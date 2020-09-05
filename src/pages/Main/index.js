@@ -2,13 +2,20 @@ import React, { useEffect, useState } from 'react';
 
 import './styles.scss';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, Switch, Route } from 'react-router-dom';
 
 import MainMenu from '../../components/MainMenu';
+import PageHeader from '../../components/PageHeader';
+import paths from '../../utils/paths';
+import Categories from '../Categories';
 
 const Main = props => {
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState(location.pathname);
+
+  const getPageTitle = () => {
+    return paths[currentPath];
+  };
 
   useEffect(() => {
     setCurrentPath(location.pathname);
@@ -17,6 +24,14 @@ const Main = props => {
   return (
     <div className='main-page'>
       <MainMenu currentPath={currentPath} />
+      <div className='data-container'>
+        <PageHeader title={getPageTitle()} />
+        <div className='data'>
+          <Switch>
+            <Route path='/categories' component={Categories} />
+          </Switch>
+        </div>
+      </div>
     </div>
   );
 };

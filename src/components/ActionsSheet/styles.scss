@@ -1,0 +1,33 @@
+.actions-sheet {
+
+  &__paper {
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+  }
+
+  &__item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: .8rem;
+    padding: .5rem;
+
+    svg {
+      margin-right: .3rem;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &.destructive {
+      color: #F44081;
+
+      svg {
+        fill: #F44081;
+      }
+    }
+  }
+}

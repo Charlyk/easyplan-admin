@@ -1,0 +1,97 @@
+.page-header {
+  width: 100%;
+  padding: 1.8rem;
+  align-items: start;
+  height: 9rem;
+  background: rgb(255,255,255);
+  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 57%, rgba(255,255,255,0) 100%);
+  display: flex;
+  justify-content: space-between;
+
+  &__title {
+    margin-top: .5rem;
+    font-weight: bold;
+    font-size: 2.1rem;
+    line-height: 2rem;
+  }
+
+  &__avatar {
+    width: 3rem;
+    height: 3rem;
+    margin-left: 1rem;
+    margin-right: .5rem;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .MuiFormControl-root {
+    position: absolute;
+    left: 50%;
+    width: 20%;
+    margin-top: .25rem;
+    border: 1px solid #E5E5F5;
+    box-sizing: border-box;
+    box-shadow: 0 15px 70px -10px rgba(239, 242, 251, 0.6);
+    border-radius: 4px;
+  }
+
+  .MuiInputBase-root {
+    font-size: 0.9rem;
+  }
+
+  .MuiOutlinedInput-input {
+    padding: .8rem;
+
+    &::placeholder {
+      color: #CDCEEA;
+    }
+  }
+
+  .MuiOutlinedInput-root.Mui-focused {
+    .MuiOutlinedInput-notchedOutline {
+      border: 2px solid #3A83DC;
+    }
+  }
+
+  .search {
+    position: absolute;
+    top: .25rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &__search {
+    width: 30%;
+    margin-top: .25rem;
+    padding-left: .8rem;
+    padding-right: .8rem;
+    background: rgba(255, 255, 255, 0.4);
+    /* Grayscale / Gray 05 */
+    border: 1px solid #E5E5F5;
+    box-sizing: border-box;
+    box-shadow: 0 15px 70px -10px rgba(239, 242, 251, 0.6);
+    border-radius: 4px;
+
+    &::placeholder {
+      color: #CDCEEA;
+      font-size: 0.9rem;
+    }
+  }
+
+  &__notifications {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 2rem;
+
+    &:hover {
+      background-color: #FAFAFD;
+    }
+  }
+}

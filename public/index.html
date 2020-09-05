@@ -25,6 +25,14 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+
+    <script>
+      window._remToPixels = number => {
+        const adjustedRemSize =
+                (window.innerWidth + window.innerHeight) / 2 / 141;
+        return number * adjustedRemSize;
+      };
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
