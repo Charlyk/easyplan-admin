@@ -1,0 +1,151 @@
+.main-menu {
+  background-color: #34344E;
+  width: 16rem;
+  padding: 2rem;
+
+  &__logo-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  &__logo {
+    height: 3rem;
+  }
+
+  &__menu-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  &__drop-down-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-left: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.navigation {
+  &__item {
+    color: #FAFAFD;
+    min-height: 3rem;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    svg {
+      fill: #FAFAFD;
+      margin-right: 1rem;
+    }
+
+    &.link-item {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      cursor: pointer;
+      padding: 0;
+      user-select: none;
+      text-decoration: none;
+
+      &:hover {
+        color: #7DD7C8;
+
+        svg {
+          fill: #7DD7C8;
+        }
+      }
+    }
+
+    &.div-item {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+
+      .title-container {
+        height: 3rem;
+        user-select: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        &.active {
+          color: #7DD7C8;
+
+          svg {
+            fill: #7DD7C8;
+          }
+        }
+
+        &:hover {
+          color: #7DD7C8;
+
+          svg {
+            fill: #7DD7C8;
+          }
+        }
+      }
+
+      .child-container {
+        height: 0;
+        margin-left: 1.5rem;
+        margin-top: unset;
+        overflow: hidden;
+
+        &.expanded {
+          height: unset;
+          margin-top: .5rem;
+        }
+
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          cursor: pointer;
+          font-size: 0.8rem;
+          color: #FAFAFD;
+          user-select: none;
+          text-decoration: none;
+          padding: .5rem 1rem;
+
+          &.active {
+            color: #7DD7C8;
+
+            svg {
+              fill: #7DD7C8;
+            }
+          }
+
+          svg {
+            width: 0.5rem;
+            height: 0.5rem;
+            margin-right: 0.6rem;;
+            fill: #FAFAFD;
+          }
+
+          &:hover {
+            color: #7DD7C8;
+
+            svg {
+              fill: #7DD7C8;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .active {
+    color: #7DD7C8;
+
+    svg {
+      fill: #7DD7C8;
+    }
+  }
+}
