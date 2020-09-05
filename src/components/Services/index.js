@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap';
 import IconPlus from '../../assets/icons/iconPlus';
 import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
+import ServiceDetailsModal from '../ServiceDetailsModal';
 import ServiceItem from './ServiceItem';
 
 const Services = props => {
@@ -59,7 +60,7 @@ const Services = props => {
 
   return (
     <div className='services-root'>
-      <LeftSideModal show={isAddingService} onClose={toggleAddService} />
+      <ServiceDetailsModal show={isAddingService} onClose={toggleAddService} />
       <div className='services-root__header'>
         <div className='services-root__title'>{textForKey('Services')}</div>
         <Button className='add-service-btn' onClick={toggleAddService}>

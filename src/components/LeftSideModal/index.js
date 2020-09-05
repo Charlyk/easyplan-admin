@@ -14,7 +14,7 @@ const LeftSideModal = props => {
     } else {
       setTimeout(() => {
         setIsHidden(true);
-      }, 300);
+      }, 310);
     }
   }, [show]);
 
