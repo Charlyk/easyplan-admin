@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import PropTypes from 'prop-types';
 import './styles.scss';
 import Skeleton from '@material-ui/lab/Skeleton';
 
@@ -36,6 +37,7 @@ const actions = [
 ];
 
 const CategoriesList = props => {
+  const { onCategorySelect } = props;
   const actionsAnchor = useRef(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
@@ -84,6 +86,7 @@ const CategoriesList = props => {
 
   const handleCategoryClick = category => {
     setSelectedCategory(category);
+    onCategorySelect(category);
   };
 
   const handleMoreClick = () => {
@@ -144,6 +147,7 @@ const CategoriesList = props => {
         setIsDeleteConfirmation(false);
         setIsDeleting(false);
         setSelectedCategory(null);
+        onCategorySelect(null);
       })
       .catch(error => {
         console.log(error);
@@ -177,31 +181,38 @@ const CategoriesList = props => {
         anchorEl={actionsAnchor.current}
       />
 
-      <div className='categories-list__header'>
-        {textForKey('List')}
-        <div ref={actionsAnchor} onClick={handleMoreClick}>
-          <IconMoreHorizontal />
+      <div className='categories-list__data'>
+        <div className='categories-list__header'>
+          {textForKey('List')}
+          <div ref={actionsAnchor} onClick={handleMoreClick}>
+            <IconMoreHorizontal />
+          </div>
+        </div>
+
+        <div className='categories-list__categories'>
+          {renderSkeleton()}
+          {categories.map(category => (
+            <Category
+              isSelected={category.id === selectedCategory?.id}
+              key={category.id}
+              category={category}
+              onSelected={handleCategoryClick}
+            />
+          ))}
+        </div>
+
+        <div className='categories-list__add' onClick={handleAddCategory}>
+          <IconPlus />
+          Add category
         </div>
       </div>
-
-      <div className='categories-list__categories'>
-        {renderSkeleton()}
-        {categories.map(category => (
-          <Category
-            isSelected={category.id === selectedCategory?.id}
-            key={category.id}
-            category={category}
-            onSelected={handleCategoryClick}
-          />
-        ))}
-      </div>
-
-      <div className='categories-list__add' onClick={handleAddCategory}>
-        <IconPlus />
-        Add category
-      </div>
+      <div className='categories-list__spacer' />
     </div>
   );
 };
 
 export default CategoriesList;
+
+CategoriesList.propTypes = {
+  onCategorySelect: PropTypes.func,
+};

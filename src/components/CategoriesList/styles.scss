@@ -1,16 +1,25 @@
 .categories-list {
   display: flex;
   flex-direction: column;
-  background-color: #FFFFFF;
-  border-radius: 4px;
-  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
-  width: 15rem;
 
-  &__categories {
+  &__data {
     display: flex;
     flex-direction: column;
     max-height: 100%;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+    width: 15rem;
+  }
+
+  &__categories {
+    max-height: 100%;
+
     overflow: scroll;
+  }
+
+  &__spacer {
+    flex: 1;
   }
 
   &__header {

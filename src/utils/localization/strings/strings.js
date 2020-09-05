@@ -17,6 +17,8 @@ export default {
     'enter category name': 'Enter category name',
     'are you sure you want to delete this category?':
       'Are you sure you want to delete this category?',
+    services: 'Services',
+    'add service': 'Add service',
   },
   ro: {
     analytics: 'Analytics',
@@ -36,6 +38,8 @@ export default {
     'enter category name': 'Enter category name',
     'are you sure you want to delete this category?':
       'Are you sure you want to delete this category?',
+    services: 'Services',
+    'add service': 'Add service',
   },
   ru: {
     analytics: 'Analytics',
@@ -55,5 +59,7 @@ export default {
     'enter category name': 'Enter category name',
     'are you sure you want to delete this category?':
       'Are you sure you want to delete this category?',
+    services: 'Services',
+    'add service': 'Add service',
   },
 };
