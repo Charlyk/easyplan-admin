@@ -9,9 +9,70 @@ const instance = axios.create({
 });
 
 export default {
+  /**
+   * Fetch categories list from server
+   * @return {Promise<{isError: boolean, message: string, data: Object|null}>}
+   */
   fetchCategories: async () => {
     try {
       const response = await instance.get('categories');
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Create new category
+   * @param {{categoryName: string}} requestBody
+   * @return {Promise<{isError: boolean, message: string|null, data: Object|null}>}
+   */
+  createCategory: async requestBody => {
+    try {
+      const response = await instance.post('categories/v1/create', requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Change category name
+   * @param {{categoryId: string, categoryName: string}} requestBody
+   * @return {Promise<{isError: boolean, message: string|null, data: Object|null}>}
+   */
+  changeCategoryName: async requestBody => {
+    try {
+      const response = await instance.put(
+        `categories/${requestBody.categoryId}`,
+        requestBody,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Delete a category
+   * @param {string} categoryId
+   * @return {Promise<{isError: boolean, message: string|null, data: Object|null}>}
+   */
+  deleteCategory: async categoryId => {
+    try {
+      const response = await instance.delete(`categories/${categoryId}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

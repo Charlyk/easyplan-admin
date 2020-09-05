@@ -5,10 +5,13 @@ import { Modal, Button, FormControl } from 'react-bootstrap';
 
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
+import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
+import LoadingButton from '../LoadingButton';
 
 const CreateCategoryModal = props => {
-  const { show, onClose, onSave, category } = props;
+  const { show, onClose, onSaved, category } = props;
+  const [isLoading, setIsLoading] = useState(false);
   const [categoryName, setCategoryName] = useState(
     category ? category.name : '',
   );
@@ -18,7 +21,44 @@ const CreateCategoryModal = props => {
   }, [category]);
 
   const handleCategorySave = () => {
-    onSave(category, categoryName);
+    setIsLoading(true);
+    if (category != null) {
+      editCategoryName();
+    } else {
+      createNewCategory();
+    }
+  };
+
+  const editCategoryName = () => {
+    dataAPI
+      .changeCategoryName({ categoryId: category.id, categoryName })
+      .then(response => {
+        setIsLoading(false);
+        if (!response.isError) {
+          setCategoryName('');
+          onSaved(response.data);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        setIsLoading(false);
+      });
+  };
+
+  const createNewCategory = () => {
+    dataAPI
+      .createCategory({ categoryName })
+      .then(response => {
+        setIsLoading(false);
+        if (!response.isError) {
+          setCategoryName('');
+          onSaved(response.data);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        setIsLoading(false);
+      });
   };
 
   const handleCategoryNameChange = event => {
@@ -61,14 +101,15 @@ const CreateCategoryModal = props => {
           Close
           <IconClose />
         </Button>
-        <Button
+        <LoadingButton
+          isLoading={isLoading}
           className='save'
           disabled={categoryName.length === 0}
           onClick={handleCategorySave}
         >
           Save
-          <IconSuccess />
-        </Button>
+          {!isLoading && <IconSuccess />}
+        </LoadingButton>
       </Modal.Footer>
     </Modal>
   );
@@ -79,7 +120,7 @@ export default CreateCategoryModal;
 CreateCategoryModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
+  onSaved: PropTypes.func,
   category: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.string,

@@ -44,6 +44,10 @@ const CategoriesList = props => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
+    fetchCategories();
+  }, [props]);
+
+  const fetchCategories = () => {
     setIsLoading(true);
     dataAPI
       .fetchCategories()
@@ -56,10 +60,10 @@ const CategoriesList = props => {
         setIsLoading(false);
       })
       .catch(console.error);
-  }, [props]);
+  };
 
   const renderSkeleton = () => {
-    if (!isLoading) return null;
+    if (!isLoading || categories.length > 0) return null;
     return (
       <div>
         <div className='categories-list__skeleton'>
@@ -87,6 +91,8 @@ const CategoriesList = props => {
     setIsCreatingCategory(true);
   };
 
+  const showDeleteConfirmation = () => {};
+
   const handleActionSelected = action => {
     switch (action.key) {
       case 'add-category':
@@ -96,6 +102,10 @@ const CategoriesList = props => {
         if (selectedCategory != null) {
           setIsEditingCategory(true);
         }
+        break;
+      case 'delete-category':
+        showDeleteConfirmation();
+        break;
     }
     setIsActionsOpen(false);
   };
@@ -107,9 +117,9 @@ const CategoriesList = props => {
     isEditingCategory && setIsEditingCategory(false);
   };
 
-  const handleCategorySave = (category, categoryName) => {
-    console.log(categoryName);
+  const handleCategorySave = () => {
     handleCloseCreationModal();
+    fetchCategories();
   };
 
   return (
@@ -118,7 +128,7 @@ const CategoriesList = props => {
         category={isEditingCategory ? selectedCategory : null}
         show={isCreatingCategory || isEditingCategory}
         onClose={handleCloseCreationModal}
-        onSave={handleCategorySave}
+        onSaved={handleCategorySave}
       />
 
       <ActionsSheet
