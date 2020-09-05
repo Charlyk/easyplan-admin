@@ -10,6 +10,7 @@ import IconTrash from '../../assets/icons/iconTrash';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
+import ConfirmationModal from '../ConfirmationModal';
 import Category from './Category';
 import CreateCategoryModal from './CreateCategoryModal';
 
@@ -28,7 +29,7 @@ const actions = [
   },
   {
     name: textForKey('Delete category'),
-    key: 'Delete-category',
+    key: 'delete-category',
     icon: <IconTrash />,
     type: 'destructive',
   },
@@ -38,6 +39,8 @@ const CategoriesList = props => {
   const actionsAnchor = useRef(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+  const [isDeleteConfirmation, setIsDeleteConfirmation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isEditingCategory, setIsEditingCategory] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -91,7 +94,13 @@ const CategoriesList = props => {
     setIsCreatingCategory(true);
   };
 
-  const showDeleteConfirmation = () => {};
+  const showDeleteConfirmation = () => {
+    setIsDeleteConfirmation(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setIsDeleteConfirmation(false);
+  };
 
   const handleActionSelected = action => {
     switch (action.key) {
@@ -104,7 +113,11 @@ const CategoriesList = props => {
         }
         break;
       case 'delete-category':
-        showDeleteConfirmation();
+        if (selectedCategory != null) {
+          showDeleteConfirmation();
+        }
+        break;
+      default:
         break;
     }
     setIsActionsOpen(false);
@@ -122,8 +135,33 @@ const CategoriesList = props => {
     fetchCategories();
   };
 
+  const handleDeleteConfirm = () => {
+    setIsDeleting(true);
+    dataAPI
+      .deleteCategory(selectedCategory.id)
+      .then(() => {
+        fetchCategories();
+        setIsDeleteConfirmation(false);
+        setIsDeleting(false);
+        setSelectedCategory(null);
+      })
+      .catch(error => {
+        console.log(error);
+        setIsDeleting(false);
+      });
+  };
+
   return (
     <div className='categories-list'>
+      <ConfirmationModal
+        isLoading={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onClose={handleCloseDeleteConfirmation}
+        show={isDeleteConfirmation}
+        title={textForKey('Delete category')}
+        message={textForKey('Are you sure you want to delete this category?')}
+      />
+
       <CreateCategoryModal
         category={isEditingCategory ? selectedCategory : null}
         show={isCreatingCategory || isEditingCategory}
@@ -140,7 +178,7 @@ const CategoriesList = props => {
       />
 
       <div className='categories-list__header'>
-        List
+        {textForKey('List')}
         <div ref={actionsAnchor} onClick={handleMoreClick}>
           <IconMoreHorizontal />
         </div>

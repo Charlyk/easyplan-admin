@@ -6,11 +6,11 @@ import { Button, Spinner } from 'react-bootstrap';
 import './styles.scss';
 
 const LoadingButton = props => {
-  const { children, spinnerVariant, isLoading } = props;
+  const { children, spinnerVariant, showLoading } = props;
   return (
     <Button {...props}>
       {children}
-      {isLoading && (
+      {showLoading && (
         <Spinner
           className='loading-spinner'
           animation='border'
@@ -24,7 +24,7 @@ const LoadingButton = props => {
 export default LoadingButton;
 
 LoadingButton.propTypes = {
-  isLoading: PropTypes.bool,
+  showLoading: PropTypes.bool,
   children: PropTypes.any,
   spinnerVariant: PropTypes.oneOf(['light']),
 };
