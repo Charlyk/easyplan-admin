@@ -22,7 +22,7 @@ const Main = props => {
   }, [location]);
 
   return (
-    <div className='main-page'>
+    <div className='main-page' id='main-page'>
       <MainMenu currentPath={currentPath} />
       <div className='data-container'>
         <PageHeader title={getPageTitle()} />

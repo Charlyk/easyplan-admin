@@ -1,0 +1,91 @@
+.left-side-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 999;
+
+  &.hide {
+    width: 0;
+    height: 0;
+  }
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(52, 53, 76, 0.25);
+
+    &.show {
+      animation-name: shadowin;
+      animation-duration: .3s;
+    }
+
+    &.hide {
+      animation-name: shadowout;
+      animation-duration: .3s;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 38%;
+    background-color: white;
+
+    &.show {
+      animation-name: slidein;
+      animation-duration: .3s;
+    }
+
+    &.hide {
+      animation-name: slideout;
+      animation-duration: .3s;
+    }
+  }
+
+  @keyframes shadowin {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes shadowout {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes slidein {
+    from {
+      width: 0;
+    }
+
+    to {
+      width: 38%;
+    }
+  }
+
+  @keyframes slideout {
+    from {
+      width: 38%;
+    }
+
+    to {
+      width: 0;
+    }
+  }
+}

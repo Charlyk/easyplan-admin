@@ -7,11 +7,13 @@ import { Button } from 'react-bootstrap';
 
 import IconPlus from '../../assets/icons/iconPlus';
 import { textForKey } from '../../utils/localization';
+import LeftSideModal from '../LeftSideModal';
 import ServiceItem from './ServiceItem';
 
 const Services = props => {
   const { category } = props;
   const [isLoading, setIsLoading] = useState(false);
+  const [isAddingService, setIsAddingService] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -51,11 +53,16 @@ const Services = props => {
     );
   };
 
+  const toggleAddService = () => {
+    setIsAddingService(!isAddingService);
+  };
+
   return (
     <div className='services-root'>
+      <LeftSideModal show={isAddingService} onClose={toggleAddService} />
       <div className='services-root__header'>
         <div className='services-root__title'>{textForKey('Services')}</div>
-        <Button className='add-service-btn'>
+        <Button className='add-service-btn' onClick={toggleAddService}>
           {textForKey('Add service')}
           <IconPlus />
         </Button>
