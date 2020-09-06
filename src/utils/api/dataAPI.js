@@ -85,4 +85,49 @@ export default {
       };
     }
   },
+
+  /**
+   * Create new Service
+   * @param {Object} requestBody
+   * @param {string} requestBody.name
+   * @param {number} requestBody.price
+   * @param {number} requestBody.duration
+   * @param {string} requestBody.color
+   * @param {string|null} requestBody.description
+   * @param {string|null} requestBody.categoryId
+   * @param {string[]} requestBody.doctors
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  createService: async requestBody => {
+    try {
+      const response = await instance.post('services/v1/create', requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Fetch all categories
+   * @param {string|null} categoryId
+   * @return {Promise<void>}
+   */
+  fetchServices: async categoryId => {
+    try {
+      const response = await instance.get(
+        `services?categoryId=${categoryId?.length > 0 ? categoryId : ''}`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };

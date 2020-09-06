@@ -119,10 +119,12 @@
     flex-direction: column;
     overflow: hidden;
     height: 0;
+    padding-left: .2rem;
+    padding-right: .2rem;
 
     &.expanded {
       padding-top: .5rem;
-      height: 25rem;
+      height: 25.5rem;
       transition: height .2s ease-out, padding-top .2s ease-out;
     }
 
@@ -145,6 +147,7 @@
     }
 
     &__colors {
+      margin-left: .2rem;
       margin-top: .5rem;
       display: flex !important;
       align-items: center;

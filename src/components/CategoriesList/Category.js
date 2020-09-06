@@ -15,7 +15,9 @@ const Category = props => {
 
   return (
     <div className={classes} onClick={handleCategoryClick}>
-      <div className='category__name'>{category.name}</div>
+      <div className='category__name'>
+        {category.name} ({category.servicesCount})
+      </div>
       {isSelected && <IconNext />}
     </div>
   );

@@ -3,11 +3,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useSelector } from 'react-redux';
 
 import IconEdit from '../../assets/icons/iconEdit';
 import IconMoreHorizontal from '../../assets/icons/iconMoreHorizontal';
 import IconPlus from '../../assets/icons/iconPlus';
 import IconTrash from '../../assets/icons/iconTrash';
+import { updateCategoriesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
@@ -38,6 +40,7 @@ const actions = [
 
 const CategoriesList = props => {
   const { onCategorySelect } = props;
+  const updateCategories = useSelector(updateCategoriesSelector);
   const actionsAnchor = useRef(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
@@ -50,7 +53,7 @@ const CategoriesList = props => {
 
   useEffect(() => {
     fetchCategories();
-  }, [props]);
+  }, [props, updateCategories]);
 
   const fetchCategories = () => {
     setIsLoading(true);

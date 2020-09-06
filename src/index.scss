@@ -55,6 +55,10 @@ body {
       background-color: #3A83DC;
     }
 
+    &:disabled {
+      background-color: #A1A2C6;
+    }
+
     &:active:focus {
       background-color: #3A83DC !important;
       color: #FFF !important;

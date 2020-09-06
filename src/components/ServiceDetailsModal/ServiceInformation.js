@@ -14,10 +14,30 @@ import IconPlusBig from '../../assets/icons/iconPlusBig';
 import { textForKey } from '../../utils/localization';
 
 const ServiceInformation = props => {
-  const { isExpanded, showStep, onToggle } = props;
+  const { isExpanded, showStep, onToggle, data, onChange } = props;
 
   const handleInfoExpand = () => {
     onToggle();
+  };
+
+  const handleFormChange = event => {
+    if (typeof event === 'string') {
+      onChange({
+        ...data,
+        color: event,
+      });
+    } else {
+      const fieldName = event.target.id;
+      onChange({
+        ...data,
+        [fieldName]:
+          fieldName === 'price'
+            ? parseFloat(event.target.value)
+            : fieldName === 'duration'
+            ? parseInt(event.target.value)
+            : event.target.value,
+      });
+    }
   };
 
   const contentClasses = clsx(
@@ -48,47 +68,65 @@ const ServiceInformation = props => {
 
       <div className={contentClasses}>
         <Form>
-          <Form.Group controlId='serviceName'>
+          <Form.Group controlId='name'>
             <Form.Label>{textForKey('Service name')}</Form.Label>
             <InputGroup>
-              <Form.Control type='text' />
+              <Form.Control
+                type='text'
+                value={data.name}
+                onChange={handleFormChange}
+              />
             </InputGroup>
           </Form.Group>
 
-          <Form.Group controlId='serviceTime'>
+          <Form.Group controlId='duration'>
             <Form.Label>{textForKey('Required time')}</Form.Label>
             <InputGroup>
-              <Form.Control type='number' />
+              <Form.Control
+                type='number'
+                value={data.duration}
+                onChange={handleFormChange}
+              />
               <InputGroup.Append>
                 <InputGroup.Text id='basic-addon1'>min</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
           </Form.Group>
 
-          <Form.Group controlId='servicePrice'>
+          <Form.Group controlId='price'>
             <Form.Label>{textForKey('Service price')}</Form.Label>
             <InputGroup>
-              <Form.Control type='number' />
+              <Form.Control
+                type='number'
+                value={data.price}
+                onChange={handleFormChange}
+              />
               <InputGroup.Append>
                 <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
           </Form.Group>
 
-          <Form.Group controlId='serviceDescription'>
+          <Form.Group controlId='description'>
             <Form.Label>{textForKey('Description')}</Form.Label>
             <InputGroup>
-              <Form.Control as='textarea' aria-label='With textarea' />
+              <Form.Control
+                as='textarea'
+                value={data.description}
+                onChange={handleFormChange}
+                aria-label='With textarea'
+              />
             </InputGroup>
           </Form.Group>
         </Form>
 
         <Form.Label>{textForKey('Select color')}</Form.Label>
         <ToggleButtonGroup
+          onChange={handleFormChange}
           className='service-information__content__colors'
           type='radio'
           name='serviceColors'
-          defaultValue='#FF453A'
+          defaultValue={data.color}
         >
           <ToggleButton value='#FF453A'>
             <div
@@ -161,5 +199,13 @@ export default ServiceInformation;
 ServiceInformation.propTypes = {
   isExpanded: PropTypes.bool.isRequired,
   showStep: PropTypes.bool,
+  data: PropTypes.shape({
+    name: PropTypes.string,
+    duration: PropTypes.number,
+    price: PropTypes.number,
+    description: PropTypes.number,
+    color: PropTypes.string,
+  }),
+  onChange: PropTypes.func,
   onToggle: PropTypes.func.isRequired,
 };
