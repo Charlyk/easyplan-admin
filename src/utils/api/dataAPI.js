@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// const baseURL = 'https://auth-nmcmweav5q-uc.a.run.app/api';
+const baseURL = 'http://localhost:8080/api/';
+
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/api/',
+  baseURL,
   headers: {
     Authorization:
       'eyJhbGciOiJIUzI1NiJ9.eyJjbGluaWNJZCI6Im5vX2NsaW5pYyIsInVzZXJJZCI6IjY4ZTljNDlmLTE0NmQtM2NmZS04OGFlLWQ0ZmQ5MGFlM2MwNyJ9.hRV30BJSf6nXJSib3cMdswBrwG7l6SNaQy-y2UBgYtk',

@@ -71,18 +71,23 @@ const CreateCategoryModal = props => {
       : textForKey('Add category');
   };
 
+  const handleModalClose = () => {
+    setCategoryName('');
+    onClose();
+  };
+
   return (
     <Modal
       className='create-category-modal'
       centered
       show={show}
-      onHide={onClose}
+      onHide={handleModalClose}
     >
       <Modal.Header>
         <Modal.Title id='contained-modal-title-vcenter'>
           {getTitle()}
         </Modal.Title>
-        <div className='close-btn' onClick={onClose}>
+        <div className='close-btn' onClick={handleModalClose}>
           <IconClose />
         </div>
       </Modal.Header>
@@ -97,7 +102,7 @@ const CreateCategoryModal = props => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button className='cancel' onClick={onClose}>
+        <Button className='cancel' onClick={handleModalClose}>
           {textForKey('Close')}
           <IconClose />
         </Button>
