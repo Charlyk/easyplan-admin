@@ -102,13 +102,13 @@ const CreateCategoryModal = props => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button className='cancel' onClick={handleModalClose}>
+        <Button className='cancel-button' onClick={handleModalClose}>
           {textForKey('Close')}
           <IconClose />
         </Button>
         <LoadingButton
           showLoading={isLoading}
-          className='save'
+          className='positive-button'
           disabled={categoryName.length === 0}
           onClick={handleCategorySave}
         >

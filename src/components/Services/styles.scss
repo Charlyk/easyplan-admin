@@ -1,5 +1,6 @@
 .services-root {
   width: 100%;
+  user-select: none;
 
   &__header {
     padding-left: 1.5rem;
@@ -8,6 +9,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .positive-button {
+      flex: unset;
+      padding: .3rem 1rem;
+    }
   }
 
   &__title {
@@ -17,33 +23,6 @@
     font-size: 1rem;
     line-height: 1rem;
     color: #34354C;
-  }
-
-  .add-service-btn {
-    background-color: #3A83DC;
-    color: #FFF;
-    padding: .7rem 1rem;
-    text-transform: uppercase;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    border: none;
-    border-radius: 4px;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: .9rem;
-    line-height: 1rem;
-
-    svg {
-      margin-left: .5rem;
-      fill: #FFF;
-    }
-
-    &:active:focus {
-      background-color: #3A83DC;
-      color: #FFF;
-    }
   }
 
   &__services {

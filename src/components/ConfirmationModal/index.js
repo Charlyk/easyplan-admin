@@ -21,13 +21,13 @@ const ConfirmationModal = props => {
       </Modal.Header>
       <Modal.Body>{message}</Modal.Body>
       <Modal.Footer>
-        <Button className='cancel' onClick={onClose}>
+        <Button className='cancel-button' onClick={onClose}>
           {textForKey('Close')}
           <IconClose />
         </Button>
         <LoadingButton
           showLoading={isLoading}
-          className='save'
+          className='positive-button'
           onClick={onConfirm}
         >
           {textForKey('Confirm')}

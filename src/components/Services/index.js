@@ -63,7 +63,7 @@ const Services = props => {
       <ServiceDetailsModal show={isAddingService} onClose={toggleAddService} />
       <div className='services-root__header'>
         <div className='services-root__title'>{textForKey('Services')}</div>
-        <Button className='add-service-btn' onClick={toggleAddService}>
+        <Button className='positive-button' onClick={toggleAddService}>
           {textForKey('Add service')}
           <IconPlus />
         </Button>

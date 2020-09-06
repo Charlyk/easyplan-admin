@@ -61,4 +61,226 @@
       }
     }
   }
+
+  &__data {
+    margin-bottom: 6.2rem;
+    padding: 1rem;
+    overflow-y: scroll;
+  }
+}
+
+.service-information {
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+  user-select: none;
+
+  &__header {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    &__step {
+      color: #7DD7C8 !important;
+      margin-right: .5rem;
+    }
+
+    &__title, &__step {
+      display: flex;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #34354C;
+    }
+
+    &__button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+
+      svg {
+        fill: #3A83DC;
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 0;
+
+    &.expanded {
+      padding-top: .5rem;
+      height: 25rem;
+      transition: height .2s ease-out, padding-top .2s ease-out;
+    }
+
+    &.collapsed {
+      padding-top: 0;
+      height: 0;
+      transition: height .2s ease-out, padding-top .2s ease-out;
+    }
+
+    .form-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .7rem;
+      margin-bottom: 0;
+    }
+
+    .form-control {
+      background-color: #FAFAFD;
+    }
+
+    &__colors {
+      margin-top: .5rem;
+      display: flex !important;
+      align-items: center;
+      justify-content: flex-start;
+
+      &__color-container {
+        padding: .63rem;
+        border-radius: 1rem;
+      }
+
+      .btn-primary {
+        width: 2rem;
+        height: 2rem;
+        margin-right: .3rem;
+        flex: unset !important;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        border-color: white;
+        background-color: white;
+        border-radius: 1rem !important;
+
+        &:hover {
+          background-color: white !important;
+          border-color: #3A83DC !important;
+        }
+
+        &.active {
+          border-color: #3A83DC !important;
+          background-color: white !important;
+        }
+      }
+    }
+  }
+}
+
+.service-doctor {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 1rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+
+  &__text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .8rem;
+
+    &.selected {
+      color: #34354C;
+      transition: color .2s ease;
+    }
+
+    &.default {
+      color: #A1A2C6;
+      transition: color .2s ease;
+    }
+  }
+}
+
+.service-doctors {
+  margin-top: 1rem;
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+  user-select: none;
+
+  &__header {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    &__step {
+      color: #7DD7C8 !important;
+      margin-right: .5rem;
+    }
+
+    &__title, &__step {
+      display: flex;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #34354C;
+    }
+
+    &__button {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+
+      svg {
+        fill: #3A83DC;
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    &.expanded {
+      padding-top: 1rem;
+      transition: height .2s ease-out, padding-top .2s ease-out;
+    }
+
+    &.collapsed {
+      padding-top: 0;
+      height: 0;
+      transition: height .2s ease-out, padding-top .2s ease-out;
+    }
+  }
+
+  &__footer {
+    width: 100%;
+    position: absolute;
+    display: flex;
+    bottom: 0;
+    padding: 2rem 1rem;
+    background-color: white;
+    box-shadow: 0px -20px 40px -5px rgba(239, 242, 251, 0.8);
+
+    .cancel-button {
+      margin-right: .5rem;
+    }
+  }
 }

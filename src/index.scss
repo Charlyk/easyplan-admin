@@ -2,4 +2,67 @@ body {
   margin: 0;
   font-family: Inter, serif;
   font-style: normal;
+
+  .cancel-button {
+    flex: 1;
+    background-color: #e5e5f5;
+    color: #a1a2c6;
+    text-transform: uppercase;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+
+    svg {
+      margin-left: .5rem;
+      fill: #A1A2C6;
+    }
+
+    &:focus {
+      background-color: #e5e5f5;
+      color: #a1a2c6;
+    }
+
+    &:active:focus {
+      background-color: #e5e5f5 !important;
+      color: #a1a2c6 !important;
+    }
+
+    &:hover {
+      background-color: #d9d9e5;
+      color: #a1a2c6;
+    }
+  }
+
+  .positive-button {
+    flex: 1;
+    background-color: #3A83DC;
+    color: #FFF;
+    text-transform: uppercase;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+
+    svg {
+      margin-left: .5rem;
+      fill: #FFF;
+    }
+
+    &:focus {
+      background-color: #3A83DC;
+    }
+
+    &:active:focus {
+      background-color: #3A83DC !important;
+      color: #FFF !important;
+    }
+
+    &:hover:not(.btn-primary.disabled) {
+      background-color: #367acb;
+      color: #FFF;
+    }
+  }
 }
