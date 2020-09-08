@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import IconArrowNext from '../../assets/icons/iconArrowNext';
 import IconClose from '../../assets/icons/iconClose';
+import IconDelete from '../../assets/icons/iconDelete';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerCategoriesUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
@@ -15,6 +16,7 @@ import './styles.scss';
 import LoadingButton from '../LoadingButton';
 import ServiceDoctors from './ServiceDoctors';
 import ServiceInformation from './ServiceInformation';
+import ConfirmationModal from '../ConfirmationModal';
 
 const initialService = {
   name: '',
@@ -31,6 +33,11 @@ const ServiceDetailsModal = props => {
   const dispatch = useDispatch();
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [doctors, setDoctors] = useState([]);
+  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] = useState(
+    false,
+  );
   const [isFormValid, setIsFormValid] = useState(false);
   const [serviceInfo, setServiceInfo] = useState({
     ...initialService,
@@ -38,6 +45,7 @@ const ServiceDetailsModal = props => {
   });
 
   useEffect(() => {
+    fetchDoctors();
     if (service != null) {
       setServiceInfo(service);
     }
@@ -58,9 +66,30 @@ const ServiceDetailsModal = props => {
     );
   }, [serviceInfo]);
 
+  const fetchDoctors = () => {
+    dataAPI
+      .fetchServiceDoctors(service?.id)
+      .then(response => {
+        if (!response.isError) {
+          setDoctors(response.data);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   const handleSaveService = () => {
     setIsLoading(true);
     if (serviceInfo.price.length === 0) serviceInfo.price = '0';
+    if (service != null) {
+      editService();
+    } else {
+      createService();
+    }
+  };
+
+  const createService = () => {
     dataAPI
       .createService(serviceInfo)
       .then(() => {
@@ -72,6 +101,42 @@ const ServiceDetailsModal = props => {
         console.error(error);
         setIsLoading(false);
       });
+  };
+
+  const editService = () => {
+    dataAPI
+      .editService(serviceInfo, service.id)
+      .then(() => {
+        setIsLoading(false);
+        dispatch(triggerCategoriesUpdate());
+        handleCloseModal();
+      })
+      .catch(error => {
+        console.error(error);
+        setIsLoading(false);
+      });
+  };
+
+  const deleteService = () => {
+    setIsDeleting(true);
+    dataAPI
+      .deleteService(service.id)
+      .then(response => {
+        if (!response.isError) {
+          setDeleteConfirmationVisible(false);
+          dispatch(triggerCategoriesUpdate());
+          handleCloseModal();
+        }
+        setIsDeleting(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setIsDeleting(false);
+      });
+  };
+
+  const handleDeleteService = () => {
+    setDeleteConfirmationVisible(true);
   };
 
   const handleInfoToggle = () => {
@@ -91,6 +156,7 @@ const ServiceDetailsModal = props => {
   };
 
   const handleCloseModal = () => {
+    if (isLoading || isDeleting) return;
     setServiceInfo({
       ...initialService,
       categoryId: category?.id,
@@ -103,12 +169,29 @@ const ServiceDetailsModal = props => {
     setServiceInfo(newInfo);
   };
 
+  const handleDeleteCancel = () => {
+    setDeleteConfirmationVisible(false);
+  };
+
   return (
     <LeftSideModal show={show} onClose={handleCloseModal}>
+      <ConfirmationModal
+        onConfirm={deleteService}
+        show={isDeleteConfirmationVisible}
+        onClose={handleDeleteCancel}
+        isLoading={isDeleting}
+        title={textForKey('Delete service')}
+        message={textForKey('Are you sure you want to delete this service?')}
+      />
       <div className='service-details-modal'>
         <div className='service-details-modal__header'>
           <div className='service-details-modal__header__close-container'>
-            <div className='close-btn' onClick={handleCloseModal}>
+            <div
+              className='close-btn'
+              role='button'
+              tabIndex={0}
+              onClick={handleCloseModal}
+            >
               <IconClose />
             </div>
           </div>
@@ -146,6 +229,7 @@ const ServiceDetailsModal = props => {
           />
 
           <ServiceDoctors
+            doctors={doctors}
             onToggle={handleDoctorsToggle}
             isExpanded={expandedMenu === 'doctors'}
             showStep={service == null}
@@ -153,15 +237,30 @@ const ServiceDetailsModal = props => {
         </div>
 
         <div className='service-doctors__footer'>
-          <Button className='cancel-button' onClick={handleCloseModal}>
+          <Button
+            className='cancel-button'
+            disabled={isLoading || isDeleting}
+            onClick={handleCloseModal}
+          >
             {textForKey('Cancel')}
             <IconClose />
           </Button>
+          {service && (
+            <LoadingButton
+              onClick={handleDeleteService}
+              className='delete-button'
+              disabled={isDeleting || isLoading}
+              showLoading={isDeleting}
+            >
+              {textForKey('Delete')}
+              {!isDeleting && <IconDelete />}
+            </LoadingButton>
+          )}
           <LoadingButton
             onClick={handleSaveService}
             className='positive-button'
             showLoading={isLoading}
-            disabled={!isFormValid}
+            disabled={!isFormValid || isLoading || isDeleting}
           >
             {textForKey('Save')}
             {!isLoading && <IconSuccess />}

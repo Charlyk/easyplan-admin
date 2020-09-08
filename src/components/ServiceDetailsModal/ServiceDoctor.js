@@ -1,47 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
-import { textForKey } from '../../utils/localization';
 import SwitchButton from '../SwitchButton';
 
 const ServiceDoctor = props => {
-  const { selected, onToggle } = props;
-  const [isSelected, setIsSelected] = useState(selected);
-  const [percentage, setPercentage] = useState('');
-  const [price, setPrice] = useState('');
+  const { selected, doctor, onToggle, onChange } = props;
+  const { price, percentage } = doctor;
 
-  const isPercentageDisabled = !isSelected || price.length > 0;
-  const isPriceDisabled = !isSelected || percentage.length > 0;
+  const isPercentageDisabled = !selected || price.length > 0;
+  const isPriceDisabled = !selected || percentage.length > 0;
 
   const handlePercentageChange = event => {
     let newValue = event.target.value;
-    if (newValue.length > 0 && parseInt(newValue) < 0) newValue = '0';
-    setPercentage(newValue);
+    onChange({
+      doctorId: doctor.doctorId,
+      price: null,
+      percentage: parseInt(newValue),
+    });
   };
 
   const handlePriceChanged = event => {
     let newValue = event.target.value;
-    if (newValue.length > 0 && parseFloat(newValue) < 0) newValue = '0';
-    setPrice(newValue);
+    onChange({
+      doctorId: doctor.doctorId,
+      price: parseFloat(newValue),
+      percentage: null,
+    });
   };
 
   const handleDoctorToggle = () => {
-    setIsSelected(!isSelected);
-    onToggle(isSelected);
+    onToggle(selected);
   };
 
   const textClasses = clsx(
     'service-doctor__text',
-    isSelected ? 'selected' : 'default',
+    selected ? 'selected' : 'default',
   );
 
   return (
     <div className='service-doctor'>
       <div className='service-doctor__name-and-switch'>
-        <SwitchButton isChecked={isSelected} onChange={handleDoctorToggle} />
+        <SwitchButton isChecked={selected} onChange={handleDoctorToggle} />
         <div className={textClasses}>Doctor Name</div>
       </div>
       <div className='service-doctor__fields'>
@@ -79,11 +81,24 @@ const ServiceDoctor = props => {
 export default ServiceDoctor;
 
 ServiceDoctor.propTypes = {
+  doctor: PropTypes.shape({
+    doctorName: PropTypes.string,
+    doctorId: PropTypes.string,
+    percentage: PropTypes.string,
+    price: PropTypes.string,
+  }),
   selected: PropTypes.bool,
   onToggle: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 ServiceDoctor.defaultProps = {
+  doctor: {
+    doctorName: '',
+    doctorId: '',
+    percentage: '',
+    price: '',
+  },
   selected: false,
   onToggle: () => null,
 };

@@ -95,12 +95,81 @@ export default {
    * @param {string} requestBody.color
    * @param {string|null} requestBody.description
    * @param {string|null} requestBody.categoryId
-   * @param {string[]} requestBody.doctors
+   * @param {Array.<{doctorId: string, percentage: number|null, price: number|null}>} requestBody.doctors
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   createService: async requestBody => {
     try {
       const response = await instance.post('services/v1/create', requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Create new Service
+   * @param {string} serviceId
+   * @param {Object} requestBody
+   * @param {string} requestBody.name
+   * @param {string} requestBody.price
+   * @param {string} requestBody.duration
+   * @param {string} requestBody.color
+   * @param {string|null} requestBody.description
+   * @param {string|null} requestBody.categoryId
+   * @param {Array.<{doctorId: string, percentage: number|null, price: number|null}>} requestBody.doctors
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  editService: async (requestBody, serviceId) => {
+    try {
+      const response = await instance.put(
+        `services/v1/${serviceId}`,
+        requestBody,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Fetch a list of doctors to assign to service
+   * @param {string} serviceId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchServiceDoctors: async serviceId => {
+    try {
+      const serviceIdParam =
+        serviceId?.length > 0 ? `?serviceId=${serviceId}` : '';
+      const response = await instance.get(
+        `services/v1/doctors${serviceIdParam}`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Create new Service
+   * @param {string} serviceId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  deleteService: async serviceId => {
+    try {
+      const response = await instance.delete(`services/v1/${serviceId}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -118,9 +187,9 @@ export default {
    */
   fetchServices: async categoryId => {
     try {
-      const response = await instance.get(
-        `services?categoryId=${categoryId?.length > 0 ? categoryId : ''}`,
-      );
+      const categoryIdParam =
+        categoryId?.length > 0 ? `?categoryId=${categoryId}` : '';
+      const response = await instance.get(`services${categoryIdParam}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

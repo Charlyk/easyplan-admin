@@ -16,6 +16,47 @@ body {
     border: unset;
   }
 
+  .delete-button {
+    flex: 1;
+    background-color: #F44081;
+    color: #fff;
+    text-transform: uppercase;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+
+    svg {
+      margin-left: .5rem;
+      fill: #fff;
+    }
+
+    &:focus {
+      background-color: #F44081;
+      color: #fff;
+    }
+
+    &:active:focus {
+      background-color: #F44081 !important;
+      color: #fff !important;
+    }
+
+    &:hover {
+      background-color: #ec3276;
+      color: #fff;
+    }
+
+    &:disabled {
+      background-color: #ef568e;
+    }
+
+    &:hover:not(.btn-primary.disabled) {
+      background-color: #F44081;
+      color: #FFF;
+    }
+  }
+
   .cancel-button {
     flex: 1;
     background-color: #e5e5f5;
@@ -43,6 +84,16 @@ body {
     }
 
     &:hover {
+      background-color: #d9d9e5;
+      color: #a1a2c6;
+    }
+
+    &:disabled {
+      background-color: #dbdbe3;
+      color: #a1a2c6;
+    }
+
+    &:hover:not(.btn-primary.disabled) {
       background-color: #d9d9e5;
       color: #a1a2c6;
     }

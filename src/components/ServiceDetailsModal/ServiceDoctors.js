@@ -2,6 +2,7 @@ import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlusBig from '../../assets/icons/iconPlusBig';
@@ -9,7 +10,7 @@ import { textForKey } from '../../utils/localization';
 import ServiceDoctor from './ServiceDoctor';
 
 const ServiceDoctors = props => {
-  const { isExpanded, showStep, onToggle } = props;
+  const { isExpanded, showStep, onToggle, doctors } = props;
 
   const handleInfoExpand = () => {
     onToggle();
@@ -41,14 +42,14 @@ const ServiceDoctors = props => {
         </div>
       </div>
       <div className={contentClasses}>
-        <ServiceDoctor />
-        <ServiceDoctor />
-        <ServiceDoctor />
-        <ServiceDoctor />
-        <ServiceDoctor />
-        <ServiceDoctor />
-        <ServiceDoctor />
-        <ServiceDoctor />
+        {doctors.length === 0 && (
+          <div className='service-doctors__content__no-data'>
+            There are not doctors yet. <Link to='/users'>Add one +</Link>
+          </div>
+        )}
+        {doctors.map(doctor => (
+          <ServiceDoctor doctor={doctor} />
+        ))}
       </div>
     </div>
   );
@@ -57,6 +58,14 @@ const ServiceDoctors = props => {
 export default ServiceDoctors;
 
 ServiceDoctors.propTypes = {
+  doctors: PropTypes.arrayOf(
+    PropTypes.shape({
+      doctorName: PropTypes.string,
+      doctorId: PropTypes.string,
+      percentage: PropTypes.string,
+      price: PropTypes.string,
+    }),
+  ),
   showStep: PropTypes.bool,
   isExpanded: PropTypes.bool,
   onToggle: PropTypes.func,
