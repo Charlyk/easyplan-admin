@@ -2,6 +2,19 @@ body {
   margin: 0;
   font-family: Inter, serif;
   font-style: normal;
+  min-width: 920px;
+
+  .modal-backdrop {
+    background-color: rgba(52, 53, 76, 0.25);
+
+    &.show {
+      opacity: 1;
+    }
+  }
+
+  .modal-content {
+    border: unset;
+  }
 
   .cancel-button {
     flex: 1;

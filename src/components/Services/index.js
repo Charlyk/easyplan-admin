@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 import PropTypes from 'prop-types';
@@ -13,6 +13,7 @@ import ServiceDetailsModal from '../ServiceDetailsModal';
 import ServiceItem from './ServiceItem';
 
 const Services = props => {
+  const serviceToEdit = useRef(null);
   const { category } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [isAddingService, setIsAddingService] = useState(false);
@@ -20,6 +21,7 @@ const Services = props => {
 
   useEffect(() => {
     setServices([]);
+    serviceToEdit.current = null;
     fetchServices();
   }, [category]);
 
@@ -52,13 +54,20 @@ const Services = props => {
   };
 
   const toggleAddService = () => {
+    serviceToEdit.current = null;
     setIsAddingService(!isAddingService);
     fetchServices();
+  };
+
+  const handleServiceEdit = service => {
+    serviceToEdit.current = service;
+    setIsAddingService(true);
   };
 
   return (
     <div className='services-root'>
       <ServiceDetailsModal
+        service={serviceToEdit.current}
         category={category}
         show={isAddingService}
         onClose={toggleAddService}
@@ -73,7 +82,11 @@ const Services = props => {
       <div className='services-root__services'>
         {isLoading && services.length === 0 && renderSkeleton()}
         {services.map(service => (
-          <ServiceItem key={service.id} service={service} />
+          <ServiceItem
+            onEdit={handleServiceEdit}
+            key={service.id}
+            service={service}
+          />
         ))}
       </div>
     </div>

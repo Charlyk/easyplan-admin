@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // const baseURL = 'https://auth-nmcmweav5q-uc.a.run.app/api';
-const baseURL = 'http://localhost:8080/api/';
+const baseURL = 'http://localhost:8000/api/';
 
 const instance = axios.create({
   baseURL,
@@ -90,8 +90,8 @@ export default {
    * Create new Service
    * @param {Object} requestBody
    * @param {string} requestBody.name
-   * @param {number} requestBody.price
-   * @param {number} requestBody.duration
+   * @param {string} requestBody.price
+   * @param {string} requestBody.duration
    * @param {string} requestBody.color
    * @param {string|null} requestBody.description
    * @param {string|null} requestBody.categoryId

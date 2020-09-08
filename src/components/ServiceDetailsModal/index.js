@@ -18,8 +18,8 @@ import ServiceInformation from './ServiceInformation';
 
 const initialService = {
   name: '',
-  price: 0,
-  duration: 0,
+  price: '',
+  duration: '',
   description: '',
   color: '',
   doctors: [],
@@ -27,7 +27,7 @@ const initialService = {
 };
 
 const ServiceDetailsModal = props => {
-  const { show, onClose, category } = props;
+  const { show, onClose, category, service } = props;
   const dispatch = useDispatch();
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +36,12 @@ const ServiceDetailsModal = props => {
     ...initialService,
     categoryId: category?.id,
   });
+
+  useEffect(() => {
+    if (service != null) {
+      setServiceInfo(service);
+    }
+  }, [service]);
 
   useEffect(() => {
     setServiceInfo({
@@ -48,23 +54,19 @@ const ServiceDetailsModal = props => {
     setIsFormValid(
       serviceInfo.name.length > 0 &&
         serviceInfo.color.length > 0 &&
-        parseFloat(serviceInfo.price) > 0 &&
         parseInt(serviceInfo.duration) > 0,
     );
   }, [serviceInfo]);
 
   const handleSaveService = () => {
     setIsLoading(true);
+    if (serviceInfo.price.length === 0) serviceInfo.price = '0';
     dataAPI
       .createService(serviceInfo)
       .then(() => {
-        setServiceInfo({
-          ...initialService,
-          categoryId: category?.id,
-        });
         setIsLoading(false);
         dispatch(triggerCategoriesUpdate());
-        onClose();
+        handleCloseModal();
       })
       .catch(error => {
         console.error(error);
@@ -89,6 +91,10 @@ const ServiceDetailsModal = props => {
   };
 
   const handleCloseModal = () => {
+    setServiceInfo({
+      ...initialService,
+      categoryId: category?.id,
+    });
     setExpandedMenu('info');
     onClose();
   };
@@ -107,7 +113,9 @@ const ServiceDetailsModal = props => {
             </div>
           </div>
           <div className='service-details-modal__header__title'>
-            {textForKey('Add service')}
+            {service == null
+              ? textForKey('Add service')
+              : textForKey('Edit service')}
           </div>
           <div className='service-details-modal__header__breadcrumb-container'>
             <div className='service-details-modal__header__breadcrumb current'>
@@ -121,7 +129,9 @@ const ServiceDetailsModal = props => {
             )}
             <IconArrowNext />
             <div className='service-details-modal__header__breadcrumb'>
-              {textForKey('Add service')}
+              {service == null
+                ? textForKey('Add service')
+                : textForKey('Edit service')}
             </div>
           </div>
         </div>
@@ -132,13 +142,13 @@ const ServiceDetailsModal = props => {
             data={serviceInfo}
             onToggle={handleInfoToggle}
             isExpanded={expandedMenu === 'info'}
-            showStep={true}
+            showStep={service == null}
           />
 
           <ServiceDoctors
             onToggle={handleDoctorsToggle}
             isExpanded={expandedMenu === 'doctors'}
-            showStep={true}
+            showStep={service == null}
           />
         </div>
 
@@ -167,6 +177,7 @@ export default ServiceDetailsModal;
 ServiceDetailsModal.propTypes = {
   show: PropTypes.bool,
   onClose: PropTypes.func,
+  service: PropTypes.object,
   category: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,

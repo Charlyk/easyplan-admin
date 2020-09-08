@@ -40,10 +40,7 @@ const ServiceDoctors = props => {
           {isExpanded ? <IconMinus /> : <IconPlusBig />}
         </div>
       </div>
-      <div
-        className={contentClasses}
-        style={{ height: isExpanded ? '17rem' : 0 }}
-      >
+      <div className={contentClasses}>
         <ServiceDoctor />
         <ServiceDoctor />
         <ServiceDoctor />

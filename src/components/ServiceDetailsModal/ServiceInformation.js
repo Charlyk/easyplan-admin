@@ -30,12 +30,7 @@ const ServiceInformation = props => {
       const fieldName = event.target.id;
       onChange({
         ...data,
-        [fieldName]:
-          fieldName === 'price'
-            ? parseFloat(event.target.value)
-            : fieldName === 'duration'
-            ? parseInt(event.target.value)
-            : event.target.value,
+        [fieldName]: event.target.value,
       });
     }
   };
@@ -84,6 +79,7 @@ const ServiceInformation = props => {
             <InputGroup>
               <Form.Control
                 type='number'
+                min='0'
                 value={data.duration}
                 onChange={handleFormChange}
               />
@@ -99,6 +95,7 @@ const ServiceInformation = props => {
               <Form.Control
                 type='number'
                 value={data.price}
+                min='0'
                 onChange={handleFormChange}
               />
               <InputGroup.Append>
@@ -125,8 +122,8 @@ const ServiceInformation = props => {
           onChange={handleFormChange}
           className='service-information__content__colors'
           type='radio'
+          value={data.color}
           name='serviceColors'
-          defaultValue={data.color}
         >
           <ToggleButton value='#FF453A'>
             <div
@@ -201,9 +198,9 @@ ServiceInformation.propTypes = {
   showStep: PropTypes.bool,
   data: PropTypes.shape({
     name: PropTypes.string,
-    duration: PropTypes.number,
-    price: PropTypes.number,
-    description: PropTypes.number,
+    duration: PropTypes.string,
+    price: PropTypes.string,
+    description: PropTypes.string,
     color: PropTypes.string,
   }),
   onChange: PropTypes.func,

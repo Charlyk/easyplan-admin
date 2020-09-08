@@ -8,7 +8,7 @@ import IconEditService from '../../assets/icons/iconEditService';
 import { textForKey } from '../../utils/localization';
 
 const ServiceItem = props => {
-  const { service } = props;
+  const { service, onEdit } = props;
   return (
     <div className='service-item'>
       <div className='service-item__header'>
@@ -17,7 +17,12 @@ const ServiceItem = props => {
           style={{ backgroundColor: service.color }}
         />
         <div className='service-item__title'>{service.name}</div>
-        <div className='service-item__edit-btn'>
+        <div
+          role='button'
+          tabIndex={0}
+          className='service-item__edit-btn'
+          onClick={() => onEdit(service)}
+        >
           <IconEditService />
         </div>
       </div>
@@ -48,4 +53,5 @@ ServiceItem.propTypes = {
     color: PropTypes.string,
     description: PropTypes.string,
   }).isRequired,
+  onEdit: PropTypes.func,
 };
