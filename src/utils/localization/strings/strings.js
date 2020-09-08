@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default {
   en: {
     analytics: 'Analytics',
@@ -9,6 +11,7 @@ export default {
     close: 'Close',
     save: 'Save',
     delete: 'Delete',
+    edit: 'Edit',
     confirm: 'Confirm',
     search: 'Search',
     list: 'List',
@@ -31,6 +34,13 @@ export default {
     'required time': 'Required time',
     'service price': 'Service price',
     'select color': 'Select color',
+    administrators: 'Administrators',
+    receptionists: 'Receptionists',
+    doctors: 'Doctors',
+    all: 'All',
+    'add new user': 'Add new user',
+    'there are not doctors yet.': 'There are not doctors yet.',
+    'add one +': 'Add one +',
   },
   ro: {
     analytics: 'Analytics',
@@ -42,6 +52,7 @@ export default {
     close: 'Close',
     save: 'Save',
     delete: 'Delete',
+    edit: 'Edit',
     confirm: 'Confirm',
     search: 'Search',
     list: 'List',
@@ -64,6 +75,13 @@ export default {
     'required time': 'Required time',
     'service price': 'Service price',
     'select color': 'Select color',
+    administrators: 'Administrators',
+    receptionists: 'Receptionists',
+    doctors: 'Doctors',
+    all: 'All',
+    'add new user': 'Add new user',
+    'there are not doctors yet.': 'There are not doctors yet.',
+    'add one +': 'Add one +',
   },
   ru: {
     analytics: 'Analytics',
@@ -75,6 +93,7 @@ export default {
     close: 'Close',
     save: 'Save',
     delete: 'Delete',
+    edit: 'Edit',
     confirm: 'Confirm',
     search: 'Search',
     list: 'List',
@@ -97,5 +116,12 @@ export default {
     'required time': 'Required time',
     'service price': 'Service price',
     'select color': 'Select color',
+    administrators: 'Administrators',
+    receptionists: 'Receptionists',
+    doctors: 'Doctors',
+    all: 'All',
+    'add new user': 'Add new user',
+    'there are not doctors yet.': 'There are not doctors yet.',
+    'add one +': 'Add one +',
   },
 };

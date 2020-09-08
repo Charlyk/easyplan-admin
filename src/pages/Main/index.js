@@ -8,6 +8,7 @@ import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import paths from '../../utils/paths';
 import Categories from '../Categories';
+import Users from '../Users';
 
 const Main = props => {
   const location = useLocation();
@@ -29,6 +30,7 @@ const Main = props => {
         <div className='data'>
           <Switch>
             <Route path='/categories' component={Categories} />
+            <Route path='/users' component={Users} />
           </Switch>
         </div>
       </div>
