@@ -3,7 +3,41 @@
   display: flex;
   flex-direction: column;
 
+  &__no-data {
+    user-select: none;
+    -webkit-user-select: none;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #A1A2C6;
+    padding: .5rem 1rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: .8rem;
+    background: #FFFFFF;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: .3rem;
+
+    div {
+      margin-left: .2rem;
+      color: #3A83DC;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
   &__group-title {
+    user-select: none;
+    -webkit-user-select: none;
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: 600;
@@ -24,6 +58,24 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 3rem;
+  }
+
+  &__skeleton {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .MuiSkeleton-root {
+      border: 1px solid #F4FAFE;
+      background-color: #FAFAFD;
+      box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+      border-radius: .3rem;
+      width: 100%;
+      height: 3rem;
+      margin-left: 2rem;
+      margin-right: 2rem;
+      margin-top: .8rem;
+    }
   }
 }
 
@@ -99,11 +151,11 @@
   margin-left: 2rem;
   margin-right: 2rem;
   margin-top: .8rem;
-  display: flex;
-  align-items: center;
   background: #FFFFFF;
   box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
-  border-radius: 4px;
+  border-radius: .3rem;
+  display: flex;
+  align-items: center;
 
   &__name-and-avatar {
     width: 25%;

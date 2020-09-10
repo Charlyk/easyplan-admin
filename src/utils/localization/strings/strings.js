@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default {
   en: {
     analytics: 'Analytics',
@@ -41,6 +39,7 @@ export default {
     'add new user': 'Add new user',
     'there are not doctors yet.': 'There are not doctors yet.',
     'add one +': 'Add one +',
+    'no phone number': 'No phone number',
   },
   ro: {
     analytics: 'Analytics',
@@ -82,6 +81,7 @@ export default {
     'add new user': 'Add new user',
     'there are not doctors yet.': 'There are not doctors yet.',
     'add one +': 'Add one +',
+    'no phone number': 'No phone number',
   },
   ru: {
     analytics: 'Analytics',
@@ -123,5 +123,6 @@ export default {
     'add new user': 'Add new user',
     'there are not doctors yet.': 'There are not doctors yet.',
     'add one +': 'Add one +',
+    'no phone number': 'No phone number',
   },
 };

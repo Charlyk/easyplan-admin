@@ -80,14 +80,15 @@ const Services = props => {
         </Button>
       </div>
       <div className='services-root__services'>
-        {isLoading && services.length === 0 && renderSkeleton()}
-        {services.map(service => (
-          <ServiceItem
-            onEdit={handleServiceEdit}
-            key={service.id}
-            service={service}
-          />
-        ))}
+        {isLoading && services?.length === 0 && renderSkeleton()}
+        {services &&
+          services.map(service => (
+            <ServiceItem
+              onEdit={handleServiceEdit}
+              key={service.id}
+              service={service}
+            />
+          ))}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
 import IconPlus from '../../assets/icons/iconPlus';
+import { Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 
 const Tab = ({ title, selected, onClick }) => {
@@ -27,23 +28,23 @@ const UsersHeader = ({ onFilterChange, filter }) => {
       <div className='users-header__tabs'>
         <Tab
           title={textForKey('All')}
-          onClick={() => handleTabClick('all')}
-          selected={filter === 'all'}
+          onClick={() => handleTabClick(Role.all)}
+          selected={filter === Role.all}
         />
         <Tab
           title={textForKey('Administrators')}
-          onClick={() => handleTabClick('admins')}
-          selected={filter === 'admins'}
+          onClick={() => handleTabClick(Role.admin)}
+          selected={filter === Role.admin}
         />
         <Tab
           title={textForKey('Receptionists')}
-          onClick={() => handleTabClick('reception')}
-          selected={filter === 'reception'}
+          onClick={() => handleTabClick(Role.reception)}
+          selected={filter === Role.reception}
         />
         <Tab
           title={textForKey('Doctors')}
-          onClick={() => handleTabClick('doctors')}
-          selected={filter === 'doctors'}
+          onClick={() => handleTabClick(Role.doctor)}
+          selected={filter === Role.doctor}
         />
       </div>
       <Button className='positive-button'>
@@ -64,5 +65,5 @@ Tab.propTypes = {
 
 UsersHeader.propTypes = {
   onFilterChange: PropTypes.func,
-  filter: PropTypes.oneOf(['all', 'admins', 'reception', 'doctors']),
+  filter: PropTypes.oneOf([Role.all, Role.admin, Role.reception, Role.doctor]),
 };

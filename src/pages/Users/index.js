@@ -1,19 +1,92 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import UsersHeader from './UsersHeader';
 import './styles.scss';
-import UserItem from './UserItem';
+
+import Skeleton from '@material-ui/lab/Skeleton';
+
+import dataAPI from '../../utils/api/dataAPI';
+import { Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
+import UserItem from './UserItem';
 
 const Users = props => {
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedFilter, setSelectedFilter] = useState(Role.all);
+  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [props]);
+
+  const fetchUsers = () => {
+    setIsLoading(true);
+    dataAPI
+      .fetchUsers()
+      .then(response => {
+        setIsLoading(false);
+        if (!response.isError) {
+          setUsers(response.data);
+        }
+      })
+      .catch(error => {
+        setUsers([]);
+        setIsLoading(false);
+        console.error(error);
+      });
+  };
 
   const handleFilterChange = newFilter => {
     setSelectedFilter(newFilter);
   };
 
+  const doctors = users.filter(item => item.role === Role.doctor);
+
+  const admins = users.filter(
+    item => item.role === Role.admin || item.role === Role.manager,
+  );
+
+  const reception = users.filter(item => item.role === Role.reception);
+
   const canShowType = type => {
-    return selectedFilter === 'all' || selectedFilter === type;
+    return selectedFilter === Role.all || selectedFilter === type;
+  };
+
+  const renderNoData = type => {
+    if (users.some(item => item.role === type) || isLoading) return null;
+    let message = '';
+    switch (type) {
+      case Role.admin:
+      case Role.manager:
+        message = 'No managers yet.';
+        break;
+      case Role.doctor:
+        message = 'No doctors yet.';
+        break;
+      case Role.reception:
+        message = 'No receptionists yet.';
+        break;
+      default:
+        return null;
+    }
+
+    return (
+      <div className='users-root__no-data'>
+        {message}
+        <div role='button'>Add {type.toLowerCase()}</div>{' '}
+      </div>
+    );
+  };
+
+  const renderSkeleton = () => {
+    if (!isLoading || users.length > 0) return null;
+    return (
+      <div className='users-root__skeleton'>
+        <Skeleton variant='rect' animation='wave' />
+        <Skeleton variant='rect' animation='wave' />
+        <Skeleton variant='rect' animation='wave' />
+      </div>
+    );
   };
 
   return (
@@ -23,37 +96,40 @@ const Users = props => {
         filter={selectedFilter}
       />
       <div className='users-root__content'>
-        {canShowType('admins') && (
+        {canShowType(Role.admin) && (
           <div className='users-root__group'>
             <span className='users-root__group-title'>
               {textForKey('Administrators')}
             </span>
-            <UserItem />
-            <UserItem />
+            {admins.map(item => (
+              <UserItem user={item} key={item.id} />
+            ))}
+            {renderSkeleton()}
+            {renderNoData(Role.admin)}
           </div>
         )}
-        {canShowType('reception') && (
+        {canShowType(Role.reception) && (
           <div className='users-root__group'>
             <span className='users-root__group-title'>
               {textForKey('Receptionists')}
             </span>
-            <UserItem />
-            <UserItem />
-            <UserItem />
-            <UserItem />
+            {reception.map(item => (
+              <UserItem user={item} key={item.id} />
+            ))}
+            {renderSkeleton()}
+            {renderNoData(Role.reception)}
           </div>
         )}
-        {canShowType('doctors') && (
+        {canShowType(Role.doctor) && (
           <div className='users-root__group'>
             <span className='users-root__group-title'>
               {textForKey('Doctors')}
             </span>
-            <UserItem />
-            <UserItem />
-            <UserItem />
-            <UserItem />
-            <UserItem />
-            <UserItem />
+            {doctors.map(item => (
+              <UserItem user={item} key={item.id} />
+            ))}
+            {renderSkeleton()}
+            {renderNoData(Role.doctor)}
           </div>
         )}
       </div>

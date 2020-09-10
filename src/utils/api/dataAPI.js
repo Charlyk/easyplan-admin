@@ -199,4 +199,21 @@ export default {
       };
     }
   },
+
+  /**
+   * Fetch all users for current clinic
+   * @return {Promise<{isError: boolean, message: string|null, data: [{id: string, firstName: string|null, lastName: string|null, avatar: string|null, phoneNumber: string|null, email: string, role: string}]}|null>}
+   */
+  fetchUsers: async () => {
+    try {
+      const response = await instance.get('users');
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };
