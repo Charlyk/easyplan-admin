@@ -174,7 +174,20 @@ const ServiceDetailsModal = props => {
   };
 
   return (
-    <LeftSideModal show={show} onClose={handleCloseModal}>
+    <LeftSideModal
+      show={show}
+      onClose={handleCloseModal}
+      steps={[
+        textForKey('Categories'),
+        category.name,
+        service == null
+          ? textForKey('Add service')
+          : textForKey('Edit service'),
+      ]}
+      title={
+        service == null ? textForKey('Add service') : textForKey('Edit service')
+      }
+    >
       <ConfirmationModal
         onConfirm={deleteService}
         show={isDeleteConfirmationVisible}
@@ -184,41 +197,6 @@ const ServiceDetailsModal = props => {
         message={textForKey('Are you sure you want to delete this service?')}
       />
       <div className='service-details-modal'>
-        <div className='service-details-modal__header'>
-          <div className='service-details-modal__header__close-container'>
-            <div
-              className='close-btn'
-              role='button'
-              tabIndex={0}
-              onClick={handleCloseModal}
-            >
-              <IconClose />
-            </div>
-          </div>
-          <div className='service-details-modal__header__title'>
-            {service == null
-              ? textForKey('Add service')
-              : textForKey('Edit service')}
-          </div>
-          <div className='service-details-modal__header__breadcrumb-container'>
-            <div className='service-details-modal__header__breadcrumb current'>
-              {textForKey('Categories')}
-            </div>
-            {category && <IconArrowNext />}
-            {category && (
-              <div className='service-details-modal__header__breadcrumb current'>
-                {category.name}
-              </div>
-            )}
-            <IconArrowNext />
-            <div className='service-details-modal__header__breadcrumb'>
-              {service == null
-                ? textForKey('Add service')
-                : textForKey('Edit service')}
-            </div>
-          </div>
-        </div>
-
         <div className='service-details-modal__data'>
           <ServiceInformation
             onChange={handleInfoChanged}

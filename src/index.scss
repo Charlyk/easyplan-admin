@@ -16,6 +16,10 @@ body {
     border: unset;
   }
 
+  button:active, div:active, .nav-link:active {
+    outline: none !important;
+  }
+
   .delete-button {
     font-family: Inter, sans-serif;
     font-style: normal;

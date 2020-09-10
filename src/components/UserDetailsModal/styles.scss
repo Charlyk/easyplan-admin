@@ -1,0 +1,44 @@
+.user-details-root {
+  display: flex;
+  flex-direction: column;
+
+  &__tabs {
+    width: 100%;
+    background-color: white;
+
+    .nav-tabs {
+      align-items: center;
+      justify-content: center;
+      border-bottom: none;
+
+      .nav-link {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        color: #B8DBF8;
+        border-bottom: white .15rem solid;
+        margin-right: .5rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: .9rem;
+        line-height: 24px;
+
+        &.active {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-size: .9rem;
+          line-height: 24px;
+          font-weight: 600;
+          color: #3A83DC;
+          border-bottom: #3A83DC .15rem solid;
+        }
+
+        &:hover {
+          border-bottom: #3A83DC .15rem solid;
+        }
+      }
+    }
+  }
+}

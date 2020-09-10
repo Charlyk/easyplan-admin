@@ -5,6 +5,7 @@ import './styles.scss';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import UserDetailsModal from '../../components/UserDetailsModal';
 import dataAPI from '../../utils/api/dataAPI';
 import { Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
@@ -55,16 +56,20 @@ const Users = props => {
   const renderNoData = type => {
     if (users.some(item => item.role === type) || isLoading) return null;
     let message = '';
+    let buttonText = '';
     switch (type) {
       case Role.admin:
       case Role.manager:
-        message = 'No managers yet.';
+        message = textForKey('No managers yet.');
+        buttonText = textForKey('Add manager');
         break;
       case Role.doctor:
-        message = 'No doctors yet.';
+        message = textForKey('No doctors yet.');
+        buttonText = textForKey('Add doctor');
         break;
       case Role.reception:
-        message = 'No receptionists yet.';
+        message = textForKey('No receptionists yet.');
+        buttonText = textForKey('Add receptionist');
         break;
       default:
         return null;
@@ -73,7 +78,7 @@ const Users = props => {
     return (
       <div className='users-root__no-data'>
         {message}
-        <div role='button'>Add {type.toLowerCase()}</div>{' '}
+        <div role='button'>{buttonText}</div>
       </div>
     );
   };
@@ -91,6 +96,7 @@ const Users = props => {
 
   return (
     <div className='users-root'>
+      <UserDetailsModal />
       <UsersHeader
         onFilterChange={handleFilterChange}
         filter={selectedFilter}
