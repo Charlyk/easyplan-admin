@@ -15,6 +15,7 @@ const Users = props => {
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -48,6 +49,14 @@ const Users = props => {
   );
 
   const reception = users.filter(item => item.role === Role.reception);
+
+  const handleUserModalClose = () => {
+    setIsUserModalOpen(false);
+  };
+
+  const handleUserModalOpen = user => {
+    setIsUserModalOpen(true);
+  };
 
   const canShowType = type => {
     return selectedFilter === Role.all || selectedFilter === type;
@@ -96,10 +105,11 @@ const Users = props => {
 
   return (
     <div className='users-root'>
-      <UserDetailsModal />
+      <UserDetailsModal onClose={handleUserModalClose} show={isUserModalOpen} />
       <UsersHeader
         onFilterChange={handleFilterChange}
         filter={selectedFilter}
+        onAddUser={handleUserModalOpen}
       />
       <div className='users-root__content'>
         {canShowType(Role.admin) && (

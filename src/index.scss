@@ -49,6 +49,10 @@ body {
       color: #fff !important;
     }
 
+    &:active {
+      outline: none !important;
+    }
+
     &:hover {
       background-color: #ec3276;
       color: #fff;
@@ -91,6 +95,11 @@ body {
     &:active:focus {
       background-color: #e5e5f5 !important;
       color: #a1a2c6 !important;
+      outline: none !important;
+    }
+
+    &:active {
+      outline: none !important;
     }
 
     &:hover {
@@ -139,11 +148,36 @@ body {
     &:active:focus {
       background-color: #3A83DC !important;
       color: #FFF !important;
+      outline: none !important;
+    }
+
+    &:active {
+      outline: none !important;
     }
 
     &:hover:not(.btn-primary.disabled) {
       background-color: #367acb;
       color: #FFF;
+    }
+  }
+
+  .btn-outline-primary {
+    color: #3A83DC;
+    border-color: #3A83DC;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: .9rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+
+    &:active {
+      outline: none !important;
     }
   }
 }

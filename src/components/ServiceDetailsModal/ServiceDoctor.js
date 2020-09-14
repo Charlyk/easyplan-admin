@@ -57,7 +57,7 @@ const ServiceDoctor = props => {
             type='number'
           />
           <InputGroup.Append>
-            <InputGroup.Text id='basic-addon1'>mdl</InputGroup.Text>
+            <InputGroup.Text id='basic-addon1'>%</InputGroup.Text>
           </InputGroup.Append>
         </InputGroup>
         <InputGroup>

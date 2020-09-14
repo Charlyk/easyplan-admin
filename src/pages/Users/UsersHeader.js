@@ -18,7 +18,7 @@ const Tab = ({ title, selected, onClick }) => {
   );
 };
 
-const UsersHeader = ({ onFilterChange, filter }) => {
+const UsersHeader = ({ onFilterChange, filter, onAddUser }) => {
   const handleTabClick = tabName => {
     onFilterChange(tabName);
   };
@@ -47,7 +47,7 @@ const UsersHeader = ({ onFilterChange, filter }) => {
           selected={filter === Role.doctor}
         />
       </div>
-      <Button className='positive-button'>
+      <Button className='positive-button' onClick={onAddUser}>
         {textForKey('Add new user')}
         <IconPlus />
       </Button>
@@ -66,4 +66,5 @@ Tab.propTypes = {
 UsersHeader.propTypes = {
   onFilterChange: PropTypes.func,
   filter: PropTypes.oneOf([Role.all, Role.admin, Role.reception, Role.doctor]),
+  onAddUser: PropTypes.func,
 };

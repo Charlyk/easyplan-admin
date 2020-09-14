@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 
-import { Tab, Tabs } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { Button, Tab, Tabs } from 'react-bootstrap';
 
-import LeftSideModal from '../LeftSideModal';
 import './styles.scss';
+import IconClose from '../../assets/icons/iconClose';
+import IconDelete from '../../assets/icons/iconDelete';
+import IconSuccess from '../../assets/icons/iconSuccess';
 import { Role } from '../../utils/constants';
+import { textForKey } from '../../utils/localization';
+import LeftSideModal from '../LeftSideModal';
+import LoadingButton from '../LoadingButton';
+import AdminForm from './AdminForm';
+import DoctorForm from './DoctorForm';
+import ReceptionForm from './ReceptionForm';
 
 const UserDetailsModal = props => {
+  const { onClose, show } = props;
   const [currentTab, setCurrentTab] = useState(Role.admin);
   const handleModalClose = () => {
-    console.log('close');
+    onClose();
   };
 
   const handleTabSelect = newKey => {
@@ -20,7 +30,7 @@ const UserDetailsModal = props => {
     <LeftSideModal
       title='Add user'
       steps={['Users', 'Add user']}
-      show={true}
+      show={show}
       onClose={handleModalClose}
     >
       <div className='user-details-root'>
@@ -35,9 +45,33 @@ const UserDetailsModal = props => {
             <Tab eventKey={Role.doctor} title='Doctor' />
           </Tabs>
         </div>
+        <div className='user-details-root__content'>
+          {currentTab === Role.admin && <AdminForm />}
+          {currentTab === Role.reception && <ReceptionForm />}
+          {currentTab === Role.doctor && <DoctorForm />}
+        </div>
+        <div className='user-details-root__footer'>
+          <Button className='cancel-button' onClick={handleModalClose}>
+            {textForKey('Cancel')}
+            <IconClose />
+          </Button>
+          <LoadingButton className='delete-button'>
+            {textForKey('Delete')}
+            <IconDelete />
+          </LoadingButton>
+          <LoadingButton className='positive-button'>
+            {textForKey('Save')}
+            <IconSuccess />
+          </LoadingButton>
+        </div>
       </div>
     </LeftSideModal>
   );
 };
 
 export default UserDetailsModal;
+
+UserDetailsModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
+};
