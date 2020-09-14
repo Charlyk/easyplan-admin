@@ -210,6 +210,17 @@
     font-size: 1rem;
     color: #34354C;
 
+    &__title-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    &__step {
+      color: #7DD7C8 !important;
+      margin-right: .5rem;
+    }
+
     &__title {
       font-family: Inter, sans-serif;
       font-style: normal;

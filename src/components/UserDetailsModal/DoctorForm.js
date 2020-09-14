@@ -20,6 +20,7 @@ const GroupType = {
 
 const DoctorForm = props => {
   const [expandedGroup, setExpandedGroup] = useState(GroupType.account);
+  const showStep = true;
 
   const handleToggleForm = formId => {
     setExpandedGroup(formId);
@@ -29,7 +30,14 @@ const DoctorForm = props => {
     <div className='doctor-form'>
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
-          {textForKey('Account information')}
+          <div className='doctor-form__group-header__title-container'>
+            {showStep && (
+              <div className='doctor-form__group-header__step'>
+                {textForKey('Step 1.')}
+              </div>
+            )}
+            {textForKey('Account information')}
+          </div>
           <div
             tabIndex={0}
             role='button'
@@ -48,7 +56,14 @@ const DoctorForm = props => {
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
-          {textForKey('Provided services')}
+          <div className='doctor-form__group-header__title-container'>
+            {showStep && (
+              <div className='doctor-form__group-header__step'>
+                {textForKey('Step 2.')}
+              </div>
+            )}
+            {textForKey('Provided services')}
+          </div>
           <div
             tabIndex={0}
             role='button'
@@ -67,7 +82,14 @@ const DoctorForm = props => {
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
-          {textForKey('Work hours')}
+          <div className='doctor-form__group-header__title-container'>
+            {showStep && (
+              <div className='doctor-form__group-header__step'>
+                {textForKey('Step 3.')}
+              </div>
+            )}
+            {textForKey('Work hours')}
+          </div>
           <div
             tabIndex={0}
             role='button'
@@ -86,7 +108,14 @@ const DoctorForm = props => {
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
-          {textForKey('Holidays')}
+          <div className='doctor-form__group-header__title-container'>
+            {showStep && (
+              <div className='doctor-form__group-header__step'>
+                {textForKey('Step 4.')}
+              </div>
+            )}
+            {textForKey('Holidays')}
+          </div>
           <div
             tabIndex={0}
             role='button'
