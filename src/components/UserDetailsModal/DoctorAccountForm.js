@@ -14,7 +14,7 @@ const DoctorAccountForm = props => {
     <div className={classes}>
       <div className='account-info__avatar-container'>
         <IconAvatar />
-        <span>JPG or PNG, Max size of 800kb</span>
+        <span>{textForKey('JPG or PNG, Max size of 800kb')}</span>
         <Button variant='outline-primary'>{textForKey('Upload image')}</Button>
       </div>
       <div className='account-info__content'>

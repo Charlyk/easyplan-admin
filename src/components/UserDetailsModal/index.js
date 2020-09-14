@@ -29,7 +29,7 @@ const UserDetailsModal = props => {
   return (
     <LeftSideModal
       title='Add user'
-      steps={['Users', 'Add user']}
+      steps={[textForKey('Users'), textForKey('Add user')]}
       show={show}
       onClose={handleModalClose}
     >

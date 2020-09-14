@@ -13,7 +13,7 @@ const AdminForm = props => {
       </div>
       <div className='admin-form__avatar-container'>
         <IconAvatar />
-        <span>JPG or PNG, Max size of 800kb</span>
+        <span>{textForKey('JPG or PNG, Max size of 800kb')}</span>
         <Button variant='outline-primary'>{textForKey('Upload image')}</Button>
       </div>
       <div className='admin-form__content'>
