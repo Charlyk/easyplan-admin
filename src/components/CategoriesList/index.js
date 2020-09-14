@@ -206,7 +206,7 @@ const CategoriesList = props => {
 
         <div className='categories-list__add' onClick={handleAddCategory}>
           <IconPlus />
-          Add category
+          {textForKey('Add category')}
         </div>
       </div>
       <div className='categories-list__spacer' />

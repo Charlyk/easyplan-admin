@@ -52,7 +52,7 @@ const UserDetailsModal = props => {
         </div>
         <div className='user-details-root__footer'>
           <Button className='cancel-button' onClick={handleModalClose}>
-            {textForKey('Cancel')}
+            {textForKey('Close')}
             <IconClose />
           </Button>
           <LoadingButton className='delete-button'>

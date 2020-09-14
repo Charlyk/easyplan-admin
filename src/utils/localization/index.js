@@ -14,7 +14,7 @@ export function setAppLanguage(newLanguage) {
  */
 export function getAppLanguage() {
   const lang = localStorage.getItem('appLanguage');
-  return lang ? lang : 'en';
+  return lang ? lang : 'ro';
 }
 
 /**

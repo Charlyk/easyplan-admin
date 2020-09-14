@@ -220,7 +220,7 @@ const ServiceDetailsModal = props => {
             disabled={isLoading || isDeleting}
             onClick={handleCloseModal}
           >
-            {textForKey('Cancel')}
+            {textForKey('Close')}
             <IconClose />
           </Button>
           {service && (

@@ -44,7 +44,7 @@ const ServiceDoctors = props => {
       <div className={contentClasses}>
         {doctors.length === 0 && (
           <div className='service-doctors__content__no-data'>
-            {textForKey('There are not doctors yet.')}{' '}
+            {textForKey('No doctors yet.')}{' '}
             <Link to='/users'>{textForKey('Add one +')}</Link>
           </div>
         )}
