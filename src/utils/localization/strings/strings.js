@@ -77,6 +77,12 @@ export default {
     price: 'Price',
     description: 'Description',
     'doctors who provide this service': 'Doctors who provide this service',
+    manager: 'Manager',
+    receptionist: 'Receptionist',
+    doctor: 'Doctor',
+    'delete user': 'Delete user',
+    'are you sure you want to delete this user?':
+      'Are you sure you want to delete this user?',
   },
   ro: {
     analytics: 'Analitică',
@@ -142,7 +148,7 @@ export default {
     holidays: 'Vacanțe',
     'work hours': 'Orarul de lucru',
     'provided services': 'Serviciile oferite',
-    'account information': 'Account information',
+    'account information': 'Detalii cont',
     'upload image': 'Alege imagine',
     'first name': 'Prenume',
     'last name': 'Nume',
@@ -155,6 +161,12 @@ export default {
     price: 'Preț',
     description: 'Descriere',
     'doctors who provide this service': 'Doctori care oferă acest serviciu',
+    manager: 'Manager',
+    receptionist: 'Recepționist',
+    doctor: 'Doctor',
+    'delete user': 'Șterge utilizator',
+    'are you sure you want to delete this user?':
+      'Sunteți sigur(ă) că vreți sa ștergeți acest utilizator?',
   },
   ru: {
     analytics: 'Analytics',
@@ -232,5 +244,11 @@ export default {
     price: 'Price',
     description: 'Description',
     'doctors who provide this service': 'Doctors who provide this service',
+    manager: 'Manager',
+    receptionist: 'Receptionist',
+    doctor: 'Doctor',
+    'delete user': 'Delete user',
+    'are you sure you want to delete this user?':
+      'Are you sure you want to delete this user?',
   },
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './index.scss';
+import 'react-phone-number-input/style.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Login from './pages/Login';

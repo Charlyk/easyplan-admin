@@ -74,6 +74,34 @@
   width: 100%;
   padding: 2rem;
 
+  .custom-file {
+    width: 10rem;
+    cursor: pointer;
+    border: #3A83DC 1px solid;
+    border-radius: .2rem;
+    height: unset;
+    background-color: white;
+
+    .custom-file-label {
+      cursor: pointer;
+      text-transform: uppercase;
+      color: #3A83DC;
+      background-color: white;
+
+      &:after {
+        cursor: pointer;
+        color: #3A83DC;
+        box-shadow: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        width: 100%;
+      }
+    }
+  }
+
   &__title {
     font-family: Inter, sans-serif;
     font-style: normal;
@@ -116,9 +144,9 @@
     letter-spacing: 0.01em;
     color: #A1A2C6;
 
-    svg {
-      width: 4.5rem;
-      height: 4.5rem;
+    svg, img {
+      width: 4rem;
+      min-height: 4rem;
     }
 
     .btn-outline-primary {
@@ -131,6 +159,34 @@
   width: 100%;
   padding: 2rem;
 
+  .custom-file {
+    width: 10rem;
+    cursor: pointer;
+    border: #3A83DC 1px solid;
+    border-radius: .2rem;
+    height: unset;
+    background-color: white;
+
+    .custom-file-label {
+      cursor: pointer;
+      text-transform: uppercase;
+      color: #3A83DC;
+      background-color: white;
+
+      &:after {
+        cursor: pointer;
+        color: #3A83DC;
+        box-shadow: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        width: 100%;
+      }
+    }
+  }
+
   &__title {
     font-family: Inter, sans-serif;
     font-style: normal;
@@ -173,9 +229,9 @@
     letter-spacing: 0.01em;
     color: #A1A2C6;
 
-    svg {
-      width: 4.5rem;
-      height: 4.5rem;
+    svg, img {
+      width: 4rem;
+      min-height: 4rem;
     }
 
     .btn-outline-primary {
@@ -294,9 +350,9 @@
     letter-spacing: 0.01em;
     color: #A1A2C6;
 
-    svg {
-      width: 4.5rem;
-      height: 4.5rem;
+    svg, img {
+      width: 3.5rem;
+      height: 3.5rem;
     }
 
     .btn-outline-primary {

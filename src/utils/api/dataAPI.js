@@ -216,4 +216,46 @@ export default {
       };
     }
   },
+
+  /**
+   * Create new user
+   * @param {Object} requestBody
+   * @param {string} requestBody.firstName
+   * @param {string} requestBody.lastName
+   * @param {string} requestBody.email
+   * @param {string} requestBody.phoneNumber
+   * @param {string} requestBody.avatar
+   * @return {Promise<{isError: boolean, message: string}>}
+   */
+  createUser: async requestBody => {
+    try {
+      const response = await instance.post('users', requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Remove user from current clinic
+   * @param {string} userId
+   * @return {Promise<{isError: boolean, message: string}>}
+   */
+  deleteUser: async userId => {
+    try {
+      const url = `users/${userId}`;
+      const response = await instance.delete(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };

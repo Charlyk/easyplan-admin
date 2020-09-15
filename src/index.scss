@@ -180,4 +180,42 @@ body {
       outline: none !important;
     }
   }
+
+  .form-control {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: .8rem;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #34354C;
+  }
+
+  .PhoneInput {
+    flex: 1;
+
+    .PhoneInputInput {
+      height: calc(1.5em + .75rem + 2px);
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+      padding: .375rem .75rem;
+      margin-left: .25rem;
+      background-color: transparent;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: .8rem;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #34354C;
+
+      &:focus {
+        background-color: white;
+      }
+
+      &::placeholder {
+        color: #CDCEEA;
+      }
+    }
+  }
 }

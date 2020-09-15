@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
-import UsersHeader from './UsersHeader';
 import './styles.scss';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import ConfirmationModal from '../../components/ConfirmationModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
 import dataAPI from '../../utils/api/dataAPI';
 import { Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import UserItem from './UserItem';
+import UsersHeader from './UsersHeader';
 
 const Users = props => {
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [userToDelete, setUserToDelete] = useState(null);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -69,6 +72,7 @@ const Users = props => {
     switch (type) {
       case Role.admin:
       case Role.manager:
+        if (admins.length > 0) return null;
         message = textForKey('No managers yet.');
         buttonText = textForKey('Add manager');
         break;
@@ -103,8 +107,44 @@ const Users = props => {
     );
   };
 
+  const startUserDelete = user => {
+    setUserToDelete(user);
+  };
+
+  const closeDeleteUserDialog = () => {
+    setUserToDelete(null);
+  };
+
+  const deleteUser = () => {
+    if (!userToDelete) return;
+    setIsDeleting(true);
+    dataAPI
+      .deleteUser(userToDelete.id)
+      .then(response => {
+        setIsDeleting(false);
+        if (response.isError) {
+          console.error(response);
+        } else {
+          setUserToDelete(null);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        setIsDeleting(false);
+      });
+  };
+
   return (
     <div className='users-root'>
+      <ConfirmationModal
+        show={Boolean(userToDelete)}
+        onClose={closeDeleteUserDialog}
+        title={textForKey('Delete user')}
+        message={textForKey('Are you sure you want to delete this user?')}
+        onConfirm={deleteUser}
+        isLoading={isDeleting}
+      />
+
       <UserDetailsModal onClose={handleUserModalClose} show={isUserModalOpen} />
       <UsersHeader
         onFilterChange={handleFilterChange}
@@ -118,7 +158,7 @@ const Users = props => {
               {textForKey('Administrators')}
             </span>
             {admins.map(item => (
-              <UserItem user={item} key={item.id} />
+              <UserItem user={item} key={item.id} onDelete={startUserDelete} />
             ))}
             {renderSkeleton()}
             {renderNoData(Role.admin)}
@@ -130,7 +170,7 @@ const Users = props => {
               {textForKey('Receptionists')}
             </span>
             {reception.map(item => (
-              <UserItem user={item} key={item.id} />
+              <UserItem user={item} key={item.id} onDelete={startUserDelete} />
             ))}
             {renderSkeleton()}
             {renderNoData(Role.reception)}
@@ -142,7 +182,7 @@ const Users = props => {
               {textForKey('Doctors')}
             </span>
             {doctors.map(item => (
-              <UserItem user={item} key={item.id} />
+              <UserItem user={item} key={item.id} onDelete={startUserDelete} />
             ))}
             {renderSkeleton()}
             {renderNoData(Role.doctor)}

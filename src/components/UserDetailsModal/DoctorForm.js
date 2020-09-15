@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlusBig from '../../assets/icons/iconPlusBig';
-import { Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import DoctorAccountForm from './DoctorAccountForm';
 import DoctorHolidays from './DoctorHolidays';
