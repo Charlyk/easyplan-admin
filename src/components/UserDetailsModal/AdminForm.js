@@ -102,9 +102,10 @@ const AdminForm = props => {
           <Form.Label>{textForKey('Phone number')}</Form.Label>
           <InputGroup>
             <PhoneInput
+              displayInitialValueAsLocalNumber
+              value={data?.phoneNumber || ''}
               defaultCountry='MD'
               placeholder='079123456'
-              value={data.phoneNumber}
               onChange={handlePhoneChanged}
             />
           </InputGroup>

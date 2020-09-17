@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
-import PhoneInput from 'react-phone-number-input';
+import PhoneInput, { parsePhoneNumber } from 'react-phone-number-input';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import { textForKey } from '../../utils/localization';
@@ -98,8 +98,9 @@ const DoctorAccountForm = props => {
           <InputGroup>
             <PhoneInput
               defaultCountry='MD'
+              displayInitialValueAsLocalNumber
+              value={data?.phoneNumber || ''}
               placeholder='079123456'
-              value={data.phoneNumber}
               onChange={handlePhoneChanged}
             />
           </InputGroup>
