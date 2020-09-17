@@ -17,7 +17,10 @@ const Users = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState({
+    open: false,
+    user: null,
+  });
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
@@ -32,6 +35,8 @@ const Users = props => {
         setIsLoading(false);
         if (!response.isError) {
           setUsers(response.data);
+        } else {
+          console.error(response.message);
         }
       })
       .catch(error => {
@@ -54,11 +59,14 @@ const Users = props => {
   const reception = users.filter(item => item.role === Role.reception);
 
   const handleUserModalClose = () => {
-    setIsUserModalOpen(false);
+    setIsUserModalOpen({ ...isUserModalOpen, open: false });
+    setTimeout(() => {
+      setIsUserModalOpen({ open: false, user: null });
+    }, 300);
   };
 
-  const handleUserModalOpen = user => {
-    setIsUserModalOpen(true);
+  const handleUserModalOpen = (event, user) => {
+    setIsUserModalOpen({ open: true, user });
   };
 
   const canShowType = type => {
@@ -145,23 +153,32 @@ const Users = props => {
         isLoading={isDeleting}
       />
 
-      <UserDetailsModal onClose={handleUserModalClose} show={isUserModalOpen} />
+      <UserDetailsModal
+        onClose={handleUserModalClose}
+        show={isUserModalOpen.open}
+        user={isUserModalOpen.user}
+      />
       <UsersHeader
         onFilterChange={handleFilterChange}
         filter={selectedFilter}
         onAddUser={handleUserModalOpen}
       />
       <div className='users-root__content'>
-        {canShowType(Role.admin) && (
+        {canShowType(Role.doctor) && (
           <div className='users-root__group'>
             <span className='users-root__group-title'>
-              {textForKey('Administrators')}
+              {textForKey('Doctors')}
             </span>
-            {admins.map(item => (
-              <UserItem user={item} key={item.id} onDelete={startUserDelete} />
+            {doctors.map(item => (
+              <UserItem
+                user={item}
+                key={item.id}
+                onDelete={startUserDelete}
+                onEdit={handleUserModalOpen}
+              />
             ))}
             {renderSkeleton()}
-            {renderNoData(Role.admin)}
+            {renderNoData(Role.doctor)}
           </div>
         )}
         {canShowType(Role.reception) && (
@@ -170,22 +187,32 @@ const Users = props => {
               {textForKey('Receptionists')}
             </span>
             {reception.map(item => (
-              <UserItem user={item} key={item.id} onDelete={startUserDelete} />
+              <UserItem
+                user={item}
+                key={item.id}
+                onDelete={startUserDelete}
+                onEdit={handleUserModalOpen}
+              />
             ))}
             {renderSkeleton()}
             {renderNoData(Role.reception)}
           </div>
         )}
-        {canShowType(Role.doctor) && (
+        {canShowType(Role.admin) && (
           <div className='users-root__group'>
             <span className='users-root__group-title'>
-              {textForKey('Doctors')}
+              {textForKey('Administrators')}
             </span>
-            {doctors.map(item => (
-              <UserItem user={item} key={item.id} onDelete={startUserDelete} />
+            {admins.map(item => (
+              <UserItem
+                user={item}
+                key={item.id}
+                onDelete={startUserDelete}
+                onEdit={handleUserModalOpen}
+              />
             ))}
             {renderSkeleton()}
-            {renderNoData(Role.doctor)}
+            {renderNoData(Role.admin)}
           </div>
         )}
       </div>

@@ -32,9 +32,9 @@ const UsersHeader = ({ onFilterChange, filter, onAddUser }) => {
           selected={filter === Role.all}
         />
         <Tab
-          title={textForKey('Administrators')}
-          onClick={() => handleTabClick(Role.admin)}
-          selected={filter === Role.admin}
+          title={textForKey('Doctors')}
+          onClick={() => handleTabClick(Role.doctor)}
+          selected={filter === Role.doctor}
         />
         <Tab
           title={textForKey('Receptionists')}
@@ -42,9 +42,9 @@ const UsersHeader = ({ onFilterChange, filter, onAddUser }) => {
           selected={filter === Role.reception}
         />
         <Tab
-          title={textForKey('Doctors')}
-          onClick={() => handleTabClick(Role.doctor)}
-          selected={filter === Role.doctor}
+          title={textForKey('Administrators')}
+          onClick={() => handleTabClick(Role.admin)}
+          selected={filter === Role.admin}
         />
       </div>
       <Button className='positive-button' onClick={onAddUser}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import clsx from 'clsx';
+import { cloneDeep, remove } from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
@@ -26,18 +27,39 @@ const days = [
   textForKey('Sunday'),
 ];
 
-const WorkDay = ({ day }) => {
-  const [selected, setSelected] = useState(false);
+const WorkDay = ({ day, onChange }) => {
   const hours = createHoursList();
-  const titleClasses = clsx('day-title', selected ? 'selected' : 'default');
+  const titleClasses = clsx('day-title', day.selected ? 'selected' : 'default');
+
   const handleDayToggle = () => {
-    setSelected(!selected);
+    onChange(day, day.startHour, day.endHour, !day.selected);
   };
+
+  const handleStartHourChange = event => {
+    const newValue = event.target.value;
+    onChange(
+      day,
+      newValue === 'choose' ? null : newValue,
+      day.endHour,
+      day.selected,
+    );
+  };
+
+  const handleEndHourChange = event => {
+    const newValue = event.target.value;
+    onChange(
+      day,
+      day.startHour,
+      newValue === 'choose' ? null : newValue,
+      day.selected,
+    );
+  };
+
   return (
     <div className='doctor-work-hours__day'>
-      <SwitchButton isChecked={selected} onChange={handleDayToggle} />
-      <div className={titleClasses}>{day}</div>
-      {!selected ? (
+      <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
+      <div className={titleClasses}>{days[day.dayId]}</div>
+      {!day.selected ? (
         <div className='doctor-work-hours__day__day-off'>
           {textForKey('Day off')}
         </div>
@@ -49,6 +71,8 @@ const WorkDay = ({ day }) => {
               className='mr-sm-2'
               id='inlineFormCustomSelect'
               custom
+              onChange={handleStartHourChange}
+              value={day.startHour}
             >
               <option value='choose'>{textForKey('Chose...')}</option>
               {hours.map(item => (
@@ -65,6 +89,8 @@ const WorkDay = ({ day }) => {
               className='mr-sm-2'
               id='inlineFormCustomSelect'
               custom
+              onChange={handleEndHourChange}
+              value={day.endHour}
             >
               <option value='choose'>{textForKey('Chose...')}</option>
               {hours.map(item => (
@@ -81,12 +107,27 @@ const WorkDay = ({ day }) => {
 };
 
 const DoctorWorkHours = props => {
-  const { show } = props;
+  const { show, data, onChange } = props;
+
+  const handleDayChange = (day, startHour, endHour, isSelected) => {
+    const newDays = data.workDays.map(item => {
+      if (item.dayId !== day.dayId) return item;
+      return {
+        ...item,
+        startHour,
+        endHour,
+        selected: isSelected,
+      };
+    });
+
+    onChange(newDays);
+  };
+
   const classes = clsx('doctor-work-hours', show ? 'expanded' : 'collapsed');
   return (
     <div className={classes} style={{ height: show ? days.length * 48 : 0 }}>
-      {days.map(day => (
-        <WorkDay key={day} day={day} />
+      {data.workDays.map(day => (
+        <WorkDay key={day.dayId} day={day} onChange={handleDayChange} />
       ))}
     </div>
   );
@@ -94,6 +135,32 @@ const DoctorWorkHours = props => {
 
 export default DoctorWorkHours;
 
+WorkDay.propTypes = {
+  onChange: PropTypes.func,
+  day: PropTypes.shape({
+    dayId: PropTypes.number,
+    startHour: PropTypes.string,
+    endHour: PropTypes.string,
+    selected: false,
+  }),
+};
+
 DoctorWorkHours.propTypes = {
   show: PropTypes.bool.isRequired,
+  data: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    avatarFile: PropTypes.object,
+    workDays: PropTypes.arrayOf(
+      PropTypes.shape({
+        dayId: PropTypes.number,
+        startHour: PropTypes.string,
+        endHour: PropTypes.string,
+        selected: false,
+      }),
+    ),
+  }),
+  onChange: PropTypes.func,
 };

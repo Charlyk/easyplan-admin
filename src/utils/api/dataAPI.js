@@ -185,7 +185,7 @@ export default {
   /**
    * Fetch all categories
    * @param {string|null} categoryId
-   * @return {Promise<void>}
+   * @return {Promise<{isError: boolean, message: string|null, data: Array.<Object>|null}>}
    */
   fetchServices: async categoryId => {
     try {
@@ -232,6 +232,30 @@ export default {
   createUser: async requestBody => {
     try {
       const response = await instance.post('users', requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Create new user
+   * @param {string} userId
+   * @param {Object} requestBody
+   * @param {string} requestBody.firstName
+   * @param {string} requestBody.lastName
+   * @param {string} requestBody.email
+   * @param {string} requestBody.phoneNumber
+   * @param {string} requestBody.avatar
+   * @return {Promise<{isError: boolean, message: string}>}
+   */
+  updateUser: async (userId, requestBody) => {
+    try {
+      const response = await instance.put(`users/${userId}`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

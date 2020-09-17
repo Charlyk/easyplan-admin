@@ -13,10 +13,14 @@ import { imageLambdaUrl } from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 
 const UserItem = props => {
-  const { user, onDelete } = props;
+  const { user, onDelete, onEdit } = props;
 
-  const handleDeleteUser = () => {
-    onDelete(user);
+  const handleDeleteUser = event => {
+    onDelete(event, user);
+  };
+
+  const handleEditUser = event => {
+    onEdit(event, user);
   };
 
   const rootClasses = clsx('user-item', user.status.toLowerCase());
@@ -51,7 +55,7 @@ const UserItem = props => {
         {user.email}
       </div>
       <div className='user-item__action-buttons'>
-        <Button className='user-item__edit-button'>
+        <Button className='user-item__edit-button' onClick={handleEditUser}>
           {textForKey('Edit')} <IconEdit />
         </Button>
         <Button className='user-item__delete-button' onClick={handleDeleteUser}>
@@ -76,8 +80,10 @@ UserItem.propTypes = {
     status: PropTypes.string,
   }).isRequired,
   onDelete: PropTypes.func,
+  onEdit: PropTypes.func,
 };
 
 UserItem.defaultProps = {
   onDelete: () => null,
+  onEdit: () => null,
 };

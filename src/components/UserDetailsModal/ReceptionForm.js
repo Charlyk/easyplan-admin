@@ -41,10 +41,14 @@ const ReceptionForm = props => {
         {textForKey('Account information')}
       </div>
       <div className='reception-form__avatar-container'>
-        {data.avatarFile ? (
+        {data.avatarFile || data.avatar ? (
           <Image
             roundedCircle
-            src={window.URL.createObjectURL(data.avatarFile)}
+            src={
+              data.avatarFile
+                ? window.URL.createObjectURL(data.avatarFile)
+                : data.avatar
+            }
           />
         ) : (
           <IconAvatar />
@@ -119,6 +123,7 @@ ReceptionForm.propTypes = {
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
     avatarFile: PropTypes.object,
+    avatar: PropTypes.string,
   }).isRequired,
 };
 
@@ -130,5 +135,6 @@ ReceptionForm.defaultProps = {
     email: '',
     phoneNumber: '',
     avatarFile: null,
+    avatar: null,
   },
 };

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default {
   en: {
     analytics: 'Analytics',
@@ -156,7 +154,7 @@ export default {
     'phone number': 'Număr de telefon',
     'jpg or png, max size of 800kb': 'JPG or PNG, Mărime maximă 800kb',
     'add user': 'Adaugă utilizator',
-    'edit user': 'Editează user',
+    'edit user': 'Editează utilizator',
     time: 'Timp',
     price: 'Preț',
     description: 'Descriere',

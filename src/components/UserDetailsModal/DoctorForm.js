@@ -18,11 +18,23 @@ const GroupType = {
 };
 
 const DoctorForm = props => {
+  const { data, onChange, showSteps } = props;
   const [expandedGroup, setExpandedGroup] = useState(GroupType.account);
-  const showStep = true;
 
   const handleToggleForm = formId => {
     setExpandedGroup(formId);
+  };
+
+  const handleAccountInfoChange = newData => {
+    onChange(newData);
+  };
+
+  const handleServicesChange = services => {
+    onChange({ services });
+  };
+
+  const handleWorkDaysChange = workDays => {
+    onChange({ workDays });
   };
 
   return (
@@ -30,7 +42,7 @@ const DoctorForm = props => {
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {showStep && (
+            {showSteps && (
               <div className='doctor-form__group-header__step'>
                 {textForKey('Step 1.')}
               </div>
@@ -50,13 +62,17 @@ const DoctorForm = props => {
             )}
           </div>
         </div>
-        <DoctorAccountForm show={expandedGroup === GroupType.account} />
+        <DoctorAccountForm
+          show={expandedGroup === GroupType.account}
+          onChange={handleAccountInfoChange}
+          data={data}
+        />
       </div>
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {showStep && (
+            {showSteps && (
               <div className='doctor-form__group-header__step'>
                 {textForKey('Step 2.')}
               </div>
@@ -76,13 +92,17 @@ const DoctorForm = props => {
             )}
           </div>
         </div>
-        <DoctorServices show={expandedGroup === GroupType.services} />
+        <DoctorServices
+          data={data}
+          onChange={handleServicesChange}
+          show={expandedGroup === GroupType.services}
+        />
       </div>
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {showStep && (
+            {showSteps && (
               <div className='doctor-form__group-header__step'>
                 {textForKey('Step 3.')}
               </div>
@@ -102,13 +122,17 @@ const DoctorForm = props => {
             )}
           </div>
         </div>
-        <DoctorWorkHours show={expandedGroup === GroupType.workHours} />
+        <DoctorWorkHours
+          onChange={handleWorkDaysChange}
+          data={data}
+          show={expandedGroup === GroupType.workHours}
+        />
       </div>
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {showStep && (
+            {showSteps && (
               <div className='doctor-form__group-header__step'>
                 {textForKey('Step 4.')}
               </div>
@@ -136,4 +160,14 @@ const DoctorForm = props => {
 
 export default DoctorForm;
 
-DoctorForm.propTypes = {};
+DoctorForm.propTypes = {
+  onChange: PropTypes.func,
+  showSteps: PropTypes.bool,
+  data: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    avatarFile: PropTypes.object,
+  }).isRequired,
+};

@@ -74,34 +74,6 @@
   width: 100%;
   padding: 2rem;
 
-  .custom-file {
-    width: 10rem;
-    cursor: pointer;
-    border: #3A83DC 1px solid;
-    border-radius: .2rem;
-    height: unset;
-    background-color: white;
-
-    .custom-file-label {
-      cursor: pointer;
-      text-transform: uppercase;
-      color: #3A83DC;
-      background-color: white;
-
-      &:after {
-        cursor: pointer;
-        color: #3A83DC;
-        box-shadow: none;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: white;
-        width: 100%;
-      }
-    }
-  }
-
   &__title {
     font-family: Inter, sans-serif;
     font-style: normal;
@@ -151,6 +123,34 @@
 
     .btn-outline-primary {
       text-transform: uppercase;
+    }
+  }
+
+  .custom-file {
+    width: 10rem;
+    cursor: pointer;
+    border: #3A83DC 1px solid;
+    border-radius: .2rem;
+    height: unset;
+    background-color: white;
+
+    .custom-file-label {
+      cursor: pointer;
+      text-transform: uppercase;
+      color: #3A83DC;
+      background-color: white;
+
+      &:after {
+        cursor: pointer;
+        color: #3A83DC;
+        box-shadow: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        width: 100%;
+      }
     }
   }
 }
@@ -339,6 +339,7 @@
   }
 
   &__avatar-container {
+    margin-top: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -351,12 +352,40 @@
     color: #A1A2C6;
 
     svg, img {
-      width: 3.5rem;
-      height: 3.5rem;
+      width: 4rem;
+      min-height: 4rem;
     }
 
     .btn-outline-primary {
       text-transform: uppercase;
+    }
+  }
+
+  .custom-file {
+    width: 10rem;
+    cursor: pointer;
+    border: #3A83DC 1px solid;
+    border-radius: .2rem;
+    height: unset;
+    background-color: white;
+
+    .custom-file-label {
+      cursor: pointer;
+      text-transform: uppercase;
+      color: #3A83DC;
+      background-color: white;
+
+      &:after {
+        cursor: pointer;
+        color: #3A83DC;
+        box-shadow: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        width: 100%;
+      }
     }
   }
 }
@@ -475,6 +504,7 @@
     }
 
     .separator-text {
+      width: 6rem;
       margin-right: 1rem;
       margin-left: .5rem;
       font-family: Inter, sans-serif;
@@ -487,7 +517,7 @@
     }
 
     .day-title {
-      width: 8rem;
+      width: 7rem;
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: 600;
