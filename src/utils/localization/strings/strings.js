@@ -95,7 +95,7 @@ export default {
     cancel: 'Amână',
     save: 'Salvează',
     delete: 'Șterge',
-    edit: 'Editeazăa',
+    edit: 'Editează',
     confirm: 'Confirmă',
     search: 'Caută',
     list: 'Lista',
