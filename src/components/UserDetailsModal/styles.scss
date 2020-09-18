@@ -680,3 +680,64 @@
     }
   }
 }
+
+.holiday-modal {
+
+  .modal-header {
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__close-btn {
+      outline: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+
+  .modal-footer {
+    border-top: none;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+
+    &__picker {
+      left: 101%;
+      top: 0;
+      z-index: 999;
+      position: absolute;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .7rem;
+      margin-bottom: 0;
+    }
+
+    .form-control {
+      background-color: #FAFAFD;
+    }
+  }
+
+  &__footer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .cancel-button {
+      margin-right: .5rem;
+    }
+  }
+}

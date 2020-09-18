@@ -14,6 +14,7 @@ import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
 import LoadingButton from '../LoadingButton';
 import AdminForm from './AdminForm';
+import CreateHolidayModal from './CreateHolidayModal';
 import DoctorForm from './DoctorForm';
 import ReceptionForm from './ReceptionForm';
 
@@ -210,6 +211,11 @@ const UserDetailsModal = props => {
       show={show}
       onClose={handleModalClose}
     >
+      <CreateHolidayModal
+        show={true}
+        onCreate={() => null}
+        onClose={() => null}
+      />
       <div className='user-details-root'>
         {user == null && (
           <div className='user-details-root__tabs'>
