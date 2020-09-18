@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useSelector } from 'react-redux';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
+import { updateUsersSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
@@ -13,6 +15,7 @@ import UserItem from './UserItem';
 import UsersHeader from './UsersHeader';
 
 const Users = props => {
+  const updateUsers = useSelector(updateUsersSelector);
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -25,7 +28,7 @@ const Users = props => {
 
   useEffect(() => {
     fetchUsers();
-  }, [props]);
+  }, [props, updateUsers]);
 
   const fetchUsers = () => {
     setIsLoading(true);

@@ -47,7 +47,10 @@ const UsersHeader = ({ onFilterChange, filter, onAddUser }) => {
           selected={filter === Role.admin}
         />
       </div>
-      <Button className='positive-button' onClick={onAddUser}>
+      <Button
+        className='positive-button'
+        onClick={event => onAddUser(event, null)}
+      >
         {textForKey('Add new user')}
         <IconPlus />
       </Button>

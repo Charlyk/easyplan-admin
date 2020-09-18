@@ -8,6 +8,11 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         updateCategories: !state.updateCategories,
       };
+    case types.updateUsersList:
+      return {
+        ...state,
+        updateUsers: !state.updateUsers,
+      };
     default:
       return state;
   }

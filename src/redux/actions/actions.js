@@ -10,3 +10,14 @@ export function triggerCategoriesUpdate() {
     payload: '',
   };
 }
+
+/**
+ * Trigger users list update
+ * @return {{payload: string, type: string}}
+ */
+export function triggerUsersUpdate() {
+  return {
+    type: types.updateUsersList,
+    payload: '',
+  };
+}
