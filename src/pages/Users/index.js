@@ -118,7 +118,7 @@ const Users = props => {
     );
   };
 
-  const startUserDelete = user => {
+  const startUserDelete = (event, user) => {
     setUserToDelete(user);
   };
 
@@ -137,6 +137,7 @@ const Users = props => {
           console.error(response);
         } else {
           setUserToDelete(null);
+          fetchUsers();
         }
       })
       .catch(error => {

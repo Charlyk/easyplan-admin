@@ -153,7 +153,7 @@ const CategoriesList = props => {
         onCategorySelect(null);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
         setIsDeleting(false);
       });
   };

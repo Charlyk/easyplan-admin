@@ -6,6 +6,7 @@ import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput, { parsePhoneNumber } from 'react-phone-number-input';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
+import { EmailRegex } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 
 const DoctorAccountForm = props => {
@@ -20,7 +21,6 @@ const DoctorAccountForm = props => {
   };
 
   const handlePhoneChanged = newValue => {
-    console.log(newValue);
     onChange({
       ...data,
       phoneNumber: newValue,
@@ -87,6 +87,7 @@ const DoctorAccountForm = props => {
           <Form.Label>{textForKey('Email')}</Form.Label>
           <InputGroup>
             <Form.Control
+              isInvalid={data.email.length > 0 && !data.email.match(EmailRegex)}
               type='email'
               onChange={handleFormChange}
               value={data.email}
