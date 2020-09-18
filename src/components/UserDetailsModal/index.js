@@ -4,6 +4,7 @@ import { remove, cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
 import S3 from 'react-aws-s3';
 import { Button, Tab, Tabs } from 'react-bootstrap';
+import { v4 as uuidv4 } from 'uuid';
 
 import './styles.scss';
 import IconClose from '../../assets/icons/iconClose';
@@ -69,6 +70,7 @@ const initialData = {
       selected: false,
     },
   ],
+  holidays: [],
 };
 
 const UserDetailsModal = props => {
@@ -79,10 +81,13 @@ const UserDetailsModal = props => {
     ...initialData,
     userType: currentTab,
   });
+  const [isCreatingHoliday, setIsCreatingHoliday] = useState({
+    open: false,
+    holiday: null,
+  });
 
   useEffect(() => {
     if (user != null) {
-      console.log(user);
       setCurrentTab(user.role);
       setUserData({
         ...initialData,
@@ -196,6 +201,49 @@ const UserDetailsModal = props => {
     }
   };
 
+  const handleCreateHoliday = holiday => {
+    setIsCreatingHoliday({ open: true, holiday: holiday });
+  };
+
+  const handleHolidayDelete = holiday => {
+    const newHolidays = cloneDeep(userData.holidays);
+    remove(newHolidays, item => item.id === holiday.id);
+    setUserData({
+      ...userData,
+      holidays: newHolidays,
+    });
+  };
+
+  const handleSaveHoliday = holiday => {
+    let newHolidays = cloneDeep(userData.holidays);
+    if (newHolidays.some(item => item.id === holiday.id)) {
+      // holiday already in the list so we need just to update it
+      newHolidays = newHolidays.map(item => {
+        if (item.id !== holiday.id) return item;
+        return {
+          ...item,
+          ...holiday,
+        };
+      });
+    } else {
+      // it's a new holiday so we need to add it to the list
+      newHolidays.push({
+        ...holiday,
+        id: uuidv4(),
+      });
+    }
+
+    setUserData({
+      ...userData,
+      holidays: newHolidays,
+    });
+    setIsCreatingHoliday({ open: false, holiday: null });
+  };
+
+  const handleCloseHolidayModal = () => {
+    setIsCreatingHoliday({ open: false, holiday: null });
+  };
+
   const steps = [textForKey('Users')];
   if (user != null) {
     steps.push(textForKey(`${user.firstName} ${user.lastName}`));
@@ -212,9 +260,10 @@ const UserDetailsModal = props => {
       onClose={handleModalClose}
     >
       <CreateHolidayModal
-        show={true}
-        onCreate={() => null}
-        onClose={() => null}
+        show={isCreatingHoliday.open}
+        holiday={isCreatingHoliday.holiday}
+        onCreate={handleSaveHoliday}
+        onClose={handleCloseHolidayModal}
       />
       <div className='user-details-root'>
         {user == null && (
@@ -242,6 +291,8 @@ const UserDetailsModal = props => {
           )}
           {currentTab === Role.doctor && (
             <DoctorForm
+              onCreateHoliday={handleCreateHoliday}
+              onDeleteHoliday={handleHolidayDelete}
               onChange={handleFormChange}
               data={userData}
               showSteps={user == null}
@@ -282,6 +333,21 @@ UserDetailsModal.propTypes = {
     email: PropTypes.string,
     role: PropTypes.oneOf([Role.manager, Role.doctor, Role.reception]),
     status: PropTypes.string,
+    holidays: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        startDate: PropTypes.string,
+        endDate: PropTypes.string,
+        description: PropTypes.string,
+      }),
+    ),
+    services: PropTypes.arrayOf(
+      PropTypes.shape({
+        serviceId: PropTypes.string,
+        price: PropTypes.number,
+        percentage: PropTypes.number,
+      }),
+    ),
     workDays: PropTypes.arrayOf(
       PropTypes.shape({
         day: PropTypes.number,

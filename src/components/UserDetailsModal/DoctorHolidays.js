@@ -1,43 +1,74 @@
 import React from 'react';
 
 import clsx from 'clsx';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
+import IconDelete from '../../assets/icons/iconDelete';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconUmbrella from '../../assets/icons/iconUmbrella';
 import { textForKey } from '../../utils/localization';
 
-const DoctorHoliday = props => {
+const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
   return (
     <div className='doctor-holidays__holiday'>
       <IconUmbrella />
       <div className='doctor-holidays__holiday__data'>
         <div className='doctor-holidays__holiday__title'>
-          October 20, 2020 until December 20, 2020
+          {moment(holiday.startDate).format('DD MMM yyyy')}{' '}
+          {textForKey('until')} {moment(holiday.endDate).format('DD MMM yyyy')}
         </div>
         <div className='doctor-holidays__holiday__description'>
-          {textForKey('No description')}
+          {holiday.description?.length > 0
+            ? holiday.description
+            : textForKey('No description')}
         </div>
       </div>
-      <div className='doctor-holidays__edit'>
+      <div
+        role='button'
+        tabIndex={0}
+        className='doctor-holidays__edit'
+        onClick={() => onEdit(holiday)}
+      >
         <IconEdit />
+      </div>
+      <div
+        role='button'
+        tabIndex={0}
+        className='doctor-holidays__delete'
+        onClick={() => onDelete(holiday)}
+      >
+        <IconDelete />
       </div>
     </div>
   );
 };
 
 const DoctorHolidays = props => {
-  const { show } = props;
+  const { show, data, onCreateOrUpdate, onDeleteHoliday } = props;
   const classes = clsx('doctor-holidays', show ? 'expanded' : 'collapsed');
   return (
     <div className={classes}>
       <div className='doctor-holidays__header'>
-        <div className='doctor-holidays__header__title'>Add a holiday</div>
-        <Button variant='outline-primary'>{textForKey('Add holiday')}</Button>
+        <div className='doctor-holidays__header__title'>
+          {textForKey('Add a holiday')}
+        </div>
+        <Button
+          variant='outline-primary'
+          onClick={() => onCreateOrUpdate(null)}
+        >
+          {textForKey('Add holiday')}
+        </Button>
       </div>
-      <DoctorHoliday />
-      <DoctorHoliday />
+      {data.holidays.map(holiday => (
+        <DoctorHoliday
+          holiday={holiday}
+          key={holiday.id}
+          onEdit={onCreateOrUpdate}
+          onDelete={onDeleteHoliday}
+        />
+      ))}
     </div>
   );
 };
@@ -45,5 +76,30 @@ const DoctorHolidays = props => {
 export default DoctorHolidays;
 
 DoctorHolidays.propTypes = {
+  data: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    holidays: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        startDate: PropTypes.string,
+        endDate: PropTypes.string,
+        description: PropTypes.string,
+      }),
+    ),
+  }),
   show: PropTypes.bool.isRequired,
+  onCreateOrUpdate: PropTypes.func,
+  onDeleteHoliday: PropTypes.func,
+};
+
+DoctorHoliday.propTypes = {
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
+  holiday: PropTypes.shape({
+    id: PropTypes.string,
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+    description: PropTypes.string,
+  }),
 };

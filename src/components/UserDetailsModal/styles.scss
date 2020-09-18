@@ -602,6 +602,7 @@
   &__header {
     width: 100%;
     display: flex;
+    margin-top: .5rem;
     flex: 1;
     align-items: center;
     justify-content: space-between;
@@ -665,7 +666,25 @@
     }
   }
 
+  &__delete {
+    margin-left: .3rem;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffcbdc;
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+
+    svg {
+      fill: #F44081;
+    }
+  }
+
   &__edit {
+    outline: none;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -690,7 +709,7 @@
     justify-content: space-between;
 
     &__close-btn {
-      outline: none;
+      outline: none !important;
       cursor: pointer;
 
       &:hover {
@@ -706,6 +725,10 @@
   &__body {
     display: flex;
     flex-direction: column;
+
+    .rdrMonthsVertical {
+      align-items: center;
+    }
 
     &__picker {
       left: 101%;
@@ -727,7 +750,8 @@
     }
 
     .form-control {
-      background-color: #FAFAFD;
+      cursor: pointer;
+      background-color: #FAFAFD !important;
     }
   }
 

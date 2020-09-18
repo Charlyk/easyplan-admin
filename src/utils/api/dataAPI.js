@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const baseURL = 'https://auth-nmcmweav5q-uc.a.run.app/api';
-const baseURL = 'http://localhost:8000/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8080/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 

@@ -18,7 +18,7 @@ const GroupType = {
 };
 
 const DoctorForm = props => {
-  const { data, onChange, showSteps } = props;
+  const { data, onChange, showSteps, onCreateHoliday, onDeleteHoliday } = props;
   const [expandedGroup, setExpandedGroup] = useState(GroupType.account);
 
   const handleToggleForm = formId => {
@@ -152,7 +152,12 @@ const DoctorForm = props => {
             )}
           </div>
         </div>
-        <DoctorHolidays show={expandedGroup === GroupType.holidays} />
+        <DoctorHolidays
+          data={data}
+          show={expandedGroup === GroupType.holidays}
+          onCreateOrUpdate={onCreateHoliday}
+          onDeleteHoliday={onDeleteHoliday}
+        />
       </div>
     </div>
   );
@@ -162,6 +167,8 @@ export default DoctorForm;
 
 DoctorForm.propTypes = {
   onChange: PropTypes.func,
+  onCreateHoliday: PropTypes.func,
+  onDeleteHoliday: PropTypes.func,
   showSteps: PropTypes.bool,
   data: PropTypes.shape({
     firstName: PropTypes.string,
@@ -169,5 +176,28 @@ DoctorForm.propTypes = {
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
     avatarFile: PropTypes.object,
+    holidays: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        startDate: PropTypes.string,
+        endDate: PropTypes.string,
+        description: PropTypes.string,
+      }),
+    ),
+    services: PropTypes.arrayOf(
+      PropTypes.shape({
+        serviceId: PropTypes.string,
+        price: PropTypes.number,
+        percentage: PropTypes.number,
+      }),
+    ),
+    workDays: PropTypes.arrayOf(
+      PropTypes.shape({
+        day: PropTypes.number,
+        endHour: PropTypes.string,
+        startHour: PropTypes.string,
+        isDayOff: PropTypes.bool,
+      }),
+    ),
   }).isRequired,
 };
