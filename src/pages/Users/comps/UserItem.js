@@ -4,13 +4,13 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
-import IconDelete from '../../assets/icons/iconDelete';
-import IconEdit from '../../assets/icons/iconEdit';
-import IconEmail from '../../assets/icons/iconEmail';
-import IconPhone from '../../assets/icons/iconPhone';
-import { imageLambdaUrl } from '../../utils/api/dataAPI';
-import { textForKey } from '../../utils/localization';
+import IconAvatar from '../../../assets/icons/iconAvatar';
+import IconDelete from '../../../assets/icons/iconDelete';
+import IconEdit from '../../../assets/icons/iconEdit';
+import IconEmail from '../../../assets/icons/iconEmail';
+import IconPhone from '../../../assets/icons/iconPhone';
+import { imageLambdaUrl } from '../../../utils/api/dataAPI';
+import { textForKey } from '../../../utils/localization';
 
 const UserItem = props => {
   const { user, onDelete, onEdit } = props;

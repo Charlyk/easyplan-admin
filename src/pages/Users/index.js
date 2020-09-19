@@ -11,8 +11,8 @@ import { updateUsersSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
-import UserItem from './UserItem';
-import UsersHeader from './UsersHeader';
+import UserItem from './comps/UserItem';
+import UsersHeader from './comps/UsersHeader';
 
 const Users = props => {
   const updateUsers = useSelector(updateUsersSelector);

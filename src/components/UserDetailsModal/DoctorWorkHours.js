@@ -58,7 +58,7 @@ const WorkDay = ({ day, onChange }) => {
   return (
     <div className='doctor-work-hours__day'>
       <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
-      <div className={titleClasses}>{days[day.dayId]}</div>
+      <div className={titleClasses}>{days[day.day]}</div>
       {!day.selected ? (
         <div className='doctor-work-hours__day__day-off'>
           {textForKey('Day off')}
@@ -111,7 +111,7 @@ const DoctorWorkHours = props => {
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
     const newDays = data.workDays.map(item => {
-      if (item.dayId !== day.dayId) return item;
+      if (item.day !== day.day) return item;
       return {
         ...item,
         startHour,
@@ -127,7 +127,7 @@ const DoctorWorkHours = props => {
   return (
     <div className={classes} style={{ height: show ? days.length * 48 : 0 }}>
       {data.workDays.map(day => (
-        <WorkDay key={day.dayId} day={day} onChange={handleDayChange} />
+        <WorkDay key={day.day} day={day} onChange={handleDayChange} />
       ))}
     </div>
   );
@@ -138,7 +138,7 @@ export default DoctorWorkHours;
 WorkDay.propTypes = {
   onChange: PropTypes.func,
   day: PropTypes.shape({
-    dayId: PropTypes.number,
+    day: PropTypes.number,
     startHour: PropTypes.string,
     endHour: PropTypes.string,
     selected: false,
@@ -155,7 +155,7 @@ DoctorWorkHours.propTypes = {
     avatarFile: PropTypes.object,
     workDays: PropTypes.arrayOf(
       PropTypes.shape({
-        dayId: PropTypes.number,
+        day: PropTypes.number,
         startHour: PropTypes.string,
         endHour: PropTypes.string,
         selected: false,

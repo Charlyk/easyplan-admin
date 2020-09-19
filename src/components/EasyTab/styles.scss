@@ -1,0 +1,44 @@
+.easy-tab {
+  margin-right: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: .9rem;
+  line-height: 24px;
+
+  .tab-indicator {
+    margin-top: .2rem;
+    width: .25rem;
+    height: .25rem;
+    border-radius: .12rem;
+  }
+
+  &:hover {
+    color: #3A83DC !important;
+
+    .tab-indicator {
+      background-color: #3A83DC !important;
+    }
+  }
+
+  &.selected {
+    color: #3A83DC;
+
+    .tab-indicator {
+      background-color: #3A83DC;
+    }
+  }
+
+  &.default {
+    color: #B8DBF8;
+
+    .tab-indicator {
+      background-color: #B8DBF8;
+    }
+  }
+}

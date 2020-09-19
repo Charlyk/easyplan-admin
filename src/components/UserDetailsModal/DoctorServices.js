@@ -111,24 +111,24 @@ const DoctorServices = props => {
   const handleServiceSelected = (service, price, percentage, isSelected) => {
     let newList = cloneDeep(data.services);
     if (isSelected) {
-      if (newList.some(item => item.serviceId === service.id)) {
+      if (newList.some(item => item.id === service.id)) {
         newList = newList.map(item => {
-          if (item.serviceId !== service.id) return item;
+          if (item.id !== service.id) return item;
           return {
-            serviceId: service.id,
+            id: service.id,
             price,
             percentage,
           };
         });
       } else {
         newList.push({
-          serviceId: service.id,
+          id: service.id,
           price,
           percentage,
         });
       }
     } else {
-      remove(newList, item => item.serviceId === service.id);
+      remove(newList, item => item.id === service.id);
     }
     onChange(newList);
   };
@@ -143,11 +143,9 @@ const DoctorServices = props => {
         <Service
           key={service.id}
           service={service}
-          doctorService={data.services.find(
-            item => item.serviceId === service.id,
-          )}
+          doctorService={data.services.find(item => item.id === service.id)}
           onSelected={handleServiceSelected}
-          selected={data.services.some(item => item.serviceId === service.id)}
+          selected={data.services.some(item => item.id === service.id)}
         />
       ))}
     </div>
@@ -160,7 +158,7 @@ Service.propTypes = {
   selected: PropTypes.bool,
   onSelected: PropTypes.func,
   doctorService: PropTypes.shape({
-    serviceId: PropTypes.string,
+    id: PropTypes.string,
     price: PropTypes.number,
     percentage: PropTypes.number,
   }),
@@ -185,7 +183,7 @@ DoctorServices.propTypes = {
     avatarFile: PropTypes.object,
     services: PropTypes.arrayOf(
       PropTypes.shape({
-        serviceId: PropTypes.string,
+        id: PropTypes.string,
         price: PropTypes.number,
         percentage: PropTypes.number,
       }),

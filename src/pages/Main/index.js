@@ -8,6 +8,7 @@ import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import paths from '../../utils/paths';
 import Categories from '../Categories';
+import Patients from '../Patients';
 import Users from '../Users';
 
 const Main = props => {
@@ -31,6 +32,7 @@ const Main = props => {
           <Switch>
             <Route path='/categories' component={Categories} />
             <Route path='/users' component={Users} />
+            <Route path='/patients' component={Patients} />
           </Switch>
         </div>
       </div>

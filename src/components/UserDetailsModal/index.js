@@ -30,43 +30,43 @@ const initialData = {
   services: [],
   workDays: [
     {
-      dayId: 0,
+      day: 0,
       startHour: null,
       endHour: null,
       selected: false,
     },
     {
-      dayId: 1,
+      day: 1,
       startHour: null,
       endHour: null,
       selected: false,
     },
     {
-      dayId: 2,
+      day: 2,
       startHour: null,
       endHour: null,
       selected: false,
     },
     {
-      dayId: 3,
+      day: 3,
       startHour: null,
       endHour: null,
       selected: false,
     },
     {
-      dayId: 4,
+      day: 4,
       startHour: null,
       endHour: null,
       selected: false,
     },
     {
-      dayId: 5,
+      day: 5,
       startHour: null,
       endHour: null,
       selected: false,
     },
     {
-      dayId: 6,
+      day: 6,
       startHour: null,
       endHour: null,
       selected: false,
@@ -97,9 +97,7 @@ const UserDetailsModal = props => {
         ...user,
         userType: user.role,
         workDays: user.workDays.map(item => ({
-          dayId: item.day,
-          startHour: item.startHour,
-          endHour: item.endHour,
+          ...item,
           selected: !item.isDayOff,
         })),
       });
@@ -163,10 +161,14 @@ const UserDetailsModal = props => {
   const updateUser = requestBody => {
     dataAPI
       .updateUser(user.id, requestBody)
-      .then(() => {
-        dispatch(triggerUsersUpdate());
+      .then(response => {
         setIsSaving(false);
-        handleModalClose();
+        if (!response.isError) {
+          dispatch(triggerUsersUpdate());
+          handleModalClose();
+        } else {
+          console.error(response);
+        }
       })
       .catch(error => {
         console.error(error);
@@ -312,7 +314,7 @@ const UserDetailsModal = props => {
           <LoadingButton
             onClick={handleSaveForm}
             className='positive-button'
-            disabled={!isFormValid()}
+            disabled={!isFormValid() || isSaving}
             showLoading={isSaving}
           >
             {textForKey('Save')}
