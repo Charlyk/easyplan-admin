@@ -1,0 +1,258 @@
+.calendar-root {
+  outline: none;
+  padding: 1.5rem;
+  display: flex;
+  height: 100%;
+
+  &__content {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    &__left-container {
+      width: 20%;
+      height: 100%;
+    }
+
+    &__right-container {
+      width: 20%;
+      height: 100%;
+    }
+
+    &__center-container {
+      width: 60%;
+      height: 100%;
+    }
+
+    &__account {
+      width: 29%;
+      max-height: 100%;
+    }
+
+    &__details {
+      width: 46%;
+      max-height: 100%;
+    }
+  }
+
+  &__services {
+    width: 100%;
+    height: 5rem;
+    padding: .5rem 1rem;
+    margin-bottom: 1rem;
+    background: #FFFFFF;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: 4px;
+
+    .form-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .7rem;
+      margin-bottom: 0;
+    }
+
+    .form-control {
+      background-color: #FAFAFD;
+    }
+  }
+
+  &__doctors {
+    height: calc(100% - 6rem);
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: 4px;
+
+    .doctors-header {
+      padding: .5rem 1rem;
+      display: flex;
+      width: 100%;
+      height: 3rem;
+      align-items: center;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #34354C;
+    }
+
+    .doctors-search {
+      height: 3rem;
+      width: 100%;
+      padding: .5rem 1rem;
+      border-bottom: #FAFAFD .1rem solid;
+    }
+
+    .doctors-content {
+      height: calc(100% - 6rem);
+      overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: .5rem;
+    }
+
+    .doctor-item {
+      margin-bottom: .5rem;
+      padding: .5rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      border: .1rem solid #F4FAFE;
+      box-sizing: border-box;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover, &.selected {
+        background-color: #F4FAFE;
+        border: .1rem solid #3A83DC;
+      }
+
+      svg {
+        height: 2rem;
+        width: 2rem;
+      }
+
+      .name-and-service {
+        margin-left: .5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .doctor-name {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: .9rem;
+          height: .9rem;
+          color: #34354C;
+        }
+
+        .service-name {
+          margin-top: .1rem;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          height: .7rem;
+          font-size: .7rem;
+          color: #A1A2C6;
+        }
+      }
+    }
+  }
+
+  &__appointment-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .rdrCalendarWrapper {
+      background: #FFFFFF;
+      box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+      border-radius: 4px;
+    }
+
+    .rdrMonthAndYearPickers {
+      width: 0;
+    }
+
+    .rdrMonth {
+      max-width: 100%;
+    }
+
+    .appointment-details {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      background: #FFFFFF;
+      box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+      border-radius: 4px;
+      overflow: hidden;
+
+      .appointment-details-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background-color: #F4FAFE;
+
+        .service-name-container {
+          display: flex;
+          align-items: center;
+
+          .color-indicator {
+            width: .5rem;
+            height: .5rem;
+            border-radius: 50%;
+            background-color: #7DD7C8;
+          }
+
+          .service-name {
+            margin-left: .5rem;
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            color: #34354C;
+          }
+        }
+
+        .edit-button {
+          outline: none;
+          cursor: pointer;
+        }
+      }
+
+      .appointment-details-data {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+
+        .info-row-title {
+          margin-right: .5rem;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 20px;
+          color: #34354C;
+        }
+
+        .info-row-text {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 16px;
+          letter-spacing: 0.01em;
+          color: #34354C;
+        }
+
+        .info-row {
+          display: flex;
+          align-items: center;
+          padding-top: .5rem;
+          padding-bottom: .2rem;
+
+          svg {
+            margin-right: .5rem;
+            fill: #B8DBF8
+          }
+        }
+
+        .doctor-info {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .patient-info {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}

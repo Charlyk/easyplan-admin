@@ -7,6 +7,7 @@ import { useLocation, Switch, Route } from 'react-router-dom';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import paths from '../../utils/paths';
+import Calendar from '../Calendar';
 import Categories from '../Categories';
 import Patients from '../Patients';
 import Users from '../Users';
@@ -32,6 +33,7 @@ const Main = props => {
           <Switch>
             <Route path='/categories' component={Categories} />
             <Route path='/users' component={Users} />
+            <Route path='/calendar' component={Calendar} />
             <Route path='/patients' component={Patients} />
           </Switch>
         </div>
