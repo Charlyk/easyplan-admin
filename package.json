@@ -67,7 +67,7 @@
     "webpack-s3-plugin": "1.0.0-rc.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3006 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
