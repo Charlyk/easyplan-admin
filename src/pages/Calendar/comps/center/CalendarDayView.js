@@ -30,7 +30,7 @@ const CalendarDayView = props => {
   return (
     <div className='calendar-root__day-view'>
       <div id='appointments-container' className='items-container'>
-        <AppointmentsContainer fromHour='13:00' toHour='14:00' />
+        <AppointmentsContainer fromHour='13:20' toHour='14:00' />
       </div>
       {hours.map(item => (
         <Hour hour={item} key={item} highlighted={item === currentHour} />
