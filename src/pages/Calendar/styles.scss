@@ -268,62 +268,6 @@
     flex-direction: column;
     overflow: hidden;
 
-    .day-appointments-container {
-      min-width: 100%;
-      cursor: pointer;
-      user-select: none;
-      display: flex;
-      position: absolute;
-      min-height: 2rem;
-
-      .day-appointment-item {
-        width: 100%;
-        margin-right: .5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-right: .5rem;
-        padding-left: .5rem;
-
-        background: rgba(244, 64, 129, 0.05);
-        border: 1px solid #F44081;
-        box-sizing: border-box;
-        border-radius: 4px;
-
-        .title-and-time {
-          flex: 1;
-          display: flex;
-          align-items: center;
-
-          .service-name {
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 12px;
-            line-height: 16px;
-            color: #F44081;
-            margin-right: .5rem;
-          }
-
-          .item-time-text {
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 16px;
-            color: #34354C;
-            white-space: nowrap;
-          }
-        }
-
-        svg {
-          width: 1.1rem;
-          height: 1.1rem;
-          margin-left: .5rem;
-        }
-      }
-    }
-
     .center-header {
       margin-bottom: 1rem;
       display: flex;
@@ -367,12 +311,51 @@
     height: 100%;
     overflow: hidden;
 
-    .items-container {
-      width: 89%;
-      height: 100%;
-      overflow: hidden;
-      position: absolute;
+    .day-appointment-item {
+      width: 88%;
       left: 4rem;
+      position: absolute;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: .5rem;
+      padding-left: .5rem;
+      background: rgba(244, 64, 129, 0.05);
+      border: 1px solid #F44081;
+      box-sizing: border-box;
+      border-radius: 4px;
+
+      .title-and-time {
+        flex: 1;
+        display: flex;
+        align-items: center;
+
+        .service-name {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 16px;
+          color: #F44081;
+          margin-right: .5rem;
+        }
+
+        .item-time-text {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          line-height: 16px;
+          color: #34354C;
+          white-space: nowrap;
+        }
+      }
+
+      svg {
+        width: 1.1rem;
+        height: 1.1rem;
+        margin-left: .5rem;
+      }
     }
 
     .day-hour {
@@ -408,5 +391,9 @@
         color: #B8DBF8;
       }
     }
+  }
+
+  &__week-view {
+
   }
 }

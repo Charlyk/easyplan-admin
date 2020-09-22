@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 import EasyTab from '../../../../components/EasyTab';
 import { textForKey } from '../../../../utils/localization';
-import CalendarDayView from './CalendarDayView';
+import CalendarDayView from './day/CalendarDayView';
+import CalendarWeekView from './week/CalendarWeekView';
 
 const CalendarView = {
   day: 'day',
@@ -47,6 +48,7 @@ const AppointmentsCalendar = props => {
       </div>
       <div className='center-content'>
         <CalendarDayView opened={currentTab === CalendarView.day} />
+        <CalendarWeekView opened={currentTab === CalendarView.week} />
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useSpring, animated } from 'react-spring';
 
-import AppointmentsContainer from './AppointemntsContainer';
+import DayAppointmentItem from './DayAppointmentItem';
 
 function createHoursList() {
   return [].concat(
@@ -24,18 +25,35 @@ const Hour = props => {
   );
 };
 
-const CalendarDayView = props => {
+const CalendarDayView = ({ opened }) => {
   const currentHour = moment().format('HH:00');
   const hours = createHoursList();
+
+  const [{ opacity }, set] = useSpring(() => ({
+    opacity: 1,
+  }));
+
+  useEffect(() => {
+    set({
+      opacity: opened ? 1 : 0,
+    });
+  }, [opened]);
+
   return (
-    <div className='calendar-root__day-view'>
-      <div id='appointments-container' className='items-container'>
-        <AppointmentsContainer fromHour='13:20' toHour='14:00' />
-      </div>
+    <animated.div
+      className='calendar-root__day-view'
+      id='appointments-container'
+      style={{
+        opacity,
+      }}
+    >
       {hours.map(item => (
         <Hour hour={item} key={item} highlighted={item === currentHour} />
       ))}
-    </div>
+      <DayAppointmentItem
+        appointment={{ startHour: '10:00', endHour: '11:30' }}
+      />
+    </animated.div>
   );
 };
 

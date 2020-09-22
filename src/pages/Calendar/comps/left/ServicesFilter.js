@@ -7,7 +7,7 @@ import { textForKey } from '../../../../utils/localization';
 const ServicesFilter = props => {
   return (
     <div className='calendar-root__services'>
-      <Form.Group controlId='firstName'>
+      <Form.Group controlId='searchQuery'>
         <Form.Label>{textForKey('Services')}</Form.Label>
         <InputGroup>
           <Form.Control type='text' />
