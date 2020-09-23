@@ -19,6 +19,18 @@ const CalendarWeekView = ({ opened }) => {
 
   if (isClosed) return null;
 
+  const getWeekDays = () => {
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      days.push(
+        moment()
+          .weekday(i)
+          .format('DD ddd'),
+      );
+    }
+    return days;
+  };
+
   return (
     <animated.div className='week-view'>
       <div className='text-container'>
@@ -35,13 +47,9 @@ const CalendarWeekView = ({ opened }) => {
         ))}
       </div>
       <div className='days-container'>
-        <CalendarWeekDayView />
-        <CalendarWeekDayView />
-        <CalendarWeekDayView />
-        <CalendarWeekDayView />
-        <CalendarWeekDayView />
-        <CalendarWeekDayView />
-        <CalendarWeekDayView />
+        {getWeekDays().map(day => (
+          <CalendarWeekDayView key={day} day={day} />
+        ))}
       </div>
     </animated.div>
   );

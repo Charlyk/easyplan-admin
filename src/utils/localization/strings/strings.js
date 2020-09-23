@@ -81,6 +81,10 @@ export default {
     'delete user': 'Delete user',
     'are you sure you want to delete this user?':
       'Are you sure you want to delete this user?',
+    day: 'Day',
+    week: 'Week',
+    month: 'Month',
+    year: 'Year',
   },
   ro: {
     analytics: 'Analitică',
@@ -165,6 +169,10 @@ export default {
     'delete user': 'Șterge utilizator',
     'are you sure you want to delete this user?':
       'Sunteți sigur(ă) că vreți sa ștergeți acest utilizator?',
+    day: 'Zi',
+    week: 'Săptămână',
+    month: 'Lună',
+    year: 'An',
   },
   ru: {
     analytics: 'Analytics',
@@ -248,5 +256,9 @@ export default {
     'delete user': 'Delete user',
     'are you sure you want to delete this user?':
       'Are you sure you want to delete this user?',
+    day: 'Day',
+    week: 'Week',
+    month: 'Month',
+    year: 'Year',
   },
 };

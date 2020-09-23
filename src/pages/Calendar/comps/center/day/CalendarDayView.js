@@ -41,7 +41,7 @@ const CalendarDayView = ({ opened }) => {
       ))}
       {hours?.length > 0 && (
         <DayAppointmentItem
-          appointment={{ startHour: '10:00', endHour: '11:30' }}
+          appointment={{ startHour: '11:00', endHour: '12:30' }}
         />
       )}
     </animated.div>

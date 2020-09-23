@@ -294,16 +294,40 @@
       flex: 1;
       height: 100%;
       overflow-y: scroll;
-      padding: 1rem;
       display: flex;
       flex-direction: column;
       background: #FFFFFF;
       box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
       border-radius: 4px;
     }
+
+    .title-and-time {
+      flex: 1;
+      display: flex;
+      align-items: center;
+
+      .service-name {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        color: #F44081;
+        margin-right: .5rem;
+      }
+
+      .item-time-text {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        color: #34354C;
+        white-space: nowrap;
+      }
+    }
   }
 
   &__day-view {
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -312,6 +336,7 @@
     overflow: hidden;
 
     .day-appointment-item {
+      cursor: pointer;
       width: 88%;
       left: 4rem;
       position: absolute;
@@ -324,32 +349,6 @@
       border: 1px solid #F44081;
       box-sizing: border-box;
       border-radius: 4px;
-
-      .title-and-time {
-        flex: 1;
-        display: flex;
-        align-items: center;
-
-        .service-name {
-          font-family: Inter, sans-serif;
-          font-style: normal;
-          font-weight: 600;
-          font-size: 12px;
-          line-height: 16px;
-          color: #F44081;
-          margin-right: .5rem;
-        }
-
-        .item-time-text {
-          font-family: Inter, sans-serif;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 12px;
-          line-height: 16px;
-          color: #34354C;
-          white-space: nowrap;
-        }
-      }
 
       svg {
         width: 1.1rem;
@@ -395,6 +394,7 @@
   }
 
   .week-view {
+    padding: 1rem;
     width: 100%;
     display: flex;
     align-items: center;
@@ -429,6 +429,37 @@
         align-items: center;
         position: relative;
         border-right: #DBEEFB 1px solid;
+
+        .appointment-item {
+          cursor: pointer;
+          position: absolute;
+          width: 100%;
+          height: 32px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          padding-left: .3rem;
+          padding-right: .3rem;
+          background: rgba(244, 64, 129, 0.05);
+          border: 1px solid #F44081;
+          box-sizing: border-box;
+          border-radius: 4px;
+
+          .title-and-time {
+            flex: unset;
+            flex-direction: column;
+            align-items: flex-start;
+
+            .service-name {
+              margin-right: 0;
+            }
+
+            .item-time-text {
+              font-size: 10px;
+            }
+          }
+        }
 
         .day-title {
           width: 100%;
@@ -472,6 +503,102 @@
             width: 100%;
             height: 1px;
             background-color: #DBEEFB;
+          }
+        }
+      }
+    }
+  }
+
+  .month-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .item-data-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: calc(100% / 7);
+      height: calc(100% / 6);
+      border-top: 1px solid #DBEEFB;
+      border-right: 1px solid #DBEEFB;
+
+      &.current-date {
+        background-color: #F4FAFE;
+      }
+
+      .item-text {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: center;
+        color: #B8DBF8;
+
+        &.month-day {
+          position: absolute;
+          top: .5rem;
+          right: .5rem;
+        }
+
+        &.next-month {
+          color: #DBEEFB;
+        }
+      }
+
+      .appointments-container {
+        width: 100%;
+        height: 100%;
+        padding: 1.7rem .5rem .5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .view-more-container {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          justify-content: flex-end;
+
+          .view-more-button {
+            height: calc(100% / 4 - .1rem);
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 8px;
+            letter-spacing: 0.01em;
+            color: #3A83DC;
+            cursor: pointer;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        .appointment-item {
+          width: 100%;
+          height: calc(100% / 4 - .1rem);
+          margin-bottom: .1rem;
+          padding-left: .2rem;
+          padding-right: .2rem;
+          background: #FEF5F9;
+          border: 1px solid #F44081;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+
+          .service-name {
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 10px;
+            color: #F44081;
           }
         }
       }
