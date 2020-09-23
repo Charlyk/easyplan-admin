@@ -1,17 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { useSpring, animated } from 'react-spring';
+import { animated } from 'react-spring';
 
+import { createHoursList } from '../../../../../utils/helperFuncs';
 import DayAppointmentItem from './DayAppointmentItem';
-
-function createHoursList() {
-  return [].concat(
-    ...Array.from(Array(24), (_, hour) => [moment({ hour }).format('HH:mm')]),
-  );
-}
 
 const Hour = props => {
   return (
@@ -26,33 +21,29 @@ const Hour = props => {
 };
 
 const CalendarDayView = ({ opened }) => {
+  const [isClosed, setIsClosed] = useState(!opened);
   const currentHour = moment().format('HH:00');
   const hours = createHoursList();
 
-  const [{ opacity }, set] = useSpring(() => ({
-    opacity: 1,
-  }));
-
   useEffect(() => {
-    set({
-      opacity: opened ? 1 : 0,
-    });
+    setIsClosed(!opened);
   }, [opened]);
+
+  if (isClosed) return null;
 
   return (
     <animated.div
       className='calendar-root__day-view'
       id='appointments-container'
-      style={{
-        opacity,
-      }}
     >
       {hours.map(item => (
         <Hour hour={item} key={item} highlighted={item === currentHour} />
       ))}
-      <DayAppointmentItem
-        appointment={{ startHour: '10:00', endHour: '11:30' }}
-      />
+      {hours?.length > 0 && (
+        <DayAppointmentItem
+          appointment={{ startHour: '10:00', endHour: '11:30' }}
+        />
+      )}
     </animated.div>
   );
 };

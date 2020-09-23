@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { useSpring, animated, interpolate } from 'react-spring';
+import { animated } from 'react-spring';
 
 import IconNext from '../../../../../assets/icons/iconNext';
 
@@ -9,7 +9,6 @@ const minTop = 64;
 const minHeight = 32;
 
 const DayAppointmentItem = ({ appointment }) => {
-  const currentRef = useRef(null);
   const [position, setPosition] = useState({ top: minTop, height: minHeight });
 
   useEffect(() => {

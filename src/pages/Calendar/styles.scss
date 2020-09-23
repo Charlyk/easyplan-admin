@@ -359,7 +359,7 @@
     }
 
     .day-hour {
-      height: 2rem;
+      height: 32px;
       width: 100%;
       display: flex;
       align-items: center;
@@ -389,11 +389,92 @@
         line-height: 16px;
         text-align: right;
         color: #B8DBF8;
+        width: 2rem;
       }
     }
   }
 
-  &__week-view {
+  .week-view {
+    width: 100%;
+    display: flex;
+    align-items: center;
 
+    .week-hour-text {
+      height: 32px;
+      width: 2rem;
+      display: flex;
+      align-items: center;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: right;
+      color: #B8DBF8;
+
+      &.highlighted {
+        color: #3A83DC;
+      }
+    }
+
+    .days-container {
+      margin-left: 1rem;
+      display: flex;
+      width: calc(100% - 2rem);
+
+      .week-day {
+        width: calc(100% / 7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        border-right: #DBEEFB 1px solid;
+
+        .day-title {
+          width: 100%;
+          position: absolute;
+          top: -.7rem;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 16px;
+          text-align: right;
+          color: #B8DBF8;
+
+          &.highlighted {
+            color: #3A83DC;
+          }
+        }
+
+        .week-hour {
+          width: 100%;
+          height: 32px;
+          display: flex;
+          align-items: center;
+
+          &.highlighted {
+            .hour-text {
+              color: #3A83DC;
+            }
+
+            .hour-line {
+              background-color: #3A83DC;
+            }
+          }
+
+          .hour-line {
+            width: 100%;
+            height: 1px;
+            background-color: #DBEEFB;
+          }
+        }
+      }
+    }
   }
 }
