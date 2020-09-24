@@ -8,6 +8,14 @@ import IconAvatar from '../../../../assets/icons/iconAvatar';
 import IconNext from '../../../../assets/icons/iconNext';
 
 const PatientItem = ({ patient, selected, onSelected }) => {
+  const patientName = () => {
+    let fullName = `${patient?.firstName || ''} ${patient?.lastName || ''}`;
+    if (fullName.replace(' ', '').length === 0) {
+      fullName = patient.phoneNumber;
+    }
+    return fullName;
+  };
+
   return (
     <div
       role='button'
@@ -16,7 +24,7 @@ const PatientItem = ({ patient, selected, onSelected }) => {
       onClick={() => onSelected(patient)}
     >
       <div className='patients-root__list__item__patient-photo'>
-        {patient ? <Image roundedCircle /> : <IconAvatar />}
+        {patient.photo ? <Image roundedCircle /> : <IconAvatar />}
       </div>
       <div
         className={clsx(
@@ -24,7 +32,7 @@ const PatientItem = ({ patient, selected, onSelected }) => {
           selected && 'selected',
         )}
       >
-        Patient Name
+        {patientName()}
       </div>
       {selected && <IconNext />}
     </div>
@@ -34,7 +42,14 @@ const PatientItem = ({ patient, selected, onSelected }) => {
 export default PatientItem;
 
 PatientItem.propTypes = {
-  patient: PropTypes.object,
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    photo: PropTypes.string,
+  }),
   selected: PropTypes.bool,
   onSelected: PropTypes.func,
 };

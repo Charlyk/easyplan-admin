@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import Skeleton from '@material-ui/lab/Skeleton';
 import PropTypes from 'prop-types';
 import './styles.scss';
-import Skeleton from '@material-ui/lab/Skeleton';
 import { useSelector } from 'react-redux';
 
 import IconEdit from '../../assets/icons/iconEdit';
@@ -187,7 +187,13 @@ const CategoriesList = props => {
       <div className='categories-list__data'>
         <div className='categories-list__header'>
           {textForKey('List')}
-          <div ref={actionsAnchor} onClick={handleMoreClick}>
+          <div
+            style={{ outline: 'none' }}
+            role='button'
+            tabIndex={0}
+            ref={actionsAnchor}
+            onClick={handleMoreClick}
+          >
             <IconMoreHorizontal />
           </div>
         </div>
@@ -204,7 +210,12 @@ const CategoriesList = props => {
           ))}
         </div>
 
-        <div className='categories-list__add' onClick={handleAddCategory}>
+        <div
+          role='button'
+          tabIndex={0}
+          className='categories-list__add'
+          onClick={handleAddCategory}
+        >
           <IconPlus />
           {textForKey('Add category')}
         </div>

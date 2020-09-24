@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8080/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8080/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -276,6 +276,86 @@ export default {
     try {
       const url = `users/${userId}`;
       const response = await instance.delete(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Create new patient
+   * @param {Object} requestBody
+   * @param {string|null} requestBody.email
+   * @param {string|null} requestBody.firstName
+   * @param {string|null} requestBody.lastName
+   * @param {string} requestBody.phoneNumber
+   * @return {Promise<{isError: boolean, message: string|null, data: Object|null}>}
+   */
+  createPatient: async requestBody => {
+    try {
+      const response = await instance.post('patients', requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Fetch all patients for selected clinic
+   * @return {Promise<{isError: boolean, message: string|null, data: [Object]}>}
+   */
+  fetchAllPatients: async () => {
+    try {
+      const response = await instance.get('patients');
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Delete patient
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: string|null}>}
+   */
+  deletePatient: async patientId => {
+    try {
+      const response = await instance.delete(`patients?patientId=${patientId}`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Create new patient
+   * @param {string} patientId
+   * @param {Object} requestBody
+   * @param {string|null} requestBody.email
+   * @param {string|null} requestBody.firstName
+   * @param {string|null} requestBody.lastName
+   * @param {string} requestBody.phoneNumber
+   * @return {Promise<{isError: boolean, message: string|null, data: Object|null}>}
+   */
+  updatePatient: async (patientId, requestBody) => {
+    try {
+      const response = await instance.put(`patients/${patientId}`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

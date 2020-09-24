@@ -61,6 +61,7 @@
     }
 
     &__add-btn {
+      outline: none;
       padding: 1rem;
       cursor: pointer;
       display: flex;
@@ -143,7 +144,6 @@
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      overflow-y: scroll;
       align-items: center;
     }
 
@@ -176,6 +176,8 @@
       }
 
       .form-control {
+        outline: none;
+        width: 100%;
         background-color: #FAFAFD;
       }
     }

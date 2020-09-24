@@ -18,7 +18,7 @@ const CalendarWeekDayView = ({ day }) => {
       </div>
       {hours.map(hour => (
         <CalendarWeekHourView
-          key={hour}
+          key={`${hour}-${day}-key`}
           hour={hour}
           currentHour={hour === currentHour}
         />

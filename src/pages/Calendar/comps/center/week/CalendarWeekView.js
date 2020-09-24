@@ -34,13 +34,13 @@ const CalendarWeekView = ({ opened }) => {
   return (
     <animated.div className='week-view'>
       <div className='text-container'>
-        {hours.map(hour => (
+        {hours.map((hour, index) => (
           <div
             className={clsx(
               'week-hour-text',
               currentHour === hour && 'highlighted',
             )}
-            key={`${hours}-text`}
+            key={`${hours}-${index}-text`}
           >
             {hour}
           </div>

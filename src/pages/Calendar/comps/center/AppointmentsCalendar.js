@@ -14,7 +14,7 @@ const CalendarView = {
 };
 
 const AppointmentsCalendar = props => {
-  const [currentTab, setCurrentTab] = useState(CalendarView.month);
+  const [currentTab, setCurrentTab] = useState(CalendarView.day);
 
   const handleTabChange = newTab => {
     setCurrentTab(newTab);
@@ -39,11 +39,6 @@ const AppointmentsCalendar = props => {
             title={textForKey('Month')}
             selected={currentTab === CalendarView.month}
             onClick={() => handleTabChange(CalendarView.month)}
-          />
-          <EasyTab
-            title={textForKey('Year')}
-            selected={currentTab === CalendarView.year}
-            onClick={() => handleTabChange(CalendarView.year)}
           />
         </div>
       </div>
