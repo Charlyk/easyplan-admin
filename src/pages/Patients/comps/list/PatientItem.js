@@ -34,7 +34,7 @@ const PatientItem = ({ patient, selected, onSelected }) => {
       >
         {patientName()}
       </div>
-      {selected && <IconNext />}
+      <div className='next-arrow'>{selected && <IconNext />}</div>
     </div>
   );
 };

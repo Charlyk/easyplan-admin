@@ -1,20 +1,42 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
+import { Form, InputGroup } from 'react-bootstrap';
 
 import IconMoreHorizontal from '../../../../assets/icons/iconMoreHorizontal';
 import IconPlus from '../../../../assets/icons/iconPlus';
 import { textForKey } from '../../../../utils/localization';
 import PatientItem from './PatientItem';
 
-const PatientsList = ({ onAdd, onSelect, patients, selectedPatient }) => {
+const PatientsList = ({
+  onAdd,
+  onSearch,
+  onSelect,
+  patients,
+  selectedPatient,
+}) => {
+  const handleSearchChange = event => {
+    onSearch(event.target.value);
+  };
+
   return (
     <div className='patients-root__list'>
       <div className='patients-root__list__header'>
-        {textForKey('All patients')}
-        <div className='more-btn'>
-          <IconMoreHorizontal />
+        <div className='title-container'>
+          {textForKey('All patients')}
+          <div className='more-btn'>
+            <IconMoreHorizontal />
+          </div>
         </div>
+        <Form.Group controlId='firstName'>
+          <InputGroup>
+            <Form.Control
+              placeholder={`${textForKey('Search')}...`}
+              type='text'
+              onChange={handleSearchChange}
+            />
+          </InputGroup>
+        </Form.Group>
       </div>
       <div className='patients-root__list__content'>
         {patients.map(patient => (
@@ -62,9 +84,11 @@ PatientsList.propTypes = {
   ),
   onSelect: PropTypes.func,
   onAdd: PropTypes.func,
+  onSearch: PropTypes.func,
 };
 
 PatientsList.defaultProps = {
   onAdd: () => null,
   onSelect: () => null,
+  onSearch: () => null,
 };

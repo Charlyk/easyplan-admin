@@ -15,7 +15,7 @@ const TabId = {
 };
 
 const PatientDetails = props => {
-  const [selectedTab, setSelectedTab] = useState(TabId.xRay);
+  const [selectedTab, setSelectedTab] = useState(TabId.notes);
 
   const handleTabClick = selectedTab => {
     setSelectedTab(selectedTab);

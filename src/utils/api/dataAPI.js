@@ -365,4 +365,27 @@ export default {
       };
     }
   },
+
+  /**
+   * Create a note for patient
+   * @param {string} patientId
+   * @param {Object} requestBody
+   * @param {string} requestBody.note
+   * @return {Promise<{isError: boolean, message: string|null, data: {id: string, createdById: string, createdByName: string, noteText: string, created: string}|null}>}
+   */
+  createPatientNote: async (patientId, requestBody) => {
+    try {
+      const response = await instance.post(
+        `patients/${patientId}/notes`,
+        requestBody,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };

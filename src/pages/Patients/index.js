@@ -11,11 +11,15 @@ import { textForKey } from '../../utils/localization';
 const Patients = props => {
   const [isAdding, setIsAdding] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [patients, setPatients] = useState([]);
+  const [patients, setPatients] = useState({ all: [], filtered: [] });
   const [deletePatient, setDeletePatient] = useState({
     open: false,
     patient: null,
     isDeleting: false,
+  });
+  const [createNote, setCreateNote] = useState({
+    open: false,
+    isSaving: false,
   });
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -33,7 +37,7 @@ const Patients = props => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      setPatients(response.data);
+      setPatients({ all: response.data, filtered: response.data });
     }
   };
 
@@ -73,6 +77,19 @@ const Patients = props => {
     setIsAdding(false);
   };
 
+  const handlePatientsSearch = searchQuery => {
+    const filtered = patients.all.filter(item => {
+      const fullName = `${item.firstName || ''} ${item.lastName || ''}`
+        .replace(' ', '')
+        .toLowerCase();
+      return (
+        fullName.includes(searchQuery.toLowerCase()) ||
+        item.phoneNumber.includes(searchQuery)
+      );
+    });
+    setPatients({ ...patients, filtered });
+  };
+
   return (
     <div className='patients-root'>
       <ConfirmationModal
@@ -86,9 +103,10 @@ const Patients = props => {
       <div className='patients-root__content'>
         <div className='patients-root__content__list'>
           <PatientsList
+            onSearch={handlePatientsSearch}
             onSelect={handlePatientSelected}
             selectedPatient={selectedPatient}
-            patients={patients}
+            patients={patients.filtered}
             onAdd={handleAddPatient}
           />
         </div>
