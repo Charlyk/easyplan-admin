@@ -406,4 +406,46 @@ export default {
       };
     }
   },
+
+  /**
+   * Add X-Ray image to patient
+   * @param {string} patientId
+   * @param {Object} requestBody
+   * @param {string} requestBody.type
+   * @param {string} requestBody.imageUrl
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  addXRayImage: async (patientId, requestBody) => {
+    try {
+      const response = await instance.post(
+        `patients/${patientId}/x-ray`,
+        requestBody,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Fetch all X-Ray images for a patient
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchPatientXRayImages: async patientId => {
+    try {
+      const response = await instance.get(`patients/${patientId}/x-ray`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };

@@ -10,6 +10,7 @@ import IconEdit from '../../../assets/icons/iconEdit';
 import IconEmail from '../../../assets/icons/iconEmail';
 import IconPhone from '../../../assets/icons/iconPhone';
 import { imageLambdaUrl } from '../../../utils/api/dataAPI';
+import { urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const UserItem = props => {
@@ -25,11 +26,6 @@ const UserItem = props => {
 
   const rootClasses = clsx('user-item', user.status.toLowerCase());
 
-  const avatarUrl = () => {
-    const url = new URL(user.avatar);
-    return `${imageLambdaUrl}${url.pathname}?width=50`;
-  };
-
   return (
     <div className={rootClasses}>
       <div className='user-item__name-and-avatar'>
@@ -37,7 +33,7 @@ const UserItem = props => {
           <Image
             className='user-item__avatar'
             roundedCircle
-            src={avatarUrl()}
+            src={urlToLambda(user.avatar)}
           />
         ) : (
           <IconAvatar />

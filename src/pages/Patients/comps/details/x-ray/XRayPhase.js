@@ -4,13 +4,12 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import IconNext from '../../../../../assets/icons/iconNext';
+import { urlToLambda } from '../../../../../utils/helperFuncs';
 
 const XRayPhase = ({ title, images, isExpanded, phaseId, onExpand }) => {
-  const imagesContainerHeight = Math.ceil(images.length / 3) * 8.2;
+  const imagesContainerHeight = Math.ceil(images.length / 3) * 9;
   return (
-    <div
-      className={clsx('patients-root__x-ray__phase', isExpanded && 'expanded')}
-    >
+    <div className={clsx('phase', isExpanded && 'expanded')}>
       <div className='phase-header'>
         {title}
         <div
@@ -26,8 +25,12 @@ const XRayPhase = ({ title, images, isExpanded, phaseId, onExpand }) => {
         className='phase-images'
         style={{ height: isExpanded ? `${imagesContainerHeight}rem` : 0 }}
       >
-        {images.map((item, index) => (
-          <img key={`${index}`} />
+        {images.map(item => (
+          <img
+            key={item.id}
+            src={urlToLambda(item.imageUrl, 150)}
+            alt='X-Ray'
+          />
         ))}
       </div>
     </div>
@@ -38,12 +41,22 @@ export default XRayPhase;
 
 XRayPhase.propTypes = {
   title: PropTypes.string,
-  images: PropTypes.arrayOf(PropTypes.string),
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      imageUrl: PropTypes.string,
+      type: PropTypes.string,
+      created: PropTypes.string,
+      createdById: PropTypes.string,
+      createdByName: PropTypes.string,
+    }),
+  ),
   isExpanded: PropTypes.bool,
-  phaseId: PropTypes.oneOf(['initial', 'middle', 'final']),
+  phaseId: PropTypes.oneOf(['Initial', 'Middle', 'Final']),
   onExpand: PropTypes.func,
 };
 
 XRayPhase.defaultProps = {
   onExpand: () => null,
+  images: [],
 };

@@ -228,7 +228,7 @@ const ServiceDetailsModal = props => {
               onClick={handleDeleteService}
               className='delete-button'
               disabled={isDeleting || isLoading}
-              showLoading={isDeleting}
+              isLoading={isDeleting}
             >
               {textForKey('Delete')}
               {!isDeleting && <IconDelete />}
@@ -237,7 +237,7 @@ const ServiceDetailsModal = props => {
           <LoadingButton
             onClick={handleSaveService}
             className='positive-button'
-            showLoading={isLoading}
+            isLoading={isLoading}
             disabled={!isFormValid || isLoading || isDeleting}
           >
             {textForKey('Save')}

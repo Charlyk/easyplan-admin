@@ -13,6 +13,7 @@ import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { EmailRegex, Role, S3Config } from '../../utils/constants';
+import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
 import LoadingButton from '../LoadingButton';
@@ -190,19 +191,11 @@ const UserDetailsModal = props => {
       });
   };
 
-  const handleSaveForm = () => {
+  const handleSaveForm = async () => {
     setIsSaving(true);
     if (userData.avatarFile != null) {
-      const s3client = new S3(S3Config('avatars'));
-      s3client
-        .uploadFile(userData.avatarFile, userData.avatarFile.name)
-        .then(result => {
-          saveUser(result.location);
-        })
-        .catch(error => {
-          console.error(error);
-          saveUser(null);
-        });
+      const result = await uploadFileToAWS('avatars', userData.avatarFile);
+      saveUser(result?.location);
     } else {
       saveUser(null);
     }
@@ -315,7 +308,7 @@ const UserDetailsModal = props => {
             onClick={handleSaveForm}
             className='positive-button'
             disabled={!isFormValid() || isSaving}
-            showLoading={isSaving}
+            isLoading={isSaving}
           >
             {textForKey('Save')}
             {!isSaving && <IconSuccess />}

@@ -41,7 +41,7 @@ const EasyPlanModal = ({
       <Modal.Footer>
         <LoadingButton
           disabled={isNegativeDisabled}
-          showLoading={isNegativeLoading}
+          isLoading={isNegativeLoading}
           className='cancel-button'
           onClick={onNegativeClick || onClose}
         >
@@ -50,7 +50,7 @@ const EasyPlanModal = ({
         </LoadingButton>
         <LoadingButton
           disabled={isPositiveDisabled}
-          showLoading={isPositiveLoading}
+          isLoading={isPositiveLoading}
           className='positive-button'
           onClick={onPositiveClick}
         >

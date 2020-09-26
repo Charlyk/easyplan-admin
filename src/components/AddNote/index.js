@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,10 @@ import { FormControl } from 'react-bootstrap';
 
 const AddNote = ({ open, onClose, onSave, isSaving }) => {
   const [noteText, setNoteText] = useState('');
+
+  useEffect(() => {
+    if (!open) setNoteText('');
+  }, [open]);
 
   const handleNoteChange = event => {
     setNoteText(event.target.value);

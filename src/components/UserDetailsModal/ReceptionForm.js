@@ -6,6 +6,7 @@ import PhoneInput, { parsePhoneNumber } from 'react-phone-number-input';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import { EmailRegex } from '../../utils/constants';
+import { urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 const ReceptionForm = props => {
@@ -47,7 +48,7 @@ const ReceptionForm = props => {
             src={
               data.avatarFile
                 ? window.URL.createObjectURL(data.avatarFile)
-                : data.avatar
+                : urlToLambda(data.avatar, window._remToPixels(4))
             }
           />
         ) : (

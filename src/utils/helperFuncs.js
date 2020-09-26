@@ -1,41 +1,13 @@
 import moment from 'moment';
+import S3 from 'react-aws-s3';
+
+import { imageLambdaUrl } from './api/dataAPI';
+import { S3Config } from './constants';
 
 export function createHoursList() {
   return [].concat(
     ...Array.from(Array(24), (_, hour) => [moment({ hour }).format('HH:mm')]),
   );
-}
-
-export function createMonthDays() {
-  const currentMonth = moment().month();
-  const currentMonthDays = moment({ month: currentMonth }).daysInMonth();
-  const nextMonthDays = moment()
-    .add('months', 1)
-    .daysInMonth();
-
-  const currentDates = [].concat(
-    ...Array.from(Array(currentMonthDays), (_, day) => [
-      {
-        date: moment({ day: day + 1 }).format('DD'),
-        isCurrent: true,
-      },
-    ]),
-  );
-  const nextDays = [].concat(
-    ...Array.from(Array(nextMonthDays), (_, day) => [
-      {
-        date: moment({ day: day + 1 }).format('DD'),
-        isCurrent: false,
-      },
-    ]),
-  );
-
-  const daysDiff = 35 - currentDates.length;
-  for (let i = 0; i < daysDiff; i++) {
-    currentDates.push(nextDays[i]);
-  }
-
-  return currentDates;
 }
 
 /**
@@ -95,4 +67,26 @@ export function getAppointmentTop(
 
   // return new position and height
   return { top: topPosition, height };
+}
+
+/**
+ * Upload a file to AWS
+ * @param {string} path
+ * @param {Object} file
+ * @return {Promise<Object|null>}
+ */
+export async function uploadFileToAWS(path, file) {
+  const s3client = new S3(S3Config(path));
+  return await s3client.uploadFile(file, file.name);
+}
+
+/**
+ * convert image url to lambda url
+ * @param {string} imageUrl
+ * @param {number} width
+ * @return {string}
+ */
+export function urlToLambda(imageUrl, width = 50) {
+  const url = new URL(imageUrl);
+  return `${imageLambdaUrl}${url.pathname}?width=${width}`;
 }

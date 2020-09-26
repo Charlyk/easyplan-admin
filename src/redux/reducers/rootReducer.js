@@ -13,6 +13,16 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         updateUsers: !state.updateUsers,
       };
+    case types.updateXRay:
+      return {
+        ...state,
+        updateXRay: !state.updateXRay,
+      };
+    case types.updateNotes:
+      return {
+        ...state,
+        updateNotes: !state.updateNotes,
+      };
     default:
       return state;
   }

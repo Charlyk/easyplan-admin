@@ -128,18 +128,14 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
         </div>
         <div className='patients-root__account__actions'>
           {!isAdding && (
-            <Button
-              className='delete-button'
-              showLoading={isSaving}
-              onClick={handleDeletePatient}
-            >
+            <Button className='delete-button' onClick={handleDeletePatient}>
               {textForKey('Delete')}
               <IconTrash />
             </Button>
           )}
           <LoadingButton
             className='positive-button'
-            showLoading={isSaving}
+            isLoading={isSaving}
             onClick={handleSavePatient}
             disabled={!isFormValid()}
           >

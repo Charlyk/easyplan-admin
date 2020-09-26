@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 import IconPlus from '../../../../../assets/icons/iconPlus';
+import { updateNotesSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../../utils/localization';
 import PatientNote from './PatientNote';
 
-const PatientNotes = ({ onAddNote, patient, shouldUpdate }) => {
+const PatientNotes = ({ onAddNote, patient }) => {
   const [state, setState] = useState({ isFetching: false, notes: [] });
+  const updateNotes = useSelector(updateNotesSelector);
 
   useEffect(() => {
     fetchNotes();
-  }, [patient, shouldUpdate]);
+  }, [patient, updateNotes]);
 
   const fetchNotes = async () => {
     setState({ isFetching: true, notes: [] });
@@ -41,6 +44,7 @@ const PatientNotes = ({ onAddNote, patient, shouldUpdate }) => {
       </div>
       <div className='patients-root__notes__actions'>
         <Button
+          disabled={state.isFetching}
           className='btn-outline-primary'
           variant='outline-primary'
           onClick={onAddNote}
@@ -57,7 +61,6 @@ export default PatientNotes;
 
 PatientNotes.propTypes = {
   onAddNote: PropTypes.func,
-  shouldUpdate: PropTypes.func,
   patient: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,

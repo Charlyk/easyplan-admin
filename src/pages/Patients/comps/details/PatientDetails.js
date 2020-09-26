@@ -16,8 +16,8 @@ const TabId = {
   treatmentPlans: 'TreatmentPlans',
 };
 
-const PatientDetails = ({ onAddNote, patient, shouldUpdate }) => {
-  const [selectedTab, setSelectedTab] = useState(TabId.notes);
+const PatientDetails = ({ onAddNote, onAddXRay, patient }) => {
+  const [selectedTab, setSelectedTab] = useState(TabId.xRay);
 
   if (!patient) return null;
 
@@ -52,13 +52,11 @@ const PatientDetails = ({ onAddNote, patient, shouldUpdate }) => {
       <div className='patients-root__details__content'>
         {selectedTab === TabId.appointments && <PatientAppointments />}
         {selectedTab === TabId.notes && (
-          <PatientNotes
-            patient={patient}
-            onAddNote={onAddNote}
-            shouldUpdate={shouldUpdate}
-          />
+          <PatientNotes patient={patient} onAddNote={onAddNote} />
         )}
-        {selectedTab === TabId.xRay && <PatientXRay />}
+        {selectedTab === TabId.xRay && (
+          <PatientXRay onAddXRay={onAddXRay} patient={patient} />
+        )}
         {selectedTab === TabId.treatmentPlans && <TreatmentPlans />}
       </div>
     </div>
@@ -69,7 +67,7 @@ export default PatientDetails;
 
 PatientDetails.propTypes = {
   onAddNote: PropTypes.func,
-  shouldUpdate: PropTypes.bool,
+  onAddXRay: PropTypes.func,
   patient: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,

@@ -1,59 +1,116 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
+import { Button, Spinner } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
+import IconPlus from '../../../../../assets/icons/iconPlus';
+import { updateXRaySelector } from '../../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../../utils/localization';
 import XRayPhase from './XRayPhase';
 
 const ExpandedPhase = {
-  initial: 'initial',
-  middle: 'middle',
-  final: 'final',
+  initial: 'Initial',
+  middle: 'Middle',
+  final: 'Final',
 };
 
-const PatientXRay = ({ patient }) => {
+const PatientXRay = ({ patient, onAddXRay }) => {
+  const updateXRay = useSelector(updateXRaySelector);
   const [expandedPhase, setExpandedPhase] = useState(ExpandedPhase.initial);
+  const [state, setState] = useState({
+    isFetching: false,
+    images: { initial: [], middle: [], final: [] },
+  });
+
+  useEffect(() => {
+    fetchImages();
+  }, [patient, updateXRay]);
 
   const handlePhaseToggle = newPhase => {
     setExpandedPhase(newPhase);
   };
 
+  const getItemsOfType = (items, type) => {
+    return sortBy(
+      items?.filter(item => item.type === type) || [],
+      item => item.created,
+    ).reverse();
+  };
+
+  const fetchImages = async () => {
+    setState({
+      isFetching: true,
+      images: { initial: [], middle: [], final: [] },
+    });
+    const response = await dataAPI.fetchPatientXRayImages(patient.id);
+    if (response.isError) {
+      console.error(response.message);
+    }
+
+    const { data } = response;
+
+    const mappedImages = {
+      initial: getItemsOfType(data, ExpandedPhase.initial),
+      middle: getItemsOfType(data, ExpandedPhase.middle),
+      final: getItemsOfType(data, ExpandedPhase.final),
+    };
+
+    setState({ isFetching: false, images: mappedImages });
+  };
+
   return (
     <div className='patients-root__x-ray'>
-      <XRayPhase
-        title='Initial phase'
-        isExpanded={expandedPhase === ExpandedPhase.initial}
-        images={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
-        phaseId={ExpandedPhase.initial}
-        onExpand={handlePhaseToggle}
-      />
-      <XRayPhase
-        title='Middle phase'
-        isExpanded={expandedPhase === ExpandedPhase.middle}
-        images={[
-          '1',
-          '2',
-          '3',
-          '4',
-          '5',
-          '6',
-          '7',
-          '8',
-          '9',
-          '10',
-          '11',
-          '12',
-          '13',
-        ]}
-        phaseId={ExpandedPhase.middle}
-        onExpand={handlePhaseToggle}
-      />
-      <XRayPhase
-        title='Final phase'
-        isExpanded={expandedPhase === ExpandedPhase.final}
-        images={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
-        phaseId={ExpandedPhase.final}
-        onExpand={handlePhaseToggle}
-      />
+      <div className='images-container'>
+        {!state.isFetching && (
+          <XRayPhase
+            title='Initial phase'
+            isExpanded={expandedPhase === ExpandedPhase.initial}
+            images={state.images.initial}
+            phaseId={ExpandedPhase.initial}
+            onExpand={handlePhaseToggle}
+          />
+        )}
+        {!state.isFetching && (
+          <XRayPhase
+            title='Middle phase'
+            isExpanded={expandedPhase === ExpandedPhase.middle}
+            images={state.images.middle}
+            phaseId={ExpandedPhase.middle}
+            onExpand={handlePhaseToggle}
+          />
+        )}
+        {!state.isFetching && (
+          <XRayPhase
+            title='Final phase'
+            isExpanded={expandedPhase === ExpandedPhase.final}
+            images={state.images.final}
+            phaseId={ExpandedPhase.final}
+            onExpand={handlePhaseToggle}
+          />
+        )}
+        {state.isFetching && (
+          <Spinner
+            animation='border'
+            variant='primary'
+            role='status'
+            className='loading-spinner'
+          />
+        )}
+      </div>
+      <div className='patients-root__x-ray__actions'>
+        <Button
+          className='btn-outline-primary'
+          variant='outline-primary'
+          onClick={onAddXRay}
+          disabled={state.isFetching}
+        >
+          {textForKey('Add image')}
+          <IconPlus />
+        </Button>
+      </div>
     </div>
   );
 };
@@ -61,5 +118,17 @@ const PatientXRay = ({ patient }) => {
 export default PatientXRay;
 
 PatientXRay.propTypes = {
-  patient: PropTypes.object,
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    photo: PropTypes.string,
+  }).isRequired,
+  onAddXRay: PropTypes.func,
+};
+
+PatientXRay.defaultProps = {
+  onAddXRay: () => null,
 };

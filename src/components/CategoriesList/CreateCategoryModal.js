@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Modal, Button, FormControl } from 'react-bootstrap';
+import { FormControl } from 'react-bootstrap';
 
-import IconClose from '../../assets/icons/iconClose';
-import IconSuccess from '../../assets/icons/iconSuccess';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import LoadingButton from '../LoadingButton';
 
 const CreateCategoryModal = props => {
   const { show, onClose, onSaved, category } = props;
