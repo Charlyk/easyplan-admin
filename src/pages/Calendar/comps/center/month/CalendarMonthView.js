@@ -28,7 +28,7 @@ const CalendarMonthView = ({ opened }) => {
     const previousMonth = moment().add(-1, 'months');
     const daysInPreviousMonth = previousMonth.daysInMonth();
 
-    for (let i = 0; i < firstDayOfMonth(); i++) {
+    for (let i = 0; i < firstDayOfMonth() - 1; i++) {
       const date = moment({
         month: currentMonthIndex - 1,
         day: daysInPreviousMonth - i,
@@ -45,7 +45,7 @@ const CalendarMonthView = ({ opened }) => {
     }
 
     const lastDays = [];
-    for (let i = lastDayOfMonth(); i > 0; i--) {
+    for (let i = lastDayOfMonth() + 1; i > 0; i--) {
       lastDays.unshift({
         date: moment({ month: currentMonthIndex + 1, day: i }).format('DD'),
         month: currentMonthIndex + 1,
