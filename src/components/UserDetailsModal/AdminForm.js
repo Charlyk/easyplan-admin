@@ -42,14 +42,14 @@ const AdminForm = props => {
       <div className='admin-form__title'>
         {textForKey('Account information')}
       </div>
-      <div className='admin-form__avatar-container'>
+      <div className='avatar-container'>
         {data.avatarFile || data.avatar ? (
           <Image
             roundedCircle
             src={
               data.avatarFile
                 ? window.URL.createObjectURL(data.avatarFile)
-                : urlToLambda(data.avatar, window._remToPixels(4))
+                : urlToLambda(data.avatar, 100)
             }
           />
         ) : (
@@ -58,14 +58,17 @@ const AdminForm = props => {
         <span style={{ margin: '1rem' }}>
           {textForKey('JPG or PNG, Max size of 800kb')}
         </span>
-        <Form.File id='admin-avatar-input' custom>
-          <Form.File.Input
-            ref={fileRef}
+        <Form.Group>
+          <input
+            className='custom-file-button'
+            type='file'
+            name='x-ray-file'
+            id='x-ray-file'
             accept='.jpg,.jpeg,.png'
             onChange={handleAvatarChange}
           />
-          <Form.File.Label data-browse={textForKey('Upload image')} />
-        </Form.File>
+          <label htmlFor='x-ray-file'>{textForKey('Upload image')}</label>
+        </Form.Group>
       </div>
       <div className='admin-form__content'>
         <Form.Group controlId='firstName'>

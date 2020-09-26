@@ -49,6 +49,43 @@
     overflow-y: scroll;
     margin-bottom: 13.5rem;
     padding-bottom: 2rem;
+
+    .avatar-container {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #A1A2C6;
+
+      svg, img {
+        width: 4rem;
+        min-height: 4rem;
+      }
+
+      img {
+        object-fit: cover;
+      }
+
+      .btn-outline-primary {
+        text-transform: uppercase;
+      }
+
+      .form-group {
+        margin-bottom: 0;
+
+        .custom-file-button + label {
+          margin-bottom: 0;
+          color: #3A83DC;
+          text-transform: uppercase;
+        }
+      }
+    }
   }
 
   &__footer {
@@ -100,29 +137,6 @@
 
     .form-control {
       background-color: #FAFAFD;
-    }
-  }
-
-  &__avatar-container {
-    margin-top: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: 0.01em;
-    color: #A1A2C6;
-
-    svg, img {
-      width: 4rem;
-      min-height: 4rem;
-    }
-
-    .btn-outline-primary {
-      text-transform: uppercase;
     }
   }
 

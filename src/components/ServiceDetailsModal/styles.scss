@@ -144,6 +144,17 @@
 
     .form-control {
       background-color: #FAFAFD;
+      height: 33.19px;
+    }
+
+    .input-group {
+      textarea {
+        height: 80px;
+      }
+    }
+
+    .input-group-append {
+      height: 33.19px;
     }
 
     &__colors {

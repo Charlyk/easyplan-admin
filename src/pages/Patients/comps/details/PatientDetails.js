@@ -17,7 +17,7 @@ const TabId = {
 };
 
 const PatientDetails = ({ onAddNote, onAddXRay, patient }) => {
-  const [selectedTab, setSelectedTab] = useState(TabId.xRay);
+  const [selectedTab, setSelectedTab] = useState(TabId.appointments);
 
   if (!patient) return null;
 
