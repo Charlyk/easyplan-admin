@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
+import AddNote from '../../components/AddNote';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import dataAPI from '../../utils/api/dataAPI';
+import { textForKey } from '../../utils/localization';
+import PatientDetails from './comps/details/PatientDetails';
 import PatientsList from './comps/list/PatientsList';
 import './styles.scss';
 import PatientAccount from './comps/PatientAccount';
-import PatientDetails from './comps/details/PatientDetails';
-import dataAPI from '../../utils/api/dataAPI';
-import ConfirmationModal from '../../components/ConfirmationModal';
-import { textForKey } from '../../utils/localization';
 
 const Patients = props => {
   const [isAdding, setIsAdding] = useState(false);
@@ -90,8 +91,29 @@ const Patients = props => {
     setPatients({ ...patients, filtered });
   };
 
+  const handleCreateNote = () => {
+    setCreateNote({ open: true, isSaving: false });
+  };
+
+  const cancelCreateNote = () => {
+    setCreateNote({ open: false, isSaving: false });
+  };
+
+  const handleSaveNote = async noteText => {
+    if (selectedPatient == null) return;
+    setCreateNote({ ...createNote, isSaving: true });
+    await dataAPI.createPatientNote(selectedPatient.id, { note: noteText });
+    setCreateNote({ open: false, isSaving: false });
+  };
+
   return (
     <div className='patients-root'>
+      <AddNote
+        onClose={cancelCreateNote}
+        open={createNote.open}
+        isSaving={createNote.isSaving}
+        onSave={handleSaveNote}
+      />
       <ConfirmationModal
         show={deletePatient.open}
         isLoading={deletePatient.isDeleting}
@@ -122,7 +144,13 @@ const Patients = props => {
           )}
         </div>
         <div className='patients-root__content__details'>
-          {selectedPatient && <PatientDetails patient={selectedPatient} />}
+          {selectedPatient && (
+            <PatientDetails
+              shouldUpdate={!createNote.isSaving}
+              patient={selectedPatient}
+              onAddNote={handleCreateNote}
+            />
+          )}
         </div>
       </div>
     </div>

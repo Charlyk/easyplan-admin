@@ -85,6 +85,7 @@ export default {
     week: 'Week',
     month: 'Month',
     year: 'Year',
+    'created by': 'created by',
   },
   ro: {
     analytics: 'Analitică',
@@ -173,6 +174,7 @@ export default {
     week: 'Săptămână',
     month: 'Lună',
     year: 'An',
+    'created by': 'creat de',
   },
   ru: {
     analytics: 'Analytics',
@@ -260,5 +262,6 @@ export default {
     week: 'Week',
     month: 'Month',
     year: 'Year',
+    'created by': 'created by',
   },
 };

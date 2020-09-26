@@ -7,34 +7,23 @@ import './styles.scss';
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { textForKey } from '../../utils/localization';
+import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import LoadingButton from '../LoadingButton';
 
 const ConfirmationModal = props => {
-  const { title, message, onConfirm, onClose, isLoading } = props;
+  const { show, title, message, onConfirm, onClose, isLoading } = props;
   return (
-    <Modal {...props} centered onHide={onClose} className='confirmation-modal'>
-      <Modal.Header>
-        <Modal.Title>{title}</Modal.Title>
-        <div className='close-btn' onClick={onClose}>
-          <IconClose />
-        </div>
-      </Modal.Header>
-      <Modal.Body>{message}</Modal.Body>
-      <Modal.Footer>
-        <Button className='cancel-button' onClick={onClose}>
-          {textForKey('Close')}
-          <IconClose />
-        </Button>
-        <LoadingButton
-          showLoading={isLoading}
-          className='positive-button'
-          onClick={onConfirm}
-        >
-          {textForKey('Confirm')}
-          {!isLoading && <IconSuccess />}
-        </LoadingButton>
-      </Modal.Footer>
-    </Modal>
+    <EasyPlanModal
+      onClose={onClose}
+      open={show}
+      title={title}
+      isPositiveLoading={isLoading}
+      className='confirmation-modal'
+      positiveBtnText={textForKey('Confirm')}
+      onPositiveClick={onConfirm}
+    >
+      {message}
+    </EasyPlanModal>
   );
 };
 

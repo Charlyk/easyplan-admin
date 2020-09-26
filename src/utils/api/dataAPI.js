@@ -388,4 +388,22 @@ export default {
       };
     }
   },
+
+  /**
+   * Fetch patient notes
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: string|null, data: Array.<Object>}>}
+   */
+  fetchPatientNotes: async patientId => {
+    try {
+      const response = await instance.get(`patients/${patientId}/notes`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };

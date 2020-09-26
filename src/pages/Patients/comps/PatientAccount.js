@@ -8,7 +8,6 @@ import IconAvatar from '../../../assets/icons/iconAvatar';
 import IconSuccess from '../../../assets/icons/iconSuccess';
 import IconTrash from '../../../assets/icons/iconTrash';
 import LoadingButton from '../../../components/LoadingButton';
-import initialState from '../../../redux/initialState';
 import { EmailRegex } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 
@@ -23,7 +22,6 @@ const emptyPatient = {
 
 const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
   const countryCode = useRef('373');
-  const [isDeleting, setIsDeleting] = useState(false);
   const [patientData, setPatientData] = useState(patient || emptyPatient);
 
   useEffect(() => {

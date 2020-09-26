@@ -9,6 +9,7 @@ import * as locales from 'react-date-range/dist/locale';
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { getAppLanguage, textForKey } from '../../utils/localization';
+import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
 const initialRange = {
   startDate: moment().toDate(),
@@ -70,62 +71,35 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
   };
 
   return (
-    <Modal
-      centered={true}
-      show={show}
-      onHide={handleCloseModal}
-      className='holiday-modal'
+    <EasyPlanModal
+      onClose={handleCloseModal}
+      open={show}
+      title={textForKey('Add holiday')}
+      onPositiveClick={handleSaveHoliday}
     >
-      <Modal.Header>
-        {textForKey('Add holiday')}
-        <div
-          role='button'
-          tabIndex={0}
-          className='modal-header__close-btn'
-          onClick={handleCloseModal}
-        >
-          <IconClose />
-        </div>
-      </Modal.Header>
-
-      <Modal.Body>
-        <div className='holiday-modal__body'>
-          <DateRange
-            onChange={handleDateSelected}
-            moveRangeOnFirstSelection={false}
-            minDate={new Date()}
-            months={2}
-            direction='horizontal'
-            ranges={dateRanges}
-            locale={locales[getAppLanguage()]}
-          />
-          <Form.Group controlId='description'>
-            <Form.Label>{textForKey('Description')}</Form.Label>
-            <InputGroup>
-              <Form.Control
-                value={description}
-                onChange={handleDescriptionChange}
-                as='textarea'
-                aria-label='With textarea'
-              />
-            </InputGroup>
-          </Form.Group>
-        </div>
-      </Modal.Body>
-
-      <Modal.Footer>
-        <div className='holiday-modal__footer'>
-          <Button className='cancel-button' onClick={handleCloseModal}>
-            {textForKey('Close')}
-            <IconClose />
-          </Button>
-          <Button className='positive-button' onClick={handleSaveHoliday}>
-            {textForKey('Save')}
-            <IconSuccess />
-          </Button>
-        </div>
-      </Modal.Footer>
-    </Modal>
+      <div className='holiday-modal__body'>
+        <DateRange
+          onChange={handleDateSelected}
+          moveRangeOnFirstSelection={false}
+          minDate={new Date()}
+          months={2}
+          direction='horizontal'
+          ranges={dateRanges}
+          locale={locales[getAppLanguage()]}
+        />
+        <Form.Group controlId='description'>
+          <Form.Label>{textForKey('Description')}</Form.Label>
+          <InputGroup>
+            <Form.Control
+              value={description}
+              onChange={handleDescriptionChange}
+              as='textarea'
+              aria-label='With textarea'
+            />
+          </InputGroup>
+        </Form.Group>
+      </div>
+    </EasyPlanModal>
   );
 };
 

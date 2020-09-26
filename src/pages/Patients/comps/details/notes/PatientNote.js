@@ -1,24 +1,19 @@
 import React from 'react';
 
+import moment from 'moment';
 import PropTypes from 'prop-types';
+
+import { textForKey } from '../../../../../utils/localization';
 
 const PatientNote = ({ note }) => {
   return (
     <div className='patients-root__notes__item'>
       <div className='patients-root__notes__item__note-date'>
-        20 Jan 2020 12:33
+        {moment(note.created).format('DD MMM YYYY HH:mm')}{' '}
+        {textForKey('created by')} {note.createdByName}
       </div>
       <div className='patients-root__notes__item__note-text'>
-        Some long text will go here so I need to fill this with a random text
-        just for test purpose. Some long text will go here so I need to fill
-        this with a random text just for test purpose. Some long text will go
-        here so I need to fill this with a random text just for test purpose.
-        Some long text will go here so I need to fill this with a random text
-        just for test purpose. Some long text will go here so I need to fill
-        this with a random text just for test purpose. Some long text will go
-        here so I need to fill this with a random text just for test purpose.
-        Some long text will go here so I need to fill this with a random text
-        just for test purpose.
+        {note.noteText}
       </div>
     </div>
   );
@@ -27,5 +22,11 @@ const PatientNote = ({ note }) => {
 export default PatientNote;
 
 PatientNote.propTypes = {
-  note: PropTypes.object,
+  note: PropTypes.shape({
+    id: PropTypes.string,
+    noteText: PropTypes.string,
+    createdById: PropTypes.string,
+    createdByName: PropTypes.string,
+    created: PropTypes.string,
+  }).isRequired,
 };

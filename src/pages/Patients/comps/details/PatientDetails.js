@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import PropTypes from 'prop-types';
+
 import EasyTab from '../../../../components/EasyTab';
 import { textForKey } from '../../../../utils/localization';
 import PatientAppointments from './appointments/PatientAppointments';
@@ -14,8 +16,10 @@ const TabId = {
   treatmentPlans: 'TreatmentPlans',
 };
 
-const PatientDetails = props => {
+const PatientDetails = ({ onAddNote, patient, shouldUpdate }) => {
   const [selectedTab, setSelectedTab] = useState(TabId.notes);
+
+  if (!patient) return null;
 
   const handleTabClick = selectedTab => {
     setSelectedTab(selectedTab);
@@ -47,7 +51,13 @@ const PatientDetails = props => {
       </div>
       <div className='patients-root__details__content'>
         {selectedTab === TabId.appointments && <PatientAppointments />}
-        {selectedTab === TabId.notes && <PatientNotes />}
+        {selectedTab === TabId.notes && (
+          <PatientNotes
+            patient={patient}
+            onAddNote={onAddNote}
+            shouldUpdate={shouldUpdate}
+          />
+        )}
         {selectedTab === TabId.xRay && <PatientXRay />}
         {selectedTab === TabId.treatmentPlans && <TreatmentPlans />}
       </div>
@@ -56,3 +66,16 @@ const PatientDetails = props => {
 };
 
 export default PatientDetails;
+
+PatientDetails.propTypes = {
+  onAddNote: PropTypes.func,
+  shouldUpdate: PropTypes.bool,
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    photo: PropTypes.string,
+  }).isRequired,
+};

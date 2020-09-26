@@ -118,11 +118,6 @@
 }
 
 .create-category-modal {
-
-  .modal-content {
-    width: 80%;
-  }
-
   .modal-body {
     padding: .5rem 1rem;
 
@@ -142,32 +137,5 @@
       color: #34354C;
       margin-bottom: 0;
     }
-  }
-
-  .modal-header {
-    border: none;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-
-    .close-btn {
-      cursor: pointer;
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
-      }
-    }
-  }
-
-  .modal-title {
-    /* H400 */
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #34354C;
-  }
-
-  .modal-footer {
-    border: none;
   }
 }

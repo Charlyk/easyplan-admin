@@ -7,6 +7,7 @@ import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
+import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import LoadingButton from '../LoadingButton';
 
 const CreateCategoryModal = props => {
@@ -77,46 +78,20 @@ const CreateCategoryModal = props => {
   };
 
   return (
-    <Modal
+    <EasyPlanModal
+      onClose={handleModalClose}
+      open={show}
+      title={getTitle()}
       className='create-category-modal'
-      centered
-      show={show}
-      onHide={handleModalClose}
+      onPositiveClick={handleCategorySave}
     >
-      <Modal.Header>
-        <Modal.Title id='contained-modal-title-vcenter'>
-          {getTitle()}
-        </Modal.Title>
-        <div className='close-btn' onClick={handleModalClose}>
-          <IconClose />
-        </div>
-      </Modal.Header>
-
-      <Modal.Body>
-        <label htmlFor='basic-url'>{textForKey('Enter category name')}</label>
-        <FormControl
-          value={categoryName}
-          onChange={handleCategoryNameChange}
-          aria-label={textForKey('Enter category name')}
-        />
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button className='cancel-button' onClick={handleModalClose}>
-          {textForKey('Close')}
-          <IconClose />
-        </Button>
-        <LoadingButton
-          showLoading={isLoading}
-          className='positive-button'
-          disabled={categoryName.length === 0}
-          onClick={handleCategorySave}
-        >
-          {textForKey('Save')}
-          {!isLoading && <IconSuccess />}
-        </LoadingButton>
-      </Modal.Footer>
-    </Modal>
+      <label htmlFor='basic-url'>{textForKey('Enter category name')}</label>
+      <FormControl
+        value={categoryName}
+        onChange={handleCategoryNameChange}
+        aria-label={textForKey('Enter category name')}
+      />
+    </EasyPlanModal>
   );
 };
 
