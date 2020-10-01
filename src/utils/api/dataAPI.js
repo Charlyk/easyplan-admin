@@ -465,4 +465,58 @@ export default {
       };
     }
   },
+
+  /**
+   * Search patients by phone or name
+   * @param {string} query
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  searchPatients: async query => {
+    try {
+      const response = await instance.get(`patients/search?query=${query}`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Search doctors by phone or name
+   * @param {string} query
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  searchDoctors: async query => {
+    try {
+      const response = await instance.get(`users/search?query=${query}`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
+
+  /**
+   * Search services by name
+   * @param {string} query
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  searchServices: async query => {
+    try {
+      const response = await instance.get(`services/search?query=${query}`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };

@@ -1,0 +1,22 @@
+.add-appointment-root {
+  position: relative;
+
+  .form-label {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .7rem;
+    margin-bottom: 0;
+  }
+
+  .form-control {
+    background-color: #FAFAFD;
+  }
+
+  .rbt-aux {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: .5rem;
+  }
+}

@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
+import AddAppointmentModal from '../../components/AddAppintmentModal';
 import dataAPI from '../../utils/api/dataAPI';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
 import CalendarDoctors from './comps/left/CalendarDoctors';
@@ -11,6 +12,7 @@ const reducerTypes = {
   filters: 'filters',
   selectedService: 'selectedService',
   selectedDoctor: 'selectedDoctor',
+  appointmentModal: 'appointmentModal',
 };
 
 const reducerActions = {
@@ -23,6 +25,10 @@ const reducerActions = {
     type: reducerTypes.selectedDoctor,
     payload,
   }),
+  setAppointmentModal: payload => ({
+    type: reducerTypes.appointmentModal,
+    payload,
+  }),
 };
 
 const reducer = (state, action) => {
@@ -33,6 +39,8 @@ const reducer = (state, action) => {
       return { ...state, selectedService: action.payload };
     case reducerTypes.selectedDoctor:
       return { ...state, selectedDoctor: action.payload };
+    case reducerTypes.appointmentModal:
+      return { ...state, appointmentModal: action.payload };
     default:
       throw new Error('unknown type');
   }
@@ -42,11 +50,12 @@ const initialState = {
   filters: { doctors: [], services: [] },
   selectedService: null,
   selectedDoctor: null,
+  appointmentModal: { open: false },
 };
 
 const Calendar = props => {
   const [
-    { filters, selectedService, selectedDoctor },
+    { filters, selectedService, selectedDoctor, appointmentModal },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -78,6 +87,14 @@ const Calendar = props => {
     }
   };
 
+  const handleAppointmentModalClose = () => {
+    localDispatch(reducerActions.setAppointmentModal({ open: false }));
+  };
+
+  const handleAppointmentModalOpen = () => {
+    localDispatch(reducerActions.setAppointmentModal({ open: true }));
+  };
+
   const handleServiceSelected = service => {
     localDispatch(reducerActions.setSelectedService(service));
   };
@@ -88,6 +105,10 @@ const Calendar = props => {
 
   return (
     <div className='calendar-root'>
+      <AddAppointmentModal
+        onClose={handleAppointmentModalClose}
+        open={appointmentModal.open}
+      />
       <div className='calendar-root__content__left-container'>
         <ServicesFilter
           services={filters.services}
@@ -105,7 +126,7 @@ const Calendar = props => {
         <AppointmentsCalendar />
       </div>
       <div className='calendar-root__content__right-container'>
-        <CalendarRightContainer />
+        <CalendarRightContainer onAddAppointment={handleAppointmentModalOpen} />
       </div>
     </div>
   );
