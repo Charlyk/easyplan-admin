@@ -39,13 +39,17 @@
   }
 
   &__services {
-    width: 100%;
+    width: 100% !important;
     height: 5rem;
     padding: .5rem 1rem;
     margin-bottom: 1rem;
     background: #FFFFFF;
     box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
     border-radius: 4px;
+
+    .custom-select {
+      width: 100% !important;
+    }
 
     .form-label {
       font-family: Inter, sans-serif;
@@ -139,6 +143,7 @@
           font-weight: normal;
           height: .7rem;
           font-size: .7rem;
+          overflow: hidden;
           color: #A1A2C6;
         }
       }

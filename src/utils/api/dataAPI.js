@@ -448,4 +448,21 @@ export default {
       };
     }
   },
+
+  /**
+   * Fetch filters for calendar
+   * @return {Promise<{isError: boolean, message: string|null, data: {doctors: [Object], services: [Object]}}>}
+   */
+  fetchCalendarFilters: async () => {
+    try {
+      const response = await instance.get(`schedules/filters`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e,
+      };
+    }
+  },
 };

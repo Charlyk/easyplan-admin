@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
 import { textForKey } from '../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 
-const CalendarDoctors = props => {
+const CalendarDoctors = ({ doctors, selectedService }) => {
+  const [filteredDoctors, setFilteredDoctors] = useState(doctors);
+  const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    const newDoctors = doctors.filter(doctor => {
+      if (selectedService == null && searchText.length === 0) return true;
+      const servicesIds = doctor.services.map(item => item.id);
+      const fullName = `${doctor.firstName} ${doctor.lastName}`.toLowerCase();
+      return (
+        (selectedService == null || servicesIds.includes(selectedService.id)) &&
+        (searchText.length === 0 || fullName.includes(searchText.toLowerCase()))
+      );
+    });
+    setFilteredDoctors(newDoctors);
+  }, [doctors, selectedService, searchText]);
+
+  const handleSearchTextChange = event => {
+    setSearchText(event.target.value);
+  };
+
   return (
     <div className='calendar-root__doctors'>
       <div className='doctors-header'>Doctors</div>
@@ -13,6 +34,8 @@ const CalendarDoctors = props => {
         <Form.Group controlId='firstName'>
           <InputGroup>
             <Form.Control
+              onChange={handleSearchTextChange}
+              value={searchText}
               placeholder={`${textForKey('Search')}...`}
               type='text'
             />
@@ -20,24 +43,34 @@ const CalendarDoctors = props => {
         </Form.Group>
       </div>
       <div className='doctors-content'>
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
-        <CalendarDoctor />
+        {filteredDoctors.map(doctor => (
+          <CalendarDoctor key={doctor.id} doctor={doctor} />
+        ))}
       </div>
     </div>
   );
 };
 
 export default CalendarDoctors;
+
+CalendarDoctors.propTypes = {
+  selectedService: PropTypes.object,
+  doctors: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      avatar: PropTypes.string,
+      services: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+          name: PropTypes.string,
+        }),
+      ),
+    }),
+  ),
+};
+
+CalendarDoctors.defaultProps = {
+  doctors: [],
+};
