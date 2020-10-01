@@ -6,7 +6,12 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { textForKey } from '../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 
-const CalendarDoctors = ({ doctors, selectedService }) => {
+const CalendarDoctors = ({
+  doctors,
+  selectedDoctor,
+  selectedService,
+  onSelect,
+}) => {
   const [filteredDoctors, setFilteredDoctors] = useState(doctors);
   const [searchText, setSearchText] = useState('');
 
@@ -44,7 +49,12 @@ const CalendarDoctors = ({ doctors, selectedService }) => {
       </div>
       <div className='doctors-content'>
         {filteredDoctors.map(doctor => (
-          <CalendarDoctor key={doctor.id} doctor={doctor} />
+          <CalendarDoctor
+            key={doctor.id}
+            isSelected={doctor.id === selectedDoctor?.id}
+            doctor={doctor}
+            onSelect={onSelect}
+          />
         ))}
       </div>
     </div>
@@ -55,6 +65,18 @@ export default CalendarDoctors;
 
 CalendarDoctors.propTypes = {
   selectedService: PropTypes.object,
+  selectedDoctor: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    avatar: PropTypes.string,
+    services: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+      }),
+    ),
+  }),
   doctors: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -69,8 +91,10 @@ CalendarDoctors.propTypes = {
       ),
     }),
   ),
+  onSelect: PropTypes.func,
 };
 
 CalendarDoctors.defaultProps = {
   doctors: [],
+  onSelect: () => null,
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import './styles.scss';
 import dataAPI from '../../utils/api/dataAPI';
@@ -7,9 +7,48 @@ import CalendarDoctors from './comps/left/CalendarDoctors';
 import ServicesFilter from './comps/left/ServicesFilter';
 import CalendarRightContainer from './comps/right/CalendarRightContainer';
 
+const reducerTypes = {
+  filters: 'filters',
+  selectedService: 'selectedService',
+  selectedDoctor: 'selectedDoctor',
+};
+
+const reducerActions = {
+  setFilters: payload => ({ type: reducerTypes.filters, payload }),
+  setSelectedService: payload => ({
+    type: reducerTypes.selectedService,
+    payload,
+  }),
+  setSelectedDoctor: payload => ({
+    type: reducerTypes.selectedDoctor,
+    payload,
+  }),
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.filters:
+      return { ...state, filters: action.payload };
+    case reducerTypes.selectedService:
+      return { ...state, selectedService: action.payload };
+    case reducerTypes.selectedDoctor:
+      return { ...state, selectedDoctor: action.payload };
+    default:
+      throw new Error('unknown type');
+  }
+};
+
+const initialState = {
+  filters: { doctors: [], services: [] },
+  selectedService: null,
+  selectedDoctor: null,
+};
+
 const Calendar = props => {
-  const [filters, setFilters] = useState({ doctors: [], services: [] });
-  const [selectedService, setSelectedService] = useState(null);
+  const [
+    { filters, selectedService, selectedDoctor },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetchFilters();
@@ -30,12 +69,21 @@ const Calendar = props => {
           ),
         };
       });
-      setFilters({ doctors: newDoctors, services });
+      localDispatch(
+        reducerActions.setFilters({ doctors: newDoctors, services }),
+      );
+      if (newDoctors.length > 0) {
+        localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
+      }
     }
   };
 
   const handleServiceSelected = service => {
-    setSelectedService(service);
+    localDispatch(reducerActions.setSelectedService(service));
+  };
+
+  const handleDoctorSelected = doctor => {
+    localDispatch(reducerActions.setSelectedDoctor(doctor));
   };
 
   return (
@@ -47,8 +95,10 @@ const Calendar = props => {
           onSelect={handleServiceSelected}
         />
         <CalendarDoctors
+          selectedDoctor={selectedDoctor}
           selectedService={selectedService}
           doctors={filters.doctors}
+          onSelect={handleDoctorSelected}
         />
       </div>
       <div className='calendar-root__content__center-container'>

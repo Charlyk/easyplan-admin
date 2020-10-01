@@ -86,6 +86,8 @@ export default {
     month: 'Month',
     year: 'Year',
     'created by': 'created by',
+    'all services': 'All services',
+    'add appointment': 'Add appointment',
   },
   ro: {
     analytics: 'Analitică',
@@ -175,6 +177,8 @@ export default {
     month: 'Lună',
     year: 'An',
     'created by': 'creat de',
+    'all services': 'Toate serviciile',
+    'add appointment': 'Adaugă programare',
   },
   ru: {
     analytics: 'Analytics',
@@ -263,5 +267,7 @@ export default {
     month: 'Month',
     year: 'Year',
     'created by': 'created by',
+    'all services': 'All services',
+    'add appointment': 'Add appointment',
   },
 };
