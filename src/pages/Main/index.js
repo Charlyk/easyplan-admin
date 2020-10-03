@@ -15,6 +15,7 @@ import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
 import Categories from '../Categories';
 import Patients from '../Patients';
+import Settings from '../Settings';
 import Users from '../Users';
 
 const Main = props => {
@@ -99,6 +100,7 @@ const Main = props => {
               <Route path='/users' component={Users} />
               <Route path='/calendar' component={Calendar} />
               <Route path='/patients' component={Patients} />
+              <Route path='/settings' component={Settings} />
             </Switch>
           </div>
         )}

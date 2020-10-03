@@ -52,6 +52,9 @@ const Patients = props => {
       console.error(response.message);
     } else {
       setPatients({ all: response.data, filtered: response.data });
+      if (response?.data?.length > 0) {
+        setSelectedPatient(response.data[0]);
+      }
     }
   };
 

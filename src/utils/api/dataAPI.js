@@ -18,7 +18,7 @@ const instance = () =>
 export default {
   /**
    * Fetch categories list from server
-   * @return {Promise<{isError: boolean, message: string, data: Object|null}>}
+   * @return {Promise<{isError: boolean, message: string, data: [Object]|null}>}
    */
   fetchCategories: async () => {
     try {

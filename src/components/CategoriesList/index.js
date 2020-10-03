@@ -53,21 +53,22 @@ const CategoriesList = props => {
 
   useEffect(() => {
     fetchCategories();
-  }, [props, updateCategories]);
+  }, [updateCategories]);
 
-  const fetchCategories = () => {
+  const fetchCategories = async () => {
     setIsLoading(true);
-    dataAPI
-      .fetchCategories()
-      .then(response => {
-        if (response.isError) {
-          console.error(response.message);
-        } else {
-          setCategories(response.data);
-        }
-        setIsLoading(false);
-      })
-      .catch(console.error);
+    const response = await dataAPI.fetchCategories();
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      setCategories(response.data || []);
+      console.log(response.data);
+      if (response?.data?.length > 0) {
+        setSelectedCategory(response.data[0]);
+        onCategorySelect(response.data[0]);
+      }
+    }
+    setIsLoading(false);
   };
 
   const renderSkeleton = () => {
