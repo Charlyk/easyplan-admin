@@ -18,3 +18,28 @@
     }
   }
 }
+
+.loading-modal {
+  .modal-dialog {
+    width: 15rem;
+
+    .modal-content {
+      height: 8rem;
+      width: 15rem;
+
+      .modal-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+
+        .spinner-border {
+          width: 1.5rem;
+          height: 1.5rem;
+          color: #3A83DC;
+          margin-right: .5rem;
+        }
+      }
+    }
+  }
+}

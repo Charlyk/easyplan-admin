@@ -5,9 +5,11 @@ import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
 
+import IconAvatar from '../../assets/icons/iconAvatar';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
+import IconTurnOff from '../../assets/icons/iconTurnOff';
 import profileImage from '../../assets/images/profile-image.jpg';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
@@ -22,14 +24,14 @@ const actions = [
   {
     name: textForKey('Log out'),
     key: 'log-out',
-    icon: <IconEdit />,
-    type: 'default',
+    icon: <IconTurnOff />,
+    type: 'destructive',
   },
 ];
 
 const PageHeader = props => {
   const actionsAnchor = useRef(null);
-  const { title, onSearch, onLogout } = props;
+  const { title, user, onSearch, onLogout } = props;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -52,6 +54,7 @@ const PageHeader = props => {
         open={isActionsOpen}
         actions={actions}
         anchorEl={actionsAnchor.current}
+        placement='bottom-end'
       />
       <div className='page-header__title'>{title}</div>
       <TextField
@@ -63,11 +66,13 @@ const PageHeader = props => {
         <div className='page-header__notifications'>
           <IconNotifications />
         </div>
-        <Image
-          roundedCircle
-          className='page-header__avatar'
-          src={profileImage}
-        />
+        <div className='avatar-container'>
+          {user?.avatar ? (
+            <Image roundedCircle className='avatar-image' src={user.avatar} />
+          ) : (
+            <IconAvatar />
+          )}
+        </div>
         <div
           role='button'
           tabIndex={0}
@@ -86,6 +91,13 @@ export default PageHeader;
 
 PageHeader.propTypes = {
   title: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string,
+    avatar: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    username: PropTypes.string,
+  }),
   onSearch: PropTypes.func,
   onLogout: PropTypes.func,
 };

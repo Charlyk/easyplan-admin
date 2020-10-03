@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 import './styles.scss';
 
 const ActionsSheet = props => {
-  const { actions, onSelect, onClose } = props;
+  const { actions, onSelect, onClose, placement } = props;
 
   const handleActionClick = action => onSelect(action);
 
   return (
-    <Popper {...props} placement='bottom' transition>
+    <Popper {...props} placement={placement} transition>
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
           <Paper className='actions-sheet__paper'>
@@ -46,6 +46,11 @@ ActionsSheet.propTypes = {
       type: PropTypes.oneOf(['default', 'destructive']),
     }),
   ).isRequired,
+  placement: PropTypes.oneOf(['bottom', 'bottom-end', 'bottom-start']),
   onSelect: PropTypes.func,
   onClose: PropTypes.func.isRequired,
+};
+
+ActionsSheet.defaultProps = {
+  placement: 'bottom',
 };
