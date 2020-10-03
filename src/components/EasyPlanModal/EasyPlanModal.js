@@ -29,25 +29,34 @@ const EasyPlanModal = ({
       centered
       className={`easyplan-modal-root easyplan-modal ${className}`}
       show={open}
-      onHide={onClose}
+      onHide={typeof onClose === 'function' ? onClose : () => null}
     >
       <Modal.Header>
         {title}
-        <div role='button' tabIndex={0} className='close-btn' onClick={onClose}>
-          <IconClose />
-        </div>
+        {typeof onClose === 'function' && (
+          <div
+            role='button'
+            tabIndex={0}
+            className='close-btn'
+            onClick={onClose}
+          >
+            <IconClose />
+          </div>
+        )}
       </Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
-        <LoadingButton
-          disabled={isNegativeDisabled}
-          isLoading={isNegativeLoading}
-          className='cancel-button'
-          onClick={onNegativeClick || onClose}
-        >
-          {negativeBtnText}
-          {!isNegativeLoading} <IconClose />
-        </LoadingButton>
+        {typeof onClose === 'function' && (
+          <LoadingButton
+            disabled={isNegativeDisabled}
+            isLoading={isNegativeLoading}
+            className='cancel-button'
+            onClick={onNegativeClick || onClose}
+          >
+            {negativeBtnText}
+            {!isNegativeLoading} <IconClose />
+          </LoadingButton>
+        )}
         <LoadingButton
           disabled={isPositiveDisabled}
           isLoading={isPositiveLoading}
@@ -65,7 +74,7 @@ const EasyPlanModal = ({
 export default EasyPlanModal;
 
 EasyPlanModal.propTypes = {
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
   title: PropTypes.string,
   children: PropTypes.any,
   negativeBtnText: PropTypes.string,
@@ -76,11 +85,12 @@ EasyPlanModal.propTypes = {
   isNegativeDisabled: PropTypes.bool,
   onNegativeClick: PropTypes.func,
   onPositiveClick: PropTypes.func,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   className: PropTypes.string,
 };
 
 EasyPlanModal.defaultProps = {
+  open: false,
   onPositiveClick: () => null,
   negativeBtnText: textForKey('Close'),
   positiveBtnText: textForKey('Save'),

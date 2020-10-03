@@ -2,8 +2,8 @@ import axios from 'axios';
 
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8080/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8080/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -523,6 +523,29 @@ export default {
       const response = await instance().get(
         `services/search?query=${query}&doctorId=${doctorId}`,
       );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Create new clinic
+   * @param {Object} requestBody
+   * @param {string} requestBody.clinicName
+   * @param {string|null} requestBody.website
+   * @param {string|null} requestBody.description
+   * @param {string|null} requestBody.logo
+   * @param {boolean} requestBody.hasBrackets
+   * @return {Promise<void>}
+   */
+  createClinic: async requestBody => {
+    try {
+      const response = await instance().post(`clinics`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

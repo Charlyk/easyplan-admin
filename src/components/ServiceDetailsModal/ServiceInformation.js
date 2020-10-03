@@ -109,7 +109,7 @@ const ServiceInformation = props => {
             <InputGroup>
               <Form.Control
                 as='textarea'
-                value={data.description}
+                value={data.description || ''}
                 onChange={handleFormChange}
                 aria-label='With textarea'
               />
@@ -198,8 +198,8 @@ ServiceInformation.propTypes = {
   showStep: PropTypes.bool,
   data: PropTypes.shape({
     name: PropTypes.string,
-    duration: PropTypes.string,
-    price: PropTypes.string,
+    duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     description: PropTypes.string,
     color: PropTypes.string,
   }),

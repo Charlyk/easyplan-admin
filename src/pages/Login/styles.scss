@@ -175,6 +175,12 @@
 }
 
 .register-form {
+  position: relative;
+
+  .form-control {
+    width: 100%;
+  }
+
   .form-title {
     margin-bottom: 3rem;
   }
@@ -183,7 +189,7 @@
     margin-top: 3rem;
   }
 
-  .avatar-container {
+  .upload-avatar-container {
     user-select: none;
     margin-top: 1rem;
     display: flex;

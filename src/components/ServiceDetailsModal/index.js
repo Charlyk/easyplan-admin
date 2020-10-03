@@ -4,19 +4,18 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
-import IconArrowNext from '../../assets/icons/iconArrowNext';
 import IconClose from '../../assets/icons/iconClose';
 import IconDelete from '../../assets/icons/iconDelete';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerCategoriesUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
+import ConfirmationModal from '../ConfirmationModal';
 import LeftSideModal from '../LeftSideModal';
 import './styles.scss';
 import LoadingButton from '../LoadingButton';
 import ServiceDoctors from './ServiceDoctors';
 import ServiceInformation from './ServiceInformation';
-import ConfirmationModal from '../ConfirmationModal';
 
 const initialService = {
   name: '',

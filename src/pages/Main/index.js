@@ -5,6 +5,7 @@ import './styles.scss';
 import { Modal, Spinner } from 'react-bootstrap';
 import { useLocation, useHistory, Switch, Route } from 'react-router-dom';
 
+import CreateClinicModal from '../../components/CreateClinicModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import authAPI from '../../utils/api/authAPI';
@@ -42,12 +43,17 @@ const Main = props => {
 
   const handleUserLogout = () => {
     setUser(null);
+    setAppInitialized(false);
     authManager.logOut();
     history.push('/login');
   };
 
-  const fetchUser = async () => {
-    if (!authManager.isLoggedIn() || user != null) {
+  const handleClinicCreated = () => {
+    fetchUser(true);
+  };
+
+  const fetchUser = async force => {
+    if (!force && (!authManager.isLoggedIn() || user != null)) {
       return;
     }
     setAppIsLoading(true);
@@ -56,7 +62,6 @@ const Main = props => {
       handleUserLogout();
       console.error(response.message);
     } else {
-      console.log(response.data);
       setUser(response.data);
       setAppInitialized(true);
     }
@@ -65,6 +70,10 @@ const Main = props => {
 
   return (
     <div className='main-page' id='main-page'>
+      <CreateClinicModal
+        open={user && user.clinicIds.length === 0}
+        onCreate={handleClinicCreated}
+      />
       <Modal
         centered
         className='loading-modal'

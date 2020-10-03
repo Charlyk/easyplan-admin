@@ -367,4 +367,42 @@ body {
   .custom-file-button + label * {
     pointer-events: none;
   }
+
+  .upload-avatar-container {
+    user-select: none;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #A1A2C6;
+
+    svg, img {
+      width: 4rem;
+      min-height: 4rem;
+    }
+
+    img {
+      object-fit: cover;
+    }
+
+    .btn-outline-primary {
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+
+      .custom-file-button + label {
+        margin-bottom: 0;
+        color: #3A83DC;
+        text-transform: uppercase;
+      }
+    }
+  }
 }
