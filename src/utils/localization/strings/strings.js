@@ -88,6 +88,10 @@ export default {
     'created by': 'created by',
     'all services': 'All services',
     'add appointment': 'Add appointment',
+    'reset password message':
+      "Enter the email address associated with your account and we'll send you a link to reset your password.",
+    password: 'Password',
+    wrong_username_or_password: 'Wrong email or password',
   },
   ro: {
     analytics: 'Analitică',
@@ -179,6 +183,10 @@ export default {
     'created by': 'creat de',
     'all services': 'Toate serviciile',
     'add appointment': 'Adaugă programare',
+    'reset password message':
+      "Enter the email address associated with your account and we'll send you a link to reset your password.",
+    password: 'Parola',
+    wrong_username_or_password: 'Wrong email or password',
   },
   ru: {
     analytics: 'Analytics',
@@ -269,5 +277,9 @@ export default {
     'created by': 'created by',
     'all services': 'All services',
     'add appointment': 'Add appointment',
+    'reset password message':
+      "Enter the email address associated with your account and we'll send you a link to reset your password.",
+    password: 'Password',
+    wrong_username_or_password: 'Wrong email or password',
   },
 };

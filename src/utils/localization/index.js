@@ -23,6 +23,7 @@ export function getAppLanguage() {
  * @return {string}
  */
 export function textForKey(key) {
+  if (typeof key !== 'string') return key;
   const lang = getAppLanguage();
   const text = strings[lang][key.toLowerCase()];
   return text ? text : key;

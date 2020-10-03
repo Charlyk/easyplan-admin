@@ -1,17 +1,19 @@
 import axios from 'axios';
 
-// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-const baseURL = 'http://localhost:8080/api/';
+import authManager from '../settings/authManager';
+
+const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+// const baseURL = 'http://localhost:8080/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
-const instance = axios.create({
-  baseURL,
-  headers: {
-    Authorization:
-      'eyJhbGciOiJIUzI1NiJ9.eyJjbGluaWNJZCI6Im5vX2NsaW5pYyIsInVzZXJJZCI6IjY4ZTljNDlmLTE0NmQtM2NmZS04OGFlLWQ0ZmQ5MGFlM2MwNyJ9.hRV30BJSf6nXJSib3cMdswBrwG7l6SNaQy-y2UBgYtk',
-  },
-});
+const instance = () =>
+  axios.create({
+    baseURL,
+    headers: {
+      Authorization: authManager.getUserToken(),
+    },
+  });
 
 export default {
   /**
@@ -20,13 +22,13 @@ export default {
    */
   fetchCategories: async () => {
     try {
-      const response = await instance.get('categories');
+      const response = await instance().get('categories');
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -38,13 +40,16 @@ export default {
    */
   createCategory: async requestBody => {
     try {
-      const response = await instance.post('categories/v1/create', requestBody);
+      const response = await instance().post(
+        'categories/v1/create',
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -56,7 +61,7 @@ export default {
    */
   changeCategoryName: async requestBody => {
     try {
-      const response = await instance.put(
+      const response = await instance().put(
         `categories/${requestBody.categoryId}`,
         requestBody,
       );
@@ -65,7 +70,7 @@ export default {
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -77,13 +82,13 @@ export default {
    */
   deleteCategory: async categoryId => {
     try {
-      const response = await instance.delete(`categories/${categoryId}`);
+      const response = await instance().delete(`categories/${categoryId}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -102,13 +107,13 @@ export default {
    */
   createService: async requestBody => {
     try {
-      const response = await instance.post('services/v1/create', requestBody);
+      const response = await instance().post('services/v1/create', requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -128,7 +133,7 @@ export default {
    */
   editService: async (requestBody, serviceId) => {
     try {
-      const response = await instance.put(
+      const response = await instance().put(
         `services/v1/${serviceId}`,
         requestBody,
       );
@@ -137,7 +142,7 @@ export default {
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -151,7 +156,7 @@ export default {
     try {
       const serviceIdParam =
         serviceId?.length > 0 ? `?serviceId=${serviceId}` : '';
-      const response = await instance.get(
+      const response = await instance().get(
         `services/v1/doctors${serviceIdParam}`,
       );
       const { data: responseData } = response;
@@ -159,7 +164,7 @@ export default {
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -171,13 +176,13 @@ export default {
    */
   deleteService: async serviceId => {
     try {
-      const response = await instance.delete(`services/v1/${serviceId}`);
+      const response = await instance().delete(`services/v1/${serviceId}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -191,13 +196,13 @@ export default {
     try {
       const categoryIdParam =
         categoryId?.length > 0 ? `?categoryId=${categoryId}` : '';
-      const response = await instance.get(`services${categoryIdParam}`);
+      const response = await instance().get(`services${categoryIdParam}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -208,13 +213,13 @@ export default {
    */
   fetchUsers: async () => {
     try {
-      const response = await instance.get('users');
+      const response = await instance().get('users');
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -231,13 +236,13 @@ export default {
    */
   createUser: async requestBody => {
     try {
-      const response = await instance.post('users', requestBody);
+      const response = await instance().post('users', requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -256,7 +261,7 @@ export default {
   updateUser: async (userId, requestBody) => {
     try {
       console.log(requestBody);
-      const response = await instance.put(`users/${userId}`, requestBody);
+      const response = await instance().put(`users/${userId}`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -275,13 +280,13 @@ export default {
   deleteUser: async userId => {
     try {
       const url = `users/${userId}`;
-      const response = await instance.delete(url);
+      const response = await instance().delete(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -297,13 +302,13 @@ export default {
    */
   createPatient: async requestBody => {
     try {
-      const response = await instance.post('patients', requestBody);
+      const response = await instance().post('patients', requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -314,13 +319,13 @@ export default {
    */
   fetchAllPatients: async () => {
     try {
-      const response = await instance.get('patients');
+      const response = await instance().get('patients');
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -332,13 +337,15 @@ export default {
    */
   deletePatient: async patientId => {
     try {
-      const response = await instance.delete(`patients?patientId=${patientId}`);
+      const response = await instance().delete(
+        `patients?patientId=${patientId}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -355,13 +362,16 @@ export default {
    */
   updatePatient: async (patientId, requestBody) => {
     try {
-      const response = await instance.put(`patients/${patientId}`, requestBody);
+      const response = await instance().put(
+        `patients/${patientId}`,
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -375,7 +385,7 @@ export default {
    */
   createPatientNote: async (patientId, requestBody) => {
     try {
-      const response = await instance.post(
+      const response = await instance().post(
         `patients/${patientId}/notes`,
         requestBody,
       );
@@ -384,7 +394,7 @@ export default {
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -396,13 +406,13 @@ export default {
    */
   fetchPatientNotes: async patientId => {
     try {
-      const response = await instance.get(`patients/${patientId}/notes`);
+      const response = await instance().get(`patients/${patientId}/notes`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -417,7 +427,7 @@ export default {
    */
   addXRayImage: async (patientId, requestBody) => {
     try {
-      const response = await instance.post(
+      const response = await instance().post(
         `patients/${patientId}/x-ray`,
         requestBody,
       );
@@ -426,7 +436,7 @@ export default {
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -438,13 +448,13 @@ export default {
    */
   fetchPatientXRayImages: async patientId => {
     try {
-      const response = await instance.get(`patients/${patientId}/x-ray`);
+      const response = await instance().get(`patients/${patientId}/x-ray`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -455,13 +465,13 @@ export default {
    */
   fetchCalendarFilters: async () => {
     try {
-      const response = await instance.get(`schedules/filters`);
+      const response = await instance().get(`schedules/filters`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -473,13 +483,13 @@ export default {
    */
   searchPatients: async query => {
     try {
-      const response = await instance.get(`patients/search?query=${query}`);
+      const response = await instance().get(`patients/search?query=${query}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -491,13 +501,13 @@ export default {
    */
   searchDoctors: async query => {
     try {
-      const response = await instance.get(`users/search?query=${query}`);
+      const response = await instance().get(`users/search?query=${query}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },
@@ -505,17 +515,20 @@ export default {
   /**
    * Search services by name
    * @param {string} query
+   * @param {string} doctorId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  searchServices: async query => {
+  searchServices: async (query, doctorId) => {
     try {
-      const response = await instance.get(`services/search?query=${query}`);
+      const response = await instance().get(
+        `services/search?query=${query}&doctorId=${doctorId}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
       return {
         isError: true,
-        message: e,
+        message: e.message,
       };
     }
   },

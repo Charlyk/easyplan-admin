@@ -1,0 +1,223 @@
+.login-form-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+
+  .logo-container {
+    background-color: #34344E;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 40%;
+    }
+  }
+
+  .form-container {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E5E5E5;
+  }
+
+  .form-title {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 48px;
+    color: #34354C;
+  }
+
+  .welcome-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A1A2C6;
+    margin-bottom: .5rem;
+  }
+
+  .error-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: .5rem;
+    position: absolute;
+    bottom: 1rem;
+    right: 3rem;
+    color: #ec3276;
+  }
+
+  .form-label {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .7rem;
+    margin-bottom: 0;
+  }
+
+  .form-control {
+    background-color: #FAFAFD;
+  }
+
+  .form-root {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    background: #FFFFFF;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: 4px;
+  }
+
+  .footer {
+    margin-top: 1.5rem;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .back-button {
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      color: #3A83DC;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .positive-button {
+      flex: unset;
+      min-width: 8rem;
+      padding-right: 1rem;
+      padding-left: 1rem;
+    }
+  }
+}
+
+.login-form {
+  position: relative;
+
+  .form-title {
+    margin-bottom: 3rem;
+  }
+
+  .forgot-password-container {
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .1rem;
+
+    .forgot-button {
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      color: #3A83DC;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .footer {
+    .footer-sign-up {
+      display: flex;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+
+      .text {
+        color: #34354C;
+      }
+
+      .sign-up-btn {
+        outline: none;
+        margin-left: .2rem;
+        color: #3A83DC !important;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.reset-password-form {
+  .welcome-text {
+    margin-bottom: 3rem;
+  }
+}
+
+.register-form {
+  .form-title {
+    margin-bottom: 3rem;
+  }
+
+  .footer {
+    margin-top: 3rem;
+  }
+
+  .avatar-container {
+    user-select: none;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #A1A2C6;
+
+    svg, img {
+      width: 4rem;
+      min-height: 4rem;
+    }
+
+    img {
+      object-fit: cover;
+    }
+
+    .btn-outline-primary {
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+
+      .custom-file-button + label {
+        margin-bottom: 0;
+        color: #3A83DC;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

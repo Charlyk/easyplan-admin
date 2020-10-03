@@ -146,6 +146,7 @@ const AddAppointmentModal = ({ open, onClose }) => {
         localDispatch(reducerActions.setIsPatientValid(true));
       }
     } else {
+      localDispatch(reducerActions.setPatient(null));
       localDispatch(reducerActions.setIsPatientValid(false));
     }
   };
@@ -155,6 +156,7 @@ const AddAppointmentModal = ({ open, onClose }) => {
       localDispatch(reducerActions.setDoctor(selectedDoctors[0]));
       localDispatch(reducerActions.setIsDoctorValid(true));
     } else {
+      localDispatch(reducerActions.setDoctor(null));
       localDispatch(reducerActions.setIsDoctorValid(false));
     }
   };
@@ -164,6 +166,7 @@ const AddAppointmentModal = ({ open, onClose }) => {
       localDispatch(reducerActions.setService(selectedServices[0]));
       localDispatch(reducerActions.setIsServiceValid(true));
     } else {
+      localDispatch(reducerActions.setService(null));
       localDispatch(reducerActions.setIsServiceValid(false));
     }
   };
@@ -206,7 +209,7 @@ const AddAppointmentModal = ({ open, onClose }) => {
 
   const handleServiceSearch = async query => {
     localDispatch(reducerActions.setServicesLoading(true));
-    const response = await dataAPI.searchServices(query);
+    const response = await dataAPI.searchServices(query, doctor.id);
     if (response.isError) {
       console.error(response.message);
     } else {
@@ -238,6 +241,7 @@ const AddAppointmentModal = ({ open, onClose }) => {
           labelKey='fullName'
           onSearch={handlePatientSearch}
           options={patients}
+          selected={patient ? [patient] : []}
           onChange={handlePatientChange}
         />
       </Form.Group>
@@ -254,12 +258,14 @@ const AddAppointmentModal = ({ open, onClose }) => {
           labelKey='fullName'
           onSearch={handleDoctorSearch}
           options={doctors}
+          selected={doctor ? [doctor] : []}
           onChange={handleDoctorChange}
         />
       </Form.Group>
       <Form.Group controlId='service'>
         <Form.Label>{textForKey('Service')}</Form.Label>
         <AsyncTypeahead
+          disabled={doctor == null}
           isValid={isServiceValid}
           placeholder={textForKey('Enter service name')}
           id='services'
@@ -270,6 +276,7 @@ const AddAppointmentModal = ({ open, onClose }) => {
           labelKey='name'
           onSearch={handleServiceSearch}
           options={services}
+          selected={service ? [service] : []}
           onChange={handleServiceChange}
         />
       </Form.Group>

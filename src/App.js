@@ -5,6 +5,7 @@ import 'react-phone-number-input/style.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
