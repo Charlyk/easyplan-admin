@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSelector } from 'react-redux';
+
 import IconSuccess from '../../assets/icons/iconSuccess';
 import LoadingButton from '../../components/LoadingButton';
 import WorkDay from '../../components/WorkDay';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { days } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 
 const ClinicWorkingHours = props => {
+  const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [clinic, setClinic] = useState(null);
 
   useEffect(() => {
     fetchClinicDetails();
-  }, [props]);
+  }, [props, currentUser]);
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
     const newDays = clinic.workDays.map(workDay => {

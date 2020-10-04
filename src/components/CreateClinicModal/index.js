@@ -10,7 +10,7 @@ import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
-const CreateClinicModal = ({ open, onCreate }) => {
+const CreateClinicModal = ({ open, onCreate, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
     logoFile: null,
@@ -78,6 +78,7 @@ const CreateClinicModal = ({ open, onCreate }) => {
     <EasyPlanModal
       className='create-clinic-modal-root'
       open={open}
+      onClose={onClose}
       onPositiveClick={submitForm}
       isPositiveDisabled={!isFormValid()}
       isPositiveLoading={isLoading}
@@ -148,4 +149,9 @@ export default CreateClinicModal;
 CreateClinicModal.propTypes = {
   open: PropTypes.bool,
   onCreate: PropTypes.func,
+  onClose: PropTypes.func,
+};
+
+CreateClinicModal.defaultProps = {
+  onClose: null,
 };

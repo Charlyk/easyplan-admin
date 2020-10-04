@@ -9,7 +9,10 @@ import IconEdit from '../../assets/icons/iconEdit';
 import IconMoreHorizontal from '../../assets/icons/iconMoreHorizontal';
 import IconPlus from '../../assets/icons/iconPlus';
 import IconTrash from '../../assets/icons/iconTrash';
-import { updateCategoriesSelector } from '../../redux/selectors/rootSelector';
+import {
+  updateCategoriesSelector,
+  userSelector,
+} from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
@@ -21,7 +24,7 @@ const actions = [
   {
     name: textForKey('Add category'),
     key: 'add-category',
-    icon: <IconPlus />,
+    icon: <IconPlus fill='#000' />,
     type: 'default',
   },
   {
@@ -40,6 +43,7 @@ const actions = [
 
 const CategoriesList = props => {
   const { onCategorySelect } = props;
+  const currentUser = useSelector(userSelector);
   const updateCategories = useSelector(updateCategoriesSelector);
   const actionsAnchor = useRef(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
@@ -55,6 +59,11 @@ const CategoriesList = props => {
     fetchCategories();
   }, [updateCategories]);
 
+  useEffect(() => {
+    setSelectedCategory(null);
+    fetchCategories();
+  }, [currentUser]);
+
   const fetchCategories = async () => {
     setIsLoading(true);
     const response = await dataAPI.fetchCategories();
@@ -62,7 +71,6 @@ const CategoriesList = props => {
       console.error(response.message);
     } else {
       setCategories(response.data || []);
-      console.log(response.data);
       if (response?.data?.length > 0) {
         setSelectedCategory(response.data[0]);
         onCategorySelect(response.data[0]);
@@ -217,7 +225,7 @@ const CategoriesList = props => {
           className='categories-list__add'
           onClick={handleAddCategory}
         >
-          <IconPlus />
+          <IconPlus fill='#CDCEEA' />
           {textForKey('Add category')}
         </div>
       </div>

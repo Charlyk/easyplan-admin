@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
+
 import AddNote from '../../components/AddNote';
 import AddXRay from '../../components/AddXRay';
 import ConfirmationModal from '../../components/ConfirmationModal';
@@ -7,18 +9,20 @@ import {
   triggerUpdateNotes,
   triggerUpdateXRay,
 } from '../../redux/actions/actions';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import PatientDetails from './comps/details/PatientDetails';
 import PatientsList from './comps/list/PatientsList';
-import './styles.scss';
-import PatientAccount from './comps/PatientAccount';
 
-import { useDispatch } from 'react-redux';
+import './styles.scss';
+
+import PatientAccount from './comps/PatientAccount';
 
 const Patients = props => {
   const dispatch = useDispatch();
+  const currentUser = useSelector(userSelector);
   const [isAdding, setIsAdding] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [patients, setPatients] = useState({ all: [], filtered: [] });
@@ -40,6 +44,11 @@ const Patients = props => {
   useEffect(() => {
     fetchPatients();
   }, [props]);
+
+  useEffect(() => {
+    setSelectedPatient(null);
+    fetchPatients();
+  }, [currentUser]);
 
   const handleAddPatient = () => {
     setSelectedPatient(null);

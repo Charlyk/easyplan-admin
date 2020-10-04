@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
+import { useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import LoadingButton from '../../components/LoadingButton';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { EmailRegex } from '../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 const CompanyDetailsForm = props => {
+  const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [data, setData] = useState({
@@ -32,7 +35,7 @@ const CompanyDetailsForm = props => {
 
   useEffect(() => {
     fetchCompany();
-  }, [props]);
+  }, [props, currentUser]);
 
   const fetchCompany = async () => {
     setIsLoading(true);

@@ -1,7 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
+import { useSelector } from 'react-redux';
+
 import AddAppointmentModal from '../../components/AddAppintmentModal';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
 import CalendarDoctors from './comps/left/CalendarDoctors';
@@ -54,6 +57,7 @@ const initialState = {
 };
 
 const Calendar = props => {
+  const currentUser = useSelector(userSelector);
   const [
     { filters, selectedService, selectedDoctor, appointmentModal },
     localDispatch,
@@ -61,7 +65,7 @@ const Calendar = props => {
 
   useEffect(() => {
     fetchFilters();
-  }, [props]);
+  }, [props, currentUser]);
 
   const fetchFilters = async () => {
     const response = await dataAPI.fetchCalendarFilters();

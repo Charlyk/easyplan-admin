@@ -18,6 +18,8 @@ const ActionsSheet = props => {
               <div>
                 {actions.map(action => (
                   <div
+                    role='button'
+                    tabIndex={0}
                     onClick={() => handleActionClick(action)}
                     className={`actions-sheet__item ${action.type}`}
                     key={action.key}

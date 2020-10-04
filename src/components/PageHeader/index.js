@@ -7,7 +7,6 @@ import { Image } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
-import IconEdit from '../../assets/icons/iconEdit';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
@@ -16,12 +15,6 @@ import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
 
 const actions = [
-  {
-    name: textForKey('Edit profile'),
-    key: 'edit-profile',
-    icon: <IconEdit />,
-    type: 'default',
-  },
   {
     name: textForKey('Log out'),
     key: 'log-out',
@@ -59,11 +52,6 @@ const PageHeader = props => {
         placement='bottom-end'
       />
       <div className='page-header__title'>{title}</div>
-      <TextField
-        variant='outlined'
-        placeholder={textForKey('Search')}
-        onChange={onSearch}
-      />
       <div className='page-header__actions'>
         <div className='page-header__notifications'>
           <IconNotifications />

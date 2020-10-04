@@ -27,6 +27,10 @@ const Main = props => {
   const [appIsLoading, setAppIsLoading] = useState(false);
   const [appInitialized, setAppInitialized] = useState(false);
   const [currentPath, setCurrentPath] = useState(location.pathname);
+  const [isCreatingClinic, setIsCreatingClinic] = useState({
+    open: false,
+    canClose: false,
+  });
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -55,6 +59,30 @@ const Main = props => {
 
   const handleClinicCreated = () => {
     fetchUser(true);
+    setIsCreatingClinic({ open: false, canClose: false });
+  };
+
+  const handleCreateClinic = () => {
+    setIsCreatingClinic({ open: true, canClose: true });
+  };
+
+  const handleCloseCreateClinic = () => {
+    setIsCreatingClinic({ open: false, canClose: false });
+  };
+
+  const handleChangeCompany = async company => {
+    setAppInitialized(false);
+    setAppIsLoading(true);
+    const response = await authAPI.changeClinic(company.id);
+    if (response.isError) {
+      console.error(response.message);
+      setAppInitialized(false);
+    } else {
+      setUser(response.data);
+      dispatch(setCurrentUser(response.data));
+      setAppInitialized(true);
+    }
+    setAppIsLoading(false);
   };
 
   const fetchUser = async force => {
@@ -67,9 +95,13 @@ const Main = props => {
       handleUserLogout();
       console.error(response.message);
     } else {
-      console.log(response.data);
-      setUser(response.data);
-      dispatch(setCurrentUser(response.data));
+      const { data: user } = response;
+      setUser(user);
+      setIsCreatingClinic({
+        open: user && user.clinicIds.length === 0,
+        canClose: false,
+      });
+      dispatch(setCurrentUser(user));
       setAppInitialized(true);
     }
     setAppIsLoading(false);
@@ -78,7 +110,8 @@ const Main = props => {
   return (
     <div className='main-page' id='main-page'>
       <CreateClinicModal
-        open={user && user.clinicIds.length === 0}
+        onClose={isCreatingClinic.canClose ? handleCloseCreateClinic : null}
+        open={isCreatingClinic.open}
         onCreate={handleClinicCreated}
       />
       <Modal
@@ -92,7 +125,11 @@ const Main = props => {
           {textForKey('App initialization...')}
         </Modal.Body>
       </Modal>
-      <MainMenu currentPath={currentPath} />
+      <MainMenu
+        currentPath={currentPath}
+        onCreateClinic={handleCreateClinic}
+        onChangeCompany={handleChangeCompany}
+      />
       <div className='data-container'>
         <PageHeader
           title={getPageTitle()}

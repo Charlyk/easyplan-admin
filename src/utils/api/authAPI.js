@@ -106,4 +106,22 @@ export default {
       };
     }
   },
+
+  /**
+   * Change user selected clinic
+   * @param {string} clinicId
+   * @return {Promise<{isError: boolean, message: string|null, data: Object}>}
+   */
+  changeClinic: async clinicId => {
+    try {
+      const response = await instance().get(`v1/change-clinic/${clinicId}`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };
