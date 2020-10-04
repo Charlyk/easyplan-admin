@@ -41,7 +41,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
       setErrorMessage(response.message);
     } else {
       authManager.setUserToken(response?.data?.token);
-      history.goBack();
+      history.push('/analytics/general');
     }
     setIsLoading(false);
   };
