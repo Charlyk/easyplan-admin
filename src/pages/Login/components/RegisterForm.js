@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useHistory, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import IconAvatar from '../../../assets/icons/iconAvatar';
 import LoadingButton from '../../../components/LoadingButton';
@@ -14,7 +14,6 @@ import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
 const RegisterForm = ({ onGoBack }) => {
-  const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [data, setData] = useState({
