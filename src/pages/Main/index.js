@@ -4,7 +4,13 @@ import './styles.scss';
 
 import { Modal, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { useLocation, useHistory, Switch, Route } from 'react-router-dom';
+import {
+  useLocation,
+  useHistory,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
 import CreateClinicModal from '../../components/CreateClinicModal';
@@ -75,11 +81,10 @@ const Main = props => {
   };
 
   const handleUserLogout = () => {
+    authManager.logOut();
     setUser(null);
     dispatch(setCurrentUser(null));
     setAppInitialized(false);
-    authManager.logOut();
-    history.push('/login');
   };
 
   const handleClinicCreated = () => {
@@ -132,6 +137,14 @@ const Main = props => {
     }
     setAppIsLoading(false);
   };
+
+  if (currentPath === '/') {
+    return <Redirect to='/analytics/general' />;
+  }
+
+  if (!authManager.isLoggedIn()) {
+    return <Redirect to='/login' />;
+  }
 
   return (
     <div className='main-page' id='main-page'>

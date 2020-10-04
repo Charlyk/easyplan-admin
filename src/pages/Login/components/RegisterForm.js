@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 
 import IconAvatar from '../../../assets/icons/iconAvatar';
 import LoadingButton from '../../../components/LoadingButton';
@@ -74,7 +74,6 @@ const RegisterForm = ({ onGoBack }) => {
       setErrorMessage(response.message);
     } else {
       authManager.setUserToken(response.data.token);
-      history.push('/analytics/general');
     }
     setIsLoading(false);
   };
@@ -88,6 +87,10 @@ const RegisterForm = ({ onGoBack }) => {
       data.isPhoneValid
     );
   };
+
+  if (authManager.isLoggedIn()) {
+    return <Redirect to='/analytics/general' />;
+  }
 
   const avatarSrc =
     data.avatarFile && window.URL.createObjectURL(data.avatarFile);

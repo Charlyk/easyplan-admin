@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 
 import LoadingButton from '../../../components/LoadingButton';
 import authAPI from '../../../utils/api/authAPI';
@@ -12,7 +12,6 @@ import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
 const LoginForm = ({ onResetPassword, onSignUp }) => {
-  const history = useHistory();
   const [data, setData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -41,7 +40,6 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
       setErrorMessage(response.message);
     } else {
       authManager.setUserToken(response?.data?.token);
-      history.push('/analytics/general');
     }
     setIsLoading(false);
   };
@@ -49,6 +47,10 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
   const isFormValid = () => {
     return data.email.match(EmailRegex) && data.password.length > 4;
   };
+
+  if (authManager.isLoggedIn()) {
+    return <Redirect to='/analytics/general' />;
+  }
 
   return (
     <div className={clsx('form-root login-form', isLoading && 'disabled')}>
