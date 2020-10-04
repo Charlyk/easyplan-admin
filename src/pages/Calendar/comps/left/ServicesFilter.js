@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import { textForKey } from '../../../../utils/localization';
 
@@ -14,7 +14,7 @@ const ServicesFilter = ({ services, selectedService, onSelect }) => {
 
   return (
     <div className='calendar-root__services'>
-      <InputGroup style={{ flexDirection: 'column' }}>
+      <Form.Group style={{ flexDirection: 'column' }}>
         <Form.Label>Services</Form.Label>
         <Form.Control
           as='select'
@@ -24,14 +24,14 @@ const ServicesFilter = ({ services, selectedService, onSelect }) => {
           onChange={handleServiceSelected}
           value={selectedService?.id}
         >
-          <option value='choose'>{textForKey('All components')}</option>
+          <option value='choose'>{textForKey('All services')}</option>
           {services.map(item => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
           ))}
         </Form.Control>
-      </InputGroup>
+      </Form.Group>
     </div>
   );
 };

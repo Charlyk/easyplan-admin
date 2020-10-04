@@ -30,19 +30,19 @@ const menuItems = [
     roles: ['ADMIN', 'MANAGER'],
     children: [
       {
-        text: 'General',
+        text: textForKey('General'),
         href: '/analytics/general',
       },
       {
-        text: 'Services',
+        text: textForKey('Services'),
         href: '/analytics/services',
       },
       {
-        text: 'Doctors',
+        text: textForKey('Doctors'),
         href: '/analytics/doctors',
       },
       {
-        text: 'Activity logs',
+        text: textForKey('Activity logs'),
         href: '/analytics/activity-logs',
       },
     ],
