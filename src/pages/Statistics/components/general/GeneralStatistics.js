@@ -6,12 +6,6 @@ import { textForKey } from '../../../../utils/localization';
 import ServiceView from './ServiceView';
 
 const GeneralStatistics = props => {
-  const [{ width, height }, setParentSize] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    setParentSize(parentSize());
-  }, [props]);
-
   const data = () => {
     const items = [];
     for (let i = 7; i < 20; i++) {
@@ -21,17 +15,6 @@ const GeneralStatistics = props => {
       });
     }
     return items;
-  };
-
-  const parentSize = () => {
-    const rect = document
-      .getElementById('month-income-chart')
-      ?.getBoundingClientRect();
-    console.log(rect);
-    return {
-      width: rect?.width || 0,
-      height: rect?.height || 0,
-    };
   };
 
   return (
