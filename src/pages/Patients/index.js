@@ -23,6 +23,7 @@ import PatientAccount from './comps/PatientAccount';
 const Patients = props => {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
+  const [isFetching, setIsFetching] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [patients, setPatients] = useState({ all: [], filtered: [] });
@@ -56,6 +57,7 @@ const Patients = props => {
   };
 
   const fetchPatients = async () => {
+    setIsFetching(true);
     const response = await dataAPI.fetchAllPatients();
     if (response.isError) {
       console.error(response.message);
@@ -65,6 +67,7 @@ const Patients = props => {
         setSelectedPatient(response.data[0]);
       }
     }
+    setIsFetching(false);
   };
 
   const handlePatientSave = async patientData => {
@@ -184,6 +187,7 @@ const Patients = props => {
       <div className='patients-root__content'>
         <div className='patients-root__content__list'>
           <PatientsList
+            isFetching={isFetching}
             onSearch={handlePatientsSearch}
             onSelect={handlePatientSelected}
             selectedPatient={selectedPatient}

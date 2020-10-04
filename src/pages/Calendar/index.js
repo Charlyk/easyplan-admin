@@ -16,6 +16,7 @@ const reducerTypes = {
   selectedService: 'selectedService',
   selectedDoctor: 'selectedDoctor',
   appointmentModal: 'appointmentModal',
+  isFetching: 'isFetching',
 };
 
 const reducerActions = {
@@ -32,6 +33,7 @@ const reducerActions = {
     type: reducerTypes.appointmentModal,
     payload,
   }),
+  setIsFetching: payload => ({ type: reducerTypes.isFetching, payload }),
 };
 
 const reducer = (state, action) => {
@@ -44,6 +46,8 @@ const reducer = (state, action) => {
       return { ...state, selectedDoctor: action.payload };
     case reducerTypes.appointmentModal:
       return { ...state, appointmentModal: action.payload };
+    case reducerTypes.isFetching:
+      return { ...state, isFetching: action.payload };
     default:
       throw new Error('unknown type');
   }
@@ -54,12 +58,13 @@ const initialState = {
   selectedService: null,
   selectedDoctor: null,
   appointmentModal: { open: false },
+  isFetching: false,
 };
 
 const Calendar = props => {
   const currentUser = useSelector(userSelector);
   const [
-    { filters, selectedService, selectedDoctor, appointmentModal },
+    { filters, selectedService, selectedDoctor, appointmentModal, isFetching },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -68,6 +73,7 @@ const Calendar = props => {
   }, [props, currentUser]);
 
   const fetchFilters = async () => {
+    localDispatch(reducerActions.setIsFetching(true));
     const response = await dataAPI.fetchCalendarFilters();
     if (response.isError) {
       console.error(response.message);
@@ -89,6 +95,7 @@ const Calendar = props => {
         localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
       }
     }
+    localDispatch(reducerActions.setIsFetching(false));
   };
 
   const handleAppointmentModalClose = () => {
@@ -120,6 +127,7 @@ const Calendar = props => {
           onSelect={handleServiceSelected}
         />
         <CalendarDoctors
+          isFetching={isFetching}
           selectedDoctor={selectedDoctor}
           selectedService={selectedService}
           doctors={filters.doctors}

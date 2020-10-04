@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup, Spinner } from 'react-bootstrap';
 
 import { textForKey } from '../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 
 const CalendarDoctors = ({
   doctors,
+  isFetching,
   selectedDoctor,
   selectedService,
   onSelect,
@@ -48,6 +49,9 @@ const CalendarDoctors = ({
         </Form.Group>
       </div>
       <div className='doctors-content'>
+        {isFetching && (
+          <Spinner animation='border' className='loading-spinner' />
+        )}
         {filteredDoctors.map(doctor => (
           <CalendarDoctor
             key={doctor.id}
@@ -65,6 +69,7 @@ export default CalendarDoctors;
 
 CalendarDoctors.propTypes = {
   selectedService: PropTypes.object,
+  isFetching: PropTypes.bool,
   selectedDoctor: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup, Spinner } from 'react-bootstrap';
 
 import IconPlus from '../../../../assets/icons/iconPlus';
 import { textForKey } from '../../../../utils/localization';
@@ -9,6 +9,7 @@ import PatientItem from './PatientItem';
 
 const PatientsList = ({
   onAdd,
+  isFetching,
   onSearch,
   onSelect,
   patients,
@@ -33,6 +34,9 @@ const PatientsList = ({
         </Form.Group>
       </div>
       <div className='patients-root__list__content'>
+        {isFetching && (
+          <Spinner className='loading-spinner' animation='border' />
+        )}
         {patients.map(patient => (
           <PatientItem
             onSelected={onSelect}
@@ -76,6 +80,7 @@ PatientsList.propTypes = {
       photo: PropTypes.string,
     }),
   ),
+  isFetching: PropTypes.bool,
   onSelect: PropTypes.func,
   onAdd: PropTypes.func,
   onSearch: PropTypes.func,
