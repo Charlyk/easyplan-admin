@@ -114,6 +114,13 @@
 .login-form {
   position: relative;
 
+  &.disabled {
+    .sign-up-btn, .forgot-button {
+      pointer-events: none;
+      cursor: auto;
+    }
+  }
+
   .form-title {
     margin-bottom: 3rem;
   }
@@ -159,6 +166,11 @@
         margin-left: .2rem;
         color: #3A83DC !important;
         cursor: pointer;
+
+        &.disabled {
+          pointer-events: none;
+          cursor: auto;
+        }
 
         &:hover {
           text-decoration: underline;

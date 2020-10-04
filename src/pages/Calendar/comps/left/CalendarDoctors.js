@@ -36,7 +36,7 @@ const CalendarDoctors = ({
     <div className='calendar-root__doctors'>
       <div className='doctors-header'>Doctors</div>
       <div className='doctors-search'>
-        <Form.Group controlId='firstName'>
+        <Form.Group>
           <InputGroup>
             <Form.Control
               onChange={handleSearchTextChange}

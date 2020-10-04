@@ -555,4 +555,48 @@ export default {
       };
     }
   },
+
+  /**
+   * Update clinic details
+   * @param {Object} requestBody
+   * @param {string} requestBody.id
+   * @param {string} requestBody.clinicName
+   * @param {string|null} requestBody.email
+   * @param {string|null} requestBody.phoneNumber
+   * @param {string|null} requestBody.website
+   * @param {string} requestBody.currency
+   * @param {string} requestBody.country
+   * @param {string|null} requestBody.description
+   * @param {string|null} requestBody.logoUrl
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  updateClinic: async requestBody => {
+    try {
+      const response = await instance().put(`clinics`, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch selected clinic details
+   * @return {Promise<{isError: boolean, message: string|null, data: Object}>}
+   */
+  fetchClinicDetails: async () => {
+    try {
+      const response = await instance().get(`clinics/details`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

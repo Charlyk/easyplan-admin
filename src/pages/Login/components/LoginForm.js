@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
@@ -50,7 +51,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
   };
 
   return (
-    <div className='form-root login-form'>
+    <div className={clsx('form-root login-form', isLoading && 'disabled')}>
       <span className='welcome-text'>{textForKey('Welcome to EasyPlan')}</span>
       <span className='form-title'>{textForKey('Log in to your account')}</span>
       {errorMessage && (

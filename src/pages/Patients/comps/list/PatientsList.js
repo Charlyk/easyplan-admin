@@ -28,7 +28,7 @@ const PatientsList = ({
             <IconMoreHorizontal />
           </div>
         </div>
-        <Form.Group controlId='firstName'>
+        <Form.Group>
           <InputGroup>
             <Form.Control
               placeholder={`${textForKey('Search')}...`}
