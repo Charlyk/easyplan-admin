@@ -4,4 +4,5 @@ export default {
   updateUsersList: 'updateUsersList',
   updateXRay: 'updateXRay',
   updateNotes: 'updateNotes',
+  setUser: 'setUser',
 };

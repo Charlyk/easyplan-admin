@@ -23,6 +23,11 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         updateNotes: !state.updateNotes,
       };
+    case types.setUser:
+      return {
+        ...state,
+        user: action.payload,
+      };
     default:
       return state;
   }

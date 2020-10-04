@@ -24,6 +24,7 @@ const CompanyDetailsForm = props => {
     phoneNumber: '',
     description: '',
     socialNetworks: '',
+    workDays: [],
     currency: 'MDL',
     country: 'md',
     isPhoneValid: true,
@@ -101,6 +102,7 @@ const CompanyDetailsForm = props => {
       currency: data.currency,
       country: data.country,
       description: data.description,
+      workDays: data.workDays,
       logoUrl,
     };
 
@@ -119,7 +121,7 @@ const CompanyDetailsForm = props => {
 
   return (
     <div className='company-details-form'>
-      <span className='form-title'>Company details</span>
+      <span className='form-title'>{textForKey('Company details')}</span>
       <div className='data-wrapper'>
         <div className='left'>
           <div className='upload-avatar-container'>

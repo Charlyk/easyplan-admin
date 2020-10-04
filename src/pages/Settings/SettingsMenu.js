@@ -41,6 +41,20 @@ const SettingsMenu = ({ onSelect, currentOption }) => {
           {isSelected('workingHours') && <IconNext />}
         </div>
       </div>
+      <div
+        role='button'
+        tabIndex={0}
+        onClick={() => onSelect('accountSettings')}
+        className={clsx(
+          'settings-menu-item',
+          isSelected('accountSettings') && 'selected',
+        )}
+      >
+        <span className='item-title'>{textForKey('Account settings')}</span>
+        <div className='next-arrow'>
+          {isSelected('accountSettings') && <IconNext />}
+        </div>
+      </div>
     </div>
   );
 };

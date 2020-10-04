@@ -12,6 +12,53 @@
     width: 76%;
     max-height: 100%;
     margin-left: 1rem;
+
+    .form-title {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: #34354C;
+      margin-bottom: 1rem;
+    }
+
+    .footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      width: 100%;
+
+      .positive-button {
+        max-width: 11rem;
+      }
+    }
+
+    .upload-avatar-container {
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      width: 100%;
+
+      .form-group {
+        width: unset;
+      }
+    }
+
+    .form-group {
+      width: 100%;
+
+      .form-label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+      }
+
+      .form-control {
+        background-color: #FAFAFD;
+      }
+    }
   }
 }
 
@@ -80,52 +127,6 @@
   width: 100%;
   max-height: 100%;
 
-  .footer {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    width: 100%;
-
-    .positive-button {
-      max-width: 11rem;
-    }
-  }
-
-  .upload-avatar-container {
-    margin-bottom: 1rem;
-    width: 100%;
-
-    .info-text {
-      width: 100%;
-    }
-  }
-
-  .form-title {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    color: #34354C;
-    margin-bottom: 1rem;
-  }
-
-  .form-group {
-    width: 100%;
-
-    .form-label {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: .7rem;
-      margin-bottom: 0;
-    }
-
-    .form-control {
-      background-color: #FAFAFD;
-    }
-  }
-
   .data-wrapper {
     width: 100%;
     display: flex;
@@ -159,5 +160,34 @@
         max-height: 6.6rem;
       }
     }
+  }
+}
+
+.company-working-hours {
+  display: flex;
+  flex-direction: column;
+  width: 40rem;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+
+.account-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40rem;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+
+  .positive-button {
+    max-width: 15rem;
+  }
+
+  .form-control {
+    width: 100%;
   }
 }

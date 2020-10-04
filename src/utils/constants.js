@@ -1,3 +1,7 @@
+import moment from 'moment';
+
+import { textForKey } from './localization';
+
 export const Role = {
   all: 'ALL',
   doctor: 'DOCTOR',
@@ -65,3 +69,21 @@ export const localeNameMapper = {
   zhCN: 'Chinese Simplified',
   zhTW: 'Chinese Traditional',
 };
+
+export function createHoursList() {
+  return [].concat(
+    ...Array.from(Array(24), (_, hour) => [
+      moment({ hour }).format('HH:mm'),
+      moment({ hour, minute: 30 }).format('HH:mm'),
+    ]),
+  );
+}
+export const days = [
+  textForKey('Monday'),
+  textForKey('Tuesday'),
+  textForKey('Wednesday'),
+  textForKey('Thursday'),
+  textForKey('Friday'),
+  textForKey('Saturday'),
+  textForKey('Sunday'),
+];

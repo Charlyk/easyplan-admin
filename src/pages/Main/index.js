@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 
 import { Modal, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useLocation, useHistory, Switch, Route } from 'react-router-dom';
 
 import CreateClinicModal from '../../components/CreateClinicModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
+import { setCurrentUser } from '../../redux/actions/actions';
 import authAPI from '../../utils/api/authAPI';
 import { textForKey } from '../../utils/localization';
 import paths from '../../utils/paths';
@@ -21,6 +23,7 @@ import Users from '../Users';
 const Main = props => {
   const location = useLocation();
   const history = useHistory();
+  const dispatch = useDispatch();
   const [appIsLoading, setAppIsLoading] = useState(false);
   const [appInitialized, setAppInitialized] = useState(false);
   const [currentPath, setCurrentPath] = useState(location.pathname);
@@ -44,6 +47,7 @@ const Main = props => {
 
   const handleUserLogout = () => {
     setUser(null);
+    dispatch(setCurrentUser(null));
     setAppInitialized(false);
     authManager.logOut();
     history.push('/login');
@@ -64,6 +68,7 @@ const Main = props => {
       console.error(response.message);
     } else {
       setUser(response.data);
+      dispatch(setCurrentUser(response.data));
       setAppInitialized(true);
     }
     setAppIsLoading(false);

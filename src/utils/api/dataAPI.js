@@ -568,6 +568,7 @@ export default {
    * @param {string} requestBody.country
    * @param {string|null} requestBody.description
    * @param {string|null} requestBody.logoUrl
+   * @param {Array.<{day: number, startHour: string, endHour: string, isDayOff: boolean}>} requestBody.workDays
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   updateClinic: async requestBody => {

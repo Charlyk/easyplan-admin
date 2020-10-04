@@ -3,10 +3,13 @@ import React, { useState } from 'react';
 import SettingsMenu from './SettingsMenu';
 import './styles.scss';
 import CompanyDetailsForm from './CompanyDetailsForm';
+import ClinicWorkingHours from './ClinicWorkingHours';
+import AccountSettings from './AccountSettings';
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
   workingHours: 'workingHours',
+  accountSettings: 'accountSettings',
 };
 
 const Settings = props => {
@@ -21,6 +24,8 @@ const Settings = props => {
       </div>
       <div className='settings-root__form'>
         {currentForm === SettingsForm.companyDetails && <CompanyDetailsForm />}
+        {currentForm === SettingsForm.workingHours && <ClinicWorkingHours />}
+        {currentForm === SettingsForm.accountSettings && <AccountSettings />}
       </div>
     </div>
   );

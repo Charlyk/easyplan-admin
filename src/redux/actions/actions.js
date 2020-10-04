@@ -43,3 +43,15 @@ export function triggerUpdateXRay() {
     payload: '',
   };
 }
+
+/**
+ * Save current user to store
+ * @param user
+ * @return {{payload: *, type: string}}
+ */
+export function setCurrentUser(user) {
+  return {
+    type: types.setUser,
+    payload: user,
+  };
+}
