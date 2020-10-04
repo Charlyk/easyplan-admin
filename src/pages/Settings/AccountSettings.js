@@ -112,6 +112,7 @@ const AccountSettings = props => {
 
   return (
     <div className='account-settings'>
+      <span className='form-title'>{textForKey('Account settings')}</span>
       <div className='upload-avatar-container'>
         {avatarSrc ? <Image roundedCircle src={avatarSrc} /> : <IconAvatar />}
         <span style={{ margin: '1rem' }} className='info-text'>

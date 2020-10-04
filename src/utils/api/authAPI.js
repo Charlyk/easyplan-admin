@@ -3,8 +3,8 @@ import axios from 'axios';
 import { textForKey } from '../localization';
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://auth-nmcmweav5q-uc.a.run.app/api/authentication/';
-// const baseURL = 'http://localhost:8080/api/authentication/';
+// const baseURL = 'https://auth-nmcmweav5q-uc.a.run.app/api/authentication/';
+const baseURL = 'http://localhost:8080/api/authentication/';
 
 const instance = () => {
   let headers = null;

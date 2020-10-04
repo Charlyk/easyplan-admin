@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 
 import SettingsMenu from './SettingsMenu';
 import './styles.scss';
-import CompanyDetailsForm from './CompanyDetailsForm';
-import ClinicWorkingHours from './ClinicWorkingHours';
 import AccountSettings from './AccountSettings';
+import ClinicWorkingHours from './ClinicWorkingHours';
+import CompanyDetailsForm from './CompanyDetailsForm';
+import SecuritySettings from './SecuritySettings';
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
   workingHours: 'workingHours',
   accountSettings: 'accountSettings',
+  securitySettings: 'securitySettings',
 };
 
 const Settings = props => {
@@ -26,6 +28,7 @@ const Settings = props => {
         {currentForm === SettingsForm.companyDetails && <CompanyDetailsForm />}
         {currentForm === SettingsForm.workingHours && <ClinicWorkingHours />}
         {currentForm === SettingsForm.accountSettings && <AccountSettings />}
+        {currentForm === SettingsForm.securitySettings && <SecuritySettings />}
       </div>
     </div>
   );

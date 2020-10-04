@@ -65,15 +65,17 @@ const ClinicWorkingHours = props => {
   return (
     <div className='company-working-hours'>
       <span className='form-title'>{textForKey('Work Hours')}</span>
-      {clinic?.workDays.map(day => (
-        <WorkDay day={day} key={day.day} onChange={handleDayChange} />
-      ))}
+      <div className='days-wrapper'>
+        {clinic?.workDays.map(day => (
+          <WorkDay day={day} key={day.day} onChange={handleDayChange} />
+        ))}
+      </div>
       <div className='footer'>
         <LoadingButton
           onClick={submitForm}
           className='positive-button'
           isLoading={isLoading}
-          disabled={isLoading}
+          disabled={isLoading || !clinic}
         >
           {textForKey('Save')}
           {!isLoading && <IconSuccess />}

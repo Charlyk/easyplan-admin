@@ -116,7 +116,7 @@ export default LoginForm;
 
 LoginForm.propTypes = {
   onResetPassword: PropTypes.func,
-  onSignUp: PropTypes.string,
+  onSignUp: PropTypes.func,
 };
 
 LoginForm.defaultProps = {

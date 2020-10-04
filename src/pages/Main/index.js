@@ -67,6 +67,7 @@ const Main = props => {
       handleUserLogout();
       console.error(response.message);
     } else {
+      console.log(response.data);
       setUser(response.data);
       dispatch(setCurrentUser(response.data));
       setAppInitialized(true);
