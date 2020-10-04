@@ -4,13 +4,14 @@ import './styles.scss';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
-import profileImage from '../../assets/images/profile-image.jpg';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
 
@@ -31,7 +32,8 @@ const actions = [
 
 const PageHeader = props => {
   const actionsAnchor = useRef(null);
-  const { title, user, onSearch, onLogout } = props;
+  const user = useSelector(userSelector);
+  const { title, onSearch, onLogout } = props;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);

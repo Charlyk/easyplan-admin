@@ -82,4 +82,28 @@ export default {
       };
     }
   },
+
+  /**
+   * Update current user account
+   * @param {Object} requestBody
+   * @param {string?} requestBody.avatar
+   * @param {string?} requestBody.username
+   * @param {string?} requestBody.oldPassword
+   * @param {string?} requestBody.password
+   * @param {string?} requestBody.firstName
+   * @param {string?} requestBody.lastName
+   * @return {Promise<{isError: boolean, message: string|null, data: {token: string, user: object}}>}
+   */
+  updateAccount: async requestBody => {
+    try {
+      const response = await instance().put('v1/update-account', requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };
