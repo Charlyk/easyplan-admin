@@ -6,6 +6,7 @@ import { Modal, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useLocation, useHistory, Switch, Route } from 'react-router-dom';
 
+import ConfirmationModal from '../../components/ConfirmationModal';
 import CreateClinicModal from '../../components/CreateClinicModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
@@ -27,6 +28,7 @@ const Main = props => {
   const [appIsLoading, setAppIsLoading] = useState(false);
   const [appInitialized, setAppInitialized] = useState(false);
   const [currentPath, setCurrentPath] = useState(location.pathname);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isCreatingClinic, setIsCreatingClinic] = useState({
     open: false,
     canClose: false,
@@ -48,6 +50,14 @@ const Main = props => {
       history.push('/login');
     }
   }, [location]);
+
+  const handleStartLogout = () => {
+    setIsLoggingOut(true);
+  };
+
+  const handleCancelLogout = () => {
+    setIsLoggingOut(false);
+  };
 
   const handleUserLogout = () => {
     setUser(null);
@@ -109,6 +119,13 @@ const Main = props => {
 
   return (
     <div className='main-page' id='main-page'>
+      <ConfirmationModal
+        title={textForKey('Logout')}
+        message={textForKey('logout message')}
+        onConfirm={handleUserLogout}
+        onClose={handleCancelLogout}
+        show={isLoggingOut}
+      />
       <CreateClinicModal
         onClose={isCreatingClinic.canClose ? handleCloseCreateClinic : null}
         open={isCreatingClinic.open}
@@ -134,7 +151,7 @@ const Main = props => {
         <PageHeader
           title={getPageTitle()}
           user={user}
-          onLogout={handleUserLogout}
+          onLogout={handleStartLogout}
         />
         {appInitialized && (
           <div className='data'>

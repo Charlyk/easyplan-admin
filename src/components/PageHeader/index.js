@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 
 import './styles.scss';
-import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -16,7 +15,7 @@ import ActionsSheet from '../ActionsSheet';
 
 const actions = [
   {
-    name: textForKey('Log out'),
+    name: textForKey('Logout'),
     key: 'log-out',
     icon: <IconTurnOff />,
     type: 'destructive',
@@ -26,7 +25,7 @@ const actions = [
 const PageHeader = props => {
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
-  const { title, onSearch, onLogout } = props;
+  const { title, onLogout } = props;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);

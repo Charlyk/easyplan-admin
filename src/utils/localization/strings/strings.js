@@ -92,6 +92,8 @@ export default {
       "Enter the email address associated with your account and we'll send you a link to reset your password.",
     password: 'Password',
     wrong_username_or_password: 'Wrong email or password',
+    'logout message': 'Are you sure you want to log out from your account?',
+    logout: 'Logout',
   },
   ro: {
     analytics: 'Analitică',
@@ -187,6 +189,8 @@ export default {
       "Enter the email address associated with your account and we'll send you a link to reset your password.",
     password: 'Parola',
     wrong_username_or_password: 'Wrong email or password',
+    'logout message': 'Sunteți sigur(ă) că doriți să va delogați?',
+    logout: 'Delogare',
   },
   ru: {
     analytics: 'Analytics',
@@ -281,5 +285,7 @@ export default {
       "Enter the email address associated with your account and we'll send you a link to reset your password.",
     password: 'Password',
     wrong_username_or_password: 'Wrong email or password',
+    'logout message': 'Are you sure you want to log out from your account?',
+    logout: 'Выход',
   },
 };
