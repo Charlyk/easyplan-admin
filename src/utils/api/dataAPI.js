@@ -107,7 +107,10 @@ export default {
    */
   createService: async requestBody => {
     try {
-      const response = await instance().post('services/v1/create', requestBody);
+      const response = await instance().post(
+        'components/v1/create',
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -461,7 +464,7 @@ export default {
 
   /**
    * Fetch filters for calendar
-   * @return {Promise<{isError: boolean, message: string|null, data: {doctors: [Object], services: [Object]}}>}
+   * @return {Promise<{isError: boolean, message: string|null, data: {doctors: [Object], components: [Object]}}>}
    */
   fetchCalendarFilters: async () => {
     try {
@@ -513,7 +516,7 @@ export default {
   },
 
   /**
-   * Search services by name
+   * Search components by name
    * @param {string} query
    * @param {string} doctorId
    * @return {Promise<{isError: boolean, message: *}|any>}

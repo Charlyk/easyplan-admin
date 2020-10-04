@@ -1,0 +1,53 @@
+.statistics-root {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  height: 100%;
+}
+
+.statistics-services {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .filter {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: 4px;
+    padding: 1rem;
+
+    .positive-button {
+      height: 2rem;
+      max-width: 11rem;
+      margin-bottom: 0.05rem;
+      margin-left: 1.5rem;
+    }
+
+    .form-group {
+      margin-right: .5rem;
+      margin-left: .5rem;
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .custom-select {
+      font-size: .8rem;
+      width: 100% !important;
+    }
+
+    .form-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .7rem;
+      margin-bottom: 0;
+    }
+
+    .form-control {
+      background-color: #FAFAFD;
+    }
+  }
+}

@@ -15,8 +15,12 @@ const LoadingButton = props => {
     isLoading,
   } = props;
   return (
-    <Button className={className} onClick={onClick} disabled={disabled}>
-      {children}
+    <Button
+      className={`loading-button ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {!isLoading && children}
       {isLoading && (
         <Spinner
           className='loading-spinner'

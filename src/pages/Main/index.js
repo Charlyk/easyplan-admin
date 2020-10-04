@@ -19,6 +19,7 @@ import Calendar from '../Calendar';
 import Categories from '../Categories';
 import Patients from '../Patients';
 import Settings from '../Settings';
+import Statistics from '../Statistics';
 import Users from '../Users';
 
 const Main = props => {
@@ -29,6 +30,7 @@ const Main = props => {
   const [appInitialized, setAppInitialized] = useState(false);
   const [currentPath, setCurrentPath] = useState(location.pathname);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [appRefresh, setAppRefresh] = useState(false);
   const [isCreatingClinic, setIsCreatingClinic] = useState({
     open: false,
     canClose: false,
@@ -38,6 +40,19 @@ const Main = props => {
   useEffect(() => {
     fetchUser();
   }, [props]);
+
+  useEffect(() => {
+    if (appRefresh) {
+      const selectedClinic = user.clinics.find(
+        item => item.id === user.selectedClinic,
+      );
+      if (['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)) {
+        history.push('/analytics/general');
+      } else {
+        history.push('/calendar');
+      }
+    }
+  }, [appRefresh]);
 
   const getPageTitle = () => {
     return paths[currentPath];
@@ -91,6 +106,7 @@ const Main = props => {
       setUser(response.data);
       dispatch(setCurrentUser(response.data));
       setAppInitialized(true);
+      setAppRefresh(true);
     }
     setAppIsLoading(false);
   };
@@ -156,6 +172,7 @@ const Main = props => {
         {appInitialized && (
           <div className='data'>
             <Switch>
+              <Route path='/analytics' component={Statistics} />
               <Route path='/categories' component={Categories} />
               <Route path='/users' component={Users} />
               <Route path='/calendar' component={Calendar} />

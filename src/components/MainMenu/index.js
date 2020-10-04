@@ -27,6 +27,7 @@ const menuItems = [
     type: 'group',
     text: textForKey('Analytics'),
     icon: <MenuAnalytics />,
+    roles: ['ADMIN', 'MANAGER'],
     children: [
       {
         text: 'General',
@@ -49,6 +50,7 @@ const menuItems = [
   {
     id: 'categories',
     type: 'link',
+    roles: ['ADMIN', 'MANAGER'],
     text: textForKey('Categories'),
     icon: <MenuCategories />,
     href: '/categories',
@@ -56,6 +58,7 @@ const menuItems = [
   {
     id: 'users',
     type: 'link',
+    roles: ['ADMIN', 'MANAGER'],
     text: textForKey('Users'),
     icon: <MenuUsers />,
     href: '/users',
@@ -63,6 +66,7 @@ const menuItems = [
   {
     id: 'calendar',
     type: 'link',
+    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('Calendar'),
     icon: <MenuCalendar />,
     href: '/calendar',
@@ -70,6 +74,7 @@ const menuItems = [
   {
     id: 'patients',
     type: 'link',
+    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('Patients'),
     icon: <MenuPatients />,
     href: '/patients',
@@ -77,6 +82,7 @@ const menuItems = [
   {
     id: 'settings',
     type: 'link',
+    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('Settings'),
     icon: <MenuSettings />,
     href: '/settings',
@@ -207,6 +213,7 @@ const MainMenu = props => {
       <Nav defaultActiveKey={currentPath} className='navigation flex-column'>
         {currentUser &&
           menuItems.map(item => {
+            if (!item.roles.includes(selectedClinic?.roleInClinic)) return null;
             if (item.type === 'group') {
               return (
                 <Nav.Item key={item.id} as='div' className={analyticsClass}>

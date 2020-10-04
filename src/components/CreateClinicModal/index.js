@@ -137,7 +137,7 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
           onChange={handleBracketsChange}
           checked={data.hasBrackets}
           type='checkbox'
-          label={textForKey('Offers Brackets services')}
+          label={textForKey('Offers Brackets components')}
         />
       </Form.Group>
     </EasyPlanModal>

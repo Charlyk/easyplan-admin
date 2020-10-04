@@ -142,7 +142,7 @@ const UserDetailsModal = props => {
   };
 
   const saveUser = avatarUrl => {
-    // clear services with no price and percentage
+    // clear components with no price and percentage
     const newServices = cloneDeep(userData.services);
     remove(newServices, item => item.price == null && item.percentage == null);
 

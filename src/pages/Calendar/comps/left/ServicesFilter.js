@@ -24,7 +24,7 @@ const ServicesFilter = ({ services, selectedService, onSelect }) => {
           onChange={handleServiceSelected}
           value={selectedService?.id}
         >
-          <option value='choose'>{textForKey('All services')}</option>
+          <option value='choose'>{textForKey('All components')}</option>
           {services.map(item => (
             <option key={item.id} value={item.id}>
               {item.name}
