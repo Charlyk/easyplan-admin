@@ -11,7 +11,6 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import ConfirmationModal from '../../components/ConfirmationModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import {

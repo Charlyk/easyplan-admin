@@ -2,8 +2,8 @@ import axios from 'axios';
 
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8080/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8080/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -107,10 +107,7 @@ export default {
    */
   createService: async requestBody => {
     try {
-      const response = await instance().post(
-        'components/v1/create',
-        requestBody,
-      );
+      const response = await instance().post('services/v1/create', requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -594,6 +591,19 @@ export default {
   fetchClinicDetails: async () => {
     try {
       const response = await instance().get(`clinics/details`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  fetchUserServices: async () => {
+    try {
+      const response = await instance().get(`services/v1/user-services`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

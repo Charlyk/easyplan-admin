@@ -4,11 +4,87 @@
   display: flex;
 
   .left-container {
-    padding: 1rem;
+    padding: 1rem 3rem;
     width: 50%;
-    max-height: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+
+    .services-container {
+      margin-top: 3rem;
+      user-select: none;
+      display: flex;
+      width: 100%;
+
+      .total-title, .no-data-label {
+        margin-bottom: 1rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        color: #A1A2C6;
+      }
+
+      .available-services {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 50%;
+        height: 100%;
+
+        .form-group {
+          margin-bottom: .1rem;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 20px;
+          color: #34354C;
+
+          .form-check {
+            align-items: center;
+            display: flex;
+          }
+
+          .form-check-input {
+            margin-top: 0;
+            color: transparent;
+          }
+        }
+      }
+
+      .services-total {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+
+        .no-data-label {
+          width: 100%;
+          text-align: center;
+          margin-top: 1rem;
+          font-weight: normal;
+          font-size: .8rem;
+        }
+
+        .total-price {
+          width: 100%;
+          text-align: end;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 24px;
+          color: #34354C;
+        }
+
+        .positive-button {
+          margin-top: 2rem;
+          height: 2rem;
+          flex: unset;
+        }
+      }
+    }
   }
 
   .patient-info {
@@ -62,4 +138,222 @@
       height: 3rem;
     }
   }
+
+  .tooth-container {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 13rem;
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      height: 50%;
+      border-bottom: 1px dashed #B8DBF8;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      height: 50%;
+      border-bottom: 1px dashed #B8DBF8;
+      border-left: 1px dashed #B8DBF8;
+    }
+
+    .bottom-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      height: 50%;
+    }
+
+    .bottom-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      height: 50%;
+      border-left: 1px dashed #B8DBF8;
+    }
+  }
 }
+
+.tooth-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 5rem;
+  margin-left: .5rem;
+  margin-right: .5rem;
+  position: relative;
+
+  .tooth-icon {
+    outline: none;
+    height: 5rem;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .6;
+    }
+
+    &.top {
+      align-items: flex-start;
+    }
+  }
+
+  .tooth-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 8px;
+    line-height: 16px;
+    text-align: center;
+    letter-spacing: 0.01em;
+    color: #3A83DC;
+  }
+
+  .tooth-services-container {
+    width: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    padding: .2rem;
+    top: 64%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &.top {
+      top: 34%;
+    }
+
+    .service-indicator {
+      margin: .1rem;
+      width: .25rem;
+      height: .25rem;
+      border-radius: 50%;
+    }
+  }
+}
+
+.final-service-root {
+  padding: .5rem 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+
+  .service-name {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #34354C;
+  }
+
+  .service-price {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A1A2C6;
+  }
+}
+
+.tooth-popper-root {
+  user-select: none;
+  z-index: 10;
+
+  .tooth-paper {
+    border: #3A83DC 1px solid;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 4px !important;
+
+    .options-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .form-group {
+      margin: .3rem .5rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: #34354C;
+
+      .form-check {
+        align-items: center;
+        display: flex;
+      }
+
+      .form-check-input {
+        margin-top: 0;
+        color: transparent;
+      }
+    }
+  }
+}
+
+.tooth-services-paper-root {
+  user-select: none;
+  z-index: 10;
+
+  .services-tooth-paper {
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 4px !important;
+
+    .options-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .option-row {
+        margin: .2rem;
+        padding-left: .2rem;
+        padding-right: .2rem;
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .service-color-indicator {
+        margin-right: .3rem;
+        width: .35rem;
+        height: .35rem;
+        border-radius: 50%;
+      }
+
+      .service-name {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        color: #34354C;
+      }
+    }
+  }
+}
+
