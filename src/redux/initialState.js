@@ -3,5 +3,6 @@ export default {
   updateUsers: false,
   updateXRay: false,
   updateNotes: false,
+  updateCurrentUser: false,
   user: null,
 };

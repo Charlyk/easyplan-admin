@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import IconAvatar from '../../../assets/icons/iconAvatar';
 import LoadingButton from '../../../components/LoadingButton';
+import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
 import { uploadFileToAWS } from '../../../utils/helperFuncs';
@@ -14,6 +16,7 @@ import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
 const RegisterForm = ({ onGoBack }) => {
+  const dispatch = useSelector();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [data, setData] = useState({
@@ -73,6 +76,7 @@ const RegisterForm = ({ onGoBack }) => {
       setErrorMessage(response.message);
     } else {
       authManager.setUserToken(response.data.token);
+      dispatch(setCurrentUser(response?.data?.user));
     }
     setIsLoading(false);
   };
@@ -88,7 +92,7 @@ const RegisterForm = ({ onGoBack }) => {
   };
 
   if (authManager.isLoggedIn()) {
-    return <Redirect to='/analytics/general' />;
+    return <Redirect to='/' />;
   }
 
   const avatarSrc =

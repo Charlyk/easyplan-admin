@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
+import AppLogoBlue from '../../assets/icons/appLogoBlue';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
@@ -25,7 +26,7 @@ const actions = [
 const PageHeader = props => {
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
-  const { title, onLogout } = props;
+  const { title, showLogo, onLogout } = props;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -50,7 +51,12 @@ const PageHeader = props => {
         anchorEl={actionsAnchor.current}
         placement='bottom-end'
       />
-      <div className='page-header__title'>{title}</div>
+      <div
+        className='page-header__title'
+        style={{ marginTop: showLogo ? 0 : '0.5rem' }}
+      >
+        {showLogo ? <AppLogoBlue /> : title}
+      </div>
       <div className='page-header__actions'>
         <div className='page-header__notifications'>
           <IconNotifications />
@@ -79,7 +85,8 @@ const PageHeader = props => {
 export default PageHeader;
 
 PageHeader.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  showLogo: PropTypes.bool,
   user: PropTypes.shape({
     id: PropTypes.string,
     avatar: PropTypes.string,

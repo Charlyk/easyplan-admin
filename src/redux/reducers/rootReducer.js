@@ -28,6 +28,11 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         user: action.payload,
       };
+    case types.setUpdateCurrentUser:
+      return {
+        ...state,
+        updateCurrentUser: !state.updateCurrentUser,
+      };
     default:
       return state;
   }

@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Nav } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
@@ -18,7 +17,6 @@ import MenuEllipse from '../../assets/icons/menuEllipse';
 import MenuPatients from '../../assets/icons/menuPatients';
 import MenuSettings from '../../assets/icons/menuSettings';
 import MenuUsers from '../../assets/icons/menuUsers';
-import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 
 const menuItems = [
@@ -90,9 +88,8 @@ const menuItems = [
 ];
 
 const MainMenu = props => {
-  const currentUser = useSelector(userSelector);
   const buttonRef = useRef(null);
-  const { currentPath, onCreateClinic, onChangeCompany } = props;
+  const { currentPath, currentUser, onCreateClinic, onChangeCompany } = props;
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
@@ -192,74 +189,71 @@ const MainMenu = props => {
 
   return (
     <div className='main-menu'>
-      {currentUser && (
-        <div
-          role='button'
-          tabIndex={0}
-          ref={buttonRef}
-          className='main-menu__logo-container'
-          onClick={handleCompanyClick}
-        >
-          <ClickAwayListener onClickAway={handleCompanyClose}>
-            <span className='clinic-name'>
-              {selectedClinic?.clinicName || textForKey('Create clinic')}
-            </span>
-          </ClickAwayListener>
-          <IconArrowDown />
-          {clinicsPopper}
-        </div>
-      )}
+      <div
+        role='button'
+        tabIndex={0}
+        ref={buttonRef}
+        className='main-menu__logo-container'
+        onClick={handleCompanyClick}
+      >
+        <ClickAwayListener onClickAway={handleCompanyClose}>
+          <span className='clinic-name'>
+            {selectedClinic?.clinicName || textForKey('Create clinic')}
+          </span>
+        </ClickAwayListener>
+        <IconArrowDown />
+        {clinicsPopper}
+      </div>
 
       <Nav defaultActiveKey={currentPath} className='navigation flex-column'>
-        {currentUser &&
-          menuItems.map(item => {
-            if (!item.roles.includes(selectedClinic?.roleInClinic)) return null;
-            if (item.type === 'group') {
-              return (
-                <Nav.Item key={item.id} as='div' className={analyticsClass}>
-                  <div
-                    tabIndex={0}
-                    className='title-container'
-                    role='button'
-                    onClick={handleAnalyticsClick}
-                  >
-                    {item.icon}
-                    {item.text}
-                  </div>
-                  <div className={analyticsChildClass}>
-                    {item.children.map(child => {
-                      return (
-                        <Nav.Item key={child.href}>
-                          <Link
-                            className={`link-item ${isActive(child.href) &&
-                              'active'}`}
-                            to={child.href}
-                          >
-                            <MenuEllipse />
-                            {child.text}
-                          </Link>
-                        </Nav.Item>
-                      );
-                    })}
-                  </div>
-                </Nav.Item>
-              );
-            } else {
-              return (
-                <Nav.Item key={item.id}>
-                  <Link
-                    className={`navigation__item link-item ${isActive(
-                      item.href,
-                    ) && 'active'}`}
-                    to={item.href}
-                  >
-                    {item.icon}
-                    {item.text}
-                  </Link>
-                </Nav.Item>
-              );
-            }
-          })}
+        {menuItems.map(item => {
+          if (!item.roles.includes(selectedClinic?.roleInClinic)) return null;
+          if (item.type === 'group') {
+            return (
+              <Nav.Item key={item.id} as='div' className={analyticsClass}>
+                <div
+                  tabIndex={0}
+                  className='title-container'
+                  role='button'
+                  onClick={handleAnalyticsClick}
+                >
+                  {item.icon}
+                  {item.text}
+                </div>
+                <div className={analyticsChildClass}>
+                  {item.children.map(child => {
+                    return (
+                      <Nav.Item key={child.href}>
+                        <Link
+                          className={`link-item ${isActive(child.href) &&
+                            'active'}`}
+                          to={child.href}
+                        >
+                          <MenuEllipse />
+                          {child.text}
+                        </Link>
+                      </Nav.Item>
+                    );
+                  })}
+                </div>
+              </Nav.Item>
+            );
+          } else {
+            return (
+              <Nav.Item key={item.id}>
+                <Link
+                  className={`navigation__item link-item ${isActive(
+                    item.href,
+                  ) && 'active'}`}
+                  to={item.href}
+                >
+                  {item.icon}
+                  {item.text}
+                </Link>
+              </Nav.Item>
+            );
+          }
+        })}
       </Nav>
     </div>
   );
@@ -269,6 +263,7 @@ export default MainMenu;
 
 MainMenu.propTypes = {
   currentPath: PropTypes.string.isRequired,
+  currentUser: PropTypes.object,
   onCreateClinic: PropTypes.func,
   onChangeCompany: PropTypes.func,
 };

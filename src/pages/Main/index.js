@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import './styles.scss';
 
-import { Modal, Spinner } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   useLocation,
   useHistory,
@@ -16,7 +15,11 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 import CreateClinicModal from '../../components/CreateClinicModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
-import { setCurrentUser } from '../../redux/actions/actions';
+import {
+  setCurrentUser,
+  triggerUpdateCurrentUser,
+} from '../../redux/actions/actions';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import authAPI from '../../utils/api/authAPI';
 import { textForKey } from '../../utils/localization';
 import paths from '../../utils/paths';
@@ -28,37 +31,20 @@ import Settings from '../Settings';
 import Statistics from '../Statistics';
 import Users from '../Users';
 
-const Main = props => {
+const Main = () => {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
-  const [appIsLoading, setAppIsLoading] = useState(false);
-  const [appInitialized, setAppInitialized] = useState(false);
+  const user = useSelector(userSelector);
   const [currentPath, setCurrentPath] = useState(location.pathname);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [appRefresh, setAppRefresh] = useState(false);
   const [isCreatingClinic, setIsCreatingClinic] = useState({
     open: false,
     canClose: false,
   });
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    fetchUser();
-  }, [props]);
-
-  useEffect(() => {
-    if (appRefresh) {
-      const selectedClinic = user.clinics.find(
-        item => item.id === user.selectedClinic,
-      );
-      if (['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)) {
-        history.push('/analytics/general');
-      } else {
-        history.push('/calendar');
-      }
-    }
-  }, [appRefresh]);
+  const selectedClinic = user?.clinics?.find(
+    item => item.id === user.selectedClinic,
+  );
 
   const getPageTitle = () => {
     return paths[currentPath];
@@ -82,13 +68,11 @@ const Main = props => {
 
   const handleUserLogout = () => {
     authManager.logOut();
-    setUser(null);
     dispatch(setCurrentUser(null));
-    setAppInitialized(false);
   };
 
   const handleClinicCreated = () => {
-    fetchUser(true);
+    dispatch(triggerUpdateCurrentUser());
     setIsCreatingClinic({ open: false, canClose: false });
   };
 
@@ -101,49 +85,24 @@ const Main = props => {
   };
 
   const handleChangeCompany = async company => {
-    setAppInitialized(false);
-    setAppIsLoading(true);
     const response = await authAPI.changeClinic(company.id);
     if (response.isError) {
       console.error(response.message);
-      setAppInitialized(false);
     } else {
-      setUser(response.data);
       dispatch(setCurrentUser(response.data));
-      setAppInitialized(true);
-      setAppRefresh(true);
     }
-    setAppIsLoading(false);
   };
-
-  const fetchUser = async force => {
-    if (!force && (!authManager.isLoggedIn() || user != null)) {
-      return;
-    }
-    setAppIsLoading(true);
-    const response = await authAPI.me();
-    if (response.isError) {
-      handleUserLogout();
-      console.error(response.message);
-    } else {
-      const { data: user } = response;
-      setUser(user);
-      setIsCreatingClinic({
-        open: user && user.clinicIds.length === 0,
-        canClose: false,
-      });
-      dispatch(setCurrentUser(user));
-      setAppInitialized(true);
-    }
-    setAppIsLoading(false);
-  };
-
-  if (currentPath === '/') {
-    return <Redirect to='/analytics/general' />;
-  }
 
   if (!authManager.isLoggedIn()) {
     return <Redirect to='/login' />;
+  }
+
+  if (currentPath === '/') {
+    if (['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)) {
+      return <Redirect to='/analytics/general' />;
+    } else if (selectedClinic?.roleInClinic === 'RECEPTION') {
+      return <Redirect to='/calendar' />;
+    }
   }
 
   return (
@@ -160,29 +119,23 @@ const Main = props => {
         open={isCreatingClinic.open}
         onCreate={handleClinicCreated}
       />
-      <Modal
-        centered
-        className='loading-modal'
-        show={appIsLoading}
-        onHide={() => null}
-      >
-        <Modal.Body>
-          <Spinner animation='border' />
-          {textForKey('App initialization...')}
-        </Modal.Body>
-      </Modal>
-      <MainMenu
-        currentPath={currentPath}
-        onCreateClinic={handleCreateClinic}
-        onChangeCompany={handleChangeCompany}
-      />
-      <div className='data-container'>
-        <PageHeader
-          title={getPageTitle()}
-          user={user}
-          onLogout={handleStartLogout}
+      {user != null && (
+        <MainMenu
+          currentUser={user}
+          currentPath={currentPath}
+          onCreateClinic={handleCreateClinic}
+          onChangeCompany={handleChangeCompany}
         />
-        {appInitialized && (
+      )}
+      <div className='data-container'>
+        {user != null && (
+          <PageHeader
+            title={getPageTitle()}
+            user={user}
+            onLogout={handleStartLogout}
+          />
+        )}
+        {user != null && (
           <div className='data'>
             <Switch>
               <Route path='/analytics' component={Statistics} />

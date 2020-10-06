@@ -1,0 +1,151 @@
+.doctor-patients-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  .filter-wrapper {
+    display: flex;
+    width: 20rem;
+    height: 16rem;
+  }
+
+  .data-wrapper {
+    max-height: 100%;
+    overflow-y: scroll;
+  }
+}
+
+.patients-filter {
+  margin: 1rem;
+  width: 20rem;
+  display: flex;
+  padding: 1rem;
+  flex-direction: column;
+  align-items: flex-end;
+  background: #FFFFFF;
+  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+
+  .custom-select {
+    font-size: .7rem;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .form-label {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .7rem;
+    margin-bottom: 0;
+  }
+
+  .form-control {
+    background-color: #FAFAFD;
+  }
+
+  .positive-button {
+    margin-top: 1rem;
+  }
+}
+
+.patients-list-root {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.patient-item-root {
+  margin: .5rem;
+  width: 14rem;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+
+  .details-button {
+    user-select: none;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      .button-text {
+        text-decoration: underline;
+      }
+    }
+
+    .button-text {
+      color: #3A83DC;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+
+  .item-header {
+    background: #F4FAFE;
+    display: flex;
+    width: 100%;
+    height: 3.5rem;
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    .patient-name {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      color: #34354C;
+      margin-left: .5rem;
+    }
+
+    svg {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+
+  .item-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+
+    .row-wrapper {
+      margin-top: .5rem;
+      margin-bottom: .5rem;
+      display: flex;
+      width: 100%;
+    }
+
+    .row-title {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      margin-right: .3rem;
+      color: #34354C;
+    }
+
+    .row-value {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 12px;
+      line-height: 16px;
+      color: #34354C;
+    }
+  }
+}

@@ -55,3 +55,10 @@ export function setCurrentUser(user) {
     payload: user,
   };
 }
+
+export function triggerUpdateCurrentUser() {
+  return {
+    type: types.setUpdateCurrentUser,
+    payload: '',
+  };
+}

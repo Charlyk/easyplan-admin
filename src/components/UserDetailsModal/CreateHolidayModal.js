@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Form, InputGroup, Modal, Button } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import IconClose from '../../assets/icons/iconClose';
-import IconSuccess from '../../assets/icons/iconSuccess';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 

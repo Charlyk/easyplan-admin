@@ -3,15 +3,18 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import LoadingButton from '../../../components/LoadingButton';
+import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
 const LoginForm = ({ onResetPassword, onSignUp }) => {
+  const dispatch = useDispatch();
   const [data, setData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -40,6 +43,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
       setErrorMessage(response.message);
     } else {
       authManager.setUserToken(response?.data?.token);
+      dispatch(setCurrentUser(response?.data?.user));
     }
     setIsLoading(false);
   };
@@ -49,7 +53,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
   };
 
   if (authManager.isLoggedIn()) {
-    return <Redirect to='/analytics/general' />;
+    return <Redirect to='/' />;
   }
 
   return (

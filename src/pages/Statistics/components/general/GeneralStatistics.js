@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { AreaChart, Area, XAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 import { textForKey } from '../../../../utils/localization';
 import ServiceView from './ServiceView';
 
-const GeneralStatistics = props => {
+const GeneralStatistics = () => {
   const data = () => {
     const items = [];
     for (let i = 7; i < 20; i++) {

@@ -6,6 +6,8 @@ export const updateNotesSelector = state => state.updateNotes;
 
 export const updateXRaySelector = state => state.updateXRay;
 
+export const updateCurrentUserSelector = state => state.updateCurrentUser;
+
 /**
  * Get current user from store
  * @param state
