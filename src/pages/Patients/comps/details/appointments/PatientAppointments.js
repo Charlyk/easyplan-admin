@@ -9,29 +9,17 @@ import Appointment from './Appointment';
 
 const PatientAppointments = ({ patient }) => {
   return (
-    <div className='patients-root__appointments'>
-      <div className='patients-root__appointments__appointments-data'>
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
-        <Appointment />
+    <div className='patient-appointments'>
+      <div className='patient-appointments__appointments-data'>
         <Appointment />
         <Appointment />
         <Appointment />
         <Appointment />
       </div>
-      <div className='patients-root__appointments__actions'>
+      <div className='patient-appointments__actions'>
         <Button className='btn-outline-primary' variant='outline-primary'>
           {textForKey('Add appointment')}
-          <IconPlus />
+          <IconPlus fill={null} />
         </Button>
       </div>
     </div>

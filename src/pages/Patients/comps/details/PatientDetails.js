@@ -8,6 +8,7 @@ import PatientAppointments from './appointments/PatientAppointments';
 import PatientNotes from './notes/PatientNotes';
 import TreatmentPlans from './treatment-plans/TreatmentPlans';
 import PatientXRay from './x-ray/PatientXRay';
+import './styles.scss';
 
 const TabId = {
   appointments: 'Appointments',
@@ -16,7 +17,7 @@ const TabId = {
   treatmentPlans: 'TreatmentPlans',
 };
 
-const PatientDetails = ({ onAddNote, onAddXRay, patient }) => {
+const PatientDetails = ({ onAddNote, onAddXRay, showTabs, patient }) => {
   const [selectedTab, setSelectedTab] = useState(TabId.appointments);
 
   if (!patient) return null;
@@ -26,30 +27,41 @@ const PatientDetails = ({ onAddNote, onAddXRay, patient }) => {
   };
 
   return (
-    <div className='patients-root__details'>
-      <div className='patients-root__details__header'>
-        <EasyTab
-          title={textForKey('Appointments')}
-          onClick={() => handleTabClick(TabId.appointments)}
-          selected={selectedTab === TabId.appointments}
-        />
-        <EasyTab
-          title={textForKey('Notes')}
-          onClick={() => handleTabClick(TabId.notes)}
-          selected={selectedTab === TabId.notes}
-        />
-        <EasyTab
-          title={textForKey('X-Ray')}
-          onClick={() => handleTabClick(TabId.xRay)}
-          selected={selectedTab === TabId.xRay}
-        />
-        <EasyTab
-          title={textForKey('Treatment plans')}
-          onClick={() => handleTabClick(TabId.treatmentPlans)}
-          selected={selectedTab === TabId.treatmentPlans}
-        />
+    <div className='patient-details-root'>
+      <div className='patient-details-root__header'>
+        {showTabs.includes(TabId.appointments) && (
+          <EasyTab
+            title={textForKey('Appointments')}
+            onClick={() => handleTabClick(TabId.appointments)}
+            selected={selectedTab === TabId.appointments}
+          />
+        )}
+
+        {showTabs.includes(TabId.notes) && (
+          <EasyTab
+            title={textForKey('Notes')}
+            onClick={() => handleTabClick(TabId.notes)}
+            selected={selectedTab === TabId.notes}
+          />
+        )}
+
+        {showTabs.includes(TabId.xRay) && (
+          <EasyTab
+            title={textForKey('X-Ray')}
+            onClick={() => handleTabClick(TabId.xRay)}
+            selected={selectedTab === TabId.xRay}
+          />
+        )}
+
+        {showTabs.includes(TabId.treatmentPlans) && (
+          <EasyTab
+            title={textForKey('Treatment plans')}
+            onClick={() => handleTabClick(TabId.treatmentPlans)}
+            selected={selectedTab === TabId.treatmentPlans}
+          />
+        )}
       </div>
-      <div className='patients-root__details__content'>
+      <div className='patient-details-root__content'>
         {selectedTab === TabId.appointments && <PatientAppointments />}
         {selectedTab === TabId.notes && (
           <PatientNotes patient={patient} onAddNote={onAddNote} />
@@ -68,6 +80,7 @@ export default PatientDetails;
 PatientDetails.propTypes = {
   onAddNote: PropTypes.func,
   onAddXRay: PropTypes.func,
+  showTabs: PropTypes.arrayOf(PropTypes.string),
   patient: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,
@@ -76,4 +89,8 @@ PatientDetails.propTypes = {
     phoneNumber: PropTypes.string,
     photo: PropTypes.string,
   }).isRequired,
+};
+
+PatientDetails.defaultProps = {
+  showTabs: [TabId.appointments, TabId.xRay, TabId.notes, TabId.treatmentPlans],
 };

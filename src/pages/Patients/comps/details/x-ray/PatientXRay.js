@@ -62,7 +62,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   };
 
   return (
-    <div className='patients-root__x-ray'>
+    <div className='patient-x-ray'>
       <div className='images-container'>
         {!state.isFetching && (
           <XRayPhase
@@ -100,7 +100,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           />
         )}
       </div>
-      <div className='patients-root__x-ray__actions'>
+      <div className='patient-x-ray__actions'>
         <Button
           className='btn-outline-primary'
           variant='outline-primary'
@@ -108,7 +108,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           disabled={state.isFetching}
         >
           {textForKey('Add image')}
-          <IconPlus />
+          <IconPlus fill={null} />
         </Button>
       </div>
     </div>

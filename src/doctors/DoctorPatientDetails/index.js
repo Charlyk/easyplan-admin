@@ -40,6 +40,7 @@ import IconTooth46 from '../../assets/icons/iconTooth46';
 import IconTooth47 from '../../assets/icons/iconTooth47';
 import IconTooth48 from '../../assets/icons/iconTooth48';
 import LoadingButton from '../../components/LoadingButton';
+import PatientDetails from '../../pages/Patients/comps/details/PatientDetails';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
@@ -47,7 +48,13 @@ import ToothView from './components/ToothView';
 
 import { Form } from 'react-bootstrap';
 
-const PatientDetails = () => {
+const TabId = {
+  appointments: 'Appointments',
+  notes: 'Notes',
+  xRay: 'X-Ray',
+};
+
+const DoctorPatientDetails = () => {
   const { patientId } = useParams();
   const [patient, setPatient] = useState(null);
   const [services, setServices] = useState([]);
@@ -358,8 +365,16 @@ const PatientDetails = () => {
           </div>
         </div>
       </div>
+      <div className='right-container'>
+        {patient && (
+          <PatientDetails
+            patient={patient}
+            showTabs={[TabId.appointments, TabId.xRay, TabId.notes]}
+          />
+        )}
+      </div>
     </div>
   );
 };
 
-export default PatientDetails;
+export default DoctorPatientDetails;

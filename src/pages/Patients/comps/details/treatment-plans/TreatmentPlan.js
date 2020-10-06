@@ -9,8 +9,8 @@ import { textForKey } from '../../../../../utils/localization';
 
 const TreatmentPlan = ({ appointment }) => {
   return (
-    <div className='patients-root__treatment-plans__item'>
-      <div className='patients-root__treatment-plans__item__data-container'>
+    <div className='patient-treatment-plans__item'>
+      <div className='patient-treatment-plans__item__data-container'>
         <div className='plan-info'>
           <div className='plan-info-row'>
             <div className='plan-info-title'>{textForKey('Doctor')}:</div>
@@ -32,7 +32,7 @@ const TreatmentPlan = ({ appointment }) => {
           </div>
         </div>
       </div>
-      <div className='patients-root__treatment-plans__item__status-and-action'>
+      <div className='patient-treatment-plans__item__status-and-action'>
         <div className='plan-status-indicator not-paid'>
           <div className='dot-indicator' />
           Completed not paid

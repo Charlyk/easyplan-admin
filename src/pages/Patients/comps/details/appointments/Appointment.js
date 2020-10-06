@@ -8,7 +8,7 @@ import { textForKey } from '../../../../../utils/localization';
 
 const Appointment = ({ appointment }) => {
   return (
-    <div className='patients-root__appointments__item'>
+    <div className='patient-appointments__item'>
       <div className='appointment-info'>
         <div className='appointment-info-row'>
           <div className='appointment-info-title'>{textForKey('Doctor')}:</div>

@@ -28,8 +28,8 @@ const PatientNotes = ({ onAddNote, patient }) => {
   };
 
   return (
-    <div className='patients-root__notes'>
-      <div className='patients-root__notes__notes-data'>
+    <div className='patient-notes'>
+      <div className='patient-notes__notes-data'>
         {state.isFetching && (
           <Spinner
             animation='border'
@@ -42,7 +42,7 @@ const PatientNotes = ({ onAddNote, patient }) => {
           <PatientNote key={note.id} note={note} />
         ))}
       </div>
-      <div className='patients-root__notes__actions'>
+      <div className='patient-notes__actions'>
         <Button
           disabled={state.isFetching}
           className='btn-outline-primary'
@@ -50,7 +50,7 @@ const PatientNotes = ({ onAddNote, patient }) => {
           onClick={onAddNote}
         >
           {textForKey('Add note')}
-          <IconPlus />
+          <IconPlus fill={null} />
         </Button>
       </div>
     </div>

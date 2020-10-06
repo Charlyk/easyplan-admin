@@ -9,8 +9,8 @@ import TreatmentPlan from './TreatmentPlan';
 
 const TreatmentPlans = ({ patient }) => {
   return (
-    <div className='patients-root__treatment-plans'>
-      <div className='patients-root__treatment-plans__plans-data'>
+    <div className='patient-treatment-plans'>
+      <div className='patient-treatment-plans__plans-data'>
         <TreatmentPlan />
         <TreatmentPlan />
         <TreatmentPlan />
@@ -32,10 +32,10 @@ const TreatmentPlans = ({ patient }) => {
         <TreatmentPlan />
         <TreatmentPlan />
       </div>
-      <div className='patients-root__treatment-plans__actions'>
+      <div className='patient-treatment-plans__actions'>
         <Button className='btn-outline-primary' variant='outline-primary'>
           {textForKey('Add plan')}
-          <IconPlus />
+          <IconPlus fill={null} />
         </Button>
       </div>
     </div>
