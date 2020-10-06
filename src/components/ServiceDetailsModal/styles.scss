@@ -124,7 +124,7 @@
 
     &.expanded {
       padding-top: .5rem;
-      height: 25.5rem;
+      height: 30.5rem;
       transition: height .2s ease-out, padding-top .2s ease-out;
     }
 
@@ -132,6 +132,10 @@
       padding-top: 0;
       height: 0;
       transition: height .2s ease-out, padding-top .2s ease-out;
+    }
+
+    .custom-select {
+      font-size: .8rem;
     }
 
     .form-label {

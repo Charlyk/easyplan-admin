@@ -25,6 +25,7 @@ const initialService = {
   color: '',
   doctors: [],
   categoryId: null,
+  serviceType: 'all',
 };
 
 const ServiceDetailsModal = props => {

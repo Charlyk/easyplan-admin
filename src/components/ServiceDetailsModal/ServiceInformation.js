@@ -104,6 +104,43 @@ const ServiceInformation = props => {
             </InputGroup>
           </Form.Group>
 
+          <Form.Group controlId='price'>
+            <Form.Label>{textForKey('Service price')}</Form.Label>
+            <InputGroup>
+              <Form.Control
+                type='number'
+                value={data.price}
+                min='0'
+                onChange={handleFormChange}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form.Group>
+
+          <Form.Group
+            controlId='serviceType'
+            style={{ flexDirection: 'column' }}
+          >
+            <Form.Label>{textForKey('Service type')}</Form.Label>
+            <Form.Control
+              as='select'
+              className='mr-sm-2'
+              id='inlineFormCustomSelect'
+              custom
+              onChange={handleFormChange}
+              value={data.serviceType}
+            >
+              <option value='all'>
+                {textForKey('Applicable on all teeth')}
+              </option>
+              <option value='single'>
+                {textForKey('Applicable on single tooth')}
+              </option>
+            </Form.Control>
+          </Form.Group>
+
           <Form.Group controlId='description'>
             <Form.Label>{textForKey('Description')}</Form.Label>
             <InputGroup>
@@ -201,6 +238,7 @@ ServiceInformation.propTypes = {
     duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     price: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     description: PropTypes.string,
+    serviceType: PropTypes.string,
     color: PropTypes.string,
   }),
   onChange: PropTypes.func,
