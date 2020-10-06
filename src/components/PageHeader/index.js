@@ -26,7 +26,7 @@ const actions = [
 const PageHeader = props => {
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
-  const { title, showLogo, onLogout } = props;
+  const { title, titleComponent, onLogout } = props;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -53,9 +53,9 @@ const PageHeader = props => {
       />
       <div
         className='page-header__title'
-        style={{ marginTop: showLogo ? 0 : '0.5rem' }}
+        style={{ marginTop: titleComponent != null ? 0 : '0.5rem' }}
       >
-        {showLogo ? <AppLogoBlue /> : title}
+        {titleComponent || title}
       </div>
       <div className='page-header__actions'>
         <div className='page-header__notifications'>
@@ -87,6 +87,7 @@ export default PageHeader;
 PageHeader.propTypes = {
   title: PropTypes.string,
   showLogo: PropTypes.bool,
+  titleComponent: PropTypes.element,
   user: PropTypes.shape({
     id: PropTypes.string,
     avatar: PropTypes.string,

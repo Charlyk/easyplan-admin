@@ -19,11 +19,20 @@ import {
   Switch,
 } from 'react-router-dom';
 
+import ConfirmationModal from './components/ConfirmationModal';
+import CreateClinicModal from './components/CreateClinicModal';
 import DoctorsMain from './doctors/DoctorsMain';
 import Login from './pages/Login';
 import Main from './pages/Main';
-import { setCurrentUser } from './redux/actions/actions';
 import {
+  setCreateClinic,
+  setCurrentUser,
+  triggerUserLogout,
+} from './redux/actions/actions';
+import {
+  createClinicSelector,
+  logoutSelector,
+  newClinicIdSelector,
   updateCurrentUserSelector,
   userSelector,
 } from './redux/selectors/rootSelector';
@@ -35,7 +44,10 @@ function App() {
   moment.locale(getAppLanguage());
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
+  const newClinicId = useSelector(newClinicIdSelector);
   const updateCurrentUser = useSelector(updateCurrentUserSelector);
+  const createClinic = useSelector(createClinicSelector);
+  const logout = useSelector(logoutSelector);
   const selectedClinic = currentUser?.clinics?.find(
     item => item.id === currentUser?.selectedClinic,
   );
@@ -44,8 +56,27 @@ function App() {
   useEffect(() => {
     if (currentUser == null) {
       fetchUser();
+    } else if (currentUser.clinics.length === 0) {
+      dispatch(setCreateClinic({ open: true, canClose: false }));
     }
   }, [currentUser, updateCurrentUser]);
+
+  useEffect(() => {
+    if (newClinicId != null) {
+      changeCurrentClinic(newClinicId);
+    }
+  }, [newClinicId]);
+
+  const changeCurrentClinic = async clinicId => {
+    setAppIsLoading(true);
+    const response = await authAPI.changeClinic(clinicId);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      dispatch(setCurrentUser(response.data));
+    }
+    setAppIsLoading(false);
+  };
 
   const fetchUser = async () => {
     if (!authManager.isLoggedIn()) {
@@ -62,10 +93,41 @@ function App() {
     setAppIsLoading(false);
   };
 
+  const handleCloseCreateClinic = () => {
+    dispatch(setCreateClinic({ open: false, canClose: false }));
+  };
+
+  const handleClinicCreated = () => {
+    handleCloseCreateClinic();
+    fetchUser();
+  };
+
+  const handleUserLogout = () => {
+    authManager.logOut();
+    dispatch(setCurrentUser(null));
+    handleCancelLogout();
+  };
+
+  const handleCancelLogout = () => {
+    dispatch(triggerUserLogout(false));
+  };
+
   return (
     <Router basename='/'>
       {selectedClinic?.roleInClinic === 'DOCTOR' && <Redirect to='/' />}
       <React.Fragment>
+        <ConfirmationModal
+          title={textForKey('Logout')}
+          message={textForKey('logout message')}
+          onConfirm={handleUserLogout}
+          onClose={handleCancelLogout}
+          show={logout}
+        />
+        <CreateClinicModal
+          onClose={createClinic.canClose ? handleCloseCreateClinic : null}
+          open={createClinic.open}
+          onCreate={handleClinicCreated}
+        />
         <Modal
           centered
           className='loading-modal'

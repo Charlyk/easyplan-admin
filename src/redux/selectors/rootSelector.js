@@ -8,6 +8,12 @@ export const updateXRaySelector = state => state.updateXRay;
 
 export const updateCurrentUserSelector = state => state.updateCurrentUser;
 
+export const newClinicIdSelector = state => state.newClinicId;
+
+export const createClinicSelector = state => state.createClinic;
+
+export const logoutSelector = state => state.logout;
+
 /**
  * Get current user from store
  * @param state

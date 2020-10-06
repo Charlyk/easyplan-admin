@@ -6,4 +6,7 @@ export default {
   updateNotes: 'updateNotes',
   setUpdateCurrentUser: 'setUpdateCurrentUser',
   setUser: 'setUser',
+  changeCurrentClinic: 'changeCurrentClinic',
+  setCreateClinic: 'setCreateClinic',
+  triggerUserLogOut: 'triggerUserLogOut',
 };

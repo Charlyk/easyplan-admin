@@ -12,16 +12,14 @@ import {
 } from 'react-router-dom';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
-import CreateClinicModal from '../../components/CreateClinicModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import {
-  setCurrentUser,
-  triggerUpdateCurrentUser,
+  changeSelectedClinic,
+  setCreateClinic,
+  triggerUserLogout,
 } from '../../redux/actions/actions';
 import { userSelector } from '../../redux/selectors/rootSelector';
-import authAPI from '../../utils/api/authAPI';
-import { textForKey } from '../../utils/localization';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
@@ -37,11 +35,6 @@ const Main = () => {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const [currentPath, setCurrentPath] = useState(location.pathname);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [isCreatingClinic, setIsCreatingClinic] = useState({
-    open: false,
-    canClose: false,
-  });
   const selectedClinic = user?.clinics?.find(
     item => item.id === user.selectedClinic,
   );
@@ -59,38 +52,15 @@ const Main = () => {
   }, [location]);
 
   const handleStartLogout = () => {
-    setIsLoggingOut(true);
-  };
-
-  const handleCancelLogout = () => {
-    setIsLoggingOut(false);
-  };
-
-  const handleUserLogout = () => {
-    authManager.logOut();
-    dispatch(setCurrentUser(null));
-  };
-
-  const handleClinicCreated = () => {
-    dispatch(triggerUpdateCurrentUser());
-    setIsCreatingClinic({ open: false, canClose: false });
+    dispatch(triggerUserLogout(true));
   };
 
   const handleCreateClinic = () => {
-    setIsCreatingClinic({ open: true, canClose: true });
+    dispatch(setCreateClinic({ open: true, canClose: true }));
   };
 
-  const handleCloseCreateClinic = () => {
-    setIsCreatingClinic({ open: false, canClose: false });
-  };
-
-  const handleChangeCompany = async company => {
-    const response = await authAPI.changeClinic(company.id);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      dispatch(setCurrentUser(response.data));
-    }
+  const handleChangeCompany = company => {
+    dispatch(changeSelectedClinic(company.id));
   };
 
   if (!authManager.isLoggedIn()) {
@@ -107,18 +77,6 @@ const Main = () => {
 
   return (
     <div className='main-page' id='main-page'>
-      <ConfirmationModal
-        title={textForKey('Logout')}
-        message={textForKey('logout message')}
-        onConfirm={handleUserLogout}
-        onClose={handleCancelLogout}
-        show={isLoggingOut}
-      />
-      <CreateClinicModal
-        onClose={isCreatingClinic.canClose ? handleCloseCreateClinic : null}
-        open={isCreatingClinic.open}
-        onCreate={handleClinicCreated}
-      />
       {user != null && (
         <MainMenu
           currentUser={user}

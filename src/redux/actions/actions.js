@@ -62,3 +62,29 @@ export function triggerUpdateCurrentUser() {
     payload: '',
   };
 }
+
+export function changeSelectedClinic(clinicId) {
+  return {
+    type: types.changeCurrentClinic,
+    payload: clinicId,
+  };
+}
+
+/**
+ * Toggle create clinic modal
+ * @param {{ open: boolean, canClose: boolean }} data
+ * @return {{payload: *, type: string}}
+ */
+export function setCreateClinic(data) {
+  return {
+    type: types.setCreateClinic,
+    payload: data,
+  };
+}
+
+export function triggerUserLogout(logout) {
+  return {
+    type: types.triggerUserLogOut,
+    payload: logout,
+  };
+}

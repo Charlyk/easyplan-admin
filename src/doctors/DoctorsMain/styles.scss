@@ -16,4 +16,34 @@
     max-height: 100%;
     overflow: hidden;
   }
+
+  .company-selector-container {
+    user-select: none;
+    position: relative;
+    outline: none;
+    width: 15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+    cursor: pointer;
+    background-color: white;
+    border: #3A83DC 1px solid;
+    padding: .5rem;
+    border-radius: .3rem;
+
+    .clinic-name {
+      flex: 1;
+      color: #34344E;
+      font-weight: 600;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 14px;
+      line-height: 24px;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
 }

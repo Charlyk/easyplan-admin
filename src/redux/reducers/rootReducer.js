@@ -33,6 +33,21 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         updateCurrentUser: !state.updateCurrentUser,
       };
+    case types.changeCurrentClinic:
+      return {
+        ...state,
+        newClinicId: action.payload,
+      };
+    case types.setCreateClinic:
+      return {
+        ...state,
+        createClinic: action.payload,
+      };
+    case types.triggerUserLogOut:
+      return {
+        ...state,
+        logout: action.payload,
+      };
     default:
       return state;
   }
