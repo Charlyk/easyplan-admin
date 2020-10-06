@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { remove, cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
-import S3 from 'react-aws-s3';
 import { Button, Tab, Tabs } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +11,7 @@ import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
-import { EmailRegex, Role, S3Config } from '../../utils/constants';
+import { EmailRegex, Role } from '../../utils/constants';
 import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
