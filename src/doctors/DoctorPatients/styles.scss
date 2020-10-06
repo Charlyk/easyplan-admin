@@ -10,8 +10,17 @@
   }
 
   .data-wrapper {
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     overflow-y: scroll;
+
+    .loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 60%;
+      z-index: 10;
+      color: #3A83DC;
+    }
   }
 }
 
@@ -54,6 +63,7 @@
 .patients-list-root {
   display: flex;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .patient-item-root {
@@ -66,6 +76,7 @@
   border-radius: 4px;
 
   .details-button {
+    outline: none;
     user-select: none;
     display: flex;
     width: 100%;

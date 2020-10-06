@@ -13,8 +13,8 @@ import {
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
+import PatientDetails from '../DoctorPatientDetails';
 import DoctorPatients from '../DoctorPatients';
-import PatientDetails from '../DoctorPatients/components/details/PatientDetails';
 import './styles.scss';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,8 +87,8 @@ const DoctorsMain = () => {
       </div>
       <div className='doctor-data-container'>
         <Switch>
-          <Route path='/' component={DoctorPatients} />
-          <Route path='/:patientId' component={PatientDetails} />
+          <Route path='/' exact component={DoctorPatients} />
+          <Route path='/:patientId' exact component={PatientDetails} />
         </Switch>
       </div>
     </div>
