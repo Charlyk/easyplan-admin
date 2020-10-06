@@ -17,6 +17,7 @@ import {
   Redirect,
   Route,
   Switch,
+  useHistory,
 } from 'react-router-dom';
 
 import ConfirmationModal from './components/ConfirmationModal';
@@ -42,12 +43,14 @@ import authManager from './utils/settings/authManager';
 
 function App() {
   moment.locale(getAppLanguage());
+  const history = useHistory();
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
   const newClinicId = useSelector(newClinicIdSelector);
   const updateCurrentUser = useSelector(updateCurrentUserSelector);
   const createClinic = useSelector(createClinicSelector);
   const logout = useSelector(logoutSelector);
+  const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
     item => item.id === currentUser?.selectedClinic,
   );
@@ -74,6 +77,8 @@ function App() {
       console.error(response.message);
     } else {
       dispatch(setCurrentUser(response.data));
+      setRedirectUser(true);
+      setTimeout(() => setRedirectUser(false), 500);
     }
     setAppIsLoading(false);
   };
@@ -114,7 +119,7 @@ function App() {
 
   return (
     <Router basename='/'>
-      {selectedClinic?.roleInClinic === 'DOCTOR' && <Redirect to='/' />}
+      {redirectUser && <Redirect to='/' />}
       <React.Fragment>
         <ConfirmationModal
           title={textForKey('Logout')}

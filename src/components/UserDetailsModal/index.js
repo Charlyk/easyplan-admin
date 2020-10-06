@@ -77,9 +77,9 @@ const initialData = {
 };
 
 const UserDetailsModal = props => {
-  const { onClose, show, user } = props;
+  const { onClose, show, user, role } = props;
   const dispatch = useDispatch();
-  const [currentTab, setCurrentTab] = useState(Role.manager);
+  const [currentTab, setCurrentTab] = useState(role);
   const [isSaving, setIsSaving] = useState(false);
   const [userData, setUserData] = useState({
     ...initialData,
@@ -89,6 +89,10 @@ const UserDetailsModal = props => {
     open: false,
     holiday: null,
   });
+
+  useEffect(() => {
+    setCurrentTab(role);
+  }, [role]);
 
   useEffect(() => {
     if (user != null) {
@@ -323,6 +327,7 @@ export default UserDetailsModal;
 
 UserDetailsModal.propTypes = {
   onClose: PropTypes.func.isRequired,
+  role: PropTypes.string,
   show: PropTypes.bool.isRequired,
   user: PropTypes.shape({
     id: PropTypes.string,

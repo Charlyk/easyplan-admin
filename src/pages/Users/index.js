@@ -23,6 +23,7 @@ const Users = props => {
   const [isUserModalOpen, setIsUserModalOpen] = useState({
     open: false,
     user: null,
+    type: Role.manager,
   });
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -68,8 +69,8 @@ const Users = props => {
     }, 300);
   };
 
-  const handleUserModalOpen = (event, user) => {
-    setIsUserModalOpen({ open: true, user });
+  const handleUserModalOpen = (event, user, type = Role.manager) => {
+    setIsUserModalOpen({ open: true, user, type });
   };
 
   const canShowType = type => {
@@ -99,8 +100,13 @@ const Users = props => {
         return null;
     }
 
+    const role = type === Role.admin ? Role.manager : type;
+
     return (
-      <div className='users-root__no-data'>
+      <div
+        className='users-root__no-data'
+        onClick={event => handleUserModalOpen(event, null, role)}
+      >
         {message}
         <div role='button'>{buttonText}</div>
       </div>
@@ -161,6 +167,7 @@ const Users = props => {
         onClose={handleUserModalClose}
         show={isUserModalOpen.open}
         user={isUserModalOpen.user}
+        role={isUserModalOpen.type}
       />
       <UsersHeader
         onFilterChange={handleFilterChange}

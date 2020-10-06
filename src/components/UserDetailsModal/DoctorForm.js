@@ -77,7 +77,7 @@ const DoctorForm = props => {
                 {textForKey('Step 2.')}
               </div>
             )}
-            {textForKey('Provided components')}
+            {textForKey('Provided services')}
           </div>
           <div
             tabIndex={0}

@@ -133,7 +133,7 @@ const DoctorServices = props => {
     onChange(newList);
   };
 
-  const classes = clsx('doctor-components', show ? 'expanded' : 'collapsed');
+  const classes = clsx('doctor-services', show ? 'expanded' : 'collapsed');
   return (
     <div
       className={classes}
