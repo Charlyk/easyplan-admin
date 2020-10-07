@@ -42,6 +42,21 @@ export default {
     }
   },
 
+  requestResetPassword: async email => {
+    try {
+      const response = await instance().post('v1/reset-password', {
+        username: email,
+      });
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
   /**
    * Get current user details
    * @return {Promise<{isError: boolean, message: *}|any>}

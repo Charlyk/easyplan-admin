@@ -17,12 +17,12 @@ import {
   Redirect,
   Route,
   Switch,
-  useHistory,
 } from 'react-router-dom';
 
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
 import DoctorsMain from './doctors/DoctorsMain';
+import AcceptInvitation from './pages/General/AcceptInvitation';
 import Login from './pages/Login';
 import Main from './pages/Main';
 import {
@@ -43,7 +43,6 @@ import authManager from './utils/settings/authManager';
 
 function App() {
   moment.locale(getAppLanguage());
-  const history = useHistory();
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
   const newClinicId = useSelector(newClinicIdSelector);
@@ -145,6 +144,11 @@ function App() {
           </Modal.Body>
         </Modal>
         <Switch>
+          <Route
+            path='/clinic-invitation/:isNew?/:token'
+            exact
+            component={AcceptInvitation}
+          />
           <Route path='/login' exact component={Login} />
           <Route
             path='/'

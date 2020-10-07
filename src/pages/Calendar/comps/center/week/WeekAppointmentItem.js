@@ -21,9 +21,21 @@ const WeekAppointmentItem = ({ appointment }) => {
   }, [appointment]);
 
   return (
-    <div className='appointment-item' style={position}>
+    <div
+      className='appointment-item'
+      style={{
+        ...position,
+        border: `1px solid ${appointment.serviceColor}`,
+        backgroundColor: `${appointment.serviceColor}1A`,
+      }}
+    >
       <div className='title-and-time'>
-        <span className='service-name'>Service name</span>
+        <span
+          className='service-name'
+          style={{ color: appointment.serviceColor }}
+        >
+          {appointment.serviceName}
+        </span>
         {position.height >= minHeight && (
           <span className='item-time-text'>
             {appointment.startHour} - {appointment.endHour}
@@ -40,5 +52,7 @@ WeekAppointmentItem.propTypes = {
   appointment: PropTypes.shape({
     startHour: PropTypes.string,
     endHour: PropTypes.string,
+    serviceColor: PropTypes.string,
+    serviceName: PropTypes.string,
   }),
 };

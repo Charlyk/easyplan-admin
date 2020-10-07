@@ -24,7 +24,12 @@ const CalendarWeekDayView = ({ day }) => {
         />
       ))}
       <WeekAppointmentItem
-        appointment={{ startHour: '11:00', endHour: '12:30' }}
+        appointment={{
+          startHour: '11:00',
+          endHour: '12:30',
+          serviceColor: '#F44081',
+          serviceName: 'Extractie',
+        }}
       />
     </div>
   );

@@ -119,6 +119,8 @@ export default {
     'activity logs': 'Activity logs',
     general: 'General',
     'general statistics': 'General statistics',
+    'accept invitation message':
+      'Create a password that will be used to login to your account.',
   },
   ro: {
     analytics: 'Analitică',
@@ -241,6 +243,8 @@ export default {
     'activity logs': 'Jurnal activități',
     general: 'General',
     'general statistics': 'Statistica generală',
+    'accept invitation message':
+      'Create a password that will be used to login to your account.',
   },
   ru: {
     analytics: 'Analytics',
@@ -362,5 +366,7 @@ export default {
     'activity logs': 'Activity logs',
     general: 'General',
     'general statistics': 'General statistics',
+    'accept invitation message':
+      'Create a password that will be used to login to your account.',
   },
 };

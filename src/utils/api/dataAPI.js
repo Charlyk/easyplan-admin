@@ -613,4 +613,26 @@ export default {
       };
     }
   },
+
+  /**
+   * Accept invitation to a clinic
+   * @param {string} token
+   * @param {string?} password
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  acceptClinicInvitation: async (token, password) => {
+    try {
+      const response = await instance().put(
+        `users/accept-invitation/${token}`,
+        { password: password?.length > 0 ? password : null },
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };
