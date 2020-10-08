@@ -104,21 +104,6 @@ const ServiceInformation = props => {
             </InputGroup>
           </Form.Group>
 
-          <Form.Group controlId='price'>
-            <Form.Label>{textForKey('Service price')}</Form.Label>
-            <InputGroup>
-              <Form.Control
-                type='number'
-                value={data.price}
-                min='0'
-                onChange={handleFormChange}
-              />
-              <InputGroup.Append>
-                <InputGroup.Text>MDL</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
-
           <Form.Group
             controlId='serviceType'
             style={{ flexDirection: 'column' }}
