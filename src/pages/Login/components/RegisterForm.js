@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import IconAvatar from '../../../assets/icons/iconAvatar';
@@ -16,7 +16,7 @@ import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
 const RegisterForm = ({ onGoBack }) => {
-  const dispatch = useSelector();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [data, setData] = useState({

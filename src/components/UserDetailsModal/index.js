@@ -91,6 +91,7 @@ const UserDetailsModal = props => {
 
   useEffect(() => {
     setCurrentTab(role);
+    setUserData({ ...userData, userType: role });
   }, [role]);
 
   useEffect(() => {

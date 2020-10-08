@@ -260,7 +260,6 @@ export default {
    */
   updateUser: async (userId, requestBody) => {
     try {
-      console.log(requestBody);
       const response = await instance().put(`users/${userId}`, requestBody);
       const { data: responseData } = response;
       return responseData;

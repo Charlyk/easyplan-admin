@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Form, InputGroup, Spinner } from 'react-bootstrap';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import appLogo from '../../assets/images/easyplan-logo.svg';
 import LoadingButton from '../../components/LoadingButton';
@@ -10,14 +10,17 @@ import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import authManager from '../../utils/settings/authManager';
 
+import clsx from 'clsx';
+
 const AcceptInvitation = () => {
+  const history = useHistory();
   const { isNew, token } = useParams();
   const [state, setState] = useState({
     newPassword: '',
     confirmPassword: '',
     isLoading: false,
-    redirectToLogin: false,
     errorMessage: null,
+    isAccepted: false,
   });
 
   useEffect(() => {
@@ -41,28 +44,32 @@ const AcceptInvitation = () => {
   };
 
   const handleAcceptInvitation = async () => {
+    if (state.isAccepted) {
+      history.push(authManager.isLoggedIn() ? '/' : '/login');
+      return;
+    }
     setState({ ...state, isLoading: true });
     const response = await dataAPI.acceptClinicInvitation(
       token,
       state.newPassword,
     );
     if (response.isError) {
-      console.error(response.message);
-      setState({ ...state, isLoading: false, errorMessage: response.message });
+      setState({
+        ...state,
+        isLoading: false,
+        errorMessage: response.message,
+        isAccepted: true,
+      });
     } else {
       setState({
-        redirectToLogin: true,
         isLoading: false,
         newPassword: '',
         confirmPassword: '',
         errorMessage: null,
+        isAccepted: true,
       });
     }
   };
-
-  if (state.redirectToLogin) {
-    return <Redirect to={authManager.isLoggedIn() ? '/' : '/login'} />;
-  }
 
   return (
     <div className='general-page'>
@@ -71,13 +78,18 @@ const AcceptInvitation = () => {
       </div>
       <div className='form-container'>
         <div className='form-root accept-invitation'>
-          {!isNew && !state.errorMessage && (
+          {!isNew && !state.errorMessage && !state.isAccepted && (
             <Spinner animation='border' className='loading-spinner' />
           )}
           {!isNew && state.errorMessage && (
             <span className='error-message'>{state.errorMessage}</span>
           )}
-          {isNew && (
+          {state.isAccepted && !state.errorMessage && (
+            <span className='success-message'>
+              {textForKey('Inivtation accepted')}
+            </span>
+          )}
+          {isNew && !state.isAccepted && (
             <div className='form-wrapper'>
               <span className='form-title'>
                 {textForKey('Accept invitation')}
@@ -113,14 +125,19 @@ const AcceptInvitation = () => {
               </Form.Group>
             </div>
           )}
-          {isNew && (
-            <div className='footer'>
+          {(isNew || state.isAccepted) && (
+            <div className={clsx('footer', !isNew && 'is-new')}>
               <LoadingButton
-                disabled={!isFormValid()}
+                isLoading={state.isLoading}
+                disabled={
+                  !state.isAccepted && (!isFormValid() || state.isLoading)
+                }
                 className='positive-button'
                 onClick={handleAcceptInvitation}
               >
-                {textForKey('Accept invitation')}
+                {state.isAccepted
+                  ? textForKey('Go to login')
+                  : textForKey('Accept invitation')}
               </LoadingButton>
             </div>
           )}

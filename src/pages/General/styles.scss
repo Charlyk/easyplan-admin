@@ -87,6 +87,7 @@
     user-select: none;
     display: flex;
     justify-content: flex-end;
+    position: absolute;
 
     .positive-button {
       flex: unset;
@@ -108,6 +109,16 @@
   border-radius: 4px;
   position: relative;
 
+  .footer {
+    &.is-new {
+      position: absolute;
+      bottom: 1rem;
+      align-items: center;
+      justify-content: center;
+      left: 0;
+    }
+  }
+
   .form-wrapper {
     display: flex;
     flex-direction: column;
@@ -121,7 +132,7 @@
     color: #3A83DC;
   }
 
-  .error-message {
+  .error-message, .success-message {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -139,13 +150,7 @@
     margin-bottom: 3rem;
   }
 
-  .success-text {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
+  .success-message {
     color: #00E987;
-    margin-bottom: .5rem;
   }
 }

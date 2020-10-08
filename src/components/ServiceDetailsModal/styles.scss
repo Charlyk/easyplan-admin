@@ -99,6 +99,7 @@
     }
 
     &__button {
+      outline: none;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -124,7 +125,7 @@
 
     &.expanded {
       padding-top: .5rem;
-      height: 30.5rem;
+      height: 34rem;
       transition: height .2s ease-out, padding-top .2s ease-out;
     }
 
