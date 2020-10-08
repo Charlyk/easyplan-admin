@@ -72,8 +72,10 @@ const CategoriesList = props => {
     } else {
       setCategories(response.data || []);
       if (response?.data?.length > 0) {
-        setSelectedCategory(response.data[0]);
-        onCategorySelect(response.data[0]);
+        if (selectedCategory == null) {
+          setSelectedCategory(response.data[0]);
+          onCategorySelect(response.data[0]);
+        }
       }
     }
     setIsLoading(false);
