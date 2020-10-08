@@ -14,6 +14,8 @@ export const createClinicSelector = state => state.createClinic;
 
 export const logoutSelector = state => state.logout;
 
+export const appointmentModalSelector = state => state.appointmentModal;
+
 /**
  * Get current user from store
  * @param state

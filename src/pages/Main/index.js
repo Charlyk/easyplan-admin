@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
 
@@ -11,14 +11,19 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import AddAppointmentModal from '../../components/AddAppintmentModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import {
   changeSelectedClinic,
+  setAppointmentModal,
   setCreateClinic,
   triggerUserLogout,
 } from '../../redux/actions/actions';
-import { userSelector } from '../../redux/selectors/rootSelector';
+import {
+  appointmentModalSelector,
+  userSelector,
+} from '../../redux/selectors/rootSelector';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
@@ -28,12 +33,33 @@ import Settings from '../Settings';
 import Statistics from '../Statistics';
 import Users from '../Users';
 
+const reducerTypes = {
+  setCurrentPath: 'setCurrentPath',
+};
+
+const reducerActions = {
+  setCurrentPath: payload => ({ type: reducerTypes.setCurrentPath, payload }),
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setCurrentPath:
+      return { ...state, currentPath: action.payload };
+    default:
+      return state;
+  }
+};
+
 const Main = () => {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
-  const [currentPath, setCurrentPath] = useState(location.pathname);
+  const appointmentModal = useSelector(appointmentModalSelector);
+  const [{ currentPath }, localDispatch] = useReducer(reducer, {
+    currentPath: location.pathname,
+    openAppointmentModal: false,
+  });
   const selectedClinic = user?.clinics?.find(
     item => item.id === user.selectedClinic,
   );
@@ -44,7 +70,7 @@ const Main = () => {
 
   useEffect(() => {
     if (authManager.isLoggedIn()) {
-      setCurrentPath(location.pathname);
+      localDispatch(reducerActions.setCurrentPath(location.pathname));
     } else {
       history.push('/login');
     }
@@ -62,6 +88,10 @@ const Main = () => {
     dispatch(changeSelectedClinic(company.id));
   };
 
+  const handleAppointmentModalClose = () => {
+    dispatch(setAppointmentModal({ open: false }));
+  };
+
   if (!authManager.isLoggedIn()) {
     return <Redirect to='/login' />;
   }
@@ -76,6 +106,10 @@ const Main = () => {
 
   return (
     <div className='main-page' id='main-page'>
+      <AddAppointmentModal
+        onClose={handleAppointmentModalClose}
+        open={appointmentModal.open}
+      />
       {user != null && (
         <MainMenu
           currentUser={user}

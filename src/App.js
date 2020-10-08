@@ -56,6 +56,15 @@ function App() {
   const [isAppLoading, setAppIsLoading] = useState(false);
 
   useEffect(() => {
+    if (selectedClinic != null) {
+      const title = document.getElementById('site-title');
+      if (title != null) {
+        title.innerText = `EasyPlan - ${selectedClinic.clinicName}`;
+      }
+    }
+  }, [selectedClinic]);
+
+  useEffect(() => {
     if (currentUser == null) {
       fetchUser();
     } else if (currentUser.clinics.length === 0) {

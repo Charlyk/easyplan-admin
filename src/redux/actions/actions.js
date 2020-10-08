@@ -82,9 +82,28 @@ export function setCreateClinic(data) {
   };
 }
 
+/**
+ * Trigger user logout modal
+ * @param {boolean} logout
+ * @return {{payload: *, type: string}}
+ */
 export function triggerUserLogout(logout) {
   return {
     type: types.triggerUserLogOut,
     payload: logout,
+  };
+}
+
+/**
+ * Toggle appointment creation modal
+ * @param {Object} modalData
+ * @param {boolean} modalData.open
+ * @param {Object?} modalData.doctor
+ * @return {{payload: *, type: string}}
+ */
+export function setAppointmentModal(modalData) {
+  return {
+    type: types.setAppointmentModal,
+    payload: modalData,
   };
 }

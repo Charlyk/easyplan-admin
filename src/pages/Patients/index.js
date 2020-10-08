@@ -63,7 +63,7 @@ const Patients = props => {
       console.error(response.message);
     } else {
       setPatients({ all: response.data, filtered: response.data });
-      if (response?.data?.length > 0) {
+      if (response?.data?.length > 0 && selectedPatient == null) {
         setSelectedPatient(response.data[0]);
       }
     }

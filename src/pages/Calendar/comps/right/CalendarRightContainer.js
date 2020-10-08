@@ -9,10 +9,14 @@ import IconPlus from '../../../../assets/icons/iconPlus';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import CalendarAppointmentDetails from './CalendarAppointmentDetails';
 
-const CalendarRightContainer = ({ onAddAppointment }) => {
+const CalendarRightContainer = ({ onAddAppointment, canAddAppointment }) => {
   return (
     <div className='calendar-root__appointment-info'>
-      <Button className='positive-button' onClick={onAddAppointment}>
+      <Button
+        className='positive-button'
+        disabled={!canAddAppointment}
+        onClick={onAddAppointment}
+      >
         {textForKey('Add appointment')}
         <IconPlus />
       </Button>
@@ -25,9 +29,11 @@ const CalendarRightContainer = ({ onAddAppointment }) => {
 export default CalendarRightContainer;
 
 CalendarRightContainer.propTypes = {
+  canAddAppointment: PropTypes.bool,
   onAddAppointment: PropTypes.func,
 };
 
 CalendarRightContainer.defaultProps = {
+  canAddAppointment: true,
   onAddAppointment: () => null,
 };
