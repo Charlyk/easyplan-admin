@@ -69,6 +69,11 @@ function App() {
     }
   }, [newClinicId]);
 
+  const redirectToHome = () => {
+    setRedirectUser(true);
+    setTimeout(() => setRedirectUser(false), 500);
+  };
+
   const changeCurrentClinic = async clinicId => {
     setAppIsLoading(true);
     const response = await authAPI.changeClinic(clinicId);
@@ -76,8 +81,7 @@ function App() {
       console.error(response.message);
     } else {
       dispatch(setCurrentUser(response.data));
-      setRedirectUser(true);
-      setTimeout(() => setRedirectUser(false), 500);
+      redirectToHome();
     }
     setAppIsLoading(false);
   };
@@ -101,9 +105,9 @@ function App() {
     dispatch(setCreateClinic({ open: false, canClose: false }));
   };
 
-  const handleClinicCreated = () => {
+  const handleClinicCreated = data => {
     handleCloseCreateClinic();
-    fetchUser();
+    dispatch(setCurrentUser(data));
   };
 
   const handleUserLogout = () => {

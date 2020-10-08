@@ -85,14 +85,14 @@ const Main = () => {
         />
       )}
       <div className='data-container'>
-        {user != null && (
+        {user != null && selectedClinic != null && (
           <PageHeader
             title={getPageTitle()}
             user={user}
             onLogout={handleStartLogout}
           />
         )}
-        {user != null && (
+        {user != null && selectedClinic != null && (
           <div className='data'>
             <Switch>
               <Route path='/analytics' component={Statistics} />

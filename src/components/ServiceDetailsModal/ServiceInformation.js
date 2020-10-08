@@ -114,7 +114,7 @@ const ServiceInformation = props => {
                 onChange={handleFormChange}
               />
               <InputGroup.Append>
-                <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+                <InputGroup.Text>MDL</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
           </Form.Group>
@@ -127,7 +127,6 @@ const ServiceInformation = props => {
             <Form.Control
               as='select'
               className='mr-sm-2'
-              id='inlineFormCustomSelect'
               custom
               onChange={handleFormChange}
               value={data.serviceType}
