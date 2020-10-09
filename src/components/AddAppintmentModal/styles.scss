@@ -19,4 +19,41 @@
     transform: translateY(-50%);
     right: .5rem;
   }
+
+  .date-and-time-group {
+    width: 100%;
+
+    .form-control[readonly] {
+      background-color: white;
+    }
+
+    .custom-select {
+      height: 2.1rem;
+      font-size: .8rem;
+    }
+
+    .date-form-group {
+      width: 60%;
+    }
+
+    .date-append {
+      width: 40%;
+    }
+  }
+}
+
+.appointment-date-picker-root {
+  z-index: 2000;
+  .calendar-paper {
+    .rdrMonthAndYearWrapper {
+      padding-top: 0;
+      height: 30px;
+    }
+
+    .rdrMonths {
+      .rdrMonth {
+        padding: 0;
+      }
+    }
+  }
 }

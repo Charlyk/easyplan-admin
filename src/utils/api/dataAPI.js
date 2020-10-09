@@ -1,9 +1,10 @@
 import axios from 'axios';
+import moment from 'moment';
 
 import authManager from '../settings/authManager';
 
 const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8080/api/';
+// const baseURL = 'http://localhost:8000/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -603,6 +604,28 @@ export default {
   fetchUserServices: async () => {
     try {
       const response = await instance().get(`services/v1/user-services`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch available hours for a doctor
+   * @param {string} doctorId
+   * @param {string} serviceId
+   * @param {Date} date
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchAvailableTime: async (doctorId, serviceId, date) => {
+    try {
+      const stringDate = moment(date).format('YYYY-MM-DD');
+      const url = `schedules/available-time?doctorId=${doctorId}&serviceId=${serviceId}&date=${stringDate}`;
+      const response = await instance().get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

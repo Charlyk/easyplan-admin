@@ -109,6 +109,7 @@ const Main = () => {
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
         open={appointmentModal.open}
+        doctor={appointmentModal.doctor}
       />
       {user != null && (
         <MainMenu

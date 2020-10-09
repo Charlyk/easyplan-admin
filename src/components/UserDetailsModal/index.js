@@ -30,18 +30,6 @@ const initialData = {
   services: [],
   workDays: [
     {
-      day: 0,
-      startHour: null,
-      endHour: null,
-      selected: false,
-    },
-    {
-      day: 1,
-      startHour: null,
-      endHour: null,
-      selected: false,
-    },
-    {
       day: 2,
       startHour: null,
       endHour: null,
@@ -67,6 +55,18 @@ const initialData = {
     },
     {
       day: 6,
+      startHour: null,
+      endHour: null,
+      selected: false,
+    },
+    {
+      day: 7,
+      startHour: null,
+      endHour: null,
+      selected: false,
+    },
+    {
+      day: 1,
       startHour: null,
       endHour: null,
       selected: false,

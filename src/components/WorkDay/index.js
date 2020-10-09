@@ -40,7 +40,7 @@ const WorkDay = ({ day, onChange }) => {
   return (
     <div className='work-day'>
       <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
-      <div className={titleClasses}>{days[day.day]}</div>
+      <div className={titleClasses}>{days[day.day - 1]}</div>
       {!day.selected ? (
         <div className='work-day__day-off'>{textForKey('Day off')}</div>
       ) : (
