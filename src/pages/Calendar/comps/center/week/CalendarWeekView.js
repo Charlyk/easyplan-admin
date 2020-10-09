@@ -59,4 +59,21 @@ export default CalendarWeekView;
 
 CalendarWeekView.propTypes = {
   opened: PropTypes.bool,
+  schedules: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      patientId: PropTypes.string,
+      patientName: PropTypes.string,
+      patientPhone: PropTypes.string,
+      doctorId: PropTypes.string,
+      doctorName: PropTypes.string,
+      serviceId: PropTypes.string,
+      serviceName: PropTypes.string,
+      serviceColor: PropTypes.string,
+      serviceDuration: PropTypes.string,
+      dateAndTime: PropTypes.string,
+      status: PropTypes.string,
+      note: PropTypes.string,
+    }),
+  ),
 };

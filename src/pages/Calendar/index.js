@@ -16,10 +16,12 @@ const reducerTypes = {
   filters: 'filters',
   selectedService: 'selectedService',
   selectedDoctor: 'selectedDoctor',
+  setViewDate: 'setViewDate',
   isFetching: 'isFetching',
 };
 
 const reducerActions = {
+  setViewDate: payload => ({ type: reducerTypes.setViewDate, payload }),
   setFilters: payload => ({ type: reducerTypes.filters, payload }),
   setSelectedService: payload => ({
     type: reducerTypes.selectedService,
@@ -42,6 +44,8 @@ const reducer = (state, action) => {
       return { ...state, selectedDoctor: action.payload };
     case reducerTypes.isFetching:
       return { ...state, isFetching: action.payload };
+    case reducerTypes.setViewDate:
+      return { ...state, viewDate: action.payload };
     default:
       throw new Error('unknown type');
   }
@@ -53,13 +57,14 @@ const initialState = {
   selectedDoctor: null,
   appointmentModal: { open: false },
   isFetching: false,
+  viewDate: new Date(),
 };
 
 const Calendar = props => {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
   const [
-    { filters, selectedService, selectedDoctor, isFetching },
+    { filters, selectedService, selectedDoctor, isFetching, viewDate },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -94,7 +99,13 @@ const Calendar = props => {
   };
 
   const handleAppointmentModalOpen = () => {
-    dispatch(setAppointmentModal({ open: true, doctor: selectedDoctor }));
+    dispatch(
+      setAppointmentModal({
+        open: true,
+        doctor: selectedDoctor,
+        date: viewDate,
+      }),
+    );
   };
 
   const handleServiceSelected = service => {
@@ -103,6 +114,10 @@ const Calendar = props => {
 
   const handleDoctorSelected = doctor => {
     localDispatch(reducerActions.setSelectedDoctor(doctor));
+  };
+
+  const handleViewDateChange = newDate => {
+    localDispatch(reducerActions.setViewDate(newDate));
   };
 
   return (
@@ -122,10 +137,12 @@ const Calendar = props => {
         />
       </div>
       <div className='calendar-root__content__center-container'>
-        <AppointmentsCalendar />
+        <AppointmentsCalendar doctor={selectedDoctor} viewDate={viewDate} />
       </div>
       <div className='calendar-root__content__right-container'>
         <CalendarRightContainer
+          onDateChange={handleViewDateChange}
+          selectedDate={viewDate}
           canAddAppointment={selectedDoctor != null}
           onAddAppointment={handleAppointmentModalOpen}
         />

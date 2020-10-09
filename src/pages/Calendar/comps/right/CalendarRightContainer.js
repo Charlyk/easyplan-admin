@@ -9,7 +9,12 @@ import IconPlus from '../../../../assets/icons/iconPlus';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import CalendarAppointmentDetails from './CalendarAppointmentDetails';
 
-const CalendarRightContainer = ({ onAddAppointment, canAddAppointment }) => {
+const CalendarRightContainer = ({
+  onAddAppointment,
+  selectedDate,
+  canAddAppointment,
+  onDateChange,
+}) => {
   return (
     <div className='calendar-root__appointment-info'>
       <Button
@@ -20,7 +25,11 @@ const CalendarRightContainer = ({ onAddAppointment, canAddAppointment }) => {
         {textForKey('Add appointment')}
         <IconPlus />
       </Button>
-      <Calendar locale={locales[getAppLanguage()]} date={new Date()} />
+      <Calendar
+        locale={locales[getAppLanguage()]}
+        onChange={onDateChange}
+        date={selectedDate}
+      />
       <CalendarAppointmentDetails />
     </div>
   );
@@ -30,10 +39,14 @@ export default CalendarRightContainer;
 
 CalendarRightContainer.propTypes = {
   canAddAppointment: PropTypes.bool,
+  selectedDate: PropTypes.instanceOf(Date),
   onAddAppointment: PropTypes.func,
+  onDateChange: PropTypes.func,
 };
 
 CalendarRightContainer.defaultProps = {
+  selectedDate: new Date(),
   canAddAppointment: true,
   onAddAppointment: () => null,
+  onDateChange: () => null,
 };

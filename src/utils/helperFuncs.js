@@ -12,28 +12,24 @@ export function createHoursList() {
 
 /**
  * Calculate and return appointment position
- * @param {{ startHour: string, endHour: string }} appointment
+ * @param {[string]} appointment
  * @param {string} parentId
  * @param {number} minHeight
  * @param {number} minTop
  * @return {{top: number, height: number}}
  */
 export function getAppointmentTop(
-  appointment,
+  [startHour, endHour],
   parentId,
   minHeight = 32,
   minTop = 0,
 ) {
-  if (!appointment) {
+  if (!startHour || !endHour) {
     return {
       top: minTop,
       height: minHeight,
     };
   }
-  const { startHour, endHour } = appointment;
-
-  if (startHour == null || endHour == null)
-    return { top: minTop, height: minHeight };
 
   const fromHourComponents = startHour.split(':');
   const toHourComponents = endHour.split(':');
@@ -59,11 +55,13 @@ export function getAppointmentTop(
 
   // calculate top position
   const distanceFromTop = fromHourRect.top - parentRect.top;
-  const topPosition = distanceFromTop + fromHeightDiff + minTop;
+  const topPosition =
+    distanceFromTop + fromHeightDiff + fromHourRect.height / 2;
 
   // calculate item height
-  const distanceFromStart = toHourRect.top - fromHourRect.top;
-  const height = distanceFromStart + toHeightDiff;
+  const height = Math.abs(
+    toHourRect.top + toHeightDiff - (fromHourRect.top + fromHeightDiff),
+  );
 
   // return new position and height
   return { top: topPosition, height };

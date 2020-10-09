@@ -8,11 +8,13 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
+import { useDispatch } from 'react-redux';
 
 import dataAPI from '../../utils/api/dataAPI';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 
 const initialState = {
   patient: null,
@@ -23,12 +25,14 @@ const initialState = {
   services: [],
   hours: [],
   isFetchingHours: false,
+  isCreatingSchedule: false,
   isPatientValid: false,
   isDoctorValid: false,
   isServiceValid: false,
   showDatePicker: false,
   appointmentDate: new Date(),
   appointmentHour: '',
+  appointmentNote: '',
   loading: { patients: false, services: false, doctors: false },
 };
 
@@ -50,6 +54,8 @@ const reducerTypes = {
   setShowDatePicker: 'setShowDatePicker',
   setAppointmentDate: 'setAppointmentDate',
   setAppointmentHour: 'setAppointmentHour',
+  setAppointmentNote: 'setAppointmentNote',
+  setIsCreatingSchedule: 'setIsCreatingSchedule',
   reset: 'reset',
 };
 
@@ -94,8 +100,16 @@ const reducerActions = {
     type: reducerTypes.setShowDatePicker,
     payload,
   }),
+  setAppointmentNote: payload => ({
+    type: reducerTypes.setAppointmentNote,
+    payload,
+  }),
   setAppointmentHour: payload => ({
     type: reducerTypes.setAppointmentHour,
+    payload,
+  }),
+  setIsCreatingSchedule: payload => ({
+    type: reducerTypes.setIsCreatingSchedule,
     payload,
   }),
   resetState: () => ({ type: reducerTypes.reset }),
@@ -150,12 +164,22 @@ const reducer = (state, action) => {
       return { ...state, isFetchingHours: action.payload };
     case reducerTypes.setAppointmentHour:
       return { ...state, appointmentHour: action.payload };
+    case reducerTypes.setAppointmentNote:
+      return { ...state, appointmentNote: action.payload };
+    case reducerTypes.setIsCreatingSchedule:
+      return { ...state, isCreatingSchedule: action.payload };
     case reducerTypes.reset:
       return initialState;
   }
 };
 
-const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
+const AddAppointmentModal = ({
+  open,
+  doctor: selectedDoctor,
+  date,
+  onClose,
+}) => {
+  const dispatch = useDispatch();
   const datePickerAnchor = useRef(null);
   const [
     {
@@ -169,11 +193,13 @@ const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
       hours,
       appointmentDate,
       appointmentHour,
+      appointmentNote,
       showDatePicker,
       isFetchingHours,
       isPatientValid,
       isDoctorValid,
       isServiceValid,
+      isCreatingSchedule,
     },
     localDispatch,
   ] = useReducer(reducer, { ...initialState });
@@ -194,7 +220,11 @@ const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
       );
       localDispatch(reducerActions.setIsDoctorValid(true));
     }
-  }, [selectedDoctor]);
+
+    if (date != null) {
+      localDispatch(reducerActions.setAppointmentDate(date));
+    }
+  }, [selectedDoctor, date]);
 
   useEffect(() => {
     fetchAvailableHours();
@@ -325,8 +355,8 @@ const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
     localDispatch(reducerActions.setAppointmentHour(event.target.value));
   };
 
-  const disableDate = date => {
-    console.log(date);
+  const handleNoteChange = event => {
+    localDispatch(reducerActions.setAppointmentNote(event.target.value));
   };
 
   const isFormValid = () => {
@@ -337,6 +367,34 @@ const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
       appointmentDate != null &&
       appointmentHour.length > 0
     );
+  };
+
+  const handleCreateSchedule = async () => {
+    if (!isFormValid()) {
+      return;
+    }
+    localDispatch(reducerActions.setIsCreatingSchedule(true));
+    const scheduleDate = `${moment(appointmentDate).format(
+      'YYYY-MM-DD',
+    )} ${appointmentHour}`;
+    const response = await dataAPI.createNewSchedule({
+      patientId: patient.id,
+      doctorId: doctor.id,
+      serviceId: service.id,
+      date: scheduleDate,
+      note: appointmentNote,
+    });
+    if (response.isError) {
+      console.error(response.message);
+      localDispatch(reducerActions.setIsCreatingSchedule(false));
+    } else {
+      onClose();
+      dispatch(toggleAppointmentsUpdate());
+    }
+  };
+
+  const disableDate = date => {
+    console.log(date);
   };
 
   const datePicker = (
@@ -366,7 +424,7 @@ const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
     </Popper>
   );
 
-  const isLoading = isFetchingHours;
+  const isLoading = isFetchingHours || isCreatingSchedule;
 
   return (
     <EasyPlanModal
@@ -375,6 +433,7 @@ const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
       className='add-appointment-root'
       title={textForKey('Add appointment')}
       isPositiveDisabled={!isFormValid() || isLoading}
+      onPositiveClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >
       <Form.Group controlId='patient'>
@@ -461,6 +520,17 @@ const AddAppointmentModal = ({ open, doctor: selectedDoctor, onClose }) => {
           </Form.Group>
         </InputGroup.Append>
       </InputGroup>
+      <Form.Group controlId='description'>
+        <Form.Label>{textForKey('Notes')}</Form.Label>
+        <InputGroup>
+          <Form.Control
+            as='textarea'
+            value={appointmentNote}
+            onChange={handleNoteChange}
+            aria-label='With textarea'
+          />
+        </InputGroup>
+      </Form.Group>
       {datePicker}
     </EasyPlanModal>
   );
@@ -470,6 +540,7 @@ export default AddAppointmentModal;
 
 AddAppointmentModal.propTypes = {
   open: PropTypes.bool,
+  date: PropTypes.instanceOf(Date),
   doctor: PropTypes.object,
   onClose: PropTypes.func.isRequired,
 };

@@ -10,4 +10,5 @@ export default {
   setCreateClinic: 'setCreateClinic',
   triggerUserLogOut: 'triggerUserLogOut',
   setAppointmentModal: 'setAppointmentModal',
+  updateAppointmentsList: 'updateAppointmentsList',
 };

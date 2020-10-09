@@ -601,6 +601,10 @@ export default {
     }
   },
 
+  /**
+   * Fetch current user services
+   * @return {Promise<{isError: boolean, message: string|null, data: [Object]}>}
+   */
   fetchUserServices: async () => {
     try {
       const response = await instance().get(`services/v1/user-services`);
@@ -647,6 +651,74 @@ export default {
       const response = await instance().put(
         `users/accept-invitation/${token}`,
         { password: password?.length > 0 ? password : null },
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Create new schedule
+   * @param {Object} requestBody
+   * @param {string?} requestBody.patientId
+   * @param {string?} requestBody.patientFirstName
+   * @param {string?} requestBody.patientLastName
+   * @param {string?} requestBody.patientPhoneNumber
+   * @param {string} requestBody.doctorId
+   * @param {string} requestBody.serviceId
+   * @param {string} requestBody.date
+   * @param {string?} requestBody.note
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  createNewSchedule: async requestBody => {
+    try {
+      const response = await instance().post(`schedules`, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch all schedules for a doctor
+   * @param {string} doctorId
+   * @param {Date} date
+   * @return {Promise<{isError: boolean, message: string|null}>}
+   */
+  fetchSchedules: async (doctorId, date) => {
+    try {
+      const stringDate = moment(date).format('YYYY-MM-DD');
+      const response = await instance().get(
+        `schedules?doctorId=${doctorId}&date=${stringDate}`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch a list of working hours for current clinic at a specified week day
+   * @param {number} weekDay
+   * @return {Promise<{isError: boolean, message: string|null, data: [string]}>}
+   */
+  fetchClinicWorkHours: async weekDay => {
+    try {
+      const response = await instance().get(
+        `schedules/clinic-workhours?weekDay=${weekDay}`,
       );
       const { data: responseData } = response;
       return responseData;

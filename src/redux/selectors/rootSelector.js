@@ -16,6 +16,8 @@ export const logoutSelector = state => state.logout;
 
 export const appointmentModalSelector = state => state.appointmentModal;
 
+export const updateAppointmentsSelector = state => state.updateAppointments;
+
 /**
  * Get current user from store
  * @param state

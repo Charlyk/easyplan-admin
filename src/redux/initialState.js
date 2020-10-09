@@ -9,4 +9,5 @@ export default {
   user: null,
   createClinic: { open: false, canClose: false },
   appointmentModal: { open: false, doctor: null },
+  updateAppointments: false,
 };

@@ -110,6 +110,7 @@ const Main = () => {
         onClose={handleAppointmentModalClose}
         open={appointmentModal.open}
         doctor={appointmentModal.doctor}
+        date={appointmentModal.date}
       />
       {user != null && (
         <MainMenu

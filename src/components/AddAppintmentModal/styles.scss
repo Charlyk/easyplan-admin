@@ -13,6 +13,12 @@
     background-color: #FAFAFD;
   }
 
+  .input-group {
+    textarea {
+      height: 5rem !important;
+    }
+  }
+
   .rbt-aux {
     position: absolute;
     top: 50%;

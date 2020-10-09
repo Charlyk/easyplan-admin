@@ -1,51 +1,56 @@
 import React, { useEffect, useState } from 'react';
 
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { animated } from 'react-spring';
 
 import IconNext from '../../../../../assets/icons/iconNext';
 import { getAppointmentTop } from '../../../../../utils/helperFuncs';
 
-const minHeight = 32;
-const minTop = 48 + minHeight / 2;
+const minHeight = 10;
+const hourHeight = 32;
+const minTop = hourHeight / 2;
 
-const DayAppointmentItem = ({ appointment }) => {
+const DayAppointmentItem = ({ schedule }) => {
   const [position, setPosition] = useState({ top: minTop, height: minHeight });
+  const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
 
   useEffect(() => {
+    if (!schedule) return;
+    const { dateAndTime } = schedule;
+    const appointmentDate = moment(dateAndTime, 'YYYY-MM-DD HH:mm');
+    const startHour = appointmentDate.format('HH:mm');
+    const endHour = appointmentDate
+      .add('minutes', schedule.serviceDuration)
+      .format('HH:mm');
     const newPosition = getAppointmentTop(
-      appointment,
+      [startHour, endHour],
       'appointments-container',
       minHeight,
       minTop,
     );
     setPosition(newPosition);
-  }, [appointment]);
+    setHours([startHour, endHour]);
+  }, [schedule]);
 
   return (
     <animated.div
       className='day-appointment-item'
       style={{
         ...position,
-        border: `1px solid ${appointment.serviceColor}`,
-        backgroundColor: `${appointment.serviceColor}1A`,
+        border: `1px solid ${schedule.serviceColor}`,
+        backgroundColor: `${schedule.serviceColor}1A`,
       }}
     >
       <div className='title-and-time'>
-        <span
-          className='service-name'
-          style={{ color: appointment.serviceColor }}
-        >
-          {appointment.serviceName}
+        <span className='service-name' style={{ color: schedule.serviceColor }}>
+          {schedule.serviceName}
         </span>
         <span className='item-time-text'>
-          {appointment.startHour} - {appointment.endHour}
+          {startHour} - {endHour}
         </span>
       </div>
-      <IconNext
-        fillColor={appointment.serviceColor}
-        circleColor='transparent'
-      />
+      <IconNext fillColor={schedule.serviceColor} circleColor='transparent' />
     </animated.div>
   );
 };
@@ -53,10 +58,19 @@ const DayAppointmentItem = ({ appointment }) => {
 export default DayAppointmentItem;
 
 DayAppointmentItem.propTypes = {
-  appointment: PropTypes.shape({
+  schedule: PropTypes.shape({
+    id: PropTypes.string,
+    patientId: PropTypes.string,
+    patientName: PropTypes.string,
+    patientPhone: PropTypes.string,
+    doctorId: PropTypes.string,
+    doctorName: PropTypes.string,
+    serviceId: PropTypes.string,
     serviceName: PropTypes.string,
-    startHour: PropTypes.string,
-    endHour: PropTypes.string,
     serviceColor: PropTypes.string,
+    serviceDuration: PropTypes.string,
+    dateAndTime: PropTypes.string,
+    status: PropTypes.string,
+    note: PropTypes.string,
   }),
 };

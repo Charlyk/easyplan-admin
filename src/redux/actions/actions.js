@@ -99,11 +99,19 @@ export function triggerUserLogout(logout) {
  * @param {Object} modalData
  * @param {boolean} modalData.open
  * @param {Object?} modalData.doctor
+ * @param {Date?} modalData.date
  * @return {{payload: *, type: string}}
  */
 export function setAppointmentModal(modalData) {
   return {
     type: types.setAppointmentModal,
     payload: modalData,
+  };
+}
+
+export function toggleAppointmentsUpdate() {
+  return {
+    type: types.updateAppointmentsList,
+    payload: '',
   };
 }

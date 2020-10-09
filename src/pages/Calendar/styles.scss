@@ -63,6 +63,10 @@
       margin-bottom: 0;
     }
 
+    .form-group {
+      width: 100%;
+    }
+
     .form-control {
       background-color: #FAFAFD;
     }
@@ -288,6 +292,13 @@
     flex-direction: column;
     overflow: hidden;
 
+    .loading-spinner {
+      color: #3A83DC;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+    }
+
     .center-header {
       margin-bottom: 1rem;
       display: flex;
@@ -311,14 +322,28 @@
     }
 
     .center-content {
-      flex: 1;
-      height: 100%;
+      max-height: 100%;
+      min-height: 20rem;
       overflow-y: scroll;
       display: flex;
       flex-direction: column;
       background: #FFFFFF;
       box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
       border-radius: 4px;
+      position: relative;
+
+      .day-off-label {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        color: #34344E;
+        margin-right: .5rem;
+      }
     }
 
     .title-and-time {

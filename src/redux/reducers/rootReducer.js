@@ -53,8 +53,14 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         appointmentModal: {
           ...action.payload,
+          date: action.payload.open ? action.payload.date : null,
           doctor: action.payload.open ? action.payload.doctor : null,
         },
+      };
+    case types.updateAppointmentsList:
+      return {
+        ...state,
+        updateAppointments: !state.updateAppointments,
       };
     default:
       return state;
