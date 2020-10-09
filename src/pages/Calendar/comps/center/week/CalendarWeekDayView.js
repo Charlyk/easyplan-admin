@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-import { createHoursList } from '../../../../../utils/helperFuncs';
+import dataAPI from '../../../../../utils/api/dataAPI';
 import CalendarWeekHourView from './CalendarWeekHourView';
 import WeekAppointmentItem from './WeekAppointmentItem';
 
-const CalendarWeekDayView = ({ day }) => {
+const CalendarWeekDayView = ({ day, hours, doctorId }) => {
   const currentHour = moment().format('HH:00');
-  const hours = createHoursList();
+  const [schedules, setSchedules] = useState([]);
+
+  useEffect(() => {
+    if (hours.length > 0 && doctorId != null) {
+      fetchSchedules();
+    }
+  }, [doctorId, hours]);
+
+  const fetchSchedules = async () => {
+    const response = await dataAPI.fetchSchedules(doctorId, day.toDate());
+    if (response.isError) {
+      console.log(response.message);
+    } else {
+      setSchedules(response.data);
+    }
+  };
 
   return (
     <div className='week-day'>
       <div id='days-container' className='day-title'>
-        {day}
+        {day.format('DD dddd')}
       </div>
       {hours.map(hour => (
         <CalendarWeekHourView
@@ -23,14 +38,9 @@ const CalendarWeekDayView = ({ day }) => {
           currentHour={hour === currentHour}
         />
       ))}
-      <WeekAppointmentItem
-        appointment={{
-          startHour: '11:00',
-          endHour: '12:30',
-          serviceColor: '#F44081',
-          serviceName: 'Extractie',
-        }}
-      />
+      {schedules.map(schedule => (
+        <WeekAppointmentItem key={schedule.id} schedule={schedule} />
+      ))}
     </div>
   );
 };
@@ -38,5 +48,7 @@ const CalendarWeekDayView = ({ day }) => {
 export default CalendarWeekDayView;
 
 CalendarWeekDayView.propTypes = {
+  doctorId: PropTypes.string,
   day: PropTypes.string,
+  hours: PropTypes.arrayOf(PropTypes.string),
 };

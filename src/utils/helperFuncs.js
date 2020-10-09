@@ -55,8 +55,7 @@ export function getAppointmentTop(
 
   // calculate top position
   const distanceFromTop = fromHourRect.top - parentRect.top;
-  const topPosition =
-    distanceFromTop + fromHeightDiff + fromHourRect.height / 2;
+  const topPosition = distanceFromTop + fromHeightDiff + minTop;
 
   // calculate item height
   const height = Math.abs(
@@ -88,3 +87,83 @@ export function urlToLambda(imageUrl, width = 50) {
   const url = new URL(imageUrl);
   return `${imageLambdaUrl}${url.pathname}?width=${width}`;
 }
+
+export const getCurrentWeek = date => {
+  const currentDate = moment(date);
+  const weekStart = currentDate.clone().startOf('isoWeek');
+  const days = [];
+  for (let i = 0; i <= 6; i++) {
+    days.push(moment(weekStart).add(i, 'days'));
+  }
+  return days;
+};
+
+export const firstDayOfMonth = viewDate => {
+  return moment(viewDate)
+    .startOf('month')
+    .weekday();
+};
+
+export const lastDayOfMonth = viewDate => {
+  return moment(viewDate)
+    .endOf('month')
+    .weekday();
+};
+
+export const getDays = viewDate => {
+  const days = [];
+  const currentMonth = moment(viewDate);
+  const daysInCurrentMonth = currentMonth.daysInMonth();
+  const currentMonthIndex = currentMonth.month();
+  const previousMonthIndex = moment({ month: currentMonthIndex - 1 }).month();
+  const nextMonthIndex = currentMonth.add('months', 1).month();
+
+  const daysInPreviousMonth = moment({
+    month: previousMonthIndex,
+  }).daysInMonth();
+  const firstDay = firstDayOfMonth(viewDate);
+  const lastDay = lastDayOfMonth(viewDate);
+
+  // add last days of previous month
+  for (let i = 0; i < firstDay; i++) {
+    const date = moment({
+      month: previousMonthIndex,
+      day: daysInPreviousMonth - i,
+    });
+    days.unshift({
+      date: date.format('DD'),
+      fullDate: date.format('YYYY-DD-MM'),
+      month: previousMonthIndex,
+      isCurrent: false,
+    });
+  }
+
+  // add current month days
+  for (let i = 0; i < daysInCurrentMonth; i++) {
+    const date = moment({
+      month: currentMonthIndex,
+      day: i + 1,
+    });
+    days.push({
+      date: date.format('DD'),
+      fullDate: date.format('YYYY-DD-MM'),
+      month: currentMonthIndex,
+      isCurrent: true,
+    });
+  }
+
+  // add next month days
+  for (let i = 0; i < 6 - lastDay; i++) {
+    const date = moment({
+      month: nextMonthIndex,
+      day: i + 1,
+    });
+    days.push({
+      date: date.format('DD'),
+      fullDate: date.format('YYYY-DD-MM'),
+      month: nextMonthIndex,
+      isCurrent: false,
+    });
+  }
+  return days;
+};

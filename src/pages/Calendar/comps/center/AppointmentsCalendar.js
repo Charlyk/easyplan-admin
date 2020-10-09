@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Spinner } from 'react-bootstrap';
@@ -8,6 +9,7 @@ import { useSelector } from 'react-redux';
 import EasyTab from '../../../../components/EasyTab';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
+import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import CalendarDayView from './day/CalendarDayView';
 import CalendarMonthView from './month/CalendarMonthView';
@@ -20,7 +22,7 @@ const CalendarView = {
   year: 'ear',
 };
 
-const AppointmentsCalendar = ({ doctor, viewDate }) => {
+const AppointmentsCalendar = ({ doctor, viewDate, onViewDateChange }) => {
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
@@ -31,12 +33,12 @@ const AppointmentsCalendar = ({ doctor, viewDate }) => {
     setHours([]);
     setSchedules([]);
     fethWorkHours();
-  }, [viewDate]);
+  }, [viewDate, currentTab]);
 
   useEffect(() => {
     if (hours.length === 0) {
       fethWorkHours();
-    } else if (doctor != null) {
+    } else if (doctor != null && currentTab === CalendarView.day) {
       fetchSchedules();
     }
   }, [doctor, updateAppointments]);
@@ -45,12 +47,13 @@ const AppointmentsCalendar = ({ doctor, viewDate }) => {
     setIsLoading(true);
     const response = await dataAPI.fetchClinicWorkHours(
       moment(viewDate).isoWeekday(),
+      currentTab === CalendarView.week ? 'week' : 'day',
     );
     if (response.isError) {
       console.error(response.message);
     } else {
       setHours(response.data);
-      if (doctor != null) {
+      if (doctor != null && currentTab === CalendarView.day) {
         await fetchSchedules();
       }
     }
@@ -75,12 +78,30 @@ const AppointmentsCalendar = ({ doctor, viewDate }) => {
     setCurrentTab(newTab);
   };
 
+  const getTitleText = () => {
+    switch (currentTab) {
+      case CalendarView.day:
+        return moment(viewDate).format('DD MMMM YYYY');
+      case CalendarView.week: {
+        const week = getCurrentWeek(viewDate);
+        return `${week[0].format('DD MMM')} - ${week[week.length - 1].format(
+          'DD MMM',
+        )}`;
+      }
+      case CalendarView.month:
+        return moment(viewDate).format('MMMM');
+    }
+  };
+
+  const handleMonthDateClick = date => {
+    onViewDateChange(date);
+    setCurrentTab(CalendarView.day);
+  };
+
   return (
     <div className='calendar-root__center'>
       <div className='center-header'>
-        <span className='center-header__date'>
-          {moment(viewDate).format('DD MMMM YYYY')}
-        </span>
+        <span className='center-header__date'>{getTitleText()}</span>
         <div className='center-header__tabs'>
           <EasyTab
             title={textForKey('Day')}
@@ -99,24 +120,38 @@ const AppointmentsCalendar = ({ doctor, viewDate }) => {
           />
         </div>
       </div>
-      <div className='center-content'>
+      <div
+        id='calendar-content'
+        className={clsx(
+          'center-content',
+          currentTab === CalendarView.month && 'full-height',
+        )}
+      >
         {isLoading && (
           <Spinner animation='border' className='loading-spinner' />
         )}
-        {hours.length === 0 && !isLoading && (
-          <span className='day-off-label'>{textForKey("It's a day off")}</span>
-        )}
+        {hours.length === 0 &&
+          !isLoading &&
+          currentTab === CalendarView.day && (
+            <span className='day-off-label'>
+              {textForKey("It's a day off")}
+            </span>
+          )}
         <CalendarDayView
           hours={hours}
           schedules={schedules}
           opened={currentTab === CalendarView.day}
         />
         <CalendarWeekView
-          schedules={schedules}
+          viewDate={viewDate}
+          hours={hours}
+          doctorId={doctor?.id}
           opened={currentTab === CalendarView.week}
         />
         <CalendarMonthView
-          schedules={schedules}
+          onDateClick={handleMonthDateClick}
+          viewDate={viewDate}
+          doctorId={doctor?.id}
           opened={currentTab === CalendarView.month}
         />
       </div>
@@ -129,8 +164,10 @@ export default AppointmentsCalendar;
 AppointmentsCalendar.propTypes = {
   doctor: PropTypes.object,
   viewDate: PropTypes.instanceOf(Date),
+  onViewDateChange: PropTypes.func,
 };
 
 AppointmentsCalendar.defaultProps = {
   viewDate: new Date(),
+  onViewDateChange: () => null,
 };

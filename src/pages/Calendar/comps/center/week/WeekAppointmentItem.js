@@ -1,44 +1,50 @@
 import React, { useEffect, useState } from 'react';
 
+import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import { getAppointmentTop } from '../../../../../utils/helperFuncs';
 
-const minHeight = 32;
+const minHeight = 5;
 const minTop = 3;
 
-const WeekAppointmentItem = ({ appointment }) => {
+const WeekAppointmentItem = ({ schedule }) => {
   const [position, setPosition] = useState({ top: minTop, height: minHeight });
+  const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
 
   useEffect(() => {
+    const { dateAndTime } = schedule;
+    const appointmentDate = moment(dateAndTime, 'YYYY-MM-DD HH:mm');
+    const startHour = appointmentDate.format('HH:mm');
+    const endHour = appointmentDate
+      .add('minutes', schedule.serviceDuration)
+      .format('HH:mm');
     const newPosition = getAppointmentTop(
-      appointment,
+      [startHour, endHour],
       'days-container',
       minHeight,
       minTop,
     );
     setPosition(newPosition);
-  }, [appointment]);
+    setHours([startHour, endHour]);
+  }, [schedule]);
 
   return (
     <div
       className='appointment-item'
       style={{
         ...position,
-        border: `1px solid ${appointment.serviceColor}`,
-        backgroundColor: `${appointment.serviceColor}1A`,
+        border: `1px solid ${schedule.serviceColor}`,
+        backgroundColor: `${schedule.serviceColor}1A`,
       }}
     >
       <div className='title-and-time'>
-        <span
-          className='service-name'
-          style={{ color: appointment.serviceColor }}
-        >
-          {appointment.serviceName}
+        <span className='service-name' style={{ color: schedule.serviceColor }}>
+          {schedule.serviceName}
         </span>
         {position.height >= minHeight && (
           <span className='item-time-text'>
-            {appointment.startHour} - {appointment.endHour}
+            {startHour} - {endHour}
           </span>
         )}
       </div>
@@ -49,10 +55,19 @@ const WeekAppointmentItem = ({ appointment }) => {
 export default WeekAppointmentItem;
 
 WeekAppointmentItem.propTypes = {
-  appointment: PropTypes.shape({
-    startHour: PropTypes.string,
-    endHour: PropTypes.string,
-    serviceColor: PropTypes.string,
+  schedule: PropTypes.shape({
+    id: PropTypes.string,
+    patientId: PropTypes.string,
+    patientName: PropTypes.string,
+    patientPhone: PropTypes.string,
+    doctorId: PropTypes.string,
+    doctorName: PropTypes.string,
+    serviceId: PropTypes.string,
     serviceName: PropTypes.string,
+    serviceColor: PropTypes.string,
+    serviceDuration: PropTypes.string,
+    dateAndTime: PropTypes.string,
+    status: PropTypes.string,
+    note: PropTypes.string,
   }),
 };

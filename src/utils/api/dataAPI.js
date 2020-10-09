@@ -713,12 +713,29 @@ export default {
   /**
    * Fetch a list of working hours for current clinic at a specified week day
    * @param {number} weekDay
+   * @param {'week'|'day'} period
    * @return {Promise<{isError: boolean, message: string|null, data: [string]}>}
    */
-  fetchClinicWorkHours: async weekDay => {
+  fetchClinicWorkHours: async (weekDay, period) => {
     try {
       const response = await instance().get(
-        `schedules/clinic-workhours?weekDay=${weekDay}`,
+        `schedules/clinic-workhours?weekDay=${weekDay}&period=${period}`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  fetchMonthSchedules: async (doctorId, date) => {
+    try {
+      const stringDate = moment(date).format('YYYY-MM-DD');
+      const response = await instance().get(
+        `schedules/month-schedules?doctorId=${doctorId}&date=${stringDate}`,
       );
       const { data: responseData } = response;
       return responseData;

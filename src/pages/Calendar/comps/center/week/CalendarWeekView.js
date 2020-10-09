@@ -5,31 +5,23 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { animated } from 'react-spring';
 
-import { createHoursList } from '../../../../../utils/helperFuncs';
+import { getCurrentWeek } from '../../../../../utils/helperFuncs';
 import CalendarWeekDayView from './CalendarWeekDayView';
 
-const CalendarWeekView = ({ opened }) => {
+const CalendarWeekView = ({ opened, hours, doctorId, viewDate }) => {
   const [isClosed, setIsClosed] = useState(!opened);
+  const [week, setWeek] = useState(getCurrentWeek(viewDate));
   const currentHour = moment().format('HH:00');
-  const hours = createHoursList();
 
   useEffect(() => {
     setIsClosed(!opened);
   }, [opened]);
 
-  if (isClosed) return null;
+  useEffect(() => {
+    setWeek(getCurrentWeek(viewDate));
+  }, [viewDate]);
 
-  const getWeekDays = () => {
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      days.push(
-        moment()
-          .weekday(i)
-          .format('DD ddd'),
-      );
-    }
-    return days;
-  };
+  if (isClosed) return null;
 
   return (
     <animated.div className='week-view'>
@@ -47,8 +39,13 @@ const CalendarWeekView = ({ opened }) => {
         ))}
       </div>
       <div className='days-container'>
-        {getWeekDays().map(day => (
-          <CalendarWeekDayView key={day} day={day} />
+        {week.map(day => (
+          <CalendarWeekDayView
+            doctorId={doctorId}
+            key={day}
+            day={day}
+            hours={hours}
+          />
         ))}
       </div>
     </animated.div>
@@ -59,21 +56,7 @@ export default CalendarWeekView;
 
 CalendarWeekView.propTypes = {
   opened: PropTypes.bool,
-  schedules: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      patientId: PropTypes.string,
-      patientName: PropTypes.string,
-      patientPhone: PropTypes.string,
-      doctorId: PropTypes.string,
-      doctorName: PropTypes.string,
-      serviceId: PropTypes.string,
-      serviceName: PropTypes.string,
-      serviceColor: PropTypes.string,
-      serviceDuration: PropTypes.string,
-      dateAndTime: PropTypes.string,
-      status: PropTypes.string,
-      note: PropTypes.string,
-    }),
-  ),
+  hours: PropTypes.arrayOf(PropTypes.string),
+  doctorId: PropTypes.string,
+  viewDate: PropTypes.instanceOf(Date),
 };

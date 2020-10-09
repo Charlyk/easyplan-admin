@@ -4,67 +4,36 @@ import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-const CalendarMonthView = ({ opened }) => {
+import dataAPI from '../../../../../utils/api/dataAPI';
+import { getDays } from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
+
+const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   const [isClosed, setIsClosed] = useState(!opened);
+  const [schedules, setSchedules] = useState([]);
+  const [monthDays, setMonthDays] = useState([]);
   const currentDate = moment().format('DD');
 
-  const firstDayOfMonth = () => {
-    return moment()
-      .startOf('month')
-      .format('d');
-  };
-
-  const lastDayOfMonth = () => {
-    return moment()
-      .endOf('month')
-      .format('d');
-  };
-
-  const getDays = () => {
-    const days = [];
-    const daysInCurrentMonth = moment().daysInMonth();
-    const currentMonthIndex = moment().month();
-
-    const previousMonth = moment().add(-1, 'months');
-    const daysInPreviousMonth = previousMonth.daysInMonth();
-
-    for (let i = 0; i < firstDayOfMonth() - 1; i++) {
-      const date = moment({
-        month: currentMonthIndex - 1,
-        day: daysInPreviousMonth - i,
-      }).format('DD');
-      days.unshift({ date, month: currentMonthIndex - 1, isCurrent: false });
+  useEffect(() => {
+    if (viewDate != null && doctorId != null && opened) {
+      setMonthDays(getDays(viewDate));
+      fetchSchedules();
     }
+  }, [viewDate, doctorId, opened]);
 
-    for (let i = 1; i < daysInCurrentMonth + 1; i++) {
-      days.push({
-        date: moment({ day: i }).format('DD'),
-        month: currentMonthIndex,
-        isCurrent: true,
-      });
+  const fetchSchedules = async () => {
+    const response = await dataAPI.fetchMonthSchedules(doctorId, viewDate);
+    if (response.isError) {
+      console.error(response.isError);
+    } else {
+      const newSchedules = [];
+      for (let prop in response.data) {
+        const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');
+        newSchedules.push({ date, schedules: response.data[prop] });
+      }
+      console.log(newSchedules);
+      setSchedules(newSchedules);
     }
-
-    const lastDays = [];
-    for (let i = lastDayOfMonth() + 1; i > 0; i--) {
-      lastDays.unshift({
-        date: moment({ month: currentMonthIndex + 1, day: i }).format('DD'),
-        month: currentMonthIndex + 1,
-        isCurrent: false,
-      });
-    }
-    return [...days, ...lastDays];
-  };
-
-  const getWeekDays = () => {
-    const days = [];
-    for (let i = 0; i < 7; i++) {
-      days.push(
-        moment()
-          .weekday(i)
-          .format('ddd'),
-      );
-    }
-    return days;
   };
 
   useEffect(() => {
@@ -73,13 +42,46 @@ const CalendarMonthView = ({ opened }) => {
 
   if (isClosed) return null;
 
-  const renderDayItem = day => {
+  const rowsCount = monthDays.length / 7;
+  const calendarRect = document
+    .getElementById('calendar-content')
+    ?.getBoundingClientRect();
+
+  const handleDayClick = day => {
+    const date = moment(day.fullDate, 'YYYY-DD-MM').toDate();
+    onDateClick(date);
+  };
+
+  const getSchedules = day => {
+    return schedules.find(item => item.date === day.date)?.schedules || [];
+  };
+
+  const renderSchedule = schedule => {
     return (
       <div
+        className='appointment-item'
+        style={{
+          border: `1px solid ${schedule.serviceColor}`,
+          backgroundColor: `${schedule.serviceColor}1A`,
+        }}
+      >
+        <span className='service-name' style={{ color: schedule.serviceColor }}>
+          {schedule.serviceName}
+        </span>
+      </div>
+    );
+  };
+
+  const renderDayItem = day => {
+    const daySchedules = getSchedules(day);
+    return (
+      <div
+        onClick={() => handleDayClick(day)}
         className={clsx(
           'item-data-container',
           currentDate === day.date && day.isCurrent && 'current-date',
         )}
+        style={{ height: calendarRect?.height / rowsCount }}
         key={`${day.date}-${day.isCurrent}-${day.month}`}
       >
         <span
@@ -92,55 +94,32 @@ const CalendarMonthView = ({ opened }) => {
         </span>
         {day.isCurrent && (
           <div className='appointments-container'>
-            <div className='appointment-item'>
-              <span className='service-name'>Service name</span>
-            </div>
-            <div className='appointment-item'>
-              <span className='service-name'>Service name</span>
-            </div>
-            <div className='appointment-item'>
-              <span className='service-name'>Service name</span>
-            </div>
-            <div className='view-more-container'>
-              <span className='view-more-button'>View more (7)</span>
-            </div>
+            {daySchedules.slice(0, 3).map(renderSchedule)}
+            {daySchedules.length > 3 && (
+              <div className='view-more-container'>
+                <span className='view-more-button'>
+                  {textForKey('View more')} ({daySchedules.length - 3})
+                </span>
+              </div>
+            )}
           </div>
         )}
       </div>
     );
   };
 
-  return (
-    <div className='month-view'>
-      {getWeekDays().map(day => (
-        <div key={day} className='item-data-container'>
-          <span className='item-text'>{day}</span>
-        </div>
-      ))}
-      {getDays().map(day => renderDayItem(day))}
-    </div>
-  );
+  return <div className='month-view'>{monthDays.map(renderDayItem)}</div>;
 };
 
 export default CalendarMonthView;
 
 CalendarMonthView.propTypes = {
   opened: PropTypes.bool.isRequired,
-  schedules: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      patientId: PropTypes.string,
-      patientName: PropTypes.string,
-      patientPhone: PropTypes.string,
-      doctorId: PropTypes.string,
-      doctorName: PropTypes.string,
-      serviceId: PropTypes.string,
-      serviceName: PropTypes.string,
-      serviceColor: PropTypes.string,
-      serviceDuration: PropTypes.string,
-      dateAndTime: PropTypes.string,
-      status: PropTypes.string,
-      note: PropTypes.string,
-    }),
-  ),
+  viewDate: PropTypes.instanceOf(Date),
+  doctorId: PropTypes.string,
+  onDateClick: PropTypes.func,
+};
+
+CalendarMonthView.defaultProps = {
+  onDateClick: () => null,
 };

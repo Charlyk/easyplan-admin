@@ -137,7 +137,11 @@ const Calendar = props => {
         />
       </div>
       <div className='calendar-root__content__center-container'>
-        <AppointmentsCalendar doctor={selectedDoctor} viewDate={viewDate} />
+        <AppointmentsCalendar
+          onViewDateChange={handleViewDateChange}
+          doctor={selectedDoctor}
+          viewDate={viewDate}
+        />
       </div>
       <div className='calendar-root__content__right-container'>
         <CalendarRightContainer
