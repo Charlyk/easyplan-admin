@@ -1,0 +1,76 @@
+.treatment-plan-modal-root {
+  .modal-dialog {
+    max-width: 600px;
+  }
+}
+
+.treatment-plan-modal-content {
+  display: flex;
+  flex-direction: column;
+
+  .options-row {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .group-title {
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #34354C;
+  }
+
+  .group-subtitle {
+    width: 70px;
+    margin-top: 1rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: #34354C;
+  }
+
+  .options-container {
+    flex: 1;
+    margin: .5rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .option-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #34354C;
+  }
+
+  .option-button {
+    cursor: pointer;
+    margin: .2rem;
+    padding: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border: 1px solid #CDCEEA;
+    border-radius: 4px;
+
+    &:hover {
+      opacity: .8;
+    }
+
+    &.selected {
+      border: 1px solid #3A83DC;
+      background: #3A83DC1A;
+    }
+  }
+}

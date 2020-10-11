@@ -4,13 +4,15 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sum from 'lodash/sum';
 import moment from 'moment';
-import { Form, Modal, Spinner } from 'react-bootstrap';
+import { Button, Form, Modal, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import './styles.scss';
 import IconAvatar from '../../assets/icons/iconAvatar';
+import FinalizeTreatmentModal from '../../components/FinalizeTreatmentModal';
 import LoadingButton from '../../components/LoadingButton';
+import TreatmentPlanModal from '../../components/TreatmentPlanModal';
 import PatientDetails from '../../pages/Patients/comps/details/PatientDetails';
 import {
   setPatientNoteModal,
@@ -31,6 +33,7 @@ const TabId = {
 const DoctorPatientDetails = () => {
   const dispatch = useDispatch();
   const { patientId, scheduleId } = useParams();
+  const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const [patient, setPatient] = useState(null);
   const [services, setServices] = useState([]);
@@ -38,6 +41,12 @@ const DoctorPatientDetails = () => {
   const [toothServices, setToothServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
   const [schedule, setSchedule] = useState(null);
+  const [shouldFillTreatmentPlan, setShouldFillTreatmentPlan] = useState(false);
+  const [treatmentPlan, setTreatmentPlan] = useState(null);
+  const [showFinalizeTreatment, setShowFinalizeTreatment] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
+  const bracketServices = services.filter(item => item.bracket);
+  const simpleServices = services.filter(item => !item.bracket);
 
   useEffect(() => {
     fetchPatientDetails();
@@ -163,22 +172,109 @@ const DoctorPatientDetails = () => {
     return allServices;
   };
 
+  const handleBracketSelectChange = () => {
+    const newServices = cloneDeep(selectedServices);
+    if (newServices.some(item => item.bracket)) {
+      remove(newServices, item => item.bracket);
+      setSelectedServices(newServices);
+    } else {
+      setShouldFillTreatmentPlan(true);
+    }
+  };
+
   const getTotalPrice = () => {
     const prices = getCombinedServices().map(item => item.price);
     return sum(prices);
   };
 
+  const handleCloseTreatmentPlan = () => {
+    setShouldFillTreatmentPlan(false);
+  };
+
+  const openTreatmentPlan = () => {
+    setShouldFillTreatmentPlan(true);
+  };
+
+  const handleSaveTreatmentPlan = plan => {
+    setTreatmentPlan(plan);
+    const newServices = cloneDeep(selectedServices);
+    remove(newServices, item => item.bracket);
+    newServices.push(plan.service);
+    setSelectedServices(newServices);
+    handleCloseTreatmentPlan();
+  };
+
+  const handleFinalizeTreatment = () => {
+    setShowFinalizeTreatment(true);
+  };
+
+  const handleCloseFinalizeTreatment = () => {
+    setShowFinalizeTreatment(false);
+  };
+
+  const finalizeTreatment = async () => {
+    handleCloseFinalizeTreatment();
+    setIsFinalizing(true);
+    const allServices = selectedServices.map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+    }));
+
+    for (let tooth of teethServices) {
+      for (let toothService of tooth.services) {
+        allServices.push({
+          id: toothService.id,
+          name: toothService.name,
+          price: toothService.price,
+          toothId: tooth.toothId,
+        });
+      }
+    }
+
+    const requestBody = {
+      scheduleId,
+      services: allServices,
+      treatmentPlan,
+    };
+
+    const response = await dataAPI.finalizeTreatment(patientId, requestBody);
+
+    if (response.isError) {
+      console.error(response.message);
+      setIsFinalizing(false);
+    } else {
+      history.goBack();
+    }
+  };
+
   return (
     <div className='doctor-patient-root'>
+      <FinalizeTreatmentModal
+        onSave={finalizeTreatment}
+        totalPrice={getTotalPrice()}
+        services={getCombinedServices()}
+        open={showFinalizeTreatment}
+        onClose={handleCloseFinalizeTreatment}
+      />
+      <TreatmentPlanModal
+        treatmentPlan={treatmentPlan}
+        onSave={handleSaveTreatmentPlan}
+        open={shouldFillTreatmentPlan}
+        onClose={handleCloseTreatmentPlan}
+        services={services.filter(item => item.bracket)}
+      />
       <Modal
         centered
         className='loading-modal'
-        show={isLoading}
+        show={isLoading || isFinalizing}
         onHide={() => null}
       >
         <Modal.Body>
           <Spinner animation='border' />
-          {textForKey('Loading patient...')}
+          {isLoading
+            ? textForKey('Loading patient...')
+            : textForKey('Finalizing treatment...')}
         </Modal.Body>
       </Modal>
       <div className='left-container'>
@@ -202,6 +298,14 @@ const DoctorPatientDetails = () => {
             </div>
           </div>
         </div>
+        {treatmentPlan != null && (
+          <Button
+            className='positive-button treatment-plan-btn'
+            onClick={openTreatmentPlan}
+          >
+            {textForKey('Treatment plan')}
+          </Button>
+        )}
         <div className='tooth-container'>
           <div className='top-left'>
             {teeth
@@ -261,7 +365,17 @@ const DoctorPatientDetails = () => {
         <div className='services-container'>
           <div className='available-services'>
             <span className='total-title'>{textForKey('Services')}</span>
-            {services.map(service => (
+            {bracketServices.length > 0 && (
+              <Form.Group controlId='bracketsServices'>
+                <Form.Check
+                  onChange={handleBracketSelectChange}
+                  type='checkbox'
+                  checked={selectedServices.some(item => item.bracket)}
+                  label={textForKey('Brackets')}
+                />
+              </Form.Group>
+            )}
+            {simpleServices.map(service => (
               <Form.Group key={service.id} controlId={service.id}>
                 <Form.Check
                   onChange={handleServiceChecked}
@@ -296,6 +410,8 @@ const DoctorPatientDetails = () => {
             )}
 
             <LoadingButton
+              isLoading={isFinalizing}
+              onClick={handleFinalizeTreatment}
               disabled={getCombinedServices().length === 0}
               className='positive-button'
             >

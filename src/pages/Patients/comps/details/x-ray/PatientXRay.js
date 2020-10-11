@@ -66,7 +66,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
       <div className='images-container'>
         {!state.isFetching && (
           <XRayPhase
-            title='Initial phase'
+            title={textForKey('Initial phase')}
             isExpanded={expandedPhase === ExpandedPhase.initial}
             images={state.images.initial}
             phaseId={ExpandedPhase.initial}
@@ -75,7 +75,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
         )}
         {!state.isFetching && (
           <XRayPhase
-            title='Middle phase'
+            title={textForKey('Middle phase')}
             isExpanded={expandedPhase === ExpandedPhase.middle}
             images={state.images.middle}
             phaseId={ExpandedPhase.middle}
@@ -84,7 +84,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
         )}
         {!state.isFetching && (
           <XRayPhase
-            title='Final phase'
+            title={textForKey('Final phase')}
             isExpanded={expandedPhase === ExpandedPhase.final}
             images={state.images.final}
             phaseId={ExpandedPhase.final}

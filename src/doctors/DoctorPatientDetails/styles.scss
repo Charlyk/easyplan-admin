@@ -95,6 +95,13 @@
     padding: 1rem;
   }
 
+  .positive-button {
+    &.treatment-plan-btn {
+      flex: unset;
+      width: 16rem;
+    }
+  }
+
   .patient-info {
     width: 16rem;
     background: #FFFFFF;

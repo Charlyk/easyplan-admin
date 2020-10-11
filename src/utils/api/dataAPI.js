@@ -3,8 +3,8 @@ import moment from 'moment';
 
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8000/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8000/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -777,6 +777,37 @@ export default {
   fetchScheduleDetails: async scheduleId => {
     try {
       const response = await instance().get(`schedules/details/${scheduleId}`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Finalize patient treatment
+   * @param {string} patientId
+   * @param {Object} requestBody
+   * @param {string} requestBody.scheduleId
+   * @param {Array.<{id: string, name: string, price: number, toothId: string?}>} requestBody.services
+   * @param {Object} requestBody.treatmentPlan
+   * @param {string} requestBody.treatmentPlan.planClass
+   * @param {string} requestBody.treatmentPlan.occlusion
+   * @param {string} requestBody.treatmentPlan.included
+   * @param {string} requestBody.treatmentPlan.radiograph
+   * @param {Array.<string>} requestBody.treatmentPlan.fallenBrackets
+   * @param {{id: string, toothId: string?, name: string, price: number}} requestBody.treatmentPlan.service
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  finalizeTreatment: async (patientId, requestBody) => {
+    try {
+      const response = await instance().put(
+        `patients/${patientId}/finalize-treatment`,
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

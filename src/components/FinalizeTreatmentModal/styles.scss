@@ -1,0 +1,61 @@
+.finalize-treatment-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .modal-subtitle {
+    width: 100%;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #A1A2C6;
+  }
+
+  .totals-text-wrapper {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #34354C;
+  }
+
+  .final-service-item {
+    margin-top: .5rem;
+    width: 100%;
+    padding: .5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #FFFFFF;
+    border: 1px solid #74A8E5;
+    box-sizing: border-box;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: 4px;
+
+    .service-name {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: #34354C;
+    }
+
+    .service-price {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: #A1A2C6;
+    }
+  }
+}
