@@ -5,7 +5,13 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
-const ToothView = ({ icon, toothId, direction, services }) => {
+const ToothView = ({
+  icon,
+  toothId,
+  direction,
+  services,
+  onServicesChange,
+}) => {
   const anchorEl = useRef(null);
   const infoAnchor = useRef(null);
   const [showInfo, setShowInfo] = useState(false);
@@ -18,9 +24,9 @@ const ToothView = ({ icon, toothId, direction, services }) => {
     setToothServices(services.map(item => ({ ...item, selected: false })));
   }, [services]);
 
-  const handleServiceSelected = (serviceId, selected) => {
+  const handleServiceSelected = (service, selected) => {
     const newServices = toothServices.map(item => {
-      if (item.id !== serviceId) {
+      if (item.id !== service.id) {
         return item;
       }
 
@@ -29,7 +35,12 @@ const ToothView = ({ icon, toothId, direction, services }) => {
         selected: selected,
       };
     });
+
     setToothServices(newServices);
+    onServicesChange({
+      toothId,
+      services: newServices.filter(item => item.selected),
+    });
   };
 
   const handleOpenServicesPopper = () => {
@@ -68,7 +79,7 @@ const ToothView = ({ icon, toothId, direction, services }) => {
                   >
                     <Form.Check
                       onChange={() =>
-                        handleServiceSelected(service.id, !service.selected)
+                        handleServiceSelected(service, !service.selected)
                       }
                       type='checkbox'
                       checked={service.selected}
@@ -163,11 +174,12 @@ const ToothView = ({ icon, toothId, direction, services }) => {
 export default ToothView;
 
 ToothView.propTypes = {
+  onServicesChange: PropTypes.func,
   services: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
-      price: PropTypes.string,
+      price: PropTypes.number,
       color: PropTypes.string,
     }),
   ),
@@ -179,4 +191,5 @@ ToothView.propTypes = {
 ToothView.defaultProps = {
   direction: 'bottom',
   services: [],
+  onServicesChange: () => null,
 };

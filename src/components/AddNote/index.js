@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
+import { FormControl } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 
+import { triggerUpdateNotes } from '../../redux/actions/actions';
+import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
-import { FormControl } from 'react-bootstrap';
-
-const AddNote = ({ open, onClose, onSave, isSaving }) => {
+const AddNote = ({ open, patientId, mode, scheduleId, onClose }) => {
+  const dispatch = useDispatch();
   const [noteText, setNoteText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!open) setNoteText('');
@@ -19,8 +23,16 @@ const AddNote = ({ open, onClose, onSave, isSaving }) => {
     setNoteText(event.target.value);
   };
 
-  const handleSaveNote = () => {
-    onSave(noteText);
+  const handleSaveNote = async () => {
+    setIsLoading(true);
+    await dataAPI.createPatientNote(patientId, {
+      note: noteText,
+      mode,
+      scheduleId,
+    });
+    dispatch(triggerUpdateNotes());
+    setIsLoading(false);
+    onClose();
   };
 
   return (
@@ -29,7 +41,7 @@ const AddNote = ({ open, onClose, onSave, isSaving }) => {
       open={open}
       className='add-note-root'
       title={textForKey('Create note')}
-      isPositiveLoading={isSaving}
+      isPositiveLoading={isLoading}
       isPositiveDisabled={noteText.length === 0}
       onPositiveClick={handleSaveNote}
     >
@@ -48,7 +60,8 @@ export default AddNote;
 
 AddNote.propTypes = {
   open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  isSaving: PropTypes.bool,
+  patientId: PropTypes.string,
+  onClose: PropTypes.func,
+  mode: PropTypes.string.isRequired,
+  scheduleId: PropTypes.string,
 };

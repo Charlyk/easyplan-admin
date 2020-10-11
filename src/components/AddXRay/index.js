@@ -8,8 +8,15 @@ import { textForKey } from '../../utils/localization';
 import './styles.scss';
 
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import { uploadFileToAWS } from '../../utils/helperFuncs';
+import dataAPI from '../../utils/api/dataAPI';
+import { triggerUpdateXRay } from '../../redux/actions/actions';
 
-const AddXRay = ({ open, onClose, onSave, isSaving }) => {
+import { useDispatch } from 'react-redux';
+
+const AddXRay = ({ open, patientId, onClose }) => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [phase, setPhase] = useState('Initial');
 
@@ -21,8 +28,17 @@ const AddXRay = ({ open, onClose, onSave, isSaving }) => {
     setImageFile(event.target.files[0]);
   };
 
-  const handleSaveImage = () => {
-    onSave({ phase, imageFile });
+  const handleSaveImage = async () => {
+    setIsLoading(true);
+    const uploadResult = await uploadFileToAWS('x-ray', imageFile);
+    if (!uploadResult) return;
+    await dataAPI.addXRayImage(patientId, {
+      imageUrl: uploadResult.location,
+      type: phase,
+    });
+    dispatch(triggerUpdateXRay());
+    setIsLoading(false);
+    onClose();
   };
 
   const handlePhaseChange = event => {
@@ -35,7 +51,7 @@ const AddXRay = ({ open, onClose, onSave, isSaving }) => {
       open={open}
       className='add-x-ray-root'
       title={textForKey('Add X-Ray image')}
-      isPositiveLoading={isSaving}
+      isPositiveLoading={isLoading}
       isPositiveDisabled={imageFile == null || phase == null}
       onPositiveClick={handleSaveImage}
     >
@@ -74,7 +90,10 @@ export default AddXRay;
 
 AddXRay.propTypes = {
   open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  isSaving: PropTypes.bool,
+  patientId: PropTypes.string,
+  onClose: PropTypes.func,
+};
+
+AddXRay.defaultProps = {
+  onClose: () => null,
 };

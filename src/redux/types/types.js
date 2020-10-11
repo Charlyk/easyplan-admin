@@ -11,4 +11,6 @@ export default {
   triggerUserLogOut: 'triggerUserLogOut',
   setAppointmentModal: 'setAppointmentModal',
   updateAppointmentsList: 'updateAppointmentsList',
+  setAddPatientNote: 'setAddPatientNote',
+  setAddPatientXRay: 'setAddPatientXRay',
 };

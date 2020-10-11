@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 
 import './styles.scss';
 import { Spinner } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import PatientsFilter from './components/patients/PatientsFilter';
 import PatientsList from './components/patients/PatientsList';
 
 const DoctorPatients = props => {
   const history = useHistory();
+  const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
-  const [patients, setPatients] = useState([]);
+  const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
     fetchPatients();
@@ -19,17 +22,18 @@ const DoctorPatients = props => {
 
   const fetchPatients = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchAllPatients();
+    const response = await dataAPI.fetchSchedules(currentUser.id, new Date());
     if (response.isError) {
       console.error(response.message);
     } else {
-      setPatients(response.data);
+      console.log(response.data);
+      setSchedules(response.data);
     }
     setIsLoading(false);
   };
 
-  const handlePatientSelected = patient => {
-    history.push(`/${patient.id}`);
+  const handlePatientSelected = schedule => {
+    history.push(`/${schedule.patientId}/${schedule.id}`);
   };
 
   return (
@@ -42,7 +46,7 @@ const DoctorPatients = props => {
           <Spinner animation='border' className='loading-spinner' />
         )}
         <PatientsList
-          patients={patients}
+          schedules={schedules}
           onPatientSelect={handlePatientSelected}
         />
       </div>

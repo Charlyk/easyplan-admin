@@ -2,22 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import AddNote from '../../components/AddNote';
-import AddXRay from '../../components/AddXRay';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import {
-  triggerUpdateNotes,
-  triggerUpdateXRay,
+  setPatientNoteModal,
+  setPatientXRayModal,
 } from '../../redux/actions/actions';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import PatientDetails from './comps/details/PatientDetails';
 import PatientsList from './comps/list/PatientsList';
-
 import './styles.scss';
-
 import PatientAccount from './comps/PatientAccount';
 
 const Patients = props => {
@@ -31,14 +26,6 @@ const Patients = props => {
     open: false,
     patient: null,
     isDeleting: false,
-  });
-  const [createNote, setCreateNote] = useState({
-    open: false,
-    isSaving: false,
-  });
-  const [addXRayImage, setAddXRayImage] = useState({
-    open: false,
-    isSaving: false,
   });
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -120,62 +107,29 @@ const Patients = props => {
   };
 
   const handleCreateNote = () => {
-    setCreateNote({ open: true, isSaving: false });
-  };
-
-  const cancelCreateNote = () => {
-    setCreateNote({ open: false, isSaving: false });
-  };
-
-  const handleSaveNote = async noteText => {
-    if (selectedPatient == null) return;
-    setCreateNote({ ...createNote, isSaving: true });
-    await dataAPI.createPatientNote(selectedPatient.id, { note: noteText });
-    setCreateNote({ open: false, isSaving: false });
-    dispatch(triggerUpdateNotes());
+    if (selectedPatient == null) {
+      return;
+    }
+    dispatch(
+      setPatientNoteModal({
+        open: true,
+        patientId: selectedPatient.id,
+        mode: 'notes',
+      }),
+    );
   };
 
   const handleAddXRayImage = () => {
-    setAddXRayImage({ open: true, isSaving: false });
-  };
-
-  const cancelAddXRayImage = () => {
-    setAddXRayImage({ open: false, isSaving: false });
-  };
-
-  /**
-   * Save patient x-ray image
-   * @param {Object} image
-   * @param {string} image.phase
-   * @param {File} image.imageFile
-   * @return {Promise<void>}
-   */
-  const handleSaveXRayImage = async image => {
-    setAddXRayImage({ ...addXRayImage, isSaving: true });
-    const uploadResult = await uploadFileToAWS('x-ray', image.imageFile);
-    if (!uploadResult) return;
-    await dataAPI.addXRayImage(selectedPatient.id, {
-      imageUrl: uploadResult.location,
-      type: image.phase,
-    });
-    setAddXRayImage({ open: false, isSaving: false });
-    dispatch(triggerUpdateXRay());
+    if (selectedPatient == null) {
+      return;
+    }
+    dispatch(
+      setPatientXRayModal({ open: true, patientId: selectedPatient.id }),
+    );
   };
 
   return (
     <div className='patients-root'>
-      <AddXRay
-        onSave={handleSaveXRayImage}
-        onClose={cancelAddXRayImage}
-        open={addXRayImage.open}
-        isSaving={addXRayImage.isSaving}
-      />
-      <AddNote
-        onClose={cancelCreateNote}
-        open={createNote.open}
-        isSaving={createNote.isSaving}
-        onSave={handleSaveNote}
-      />
       <ConfirmationModal
         show={deletePatient.open}
         isLoading={deletePatient.isDeleting}

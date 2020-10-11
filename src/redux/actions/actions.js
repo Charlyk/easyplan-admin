@@ -115,3 +115,33 @@ export function toggleAppointmentsUpdate() {
     payload: '',
   };
 }
+
+/**
+ * Toggle create note modal
+ * @param {Object} payload
+ * @param {boolean} payload.open
+ * @param {string|null} payload.patientId
+ * @param {'notes'|'appointments'} payload.mode
+ * @param {string?} payload.scheduleId
+ * @return {{payload: *, type: string}}
+ */
+export function setPatientNoteModal(payload) {
+  return {
+    type: types.setAddPatientNote,
+    payload,
+  };
+}
+
+/**
+ * Toggle add x-ray image modal
+ * @param {Object} payload
+ * @param {boolean} payload.open
+ * @param {string|null} payload.patientId
+ * @return {{payload: *, type: string}}
+ */
+export function setPatientXRayModal(payload) {
+  return {
+    type: types.setAddPatientXRay,
+    payload,
+  };
+}

@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 
 import DoctorPatientItem from './DoctorPatientItem';
 
-const PatientsList = ({ patients, onPatientSelect }) => {
+const PatientsList = ({ schedules, onPatientSelect }) => {
   return (
     <div className='patients-list-root'>
-      {patients.map(patient => (
+      {schedules.map(schedule => (
         <DoctorPatientItem
-          key={patient.id}
-          patient={patient}
+          key={schedule.id}
+          schedule={schedule}
           onView={onPatientSelect}
         />
       ))}
@@ -21,7 +21,24 @@ const PatientsList = ({ patients, onPatientSelect }) => {
 export default PatientsList;
 
 PatientsList.propTypes = {
-  patients: PropTypes.array,
+  schedules: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      patientId: PropTypes.string,
+      patientName: PropTypes.string,
+      patientPhone: PropTypes.string,
+      patientPhoto: PropTypes.string,
+      doctorId: PropTypes.string,
+      doctorName: PropTypes.string,
+      serviceId: PropTypes.string,
+      serviceName: PropTypes.string,
+      serviceColor: PropTypes.string,
+      serviceDuration: PropTypes.number,
+      dateAndTime: PropTypes.string,
+      status: PropTypes.string,
+      note: PropTypes.string,
+    }),
+  ),
   onPatientSelect: PropTypes.func,
 };
 

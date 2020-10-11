@@ -19,6 +19,8 @@ import {
   Switch,
 } from 'react-router-dom';
 
+import AddNote from './components/AddNote';
+import AddXRay from './components/AddXRay';
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
 import DoctorsMain from './doctors/DoctorsMain';
@@ -28,12 +30,17 @@ import Main from './pages/Main';
 import {
   setCreateClinic,
   setCurrentUser,
+  setPatientNoteModal,
+  setPatientXRayModal,
   triggerUserLogout,
 } from './redux/actions/actions';
+import initialState from './redux/initialState';
 import {
   createClinicSelector,
   logoutSelector,
   newClinicIdSelector,
+  patientNoteModalSelector,
+  patientXRayModalSelector,
   updateCurrentUserSelector,
   userSelector,
 } from './redux/selectors/rootSelector';
@@ -49,6 +56,8 @@ function App() {
   const updateCurrentUser = useSelector(updateCurrentUserSelector);
   const createClinic = useSelector(createClinicSelector);
   const logout = useSelector(logoutSelector);
+  const patientNoteModal = useSelector(patientNoteModalSelector);
+  const patientXRayModal = useSelector(patientXRayModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
     item => item.id === currentUser?.selectedClinic,
@@ -129,10 +138,20 @@ function App() {
     dispatch(triggerUserLogout(false));
   };
 
+  const handleClosePatientNoteModal = () => {
+    dispatch(setPatientNoteModal(initialState.patientNoteModal));
+  };
+
+  const handleClosePatientXRayModal = () => {
+    dispatch(setPatientXRayModal({ open: false, patientId: null }));
+  };
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to='/' />}
       <React.Fragment>
+        <AddXRay {...patientXRayModal} onClose={handleClosePatientXRayModal} />
+        <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
         <ConfirmationModal
           title={textForKey('Logout')}
           message={textForKey('logout message')}

@@ -3,66 +3,44 @@ import React, { useEffect, useState } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sum from 'lodash/sum';
+import moment from 'moment';
+import { Form, Modal, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import './styles.scss';
 import IconAvatar from '../../assets/icons/iconAvatar';
-import IconTooth11 from '../../assets/icons/iconTooth11';
-import IconTooth12 from '../../assets/icons/iconTooth12';
-import IconTooth13 from '../../assets/icons/iconTooth13';
-import IconTooth14 from '../../assets/icons/iconTooth14';
-import IconTooth15 from '../../assets/icons/iconTooth15';
-import IconTooth16 from '../../assets/icons/iconTooth16';
-import IconTooth17 from '../../assets/icons/iconTooth17';
-import IconTooth18 from '../../assets/icons/iconTooth18';
-import IconTooth21 from '../../assets/icons/iconTooth21';
-import IconTooth22 from '../../assets/icons/iconTooth22';
-import IconTooth23 from '../../assets/icons/iconTooth23';
-import IconTooth24 from '../../assets/icons/iconTooth24';
-import IconTooth25 from '../../assets/icons/iconTooth25';
-import IconTooth26 from '../../assets/icons/iconTooth26';
-import IconTooth27 from '../../assets/icons/iconTooth27';
-import IconTooth28 from '../../assets/icons/iconTooth28';
-import IconTooth31 from '../../assets/icons/iconTooth31';
-import IconTooth32 from '../../assets/icons/iconTooth32';
-import IconTooth33 from '../../assets/icons/iconTooth33';
-import IconTooth34 from '../../assets/icons/iconTooth34';
-import IconTooth35 from '../../assets/icons/iconTooth35';
-import IconTooth36 from '../../assets/icons/iconTooth36';
-import IconTooth37 from '../../assets/icons/iconTooth37';
-import IconTooth38 from '../../assets/icons/iconTooth38';
-import IconTooth41 from '../../assets/icons/iconTooth41';
-import IconTooth42 from '../../assets/icons/iconTooth42';
-import IconTooth43 from '../../assets/icons/iconTooth43';
-import IconTooth44 from '../../assets/icons/iconTooth44';
-import IconTooth45 from '../../assets/icons/iconTooth45';
-import IconTooth46 from '../../assets/icons/iconTooth46';
-import IconTooth47 from '../../assets/icons/iconTooth47';
-import IconTooth48 from '../../assets/icons/iconTooth48';
 import LoadingButton from '../../components/LoadingButton';
 import PatientDetails from '../../pages/Patients/comps/details/PatientDetails';
+import {
+  setPatientNoteModal,
+  setPatientXRayModal,
+} from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
+import { teeth } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
 
-import { Form } from 'react-bootstrap';
-
 const TabId = {
-  appointments: 'Appointments',
+  appointmentsNotes: 'AppointmentsNotes',
   notes: 'Notes',
   xRay: 'X-Ray',
 };
 
 const DoctorPatientDetails = () => {
-  const { patientId } = useParams();
+  const dispatch = useDispatch();
+  const { patientId, scheduleId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const [patient, setPatient] = useState(null);
   const [services, setServices] = useState([]);
+  const [teethServices, setTeethServices] = useState([]);
+  const [toothServices, setToothServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
+  const [schedule, setSchedule] = useState(null);
 
   useEffect(() => {
     fetchPatientDetails();
-    fetchServices();
   }, [patientId]);
 
   const fetchServices = async () => {
@@ -70,17 +48,30 @@ const DoctorPatientDetails = () => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      setServices(response.data);
+      const { data } = response;
+      setServices(data.filter(item => item.serviceType === 'all'));
+      setToothServices(data.filter(item => item.serviceType !== 'all'));
+    }
+  };
+
+  const fetchScheduleDetails = async () => {
+    const response = await dataAPI.fetchScheduleDetails(scheduleId);
+    if (!response.isError) {
+      setSchedule(response.data);
     }
   };
 
   const fetchPatientDetails = async () => {
+    setIsLoading(true);
     const response = await dataAPI.fetchAllPatients();
     if (response.isError) {
       console.error(response.message);
     } else {
       setPatient(response.data.find(item => item.id === patientId));
+      await fetchServices();
+      await fetchScheduleDetails();
     }
+    setIsLoading(false);
   };
 
   const handleServiceChecked = event => {
@@ -95,6 +86,45 @@ const DoctorPatientDetails = () => {
     setSelectedServices(newServices);
   };
 
+  const handleAddNote = () => {
+    dispatch(setPatientNoteModal({ open: true, patientId, mode: 'notes' }));
+  };
+
+  const handleAddXRay = () => {
+    dispatch(setPatientXRayModal({ open: true, patientId }));
+  };
+
+  const handleAddAppointmentNote = () => {
+    dispatch(
+      setPatientNoteModal({
+        open: true,
+        patientId,
+        mode: 'appointments',
+        scheduleId,
+      }),
+    );
+  };
+
+  const handleToothServicesChange = ({ toothId, services }) => {
+    let newServices = cloneDeep(teethServices);
+    if (newServices.some(item => item.toothId === toothId)) {
+      newServices = newServices.map(item => {
+        if (item.toothId !== toothId) {
+          return item;
+        }
+
+        return {
+          ...item,
+          services,
+        };
+      });
+    } else {
+      newServices.push({ toothId, services });
+    }
+
+    setTeethServices(newServices);
+  };
+
   const getPatientName = () => {
     if (patient?.firstName && patient?.lastName) {
       return `${patient.firstName} ${patient.lastName}`;
@@ -107,13 +137,50 @@ const DoctorPatientDetails = () => {
     }
   };
 
+  const getCombinedServices = () => {
+    let allServices = cloneDeep(selectedServices);
+    for (let tooth of teethServices) {
+      if (!Array.isArray(tooth.services)) {
+        continue;
+      }
+      for (let toothService of tooth.services) {
+        if (allServices?.some(item => item.id === toothService.id)) {
+          allServices = allServices.map(item => {
+            if (item.id !== toothService.id) {
+              return item;
+            }
+
+            return {
+              ...item,
+              price: item.price + toothService.price,
+            };
+          });
+        } else {
+          allServices.push(toothService);
+        }
+      }
+    }
+    return allServices;
+  };
+
   const getTotalPrice = () => {
-    const prices = selectedServices.map(item => item.price);
+    const prices = getCombinedServices().map(item => item.price);
     return sum(prices);
   };
 
   return (
     <div className='doctor-patient-root'>
+      <Modal
+        centered
+        className='loading-modal'
+        show={isLoading}
+        onHide={() => null}
+      >
+        <Modal.Body>
+          <Spinner animation='border' />
+          {textForKey('Loading patient...')}
+        </Modal.Body>
+      </Modal>
       <div className='left-container'>
         <div className='patient-info'>
           <IconAvatar />
@@ -122,201 +189,73 @@ const DoctorPatientDetails = () => {
             <div className='patient-info-row'>
               <span className='patient-info-title'>{textForKey('Date')}:</span>
               <span className='patient-info-value'>
-                {textForKey('20 Sep 2020')}
+                {schedule
+                  ? moment(schedule.dateAndTime).format('DD MMM YYYY HH:mm')
+                  : ''}
               </span>
             </div>
             <div className='patient-info-row'>
               <span className='patient-info-title'>
                 {textForKey('Doctor')}:
               </span>
-              <span className='patient-info-value'>Jacob Jones</span>
+              <span className='patient-info-value'>{schedule?.doctorName}</span>
             </div>
           </div>
         </div>
         <div className='tooth-container'>
           <div className='top-left'>
-            <ToothView
-              icon={<IconTooth18 />}
-              services={services}
-              toothId='18'
-            />
-            <ToothView
-              icon={<IconTooth17 />}
-              services={services}
-              toothId='17'
-            />
-            <ToothView
-              icon={<IconTooth16 />}
-              services={services}
-              toothId='16'
-            />
-            <ToothView
-              icon={<IconTooth15 />}
-              services={services}
-              toothId='15'
-            />
-            <ToothView
-              icon={<IconTooth14 />}
-              services={services}
-              toothId='14'
-            />
-            <ToothView
-              icon={<IconTooth13 />}
-              services={services}
-              toothId='13'
-            />
-            <ToothView
-              icon={<IconTooth12 />}
-              services={services}
-              toothId='12'
-            />
-            <ToothView
-              icon={<IconTooth11 />}
-              services={services}
-              toothId='11'
-            />
+            {teeth
+              .filter(it => it.type === 'top-left')
+              .map(item => (
+                <ToothView
+                  key={item.toothId}
+                  onServicesChange={handleToothServicesChange}
+                  icon={item.icon}
+                  services={toothServices}
+                  toothId={item.toothId}
+                />
+              ))}
           </div>
           <div className='top-right'>
-            <ToothView
-              icon={<IconTooth21 />}
-              services={services}
-              toothId='21'
-            />
-            <ToothView
-              icon={<IconTooth22 />}
-              services={services}
-              toothId='22'
-            />
-            <ToothView
-              icon={<IconTooth23 />}
-              services={services}
-              toothId='23'
-            />
-            <ToothView
-              icon={<IconTooth24 />}
-              services={services}
-              toothId='24'
-            />
-            <ToothView
-              icon={<IconTooth25 />}
-              services={services}
-              toothId='25'
-            />
-            <ToothView
-              icon={<IconTooth26 />}
-              services={services}
-              toothId='26'
-            />
-            <ToothView
-              icon={<IconTooth27 />}
-              services={services}
-              toothId='27'
-            />
-            <ToothView
-              icon={<IconTooth28 />}
-              services={services}
-              toothId='28'
-            />
+            {teeth
+              .filter(it => it.type === 'top-right')
+              .map(item => (
+                <ToothView
+                  key={item.toothId}
+                  onServicesChange={handleToothServicesChange}
+                  icon={item.icon}
+                  services={toothServices}
+                  toothId={item.toothId}
+                />
+              ))}
           </div>
           <div className='bottom-left'>
-            <ToothView
-              icon={<IconTooth48 />}
-              services={services}
-              toothId='48'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth47 />}
-              services={services}
-              toothId='47'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth46 />}
-              services={services}
-              toothId='46'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth45 />}
-              services={services}
-              toothId='45'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth44 />}
-              services={services}
-              toothId='44'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth43 />}
-              services={services}
-              toothId='43'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth42 />}
-              services={services}
-              toothId='42'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth41 />}
-              services={services}
-              toothId='41'
-              direction='top'
-            />
+            {teeth
+              .filter(it => it.type === 'bottom-left')
+              .map(item => (
+                <ToothView
+                  key={item.toothId}
+                  onServicesChange={handleToothServicesChange}
+                  icon={item.icon}
+                  services={toothServices}
+                  toothId={item.toothId}
+                  direction='top'
+                />
+              ))}
           </div>
           <div className='bottom-right'>
-            <ToothView
-              icon={<IconTooth31 />}
-              services={services}
-              toothId='31'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth32 />}
-              services={services}
-              toothId='32'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth33 />}
-              services={services}
-              toothId='33'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth34 />}
-              services={services}
-              toothId='34'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth35 />}
-              services={services}
-              toothId='35'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth36 />}
-              services={services}
-              toothId='36'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth37 />}
-              services={services}
-              toothId='37'
-              direction='top'
-            />
-            <ToothView
-              icon={<IconTooth38 />}
-              services={services}
-              toothId='38'
-              direction='top'
-            />
+            {teeth
+              .filter(it => it.type === 'bottom-right')
+              .map(item => (
+                <ToothView
+                  key={item.toothId}
+                  onServicesChange={handleToothServicesChange}
+                  icon={item.icon}
+                  services={toothServices}
+                  toothId={item.toothId}
+                  direction='top'
+                />
+              ))}
           </div>
         </div>
         <div className='services-container'>
@@ -340,24 +279,24 @@ const DoctorPatientDetails = () => {
               {textForKey('Provided services')}
             </span>
 
-            {selectedServices.length === 0 && (
+            {getCombinedServices().length === 0 && (
               <span className='no-data-label'>
                 {textForKey('No selected services')}
               </span>
             )}
 
-            {selectedServices.map(service => (
+            {getCombinedServices().map(service => (
               <FinalServiceItem key={service.id} service={service} />
             ))}
 
-            {selectedServices.length > 0 && (
+            {getCombinedServices().length > 0 && (
               <span className='total-price'>
                 {textForKey('Total')}: {getTotalPrice()} MDL
               </span>
             )}
 
             <LoadingButton
-              disabled={selectedServices.length === 0}
+              disabled={getCombinedServices().length === 0}
               className='positive-button'
             >
               {textForKey('Finalize')}
@@ -368,8 +307,12 @@ const DoctorPatientDetails = () => {
       <div className='right-container'>
         {patient && (
           <PatientDetails
+            onAddXRay={handleAddXRay}
+            onAddNote={handleAddNote}
+            onAddAppointmentNote={handleAddAppointmentNote}
             patient={patient}
-            showTabs={[TabId.appointments, TabId.xRay, TabId.notes]}
+            defaultTab={TabId.appointmentsNotes}
+            showTabs={[TabId.appointmentsNotes, TabId.xRay, TabId.notes]}
           />
         )}
       </div>

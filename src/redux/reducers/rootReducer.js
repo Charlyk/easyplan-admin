@@ -62,6 +62,16 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         updateAppointments: !state.updateAppointments,
       };
+    case types.setAddPatientNote:
+      return {
+        ...state,
+        patientNoteModal: action.payload,
+      };
+    case types.setAddPatientXRay:
+      return {
+        ...state,
+        patientXRayModal: action.payload,
+      };
     default:
       return state;
   }

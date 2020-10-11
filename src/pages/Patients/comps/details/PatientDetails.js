@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import EasyTab from '../../../../components/EasyTab';
 import { textForKey } from '../../../../utils/localization';
+import AppointmentNotes from './appointmentNotes';
 import PatientAppointments from './appointments/PatientAppointments';
 import PatientNotes from './notes/PatientNotes';
 import TreatmentPlans from './treatment-plans/TreatmentPlans';
@@ -11,14 +12,22 @@ import PatientXRay from './x-ray/PatientXRay';
 import './styles.scss';
 
 const TabId = {
+  appointmentsNotes: 'AppointmentsNotes',
   appointments: 'Appointments',
   notes: 'Notes',
   xRay: 'X-Ray',
   treatmentPlans: 'TreatmentPlans',
 };
 
-const PatientDetails = ({ onAddNote, onAddXRay, showTabs, patient }) => {
-  const [selectedTab, setSelectedTab] = useState(TabId.appointments);
+const PatientDetails = ({
+  onAddNote,
+  onAddXRay,
+  onAddAppointmentNote,
+  showTabs,
+  defaultTab,
+  patient,
+}) => {
+  const [selectedTab, setSelectedTab] = useState(defaultTab);
 
   if (!patient) return null;
 
@@ -29,6 +38,14 @@ const PatientDetails = ({ onAddNote, onAddXRay, showTabs, patient }) => {
   return (
     <div className='patient-details-root'>
       <div className='patient-details-root__header'>
+        {showTabs.includes(TabId.appointmentsNotes) && (
+          <EasyTab
+            title={textForKey('Appointments notes')}
+            onClick={() => handleTabClick(TabId.appointmentsNotes)}
+            selected={selectedTab === TabId.appointmentsNotes}
+          />
+        )}
+
         {showTabs.includes(TabId.appointments) && (
           <EasyTab
             title={textForKey('Appointments')}
@@ -62,6 +79,12 @@ const PatientDetails = ({ onAddNote, onAddXRay, showTabs, patient }) => {
         )}
       </div>
       <div className='patient-details-root__content'>
+        {selectedTab === TabId.appointmentsNotes && (
+          <AppointmentNotes
+            patient={patient}
+            onAddNote={onAddAppointmentNote}
+          />
+        )}
         {selectedTab === TabId.appointments && <PatientAppointments />}
         {selectedTab === TabId.notes && (
           <PatientNotes patient={patient} onAddNote={onAddNote} />
@@ -80,7 +103,9 @@ export default PatientDetails;
 PatientDetails.propTypes = {
   onAddNote: PropTypes.func,
   onAddXRay: PropTypes.func,
+  onAddAppointmentNote: PropTypes.func,
   showTabs: PropTypes.arrayOf(PropTypes.string),
+  defaultTab: PropTypes.string,
   patient: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,
@@ -93,4 +118,5 @@ PatientDetails.propTypes = {
 
 PatientDetails.defaultProps = {
   showTabs: [TabId.appointments, TabId.xRay, TabId.notes, TabId.treatmentPlans],
+  defaultTab: TabId.appointments,
 };

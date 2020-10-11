@@ -103,6 +103,7 @@ export default {
    * @param {string} requestBody.color
    * @param {string|null} requestBody.description
    * @param {string|null} requestBody.categoryId
+   * @param {string} requestBody.serviceType
    * @param {Array.<{doctorId: string, percentage: number|null, price: number|null}>} requestBody.doctors
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
@@ -381,6 +382,8 @@ export default {
    * @param {string} patientId
    * @param {Object} requestBody
    * @param {string} requestBody.note
+   * @param {'notes'|'appointments'} requestBody.mode
+   * @param {string} requestBody.scheduleId
    * @return {Promise<{isError: boolean, message: string|null, data: {id: string, createdById: string, createdByName: string, noteText: string, created: string}|null}>}
    */
   createPatientNote: async (patientId, requestBody) => {
@@ -407,6 +410,26 @@ export default {
   fetchPatientNotes: async patientId => {
     try {
       const response = await instance().get(`patients/${patientId}/notes`);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch patient appointments notes
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: string|null, data: Array.<Object>}>}
+   */
+  fetchPatientAppointmentsNotes: async patientId => {
+    try {
+      const response = await instance().get(
+        `patients/${patientId}/appointments-notes`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -741,6 +764,19 @@ export default {
       const response = await instance().get(
         `schedules/month-schedules?doctorId=${doctorId}&date=${stringDate}`,
       );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  fetchScheduleDetails: async scheduleId => {
+    try {
+      const response = await instance().get(`schedules/details/${scheduleId}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

@@ -8,6 +8,13 @@ export default {
   logout: false,
   user: null,
   createClinic: { open: false, canClose: false },
+  patientNoteModal: {
+    open: false,
+    patientId: null,
+    mode: 'notes',
+    scheduleId: null,
+  },
+  patientXRayModal: { open: false, patientId: null },
   appointmentModal: { open: false, date: null, doctor: null, schedule: null },
   updateAppointments: false,
 };
