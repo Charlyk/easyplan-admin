@@ -70,11 +70,11 @@ const AppointmentsCalendar = ({
   };
 
   const fetchSchedules = async () => {
-    if (hours.length === 0) {
+    if (hours.length === 0 || doctor == null) {
       return;
     }
     setIsLoading(true);
-    const response = await dataAPI.fetchSchedules(doctor.id, viewDate);
+    const response = await dataAPI.fetchSchedules(doctor?.id, viewDate);
     if (response.isError) {
       console.error(response.message);
     } else {
