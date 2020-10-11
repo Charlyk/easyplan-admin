@@ -3,7 +3,6 @@ import React, { useEffect, useReducer } from 'react';
 import './styles.scss';
 import { useDispatch, useSelector } from 'react-redux';
 
-import AddAppointmentModal from '../../components/AddAppintmentModal';
 import { setAppointmentModal } from '../../redux/actions/actions';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
@@ -18,6 +17,7 @@ const reducerTypes = {
   selectedDoctor: 'selectedDoctor',
   setViewDate: 'setViewDate',
   isFetching: 'isFetching',
+  setSelectedSchedule: 'setSelectedSchedule',
 };
 
 const reducerActions = {
@@ -32,6 +32,10 @@ const reducerActions = {
     payload,
   }),
   setIsFetching: payload => ({ type: reducerTypes.isFetching, payload }),
+  setSelectedSchedule: payload => ({
+    type: reducerTypes.setSelectedSchedule,
+    payload,
+  }),
 };
 
 const reducer = (state, action) => {
@@ -46,6 +50,8 @@ const reducer = (state, action) => {
       return { ...state, isFetching: action.payload };
     case reducerTypes.setViewDate:
       return { ...state, viewDate: action.payload };
+    case reducerTypes.setSelectedSchedule:
+      return { ...state, selectedSchedule: action.payload };
     default:
       throw new Error('unknown type');
   }
@@ -60,11 +66,18 @@ const initialState = {
   viewDate: new Date(),
 };
 
-const Calendar = props => {
+const Calendar = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
   const [
-    { filters, selectedService, selectedDoctor, isFetching, viewDate },
+    {
+      filters,
+      selectedService,
+      selectedDoctor,
+      isFetching,
+      viewDate,
+      selectedSchedule,
+    },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -120,6 +133,21 @@ const Calendar = props => {
     localDispatch(reducerActions.setViewDate(newDate));
   };
 
+  const handleScheduleSelected = schedule => {
+    localDispatch(reducerActions.setSelectedSchedule(schedule));
+  };
+
+  const handleEditSchedule = schedule => {
+    dispatch(
+      setAppointmentModal({
+        open: true,
+        doctor: selectedDoctor,
+        date: viewDate,
+        schedule: schedule,
+      }),
+    );
+  };
+
   return (
     <div className='calendar-root'>
       <div className='calendar-root__content__left-container'>
@@ -138,6 +166,8 @@ const Calendar = props => {
       </div>
       <div className='calendar-root__content__center-container'>
         <AppointmentsCalendar
+          selectedSchedule={selectedSchedule}
+          onScheduleSelect={handleScheduleSelected}
           onViewDateChange={handleViewDateChange}
           doctor={selectedDoctor}
           viewDate={viewDate}
@@ -145,6 +175,8 @@ const Calendar = props => {
       </div>
       <div className='calendar-root__content__right-container'>
         <CalendarRightContainer
+          onEditSchedule={handleEditSchedule}
+          selectedSchedule={selectedSchedule}
           onDateChange={handleViewDateChange}
           selectedDate={viewDate}
           canAddAppointment={selectedDoctor != null}

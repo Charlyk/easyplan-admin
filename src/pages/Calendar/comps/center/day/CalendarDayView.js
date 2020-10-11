@@ -19,7 +19,7 @@ const Hour = props => {
   );
 };
 
-const CalendarDayView = ({ opened, schedules, hours }) => {
+const CalendarDayView = ({ opened, schedules, hours, onScheduleSelect }) => {
   const [isClosed, setIsClosed] = useState(!opened);
   const currentHour = moment().format('HH:00');
 
@@ -38,7 +38,11 @@ const CalendarDayView = ({ opened, schedules, hours }) => {
         <Hour hour={item} key={item} highlighted={item === currentHour} />
       ))}
       {schedules.map(schedule => (
-        <DayAppointmentItem key={schedule.id} schedule={schedule} />
+        <DayAppointmentItem
+          key={schedule.id}
+          onSelect={onScheduleSelect}
+          schedule={schedule}
+        />
       ))}
     </animated.div>
   );
@@ -54,6 +58,7 @@ Hour.propTypes = {
 CalendarDayView.propTypes = {
   opened: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),
+  onScheduleSelect: PropTypes.func,
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -71,4 +76,8 @@ CalendarDayView.propTypes = {
       note: PropTypes.string,
     }),
   ),
+};
+
+CalendarDayView.defaultProps = {
+  onScheduleSelect: () => null,
 };

@@ -270,6 +270,23 @@
           }
         }
 
+        .appointment-status-wrapper {
+          width: 100%;
+          padding: .5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .status-name-label {
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16px;
+            letter-spacing: 0.01em;
+          }
+        }
+
         .doctor-info {
           display: flex;
           flex-direction: column;
@@ -391,6 +408,7 @@
     overflow: hidden;
 
     .day-appointment-item {
+      outline: none;
       cursor: pointer;
       width: 88%;
       left: 4rem;
@@ -493,6 +511,7 @@
         border-right: #DBEEFB 1px solid;
 
         .appointment-item {
+          outline: none;
           cursor: pointer;
           position: absolute;
           width: 100%;
@@ -649,6 +668,7 @@
         }
 
         .appointment-item {
+          outline: none;
           width: 100%;
           height: calc(100% / 4 - .1rem);
           margin-bottom: .1rem;

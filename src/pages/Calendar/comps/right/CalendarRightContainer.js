@@ -13,7 +13,9 @@ const CalendarRightContainer = ({
   onAddAppointment,
   selectedDate,
   canAddAppointment,
+  selectedSchedule,
   onDateChange,
+  onEditSchedule,
 }) => {
   return (
     <div className='calendar-root__appointment-info'>
@@ -30,7 +32,10 @@ const CalendarRightContainer = ({
         onChange={onDateChange}
         date={selectedDate}
       />
-      <CalendarAppointmentDetails />
+      <CalendarAppointmentDetails
+        onEdit={onEditSchedule}
+        schedule={selectedSchedule}
+      />
     </div>
   );
 };
@@ -40,6 +45,22 @@ export default CalendarRightContainer;
 CalendarRightContainer.propTypes = {
   canAddAppointment: PropTypes.bool,
   selectedDate: PropTypes.instanceOf(Date),
+  onEditSchedule: PropTypes.func,
+  selectedSchedule: PropTypes.shape({
+    id: PropTypes.string,
+    patientId: PropTypes.string,
+    patientName: PropTypes.string,
+    patientPhone: PropTypes.string,
+    doctorId: PropTypes.string,
+    doctorName: PropTypes.string,
+    serviceId: PropTypes.string,
+    serviceName: PropTypes.string,
+    serviceColor: PropTypes.string,
+    serviceDuration: PropTypes.string,
+    dateAndTime: PropTypes.string,
+    status: PropTypes.string,
+    note: PropTypes.string,
+  }),
   onAddAppointment: PropTypes.func,
   onDateChange: PropTypes.func,
 };
@@ -49,4 +70,5 @@ CalendarRightContainer.defaultProps = {
   canAddAppointment: true,
   onAddAppointment: () => null,
   onDateChange: () => null,
+  onEditSchedule: () => null,
 };

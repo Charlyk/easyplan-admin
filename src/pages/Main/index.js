@@ -108,6 +108,7 @@ const Main = () => {
     <div className='main-page' id='main-page'>
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
+        schedule={appointmentModal.schedule}
         open={appointmentModal.open}
         doctor={appointmentModal.doctor}
         date={appointmentModal.date}

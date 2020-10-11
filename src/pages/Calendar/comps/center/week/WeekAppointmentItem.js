@@ -8,7 +8,7 @@ import { getAppointmentTop } from '../../../../../utils/helperFuncs';
 const minHeight = 5;
 const minTop = 3;
 
-const WeekAppointmentItem = ({ schedule }) => {
+const WeekAppointmentItem = ({ schedule, onSelect }) => {
   const [position, setPosition] = useState({ top: minTop, height: minHeight });
   const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
 
@@ -29,8 +29,15 @@ const WeekAppointmentItem = ({ schedule }) => {
     setHours([startHour, endHour]);
   }, [schedule]);
 
+  const handleScheduleSelect = () => {
+    onSelect(schedule);
+  };
+
   return (
     <div
+      role='button'
+      tabIndex={0}
+      onClick={handleScheduleSelect}
       className='appointment-item'
       style={{
         ...position,
@@ -55,6 +62,7 @@ const WeekAppointmentItem = ({ schedule }) => {
 export default WeekAppointmentItem;
 
 WeekAppointmentItem.propTypes = {
+  onSelect: PropTypes.func,
   schedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
@@ -70,4 +78,8 @@ WeekAppointmentItem.propTypes = {
     status: PropTypes.string,
     note: PropTypes.string,
   }),
+};
+
+WeekAppointmentItem.defaultProps = {
+  onSelect: () => null,
 };

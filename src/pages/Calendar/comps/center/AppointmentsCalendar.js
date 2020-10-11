@@ -22,7 +22,13 @@ const CalendarView = {
   year: 'ear',
 };
 
-const AppointmentsCalendar = ({ doctor, viewDate, onViewDateChange }) => {
+const AppointmentsCalendar = ({
+  doctor,
+  viewDate,
+  onViewDateChange,
+  onScheduleSelect,
+  selectedSchedule,
+}) => {
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
@@ -43,6 +49,12 @@ const AppointmentsCalendar = ({ doctor, viewDate, onViewDateChange }) => {
     }
   }, [doctor, updateAppointments]);
 
+  useEffect(() => {
+    if (hours.length > 0) {
+      fetchSchedules();
+    }
+  }, [hours]);
+
   const fethWorkHours = async () => {
     setIsLoading(true);
     const response = await dataAPI.fetchClinicWorkHours(
@@ -53,9 +65,6 @@ const AppointmentsCalendar = ({ doctor, viewDate, onViewDateChange }) => {
       console.error(response.message);
     } else {
       setHours(response.data);
-      if (doctor != null && currentTab === CalendarView.day) {
-        await fetchSchedules();
-      }
     }
     setIsLoading(false);
   };
@@ -69,7 +78,11 @@ const AppointmentsCalendar = ({ doctor, viewDate, onViewDateChange }) => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      setSchedules(response.data);
+      const { data } = response;
+      setSchedules(data);
+      if (selectedSchedule != null) {
+        onScheduleSelect(data.find(item => item.id === selectedSchedule.id));
+      }
     }
     setIsLoading(false);
   };
@@ -138,11 +151,14 @@ const AppointmentsCalendar = ({ doctor, viewDate, onViewDateChange }) => {
             </span>
           )}
         <CalendarDayView
+          onScheduleSelect={onScheduleSelect}
           hours={hours}
           schedules={schedules}
           opened={currentTab === CalendarView.day}
         />
         <CalendarWeekView
+          selectedSchedule={selectedSchedule}
+          onScheduleSelect={onScheduleSelect}
           viewDate={viewDate}
           hours={hours}
           doctorId={doctor?.id}
@@ -165,9 +181,26 @@ AppointmentsCalendar.propTypes = {
   doctor: PropTypes.object,
   viewDate: PropTypes.instanceOf(Date),
   onViewDateChange: PropTypes.func,
+  onScheduleSelect: PropTypes.func,
+  selectedSchedule: PropTypes.shape({
+    id: PropTypes.string,
+    patientId: PropTypes.string,
+    patientName: PropTypes.string,
+    patientPhone: PropTypes.string,
+    doctorId: PropTypes.string,
+    doctorName: PropTypes.string,
+    serviceId: PropTypes.string,
+    serviceName: PropTypes.string,
+    serviceColor: PropTypes.string,
+    serviceDuration: PropTypes.string,
+    dateAndTime: PropTypes.string,
+    status: PropTypes.string,
+    note: PropTypes.string,
+  }),
 };
 
 AppointmentsCalendar.defaultProps = {
   viewDate: new Date(),
   onViewDateChange: () => null,
+  onScheduleSelect: () => null,
 };

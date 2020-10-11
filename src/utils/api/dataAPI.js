@@ -620,15 +620,19 @@ export default {
 
   /**
    * Fetch available hours for a doctor
+   * @param {string?} scheduleId
    * @param {string} doctorId
    * @param {string} serviceId
    * @param {Date} date
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  fetchAvailableTime: async (doctorId, serviceId, date) => {
+  fetchAvailableTime: async (scheduleId, doctorId, serviceId, date) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
-      const url = `schedules/available-time?doctorId=${doctorId}&serviceId=${serviceId}&date=${stringDate}`;
+      let url = `schedules/available-time?doctorId=${doctorId}&serviceId=${serviceId}&date=${stringDate}`;
+      if (scheduleId?.length > 0) {
+        url += `&scheduleId=${scheduleId}`;
+      }
       const response = await instance().get(url);
       const { data: responseData } = response;
       return responseData;

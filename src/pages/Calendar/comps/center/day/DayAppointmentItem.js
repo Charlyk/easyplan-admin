@@ -11,7 +11,7 @@ const minHeight = 10;
 const hourHeight = 32;
 const minTop = hourHeight / 2;
 
-const DayAppointmentItem = ({ schedule }) => {
+const DayAppointmentItem = ({ schedule, onSelect }) => {
   const [position, setPosition] = useState({ top: minTop, height: minHeight });
   const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
 
@@ -33,8 +33,13 @@ const DayAppointmentItem = ({ schedule }) => {
     setHours([startHour, endHour]);
   }, [schedule]);
 
+  const handleScheduleSelect = () => {
+    onSelect(schedule);
+  };
+
   return (
     <animated.div
+      onClick={handleScheduleSelect}
       className='day-appointment-item'
       style={{
         ...position,
@@ -58,6 +63,7 @@ const DayAppointmentItem = ({ schedule }) => {
 export default DayAppointmentItem;
 
 DayAppointmentItem.propTypes = {
+  onSelect: PropTypes.func,
   schedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
@@ -73,4 +79,8 @@ DayAppointmentItem.propTypes = {
     status: PropTypes.string,
     note: PropTypes.string,
   }),
+};
+
+DayAppointmentItem.defaultProps = {
+  onSelect: () => null,
 };

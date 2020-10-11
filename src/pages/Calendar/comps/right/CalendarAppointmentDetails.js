@@ -1,58 +1,94 @@
 import React from 'react';
 
+import moment from 'moment';
+import PropTypes from 'prop-types';
+
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
 import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock';
 import IconEditService from '../../../../assets/icons/iconEditService';
-import IconEmail from '../../../../assets/icons/iconEmail';
 import IconPhone from '../../../../assets/icons/iconPhone';
+import { ScheduleStatuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 
-const CalendarAppointmentDetails = props => {
+const CalendarAppointmentDetails = ({ schedule, onEdit }) => {
+  if (schedule == null) {
+    return null;
+  }
+
+  const scheduleDate = moment(schedule.dateAndTime, 'YYYY-MM-DD HH:mm');
+  const scheduleStatus = ScheduleStatuses.find(
+    item => item.id === schedule.status,
+  );
+
+  const handleEditSchedule = () => {
+    onEdit(schedule);
+  };
+
   return (
     <div className='appointment-details'>
       <div className='appointment-details-header'>
         <div className='service-name-container'>
-          <div className='color-indicator' />
-          <span className='service-name'>Service name</span>
+          <div
+            className='color-indicator'
+            style={{ backgroundColor: schedule.serviceColor }}
+          />
+          <span className='service-name'>{schedule.serviceName}</span>
         </div>
-        <div role='button' tabIndex={0} className='edit-button'>
+        <div
+          role='button'
+          tabIndex={0}
+          className='edit-button'
+          onClick={handleEditSchedule}
+        >
           <IconEditService />
         </div>
       </div>
       <div className='appointment-details-data'>
+        <div
+          className='appointment-status-wrapper'
+          style={{ backgroundColor: `${scheduleStatus.color}1A` }}
+        >
+          <span
+            className='status-name-label'
+            style={{ color: scheduleStatus.color }}
+          >
+            {scheduleStatus.name}
+          </span>
+        </div>
         <div className='doctor-info'>
           <div className='info-row'>
-            <span className='info-row-title'>Doctor Name</span>
+            <span className='info-row-title'>{schedule.doctorName}</span>
           </div>
           <div className='info-row'>
             <IconAppointmentCalendar />
-            <span className='info-row-text'>20 Sep 2020</span>
+            <span className='info-row-text'>
+              {scheduleDate.format('DD MMM YYYY')}
+            </span>
           </div>
           <div className='info-row'>
             <IconAppointmentClock />
-            <span className='info-row-text'>13:00</span>
+            <span className='info-row-text'>
+              {scheduleDate.format('HH:mm')}
+            </span>
           </div>
         </div>
         <div className='patient-info'>
           <div className='info-row'>
             <span className='info-row-title'>{textForKey('Patient')}:</span>
-            <span className='info-row-text'>Patient Name</span>
+            <span className='info-row-text'>{schedule.patientName}</span>
           </div>
           <div className='info-row'>
             <IconPhone />
-            <span className='info-row-text'>+37379466284</span>
-          </div>
-          <div className='info-row'>
-            <IconEmail />
-            <span className='info-row-text'>patient@email.com</span>
+            <span className='info-row-text'>{schedule.patientPhone}</span>
           </div>
           <div className='info-row'>
             <span className='info-row-title'>Notes</span>
           </div>
           <div className='info-row'>
             <span className='info-row-text'>
-              Some long text will go here so we need to fill it with an example
-              to see how it looks
+              {schedule.note.length > 0
+                ? schedule.note
+                : textForKey('No notes')}
             </span>
           </div>
         </div>
@@ -62,3 +98,26 @@ const CalendarAppointmentDetails = props => {
 };
 
 export default CalendarAppointmentDetails;
+
+CalendarAppointmentDetails.propTypes = {
+  onEdit: PropTypes.func,
+  schedule: PropTypes.shape({
+    id: PropTypes.string,
+    patientId: PropTypes.string,
+    patientName: PropTypes.string,
+    patientPhone: PropTypes.string,
+    doctorId: PropTypes.string,
+    doctorName: PropTypes.string,
+    serviceId: PropTypes.string,
+    serviceName: PropTypes.string,
+    serviceColor: PropTypes.string,
+    serviceDuration: PropTypes.string,
+    dateAndTime: PropTypes.string,
+    status: PropTypes.string,
+    note: PropTypes.string,
+  }),
+};
+
+CalendarAppointmentDetails.defaultProps = {
+  onEdit: () => null,
+};

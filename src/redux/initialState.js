@@ -8,6 +8,6 @@ export default {
   logout: false,
   user: null,
   createClinic: { open: false, canClose: false },
-  appointmentModal: { open: false, doctor: null },
+  appointmentModal: { open: false, date: null, doctor: null, schedule: null },
   updateAppointments: false,
 };

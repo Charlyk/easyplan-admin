@@ -10,11 +10,12 @@ import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import { useDispatch } from 'react-redux';
 
+import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
+import { ScheduleStatuses } from '../../utils/constants';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 
 const initialState = {
   patient: null,
@@ -31,8 +32,10 @@ const initialState = {
   isServiceValid: false,
   showDatePicker: false,
   appointmentDate: new Date(),
+  scheduleId: null,
   appointmentHour: '',
   appointmentNote: '',
+  appointmentStatus: 'Pending',
   loading: { patients: false, services: false, doctors: false },
 };
 
@@ -55,7 +58,9 @@ const reducerTypes = {
   setAppointmentDate: 'setAppointmentDate',
   setAppointmentHour: 'setAppointmentHour',
   setAppointmentNote: 'setAppointmentNote',
+  setAppointmentStatus: 'setAppointmentStatus',
   setIsCreatingSchedule: 'setIsCreatingSchedule',
+  setSchedule: 'setSchedule',
   reset: 'reset',
 };
 
@@ -112,6 +117,11 @@ const reducerActions = {
     type: reducerTypes.setIsCreatingSchedule,
     payload,
   }),
+  setSchedule: payload => ({ type: reducerTypes.setSchedule, payload }),
+  setAppointmentStatus: payload => ({
+    type: reducerTypes.setAppointmentStatus,
+    payload,
+  }),
   resetState: () => ({ type: reducerTypes.reset }),
 };
 
@@ -166,8 +176,28 @@ const reducer = (state, action) => {
       return { ...state, appointmentHour: action.payload };
     case reducerTypes.setAppointmentNote:
       return { ...state, appointmentNote: action.payload };
+    case reducerTypes.setAppointmentStatus:
+      return { ...state, appointmentStatus: action.payload };
     case reducerTypes.setIsCreatingSchedule:
       return { ...state, isCreatingSchedule: action.payload };
+    case reducerTypes.setSchedule: {
+      const schedule = action.payload;
+      const scheduleDate = moment(schedule.dateAndTime);
+      return {
+        ...state,
+        scheduleId: schedule.id,
+        patient: { id: schedule.patientId, fullName: schedule.patientName },
+        doctor: { id: schedule.doctorId, fullName: schedule.doctorName },
+        service: { id: schedule.serviceId, name: schedule.serviceName },
+        appointmentNote: schedule.note,
+        appointmentDate: scheduleDate.toDate(),
+        appointmentHour: scheduleDate.format('HH:mm'),
+        appointmentStatus: schedule.status,
+        isPatientValid: true,
+        isDoctorValid: true,
+        isServiceValid: true,
+      };
+    }
     case reducerTypes.reset:
       return initialState;
   }
@@ -177,6 +207,7 @@ const AddAppointmentModal = ({
   open,
   doctor: selectedDoctor,
   date,
+  schedule,
   onClose,
 }) => {
   const dispatch = useDispatch();
@@ -191,9 +222,11 @@ const AddAppointmentModal = ({
       services,
       loading,
       hours,
+      scheduleId,
       appointmentDate,
       appointmentHour,
       appointmentNote,
+      appointmentStatus,
       showDatePicker,
       isFetchingHours,
       isPatientValid,
@@ -203,6 +236,12 @@ const AddAppointmentModal = ({
     },
     localDispatch,
   ] = useReducer(reducer, { ...initialState });
+
+  useEffect(() => {
+    if (schedule != null) {
+      localDispatch(reducerActions.setSchedule(schedule));
+    }
+  }, [schedule]);
 
   useEffect(() => {
     if (!open) {
@@ -236,6 +275,7 @@ const AddAppointmentModal = ({
     }
     localDispatch(reducerActions.setIsFetchingHours(true));
     const response = await dataAPI.fetchAvailableTime(
+      scheduleId,
       doctor.id,
       service.id,
       appointmentDate,
@@ -359,6 +399,10 @@ const AddAppointmentModal = ({
     localDispatch(reducerActions.setAppointmentNote(event.target.value));
   };
 
+  const handleStatusChange = event => {
+    localDispatch(reducerActions.setAppointmentStatus(event.target.value));
+  };
+
   const isFormValid = () => {
     return (
       isDoctorValid &&
@@ -383,6 +427,8 @@ const AddAppointmentModal = ({
       serviceId: service.id,
       date: scheduleDate,
       note: appointmentNote,
+      status: appointmentStatus,
+      scheduleId: scheduleId,
     });
     if (response.isError) {
       console.error(response.message);
@@ -490,7 +536,7 @@ const AddAppointmentModal = ({
       </Form.Group>
       <InputGroup className='date-and-time-group'>
         <Form.Group className='date-form-group'>
-          <Form.Label>Date</Form.Label>
+          <Form.Label>{textForKey('Date')}</Form.Label>
           <Form.Control
             value={moment(appointmentDate).format('DD MMMM YYYY')}
             ref={datePickerAnchor}
@@ -500,7 +546,7 @@ const AddAppointmentModal = ({
         </Form.Group>
         <InputGroup.Append className='date-append'>
           <Form.Group style={{ width: '100%' }}>
-            <Form.Label>Time</Form.Label>
+            <Form.Label>{textForKey('Time')}</Form.Label>
             <Form.Control
               as='select'
               onChange={handleHourChange}
@@ -520,6 +566,21 @@ const AddAppointmentModal = ({
           </Form.Group>
         </InputGroup.Append>
       </InputGroup>
+      <Form.Group style={{ width: '100%' }}>
+        <Form.Label>{textForKey('Status')}</Form.Label>
+        <Form.Control
+          as='select'
+          onChange={handleStatusChange}
+          value={appointmentStatus}
+          custom
+        >
+          {ScheduleStatuses.map(status => (
+            <option key={status.id} value={status.id}>
+              {status.name}
+            </option>
+          ))}
+        </Form.Control>
+      </Form.Group>
       <Form.Group controlId='description'>
         <Form.Label>{textForKey('Notes')}</Form.Label>
         <InputGroup>
@@ -543,4 +604,19 @@ AddAppointmentModal.propTypes = {
   date: PropTypes.instanceOf(Date),
   doctor: PropTypes.object,
   onClose: PropTypes.func.isRequired,
+  schedule: PropTypes.shape({
+    id: PropTypes.string,
+    patientId: PropTypes.string,
+    patientName: PropTypes.string,
+    patientPhone: PropTypes.string,
+    doctorId: PropTypes.string,
+    doctorName: PropTypes.string,
+    serviceId: PropTypes.string,
+    serviceName: PropTypes.string,
+    serviceColor: PropTypes.string,
+    serviceDuration: PropTypes.string,
+    dateAndTime: PropTypes.string,
+    status: PropTypes.string,
+    note: PropTypes.string,
+  }),
 };

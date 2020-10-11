@@ -87,3 +87,17 @@ export const days = [
   textForKey('Friday'),
   textForKey('Saturday'),
 ];
+
+export const ScheduleStatuses = [
+  { id: 'Pending', name: textForKey('Pending'), color: '#ffb902' },
+  { id: 'Late', name: textForKey('Late'), color: '#FDC534' },
+  { id: 'Confirmed', name: textForKey('Confirmed'), color: '#3A83DC' },
+  { id: 'Canceled', name: textForKey('Canceled'), color: '#F44081' },
+  // {
+  //   id: 'CompletedNotPaid',
+  //   name: textForKey('Completed not paid'),
+  //   color: '#7DD7C8',
+  // },
+  // { id: 'CompletedPaid', name: textForKey('Completed paid'), color: '#00E987' },
+  // { id: 'PartialPaid', name: textForKey('Partial paid'), color: '#9cfacc' },
+];
