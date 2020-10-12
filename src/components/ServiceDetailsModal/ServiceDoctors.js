@@ -9,9 +9,14 @@ import IconPlusBig from '../../assets/icons/iconPlusBig';
 import { textForKey } from '../../utils/localization';
 import ServiceDoctor from './ServiceDoctor';
 
-const ServiceDoctors = props => {
-  const { isExpanded, showStep, onToggle, doctors } = props;
-
+const ServiceDoctors = ({
+  isExpanded,
+  showStep,
+  onToggle,
+  doctors,
+  serviceId,
+  onDoctorChange,
+}) => {
   const handleInfoExpand = () => {
     onToggle();
   };
@@ -42,14 +47,19 @@ const ServiceDoctors = props => {
         </div>
       </div>
       <div className={contentClasses}>
-        {doctors.length === 0 && (
+        {doctors?.length === 0 && (
           <div className='service-doctors__content__no-data'>
             {textForKey('No doctors yet.')}{' '}
             <Link to='/users'>{textForKey('Add one +')}</Link>
           </div>
         )}
-        {doctors.map(doctor => (
-          <ServiceDoctor doctor={doctor} />
+        {doctors?.map(doctor => (
+          <ServiceDoctor
+            onChange={onDoctorChange}
+            key={doctor.doctorId}
+            serviceId={serviceId}
+            serviceData={doctor}
+          />
         ))}
       </div>
     </div>
@@ -59,15 +69,19 @@ const ServiceDoctors = props => {
 export default ServiceDoctors;
 
 ServiceDoctors.propTypes = {
+  open: PropTypes.bool,
+  serviceId: PropTypes.string,
   doctors: PropTypes.arrayOf(
     PropTypes.shape({
       doctorName: PropTypes.string,
       doctorId: PropTypes.string,
-      percentage: PropTypes.string,
-      price: PropTypes.string,
+      percentage: PropTypes.number,
+      price: PropTypes.number,
+      selected: PropTypes.bool,
     }),
   ),
   showStep: PropTypes.bool,
   isExpanded: PropTypes.bool,
   onToggle: PropTypes.func,
+  onDoctorChange: PropTypes.func,
 };

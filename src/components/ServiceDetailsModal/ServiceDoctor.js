@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -6,17 +6,31 @@ import { Form, InputGroup } from 'react-bootstrap';
 
 import SwitchButton from '../SwitchButton';
 
-const ServiceDoctor = props => {
-  const { selected, doctor, onToggle, onChange } = props;
-  const { price, percentage } = doctor;
+const ServiceDoctor = ({ serviceData, onChange }) => {
+  const [doctorService, setDoctorService] = useState({
+    selected: false,
+    doctorName: '',
+    doctorId: null,
+    price: '',
+    percentage: '',
+  });
 
-  const isPercentageDisabled = !selected || price.length > 0;
-  const isPriceDisabled = !selected || percentage.length > 0;
+  useEffect(() => {
+    if (serviceData != null) {
+      setDoctorService({
+        ...serviceData,
+        price: serviceData.price ? String(serviceData.price) : '',
+        percentage: serviceData.percentage
+          ? String(serviceData.percentage)
+          : '',
+      });
+    }
+  }, [serviceData]);
 
   const handlePercentageChange = event => {
     let newValue = event.target.value;
     onChange({
-      doctorId: doctor.doctorId,
+      ...doctorService,
       price: null,
       percentage: parseInt(newValue),
     });
@@ -25,30 +39,45 @@ const ServiceDoctor = props => {
   const handlePriceChanged = event => {
     let newValue = event.target.value;
     onChange({
-      doctorId: doctor.doctorId,
+      ...doctorService,
       price: parseFloat(newValue),
       percentage: null,
     });
   };
 
   const handleDoctorToggle = () => {
-    onToggle(selected);
+    const isSelected = !doctorService.selected;
+    onChange({
+      ...doctorService,
+      price: isSelected ? parseFloat(doctorService.price) : null,
+      percentage: isSelected ? parseInt(doctorService.percentage) : null,
+      selected: isSelected,
+    });
   };
 
   const textClasses = clsx(
     'service-doctor__text',
-    selected ? 'selected' : 'default',
+    doctorService.selected ? 'selected' : 'default',
   );
+
+  const isPercentageDisabled =
+    !doctorService.selected || doctorService.price.length > 0;
+  const isPriceDisabled =
+    !doctorService.selected || doctorService.percentage.length > 0;
 
   return (
     <div className='service-doctor'>
       <div className='service-doctor__name-and-switch'>
-        <SwitchButton isChecked={selected} onChange={handleDoctorToggle} />
-        <div className={textClasses}>Doctor Name</div>
+        <SwitchButton
+          isChecked={doctorService.selected}
+          onChange={handleDoctorToggle}
+        />
+        <div className={textClasses}>{doctorService.doctorName}</div>
       </div>
       <div className='service-doctor__fields'>
         <InputGroup>
           <Form.Control
+            value={String(doctorService.percentage)}
             onChange={handlePercentageChange}
             disabled={isPercentageDisabled}
             className='service-doctor__field'
@@ -62,6 +91,7 @@ const ServiceDoctor = props => {
         </InputGroup>
         <InputGroup>
           <Form.Control
+            value={String(doctorService.price)}
             onChange={handlePriceChanged}
             disabled={isPriceDisabled}
             className='service-doctor__field'
@@ -81,24 +111,16 @@ const ServiceDoctor = props => {
 export default ServiceDoctor;
 
 ServiceDoctor.propTypes = {
-  doctor: PropTypes.shape({
+  serviceData: PropTypes.shape({
     doctorName: PropTypes.string,
     doctorId: PropTypes.string,
-    percentage: PropTypes.string,
-    price: PropTypes.string,
+    percentage: PropTypes.number,
+    price: PropTypes.number,
+    selected: PropTypes.bool,
   }),
-  selected: PropTypes.bool,
-  onToggle: PropTypes.func,
   onChange: PropTypes.func,
 };
 
 ServiceDoctor.defaultProps = {
-  doctor: {
-    doctorName: '',
-    doctorId: '',
-    percentage: '',
-    price: '',
-  },
-  selected: false,
-  onToggle: () => null,
+  onChange: () => null,
 };

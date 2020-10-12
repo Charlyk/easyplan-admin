@@ -104,7 +104,7 @@ export default {
    * @param {string|null} requestBody.description
    * @param {string|null} requestBody.categoryId
    * @param {string} requestBody.serviceType
-   * @param {Array.<{doctorId: string, percentage: number|null, price: number|null}>} requestBody.doctors
+   * @param {Array.<{doctorId: string, percentage: number|null, price: number|null, selected: boolean}>} requestBody.doctors
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   createService: async requestBody => {
@@ -130,7 +130,7 @@ export default {
    * @param {string} requestBody.color
    * @param {string|null} requestBody.description
    * @param {string|null} requestBody.categoryId
-   * @param {Array.<{doctorId: string, percentage: number|null, price: number|null}>} requestBody.doctors
+   * @param {Array.<{doctorId: string, percentage: number|null, price: number|null, selected: boolean}>} requestBody.doctors
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   editService: async (requestBody, serviceId) => {
@@ -851,6 +851,19 @@ export default {
       const response = await instance().delete(
         `schedules/${scheduleId}/delete`,
       );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  getClinicDoctors: async () => {
+    try {
+      const response = await instance().get('clinics/doctors');
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

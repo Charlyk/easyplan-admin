@@ -34,7 +34,6 @@ const ServiceDetailsModal = props => {
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [doctors, setDoctors] = useState([]);
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] = useState(
     false,
   );
@@ -45,11 +44,11 @@ const ServiceDetailsModal = props => {
   });
 
   useEffect(() => {
-    fetchDoctors();
-    if (service != null) {
+    if (service != null && show) {
       setServiceInfo(service);
+      fetchDoctors();
     }
-  }, [service]);
+  }, [show, service]);
 
   useEffect(() => {
     setServiceInfo({
@@ -66,73 +65,76 @@ const ServiceDetailsModal = props => {
     );
   }, [serviceInfo]);
 
-  const fetchDoctors = () => {
-    dataAPI
-      .fetchServiceDoctors(service?.id)
-      .then(response => {
-        if (!response.isError) {
-          setDoctors(response.data);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
-  const handleSaveService = () => {
-    setIsLoading(true);
-    if (serviceInfo.price.length === 0) serviceInfo.price = '0';
-    if (service != null) {
-      editService();
+  const fetchDoctors = async () => {
+    const response = await dataAPI.getClinicDoctors();
+    if (response.isError) {
+      console.error(response.message);
     } else {
-      createService();
+      const doctorsService = response.data.map(item => {
+        const itemService = item.services.find(it => it.id === service.id);
+        return {
+          doctorId: item.id,
+          doctorName: `${item.firstName} ${item.lastName}`,
+          selected: itemService != null,
+          price: itemService?.price,
+          percentage: itemService?.percentage,
+        };
+      });
+      setServiceInfo({
+        ...service,
+        doctors: doctorsService,
+      });
     }
   };
 
-  const createService = () => {
-    dataAPI
-      .createService(serviceInfo)
-      .then(() => {
-        setIsLoading(false);
-        dispatch(triggerCategoriesUpdate());
-        handleCloseModal();
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
+  const handleSaveService = async () => {
+    setIsLoading(true);
+    if (serviceInfo.price.length === 0) serviceInfo.price = '0';
+    serviceInfo.doctors = serviceInfo.doctors.map(item => {
+      if (item.selected && item.price == null && !item.percentage == null) {
+        item.price = 0;
+      }
+      return item;
+    });
+    if (service != null) {
+      await editService();
+    } else {
+      await createService();
+    }
+    setIsLoading(false);
   };
 
-  const editService = () => {
-    dataAPI
-      .editService(serviceInfo, service.id)
-      .then(() => {
-        setIsLoading(false);
-        dispatch(triggerCategoriesUpdate());
-        handleCloseModal();
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
+  const createService = async () => {
+    const response = await dataAPI.createService(serviceInfo);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      dispatch(triggerCategoriesUpdate());
+      handleCloseModal();
+    }
   };
 
-  const deleteService = () => {
+  const editService = async () => {
+    const response = await dataAPI.editService(serviceInfo, service.id);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      dispatch(triggerCategoriesUpdate());
+      handleCloseModal();
+    }
+  };
+
+  const deleteService = async () => {
     setIsDeleting(true);
-    dataAPI
-      .deleteService(service.id)
-      .then(response => {
-        if (!response.isError) {
-          setDeleteConfirmationVisible(false);
-          dispatch(triggerCategoriesUpdate());
-          handleCloseModal();
-        }
-        setIsDeleting(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setIsDeleting(false);
-      });
+    const response = await dataAPI.deleteService(service.id);
+    if (!response.isError) {
+      setDeleteConfirmationVisible(false);
+      dispatch(triggerCategoriesUpdate());
+      handleCloseModal();
+    } else {
+      console.error(response.message);
+    }
+    setIsDeleting(false);
   };
 
   const handleDeleteService = () => {
@@ -163,6 +165,20 @@ const ServiceDetailsModal = props => {
     });
     setExpandedMenu('info');
     onClose();
+  };
+
+  const handleDoctorChange = doctorService => {
+    const newServices = serviceInfo.doctors.map(item => {
+      if (item.doctorId !== doctorService.doctorId) {
+        return item;
+      }
+
+      return doctorService;
+    });
+    setServiceInfo({
+      ...serviceInfo,
+      doctors: newServices,
+    });
   };
 
   const handleInfoChanged = newInfo => {
@@ -207,10 +223,12 @@ const ServiceDetailsModal = props => {
           />
 
           <ServiceDoctors
-            doctors={doctors}
+            onDoctorChange={handleDoctorChange}
+            serviceId={service?.id}
+            doctors={serviceInfo.doctors}
             onToggle={handleDoctorsToggle}
             isExpanded={expandedMenu === 'doctors'}
-            showStep={service == null}
+            showStep={!service}
           />
         </div>
 

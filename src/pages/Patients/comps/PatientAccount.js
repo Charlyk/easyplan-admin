@@ -51,7 +51,8 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
 
   const isFormValid = () => {
     return (
-      (patientData.email.length === 0 || patientData.email.match(EmailRegex)) &&
+      (patientData?.email?.length === 0 ||
+        patientData?.email?.match(EmailRegex)) &&
       patientData.isPhoneValid
     );
   };
@@ -95,9 +96,9 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
             <Form.Label>{textForKey('Email')}</Form.Label>
             <InputGroup>
               <Form.Control
-                value={patientData.email}
+                value={patientData?.email || ''}
                 isInvalid={
-                  patientData?.email.length > 0 &&
+                  patientData?.email?.length > 0 &&
                   !patientData.email.match(EmailRegex)
                 }
                 type='email'
