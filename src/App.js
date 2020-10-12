@@ -156,7 +156,11 @@ function App() {
 
   return (
     <Router basename='/'>
-      {redirectUser && <Redirect to='/' />}
+      {!authManager.isLoggedIn() ? (
+        <Redirect to='/login' />
+      ) : redirectUser ? (
+        <Redirect to='/analytics/general' />
+      ) : null}
       <React.Fragment>
         <RegisterPaymentModal
           {...paymentModal}
