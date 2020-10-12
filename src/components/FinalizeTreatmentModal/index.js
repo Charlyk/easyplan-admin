@@ -18,13 +18,16 @@ const FinalizeTreatmentModal = ({
       open={open}
       onClose={onClose}
       onPositiveClick={onSave}
+      positiveBtnText={textForKey('Finalize')}
       title={textForKey('Finalize treatment')}
     >
       <div className='finalize-treatment-content'>
         <span className='modal-subtitle'>{textForKey('Services')}</span>
         {services.map(item => (
           <div key={item.id} className='final-service-item'>
-            <span className='service-name'>{item.name}</span>
+            <span className='service-name'>
+              {item.name} {item.toothId}
+            </span>
             <span className='service-price'>{item.price} MDL</span>
           </div>
         ))}

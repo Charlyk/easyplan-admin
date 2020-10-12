@@ -153,20 +153,10 @@ const DoctorPatientDetails = () => {
         continue;
       }
       for (let toothService of tooth.services) {
-        if (allServices?.some(item => item.id === toothService.id)) {
-          allServices = allServices.map(item => {
-            if (item.id !== toothService.id) {
-              return item;
-            }
-
-            return {
-              ...item,
-              price: item.price + toothService.price,
-            };
-          });
-        } else {
-          allServices.push(toothService);
-        }
+        allServices.push({
+          ...toothService,
+          toothId: tooth.toothId,
+        });
       }
     }
     return allServices;

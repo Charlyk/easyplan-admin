@@ -7,6 +7,7 @@
     padding: 1rem 3rem;
     width: 50%;
     height: 100%;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
 
@@ -57,6 +58,7 @@
       .services-total {
         display: flex;
         flex-direction: column;
+        flex: 1;
         width: 50%;
 
         .no-data-label {
@@ -96,6 +98,7 @@
   }
 
   .positive-button {
+    margin-bottom: 1rem;
     &.treatment-plan-btn {
       flex: unset;
       width: 16rem;
