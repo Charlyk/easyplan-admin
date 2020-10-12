@@ -17,6 +17,7 @@
 
   .avatar-container {
     .avatar-image, svg {
+      object-fit: cover;
       width: 3rem;
       height: 3rem;
       margin-left: 1rem;
