@@ -15,6 +15,11 @@ const DoctorPatients = props => {
   const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
+  const [filterData, setFilterData] = useState({
+    patientName: '',
+    serviceId: 'all',
+    appointmentStatus: 'all',
+  });
 
   useEffect(() => {
     fetchPatients();
@@ -35,16 +40,42 @@ const DoctorPatients = props => {
     history.push(`/${schedule.patientId}/${schedule.id}`);
   };
 
+  const handlePatientNameChange = event => {
+    setFilterData({
+      ...filterData,
+      patientName: event.target.value,
+    });
+  };
+
+  const handleServiceChange = event => {
+    setFilterData({
+      ...filterData,
+      serviceId: event.target.value,
+    });
+  };
+
+  const handleAppointmentStatusChange = event => {
+    setFilterData({
+      ...filterData,
+      appointmentStatus: event.target.value,
+    });
+  };
+
   return (
     <div className='doctor-patients-root'>
       <div className='filter-wrapper'>
-        <PatientsFilter />
+        <PatientsFilter
+          onNameChange={handlePatientNameChange}
+          onServiceChange={handleServiceChange}
+          onStatusChange={handleAppointmentStatusChange}
+        />
       </div>
       <div className='data-wrapper'>
         {isLoading && (
           <Spinner animation='border' className='loading-spinner' />
         )}
         <PatientsList
+          filterData={filterData}
           schedules={schedules}
           onPatientSelect={handlePatientSelected}
         />
