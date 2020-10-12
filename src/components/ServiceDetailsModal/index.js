@@ -44,9 +44,9 @@ const ServiceDetailsModal = props => {
   });
 
   useEffect(() => {
+    fetchDoctors();
     if (service != null && show) {
       setServiceInfo(service);
-      fetchDoctors();
     }
   }, [show, service]);
 
@@ -71,7 +71,7 @@ const ServiceDetailsModal = props => {
       console.error(response.message);
     } else {
       const doctorsService = response.data.map(item => {
-        const itemService = item.services.find(it => it.id === service.id);
+        const itemService = item.services.find(it => it.id === service?.id);
         return {
           doctorId: item.id,
           doctorName: `${item.firstName} ${item.lastName}`,
@@ -80,10 +80,17 @@ const ServiceDetailsModal = props => {
           percentage: itemService?.percentage,
         };
       });
-      setServiceInfo({
-        ...service,
-        doctors: doctorsService,
-      });
+      if (service != null) {
+        setServiceInfo({
+          ...service,
+          doctors: doctorsService,
+        });
+      } else {
+        setServiceInfo({
+          ...serviceInfo,
+          doctors: doctorsService,
+        });
+      }
     }
   };
 
