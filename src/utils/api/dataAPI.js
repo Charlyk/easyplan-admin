@@ -840,4 +840,24 @@ export default {
       };
     }
   },
+
+  /**
+   * Delete schedule with specified id
+   * @param {string} scheduleId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  deleteSchedule: async scheduleId => {
+    try {
+      const response = await instance().delete(
+        `schedules/${scheduleId}/delete`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

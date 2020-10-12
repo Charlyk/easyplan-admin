@@ -3,9 +3,14 @@ import React, { useEffect, useReducer } from 'react';
 import './styles.scss';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setAppointmentModal } from '../../redux/actions/actions';
+import ConfirmationModal from '../../components/ConfirmationModal';
+import {
+  setAppointmentModal,
+  toggleAppointmentsUpdate,
+} from '../../redux/actions/actions';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
 import CalendarDoctors from './comps/left/CalendarDoctors';
 import ServicesFilter from './comps/left/ServicesFilter';
@@ -18,6 +23,8 @@ const reducerTypes = {
   setViewDate: 'setViewDate',
   isFetching: 'isFetching',
   setSelectedSchedule: 'setSelectedSchedule',
+  setDeleteSchedule: 'setDeleteSchedule',
+  setIsDeleting: 'setIsDeleting',
 };
 
 const reducerActions = {
@@ -36,6 +43,11 @@ const reducerActions = {
     type: reducerTypes.setSelectedSchedule,
     payload,
   }),
+  setDeleteSchedule: payload => ({
+    type: reducerTypes.setDeleteSchedule,
+    payload,
+  }),
+  setIsDeleting: payload => ({ type: reducerTypes.setIsDeleting, payload }),
 };
 
 const reducer = (state, action) => {
@@ -52,6 +64,10 @@ const reducer = (state, action) => {
       return { ...state, viewDate: action.payload };
     case reducerTypes.setSelectedSchedule:
       return { ...state, selectedSchedule: action.payload };
+    case reducerTypes.setDeleteSchedule:
+      return { ...state, deleteSchedule: action.payload };
+    case reducerTypes.setIsDeleting:
+      return { ...state, isDeleting: action.payload };
     default:
       throw new Error('unknown type');
   }
@@ -64,6 +80,8 @@ const initialState = {
   appointmentModal: { open: false },
   isFetching: false,
   viewDate: new Date(),
+  deleteSchedule: { open: false, schedule: null },
+  isDeleting: false,
 };
 
 const Calendar = () => {
@@ -77,6 +95,8 @@ const Calendar = () => {
       isFetching,
       viewDate,
       selectedSchedule,
+      deleteSchedule,
+      isDeleting,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -148,8 +168,39 @@ const Calendar = () => {
     );
   };
 
+  const handleDeleteSchedule = schedule => {
+    localDispatch(reducerActions.setDeleteSchedule({ open: true, schedule }));
+  };
+
+  const handleConfirmDeleteSchedule = async () => {
+    if (deleteSchedule.schedule == null) {
+      return;
+    }
+    localDispatch(reducerActions.setIsDeleting(true));
+    await dataAPI.deleteSchedule(deleteSchedule.schedule.id);
+    localDispatch(
+      reducerActions.setDeleteSchedule({ open: false, schedule: null }),
+    );
+    localDispatch(reducerActions.setIsDeleting(false));
+    dispatch(toggleAppointmentsUpdate());
+  };
+
+  const handleCloseDeleteSchedule = () => {
+    localDispatch(
+      reducerActions.setDeleteSchedule({ open: false, schedule: null }),
+    );
+  };
+
   return (
     <div className='calendar-root'>
+      <ConfirmationModal
+        isLoading={isDeleting}
+        show={deleteSchedule.open}
+        title={textForKey('Delete appointment')}
+        message={textForKey('delete appointment message')}
+        onConfirm={handleConfirmDeleteSchedule}
+        onClose={handleCloseDeleteSchedule}
+      />
       <div className='calendar-root__content__left-container'>
         <ServicesFilter
           services={filters.services}
@@ -175,6 +226,7 @@ const Calendar = () => {
       </div>
       <div className='calendar-root__content__right-container'>
         <CalendarRightContainer
+          onDeleteSchedule={handleDeleteSchedule}
           onEditSchedule={handleEditSchedule}
           selectedSchedule={selectedSchedule}
           onDateChange={handleViewDateChange}

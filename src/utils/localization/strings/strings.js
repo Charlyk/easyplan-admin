@@ -148,6 +148,9 @@ export default {
     'enter service name': 'Enter service name',
     searching: 'Searching',
     'no results': 'No results found',
+    'delete appointment': 'Delete appointment',
+    'delete appointment message':
+      'Are you sure you want to delete this appointment?',
   },
   ro: {
     analytics: 'Analitică',
@@ -299,6 +302,9 @@ export default {
     'enter service name': 'Introduceți numele serviciului',
     searching: 'Căutăm',
     'no results': 'Nu au fost găsite rezultate',
+    'delete appointment': 'Șterge programare',
+    'delete appointment message':
+      'Sunteți sigur(ă) că doriți să ștergeți această programare?',
   },
   ru: {
     analytics: 'Analytics',
@@ -448,5 +454,8 @@ export default {
     'enter service name': 'Introduceți numele serviciului',
     searching: 'Căutăm',
     'no results': 'Nu au fost găsite rezultate',
+    'delete appointment': 'Delete appointment',
+    'delete appointment message':
+      'Are you sure you want to delete this appointment?',
   },
 };

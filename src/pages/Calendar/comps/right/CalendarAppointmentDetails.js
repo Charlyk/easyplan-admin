@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
 import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock';
+import IconDelete from '../../../../assets/icons/iconDelete';
 import IconEditService from '../../../../assets/icons/iconEditService';
 import IconPhone from '../../../../assets/icons/iconPhone';
 import { ScheduleStatuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 
-const CalendarAppointmentDetails = ({ schedule, onEdit }) => {
+const CalendarAppointmentDetails = ({ schedule, onEdit, onDelete }) => {
   if (schedule == null) {
     return null;
   }
@@ -24,6 +25,10 @@ const CalendarAppointmentDetails = ({ schedule, onEdit }) => {
     onEdit(schedule);
   };
 
+  const handleDeleteSchedule = () => {
+    onDelete(schedule);
+  };
+
   return (
     <div className='appointment-details'>
       <div className='appointment-details-header'>
@@ -34,13 +39,23 @@ const CalendarAppointmentDetails = ({ schedule, onEdit }) => {
           />
           <span className='service-name'>{schedule.serviceName}</span>
         </div>
-        <div
-          role='button'
-          tabIndex={0}
-          className='edit-button'
-          onClick={handleEditSchedule}
-        >
-          <IconEditService />
+        <div className='actions-container'>
+          <div
+            role='button'
+            tabIndex={0}
+            className='delete-button'
+            onClick={handleDeleteSchedule}
+          >
+            <IconDelete />
+          </div>
+          <div
+            role='button'
+            tabIndex={0}
+            className='edit-button'
+            onClick={handleEditSchedule}
+          >
+            <IconEditService />
+          </div>
         </div>
       </div>
       <div className='appointment-details-data'>
@@ -101,6 +116,7 @@ export default CalendarAppointmentDetails;
 
 CalendarAppointmentDetails.propTypes = {
   onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
   schedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
@@ -111,7 +127,7 @@ CalendarAppointmentDetails.propTypes = {
     serviceId: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.string,
+    serviceDuration: PropTypes.number,
     dateAndTime: PropTypes.string,
     status: PropTypes.string,
     note: PropTypes.string,
@@ -120,4 +136,5 @@ CalendarAppointmentDetails.propTypes = {
 
 CalendarAppointmentDetails.defaultProps = {
   onEdit: () => null,
+  onDelete: () => null,
 };

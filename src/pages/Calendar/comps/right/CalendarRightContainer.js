@@ -16,6 +16,7 @@ const CalendarRightContainer = ({
   selectedSchedule,
   onDateChange,
   onEditSchedule,
+  onDeleteSchedule,
 }) => {
   return (
     <div className='calendar-root__appointment-info'>
@@ -33,6 +34,7 @@ const CalendarRightContainer = ({
         date={selectedDate}
       />
       <CalendarAppointmentDetails
+        onDelete={onDeleteSchedule}
         onEdit={onEditSchedule}
         schedule={selectedSchedule}
       />
@@ -46,6 +48,7 @@ CalendarRightContainer.propTypes = {
   canAddAppointment: PropTypes.bool,
   selectedDate: PropTypes.instanceOf(Date),
   onEditSchedule: PropTypes.func,
+  onDeleteSchedule: PropTypes.func,
   selectedSchedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
@@ -56,7 +59,7 @@ CalendarRightContainer.propTypes = {
     serviceId: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.string,
+    serviceDuration: PropTypes.number,
     dateAndTime: PropTypes.string,
     status: PropTypes.string,
     note: PropTypes.string,
@@ -71,4 +74,5 @@ CalendarRightContainer.defaultProps = {
   onAddAppointment: () => null,
   onDateChange: () => null,
   onEditSchedule: () => null,
+  onDeleteSchedule: () => null,
 };

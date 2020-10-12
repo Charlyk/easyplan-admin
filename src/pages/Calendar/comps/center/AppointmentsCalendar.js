@@ -192,7 +192,7 @@ AppointmentsCalendar.propTypes = {
     serviceId: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.string,
+    serviceDuration: PropTypes.number,
     dateAndTime: PropTypes.string,
     status: PropTypes.string,
     note: PropTypes.string,
