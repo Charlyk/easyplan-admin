@@ -44,6 +44,9 @@ const ToothView = ({
   };
 
   const handleOpenServicesPopper = () => {
+    if (services.length === 0) {
+      return;
+    }
     setShowServices(true);
   };
 

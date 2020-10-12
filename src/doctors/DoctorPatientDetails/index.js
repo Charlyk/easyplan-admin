@@ -77,8 +77,10 @@ const DoctorPatientDetails = () => {
       console.error(response.message);
     } else {
       setPatient(response.data.find(item => item.id === patientId));
-      await fetchServices();
-      await fetchScheduleDetails();
+      if (scheduleId !== 'view') {
+        await fetchServices();
+        await fetchScheduleDetails();
+      }
     }
     setIsLoading(false);
   };
