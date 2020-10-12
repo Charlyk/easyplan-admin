@@ -151,6 +151,8 @@ export default {
     'delete appointment': 'Delete appointment',
     'delete appointment message':
       'Are you sure you want to delete this appointment?',
+    'for payment': 'For payment',
+    'patients statistics': 'Patients statistics',
   },
   ro: {
     analytics: 'Analitică',
@@ -305,6 +307,8 @@ export default {
     'delete appointment': 'Șterge programare',
     'delete appointment message':
       'Sunteți sigur(ă) că doriți să ștergeți această programare?',
+    'for payment': 'Spre achitare',
+    'patients statistics': 'Statistica pacienților',
   },
   ru: {
     analytics: 'Analytics',
@@ -457,5 +461,7 @@ export default {
     'delete appointment': 'Delete appointment',
     'delete appointment message':
       'Are you sure you want to delete this appointment?',
+    'for payment': 'For payment',
+    'patients statistics': 'Statistica pacienților',
   },
 };
