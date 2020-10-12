@@ -385,6 +385,9 @@ body {
     svg, img {
       width: 4rem;
       height: 4rem;
+      min-width: 4rem;
+      min-height: 4rem;
+      overflow: hidden;
       object-fit: cover;
     }
 
