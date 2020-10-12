@@ -8,6 +8,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
+import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
@@ -25,6 +26,10 @@ const initialState = {
   service: null,
   services: [],
   hours: [],
+  isNewPatient: false,
+  patientFirstName: '',
+  patientLastName: '',
+  patientPhoneNumber: '',
   isFetchingHours: false,
   isCreatingSchedule: false,
   isPatientValid: false,
@@ -47,6 +52,11 @@ const reducerTypes = {
   service: 'service',
   services: 'services',
   setHours: 'setHours',
+  setPatientFirstName: 'setPatientFirstName',
+  setPatientLastName: 'setPatientLastName',
+  setPatientPhoneNumber: 'setPatientPhoneNumber',
+  isPhoneValid: false,
+  setIsNewPatient: 'setIsNewPatient',
   patientsLoading: 'patientsLoading',
   servicesLoading: 'servicesLoading',
   doctorsLoading: 'doctorsLoading',
@@ -123,6 +133,24 @@ const reducerActions = {
     payload,
   }),
   resetState: () => ({ type: reducerTypes.reset }),
+  setIsNewPatient: payload => ({ type: reducerTypes.setIsNewPatient, payload }),
+  setPatientFirstName: payload => ({
+    type: reducerTypes.setPatientFirstName,
+    payload,
+  }),
+  setPatientLastName: payload => ({
+    type: reducerTypes.setPatientLastName,
+    payload,
+  }),
+  /**
+   * Update patient phone
+   * @param {{phoneNumber: string, isPhoneValid: boolean}} payload
+   * @return {{payload: *, type: string}}
+   */
+  setPatientPhoneNumber: payload => ({
+    type: reducerTypes.setPatientPhoneNumber,
+    payload,
+  }),
 };
 
 const reducer = (state, action) => {
@@ -198,6 +226,18 @@ const reducer = (state, action) => {
         isServiceValid: true,
       };
     }
+    case reducerTypes.setIsNewPatient:
+      return { ...state, isNewPatient: action.payload };
+    case reducerTypes.setPatientFirstName:
+      return { ...state, patientFirstName: action.payload };
+    case reducerTypes.setPatientLastName:
+      return { ...state, patientLastName: action.payload };
+    case reducerTypes.setPatientPhoneNumber:
+      return {
+        ...state,
+        patientPhoneNumber: action.payload.phoneNumber,
+        isPhoneValid: action.payload.isPhoneValid,
+      };
     case reducerTypes.reset:
       return initialState;
   }
@@ -223,6 +263,11 @@ const AddAppointmentModal = ({
       loading,
       hours,
       scheduleId,
+      patientLastName,
+      patientFirstName,
+      patientPhoneNumber,
+      isPhoneValid,
+      isNewPatient,
       appointmentDate,
       appointmentHour,
       appointmentNote,
@@ -403,13 +448,35 @@ const AddAppointmentModal = ({
     localDispatch(reducerActions.setAppointmentStatus(event.target.value));
   };
 
+  const changePatientMode = () => {
+    const isNew = !isNewPatient;
+    localDispatch(reducerActions.setIsNewPatient(isNew));
+    if (isNew) {
+      localDispatch(reducerActions.setPatient(null));
+      localDispatch(reducerActions.setIsPatientValid(false));
+    }
+  };
+
+  const handlePatientNameChange = event => {
+    const newValue = event.target.value;
+    switch (event.target.id) {
+      case 'patientFirstName':
+        localDispatch(reducerActions.setPatientFirstName(newValue));
+        break;
+      case 'patientLastName':
+        localDispatch(reducerActions.setPatientLastName(newValue));
+        break;
+    }
+  };
+
   const isFormValid = () => {
     return (
       isDoctorValid &&
-      isPatientValid &&
+      (isNewPatient || isPatientValid) &&
       isServiceValid &&
       appointmentDate != null &&
-      appointmentHour.length > 0
+      appointmentHour.length > 0 &&
+      (!isNewPatient || isPhoneValid)
     );
   };
 
@@ -422,7 +489,10 @@ const AddAppointmentModal = ({
       'YYYY-MM-DD',
     )} ${appointmentHour}`;
     const response = await dataAPI.createNewSchedule({
-      patientId: patient.id,
+      patientFirstName,
+      patientLastName,
+      patientPhoneNumber,
+      patientId: patient?.id,
       doctorId: doctor.id,
       serviceId: service.id,
       date: scheduleDate,
@@ -437,6 +507,15 @@ const AddAppointmentModal = ({
       onClose();
       dispatch(toggleAppointmentsUpdate());
     }
+  };
+
+  const handlePhoneChange = (value, data, event) => {
+    localDispatch(
+      reducerActions.setPatientPhoneNumber({
+        phoneNumber: `+${value}`,
+        isPhoneValid: !event.target.classList.value.includes('invalid-number'),
+      }),
+    );
   };
 
   const disableDate = date => {
@@ -482,23 +561,76 @@ const AddAppointmentModal = ({
       onPositiveClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >
-      <Form.Group controlId='patient'>
-        <Form.Label>{textForKey('Patient')}</Form.Label>
-        <AsyncTypeahead
-          isValid={isPatientValid}
-          placeholder={textForKey('Enter patient name or phone')}
-          id='patients'
-          emptyLabel={textForKey('No results...')}
-          searchText={textForKey('Searching...')}
-          isLoading={loading.patients}
-          filterBy={['firstName', 'lastName', 'phoneNumber']}
-          labelKey='fullName'
-          onSearch={handlePatientSearch}
-          options={patients}
-          selected={patient ? [patient] : []}
-          onChange={handlePatientChange}
-        />
-      </Form.Group>
+      {isNewPatient && (
+        <Form.Group>
+          <Form.Label>{textForKey('Patient name')}</Form.Label>
+          <div className='first-and-last-name'>
+            <Form.Control
+              id='patientLastName'
+              value={patientLastName}
+              onChange={handlePatientNameChange}
+              placeholder={textForKey('Last name')}
+            />
+            <Form.Control
+              id='patientFirstName'
+              value={patientFirstName}
+              onChange={handlePatientNameChange}
+              placeholder={textForKey('First name')}
+            />
+          </div>
+        </Form.Group>
+      )}
+      {isNewPatient && (
+        <Form.Group controlId='phoneNumber'>
+          <Form.Label>{textForKey('Phone number')}</Form.Label>
+          <InputGroup>
+            <PhoneInput
+              onChange={handlePhoneChange}
+              value={patientPhoneNumber}
+              alwaysDefaultMask
+              countryCodeEditable={false}
+              country='md'
+              placeholder='079123456'
+              isValid={(inputNumber, country) => {
+                const phoneNumber = inputNumber.replace(
+                  `${country.dialCode}`,
+                  '',
+                );
+                return phoneNumber.length === 0 || phoneNumber.length === 8;
+              }}
+            />
+          </InputGroup>
+        </Form.Group>
+      )}
+      {!isNewPatient && (
+        <Form.Group controlId='patient'>
+          <Form.Label>{textForKey('Patient')}</Form.Label>
+          <AsyncTypeahead
+            isValid={isPatientValid}
+            placeholder={textForKey('Enter patient name or phone')}
+            id='patients'
+            emptyLabel={textForKey('No results...')}
+            searchText={textForKey('Searching...')}
+            isLoading={loading.patients}
+            filterBy={['firstName', 'lastName', 'phoneNumber']}
+            labelKey='fullName'
+            onSearch={handlePatientSearch}
+            options={patients}
+            selected={patient ? [patient] : []}
+            onChange={handlePatientChange}
+          />
+        </Form.Group>
+      )}
+      <div
+        className='patient-mode-button'
+        role='button'
+        tabIndex={0}
+        onClick={changePatientMode}
+      >
+        <span>
+          {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
+        </span>
+      </div>
       <Form.Group controlId='doctor'>
         <Form.Label>{textForKey('Doctor')}</Form.Label>
         <AsyncTypeahead
@@ -523,8 +655,8 @@ const AddAppointmentModal = ({
           isValid={isServiceValid}
           placeholder={textForKey('Enter service name')}
           id='services'
-          emptyLabel={textForKey('No results...')}
-          searchText={textForKey('Searching...')}
+          emptyLabel={`${textForKey('No results')}`}
+          searchText={`${textForKey('Searching')}...`}
           isLoading={loading.services}
           filterBy={['name']}
           labelKey='name'

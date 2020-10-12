@@ -85,7 +85,9 @@ const PatientDetails = ({
             onAddNote={onAddAppointmentNote}
           />
         )}
-        {selectedTab === TabId.appointments && <PatientAppointments />}
+        {selectedTab === TabId.appointments && (
+          <PatientAppointments patient={patient} />
+        )}
         {selectedTab === TabId.notes && (
           <PatientNotes patient={patient} onAddNote={onAddNote} />
         )}

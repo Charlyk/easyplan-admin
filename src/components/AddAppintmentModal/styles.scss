@@ -1,6 +1,37 @@
 .add-appointment-root {
   position: relative;
 
+  .first-and-last-name {
+    display: flex;
+  }
+
+  .patient-mode-button {
+    margin-top: .2rem;
+    outline: none;
+    display: flex;
+    align-self: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+
+    span {
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: .75rem;
+      margin-bottom: 0;
+      color: #3A83DC;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 0;
+    margin-top: .5rem;
+  }
+
   .form-label {
     font-family: Inter, sans-serif;
     font-style: normal;
@@ -10,6 +41,7 @@
   }
 
   .form-control {
+    width: 100%;
     background-color: #FAFAFD;
   }
 

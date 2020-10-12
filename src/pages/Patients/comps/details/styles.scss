@@ -48,6 +48,14 @@
     flex-direction: column;
     overflow-y: scroll;
     padding: 1.5rem;
+    min-height: 10rem;
+    position: relative;
+
+    .loading-spinner {
+      position: absolute;
+      top: 45%;
+      left: 45%;
+    }
   }
 
   &__actions {

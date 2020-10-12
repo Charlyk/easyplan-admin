@@ -32,12 +32,6 @@ const TreatmentPlans = ({ patient }) => {
         <TreatmentPlan />
         <TreatmentPlan />
       </div>
-      <div className='patient-treatment-plans__actions'>
-        <Button className='btn-outline-primary' variant='outline-primary'>
-          {textForKey('Add plan')}
-          <IconPlus fill={null} />
-        </Button>
-      </div>
     </div>
   );
 };

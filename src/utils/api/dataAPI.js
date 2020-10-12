@@ -3,8 +3,8 @@ import moment from 'moment';
 
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8000/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8000/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -692,6 +692,9 @@ export default {
   /**
    * Create new schedule
    * @param {Object} requestBody
+   * @param {string?} requestBody.patientFirstName
+   * @param {string?} requestBody.patientLastName
+   * @param {string?} requestBody.patientPhoneNumber
    * @param {string?} requestBody.patientId
    * @param {string?} requestBody.patientFirstName
    * @param {string?} requestBody.patientLastName
@@ -807,6 +810,26 @@ export default {
       const response = await instance().put(
         `patients/${patientId}/finalize-treatment`,
         requestBody,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch all schedules for a patient
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchPatientSchedules: async patientId => {
+    try {
+      const response = await instance().get(
+        `schedules/patient-schedules/${patientId}`,
       );
       const { data: responseData } = response;
       return responseData;
