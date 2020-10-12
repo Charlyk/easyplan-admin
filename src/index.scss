@@ -384,7 +384,8 @@ body {
 
     svg, img {
       width: 4rem;
-      min-height: 4rem;
+      height: 4rem;
+      object-fit: cover;
     }
 
     img {
