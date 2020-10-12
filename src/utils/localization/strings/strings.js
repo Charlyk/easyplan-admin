@@ -124,6 +124,8 @@ export default {
     'treatment plan': 'Treatment plan',
     diagnosis: 'Diagnosis',
     radiograph: 'Radiograph',
+    occlusion: 'Occlusion',
+    included: 'Included',
     'fallen brackets': 'Fallen brackets',
     'appointments notes': 'Appointments notes',
     'add note': 'Add note',
@@ -158,6 +160,7 @@ export default {
     'appointment status': 'Appointment status',
     'treatment type': 'Treatment type',
     note: 'Notes',
+    'no treatment plan': 'No treatment plan',
   },
   ro: {
     analytics: 'Analitică',
@@ -283,8 +286,10 @@ export default {
     'accept invitation message':
       'Create a password that will be used to login to your account.',
     'treatment plan': 'Plan de tratament',
-    diagnosis: 'Diagnosis',
+    diagnosis: 'Diagnostică',
     radiograph: 'Radiografie',
+    occlusion: 'Ocluzie',
+    included: 'Inclus',
     'fallen brackets': 'Brackeți căzuți',
     'appointments notes': 'Vizite',
     'add note': 'Adaugă notă',
@@ -319,6 +324,7 @@ export default {
     'appointment status': 'Statutul programării',
     'treatment type': 'Tip tratament',
     note: 'Notițe',
+    'no treatment plan': 'Nu are plan de tratament',
   },
   ru: {
     analytics: 'Analytics',
@@ -445,6 +451,8 @@ export default {
     'treatment plan': 'Treatment plan',
     diagnosis: 'Diagnosis',
     radiograph: 'Radiograph',
+    occlusion: 'Occlusion',
+    included: 'Included',
     'appointments notes': 'Appointments notes',
     'add note': 'Add note',
     'initial phase': 'Initial phase',
@@ -478,5 +486,6 @@ export default {
     'appointment status': 'Appointment status',
     'treatment type': 'Treatment type',
     note: 'Notes',
+    'no treatment plan': 'No treatment plan',
   },
 };

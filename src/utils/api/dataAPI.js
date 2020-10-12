@@ -938,4 +938,19 @@ export default {
       };
     }
   },
+
+  fetchTreatmentPlan: async patientId => {
+    try {
+      const response = await instance().get(
+        `patients/${patientId}/treatment-plan`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

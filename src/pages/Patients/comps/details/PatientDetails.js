@@ -72,7 +72,7 @@ const PatientDetails = ({
 
         {showTabs.includes(TabId.treatmentPlans) && (
           <EasyTab
-            title={textForKey('Treatment plans')}
+            title={textForKey('Treatment plan')}
             onClick={() => handleTabClick(TabId.treatmentPlans)}
             selected={selectedTab === TabId.treatmentPlans}
           />
@@ -94,7 +94,9 @@ const PatientDetails = ({
         {selectedTab === TabId.xRay && (
           <PatientXRay onAddXRay={onAddXRay} patient={patient} />
         )}
-        {selectedTab === TabId.treatmentPlans && <TreatmentPlans />}
+        {selectedTab === TabId.treatmentPlans && (
+          <TreatmentPlans patient={patient} />
+        )}
       </div>
     </div>
   );
