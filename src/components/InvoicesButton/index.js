@@ -102,7 +102,7 @@ const InvoicesButton = props => {
       ref={buttonRef}
       onClick={handleToggleInvoices}
     >
-      {isLoading && <Spinner animation='border' />}
+      {isLoading && <Spinner animation='border' className='loading-spinner' />}
       {!isLoading && (
         <span className='button-text'>
           {textForKey('For payment')} ({invoices.length})

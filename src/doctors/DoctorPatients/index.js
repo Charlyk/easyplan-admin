@@ -31,7 +31,6 @@ const DoctorPatients = props => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      console.log(response.data);
       setSchedules(response.data);
     }
     setIsLoading(false);

@@ -20,7 +20,6 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const handleFormChange = event => {
-    console.log(event.target.id);
     setData({
       ...data,
       [event.target.id]: event.target.value,

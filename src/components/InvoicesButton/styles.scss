@@ -12,6 +12,12 @@
   position: relative;
   cursor: pointer;
 
+  .loading-spinner {
+    color: #3A83DC;
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
   .invoices-popper-root {
     z-index: 999;
     margin-top: 1rem;
