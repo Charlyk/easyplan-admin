@@ -58,6 +58,7 @@ const DoctorsMain = () => {
     <div className='doctors-main-root'>
       <div className='doctor-page-header-root'>
         <PageHeader
+          isDoctor
           showLogo
           onLogout={handleStartLogout}
           titleComponent={

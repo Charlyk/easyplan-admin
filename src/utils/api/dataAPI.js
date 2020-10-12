@@ -873,4 +873,21 @@ export default {
       };
     }
   },
+
+  /**
+   * Fetch clinic invoices
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchClinicInvoices: async () => {
+    try {
+      const response = await instance().get('clinics/invoices');
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

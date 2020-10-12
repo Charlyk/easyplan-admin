@@ -13,6 +13,7 @@ import IconTurnOff from '../../assets/icons/iconTurnOff';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
+import InvoicesButton from '../InvoicesButton';
 
 const actions = [
   {
@@ -26,7 +27,7 @@ const actions = [
 const PageHeader = props => {
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
-  const { title, titleComponent, onLogout } = props;
+  const { title, titleComponent, isDoctor, onLogout } = props;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -57,6 +58,7 @@ const PageHeader = props => {
       >
         {titleComponent || title}
       </div>
+      {!isDoctor && <InvoicesButton />}
       <div className='page-header__actions'>
         <div className='page-header__notifications'>
           <IconNotifications />
@@ -88,6 +90,7 @@ PageHeader.propTypes = {
   title: PropTypes.string,
   showLogo: PropTypes.bool,
   titleComponent: PropTypes.element,
+  isDoctor: PropTypes.bool,
   user: PropTypes.shape({
     id: PropTypes.string,
     avatar: PropTypes.string,

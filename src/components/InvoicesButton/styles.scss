@@ -1,0 +1,93 @@
+.invoices-button-root {
+  outline: none;
+  width: 15rem;
+  height: 3rem;
+  background: #F4FAFE;
+  border: 1px solid #3A83DC;
+  box-sizing: border-box;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+
+  .invoices-popper-root {
+    z-index: 999;
+    margin-top: 1rem;
+    cursor: default;
+
+    .invoices-paper {
+      padding: 1rem;
+      width: 35rem;
+      border: #3A83DC 1px solid;
+      border-radius: 4px;
+      background-color: #F4FAFE;
+
+      table {
+        border-collapse: separate;
+        border-spacing: 0 .5rem;
+        width: 100%;
+
+        thead {
+          tr {
+            td {
+              padding-left: 1rem;
+              padding-right: 1rem;
+              font-family: Inter, sans-serif;
+              font-style: normal;
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 24px;
+              color: #3A83DC;
+            }
+          }
+        }
+
+        tbody {
+          tr {
+            background: #FFFFFF;
+            box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+            border-radius: 4px;
+
+            td {
+              padding: .5rem 1rem;
+              font-family: Inter, sans-serif;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px;
+              line-height: 20px;
+              color: #34354C;
+
+              .positive-button {
+                height: 1.5rem;
+              }
+            }
+          }
+        }
+
+        tr {
+          td {
+            width: calc(100% / 3);
+          }
+        }
+      }
+    }
+  }
+
+  .button-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #3A83DC;
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    .button-text {
+      opacity: 0.7;
+    }
+  }
+}
