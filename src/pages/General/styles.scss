@@ -110,8 +110,10 @@
   position: relative;
 
   .footer {
+    position: relative;
+
     &.is-new {
-      position: absolute;
+      position: absolute !important;
       bottom: 1rem;
       align-items: center;
       justify-content: center;
