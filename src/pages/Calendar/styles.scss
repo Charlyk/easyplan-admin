@@ -383,7 +383,7 @@
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: 600;
-        font-size: 12px;
+        font-size: 11px;
         margin-right: .5rem;
       }
 
@@ -391,7 +391,7 @@
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: 12px;
+        font-size: 11px;
         color: #34354C;
         white-space: nowrap;
       }
@@ -534,6 +534,7 @@
             align-items: flex-start;
 
             .service-name {
+              font-size: 10px;
               margin-right: 0;
             }
 

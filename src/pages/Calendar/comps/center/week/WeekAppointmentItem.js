@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { getAppointmentTop } from '../../../../../utils/helperFuncs';
 
-const minHeight = 5;
+const minHeight = 32;
 const minTop = 3;
 
 const WeekAppointmentItem = ({ schedule, onSelect }) => {
@@ -63,6 +63,7 @@ export default WeekAppointmentItem;
 
 WeekAppointmentItem.propTypes = {
   onSelect: PropTypes.func,
+  signeLine: PropTypes.bool,
   schedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
