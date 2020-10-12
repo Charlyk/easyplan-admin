@@ -861,6 +861,10 @@ export default {
     }
   },
 
+  /**
+   * Fetch clinic doctors
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
   getClinicDoctors: async () => {
     try {
       const response = await instance().get('clinics/doctors');
@@ -881,6 +885,30 @@ export default {
   fetchClinicInvoices: async () => {
     try {
       const response = await instance().get('clinics/invoices');
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Register patient payment
+   * @param {Object} requestBody
+   * @param {string} requestBody.invoiceId
+   * @param {number} requestBody.amount
+   * @param {number} requestBody.discount
+   * @return {Promise<void>}
+   */
+  registerPayment: async requestBody => {
+    try {
+      const response = await instance().post(
+        'clinics/register-payment',
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

@@ -23,6 +23,7 @@ import AddNote from './components/AddNote';
 import AddXRay from './components/AddXRay';
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
+import RegisterPaymentModal from './components/RegisterPaymentModal';
 import DoctorsMain from './doctors/DoctorsMain';
 import AcceptInvitation from './pages/General/AcceptInvitation';
 import Login from './pages/Login';
@@ -32,6 +33,7 @@ import {
   setCurrentUser,
   setPatientNoteModal,
   setPatientXRayModal,
+  setPaymentModal,
   triggerUserLogout,
 } from './redux/actions/actions';
 import initialState from './redux/initialState';
@@ -41,6 +43,7 @@ import {
   newClinicIdSelector,
   patientNoteModalSelector,
   patientXRayModalSelector,
+  paymentModalSelector,
   updateCurrentUserSelector,
   userSelector,
 } from './redux/selectors/rootSelector';
@@ -56,6 +59,7 @@ function App() {
   const updateCurrentUser = useSelector(updateCurrentUserSelector);
   const createClinic = useSelector(createClinicSelector);
   const logout = useSelector(logoutSelector);
+  const paymentModal = useSelector(paymentModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
@@ -146,10 +150,18 @@ function App() {
     dispatch(setPatientXRayModal({ open: false, patientId: null }));
   };
 
+  const handleClosePaymentModal = () => {
+    dispatch(setPaymentModal({ open: false, invoice: null }));
+  };
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to='/' />}
       <React.Fragment>
+        <RegisterPaymentModal
+          {...paymentModal}
+          onClose={handleClosePaymentModal}
+        />
         <AddXRay {...patientXRayModal} onClose={handleClosePatientXRayModal} />
         <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
         <ConfirmationModal

@@ -14,6 +14,7 @@ export default {
     mode: 'notes',
     scheduleId: null,
   },
+  paymentModal: { open: false, invoice: null },
   patientXRayModal: { open: false, patientId: null },
   appointmentModal: { open: false, date: null, doctor: null, schedule: null },
   updateAppointments: false,

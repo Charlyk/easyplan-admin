@@ -4,13 +4,16 @@ import PropTypes from 'prop-types';
 
 import './styles.scss';
 import { Button, Form, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 
+import { setPaymentModal } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 
 import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
 
 const InvoicesButton = props => {
+  const dispatch = useDispatch();
   const buttonRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
@@ -40,6 +43,10 @@ const InvoicesButton = props => {
     setShowInvoices(false);
   };
 
+  const handlePayInvoice = invoice => {
+    dispatch(setPaymentModal({ open: true, invoice }));
+  };
+
   const invoicesPaper = (
     <Popper
       className='invoices-popper-root'
@@ -67,9 +74,12 @@ const InvoicesButton = props => {
                     <tr key={invoice.id}>
                       <td>{invoice.doctorName}</td>
                       <td>{invoice.patientName}</td>
-                      <td align='right'>{invoice.amount} MDL</td>
+                      <td align='right'>{invoice.amount - invoice.paid} MDL</td>
                       <td align='right'>
-                        <Button className='positive-button'>
+                        <Button
+                          className='positive-button'
+                          onClick={() => handlePayInvoice(invoice)}
+                        >
                           {textForKey('Pay')}
                         </Button>
                       </td>

@@ -145,3 +145,15 @@ export function setPatientXRayModal(payload) {
     payload,
   };
 }
+
+/**
+ * Toggle payment modal
+ * @param {{open: boolean, invoice: Object}} payload
+ * @return {{payload: *, type: string}}
+ */
+export function setPaymentModal(payload) {
+  return {
+    type: types.setPaymentModal,
+    payload,
+  };
+}

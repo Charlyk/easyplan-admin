@@ -13,4 +13,5 @@ export default {
   updateAppointmentsList: 'updateAppointmentsList',
   setAddPatientNote: 'setAddPatientNote',
   setAddPatientXRay: 'setAddPatientXRay',
+  setPaymentModal: 'setPaymentModal',
 };

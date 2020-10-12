@@ -72,6 +72,11 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         patientXRayModal: action.payload,
       };
+    case types.setPaymentModal:
+      return {
+        ...state,
+        paymentModal: action.payload,
+      };
     default:
       return state;
   }

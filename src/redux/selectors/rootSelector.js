@@ -22,6 +22,8 @@ export const patientNoteModalSelector = state => state.patientNoteModal;
 
 export const patientXRayModalSelector = state => state.patientXRayModal;
 
+export const paymentModalSelector = state => state.paymentModal;
+
 /**
  * Get current user from store
  * @param state

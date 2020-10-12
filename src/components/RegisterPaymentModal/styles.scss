@@ -1,0 +1,40 @@
+.register-payment-modal {
+
+  .register-payment-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .content-row {
+      width: 100%;
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+
+      .form-control {
+        width: 6rem;
+        margin-right: .5rem;
+      }
+
+      .title-text {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        margin-right: .3rem;
+        color: #34354C;
+      }
+
+      .content-text {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        color: #34354C;
+      }
+    }
+  }
+}
