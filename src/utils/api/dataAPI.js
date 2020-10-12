@@ -741,6 +741,26 @@ export default {
   },
 
   /**
+   * Fetch a list of all patients and schedules for current user
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchSchedulesAndPatients: async () => {
+    try {
+      const stringDate = moment().format('YYYY-MM-DD');
+      const response = await instance().get(
+        `schedules/doctor?date=${stringDate}`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
    * Fetch a list of working hours for current clinic at a specified week day
    * @param {number} weekDay
    * @param {'week'|'day'} period

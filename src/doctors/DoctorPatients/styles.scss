@@ -6,6 +6,7 @@
   .filter-wrapper {
     display: flex;
     width: 20rem;
+    max-height: 17rem;
   }
 
   .data-wrapper {
@@ -131,6 +132,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 160px;
+    width: 100%;
     padding: 1rem;
 
     .row-wrapper {
@@ -155,6 +158,23 @@
       font-style: normal;
       font-size: 12px;
       line-height: 16px;
+      color: #34354C;
+    }
+  }
+
+  .no-data-placeholder {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .no-data-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
       color: #34354C;
     }
   }

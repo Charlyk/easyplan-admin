@@ -18,16 +18,21 @@ const PatientsList = ({ schedules, filterData, onPatientSelect }) => {
 
   const filterPatients = () => {
     setFilteredSchedules(
-      schedules.filter(item => {
+      schedules.filter(({ patient, schedule }) => {
         return (
           (filterData.patientName.length === 0 ||
-            item.patientName
+            patient.fullName
               .toLowerCase()
-              .includes(filterData.patientName.toLowerCase())) &&
-          (filterData.serviceId === 'all' ||
-            item.serviceId === filterData.serviceId) &&
-          (filterData.appointmentStatus === 'all' ||
-            filterData.appointmentStatus === item.status)
+              .includes(filterData.patientName.toLowerCase()) ||
+            patient.phoneNumber.includes(
+              filterData.patientName.toLowerCase(),
+            )) &&
+          (schedule == null ||
+            filterData.serviceId === 'all' ||
+            schedule.serviceId === filterData.serviceId) &&
+          (schedule == null ||
+            filterData.appointmentStatus === 'all' ||
+            filterData.appointmentStatus === patient.status)
         );
       }),
     );
@@ -35,10 +40,11 @@ const PatientsList = ({ schedules, filterData, onPatientSelect }) => {
 
   return (
     <div className='patients-list-root'>
-      {filteredSchedules.map(schedule => (
+      {filteredSchedules.map(({ patient, schedule }) => (
         <DoctorPatientItem
-          key={schedule.id}
+          key={patient.id}
           schedule={schedule}
+          patient={patient}
           onView={onPatientSelect}
         />
       ))}
@@ -56,20 +62,31 @@ PatientsList.propTypes = {
   }),
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
-      patientId: PropTypes.string,
-      patientName: PropTypes.string,
-      patientPhone: PropTypes.string,
-      patientPhoto: PropTypes.string,
-      doctorId: PropTypes.string,
-      doctorName: PropTypes.string,
-      serviceId: PropTypes.string,
-      serviceName: PropTypes.string,
-      serviceColor: PropTypes.string,
-      serviceDuration: PropTypes.number,
-      dateAndTime: PropTypes.string,
-      status: PropTypes.string,
-      note: PropTypes.string,
+      schedule: PropTypes.shape({
+        id: PropTypes.string,
+        patientId: PropTypes.string,
+        patientName: PropTypes.string,
+        patientPhone: PropTypes.string,
+        patientPhoto: PropTypes.string,
+        doctorId: PropTypes.string,
+        doctorName: PropTypes.string,
+        serviceId: PropTypes.string,
+        serviceName: PropTypes.string,
+        serviceColor: PropTypes.string,
+        serviceDuration: PropTypes.number,
+        dateAndTime: PropTypes.string,
+        status: PropTypes.string,
+        note: PropTypes.string,
+      }),
+      patient: PropTypes.shape({
+        id: PropTypes.string,
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+        fullName: PropTypes.string,
+        email: PropTypes.string,
+        phoneNumber: PropTypes.string,
+        photo: PropTypes.string,
+      }),
     }),
   ),
   onPatientSelect: PropTypes.func,

@@ -7,40 +7,48 @@ import IconNext from '../../../../assets/icons/iconNext';
 import { ScheduleStatuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 
-const DoctorPatientItem = ({ schedule, onView }) => {
+const DoctorPatientItem = ({ schedule, patient, onView }) => {
   const appointmentStatus = ScheduleStatuses.find(
-    item => item.id === schedule.status,
+    item => item.id === schedule?.status,
   );
 
   return (
     <div className='patient-item-root'>
       <div className='item-header'>
         <IconAvatar />
-        <span className='patient-name'>{schedule.patientName}</span>
+        <span className='patient-name'>{patient.fullName}</span>
       </div>
-      <div className='item-data'>
-        <div className='row-wrapper'>
-          <span className='row-title'>{textForKey('Appointment status')}:</span>
-          <span className='row-value'>{appointmentStatus.name}</span>
+      {schedule ? (
+        <div className='item-data'>
+          <div className='row-wrapper'>
+            <span className='row-title'>
+              {textForKey('Appointment status')}:
+            </span>
+            <span className='row-value'>{appointmentStatus?.name}</span>
+          </div>
+          <div className='row-wrapper'>
+            <span className='row-title'>{textForKey('Treatment type')}:</span>
+            <span className='row-value'>{schedule?.serviceName}</span>
+          </div>
+          <div className='row-wrapper'>
+            <span className='row-title'>{textForKey('Note')}:</span>
+            <span className='row-value'>{schedule?.note}</span>
+          </div>
+          <div className='row-wrapper'>
+            <span className='row-title'>{textForKey('Doctor')}:</span>
+            <span className='row-value'>{schedule?.doctorName}</span>
+          </div>
         </div>
-        <div className='row-wrapper'>
-          <span className='row-title'>{textForKey('Treatment type')}:</span>
-          <span className='row-value'>{schedule.serviceName}</span>
+      ) : (
+        <div className='no-data-placeholder'>
+          <span className='no-data-label'>{textForKey('No appointment')}</span>
         </div>
-        <div className='row-wrapper'>
-          <span className='row-title'>{textForKey('Note')}:</span>
-          <span className='row-value'>{schedule.note}</span>
-        </div>
-        <div className='row-wrapper'>
-          <span className='row-title'>{textForKey('Doctor')}:</span>
-          <span className='row-value'>{schedule.doctorName}</span>
-        </div>
-      </div>
+      )}
       <div
         role='button'
         tabIndex={0}
         className='details-button'
-        onClick={() => onView(schedule)}
+        onClick={() => onView({ schedule, patient })}
       >
         <span className='button-text'>{textForKey('View')}</span>
         <IconNext circleColor='transparent' />
@@ -52,7 +60,6 @@ const DoctorPatientItem = ({ schedule, onView }) => {
 export default DoctorPatientItem;
 
 DoctorPatientItem.propTypes = {
-  patient: PropTypes.object,
   onView: PropTypes.func,
   schedule: PropTypes.shape({
     id: PropTypes.string,
@@ -69,6 +76,15 @@ DoctorPatientItem.propTypes = {
     dateAndTime: PropTypes.string,
     status: PropTypes.string,
     note: PropTypes.string,
+  }),
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    fullName: PropTypes.string,
+    email: PropTypes.string,
+    phoneNumber: PropTypes.string,
+    photo: PropTypes.string,
   }),
 };
 

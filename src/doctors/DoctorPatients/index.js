@@ -27,17 +27,22 @@ const DoctorPatients = props => {
 
   const fetchPatients = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchSchedules(currentUser.id, new Date());
+    const response = await dataAPI.fetchSchedulesAndPatients();
     if (response.isError) {
       console.error(response.message);
     } else {
+      console.log(response.data);
       setSchedules(response.data);
     }
     setIsLoading(false);
   };
 
-  const handlePatientSelected = schedule => {
-    history.push(`/${schedule.patientId}/${schedule.id}`);
+  const handlePatientSelected = ({ patient, schedule }) => {
+    if (schedule != null) {
+      history.push(`/${patient.id}/${schedule.id}`);
+    } else {
+      history.push(`/${patient.id}/view`);
+    }
   };
 
   const handlePatientNameChange = event => {
