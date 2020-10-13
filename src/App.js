@@ -117,6 +117,8 @@ function App() {
     const response = await authAPI.me();
     if (response.isError) {
       console.error(response.message);
+      authManager.logOut();
+      setRedirectUser(true);
     } else {
       const { data: user } = response;
       dispatch(setCurrentUser(user));
