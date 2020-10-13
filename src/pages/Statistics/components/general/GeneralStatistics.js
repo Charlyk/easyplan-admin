@@ -121,6 +121,7 @@ const GeneralStatistics = () => {
                 months={1}
                 ranges={[{ startDate, endDate }]}
                 direction='horizontal'
+                locale={locales[getAppLanguage()]}
               />
             </ClickAwayListener>
           </Paper>
