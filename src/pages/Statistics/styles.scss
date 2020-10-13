@@ -169,6 +169,17 @@
   position: relative;
   overflow-y: scroll;
 
+  .filter-date-picker-root {
+    z-index: 999;
+    margin-top: .5rem;
+
+    .calendar-paper {
+      border: #3A83DC 1px solid;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  }
+
   .main-data-container {
     padding: 1.5rem;
     display: flex;

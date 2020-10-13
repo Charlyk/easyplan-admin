@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
+import Popper from '@material-ui/core/Popper';
 import moment from 'moment';
 import { Form } from 'react-bootstrap';
+import { DateRangePicker } from 'react-date-range';
+import * as locales from 'react-date-range/dist/locale';
 
 import IconCheckMark from '../../../../assets/icons/iconCheckMark';
 import IconClock from '../../../../assets/icons/iconClock';
@@ -11,16 +15,27 @@ import IconSuccess from '../../../../assets/icons/iconSuccess';
 import IconXPerson from '../../../../assets/icons/iconXPerson';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { Statuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
+import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
 
 const GeneralStatistics = () => {
+  const pickerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [statistics, setStatistics] = useState(null);
   const [selectedDoctor, setSelectedDoctor] = useState({ id: 'all' });
   const [doctors, setDoctors] = useState([]);
+  const [showRangePicker, setShowRangePicker] = useState(false);
+  const [[startDate, endDate], setDateRange] = useState([
+    moment()
+      .startOf('day')
+      .toDate(),
+    moment()
+      .add('days', 1)
+      .startOf('day')
+      .toDate(),
+  ]);
 
   useEffect(() => {
     fetchDoctors();
@@ -42,12 +57,8 @@ const GeneralStatistics = () => {
     setIsLoading(true);
     const response = await dataAPI.fetchGeneralStatistics(
       selectedDoctor.id,
-      moment()
-        .startOf('day')
-        .toDate(),
-      moment()
-        .endOf('day')
-        .toDate(),
+      startDate,
+      endDate,
     );
     if (response.isError) {
       console.error(response.message);
@@ -77,6 +88,47 @@ const GeneralStatistics = () => {
     return Number.isNaN(percent) ? 0 : percent;
   };
 
+  const handleDatePickerClose = () => {
+    setShowRangePicker(false);
+  };
+
+  const handleDateChange = data => {
+    const { startDate, endDate } = data.range1;
+    setDateRange([startDate, endDate]);
+  };
+
+  const handleDatePickerOpen = () => {
+    setShowRangePicker(true);
+  };
+
+  const dateRangePicker = (
+    <Popper
+      className='filter-date-picker-root'
+      anchorEl={pickerRef.current}
+      open={showRangePicker}
+      disablePortal
+      placement='bottom'
+      transition
+    >
+      {({ TransitionProps }) => (
+        <Fade {...TransitionProps} timeout={350}>
+          <Paper className='calendar-paper'>
+            <ClickAwayListener onClickAway={handleDatePickerClose}>
+              <DateRangePicker
+                onChange={handleDateChange}
+                showSelectionPreview={true}
+                moveRangeOnFirstSelection={false}
+                months={1}
+                ranges={[{ startDate, endDate }]}
+                direction='horizontal'
+              />
+            </ClickAwayListener>
+          </Paper>
+        </Fade>
+      )}
+    </Popper>
+  );
+
   return (
     <div className='general-statistics' id='general-statistics'>
       <div className='main-data-container'>
@@ -99,9 +151,15 @@ const GeneralStatistics = () => {
               ))}
             </Form.Control>
           </Form.Group>
-          <Form.Group>
+          <Form.Group ref={pickerRef}>
             <Form.Label>{textForKey('Period')}</Form.Label>
-            <Form.Control readOnly />
+            <Form.Control
+              value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
+                endDate,
+              ).format('DD MMM YYYY')}`}
+              readOnly
+              onClick={handleDatePickerOpen}
+            />
           </Form.Group>
         </StatisticFilter>
         <span className='block-title'>{textForKey('Patients statistics')}</span>
@@ -157,6 +215,7 @@ const GeneralStatistics = () => {
           />
         </div>
       </div>
+      {dateRangePicker}
     </div>
   );
 };
