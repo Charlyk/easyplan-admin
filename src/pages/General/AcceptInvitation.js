@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import { Form, InputGroup, Spinner } from 'react-bootstrap';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Redirect } from 'react-router-dom';
 
 import appLogo from '../../assets/images/easyplan-logo.svg';
 import LoadingButton from '../../components/LoadingButton';
 import dataAPI from '../../utils/api/dataAPI';
+import { JwtRegex } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import authManager from '../../utils/settings/authManager';
@@ -28,6 +29,10 @@ const AcceptInvitation = () => {
       handleAcceptInvitation();
     }
   }, [isNew, token]);
+
+  if (!token.match(JwtRegex)) {
+    return <Redirect to='/login' />;
+  }
 
   const handleFormChange = event => {
     setState({

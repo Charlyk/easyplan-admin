@@ -26,6 +26,7 @@ import CreateClinicModal from './components/CreateClinicModal';
 import RegisterPaymentModal from './components/RegisterPaymentModal';
 import DoctorsMain from './doctors/DoctorsMain';
 import AcceptInvitation from './pages/General/AcceptInvitation';
+import ResetPasswordForm from './pages/General/ResetPasswordForm';
 import Login from './pages/Login';
 import Main from './pages/Main';
 import {
@@ -156,11 +157,7 @@ function App() {
 
   return (
     <Router basename='/'>
-      {!authManager.isLoggedIn() ? (
-        <Redirect to='/login' />
-      ) : redirectUser ? (
-        <Redirect to='/analytics/general' />
-      ) : null}
+      {redirectUser && <Redirect to='/' />}
       <React.Fragment>
         <RegisterPaymentModal
           {...paymentModal}
@@ -196,6 +193,11 @@ function App() {
             path='/clinic-invitation/:isNew?/:token'
             exact
             component={AcceptInvitation}
+          />
+          <Route
+            path='/update-current-password/:token'
+            exact
+            component={ResetPasswordForm}
           />
           <Route path='/login' exact component={Login} />
           <Route

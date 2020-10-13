@@ -18,15 +18,15 @@ import IconTooth25 from '../assets/icons/iconTooth25';
 import IconTooth26 from '../assets/icons/iconTooth26';
 import IconTooth27 from '../assets/icons/iconTooth27';
 import IconTooth28 from '../assets/icons/iconTooth28';
-import IconTooth31 from "../assets/icons/iconTooth31";
-import IconTooth32 from "../assets/icons/iconTooth32";
-import IconTooth33 from "../assets/icons/iconTooth33";
-import IconTooth34 from "../assets/icons/iconTooth34";
-import IconTooth35 from "../assets/icons/iconTooth35";
-import IconTooth36 from "../assets/icons/iconTooth36";
-import IconTooth37 from "../assets/icons/iconTooth37";
-import IconTooth38 from "../assets/icons/iconTooth38";
-import IconTooth41 from "../assets/icons/iconTooth41";
+import IconTooth31 from '../assets/icons/iconTooth31';
+import IconTooth32 from '../assets/icons/iconTooth32';
+import IconTooth33 from '../assets/icons/iconTooth33';
+import IconTooth34 from '../assets/icons/iconTooth34';
+import IconTooth35 from '../assets/icons/iconTooth35';
+import IconTooth36 from '../assets/icons/iconTooth36';
+import IconTooth37 from '../assets/icons/iconTooth37';
+import IconTooth38 from '../assets/icons/iconTooth38';
+import IconTooth41 from '../assets/icons/iconTooth41';
 import IconTooth42 from '../assets/icons/iconTooth42';
 import IconTooth43 from '../assets/icons/iconTooth43';
 import IconTooth44 from '../assets/icons/iconTooth44';
@@ -45,6 +45,7 @@ export const Role = {
 };
 
 export const EmailRegex = /.+@.+\.[A-Za-z]+$/;
+export const JwtRegex = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
 
 export const S3Config = dirname => ({
   bucketName: 'easyplan-pro-files',

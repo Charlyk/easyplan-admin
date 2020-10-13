@@ -139,4 +139,24 @@ export default {
       };
     }
   },
+
+  /**
+   * Reset user password
+   * @param {Object} requestBody
+   * @param {string} requestBody.newPassword
+   * @param {string} requestBody.resetToken
+   * @return {Promise<void>}
+   */
+  changeUserPassword: async requestBody => {
+    try {
+      const response = await instance().put(`v1/reset-password`, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };
