@@ -28,6 +28,7 @@
   }
 
   .final-service-item {
+    outline: none;
     margin-top: .5rem;
     width: 100%;
     padding: .5rem 1rem;
@@ -39,6 +40,7 @@
     box-sizing: border-box;
     box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
     border-radius: 4px;
+    cursor: pointer;
 
     .service-name {
       font-family: Inter, sans-serif;
@@ -50,6 +52,7 @@
     }
 
     .service-price {
+      margin-right: 1rem;
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;

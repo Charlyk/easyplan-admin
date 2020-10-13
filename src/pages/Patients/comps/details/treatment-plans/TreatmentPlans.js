@@ -85,13 +85,16 @@ const TreatmentPlans = ({ patient }) => {
           <div className='options-row'>
             <span className='group-title'>{textForKey('Treatment plan')}</span>
             <div className='options-container'>
-              <div
-                role='button'
-                tabIndex={0}
-                className='option-button selected'
-              >
-                <span className='option-text'>{plan.service.name}</span>
-              </div>
+              {plan.services.map(item => (
+                <div
+                  key={item.id}
+                  role='button'
+                  tabIndex={0}
+                  className='option-button selected'
+                >
+                  <span className='option-text'>{item.name}</span>
+                </div>
+              ))}
             </div>
           </div>
           <div className='options-row'>

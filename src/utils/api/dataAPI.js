@@ -821,6 +821,7 @@ export default {
    * @param {Object} requestBody
    * @param {string} requestBody.scheduleId
    * @param {Array.<{id: string, name: string, price: number, toothId: string?}>} requestBody.services
+   * @param {Array.<{id: string, name: string, price: number, toothId: string?}>} requestBody.selectedServices
    * @param {Object} requestBody.treatmentPlan
    * @param {string} requestBody.treatmentPlan.planClass
    * @param {string} requestBody.treatmentPlan.occlusion

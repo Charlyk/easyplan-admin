@@ -37,7 +37,6 @@ const DoctorPatientDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [patient, setPatient] = useState(null);
   const [services, setServices] = useState([]);
-  const [teethServices, setTeethServices] = useState([]);
   const [toothServices, setToothServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
   const [schedule, setSchedule] = useState(null);
@@ -180,29 +179,24 @@ const DoctorPatientDetails = () => {
     setShowFinalizeTreatment(false);
   };
 
-  const finalizeTreatment = async () => {
+  const finalizeTreatment = async (services, selectedServices) => {
     handleCloseFinalizeTreatment();
     setIsFinalizing(true);
-    const allServices = selectedServices.map(item => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-    }));
-
-    for (let tooth of teethServices) {
-      for (let toothService of tooth.services) {
-        allServices.push({
-          id: toothService.id,
-          name: toothService.name,
-          price: toothService.price,
-          toothId: tooth.toothId,
-        });
-      }
-    }
 
     const requestBody = {
       scheduleId,
-      services: allServices,
+      services: services.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        toothId: item.toothId,
+      })),
+      selectedServices: selectedServices.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        toothId: item.toothId,
+      })),
       treatmentPlan,
     };
 

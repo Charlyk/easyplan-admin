@@ -1,34 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import cloneDeep from 'lodash/cloneDeep';
+import remove from 'lodash/remove';
+import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 
+import IconCheckBoxUnchecked from '../../assets/icons/iconCheckBoxUnchecked';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import IconCheckBoxChecked from '../../assets/icons/iconCheckBoxChecked';
 
-const FinalizeTreatmentModal = ({
-  open,
-  services,
-  totalPrice,
-  onClose,
-  onSave,
-}) => {
+import { Box } from '@material-ui/core';
+
+const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
+  const [selectedServices, setSelectedServices] = useState([]);
+
+  const handleServiceToggle = service => {
+    const newServices = cloneDeep(selectedServices);
+    if (
+      newServices.some(
+        item => item.id === service.id && item.toothId === service.toothId,
+      )
+    ) {
+      remove(
+        newServices,
+        item => item.id === service.id && item.toothId === service.toothId,
+      );
+    } else {
+      newServices.push(service);
+    }
+    setSelectedServices(newServices);
+  };
+
+  const handleSaveTreatment = () => {
+    onSave(services, selectedServices);
+  };
+
+  const totalPrice = sum(selectedServices.map(item => item.price));
+
+  const isChecked = item =>
+    selectedServices.some(
+      service => service.id === item.id && service.toothId === item.toothId,
+    );
   return (
     <EasyPlanModal
       open={open}
       onClose={onClose}
-      onPositiveClick={onSave}
+      onPositiveClick={handleSaveTreatment}
       positiveBtnText={textForKey('Finalize')}
       title={textForKey('Finalize treatment')}
     >
       <div className='finalize-treatment-content'>
         <span className='modal-subtitle'>{textForKey('Services')}</span>
         {services.map(item => (
-          <div key={item.id} className='final-service-item'>
+          <div
+            role='button'
+            tabIndex={0}
+            key={`${item.id}-${item.toothId}`}
+            className='final-service-item'
+            onClick={() => handleServiceToggle(item)}
+          >
             <span className='service-name'>
               {item.name} {item.toothId}
             </span>
-            <span className='service-price'>{item.price} MDL</span>
+            <Box display='flex' alignItems='center'>
+              <span className='service-price'>{item.price} MDL</span>
+              {isChecked(item) ? (
+                <IconCheckBoxChecked />
+              ) : (
+                <IconCheckBoxUnchecked />
+              )}
+            </Box>
           </div>
         ))}
         <div className='totals-text-wrapper'>
