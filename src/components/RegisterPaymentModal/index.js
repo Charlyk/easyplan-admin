@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 
 import { textForKey } from '../../utils/localization';
@@ -52,8 +53,8 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     if (discount.length === 0 || payAmount.length === 0) {
       return payAmount;
     }
-    const discountAmount =
-      (parseInt(discount) / 100) * parseFloat(invoice?.amount || 0);
+    const amount = sum(invoice?.services.map(item => item.price) || [0]);
+    const discountAmount = (parseInt(discount) / 100) * parseFloat(amount || 0);
     return payAmount - discountAmount;
   };
 
@@ -146,6 +147,7 @@ RegisterPaymentModal.propTypes = {
     status: PropTypes.string,
     paid: PropTypes.number,
     discount: PropTypes.number,
+    services: PropTypes.arrayOf(PropTypes.object),
   }),
   onClose: PropTypes.func,
 };
