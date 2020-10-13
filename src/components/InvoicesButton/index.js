@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import PropTypes from 'prop-types';
-
+import sum from 'lodash/sum';
 import './styles.scss';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
@@ -74,7 +73,11 @@ const InvoicesButton = props => {
                     <tr key={invoice.id}>
                       <td>{invoice.doctorName}</td>
                       <td>{invoice.patientName}</td>
-                      <td align='right'>{invoice.amount - invoice.paid} MDL</td>
+                      <td align='right'>
+                        {sum(invoice.services.map(it => it.price)) -
+                          invoice.paid}{' '}
+                        MDL
+                      </td>
                       <td align='right'>
                         <Button
                           className='positive-button'
