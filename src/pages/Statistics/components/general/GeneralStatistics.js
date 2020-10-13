@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import moment from 'moment';
 import { Form } from 'react-bootstrap';
 
 import IconCheckMark from '../../../../assets/icons/iconCheckMark';
@@ -8,36 +9,88 @@ import IconCreditCard from '../../../../assets/icons/iconCreditCard';
 import IconLiabilities from '../../../../assets/icons/iconLiabilities';
 import IconSuccess from '../../../../assets/icons/iconSuccess';
 import IconXPerson from '../../../../assets/icons/iconXPerson';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
 
 const GeneralStatistics = () => {
-  const data = () => {
-    const items = [];
-    for (let i = 7; i < 20; i++) {
-      items.push({
-        name: `0${i}:00`,
-        income: Math.random(),
-      });
+  const [isLoading, setIsLoading] = useState(false);
+  const [statistics, setStatistics] = useState(null);
+  const [selectedDoctor, setSelectedDoctor] = useState({ id: 'all' });
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  const fetchDoctors = async () => {
+    setIsLoading(true);
+    const response = await dataAPI.getClinicDoctors();
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      setDoctors(response.data);
+      await fetchStatistics();
     }
-    return items;
+    setIsLoading(false);
   };
+
+  const fetchStatistics = async () => {
+    setIsLoading(true);
+    const response = await dataAPI.fetchGeneralStatistics(
+      selectedDoctor.id,
+      moment()
+        .startOf('day')
+        .toDate(),
+      moment()
+        .endOf('day')
+        .toDate(),
+    );
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      setStatistics(response.data);
+    }
+    setIsLoading(false);
+  };
+
+  const handleDoctorChange = event => {
+    const newValue = event.target.value;
+    if (newValue === 'all') {
+      setSelectedDoctor({ id: newValue });
+    } else {
+      setSelectedDoctor(doctors.find(item => item.id === newValue));
+    }
+  };
+
+  const handleFilterSubmit = () => {
+    fetchStatistics();
+  };
+
+  const statuses = statistics?.items || [];
 
   return (
     <div className='general-statistics' id='general-statistics'>
       <div className='main-data-container'>
-        <StatisticFilter>
+        <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
           <Form.Group>
             <Form.Label>{textForKey('Doctor')}</Form.Label>
             <Form.Control
+              onChange={handleDoctorChange}
               as='select'
               className='mr-sm-2'
               id='inlineFormCustomSelect'
               custom
             >
               <option value='all'>{textForKey('All doctors')}</option>
+              {doctors.map(item => (
+                <option
+                  value={item.id}
+                >{`${item.firstName} ${item.lastName}`}</option>
+              ))}
             </Form.Control>
           </Form.Group>
           <Form.Group>
@@ -47,36 +100,15 @@ const GeneralStatistics = () => {
         </StatisticFilter>
         <span className='block-title'>{textForKey('Patients statistics')}</span>
         <div className='statuses-container'>
-          <StatusItem
-            title={textForKey('Waiting')}
-            percentage={30}
-            icon={<IconClock />}
-          />
-          <StatusItem
-            title={textForKey('Finished')}
-            icon={<IconSuccess fill='#3A83DC' />}
-            percentage={75}
-          />
-          <StatusItem
-            title={textForKey('Did not come')}
-            icon={<IconXPerson />}
-            percentage={50}
-          />
-          <StatusItem
-            title={textForKey('Confirmed')}
-            icon={<IconCheckMark />}
-            percentage={30}
-          />
-          <StatusItem
-            title={textForKey('Late')}
-            icon={<IconClock />}
-            percentage={10}
-          />
-          <StatusItem
-            title={textForKey('Paid')}
-            icon={<IconCreditCard />}
-            percentage={80}
-          />
+          {statuses.map(item => (
+            <StatusItem
+              personsCount={item.count}
+              key={item.status}
+              title={textForKey(item.status)}
+              percentage={(item.count / statistics.total) * 100}
+              icon={Statuses.find(it => it.id === item.status).icon}
+            />
+          ))}
         </div>
       </div>
       <div className='right-content-wrapper'>

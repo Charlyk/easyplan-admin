@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import IconNext from '../../../../assets/icons/iconNext';
+import { textForKey } from '../../../../utils/localization';
 
 const StatusItem = ({ title, icon, percentage, personsCount }) => {
   return (
@@ -10,7 +10,9 @@ const StatusItem = ({ title, icon, percentage, personsCount }) => {
       <div className='title-wrapper'>
         {icon}
         <span className='title-label'>{title}</span>
-        <span className='subtitle-label'>3 persons</span>
+        <span className='subtitle-label'>
+          {personsCount} {textForKey('persons')}
+        </span>
       </div>
       <div className='item-progress-container'>
         <div className='progress-bar-container'>

@@ -167,6 +167,10 @@ export default {
     'confirm password': 'Confirmă parola nouă',
     'accept invitation': 'Accept invitation',
     'create new account': 'Create new account',
+    persons: 'persons',
+    partialpaid: 'Partial paid',
+    completednotpaid: 'Completed not paid',
+    completedpaid: 'Completed paid',
   },
   ro: {
     analytics: 'Analitică',
@@ -337,6 +341,10 @@ export default {
     'confirm password': 'Confirmă parola nouă',
     'accept invitation': 'Acceptă invitația',
     'create new account': 'Creează cont',
+    persons: 'persoane',
+    partialpaid: 'Achitat parțial',
+    completednotpaid: 'Finisat ne achitat',
+    completedpaid: 'Achitat',
   },
   ru: {
     analytics: 'Analytics',
@@ -505,5 +513,9 @@ export default {
     'confirm password': 'Confirmă parola nouă',
     'accept invitation': 'Accept invitation',
     'create new account': 'Create new account',
+    persons: 'persons',
+    partialpaid: 'Partial paid',
+    completednotpaid: 'Completed not paid',
+    completedpaid: 'Completed paid',
   },
 };

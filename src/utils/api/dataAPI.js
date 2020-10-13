@@ -8,13 +8,18 @@ const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
-const instance = () =>
-  axios.create({
-    baseURL,
-    headers: {
+const instance = () => {
+  let headers = null;
+  if (authManager.isLoggedIn()) {
+    headers = {
       Authorization: authManager.getUserToken(),
-    },
+    };
+  }
+  return axios.create({
+    baseURL,
+    headers,
   });
+};
 
 export default {
   /**
@@ -939,10 +944,39 @@ export default {
     }
   },
 
+  /**
+   * Get patient treatment plan
+   * @param patientId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
   fetchTreatmentPlan: async patientId => {
     try {
       const response = await instance().get(
         `patients/${patientId}/treatment-plan`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch app general statistics
+   * @param {string} doctorId
+   * @param {Date} fromDate
+   * @param {Date} toDate
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchGeneralStatistics: async (doctorId, fromDate, toDate) => {
+    try {
+      const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
+      const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
+      const response = await instance().get(
+        `analytics/general?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
       );
       const { data: responseData } = response;
       return responseData;

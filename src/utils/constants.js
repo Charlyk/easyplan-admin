@@ -2,6 +2,10 @@ import React from 'react';
 
 import moment from 'moment';
 
+import IconCheckMark from '../assets/icons/iconCheckMark';
+import IconClock from '../assets/icons/iconClock';
+import IconCreditCard from '../assets/icons/iconCreditCard';
+import IconSuccess from '../assets/icons/iconSuccess';
 import IconTooth11 from '../assets/icons/iconTooth11';
 import IconTooth12 from '../assets/icons/iconTooth12';
 import IconTooth13 from '../assets/icons/iconTooth13';
@@ -34,6 +38,7 @@ import IconTooth45 from '../assets/icons/iconTooth45';
 import IconTooth46 from '../assets/icons/iconTooth46';
 import IconTooth47 from '../assets/icons/iconTooth47';
 import IconTooth48 from '../assets/icons/iconTooth48';
+import IconXPerson from '../assets/icons/iconXPerson';
 import { textForKey } from './localization';
 
 export const Role = {
@@ -124,7 +129,11 @@ export const days = [
 ];
 
 export const ScheduleStatuses = [
-  { id: 'Pending', name: textForKey('Pending'), color: '#ffb902' },
+  {
+    id: 'Pending',
+    name: textForKey('Pending'),
+    color: '#ffb902',
+  },
   { id: 'Late', name: textForKey('Late'), color: '#FDC534' },
   { id: 'Confirmed', name: textForKey('Confirmed'), color: '#3A83DC' },
   { id: 'Canceled', name: textForKey('Canceled'), color: '#F44081' },
@@ -133,8 +142,53 @@ export const ScheduleStatuses = [
   //   name: textForKey('Completed not paid'),
   //   color: '#7DD7C8',
   // },
-  // { id: 'CompletedPaid', name: textForKey('Completed paid'), color: '#00E987' },
+  // { id: 'CompletedPaid', name: textForKey('Paid'), color: '#00E987' },
   // { id: 'PartialPaid', name: textForKey('Partial paid'), color: '#9cfacc' },
+];
+
+export const Statuses = [
+  {
+    id: 'Pending',
+    name: textForKey('Pending'),
+    color: '#ffb902',
+    icon: <IconCheckMark />,
+  },
+  {
+    id: 'Late',
+    name: textForKey('Late'),
+    color: '#FDC534',
+    icon: <IconClock />,
+  },
+  {
+    id: 'Confirmed',
+    name: textForKey('Confirmed'),
+    color: '#3A83DC',
+    icon: <IconCheckMark />,
+  },
+  {
+    id: 'Canceled',
+    name: textForKey('Canceled'),
+    color: '#F44081',
+    icon: <IconXPerson />,
+  },
+  {
+    id: 'CompletedNotPaid',
+    name: textForKey('Completed not paid'),
+    color: '#7DD7C8',
+    icon: <IconSuccess fill='#3A83DC' />,
+  },
+  {
+    id: 'CompletedPaid',
+    name: textForKey('Paid'),
+    color: '#00E987',
+    icon: <IconCreditCard />,
+  },
+  {
+    id: 'PartialPaid',
+    name: textForKey('Partial paid'),
+    color: '#9cfacc',
+    icon: <IconSuccess fill='#3A83DC' />,
+  },
 ];
 
 export const teeth = [
