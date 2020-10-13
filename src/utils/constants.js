@@ -137,13 +137,13 @@ export const ScheduleStatuses = [
   { id: 'Late', name: textForKey('Late'), color: '#FDC534' },
   { id: 'Confirmed', name: textForKey('Confirmed'), color: '#3A83DC' },
   { id: 'Canceled', name: textForKey('Canceled'), color: '#F44081' },
-  // {
-  //   id: 'CompletedNotPaid',
-  //   name: textForKey('Completed not paid'),
-  //   color: '#7DD7C8',
-  // },
-  // { id: 'CompletedPaid', name: textForKey('Paid'), color: '#00E987' },
-  // { id: 'PartialPaid', name: textForKey('Partial paid'), color: '#9cfacc' },
+  {
+    id: 'CompletedNotPaid',
+    name: textForKey('Completed not paid'),
+    color: '#7DD7C8',
+  },
+  { id: 'CompletedPaid', name: textForKey('Paid'), color: '#00E987' },
+  { id: 'PartialPaid', name: textForKey('Partial paid'), color: '#9cfacc' },
 ];
 
 export const Statuses = [
