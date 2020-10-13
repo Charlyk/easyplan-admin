@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import clsx from 'clsx';
 import { Form, InputGroup, Spinner } from 'react-bootstrap';
 import { useParams, useHistory, Redirect } from 'react-router-dom';
 
@@ -11,8 +12,6 @@ import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import authManager from '../../utils/settings/authManager';
 
-import clsx from 'clsx';
-
 const AcceptInvitation = () => {
   const history = useHistory();
   const { isNew, token } = useParams();
@@ -22,6 +21,7 @@ const AcceptInvitation = () => {
     isLoading: false,
     errorMessage: null,
     isAccepted: false,
+    redirectUser: false,
   });
 
   useEffect(() => {
@@ -76,9 +76,14 @@ const AcceptInvitation = () => {
         confirmPassword: '',
         errorMessage: null,
         isAccepted: true,
+        redirectUser: true,
       });
     }
   };
+
+  if (state.redirectUser) {
+    return <Redirect to='/login' />;
+  }
 
   return (
     <div className='general-page'>
