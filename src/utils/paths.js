@@ -1,7 +1,7 @@
 import { textForKey } from './localization';
 
 export default {
-  '/categories': textForKey('Categories'),
+  '/categories': textForKey('Services'),
   '/users': textForKey('Users'),
   '/patients': textForKey('Patients'),
   '/calendar': textForKey('Calendar'),

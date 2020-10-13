@@ -90,9 +90,12 @@ const DoctorPatientDetails = () => {
     const newServices = cloneDeep(selectedServices);
     const service = services.find(item => item.id === serviceId);
     if (newServices.some(item => item.id === serviceId)) {
-      remove(newServices, item => item.id === serviceId);
+      remove(
+        newServices,
+        item => item.id === serviceId && item.toothId == null,
+      );
     } else {
-      newServices.push(service);
+      newServices.unshift(service);
     }
     setSelectedServices(newServices);
   };
@@ -117,23 +120,12 @@ const DoctorPatientDetails = () => {
   };
 
   const handleToothServicesChange = ({ toothId, services }) => {
-    let newServices = cloneDeep(teethServices);
-    if (newServices.some(item => item.toothId === toothId)) {
-      newServices = newServices.map(item => {
-        if (item.toothId !== toothId) {
-          return item;
-        }
-
-        return {
-          ...item,
-          services,
-        };
-      });
-    } else {
-      newServices.push({ toothId, services });
+    let newServices = cloneDeep(selectedServices);
+    remove(newServices, item => item.toothId === toothId);
+    for (let service of services) {
+      newServices.unshift({ ...service, toothId });
     }
-
-    setTeethServices(newServices);
+    setSelectedServices(newServices);
   };
 
   const getPatientName = () => {
@@ -148,22 +140,6 @@ const DoctorPatientDetails = () => {
     }
   };
 
-  const getCombinedServices = () => {
-    let allServices = cloneDeep(selectedServices);
-    for (let tooth of teethServices) {
-      if (!Array.isArray(tooth.services)) {
-        continue;
-      }
-      for (let toothService of tooth.services) {
-        allServices.push({
-          ...toothService,
-          toothId: tooth.toothId,
-        });
-      }
-    }
-    return allServices;
-  };
-
   const handleBracketSelectChange = () => {
     const newServices = cloneDeep(selectedServices);
     if (newServices.some(item => item.bracket)) {
@@ -175,7 +151,7 @@ const DoctorPatientDetails = () => {
   };
 
   const getTotalPrice = () => {
-    const prices = getCombinedServices().map(item => item.price);
+    const prices = selectedServices.map(item => item.price);
     return sum(prices);
   };
 
@@ -245,7 +221,7 @@ const DoctorPatientDetails = () => {
       <FinalizeTreatmentModal
         onSave={finalizeTreatment}
         totalPrice={getTotalPrice()}
-        services={getCombinedServices()}
+        services={selectedServices}
         open={showFinalizeTreatment}
         onClose={handleCloseFinalizeTreatment}
       />
@@ -385,17 +361,20 @@ const DoctorPatientDetails = () => {
               {textForKey('Provided services')}
             </span>
 
-            {getCombinedServices().length === 0 && (
+            {selectedServices.length === 0 && (
               <span className='no-data-label'>
                 {textForKey('No selected services')}
               </span>
             )}
 
-            {getCombinedServices().map(service => (
-              <FinalServiceItem key={service.id} service={service} />
+            {selectedServices.map(service => (
+              <FinalServiceItem
+                key={`${service.id}-${service.toothId}`}
+                service={service}
+              />
             ))}
 
-            {getCombinedServices().length > 0 && (
+            {selectedServices.length > 0 && (
               <span className='total-price'>
                 {textForKey('Total')}: {getTotalPrice()} MDL
               </span>
@@ -404,7 +383,7 @@ const DoctorPatientDetails = () => {
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
-              disabled={getCombinedServices().length === 0}
+              disabled={selectedServices.length === 0}
               className='positive-button'
             >
               {textForKey('Finalize')}

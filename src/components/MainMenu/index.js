@@ -48,7 +48,7 @@ const menuItems = [
     id: 'categories',
     type: 'link',
     roles: ['ADMIN', 'MANAGER'],
-    text: textForKey('Categories'),
+    text: textForKey('Services'),
     icon: <MenuCategories />,
     href: '/categories',
   },

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { animated } from 'react-spring';
+import { animated, useSpring } from 'react-spring';
 
 import IconNext from '../../../../../assets/icons/iconNext';
 import { getAppointmentTop } from '../../../../../utils/helperFuncs';
@@ -14,6 +14,13 @@ const minTop = hourHeight / 2;
 const DayAppointmentItem = ({ schedule, onSelect }) => {
   const [position, setPosition] = useState({ top: minTop, height: minHeight });
   const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
+  const [{ left }, setLeft] = useSpring(() => ({
+    from: { left: 64 },
+    to: { left: 70 },
+    delay: 100,
+    reset: true,
+    reverse: true,
+  }));
 
   useEffect(() => {
     if (!schedule) return;
@@ -31,6 +38,7 @@ const DayAppointmentItem = ({ schedule, onSelect }) => {
     );
     setPosition(newPosition);
     setHours([startHour, endHour]);
+    setLeft({ left: 70 });
   }, [schedule]);
 
   const handleScheduleSelect = () => {
