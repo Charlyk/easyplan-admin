@@ -72,6 +72,11 @@ const GeneralStatistics = () => {
 
   const statuses = statistics?.items || [];
 
+  const getSchedulePercentage = item => {
+    const percent = (item.count / statistics.total) * 100;
+    return Number.isNaN(percent) ? 0 : percent;
+  };
+
   return (
     <div className='general-statistics' id='general-statistics'>
       <div className='main-data-container'>
@@ -105,7 +110,7 @@ const GeneralStatistics = () => {
               personsCount={item.count}
               key={item.status}
               title={textForKey(item.status)}
-              percentage={(item.count / statistics.total) * 100}
+              percentage={getSchedulePercentage(item)}
               icon={Statuses.find(it => it.id === item.status).icon}
             />
           ))}
