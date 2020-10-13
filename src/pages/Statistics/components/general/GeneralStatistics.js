@@ -93,6 +93,7 @@ const GeneralStatistics = () => {
               <option value='all'>{textForKey('All doctors')}</option>
               {doctors.map(item => (
                 <option
+                  key={item.id}
                   value={item.id}
                 >{`${item.firstName} ${item.lastName}`}</option>
               ))}
