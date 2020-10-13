@@ -121,7 +121,12 @@ function App() {
       setRedirectUser(true);
     } else {
       const { data: user } = response;
-      dispatch(setCurrentUser(user));
+      if (user != null) {
+        dispatch(setCurrentUser(user));
+      } else {
+        authManager.logOut();
+        setRedirectUser(true);
+      }
     }
     setAppIsLoading(false);
   };
