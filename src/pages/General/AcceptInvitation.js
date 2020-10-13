@@ -26,7 +26,11 @@ const AcceptInvitation = () => {
 
   useEffect(() => {
     if (!isNew && !state.isLoading) {
-      handleAcceptInvitation();
+      try {
+        handleAcceptInvitation();
+      } catch (e) {
+        console.log(e.message);
+      }
     }
   }, [isNew, token]);
 
