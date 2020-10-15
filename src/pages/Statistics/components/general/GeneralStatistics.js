@@ -32,8 +32,7 @@ const GeneralStatistics = () => {
       .startOf('day')
       .toDate(),
     moment()
-      .add('days', 1)
-      .startOf('day')
+      .endOf('day')
       .toDate(),
   ]);
 
@@ -94,7 +93,12 @@ const GeneralStatistics = () => {
 
   const handleDateChange = data => {
     const { startDate, endDate } = data.range1;
-    setDateRange([startDate, endDate]);
+    setDateRange([
+      startDate,
+      moment(endDate)
+        .endOf('day')
+        .toDate(),
+    ]);
   };
 
   const handleDatePickerOpen = () => {

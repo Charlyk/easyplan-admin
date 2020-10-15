@@ -173,7 +173,14 @@ const ServicesStatistics = () => {
 
   const handleDateChange = data => {
     const { startDate, endDate } = data.range1;
-    localDispatch(reducerActions.setDateRange([startDate, endDate]));
+    localDispatch(
+      reducerActions.setDateRange([
+        startDate,
+        moment(endDate)
+          .endOf('day')
+          .toDate(),
+      ]),
+    );
   };
 
   const handleDoctorChange = event => {
