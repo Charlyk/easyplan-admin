@@ -4,6 +4,14 @@
   height: 100%;
   overflow: hidden;
 
+  .statistics-loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    color: #3A83DC;
+  }
+
   .data-container {
     margin-top: 2rem;
     width: 100%;
@@ -162,6 +170,17 @@
   padding: 1.5rem;
 }
 
+.filter-date-picker-root {
+  z-index: 999;
+  margin-top: .5rem;
+
+  .calendar-paper {
+    border: #3A83DC 1px solid;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+}
+
 .general-statistics {
   display: flex;
   max-height: 100%;
@@ -169,23 +188,13 @@
   position: relative;
   overflow-y: scroll;
 
-  .filter-date-picker-root {
-    z-index: 999;
-    margin-top: .5rem;
-
-    .calendar-paper {
-      border: #3A83DC 1px solid;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-  }
-
   .main-data-container {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     width: 70%;
     max-height: 100%;
+    min-height: 50%;
     position: relative;
 
     .block-title {
@@ -201,7 +210,9 @@
 
     .statuses-container {
       width: 100%;
-      padding: 1rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-top: .5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -215,7 +226,8 @@
         width: 100%;
         flex-direction: column;
         position: relative;
-        margin-bottom: 1rem;
+        margin-top: .5rem;
+        margin-bottom: .5rem;
 
         .subtitle-label {
           margin-left: 1rem;
@@ -235,7 +247,12 @@
           font-weight: 600;
           font-size: 14px;
           line-height: 20px;
-          color: #34354C;
+          color: #34344E;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
 
         .title-wrapper {

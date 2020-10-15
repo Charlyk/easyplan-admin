@@ -988,4 +988,35 @@ export default {
       };
     }
   },
+
+  /**
+   * Fetch services statistics
+   * @param {string} serviceId
+   * @param {string} doctorId
+   * @param {Date} fromDate
+   * @param {Date} toDate
+   * @param {string} status
+   * @return {Promise<{isError: boolean, message: string|null, data: [Object]}|any>}
+   */
+  fetchServicesStatistics: async (
+    fromDate,
+    toDate,
+    doctorId = 'all',
+    serviceId = 'all',
+    status = 'all',
+  ) => {
+    try {
+      const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
+      const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
+      const url = `analytics/services?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
+      const response = await instance().get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

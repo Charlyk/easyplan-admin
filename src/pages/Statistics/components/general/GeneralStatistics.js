@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import moment from 'moment';
-import { Form } from 'react-bootstrap';
+import { Form, Spinner } from 'react-bootstrap';
 import { DateRangePicker } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
@@ -23,7 +23,7 @@ import StatusItem from './StatusItem';
 const GeneralStatistics = () => {
   const pickerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [statistics, setStatistics] = useState(null);
+  const [statistics, setStatistics] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState({ id: 'all' });
   const [doctors, setDoctors] = useState([]);
   const [showRangePicker, setShowRangePicker] = useState(false);
@@ -101,6 +101,16 @@ const GeneralStatistics = () => {
     setShowRangePicker(true);
   };
 
+  const titleForStatus = statusItem => {
+    const data = Statuses.find(it => it.id === statusItem.status);
+    return data?.name;
+  };
+
+  const iconForStatus = statusItem => {
+    const data = Statuses.find(it => it.id === statusItem.status);
+    return data?.icon;
+  };
+
   const dateRangePicker = (
     <Popper
       className='filter-date-picker-root'
@@ -164,17 +174,26 @@ const GeneralStatistics = () => {
           </Form.Group>
         </StatisticFilter>
         <span className='block-title'>{textForKey('Patients statistics')}</span>
-        <div className='statuses-container'>
-          {statuses.map(item => (
-            <StatusItem
-              personsCount={item.count}
-              key={item.status}
-              title={textForKey(item.status)}
-              percentage={getSchedulePercentage(item)}
-              icon={Statuses.find(it => it.id === item.status).icon}
-            />
-          ))}
-        </div>
+        {isLoading && statuses.length === 0 && (
+          <Spinner animation='border' className='statistics-loading-spinner' />
+        )}
+        {statuses.length > 0 ? (
+          <div className='statuses-container'>
+            {statuses.map(item => (
+              <StatusItem
+                status={item}
+                personsCount={item.count}
+                key={item.status}
+                doctorId={selectedDoctor.id}
+                startDate={startDate}
+                endDate={endDate}
+                title={titleForStatus(item)}
+                percentage={getSchedulePercentage(item)}
+                icon={iconForStatus(item)}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
       <div className='right-content-wrapper'>
         <div className='items-wrapper'>

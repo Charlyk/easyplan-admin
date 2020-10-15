@@ -8,7 +8,7 @@ import DoctorsStatistics from './components/doctors/DoctorsStatistics';
 import GeneralStatistics from './components/general/GeneralStatistics';
 import ServicesStatistics from './components/services/ServicesStatistics';
 
-const Statistics = props => {
+const Statistics = () => {
   return (
     <div className='statistics-root' id='statistics-root'>
       <Switch>

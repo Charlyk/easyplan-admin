@@ -2,6 +2,7 @@ import React from 'react';
 
 import moment from 'moment';
 
+import IconAppointmentCalendar from '../assets/icons/iconAppointmentCalendar';
 import IconCheckMark from '../assets/icons/iconCheckMark';
 import IconClock from '../assets/icons/iconClock';
 import IconCreditCard from '../assets/icons/iconCreditCard';
@@ -150,6 +151,18 @@ export const Statuses = [
   {
     id: 'Pending',
     name: textForKey('Pending'),
+    color: '#ffb902',
+    icon: <IconAppointmentCalendar />,
+  },
+  {
+    id: 'WaitingForPatient',
+    name: textForKey('Waiting for patient'),
+    color: '#ffb902',
+    icon: <IconClock />,
+  },
+  {
+    id: 'OnSite',
+    name: textForKey('On site'),
     color: '#ffb902',
     icon: <IconCheckMark />,
   },
