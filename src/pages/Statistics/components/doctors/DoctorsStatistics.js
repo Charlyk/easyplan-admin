@@ -1,9 +1,10 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
 import moment from 'moment';
 import { Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
+import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
 import {
   clinicDoctorsSelector,
   clinicServicesSelector,
@@ -38,6 +39,7 @@ const reducerTypes = {
   setDoctors: 'setDoctors',
   setServices: 'setServices',
   setStatistics: 'setStatistics',
+  setShowRangePicker: 'setShowRangePicker',
 };
 
 const reducerActions = generateReducerActions(reducerTypes);
@@ -58,10 +60,13 @@ const reducer = (state, action) => {
       return { ...state, services: action.payload };
     case reducerTypes.setStatistics:
       return { ...state, statistics: action.payload };
+    case reducerTypes.setShowRangePicker:
+      return { ...state, showRangePicker: action.payload };
   }
 };
 
 const DoctorsStatistics = () => {
+  const pickerRef = useRef(null);
   const doctors = useSelector(clinicDoctorsSelector);
   const services = useSelector(clinicServicesSelector);
   const [
@@ -69,6 +74,7 @@ const DoctorsStatistics = () => {
       isLoading,
       selectedDoctor,
       selectedService,
+      showRangePicker,
       dateRange: [startDate, endDate],
     },
     localDispatch,
@@ -77,6 +83,26 @@ const DoctorsStatistics = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleDatePickerOpen = () => {
+    localDispatch(reducerActions.setShowRangePicker(true));
+  };
+
+  const handleDatePickerClose = () => {
+    localDispatch(reducerActions.setShowRangePicker(false));
+  };
+
+  const handleDateChange = data => {
+    const { startDate, endDate } = data.range1;
+    localDispatch(
+      reducerActions.setDateRange([
+        startDate,
+        moment(endDate)
+          .endOf('day')
+          .toDate(),
+      ]),
+    );
+  };
 
   const fetchData = async () => {
     localDispatch(reducerActions.setIsLoading(true));
@@ -131,6 +157,17 @@ const DoctorsStatistics = () => {
             ))}
           </Form.Control>
         </Form.Group>
+        <Form.Group ref={pickerRef}>
+          <Form.Label>{textForKey('Period')}</Form.Label>
+          <Form.Control
+            disabled={isLoading}
+            value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
+              endDate,
+            ).format('DD MMM YYYY')}`}
+            readOnly
+            onClick={handleDatePickerOpen}
+          />
+        </Form.Group>
       </StatisticFilter>
       <div className='data-container'>
         <table className='data-table'>
@@ -176,6 +213,13 @@ const DoctorsStatistics = () => {
           </tbody>
         </table>
       </div>
+      <EasyDateRangePicker
+        onChange={handleDateChange}
+        onClose={handleDatePickerClose}
+        dateRange={{ startDate, endDate }}
+        open={showRangePicker}
+        pickerAnchor={pickerRef.current}
+      />
     </div>
   );
 };
