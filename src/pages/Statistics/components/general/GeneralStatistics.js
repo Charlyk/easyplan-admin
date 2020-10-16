@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
-import Popper from '@material-ui/core/Popper';
 import moment from 'moment';
 import { Form, Spinner } from 'react-bootstrap';
-import { DateRangePicker } from 'react-date-range';
-import * as locales from 'react-date-range/dist/locale';
+import { useSelector } from 'react-redux';
 
 import IconCheckMark from '../../../../assets/icons/iconCheckMark';
 import IconClock from '../../../../assets/icons/iconClock';
@@ -13,19 +10,21 @@ import IconCreditCard from '../../../../assets/icons/iconCreditCard';
 import IconLiabilities from '../../../../assets/icons/iconLiabilities';
 import IconSuccess from '../../../../assets/icons/iconSuccess';
 import IconXPerson from '../../../../assets/icons/iconXPerson';
+import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
+import { clinicDoctorsSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { Statuses } from '../../../../utils/constants';
-import { getAppLanguage, textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
 
 const GeneralStatistics = () => {
+  const doctors = useSelector(clinicDoctorsSelector);
   const pickerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [statistics, setStatistics] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState({ id: 'all' });
-  const [doctors, setDoctors] = useState([]);
   const [showRangePicker, setShowRangePicker] = useState(false);
   const [[startDate, endDate], setDateRange] = useState([
     moment()
@@ -37,20 +36,8 @@ const GeneralStatistics = () => {
   ]);
 
   useEffect(() => {
-    fetchDoctors();
+    fetchStatistics();
   }, []);
-
-  const fetchDoctors = async () => {
-    setIsLoading(true);
-    const response = await dataAPI.getClinicDoctors();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      setDoctors(response.data);
-      await fetchStatistics();
-    }
-    setIsLoading(false);
-  };
 
   const fetchStatistics = async () => {
     setIsLoading(true);
@@ -114,35 +101,6 @@ const GeneralStatistics = () => {
     const data = Statuses.find(it => it.id === statusItem.status);
     return data?.icon;
   };
-
-  const dateRangePicker = (
-    <Popper
-      className='filter-date-picker-root'
-      anchorEl={pickerRef.current}
-      open={showRangePicker}
-      disablePortal
-      placement='bottom'
-      transition
-    >
-      {({ TransitionProps }) => (
-        <Fade {...TransitionProps} timeout={350}>
-          <Paper className='calendar-paper'>
-            <ClickAwayListener onClickAway={handleDatePickerClose}>
-              <DateRangePicker
-                onChange={handleDateChange}
-                showSelectionPreview={true}
-                moveRangeOnFirstSelection={false}
-                months={1}
-                ranges={[{ startDate, endDate }]}
-                direction='horizontal'
-                locale={locales[getAppLanguage()]}
-              />
-            </ClickAwayListener>
-          </Paper>
-        </Fade>
-      )}
-    </Popper>
-  );
 
   return (
     <div className='general-statistics' id='general-statistics'>
@@ -239,7 +197,13 @@ const GeneralStatistics = () => {
           />
         </div>
       </div>
-      {dateRangePicker}
+      <EasyDateRangePicker
+        open={showRangePicker}
+        onChange={handleDateChange}
+        onClose={handleDatePickerClose}
+        pickerAnchor={pickerRef.current}
+        dateRange={{ startDate, endDate }}
+      />
     </div>
   );
 };

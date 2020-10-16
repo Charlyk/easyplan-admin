@@ -170,17 +170,6 @@
   padding: 1.5rem;
 }
 
-.filter-date-picker-root {
-  z-index: 999;
-  margin-top: .5rem;
-
-  .calendar-paper {
-    border: #3A83DC 1px solid;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-}
-
 .general-statistics {
   display: flex;
   max-height: 100%;

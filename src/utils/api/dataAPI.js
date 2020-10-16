@@ -3,8 +3,8 @@ import moment from 'moment';
 
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8000/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8000/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -1009,6 +1009,35 @@ export default {
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
       const url = `analytics/services?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
+      const response = await instance().get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch services statistics
+   * @param {string} serviceId
+   * @param {string} doctorId
+   * @param {Date} fromDate
+   * @param {Date} toDate
+   * @return {Promise<{isError: boolean, message: string|null, data: [Object]}|any>}
+   */
+  fetchDoctorsStatistics: async (
+    fromDate,
+    toDate,
+    doctorId = 'all',
+    serviceId = 'all',
+  ) => {
+    try {
+      const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
+      const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
+      const url = `analytics/doctors?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
       const response = await instance().get(url);
       const { data: responseData } = response;
       return responseData;

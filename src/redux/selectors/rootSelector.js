@@ -1,40 +1,45 @@
-export const updateCategoriesSelector = state => state.updateCategories;
+import { createSelector } from 'reselect';
 
-export const updateUsersSelector = state => state.updateUsers;
+export const mainSelector = state => state.main;
 
-export const updateNotesSelector = state => state.updateNotes;
+export const updateCategoriesSelector = createSelector(
+  mainSelector,
+  state => state.updateCategories,
+);
 
-export const updateXRaySelector = state => state.updateXRay;
+export const updateUsersSelector = createSelector(
+  mainSelector,
+  state => state.updateUsers,
+);
 
-export const updateCurrentUserSelector = state => state.updateCurrentUser;
+export const updateNotesSelector = createSelector(
+  mainSelector,
+  state => state.updateNotes,
+);
 
-export const newClinicIdSelector = state => state.newClinicId;
+export const updateXRaySelector = createSelector(
+  mainSelector,
+  state => state.updateXRay,
+);
 
-export const createClinicSelector = state => state.createClinic;
+export const updateCurrentUserSelector = createSelector(
+  mainSelector,
+  state => state.updateCurrentUser,
+);
 
-export const logoutSelector = state => state.logout;
+export const updateAppointmentsSelector = createSelector(
+  mainSelector,
+  state => state.updateAppointments,
+);
 
-export const appointmentModalSelector = state => state.appointmentModal;
+export const newClinicIdSelector = createSelector(
+  mainSelector,
+  state => state.newClinicId,
+);
 
-export const updateAppointmentsSelector = state => state.updateAppointments;
+export const logoutSelector = createSelector(
+  mainSelector,
+  state => state.logout,
+);
 
-export const patientNoteModalSelector = state => state.patientNoteModal;
-
-export const patientXRayModalSelector = state => state.patientXRayModal;
-
-export const paymentModalSelector = state => state.paymentModal;
-
-/**
- * Get current user from store
- * @param state
- * @return {{
- *   id: string,
- *   firstName: string,
- *   lastName: string,
- *   username: string,
- *   avatar: string,
- *   clinicIds: [string],
- *   clinics: [{id: string, clinicName: string, roleInClinic: string, userStatus: string}],
- * }}
- */
-export const userSelector = state => state.user;
+export const userSelector = createSelector(mainSelector, state => state.user);

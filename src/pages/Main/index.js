@@ -20,10 +20,8 @@ import {
   setCreateClinic,
   triggerUserLogout,
 } from '../../redux/actions/actions';
-import {
-  appointmentModalSelector,
-  userSelector,
-} from '../../redux/selectors/rootSelector';
+import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
@@ -108,10 +106,10 @@ const Main = () => {
     <div className='main-page' id='main-page'>
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
-        schedule={appointmentModal.schedule}
-        open={appointmentModal.open}
-        doctor={appointmentModal.doctor}
-        date={appointmentModal.date}
+        schedule={appointmentModal?.schedule}
+        open={appointmentModal?.open}
+        doctor={appointmentModal?.doctor}
+        date={appointmentModal?.date}
       />
       {user != null && (
         <MainMenu

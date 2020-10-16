@@ -1,3 +1,5 @@
+import clinicTypes from './clinicTypes';
+
 export default {
   setIsAuthenticated: 'setIsAuthenticated',
   updateCategoriesList: 'updateCategoriesList',
@@ -14,4 +16,5 @@ export default {
   setAddPatientNote: 'setAddPatientNote',
   setAddPatientXRay: 'setAddPatientXRay',
   setPaymentModal: 'setPaymentModal',
+  ...clinicTypes,
 };

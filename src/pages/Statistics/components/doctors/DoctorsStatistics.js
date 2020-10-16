@@ -1,46 +1,137 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 
+import moment from 'moment';
 import { Form } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
-import LoadingButton from '../../../../components/LoadingButton';
+import {
+  clinicDoctorsSelector,
+  clinicServicesSelector,
+} from '../../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
+import StatisticFilter from '../StatisticFilter';
 
-const Filter = props => {
-  return (
-    <div className='filter'>
-      <Form.Group style={{ flexDirection: 'column' }}>
-        <Form.Label>{textForKey('Services')}</Form.Label>
-        <Form.Control
-          as='select'
-          className='mr-sm-2'
-          id='inlineFormCustomSelect'
-          custom
-        >
-          <option value='choose'>{textForKey('All services')}</option>
-        </Form.Control>
-      </Form.Group>
-      <Form.Group style={{ flexDirection: 'column' }}>
-        <Form.Label>{textForKey('Doctors')}</Form.Label>
-        <Form.Control
-          as='select'
-          className='mr-sm-2'
-          id='inlineFormCustomSelect'
-          custom
-        >
-          <option value='choose'>{textForKey('All doctors')}</option>
-        </Form.Control>
-      </Form.Group>
-      <LoadingButton className='positive-button'>
-        {textForKey('Apply filters')}
-      </LoadingButton>
-    </div>
-  );
+const initialState = {
+  isLoading: false,
+  selectedDoctor: { id: 'all' },
+  selectedService: { id: 'all' },
+  dateRange: [
+    moment()
+      .startOf('month')
+      .toDate(),
+    moment()
+      .endOf('month')
+      .toDate(),
+  ],
+  doctors: [],
+  services: [],
+  statistics: [],
 };
 
-const DoctorsStatistics = props => {
+const reducerTypes = {
+  setIsLoading: 'setIsLoading',
+  setSelectedDoctor: 'setSelectedDoctor',
+  setSelectedService: 'setSelectedService',
+  setDateRange: 'setDateRange',
+  setDoctors: 'setDoctors',
+  setServices: 'setServices',
+  setStatistics: 'setStatistics',
+};
+
+const reducerActions = generateReducerActions(reducerTypes);
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setIsLoading:
+      return { ...state, isLoading: action.payload };
+    case reducerTypes.setSelectedDoctor:
+      return { ...state, selectedDoctor: action.payload };
+    case reducerTypes.setSelectedService:
+      return { ...state, selectedService: action.payload };
+    case reducerTypes.setDateRange:
+      return { ...state, dateRange: action.payload };
+    case reducerTypes.setDoctors:
+      return { ...state, doctors: action.payload };
+    case reducerTypes.setServices:
+      return { ...state, services: action.payload };
+    case reducerTypes.setStatistics:
+      return { ...state, statistics: action.payload };
+  }
+};
+
+const DoctorsStatistics = () => {
+  const doctors = useSelector(clinicDoctorsSelector);
+  const services = useSelector(clinicServicesSelector);
+  const [
+    {
+      isLoading,
+      selectedDoctor,
+      selectedService,
+      dateRange: [startDate, endDate],
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    localDispatch(reducerActions.setIsLoading(true));
+    const response = await dataAPI.fetchDoctorsStatistics(
+      startDate,
+      endDate,
+      selectedDoctor?.id || 'all',
+      selectedService?.id || 'all',
+    );
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      console.log(response.data);
+      localDispatch(reducerActions.setStatistics(response.data));
+    }
+    localDispatch(reducerActions.setIsLoading(false));
+  };
+
   return (
     <div className='statistics-doctors'>
-      <Filter />
+      <StatisticFilter isLoading={isLoading}>
+        <Form.Group style={{ flexDirection: 'column' }}>
+          <Form.Label>{textForKey('Services')}</Form.Label>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            custom
+          >
+            <option value='all'>{textForKey('All services')}</option>
+            {services.map(service => (
+              <option key={service.id} value={service.id}>
+                {service.name}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+        <Form.Group style={{ flexDirection: 'column' }}>
+          <Form.Label>{textForKey('Doctors')}</Form.Label>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            custom
+          >
+            <option value='all'>{textForKey('All doctors')}</option>
+            {doctors.map(doctor => (
+              <option
+                key={doctor.id}
+                value={doctor.id}
+              >{`${doctor.firstName} ${doctor.lastName}`}</option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+      </StatisticFilter>
       <div className='data-container'>
         <table className='data-table'>
           <thead>

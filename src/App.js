@@ -40,11 +40,13 @@ import {
 import initialState from './redux/initialState';
 import {
   createClinicSelector,
-  logoutSelector,
-  newClinicIdSelector,
   patientNoteModalSelector,
   patientXRayModalSelector,
   paymentModalSelector,
+} from './redux/selectors/modalsSelector';
+import {
+  logoutSelector,
+  newClinicIdSelector,
   updateCurrentUserSelector,
   userSelector,
 } from './redux/selectors/rootSelector';
@@ -180,8 +182,8 @@ function App() {
           show={logout}
         />
         <CreateClinicModal
-          onClose={createClinic.canClose ? handleCloseCreateClinic : null}
-          open={createClinic.open}
+          onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
+          open={createClinic?.open}
           onCreate={handleClinicCreated}
         />
         <Modal

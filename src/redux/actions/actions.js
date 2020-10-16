@@ -56,13 +56,11 @@ export function setCurrentUser(user) {
   };
 }
 
-export function triggerUpdateCurrentUser() {
-  return {
-    type: types.setUpdateCurrentUser,
-    payload: '',
-  };
-}
-
+/**
+ * Toggle clinic change
+ * @param {string} clinicId
+ * @return {{payload: *, type: string}}
+ */
 export function changeSelectedClinic(clinicId) {
   return {
     type: types.changeCurrentClinic,

@@ -1,19 +1,21 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
-import Popper from '@material-ui/core/Popper';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import { parse } from 'query-string';
 import { Form, Spinner } from 'react-bootstrap';
-import { DateRangePicker } from 'react-date-range';
-import * as locales from 'react-date-range/dist/locale';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
+import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
+import {
+  clinicDoctorsSelector,
+  clinicServicesSelector,
+} from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { Statuses } from '../../../../utils/constants';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
-import { getAppLanguage, textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
 
 const reducerTypes = {
@@ -22,8 +24,6 @@ const reducerTypes = {
   setSelectedStatus: 'setSelectedStatus',
   setStatistics: 'setStatistics',
   setIsLoading: 'setIsLoading',
-  setDoctors: 'setDoctors',
-  setServices: 'setServices',
   setShowRangePicker: 'setShowRangePicker',
   setDateRange: 'setDateRange',
   setUrlParams: 'setUrlParams',
@@ -86,15 +86,17 @@ const initialState = {
   params: {},
   dateRange: [
     moment()
-      .startOf('day')
+      .startOf('month')
       .toDate(),
     moment()
-      .endOf('day')
+      .endOf('month')
       .toDate(),
   ],
 };
 
 const ServicesStatistics = () => {
+  const doctors = useSelector(clinicDoctorsSelector);
+  const services = useSelector(clinicServicesSelector);
   const location = useLocation();
   const params = parse(location.search);
   const pickerRef = useRef(null);
@@ -106,8 +108,6 @@ const ServicesStatistics = () => {
       selectedDoctor,
       selectedService,
       selectedStatus,
-      doctors,
-      services,
       showRangePicker,
       params: urlParams,
       dateRange: [startDate, endDate],
@@ -116,7 +116,7 @@ const ServicesStatistics = () => {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    fetchFilterData();
+    setTimeout(fetchData, 50);
   }, [urlParams]);
 
   useEffect(() => {
@@ -139,23 +139,6 @@ const ServicesStatistics = () => {
     } else {
       localDispatch(reducerActions.setStatistics(response.data));
     }
-    localDispatch(reducerActions.setIsLoading(false));
-  };
-
-  const fetchFilterData = async () => {
-    localDispatch(reducerActions.setIsLoading(true));
-    // fetch clinic doctors
-    const doctorsResponse = await dataAPI.getClinicDoctors();
-    if (!doctorsResponse.isError) {
-      localDispatch(reducerActions.setDoctors(doctorsResponse.data));
-    }
-
-    // fetch clinic services
-    const servicesResponse = await dataAPI.fetchServices(null);
-    if (!servicesResponse.isError) {
-      localDispatch(reducerActions.setServices(servicesResponse.data));
-    }
-    await fetchData();
     localDispatch(reducerActions.setIsLoading(false));
   };
 
@@ -212,35 +195,6 @@ const ServicesStatistics = () => {
     const status = Statuses.find(it => it.id === newValue);
     localDispatch(reducerActions.setSelectedStatus(status));
   };
-
-  const dateRangePicker = (
-    <Popper
-      className='filter-date-picker-root'
-      anchorEl={pickerRef.current}
-      open={showRangePicker}
-      disablePortal
-      placement='bottom'
-      transition
-    >
-      {({ TransitionProps }) => (
-        <Fade {...TransitionProps} timeout={350}>
-          <Paper className='calendar-paper'>
-            <ClickAwayListener onClickAway={handleDatePickerClose}>
-              <DateRangePicker
-                onChange={handleDateChange}
-                showSelectionPreview={true}
-                moveRangeOnFirstSelection={false}
-                months={1}
-                ranges={[{ startDate, endDate }]}
-                direction='horizontal'
-                locale={locales[getAppLanguage()]}
-              />
-            </ClickAwayListener>
-          </Paper>
-        </Fade>
-      )}
-    </Popper>
-  );
 
   const titleForStatus = status => {
     const data = Statuses.find(it => it.id === status);
@@ -366,7 +320,13 @@ const ServicesStatistics = () => {
           </table>
         )}
       </div>
-      {dateRangePicker}
+      <EasyDateRangePicker
+        onChange={handleDateChange}
+        onClose={handleDatePickerClose}
+        dateRange={{ startDate, endDate }}
+        open={showRangePicker}
+        pickerAnchor={pickerRef.current}
+      />
     </div>
   );
 };
