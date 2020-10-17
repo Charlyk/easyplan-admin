@@ -13,8 +13,11 @@ import {
   clinicServicesSelector,
 } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
-import { Statuses } from '../../../../utils/constants';
-import { generateReducerActions } from '../../../../utils/helperFuncs';
+import { Action, Statuses } from '../../../../utils/constants';
+import {
+  generateReducerActions,
+  logUserAction,
+} from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
 
@@ -56,12 +59,12 @@ const reducer = (state, action) => {
       const fromDate = startDate
         ? moment(startDate, 'YYYY-MM-DD HH:mm:ss').toDate()
         : moment()
-            .startOf('day')
+            .startOf('month')
             .toDate();
       const toDate = endDate
         ? moment(endDate, 'YYYY-MM-DD HH:mm:ss').toDate()
         : moment()
-            .endOf('day')
+            .endOf('month')
             .toDate();
       return {
         ...state,
@@ -83,7 +86,7 @@ const initialState = {
   services: [],
   isLoading: false,
   showRangePicker: false,
-  params: {},
+  urlParams: {},
   dateRange: [
     moment()
       .startOf('month')
@@ -127,13 +130,18 @@ const ServicesStatistics = () => {
 
   const fetchData = async () => {
     localDispatch(reducerActions.setIsLoading(true));
-    const response = await dataAPI.fetchServicesStatistics(
-      startDate,
-      endDate,
-      selectedDoctor?.id || 'all',
-      selectedService?.id || 'all',
-      selectedStatus?.id || 'all',
+    const requestData = {
+      fromDate: startDate,
+      toDate: endDate,
+      doctorId: selectedDoctor?.id || 'all',
+      serviceId: selectedService?.id || 'all',
+      status: selectedStatus?.id || 'all',
+    };
+    logUserAction(
+      Action.ViewServicesStatistics,
+      JSON.stringify({ filter: requestData }),
     );
+    const response = await dataAPI.fetchServicesStatistics(requestData);
     if (response.isError) {
       console.error(response.message);
     } else {

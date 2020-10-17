@@ -11,7 +11,11 @@ import {
   clinicServicesSelector,
 } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
-import { generateReducerActions } from '../../../../utils/helperFuncs';
+import { Action } from '../../../../utils/constants';
+import {
+  generateReducerActions,
+  logUserAction,
+} from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
 
@@ -123,12 +127,17 @@ const DoctorsStatistics = () => {
 
   const fetchData = async () => {
     localDispatch(reducerActions.setIsLoading(true));
-    const response = await dataAPI.fetchDoctorsStatistics(
-      startDate,
-      endDate,
-      selectedDoctor?.id || 'all',
-      selectedService?.id || 'all',
+    const requestData = {
+      fromDate: startDate,
+      toDate: endDate,
+      doctorId: selectedDoctor?.id || 'all',
+      serviceId: selectedService?.id || 'all',
+    };
+    logUserAction(
+      Action.ViewDoctorsStatistics,
+      JSON.stringify({ filter: requestData }),
     );
+    const response = await dataAPI.fetchDoctorsStatistics(requestData);
     if (response.isError) {
       console.error(response.message);
     } else {

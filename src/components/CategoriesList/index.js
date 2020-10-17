@@ -14,6 +14,8 @@ import {
   userSelector,
 } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
 import ConfirmationModal from '../ConfirmationModal';
@@ -56,7 +58,9 @@ const CategoriesList = props => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    fetchCategories();
+    if (!isLoading) {
+      fetchCategories();
+    }
   }, [updateCategories]);
 
   useEffect(() => {
@@ -73,8 +77,8 @@ const CategoriesList = props => {
       setCategories(response.data || []);
       if (response?.data?.length > 0) {
         if (selectedCategory == null) {
-          setSelectedCategory(response.data[0]);
-          onCategorySelect(response.data[0]);
+          const category = response.data[0];
+          handleCategoryClick(category);
         }
       }
     }
@@ -101,6 +105,7 @@ const CategoriesList = props => {
   const handleCategoryClick = category => {
     setSelectedCategory(category);
     onCategorySelect(category);
+    logUserAction(Action.ViewCategory, JSON.stringify(category));
   };
 
   const handleMoreClick = () => {
@@ -152,21 +157,21 @@ const CategoriesList = props => {
     fetchCategories();
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     setIsDeleting(true);
-    dataAPI
-      .deleteCategory(selectedCategory.id)
-      .then(() => {
-        fetchCategories();
-        setIsDeleteConfirmation(false);
-        setIsDeleting(false);
-        setSelectedCategory(null);
-        onCategorySelect(null);
-      })
-      .catch(error => {
-        console.error(error);
-        setIsDeleting(false);
-      });
+    const response = await dataAPI.deleteCategory(selectedCategory.id);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      logUserAction(Action.DeleteCategory, JSON.stringify(selectedCategory));
+      fetchCategories();
+      setIsDeleteConfirmation(false);
+      setIsDeleting(false);
+      setSelectedCategory(null);
+      onCategorySelect(null);
+    }
+
+    setIsDeleting(false);
   };
 
   return (

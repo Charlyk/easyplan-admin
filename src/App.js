@@ -37,6 +37,10 @@ import {
   setPaymentModal,
   triggerUserLogout,
 } from './redux/actions/actions';
+import {
+  setClinicDoctors,
+  setClinicServices,
+} from './redux/actions/clinicActions';
 import initialState from './redux/initialState';
 import {
   createClinicSelector,
@@ -51,6 +55,7 @@ import {
   userSelector,
 } from './redux/selectors/rootSelector';
 import authAPI from './utils/api/authAPI';
+import dataAPI from './utils/api/dataAPI';
 import { getAppLanguage, textForKey } from './utils/localization';
 import authManager from './utils/settings/authManager';
 
@@ -83,6 +88,7 @@ function App() {
   useEffect(() => {
     if (currentUser == null) {
       fetchUser();
+      fetchClinicData();
     } else if (currentUser.clinics.length === 0) {
       dispatch(setCreateClinic({ open: true, canClose: false }));
     }
@@ -91,8 +97,23 @@ function App() {
   useEffect(() => {
     if (newClinicId != null) {
       changeCurrentClinic(newClinicId);
+      fetchClinicData();
     }
   }, [newClinicId]);
+
+  const fetchClinicData = async () => {
+    // fetch clinic doctors
+    const doctorsResponse = await dataAPI.getClinicDoctors();
+    if (!doctorsResponse.isError) {
+      dispatch(setClinicDoctors(doctorsResponse.data));
+    }
+
+    // fetch clinic services
+    const servicesResponse = await dataAPI.fetchServices(null);
+    if (!servicesResponse.isError) {
+      dispatch(setClinicServices(servicesResponse.data));
+    }
+  };
 
   const redirectToHome = () => {
     setRedirectUser(true);

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import S3 from 'react-aws-s3';
 
-import { imageLambdaUrl } from './api/dataAPI';
+import dataAPI, { imageLambdaUrl } from './api/dataAPI';
 import { S3Config } from './constants';
 
 export function createHoursList() {
@@ -86,6 +86,15 @@ export async function uploadFileToAWS(path, file) {
 export function urlToLambda(imageUrl, width = 50) {
   const url = new URL(imageUrl);
   return `${imageLambdaUrl}${url.pathname}?width=${width}`;
+}
+
+/**
+ * Send user action to server
+ * @param {string} action
+ * @param {string?} details
+ */
+export function logUserAction(action, details) {
+  dataAPI.sendAction(action, details);
 }
 
 export const getCurrentWeek = date => {

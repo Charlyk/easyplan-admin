@@ -9,7 +9,8 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
 import { updateUsersSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { Role } from '../../utils/constants';
+import { Action, Role } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import UserItem from './comps/UserItem';
 import UsersHeader from './comps/UsersHeader';
@@ -28,26 +29,23 @@ const Users = props => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
+    logUserAction(Action.ViewUsers);
+  }, []);
+
+  useEffect(() => {
     fetchUsers();
   }, [props, updateUsers]);
 
-  const fetchUsers = () => {
+  const fetchUsers = async () => {
     setIsLoading(true);
-    dataAPI
-      .fetchUsers()
-      .then(response => {
-        setIsLoading(false);
-        if (!response.isError) {
-          setUsers(response.data);
-        } else {
-          console.error(response.message);
-        }
-      })
-      .catch(error => {
-        setUsers([]);
-        setIsLoading(false);
-        console.error(error);
-      });
+    const response = await dataAPI.fetchUsers();
+    if (response.isError) {
+      console.error(response.message);
+      setUsers([]);
+    } else {
+      setUsers(response.data);
+    }
+    setIsLoading(false);
   };
 
   const handleFilterChange = newFilter => {
@@ -104,6 +102,8 @@ const Users = props => {
 
     return (
       <div
+        role='button'
+        tabIndex={0}
         className='users-root__no-data'
         onClick={event => handleUserModalOpen(event, null, role)}
       >
@@ -132,24 +132,18 @@ const Users = props => {
     setUserToDelete(null);
   };
 
-  const deleteUser = () => {
+  const deleteUser = async () => {
     if (!userToDelete) return;
     setIsDeleting(true);
-    dataAPI
-      .deleteUser(userToDelete.id)
-      .then(response => {
-        setIsDeleting(false);
-        if (response.isError) {
-          console.error(response);
-        } else {
-          setUserToDelete(null);
-          fetchUsers();
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        setIsDeleting(false);
-      });
+    const response = await dataAPI.deleteUser(userToDelete.id);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      logUserAction(Action.DeleteUser, JSON.stringify(userToDelete));
+      setUserToDelete(null);
+      await fetchUsers();
+    }
+    setIsDeleting(false);
   };
 
   return (

@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { FormControl } from 'react-bootstrap';
 
 import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
@@ -27,36 +29,38 @@ const CreateCategoryModal = props => {
     }
   };
 
-  const editCategoryName = () => {
-    dataAPI
-      .changeCategoryName({ categoryId: category.id, categoryName })
-      .then(response => {
-        setIsLoading(false);
-        if (!response.isError) {
-          setCategoryName('');
-          onSaved(response.data);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
+  const editCategoryName = async () => {
+    const response = await dataAPI.changeCategoryName({
+      categoryId: category.id,
+      categoryName,
+    });
+    if (!response.isError) {
+      logUserAction(
+        Action.EditCategory,
+        JSON.stringify({
+          before: category,
+          after: { ...category, name: categoryName },
+        }),
+      );
+      setCategoryName('');
+      onSaved(response.data);
+    } else {
+      console.error(response.message);
+    }
+    setIsLoading(false);
   };
 
-  const createNewCategory = () => {
-    dataAPI
-      .createCategory({ categoryName })
-      .then(response => {
-        setIsLoading(false);
-        if (!response.isError) {
-          setCategoryName('');
-          onSaved(response.data);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
+  const createNewCategory = async () => {
+    const response = await dataAPI.createCategory({ categoryName });
+    if (!response.isError) {
+      logUserAction(Action.CreateCategory, JSON.stringify({ categoryName }));
+      setCategoryName('');
+      onSaved(response.data);
+    } else {
+      console.error(response.message);
+    }
+
+    setIsLoading(false);
   };
 
   const handleCategoryNameChange = event => {

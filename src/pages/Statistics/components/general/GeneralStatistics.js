@@ -13,7 +13,8 @@ import IconXPerson from '../../../../assets/icons/iconXPerson';
 import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
 import { clinicDoctorsSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
-import { Statuses } from '../../../../utils/constants';
+import { Action, Statuses } from '../../../../utils/constants';
+import { logUserAction } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
@@ -41,11 +42,16 @@ const GeneralStatistics = () => {
 
   const fetchStatistics = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchGeneralStatistics(
-      selectedDoctor.id,
-      startDate,
-      endDate,
+    const requestData = {
+      doctorId: selectedDoctor.id,
+      fromDate: startDate,
+      toDate: endDate,
+    };
+    logUserAction(
+      Action.ViewGeneralStatistics,
+      JSON.stringify({ filter: requestData }),
     );
+    const response = await dataAPI.fetchGeneralStatistics(requestData);
     if (response.isError) {
       console.error(response.message);
     } else {

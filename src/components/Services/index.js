@@ -4,7 +4,6 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 
 import IconPlus from '../../assets/icons/iconPlus';
 import dataAPI from '../../utils/api/dataAPI';
@@ -20,23 +19,21 @@ const Services = props => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    setServices([]);
-    serviceToEdit.current = null;
-    fetchServices();
+    if (category != null && !isLoading) {
+      serviceToEdit.current = null;
+      fetchServices();
+    }
   }, [category]);
 
-  const fetchServices = () => {
+  const fetchServices = async () => {
     setIsLoading(true);
-    dataAPI
-      .fetchServices(category?.id)
-      .then(response => {
-        setServices(response.data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
+    const response = await dataAPI.fetchServices(category?.id);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      setServices(response.data);
+    }
+    setIsLoading(false);
   };
 
   if (category == null) return null;

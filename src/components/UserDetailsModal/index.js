@@ -11,8 +11,8 @@ import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
-import { EmailRegex, Role } from '../../utils/constants';
-import { uploadFileToAWS } from '../../utils/helperFuncs';
+import { Action, EmailRegex, Role } from '../../utils/constants';
+import { logUserAction, uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
 import LoadingButton from '../LoadingButton';
@@ -97,6 +97,7 @@ const UserDetailsModal = props => {
   useEffect(() => {
     if (user != null) {
       setCurrentTab(user.role);
+      logUserAction(Action.ViewUser, JSON.stringify(user));
       setUserData({
         ...initialData,
         ...user,
@@ -145,7 +146,7 @@ const UserDetailsModal = props => {
     }
   };
 
-  const saveUser = avatarUrl => {
+  const saveUser = async avatarUrl => {
     // clear components with no price and percentage
     const newServices = cloneDeep(userData.services);
     remove(newServices, item => item.price == null && item.percentage == null);
@@ -157,52 +158,46 @@ const UserDetailsModal = props => {
     };
 
     if (user == null) {
-      createUser(requestBody);
+      await createUser(requestBody);
     } else {
-      updateUser(requestBody);
+      await updateUser(requestBody);
     }
   };
 
-  const updateUser = requestBody => {
-    dataAPI
-      .updateUser(user.id, requestBody)
-      .then(response => {
-        setIsSaving(false);
-        if (!response.isError) {
-          dispatch(triggerUsersUpdate());
-          handleModalClose();
-        } else {
-          console.error(response);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        setIsSaving(false);
-      });
+  const updateUser = async requestBody => {
+    const response = await dataAPI.updateUser(user.id, requestBody);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      logUserAction(
+        Action.EditUser,
+        JSON.stringify({ before: user, after: requestBody }),
+      );
+      dispatch(triggerUsersUpdate());
+      handleModalClose();
+    }
   };
 
-  const createUser = requestBody => {
-    dataAPI
-      .createUser(requestBody)
-      .then(() => {
-        dispatch(triggerUsersUpdate());
-        setIsSaving(false);
-        handleModalClose();
-      })
-      .catch(error => {
-        console.error(error);
-        setIsSaving(false);
-      });
+  const createUser = async requestBody => {
+    const response = await dataAPI.createUser(requestBody);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      logUserAction(Action.CreateUser, JSON.stringify(requestBody));
+      dispatch(triggerUsersUpdate());
+      handleModalClose();
+    }
   };
 
   const handleSaveForm = async () => {
     setIsSaving(true);
     if (userData.avatarFile != null) {
       const result = await uploadFileToAWS('avatars', userData.avatarFile);
-      saveUser(result?.location);
+      await saveUser(result?.location);
     } else {
-      saveUser(null);
+      await saveUser(null);
     }
+    setIsSaving(false);
   };
 
   const handleCreateHoliday = holiday => {

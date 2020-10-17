@@ -4,6 +4,7 @@
   flex-direction: column;
 
   &__no-data {
+    outline: none;
     user-select: none;
     -webkit-user-select: none;
     height: 4rem;

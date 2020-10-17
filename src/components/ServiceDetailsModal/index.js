@@ -9,6 +9,8 @@ import IconDelete from '../../assets/icons/iconDelete';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerCategoriesUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ConfirmationModal from '../ConfirmationModal';
 import LeftSideModal from '../LeftSideModal';
@@ -47,6 +49,7 @@ const ServiceDetailsModal = props => {
     fetchDoctors();
     if (service != null && show) {
       setServiceInfo(service);
+      logUserAction(Action.ViewService, JSON.stringify(service));
     }
   }, [show, service]);
 
@@ -116,6 +119,7 @@ const ServiceDetailsModal = props => {
     if (response.isError) {
       console.error(response.message);
     } else {
+      logUserAction(Action.CreateService, JSON.stringify(serviceInfo));
       dispatch(triggerCategoriesUpdate());
       handleCloseModal();
     }
@@ -126,6 +130,13 @@ const ServiceDetailsModal = props => {
     if (response.isError) {
       console.error(response.message);
     } else {
+      logUserAction(
+        Action.EditService,
+        JSON.stringify({
+          before: service,
+          after: serviceInfo,
+        }),
+      );
       dispatch(triggerCategoriesUpdate());
       handleCloseModal();
     }
@@ -135,6 +146,7 @@ const ServiceDetailsModal = props => {
     setIsDeleting(true);
     const response = await dataAPI.deleteService(service.id);
     if (!response.isError) {
+      logUserAction(Action.DeleteService, JSON.stringify(service));
       setDeleteConfirmationVisible(false);
       dispatch(triggerCategoriesUpdate());
       handleCloseModal();

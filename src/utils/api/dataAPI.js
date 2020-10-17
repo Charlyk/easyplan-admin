@@ -967,13 +967,15 @@ export default {
 
   /**
    * Fetch app general statistics
-   * @param {string} doctorId
-   * @param {Date} fromDate
-   * @param {Date} toDate
+   * @param {Object} requestData
+   * @param {string} requestData.doctorId
+   * @param {Date} requestData.fromDate
+   * @param {Date} requestData.toDate
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  fetchGeneralStatistics: async (doctorId, fromDate, toDate) => {
+  fetchGeneralStatistics: async requestData => {
     try {
+      const { doctorId, fromDate, toDate } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
       const response = await instance().get(
@@ -991,21 +993,17 @@ export default {
 
   /**
    * Fetch services statistics
-   * @param {string} serviceId
-   * @param {string} doctorId
-   * @param {Date} fromDate
-   * @param {Date} toDate
-   * @param {string} status
+   * @param {Object} requestData
+   * @param {string} requestData.serviceId
+   * @param {string} requestData.doctorId
+   * @param {Date} requestData.fromDate
+   * @param {Date} requestData.toDate
+   * @param {string} requestData.status
    * @return {Promise<{isError: boolean, message: string|null, data: [Object]}|any>}
    */
-  fetchServicesStatistics: async (
-    fromDate,
-    toDate,
-    doctorId = 'all',
-    serviceId = 'all',
-    status = 'all',
-  ) => {
+  fetchServicesStatistics: async requestData => {
     try {
+      const { serviceId, doctorId, fromDate, toDate, status } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
       const url = `analytics/services?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
@@ -1022,23 +1020,40 @@ export default {
 
   /**
    * Fetch services statistics
-   * @param {string} serviceId
-   * @param {string} doctorId
-   * @param {Date} fromDate
-   * @param {Date} toDate
+   * @param {Object} requestData
+   * @param {string} requestData.serviceId
+   * @param {string} requestData.doctorId
+   * @param {Date} requestData.fromDate
+   * @param {Date} requestData.toDate
    * @return {Promise<{isError: boolean, message: string|null, data: [Object]}|any>}
    */
-  fetchDoctorsStatistics: async (
-    fromDate,
-    toDate,
-    doctorId = 'all',
-    serviceId = 'all',
-  ) => {
+  fetchDoctorsStatistics: async requestData => {
     try {
+      const { fromDate, toDate, doctorId, serviceId } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
       const url = `analytics/doctors?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
       const response = await instance().get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Log user action
+   * @param {string} action
+   * @param {Object} details
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  sendAction: async (action, details) => {
+    try {
+      const url = 'clinics/log-action';
+      const response = await instance().put(url, { action, details });
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
