@@ -19,6 +19,7 @@ const initialState = {
   isLoading: false,
   selectedDoctor: { id: 'all' },
   selectedService: { id: 'all' },
+  showRangePicker: false,
   dateRange: [
     moment()
       .startOf('month')
