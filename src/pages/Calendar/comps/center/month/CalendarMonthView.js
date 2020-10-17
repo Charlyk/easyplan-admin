@@ -5,7 +5,8 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import dataAPI from '../../../../../utils/api/dataAPI';
-import { getDays } from '../../../../../utils/helperFuncs';
+import { Action } from '../../../../../utils/constants';
+import { getDays, logUserAction } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 
 const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
@@ -15,6 +16,12 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   const currentDate = moment().format('DD');
 
   useEffect(() => {
+    if (opened) {
+      logUserAction(
+        Action.ViewAppointments,
+        JSON.stringify({ mode: 'Month', doctorId }),
+      );
+    }
     if (viewDate != null && doctorId != null && opened) {
       setMonthDays(getDays(viewDate));
       fetchSchedules();

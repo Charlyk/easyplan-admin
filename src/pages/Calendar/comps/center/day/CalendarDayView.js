@@ -5,6 +5,8 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { animated } from 'react-spring';
 
+import { Action } from '../../../../../utils/constants';
+import { logUserAction } from '../../../../../utils/helperFuncs';
 import DayAppointmentItem from './DayAppointmentItem';
 
 const Hour = props => {
@@ -19,12 +21,24 @@ const Hour = props => {
   );
 };
 
-const CalendarDayView = ({ opened, schedules, hours, onScheduleSelect }) => {
+const CalendarDayView = ({
+  opened,
+  schedules,
+  hours,
+  doctorId,
+  onScheduleSelect,
+}) => {
   const [isClosed, setIsClosed] = useState(!opened);
   const currentHour = moment().format('HH:00');
 
   useEffect(() => {
     setIsClosed(!opened);
+    if (opened) {
+      logUserAction(
+        Action.ViewAppointments,
+        JSON.stringify({ mode: 'Day', doctorId }),
+      );
+    }
   }, [opened]);
 
   if (isClosed) return null;
@@ -56,6 +70,7 @@ Hour.propTypes = {
 };
 
 CalendarDayView.propTypes = {
+  doctorId: PropTypes.string,
   opened: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),
   onScheduleSelect: PropTypes.func,

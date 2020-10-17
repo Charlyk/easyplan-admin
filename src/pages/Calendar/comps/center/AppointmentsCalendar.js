@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import EasyTab from '../../../../components/EasyTab';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
-import { getCurrentWeek } from '../../../../utils/helperFuncs';
+import { getCurrentWeek, logUserAction } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import CalendarDayView from './day/CalendarDayView';
 import CalendarMonthView from './month/CalendarMonthView';
@@ -151,6 +151,7 @@ const AppointmentsCalendar = ({
             </span>
           )}
         <CalendarDayView
+          doctorId={doctor?.id}
           onScheduleSelect={onScheduleSelect}
           hours={hours}
           schedules={schedules}

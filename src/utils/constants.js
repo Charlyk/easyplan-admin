@@ -381,6 +381,7 @@ export const Action = {
   EditAppointment: 'EditAppointment',
   DeleteAppointment: 'DeleteAppointment',
   ViewAppointment: 'ViewAppointment',
+  ViewAppointments: 'ViewAppointments',
   CreatePatient: 'CreatePatient',
   EditPatient: 'EditPatient',
   DeletePatient: 'DeletePatient',

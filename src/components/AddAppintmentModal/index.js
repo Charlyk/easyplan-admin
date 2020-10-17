@@ -13,7 +13,8 @@ import { useDispatch } from 'react-redux';
 
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
-import { ScheduleStatuses } from '../../utils/constants';
+import { Action, ScheduleStatuses } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
@@ -488,7 +489,7 @@ const AddAppointmentModal = ({
     const scheduleDate = `${moment(appointmentDate).format(
       'YYYY-MM-DD',
     )} ${appointmentHour}`;
-    const response = await dataAPI.createNewSchedule({
+    const requestBody = {
       patientFirstName,
       patientLastName,
       patientPhoneNumber,
@@ -499,12 +500,21 @@ const AddAppointmentModal = ({
       note: appointmentNote,
       status: appointmentStatus,
       scheduleId: scheduleId,
-    });
+    };
+    const response = await dataAPI.createNewSchedule(requestBody);
     if (response.isError) {
       console.error(response.message);
       localDispatch(reducerActions.setIsCreatingSchedule(false));
     } else {
       onClose();
+      if (schedule != null) {
+        logUserAction(
+          Action.EditAppointment,
+          JSON.stringify({ before: schedule, after: requestBody }),
+        );
+      } else {
+        logUserAction(Action.CreateAppointment, JSON.stringify(requestBody));
+      }
       dispatch(toggleAppointmentsUpdate());
     }
   };

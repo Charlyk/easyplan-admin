@@ -8,8 +8,14 @@ import {
   setAppointmentModal,
   toggleAppointmentsUpdate,
 } from '../../redux/actions/actions';
+import {
+  clinicDoctorsSelector,
+  clinicServicesSelector,
+} from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
 import CalendarDoctors from './comps/left/CalendarDoctors';
@@ -86,7 +92,8 @@ const initialState = {
 
 const Calendar = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector(userSelector);
+  const services = useSelector(clinicServicesSelector);
+  const doctors = useSelector(clinicDoctorsSelector);
   const [
     {
       filters,
@@ -102,34 +109,18 @@ const Calendar = () => {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    fetchFilters();
-  }, [currentUser]);
-
-  const fetchFilters = async () => {
-    localDispatch(reducerActions.setIsFetching(true));
-    const response = await dataAPI.fetchCalendarFilters();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      const { doctors, services } = response.data;
-      const newDoctors = doctors.map(item => {
-        const servicesIds = item.services.map(service => service.id);
-        return {
-          ...item,
-          services: services.filter(service =>
-            servicesIds.includes(service.id),
-          ),
-        };
-      });
-      localDispatch(
-        reducerActions.setFilters({ doctors: newDoctors, services }),
-      );
-      if (newDoctors.length > 0) {
-        localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
-      }
+    const newDoctors = doctors.map(item => {
+      const servicesIds = item.services.map(service => service.id);
+      return {
+        ...item,
+        services: services.filter(service => servicesIds.includes(service.id)),
+      };
+    });
+    localDispatch(reducerActions.setFilters({ doctors: newDoctors, services }));
+    if (newDoctors.length > 0) {
+      localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
     }
-    localDispatch(reducerActions.setIsFetching(false));
-  };
+  }, [doctors, services]);
 
   const handleAppointmentModalOpen = () => {
     dispatch(
@@ -178,6 +169,10 @@ const Calendar = () => {
     }
     localDispatch(reducerActions.setIsDeleting(true));
     await dataAPI.deleteSchedule(deleteSchedule.schedule.id);
+    logUserAction(
+      Action.DeleteAppointment,
+      JSON.stringify(deleteSchedule.schedule),
+    );
     localDispatch(
       reducerActions.setDeleteSchedule({ open: false, schedule: null }),
     );

@@ -5,7 +5,11 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { animated } from 'react-spring';
 
-import { getCurrentWeek } from '../../../../../utils/helperFuncs';
+import { Action } from '../../../../../utils/constants';
+import {
+  getCurrentWeek,
+  logUserAction,
+} from '../../../../../utils/helperFuncs';
 import CalendarWeekDayView from './CalendarWeekDayView';
 
 const CalendarWeekView = ({
@@ -22,6 +26,12 @@ const CalendarWeekView = ({
 
   useEffect(() => {
     setIsClosed(!opened);
+    if (opened) {
+      logUserAction(
+        Action.ViewAppointments,
+        JSON.stringify({ mode: 'Day', doctorId }),
+      );
+    }
   }, [opened]);
 
   useEffect(() => {
