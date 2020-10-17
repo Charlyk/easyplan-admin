@@ -27,6 +27,6 @@ export default IncomeStatisticItem;
 IncomeStatisticItem.propTypes = {
   title: PropTypes.string,
   icon: PropTypes.element,
-  persons: PropTypes.string,
-  amount: PropTypes.string,
+  persons: PropTypes.number,
+  amount: PropTypes.number,
 };

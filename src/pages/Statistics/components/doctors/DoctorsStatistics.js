@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
+import sum from 'lodash/sum';
 import moment from 'moment';
 import { Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -26,8 +27,6 @@ const initialState = {
       .endOf('month')
       .toDate(),
   ],
-  doctors: [],
-  services: [],
   statistics: [],
 };
 
@@ -54,10 +53,6 @@ const reducer = (state, action) => {
       return { ...state, selectedService: action.payload };
     case reducerTypes.setDateRange:
       return { ...state, dateRange: action.payload };
-    case reducerTypes.setDoctors:
-      return { ...state, doctors: action.payload };
-    case reducerTypes.setServices:
-      return { ...state, services: action.payload };
     case reducerTypes.setStatistics:
       return { ...state, statistics: action.payload };
     case reducerTypes.setShowRangePicker:
@@ -75,6 +70,7 @@ const DoctorsStatistics = () => {
       selectedDoctor,
       selectedService,
       showRangePicker,
+      statistics,
       dateRange: [startDate, endDate],
     },
     localDispatch,
@@ -83,6 +79,26 @@ const DoctorsStatistics = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleServiceChange = event => {
+    const newValue = event.target.value;
+    if (newValue === 'all') {
+      localDispatch(reducerActions.setSelectedService({ id: newValue }));
+      return;
+    }
+    const service = services.find(item => item.id === newValue);
+    localDispatch(reducerActions.setSelectedService(service));
+  };
+
+  const handleDoctorChange = event => {
+    const newValue = event.target.value;
+    if (newValue === 'all') {
+      localDispatch(reducerActions.setSelectedDoctor({ id: newValue }));
+      return;
+    }
+    const doctor = doctors.find(item => item.id === newValue);
+    localDispatch(reducerActions.setSelectedDoctor(doctor));
+  };
 
   const handleDatePickerOpen = () => {
     localDispatch(reducerActions.setShowRangePicker(true));
@@ -115,7 +131,6 @@ const DoctorsStatistics = () => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      console.log(response.data);
       localDispatch(reducerActions.setStatistics(response.data));
     }
     localDispatch(reducerActions.setIsLoading(false));
@@ -123,13 +138,15 @@ const DoctorsStatistics = () => {
 
   return (
     <div className='statistics-doctors'>
-      <StatisticFilter isLoading={isLoading}>
+      <StatisticFilter isLoading={isLoading} onUpdate={fetchData}>
         <Form.Group style={{ flexDirection: 'column' }}>
           <Form.Label>{textForKey('Services')}</Form.Label>
           <Form.Control
             as='select'
             className='mr-sm-2'
             id='inlineFormCustomSelect'
+            onChange={handleServiceChange}
+            value={selectedService.id}
             custom
           >
             <option value='all'>{textForKey('All services')}</option>
@@ -146,6 +163,8 @@ const DoctorsStatistics = () => {
             as='select'
             className='mr-sm-2'
             id='inlineFormCustomSelect'
+            onChange={handleDoctorChange}
+            value={selectedDoctor.id}
             custom
           >
             <option value='all'>{textForKey('All doctors')}</option>
@@ -170,48 +189,39 @@ const DoctorsStatistics = () => {
         </Form.Group>
       </StatisticFilter>
       <div className='data-container'>
-        <table className='data-table'>
-          <thead>
-            <tr>
-              <td>{textForKey('Doctor')}</td>
-              <td>{textForKey('Total income')}</td>
-              <td>{textForKey('Doctor part')}</td>
-              <td>{textForKey('Total profit')}</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Leslie Alexander</td>
-              <td>2400MDL</td>
-              <td>1210MDL</td>
-              <td>1390MDL</td>
-            </tr>
-            <tr>
-              <td>Leslie Alexander</td>
-              <td>2400MDL</td>
-              <td>1210MDL</td>
-              <td>1390MDL</td>
-            </tr>
-            <tr>
-              <td>Leslie Alexander</td>
-              <td>2400MDL</td>
-              <td>1210MDL</td>
-              <td>1390MDL</td>
-            </tr>
-            <tr>
-              <td>Leslie Alexander</td>
-              <td>2400MDL</td>
-              <td>1210MDL</td>
-              <td>1390MDL</td>
-            </tr>
-            <tr>
-              <td>Leslie Alexander</td>
-              <td>2400MDL</td>
-              <td>1210MDL</td>
-              <td>1390MDL</td>
-            </tr>
-          </tbody>
-        </table>
+        {statistics.length > 0 && (
+          <table className='data-table'>
+            <thead>
+              <tr>
+                <td>{textForKey('Doctor')}</td>
+                <td>{textForKey('Total income')}</td>
+                <td>{textForKey('Doctor part')}</td>
+                <td>{textForKey('Clinic profit')}</td>
+              </tr>
+            </thead>
+            <tbody>
+              {statistics.map(item => (
+                <tr key={item.doctorId}>
+                  <td>{item.doctorName}</td>
+                  <td>{item.totalAmount} MDL</td>
+                  <td>{item.doctorAmount} MDL</td>
+                  <td>{item.clinicAmount} MDL</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td />
+                <td />
+                <td />
+                <td align='left'>
+                  {textForKey('Total')}:{' '}
+                  {sum(statistics.map(it => it.clinicAmount))} MDL
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        )}
       </div>
       <EasyDateRangePicker
         onChange={handleDateChange}

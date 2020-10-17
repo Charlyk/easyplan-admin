@@ -175,6 +175,9 @@ export default {
     partialpaid: 'Partial paid',
     completednotpaid: 'Completed not paid',
     completedpaid: 'Completed paid',
+    'total incom': 'Total income',
+    'doctor part': 'Doctor salary',
+    'clinic profit': 'Clinic profit',
   },
   ro: {
     analytics: 'Analitică',
@@ -353,6 +356,9 @@ export default {
     partialpaid: 'Achitat parțial',
     completednotpaid: 'Finisat ne achitat',
     completedpaid: 'Achitat',
+    'total incom': 'Venit total',
+    'doctor part': 'Salariul doctorului',
+    'clinic profit': 'Profitul clinicii',
   },
   ru: {
     analytics: 'Analytics',
@@ -529,5 +535,8 @@ export default {
     partialpaid: 'Partial paid',
     completednotpaid: 'Completed not paid',
     completedpaid: 'Completed paid',
+    'total incom': 'Total income',
+    'doctor part': 'Doctor salary',
+    'clinic profit': 'Clinic profit',
   },
 };
