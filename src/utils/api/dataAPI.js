@@ -1045,6 +1045,31 @@ export default {
   },
 
   /**
+   * Fetch activity logs from server
+   * @param {Object} requestData
+   * @param {Date} requestData.fromDate
+   * @param {Date} requestData.toDate
+   * @param {string} requestData.userId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchActivityLogs: async requestData => {
+    try {
+      const { fromDate, toDate, userId } = requestData;
+      const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
+      const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
+      const url = `analytics/activity-logs?userId=${userId}&fromDate=${fromDateString}&toDate=${toDateString}`;
+      const response = await instance().get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
    * Log user action
    * @param {string} action
    * @param {Object} details
