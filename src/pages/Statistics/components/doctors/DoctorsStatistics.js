@@ -189,6 +189,9 @@ const DoctorsStatistics = () => {
         </Form.Group>
       </StatisticFilter>
       <div className='data-container'>
+        {!isLoading && statistics.length === 0 && (
+          <span className='no-data-label'>{textForKey('No results')}</span>
+        )}
         {statistics.length > 0 && (
           <table className='data-table'>
             <thead>

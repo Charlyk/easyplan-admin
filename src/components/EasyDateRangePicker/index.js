@@ -7,7 +7,9 @@ import { DateRangePicker } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { getAppLanguage } from '../../utils/localization';
+
 import './styles.scss';
+import { localizedInputRanges, localizedStaticRanges } from './ranges';
 
 const EasyDateRangePicker = ({
   pickerAnchor,
@@ -30,6 +32,8 @@ const EasyDateRangePicker = ({
           <Paper className='calendar-paper'>
             <ClickAwayListener onClickAway={onClose}>
               <DateRangePicker
+                staticRanges={localizedStaticRanges}
+                inputRanges={localizedInputRanges}
                 onChange={onChange}
                 showSelectionPreview={true}
                 moveRangeOnFirstSelection={false}

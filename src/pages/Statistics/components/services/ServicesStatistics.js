@@ -283,6 +283,9 @@ const ServicesStatistics = () => {
         {isLoading && statistics.length === 0 && (
           <Spinner animation='border' className='statistics-loading-spinner' />
         )}
+        {!isLoading && statistics.length === 0 && (
+          <span className='no-data-label'>{textForKey('No results')}</span>
+        )}
         {statistics.length > 0 && (
           <table className='data-table'>
             <thead>
