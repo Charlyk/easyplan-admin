@@ -1,3 +1,12 @@
 .easyplan-modal-root {
+  max-height: 100%;
+  overflow: hidden;
 
+  .modal-content {
+    max-height: 800px;
+
+    .easyplan-modal-body {
+      overflow-y: scroll;
+    }
+  }
 }

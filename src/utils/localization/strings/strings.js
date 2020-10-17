@@ -224,6 +224,7 @@ export default {
     deleteuser: 'A șters un utilizator',
     createpatientnote: 'A adaugat o notă la un pacient',
     addpatientxrayimage: 'A adăugat o imagine X-Ray la un pacient',
+    'view details': 'View details',
   },
   ro: {
     analytics: 'Analitică',
@@ -451,6 +452,7 @@ export default {
     deleteuser: 'A șters un utilizator',
     createpatientnote: 'A adaugat o notă la un pacient',
     addpatientxrayimage: 'A adăugat o imagine X-Ray la un pacient',
+    'view details': 'Detalii',
   },
   ru: {
     analytics: 'Analytics',
@@ -676,5 +678,6 @@ export default {
     deleteuser: 'A șters un utilizator',
     createpatientnote: 'A adaugat o notă la un pacient',
     addpatientxrayimage: 'A adăugat o imagine X-Ray la un pacient',
+    'view details': 'View details',
   },
 };

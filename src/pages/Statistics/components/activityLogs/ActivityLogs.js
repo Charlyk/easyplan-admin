@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import moment from 'moment';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
+import ActionLogModal from '../../../../components/ActionLogModal';
 import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
@@ -28,6 +29,10 @@ const ActivityLogs = () => {
   const [selectedUser, setSelectedUser] = useState(initialState.selectedUser);
   const [users, setUsers] = useState([]);
   const [[startDate, endDate], setDateRange] = useState(initialState.dateRange);
+  const [showDetails, setShowDetails] = useState({
+    open: false,
+    activityLog: null,
+  });
   const [showRangePicker, setShowRangePicker] = useState(
     initialState.showRangePicker,
   );
@@ -89,8 +94,21 @@ const ActivityLogs = () => {
     setSelectedUser(user);
   };
 
+  const handleShowDetails = log => {
+    setShowDetails({ open: true, activityLog: log });
+  };
+
+  const handleCloseDetails = () => {
+    setShowDetails({ open: false, activityLog: null });
+  };
+
   return (
     <div className='activity-logs'>
+      <ActionLogModal
+        open={showDetails.open}
+        activityLog={showDetails.activityLog}
+        onClose={handleCloseDetails}
+      />
       <StatisticFilter isLoading={isLoading} onUpdate={fetchActivityLogs}>
         <Form.Group style={{ flexDirection: 'column' }}>
           <Form.Label>{textForKey('User')}</Form.Label>
@@ -134,6 +152,7 @@ const ActivityLogs = () => {
                 <td className='date-cell'>{textForKey('Date')}</td>
                 <td className='user-cell'>{textForKey('User')}</td>
                 <td className='details-cell'>{textForKey('Details')}</td>
+                <td className='actions-cell'>{textForKey('Actions')}</td>
               </tr>
             </thead>
             <tbody>
@@ -144,6 +163,14 @@ const ActivityLogs = () => {
                   </td>
                   <td className='user-cell'>{item.userName}</td>
                   <td className='details-cell'>{textForKey(item.action)}</td>
+                  <td className='actions-cell'>
+                    <Button
+                      className='positive-button'
+                      onClick={() => handleShowDetails(item)}
+                    >
+                      {textForKey('View Details')}
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>

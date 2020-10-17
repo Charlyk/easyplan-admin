@@ -19,6 +19,7 @@ const EasyPlanModal = ({
   isNegativeDisabled,
   isPositiveLoading,
   isNegativeLoading,
+  hidePositiveBtn,
   className,
   onPositiveClick,
   onNegativeClick,
@@ -44,7 +45,7 @@ const EasyPlanModal = ({
           </div>
         )}
       </Modal.Header>
-      <Modal.Body>{children}</Modal.Body>
+      <Modal.Body className='easyplan-modal-body'>{children}</Modal.Body>
       <Modal.Footer>
         {typeof onClose === 'function' && (
           <LoadingButton
@@ -57,15 +58,17 @@ const EasyPlanModal = ({
             {!isNegativeLoading} <IconClose />
           </LoadingButton>
         )}
-        <LoadingButton
-          disabled={isPositiveDisabled}
-          isLoading={isPositiveLoading}
-          className='positive-button'
-          onClick={onPositiveClick}
-        >
-          {positiveBtnText}
-          {!isPositiveLoading && <IconSuccess />}
-        </LoadingButton>
+        {!hidePositiveBtn && (
+          <LoadingButton
+            disabled={isPositiveDisabled}
+            isLoading={isPositiveLoading}
+            className='positive-button'
+            onClick={onPositiveClick}
+          >
+            {positiveBtnText}
+            {!isPositiveLoading && <IconSuccess />}
+          </LoadingButton>
+        )}
       </Modal.Footer>
     </Modal>
   );
@@ -77,6 +80,7 @@ EasyPlanModal.propTypes = {
   open: PropTypes.bool,
   title: PropTypes.string,
   children: PropTypes.any,
+  hidePositiveBtn: PropTypes.bool,
   negativeBtnText: PropTypes.string,
   positiveBtnText: PropTypes.string,
   isPositiveLoading: PropTypes.bool,

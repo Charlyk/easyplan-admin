@@ -178,7 +178,16 @@
     }
 
     .details-cell {
-      width: 60%;
+      width: 45%;
+    }
+
+    .actions-cell {
+      width: 15%;
+
+      .positive-button {
+        flex: 1;
+        height: 1.6rem;
+      }
     }
   }
 }
