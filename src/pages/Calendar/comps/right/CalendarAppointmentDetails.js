@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -8,10 +8,17 @@ import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock'
 import IconDelete from '../../../../assets/icons/iconDelete';
 import IconEditService from '../../../../assets/icons/iconEditService';
 import IconPhone from '../../../../assets/icons/iconPhone';
-import { ScheduleStatuses } from '../../../../utils/constants';
+import { Action, ScheduleStatuses } from '../../../../utils/constants';
+import { logUserAction } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 
 const CalendarAppointmentDetails = ({ schedule, onEdit, onDelete }) => {
+  useEffect(() => {
+    if (schedule != null) {
+      logUserAction(Action.ViewAppointment, JSON.stringify(schedule));
+    }
+  }, [schedule]);
+
   if (schedule == null) {
     return null;
   }

@@ -247,6 +247,7 @@ const reducer = (state, action) => {
 const AddAppointmentModal = ({
   open,
   doctor: selectedDoctor,
+  patient: selectedPatient,
   date,
   schedule,
   onClose,
@@ -309,7 +310,17 @@ const AddAppointmentModal = ({
     if (date != null) {
       localDispatch(reducerActions.setAppointmentDate(date));
     }
-  }, [selectedDoctor, date]);
+
+    if (selectedPatient != null) {
+      localDispatch(
+        reducerActions.setPatient({
+          ...selectedPatient,
+          fullName: getLabelKey(selectedPatient),
+        }),
+      );
+      localDispatch(reducerActions.setIsPatientValid(true));
+    }
+  }, [selectedDoctor, date, selectedPatient]);
 
   useEffect(() => {
     fetchAvailableHours();
@@ -502,19 +513,29 @@ const AddAppointmentModal = ({
       scheduleId: scheduleId,
     };
     const response = await dataAPI.createNewSchedule(requestBody);
+    // log user action
+    console.log(schedule);
+    if (schedule != null) {
+      logUserAction(
+        Action.EditAppointment,
+        JSON.stringify({
+          before: schedule,
+          after: response.data || response,
+        }),
+      );
+    } else {
+      logUserAction(
+        Action.CreateAppointment,
+        JSON.stringify(response.data || response),
+      );
+    }
+
+    // update states
     if (response.isError) {
       console.error(response.message);
       localDispatch(reducerActions.setIsCreatingSchedule(false));
     } else {
       onClose();
-      if (schedule != null) {
-        logUserAction(
-          Action.EditAppointment,
-          JSON.stringify({ before: schedule, after: requestBody }),
-        );
-      } else {
-        logUserAction(Action.CreateAppointment, JSON.stringify(requestBody));
-      }
       dispatch(toggleAppointmentsUpdate());
     }
   };
@@ -708,21 +729,23 @@ const AddAppointmentModal = ({
           </Form.Group>
         </InputGroup.Append>
       </InputGroup>
-      <Form.Group style={{ width: '100%' }}>
-        <Form.Label>{textForKey('Status')}</Form.Label>
-        <Form.Control
-          as='select'
-          onChange={handleStatusChange}
-          value={appointmentStatus}
-          custom
-        >
-          {ScheduleStatuses.map(status => (
-            <option key={status.id} value={status.id}>
-              {status.name}
-            </option>
-          ))}
-        </Form.Control>
-      </Form.Group>
+      {schedule != null && (
+        <Form.Group style={{ width: '100%' }}>
+          <Form.Label>{textForKey('Status')}</Form.Label>
+          <Form.Control
+            as='select'
+            onChange={handleStatusChange}
+            value={appointmentStatus}
+            custom
+          >
+            {ScheduleStatuses.map(status => (
+              <option key={status.id} value={status.id}>
+                {status.name}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+      )}
       <Form.Group controlId='description'>
         <Form.Label>{textForKey('Notes')}</Form.Label>
         <InputGroup>

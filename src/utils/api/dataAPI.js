@@ -1054,6 +1054,7 @@ export default {
     try {
       const url = 'clinics/log-action';
       const response = await instance().put(url, { action, details });
+      console.log(response);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 
+import { triggerUpdateXRay } from '../../redux/actions/actions';
+import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction, uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 import './styles.scss';
 
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import { uploadFileToAWS } from '../../utils/helperFuncs';
-import dataAPI from '../../utils/api/dataAPI';
-import { triggerUpdateXRay } from '../../redux/actions/actions';
-
-import { useDispatch } from 'react-redux';
 
 const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
@@ -32,10 +32,15 @@ const AddXRay = ({ open, patientId, onClose }) => {
     setIsLoading(true);
     const uploadResult = await uploadFileToAWS('x-ray', imageFile);
     if (!uploadResult) return;
-    await dataAPI.addXRayImage(patientId, {
+    const requestBody = {
       imageUrl: uploadResult.location,
       type: phase,
-    });
+    };
+    await dataAPI.addXRayImage(patientId, requestBody);
+    logUserAction(
+      Action.AddPatientXRayImage,
+      JSON.stringify({ patientId, requestBody }),
+    );
     dispatch(triggerUpdateXRay());
     setIsLoading(false);
     onClose();

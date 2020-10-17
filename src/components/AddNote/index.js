@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 
 import { triggerUpdateNotes } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
@@ -25,11 +27,16 @@ const AddNote = ({ open, patientId, mode, scheduleId, onClose }) => {
 
   const handleSaveNote = async () => {
     setIsLoading(true);
-    await dataAPI.createPatientNote(patientId, {
+    const requestBody = {
       note: noteText,
       mode,
       scheduleId,
-    });
+    };
+    await dataAPI.createPatientNote(patientId, requestBody);
+    logUserAction(
+      Action.CreatePatientNote,
+      JSON.stringify({ patientId, requestBody }),
+    );
     dispatch(triggerUpdateNotes());
     setIsLoading(false);
     onClose();

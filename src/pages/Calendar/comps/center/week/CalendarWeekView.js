@@ -29,7 +29,7 @@ const CalendarWeekView = ({
     if (opened) {
       logUserAction(
         Action.ViewAppointments,
-        JSON.stringify({ mode: 'Day', doctorId }),
+        JSON.stringify({ mode: 'Week', doctorId }),
       );
     }
   }, [opened]);

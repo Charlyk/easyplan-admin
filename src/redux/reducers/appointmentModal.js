@@ -5,6 +5,7 @@ const initialState = Object.freeze({
   date: null,
   doctor: null,
   schedule: null,
+  patient: null,
 });
 
 export default function appointmentModal(state = initialState, action) {
@@ -15,6 +16,8 @@ export default function appointmentModal(state = initialState, action) {
         ...action.payload,
         date: action.payload.open ? action.payload.date : null,
         doctor: action.payload.open ? action.payload.doctor : null,
+        patient: action.payload.open ? action.payload.patient : null,
+        schedule: action.payload.open ? action.payload.schedule : null,
       };
     default:
       return state;

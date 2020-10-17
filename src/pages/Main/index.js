@@ -110,6 +110,7 @@ const Main = () => {
         open={appointmentModal?.open}
         doctor={appointmentModal?.doctor}
         date={appointmentModal?.date}
+        patient={appointmentModal?.patient}
       />
       {user != null && (
         <MainMenu

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../redux/actions/actions';
-import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import PatientDetails from './comps/details/PatientDetails';
 import PatientsList from './comps/list/PatientsList';
 import './styles.scss';
 import PatientAccount from './comps/PatientAccount';
 
-const Patients = props => {
+const Patients = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector(userSelector);
   const [isFetching, setIsFetching] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -30,13 +30,10 @@ const Patients = props => {
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   useEffect(() => {
-    fetchPatients();
-  }, [props]);
-
-  useEffect(() => {
     setSelectedPatient(null);
+    logUserAction(Action.ViewPatients);
     fetchPatients();
-  }, [currentUser]);
+  }, []);
 
   const handleAddPatient = () => {
     setSelectedPatient(null);
@@ -51,7 +48,8 @@ const Patients = props => {
     } else {
       setPatients({ all: response.data, filtered: response.data });
       if (response?.data?.length > 0 && selectedPatient == null) {
-        setSelectedPatient(response.data[0]);
+        const patient = response.data[0];
+        handlePatientSelected(patient);
       }
     }
     setIsFetching(false);
@@ -59,14 +57,24 @@ const Patients = props => {
 
   const handlePatientSave = async patientData => {
     setIsSaving(true);
-    const response = patientData.id
-      ? await dataAPI.updatePatient(patientData.id, patientData)
-      : await dataAPI.createPatient(patientData);
+    if (patientData.id != null) {
+      logUserAction(
+        Action.EditPatient,
+        JSON.stringify({ before: selectedPatient, after: patientData }),
+      );
+    } else {
+      logUserAction(Action.CreatePatient, JSON.stringify(patientData));
+    }
+
+    const response =
+      patientData.id != null
+        ? await dataAPI.updatePatient(patientData.id, patientData)
+        : await dataAPI.createPatient(patientData);
     if (response.isError) {
       console.error(response.message);
     } else {
-      handlePatientSelected(response.data);
       await fetchPatients();
+      handlePatientSelected(response.data);
     }
     setIsSaving(false);
   };
@@ -83,12 +91,14 @@ const Patients = props => {
     if (deletePatient.patient == null) return;
     setDeletePatient({ ...deletePatient, isDeleting: true });
     await dataAPI.deletePatient(deletePatient.patient.id);
-    await fetchPatients();
+    logUserAction(Action.DeletePatient, JSON.stringify(deletePatient.patient));
     setSelectedPatient(null);
+    await fetchPatients();
     handleCancelDelete();
   };
 
   const handlePatientSelected = patient => {
+    logUserAction(Action.ViewPatient, JSON.stringify(patient));
     setSelectedPatient(patient);
     setIsAdding(false);
   };

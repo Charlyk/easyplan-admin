@@ -386,6 +386,7 @@ export const Action = {
   EditPatient: 'EditPatient',
   DeletePatient: 'DeletePatient',
   ViewPatient: 'ViewPatient',
+  ViewPatients: 'ViewPatients',
   CreateClinic: 'CreateClinic',
   EditClinic: 'EditClinic',
   PayInvoice: 'PayInvoice',
@@ -400,4 +401,6 @@ export const Action = {
   ViewUser: 'ViewUser',
   ViewUsers: 'ViewUsers',
   DeleteUser: 'DeleteUser',
+  CreatePatientNote: 'CreatePatientNote',
+  AddPatientXRayImage: 'AddPatientXRayImage',
 };

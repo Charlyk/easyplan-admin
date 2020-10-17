@@ -98,6 +98,8 @@ export function triggerUserLogout(logout) {
  * @param {boolean} modalData.open
  * @param {Object?} modalData.doctor
  * @param {Date?} modalData.date
+ * @param {Object?} modalData.schedule
+ * @param {Object?} modalData.patient
  * @return {{payload: *, type: string}}
  */
 export function setAppointmentModal(modalData) {

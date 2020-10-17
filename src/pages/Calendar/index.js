@@ -12,7 +12,6 @@ import {
   clinicDoctorsSelector,
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
-import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import { logUserAction } from '../../utils/helperFuncs';
@@ -154,7 +153,7 @@ const Calendar = () => {
         open: true,
         doctor: selectedDoctor,
         date: viewDate,
-        schedule: schedule,
+        schedule,
       }),
     );
   };
