@@ -205,7 +205,7 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition }) => {
       style={{
         width: width,
         border: `${appointment.serviceColor} 1px solid`,
-        backgroundColor: `${appointment.serviceColor}33`,
+        backgroundColor: `${appointment.serviceColor}1A`,
         transform: x.interpolate(x => `translateX(${x}px)`),
       }}
     >
