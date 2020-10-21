@@ -33,7 +33,13 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
+const DoctorAppointmentsRow = ({
+  doctor,
+  hours,
+  hourWidth,
+  viewDate,
+  onScheduleSelect,
+}) => {
   const dispatch = useDispatch();
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const sizeDifference = useRef(0);
@@ -170,6 +176,7 @@ const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
                 >
                   {appointmentsForHour(item).map(item => (
                     <AppointmentItem
+                      onSelect={onScheduleSelect}
                       key={item.id}
                       getPosition={getAppointmentPosition}
                       appointments={appointments}
@@ -186,7 +193,7 @@ const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
   );
 };
 
-const AppointmentItem = ({ appointment, hourWidth, getPosition }) => {
+const AppointmentItem = ({ appointment, hourWidth, getPosition, onSelect }) => {
   const [{ x, width }, set] = useSpring(() => ({
     x: 0,
     width: 10,
@@ -200,6 +207,10 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition }) => {
     'HH:mm',
   )} - ${appointment.end.format('HH:mm')}`;
 
+  const handleScheduleClick = () => {
+    onSelect(appointment);
+  };
+
   return (
     <Tooltip title={title}>
       <animated.div
@@ -208,6 +219,7 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition }) => {
         )}>${appointment.end.format('HH:mm')}`}
         key={appointment.id}
         className='appointment-item'
+        onClick={handleScheduleClick}
         style={{
           width: width,
           border: `${appointment.serviceColor} 1px solid`,
@@ -228,6 +240,7 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition }) => {
 };
 
 AppointmentItem.propTypes = {
+  onSelect: PropTypes.func,
   hourWidth: PropTypes.number,
   getPosition: PropTypes.func,
   appointments: PropTypes.arrayOf(
@@ -254,6 +267,7 @@ AppointmentItem.propTypes = {
 };
 
 DoctorAppointmentsRow.propTypes = {
+  onScheduleSelect: PropTypes.func,
   viewDate: PropTypes.instanceOf(Date),
   hours: PropTypes.arrayOf(PropTypes.string),
   hourWidth: PropTypes.number,

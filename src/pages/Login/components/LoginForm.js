@@ -107,7 +107,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
         <LoadingButton
           onClick={handleLogin}
           className='positive-button'
-          disabled={!isFormValid()}
+          disabled={!isFormValid() || isLoading}
           isLoading={isLoading}
         >
           {textForKey('Login')}

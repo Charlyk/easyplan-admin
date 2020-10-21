@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import sum from 'lodash/sum';
 import './styles.scss';
-import { Button, Form, Spinner } from 'react-bootstrap';
+import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
+import { Button, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
 import { setPaymentModal } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
-
-import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
 
 const InvoicesButton = props => {
   const dispatch = useDispatch();
@@ -73,11 +71,7 @@ const InvoicesButton = props => {
                     <tr key={invoice.id}>
                       <td>{invoice.doctorName}</td>
                       <td>{invoice.patientName}</td>
-                      <td align='right'>
-                        {sum(invoice.services.map(it => it.price)) -
-                          invoice.paid}{' '}
-                        MDL
-                      </td>
+                      <td align='right'>{invoice.amount - invoice.paid}MDL</td>
                       <td align='right'>
                         <Button
                           className='positive-button'

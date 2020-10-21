@@ -324,7 +324,7 @@ const AddAppointmentModal = ({
 
   useEffect(() => {
     fetchAvailableHours();
-  }, [doctor, service, appointmentDate]);
+  }, [doctor, schedule, service, appointmentDate]);
 
   const fetchAvailableHours = async () => {
     if (doctor == null || service == null || appointmentDate == null) {
@@ -341,9 +341,9 @@ const AddAppointmentModal = ({
       console.log(response.message);
     } else {
       localDispatch(reducerActions.setHours(response.data));
-      if (response.data.length > 0) {
+      if (response.data.length > 0 && schedule == null) {
         localDispatch(reducerActions.setAppointmentHour(response.data[0]));
-      } else {
+      } else if (schedule == null) {
         localDispatch(reducerActions.setAppointmentHour(''));
       }
     }
@@ -769,6 +769,7 @@ AddAppointmentModal.propTypes = {
   date: PropTypes.instanceOf(Date),
   doctor: PropTypes.object,
   onClose: PropTypes.func.isRequired,
+  patient: PropTypes.object,
   schedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,

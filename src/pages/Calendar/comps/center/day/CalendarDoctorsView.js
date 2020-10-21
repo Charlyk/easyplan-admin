@@ -43,7 +43,7 @@ const reducer = (state, action) => {
   }
 };
 
-const CalendarDoctorsView = ({ viewDate }) => {
+const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
   const windowSize = useWindowSize();
   const doctors = useSelector(clinicDoctorsSelector);
   const clinicServices = useSelector(clinicServicesSelector);
@@ -111,6 +111,7 @@ const CalendarDoctorsView = ({ viewDate }) => {
         <div className='scrollable-wrapper'>
           {doctors.map(item => (
             <DoctorAppointmentsRow
+              onScheduleSelect={onScheduleSelect}
               viewDate={viewDate}
               hours={hours}
               windowSize={windowSize}
@@ -175,10 +176,12 @@ const HourView = ({ hour }) => {
 export default CalendarDoctorsView;
 
 CalendarDoctorsView.propTypes = {
+  onScheduleSelect: PropTypes.func,
   viewDate: PropTypes.instanceOf(Date),
 };
 
 DoctorRow.propTypes = {
+  onScheduleSelect: PropTypes.func,
   clinicServices: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,

@@ -6,16 +6,13 @@ import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
-import { Calendar, DateRangePicker } from 'react-date-range';
+import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
 import IconPlus from '../../../../assets/icons/iconPlus';
-import {
-  localizedInputRanges,
-  localizedStaticRanges,
-} from '../../../../components/EasyDateRangePicker/ranges';
+import AppointmentDetails from '../../../../components/AppointmentDetails';
 import EasyTab from '../../../../components/EasyTab';
 import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarSelector';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
@@ -35,7 +32,10 @@ const CalendarView = {
 const AppointmentsCalendar = ({
   doctor,
   viewDate,
+  onPayDebt,
   onViewDateChange,
+  onEditSchedule,
+  onDeleteSchedule,
   onScheduleSelect,
   onViewModeChange,
   selectedSchedule,
@@ -82,6 +82,10 @@ const AppointmentsCalendar = ({
     handleCloseCalendar();
   };
 
+  const handleDetailsClose = () => {
+    onScheduleSelect(null);
+  };
+
   const calendarPopper = (
     <Popper
       className='appointments-date-picker-root'
@@ -108,6 +112,15 @@ const AppointmentsCalendar = ({
 
   return (
     <div className={clsx('calendar-root__center', 'full-height')}>
+      {selectedSchedule != null && (
+        <AppointmentDetails
+          onPayDebt={onPayDebt}
+          onDelete={onDeleteSchedule}
+          onEdit={onEditSchedule}
+          schedule={selectedSchedule}
+          onClose={handleDetailsClose}
+        />
+      )}
       <div className='center-header'>
         <Button
           ref={calendarAnchor}
@@ -157,6 +170,7 @@ const AppointmentsCalendar = ({
         )}
         {currentTab === CalendarView.day && (
           <CalendarDoctorsView
+            onScheduleSelect={onScheduleSelect}
             viewDate={viewDate}
             update={updateAppointments}
           />
@@ -193,6 +207,9 @@ AppointmentsCalendar.propTypes = {
   onViewModeChange: PropTypes.func,
   canAddAppointment: PropTypes.bool,
   onAddAppointment: PropTypes.func,
+  onDeleteSchedule: PropTypes.func,
+  onEditSchedule: PropTypes.func,
+  onPayDebt: PropTypes.func,
   selectedSchedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,

@@ -5,7 +5,7 @@ import remove from 'lodash/remove';
 import sum from 'lodash/sum';
 import moment from 'moment';
 import { Button, Form, Modal, Spinner } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
 import './styles.scss';
@@ -18,6 +18,7 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../redux/actions/actions';
+import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { teeth } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
@@ -34,60 +35,42 @@ const DoctorPatientDetails = () => {
   const dispatch = useDispatch();
   const { patientId, scheduleId } = useParams();
   const history = useHistory();
+  const services = useSelector(clinicServicesSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [patient, setPatient] = useState(null);
-  const [services, setServices] = useState([]);
   const [toothServices, setToothServices] = useState([]);
+  const [allServices, setAllServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
   const [schedule, setSchedule] = useState(null);
   const [shouldFillTreatmentPlan, setShouldFillTreatmentPlan] = useState(false);
   const [treatmentPlan, setTreatmentPlan] = useState(null);
   const [showFinalizeTreatment, setShowFinalizeTreatment] = useState(false);
   const [isFinalizing, setIsFinalizing] = useState(false);
-  const bracketServices = services.filter(item => item.bracket);
-  const simpleServices = services.filter(item => !item.bracket);
+  const bracketServices = allServices.filter(item => item.bracket);
+  const simpleServices = allServices.filter(item => !item.bracket);
 
   useEffect(() => {
-    fetchPatientDetails();
+    fetchScheduleDetails();
   }, [patientId]);
 
-  const fetchServices = async () => {
-    const response = await dataAPI.fetchServices(null);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      const { data } = response;
-      setServices(data.filter(item => item.serviceType === 'all'));
-      setToothServices(data.filter(item => item.serviceType !== 'all'));
-    }
-  };
+  useEffect(() => {
+    console.log(services);
+    setAllServices(services.filter(item => item.serviceType === 'all'));
+    setToothServices(services.filter(item => item.serviceType !== 'all'));
+  }, [services]);
 
   const fetchScheduleDetails = async () => {
     const response = await dataAPI.fetchScheduleDetails(scheduleId);
     if (!response.isError) {
-      setSchedule(response.data);
+      setPatient(response.data.patient);
+      setSchedule(response.data.schedule);
     }
-  };
-
-  const fetchPatientDetails = async () => {
-    setIsLoading(true);
-    const response = await dataAPI.fetchAllPatients();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      setPatient(response.data.find(item => item.id === patientId));
-      if (scheduleId !== 'view') {
-        await fetchServices();
-        await fetchScheduleDetails();
-      }
-    }
-    setIsLoading(false);
   };
 
   const handleServiceChecked = event => {
     const serviceId = event.target.id;
     const newServices = cloneDeep(selectedServices);
-    const service = services.find(item => item.id === serviceId);
+    const service = allServices.find(item => item.id === serviceId);
     if (newServices.some(item => item.id === serviceId)) {
       remove(
         newServices,
@@ -224,7 +207,7 @@ const DoctorPatientDetails = () => {
         onSave={handleSaveTreatmentPlan}
         open={shouldFillTreatmentPlan}
         onClose={handleCloseTreatmentPlan}
-        services={services.filter(item => item.bracket)}
+        services={allServices.filter(item => item.bracket)}
       />
       <Modal
         centered

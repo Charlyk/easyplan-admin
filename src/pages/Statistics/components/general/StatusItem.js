@@ -45,7 +45,7 @@ const StatusItem = ({
             style={{ width: `${percentage}%` }}
           />
         </div>
-        <span className='percentage-label'>{percentage}%</span>
+        <span className='percentage-label'>{Math.round(percentage)}%</span>
       </div>
     </div>
   );

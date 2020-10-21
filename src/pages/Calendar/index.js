@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import {
   setAppointmentModal,
+  setPaymentModal,
   toggleAppointmentsUpdate,
 } from '../../redux/actions/actions';
 import {
@@ -18,7 +19,6 @@ import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
 import CalendarDoctors from './comps/left/CalendarDoctors';
-import CalendarRightContainer from './comps/right/CalendarRightContainer';
 
 const reducerTypes = {
   filters: 'filters',
@@ -63,11 +63,15 @@ const reducer = (state, action) => {
     case reducerTypes.selectedService:
       return { ...state, selectedService: action.payload };
     case reducerTypes.selectedDoctor:
-      return { ...state, selectedDoctor: action.payload };
+      return {
+        ...state,
+        selectedDoctor: action.payload,
+        selectedSchedule: null,
+      };
     case reducerTypes.isFetching:
       return { ...state, isFetching: action.payload };
     case reducerTypes.setViewDate:
-      return { ...state, viewDate: action.payload };
+      return { ...state, viewDate: action.payload, selectedSchedule: null };
     case reducerTypes.setSelectedSchedule:
       return { ...state, selectedSchedule: action.payload };
     case reducerTypes.setDeleteSchedule:
@@ -75,9 +79,9 @@ const reducer = (state, action) => {
     case reducerTypes.setIsDeleting:
       return { ...state, isDeleting: action.payload };
     case reducerTypes.setViewMode:
-      return { ...state, viewMode: action.payload };
+      return { ...state, viewMode: action.payload, selectedSchedule: null };
     default:
-      throw new Error('unknown type');
+      return state;
   }
 };
 
@@ -152,12 +156,14 @@ const Calendar = () => {
     localDispatch(reducerActions.setViewMode(newMode));
   };
 
+  const handlePayDebt = debt => {
+    dispatch(setPaymentModal({ open: true, invoice: debt }));
+  };
+
   const handleEditSchedule = schedule => {
     dispatch(
       setAppointmentModal({
         open: true,
-        doctor: selectedDoctor,
-        date: viewDate,
         schedule,
       }),
     );
@@ -213,6 +219,9 @@ const Calendar = () => {
       )}
       <div className='calendar-root__content__center-container'>
         <AppointmentsCalendar
+          onPayDebt={handlePayDebt}
+          onDeleteSchedule={handleDeleteSchedule}
+          onEditSchedule={handleEditSchedule}
           canAddAppointment={selectedDoctor != null}
           onAddAppointment={handleAppointmentModalOpen}
           selectedSchedule={selectedSchedule}

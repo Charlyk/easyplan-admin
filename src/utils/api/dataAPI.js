@@ -1100,7 +1100,25 @@ export default {
     try {
       const url = 'clinics/log-action';
       const response = await instance().put(url, { action, details });
-      console.log(response);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch invoice details
+   * @param {string} invoiceId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchInvoiceDetails: async invoiceId => {
+    try {
+      const url = `clinics/invoice/${invoiceId}`;
+      const response = await instance().get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

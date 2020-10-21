@@ -225,6 +225,10 @@ export default {
     createpatientnote: 'A adaugat o notă la un pacient',
     addpatientxrayimage: 'A adăugat o imagine X-Ray la un pacient',
     'view details': 'View details',
+    hour: 'Hour',
+    phone: 'Phone',
+    debts: 'Debts',
+    'no debts found': 'No debts found',
   },
   ro: {
     analytics: 'Analitică',
@@ -453,6 +457,10 @@ export default {
     createpatientnote: 'A adaugat o notă la un pacient',
     addpatientxrayimage: 'A adăugat o imagine X-Ray la un pacient',
     'view details': 'Detalii',
+    hour: 'Ora',
+    phone: 'Telefon',
+    debts: 'Datorii',
+    'no debts found': 'Nu are datorii',
   },
   ru: {
     analytics: 'Analytics',
@@ -679,5 +687,9 @@ export default {
     createpatientnote: 'A adaugat o notă la un pacient',
     addpatientxrayimage: 'A adăugat o imagine X-Ray la un pacient',
     'view details': 'View details',
+    hour: 'Hour',
+    phone: 'Phone',
+    debts: 'Debts',
+    'no debts found': 'No debts found',
   },
 };
