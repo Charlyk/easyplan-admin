@@ -66,6 +66,11 @@ function main(state = initialState, action) {
         ...state,
         updateAppointments: !state.updateAppointments,
       };
+    case types.updateCalendarDoctorHeight:
+      return {
+        ...state,
+        updateCalendarDoctorHeight: !state.updateCalendarDoctorHeight,
+      };
     default:
       return state;
   }

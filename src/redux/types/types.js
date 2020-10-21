@@ -16,5 +16,6 @@ export default {
   setAddPatientNote: 'setAddPatientNote',
   setAddPatientXRay: 'setAddPatientXRay',
   setPaymentModal: 'setPaymentModal',
+  updateCalendarDoctorHeight: 'updateCalendarDoctorHeight',
   ...clinicTypes,
 };

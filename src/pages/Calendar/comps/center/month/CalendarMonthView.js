@@ -73,7 +73,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
         }}
       >
         <span className='service-name' style={{ color: schedule.serviceColor }}>
-          {schedule.serviceName}
+          {schedule.patientName}
         </span>
       </div>
     );
@@ -83,6 +83,8 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
     const daySchedules = getSchedules(day);
     return (
       <div
+        role='button'
+        tabIndex={0}
         onClick={() => handleDayClick(day)}
         className={clsx(
           'item-data-container',

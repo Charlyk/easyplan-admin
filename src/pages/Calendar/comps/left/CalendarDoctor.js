@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -19,12 +20,16 @@ const CalendarDoctor = ({ doctor, isSelected, onSelect }) => {
       className={clsx('doctor-item', isSelected && 'selected')}
       onClick={handleDoctorClick}
     >
-      <IconAvatar />
+      <div>
+        <IconAvatar />
+      </div>
       <div className='name-and-service'>
-        <span className='doctor-name'>
+        <Typography noWrap classes={{ root: 'doctor-name' }}>
           {doctor.firstName} {doctor.lastName}
-        </span>
-        <span className='service-name'>{services}</span>
+        </Typography>
+        <Typography noWrap classes={{ root: 'service-name' }}>
+          {services}
+        </Typography>
       </div>
     </div>
   );

@@ -8,4 +8,5 @@ export default Object.freeze({
   logout: false,
   user: null,
   updateAppointments: false,
+  updateCalendarDoctorHeight: false,
 });

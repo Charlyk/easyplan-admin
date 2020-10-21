@@ -2,6 +2,11 @@ import { createSelector } from 'reselect';
 
 export const mainSelector = state => state.main;
 
+export const updateCalendarDoctorHeightSelector = createSelector(
+  mainSelector,
+  state => state.updateCalendarDoctorHeight,
+);
+
 export const updateCategoriesSelector = createSelector(
   mainSelector,
   state => state.updateCategories,

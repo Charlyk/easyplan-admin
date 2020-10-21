@@ -157,3 +157,10 @@ export function setPaymentModal(payload) {
     payload,
   };
 }
+
+export function toggleUpdateCalendarDoctorHeight() {
+  return {
+    type: types.updateCalendarDoctorHeight,
+    payload: '',
+  };
+}

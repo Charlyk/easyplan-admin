@@ -17,6 +17,7 @@ import { Action } from '../../utils/constants';
 import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
+import CalendarDoctorsView from './comps/center/day/CalendarDoctorsView';
 import CalendarDoctors from './comps/left/CalendarDoctors';
 import ServicesFilter from './comps/left/ServicesFilter';
 import CalendarRightContainer from './comps/right/CalendarRightContainer';
@@ -30,6 +31,7 @@ const reducerTypes = {
   setSelectedSchedule: 'setSelectedSchedule',
   setDeleteSchedule: 'setDeleteSchedule',
   setIsDeleting: 'setIsDeleting',
+  setViewMode: 'setViewMode',
 };
 
 const reducerActions = {
@@ -53,6 +55,7 @@ const reducerActions = {
     payload,
   }),
   setIsDeleting: payload => ({ type: reducerTypes.setIsDeleting, payload }),
+  setViewMode: payload => ({ type: reducerTypes.setViewMode, payload }),
 };
 
 const reducer = (state, action) => {
@@ -73,6 +76,8 @@ const reducer = (state, action) => {
       return { ...state, deleteSchedule: action.payload };
     case reducerTypes.setIsDeleting:
       return { ...state, isDeleting: action.payload };
+    case reducerTypes.setViewMode:
+      return { ...state, viewMode: action.payload };
     default:
       throw new Error('unknown type');
   }
@@ -87,6 +92,7 @@ const initialState = {
   viewDate: new Date(),
   deleteSchedule: { open: false, schedule: null },
   isDeleting: false,
+  viewMode: 'day',
 };
 
 const Calendar = () => {
@@ -103,6 +109,7 @@ const Calendar = () => {
       selectedSchedule,
       deleteSchedule,
       isDeleting,
+      viewMode,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -145,6 +152,10 @@ const Calendar = () => {
 
   const handleScheduleSelected = schedule => {
     localDispatch(reducerActions.setSelectedSchedule(schedule));
+  };
+
+  const handleViewModeChange = newMode => {
+    localDispatch(reducerActions.setViewMode(newMode));
   };
 
   const handleEditSchedule = schedule => {
@@ -195,40 +206,40 @@ const Calendar = () => {
         onConfirm={handleConfirmDeleteSchedule}
         onClose={handleCloseDeleteSchedule}
       />
-      <div className='calendar-root__content__left-container'>
-        <ServicesFilter
-          services={filters.services}
-          selectedService={selectedService}
-          onSelect={handleServiceSelected}
-        />
-        <CalendarDoctors
-          isFetching={isFetching}
-          selectedDoctor={selectedDoctor}
-          selectedService={selectedService}
-          doctors={filters.doctors}
-          onSelect={handleDoctorSelected}
-        />
-      </div>
+      {viewMode !== 'day' && (
+        <div className='calendar-root__content__left-container'>
+          <CalendarDoctors
+            isFetching={isFetching}
+            selectedDoctor={selectedDoctor}
+            selectedService={selectedService}
+            doctors={filters.doctors}
+            onSelect={handleDoctorSelected}
+          />
+        </div>
+      )}
       <div className='calendar-root__content__center-container'>
         <AppointmentsCalendar
+          canAddAppointment={selectedDoctor != null}
+          onAddAppointment={handleAppointmentModalOpen}
           selectedSchedule={selectedSchedule}
           onScheduleSelect={handleScheduleSelected}
           onViewDateChange={handleViewDateChange}
+          onViewModeChange={handleViewModeChange}
           doctor={selectedDoctor}
           viewDate={viewDate}
         />
       </div>
-      <div className='calendar-root__content__right-container'>
-        <CalendarRightContainer
-          onDeleteSchedule={handleDeleteSchedule}
-          onEditSchedule={handleEditSchedule}
-          selectedSchedule={selectedSchedule}
-          onDateChange={handleViewDateChange}
-          selectedDate={viewDate}
-          canAddAppointment={selectedDoctor != null}
-          onAddAppointment={handleAppointmentModalOpen}
-        />
-      </div>
+      {viewMode !== 'day' && (
+        <div className='calendar-root__content__right-container'>
+          <CalendarRightContainer
+            onDeleteSchedule={handleDeleteSchedule}
+            onEditSchedule={handleEditSchedule}
+            selectedSchedule={selectedSchedule}
+            onDateChange={handleViewDateChange}
+            selectedDate={viewDate}
+          />
+        </div>
+      )}
     </div>
   );
 };

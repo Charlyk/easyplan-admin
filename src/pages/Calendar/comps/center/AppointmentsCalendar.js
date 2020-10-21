@@ -3,15 +3,17 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Spinner } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
+import IconPlus from '../../../../assets/icons/iconPlus';
 import EasyTab from '../../../../components/EasyTab';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
-import { getCurrentWeek, logUserAction } from '../../../../utils/helperFuncs';
+import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import CalendarDayView from './day/CalendarDayView';
+import CalendarDoctorsView from './day/CalendarDoctorsView';
 import CalendarMonthView from './month/CalendarMonthView';
 import CalendarWeekView from './week/CalendarWeekView';
 
@@ -27,7 +29,10 @@ const AppointmentsCalendar = ({
   viewDate,
   onViewDateChange,
   onScheduleSelect,
+  onViewModeChange,
   selectedSchedule,
+  canAddAppointment,
+  onAddAppointment,
 }) => {
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,6 +94,7 @@ const AppointmentsCalendar = ({
 
   const handleTabChange = newTab => {
     setCurrentTab(newTab);
+    onViewModeChange(newTab);
   };
 
   const getTitleText = () => {
@@ -108,11 +114,11 @@ const AppointmentsCalendar = ({
 
   const handleMonthDateClick = date => {
     onViewDateChange(date);
-    setCurrentTab(CalendarView.day);
+    handleTabChange(CalendarView.day);
   };
 
   return (
-    <div className='calendar-root__center'>
+    <div className={clsx('calendar-root__center', 'full-height')}>
       <div className='center-header'>
         <span className='center-header__date'>{getTitleText()}</span>
         <div className='center-header__tabs'>
@@ -132,13 +138,22 @@ const AppointmentsCalendar = ({
             onClick={() => handleTabChange(CalendarView.month)}
           />
         </div>
+        <Button
+          className='positive-button'
+          disabled={!canAddAppointment}
+          onClick={onAddAppointment}
+        >
+          {textForKey('Add appointment')}
+          <IconPlus />
+        </Button>
       </div>
       <div
         id='calendar-content'
-        className={clsx(
-          'center-content',
-          currentTab === CalendarView.month && 'full-height',
-        )}
+        style={{
+          marginRight: currentTab === CalendarView.day ? '0' : '1rem',
+          marginLeft: currentTab === CalendarView.day ? '0' : '1rem',
+        }}
+        className='center-content'
       >
         {isLoading && (
           <Spinner animation='border' className='loading-spinner' />
@@ -150,17 +165,14 @@ const AppointmentsCalendar = ({
               {textForKey("It's a day off")}
             </span>
           )}
-        <CalendarDayView
-          doctorId={doctor?.id}
-          onScheduleSelect={onScheduleSelect}
-          hours={hours}
-          schedules={schedules}
-          opened={currentTab === CalendarView.day}
-        />
+        {currentTab === CalendarView.day && (
+          <CalendarDoctorsView viewDate={viewDate} />
+        )}
         <CalendarWeekView
           selectedSchedule={selectedSchedule}
           onScheduleSelect={onScheduleSelect}
           viewDate={viewDate}
+          onDateClick={handleMonthDateClick}
           hours={hours}
           doctorId={doctor?.id}
           opened={currentTab === CalendarView.week}
@@ -183,6 +195,9 @@ AppointmentsCalendar.propTypes = {
   viewDate: PropTypes.instanceOf(Date),
   onViewDateChange: PropTypes.func,
   onScheduleSelect: PropTypes.func,
+  onViewModeChange: PropTypes.func,
+  canAddAppointment: PropTypes.bool,
+  onAddAppointment: PropTypes.func,
   selectedSchedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,

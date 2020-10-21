@@ -20,14 +20,6 @@ const CalendarRightContainer = ({
 }) => {
   return (
     <div className='calendar-root__appointment-info'>
-      <Button
-        className='positive-button'
-        disabled={!canAddAppointment}
-        onClick={onAddAppointment}
-      >
-        {textForKey('Add appointment')}
-        <IconPlus />
-      </Button>
       <Calendar
         locale={locales[getAppLanguage()]}
         onChange={onDateChange}

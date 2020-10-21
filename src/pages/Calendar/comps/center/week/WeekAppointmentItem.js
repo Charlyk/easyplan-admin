@@ -13,20 +13,12 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
   const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
 
   useEffect(() => {
-    const { dateAndTime } = schedule;
-    const appointmentDate = moment(dateAndTime, 'YYYY-MM-DD HH:mm');
-    const startHour = appointmentDate.format('HH:mm');
-    const endHour = appointmentDate
-      .add('minutes', schedule.serviceDuration)
-      .format('HH:mm');
-    const newPosition = getAppointmentTop(
-      [startHour, endHour],
-      'days-container',
-      minHeight,
-      minTop,
-    );
-    setPosition(newPosition);
-    setHours([startHour, endHour]);
+    setHours([
+      moment(schedule.dateAndTime).format('HH:mm'),
+      moment(schedule.dateAndTime)
+        .add(schedule.serviceDuration, 'minutes')
+        .format('HH:mm'),
+    ]);
   }, [schedule]);
 
   const handleScheduleSelect = () => {
@@ -47,7 +39,7 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
     >
       <div className='title-and-time'>
         <span className='service-name' style={{ color: schedule.serviceColor }}>
-          {schedule.serviceName}
+          {schedule.patientName}
         </span>
         {position.height >= minHeight && (
           <span className='item-time-text'>

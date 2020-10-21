@@ -43,17 +43,7 @@ const CalendarWeekDayView = ({
   };
 
   return (
-    <div className='week-day'>
-      <div id='days-container' className='day-title'>
-        {day.format('DD dddd')}
-      </div>
-      {hours.map(hour => (
-        <CalendarWeekHourView
-          key={`${hour}-${day.format('DD dddd')}-key`}
-          hour={hour}
-          currentHour={hour === currentHour}
-        />
-      ))}
+    <td className='week-day' valign='top'>
       {schedules.map(schedule => (
         <WeekAppointmentItem
           onSelect={onScheduleSelect}
@@ -61,7 +51,7 @@ const CalendarWeekDayView = ({
           schedule={schedule}
         />
       ))}
-    </div>
+    </td>
   );
 };
 

@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
+import { setClinicDoctors } from '../../redux/actions/clinicActions';
 import { updateUsersSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Role } from '../../utils/constants';
@@ -16,6 +17,7 @@ import UserItem from './comps/UserItem';
 import UsersHeader from './comps/UsersHeader';
 
 const Users = props => {
+  const dispatch = useDispatch();
   const updateUsers = useSelector(updateUsersSelector);
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +46,9 @@ const Users = props => {
       setUsers([]);
     } else {
       setUsers(response.data);
+      dispatch(
+        setClinicDoctors(response.data.filter(it => it.role === Role.doctor)),
+      );
     }
     setIsLoading(false);
   };
