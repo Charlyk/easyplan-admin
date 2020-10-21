@@ -47,7 +47,7 @@ const CalendarDoctorsView = ({ viewDate }) => {
   const windowSize = useWindowSize();
   const doctors = useSelector(clinicDoctorsSelector);
   const clinicServices = useSelector(clinicServicesSelector);
-  const [{ isLoading, hours, hourWidth }, localDispatch] = useReducer(
+  const [{ hours, hourWidth }, localDispatch] = useReducer(
     reducer,
     initialState,
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import clsx from 'clsx';
 import moment from 'moment';
@@ -8,11 +8,10 @@ import { useSelector } from 'react-redux';
 
 import IconPlus from '../../../../assets/icons/iconPlus';
 import EasyTab from '../../../../components/EasyTab';
+import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarSelector';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import CalendarDayView from './day/CalendarDayView';
 import CalendarDoctorsView from './day/CalendarDoctorsView';
 import CalendarMonthView from './month/CalendarMonthView';
 import CalendarWeekView from './week/CalendarWeekView';
@@ -35,62 +34,8 @@ const AppointmentsCalendar = ({
   onAddAppointment,
 }) => {
   const updateAppointments = useSelector(updateAppointmentsSelector);
-  const [isLoading, setIsLoading] = useState(false);
-  const [schedules, setSchedules] = useState([]);
-  const [hours, setHours] = useState([]);
+  const isLoading = useSelector(isCalendarLoadingSelector);
   const [currentTab, setCurrentTab] = useState(CalendarView.day);
-
-  useEffect(() => {
-    setHours([]);
-    setSchedules([]);
-    fethWorkHours();
-  }, [viewDate, currentTab]);
-
-  useEffect(() => {
-    if (hours.length === 0) {
-      fethWorkHours();
-    } else if (doctor != null && currentTab === CalendarView.day) {
-      fetchSchedules();
-    }
-  }, [doctor, updateAppointments]);
-
-  useEffect(() => {
-    if (hours.length > 0) {
-      fetchSchedules();
-    }
-  }, [hours]);
-
-  const fethWorkHours = async () => {
-    setIsLoading(true);
-    const response = await dataAPI.fetchClinicWorkHours(
-      moment(viewDate).isoWeekday(),
-      currentTab === CalendarView.week ? 'week' : 'day',
-    );
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      setHours(response.data);
-    }
-    setIsLoading(false);
-  };
-
-  const fetchSchedules = async () => {
-    if (hours.length === 0 || doctor == null) {
-      return;
-    }
-    setIsLoading(true);
-    const response = await dataAPI.fetchSchedules(doctor?.id, viewDate);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      const { data } = response;
-      setSchedules(data);
-      if (selectedSchedule != null) {
-        onScheduleSelect(data.find(item => item.id === selectedSchedule.id));
-      }
-    }
-    setIsLoading(false);
-  };
 
   const handleTabChange = newTab => {
     setCurrentTab(newTab);
@@ -158,30 +103,27 @@ const AppointmentsCalendar = ({
         {isLoading && (
           <Spinner animation='border' className='loading-spinner' />
         )}
-        {hours.length === 0 &&
-          !isLoading &&
-          currentTab === CalendarView.day && (
-            <span className='day-off-label'>
-              {textForKey("It's a day off")}
-            </span>
-          )}
         {currentTab === CalendarView.day && (
-          <CalendarDoctorsView viewDate={viewDate} />
+          <CalendarDoctorsView
+            viewDate={viewDate}
+            update={updateAppointments}
+          />
         )}
         <CalendarWeekView
           selectedSchedule={selectedSchedule}
           onScheduleSelect={onScheduleSelect}
           viewDate={viewDate}
           onDateClick={handleMonthDateClick}
-          hours={hours}
           doctorId={doctor?.id}
           opened={currentTab === CalendarView.week}
+          update={updateAppointments}
         />
         <CalendarMonthView
           onDateClick={handleMonthDateClick}
           viewDate={viewDate}
           doctorId={doctor?.id}
           opened={currentTab === CalendarView.month}
+          update={updateAppointments}
         />
       </div>
     </div>

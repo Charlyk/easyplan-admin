@@ -1,45 +1,46 @@
 import React, { useEffect, useState } from 'react';
 
-import moment from 'moment';
+import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
-import CalendarWeekHourView from './CalendarWeekHourView';
 import WeekAppointmentItem from './WeekAppointmentItem';
 
 const CalendarWeekDayView = ({
   day,
-  hours,
   doctorId,
   selectedSchedule,
   onScheduleSelect,
+  update,
 }) => {
+  const dispatch = useDispatch();
   const updateAppointments = useSelector(updateAppointmentsSelector);
-  const currentHour = moment().format('HH:00');
   const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
-    if (hours.length > 0 && doctorId != null) {
-      fetchSchedules();
-    }
-  }, [doctorId, hours, updateAppointments]);
+    fetchSchedules();
+  }, [doctorId, updateAppointments, update]);
 
   const fetchSchedules = async () => {
+    dispatch(setIsCalendarLoading(true));
     const response = await dataAPI.fetchSchedules(doctorId, day.toDate());
     if (response.isError) {
       console.log(response.message);
     } else {
       const { data } = response;
-      setSchedules(data);
+      const newData = sortBy(data, item => item.dateAndTime);
+      setSchedules(newData);
       if (
         selectedSchedule != null &&
         day.isSame(selectedSchedule.dateAndTime, 'day')
       ) {
-        onScheduleSelect(data.find(item => item.id === selectedSchedule.id));
+        onScheduleSelect(newData.find(item => item.id === selectedSchedule.id));
       }
     }
+    dispatch(setIsCalendarLoading(false));
   };
 
   return (
@@ -58,9 +59,9 @@ const CalendarWeekDayView = ({
 export default CalendarWeekDayView;
 
 CalendarWeekDayView.propTypes = {
+  update: PropTypes.bool,
   doctorId: PropTypes.string,
   day: PropTypes.string,
-  hours: PropTypes.arrayOf(PropTypes.string),
   onScheduleSelect: PropTypes.func,
   selectedSchedule: PropTypes.shape({
     id: PropTypes.string,

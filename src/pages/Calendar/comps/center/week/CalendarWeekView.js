@@ -12,12 +12,12 @@ import CalendarWeekDayView from './CalendarWeekDayView';
 
 const CalendarWeekView = ({
   opened,
-  hours,
   doctorId,
   viewDate,
   onDateClick,
   selectedSchedule,
   onScheduleSelect,
+  update,
 }) => {
   const [isClosed, setIsClosed] = useState(!opened);
   const [week, setWeek] = useState(getCurrentWeek(viewDate));
@@ -58,12 +58,12 @@ const CalendarWeekView = ({
           <tr>
             {week.map(day => (
               <CalendarWeekDayView
+                update={update}
                 selectedSchedule={selectedSchedule}
                 onScheduleSelect={onScheduleSelect}
                 doctorId={doctorId}
                 key={day}
                 day={day}
-                hours={hours}
               />
             ))}
           </tr>
@@ -76,6 +76,7 @@ const CalendarWeekView = ({
 export default CalendarWeekView;
 
 CalendarWeekView.propTypes = {
+  update: PropTypes.bool,
   onScheduleSelect: PropTypes.func,
   opened: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),

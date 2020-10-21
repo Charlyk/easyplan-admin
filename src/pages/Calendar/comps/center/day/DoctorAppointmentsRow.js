@@ -3,10 +3,12 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import { Tooltip, Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
 
 import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
+import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
+import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
 
@@ -33,6 +35,7 @@ const reducer = (state = initialState, action) => {
 
 const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
   const dispatch = useDispatch();
+  const updateAppointments = useSelector(updateAppointmentsSelector);
   const sizeDifference = useRef(0);
   const [{ appointments, previousHourWidth }, localDispatch] = useReducer(
     reducer,
@@ -43,7 +46,7 @@ const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
     if (doctor != null) {
       fetchAppointments();
     }
-  }, [doctor]);
+  }, [doctor, updateAppointments]);
 
   useEffect(() => {
     sizeDifference.current = Math.abs(hourWidth - previousHourWidth);
@@ -71,6 +74,7 @@ const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
   };
 
   const fetchAppointments = async () => {
+    dispatch(setIsCalendarLoading(true));
     const response = await dataAPI.fetchSchedules(doctor.id, viewDate);
     if (response.isError) {
       console.error(response.message);
@@ -92,6 +96,7 @@ const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
         dispatch(toggleUpdateCalendarDoctorHeight());
       }, 300);
     }
+    dispatch(setIsCalendarLoading(false));
   };
 
   const appointmentsForHour = hour => {
@@ -196,20 +201,20 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition }) => {
   )} - ${appointment.end.format('HH:mm')}`;
 
   return (
-    <animated.div
-      id={`${appointment.id}-${appointment.start.format(
-        'HH:mm',
-      )}>${appointment.end.format('HH:mm')}`}
-      key={appointment.id}
-      className='appointment-item'
-      style={{
-        width: width,
-        border: `${appointment.serviceColor} 1px solid`,
-        backgroundColor: `${appointment.serviceColor}1A`,
-        transform: x.interpolate(x => `translateX(${x}px)`),
-      }}
-    >
-      <Tooltip title={title}>
+    <Tooltip title={title}>
+      <animated.div
+        id={`${appointment.id}-${appointment.start.format(
+          'HH:mm',
+        )}>${appointment.end.format('HH:mm')}`}
+        key={appointment.id}
+        className='appointment-item'
+        style={{
+          width: width,
+          border: `${appointment.serviceColor} 1px solid`,
+          backgroundColor: `${appointment.serviceColor}1A`,
+          transform: x.interpolate(x => `translateX(${x}px)`),
+        }}
+      >
         <Typography
           noWrap
           classes={{ root: 'patient-name' }}
@@ -217,8 +222,8 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition }) => {
         >
           {title}
         </Typography>
-      </Tooltip>
-    </animated.div>
+      </animated.div>
+    </Tooltip>
   );
 };
 

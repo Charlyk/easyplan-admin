@@ -1,3 +1,4 @@
+import calendar from './calendar';
 import clinicTypes from './clinicTypes';
 
 export default {
@@ -18,4 +19,5 @@ export default {
   setPaymentModal: 'setPaymentModal',
   updateCalendarDoctorHeight: 'updateCalendarDoctorHeight',
   ...clinicTypes,
+  ...calendar,
 };

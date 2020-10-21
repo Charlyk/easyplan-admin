@@ -3,13 +3,18 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
+import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { Action } from '../../../../../utils/constants';
 import { getDays, logUserAction } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 
 const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
+  const dispatch = useDispatch();
+  const updateAppointments = useSelector(updateAppointmentsSelector);
   const [isClosed, setIsClosed] = useState(!opened);
   const [schedules, setSchedules] = useState([]);
   const [monthDays, setMonthDays] = useState([]);
@@ -26,9 +31,10 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
       setMonthDays(getDays(viewDate));
       fetchSchedules();
     }
-  }, [viewDate, doctorId, opened]);
+  }, [viewDate, doctorId, opened, updateAppointments]);
 
   const fetchSchedules = async () => {
+    dispatch(setIsCalendarLoading(true));
     const response = await dataAPI.fetchMonthSchedules(doctorId, viewDate);
     if (response.isError) {
       console.error(response.isError);
@@ -41,6 +47,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
       console.log(newSchedules);
       setSchedules(newSchedules);
     }
+    dispatch(setIsCalendarLoading(false));
   };
 
   useEffect(() => {

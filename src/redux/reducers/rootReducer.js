@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import initialState from '../initialState';
 import types from '../types/types';
 import appointmentModal from './appointmentModal';
+import calendar from './calendar';
 import clinic from './clinic';
 import createClinicModal from './createClinicModal';
 import patientNoteModal from './patientNoteModal';
@@ -17,6 +18,7 @@ export default combineReducers({
   appointmentModal,
   paymentModal,
   createClinicModal,
+  calendar,
 });
 
 function main(state = initialState, action) {
