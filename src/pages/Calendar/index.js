@@ -17,9 +17,7 @@ import { Action } from '../../utils/constants';
 import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
-import CalendarDoctorsView from './comps/center/day/CalendarDoctorsView';
 import CalendarDoctors from './comps/left/CalendarDoctors';
-import ServicesFilter from './comps/left/ServicesFilter';
 import CalendarRightContainer from './comps/right/CalendarRightContainer';
 
 const reducerTypes = {
@@ -138,10 +136,6 @@ const Calendar = () => {
     );
   };
 
-  const handleServiceSelected = service => {
-    localDispatch(reducerActions.setSelectedService(service));
-  };
-
   const handleDoctorSelected = doctor => {
     localDispatch(reducerActions.setSelectedDoctor(doctor));
   };
@@ -229,17 +223,6 @@ const Calendar = () => {
           viewDate={viewDate}
         />
       </div>
-      {viewMode !== 'day' && (
-        <div className='calendar-root__content__right-container'>
-          <CalendarRightContainer
-            onDeleteSchedule={handleDeleteSchedule}
-            onEditSchedule={handleEditSchedule}
-            selectedSchedule={selectedSchedule}
-            onDateChange={handleViewDateChange}
-            selectedDate={viewDate}
-          />
-        </div>
-      )}
     </div>
   );
 };

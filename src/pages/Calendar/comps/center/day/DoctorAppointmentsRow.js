@@ -46,7 +46,7 @@ const DoctorAppointmentsRow = ({ doctor, hours, hourWidth, viewDate }) => {
     if (doctor != null) {
       fetchAppointments();
     }
-  }, [doctor, updateAppointments]);
+  }, [doctor, updateAppointments, viewDate]);
 
   useEffect(() => {
     sizeDifference.current = Math.abs(hourWidth - previousHourWidth);

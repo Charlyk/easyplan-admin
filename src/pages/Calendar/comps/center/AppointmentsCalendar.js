@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
+import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
+import Popper from '@material-ui/core/Popper';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
+import { Calendar, DateRangePicker } from 'react-date-range';
+import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
+import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
 import IconPlus from '../../../../assets/icons/iconPlus';
+import {
+  localizedInputRanges,
+  localizedStaticRanges,
+} from '../../../../components/EasyDateRangePicker/ranges';
 import EasyTab from '../../../../components/EasyTab';
 import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarSelector';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
+import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import CalendarDoctorsView from './day/CalendarDoctorsView';
 import CalendarMonthView from './month/CalendarMonthView';
 import CalendarWeekView from './week/CalendarWeekView';
@@ -33,9 +42,11 @@ const AppointmentsCalendar = ({
   canAddAppointment,
   onAddAppointment,
 }) => {
+  const calendarAnchor = useRef(null);
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const isLoading = useSelector(isCalendarLoadingSelector);
   const [currentTab, setCurrentTab] = useState(CalendarView.day);
+  const [calendarVisible, setCalendarVisible] = useState(false);
 
   const handleTabChange = newTab => {
     setCurrentTab(newTab);
@@ -62,10 +73,51 @@ const AppointmentsCalendar = ({
     handleTabChange(CalendarView.day);
   };
 
+  const handleOpenCalendar = () => setCalendarVisible(true);
+
+  const handleCloseCalendar = () => setCalendarVisible(false);
+
+  const handleDateChange = date => {
+    onViewDateChange(date);
+    handleCloseCalendar();
+  };
+
+  const calendarPopper = (
+    <Popper
+      className='appointments-date-picker-root'
+      anchorEl={calendarAnchor.current}
+      open={calendarVisible}
+      placement='bottom'
+      transition
+    >
+      {({ TransitionProps }) => (
+        <Fade {...TransitionProps} timeout={350}>
+          <Paper className='calendar-paper'>
+            <ClickAwayListener onClickAway={handleCloseCalendar}>
+              <Calendar
+                locale={locales[getAppLanguage()]}
+                onChange={handleDateChange}
+                date={viewDate}
+              />
+            </ClickAwayListener>
+          </Paper>
+        </Fade>
+      )}
+    </Popper>
+  );
+
   return (
     <div className={clsx('calendar-root__center', 'full-height')}>
       <div className='center-header'>
-        <span className='center-header__date'>{getTitleText()}</span>
+        <Button
+          ref={calendarAnchor}
+          className='positive-button calendar-btn'
+          onClick={handleOpenCalendar}
+        >
+          {getTitleText()}
+          <IconAppointmentCalendar fill='#fff' />
+        </Button>
+        {calendarPopper}
         <div className='center-header__tabs'>
           <EasyTab
             title={textForKey('Day')}
@@ -95,7 +147,7 @@ const AppointmentsCalendar = ({
       <div
         id='calendar-content'
         style={{
-          marginRight: currentTab === CalendarView.day ? '0' : '1rem',
+          marginRight: 0,
           marginLeft: currentTab === CalendarView.day ? '0' : '1rem',
         }}
         className='center-content'
@@ -135,6 +187,7 @@ export default AppointmentsCalendar;
 AppointmentsCalendar.propTypes = {
   doctor: PropTypes.object,
   viewDate: PropTypes.instanceOf(Date),
+  onDateChange: PropTypes.func,
   onViewDateChange: PropTypes.func,
   onScheduleSelect: PropTypes.func,
   onViewModeChange: PropTypes.func,

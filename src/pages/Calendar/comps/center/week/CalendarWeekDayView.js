@@ -10,6 +10,7 @@ import dataAPI from '../../../../../utils/api/dataAPI';
 import WeekAppointmentItem from './WeekAppointmentItem';
 
 const CalendarWeekDayView = ({
+  viewDate,
   day,
   doctorId,
   selectedSchedule,
@@ -22,7 +23,7 @@ const CalendarWeekDayView = ({
 
   useEffect(() => {
     fetchSchedules();
-  }, [doctorId, updateAppointments, update]);
+  }, [doctorId, updateAppointments, update, viewDate]);
 
   const fetchSchedules = async () => {
     dispatch(setIsCalendarLoading(true));
@@ -59,6 +60,7 @@ const CalendarWeekDayView = ({
 export default CalendarWeekDayView;
 
 CalendarWeekDayView.propTypes = {
+  viewDate: PropTypes.instanceOf(Date),
   update: PropTypes.bool,
   doctorId: PropTypes.string,
   day: PropTypes.string,

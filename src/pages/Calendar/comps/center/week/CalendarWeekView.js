@@ -58,6 +58,7 @@ const CalendarWeekView = ({
           <tr>
             {week.map(day => (
               <CalendarWeekDayView
+                viewDate={viewDate}
                 update={update}
                 selectedSchedule={selectedSchedule}
                 onScheduleSelect={onScheduleSelect}
