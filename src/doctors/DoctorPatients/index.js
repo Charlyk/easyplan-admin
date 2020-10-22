@@ -2,17 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import './styles.scss';
 import { Spinner } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
-import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import PatientsFilter from './components/patients/PatientsFilter';
 import PatientsList from './components/patients/PatientsList';
 
 const DoctorPatients = props => {
-  const history = useHistory();
-  const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [filterData, setFilterData] = useState({
@@ -34,14 +29,6 @@ const DoctorPatients = props => {
       setSchedules(response.data);
     }
     setIsLoading(false);
-  };
-
-  const handlePatientSelected = ({ patient, schedule }) => {
-    if (schedule != null) {
-      history.push(`/${patient.id}/${schedule.id}`);
-    } else {
-      history.push(`/${patient.id}/view`);
-    }
   };
 
   const handlePatientNameChange = event => {
@@ -78,11 +65,7 @@ const DoctorPatients = props => {
         {isLoading && (
           <Spinner animation='border' className='loading-spinner' />
         )}
-        <PatientsList
-          filterData={filterData}
-          schedules={schedules}
-          onPatientSelect={handlePatientSelected}
-        />
+        <PatientsList filterData={filterData} schedules={schedules} />
       </div>
     </div>
   );

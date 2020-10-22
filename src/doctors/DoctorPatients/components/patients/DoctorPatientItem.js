@@ -1,5 +1,6 @@
 import React from 'react';
 
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import IconAvatar from '../../../../assets/icons/iconAvatar';
@@ -13,7 +14,12 @@ const DoctorPatientItem = ({ schedule, patient, onView }) => {
   );
 
   return (
-    <div className='patient-item-root'>
+    <div
+      className={clsx(
+        'patient-item-root',
+        appointmentStatus.id === 'OnSite' && 'on-site',
+      )}
+    >
       <div className='item-header'>
         <IconAvatar />
         <span className='patient-name'>{patient.fullName}</span>

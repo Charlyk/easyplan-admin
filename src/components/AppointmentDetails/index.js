@@ -36,7 +36,6 @@ const AppointmentDetails = ({
     if (response.isError) {
       console.error(response.message);
     } else {
-      console.log(response.data);
       setDetails(response.data);
     }
     setIsLoading(false);

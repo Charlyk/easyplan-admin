@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
+import moment from 'moment';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-import DoctorPatientItem from './DoctorPatientItem';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 
-const PatientsList = ({ schedules, filterData, onPatientSelect }) => {
+const PatientsList = ({ schedules, filterData }) => {
   const [filteredSchedules, setFilteredSchedules] = useState(schedules);
+  const [hours, setHours] = useState([]);
+
+  useEffect(() => {
+    fetchWorkingHours();
+  }, []);
 
   useEffect(() => {
     filterPatients();
@@ -38,16 +46,88 @@ const PatientsList = ({ schedules, filterData, onPatientSelect }) => {
     );
   };
 
+  const fetchWorkingHours = async () => {
+    const response = await dataAPI.fetchClinicWorkHoursV2(
+      moment().isoWeekday(),
+    );
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      setHours(response.data.filter(it => it.split(':')[1] === '00'));
+    }
+  };
+
+  const schedulesForHour = hour => {
+    const [hours] = hour.split(':');
+    return filteredSchedules.filter(({ schedule }) => {
+      const scheduleHour = moment(schedule.dateAndTime).format('HH:mm');
+      const [scheduleHours] = scheduleHour.split(':');
+      return hours === scheduleHours;
+    });
+  };
+
+  const renderPatientItem = ({ schedule }) => {
+    if (schedule == null) {
+      return null;
+    }
+
+    const startDate = moment(schedule.dateAndTime);
+    const endDate = moment(schedule.dateAndTime).add(
+      schedule.serviceDuration,
+      'minutes',
+    );
+
+    return (
+      <div
+        key={schedule.id}
+        className='schedule-item'
+        style={{
+          border: `${schedule.serviceColor} 1px solid`,
+          backgroundColor: `${schedule.serviceColor}1A`,
+        }}
+      >
+        <span className='patient-name'>{schedule.patientName}</span>
+        <span className='service-name' style={{ color: schedule.serviceColor }}>
+          {schedule.serviceName}
+        </span>
+        <span className='time-label'>
+          {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
+        </span>
+        <div className='details-button'>
+          <Link to={`/${schedule.patientId}/${schedule.id}`}>
+            <span className='button-text'>{textForKey('Details')}</span>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className='patients-list-root'>
-      {filteredSchedules.map(({ patient, schedule }) => (
-        <DoctorPatientItem
-          key={patient.id}
-          schedule={schedule}
-          patient={patient}
-          onView={onPatientSelect}
-        />
-      ))}
+      <table>
+        <thead>
+          <tr>
+            {hours.map(item => (
+              <td
+                align='center'
+                style={{ width: `calc(100% / ${hours.length})` }}
+                key={item}
+              >
+                {item}
+              </td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {hours.map(item => (
+              <td align='center' key={`patients-${item}`}>
+                {schedulesForHour(item).map(renderPatientItem)}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -89,7 +169,6 @@ PatientsList.propTypes = {
       }),
     }),
   ),
-  onPatientSelect: PropTypes.func,
 };
 
 PatientsList.defaultProps = {

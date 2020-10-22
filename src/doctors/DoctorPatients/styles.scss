@@ -62,8 +62,116 @@
 
 .patients-list-root {
   display: flex;
-  flex-wrap: wrap;
+  flex: 1;
+  height: 100%;
+  flex-direction: column;
   position: relative;
+  margin-right: 1rem;
+  background: #FFFFFF;
+  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1rem;
+
+  table {
+    width: 100%;
+
+    thead {
+      tr {
+        border-bottom: #DBEEFB 1px solid;
+
+        td {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 20px;
+          color: #3A83DC;
+          margin-left: .5rem;
+          border-right: #DBEEFB 1px solid;
+          padding: .5rem;
+        }
+
+        td:last-child {
+          border-right: none;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          border-right: #DBEEFB 1px solid;
+          padding-top: .5rem;
+        }
+
+        td:last-child {
+          border-right: none;
+        }
+      }
+    }
+  }
+
+  .schedule-item {
+    padding: .3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: .3rem;
+    margin-bottom: .5rem;
+
+    .patient-name {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 13px;
+      line-height: 20px;
+      color: #34344E;
+    }
+
+    .service-name {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 20px;
+      color: #34344E;
+    }
+
+    .time-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 10px;
+      line-height: 20px;
+      color: #34344E;
+    }
+
+    .details-button {
+      outline: none;
+      user-select: none;
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      margin-top: .5rem;
+      cursor: pointer;
+
+      &:hover {
+        .button-text {
+          text-decoration: underline;
+        }
+      }
+
+      .button-text {
+        color: #3A83DC;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13px;
+        line-height: 20px;
+      }
+    }
+  }
 }
 
 .patient-item-root {
@@ -74,6 +182,10 @@
   background: #FFFFFF;
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
+
+  &.on-site {
+    border: #ec3276 1px solid;
+  }
 
   .details-button {
     outline: none;

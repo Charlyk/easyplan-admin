@@ -88,7 +88,6 @@ function App() {
   useEffect(() => {
     if (currentUser == null) {
       fetchUser();
-      fetchClinicData();
     } else if (currentUser.clinics.length === 0) {
       dispatch(setCreateClinic({ open: true, canClose: false }));
     }
@@ -97,7 +96,6 @@ function App() {
   useEffect(() => {
     if (newClinicId != null) {
       changeCurrentClinic(newClinicId);
-      fetchClinicData();
     }
   }, [newClinicId]);
 
@@ -127,6 +125,7 @@ function App() {
       console.error(response.message);
     } else {
       dispatch(setCurrentUser(response.data));
+      await fetchClinicData();
       redirectToHome();
     }
     setAppIsLoading(false);
@@ -150,6 +149,7 @@ function App() {
         authManager.logOut();
         setRedirectUser(true);
       }
+      await fetchClinicData();
     }
     setAppIsLoading(false);
   };
