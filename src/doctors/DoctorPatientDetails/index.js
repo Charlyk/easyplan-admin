@@ -285,6 +285,11 @@ const DoctorPatientDetails = () => {
     }
   };
 
+  const isFinished =
+    schedule?.status === 'CompletedNotPaid' ||
+    schedule?.status === 'CompletedPaid' ||
+    schedule?.status === 'PartialPaid';
+
   return (
     <div className='doctor-patient-root'>
       <FinalizeTreatmentModal
@@ -452,10 +457,12 @@ const DoctorPatientDetails = () => {
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
-              disabled={selectedServices.length === 0}
+              disabled={selectedServices.length === 0 || isFinished}
               className='positive-button'
             >
-              {textForKey('Finalize')}
+              {isFinished
+                ? textForKey(schedule.status)
+                : textForKey('Finalize')}
             </LoadingButton>
           </div>
         </div>
