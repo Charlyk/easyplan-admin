@@ -232,6 +232,7 @@ export default {
     pay: 'Pay',
     remained: 'Remained',
     actions: 'Actions',
+    name: 'Name',
   },
   ro: {
     analytics: 'Analitică',
@@ -467,6 +468,7 @@ export default {
     pay: 'Achită',
     remained: 'Rămas',
     actions: 'Acțiuni',
+    name: 'Nume',
   },
   ru: {
     analytics: 'Analytics',
@@ -700,5 +702,6 @@ export default {
     pay: 'Pay',
     remained: 'Remained',
     actions: 'Actions',
+    name: 'Name',
   },
 };
