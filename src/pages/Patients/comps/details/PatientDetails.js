@@ -22,10 +22,11 @@ const TabId = {
 const PatientDetails = ({
   onAddNote,
   onAddXRay,
-  onAddAppointmentNote,
+  onEditAppointmentNote,
   showTabs,
   defaultTab,
   patient,
+  scheduleId,
 }) => {
   const [selectedTab, setSelectedTab] = useState(defaultTab);
 
@@ -81,8 +82,9 @@ const PatientDetails = ({
       <div className='patient-details-root__content'>
         {selectedTab === TabId.appointmentsNotes && (
           <AppointmentNotes
+            scheduleId={scheduleId}
             patient={patient}
-            onAddNote={onAddAppointmentNote}
+            onEditNote={onEditAppointmentNote}
           />
         )}
         {selectedTab === TabId.appointments && (
@@ -105,9 +107,10 @@ const PatientDetails = ({
 export default PatientDetails;
 
 PatientDetails.propTypes = {
+  scheduleId: PropTypes.string,
   onAddNote: PropTypes.func,
   onAddXRay: PropTypes.func,
-  onAddAppointmentNote: PropTypes.func,
+  onEditAppointmentNote: PropTypes.func,
   showTabs: PropTypes.arrayOf(PropTypes.string),
   defaultTab: PropTypes.string,
   patient: PropTypes.shape({

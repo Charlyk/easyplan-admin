@@ -8,6 +8,13 @@
   display: flex;
   flex-direction: column;
 
+  .tabs-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
   .options-row {
     display: flex;
     align-items: flex-start;
@@ -26,7 +33,6 @@
 
   .group-subtitle {
     width: 70px;
-    margin-top: 1rem;
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -41,6 +47,18 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
+    .custom-select {
+      flex: 1;
+      font-size: 12px;
+    }
+
+    .separator {
+      width: 1px;
+      background-color: #ededed;
+      height: 2rem;
+      margin-right: .5rem;
+    }
   }
 
   .option-text {
@@ -54,6 +72,7 @@
   }
 
   .option-button {
+    user-select: none;
     cursor: pointer;
     margin: .2rem;
     padding: .5rem;

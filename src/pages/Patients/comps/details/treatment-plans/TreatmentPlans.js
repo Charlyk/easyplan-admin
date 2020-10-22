@@ -1,117 +1,246 @@
 import React, { useEffect, useState } from 'react';
 
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Spinner } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
+import EasyTab from '../../../../../components/EasyTab';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../../utils/localization';
 
+const PlanType = {
+  mandible: 'mandible',
+  maxillary: 'maxillary',
+};
+
 const TreatmentPlans = ({ patient }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState(null);
+  const [planType, setPlanType] = useState(PlanType.mandible);
 
   useEffect(() => {
-    fetchTreatmentPlan();
+    if (patient?.treatmentPlan == null) {
+      fetchTreatmentPlan();
+    } else {
+      console.log(patient);
+      setPlan(patient.treatmentPlan);
+    }
   }, [patient]);
 
   const fetchTreatmentPlan = async () => {
-    setIsLoading(true);
     const response = await dataAPI.fetchTreatmentPlan(patient.id);
     if (response.isError) {
       console.error(response.message);
     } else {
       setPlan(response.data);
     }
-    setIsLoading(false);
   };
+
+  const handleTypeChange = newType => {
+    setPlanType(newType);
+  };
+
+  const classRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Class')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {plan[planType].classes.map(item => (
+            <div className={clsx('option-button', 'selected')} key={item}>
+              <span className='option-text'>{item}</span>
+            </div>
+          ))}
+        </div>
+      </td>
+    </tr>
+  );
+
+  const occlusionRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Occlusion')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {plan[planType].occlusions.map(item => (
+            <div className={clsx('option-button', 'selected')} key={item}>
+              <span className='option-text'>{textForKey(item)}</span>
+            </div>
+          ))}
+        </div>
+      </td>
+    </tr>
+  );
+
+  const fallenBracketsRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Fallen brackets')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {plan[planType].fallenBraces.map(item => (
+            <div className={clsx('option-button', 'selected')} key={item}>
+              <span className='option-text'>{item}</span>
+            </div>
+          ))}
+        </div>
+      </td>
+    </tr>
+  );
+
+  const radiographRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Radiografie')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {plan[planType].radiographs.map(item => (
+            <div className={clsx('option-button', 'selected')} key={item}>
+              <span className='option-text'>{textForKey(item)}</span>
+            </div>
+          ))}
+        </div>
+      </td>
+    </tr>
+  );
+
+  const bracesRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Braces')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {plan[planType].braces.map(item => (
+            <div className={clsx('option-button', 'selected')} key={item.id}>
+              <span className='option-text'>{textForKey(item.name)}</span>
+            </div>
+          ))}
+        </div>
+      </td>
+    </tr>
+  );
+
+  const treatmentTypeRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Treatment type')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {plan[planType].treatmentTypes.map(item => (
+            <div className={clsx('option-button', 'selected')} key={item.id}>
+              <span className='option-text'>{item.name}</span>
+            </div>
+          ))}
+        </div>
+      </td>
+    </tr>
+  );
+
+  const molarCaninRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Angle Class')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            disabled
+            value={plan[planType].malocclusion.molarCanin.molar}
+            custom
+          >
+            <option value='select'>
+              {textForKey('Molar')}{' '}
+              {plan[planType].malocclusion.molarCanin.molar}
+            </option>
+          </Form.Control>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            disabled
+            value={plan[planType].malocclusion.molarCanin.canin}
+            custom
+          >
+            <option value='select'>
+              {textForKey('Canin')}{' '}
+              {plan[planType].malocclusion.molarCanin.canin}
+            </option>
+          </Form.Control>
+          <div className='separator' />
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            disabled
+            value={plan[planType].malocclusion.caninMolar.canin}
+            custom
+          >
+            <option value='select'>
+              {textForKey('Canin')}{' '}
+              {plan[planType].malocclusion.caninMolar.canin}
+            </option>
+          </Form.Control>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            disabled
+            value={plan[planType].malocclusion.caninMolar.molar}
+            custom
+          >
+            <option value={plan[planType].malocclusion.caninMolar.molar}>
+              {textForKey('Molar')}{' '}
+              {plan[planType].malocclusion.caninMolar.molar}
+            </option>
+          </Form.Control>
+        </div>
+      </td>
+    </tr>
+  );
 
   return (
     <div className='patient-treatment-plans'>
-      {isLoading && <Spinner animation='border' className='loading-spinner' />}
-      {!isLoading && !plan && (
+      {!plan && (
         <span className='no-data-label'>{textForKey('No treatment plan')}</span>
       )}
-      {plan && (
+      {plan != null && (
         <React.Fragment>
-          <span className='group-title'>{textForKey('Diagnosis')}</span>
-          <div className='options-row'>
-            <span className='group-subtitle'>{textForKey('Class')}</span>
-            <div className='options-container'>
-              <div
-                role='button'
-                tabIndex={0}
-                className='option-button selected'
-              >
-                <span className='option-text'>{plan.planClass}</span>
-              </div>
-            </div>
+          <div className='tabs-container'>
+            <EasyTab
+              onClick={() => handleTypeChange(PlanType.mandible)}
+              title={textForKey('Mandible')}
+              selected={planType === PlanType.mandible}
+            />
+            <EasyTab
+              onClick={() => handleTypeChange(PlanType.maxillary)}
+              title={textForKey('Maxillary')}
+              selected={planType === PlanType.maxillary}
+            />
           </div>
-          <div className='options-row'>
-            <span className='group-subtitle'>{textForKey('Occlusion')}</span>
-            <div className='options-container'>
-              <div
-                role='button'
-                tabIndex={0}
-                className='option-button selected'
-              >
-                <span className='option-text'>{plan.occlusion}</span>
-              </div>
-            </div>
-          </div>
-          <div className='options-row'>
-            <span className='group-subtitle'>{textForKey('Included')}</span>
-            <div className='options-container'>
-              <div
-                role='button'
-                tabIndex={0}
-                className='option-button selected'
-              >
-                <span className='option-text'>{plan.included}</span>
-              </div>
-            </div>
-          </div>
-          <div className='options-row'>
-            <span className='group-title'>{textForKey('Radiografie')}</span>
-            <div className='options-container'>
-              <div
-                role='button'
-                tabIndex={0}
-                className='option-button selected'
-              >
-                <span className='option-text'>{plan.radiograph}</span>
-              </div>
-            </div>
-          </div>
-          <div className='options-row'>
-            <span className='group-title'>{textForKey('Treatment plan')}</span>
-            <div className='options-container'>
-              {plan.services.map(item => (
-                <div
-                  key={item.id}
-                  role='button'
-                  tabIndex={0}
-                  className='option-button selected'
-                >
-                  <span className='option-text'>{item.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className='options-row'>
-            <span className='group-title'>{textForKey('Fallen brackets')}</span>
-            <div className='options-container'>
-              {plan.fallenBrackets.map(item => (
-                <div
-                  key={item}
-                  role='button'
-                  tabIndex={0}
-                  className='option-button selected'
-                >
-                  <span className='option-text'>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <span className='group-title'>{textForKey('Diagnosis')}</span>
+                </td>
+              </tr>
+              {classRow}
+              {occlusionRow}
+              {molarCaninRow}
+              {radiographRow}
+              {bracesRow}
+              {treatmentTypeRow}
+              {fallenBracketsRow}
+            </tbody>
+          </table>
         </React.Fragment>
       )}
     </div>

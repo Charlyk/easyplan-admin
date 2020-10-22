@@ -28,5 +28,5 @@ IncomeStatisticItem.propTypes = {
   title: PropTypes.string,
   icon: PropTypes.element,
   persons: PropTypes.number,
-  amount: PropTypes.number,
+  amount: PropTypes.string,
 };

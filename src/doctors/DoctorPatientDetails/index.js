@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
@@ -20,7 +20,8 @@ import {
 } from '../../redux/actions/actions';
 import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { teeth } from '../../utils/constants';
+import { Action, teeth } from '../../utils/constants';
+import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
@@ -29,6 +30,94 @@ const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
   notes: 'Notes',
   xRay: 'X-Ray',
+  treatmentPlans: 'TreatmentPlans',
+};
+
+const initialState = {
+  isLoading: false,
+  patient: null,
+  toothServices: [],
+  allServices: [],
+  selectedServices: [],
+  schedule: null,
+  shouldFillTreatmentPlan: null,
+  treatmentPlan: null,
+  showFinalizeTreatment: false,
+  isFinalizing: false,
+};
+
+const reducerTypes = {
+  setIsLoading: 'setIsLoading',
+  setPatient: 'setPatient',
+  setToothServices: 'setToothServices',
+  setAllServices: 'setAllServices',
+  setSelectedServices: 'setSelectedServices',
+  setSchedule: 'setSchedule',
+  setShouldFillTreatmentPlan: 'setShouldFillTreatmentPlan',
+  setTreatmentPlan: 'setTreatmentPlan',
+  setShowFinalizeTreatment: 'setShowFinalizeTreatment',
+  setIsFinalizing: 'setIsFinalizing',
+  setServices: 'setServices',
+  setScheduleDetails: 'setScheduleDetails',
+};
+
+const actions = generateReducerActions(reducerTypes);
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setIsLoading:
+      return { ...state, isLoading: action.payload };
+    case reducerTypes.setPatient:
+      return { ...state, patient: action.payload };
+    case reducerTypes.setToothServices:
+      return { ...state, toothServices: action.payload };
+    case reducerTypes.setAllServices:
+      return { ...state, allServices: action.payload };
+    case reducerTypes.setSelectedServices:
+      return { ...state, selectedServices: action.payload };
+    case reducerTypes.setSchedule:
+      return { ...state, schedule: action.payload };
+    case reducerTypes.setShouldFillTreatmentPlan:
+      return { ...state, shouldFillTreatmentPlan: action.payload };
+    case reducerTypes.setTreatmentPlan: {
+      const { mandible, maxillary } = action.payload;
+      let newServices = cloneDeep(state.selectedServices);
+      remove(newServices, item => item.bracket);
+      const mandibleServices = mandible.braces.map(item => ({
+        ...item,
+        name: `${item.name} (${textForKey('Mandible')})`,
+      }));
+      const maxillaryServices = maxillary.braces.map(item => ({
+        ...item,
+        name: `${item.name} (${textForKey('Maxillary')})`,
+      }));
+      newServices = [...newServices, ...mandibleServices, ...maxillaryServices];
+      return {
+        ...state,
+        treatmentPlan: action.payload,
+        selectedServices: newServices,
+      };
+    }
+    case reducerTypes.setShowFinalizeTreatment:
+      return { ...state, showFinalizeTreatment: action.payload };
+    case reducerTypes.setIsFinalizing:
+      return { ...state, isFinalizing: action.payload };
+    case reducerTypes.setServices: {
+      return {
+        ...state,
+        allServices: action.payload.filter(it => it.serviceType === 'all'),
+        toothServices: action.payload.filter(it => it.serviceType !== 'all'),
+      };
+    }
+    case reducerTypes.setScheduleDetails:
+      return {
+        ...state,
+        patient: action.payload.patient,
+        schedule: action.payload.schedule,
+      };
+    default:
+      return state;
+  }
 };
 
 const DoctorPatientDetails = () => {
@@ -36,34 +125,38 @@ const DoctorPatientDetails = () => {
   const { patientId, scheduleId } = useParams();
   const history = useHistory();
   const services = useSelector(clinicServicesSelector);
-  const [isLoading, setIsLoading] = useState(false);
-  const [patient, setPatient] = useState(null);
-  const [toothServices, setToothServices] = useState([]);
-  const [allServices, setAllServices] = useState([]);
-  const [selectedServices, setSelectedServices] = useState([]);
-  const [schedule, setSchedule] = useState(null);
-  const [shouldFillTreatmentPlan, setShouldFillTreatmentPlan] = useState(false);
-  const [treatmentPlan, setTreatmentPlan] = useState(null);
-  const [showFinalizeTreatment, setShowFinalizeTreatment] = useState(false);
-  const [isFinalizing, setIsFinalizing] = useState(false);
+  const [
+    {
+      isLoading,
+      patient,
+      toothServices,
+      allServices,
+      selectedServices,
+      schedule,
+      shouldFillTreatmentPlan,
+      treatmentPlan,
+      showFinalizeTreatment,
+      isFinalizing,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
   const bracketServices = allServices.filter(item => item.bracket);
-  const simpleServices = allServices.filter(item => !item.bracket);
+  const simpleServices = allServices.filter(
+    item => !item.bracket && !item.bracesService,
+  );
 
   useEffect(() => {
     fetchScheduleDetails();
   }, [patientId]);
 
   useEffect(() => {
-    console.log(services);
-    setAllServices(services.filter(item => item.serviceType === 'all'));
-    setToothServices(services.filter(item => item.serviceType !== 'all'));
+    localDispatch(actions.setServices(services));
   }, [services]);
 
   const fetchScheduleDetails = async () => {
     const response = await dataAPI.fetchScheduleDetails(scheduleId);
     if (!response.isError) {
-      setPatient(response.data.patient);
-      setSchedule(response.data.schedule);
+      localDispatch(actions.setScheduleDetails(response.data));
     }
   };
 
@@ -79,7 +172,7 @@ const DoctorPatientDetails = () => {
     } else {
       newServices.unshift(service);
     }
-    setSelectedServices(newServices);
+    localDispatch(actions.setSelectedServices(newServices));
   };
 
   const handleAddNote = () => {
@@ -90,12 +183,13 @@ const DoctorPatientDetails = () => {
     dispatch(setPatientXRayModal({ open: true, patientId }));
   };
 
-  const handleAddAppointmentNote = () => {
+  const handleEditAppointmentNote = visit => {
     dispatch(
       setPatientNoteModal({
         open: true,
         patientId,
-        mode: 'appointments',
+        mode: 'visits',
+        visit: visit,
         scheduleId,
       }),
     );
@@ -107,7 +201,7 @@ const DoctorPatientDetails = () => {
     for (let service of services) {
       newServices.unshift({ ...service, toothId });
     }
-    setSelectedServices(newServices);
+    localDispatch(actions.setSelectedServices(newServices));
   };
 
   const getPatientName = () => {
@@ -126,9 +220,9 @@ const DoctorPatientDetails = () => {
     const newServices = cloneDeep(selectedServices);
     if (newServices.some(item => item.bracket)) {
       remove(newServices, item => item.bracket);
-      setSelectedServices(newServices);
+      localDispatch(actions.setSelectedServices(newServices));
     } else {
-      setShouldFillTreatmentPlan(true);
+      localDispatch(actions.setShouldFillTreatmentPlan(true));
     }
   };
 
@@ -138,33 +232,29 @@ const DoctorPatientDetails = () => {
   };
 
   const handleCloseTreatmentPlan = () => {
-    setShouldFillTreatmentPlan(false);
+    localDispatch(actions.setShouldFillTreatmentPlan(false));
   };
 
   const openTreatmentPlan = () => {
-    setShouldFillTreatmentPlan(true);
+    localDispatch(actions.setShouldFillTreatmentPlan(true));
   };
 
   const handleSaveTreatmentPlan = plan => {
-    setTreatmentPlan(plan);
-    const newServices = cloneDeep(selectedServices);
-    remove(newServices, item => item.bracket);
-    newServices.push(plan.service);
-    setSelectedServices(newServices);
+    localDispatch(actions.setTreatmentPlan(plan));
     handleCloseTreatmentPlan();
   };
 
   const handleFinalizeTreatment = () => {
-    setShowFinalizeTreatment(true);
+    localDispatch(actions.setShowFinalizeTreatment(true));
   };
 
   const handleCloseFinalizeTreatment = () => {
-    setShowFinalizeTreatment(false);
+    localDispatch(actions.setShowFinalizeTreatment(false));
   };
 
   const finalizeTreatment = async (services, selectedServices) => {
     handleCloseFinalizeTreatment();
-    setIsFinalizing(true);
+    localDispatch(actions.setIsFinalizing(true));
 
     const requestBody = {
       scheduleId,
@@ -183,11 +273,13 @@ const DoctorPatientDetails = () => {
       treatmentPlan,
     };
 
+    logUserAction(Action.FinalizeTreatment, JSON.stringify(requestBody));
+
     const response = await dataAPI.finalizeTreatment(patientId, requestBody);
 
     if (response.isError) {
       console.error(response.message);
-      setIsFinalizing(false);
+      localDispatch(actions.setIsFinalizing(false));
     } else {
       history.goBack();
     }
@@ -346,7 +438,7 @@ const DoctorPatientDetails = () => {
 
             {selectedServices.map(service => (
               <FinalServiceItem
-                key={`${service.id}-${service.toothId}`}
+                key={`${service.id}-${service.toothId}-${service.name}`}
                 service={service}
               />
             ))}
@@ -371,12 +463,18 @@ const DoctorPatientDetails = () => {
       <div className='right-container'>
         {patient && (
           <PatientDetails
+            scheduleId={scheduleId}
             onAddXRay={handleAddXRay}
             onAddNote={handleAddNote}
-            onAddAppointmentNote={handleAddAppointmentNote}
+            onEditAppointmentNote={handleEditAppointmentNote}
             patient={patient}
             defaultTab={TabId.appointmentsNotes}
-            showTabs={[TabId.appointmentsNotes, TabId.xRay, TabId.notes]}
+            showTabs={[
+              TabId.treatmentPlans,
+              TabId.appointmentsNotes,
+              TabId.xRay,
+              TabId.notes,
+            ]}
           />
         )}
       </div>

@@ -408,4 +408,5 @@ export const Action = {
   DeleteUser: 'DeleteUser',
   CreatePatientNote: 'CreatePatientNote',
   AddPatientXRayImage: 'AddPatientXRayImage',
+  EditVisitNote: 'EditVisitNote',
 };

@@ -1128,4 +1128,63 @@ export default {
       };
     }
   },
+
+  /**
+   * Fetch braces services
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchBracesServices: async () => {
+    try {
+      const url = 'services/braces';
+      const response = await instance().get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch patient visits
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchPatientVisits: async patientId => {
+    try {
+      const url = `patients/${patientId}/visits`;
+      const response = await instance().get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Edit visit note
+   * @param {string} patientId
+   * @param {string} scheduleId
+   * @param {string} note
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  editVisitNote: async (patientId, scheduleId, note) => {
+    try {
+      console.log(patientId, scheduleId, note);
+      const url = `patients/${patientId}/edit-visit/${scheduleId}`;
+      const response = await instance().put(url, { note });
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

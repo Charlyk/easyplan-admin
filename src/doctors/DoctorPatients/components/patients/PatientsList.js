@@ -26,13 +26,13 @@ const PatientsList = ({ schedules, filterData }) => {
 
   const filterPatients = () => {
     setFilteredSchedules(
-      schedules.filter(({ patient, schedule }) => {
+      schedules.filter(schedule => {
         return (
           (filterData.patientName.length === 0 ||
-            patient.fullName
+            schedule.patientName
               .toLowerCase()
               .includes(filterData.patientName.toLowerCase()) ||
-            patient.phoneNumber.includes(
+            schedule.patientPhone.includes(
               filterData.patientName.toLowerCase(),
             )) &&
           (schedule == null ||
@@ -40,7 +40,7 @@ const PatientsList = ({ schedules, filterData }) => {
             schedule.serviceId === filterData.serviceId) &&
           (schedule == null ||
             filterData.appointmentStatus === 'all' ||
-            filterData.appointmentStatus === patient.status)
+            filterData.appointmentStatus === schedule.status)
         );
       }),
     );
@@ -59,14 +59,14 @@ const PatientsList = ({ schedules, filterData }) => {
 
   const schedulesForHour = hour => {
     const [hours] = hour.split(':');
-    return filteredSchedules.filter(({ schedule }) => {
+    return filteredSchedules.filter(schedule => {
       const scheduleHour = moment(schedule.dateAndTime).format('HH:mm');
       const [scheduleHours] = scheduleHour.split(':');
       return hours === scheduleHours;
     });
   };
 
-  const renderPatientItem = ({ schedule }) => {
+  const renderPatientItem = schedule => {
     if (schedule == null) {
       return null;
     }
@@ -121,7 +121,7 @@ const PatientsList = ({ schedules, filterData }) => {
         <tbody>
           <tr>
             {hours.map(item => (
-              <td align='center' key={`patients-${item}`}>
+              <td align='center' valign='top' key={`patients-${item}`}>
                 {schedulesForHour(item).map(renderPatientItem)}
               </td>
             ))}

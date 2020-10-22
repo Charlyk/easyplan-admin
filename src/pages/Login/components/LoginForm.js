@@ -10,6 +10,7 @@ import LoadingButton from '../../../components/LoadingButton';
 import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
+import { fetchClinicData } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
@@ -41,8 +42,9 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
     if (response.isError) {
       setErrorMessage(response.message);
     } else {
-      authManager.setUserToken(response?.data?.token);
-      dispatch(setCurrentUser(response?.data?.user));
+      authManager.setUserToken(response.data.token);
+      dispatch(setCurrentUser(response.data.user));
+      dispatch(fetchClinicData());
     }
     setIsLoading(false);
   };

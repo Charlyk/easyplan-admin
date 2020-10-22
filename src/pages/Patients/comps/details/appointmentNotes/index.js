@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Button, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import IconPlus from '../../../../../assets/icons/iconPlus';
 import { updateNotesSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
-import { textForKey } from '../../../../../utils/localization';
 import AppointmentNote from './AppointmentNote';
 
-const AppointmentNotes = ({ patient, onAddNote }) => {
-  const [state, setState] = useState({ isFetching: false, notes: [] });
+const AppointmentNotes = ({ patient, scheduleId, onEditNote }) => {
+  const [isFetching, setIsFetching] = useState(false);
+  const [visits, setVisits] = useState([]);
   const updateNotes = useSelector(updateNotesSelector);
 
   useEffect(() => {
-    fetchNotes();
+    fetchPatientVisits();
   }, [patient, updateNotes]);
 
-  const fetchNotes = async () => {
-    setState({ isFetching: true, notes: [] });
-    const response = await dataAPI.fetchPatientAppointmentsNotes(patient.id);
+  const fetchPatientVisits = async () => {
+    setIsFetching(true);
+    const response = await dataAPI.fetchPatientVisits(patient.id);
     if (response.isError) {
       console.error(response.message);
+    } else {
+      setVisits(response.data || []);
     }
-    setState({ isFetching: false, notes: response.data || [] });
+    setIsFetching(false);
   };
 
   return (
     <div className='patient-notes'>
       <div className='patient-notes__notes-data'>
-        {state.isFetching && (
+        {isFetching && (
           <Spinner
             animation='border'
             variant='primary'
@@ -38,20 +39,14 @@ const AppointmentNotes = ({ patient, onAddNote }) => {
             className='loading-spinner'
           />
         )}
-        {state.notes.map(note => (
-          <AppointmentNote key={note.id} note={note} />
+        {visits.map(visit => (
+          <AppointmentNote
+            canEdit={visit.scheduleId === scheduleId}
+            key={visit.scheduleId}
+            visit={visit}
+            onEdit={onEditNote}
+          />
         ))}
-      </div>
-      <div className='patient-notes__actions'>
-        <Button
-          disabled={state.isFetching}
-          className='btn-outline-primary'
-          variant='outline-primary'
-          onClick={onAddNote}
-        >
-          {textForKey('Add note')}
-          <IconPlus fill={null} />
-        </Button>
       </div>
     </div>
   );
@@ -60,7 +55,8 @@ const AppointmentNotes = ({ patient, onAddNote }) => {
 export default AppointmentNotes;
 
 AppointmentNotes.propTypes = {
-  onAddNote: PropTypes.func,
+  onEditNote: PropTypes.func,
+  scheduleId: PropTypes.string,
   patient: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,

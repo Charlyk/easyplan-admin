@@ -3,13 +3,14 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
+import IconEditService from '../../../../../assets/icons/iconEditService';
 import { textForKey } from '../../../../../utils/localization';
 
-const AppointmentNote = ({ note }) => {
+const AppointmentNote = ({ visit, canEdit, onEdit }) => {
   return (
     <div className='appointment-note'>
       <div className='appointment-note__note-date'>
-        {moment(note.created).format('DD MMM YYYY HH:mm')}
+        {moment(visit.created).format('DD MMM YYYY HH:mm')}
       </div>
       <div className='appointment-note__data-wrapper'>
         <div className='appointment-note__creator-info'>
@@ -17,10 +18,29 @@ const AppointmentNote = ({ note }) => {
             {textForKey('Doctor')}:
           </span>
           <span className='appointment-note__creator-info__doctor-name'>
-            {note.createdByName}
+            {visit.doctorName}
           </span>
         </div>
-        <div className='appointment-note__note-text'>{note.noteText}</div>
+        <div className='appointment-note__note-text'>
+          {visit.note.length === 0 ? textForKey('No notes') : visit.note}
+        </div>
+        <div className='services-container'>
+          {visit.services.map(service => (
+            <div key={service.id} className='visit-service-item'>
+              {service.name}
+            </div>
+          ))}
+        </div>
+        {canEdit && (
+          <div
+            role='button'
+            tabIndex={0}
+            className='edit-note-btn'
+            onClick={() => onEdit(visit)}
+          >
+            <IconEditService />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -29,11 +49,14 @@ const AppointmentNote = ({ note }) => {
 export default AppointmentNote;
 
 AppointmentNote.propTypes = {
-  note: PropTypes.shape({
+  canEdit: PropTypes.bool,
+  onEdit: PropTypes.func,
+  visit: PropTypes.shape({
     id: PropTypes.string,
-    noteText: PropTypes.string,
-    createdById: PropTypes.string,
-    createdByName: PropTypes.string,
+    note: PropTypes.string,
+    doctorName: PropTypes.string,
+    doctorId: PropTypes.string,
     created: PropTypes.string,
+    services: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };

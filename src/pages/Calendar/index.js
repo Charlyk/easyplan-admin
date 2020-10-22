@@ -187,6 +187,9 @@ const Calendar = () => {
       reducerActions.setDeleteSchedule({ open: false, schedule: null }),
     );
     localDispatch(reducerActions.setIsDeleting(false));
+    if (selectedSchedule.id === deleteSchedule.schedule.id) {
+      localDispatch(reducerActions.setSelectedSchedule(null));
+    }
     dispatch(toggleAppointmentsUpdate());
   };
 

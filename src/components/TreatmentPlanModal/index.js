@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useReducer } from 'react';
 
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
+import { Form } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
+import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
+import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import EasyTab from '../EasyTab';
 
 const diagnosisClass = ['1', '2', '3'];
 const diagnosisOcclusion = [
@@ -23,212 +28,511 @@ const diagnosisOcclusion = [
   'Supernumerary',
   'Transposition',
 ];
-const diagnosisIncluded = ['Canin Moral', 'Moral Canin'];
 const radiographic = ['Orthopantomogram', 'Cephalometric'];
-const fallenBrackets = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+const fallenBracketsList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
-const TreatmentPlanModal = ({
-  open,
-  services,
-  treatmentPlan,
-  onClose,
-  onSave,
-}) => {
-  const [selectedClass, setSelectedClass] = useState(null);
-  const [selectedOcclusion, setSelectedOcclusion] = useState(null);
-  const [selectedIncluded, setSelectedIncluded] = useState(null);
-  const [selectedRadiograph, setSelectedRadiograph] = useState(null);
-  const [selectedTreatmentPlan, setSelectedTreatmentPlan] = useState(null);
-  const [selectedFallenBrackets, setSelectedFallenBrackets] = useState([]);
+const PlanType = {
+  mandible: 'mandible',
+  maxillary: 'maxillary',
+};
 
-  useEffect(() => {
-    if (treatmentPlan != null) {
-      setSelectedClass(treatmentPlan.planClass);
-      setSelectedOcclusion(treatmentPlan.occlusion);
-      setSelectedIncluded(treatmentPlan.included);
-      setSelectedRadiograph(treatmentPlan.radiograph);
-      setSelectedTreatmentPlan(treatmentPlan.service);
-      setSelectedFallenBrackets(treatmentPlan.fallenBrackets);
+const initialState = {
+  planType: PlanType.mandible,
+  bracketsPlan: {
+    mandible: {
+      classes: [],
+      occlusions: [],
+      radiographs: [],
+      braces: [],
+      treatmentTypes: [],
+      fallenBraces: [],
+      note: '',
+      malocclusion: {
+        molarCanin: {
+          molar: '',
+          canin: '',
+        },
+        caninMolar: {
+          molar: '',
+          canin: '',
+        },
+      },
+    },
+    maxillary: {
+      classes: [],
+      occlusions: [],
+      radiographs: [],
+      braces: [],
+      treatmentTypes: [],
+      fallenBraces: [],
+      note: '',
+      malocclusion: {
+        molarCanin: {
+          molar: '',
+          canin: '',
+        },
+        caninMolar: {
+          molar: '',
+          canin: '',
+        },
+      },
+    },
+  },
+};
+
+const reducerTypes = {
+  setPlanType: 'setPlanType',
+  setBracketsPlan: 'setBracketsPlan',
+  setMalocclusion: 'setMalocclusion',
+};
+
+const actions = generateReducerActions(reducerTypes);
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setPlanType:
+      return { ...state, planType: action.payload };
+    case reducerTypes.setBracketsPlan: {
+      const plan = cloneDeep(state.bracketsPlan);
+      const { planTypeName, data } = action.payload;
+      const planType = plan[planTypeName];
+      return {
+        ...state,
+        bracketsPlan: {
+          ...plan,
+          [planTypeName]: {
+            ...planType,
+            ...data,
+          },
+        },
+      };
     }
-  }, [treatmentPlan]);
-
-  const handleClassChange = newClass => {
-    setSelectedClass(newClass);
-  };
-
-  const handleOcclusionChange = newOcclusion => {
-    setSelectedOcclusion(newOcclusion);
-  };
-
-  const handleIncludedChange = newIncluded => {
-    setSelectedIncluded(newIncluded);
-  };
-
-  const handleRadiographChange = newRadiograph => {
-    setSelectedRadiograph(newRadiograph);
-  };
-
-  const handleTreatmentPlan = newPlan => {
-    setSelectedTreatmentPlan(newPlan);
-  };
-
-  const handleFallenBracketsChange = bracket => {
-    const newBrackets = cloneDeep(selectedFallenBrackets);
-    if (newBrackets.includes(bracket)) {
-      remove(newBrackets, item => item === bracket);
-    } else {
-      newBrackets.push(bracket);
+    case reducerTypes.setMalocclusion: {
+      const currentType = state.planType;
+      const plan = cloneDeep(state.bracketsPlan);
+      const { type, data } = action.payload;
+      plan[currentType].malocclusion[type] = {
+        ...plan[currentType].malocclusion[type],
+        ...data,
+      };
+      return {
+        ...state,
+        bracketsPlan: {
+          ...plan,
+          [currentType]: {
+            ...plan[currentType],
+          },
+        },
+      };
     }
-    setSelectedFallenBrackets(newBrackets);
-  };
+    default:
+      return state;
+  }
+};
 
-  const handleSavePlan = () => {
-    const plan = {
-      planClass: selectedClass,
-      occlusion: selectedOcclusion,
-      included: selectedIncluded,
-      radiograph: selectedRadiograph,
-      service: selectedTreatmentPlan,
-      fallenBrackets: selectedFallenBrackets,
-    };
-    onSave(plan);
-  };
+const TreatmentPlanModal = ({ open, onClose, onSave }) => {
+  const services = useSelector(clinicServicesSelector);
+  const bracesServices = services.filter(item => item.bracesService);
+  const [{ planType, bracketsPlan }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
-  const isFormValid = () => {
-    return (
-      selectedClass &&
-      selectedOcclusion &&
-      selectedIncluded &&
-      selectedRadiograph &&
-      selectedTreatmentPlan
+  const updatePlan = newData => {
+    localDispatch(
+      actions.setBracketsPlan({
+        planTypeName: planType,
+        data: newData,
+      }),
     );
   };
 
-  return (
-    <EasyPlanModal
-      className='treatment-plan-modal-root'
-      open={open}
-      onClose={onClose}
-      onPositiveClick={handleSavePlan}
-      isPositiveDisabled={!isFormValid()}
-      title={textForKey('Treatment plan')}
-    >
-      <div className='treatment-plan-modal-content'>
-        <span className='group-title'>{textForKey('Diagnosis')}</span>
-        <div className='options-row'>
-          <span className='group-subtitle'>{textForKey('Class')}</span>
-          <div className='options-container'>
-            {diagnosisClass.map(item => (
-              <div
-                role='button'
-                tabIndex={0}
-                onClick={() => handleClassChange(item)}
-                className={clsx(
-                  'option-button',
-                  selectedClass === item && 'selected',
-                )}
-                key={item}
-              >
-                <span className='option-text'>{item}</span>
-              </div>
-            ))}
-          </div>
+  const updateArray = (array, item) => {
+    if (array.includes(item)) {
+      remove(array, it => it === item);
+    } else {
+      array.push(item);
+    }
+    return array;
+  };
+
+  const updateServicesArray = (array, item) => {
+    if (array.some(it => it.id === item.id)) {
+      remove(array, it => it.id === item.id);
+    } else {
+      array.push(item);
+    }
+    return array;
+  };
+
+  const handleClassChange = newClass => {
+    const newClasses = updateArray(
+      cloneDeep(bracketsPlan[planType].classes),
+      newClass,
+    );
+    updatePlan({ classes: newClasses });
+  };
+
+  const handleOcclusionChange = newOcclusion => {
+    const newOcclusions = updateArray(
+      cloneDeep(bracketsPlan[planType].occlusions),
+      newOcclusion,
+    );
+    updatePlan({ occlusions: newOcclusions });
+  };
+
+  const handleRadiographChange = newRadioGraph => {
+    const newRadiographs = updateArray(
+      cloneDeep(bracketsPlan[planType].radiographs),
+      newRadioGraph,
+    );
+    updatePlan({ radiographs: newRadiographs });
+  };
+
+  const handleFallenBracketsChange = newBracket => {
+    const newFallenBrackets = updateArray(
+      cloneDeep(bracketsPlan[planType].fallenBraces),
+      newBracket,
+    );
+    updatePlan({ fallenBraces: newFallenBrackets });
+  };
+
+  const handleBracesChange = newBracket => {
+    let newBraces = updateServicesArray(
+      cloneDeep(bracketsPlan[planType].braces),
+      newBracket,
+    );
+    updatePlan({ braces: newBraces });
+  };
+
+  const handleTreatmentTypesChange = newTreatment => {
+    let newTypes = updateServicesArray(
+      cloneDeep(bracketsPlan[planType].treatmentTypes),
+      newTreatment,
+    );
+    updatePlan({ treatmentTypes: newTypes });
+  };
+
+  const handleMolarCaninMolarChange = event => {
+    let newValue = event.target.value;
+    if (newValue === 'select') newValue = '';
+    localDispatch(
+      actions.setMalocclusion({
+        type: 'molarCanin',
+        data: { molar: newValue },
+      }),
+    );
+  };
+
+  const handleMolarCaninCaninChange = event => {
+    let newValue = event.target.value;
+    if (newValue === 'select') newValue = '';
+    localDispatch(
+      actions.setMalocclusion({
+        type: 'molarCanin',
+        data: { canin: newValue },
+      }),
+    );
+  };
+
+  const handleCaninMolarMolarChange = event => {
+    let newValue = event.target.value;
+    if (newValue === 'select') newValue = '';
+    localDispatch(
+      actions.setMalocclusion({
+        type: 'caninMolar',
+        data: { molar: newValue },
+      }),
+    );
+  };
+
+  const handleCaninMolarCaninChange = event => {
+    let newValue = event.target.value;
+    if (newValue === 'select') newValue = '';
+    localDispatch(
+      actions.setMalocclusion({
+        type: 'caninMolar',
+        data: { canin: newValue },
+      }),
+    );
+  };
+
+  const handleSaveTreatmentPlan = () => {
+    onSave(bracketsPlan);
+    onClose();
+  };
+
+  const handlePlanTypeChange = newType => {
+    localDispatch(actions.setPlanType(newType));
+  };
+
+  const classes = bracketsPlan[planType].classes;
+  const occlusions = bracketsPlan[planType].occlusions;
+  const radiographs = bracketsPlan[planType].radiographs;
+  const fallenBraces = bracketsPlan[planType].fallenBraces;
+  const braces = bracketsPlan[planType].braces;
+  const treatmentTypes = bracketsPlan[planType].treatmentTypes;
+
+  const classRow = (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Class')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {diagnosisClass.map(item => (
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={() => handleClassChange(item)}
+              className={clsx(
+                'option-button',
+                classes.includes(item) && 'selected',
+              )}
+              key={item}
+            >
+              <span className='option-text'>{item}</span>
+            </div>
+          ))}
         </div>
-        <div className='options-row'>
-          <span className='group-subtitle'>{textForKey('Occlusion')}</span>
-          <div className='options-container'>
-            {diagnosisOcclusion.map(item => (
-              <div
-                role='button'
-                tabIndex={0}
-                onClick={() => handleOcclusionChange(item)}
-                className={clsx(
-                  'option-button',
-                  selectedOcclusion === item && 'selected',
-                )}
-                key={item}
-              >
-                <span className='option-text'>{textForKey(item)}</span>
-              </div>
-            ))}
-          </div>
+      </td>
+    </tr>
+  );
+
+  const occlusionRow = (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Occlusion')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {diagnosisOcclusion.map(item => (
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={() => handleOcclusionChange(item)}
+              className={clsx(
+                'option-button',
+                occlusions.includes(item) && 'selected',
+              )}
+              key={item}
+            >
+              <span className='option-text'>{textForKey(item)}</span>
+            </div>
+          ))}
         </div>
-        <div className='options-row'>
-          <span className='group-subtitle'>{textForKey('Included')}</span>
-          <div className='options-container'>
-            {diagnosisIncluded.map(item => (
-              <div
-                role='button'
-                tabIndex={0}
-                onClick={() => handleIncludedChange(item)}
-                className={clsx(
-                  'option-button',
-                  selectedIncluded === item && 'selected',
-                )}
-                key={item}
-              >
-                <span className='option-text'>{textForKey(item)}</span>
-              </div>
-            ))}
-          </div>
+      </td>
+    </tr>
+  );
+
+  const fallenBracketsRow = (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Fallen brackets')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {fallenBracketsList.map(item => (
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={() => handleFallenBracketsChange(item)}
+              className={clsx(
+                'option-button',
+                fallenBraces.includes(item) && 'selected',
+              )}
+              key={item}
+            >
+              <span className='option-text'>{item}</span>
+            </div>
+          ))}
         </div>
-        <div className='options-row'>
-          <span className='group-title'>{textForKey('Radiografie')}</span>
-          <div className='options-container'>
-            {radiographic.map(item => (
-              <div
-                role='button'
-                tabIndex={0}
-                onClick={() => handleRadiographChange(item)}
-                className={clsx(
-                  'option-button',
-                  selectedRadiograph === item && 'selected',
-                )}
-                key={item}
-              >
-                <span className='option-text'>{textForKey(item)}</span>
-              </div>
-            ))}
-          </div>
+      </td>
+    </tr>
+  );
+
+  const radiographRow = (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Radiografie')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {radiographic.map(item => (
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={() => handleRadiographChange(item)}
+              className={clsx(
+                'option-button',
+                radiographs.includes(item) && 'selected',
+              )}
+              key={item}
+            >
+              <span className='option-text'>{textForKey(item)}</span>
+            </div>
+          ))}
         </div>
-        <div className='options-row'>
-          <span className='group-title'>{textForKey('Treatment plan')}</span>
-          <div className='options-container'>
-            {services.map(item => (
+      </td>
+    </tr>
+  );
+
+  const bracesRow = (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Braces')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {services
+            .filter(item => item.bracket)
+            .map(item => (
               <div
                 role='button'
                 tabIndex={0}
-                onClick={() => handleTreatmentPlan(item)}
+                onClick={() => handleBracesChange(item)}
                 className={clsx(
                   'option-button',
-                  selectedTreatmentPlan?.id === item.id && 'selected',
+                  braces.some(it => it.id === item.id) && 'selected',
                 )}
                 key={item.id}
               >
                 <span className='option-text'>{textForKey(item.name)}</span>
               </div>
             ))}
-          </div>
         </div>
-        <div className='options-row'>
-          <span className='group-title'>{textForKey('Fallen brackets')}</span>
-          <div className='options-container'>
-            {fallenBrackets.map(item => (
-              <div
-                role='button'
-                tabIndex={0}
-                onClick={() => handleFallenBracketsChange(item)}
-                className={clsx(
-                  'option-button',
-                  selectedFallenBrackets.includes(item) && 'selected',
-                )}
-                key={item}
-              >
-                <span className='option-text'>{item}</span>
-              </div>
-            ))}
-          </div>
+      </td>
+    </tr>
+  );
+
+  const treatmentTypeRow = (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Treatment type')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          {bracesServices.map(item => (
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={() => handleTreatmentTypesChange(item)}
+              className={clsx(
+                'option-button',
+                treatmentTypes.some(it => it.id === item.id) && 'selected',
+              )}
+              key={item.id}
+            >
+              <span className='option-text'>{item.name}</span>
+            </div>
+          ))}
         </div>
+      </td>
+    </tr>
+  );
+
+  const molarCaninRow = (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        <span className='group-subtitle'>{textForKey('Angle Class')}</span>
+      </td>
+      <td valign='top'>
+        <div className='options-container'>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            onChange={handleMolarCaninMolarChange}
+            value={bracketsPlan[planType].malocclusion.molarCanin.molar}
+            custom
+          >
+            <option value='select'>{textForKey('Molar')}...</option>
+            <option value='1'>{textForKey('Molar')} 1</option>
+            <option value='2'>{textForKey('Molar')} 2</option>
+            <option value='3'>{textForKey('Molar')} 3</option>
+          </Form.Control>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            onChange={handleMolarCaninCaninChange}
+            value={bracketsPlan[planType].malocclusion.molarCanin.canin}
+            custom
+          >
+            <option value='select'>{textForKey('Canin')}...</option>
+            <option value='1'>{textForKey('Canin')} 1</option>
+            <option value='2'>{textForKey('Canin')} 2</option>
+            <option value='3'>{textForKey('Canin')} 3</option>
+          </Form.Control>
+          <div className='separator' />
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            onChange={handleCaninMolarCaninChange}
+            value={bracketsPlan[planType].malocclusion.caninMolar.canin}
+            custom
+          >
+            <option value='select'>{textForKey('Canin')}...</option>
+            <option value='1'>{textForKey('Canin')} 1</option>
+            <option value='2'>{textForKey('Canin')} 2</option>
+            <option value='3'>{textForKey('Canin')} 3</option>
+          </Form.Control>
+          <Form.Control
+            as='select'
+            className='mr-sm-2'
+            id='inlineFormCustomSelect'
+            onChange={handleCaninMolarMolarChange}
+            value={bracketsPlan[planType].malocclusion.caninMolar.molar}
+            custom
+          >
+            <option value='select'>{textForKey('Molar')}...</option>
+            <option value='1'>{textForKey('Molar')} 1</option>
+            <option value='2'>{textForKey('Molar')} 2</option>
+            <option value='3'>{textForKey('Molar')} 3</option>
+          </Form.Control>
+        </div>
+      </td>
+    </tr>
+  );
+
+  return (
+    <EasyPlanModal
+      className='treatment-plan-modal-root'
+      open={open}
+      onClose={onClose}
+      onPositiveClick={handleSaveTreatmentPlan}
+      title={textForKey('Treatment plan')}
+    >
+      <div className='treatment-plan-modal-content'>
+        <div className='tabs-container'>
+          <EasyTab
+            onClick={() => handlePlanTypeChange(PlanType.mandible)}
+            title={textForKey('Mandible')}
+            selected={planType === PlanType.mandible}
+          />
+          <EasyTab
+            onClick={() => handlePlanTypeChange(PlanType.maxillary)}
+            title={textForKey('Maxillary')}
+            selected={planType === PlanType.maxillary}
+          />
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <span className='group-title'>{textForKey('Diagnosis')}</span>
+              </td>
+            </tr>
+            {classRow}
+            {occlusionRow}
+            {molarCaninRow}
+            {radiographRow}
+            {bracesRow}
+            {treatmentTypeRow}
+            {fallenBracketsRow}
+          </tbody>
+        </table>
       </div>
     </EasyPlanModal>
   );
@@ -259,6 +563,7 @@ TreatmentPlanModal.propTypes = {
       price: PropTypes.number,
       color: PropTypes.string,
       bracket: PropTypes.bool,
+      bracesService: PropTypes.bool,
     }),
   ),
   onClose: PropTypes.func,

@@ -12,7 +12,7 @@ import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
-const AddNote = ({ open, patientId, mode, scheduleId, onClose }) => {
+const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   const dispatch = useDispatch();
   const [noteText, setNoteText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,22 +21,36 @@ const AddNote = ({ open, patientId, mode, scheduleId, onClose }) => {
     if (!open) setNoteText('');
   }, [open]);
 
+  useEffect(() => {
+    if (visit != null) {
+      setNoteText(visit.note);
+    }
+  }, [visit]);
+
   const handleNoteChange = event => {
     setNoteText(event.target.value);
   };
 
   const handleSaveNote = async () => {
     setIsLoading(true);
-    const requestBody = {
-      note: noteText,
-      mode,
-      scheduleId,
-    };
-    await dataAPI.createPatientNote(patientId, requestBody);
-    logUserAction(
-      Action.CreatePatientNote,
-      JSON.stringify({ patientId, requestBody }),
-    );
+    if (mode === 'visits') {
+      await dataAPI.editVisitNote(patientId, scheduleId, noteText);
+      logUserAction(
+        Action.EditVisitNote,
+        JSON.stringify({ patientId, scheduleId, noteText }),
+      );
+    } else {
+      const requestBody = {
+        note: noteText,
+        mode,
+        scheduleId,
+      };
+      await dataAPI.createPatientNote(patientId, requestBody);
+      logUserAction(
+        Action.CreatePatientNote,
+        JSON.stringify({ patientId, requestBody }),
+      );
+    }
     dispatch(triggerUpdateNotes());
     setIsLoading(false);
     onClose();
@@ -70,5 +84,6 @@ AddNote.propTypes = {
   patientId: PropTypes.string,
   onClose: PropTypes.func,
   mode: PropTypes.string.isRequired,
+  visit: PropTypes.object,
   scheduleId: PropTypes.string,
 };

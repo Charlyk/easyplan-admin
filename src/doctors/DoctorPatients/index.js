@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import './styles.scss';
 import { Spinner } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import PatientsFilter from './components/patients/PatientsFilter';
 import PatientsList from './components/patients/PatientsList';
 
-const DoctorPatients = props => {
+const DoctorPatients = () => {
+  const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [filterData, setFilterData] = useState({
@@ -18,14 +21,15 @@ const DoctorPatients = props => {
 
   useEffect(() => {
     fetchPatients();
-  }, [props]);
+  }, []);
 
   const fetchPatients = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchSchedulesAndPatients();
+    const response = await dataAPI.fetchSchedules(currentUser.id, new Date());
     if (response.isError) {
       console.error(response.message);
     } else {
+      console.log(response.data);
       setSchedules(response.data);
     }
     setIsLoading(false);

@@ -233,6 +233,10 @@ export default {
     remained: 'Remained',
     actions: 'Actions',
     name: 'Name',
+    braces: 'Braces',
+    malocclusion: 'Malocclusion',
+    mandible: 'Mandible',
+    maxillary: 'Maxillary',
   },
   ro: {
     analytics: 'Analitică',
@@ -469,6 +473,10 @@ export default {
     remained: 'Rămas',
     actions: 'Acțiuni',
     name: 'Nume',
+    braces: 'Aparat dentar',
+    malocclusion: 'Malocluzie',
+    mandible: 'Mandibulă',
+    maxillary: 'Maxilar',
   },
   ru: {
     analytics: 'Analytics',
@@ -703,5 +711,9 @@ export default {
     remained: 'Remained',
     actions: 'Actions',
     name: 'Name',
+    braces: 'Braces',
+    malocclusion: 'Malocclusion',
+    mandible: 'Mandible',
+    maxillary: 'Maxillary',
   },
 };

@@ -60,7 +60,7 @@ StatusItem.propTypes = {
   endDate: PropTypes.instanceOf(Date),
   title: PropTypes.string,
   icon: PropTypes.element,
-  personsCount: PropTypes.string,
+  personsCount: PropTypes.number,
   percentage: PropTypes.number,
 };
 

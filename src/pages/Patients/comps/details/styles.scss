@@ -233,6 +233,38 @@
 
 .appointment-note {
   margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+
+  .edit-note-btn {
+    outline: none;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    cursor: pointer;
+  }
+
+  .services-container {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    .visit-service-item {
+      background-color: #ededed;
+      border-radius: .2rem;
+      padding: .5rem;
+      margin-right: .2rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      color: #34354C;
+    }
+  }
 
   &__data-wrapper {
     display: flex;
@@ -298,6 +330,13 @@
   min-height: 10rem;
   position: relative;
 
+  .tabs-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
   .no-data-label {
     position: absolute;
     top: 50%;
@@ -336,13 +375,11 @@
 
   .group-subtitle {
     width: 70px;
-    margin-top: 1rem;
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
     line-height: 24px;
-    margin-left: 1rem;
     color: #34354C;
   }
 
@@ -352,6 +389,18 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
+    .custom-select {
+      flex: 1;
+      font-size: 12px;
+    }
+
+    .separator {
+      width: 1px;
+      background-color: #ededed;
+      height: 2rem;
+      margin-right: .5rem;
+    }
   }
 
   .option-text {
@@ -365,6 +414,8 @@
   }
 
   .option-button {
+    user-select: none;
+    cursor: pointer;
     margin: .2rem;
     padding: .5rem;
     display: flex;

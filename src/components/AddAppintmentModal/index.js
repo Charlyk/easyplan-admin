@@ -514,7 +514,6 @@ const AddAppointmentModal = ({
     };
     const response = await dataAPI.createNewSchedule(requestBody);
     // log user action
-    console.log(schedule);
     if (schedule != null) {
       logUserAction(
         Action.EditAppointment,
