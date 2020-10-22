@@ -229,6 +229,9 @@ export default {
     phone: 'Phone',
     debts: 'Debts',
     'no debts found': 'No debts found',
+    pay: 'Pay',
+    remained: 'Remained',
+    actions: 'Actions',
   },
   ro: {
     analytics: 'Analitică',
@@ -461,6 +464,9 @@ export default {
     phone: 'Telefon',
     debts: 'Datorii',
     'no debts found': 'Nu are datorii',
+    pay: 'Achită',
+    remained: 'Rămas',
+    actions: 'Acțiuni',
   },
   ru: {
     analytics: 'Analytics',
@@ -691,5 +697,8 @@ export default {
     phone: 'Phone',
     debts: 'Debts',
     'no debts found': 'No debts found',
+    pay: 'Pay',
+    remained: 'Remained',
+    actions: 'Actions',
   },
 };
