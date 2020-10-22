@@ -157,6 +157,7 @@ const DoctorAppointmentsRow = ({
     >
       <table
         style={{
+          height: `calc(${getRowHeight(doctor)}px - 1rem)`,
           marginTop: '0.5rem',
           marginBottom: '0.5rem',
           marginLeft: getMargin(),
@@ -164,7 +165,7 @@ const DoctorAppointmentsRow = ({
         }}
       >
         <tbody>
-          <tr style={{ display: 'flex' }}>
+          <tr style={{ display: 'flex', height: '100%' }}>
             {hours
               .filter(item => item.split(':')[1] === '00')
               .map((item, index) => (
