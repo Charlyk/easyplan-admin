@@ -135,6 +135,11 @@ export const ScheduleStatuses = [
     name: textForKey('Pending'),
     color: '#ffb902',
   },
+  {
+    id: 'OnSite',
+    name: textForKey('On site'),
+    color: '#ffb902',
+  },
   { id: 'Late', name: textForKey('Late'), color: '#FDC534' },
   { id: 'Confirmed', name: textForKey('Confirmed'), color: '#3A83DC' },
   { id: 'Canceled', name: textForKey('Canceled'), color: '#F44081' },
