@@ -123,6 +123,12 @@ const AppointmentDetails = ({
                     <td>{moment(schedule.dateAndTime).format('HH:mm')}</td>
                   </tr>
                   <tr>
+                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                      {textForKey('Note')}:
+                    </td>
+                    <td>{schedule.note}</td>
+                  </tr>
+                  <tr>
                     <td colSpan={2}>
                       <div className='group-title'>{textForKey('Patient')}</div>
                     </td>
