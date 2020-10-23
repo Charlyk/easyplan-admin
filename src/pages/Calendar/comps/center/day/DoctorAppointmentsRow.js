@@ -5,7 +5,7 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { animated, useSpring } from 'react-spring';
+import { animated } from 'react-spring';
 
 import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
@@ -34,7 +34,6 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-let addedItems = [];
 const DoctorAppointmentsRow = ({
   doctor,
   hours,
@@ -111,11 +110,7 @@ const DoctorAppointmentsRow = ({
     const [hours] = hour.split(':');
     const hourNumber = parseInt(hours);
     const hourTime = moment(viewDate).set({ hour: hourNumber, minute: 0 });
-    const nextHour = moment(viewDate)
-      .set({ hour: hourNumber, minute: 0 })
-      .add(1, 'hour');
     let newItems = appointments.filter(item => {
-      console.log(hourTime.hour(), nextHour.hour());
       return item.start.hour() === hourTime.hour();
     });
 
@@ -206,23 +201,7 @@ const DoctorAppointmentsRow = ({
   );
 };
 
-const AppointmentItem = ({
-  appointment,
-  hourWidth,
-  hidden,
-  zIndex,
-  getPosition,
-  onSelect,
-}) => {
-  const [{ x, width }, set] = useSpring(() => ({
-    x: 0,
-    width: 10,
-  }));
-
-  useEffect(() => {
-    set(getPosition(appointment));
-  }, [hourWidth, appointment]);
-
+const AppointmentItem = ({ appointment, hidden, onSelect }) => {
   const title = `${appointment.patientName} ${appointment.start.format(
     'HH:mm',
   )} - ${appointment.end.format('HH:mm')}`;

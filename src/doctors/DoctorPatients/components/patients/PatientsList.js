@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -87,9 +88,13 @@ const PatientsList = ({ schedules, filterData }) => {
         }}
       >
         <span className='patient-name'>{schedule.patientName}</span>
-        <span className='service-name' style={{ color: schedule.serviceColor }}>
+        <Typography
+          noWrap
+          classes={{ root: 'service-name' }}
+          style={{ color: schedule.serviceColor }}
+        >
           {schedule.serviceName}
-        </span>
+        </Typography>
         <span className='time-label'>
           {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
         </span>

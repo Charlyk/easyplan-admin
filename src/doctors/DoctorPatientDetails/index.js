@@ -39,6 +39,7 @@ const initialState = {
   toothServices: [],
   allServices: [],
   selectedServices: [],
+  completedServices: [],
   schedule: null,
   shouldFillTreatmentPlan: null,
   treatmentPlan: null,
@@ -63,14 +64,25 @@ const reducerTypes = {
 
 const actions = generateReducerActions(reducerTypes);
 
+const historyToService = it => ({
+  id: it.serviceId,
+  historyId: it.id,
+  name: it.serviceName,
+  color: it.serviceColor,
+  toothId: it.toothId,
+  price: it.servicePrice || 0,
+});
+
 const reducer = (state, action) => {
   switch (action.type) {
     case reducerTypes.setIsLoading:
       return { ...state, isLoading: action.payload };
     case reducerTypes.setPatient:
       return { ...state, patient: action.payload };
-    case reducerTypes.setToothServices:
+    case reducerTypes.setToothServices: {
+      console.log(action.payload);
       return { ...state, toothServices: action.payload };
+    }
     case reducerTypes.setAllServices:
       return { ...state, allServices: action.payload };
     case reducerTypes.setSelectedServices:
@@ -109,12 +121,20 @@ const reducer = (state, action) => {
         toothServices: action.payload.filter(it => it.serviceType !== 'all'),
       };
     }
-    case reducerTypes.setScheduleDetails:
+    case reducerTypes.setScheduleDetails: {
+      const { services, patient, schedule } = action.payload;
       return {
         ...state,
-        patient: action.payload.patient,
-        schedule: action.payload.schedule,
+        patient,
+        schedule,
+        completedServices: services
+          .filter(it => it.completed)
+          .map(historyToService),
+        selectedServices: services
+          .filter(it => !it.completed)
+          .map(historyToService),
       };
+    }
     default:
       return state;
   }
@@ -137,6 +157,7 @@ const DoctorPatientDetails = () => {
       treatmentPlan,
       showFinalizeTreatment,
       isFinalizing,
+      completedServices,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -154,9 +175,13 @@ const DoctorPatientDetails = () => {
   }, [services]);
 
   const fetchScheduleDetails = async () => {
-    const response = await dataAPI.fetchScheduleDetails(scheduleId);
+    const response = await dataAPI.fetchDoctorPatientDetails(
+      patientId,
+      scheduleId,
+    );
     if (!response.isError) {
-      localDispatch(actions.setScheduleDetails(response.data));
+      const { data } = response;
+      localDispatch(actions.setScheduleDetails(data));
     }
   };
 
@@ -358,6 +383,10 @@ const DoctorPatientDetails = () => {
                   onServicesChange={handleToothServicesChange}
                   icon={item.icon}
                   services={toothServices}
+                  selectedServices={selectedServices}
+                  completedServices={completedServices.filter(
+                    service => service.toothId === item.toothId,
+                  )}
                   toothId={item.toothId}
                 />
               ))}
@@ -371,6 +400,10 @@ const DoctorPatientDetails = () => {
                   onServicesChange={handleToothServicesChange}
                   icon={item.icon}
                   services={toothServices}
+                  selectedServices={selectedServices}
+                  completedServices={completedServices.filter(
+                    service => service.toothId === item.toothId,
+                  )}
                   toothId={item.toothId}
                 />
               ))}
@@ -384,6 +417,10 @@ const DoctorPatientDetails = () => {
                   onServicesChange={handleToothServicesChange}
                   icon={item.icon}
                   services={toothServices}
+                  selectedServices={selectedServices}
+                  completedServices={completedServices.filter(
+                    service => service.toothId === item.toothId,
+                  )}
                   toothId={item.toothId}
                   direction='top'
                 />
@@ -398,6 +435,10 @@ const DoctorPatientDetails = () => {
                   onServicesChange={handleToothServicesChange}
                   icon={item.icon}
                   services={toothServices}
+                  selectedServices={selectedServices}
+                  completedServices={completedServices.filter(
+                    service => service.toothId === item.toothId,
+                  )}
                   toothId={item.toothId}
                   direction='top'
                 />
@@ -441,12 +482,14 @@ const DoctorPatientDetails = () => {
               </span>
             )}
 
-            {selectedServices.map(service => (
-              <FinalServiceItem
-                key={`${service.id}-${service.toothId}-${service.name}`}
-                service={service}
-              />
-            ))}
+            {selectedServices
+              .filter(it => !it.completed)
+              .map(service => (
+                <FinalServiceItem
+                  key={`${service.id}-${service.toothId}-${service.name}`}
+                  service={service}
+                />
+              ))}
 
             {selectedServices.length > 0 && (
               <span className='total-price'>

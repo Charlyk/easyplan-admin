@@ -1175,9 +1175,28 @@ export default {
    */
   editVisitNote: async (patientId, scheduleId, note) => {
     try {
-      console.log(patientId, scheduleId, note);
       const url = `patients/${patientId}/edit-visit/${scheduleId}`;
       const response = await instance().put(url, { note });
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch patient details for doctor
+   * @param {string} patientId
+   * @param {string} scheduleId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchDoctorPatientDetails: async (patientId, scheduleId) => {
+    try {
+      const url = `patients/${patientId}/doctor-details/${scheduleId}`;
+      const response = await instance().get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

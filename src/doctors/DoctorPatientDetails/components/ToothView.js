@@ -10,19 +10,29 @@ const ToothView = ({
   toothId,
   direction,
   services,
+  selectedServices,
+  completedServices,
   onServicesChange,
 }) => {
   const anchorEl = useRef(null);
   const infoAnchor = useRef(null);
   const [showInfo, setShowInfo] = useState(false);
   const [showServices, setShowServices] = useState(false);
-  const [toothServices, setToothServices] = useState(
-    services.map(item => ({ ...item, selected: false })),
-  );
+  const [toothServices, setToothServices] = useState(services);
 
   useEffect(() => {
-    setToothServices(services.map(item => ({ ...item, selected: false })));
-  }, [services]);
+    setToothServices(
+      services.map(service => {
+        const selectedService = selectedServices.find(
+          item => item.id === service.id && item.toothId === toothId,
+        );
+        return {
+          ...service,
+          selected: selectedService != null,
+        };
+      }),
+    );
+  }, [services, selectedServices]);
 
   const handleServiceSelected = (service, selected) => {
     const newServices = toothServices.map(item => {
@@ -98,8 +108,13 @@ const ToothView = ({
     </Popper>
   );
 
+  const infoServices = [
+    ...toothServices.filter(item => item.selected),
+    ...completedServices,
+  ];
+
   const infoPopper =
-    toothServices.filter(item => item.selected).length > 0 ? (
+    infoServices.length > 0 ? (
       <Popper
         className='tooth-services-paper-root'
         anchorEl={infoAnchor.current}
@@ -111,17 +126,18 @@ const ToothView = ({
           <Fade {...TransitionProps} timeout={350}>
             <Paper className='services-tooth-paper'>
               <div className='options-wrapper'>
-                {toothServices
-                  .filter(item => item.selected)
-                  .map(item => (
-                    <div key={item.id} className='option-row'>
-                      <div
-                        className='service-color-indicator'
-                        style={{ backgroundColor: item.color }}
-                      />
-                      <span className='service-name'>{item.name}</span>
-                    </div>
-                  ))}
+                {infoServices.map(item => (
+                  <div
+                    key={`${item.id}-${item.historyId}`}
+                    className='option-row'
+                  >
+                    <div
+                      className='service-color-indicator'
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className='service-name'>{item.name}</span>
+                  </div>
+                ))}
               </div>
             </Paper>
           </Fade>
@@ -152,15 +168,13 @@ const ToothView = ({
             direction === 'top' && 'top',
           )}
         >
-          {toothServices
-            .filter(item => item.selected)
-            .map(item => (
-              <div
-                className='service-indicator'
-                key={item.id}
-                style={{ backgroundColor: item.color }}
-              />
-            ))}
+          {infoServices.map(item => (
+            <div
+              className='service-indicator'
+              key={`${item.id}-${item.historyId}`}
+              style={{ backgroundColor: item.color }}
+            />
+          ))}
         </div>
       </div>
       {direction === 'bottom' && (
@@ -189,6 +203,24 @@ ToothView.propTypes = {
   toothId: PropTypes.string,
   icon: PropTypes.element,
   direction: PropTypes.oneOf(['bottom', 'top']),
+  selectedServices: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      price: PropTypes.number,
+      color: PropTypes.string,
+      completed: PropTypes.bool,
+    }),
+  ),
+  completedServices: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      price: PropTypes.number,
+      color: PropTypes.string,
+      completed: PropTypes.bool,
+    }),
+  ),
 };
 
 ToothView.defaultProps = {

@@ -43,10 +43,10 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
             className='loading-spinner'
           />
         )}
-        {visits.map(visit => (
+        {visits.map((visit, index) => (
           <AppointmentNote
             canEdit={visit.doctorId === currentUser.id}
-            key={visit.scheduleId}
+            key={`${visit.scheduleId}-${visit.doctorId}-${visit.created}-${index}`}
             visit={visit}
             onEdit={onEditNote}
           />

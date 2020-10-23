@@ -25,9 +25,9 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
           {visit.note.length === 0 ? textForKey('No notes') : visit.note}
         </div>
         <div className='services-container'>
-          {visit.services.map(service => (
-            <div key={service.id} className='visit-service-item'>
-              {service.name}
+          {visit.services.map((service, index) => (
+            <div key={`${service.id}-${index}`} className='visit-service-item'>
+              {service.name} {service.toothId}
             </div>
           ))}
         </div>
