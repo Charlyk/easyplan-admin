@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Tooltip, Typography } from '@material-ui/core';
+import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +34,7 @@ const reducer = (state = initialState, action) => {
   }
 };
 
+let addedItems = [];
 const DoctorAppointmentsRow = ({
   doctor,
   hours,
@@ -108,9 +110,16 @@ const DoctorAppointmentsRow = ({
   const appointmentsForHour = hour => {
     const [hours] = hour.split(':');
     const hourNumber = parseInt(hours);
-    return appointments.filter(item => {
-      return hourNumber === item.start.hour();
+    const hourTime = moment(viewDate).set({ hour: hourNumber, minute: 0 });
+    const nextHour = moment(viewDate)
+      .set({ hour: hourNumber, minute: 0 })
+      .add(1, 'hour');
+    let newItems = appointments.filter(item => {
+      console.log(hourTime.hour(), nextHour.hour());
+      return item.start.hour() === hourTime.hour();
     });
+
+    return sortBy(newItems, it => it.start);
   };
 
   const getMargin = () => {
@@ -132,7 +141,6 @@ const DoctorAppointmentsRow = ({
   const getHourWidth = index => {
     const newHours = hours.filter(it => it.split(':')[1] === '00');
     if (index >= newHours.length) {
-      console.log(newHours, index);
       return 0;
     }
     const hourEl = document.getElementById(newHours[index]);
@@ -168,25 +176,29 @@ const DoctorAppointmentsRow = ({
           <tr style={{ display: 'flex', height: '100%' }}>
             {hours
               .filter(item => item.split(':')[1] === '00')
-              .map((item, index) => (
-                <td
-                  style={{ width: getHourWidth(index) }}
-                  key={item}
-                  id={item}
-                  className='appointment-cell'
-                >
-                  {appointmentsForHour(item).map(item => (
-                    <AppointmentItem
-                      onSelect={onScheduleSelect}
-                      key={item.id}
-                      getPosition={getAppointmentPosition}
-                      appointments={appointments}
-                      appointment={item}
-                      hourWidth={hourWidth}
-                    />
-                  ))}
-                </td>
-              ))}
+              .map((hour, index) => {
+                return (
+                  <td
+                    style={{ width: getHourWidth(index) }}
+                    key={hour}
+                    id={hour}
+                    className='appointment-cell'
+                  >
+                    {appointmentsForHour(hour).map((item, index) => (
+                      <AppointmentItem
+                        hidden={item.hidden}
+                        zIndex={index + 1}
+                        onSelect={onScheduleSelect}
+                        key={item.id}
+                        getPosition={getAppointmentPosition}
+                        appointments={appointments}
+                        appointment={item}
+                        hourWidth={hourWidth}
+                      />
+                    ))}
+                  </td>
+                );
+              })}
           </tr>
         </tbody>
       </table>
@@ -194,7 +206,14 @@ const DoctorAppointmentsRow = ({
   );
 };
 
-const AppointmentItem = ({ appointment, hourWidth, getPosition, onSelect }) => {
+const AppointmentItem = ({
+  appointment,
+  hourWidth,
+  hidden,
+  zIndex,
+  getPosition,
+  onSelect,
+}) => {
   const [{ x, width }, set] = useSpring(() => ({
     x: 0,
     width: 10,
@@ -209,11 +228,14 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition, onSelect }) => {
   )} - ${appointment.end.format('HH:mm')}`;
 
   const handleScheduleClick = () => {
+    if (hidden) {
+      return;
+    }
     onSelect(appointment);
   };
 
   return (
-    <Tooltip title={title}>
+    <Tooltip title={title} disableHoverListener={hidden}>
       <animated.div
         id={`${appointment.id}-${appointment.start.format(
           'HH:mm',
@@ -222,10 +244,10 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition, onSelect }) => {
         className='appointment-item'
         onClick={handleScheduleClick}
         style={{
-          width: width,
+          visibility: hidden ? 'hidden' : 'visible',
+          width: '100%',
           border: `${appointment.serviceColor} 1px solid`,
           backgroundColor: `${appointment.serviceColor}1A`,
-          transform: x.interpolate(x => `translateX(${x}px)`),
         }}
       >
         <Typography
@@ -233,7 +255,11 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition, onSelect }) => {
           classes={{ root: 'patient-name' }}
           style={{ color: appointment.serviceColor }}
         >
-          {title}
+          {appointment.patientName}
+        </Typography>
+        <Typography noWrap classes={{ root: 'patient-name' }}>
+          {appointment.start.format('HH:mm')} -{' '}
+          {appointment.end.format('HH:mm')}
         </Typography>
       </animated.div>
     </Tooltip>
@@ -241,6 +267,8 @@ const AppointmentItem = ({ appointment, hourWidth, getPosition, onSelect }) => {
 };
 
 AppointmentItem.propTypes = {
+  zIndex: PropTypes.number,
+  hidden: PropTypes.bool,
   onSelect: PropTypes.func,
   hourWidth: PropTypes.number,
   getPosition: PropTypes.func,

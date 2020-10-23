@@ -4,14 +4,18 @@ import PropTypes from 'prop-types';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import { updateNotesSelector } from '../../../../../redux/selectors/rootSelector';
+import {
+  updateNotesSelector,
+  userSelector,
+} from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import AppointmentNote from './AppointmentNote';
 
-const AppointmentNotes = ({ patient, scheduleId, onEditNote }) => {
+const AppointmentNotes = ({ patient, onEditNote }) => {
   const [isFetching, setIsFetching] = useState(false);
   const [visits, setVisits] = useState([]);
   const updateNotes = useSelector(updateNotesSelector);
+  const currentUser = useSelector(userSelector);
 
   useEffect(() => {
     fetchPatientVisits();
@@ -41,7 +45,7 @@ const AppointmentNotes = ({ patient, scheduleId, onEditNote }) => {
         )}
         {visits.map(visit => (
           <AppointmentNote
-            canEdit={visit.scheduleId === scheduleId}
+            canEdit={visit.doctorId === currentUser.id}
             key={visit.scheduleId}
             visit={visit}
             onEdit={onEditNote}
