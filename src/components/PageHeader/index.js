@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import AppLogoBlue from '../../assets/icons/appLogoBlue';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';

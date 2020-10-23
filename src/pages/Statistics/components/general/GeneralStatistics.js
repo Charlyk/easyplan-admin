@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import moment from 'moment';
-import { Form, Spinner } from 'react-bootstrap';
+import { Form, Modal, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import IconCheckMark from '../../../../assets/icons/iconCheckMark';
@@ -24,7 +24,7 @@ const GeneralStatistics = () => {
   const doctors = useSelector(clinicDoctorsSelector);
   const pickerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [statistics, setStatistics] = useState([]);
+  const [statistics, setStatistics] = useState({ general: [], finance: null });
   const [selectedDoctor, setSelectedDoctor] = useState({ id: 'all' });
   const [showRangePicker, setShowRangePicker] = useState(false);
   const [[startDate, endDate], setDateRange] = useState([
@@ -52,10 +52,12 @@ const GeneralStatistics = () => {
       JSON.stringify({ filter: requestData }),
     );
     const response = await dataAPI.fetchGeneralStatistics(requestData);
+    const financeResponse = await dataAPI.fetchFinanceStatistics(requestData);
+
     if (response.isError) {
       console.error(response.message);
     } else {
-      setStatistics(response.data);
+      setStatistics({ general: response.data, finance: financeResponse.data });
     }
     setIsLoading(false);
   };
@@ -73,10 +75,10 @@ const GeneralStatistics = () => {
     fetchStatistics();
   };
 
-  const statuses = statistics?.items || [];
+  const statuses = statistics.general?.items || [];
 
   const getSchedulePercentage = item => {
-    const percent = (item.count / statistics.total) * 100;
+    const percent = (item.count / statistics.general.total) * 100;
     return Number.isNaN(percent) ? 0 : percent;
   };
 
@@ -110,6 +112,17 @@ const GeneralStatistics = () => {
 
   return (
     <div className='general-statistics' id='general-statistics'>
+      <Modal
+        centered
+        className='loading-modal'
+        show={isLoading && statuses.length === 0}
+        onHide={() => null}
+      >
+        <Modal.Body>
+          <Spinner animation='border' />
+          {isLoading && textForKey('Loading statistics')}...
+        </Modal.Body>
+      </Modal>
       <div className='main-data-container'>
         <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
           <Form.Group>
@@ -142,9 +155,6 @@ const GeneralStatistics = () => {
           </Form.Group>
         </StatisticFilter>
         <span className='block-title'>{textForKey('Patients statistics')}</span>
-        {isLoading && statuses.length === 0 && (
-          <Spinner animation='border' className='statistics-loading-spinner' />
-        )}
         {statuses.length > 0 ? (
           <div className='statuses-container'>
             {statuses.map(item => (
@@ -164,44 +174,46 @@ const GeneralStatistics = () => {
         ) : null}
       </div>
       <div className='right-content-wrapper'>
-        <div className='items-wrapper'>
-          <IncomeStatisticItem
-            title={textForKey('Expectations')}
-            icon={<IconClock />}
-            amount='12.000'
-            persons={3}
-          />
-          <IncomeStatisticItem
-            title={textForKey('Confirmed')}
-            icon={<IconCheckMark />}
-            amount='12.000'
-            persons={3}
-          />
-          <IncomeStatisticItem
-            title={textForKey('Did not came')}
-            icon={<IconXPerson />}
-            amount='12.000'
-            persons={3}
-          />
-          <IncomeStatisticItem
-            title={textForKey('Finished')}
-            icon={<IconSuccess fill='#ffffff' />}
-            amount='12.000'
-            persons={3}
-          />
-          <IncomeStatisticItem
-            title={textForKey('Liabilities')}
-            icon={<IconLiabilities />}
-            amount='12.000'
-            persons={3}
-          />
-          <IncomeStatisticItem
-            title={textForKey('Paid')}
-            icon={<IconCreditCard />}
-            amount='12.000'
-            persons={3}
-          />
-        </div>
+        {statistics.finance != null && (
+          <div className='items-wrapper'>
+            <IncomeStatisticItem
+              title={textForKey('Expectations')}
+              icon={<IconClock />}
+              amount={statistics.finance?.expectations.amount}
+              persons={statistics.finance?.expectations.persons}
+            />
+            <IncomeStatisticItem
+              title={textForKey('Confirmed')}
+              icon={<IconCheckMark />}
+              amount={statistics.finance?.confirmed.amount}
+              persons={statistics.finance?.confirmed.persons}
+            />
+            <IncomeStatisticItem
+              title={textForKey('Did not came')}
+              icon={<IconXPerson />}
+              amount={statistics.finance?.canceled.amount}
+              persons={statistics.finance?.canceled.persons}
+            />
+            <IncomeStatisticItem
+              title={textForKey('Finished')}
+              icon={<IconSuccess fill='#ffffff' />}
+              amount={statistics.finance?.finished.amount}
+              persons={statistics.finance?.finished.persons}
+            />
+            <IncomeStatisticItem
+              title={textForKey('Liabilities')}
+              icon={<IconLiabilities />}
+              amount={statistics.finance?.debts.amount}
+              persons={statistics.finance?.debts.persons}
+            />
+            <IncomeStatisticItem
+              title={textForKey('Paid')}
+              icon={<IconCreditCard />}
+              amount={statistics.finance?.paid.amount}
+              persons={statistics.finance?.paid.persons}
+            />
+          </div>
+        )}
       </div>
       <EasyDateRangePicker
         open={showRangePicker}

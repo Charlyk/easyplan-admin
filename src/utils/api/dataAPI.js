@@ -1013,6 +1013,32 @@ export default {
   },
 
   /**
+   * Fetch app general statistics
+   * @param {Object} requestData
+   * @param {string} requestData.doctorId
+   * @param {Date} requestData.fromDate
+   * @param {Date} requestData.toDate
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchFinanceStatistics: async requestData => {
+    try {
+      const { doctorId, fromDate, toDate } = requestData;
+      const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
+      const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
+      const response = await instance().get(
+        `analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
    * Fetch services statistics
    * @param {Object} requestData
    * @param {string} requestData.serviceId
