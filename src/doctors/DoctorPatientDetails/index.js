@@ -175,6 +175,7 @@ const DoctorPatientDetails = () => {
   }, [services]);
 
   const fetchScheduleDetails = async () => {
+    localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.fetchDoctorPatientDetails(
       patientId,
       scheduleId,
@@ -183,6 +184,7 @@ const DoctorPatientDetails = () => {
       const { data } = response;
       localDispatch(actions.setScheduleDetails(data));
     }
+    localDispatch(actions.setIsLoading(false));
   };
 
   const handleServiceChecked = event => {
@@ -339,9 +341,8 @@ const DoctorPatientDetails = () => {
       >
         <Modal.Body>
           <Spinner animation='border' />
-          {isLoading
-            ? textForKey('Loading patient...')
-            : textForKey('Finalizing treatment...')}
+          {isLoading && textForKey('Loading patient...')}
+          {isFinalizing && textForKey('Finalizing treatment...')}
         </Modal.Body>
       </Modal>
       <div className='left-container'>
