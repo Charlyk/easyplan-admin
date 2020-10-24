@@ -18,7 +18,7 @@ const XRayPhase = ({ title, images, isExpanded }) => {
   return (
     <div className={clsx('phase', isExpanded && 'expanded')}>
       <div className='phase-header'>{title}</div>
-      <div className='phase-images' style={{ height: isExpanded ? `100%` : 0 }}>
+      <div className='phase-images'>
         <Grid container>
           {images.map(image => (
             <Grid

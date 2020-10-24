@@ -510,8 +510,7 @@
       .phase-images {
         overflow: hidden;
         width: 100%;
-        padding: 0;
-        height: 0;
+        height: 100%;
         transition: height 200ms ease-in-out, padding 200ms ease-in-out;
         position: relative;
 
