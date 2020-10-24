@@ -13,6 +13,7 @@ const DoctorPatients = () => {
   const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
+  const [viewDate, setViewDate] = useState(new Date());
   const [filterData, setFilterData] = useState({
     patientName: '',
     serviceId: 'all',
@@ -21,11 +22,11 @@ const DoctorPatients = () => {
 
   useEffect(() => {
     fetchPatients();
-  }, []);
+  }, [viewDate]);
 
   const fetchPatients = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchSchedules(currentUser.id, new Date());
+    const response = await dataAPI.fetchSchedules(currentUser.id, viewDate);
     if (response.isError) {
       console.error(response.message);
     } else {
@@ -55,10 +56,16 @@ const DoctorPatients = () => {
     });
   };
 
+  const handleDateChange = newDate => {
+    setViewDate(newDate);
+  };
+
   return (
     <div className='doctor-patients-root'>
       <div className='filter-wrapper'>
         <PatientsFilter
+          selectedDate={viewDate}
+          onDateChange={handleDateChange}
           onNameChange={handlePatientNameChange}
           onServiceChange={handleServiceChange}
           onStatusChange={handleAppointmentStatusChange}
@@ -68,7 +75,11 @@ const DoctorPatients = () => {
         {isLoading && (
           <Spinner animation='border' className='loading-spinner' />
         )}
-        <PatientsList filterData={filterData} schedules={schedules} />
+        <PatientsList
+          filterData={filterData}
+          viewDate={viewDate}
+          schedules={schedules}
+        />
       </div>
     </div>
   );

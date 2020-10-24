@@ -6,7 +6,10 @@
   .filter-wrapper {
     display: flex;
     width: 20rem;
-    max-height: 17rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    align-items: flex-start;
+    justify-content: center;
   }
 
   .data-wrapper {
@@ -25,12 +28,13 @@
 }
 
 .patients-filter {
-  margin: 1rem;
   width: 20rem;
   display: flex;
   padding: 1rem;
+  margin-left: 1rem;
+  flex: 1;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   background: #FFFFFF;
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
@@ -58,22 +62,41 @@
   .positive-button {
     margin-top: 1rem;
   }
+
+  .rdrCalendarWrapper {
+    max-width: 100%;
+
+    .rdrMonth {
+      max-width: 100%;
+    }
+  }
 }
 
 .patients-list-root {
   display: flex;
   flex: 1;
-  height: 100%;
+  margin: 1rem;
+  height: 96%;
+  overflow-y: scroll;
   flex-direction: column;
-  position: relative;
-  margin-right: 1rem;
   background: #FFFFFF;
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
   padding: 1rem;
+  position: relative;
+
+  .day-off-label {
+    color: #34344E;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    font-weight: 600;
+  }
 
   table {
-    width: 100%;
+    flex: 1;
 
     thead {
       tr {

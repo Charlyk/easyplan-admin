@@ -2,13 +2,21 @@ import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Button, Form, InputGroup } from 'react-bootstrap';
+import { Calendar } from 'react-date-range';
+import * as locales from 'react-date-range/dist/locale';
 
 import IconRefresh from '../../../../assets/icons/iconRefresh';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { ScheduleStatuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
+import { getAppLanguage, textForKey } from '../../../../utils/localization';
 
-const PatientsFilter = ({ onNameChange, onServiceChange, onStatusChange }) => {
+const PatientsFilter = ({
+  selectedDate,
+  onNameChange,
+  onServiceChange,
+  onStatusChange,
+  onDateChange,
+}) => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
@@ -66,6 +74,11 @@ const PatientsFilter = ({ onNameChange, onServiceChange, onStatusChange }) => {
           ))}
         </Form.Control>
       </Form.Group>
+      <Calendar
+        locale={locales[getAppLanguage()]}
+        onChange={onDateChange}
+        date={selectedDate}
+      />
     </div>
   );
 };
@@ -73,13 +86,17 @@ const PatientsFilter = ({ onNameChange, onServiceChange, onStatusChange }) => {
 export default PatientsFilter;
 
 PatientsFilter.propTypes = {
+  selectedDate: PropTypes.instanceOf(Date),
   onNameChange: PropTypes.func,
+  onDateChange: PropTypes.func,
   onServiceChange: PropTypes.func,
   onStatusChange: PropTypes.func,
 };
 
 PatientsFilter.defaultProps = {
+  onDateChange: () => null,
   onNameChange: () => null,
   onServiceChange: () => null,
   onStatusChange: () => null,
+  selectedDate: new Date(),
 };

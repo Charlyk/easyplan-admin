@@ -8,13 +8,14 @@ import { Link } from 'react-router-dom';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 
-const PatientsList = ({ schedules, filterData }) => {
+const PatientsList = ({ schedules, viewDate, filterData }) => {
   const [filteredSchedules, setFilteredSchedules] = useState(schedules);
   const [hours, setHours] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchWorkingHours();
-  }, []);
+  }, [viewDate]);
 
   useEffect(() => {
     filterPatients();
@@ -48,14 +49,16 @@ const PatientsList = ({ schedules, filterData }) => {
   };
 
   const fetchWorkingHours = async () => {
+    setIsLoading(true);
     const response = await dataAPI.fetchClinicWorkHoursV2(
-      moment().isoWeekday(),
+      moment(viewDate).isoWeekday(),
     );
     if (response.isError) {
       console.error(response.message);
     } else {
       setHours(response.data.filter(it => it.split(':')[1] === '00'));
     }
+    setIsLoading(false);
   };
 
   const schedulesForHour = hour => {
@@ -105,6 +108,11 @@ const PatientsList = ({ schedules, filterData }) => {
 
   return (
     <div className='patients-list-root'>
+      {!isLoading && hours.length === 0 && (
+        <Typography classes={{ root: 'day-off-label' }}>
+          {textForKey("It's a day off")}
+        </Typography>
+      )}
       <table>
         <thead>
           <tr>
@@ -136,6 +144,7 @@ const PatientsList = ({ schedules, filterData }) => {
 export default PatientsList;
 
 PatientsList.propTypes = {
+  viewDate: PropTypes.instanceOf(Date),
   filterData: PropTypes.shape({
     patientName: PropTypes.string,
     serviceId: PropTypes.string,
@@ -174,4 +183,5 @@ PatientsList.propTypes = {
 
 PatientsList.defaultProps = {
   onPatientSelect: () => null,
+  viewDate: new Date(),
 };

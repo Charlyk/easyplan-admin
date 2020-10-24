@@ -237,6 +237,7 @@ export default {
     malocclusion: 'Malocclusion',
     mandible: 'Mandible',
     maxillary: 'Maxillary',
+    "it's a day off": "It's a day off",
   },
   ro: {
     analytics: 'Analitică',
@@ -477,6 +478,7 @@ export default {
     malocclusion: 'Malocluzie',
     mandible: 'Mandibulă',
     maxillary: 'Maxilar',
+    "it's a day off": 'Este zi liberă',
   },
   ru: {
     analytics: 'Analytics',
@@ -715,5 +717,6 @@ export default {
     malocclusion: 'Malocclusion',
     mandible: 'Mandible',
     maxillary: 'Maxillary',
+    "it's a day off": "It's a day off",
   },
 };
