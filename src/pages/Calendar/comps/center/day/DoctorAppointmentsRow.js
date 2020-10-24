@@ -215,7 +215,7 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
 
   return (
     <Tooltip title={title} disableHoverListener={hidden}>
-      <animated.div
+      <div
         id={`${appointment.id}-${appointment.start.format(
           'HH:mm',
         )}>${appointment.end.format('HH:mm')}`}
@@ -223,8 +223,6 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
         className='appointment-item'
         onClick={handleScheduleClick}
         style={{
-          visibility: hidden ? 'hidden' : 'visible',
-          width: '100%',
           border: `${appointment.serviceColor} 1px solid`,
           backgroundColor: `${appointment.serviceColor}1A`,
         }}
@@ -236,7 +234,7 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
           {appointment.start.format('HH:mm')} -{' '}
           {appointment.end.format('HH:mm')}
         </Typography>
-      </animated.div>
+      </div>
     </Tooltip>
   );
 };

@@ -860,8 +860,10 @@
         align-items: flex-start;
         justify-content: center;
         padding: .2rem .5rem;
+        overflow: hidden;
 
         .patient-name {
+          width: 100%;
           font-family: Inter, sans-serif;
           font-style: normal;
           font-weight: normal;
