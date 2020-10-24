@@ -38,9 +38,7 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
       }}
     >
       <div className='title-and-time'>
-        <span className='service-name' style={{ color: schedule.serviceColor }}>
-          {schedule.patientName}
-        </span>
+        <span className='service-name'>{schedule.patientName}</span>
         {position.height >= minHeight && (
           <span className='item-time-text'>
             {startHour} - {endHour}

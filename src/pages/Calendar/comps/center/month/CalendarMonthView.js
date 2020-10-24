@@ -79,9 +79,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
           backgroundColor: `${schedule.serviceColor}1A`,
         }}
       >
-        <span className='service-name' style={{ color: schedule.serviceColor }}>
-          {schedule.patientName}
-        </span>
+        <span className='service-name'>{schedule.patientName}</span>
       </div>
     );
   };

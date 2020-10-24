@@ -88,11 +88,7 @@ const PatientsList = ({ schedules, filterData }) => {
         }}
       >
         <span className='patient-name'>{schedule.patientName}</span>
-        <Typography
-          noWrap
-          classes={{ root: 'service-name' }}
-          style={{ color: schedule.serviceColor }}
-        >
+        <Typography noWrap classes={{ root: 'service-name' }}>
           {schedule.serviceName}
         </Typography>
         <span className='time-label'>

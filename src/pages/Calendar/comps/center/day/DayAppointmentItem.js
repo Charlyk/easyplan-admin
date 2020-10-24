@@ -56,9 +56,7 @@ const DayAppointmentItem = ({ schedule, onSelect }) => {
       }}
     >
       <div className='title-and-time'>
-        <span className='service-name' style={{ color: schedule.serviceColor }}>
-          {schedule.serviceName}
-        </span>
+        <span className='service-name'>{schedule.serviceName}</span>
         <span className='item-time-text'>
           {startHour} - {endHour}
         </span>

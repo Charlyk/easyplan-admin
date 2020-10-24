@@ -229,11 +229,7 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
           backgroundColor: `${appointment.serviceColor}1A`,
         }}
       >
-        <Typography
-          noWrap
-          classes={{ root: 'patient-name' }}
-          style={{ color: appointment.serviceColor }}
-        >
+        <Typography noWrap classes={{ root: 'patient-name' }}>
           {appointment.patientName}
         </Typography>
         <Typography noWrap classes={{ root: 'patient-name' }}>
