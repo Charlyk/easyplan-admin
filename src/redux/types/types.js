@@ -1,5 +1,6 @@
 import calendar from './calendar';
 import clinicTypes from './clinicTypes';
+import imageModalTypes from './imageModalTypes';
 
 export default {
   setIsAuthenticated: 'setIsAuthenticated',
@@ -20,4 +21,5 @@ export default {
   updateCalendarDoctorHeight: 'updateCalendarDoctorHeight',
   ...clinicTypes,
   ...calendar,
+  ...imageModalTypes,
 };

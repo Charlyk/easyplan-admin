@@ -1,37 +1,36 @@
 import React from 'react';
 
+import { Grid } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
-import IconNext from '../../../../../assets/icons/iconNext';
+import { setImageModal } from '../../../../../redux/actions/imageModalActions';
 import { urlToLambda } from '../../../../../utils/helperFuncs';
 
-const XRayPhase = ({ title, images, isExpanded, phaseId, onExpand }) => {
-  const imagesContainerHeight = Math.ceil(images.length / 3) * 9;
+const XRayPhase = ({ title, images, isExpanded }) => {
+  const dispatch = useDispatch();
+
+  const handleImageClick = image => {
+    dispatch(setImageModal({ open: true, imageUrl: image.imageUrl }));
+  };
+
   return (
     <div className={clsx('phase', isExpanded && 'expanded')}>
-      <div className='phase-header'>
-        {title}
-        <div
-          role='button'
-          tabIndex={0}
-          className='expand-button'
-          onClick={() => onExpand(phaseId)}
-        >
-          <IconNext />
-        </div>
-      </div>
-      <div
-        className='phase-images'
-        style={{ height: isExpanded ? `${imagesContainerHeight}rem` : 0 }}
-      >
-        {images.map(item => (
-          <img
-            key={item.id}
-            src={urlToLambda(item.imageUrl, 150)}
-            alt='X-Ray'
-          />
-        ))}
+      <div className='phase-header'>{title}</div>
+      <div className='phase-images' style={{ height: isExpanded ? `100%` : 0 }}>
+        <Grid container>
+          {images.map(image => (
+            <Grid key={image.id} item xs={4}>
+              <img
+                onClick={() => handleImageClick(image)}
+                key={image.id}
+                src={urlToLambda(image.imageUrl, 150)}
+                alt='X-Ray'
+              />
+            </Grid>
+          ))}
+        </Grid>
       </div>
     </div>
   );

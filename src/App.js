@@ -23,6 +23,7 @@ import AddNote from './components/AddNote';
 import AddXRay from './components/AddXRay';
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
+import FullScreenImageModal from './components/FullScreenImageModal';
 import RegisterPaymentModal from './components/RegisterPaymentModal';
 import DoctorsMain from './doctors/DoctorsMain';
 import AcceptInvitation from './pages/General/AcceptInvitation';
@@ -37,7 +38,9 @@ import {
   setPaymentModal,
   triggerUserLogout,
 } from './redux/actions/actions';
+import { setImageModal } from './redux/actions/imageModalActions';
 import initialState from './redux/initialState';
+import { imageModalSelector } from './redux/selectors/imageModalSelector';
 import {
   createClinicSelector,
   patientNoteModalSelector,
@@ -66,6 +69,7 @@ function App() {
   const paymentModal = useSelector(paymentModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
+  const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
     item => item.id === currentUser?.selectedClinic,
@@ -167,6 +171,10 @@ function App() {
     dispatch(setPaymentModal({ open: false, invoice: null }));
   };
 
+  const handleCloseImageModal = () => {
+    dispatch(setImageModal({ open: false }));
+  };
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to='/' />}
@@ -177,6 +185,7 @@ function App() {
         />
         <AddXRay {...patientXRayModal} onClose={handleClosePatientXRayModal} />
         <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
+        <FullScreenImageModal {...imageModal} onClose={handleCloseImageModal} />
         <ConfirmationModal
           title={textForKey('Logout')}
           message={textForKey('logout message')}

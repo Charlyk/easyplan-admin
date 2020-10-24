@@ -6,6 +6,7 @@ import appointmentModal from './appointmentModal';
 import calendar from './calendar';
 import clinic from './clinic';
 import createClinicModal from './createClinicModal';
+import imageModal from './imageModal';
 import patientNoteModal from './patientNoteModal';
 import patientXRayModal from './patientXRayModal';
 import paymentModal from './paymentModal';
@@ -19,6 +20,7 @@ export default combineReducers({
   paymentModal,
   createClinicModal,
   calendar,
+  imageModal,
 });
 
 function main(state = initialState, action) {

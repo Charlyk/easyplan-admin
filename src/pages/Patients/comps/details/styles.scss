@@ -1,5 +1,5 @@
 .patient-details-root {
-  max-height: 100%;
+  height: 100%;
   outline: none;
   display: flex;
   flex-direction: column;
@@ -20,6 +20,7 @@
     display: flex;
     flex-direction: row;
     overflow-y: scroll;
+    flex: 1;
 
     .btn-outline-primary {
       flex-grow: 1;
@@ -41,10 +42,12 @@
 .patient-appointments {
   width: 100%;
   display: flex;
+  height: 100%;
   flex-direction: column;
 
   &__appointments-data {
     display: flex;
+    flex: 1;
     flex-direction: column;
     overflow-y: scroll;
     padding: 1.5rem;
@@ -138,11 +141,13 @@
 
 .patient-notes {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
 
   &__notes-data {
+    flex: 1;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
@@ -236,6 +241,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   position: relative;
 
   .edit-note-btn {
@@ -324,6 +330,7 @@
 
 .patient-treatment-plans {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: .5rem 2rem;
@@ -434,11 +441,13 @@
 
 .patient-x-ray {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
 
   .images-container {
+    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -459,6 +468,7 @@
       background: #FFFFFF;
       box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
       border-radius: .3rem;
+      position: relative;
 
       &.expanded {
         .phase-header {
@@ -503,12 +513,13 @@
         padding: 0;
         height: 0;
         transition: height 200ms ease-in-out, padding 200ms ease-in-out;
+        position: relative;
 
         img {
           cursor: pointer;
           margin: .2rem;
-          width: calc((100% / 3) - .4rem);
-          height: 7.2rem;
+          width: 100%;
+          height: 100%;
           object-fit: cover;
         }
       }
