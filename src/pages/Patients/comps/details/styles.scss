@@ -516,6 +516,9 @@
         position: relative;
 
         img {
+          border: #ededed 1px solid;
+          border-radius: .3rem;
+          overflow: hidden;
           cursor: pointer;
           margin: .2rem;
           width: 100%;

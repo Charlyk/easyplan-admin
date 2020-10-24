@@ -21,13 +21,28 @@ const XRayPhase = ({ title, images, isExpanded }) => {
       <div className='phase-images' style={{ height: isExpanded ? `100%` : 0 }}>
         <Grid container>
           {images.map(image => (
-            <Grid key={image.id} item xs={4}>
-              <img
+            <Grid
+              key={image.id}
+              item
+              xs={4}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '.2rem',
+              }}
+            >
+              <div
+                style={{ outline: 'none' }}
+                role='button'
+                tabIndex={0}
                 onClick={() => handleImageClick(image)}
-                key={image.id}
-                src={urlToLambda(image.imageUrl, 150)}
-                alt='X-Ray'
-              />
+              >
+                <img
+                  key={image.id}
+                  src={urlToLambda(image.imageUrl, 150)}
+                  alt='X-Ray'
+                />
+              </div>
             </Grid>
           ))}
         </Grid>
