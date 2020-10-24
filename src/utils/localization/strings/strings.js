@@ -238,6 +238,7 @@ export default {
     mandible: 'Mandible',
     maxillary: 'Maxillary',
     "it's a day off": "It's a day off",
+    'apply to all': 'Apply to all',
   },
   ro: {
     analytics: 'Analitică',
@@ -479,6 +480,7 @@ export default {
     mandible: 'Mandibulă',
     maxillary: 'Maxilar',
     "it's a day off": 'Este zi liberă',
+    'apply to all': 'Aplică la toate',
   },
   ru: {
     analytics: 'Analytics',
@@ -718,5 +720,6 @@ export default {
     mandible: 'Mandible',
     maxillary: 'Maxillary',
     "it's a day off": "It's a day off",
+    'apply to all': 'Apply to all',
   },
 };

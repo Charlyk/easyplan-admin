@@ -23,12 +23,35 @@ const DoctorWorkHours = props => {
     onChange(newDays);
   };
 
+  const handleApplyToAll = day => {
+    const newDays = data.workDays.map(item => {
+      return {
+        ...item,
+        startHour: day.startHour,
+        endHour: day.endHour,
+        selected: true,
+      };
+    });
+
+    onChange(newDays);
+  };
+
   const classes = clsx('doctor-work-hours', show ? 'expanded' : 'collapsed');
   return (
     <div className={classes} style={{ height: show ? days.length * 48 : 0 }}>
-      {data.workDays.map(day => (
-        <WorkDay key={day.day} day={day} onChange={handleDayChange} />
-      ))}
+      <table>
+        <tbody>
+          {data.workDays.map((day, index) => (
+            <WorkDay
+              onApplyToAll={handleApplyToAll}
+              key={day.day}
+              day={day}
+              onChange={handleDayChange}
+              isFirst={index === 0}
+            />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

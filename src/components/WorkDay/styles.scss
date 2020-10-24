@@ -5,6 +5,35 @@
   align-items: center;
   justify-content: flex-start;
 
+  .apply-to-all-btn {
+    user-select: none;
+    outline: none;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    margin-right: 0 !important;
+    color: #3A83DC;
+    cursor: pointer;
+
+    &.hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    &.disabled {
+      color: #CDCEEA;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   .custom-select {
     font-family: Inter, sans-serif;
     font-style: normal;
@@ -12,13 +41,11 @@
     font-size: 12px;
     line-height: 16px;
     letter-spacing: 0.01em;
+    margin-right: 0 !important;
     color: #34354C;
   }
 
   .separator-text {
-    width: 6rem;
-    margin-right: 1rem;
-    margin-left: .5rem;
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;

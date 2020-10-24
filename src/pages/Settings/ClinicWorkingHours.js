@@ -7,7 +7,6 @@ import LoadingButton from '../../components/LoadingButton';
 import WorkDay from '../../components/WorkDay';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { days } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 
 const ClinicWorkingHours = props => {
@@ -66,14 +65,35 @@ const ClinicWorkingHours = props => {
     setIsLoading(false);
   };
 
+  const handleApplyToAll = day => {
+    const newDays = clinic.workDays.map(workDay => {
+      return {
+        ...workDay,
+        isDayOff: false,
+        startHour: day.startHour,
+        endHour: day.endHour,
+        selected: true,
+      };
+    });
+    setClinic({ ...clinic, workDays: newDays });
+  };
+
   return (
     <div className='company-working-hours'>
       <span className='form-title'>{textForKey('Work Hours')}</span>
-      <div className='days-wrapper'>
-        {clinic?.workDays.map(day => (
-          <WorkDay day={day} key={day.day} onChange={handleDayChange} />
-        ))}
-      </div>
+      <table className='days-wrapper'>
+        <tbody>
+          {clinic?.workDays.map((day, index) => (
+            <WorkDay
+              onApplyToAll={handleApplyToAll}
+              day={day}
+              key={day.day}
+              onChange={handleDayChange}
+              isFirst={index === 0}
+            />
+          ))}
+        </tbody>
+      </table>
       <div className='footer'>
         <LoadingButton
           onClick={submitForm}

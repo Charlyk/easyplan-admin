@@ -7,9 +7,11 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { createHoursList, days } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import SwitchButton from '../SwitchButton';
-import './styles.scss';
 
-const WorkDay = ({ day, onChange }) => {
+import './styles.scss';
+import Typography from '@material-ui/core/Typography';
+
+const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   const hours = createHoursList();
   const titleClasses = clsx('day-title', day.selected ? 'selected' : 'default');
 
@@ -37,14 +39,25 @@ const WorkDay = ({ day, onChange }) => {
     );
   };
 
+  const handleApplyToAll = () => {
+    onApplyToAll(day);
+  };
+
   return (
-    <div className='work-day'>
-      <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
-      <div className={titleClasses}>{days[day.day - 1]}</div>
-      {!day.selected ? (
-        <div className='work-day__day-off'>{textForKey('Day off')}</div>
-      ) : (
-        <div className='work-day__fields'>
+    <tr className='work-day'>
+      <td style={{ padding: '.5rem' }}>
+        <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
+      </td>
+      <td style={{ width: '20%' }}>
+        <div className={titleClasses}>{days[day.day - 1]}</div>
+      </td>
+      {!day.selected && (
+        <td colSpan={4}>
+          <div className='work-day__day-off'>{textForKey('Day off')}</div>
+        </td>
+      )}
+      {day.selected && (
+        <td>
           <InputGroup>
             <Form.Control
               as='select'
@@ -62,7 +75,17 @@ const WorkDay = ({ day, onChange }) => {
               ))}
             </Form.Control>
           </InputGroup>
-          <div className='separator-text'>{textForKey('to')}</div>
+        </td>
+      )}
+      {day.selected && (
+        <td style={{ padding: '.3rem' }}>
+          <Typography noWrap classes={{ root: 'separator-text' }}>
+            {textForKey('to')}
+          </Typography>
+        </td>
+      )}
+      {day.selected && (
+        <td>
           <InputGroup>
             <Form.Control
               as='select'
@@ -80,15 +103,32 @@ const WorkDay = ({ day, onChange }) => {
               ))}
             </Form.Control>
           </InputGroup>
-        </div>
+        </td>
       )}
-    </div>
+      {day.selected && (
+        <td style={{ padding: '.5rem' }}>
+          <div
+            role='button'
+            tabIndex={0}
+            onClick={handleApplyToAll}
+            className={clsx(
+              'apply-to-all-btn',
+              (day.startHour == null || day.endHour == null) && 'disabled',
+              !isFirst && 'hidden',
+            )}
+          >
+            {textForKey('Apply to all')}
+          </div>
+        </td>
+      )}
+    </tr>
   );
 };
 
 export default WorkDay;
 
 WorkDay.propTypes = {
+  isFirst: PropTypes.bool,
   day: PropTypes.shape({
     day: PropTypes.number,
     selected: PropTypes.bool,
@@ -96,8 +136,10 @@ WorkDay.propTypes = {
     endHour: PropTypes.string,
   }),
   onChange: PropTypes.func,
+  onApplyToAll: PropTypes.func,
 };
 
 WorkDay.defaultProps = {
   onChange: () => null,
+  onApplyToAll: () => null,
 };
