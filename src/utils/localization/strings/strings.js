@@ -239,6 +239,9 @@ export default {
     maxillary: 'Maxillary',
     "it's a day off": "It's a day off",
     'apply to all': 'Apply to all',
+    liabilities: 'Liabilities',
+    'did not came': 'Did not came',
+    expectations: 'Expectations',
   },
   ro: {
     analytics: 'Analitică',
@@ -481,6 +484,9 @@ export default {
     maxillary: 'Maxilar',
     "it's a day off": 'Este zi liberă',
     'apply to all': 'Aplică la toate',
+    liabilities: 'Datorii',
+    'did not came': 'Nu au venit',
+    expectations: 'Programați',
   },
   ru: {
     analytics: 'Analytics',
@@ -721,5 +727,8 @@ export default {
     maxillary: 'Maxillary',
     "it's a day off": "It's a day off",
     'apply to all': 'Apply to all',
+    liabilities: 'Liabilities',
+    'did not came': 'Did not came',
+    expectations: 'Expectations',
   },
 };

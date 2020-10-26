@@ -29,10 +29,10 @@ const GeneralStatistics = () => {
   const [showRangePicker, setShowRangePicker] = useState(false);
   const [[startDate, endDate], setDateRange] = useState([
     moment()
-      .startOf('day')
+      .startOf('week')
       .toDate(),
     moment()
-      .endOf('day')
+      .endOf('week')
       .toDate(),
   ]);
 
