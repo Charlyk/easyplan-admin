@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
 import EasyTab from '../../../../components/EasyTab';
+import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import AppointmentNotes from './appointmentNotes';
 import PatientAppointments from './appointments/PatientAppointments';
@@ -27,8 +28,29 @@ const PatientDetails = ({
   defaultTab,
   patient,
   scheduleId,
+  isDoctor,
 }) => {
   const [selectedTab, setSelectedTab] = useState(defaultTab);
+  const [hasNotes, setHasNotes] = useState(false);
+
+  useEffect(() => {
+    if (showTabs.includes(TabId.notes) && isDoctor) {
+      fetchPatientNotes();
+    }
+  }, [showTabs]);
+
+  const fetchPatientNotes = async () => {
+    if (patient == null) {
+      return;
+    }
+
+    const response = await dataAPI.fetchPatientNotes(patient.id);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      setHasNotes(response.data.length > 0);
+    }
+  };
 
   if (!patient) return null;
 
@@ -58,6 +80,7 @@ const PatientDetails = ({
         {showTabs.includes(TabId.notes) && (
           <EasyTab
             title={textForKey('Notes')}
+            highlighted={hasNotes}
             onClick={() => handleTabClick(TabId.notes)}
             selected={selectedTab === TabId.notes}
           />
@@ -108,6 +131,7 @@ export default PatientDetails;
 
 PatientDetails.propTypes = {
   scheduleId: PropTypes.string,
+  isDoctor: PropTypes.bool,
   onAddNote: PropTypes.func,
   onAddXRay: PropTypes.func,
   onEditAppointmentNote: PropTypes.func,

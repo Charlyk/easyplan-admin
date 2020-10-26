@@ -514,12 +514,13 @@ const DoctorPatientDetails = () => {
       <div className='right-container'>
         {patient && (
           <PatientDetails
+            isDoctor
             scheduleId={scheduleId}
             onAddXRay={handleAddXRay}
             onAddNote={handleAddNote}
             onEditAppointmentNote={handleEditAppointmentNote}
             patient={patient}
-            defaultTab={TabId.appointmentsNotes}
+            defaultTab={TabId.notes}
             showTabs={[
               TabId.treatmentPlans,
               TabId.appointmentsNotes,
