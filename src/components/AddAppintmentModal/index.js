@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
+import { ClickAwayListener, Fade, Paper, Typography } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -14,10 +14,11 @@ import { useDispatch } from 'react-redux';
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, ScheduleStatuses } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
+import { logUserAction, urlToLambda } from '../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import IconAvatar from '../../assets/icons/iconAvatar';
 
 const initialState = {
   patient: null,
@@ -648,6 +649,28 @@ const AddAppointmentModal = ({
             options={patients}
             selected={patient ? [patient] : []}
             onChange={handlePatientChange}
+            renderMenuItemChildren={option => (
+              <div className='patient-result-item'>
+                <div className='patient-avatar-wrapper'>
+                  {option.photo == null ? (
+                    <IconAvatar />
+                  ) : (
+                    <img
+                      src={urlToLambda(option.photo, 40)}
+                      alt={option.fullName}
+                    />
+                  )}
+                </div>
+                <div className='patient-info-wrapper'>
+                  <Typography classes={{ root: 'patient-name' }}>
+                    {option.fullName}
+                  </Typography>
+                  <Typography classes={{ root: 'patient-phone' }}>
+                    {option.phoneNumber}
+                  </Typography>
+                </div>
+              </div>
+            )}
           />
         </Form.Group>
       )}
