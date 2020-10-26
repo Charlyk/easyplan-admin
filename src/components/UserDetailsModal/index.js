@@ -148,8 +148,16 @@ const UserDetailsModal = props => {
 
   const saveUser = async avatarUrl => {
     // clear components with no price and percentage
-    const newServices = cloneDeep(userData.services);
-    remove(newServices, item => item.price == null && item.percentage == null);
+    const newServices = userData.services.map(item => {
+      if (item.price != null || item.percentage != null) {
+        return item;
+      }
+
+      return {
+        ...item,
+        price: 0,
+      };
+    });
 
     const requestBody = {
       ...userData,

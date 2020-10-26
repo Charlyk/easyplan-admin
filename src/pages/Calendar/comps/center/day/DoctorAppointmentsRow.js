@@ -89,11 +89,8 @@ const DoctorAppointmentsRow = ({
       const newData = data.map(item => {
         return {
           ...item,
-          start: moment(item.dateAndTime, 'YYYY-MM-DD HH:mm:ss'),
-          end: moment(item.dateAndTime, 'YYYY-MM-DD HH:mm:ss').add(
-            item.serviceDuration,
-            'minutes',
-          ),
+          start: moment(item.dateAndTime),
+          end: moment(item.dateAndTime).add(item.serviceDuration, 'minutes'),
         };
       });
       localDispatch(actions.setAppointments(newData));

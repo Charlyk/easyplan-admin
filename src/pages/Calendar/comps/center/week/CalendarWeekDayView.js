@@ -63,7 +63,7 @@ CalendarWeekDayView.propTypes = {
   viewDate: PropTypes.instanceOf(Date),
   update: PropTypes.bool,
   doctorId: PropTypes.string,
-  day: PropTypes.string,
+  day: PropTypes.object,
   onScheduleSelect: PropTypes.func,
   selectedSchedule: PropTypes.shape({
     id: PropTypes.string,

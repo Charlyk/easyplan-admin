@@ -242,6 +242,7 @@ export default {
     liabilities: 'Liabilities',
     'did not came': 'Did not came',
     expectations: 'Expectations',
+    'created at': 'Created at',
   },
   ro: {
     analytics: 'Analitică',
@@ -487,6 +488,7 @@ export default {
     liabilities: 'Datorii',
     'did not came': 'Nu au venit',
     expectations: 'Programați',
+    'created at': 'Creat la data',
   },
   ru: {
     analytics: 'Analytics',
@@ -730,5 +732,6 @@ export default {
     liabilities: 'Liabilities',
     'did not came': 'Did not came',
     expectations: 'Expectations',
+    'created at': 'Created at',
   },
 };

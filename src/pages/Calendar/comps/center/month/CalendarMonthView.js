@@ -44,7 +44,6 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
         const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');
         newSchedules.push({ date, schedules: response.data[prop] });
       }
-      console.log(newSchedules);
       setSchedules(newSchedules);
     }
     dispatch(setIsCalendarLoading(false));
@@ -73,6 +72,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   const renderSchedule = schedule => {
     return (
       <div
+        key={schedule.id}
         className='appointment-item'
         style={{
           border: `1px solid ${schedule.serviceColor}`,

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import upperFirst from 'lodash/upperFirst';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import './styles.scss';
@@ -103,7 +104,13 @@ const AppointmentDetails = ({
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td
+                      style={{
+                        width: '35%',
+                        paddingLeft: '1rem',
+                        paddingRight: '1rem',
+                      }}
+                    >
                       {textForKey('Doctor')}:
                     </td>
                     <td>{schedule.doctorName}</td>
@@ -121,6 +128,20 @@ const AppointmentDetails = ({
                       {textForKey('Hour')}:
                     </td>
                     <td>{moment(schedule.dateAndTime).format('HH:mm')}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                      {upperFirst(textForKey('Created by'))}:
+                    </td>
+                    <td>{schedule.createdByName}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                      {upperFirst(textForKey('Created at'))}:
+                    </td>
+                    <td>
+                      {moment(schedule.created).format('DD MMM YYYY, HH:mm')}
+                    </td>
                   </tr>
                   <tr>
                     <td
@@ -249,6 +270,9 @@ AppointmentDetails.propTypes = {
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
     serviceDuration: PropTypes.number,
+    createdById: PropTypes.string,
+    createdByName: PropTypes.string,
+    created: PropTypes.string,
     dateAndTime: PropTypes.string,
     status: PropTypes.string,
     note: PropTypes.string,
