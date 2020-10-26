@@ -79,6 +79,10 @@ const CategoriesList = props => {
         if (selectedCategory == null) {
           const category = response.data[0];
           handleCategoryClick(category);
+        } else {
+          setSelectedCategory(
+            response.data.find(it => it.id === selectedCategory.id),
+          );
         }
       }
     }

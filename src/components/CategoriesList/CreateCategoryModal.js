@@ -17,16 +17,23 @@ const CreateCategoryModal = props => {
   );
 
   useEffect(() => {
+    if (!show) {
+      setCategoryName('');
+    }
+  }, [show]);
+
+  useEffect(() => {
     setCategoryName(category ? category.name : '');
   }, [category]);
 
-  const handleCategorySave = () => {
+  const handleCategorySave = async () => {
     setIsLoading(true);
     if (category != null) {
-      editCategoryName();
+      await editCategoryName();
     } else {
-      createNewCategory();
+      await createNewCategory();
     }
+    setIsLoading(false);
   };
 
   const editCategoryName = async () => {
@@ -47,7 +54,6 @@ const CreateCategoryModal = props => {
     } else {
       console.error(response.message);
     }
-    setIsLoading(false);
   };
 
   const createNewCategory = async () => {
@@ -85,6 +91,8 @@ const CreateCategoryModal = props => {
       title={getTitle()}
       className='create-category-modal'
       onPositiveClick={handleCategorySave}
+      isPositiveLoading={isLoading}
+      isPositiveDisabled={isLoading}
     >
       <label htmlFor='basic-url'>{textForKey('Enter category name')}</label>
       <FormControl

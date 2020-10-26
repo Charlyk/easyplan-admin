@@ -5,7 +5,6 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { animated } from 'react-spring';
 
 import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
