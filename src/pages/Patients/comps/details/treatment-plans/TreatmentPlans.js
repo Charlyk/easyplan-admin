@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
@@ -206,6 +207,24 @@ const TreatmentPlans = ({ patient }) => {
     </tr>
   );
 
+  const notesRow = plan && (
+    <tr>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+        {textForKey('Notes')}
+      </td>
+      <td
+        valign='top'
+        style={{
+          paddingTop: '1rem',
+          paddingLeft: '1rem',
+          paddingRight: '1rem',
+        }}
+      >
+        {plan[planType].note}
+      </td>
+    </tr>
+  );
+
   return (
     <div className='patient-treatment-plans'>
       {!plan && (
@@ -239,6 +258,7 @@ const TreatmentPlans = ({ patient }) => {
               {bracesRow}
               {treatmentTypeRow}
               {fallenBracketsRow}
+              {notesRow}
             </tbody>
           </table>
         </React.Fragment>

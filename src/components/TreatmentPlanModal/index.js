@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
-import { Form } from 'react-bootstrap';
+import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
@@ -255,6 +255,11 @@ const TreatmentPlanModal = ({ open, onClose, onSave }) => {
         data: { canin: newValue },
       }),
     );
+  };
+
+  const handleNoteChange = event => {
+    const newNote = event.target.value;
+    updatePlan({ note: newNote });
   };
 
   const handleSaveTreatmentPlan = () => {
@@ -533,6 +538,17 @@ const TreatmentPlanModal = ({ open, onClose, onSave }) => {
             {fallenBracketsRow}
           </tbody>
         </table>
+        <Form.Group controlId='note'>
+          <Form.Label>{textForKey('Enter note')}</Form.Label>
+          <InputGroup>
+            <FormControl
+              onChange={handleNoteChange}
+              value={bracketsPlan[planType].note}
+              as='textarea'
+              aria-label={textForKey('Enter note')}
+            />
+          </InputGroup>
+        </Form.Group>
       </div>
     </EasyPlanModal>
   );

@@ -66,7 +66,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
       isPositiveDisabled={noteText.length === 0}
       onPositiveClick={handleSaveNote}
     >
-      <label htmlFor='basic-url'>{textForKey('Enter note')}</label>
+      <label>{textForKey('Enter note')}</label>
       <FormControl
         onChange={handleNoteChange}
         value={noteText}
