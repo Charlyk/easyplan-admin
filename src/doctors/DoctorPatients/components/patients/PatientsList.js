@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Typography } from '@material-ui/core';
+import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -63,11 +64,11 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
 
   const schedulesForHour = hour => {
     const [hours] = hour.split(':');
-    return filteredSchedules.filter(schedule => {
-      const scheduleHour = moment(schedule.dateAndTime).format('HH:mm');
-      const [scheduleHours] = scheduleHour.split(':');
-      return hours === scheduleHours;
+    const schedules = filteredSchedules.filter(schedule => {
+      const scheduleHour = moment(schedule.dateAndTime).format('HH');
+      return hours === scheduleHour;
     });
+    return sortBy(schedules, item => item.dateAndTime);
   };
 
   const renderPatientItem = schedule => {
@@ -90,7 +91,9 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           backgroundColor: `${schedule.serviceColor}1A`,
         }}
       >
-        <span className='patient-name'>{schedule.patientName}</span>
+        <Typography noWrap classes={{ root: 'patient-name' }}>
+          {schedule.patientName}
+        </Typography>
         <Typography noWrap classes={{ root: 'service-name' }}>
           {schedule.serviceName}
         </Typography>

@@ -139,10 +139,12 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: flex-start;
     border-radius: .3rem;
     margin-bottom: .5rem;
 
     .patient-name {
+      text-align: start;
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
