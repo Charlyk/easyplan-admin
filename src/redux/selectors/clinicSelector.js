@@ -11,3 +11,8 @@ export const clinicServicesSelector = createSelector(
   clinicSelector,
   clinic => clinic.services,
 );
+
+export const clinicDetailsSelector = createSelector(
+  clinicSelector,
+  state => state.clinic,
+);

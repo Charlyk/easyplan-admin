@@ -476,7 +476,7 @@ const OrthodonticPlan = ({ patient }) => {
   const treatmentTypeRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
-        <span className='group-subtitle'>{textForKey('Treatment type')}</span>
+        <span className='group-subtitle'>{textForKey('Service type')}</span>
       </td>
       <td valign='top'>
         <div className='options-container'>

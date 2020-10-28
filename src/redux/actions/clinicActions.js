@@ -22,3 +22,10 @@ export function setClinicServices(payload) {
     payload,
   };
 }
+
+export function setClinic(payload) {
+  return {
+    type: types.setClinicDetails,
+    payload,
+  };
+}

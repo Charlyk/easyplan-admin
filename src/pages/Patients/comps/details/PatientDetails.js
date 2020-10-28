@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import EasyTab from '../../../../components/EasyTab';
+import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import AppointmentNotes from './appointmentNotes';
@@ -31,6 +33,7 @@ const PatientDetails = ({
   scheduleId,
   isDoctor,
 }) => {
+  const currentClinic = useSelector(clinicDetailsSelector);
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   const [hasNotes, setHasNotes] = useState(false);
 
@@ -102,13 +105,14 @@ const PatientDetails = ({
             selected={selectedTab === TabId.treatmentPlans}
           />
         )}
-        {showTabs.includes(TabId.orthodonticPlan) && (
-          <EasyTab
-            title={textForKey('Orthodontic plan')}
-            onClick={() => handleTabClick(TabId.orthodonticPlan)}
-            selected={selectedTab === TabId.orthodonticPlan}
-          />
-        )}
+        {showTabs.includes(TabId.orthodonticPlan) &&
+          currentClinic.hasBrackets && (
+            <EasyTab
+              title={textForKey('Orthodontic plan')}
+              onClick={() => handleTabClick(TabId.orthodonticPlan)}
+              selected={selectedTab === TabId.orthodonticPlan}
+            />
+          )}
       </div>
       <div className='patient-details-root__content'>
         {selectedTab === TabId.appointmentsNotes && (
@@ -127,7 +131,7 @@ const PatientDetails = ({
         {selectedTab === TabId.xRay && (
           <PatientXRay onAddXRay={onAddXRay} patient={patient} />
         )}
-        {selectedTab === TabId.orthodonticPlan && (
+        {selectedTab === TabId.orthodonticPlan && currentClinic.hasBrackets && (
           <OrthodonticPlan patient={patient} />
         )}
       </div>
@@ -157,10 +161,11 @@ PatientDetails.propTypes = {
 
 PatientDetails.defaultProps = {
   showTabs: [
+    TabId.appointmentsNotes,
     TabId.appointments,
     TabId.xRay,
     TabId.notes,
     TabId.orthodonticPlan,
   ],
-  defaultTab: TabId.appointments,
+  defaultTab: TabId.appointmentsNotes,
 };

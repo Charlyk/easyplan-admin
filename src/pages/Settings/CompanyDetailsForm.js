@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react';
 
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import LoadingButton from '../../components/LoadingButton';
-import { userSelector } from '../../redux/selectors/rootSelector';
+import { setClinic } from '../../redux/actions/clinicActions';
+import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { EmailRegex } from '../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 const CompanyDetailsForm = props => {
-  const currentUser = useSelector(userSelector);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const currentClinic = useSelector(clinicDetailsSelector);
   const [isSaving, setIsSaving] = useState(false);
   const [data, setData] = useState({
     id: '',
@@ -31,28 +32,25 @@ const CompanyDetailsForm = props => {
     currency: 'MDL',
     country: 'md',
     isPhoneValid: true,
+    hasBrackets: false,
   });
 
   useEffect(() => {
-    fetchCompany();
-  }, [props, currentUser]);
+    setData({
+      ...data,
+      ...currentClinic,
+    });
+  }, [props, currentClinic]);
 
-  const fetchCompany = async () => {
-    setIsLoading(true);
-    const response = await dataAPI.fetchClinicDetails();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      setData({
-        ...data,
-        ...response.data,
-      });
-    }
-    setIsLoading(false);
+  const handleBracketsChange = () => {
+    setData({
+      ...data,
+      hasBrackets: !data.hasBrackets,
+    });
   };
 
   const handleLogoChange = event => {
-    if (isLoading || isSaving) return;
+    if (isSaving) return;
     const files = event.target.files;
     if (files != null) {
       setData({ ...data, logoFile: files[0] });
@@ -60,7 +58,7 @@ const CompanyDetailsForm = props => {
   };
 
   const handleFormChange = event => {
-    if (isLoading || isSaving) return;
+    if (isSaving) return;
     setData({
       ...data,
       [event.target.id]: event.target.value,
@@ -68,7 +66,7 @@ const CompanyDetailsForm = props => {
   };
 
   const handlePhoneChange = (value, _, event) => {
-    if (isLoading || isSaving) return;
+    if (isSaving) return;
     setData({
       ...data,
       phoneNumber: `+${value}`,
@@ -106,6 +104,7 @@ const CompanyDetailsForm = props => {
       country: data.country,
       description: data.description,
       workDays: data.workDays,
+      hasBrackets: data.hasBrackets,
       logoUrl,
     };
 
@@ -113,6 +112,7 @@ const CompanyDetailsForm = props => {
     if (response.isError) {
       console.error(response.message);
     } else {
+      dispatch(setClinic(response.data));
       setData({ ...data, ...response.data });
     }
     setIsSaving(false);
@@ -196,6 +196,14 @@ const CompanyDetailsForm = props => {
           </Form.Group>
         </div>
         <div className='right'>
+          <Form.Group controlId='hasBrackets'>
+            <Form.Check
+              onChange={handleBracketsChange}
+              checked={data.hasBrackets}
+              type='checkbox'
+              label={textForKey('Offers Braces services')}
+            />
+          </Form.Group>
           <Form.Group style={{ flexDirection: 'column' }} controlId='currency'>
             <Form.Label>{textForKey('Currency')}</Form.Label>
             <Form.Control
@@ -241,11 +249,11 @@ const CompanyDetailsForm = props => {
         <LoadingButton
           onClick={submitForm}
           className='positive-button'
-          isLoading={isLoading || isSaving}
-          disabled={isLoading || isSaving || !isFormValid()}
+          isLoading={isSaving}
+          disabled={isSaving || !isFormValid()}
         >
           {textForKey('Save')}
-          {!isSaving && !isLoading && <IconSuccess />}
+          <IconSuccess />
         </LoadingButton>
       </div>
     </div>

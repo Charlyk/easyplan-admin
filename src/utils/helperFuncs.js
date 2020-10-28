@@ -2,6 +2,7 @@ import moment from 'moment';
 import S3 from 'react-aws-s3';
 
 import {
+  setClinic,
   setClinicDoctors,
   setClinicServices,
 } from '../redux/actions/clinicActions';
@@ -247,6 +248,11 @@ export function overlap(dateRanges) {
 }
 
 export const fetchClinicData = () => async dispatch => {
+  // fetch clinic details
+  const clinicResponse = await dataAPI.fetchClinicDetails();
+  if (!clinicResponse.isError) {
+    dispatch(setClinic(clinicResponse.data));
+  }
   // fetch clinic doctors
   const doctorsResponse = await dataAPI.getClinicDoctors();
   if (!doctorsResponse.isError) {

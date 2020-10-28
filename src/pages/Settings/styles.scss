@@ -145,12 +145,13 @@
     }
 
     .right {
+      user-select: none;
       width: 49%;
       display: flex;
       margin-left: 1.2rem;
       flex-direction: column;
       align-items: flex-start;
-      margin-top: 6rem;
+      margin-top: 58px;
 
       .custom-select {
         font-size: .8rem;

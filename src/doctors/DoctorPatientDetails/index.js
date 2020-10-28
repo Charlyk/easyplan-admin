@@ -18,7 +18,10 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../redux/actions/actions';
-import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
+import {
+  clinicDetailsSelector,
+  clinicServicesSelector,
+} from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, teeth } from '../../utils/constants';
 import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
@@ -245,16 +248,6 @@ const DoctorPatientDetails = () => {
     }
   };
 
-  const handleBracketSelectChange = () => {
-    const newServices = cloneDeep(selectedServices);
-    if (newServices.some(item => item.bracket)) {
-      remove(newServices, item => item.bracket);
-      localDispatch(actions.setSelectedServices(newServices));
-    } else {
-      localDispatch(actions.setShouldFillTreatmentPlan(true));
-    }
-  };
-
   const getTotalPrice = () => {
     const prices = selectedServices.map(item => item.price);
     return sum(prices);
@@ -451,16 +444,6 @@ const DoctorPatientDetails = () => {
         <div className='services-container'>
           <div className='available-services'>
             <span className='total-title'>{textForKey('Services')}</span>
-            {bracketServices.length > 0 && (
-              <Form.Group controlId='bracketsServices'>
-                <Form.Check
-                  onChange={handleBracketSelectChange}
-                  type='checkbox'
-                  checked={selectedServices.some(item => item.bracket)}
-                  label={textForKey('Brackets')}
-                />
-              </Form.Group>
-            )}
             {simpleServices.map(service => (
               <Form.Group key={service.id} controlId={service.id}>
                 <Form.Check

@@ -38,6 +38,7 @@ import {
   setPaymentModal,
   triggerUserLogout,
 } from './redux/actions/actions';
+import { setClinic } from './redux/actions/clinicActions';
 import { setImageModal } from './redux/actions/imageModalActions';
 import initialState from './redux/initialState';
 import { imageModalSelector } from './redux/selectors/imageModalSelector';
@@ -54,6 +55,7 @@ import {
   userSelector,
 } from './redux/selectors/rootSelector';
 import authAPI from './utils/api/authAPI';
+import dataAPI from './utils/api/dataAPI';
 import { fetchClinicData } from './utils/helperFuncs';
 import { getAppLanguage, textForKey } from './utils/localization';
 import authManager from './utils/settings/authManager';
@@ -130,12 +132,12 @@ function App() {
     } else {
       const { data: user } = response;
       if (user != null) {
+        await dispatch(fetchClinicData());
         dispatch(setCurrentUser(user));
       } else {
         authManager.logOut();
         setRedirectUser(true);
       }
-      dispatch(fetchClinicData());
     }
     setAppIsLoading(false);
   };
