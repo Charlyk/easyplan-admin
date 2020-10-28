@@ -409,4 +409,5 @@ export const Action = {
   CreatePatientNote: 'CreatePatientNote',
   AddPatientXRayImage: 'AddPatientXRayImage',
   EditVisitNote: 'EditVisitNote',
+  UpdatedOrthodonticPlan: 'UpdatedOrthodonticPlan',
 };

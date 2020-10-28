@@ -3,8 +3,8 @@ import moment from 'moment';
 
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
-// const baseURL = 'http://localhost:8000/api/';
+// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
+const baseURL = 'http://localhost:8000/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -975,6 +975,34 @@ export default {
     try {
       const response = await instance().get(
         `patients/${patientId}/treatment-plan`,
+      );
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Get patient treatment plan
+   * @param patientId
+   * @param {Object} plan
+   * @param {string} plan.planClass
+   * @param {string} plan.occlusion
+   * @param {string} plan.included
+   * @param {string} plan.radiograph
+   * @param {Array.<string>} plan.fallenBrackets
+   * @param {{id: string, toothId: string?, name: string, price: number}} plan.service
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  saveTreatmentPlan: async (patientId, plan) => {
+    try {
+      const response = await instance().put(
+        `patients/${patientId}/treatment-plan`,
+        plan,
       );
       const { data: responseData } = response;
       return responseData;

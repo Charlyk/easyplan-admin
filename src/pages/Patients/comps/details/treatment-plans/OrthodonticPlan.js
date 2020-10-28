@@ -4,22 +4,20 @@ import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Form,
-  FormControl,
-  InputGroup,
-  Spinner,
-} from 'react-bootstrap';
+import { Form, FormControl, InputGroup, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import IconSuccess from '../../../../../assets/icons/iconSuccess';
 import EasyTab from '../../../../../components/EasyTab';
+import LoadingButton from '../../../../../components/LoadingButton';
 import { clinicServicesSelector } from '../../../../../redux/selectors/clinicSelector';
 import { userSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
-import { Role } from '../../../../../utils/constants';
-import { generateReducerActions } from '../../../../../utils/helperFuncs';
+import { Action, Role } from '../../../../../utils/constants';
+import {
+  generateReducerActions,
+  logUserAction,
+} from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 
 const diagnosisClass = ['1', '2', '3'];
@@ -46,6 +44,7 @@ const PlanType = {
 
 const initialState = {
   isLoading: true,
+  isSaving: false,
   planType: PlanType.mandible,
   bracketsPlan: {
     mandible: {
@@ -94,6 +93,7 @@ const reducerTypes = {
   setBracketsPlan: 'setBracketsPlan',
   setMalocclusion: 'setMalocclusion',
   setIsLoading: 'setIsLoading',
+  setIsSaving: 'setIsSaving',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -102,6 +102,8 @@ const reducer = (state, action) => {
   switch (action.type) {
     case reducerTypes.setIsLoading:
       return { ...state, isLoading: action.payload };
+    case reducerTypes.setIsSaving:
+      return { ...state, isSaving: action.payload };
     case reducerTypes.setPlanType:
       return { ...state, planType: action.payload };
     case reducerTypes.setBracketsPlan: {
@@ -150,10 +152,10 @@ const OrthodonticPlan = ({ patient }) => {
   );
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
   const bracesServices = services.filter(item => item.bracesService);
-  const [{ planType, bracketsPlan, isLoading }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [
+    { planType, bracketsPlan, isLoading, isSaving },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (patient != null) {
@@ -167,15 +169,18 @@ const OrthodonticPlan = ({ patient }) => {
     if (response.isError) {
       console.error(response.message);
     } else if (response.data != null) {
-      console.log(response.data);
+      const mandible = response.data.mandible;
+      const maxillary = response.data.maxillary;
+      updatePlan({ ...mandible }, PlanType.mandible);
+      updatePlan({ ...maxillary }, PlanType.maxillary);
     }
     localDispatch(actions.setIsLoading(false));
   };
 
-  const updatePlan = newData => {
+  const updatePlan = (newData, type = planType) => {
     localDispatch(
       actions.setBracketsPlan({
-        planTypeName: planType,
+        planTypeName: type,
         data: newData,
       }),
     );
@@ -306,7 +311,24 @@ const OrthodonticPlan = ({ patient }) => {
     updatePlan({ note: newNote });
   };
 
-  const handleSaveTreatmentPlan = () => {};
+  const handleSaveTreatmentPlan = async () => {
+    localDispatch(actions.setIsSaving(true));
+    const response = await dataAPI.saveTreatmentPlan(patient.id, bracketsPlan);
+    logUserAction(
+      Action.UpdatedOrthodonticPlan,
+      JSON.stringify({
+        patient: patient.id,
+        before: patient.treatmentPlan,
+        after: bracketsPlan,
+      }),
+    );
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      await fetchOrthodonticPlan();
+    }
+    localDispatch(actions.setIsSaving(false));
+  };
 
   const handlePlanTypeChange = newType => {
     localDispatch(actions.setPlanType(newType));
@@ -601,10 +623,14 @@ const OrthodonticPlan = ({ patient }) => {
       )}
       {isDoctor && !isLoading && (
         <div className='patient-treatment-plans__actions'>
-          <Button className='positive-button' onClick={handleSaveTreatmentPlan}>
+          <LoadingButton
+            isLoading={isSaving}
+            className='positive-button'
+            onClick={handleSaveTreatmentPlan}
+          >
             {textForKey('Save')}
             <IconSuccess />
-          </Button>
+          </LoadingButton>
         </div>
       )}
     </div>
