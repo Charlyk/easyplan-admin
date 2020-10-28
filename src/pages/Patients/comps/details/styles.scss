@@ -241,15 +241,14 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   position: relative;
 
   .edit-note-btn {
     outline: none;
     position: absolute;
     right: 1rem;
-    top: 50%;
     cursor: pointer;
+    top: 50%
   }
 
   .services-container {
