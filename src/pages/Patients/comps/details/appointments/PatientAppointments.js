@@ -40,12 +40,7 @@ const PatientAppointments = ({ patient }) => {
     <div className='patient-appointments'>
       <div className='patient-appointments__appointments-data'>
         {isLoading && (
-          <Spinner
-            animation='border'
-            variant='primary'
-            role='status'
-            className='loading-spinner'
-          />
+          <Spinner animation='border' className='patient-details-spinner' />
         )}
         {schedules.map(item => (
           <Appointment key={item.id} appointment={item} />

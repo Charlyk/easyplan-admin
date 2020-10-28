@@ -19,7 +19,6 @@ const ExpandedPhase = {
 
 const PatientXRay = ({ patient, onAddXRay }) => {
   const updateXRay = useSelector(updateXRaySelector);
-  const [expandedPhase, setExpandedPhase] = useState(ExpandedPhase.initial);
   const [state, setState] = useState({
     isFetching: false,
     images: { initial: [], middle: [], final: [] },
@@ -28,10 +27,6 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   useEffect(() => {
     fetchImages();
   }, [patient, updateXRay]);
-
-  const handlePhaseToggle = newPhase => {
-    setExpandedPhase(newPhase);
-  };
 
   const getItemsOfType = (items, type) => {
     return sortBy(
@@ -89,12 +84,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           />
         )}
         {state.isFetching && (
-          <Spinner
-            animation='border'
-            variant='primary'
-            role='status'
-            className='loading-spinner'
-          />
+          <Spinner animation='border' className='patient-details-spinner' />
         )}
       </div>
       <div className='patient-x-ray__actions'>

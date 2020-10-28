@@ -28,9 +28,11 @@ import ToothView from './components/ToothView';
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
+  appointments: 'Appointments',
   notes: 'Notes',
   xRay: 'X-Ray',
   treatmentPlans: 'TreatmentPlans',
+  orthodonticPlan: 'OrthodonticPlan',
 };
 
 const initialState = {
@@ -522,7 +524,7 @@ const DoctorPatientDetails = () => {
             patient={patient}
             defaultTab={TabId.notes}
             showTabs={[
-              TabId.treatmentPlans,
+              TabId.orthodonticPlan,
               TabId.appointmentsNotes,
               TabId.xRay,
               TabId.notes,

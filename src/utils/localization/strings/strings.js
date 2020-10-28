@@ -243,6 +243,7 @@ export default {
     'did not came': 'Did not came',
     expectations: 'Expectations',
     'created at': 'Created at',
+    'orthodontic plan': 'Orthodontic plan',
   },
   ro: {
     analytics: 'Analitică',
@@ -489,6 +490,7 @@ export default {
     'did not came': 'Nu au venit',
     expectations: 'Programați',
     'created at': 'Creat la data',
+    'orthodontic plan': 'Plan ortodontic',
   },
   ru: {
     analytics: 'Analytics',
@@ -733,5 +735,6 @@ export default {
     'did not came': 'Did not came',
     expectations: 'Expectations',
     'created at': 'Created at',
+    'orthodontic plan': 'Orthodontic plan',
   },
 };

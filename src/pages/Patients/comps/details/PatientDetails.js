@@ -8,7 +8,7 @@ import { textForKey } from '../../../../utils/localization';
 import AppointmentNotes from './appointmentNotes';
 import PatientAppointments from './appointments/PatientAppointments';
 import PatientNotes from './notes/PatientNotes';
-import TreatmentPlans from './treatment-plans/TreatmentPlans';
+import OrthodonticPlan from './treatment-plans/OrthodonticPlan';
 import PatientXRay from './x-ray/PatientXRay';
 import './styles.scss';
 
@@ -18,6 +18,7 @@ const TabId = {
   notes: 'Notes',
   xRay: 'X-Ray',
   treatmentPlans: 'TreatmentPlans',
+  orthodonticPlan: 'OrthodonticPlan',
 };
 
 const PatientDetails = ({
@@ -101,6 +102,13 @@ const PatientDetails = ({
             selected={selectedTab === TabId.treatmentPlans}
           />
         )}
+        {showTabs.includes(TabId.orthodonticPlan) && (
+          <EasyTab
+            title={textForKey('Orthodontic plan')}
+            onClick={() => handleTabClick(TabId.orthodonticPlan)}
+            selected={selectedTab === TabId.orthodonticPlan}
+          />
+        )}
       </div>
       <div className='patient-details-root__content'>
         {selectedTab === TabId.appointmentsNotes && (
@@ -119,8 +127,8 @@ const PatientDetails = ({
         {selectedTab === TabId.xRay && (
           <PatientXRay onAddXRay={onAddXRay} patient={patient} />
         )}
-        {selectedTab === TabId.treatmentPlans && (
-          <TreatmentPlans patient={patient} />
+        {selectedTab === TabId.orthodonticPlan && (
+          <OrthodonticPlan patient={patient} />
         )}
       </div>
     </div>
@@ -148,6 +156,11 @@ PatientDetails.propTypes = {
 };
 
 PatientDetails.defaultProps = {
-  showTabs: [TabId.appointments, TabId.xRay, TabId.notes, TabId.treatmentPlans],
+  showTabs: [
+    TabId.appointments,
+    TabId.xRay,
+    TabId.notes,
+    TabId.orthodonticPlan,
+  ],
   defaultTab: TabId.appointments,
 };

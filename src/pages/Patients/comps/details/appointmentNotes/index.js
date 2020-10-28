@@ -36,12 +36,7 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
     <div className='patient-notes'>
       <div className='patient-notes__notes-data'>
         {isFetching && (
-          <Spinner
-            animation='border'
-            variant='primary'
-            role='status'
-            className='loading-spinner'
-          />
+          <Spinner animation='border' className='patient-details-spinner' />
         )}
         {visits.map((visit, index) => (
           <AppointmentNote

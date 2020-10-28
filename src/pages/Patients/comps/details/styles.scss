@@ -7,6 +7,13 @@
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   border-radius: .3rem;
 
+  .patient-details-spinner {
+    position: absolute;
+    top: 40%;
+    left: 45%;
+    color: #3A83DC;
+  }
+
   &__header {
     width: 100%;
     padding: 1rem;
@@ -53,12 +60,6 @@
     padding: 1.5rem;
     min-height: 10rem;
     position: relative;
-
-    .loading-spinner {
-      position: absolute;
-      top: 45%;
-      left: 45%;
-    }
   }
 
   &__actions {
@@ -141,7 +142,7 @@
 
 .patient-notes {
   width: 100%;
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -224,6 +225,7 @@
       background: #FFFFFF;
       box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
       border-radius: 4px;
+      width: 100%;
       padding: 1rem;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -332,108 +334,134 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: .5rem 2rem;
   min-height: 10rem;
   position: relative;
 
-  .tabs-container {
+  .treatment-plan-modal-content {
     display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .no-data-label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    color: #34354C;
-  }
-
-  .loading-spinner {
-    position: absolute;
-    top: 45%;
-    left: 45%;
-    color: #3A83DC;
-  }
-
-  .options-row {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .group-title {
-    margin-top: 1rem;
-    margin-bottom: .5rem;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    color: #34354C;
-  }
-
-  .group-subtitle {
-    width: 70px;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-    color: #34354C;
-  }
-
-  .options-container {
+    flex-direction: column;
     flex: 1;
-    margin: .5rem;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    overflow-y: scroll;
+    padding: .5rem 1.5rem;
 
-    .custom-select {
+    .form-group {
+      textarea {
+        min-height: 4rem;
+        max-height: 4rem;
+      }
+
+      .form-label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+      }
+
+      .form-control {
+        outline: none;
+        width: 100%;
+        background-color: #FAFAFD;
+      }
+    }
+
+    .tabs-container {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .options-row {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .group-title {
+      margin-top: 1rem;
+      margin-bottom: .5rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: #34354C;
+    }
+
+    .group-subtitle {
+      width: 70px;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 24px;
+      color: #34354C;
+    }
+
+    .options-container {
       flex: 1;
+      margin: .5rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .custom-select {
+        flex: 1;
+        font-size: 12px;
+      }
+
+      .separator {
+        width: 1px;
+        background-color: #ededed;
+        height: 2rem;
+        margin-right: .5rem;
+      }
+    }
+
+    .option-text {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
       font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #34354C;
     }
 
-    .separator {
-      width: 1px;
-      background-color: #ededed;
-      height: 2rem;
-      margin-right: .5rem;
+    .option-button {
+      user-select: none;
+      cursor: pointer;
+      margin: .2rem;
+      padding: .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      border: 1px solid #CDCEEA;
+      border-radius: 4px;
+
+      &:hover {
+        opacity: .8;
+      }
+
+      &.selected {
+        border: 1px solid #3A83DC;
+        background: #3A83DC1A;
+      }
     }
   }
 
-  .option-text {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: 0.01em;
-    color: #34354C;
-  }
-
-  .option-button {
-    user-select: none;
-    cursor: pointer;
-    margin: .2rem;
-    padding: .5rem;
+  &__actions {
+    width: 100%;
+    padding: 1rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    outline: none;
-    border: 1px solid #CDCEEA;
-    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0px -20px 40px -5px rgba(239, 242, 251, 0.8);
 
-    &.selected {
-      border: 1px solid #3A83DC;
-      background: #3A83DC1A;
+    .positive-button {
+      margin: 0;
     }
   }
 }

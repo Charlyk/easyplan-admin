@@ -29,15 +29,10 @@ const PatientNotes = ({ onAddNote, patient }) => {
 
   return (
     <div className='patient-notes'>
+      {state.isFetching && (
+        <Spinner animation='border' className='patient-details-spinner' />
+      )}
       <div className='patient-notes__notes-data'>
-        {state.isFetching && (
-          <Spinner
-            animation='border'
-            variant='primary'
-            role='status'
-            className='loading-spinner'
-          />
-        )}
         {state.notes.map(note => (
           <PatientNote key={note.id} note={note} />
         ))}
