@@ -42,6 +42,7 @@
     padding-right: 1rem;
     flex: 1;
     position: relative;
+    overflow-y: scroll;
 
     .spinner {
       color: #3A83DC;
