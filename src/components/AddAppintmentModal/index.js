@@ -498,9 +498,10 @@ const AddAppointmentModal = ({
       return;
     }
     localDispatch(reducerActions.setIsCreatingSchedule(true));
-    const scheduleDate = `${moment(appointmentDate).format(
-      'YYYY-MM-DD',
-    )} ${appointmentHour}`;
+    const [hour, minute] = appointmentHour.split(':');
+    const date = moment(appointmentDate);
+    date.set({ hour: parseInt(hour), minute: parseInt(minute) });
+    const scheduleDate = date.format();
     const requestBody = {
       patientFirstName,
       patientLastName,
@@ -513,6 +514,7 @@ const AddAppointmentModal = ({
       status: appointmentStatus,
       scheduleId: scheduleId,
     };
+    console.log(requestBody);
     const response = await dataAPI.createNewSchedule(requestBody);
     // log user action
     if (schedule != null) {

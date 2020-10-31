@@ -251,7 +251,7 @@ const ServiceDetailsModal = props => {
           />
         </div>
 
-        <div className='service-doctors__footer'>
+        <div className='service-details-modal__footer'>
           <Button
             className='cancel-button'
             disabled={isLoading || isDeleting}
