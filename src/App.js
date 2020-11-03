@@ -38,9 +38,7 @@ import {
   setPaymentModal,
   triggerUserLogout,
 } from './redux/actions/actions';
-import { setClinic } from './redux/actions/clinicActions';
 import { setImageModal } from './redux/actions/imageModalActions';
-import initialState from './redux/initialState';
 import { imageModalSelector } from './redux/selectors/imageModalSelector';
 import {
   createClinicSelector,
@@ -55,7 +53,6 @@ import {
   userSelector,
 } from './redux/selectors/rootSelector';
 import authAPI from './utils/api/authAPI';
-import dataAPI from './utils/api/dataAPI';
 import { fetchClinicData } from './utils/helperFuncs';
 import { getAppLanguage, textForKey } from './utils/localization';
 import authManager from './utils/settings/authManager';
@@ -149,6 +146,7 @@ function App() {
   const handleClinicCreated = data => {
     handleCloseCreateClinic();
     dispatch(setCurrentUser(data));
+    dispatch(fetchClinicData());
   };
 
   const handleUserLogout = () => {
