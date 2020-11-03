@@ -144,7 +144,7 @@ const reducer = (state, action) => {
   }
 };
 
-const OrthodonticPlan = ({ patient }) => {
+const OrthodonticPlan = ({ patient, onSave }) => {
   const services = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const currentClinic = currentUser.clinics.find(
@@ -326,6 +326,7 @@ const OrthodonticPlan = ({ patient }) => {
       console.error(response.message);
     } else {
       await fetchOrthodonticPlan();
+      onSave(bracketsPlan);
     }
     localDispatch(actions.setIsSaving(false));
   };
@@ -641,4 +642,9 @@ export default OrthodonticPlan;
 
 OrthodonticPlan.propTypes = {
   patient: PropTypes.object,
+  onSave: PropTypes.func,
+};
+
+OrthodonticPlan.defaultProps = {
+  onSave: () => null,
 };

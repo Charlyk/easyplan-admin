@@ -27,6 +27,7 @@ const PatientDetails = ({
   onAddNote,
   onAddXRay,
   onEditAppointmentNote,
+  onSaveOrthodonticPlan,
   showTabs,
   defaultTab,
   patient,
@@ -132,7 +133,7 @@ const PatientDetails = ({
           <PatientXRay onAddXRay={onAddXRay} patient={patient} />
         )}
         {selectedTab === TabId.orthodonticPlan && currentClinic.hasBrackets && (
-          <OrthodonticPlan patient={patient} />
+          <OrthodonticPlan patient={patient} onSave={onSaveOrthodonticPlan} />
         )}
       </div>
     </div>
@@ -147,6 +148,7 @@ PatientDetails.propTypes = {
   onAddNote: PropTypes.func,
   onAddXRay: PropTypes.func,
   onEditAppointmentNote: PropTypes.func,
+  onSaveOrthodonticPlan: PropTypes.func,
   showTabs: PropTypes.arrayOf(PropTypes.string),
   defaultTab: PropTypes.string,
   patient: PropTypes.shape({
@@ -168,4 +170,5 @@ PatientDetails.defaultProps = {
     TabId.orthodonticPlan,
   ],
   defaultTab: TabId.appointmentsNotes,
+  onSaveOrthodonticPlan: () => null,
 };

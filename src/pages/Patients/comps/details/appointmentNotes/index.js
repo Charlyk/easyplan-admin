@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -27,7 +28,7 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      setVisits(response.data || []);
+      setVisits(sortBy(response.data, item => item.created).reverse() || []);
     }
     setIsFetching(false);
   };

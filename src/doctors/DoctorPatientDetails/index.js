@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sum from 'lodash/sum';
 import moment from 'moment';
-import { Button, Form, Modal, Spinner } from 'react-bootstrap';
+import { Form, Modal, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -12,16 +12,12 @@ import './styles.scss';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import FinalizeTreatmentModal from '../../components/FinalizeTreatmentModal';
 import LoadingButton from '../../components/LoadingButton';
-import TreatmentPlanModal from '../../components/TreatmentPlanModal';
 import PatientDetails from '../../pages/Patients/comps/details/PatientDetails';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../redux/actions/actions';
-import {
-  clinicDetailsSelector,
-  clinicServicesSelector,
-} from '../../redux/selectors/clinicSelector';
+import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, teeth } from '../../utils/constants';
 import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
@@ -99,15 +95,31 @@ const reducer = (state, action) => {
     case reducerTypes.setTreatmentPlan: {
       const { mandible, maxillary } = action.payload;
       let newServices = cloneDeep(state.selectedServices);
+      const mandibleServices = [
+        ...mandible.braces.map(item => ({
+          ...item,
+          bracket: true,
+          name: `${item.name} (${textForKey('Mandible')})`,
+        })),
+        ...mandible.treatmentTypes.map(item => ({
+          ...item,
+          bracket: true,
+          name: `${item.name} (${textForKey('Mandible')})`,
+        })),
+      ];
+      const maxillaryServices = [
+        ...maxillary.braces.map(item => ({
+          ...item,
+          bracket: true,
+          name: `${item.name} (${textForKey('Maxillary')})`,
+        })),
+        ...maxillary.treatmentTypes.map(item => ({
+          ...item,
+          bracket: true,
+          name: `${item.name} (${textForKey('Maxillary')})`,
+        })),
+      ];
       remove(newServices, item => item.bracket);
-      const mandibleServices = mandible.braces.map(item => ({
-        ...item,
-        name: `${item.name} (${textForKey('Mandible')})`,
-      }));
-      const maxillaryServices = maxillary.braces.map(item => ({
-        ...item,
-        name: `${item.name} (${textForKey('Maxillary')})`,
-      }));
       newServices = [...newServices, ...mandibleServices, ...maxillaryServices];
       return {
         ...state,
@@ -158,7 +170,6 @@ const DoctorPatientDetails = () => {
       allServices,
       selectedServices,
       schedule,
-      shouldFillTreatmentPlan,
       treatmentPlan,
       showFinalizeTreatment,
       isFinalizing,
@@ -166,7 +177,6 @@ const DoctorPatientDetails = () => {
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
-  const bracketServices = allServices.filter(item => item.bracket);
   const simpleServices = allServices.filter(
     item => !item.bracket && !item.bracesService,
   );
@@ -179,6 +189,15 @@ const DoctorPatientDetails = () => {
     localDispatch(actions.setServices(services));
   }, [services]);
 
+  const fetchOrthodonticPlan = async () => {
+    const response = await dataAPI.fetchTreatmentPlan(patientId);
+    if (response.isError) {
+      console.error(response.message);
+    } else if (response.data != null) {
+      handleSaveTreatmentPlan(response.data);
+    }
+  };
+
   const fetchScheduleDetails = async () => {
     localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.fetchDoctorPatientDetails(
@@ -188,6 +207,7 @@ const DoctorPatientDetails = () => {
     if (!response.isError) {
       const { data } = response;
       localDispatch(actions.setScheduleDetails(data));
+      await fetchOrthodonticPlan();
     }
     localDispatch(actions.setIsLoading(false));
   };
@@ -253,17 +273,8 @@ const DoctorPatientDetails = () => {
     return sum(prices);
   };
 
-  const handleCloseTreatmentPlan = () => {
-    localDispatch(actions.setShouldFillTreatmentPlan(false));
-  };
-
-  const openTreatmentPlan = () => {
-    localDispatch(actions.setShouldFillTreatmentPlan(true));
-  };
-
   const handleSaveTreatmentPlan = plan => {
     localDispatch(actions.setTreatmentPlan(plan));
-    handleCloseTreatmentPlan();
   };
 
   const handleFinalizeTreatment = () => {
@@ -321,13 +332,6 @@ const DoctorPatientDetails = () => {
         open={showFinalizeTreatment}
         onClose={handleCloseFinalizeTreatment}
       />
-      <TreatmentPlanModal
-        treatmentPlan={treatmentPlan}
-        onSave={handleSaveTreatmentPlan}
-        open={shouldFillTreatmentPlan}
-        onClose={handleCloseTreatmentPlan}
-        services={allServices.filter(item => item.bracket)}
-      />
       <Modal
         centered
         className='loading-modal'
@@ -361,14 +365,6 @@ const DoctorPatientDetails = () => {
             </div>
           </div>
         </div>
-        {treatmentPlan != null && (
-          <Button
-            className='positive-button treatment-plan-btn'
-            onClick={openTreatmentPlan}
-          >
-            {textForKey('Treatment plan')}
-          </Button>
-        )}
         <div className='tooth-container'>
           <div className='top-left'>
             {teeth
@@ -503,6 +499,7 @@ const DoctorPatientDetails = () => {
             scheduleId={scheduleId}
             onAddXRay={handleAddXRay}
             onAddNote={handleAddNote}
+            onSaveOrthodonticPlan={handleSaveTreatmentPlan}
             onEditAppointmentNote={handleEditAppointmentNote}
             patient={patient}
             defaultTab={TabId.notes}
