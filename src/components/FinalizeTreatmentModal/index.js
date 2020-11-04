@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 
+import { Box } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 
+import IconCheckBoxChecked from '../../assets/icons/iconCheckBoxChecked';
 import IconCheckBoxUnchecked from '../../assets/icons/iconCheckBoxUnchecked';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import IconCheckBoxChecked from '../../assets/icons/iconCheckBoxChecked';
-
-import { Box } from '@material-ui/core';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const [selectedServices, setSelectedServices] = useState([]);
@@ -20,12 +19,18 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     const newServices = cloneDeep(selectedServices);
     if (
       newServices.some(
-        item => item.id === service.id && item.toothId === service.toothId,
+        item =>
+          item.id === service.id &&
+          item.toothId === service.toothId &&
+          item.destination === service.destination,
       )
     ) {
       remove(
         newServices,
-        item => item.id === service.id && item.toothId === service.toothId,
+        item =>
+          item.id === service.id &&
+          item.toothId === service.toothId &&
+          item.destination === service.destination,
       );
     } else {
       newServices.push(service);
@@ -41,7 +46,10 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
 
   const isChecked = item =>
     selectedServices.some(
-      service => service.id === item.id && service.toothId === item.toothId,
+      service =>
+        service.id === item.id &&
+        service.toothId === item.toothId &&
+        service.destination === item.destination,
     );
   return (
     <EasyPlanModal
@@ -57,7 +65,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
           <div
             role='button'
             tabIndex={0}
-            key={`${item.id}-${item.toothId}`}
+            key={`${item.id}-${item.toothId}-${item.name}-${item.destination}`}
             className='final-service-item'
             onClick={() => handleServiceToggle(item)}
           >

@@ -72,7 +72,17 @@ const historyToService = it => ({
   color: it.serviceColor,
   toothId: it.toothId,
   price: it.servicePrice || 0,
+  destination: it.destination,
 });
+
+const serviceExists = (list, service, destination) => {
+  return list.some(
+    it =>
+      it.id === service.id &&
+      it.toothId === service.toothId &&
+      it.destination === destination,
+  );
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -81,7 +91,6 @@ const reducer = (state, action) => {
     case reducerTypes.setPatient:
       return { ...state, patient: action.payload };
     case reducerTypes.setToothServices: {
-      console.log(action.payload);
       return { ...state, toothServices: action.payload };
     }
     case reducerTypes.setAllServices:
@@ -94,30 +103,71 @@ const reducer = (state, action) => {
       return { ...state, shouldFillTreatmentPlan: action.payload };
     case reducerTypes.setTreatmentPlan: {
       const { mandible, maxillary } = action.payload;
+      const completedServices = state.completedServices;
       let newServices = cloneDeep(state.selectedServices);
       const mandibleServices = [
-        ...mandible.braces.map(item => ({
-          ...item,
-          bracket: true,
-          name: `${item.name} (${textForKey('Mandible')})`,
-        })),
-        ...mandible.treatmentTypes.map(item => ({
-          ...item,
-          bracket: true,
-          name: `${item.name} (${textForKey('Mandible')})`,
-        })),
+        ...mandible.braces
+          .filter(
+            item =>
+              !serviceExists(
+                [...newServices, ...completedServices],
+                item,
+                'mandible',
+              ),
+          )
+          .map(item => ({
+            ...item,
+            bracket: true,
+            name: `${item.name} (${textForKey('Mandible')})`,
+            destination: 'mandible',
+          })),
+        ...mandible.treatmentTypes
+          .filter(
+            item =>
+              !serviceExists(
+                [...newServices, ...completedServices],
+                item,
+                'mandible',
+              ),
+          )
+          .map(item => ({
+            ...item,
+            bracket: true,
+            name: `${item.name} (${textForKey('Mandible')})`,
+            destination: 'mandible',
+          })),
       ];
       const maxillaryServices = [
-        ...maxillary.braces.map(item => ({
-          ...item,
-          bracket: true,
-          name: `${item.name} (${textForKey('Maxillary')})`,
-        })),
-        ...maxillary.treatmentTypes.map(item => ({
-          ...item,
-          bracket: true,
-          name: `${item.name} (${textForKey('Maxillary')})`,
-        })),
+        ...maxillary.braces
+          .filter(
+            item =>
+              !serviceExists(
+                [...newServices, ...completedServices],
+                item,
+                'maxillary',
+              ),
+          )
+          .map(item => ({
+            ...item,
+            bracket: true,
+            name: `${item.name} (${textForKey('Maxillary')})`,
+            destination: 'maxillary',
+          })),
+        ...maxillary.treatmentTypes
+          .filter(
+            item =>
+              !serviceExists(
+                [...newServices, ...completedServices],
+                item,
+                'maxillary',
+              ),
+          )
+          .map(item => ({
+            ...item,
+            bracket: true,
+            name: `${item.name} (${textForKey('Maxillary')})`,
+            destination: 'maxillary',
+          })),
       ];
       remove(newServices, item => item.bracket);
       newServices = [...newServices, ...mandibleServices, ...maxillaryServices];
@@ -296,12 +346,14 @@ const DoctorPatientDetails = () => {
         name: item.name,
         price: item.price,
         toothId: item.toothId,
+        destination: item.destination,
       })),
       selectedServices: selectedServices.map(item => ({
         id: item.id,
         name: item.name,
         price: item.price,
         toothId: item.toothId,
+        destination: item.destination,
       })),
       treatmentPlan,
     };
@@ -468,7 +520,7 @@ const DoctorPatientDetails = () => {
               .filter(it => !it.completed)
               .map(service => (
                 <FinalServiceItem
-                  key={`${service.id}-${service.toothId}-${service.name}`}
+                  key={`${service.id}-${service.toothId}-${service.name}-${service.destination}`}
                   service={service}
                 />
               ))}
