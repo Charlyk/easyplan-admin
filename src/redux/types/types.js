@@ -20,6 +20,7 @@ export default {
   setPaymentModal: 'setPaymentModal',
   updateCalendarDoctorHeight: 'updateCalendarDoctorHeight',
   checkAppointments: 'checkAppointments',
+  updateInvoices: 'updateInvoices',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,

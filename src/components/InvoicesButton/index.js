@@ -2,15 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import './styles.scss';
 import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
-import { Button, Spinner } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { setPaymentModal } from '../../redux/actions/actions';
+import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 
-const InvoicesButton = props => {
+const InvoicesButton = () => {
   const dispatch = useDispatch();
+  const updateInvoices = useSelector(updateInvoicesSelector);
   const buttonRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
@@ -18,7 +20,7 @@ const InvoicesButton = props => {
 
   useEffect(() => {
     fetchInvoices();
-  }, [props]);
+  }, [updateInvoices]);
 
   const fetchInvoices = async () => {
     setIsLoading(true);
@@ -99,12 +101,9 @@ const InvoicesButton = props => {
       ref={buttonRef}
       onClick={handleToggleInvoices}
     >
-      {isLoading && <Spinner animation='border' className='loading-spinner' />}
-      {!isLoading && (
-        <span className='button-text'>
-          {textForKey('For payment')} ({invoices.length})
-        </span>
-      )}
+      <span className='button-text'>
+        {textForKey('For payment')} ({invoices.length})
+      </span>
       {invoicesPaper}
     </div>
   );

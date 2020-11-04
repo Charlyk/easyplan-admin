@@ -78,14 +78,7 @@ function App() {
   const [isAppLoading, setAppIsLoading] = useState(false);
 
   useEffect(() => {
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.checkAppointments,
-        timerName: 'appointmentsTimer',
-        timerInterval: 60 * 1000,
-      },
-    });
+    startTimers();
   }, []);
 
   useEffect(() => {
@@ -114,6 +107,25 @@ function App() {
   const redirectToHome = () => {
     setRedirectUser(true);
     setTimeout(() => setRedirectUser(false), 500);
+  };
+
+  const startTimers = () => {
+    dispatch({
+      type: START_TIMER,
+      payload: {
+        actionName: types.checkAppointments,
+        timerName: 'appointmentsTimer',
+        timerInterval: 60 * 1000,
+      },
+    });
+    dispatch({
+      type: START_TIMER,
+      payload: {
+        actionName: types.updateInvoices,
+        timerName: 'invoicesTimer',
+        timerInterval: 10 * 1000,
+      },
+    });
   };
 
   const changeCurrentClinic = async clinicId => {

@@ -214,7 +214,7 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
 
   useEffect(() => {
     setAnimateSchedule(dispatch(checkShouldAnimateSchedule(appointment)));
-  }, [checkAppointment]);
+  }, [checkAppointment, appointment]);
 
   const handleScheduleClick = () => {
     if (hidden) {

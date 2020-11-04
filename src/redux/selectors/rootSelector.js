@@ -12,6 +12,11 @@ export const checkAppointmentsSelector = createSelector(
   state => state.checkAppointments,
 );
 
+export const updateInvoicesSelector = createSelector(
+  mainSelector,
+  state => state.updateInvoices,
+);
+
 export const updateCategoriesSelector = createSelector(
   mainSelector,
   state => state.updateCategories,

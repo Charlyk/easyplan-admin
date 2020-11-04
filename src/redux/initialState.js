@@ -10,4 +10,5 @@ export default Object.freeze({
   updateAppointments: false,
   updateCalendarDoctorHeight: false,
   checkAppointments: false,
+  updateInvoices: false,
 });

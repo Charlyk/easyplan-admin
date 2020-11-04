@@ -20,7 +20,7 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
 
   useEffect(() => {
     setAnimateSchedule(dispatch(checkShouldAnimateSchedule(schedule)));
-  }, [checkAppointment]);
+  }, [checkAppointment, schedule]);
 
   useEffect(() => {
     setHours([

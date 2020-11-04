@@ -27,6 +27,8 @@ function main(state = initialState, action) {
   switch (action.type) {
     case types.checkAppointments:
       return { ...state, checkAppointments: !state.checkAppointments };
+    case types.updateInvoices:
+      return { ...state, updateInvoices: !state.updateInvoices };
     case types.updateCategoriesList:
       return {
         ...state,
