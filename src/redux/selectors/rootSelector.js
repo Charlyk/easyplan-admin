@@ -7,6 +7,11 @@ export const updateCalendarDoctorHeightSelector = createSelector(
   state => state.updateCalendarDoctorHeight,
 );
 
+export const checkAppointmentsSelector = createSelector(
+  mainSelector,
+  state => state.checkAppointments,
+);
+
 export const updateCategoriesSelector = createSelector(
   mainSelector,
   state => state.updateCategories,

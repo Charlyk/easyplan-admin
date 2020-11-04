@@ -25,6 +25,8 @@ export default combineReducers({
 
 function main(state = initialState, action) {
   switch (action.type) {
+    case types.checkAppointments:
+      return { ...state, checkAppointments: !state.checkAppointments };
     case types.updateCategoriesList:
       return {
         ...state,

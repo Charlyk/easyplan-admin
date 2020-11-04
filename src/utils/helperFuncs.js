@@ -6,6 +6,7 @@ import {
   setClinicDoctors,
   setClinicServices,
 } from '../redux/actions/clinicActions';
+import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
 import dataAPI, { imageLambdaUrl } from './api/dataAPI';
 import { S3Config } from './constants';
 
@@ -264,4 +265,19 @@ export const fetchClinicData = () => async dispatch => {
   if (!servicesResponse.isError) {
     dispatch(setClinicServices(servicesResponse.data));
   }
+};
+
+export const checkShouldAnimateSchedule = schedule => (dispatch, getState) => {
+  if (schedule != null) {
+    const appState = getState();
+    const currentClinic = clinicDetailsSelector(appState);
+    const now = moment();
+    const scheduleTime = moment(schedule.dateAndTime);
+    const duration = moment.duration(scheduleTime.diff(now));
+    const minutes = duration.asMinutes();
+    return (
+      minutes > 0 && minutes <= currentClinic.notifyUpcomingAppointmentTimer
+    );
+  }
+  return false;
 };

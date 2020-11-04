@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
 
+import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { getAppointmentTop } from '../../../../../utils/helperFuncs';
+import { checkAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
+import { checkShouldAnimateSchedule } from '../../../../../utils/helperFuncs';
 
 const minHeight = 32;
 const minTop = 3;
 
 const WeekAppointmentItem = ({ schedule, onSelect }) => {
+  const dispatch = useDispatch();
+  const checkAppointment = useSelector(checkAppointmentsSelector);
   const [position, setPosition] = useState({ top: minTop, height: minHeight });
+  const [animateSchedule, setAnimateSchedule] = useState(false);
   const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
+
+  useEffect(() => {
+    setAnimateSchedule(dispatch(checkShouldAnimateSchedule(schedule)));
+  }, [checkAppointment]);
 
   useEffect(() => {
     setHours([
@@ -30,7 +40,7 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
       role='button'
       tabIndex={0}
       onClick={handleScheduleSelect}
-      className='appointment-item'
+      className={clsx('appointment-item', animateSchedule && 'upcoming')}
       style={{
         ...position,
         border: `1px solid ${schedule.serviceColor}`,

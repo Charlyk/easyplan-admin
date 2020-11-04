@@ -19,6 +19,7 @@ export default {
   setAddPatientXRay: 'setAddPatientXRay',
   setPaymentModal: 'setPaymentModal',
   updateCalendarDoctorHeight: 'updateCalendarDoctorHeight',
+  checkAppointments: 'checkAppointments',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,

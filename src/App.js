@@ -18,6 +18,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import { START_TIMER } from 'redux-timer-middleware';
 
 import AddNote from './components/AddNote';
 import AddXRay from './components/AddXRay';
@@ -52,6 +53,7 @@ import {
   updateCurrentUserSelector,
   userSelector,
 } from './redux/selectors/rootSelector';
+import types from './redux/types/types';
 import authAPI from './utils/api/authAPI';
 import { fetchClinicData } from './utils/helperFuncs';
 import { getAppLanguage, textForKey } from './utils/localization';
@@ -74,6 +76,17 @@ function App() {
     item => item.id === currentUser?.selectedClinic,
   );
   const [isAppLoading, setAppIsLoading] = useState(false);
+
+  useEffect(() => {
+    dispatch({
+      type: START_TIMER,
+      payload: {
+        actionName: types.checkAppointments,
+        timerName: 'appointmentsTimer',
+        timerInterval: 60 * 1000,
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (selectedClinic != null) {

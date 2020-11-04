@@ -9,7 +9,11 @@ import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { Action } from '../../../../../utils/constants';
-import { getDays, logUserAction } from '../../../../../utils/helperFuncs';
+import {
+  checkShouldAnimateSchedule,
+  getDays,
+  logUserAction,
+} from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 
 const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
@@ -70,10 +74,11 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   };
 
   const renderSchedule = schedule => {
+    const shouldAnimate = dispatch(checkShouldAnimateSchedule(schedule));
     return (
       <div
         key={schedule.id}
-        className='appointment-item'
+        className={clsx('appointment-item', shouldAnimate && 'upcoming')}
         style={{
           border: `1px solid ${schedule.serviceColor}`,
           backgroundColor: `${schedule.serviceColor}1A`,

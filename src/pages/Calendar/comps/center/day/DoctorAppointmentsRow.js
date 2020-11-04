@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Tooltip, Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -8,9 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
+import {
+  checkAppointmentsSelector,
+  updateAppointmentsSelector,
+} from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
-import { generateReducerActions } from '../../../../../utils/helperFuncs';
+import {
+  checkShouldAnimateSchedule,
+  generateReducerActions,
+} from '../../../../../utils/helperFuncs';
 
 const initialState = {
   appointments: [],
@@ -198,9 +205,16 @@ const DoctorAppointmentsRow = ({
 };
 
 const AppointmentItem = ({ appointment, hidden, onSelect }) => {
+  const dispatch = useDispatch();
+  const checkAppointment = useSelector(checkAppointmentsSelector);
+  const [animateSchedule, setAnimateSchedule] = useState(false);
   const title = `${appointment.patientName} ${appointment.start.format(
     'HH:mm',
   )} - ${appointment.end.format('HH:mm')}`;
+
+  useEffect(() => {
+    setAnimateSchedule(dispatch(checkShouldAnimateSchedule(appointment)));
+  }, [checkAppointment]);
 
   const handleScheduleClick = () => {
     if (hidden) {
@@ -216,7 +230,7 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
           'HH:mm',
         )}>${appointment.end.format('HH:mm')}`}
         key={appointment.id}
-        className='appointment-item'
+        className={clsx('appointment-item', animateSchedule && 'upcoming')}
         onClick={handleScheduleClick}
         style={{
           border: `${appointment.serviceColor} 1px solid`,
