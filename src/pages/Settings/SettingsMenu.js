@@ -2,10 +2,8 @@ import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 
 import IconNext from '../../assets/icons/iconNext';
-import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 
 const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
@@ -28,6 +26,24 @@ const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
           <span className='item-title'>{textForKey('Company details')}</span>
           <div className='next-arrow'>
             {isSelected('companyDetails') && <IconNext />}
+          </div>
+        </div>
+      )}
+      {['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic) && (
+        <div
+          role='button'
+          tabIndex={0}
+          onClick={() => onSelect('appSettings')}
+          className={clsx(
+            'settings-menu-item',
+            isSelected('appSettings') && 'selected',
+          )}
+        >
+          <span className='item-title'>
+            {textForKey('Application settings')}
+          </span>
+          <div className='next-arrow'>
+            {isSelected('appSettings') && <IconNext />}
           </div>
         </div>
       )}

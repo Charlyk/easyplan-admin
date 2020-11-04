@@ -55,6 +55,15 @@
         margin-bottom: 0;
       }
 
+      .form-text {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: .7rem;
+        color: #7b7ca0;
+        margin-bottom: 0;
+      }
+
       .form-control {
         background-color: #FAFAFD;
       }
@@ -162,6 +171,24 @@
         max-height: 6.6rem;
       }
     }
+  }
+}
+
+.application-settings-form {
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: scroll;
+
+  .data-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 }
 

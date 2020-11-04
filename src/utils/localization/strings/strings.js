@@ -248,6 +248,10 @@ export default {
     'created at': 'Created at',
     'orthodontic plan': 'Orthodontic plan',
     'offers braces services': 'Offers Braces services',
+    'application settings': 'Application settings',
+    'animate appointments before': 'Animate appointments before',
+    appointment_animation_timer:
+      'Indicate the amount of time that a schedule should be animated before its time',
   },
   ro: {
     analytics: 'Analitică',
@@ -499,6 +503,10 @@ export default {
     'created at': 'Creat la data',
     'orthodontic plan': 'Plan ortodontic',
     'offers braces services': 'Oferă servicii ortodontice',
+    'application settings': 'Setări aplicație',
+    'animate appointments before': 'Notifică despre programare din timp',
+    appointment_animation_timer:
+      'Indică cu cât timp înainte trebuie animate programarile',
   },
   ru: {
     analytics: 'Analytics',
@@ -748,5 +756,7 @@ export default {
     'created at': 'Created at',
     'orthodontic plan': 'Orthodontic plan',
     'offers braces services': 'Offers Braces services',
+    'application settings': 'Application settings',
+    'animate appointments before': 'Animate appointments before',
   },
 };
