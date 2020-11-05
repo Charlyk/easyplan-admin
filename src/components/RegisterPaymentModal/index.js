@@ -3,15 +3,16 @@ import React, { useEffect, useState } from 'react';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 import { FormControl } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 
+import {
+  toggleAppointmentsUpdate,
+  toggleUpdateInvoices,
+} from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-
 import './styles.scss';
-import { useDispatch } from 'react-redux';
-
-import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 
 const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       console.log(response.message);
     } else {
       dispatch(toggleAppointmentsUpdate());
+      dispatch(toggleUpdateInvoices());
       onClose();
     }
 

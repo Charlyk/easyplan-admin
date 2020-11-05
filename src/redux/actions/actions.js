@@ -164,3 +164,10 @@ export function toggleUpdateCalendarDoctorHeight() {
     payload: '',
   };
 }
+
+export function toggleUpdateInvoices() {
+  return {
+    type: types.updateInvoices,
+    payload: '',
+  };
+}
