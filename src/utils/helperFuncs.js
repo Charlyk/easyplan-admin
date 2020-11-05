@@ -276,7 +276,9 @@ export const checkShouldAnimateSchedule = schedule => (dispatch, getState) => {
     const duration = moment.duration(scheduleTime.diff(now));
     const minutes = duration.asMinutes();
     return (
-      minutes > 0 && minutes <= currentClinic.notifyUpcomingAppointmentTimer
+      minutes > 0 &&
+      minutes <= currentClinic.notifyUpcomingAppointmentTimer &&
+      schedule.status === 'Pending'
     );
   }
   return false;

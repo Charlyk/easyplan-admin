@@ -14,6 +14,7 @@ import {
   updateAppointmentsSelector,
 } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
+import { ScheduleStatuses, Statuses } from '../../../../../utils/constants';
 import {
   checkShouldAnimateSchedule,
   generateReducerActions,
@@ -264,6 +265,7 @@ AppointmentItem.propTypes = {
       doctorId: PropTypes.string,
       serviceDuration: PropTypes.number,
       serviceColor: PropTypes.string,
+      status: PropTypes.string,
     }),
   ),
   appointment: PropTypes.shape({
@@ -275,6 +277,7 @@ AppointmentItem.propTypes = {
     serviceDuration: PropTypes.number,
     serviceColor: PropTypes.string,
     patientName: PropTypes.string,
+    status: PropTypes.string,
   }),
 };
 
