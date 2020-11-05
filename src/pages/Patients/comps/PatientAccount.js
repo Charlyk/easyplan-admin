@@ -51,7 +51,8 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
 
   const isFormValid = () => {
     return (
-      (patientData?.email?.length === 0 ||
+      (patientData.email == null ||
+        patientData?.email?.length === 0 ||
         patientData?.email?.match(EmailRegex)) &&
       patientData.isPhoneValid
     );

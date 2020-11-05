@@ -11,6 +11,7 @@ import * as locales from 'react-date-range/dist/locale';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 
+import IconAvatar from '../../assets/icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, ScheduleStatuses } from '../../utils/constants';
@@ -18,7 +19,6 @@ import { logUserAction, urlToLambda } from '../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import IconAvatar from '../../assets/icons/iconAvatar';
 
 const initialState = {
   patient: null,
