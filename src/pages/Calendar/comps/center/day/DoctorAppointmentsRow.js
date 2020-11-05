@@ -14,7 +14,6 @@ import {
   updateAppointmentsSelector,
 } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
-import { ScheduleStatuses, Statuses } from '../../../../../utils/constants';
 import {
   checkShouldAnimateSchedule,
   generateReducerActions,
