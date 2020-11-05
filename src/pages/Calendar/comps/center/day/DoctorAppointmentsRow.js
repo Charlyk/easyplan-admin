@@ -227,6 +227,8 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
   return (
     <Tooltip title={title} disableHoverListener={hidden}>
       <div
+        role='button'
+        tabIndex={0}
         id={`${appointment.id}-${appointment.start.format(
           'HH:mm',
         )}>${appointment.end.format('HH:mm')}`}
