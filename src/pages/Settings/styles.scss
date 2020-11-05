@@ -83,6 +83,7 @@
   padding-bottom: 1rem;
 
   .settings-menu-item {
+    user-select: none;
     outline: none;
     height: 2.7rem;
     margin: .25rem 1rem;

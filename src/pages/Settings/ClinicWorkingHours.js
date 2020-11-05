@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IconSuccess from '../../assets/icons/iconSuccess';
 import LoadingButton from '../../components/LoadingButton';
 import WorkDay from '../../components/WorkDay';
-import { userSelector } from '../../redux/selectors/rootSelector';
+import { setClinic } from '../../redux/actions/clinicActions';
+import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 
-const ClinicWorkingHours = props => {
-  const currentUser = useSelector(userSelector);
+const ClinicWorkingHours = () => {
+  const dispatch = useDispatch();
+  const clinic = useSelector(clinicDetailsSelector);
   const [isLoading, setIsLoading] = useState(false);
-  const [clinic, setClinic] = useState(null);
+  const [workDays, setWorkDays] = useState([]);
 
   useEffect(() => {
-    fetchClinicDetails();
-  }, [props, currentUser]);
+    setWorkDays(
+      clinic.workDays.map(it => ({
+        ...it,
+        selected: !it.isDayOff,
+      })),
+    );
+  }, [clinic]);
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
-    const newDays = clinic.workDays.map(workDay => {
+    const newDays = workDays.map(workDay => {
       if (workDay.day !== day.day) {
         return workDay;
       }
@@ -32,41 +39,19 @@ const ClinicWorkingHours = props => {
         selected: isSelected,
       };
     });
-    setClinic({ ...clinic, workDays: newDays });
-  };
-
-  const fetchClinicDetails = async () => {
-    setIsLoading(true);
-    const response = await dataAPI.fetchClinicDetails();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      setClinic({
-        ...response.data,
-        workDays: response.data.workDays.map(item => ({
-          ...item,
-          selected: !item.isDayOff,
-        })),
-      });
-    }
-    setIsLoading(false);
+    setWorkDays(newDays);
   };
 
   const submitForm = async () => {
     setIsLoading(true);
-    const response = await dataAPI.updateClinic(clinic);
-    setClinic({
-      ...response.data,
-      workDays: response.data.workDays.map(item => ({
-        ...item,
-        selected: !item.isDayOff,
-      })),
-    });
+    const response = await dataAPI.updateClinic({ ...clinic, workDays });
+    console.log(response.data);
+    dispatch(setClinic(response.data));
     setIsLoading(false);
   };
 
   const handleApplyToAll = day => {
-    const newDays = clinic.workDays.map(workDay => {
+    const newDays = workDays.map(workDay => {
       return {
         ...workDay,
         isDayOff: false,
@@ -75,7 +60,7 @@ const ClinicWorkingHours = props => {
         selected: true,
       };
     });
-    setClinic({ ...clinic, workDays: newDays });
+    setWorkDays(newDays);
   };
 
   return (
@@ -83,7 +68,7 @@ const ClinicWorkingHours = props => {
       <span className='form-title'>{textForKey('Work Hours')}</span>
       <table className='days-wrapper'>
         <tbody>
-          {clinic?.workDays.map((day, index) => (
+          {workDays.map((day, index) => (
             <WorkDay
               onApplyToAll={handleApplyToAll}
               day={day}
