@@ -231,7 +231,7 @@ function App() {
         >
           <Modal.Body>
             <Spinner animation='border' />
-            {textForKey('App initialization...')}
+            {textForKey('App initialization')}...
           </Modal.Body>
         </Modal>
         <Switch>

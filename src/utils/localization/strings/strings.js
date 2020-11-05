@@ -252,6 +252,7 @@ export default {
     'animate appointments before': 'Animate appointments before',
     appointment_animation_timer:
       'Indicate the amount of time that a schedule should be animated before its time',
+    'app initialization': 'App initialization',
   },
   ro: {
     analytics: 'Analitică',
@@ -506,7 +507,8 @@ export default {
     'application settings': 'Setări aplicație',
     'animate appointments before': 'Notifică despre programare din timp',
     appointment_animation_timer:
-      'Indică cu cât timp înainte trebuie animate programarile',
+      'Indică cu cât timp înainte trebuie animate programările',
+    'app initialization': 'Inițializarea aplicației',
   },
   ru: {
     analytics: 'Analytics',
@@ -758,5 +760,6 @@ export default {
     'offers braces services': 'Offers Braces services',
     'application settings': 'Application settings',
     'animate appointments before': 'Animate appointments before',
+    'app initialization': 'App initialization',
   },
 };
