@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import IconNext from '../../assets/icons/iconNext';
+import { textForKey } from '../../utils/localization';
 
 const Category = props => {
   const { isSelected, category, onSelected } = props;
@@ -14,9 +15,14 @@ const Category = props => {
   };
 
   return (
-    <div className={classes} onClick={handleCategoryClick}>
+    <div
+      role='button'
+      tabIndex={0}
+      className={classes}
+      onClick={handleCategoryClick}
+    >
       <div className='category__name'>
-        {category.name} ({category.servicesCount})
+        {textForKey(category.name)} ({category.servicesCount})
       </div>
       {isSelected && <IconNext />}
     </div>
