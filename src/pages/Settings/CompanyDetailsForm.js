@@ -5,6 +5,7 @@ import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
+import IconLogoPlaceholder from '../../assets/icons/iconLogoPlaceholder';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import LoadingButton from '../../components/LoadingButton';
 import { setClinic } from '../../redux/actions/clinicActions';
@@ -128,7 +129,11 @@ const CompanyDetailsForm = props => {
       <div className='data-wrapper'>
         <div className='left'>
           <div className='upload-avatar-container'>
-            {logoSrc ? <Image roundedCircle src={logoSrc} /> : <IconAvatar />}
+            {logoSrc ? (
+              <Image roundedCircle src={logoSrc} />
+            ) : (
+              <IconLogoPlaceholder />
+            )}
             <span style={{ margin: '1rem' }} className='info-text'>
               {textForKey('JPG or PNG, Max size of 800kb')}
             </span>
@@ -145,7 +150,7 @@ const CompanyDetailsForm = props => {
             </Form.Group>
           </div>
           <Form.Group controlId='clinicName'>
-            <Form.Label>{textForKey('Company name')}</Form.Label>
+            <Form.Label>{textForKey('Clinic name')}</Form.Label>
             <InputGroup>
               <Form.Control
                 type='text'

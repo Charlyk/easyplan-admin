@@ -191,7 +191,7 @@ const RegisterForm = ({ onGoBack }) => {
           className='back-button'
           onClick={onGoBack}
         >
-          {textForKey('Already have an account?')}
+          {textForKey('Already have an account')}?
         </div>
         <LoadingButton
           onClick={submitForm}

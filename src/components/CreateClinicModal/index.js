@@ -112,7 +112,9 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
         </InputGroup>
       </Form.Group>
       <Form.Group controlId='website'>
-        <Form.Label>{textForKey('Website URL (optional)')}</Form.Label>
+        <Form.Label>{`${textForKey('Website')} (${textForKey(
+          'optional',
+        ).toLowerCase()})`}</Form.Label>
         <InputGroup>
           <Form.Control
             value={data.website}
@@ -122,7 +124,9 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
         </InputGroup>
       </Form.Group>
       <Form.Group controlId='description'>
-        <Form.Label>{textForKey('About clinic (optional)')}</Form.Label>
+        <Form.Label>{`${textForKey('About clinic')} (${textForKey(
+          'optional',
+        ).toLowerCase()})`}</Form.Label>
         <InputGroup>
           <Form.Control
             as='textarea'
@@ -137,7 +141,7 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
           onChange={handleBracketsChange}
           checked={data.hasBrackets}
           type='checkbox'
-          label={textForKey('Offers Brackets services')}
+          label={textForKey('Offers braces services')}
         />
       </Form.Group>
     </EasyPlanModal>

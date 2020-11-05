@@ -83,7 +83,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
             className='forgot-button'
             onClick={onResetPassword}
           >
-            {textForKey('Forgot your password?')}
+            {textForKey('Forgot your password')}?
           </div>
         </div>
         <InputGroup>
@@ -96,7 +96,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
       </Form.Group>
       <div className='footer'>
         <div className='footer-sign-up'>
-          <span className='text'>{textForKey("Don't have an account?")}</span>
+          <span className='text'>{textForKey("Don't have an account")}?</span>
           <div
             role='button'
             tabIndex={0}

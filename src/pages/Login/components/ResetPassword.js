@@ -32,7 +32,7 @@ const ResetPassword = ({ onGoBack }) => {
     <div className='form-root reset-password-form'>
       <span className='form-title'>{textForKey('Reset Password')}</span>
       <span className='welcome-text'>
-        {textForKey('reset password message')}
+        {textForKey('reset_password_message')}
       </span>
       {!isSuccess ? (
         <Form.Group controlId='email'>
