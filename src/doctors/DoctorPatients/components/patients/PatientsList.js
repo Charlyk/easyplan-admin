@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -85,7 +86,10 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
     return (
       <div
         key={schedule.id}
-        className='schedule-item'
+        className={clsx(
+          'schedule-item',
+          schedule.status === 'OnSite' && 'upcoming',
+        )}
         style={{
           border: `${schedule.serviceColor} 1px solid`,
           backgroundColor: `${schedule.serviceColor}1A`,

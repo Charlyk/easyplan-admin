@@ -29,6 +29,11 @@ function main(state = initialState, action) {
       return { ...state, checkAppointments: !state.checkAppointments };
     case types.updateInvoices:
       return { ...state, updateInvoices: !state.updateInvoices };
+    case types.checkDoctorAppointments:
+      return {
+        ...state,
+        checkDoctorAppointments: !state.checkDoctorAppointments,
+      };
     case types.updateCategoriesList:
       return {
         ...state,

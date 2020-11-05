@@ -115,7 +115,7 @@ function App() {
       payload: {
         actionName: types.checkAppointments,
         timerName: 'appointmentsTimer',
-        timerInterval: 60 * 1000,
+        timerInterval: 10 * 1000,
       },
     });
     dispatch({
@@ -124,6 +124,14 @@ function App() {
         actionName: types.updateInvoices,
         timerName: 'invoicesTimer',
         timerInterval: 10 * 1000,
+      },
+    });
+    dispatch({
+      type: START_TIMER,
+      payload: {
+        actionName: types.checkDoctorAppointments,
+        timerName: 'doctorAppointmentsTimer',
+        timerInterval: 30 * 1000,
       },
     });
   };

@@ -4,12 +4,16 @@ import './styles.scss';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import { userSelector } from '../../redux/selectors/rootSelector';
+import {
+  checkDoctorAppointmentsSelector,
+  userSelector,
+} from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import PatientsFilter from './components/patients/PatientsFilter';
 import PatientsList from './components/patients/PatientsList';
 
 const DoctorPatients = () => {
+  const checkAppointments = useSelector(checkDoctorAppointmentsSelector);
   const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
@@ -21,11 +25,15 @@ const DoctorPatients = () => {
   });
 
   useEffect(() => {
+    setIsLoading(true);
     fetchPatients();
   }, [viewDate]);
 
+  useEffect(() => {
+    fetchPatients();
+  }, [checkAppointments]);
+
   const fetchPatients = async () => {
-    setIsLoading(true);
     const response = await dataAPI.fetchSchedules(currentUser.id, viewDate);
     if (response.isError) {
       console.error(response.message);

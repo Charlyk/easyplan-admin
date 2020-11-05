@@ -21,6 +21,7 @@ export default {
   updateCalendarDoctorHeight: 'updateCalendarDoctorHeight',
   checkAppointments: 'checkAppointments',
   updateInvoices: 'updateInvoices',
+  checkDoctorAppointments: 'checkDoctorAppointments',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,
