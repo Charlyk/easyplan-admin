@@ -42,6 +42,9 @@ import IconTooth48 from '../assets/icons/iconTooth48';
 import IconXPerson from '../assets/icons/iconXPerson';
 import { textForKey } from './localization';
 
+const urlParams = new URLSearchParams(window.location.search);
+export const env = urlParams.get('env') || '';
+
 export const Role = {
   all: 'ALL',
   doctor: 'DOCTOR',

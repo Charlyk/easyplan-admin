@@ -1,10 +1,15 @@
 import axios from 'axios';
 
+import { env } from '../constants';
 import { textForKey } from '../localization';
 import authManager from '../settings/authManager';
 
-const baseURL = 'https://auth-nmcmweav5q-uc.a.run.app/api/authentication/';
-// const baseURL = 'http://localhost:8080/api/authentication/';
+const baseURL =
+  env === 'dev'
+    ? 'http://auth-dev.eu-west-3.elasticbeanstalk.com/api/authentication/'
+    : env === 'local'
+    ? 'http://localhost:5000/api/authentication/'
+    : 'http://auth-prod.eu-west-3.elasticbeanstalk.com/api/authentication/';
 
 const instance = () => {
   let headers = null;

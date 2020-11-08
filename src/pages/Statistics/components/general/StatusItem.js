@@ -4,6 +4,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import { updateLink } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 
 const StatusItem = ({
@@ -25,11 +26,13 @@ const StatusItem = ({
       <div className='title-wrapper'>
         {icon}
         <Link
-          to={`/analytics/services?status=${
-            status.status
-          }&doctorId=${doctorId}&startDate=${formattedDate(
-            startDate,
-          )}&endDate=${formattedDate(endDate)}`}
+          to={updateLink(
+            `/analytics/services?status=${
+              status.status
+            }&doctorId=${doctorId}&startDate=${formattedDate(
+              startDate,
+            )}&endDate=${formattedDate(endDate)}`,
+          )}
         >
           <span className='title-label'>{title}</span>
         </Link>

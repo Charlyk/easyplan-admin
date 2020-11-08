@@ -22,6 +22,7 @@ import {
 } from '../../redux/actions/actions';
 import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
+import { updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
@@ -70,7 +71,7 @@ const Main = () => {
     if (authManager.isLoggedIn()) {
       localDispatch(reducerActions.setCurrentPath(location.pathname));
     } else {
-      history.push('/login');
+      history.push(updateLink('/login'));
     }
   }, [location]);
 
@@ -91,14 +92,14 @@ const Main = () => {
   };
 
   if (!authManager.isLoggedIn()) {
-    return <Redirect to='/login' />;
+    return <Redirect to={updateLink('/login')} />;
   }
 
   if (currentPath === '/') {
     if (['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)) {
-      return <Redirect to='/analytics/general' />;
+      return <Redirect to={updateLink('/analytics/general')} />;
     } else if (selectedClinic?.roleInClinic === 'RECEPTION') {
-      return <Redirect to='/calendar' />;
+      return <Redirect to={updateLink('/calendar')} />;
     }
   }
 

@@ -55,7 +55,7 @@ import {
 } from './redux/selectors/rootSelector';
 import types from './redux/types/types';
 import authAPI from './utils/api/authAPI';
-import { fetchClinicData } from './utils/helperFuncs';
+import { fetchClinicData, updateLink } from './utils/helperFuncs';
 import { getAppLanguage, textForKey } from './utils/localization';
 import authManager from './utils/settings/authManager';
 
@@ -210,7 +210,7 @@ function App() {
 
   return (
     <Router basename='/'>
-      {redirectUser && <Redirect to='/' />}
+      {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
         <RegisterPaymentModal
           {...paymentModal}

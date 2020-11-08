@@ -8,6 +8,7 @@ import appLogo from '../../assets/images/easyplan-logo.svg';
 import LoadingButton from '../../components/LoadingButton';
 import dataAPI from '../../utils/api/dataAPI';
 import { JwtRegex } from '../../utils/constants';
+import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import authManager from '../../utils/settings/authManager';
@@ -35,7 +36,7 @@ const AcceptInvitation = () => {
   }, [isNew, token]);
 
   if (!token.match(JwtRegex)) {
-    return <Redirect to='/login' />;
+    return <Redirect to={updateLink('/login')} />;
   }
 
   const handleFormChange = event => {
@@ -54,7 +55,9 @@ const AcceptInvitation = () => {
 
   const handleAcceptInvitation = async () => {
     if (state.isAccepted) {
-      history.push(authManager.isLoggedIn() ? '/' : '/login');
+      history.push(
+        authManager.isLoggedIn() ? updateLink('/') : updateLink('/login'),
+      );
       return;
     }
     setState({ ...state, isLoading: true });
@@ -82,7 +85,7 @@ const AcceptInvitation = () => {
   };
 
   if (state.redirectUser) {
-    return <Redirect to='/login' />;
+    return <Redirect to={updateLink('/login')} />;
   }
 
   return (

@@ -1,12 +1,15 @@
 import axios from 'axios';
 import moment from 'moment';
 
+import { env } from '../constants';
 import authManager from '../settings/authManager';
 
-// const baseURL = 'https://data-nmcmweav5q-uc.a.run.app/api/';
 const baseURL =
-  'http://easyplandatadev-env.eba-hxkpmpqv.us-east-2.elasticbeanstalk.com/api/';
-// const baseURL = 'http://localhost:5000/api/';
+  env === 'dev'
+    ? 'http://data-dev.eu-west-3.elasticbeanstalk.com/api/'
+    : env === 'local'
+    ? 'http://localhost:5000/api/'
+    : 'http://data-prod.eu-west-3.elasticbeanstalk.com/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 

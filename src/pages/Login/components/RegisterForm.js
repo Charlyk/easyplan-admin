@@ -11,7 +11,7 @@ import LoadingButton from '../../../components/LoadingButton';
 import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
-import { uploadFileToAWS } from '../../../utils/helperFuncs';
+import { updateLink, uploadFileToAWS } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
@@ -92,7 +92,7 @@ const RegisterForm = ({ onGoBack }) => {
   };
 
   if (authManager.isLoggedIn()) {
-    return <Redirect to='/' />;
+    return <Redirect to={updateLink('/')} />;
   }
 
   const avatarSrc =

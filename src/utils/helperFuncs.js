@@ -8,7 +8,7 @@ import {
 } from '../redux/actions/clinicActions';
 import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
 import dataAPI, { imageLambdaUrl } from './api/dataAPI';
-import { S3Config } from './constants';
+import { env, S3Config } from './constants';
 
 export function createHoursList() {
   return [].concat(
@@ -282,4 +282,17 @@ export const checkShouldAnimateSchedule = schedule => (dispatch, getState) => {
     );
   }
   return false;
+};
+
+/**
+ * Add environment to the link
+ * @param {string} link
+ * @return {string|*}
+ */
+export const updateLink = link => {
+  if (env.length > 0) {
+    return link.includes('?') ? `${link}&env=${env}` : `${link}?env=${env}`;
+  } else {
+    return link;
+  }
 };

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlusBig from '../../assets/icons/iconPlusBig';
+import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ServiceDoctor from './ServiceDoctor';
 
@@ -50,7 +51,7 @@ const ServiceDoctors = ({
         {doctors?.length === 0 && (
           <div className='service-doctors__content__no-data'>
             {textForKey('No doctors yet.')}{' '}
-            <Link to='/users'>{textForKey('Add one +')}</Link>
+            <Link to={updateLink('/users')}>{textForKey('Add one +')}</Link>
           </div>
         )}
         {doctors?.map(doctor => (

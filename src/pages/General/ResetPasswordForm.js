@@ -9,6 +9,7 @@ import { textForKey } from '../../utils/localization';
 import './styles.scss';
 import authAPI from '../../utils/api/authAPI';
 import { JwtRegex } from '../../utils/constants';
+import { updateLink } from '../../utils/helperFuncs';
 
 const ResetPasswordForm = () => {
   const history = useHistory();
@@ -53,7 +54,7 @@ const ResetPasswordForm = () => {
   };
 
   if (state.redirectUser || !token.match(JwtRegex)) {
-    return <Redirect to='/login' />;
+    return <Redirect to={updateLink('/login')} />;
   }
 
   return (

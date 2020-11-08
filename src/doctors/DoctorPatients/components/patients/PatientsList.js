@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import dataAPI from '../../../../utils/api/dataAPI';
+import { updateLink } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 
 const PatientsList = ({ schedules, viewDate, filterData }) => {
@@ -105,7 +106,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
         </span>
         <div className='details-button'>
-          <Link to={`/${schedule.patientId}/${schedule.id}`}>
+          <Link to={updateLink(`/${schedule.patientId}/${schedule.id}`)}>
             <span className='button-text'>{textForKey('Details')}</span>
           </Link>
         </div>

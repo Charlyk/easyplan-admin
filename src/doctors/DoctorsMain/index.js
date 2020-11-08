@@ -11,6 +11,7 @@ import {
   triggerUserLogout,
 } from '../../redux/actions/actions';
 import { userSelector } from '../../redux/selectors/rootSelector';
+import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
 import DoctorPatientDetails from '../DoctorPatientDetails';
@@ -31,7 +32,7 @@ const DoctorsMain = () => {
     ) || null;
 
   if (!authManager.isLoggedIn()) {
-    return <Redirect to='/login' />;
+    return <Redirect to={updateLink('/login')} />;
   }
 
   const handleCompanyClose = () => {

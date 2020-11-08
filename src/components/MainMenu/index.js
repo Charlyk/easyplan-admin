@@ -15,6 +15,8 @@ import MenuEllipse from '../../assets/icons/menuEllipse';
 import MenuPatients from '../../assets/icons/menuPatients';
 import MenuSettings from '../../assets/icons/menuSettings';
 import MenuUsers from '../../assets/icons/menuUsers';
+import { env } from '../../utils/constants';
+import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ClinicSelector from '../ClinicSelector';
 
@@ -188,7 +190,7 @@ const MainMenu = props => {
                         <Link
                           className={`link-item ${isActive(child.href) &&
                             'active'}`}
-                          to={child.href}
+                          to={updateLink(child.href)}
                         >
                           <MenuEllipse />
                           {child.text}
@@ -206,7 +208,7 @@ const MainMenu = props => {
                   className={`navigation__item link-item ${isActive(
                     item.href,
                   ) && 'active'}`}
-                  to={item.href}
+                  to={updateLink(item.href)}
                 >
                   {item.icon}
                   {item.text}
