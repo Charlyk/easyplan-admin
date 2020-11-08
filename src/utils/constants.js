@@ -42,8 +42,11 @@ import IconTooth48 from '../assets/icons/iconTooth48';
 import IconXPerson from '../assets/icons/iconXPerson';
 import { textForKey } from './localization';
 
-const urlParams = new URLSearchParams(window.location.search);
-export const env = urlParams.get('env') || '';
+const host = window.location.host;
+export const env = host.startsWith('develop')
+  ? 'dev'
+  : host.startsWith('localhost')
+    ? 'local' : '';
 
 export const Role = {
   all: 'ALL',

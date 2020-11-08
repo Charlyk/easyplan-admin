@@ -5,10 +5,10 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev'
+  env === 'dev' || env === 'local'
     ? 'http://data-dev.eu-west-3.elasticbeanstalk.com/api/'
-    : env === 'local'
-    ? 'http://localhost:5000/api/'
+    // : env === 'local'
+    // ? 'http://localhost:5000/api/'
     : 'http://data-prod.eu-west-3.elasticbeanstalk.com/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
