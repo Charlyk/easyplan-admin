@@ -1,6 +1,8 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { Tooltip, Typography } from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment';
@@ -239,9 +241,16 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
           backgroundColor: `${appointment.serviceColor}1A`,
         }}
       >
-        <Typography noWrap classes={{ root: 'patient-name' }}>
-          {appointment.patientName}
-        </Typography>
+        <div className='name-and-status'>
+          <Typography noWrap classes={{ root: 'patient-name' }}>
+            {appointment.patientName}
+          </Typography>
+          <div className='status-icon'>
+            {appointment.status === 'OnSite' && <DoneIcon />}
+            {(appointment.status === 'CompletedPaid' ||
+              appointment.status === 'PartialPaid') && <DoneAllIcon />}
+          </div>
+        </div>
         <Typography noWrap classes={{ root: 'patient-name' }}>
           {appointment.start.format('HH:mm')} -{' '}
           {appointment.end.format('HH:mm')}

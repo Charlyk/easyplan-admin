@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import DoneIcon from '@material-ui/icons/Done';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -8,13 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import { checkShouldAnimateSchedule } from '../../../../../utils/helperFuncs';
 
-const minHeight = 32;
-const minTop = 3;
-
 const WeekAppointmentItem = ({ schedule, onSelect }) => {
   const dispatch = useDispatch();
   const checkAppointment = useSelector(checkAppointmentsSelector);
-  const [position, setPosition] = useState({ top: minTop, height: minHeight });
   const [animateSchedule, setAnimateSchedule] = useState(false);
   const [[startHour, endHour], setHours] = useState(['00:00', '00:00']);
 
@@ -42,18 +40,22 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
       onClick={handleScheduleSelect}
       className={clsx('appointment-item', animateSchedule && 'upcoming')}
       style={{
-        ...position,
         border: `1px solid ${schedule.serviceColor}`,
         backgroundColor: `${schedule.serviceColor}1A`,
       }}
     >
       <div className='title-and-time'>
-        <span className='service-name'>{schedule.patientName}</span>
-        {position.height >= minHeight && (
-          <span className='item-time-text'>
-            {startHour} - {endHour}
-          </span>
-        )}
+        <div className='name-and-status'>
+          <span className='service-name'>{schedule.patientName}</span>
+          <div className='status-icon'>
+            {schedule.status === 'OnSite' && <DoneIcon />}
+            {(schedule.status === 'CompletedPaid' ||
+              schedule.status === 'PartialPaid') && <DoneAllIcon />}
+          </div>
+        </div>
+        <span className='item-time-text'>
+          {startHour} - {endHour}
+        </span>
       </div>
     </div>
   );

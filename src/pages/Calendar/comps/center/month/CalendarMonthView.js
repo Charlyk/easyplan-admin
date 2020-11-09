@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import DoneIcon from '@material-ui/icons/Done';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -84,7 +86,14 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
           backgroundColor: `${schedule.serviceColor}1A`,
         }}
       >
-        <span className='service-name'>{schedule.patientName}</span>
+        <div className='name-and-status'>
+          <span className='service-name'>{schedule.patientName}</span>
+          <div className='status-icon'>
+            {schedule.status === 'OnSite' && <DoneIcon />}
+            {(schedule.status === 'CompletedPaid' ||
+              schedule.status === 'PartialPaid') && <DoneAllIcon />}
+          </div>
+        </div>
       </div>
     );
   };

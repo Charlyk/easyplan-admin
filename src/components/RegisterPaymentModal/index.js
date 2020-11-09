@@ -62,6 +62,10 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     return payAmount - discountAmount;
   };
 
+  const isFormValid = () => {
+    return payAmount.length > 0;
+  };
+
   const handleSubmit = async () => {
     if (!isFormValid() || invoice == null) {
       return;
@@ -81,10 +85,6 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     }
 
     setIsLoading(false);
-  };
-
-  const isFormValid = () => {
-    return payAmount.length > 0;
   };
 
   return (

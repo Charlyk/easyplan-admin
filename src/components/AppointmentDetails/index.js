@@ -63,6 +63,11 @@ const AppointmentDetails = ({
 
   const statusDetails = ScheduleStatuses.find(it => it.id === schedule.status);
 
+  const isFinished =
+    schedule.status === 'CompletedNotPaid' ||
+    schedule.status === 'CompletedPaid' ||
+    schedule.status === 'PartialPaid';
+
   return (
     <div className='appointment-details-root'>
       <div className='header-wrapper'>
@@ -239,11 +244,19 @@ const AppointmentDetails = ({
           {textForKey('Close')}
           <IconClose />
         </Button>
-        <Button className='delete-button' onClick={handleDeleteSchedule}>
+        <Button
+          className='delete-button'
+          disabled={isFinished}
+          onClick={handleDeleteSchedule}
+        >
           {textForKey('Delete')}
           <IconTrash />
         </Button>
-        <Button className='positive-button' onClick={handleEditSchedule}>
+        <Button
+          className='positive-button'
+          disabled={isFinished}
+          onClick={handleEditSchedule}
+        >
           {textForKey('Edit')}
           <IconEdit />
         </Button>
