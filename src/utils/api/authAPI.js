@@ -7,8 +7,8 @@ import authManager from '../settings/authManager';
 const baseURL =
   env === 'dev' || env === 'local'
     ? 'http://auth-dev.eu-west-3.elasticbeanstalk.com/api/authentication/'
-    // : env === 'local'
-    // ? 'http://localhost:5000/api/authentication/'
+    : env === 'local'
+    ? 'http://localhost:5000/api/authentication/'
     : 'http://auth-prod.eu-west-3.elasticbeanstalk.com/api/authentication/';
 
 const instance = () => {
