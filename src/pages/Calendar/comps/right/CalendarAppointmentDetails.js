@@ -8,7 +8,7 @@ import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock'
 import IconDelete from '../../../../assets/icons/iconDelete';
 import IconEditService from '../../../../assets/icons/iconEditService';
 import IconPhone from '../../../../assets/icons/iconPhone';
-import { Action, ScheduleStatuses } from '../../../../utils/constants';
+import { Action, Statuses } from '../../../../utils/constants';
 import { logUserAction } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 
@@ -24,9 +24,7 @@ const CalendarAppointmentDetails = ({ schedule, onEdit, onDelete }) => {
   }
 
   const scheduleDate = moment(schedule.dateAndTime, 'YYYY-MM-DD HH:mm');
-  const scheduleStatus = ScheduleStatuses.find(
-    item => item.id === schedule.status,
-  );
+  const scheduleStatus = Statuses.find(item => item.id === schedule.status);
 
   const handleEditSchedule = () => {
     onEdit(schedule);

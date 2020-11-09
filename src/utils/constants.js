@@ -46,7 +46,8 @@ const host = window.location.host;
 export const env = host.startsWith('develop')
   ? 'dev'
   : host.startsWith('localhost')
-    ? 'local' : '';
+  ? 'local'
+  : '';
 
 export const Role = {
   all: 'ALL',
@@ -135,85 +136,73 @@ export const days = [
   textForKey('Saturday'),
 ];
 
-export const ScheduleStatuses = [
-  {
-    id: 'Pending',
-    name: textForKey('Pending'),
-    color: '#ffb902',
-  },
-  {
-    id: 'OnSite',
-    name: textForKey('On site'),
-    color: '#ffb902',
-  },
-  { id: 'Late', name: textForKey('Late'), color: '#FDC534' },
-  { id: 'Confirmed', name: textForKey('Confirmed'), color: '#3A83DC' },
-  { id: 'Canceled', name: textForKey('Canceled'), color: '#F44081' },
-  {
-    id: 'CompletedNotPaid',
-    name: textForKey('Completed not paid'),
-    color: '#7DD7C8',
-  },
-  { id: 'CompletedPaid', name: textForKey('Paid'), color: '#00E987' },
-  { id: 'PartialPaid', name: textForKey('Partial paid'), color: '#9cfacc' },
-];
-
 export const Statuses = [
   {
     id: 'Pending',
     name: textForKey('Pending'),
     color: '#ffb902',
     icon: <IconAppointmentCalendar />,
+    manual: false,
   },
   {
     id: 'WaitingForPatient',
     name: textForKey('Waiting for patient'),
     color: '#ffb902',
     icon: <IconClock />,
+    manual: false,
   },
   {
     id: 'OnSite',
     name: textForKey('On site'),
     color: '#ffb902',
     icon: <IconCheckMark />,
+    manual: true,
   },
   {
     id: 'Late',
     name: textForKey('Late'),
     color: '#FDC534',
     icon: <IconClock />,
+    manual: true,
   },
   {
     id: 'Confirmed',
     name: textForKey('Confirmed'),
     color: '#3A83DC',
     icon: <IconCheckMark />,
+    manual: false,
   },
   {
     id: 'Canceled',
     name: textForKey('Canceled'),
     color: '#F44081',
     icon: <IconXPerson />,
+    manual: true,
   },
   {
     id: 'CompletedNotPaid',
     name: textForKey('Completed not paid'),
     color: '#7DD7C8',
     icon: <IconSuccess fill='#3A83DC' />,
+    manual: false,
   },
   {
     id: 'CompletedPaid',
     name: textForKey('Paid'),
     color: '#00E987',
     icon: <IconCreditCard />,
+    manual: false,
   },
   {
     id: 'PartialPaid',
     name: textForKey('Partial paid'),
     color: '#9cfacc',
     icon: <IconSuccess fill='#3A83DC' />,
+    manual: false,
   },
 ];
+
+export const ManualStatuses = Statuses.filter(item => item.manual);
 
 export const teeth = [
   {

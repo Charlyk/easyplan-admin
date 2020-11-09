@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import IconRefresh from '../../../../assets/icons/iconRefresh';
 import dataAPI from '../../../../utils/api/dataAPI';
-import { ScheduleStatuses } from '../../../../utils/constants';
+import { Statuses } from '../../../../utils/constants';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
 
 const PatientsFilter = ({
@@ -67,7 +66,7 @@ const PatientsFilter = ({
           custom
         >
           <option value='all'>{textForKey('All statuses')}</option>
-          {ScheduleStatuses.map(status => (
+          {Statuses.map(status => (
             <option key={status.id} value={status.id}>
               {status.name}
             </option>

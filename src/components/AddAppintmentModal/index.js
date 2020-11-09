@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action, ScheduleStatuses } from '../../utils/constants';
+import { Action, ManualStatuses } from '../../utils/constants';
 import { logUserAction, urlToLambda } from '../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
@@ -762,7 +762,7 @@ const AddAppointmentModal = ({
             value={appointmentStatus}
             custom
           >
-            {ScheduleStatuses.map(status => (
+            {ManualStatuses.map(status => (
               <option key={status.id} value={status.id}>
                 {status.name}
               </option>

@@ -12,6 +12,58 @@
   box-shadow: 0 1px 10px 10px #34344E1A;
   z-index: 10;
 
+  .statuses-popper-root {
+    width: calc(100% - 2rem);
+    z-index: 1000 !important;
+
+    &__paper {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      background-color: #FFFFFF;
+      border: #3A83DC 1px solid;
+      border-radius: 4px;
+      max-height: 25rem;
+      overflow-y: scroll;
+      box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+    }
+
+    &__item {
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      font-size: .8rem;
+      padding: .5rem;
+
+      .name-and-icon {
+        display: flex;
+        flex: 1;
+        align-items: center;
+      }
+
+      .checkmark-wrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      svg {
+        width: 1.3rem;
+        height: 1.3rem;
+        margin-right: .6rem;
+        fill: #3A83DC !important;
+
+        path {
+          fill: #3A83DC;
+        }
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+
   .header-wrapper {
     width: 100%;
     padding: 1rem;
@@ -53,7 +105,6 @@
 
     .group-title {
       margin-top: 1rem;
-      margin-left: 1rem;
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: bold;
@@ -65,10 +116,12 @@
     .info-wrapper {
       display: flex;
       flex-direction: column;
-      width: 100%;
+      flex: 1;
     }
 
     .schedule-status {
+      user-select: none;
+      outline: none;
       padding: .2rem;
       border-radius: .3rem;
       flex: 1;
@@ -76,7 +129,6 @@
       align-items: center;
       justify-content: center;
       margin-top: 1rem;
-      margin-left: 1rem;
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: bold;
@@ -85,13 +137,13 @@
     }
 
     .schedule-info-wrapper {
-      width: 100%;
+      flex: 1;
       display: flex;
       flex-direction: column;
     }
 
     .debts-wrapper {
-      width: 100%;
+      flex: 1;
       display: flex;
       flex-direction: column;
 
@@ -121,7 +173,6 @@
         thead {
           tr {
             td {
-              padding-left: 1rem;
               padding-right: 1rem;
               font-family: Inter, sans-serif;
               font-style: normal;
@@ -135,7 +186,6 @@
         tbody {
           tr {
             td {
-              padding-left: 1rem;
               padding-right: 1rem;
               font-family: Inter, sans-serif;
               font-style: normal;

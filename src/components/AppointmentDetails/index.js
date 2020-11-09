@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Button, Spinner } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 
 import IconClose from '../../assets/icons/iconClose';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconTrash from '../../assets/icons/iconTrash';
+import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
-import { ScheduleStatuses } from '../../utils/constants';
+import { ManualStatuses, Statuses } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
+
+import DoneIcon from '@material-ui/icons/Done';
+import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
 
 const AppointmentDetails = ({
   schedule,
@@ -20,15 +25,22 @@ const AppointmentDetails = ({
   onEdit,
   onPayDebt,
 }) => {
+  const dispatch = useDispatch();
+  const statusesAnchor = useRef(null);
   const [{ patient }, setDetails] = useState({
     patient: null,
     schedule: null,
   });
   const [loadingDebt, setLoadingDebt] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showStatuses, setShowStatuses] = useState(false);
+  const [scheduleStatus, setScheduleStatus] = useState(
+    Statuses.find(item => item.id === schedule.status),
+  );
 
   useEffect(() => {
     fetchAppointmentDetails();
+    setScheduleStatus(Statuses.find(item => item.id === schedule.status));
   }, [schedule]);
 
   const fetchAppointmentDetails = async () => {
@@ -61,15 +73,70 @@ const AppointmentDetails = ({
     setLoadingDebt(null);
   };
 
-  const statusDetails = ScheduleStatuses.find(it => it.id === schedule.status);
+  const openStatusesList = () => {
+    setShowStatuses(true);
+  };
+
+  const closeStatusesList = () => {
+    setShowStatuses(false);
+  };
+
+  const handleStatusSelected = async status => {
+    setScheduleStatus(status);
+    await dataAPI.updateScheduleStatus(schedule.id, status.id);
+    dispatch(toggleAppointmentsUpdate());
+    closeStatusesList();
+  };
 
   const isFinished =
     schedule.status === 'CompletedNotPaid' ||
     schedule.status === 'CompletedPaid' ||
     schedule.status === 'PartialPaid';
 
+  const statusesList = (
+    <Popper
+      disablePortal
+      className='statuses-popper-root'
+      anchorEl={statusesAnchor.current}
+      open={showStatuses}
+      placement='bottom-start'
+      transition
+    >
+      {({ TransitionProps }) => (
+        <Fade {...TransitionProps} timeout={350}>
+          <Paper className='statuses-popper-root__paper'>
+            <ClickAwayListener onClickAway={closeStatusesList}>
+              <div>
+                {ManualStatuses.map(status => (
+                  <div
+                    role='button'
+                    tabIndex={0}
+                    onClick={() => handleStatusSelected(status)}
+                    className={`statuses-popper-root__item`}
+                    key={status.id}
+                  >
+                    <div className='name-and-icon'>
+                      {status.icon}
+                      {status.name}
+                    </div>
+                    {scheduleStatus.id === status.id && (
+                      <div className='checkmark-wrapper'>
+                        <DoneIcon />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </ClickAwayListener>
+          </Paper>
+        </Fade>
+      )}
+    </Popper>
+  );
+
   return (
     <div className='appointment-details-root'>
+      {statusesList}
       <div className='header-wrapper'>
         <div
           role='button'
@@ -92,13 +159,17 @@ const AppointmentDetails = ({
         ) : (
           <div className='info-wrapper'>
             <div
+              ref={statusesAnchor}
+              role='button'
+              tabIndex={0}
+              onClick={!isFinished ? openStatusesList : () => null}
               className='schedule-status'
               style={{
-                color: statusDetails.color,
-                backgroundColor: `${statusDetails.color}1A`,
+                color: scheduleStatus.color,
+                backgroundColor: `${scheduleStatus.color}1A`,
               }}
             >
-              {statusDetails.name}
+              {scheduleStatus.name}
             </div>
             <div className='schedule-info-wrapper'>
               <table>
@@ -112,7 +183,6 @@ const AppointmentDetails = ({
                     <td
                       style={{
                         width: '35%',
-                        paddingLeft: '1rem',
                         paddingRight: '1rem',
                       }}
                     >
@@ -121,7 +191,7 @@ const AppointmentDetails = ({
                     <td>{schedule.doctorName}</td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Date')}:
                     </td>
                     <td>
@@ -129,19 +199,19 @@ const AppointmentDetails = ({
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Hour')}:
                     </td>
                     <td>{moment(schedule.dateAndTime).format('HH:mm')}</td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem' }}>
                       {upperFirst(textForKey('Created by'))}:
                     </td>
                     <td>{schedule.createdByName}</td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem' }}>
                       {upperFirst(textForKey('Created at'))}:
                     </td>
                     <td>
@@ -149,10 +219,7 @@ const AppointmentDetails = ({
                     </td>
                   </tr>
                   <tr>
-                    <td
-                      valign='top'
-                      style={{ paddingLeft: '1rem', paddingRight: '1rem' }}
-                    >
+                    <td valign='top' style={{ paddingRight: '1rem' }}>
                       {textForKey('Note')}:
                     </td>
                     <td valign='top'>{schedule.note}</td>
@@ -163,13 +230,13 @@ const AppointmentDetails = ({
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Name')}:
                     </td>
                     <td>{schedule.patientName}</td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Phone')}:
                     </td>
                     <td>
@@ -179,7 +246,7 @@ const AppointmentDetails = ({
                     </td>
                   </tr>
                   <tr>
-                    <td style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Email')}:
                     </td>
                     <td>
@@ -194,7 +261,7 @@ const AppointmentDetails = ({
               <table>
                 <thead>
                   <tr>
-                    <td>{textForKey('Service')}</td>
+                    <td align='left'>{textForKey('Service')}</td>
                     <td align='right'>{textForKey('Total')}</td>
                     <td align='right'>{textForKey('Remained')}</td>
                     <td align='right'>{textForKey('Actions')}</td>
@@ -203,7 +270,7 @@ const AppointmentDetails = ({
                 <tbody>
                   {patient?.debts.map(item => (
                     <tr key={item.invoiceId}>
-                      <td>{item.serviceName}</td>
+                      <td align='left'>{item.serviceName}</td>
                       <td align='right'>{item.amount}MDL</td>
                       <td align='right'>{item.amount - item.paid}MDL</td>
                       <td align='right'>

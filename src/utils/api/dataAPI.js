@@ -7,9 +7,9 @@ import authManager from '../settings/authManager';
 const baseURL =
   env === 'dev' || env === 'local'
     ? 'http://data-dev.eu-west-3.elasticbeanstalk.com/api/'
-    // : env === 'local'
-    // ? 'http://localhost:5000/api/'
-    : 'http://data-prod.eu-west-3.elasticbeanstalk.com/api/';
+    : // : env === 'local'
+      // ? 'http://localhost:5000/api/'
+      'http://data-prod.eu-west-3.elasticbeanstalk.com/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -1256,6 +1256,26 @@ export default {
     try {
       const url = `patients/${patientId}/doctor-details/${scheduleId}`;
       const response = await instance().get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Change status for a schedule
+   * @param {string} scheduleId
+   * @param {string} newStatus
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  updateScheduleStatus: async (scheduleId, newStatus) => {
+    try {
+      const url = `schedules/schedule-status?scheduleId=${scheduleId}&status=${newStatus}`;
+      const response = await instance().put(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
