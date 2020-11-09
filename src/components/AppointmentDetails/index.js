@@ -83,9 +83,9 @@ const AppointmentDetails = ({
 
   const handleStatusSelected = async status => {
     setScheduleStatus(status);
+    closeStatusesList();
     await dataAPI.updateScheduleStatus(schedule.id, status.id);
     dispatch(toggleAppointmentsUpdate());
-    closeStatusesList();
   };
 
   const isFinished =
