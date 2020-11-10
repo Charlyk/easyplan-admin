@@ -6,10 +6,10 @@ import authManager from '../settings/authManager';
 
 const baseURL =
   env === 'dev' || env === 'local'
-    ? 'http://auth-dev.eu-west-3.elasticbeanstalk.com/api/authentication/'
+    ? 'https://auth.dev.easyplan.pro/api/authentication/'
     : env === 'local'
     ? 'http://localhost:5000/api/authentication/'
-    : 'http://auth-prod.eu-west-3.elasticbeanstalk.com/api/authentication/';
+    : 'https://auth.prod.easyplan.pro/api/authentication/';
 
 const instance = () => {
   let headers = null;

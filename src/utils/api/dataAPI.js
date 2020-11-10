@@ -6,10 +6,10 @@ import authManager from '../settings/authManager';
 
 const baseURL =
   env === 'dev' || env === 'local'
-    ? 'http://data-dev.eu-west-3.elasticbeanstalk.com/api/'
+    ? 'https://data.dev.easyplan.pro/api/'
     : env === 'local'
     ? 'http://localhost:5000/api/'
-    : 'http://data-prod.eu-west-3.elasticbeanstalk.com/api/';
+    : 'https://data.prod.easyplan.pro/api/';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
