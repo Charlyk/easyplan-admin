@@ -83,10 +83,7 @@ function App() {
 
   useEffect(() => {
     if (selectedClinic != null) {
-      const title = document.getElementById('site-title');
-      if (title != null) {
-        title.innerText = `EasyPlan - ${selectedClinic.clinicName}`;
-      }
+      updateSiteTitle(selectedClinic.clinicName);
     }
   }, [selectedClinic]);
 
@@ -103,6 +100,15 @@ function App() {
       changeCurrentClinic(newClinicId);
     }
   }, [newClinicId]);
+
+  const updateSiteTitle = (clinicName = '') => {
+    const title = document.getElementById('site-title');
+    if (title != null && clinicName.length > 0) {
+      title.innerText = `EasyPlan - ${clinicName}`;
+    } else {
+      title.innerText = `EasyPlan`;
+    }
+  };
 
   const redirectToHome = () => {
     setRedirectUser(true);
@@ -184,6 +190,7 @@ function App() {
 
   const handleUserLogout = () => {
     authManager.logOut();
+    updateSiteTitle();
     dispatch(setCurrentUser(null));
     handleCancelLogout();
   };
