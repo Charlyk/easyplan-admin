@@ -71,6 +71,10 @@
     }
   }
 
+  .form-control[readonly] {
+    background-color: #FAFAFD;
+  }
+
   .form-group {
     margin-bottom: 0;
     margin-top: .5rem;

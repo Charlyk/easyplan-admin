@@ -14,11 +14,12 @@ import { useDispatch } from 'react-redux';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action, ManualStatuses } from '../../utils/constants';
+import { Action, EmailRegex, ManualStatuses } from '../../utils/constants';
 import { logUserAction, urlToLambda } from '../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import EasyDatePicker from '../EasyDatePicker';
 
 const initialState = {
   patient: null,
@@ -32,6 +33,8 @@ const initialState = {
   patientFirstName: '',
   patientLastName: '',
   patientPhoneNumber: '',
+  patientBirthday: null,
+  patientEmail: '',
   isFetchingHours: false,
   isCreatingSchedule: false,
   isPatientValid: false,
@@ -67,6 +70,7 @@ const reducerTypes = {
   isServiceValid: 'isServiceValid',
   setIsFetchingHours: 'setIsFetchingHours',
   setShowDatePicker: 'setShowDatePicker',
+  setShowBirthdayPicker: 'setShowBirthdayPicker',
   setAppointmentDate: 'setAppointmentDate',
   setAppointmentHour: 'setAppointmentHour',
   setAppointmentNote: 'setAppointmentNote',
@@ -74,6 +78,8 @@ const reducerTypes = {
   setIsCreatingSchedule: 'setIsCreatingSchedule',
   setSchedule: 'setSchedule',
   reset: 'reset',
+  setPatientBirthday: 'setPatientBirthday',
+  setPatientEmail: 'setPatientEmail',
 };
 
 const reducerActions = {
@@ -144,6 +150,11 @@ const reducerActions = {
     type: reducerTypes.setPatientLastName,
     payload,
   }),
+  setPatientBirthday: payload => ({
+    type: reducerTypes.setPatientBirthday,
+    payload,
+  }),
+  setPatientEmail: payload => ({ type: reducerTypes.setPatientEmail, payload }),
   /**
    * Update patient phone
    * @param {{phoneNumber: string, isPhoneValid: boolean}} payload
@@ -151,6 +162,10 @@ const reducerActions = {
    */
   setPatientPhoneNumber: payload => ({
     type: reducerTypes.setPatientPhoneNumber,
+    payload,
+  }),
+  setShowBirthdayPicker: payload => ({
+    type: reducerTypes.setShowBirthdayPicker,
     payload,
   }),
 };
@@ -228,8 +243,18 @@ const reducer = (state, action) => {
         isServiceValid: true,
       };
     }
-    case reducerTypes.setIsNewPatient:
-      return { ...state, isNewPatient: action.payload };
+    case reducerTypes.setIsNewPatient: {
+      const isNewPatient = action.payload;
+      return {
+        ...state,
+        isNewPatient,
+        patientBirthday: null,
+        patientEmail: '',
+        patientFirstName: '',
+        patientLastName: '',
+        patientPhoneNumber: '',
+      };
+    }
     case reducerTypes.setPatientFirstName:
       return { ...state, patientFirstName: action.payload };
     case reducerTypes.setPatientLastName:
@@ -239,6 +264,22 @@ const reducer = (state, action) => {
         ...state,
         patientPhoneNumber: action.payload.phoneNumber,
         isPhoneValid: action.payload.isPhoneValid,
+      };
+    case reducerTypes.setPatientBirthday:
+      return {
+        ...state,
+        patientBirthday: action.payload,
+        showBirthdayPicker: false,
+      };
+    case reducerTypes.setPatientEmail:
+      return {
+        ...state,
+        patientEmail: action.payload,
+      };
+    case reducerTypes.setShowBirthdayPicker:
+      return {
+        ...state,
+        showBirthdayPicker: action.payload,
       };
     case reducerTypes.reset:
       return initialState;
@@ -254,6 +295,7 @@ const AddAppointmentModal = ({
   onClose,
 }) => {
   const dispatch = useDispatch();
+  const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
   const [
     {
@@ -269,6 +311,8 @@ const AddAppointmentModal = ({
       patientLastName,
       patientFirstName,
       patientPhoneNumber,
+      patientBirthday,
+      patientEmail,
       isPhoneValid,
       isNewPatient,
       appointmentDate,
@@ -276,6 +320,7 @@ const AddAppointmentModal = ({
       appointmentNote,
       appointmentStatus,
       showDatePicker,
+      showBirthdayPicker,
       isFetchingHours,
       isPatientValid,
       isDoctorValid,
@@ -449,6 +494,23 @@ const AddAppointmentModal = ({
     localDispatch(reducerActions.setAppointmentDate(newDate));
   };
 
+  const handleBirthdayChange = newDate => {
+    localDispatch(reducerActions.setPatientBirthday(newDate));
+  };
+
+  const handleEmailChange = event => {
+    const newValue = event.target.value;
+    localDispatch(reducerActions.setPatientEmail(newValue));
+  };
+
+  const handleCloseBirthdayPicker = () => {
+    localDispatch(reducerActions.setShowBirthdayPicker(false));
+  };
+
+  const handleOpenBirthdayPicker = () => {
+    localDispatch(reducerActions.setShowBirthdayPicker(true));
+  };
+
   const handleHourChange = event => {
     localDispatch(reducerActions.setAppointmentHour(event.target.value));
   };
@@ -506,6 +568,8 @@ const AddAppointmentModal = ({
       patientFirstName,
       patientLastName,
       patientPhoneNumber,
+      patientBirthday,
+      patientEmail,
       patientId: patient?.id,
       doctorId: doctor.id,
       serviceId: service.id,
@@ -514,7 +578,6 @@ const AddAppointmentModal = ({
       status: appointmentStatus,
       scheduleId: scheduleId,
     };
-    console.log(requestBody);
     const response = await dataAPI.createNewSchedule(requestBody);
     // log user action
     if (schedule != null) {
@@ -551,35 +614,25 @@ const AddAppointmentModal = ({
     );
   };
 
-  const disableDate = date => {
-    console.log(date);
-  };
-
   const datePicker = (
-    <Popper
-      className='appointment-date-picker-root'
-      anchorEl={datePickerAnchor.current}
+    <EasyDatePicker
+      minDate={new Date()}
       open={showDatePicker}
-      disablePortal
-      placement='bottom'
-      transition
-    >
-      {({ TransitionProps }) => (
-        <Fade {...TransitionProps} timeout={350}>
-          <Paper className='calendar-paper'>
-            <ClickAwayListener onClickAway={handleCloseDatePicker}>
-              <Calendar
-                disabledDay={disableDate}
-                minDate={new Date()}
-                onChange={handleDateChange}
-                locale={locales[getAppLanguage()]}
-                date={appointmentDate}
-              />
-            </ClickAwayListener>
-          </Paper>
-        </Fade>
-      )}
-    </Popper>
+      pickerAnchor={datePickerAnchor.current}
+      onChange={handleDateChange}
+      selectedDate={appointmentDate}
+      onClose={handleCloseDatePicker}
+    />
+  );
+
+  const birthdayPicker = (
+    <EasyDatePicker
+      open={showBirthdayPicker}
+      pickerAnchor={birthdayPickerAnchor.current}
+      onChange={handleBirthdayChange}
+      onClose={handleCloseBirthdayPicker}
+      selectedDate={patientBirthday || new Date()}
+    />
   );
 
   const isLoading = isFetchingHours || isCreatingSchedule;
@@ -633,6 +686,35 @@ const AddAppointmentModal = ({
               }}
             />
           </InputGroup>
+        </Form.Group>
+      )}
+      {isNewPatient && (
+        <Form.Group controlId='email'>
+          <Form.Label>{textForKey('Email')}</Form.Label>
+          <InputGroup>
+            <Form.Control
+              value={patientEmail}
+              isInvalid={
+                patientEmail.length > 0 && !patientEmail.match(EmailRegex)
+              }
+              type='email'
+              onChange={handleEmailChange}
+            />
+          </InputGroup>
+        </Form.Group>
+      )}
+      {isNewPatient && (
+        <Form.Group ref={birthdayPickerAnchor}>
+          <Form.Label>{textForKey('Birthday')}</Form.Label>
+          <Form.Control
+            value={
+              patientBirthday
+                ? moment(patientBirthday).format('DD MMM YYYY')
+                : ''
+            }
+            readOnly
+            onClick={handleOpenBirthdayPicker}
+          />
         </Form.Group>
       )}
       {!isNewPatient && (
@@ -782,6 +864,7 @@ const AddAppointmentModal = ({
         </InputGroup>
       </Form.Group>
       {datePicker}
+      {birthdayPicker}
     </EasyPlanModal>
   );
 };

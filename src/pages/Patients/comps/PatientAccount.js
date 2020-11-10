@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
@@ -7,6 +8,7 @@ import PhoneInput from 'react-phone-input-2';
 import IconAvatar from '../../../assets/icons/iconAvatar';
 import IconSuccess from '../../../assets/icons/iconSuccess';
 import IconTrash from '../../../assets/icons/iconTrash';
+import EasyDatePicker from '../../../components/EasyDatePicker';
 import LoadingButton from '../../../components/LoadingButton';
 import { EmailRegex } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
@@ -18,17 +20,22 @@ const emptyPatient = {
   email: '',
   phoneNumber: '+373',
   photo: null,
+  birthday: null,
 };
 
 const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
+  const pickerRef = useRef(null);
   const countryCode = useRef('373');
-  const [patientData, setPatientData] = useState(patient || emptyPatient);
+  const [patientData, setPatientData] = useState(emptyPatient);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
     const isPhoneValid = patient != null;
     const patientData = patient || emptyPatient;
     setPatientData({
       ...patientData,
+      birthday:
+        patient?.birthday != null ? moment(patient.birthday).toDate() : null,
       isPhoneValid,
     });
   }, [patient]);
@@ -38,6 +45,22 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
       ...patientData,
       [event.target.id]: event.target.value,
     });
+  };
+
+  const handleDateChange = newDate => {
+    setPatientData({
+      ...patientData,
+      birthday: newDate,
+    });
+    setShowDatePicker(false);
+  };
+
+  const openDatePicker = () => {
+    setShowDatePicker(true);
+  };
+
+  const closeDatePicker = () => {
+    setShowDatePicker(false);
   };
 
   const handlePhoneChange = (value, data, event) => {
@@ -66,8 +89,20 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
     onDelete(patient);
   };
 
+  const formattedBirthday =
+    patientData.birthday == null
+      ? ''
+      : moment(patientData.birthday).format('DD MMM YYYY');
+
   return (
     <div className='patients-root__account'>
+      <EasyDatePicker
+        open={showDatePicker}
+        pickerAnchor={pickerRef.current}
+        selectedDate={patientData.birthday || new Date()}
+        onClose={closeDatePicker}
+        onChange={handleDateChange}
+      />
       <div className='patients-root__account__content'>
         <div className='patients-root__account__avatar-container'>
           {patient?.photo ? <Image roundedCircle /> : <IconAvatar />}
@@ -92,6 +127,14 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
                 onChange={handleFormChange}
               />
             </InputGroup>
+          </Form.Group>
+          <Form.Group ref={pickerRef}>
+            <Form.Label>{textForKey('Birthday')}</Form.Label>
+            <Form.Control
+              value={formattedBirthday}
+              readOnly
+              onClick={openDatePicker}
+            />
           </Form.Group>
           <Form.Group controlId='email'>
             <Form.Label>{textForKey('Email')}</Form.Label>
@@ -160,6 +203,7 @@ PatientAccount.propTypes = {
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
     photo: PropTypes.string,
+    birthday: PropTypes.string,
   }),
   isSaving: PropTypes.bool,
   isAdding: PropTypes.bool,

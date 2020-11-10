@@ -272,6 +272,7 @@ export default {
     reset_password_message:
       "Enter the email address associated with your account and we'll send you a link to reset your password.",
     'go back': 'Go back',
+    birthday: 'Birthday',
   },
   ro: {
     analytics: 'Analitică',
@@ -547,6 +548,7 @@ export default {
     reset_password_message:
       'Introduce adresa de email asociată cu contul tău și noi îți vom trimite un link pentru resetare.',
     'go back': 'Înapoi',
+    birthday: 'Data nașterii',
   },
   ru: {
     analytics: 'Analytics',
@@ -818,5 +820,6 @@ export default {
     reset_password_message:
       "Enter the email address associated with your account and we'll send you a link to reset your password.",
     'go back': 'Go back',
+    birthday: 'Birthday',
   },
 };
