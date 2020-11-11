@@ -1,14 +1,10 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'react-bootstrap';
 
 import './styles.scss';
-import IconClose from '../../assets/icons/iconClose';
-import IconSuccess from '../../assets/icons/iconSuccess';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import LoadingButton from '../LoadingButton';
 
 const ConfirmationModal = props => {
   const { show, title, message, onConfirm, onClose, isLoading } = props;
@@ -17,6 +13,7 @@ const ConfirmationModal = props => {
       onClose={onClose}
       open={show}
       title={title}
+      hidePositiveBtn={onConfirm == null}
       isPositiveLoading={isLoading}
       className='confirmation-modal'
       positiveBtnText={textForKey('Confirm')}

@@ -273,6 +273,9 @@ export default {
       "Enter the email address associated with your account and we'll send you a link to reset your password.",
     'go back': 'Go back',
     birthday: 'Birthday',
+    invite: 'Invite',
+    'invitation sent': 'Invitation sent',
+    invitation_sent_message: 'A new invitation email was sent to this user.',
   },
   ro: {
     analytics: 'Analitică',
@@ -549,6 +552,10 @@ export default {
       'Introduce adresa de email asociată cu contul tău și noi îți vom trimite un link pentru resetare.',
     'go back': 'Înapoi',
     birthday: 'Data nașterii',
+    invite: 'Invită',
+    'invitation sent': 'Invitație transmisă',
+    invitation_sent_message:
+      'Un email nou cu invitație în clinica Dvs a fost transmis.',
   },
   ru: {
     analytics: 'Analytics',
@@ -821,5 +828,8 @@ export default {
       "Enter the email address associated with your account and we'll send you a link to reset your password.",
     'go back': 'Go back',
     birthday: 'Birthday',
+    invite: 'Invite',
+    'invitation sent': 'Invitation sent',
+    invitation_sent_message: 'A new invitation email was sent to this user.',
   },
 };

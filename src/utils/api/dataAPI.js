@@ -1285,4 +1285,23 @@ export default {
       };
     }
   },
+
+  /**
+   * Resend invitation to clinic for user
+   * @param {string} userId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  resendUserInvitation: async userId => {
+    try {
+      const url = `users/resend-invitation?userId=${userId}`;
+      const response = await instance().put(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

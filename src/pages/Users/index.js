@@ -20,6 +20,8 @@ const Users = props => {
   const dispatch = useDispatch();
   const updateUsers = useSelector(updateUsersSelector);
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
+  const [isInviting, setIsInviting] = useState(false);
+  const [showInvitationSent, setShowInvitationSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
@@ -137,6 +139,17 @@ const Users = props => {
     setUserToDelete(null);
   };
 
+  const handleResendInvitation = async (event, user) => {
+    setIsInviting(true);
+    await dataAPI.resendUserInvitation(user.id);
+    setIsInviting(false);
+    setShowInvitationSent(true);
+  };
+
+  const closeInvitationSentModal = () => {
+    setShowInvitationSent(false);
+  };
+
   const deleteUser = async () => {
     if (!userToDelete) return;
     setIsDeleting(true);
@@ -162,6 +175,13 @@ const Users = props => {
         isLoading={isDeleting}
       />
 
+      <ConfirmationModal
+        onClose={closeInvitationSentModal}
+        show={showInvitationSent}
+        title={textForKey('Invitation sent')}
+        message={textForKey('invitation_sent_message')}
+      />
+
       <UserDetailsModal
         onClose={handleUserModalClose}
         show={isUserModalOpen.open}
@@ -181,6 +201,8 @@ const Users = props => {
             </span>
             {doctors.map(item => (
               <UserItem
+                isInviting={isInviting}
+                onResend={handleResendInvitation}
                 user={item}
                 key={item.id}
                 onDelete={startUserDelete}
@@ -198,6 +220,8 @@ const Users = props => {
             </span>
             {reception.map(item => (
               <UserItem
+                isInviting={isInviting}
+                onResend={handleResendInvitation}
                 user={item}
                 key={item.id}
                 onDelete={startUserDelete}
@@ -215,6 +239,8 @@ const Users = props => {
             </span>
             {admins.map(item => (
               <UserItem
+                isInviting={isInviting}
+                onResend={handleResendInvitation}
                 user={item}
                 key={item.id}
                 onDelete={startUserDelete}
