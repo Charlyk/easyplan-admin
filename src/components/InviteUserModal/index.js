@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -13,6 +13,12 @@ import { EmailRegex, Role } from '../../utils/constants';
 const InviteUserModal = ({ open, error, isLoading, onClose, onInvite }) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(Role.reception);
+
+  useEffect(() => {
+    if (!open) {
+      setEmail('');
+    }
+  }, [open]);
 
   const handleInviteUser = () => {
     onInvite(email, role);
