@@ -6,6 +6,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
+import InviteUserModal from '../../components/InviteUserModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
 import { setClinicDoctors } from '../../redux/actions/clinicActions';
 import { updateUsersSelector } from '../../redux/selectors/rootSelector';
@@ -20,11 +21,17 @@ const Users = props => {
   const dispatch = useDispatch();
   const updateUsers = useSelector(updateUsersSelector);
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
-  const [isInviting, setIsInviting] = useState(false);
+  const [isInviting, setIsInviting] = useState({
+    loading: false,
+    userId: null,
+  });
   const [showInvitationSent, setShowInvitationSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInvitingExistent, setIsInvitingExistent] = useState(false);
+  const [invitingExistentError, setInitingExistentError] = useState(null);
   const [users, setUsers] = useState([]);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [isUserModalOpen, setIsUserModalOpen] = useState({
     open: false,
     user: null,
@@ -76,6 +83,27 @@ const Users = props => {
 
   const handleUserModalOpen = (event, user, type = Role.manager) => {
     setIsUserModalOpen({ open: true, user, type });
+  };
+
+  const handleInviteUser = async (email, role) => {
+    setIsInvitingExistent(true);
+    setInitingExistentError(null);
+    const response = await dataAPI.inviteExistentUser({ email, role });
+    if (response.isError) {
+      setInitingExistentError(response.message);
+    } else {
+      setShowInviteModal(false);
+      await fetchUsers();
+    }
+    setIsInvitingExistent(false);
+  };
+
+  const openInviteModal = () => {
+    setShowInviteModal(true);
+  };
+
+  const closeInviteModal = () => {
+    setShowInviteModal(false);
   };
 
   const canShowType = type => {
@@ -140,9 +168,9 @@ const Users = props => {
   };
 
   const handleResendInvitation = async (event, user) => {
-    setIsInviting(true);
+    setIsInviting({ loading: true, userId: user.id });
     await dataAPI.resendUserInvitation(user.id);
-    setIsInviting(false);
+    setIsInviting({ loading: false, userId: null });
     setShowInvitationSent(true);
   };
 
@@ -166,6 +194,13 @@ const Users = props => {
 
   return (
     <div className='users-root'>
+      <InviteUserModal
+        error={invitingExistentError}
+        isLoading={isInvitingExistent}
+        open={showInviteModal}
+        onInvite={handleInviteUser}
+        onClose={closeInviteModal}
+      />
       <ConfirmationModal
         show={Boolean(userToDelete)}
         onClose={closeDeleteUserDialog}
@@ -192,6 +227,7 @@ const Users = props => {
         onFilterChange={handleFilterChange}
         filter={selectedFilter}
         onAddUser={handleUserModalOpen}
+        onInviteUser={openInviteModal}
       />
       <div className='users-root__content'>
         {canShowType(Role.doctor) && (
@@ -201,7 +237,7 @@ const Users = props => {
             </span>
             {doctors.map(item => (
               <UserItem
-                isInviting={isInviting}
+                isInviting={isInviting.userId === item.id && isInviting.loading}
                 onResend={handleResendInvitation}
                 user={item}
                 key={item.id}
@@ -220,7 +256,7 @@ const Users = props => {
             </span>
             {reception.map(item => (
               <UserItem
-                isInviting={isInviting}
+                isInviting={isInviting.userId === item.id && isInviting.loading}
                 onResend={handleResendInvitation}
                 user={item}
                 key={item.id}
@@ -239,7 +275,7 @@ const Users = props => {
             </span>
             {admins.map(item => (
               <UserItem
-                isInviting={isInviting}
+                isInviting={isInviting.userId === item.id && isInviting.loading}
                 onResend={handleResendInvitation}
                 user={item}
                 key={item.id}

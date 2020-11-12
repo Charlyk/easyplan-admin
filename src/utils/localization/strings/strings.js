@@ -276,6 +276,10 @@ export default {
     invite: 'Invite',
     'invitation sent': 'Invitation sent',
     invitation_sent_message: 'A new invitation email was sent to this user.',
+    'invite existent user': 'Invite existent user',
+    reception: 'Reception',
+    'role for user': 'Role for user',
+    user_not_found: 'User not found',
   },
   ro: {
     analytics: 'Analitică',
@@ -556,6 +560,10 @@ export default {
     'invitation sent': 'Invitație transmisă',
     invitation_sent_message:
       'Un email nou cu invitație în clinica Dvs a fost transmis.',
+    'invite existent user': 'Invită utilizator existent',
+    reception: 'Recepționist',
+    'role for user': 'Rolul utilizatorului în clinică',
+    user_not_found: 'Utilizatorul nu a fost găsit',
   },
   ru: {
     analytics: 'Analytics',
@@ -831,5 +839,9 @@ export default {
     invite: 'Invite',
     'invitation sent': 'Invitation sent',
     invitation_sent_message: 'A new invitation email was sent to this user.',
+    'invite existent user': 'Invite existent user',
+    reception: 'Reception',
+    'role for user': 'Rolul utilizatorului în clinică',
+    user_not_found: 'User not found',
   },
 };

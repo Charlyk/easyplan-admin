@@ -1,0 +1,30 @@
+.invite-user-modal {
+  .form-group {
+    margin-bottom: 0;
+    margin-top: .5rem;
+  }
+
+  .form-label {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .7rem;
+    margin-bottom: 0;
+  }
+
+  .form-control {
+    width: 100%;
+    background-color: #FAFAFD;
+  }
+
+  .custom-select {
+    height: 2.1rem;
+    font-size: .8rem;
+  }
+
+  .error-message {
+    color: #ec3276;
+    font-size: .7rem;
+    margin-top: 1rem;
+  }
+}

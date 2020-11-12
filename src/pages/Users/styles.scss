@@ -91,7 +91,13 @@
   margin-right: 2rem;
   margin-top: .5rem;
 
+  .buttons-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
   .positive-button {
+    margin-left: .5rem;
     flex: unset;
     padding: .4rem 1rem;
   }

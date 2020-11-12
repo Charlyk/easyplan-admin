@@ -8,7 +8,7 @@ import EasyTab from '../../../components/EasyTab';
 import { Role } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 
-const UsersHeader = ({ onFilterChange, filter, onAddUser }) => {
+const UsersHeader = ({ onFilterChange, filter, onAddUser, onInviteUser }) => {
   const handleTabClick = tabName => {
     onFilterChange(tabName);
   };
@@ -37,13 +37,22 @@ const UsersHeader = ({ onFilterChange, filter, onAddUser }) => {
           selected={filter === Role.admin}
         />
       </div>
-      <Button
-        className='positive-button'
-        onClick={event => onAddUser(event, null)}
-      >
-        {textForKey('Add new user')}
-        <IconPlus />
-      </Button>
+      <div className='buttons-wrapper'>
+        <Button
+          className='positive-button'
+          onClick={event => onInviteUser(event)}
+        >
+          {textForKey('Invite existent user')}
+          <IconPlus />
+        </Button>
+        <Button
+          className='positive-button'
+          onClick={event => onAddUser(event, null)}
+        >
+          {textForKey('Add new user')}
+          <IconPlus />
+        </Button>
+      </div>
     </div>
   );
 };
@@ -54,4 +63,5 @@ UsersHeader.propTypes = {
   onFilterChange: PropTypes.func,
   filter: PropTypes.oneOf([Role.all, Role.admin, Role.reception, Role.doctor]),
   onAddUser: PropTypes.func,
+  onInviteUser: PropTypes.func,
 };

@@ -1304,4 +1304,23 @@ export default {
       };
     }
   },
+
+  /**
+   * Invite existent user to clinic
+   * @param {{ email: string, role: 'RECEPTION'|'DOCTOR'|'MANAGER'}} body
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  inviteExistentUser: async body => {
+    try {
+      const url = `users/invite-existent`;
+      const response = await instance().post(url, body);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };
