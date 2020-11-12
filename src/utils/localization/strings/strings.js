@@ -280,6 +280,8 @@ export default {
     reception: 'Reception',
     'role for user': 'Role for user',
     user_not_found: 'User not found',
+    'delete clinic': 'Delete clinic',
+    delete_clinic_message: 'Are you sure you want to delete current clinic?',
   },
   ro: {
     analytics: 'Analitică',
@@ -564,6 +566,9 @@ export default {
     reception: 'Recepționist',
     'role for user': 'Rolul utilizatorului în clinică',
     user_not_found: 'Utilizatorul nu a fost găsit',
+    'delete clinic': 'Șterge clinică',
+    delete_clinic_message:
+      'Sunteți sigur că doriți să ștergeți clinica curentă?',
   },
   ru: {
     analytics: 'Analytics',
@@ -843,5 +848,7 @@ export default {
     reception: 'Reception',
     'role for user': 'Rolul utilizatorului în clinică',
     user_not_found: 'User not found',
+    'delete clinic': 'Delete clinic',
+    delete_clinic_message: 'Are you sure you want to delete current clinic?',
   },
 };

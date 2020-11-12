@@ -4,12 +4,18 @@ import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
 import IconLogoPlaceholder from '../../assets/icons/iconLogoPlaceholder';
 import IconSuccess from '../../assets/icons/iconSuccess';
+import IconTrash from '../../assets/icons/iconTrash';
+import ConfirmationModal from '../../components/ConfirmationModal';
 import LoadingButton from '../../components/LoadingButton';
+import {
+  changeSelectedClinic,
+  setCreateClinic,
+} from '../../redux/actions/actions';
 import { setClinic } from '../../redux/actions/clinicActions';
 import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { EmailRegex } from '../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../utils/helperFuncs';
@@ -18,7 +24,10 @@ import { textForKey } from '../../utils/localization';
 const CompanyDetailsForm = props => {
   const dispatch = useDispatch();
   const currentClinic = useSelector(clinicDetailsSelector);
+  const currentUser = useSelector(userSelector);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({ open: false });
   const [data, setData] = useState({
     id: '',
     logoUrl: null,
@@ -75,6 +84,28 @@ const CompanyDetailsForm = props => {
     });
   };
 
+  const handleStartDelete = () => {
+    console.log(currentUser);
+    setDeleteModal({ open: true });
+  };
+
+  const handleCloseDelete = () => {
+    setDeleteModal({ open: false });
+  };
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    const response = await dataAPI.deleteClinic();
+    if (!response.isError) {
+      if (currentUser.clinicIds.length > 0) {
+        dispatch(changeSelectedClinic(currentUser.clinicIds[0]));
+      } else {
+        dispatch(setCreateClinic({ open: true, canClose: false }));
+      }
+    }
+    setIsDeleting(false);
+  };
+
   const isFormValid = () => {
     return (
       data.clinicName?.length > 3 &&
@@ -125,6 +156,14 @@ const CompanyDetailsForm = props => {
 
   return (
     <div className='company-details-form'>
+      <ConfirmationModal
+        isLoading={isDeleting}
+        title={textForKey('Delete clinic')}
+        message={textForKey('delete_clinic_message')}
+        show={deleteModal.open}
+        onClose={handleCloseDelete}
+        onConfirm={handleConfirmDelete}
+      />
       <span className='form-title'>{textForKey('Company details')}</span>
       <div className='data-wrapper'>
         <div className='left'>
@@ -251,6 +290,15 @@ const CompanyDetailsForm = props => {
         </div>
       </div>
       <div className='footer'>
+        <LoadingButton
+          onClick={handleStartDelete}
+          className='delete-button'
+          isLoading={isSaving}
+          disabled={isSaving || !isFormValid()}
+        >
+          {textForKey('Delete')}
+          <IconTrash />
+        </LoadingButton>
         <LoadingButton
           onClick={submitForm}
           className='positive-button'

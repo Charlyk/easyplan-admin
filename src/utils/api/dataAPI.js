@@ -1323,4 +1323,22 @@ export default {
       };
     }
   },
+
+  /**
+   * Delete user selected clinic
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  deleteClinic: async () => {
+    try {
+      const url = `clinics`;
+      const response = await instance().delete(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };
