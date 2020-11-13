@@ -282,6 +282,7 @@ export default {
     user_not_found: 'User not found',
     'delete clinic': 'Delete clinic',
     delete_clinic_message: 'Are you sure you want to delete current clinic?',
+    from: 'from',
   },
   ro: {
     analytics: 'Analitică',
@@ -569,6 +570,7 @@ export default {
     'delete clinic': 'Șterge clinică',
     delete_clinic_message:
       'Sunteți sigur că doriți să ștergeți clinica curentă?',
+    from: 'din',
   },
   ru: {
     analytics: 'Analytics',
@@ -850,5 +852,6 @@ export default {
     user_not_found: 'User not found',
     'delete clinic': 'Delete clinic',
     delete_clinic_message: 'Are you sure you want to delete current clinic?',
+    from: 'from',
   },
 };

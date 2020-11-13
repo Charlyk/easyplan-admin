@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { Typography } from '@material-ui/core';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 import { FormControl } from 'react-bootstrap';
@@ -106,6 +107,29 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
         <div className='content-row'>
           <span className='title-text'>{textForKey('Patient')}:</span>
           <span className='content-text'>{invoice?.patientName}</span>
+        </div>
+        <div className='services-wrapper'>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Services')}</span>
+          </div>
+          <table>
+            <tbody>
+              {invoice?.services.map(service => (
+                <tr key={service.id}>
+                  <td>
+                    <Typography classes={{ root: 'service-name-label' }}>{`${
+                      service.name
+                    } ${service.toothId || ''}`}</Typography>
+                  </td>
+                  <td align='right'>
+                    <Typography classes={{ root: 'service-price-label' }}>
+                      {service.price} MDL
+                    </Typography>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         <div className='content-row'>
           <span className='title-text'>{textForKey('For payment')}:</span>
