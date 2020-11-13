@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Tooltip, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 import IconClock from '../../assets/icons/iconClock';
@@ -16,7 +17,11 @@ const ServiceItem = props => {
           className='service-item__color'
           style={{ backgroundColor: service.color }}
         />
-        <div className='service-item__title'>{service.name}</div>
+        <Tooltip title={service.name}>
+          <Typography noWrap classes={{ root: 'service-item__title' }}>
+            {service.name}
+          </Typography>
+        </Tooltip>
         <div
           role='button'
           tabIndex={0}
