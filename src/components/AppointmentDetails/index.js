@@ -7,6 +7,7 @@ import './styles.scss';
 import { Button, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
+import IconArrowDown from '../../assets/icons/iconArrowDown';
 import IconClose from '../../assets/icons/iconClose';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconTrash from '../../assets/icons/iconTrash';
@@ -167,9 +168,11 @@ const AppointmentDetails = ({
               style={{
                 color: scheduleStatus.color,
                 backgroundColor: `${scheduleStatus.color}1A`,
+                border: `${scheduleStatus.color} 1px solid`,
               }}
             >
               {scheduleStatus.name}
+              <IconArrowDown fill={scheduleStatus.color} />
             </div>
             <div className='schedule-info-wrapper'>
               <table>
