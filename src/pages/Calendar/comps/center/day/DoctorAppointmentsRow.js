@@ -9,8 +9,10 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
+import IconAvatar from '../../../../../assets/icons/iconAvatar';
 import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
+import { clinicServicesSelector } from '../../../../../redux/selectors/clinicSelector';
 import {
   checkAppointmentsSelector,
   updateAppointmentsSelector,
@@ -20,6 +22,8 @@ import {
   checkShouldAnimateSchedule,
   generateReducerActions,
 } from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
+import HourView from './HourView';
 
 const initialState = {
   appointments: [],
@@ -50,6 +54,7 @@ const DoctorAppointmentsRow = ({
   onScheduleSelect,
 }) => {
   const dispatch = useDispatch();
+  const clinicServices = useSelector(clinicServicesSelector);
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const sizeDifference = useRef(0);
   const [{ appointments, previousHourWidth }, localDispatch] = useReducer(
@@ -156,53 +161,69 @@ const DoctorAppointmentsRow = ({
     return endX - startX;
   };
 
+  console.log(doctor);
+
+  const doctorServices = () => {
+    const servicesIds = doctor.services.map(it => it.id);
+    return clinicServices
+      .filter(item => servicesIds.includes(item.id))
+      .map(it => it.name);
+  };
+
+  const fixHours = hours.filter(item => item.split(':')[1] === '00');
+
+  const getCellWidth = () => {
+    const element = document.getElementById('calendar-content');
+    const elementRect = element.getBoundingClientRect();
+    return Math.abs((elementRect.width - 210) / fixHours.length);
+  };
+
   return (
-    <div
-      id={`appointments-${doctor.id}`}
-      key={doctor.id}
-      className='doctor-appointments-row'
-      style={{ minHeight: getRowHeight(doctor) }}
-    >
-      <table
-        style={{
-          height: `calc(${getRowHeight(doctor)}px - 1rem)`,
-          marginTop: '0.5rem',
-          marginBottom: '0.5rem',
-          marginLeft: getMargin(),
-          marginRight: getMargin(),
-        }}
-      >
-        <tbody>
-          <tr style={{ display: 'flex', height: '100%' }}>
-            {hours
-              .filter(item => item.split(':')[1] === '00')
-              .map((hour, index) => {
-                return (
-                  <td
-                    style={{ width: getHourWidth(index) }}
-                    key={hour}
-                    id={hour}
-                    className='appointment-cell'
-                  >
-                    {appointmentsForHour(hour).map((item, index) => (
-                      <AppointmentItem
-                        hidden={item.hidden}
-                        zIndex={index + 1}
-                        onSelect={onScheduleSelect}
-                        key={item.id}
-                        getPosition={getAppointmentPosition}
-                        appointments={appointments}
-                        appointment={item}
-                        hourWidth={hourWidth}
-                      />
-                    ))}
-                  </td>
-                );
-              })}
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <tr>
+      <td width={210}>
+        <div className='doctor-row'>
+          <div className='doctor-info-wrapper'>
+            <div className='avatar-wrapper'>
+              <IconAvatar />
+            </div>
+            <Tooltip title={doctorServices().join(', ')}>
+              <div className='name-and-services'>
+                <Typography noWrap classes={{ root: 'doctor-name' }}>
+                  {`${doctor.firstName} ${doctor.lastName}`}
+                </Typography>
+                <Typography noWrap classes={{ root: 'services-names' }}>
+                  {doctorServices().join(', ')}
+                </Typography>
+              </div>
+            </Tooltip>
+          </div>
+        </div>
+      </td>
+      {fixHours.map(hour => {
+        return (
+          <td
+            width={getCellWidth()}
+            style={{ maxWidth: getCellWidth() }}
+            key={hour}
+            id={hour}
+            className='appointment-cell'
+          >
+            {appointmentsForHour(hour).map((item, index) => (
+              <AppointmentItem
+                hidden={item.hidden}
+                zIndex={index + 1}
+                onSelect={onScheduleSelect}
+                key={item.id}
+                getPosition={getAppointmentPosition}
+                appointments={appointments}
+                appointment={item}
+                hourWidth={hourWidth}
+              />
+            ))}
+          </td>
+        );
+      })}
+    </tr>
   );
 };
 
@@ -226,37 +247,34 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
   };
 
   return (
-    <Tooltip title={title} disableHoverListener={hidden}>
-      <div
-        role='button'
-        tabIndex={0}
-        id={`${appointment.id}-${appointment.start.format(
-          'HH:mm',
-        )}>${appointment.end.format('HH:mm')}`}
-        key={appointment.id}
-        className={clsx('appointment-item', animateSchedule && 'upcoming')}
-        onClick={handleScheduleClick}
-        style={{
-          border: `${appointment.serviceColor} 1px solid`,
-          backgroundColor: `${appointment.serviceColor}1A`,
-        }}
-      >
-        <div className='name-and-status'>
-          <Typography noWrap classes={{ root: 'patient-name' }}>
-            {appointment.patientName}
-          </Typography>
-          <div className='status-icon'>
-            {appointment.status === 'OnSite' && <DoneIcon />}
-            {(appointment.status === 'CompletedPaid' ||
-              appointment.status === 'PartialPaid') && <DoneAllIcon />}
-          </div>
-        </div>
+    <div
+      role='button'
+      tabIndex={0}
+      id={`${appointment.id}-${appointment.start.format(
+        'HH:mm',
+      )}>${appointment.end.format('HH:mm')}`}
+      key={appointment.id}
+      className={clsx('appointment-item', animateSchedule && 'upcoming')}
+      onClick={handleScheduleClick}
+      style={{
+        border: `${appointment.serviceColor} 1px solid`,
+        backgroundColor: `${appointment.serviceColor}1A`,
+      }}
+    >
+      <div className='name-and-status'>
         <Typography noWrap classes={{ root: 'patient-name' }}>
-          {appointment.start.format('HH:mm')} -{' '}
-          {appointment.end.format('HH:mm')}
+          {appointment.patientName}
         </Typography>
+        <div className='status-icon'>
+          {appointment.status === 'OnSite' && <DoneIcon />}
+          {(appointment.status === 'CompletedPaid' ||
+            appointment.status === 'PartialPaid') && <DoneAllIcon />}
+        </div>
       </div>
-    </Tooltip>
+      <Typography noWrap classes={{ root: 'patient-name' }}>
+        {appointment.start.format('HH:mm')} - {appointment.end.format('HH:mm')}
+      </Typography>
+    </div>
   );
 };
 
@@ -300,6 +318,7 @@ DoctorAppointmentsRow.propTypes = {
     id: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    services: PropTypes.arrayOf(PropTypes.object),
   }),
   windowSize: PropTypes.shape({
     width: PropTypes.number,

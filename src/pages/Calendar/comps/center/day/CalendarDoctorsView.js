@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
+import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import { useWindowSize } from '../../../../../utils/hooks';
 import { textForKey } from '../../../../../utils/localization';
 import DoctorAppointmentsRow from './DoctorAppointmentsRow';
+import HourView from './HourView';
 
 const initialState = {
   isLoading: false,
@@ -88,39 +90,52 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
     localDispatch(actions.setIsLoading(false));
   };
 
+  const fixHours = hours.filter(item => item.split(':')[1] === '00');
+
+  const getCellWidth = () => {
+    const element = document.getElementById('calendar-content');
+    const elementRect = element.getBoundingClientRect();
+    return Math.abs((elementRect.width - 210) / fixHours.length);
+  };
+
   return (
-    <div className='calendar-doctors-view'>
-      <div className='calendar-doctors-view__doctors'>
-        <span className='title-label'>{textForKey('Doctors')}</span>
-        <div className='scrollable-wrapper'>
-          {doctors.map(doctor => (
-            <DoctorRow
-              key={doctor.id}
-              doctor={doctor}
-              clinicServices={clinicServices}
-            />
-          ))}
-        </div>
-      </div>
+    <div id='day-view-root' className='calendar-doctors-view'>
+      <table>
+        <thead>
+          <tr>
+            <td width={210}>
+              <Typography classes={{ root: 'title-label' }}>
+                {textForKey('Doctors')}
+              </Typography>
+            </td>
+            {fixHours.map(item => (
+              <td
+                width={getCellWidth()}
+                style={{ maxWidth: getCellWidth() }}
+                key={item}
+              >
+                <HourView hour={item} />
+              </td>
+            ))}
+          </tr>
+        </thead>
+      </table>
       <div className='calendar-doctors-view__appointments-wrapper'>
-        <div className='hours-container' id='hours-container'>
-          {hours.map(item => (
-            <HourView key={item} hour={item} />
-          ))}
-        </div>
-        <div className='scrollable-wrapper'>
-          {doctors.map(item => (
-            <DoctorAppointmentsRow
-              onScheduleSelect={onScheduleSelect}
-              viewDate={viewDate}
-              hours={hours}
-              windowSize={windowSize}
-              key={item.id}
-              doctor={item}
-              hourWidth={hourWidth}
-            />
-          ))}
-        </div>
+        <table>
+          <tbody>
+            {doctors.map(item => (
+              <DoctorAppointmentsRow
+                onScheduleSelect={onScheduleSelect}
+                viewDate={viewDate}
+                hours={hours}
+                windowSize={windowSize}
+                key={item.id}
+                doctor={item}
+                hourWidth={hourWidth}
+              />
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -156,19 +171,11 @@ const DoctorRow = ({ doctor, clinicServices }) => {
           <span className='doctor-name'>
             {doctor.firstName} {doctor.lastName}
           </span>
-          <span className='services-names'>{services.join(', ')}</span>
+          <Typography classes={{ root: 'services-names' }}>
+            {services.join(', ')}
+          </Typography>
         </div>
       </div>
-    </div>
-  );
-};
-
-const HourView = ({ hour }) => {
-  const [hourText, minute] = hour.split(':');
-  return (
-    <div id={hour} className='calendar-doctors-view__hour'>
-      <span className='hour-text'>{minute !== '00' ? '' : hourText}</span>
-      <span className='minute-text'>{minute}</span>
     </div>
   );
 };
