@@ -8,6 +8,7 @@ import {
   Tooltip,
   CircularProgress,
 } from '@material-ui/core';
+import sortBy from 'lodash/sortBy';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -77,10 +78,11 @@ const Services = () => {
       console.error(response.message);
     } else {
       const { data } = response;
-      if (data.length > 0 && category.data == null) {
-        setCategory({ data: data[0], index: 0 });
+      const sortedData = sortBy(data, item => item.created);
+      if (sortedData.length > 0 && category.data == null) {
+        setCategory({ data: sortedData[0], index: 0 });
       }
-      setCategories(data);
+      setCategories(sortedData);
     }
     setIsLoading(false);
   };
@@ -122,27 +124,22 @@ const Services = () => {
     fetchCategories();
   };
 
-  const handleTabChange = (evet, newValue) => {
-    if (newValue === 'create') {
-      handleCreateCategory();
-      return;
-    }
-
+  const handleTabChange = (event, newValue) => {
     if (category.index !== newValue) {
       const newCategory = categories[newValue];
       setCategory({ data: newCategory, index: newValue });
     }
   };
 
-  const filteredServices =
-    category.data != null
-      ? clinicServices.filter(item => item.categoryId === category.data.id)
-      : [];
-
   const getServicesCount = category => {
     return clinicServices.filter(item => item.categoryId === category.id)
       .length;
   };
+
+  const filteredServices =
+    category.data != null
+      ? clinicServices.filter(item => item.categoryId === category.data.id)
+      : [];
 
   return (
     <div className='services-root'>

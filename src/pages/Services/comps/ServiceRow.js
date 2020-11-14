@@ -30,7 +30,7 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
           </Typography>
         </div>
       </td>
-      <td align='left'>
+      <td align='left' className='description-cell'>
         <Typography classes={{ root: 'row-label description-label' }}>
           {service.description || '-'}
         </Typography>

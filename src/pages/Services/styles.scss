@@ -124,8 +124,8 @@
     outline: none;
     background-color: #3A83DC !important;
     min-width: unset !important;
-    width: 50px;
-    height: 50px;
+    width: 50px !important;
+    height: 50px !important;
     align-items: center;
     justify-content: center;
     display: flex !important;
@@ -221,11 +221,20 @@
       }
 
       tbody {
+        width: 100%;
+
         tr {
+          width: 100%;
+
+          .description-cell {
+            max-width: 500px;
+          }
+
           td {
             z-index: 1;
             padding: 1rem;
             border-bottom: #ededed 1px solid;
+            overflow: hidden;
 
             .description-label {
               color: #34344E;
