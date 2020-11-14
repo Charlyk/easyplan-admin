@@ -283,6 +283,8 @@ export default {
     'delete clinic': 'Delete clinic',
     delete_clinic_message: 'Are you sure you want to delete current clinic?',
     from: 'from',
+    duration: 'Duration',
+    no_services_message: 'There are not services in this category :(',
   },
   ro: {
     analytics: 'Analitică',
@@ -571,6 +573,8 @@ export default {
     delete_clinic_message:
       'Sunteți sigur că doriți să ștergeți clinica curentă?',
     from: 'din',
+    duration: 'Durata',
+    no_services_message: 'Încă nu sunt servicii în această categorie :(',
   },
   ru: {
     analytics: 'Analytics',
@@ -853,5 +857,7 @@ export default {
     'delete clinic': 'Delete clinic',
     delete_clinic_message: 'Are you sure you want to delete current clinic?',
     from: 'from',
+    duration: 'Duration',
+    no_services_message: 'There are not services in this category :(',
   },
 };

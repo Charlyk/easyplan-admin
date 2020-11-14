@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IconClose from '../../assets/icons/iconClose';
 import IconDelete from '../../assets/icons/iconDelete';
 import IconSuccess from '../../assets/icons/iconSuccess';
-import { triggerCategoriesUpdate } from '../../redux/actions/actions';
+import {
+  triggerCategoriesUpdate,
+  triggerServicesUpdate,
+} from '../../redux/actions/actions';
+import { closeServiceDetailsModal } from '../../redux/actions/serviceDetailsActions';
+import { clinicDoctorsSelector } from '../../redux/selectors/clinicSelector';
+import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import { logUserAction } from '../../utils/helperFuncs';
@@ -30,9 +35,11 @@ const initialService = {
   serviceType: 'all',
 };
 
-const ServiceDetailsModal = props => {
-  const { show, onClose, category, service } = props;
+const ServiceDetailsModal = () => {
   const dispatch = useDispatch();
+  const { category, service, open } = useSelector(serviceDetailsModalSelector);
+  const modalData = useSelector(serviceDetailsModalSelector);
+  const clinicDoctors = useSelector(clinicDoctorsSelector);
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -40,25 +47,28 @@ const ServiceDetailsModal = props => {
     false,
   );
   const [isFormValid, setIsFormValid] = useState(false);
-  const [serviceInfo, setServiceInfo] = useState({
-    ...initialService,
-    categoryId: category?.id,
-  });
+  const [serviceInfo, setServiceInfo] = useState({ ...initialService });
 
   useEffect(() => {
-    fetchDoctors();
-    if (service != null && show) {
-      setServiceInfo(service);
-      logUserAction(Action.ViewService, JSON.stringify(service));
+    const { category, service, open } = modalData;
+
+    if (!open) {
+      // modal is closed so we need to reset the expanded component
+      setExpandedMenu('info');
     }
-  }, [show, service]);
 
-  useEffect(() => {
-    setServiceInfo({
-      ...serviceInfo,
-      categoryId: category?.id,
-    });
-  }, [category]);
+    if (service != null) {
+      // update service data with specified service
+      setServiceInfo({ ...service, doctors: mapDoctorsToServices() });
+    } else {
+      // update category id na doctors
+      setServiceInfo({
+        ...initialService,
+        categoryId: category?.id,
+        doctors: mapDoctorsToServices(),
+      });
+    }
+  }, [modalData, clinicDoctors]);
 
   useEffect(() => {
     setIsFormValid(
@@ -68,33 +78,17 @@ const ServiceDetailsModal = props => {
     );
   }, [serviceInfo]);
 
-  const fetchDoctors = async () => {
-    const response = await dataAPI.getClinicDoctors();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      const doctorsService = response.data.map(item => {
-        const itemService = item.services.find(it => it.id === service?.id);
-        return {
-          doctorId: item.id,
-          doctorName: `${item.firstName} ${item.lastName}`,
-          selected: itemService != null,
-          price: itemService?.price,
-          percentage: itemService?.percentage,
-        };
-      });
-      if (service != null) {
-        setServiceInfo({
-          ...service,
-          doctors: doctorsService,
-        });
-      } else {
-        setServiceInfo({
-          ...serviceInfo,
-          doctors: doctorsService,
-        });
-      }
-    }
+  const mapDoctorsToServices = () => {
+    return clinicDoctors.map(item => {
+      const itemService = item.services.find(it => it.id === service?.id);
+      return {
+        doctorId: item.id,
+        doctorName: `${item.firstName} ${item.lastName}`,
+        selected: itemService != null,
+        price: itemService?.price,
+        percentage: itemService?.percentage,
+      };
+    });
   };
 
   const handleSaveService = async () => {
@@ -111,24 +105,24 @@ const ServiceDetailsModal = props => {
     } else {
       await createService();
     }
+    dispatch(triggerServicesUpdate());
     setIsLoading(false);
   };
 
   const createService = async () => {
     const response = await dataAPI.createService(serviceInfo);
     if (response.isError) {
-      console.error(response.message);
+      console.error('error creating service', response.message);
     } else {
       logUserAction(Action.CreateService, JSON.stringify(serviceInfo));
-      dispatch(triggerCategoriesUpdate());
-      handleCloseModal();
     }
+    handleCloseModal();
   };
 
   const editService = async () => {
     const response = await dataAPI.editService(serviceInfo, service.id);
     if (response.isError) {
-      console.error(response.message);
+      console.error('error editing service', response.message);
     } else {
       logUserAction(
         Action.EditService,
@@ -137,21 +131,20 @@ const ServiceDetailsModal = props => {
           after: serviceInfo,
         }),
       );
-      dispatch(triggerCategoriesUpdate());
-      handleCloseModal();
     }
+    handleCloseModal();
   };
 
   const deleteService = async () => {
     setIsDeleting(true);
     const response = await dataAPI.deleteService(service.id);
-    if (!response.isError) {
+    if (response.isError) {
+      console.error('error deleting service', response.message);
+    } else {
       logUserAction(Action.DeleteService, JSON.stringify(service));
       setDeleteConfirmationVisible(false);
       dispatch(triggerCategoriesUpdate());
       handleCloseModal();
-    } else {
-      console.error(response.message);
     }
     setIsDeleting(false);
   };
@@ -178,12 +171,7 @@ const ServiceDetailsModal = props => {
 
   const handleCloseModal = () => {
     if (isLoading || isDeleting) return;
-    setServiceInfo({
-      ...initialService,
-      categoryId: category?.id,
-    });
-    setExpandedMenu('info');
-    onClose();
+    dispatch(closeServiceDetailsModal(true));
   };
 
   const handleDoctorChange = doctorService => {
@@ -210,11 +198,11 @@ const ServiceDetailsModal = props => {
 
   return (
     <LeftSideModal
-      show={show}
+      show={open}
       onClose={handleCloseModal}
       steps={[
         textForKey('Categories'),
-        category.name,
+        textForKey(category?.name),
         service == null
           ? textForKey('Add service')
           : textForKey('Edit service'),
@@ -287,14 +275,3 @@ const ServiceDetailsModal = props => {
 };
 
 export default ServiceDetailsModal;
-
-ServiceDetailsModal.propTypes = {
-  show: PropTypes.bool,
-  onClose: PropTypes.func,
-  service: PropTypes.object,
-  category: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    servicesCount: PropTypes.number,
-  }),
-};

@@ -201,6 +201,10 @@ body {
 
     &:hover {
       background-color: #3A83DC;
+
+      svg {
+        fill: white;
+      }
     }
 
     &:active {

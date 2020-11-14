@@ -47,6 +47,11 @@ export const updateCurrentUserSelector = createSelector(
   state => state.updateCurrentUser,
 );
 
+export const updateServicesSelector = createSelector(
+  mainSelector,
+  state => state.updateServices,
+);
+
 export const updateAppointmentsSelector = createSelector(
   mainSelector,
   state => state.updateAppointments,

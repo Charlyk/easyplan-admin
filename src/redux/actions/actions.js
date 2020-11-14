@@ -11,6 +11,13 @@ export function triggerCategoriesUpdate() {
   };
 }
 
+export function triggerServicesUpdate() {
+  return {
+    type: types.updateServicesList,
+    payload: '',
+  };
+}
+
 /**
  * Trigger users list update
  * @return {{payload: string, type: string}}

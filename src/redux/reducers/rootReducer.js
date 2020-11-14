@@ -10,6 +10,7 @@ import imageModal from './imageModal';
 import patientNoteModal from './patientNoteModal';
 import patientXRayModal from './patientXRayModal';
 import paymentModal from './paymentModal';
+import serviceDetailsModal from './serviceDetailsReducer';
 
 export default combineReducers({
   main,
@@ -21,6 +22,7 @@ export default combineReducers({
   createClinicModal,
   calendar,
   imageModal,
+  serviceDetailsModal,
 });
 
 function main(state = initialState, action) {
@@ -38,6 +40,11 @@ function main(state = initialState, action) {
       return {
         ...state,
         updateCategories: !state.updateCategories,
+      };
+    case types.updateServicesList:
+      return {
+        ...state,
+        updateServices: !state.updateServices,
       };
     case types.updateUsersList:
       return {

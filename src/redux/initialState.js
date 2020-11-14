@@ -1,5 +1,6 @@
 export default Object.freeze({
   updateCategories: false,
+  updateServices: false,
   updateUsers: false,
   updateXRay: false,
   updateNotes: false,
