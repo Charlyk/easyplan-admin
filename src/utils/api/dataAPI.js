@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://data.dev.easyplan.pro/api/'
     : env === 'local'
     ? 'http://localhost:5000/api/'

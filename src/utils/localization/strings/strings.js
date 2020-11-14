@@ -285,6 +285,7 @@ export default {
     from: 'from',
     duration: 'Duration',
     no_services_message: 'There are not services in this category :(',
+    'patients per page': 'Patients per page',
   },
   ro: {
     analytics: 'Analitică',
@@ -575,6 +576,7 @@ export default {
     from: 'din',
     duration: 'Durata',
     no_services_message: 'Încă nu sunt servicii în această categorie :(',
+    'patients per page': 'Pacienți per pagină',
   },
   ru: {
     analytics: 'Analytics',
@@ -859,5 +861,6 @@ export default {
     from: 'from',
     duration: 'Duration',
     no_services_message: 'There are not services in this category :(',
+    'patients per page': 'Pacienți per pagină',
   },
 };

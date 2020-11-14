@@ -29,7 +29,7 @@ import { updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
-import Patients from '../Patients';
+import NewPatients from '../NewPatients';
 import Services from '../Services';
 import Settings from '../Settings';
 import Statistics from '../Statistics';
@@ -145,7 +145,7 @@ const Main = () => {
               <Route path='/categories' component={Services} />
               <Route path='/users' component={Users} />
               <Route path='/calendar' component={Calendar} />
-              <Route path='/patients' component={Patients} />
+              <Route path='/patients' component={NewPatients} />
               <Route path='/settings' component={Settings} />
             </Switch>
           </div>
