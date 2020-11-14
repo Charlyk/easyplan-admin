@@ -22,8 +22,6 @@ import {
   checkShouldAnimateSchedule,
   generateReducerActions,
 } from '../../../../../utils/helperFuncs';
-import { textForKey } from '../../../../../utils/localization';
-import HourView from './HourView';
 
 const initialState = {
   appointments: [],
@@ -160,8 +158,6 @@ const DoctorAppointmentsRow = ({
     const endX = nextHourRect.x + nextHourRect.width / 2;
     return endX - startX;
   };
-
-  console.log(doctor);
 
   const doctorServices = () => {
     const servicesIds = doctor.services.map(it => it.id);
