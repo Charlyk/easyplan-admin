@@ -14,8 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IconEdit from '../../assets/icons/iconEdit';
 import IconPlus from '../../assets/icons/iconPlus';
-import CreateCategoryModal from '../../components/CategoriesList/CreateCategoryModal';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import CreateCategoryModal from '../../components/CreateCategoryModal';
 import { setClinicServices } from '../../redux/actions/clinicActions';
 import {
   closeServiceDetailsModal,

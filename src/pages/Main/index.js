@@ -21,10 +21,7 @@ import {
   setCreateClinic,
   triggerUserLogout,
 } from '../../redux/actions/actions';
-import {
-  closeServiceDetailsModal,
-  setServiceDetailsModal,
-} from '../../redux/actions/serviceDetailsActions';
+import { closeServiceDetailsModal } from '../../redux/actions/serviceDetailsActions';
 import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
@@ -32,7 +29,6 @@ import { updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
-import Categories from '../Categories';
 import Patients from '../Patients';
 import Services from '../Services';
 import Settings from '../Settings';
