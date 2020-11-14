@@ -14,20 +14,24 @@ import {
 import AddAppointmentModal from '../../components/AddAppintmentModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
+import ServiceDetailsModal from '../../components/ServiceDetailsModal';
 import {
   changeSelectedClinic,
   setAppointmentModal,
   setCreateClinic,
   triggerUserLogout,
 } from '../../redux/actions/actions';
+import { setServiceDetailsModal } from '../../redux/actions/serviceDetailsActions';
 import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
+import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
 import { updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
 import Categories from '../Categories';
 import Patients from '../Patients';
+import Services from '../Services';
 import Settings from '../Settings';
 import Statistics from '../Statistics';
 import Users from '../Users';
@@ -54,6 +58,7 @@ const Main = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
+  const serviceDetailsModal = useSelector(serviceDetailsModalSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
   const [{ currentPath }, localDispatch] = useReducer(reducer, {
     currentPath: location.pathname,
@@ -91,6 +96,10 @@ const Main = () => {
     dispatch(setAppointmentModal({ open: false }));
   };
 
+  const handleCloseServiceDetails = () => {
+    dispatch(setServiceDetailsModal({ open: false }));
+  };
+
   if (!authManager.isLoggedIn()) {
     return <Redirect to={updateLink('/login')} />;
   }
@@ -105,6 +114,12 @@ const Main = () => {
 
   return (
     <div className='main-page' id='main-page'>
+      <ServiceDetailsModal
+        service={serviceDetailsModal.service}
+        category={serviceDetailsModal.category}
+        show={serviceDetailsModal.open}
+        onClose={handleCloseServiceDetails}
+      />
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
         schedule={appointmentModal?.schedule}
@@ -133,7 +148,7 @@ const Main = () => {
           <div className='data'>
             <Switch>
               <Route path='/analytics' component={Statistics} />
-              <Route path='/categories' component={Categories} />
+              <Route path='/categories' component={Services} />
               <Route path='/users' component={Users} />
               <Route path='/calendar' component={Calendar} />
               <Route path='/patients' component={Patients} />

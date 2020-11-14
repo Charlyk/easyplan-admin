@@ -1,6 +1,7 @@
 import calendar from './calendar';
 import clinicTypes from './clinicTypes';
 import imageModalTypes from './imageModalTypes';
+import seriveDetailsModalTypes from './seriveDetailsModalTypes';
 
 export default {
   setIsAuthenticated: 'setIsAuthenticated',
@@ -25,4 +26,5 @@ export default {
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,
+  ...seriveDetailsModalTypes,
 };

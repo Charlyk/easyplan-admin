@@ -214,7 +214,7 @@ const ServiceDetailsModal = props => {
       onClose={handleCloseModal}
       steps={[
         textForKey('Categories'),
-        category.name,
+        textForKey(category?.name),
         service == null
           ? textForKey('Add service')
           : textForKey('Edit service'),

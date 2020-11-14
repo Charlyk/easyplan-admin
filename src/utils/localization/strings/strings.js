@@ -283,6 +283,7 @@ export default {
     'delete clinic': 'Delete clinic',
     delete_clinic_message: 'Are you sure you want to delete current clinic?',
     from: 'from',
+    duration: 'Duration',
   },
   ro: {
     analytics: 'Analitică',
@@ -571,6 +572,7 @@ export default {
     delete_clinic_message:
       'Sunteți sigur că doriți să ștergeți clinica curentă?',
     from: 'din',
+    duration: 'Durata',
   },
   ru: {
     analytics: 'Analytics',
@@ -853,5 +855,6 @@ export default {
     'delete clinic': 'Delete clinic',
     delete_clinic_message: 'Are you sure you want to delete current clinic?',
     from: 'from',
+    duration: 'Duration',
   },
 };
