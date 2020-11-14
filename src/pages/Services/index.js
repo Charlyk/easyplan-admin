@@ -139,6 +139,11 @@ const Services = () => {
       ? clinicServices.filter(item => item.categoryId === category.data.id)
       : [];
 
+  const getServicesCount = category => {
+    return clinicServices.filter(item => item.categoryId === category.id)
+      .length;
+  };
+
   return (
     <div className='services-root'>
       <CreateCategoryModal
@@ -167,32 +172,37 @@ const Services = () => {
             </Typography>
           </div>
         )}
-        {category.data != null && (
-          <Tabs
-            classes={{ indicator: 'services-root__tab-indicator' }}
-            value={category.index}
-            indicatorColor='primary'
-            textColor='primary'
-            onChange={handleTabChange}
-          >
-            <Tooltip title={textForKey('Add category')}>
-              <Tab
-                classes={{ root: 'services-root__add-tab' }}
-                style={{ outline: 'none' }}
-                value='create'
-                icon={<IconPlus fill='#FFFF' />}
-              />
-            </Tooltip>
-            {categories.map((item, index) => (
-              <Tab
-                style={{ outline: 'none' }}
-                key={item.id}
-                value={index}
-                label={textForKey(item.name)}
-              />
-            ))}
-          </Tabs>
-        )}
+        <div className='tabs-container'>
+          <Tooltip title={textForKey('Add category')}>
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={handleCreateCategory}
+              className='services-root__add-tab'
+              style={{ outline: 'none' }}
+            >
+              <IconPlus fill='#FFFF' />
+            </div>
+          </Tooltip>
+          {category.data != null && (
+            <Tabs
+              classes={{ indicator: 'services-root__tab-indicator' }}
+              value={category.index}
+              indicatorColor='primary'
+              textColor='primary'
+              onChange={handleTabChange}
+            >
+              {categories.map((item, index) => (
+                <Tab
+                  style={{ outline: 'none' }}
+                  key={item.id}
+                  value={index}
+                  label={`${textForKey(item.name)} (${getServicesCount(item)})`}
+                />
+              ))}
+            </Tabs>
+          )}
+        </div>
         {filteredServices.length > 0 && (
           <table>
             <thead>
