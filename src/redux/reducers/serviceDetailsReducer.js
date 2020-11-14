@@ -8,11 +8,16 @@ const initialState = Object.freeze({
 
 export default function serviceDetailsModal(state = initialState, action) {
   switch (action.type) {
+    case types.closeServiceDetailsModal:
+      return { ...state, open: !action.payload };
+    case types.setServiceModalCategory:
+      return { ...state, category: action.payload };
+    case types.setServiceModalService:
+      return { ...state, service: action.payload };
     case types.setServiceModal:
       return {
+        ...state,
         ...action.payload,
-        service: !action.payload.open ? null : action.payload.service,
-        category: !action.payload.open ? null : action.payload.category,
       };
     default:
       return state;

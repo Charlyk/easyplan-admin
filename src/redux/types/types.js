@@ -6,6 +6,7 @@ import seriveDetailsModalTypes from './seriveDetailsModalTypes';
 export default {
   setIsAuthenticated: 'setIsAuthenticated',
   updateCategoriesList: 'updateCategoriesList',
+  updateServicesList: 'updateServicesList',
   updateUsersList: 'updateUsersList',
   updateXRay: 'updateXRay',
   updateNotes: 'updateNotes',

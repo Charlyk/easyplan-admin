@@ -24,7 +24,7 @@ const ModalHeader = props => {
             !isLast && 'current',
           );
           return (
-            <div key={step} className={classes}>
+            <div key={`${step}-${index}`} className={classes}>
               {step}
               {!isLast && <IconArrowNext />}
             </div>

@@ -41,6 +41,11 @@ function main(state = initialState, action) {
         ...state,
         updateCategories: !state.updateCategories,
       };
+    case types.updateServicesList:
+      return {
+        ...state,
+        updateServices: !state.updateServices,
+      };
     case types.updateUsersList:
       return {
         ...state,

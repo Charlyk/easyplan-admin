@@ -14,3 +14,24 @@ export function setServiceDetailsModal(payload) {
     payload,
   };
 }
+
+export function closeServiceDetailsModal(close) {
+  return {
+    type: types.closeServiceDetailsModal,
+    payload: close,
+  };
+}
+
+export function setServiceModalService(service) {
+  return {
+    type: types.setServiceModalService,
+    payload: service,
+  };
+}
+
+export function setServiceModalCategory(category) {
+  return {
+    type: types.setServiceModalCategory,
+    payload: category,
+  };
+}

@@ -13,9 +13,13 @@ import IconMinus from '../../assets/icons/iconMinus';
 import IconPlusBig from '../../assets/icons/iconPlusBig';
 import { textForKey } from '../../utils/localization';
 
-const ServiceInformation = props => {
-  const { isExpanded, showStep, onToggle, data, onChange } = props;
-
+const ServiceInformation = ({
+  isExpanded,
+  showStep,
+  onToggle,
+  data,
+  onChange,
+}) => {
   const handleInfoExpand = () => {
     onToggle();
   };

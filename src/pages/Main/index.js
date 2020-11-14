@@ -21,7 +21,10 @@ import {
   setCreateClinic,
   triggerUserLogout,
 } from '../../redux/actions/actions';
-import { setServiceDetailsModal } from '../../redux/actions/serviceDetailsActions';
+import {
+  closeServiceDetailsModal,
+  setServiceDetailsModal,
+} from '../../redux/actions/serviceDetailsActions';
 import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
@@ -97,7 +100,7 @@ const Main = () => {
   };
 
   const handleCloseServiceDetails = () => {
-    dispatch(setServiceDetailsModal({ open: false }));
+    dispatch(closeServiceDetailsModal(true));
   };
 
   if (!authManager.isLoggedIn()) {
@@ -114,12 +117,7 @@ const Main = () => {
 
   return (
     <div className='main-page' id='main-page'>
-      <ServiceDetailsModal
-        service={serviceDetailsModal.service}
-        category={serviceDetailsModal.category}
-        show={serviceDetailsModal.open}
-        onClose={handleCloseServiceDetails}
-      />
+      <ServiceDetailsModal />
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
         schedule={appointmentModal?.schedule}
