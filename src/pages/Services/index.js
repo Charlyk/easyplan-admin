@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconPlus from '../../assets/icons/iconPlus';
 import CreateCategoryModal from '../../components/CategoriesList/CreateCategoryModal';
+import ConfirmationModal from '../../components/ConfirmationModal';
 import { setClinicServices } from '../../redux/actions/clinicActions';
 import {
   closeServiceDetailsModal,
@@ -41,6 +42,11 @@ const Services = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState({ data: null, index: -1 });
+  const [deleteServiceModal, setDeleteServiceModal] = useState({
+    open: false,
+    service: null,
+    isLoading: false,
+  });
   const [categoryModal, setCategoryModal] = useState({
     state: categoryModalState.closed,
   });
@@ -102,7 +108,23 @@ const Services = () => {
     dispatch(closeServiceDetailsModal(false));
   };
 
-  const handleDeleteService = service => {};
+  const handleDeleteService = service => {
+    setDeleteServiceModal({ open: true, service, isLoading: false });
+  };
+
+  const handleCloseDeleteService = () => {
+    setDeleteServiceModal({ open: false, service: null, isLoading: false });
+  };
+
+  const handleServiceDeleteConfirmed = async () => {
+    if (deleteServiceModal.service == null) {
+      return;
+    }
+    setDeleteServiceModal({ ...deleteServiceModal, isLoading: true });
+    await dataAPI.deleteService(deleteServiceModal.service.id);
+    await fetchServices();
+    handleCloseDeleteService();
+  };
 
   const handleCreateCategory = () => {
     setCategoryModal({ state: categoryModalState.create });
@@ -143,6 +165,14 @@ const Services = () => {
 
   return (
     <div className='services-root'>
+      <ConfirmationModal
+        onConfirm={handleServiceDeleteConfirmed}
+        onClose={handleCloseDeleteService}
+        isLoading={deleteServiceModal.isLoading}
+        title={textForKey('Delete service')}
+        message={textForKey('Are you sure you want to delete this service?')}
+        show={deleteServiceModal.open}
+      />
       <CreateCategoryModal
         category={
           categoryModal.state === categoryModalState.edit ? category.data : null
