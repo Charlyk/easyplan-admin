@@ -1,4 +1,4 @@
-import axios from 'axios';
+import Axios from 'axios';
 
 import { env } from '../constants';
 import { textForKey } from '../localization';
@@ -6,23 +6,10 @@ import authManager from '../settings/authManager';
 
 const baseURL =
   env === 'dev' || env === 'local'
-    ? 'https://auth.dev.easyplan.pro/api/authentication/'
+    ? 'https://auth.dev.easyplan.pro/api/authentication'
     : env === 'local'
-    ? 'http://localhost:5000/api/authentication/'
-    : 'https://auth.prod.easyplan.pro/api/authentication/';
-
-const instance = () => {
-  let headers = null;
-  if (authManager.isLoggedIn()) {
-    headers = {
-      Authorization: authManager.getUserToken(),
-    };
-  }
-  return axios.create({
-    baseURL,
-    headers,
-  });
-};
+    ? 'http://localhost:5000/api/authentication'
+    : 'https://auth.prod.easyplan.pro/api/authentication';
 
 export default {
   /**
@@ -33,7 +20,7 @@ export default {
    */
   login: async (email, password) => {
     try {
-      const response = await instance().post('v1/login', {
+      const response = await Axios.post(`${baseURL}/v1/login`, {
         username: email,
         password,
       });
@@ -49,7 +36,7 @@ export default {
 
   requestResetPassword: async email => {
     try {
-      const response = await instance().post('v1/reset-password', {
+      const response = await Axios.post(`${baseURL}/v1/reset-password`, {
         username: email,
       });
       const { data: responseData } = response;
@@ -74,7 +61,7 @@ export default {
           message: textForKey('Not logged in'),
         };
       }
-      const response = await instance().get('v1/me');
+      const response = await Axios.get(`${baseURL}/v1/me`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -92,7 +79,7 @@ export default {
    */
   register: async requestBody => {
     try {
-      const response = await instance().post('v1/register', requestBody);
+      const response = await Axios.post(`${baseURL}/v1/register`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -116,7 +103,10 @@ export default {
    */
   updateAccount: async requestBody => {
     try {
-      const response = await instance().put('v1/update-account', requestBody);
+      const response = await Axios.put(
+        `${baseURL}/v1/update-account`,
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -134,7 +124,9 @@ export default {
    */
   changeClinic: async clinicId => {
     try {
-      const response = await instance().get(`v1/change-clinic/${clinicId}`);
+      const response = await Axios.get(
+        `${baseURL}/v1/change-clinic/${clinicId}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -154,7 +146,10 @@ export default {
    */
   changeUserPassword: async requestBody => {
     try {
-      const response = await instance().put(`v1/reset-password`, requestBody);
+      const response = await Axios.put(
+        `${baseURL}/v1/reset-password`,
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
