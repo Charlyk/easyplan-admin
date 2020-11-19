@@ -34,6 +34,7 @@ import Services from '../Services';
 import Settings from '../Settings';
 import Statistics from '../Statistics';
 import Users from '../Users';
+import Patients from "../Patients";
 
 const reducerTypes = {
   setCurrentPath: 'setCurrentPath',
@@ -145,7 +146,7 @@ const Main = () => {
               <Route path='/categories' component={Services} />
               <Route path='/users' component={Users} />
               <Route path='/calendar' component={Calendar} />
-              <Route path='/patients' component={NewPatients} />
+              <Route path='/patients' component={Patients} />
               <Route path='/settings' component={Settings} />
             </Switch>
           </div>
