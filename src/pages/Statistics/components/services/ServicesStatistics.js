@@ -1,5 +1,14 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TablePagination,
+} from '@material-ui/core';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import { parse } from 'query-string';
@@ -30,6 +39,8 @@ const reducerTypes = {
   setShowRangePicker: 'setShowRangePicker',
   setDateRange: 'setDateRange',
   setUrlParams: 'setUrlParams',
+  setPage: 'setPage',
+  setRowsPerPage: 'setRowsPerPage',
 };
 
 const reducerActions = generateReducerActions(reducerTypes);
@@ -43,7 +54,11 @@ const reducer = (state, action) => {
     case reducerTypes.setSelectedStatus:
       return { ...state, selectedStatus: action.payload };
     case reducerTypes.setStatistics:
-      return { ...state, statistics: action.payload };
+      return {
+        ...state,
+        statistics: action.payload.data,
+        totalItems: action.payload.total,
+      };
     case reducerTypes.setDoctors:
       return { ...state, doctors: action.payload };
     case reducerTypes.setServices:
@@ -74,6 +89,10 @@ const reducer = (state, action) => {
         params: action.payload,
       };
     }
+    case reducerTypes.setPage:
+      return { ...state, page: action.payload };
+    case reducerTypes.setRowsPerPage:
+      return { ...state, rowsPerPage: parseInt(action.payload), page: 0 };
   }
 };
 
@@ -87,6 +106,7 @@ const initialState = {
   isLoading: false,
   showRangePicker: false,
   urlParams: {},
+  totalItems: 0,
   dateRange: [
     moment()
       .startOf('month')
@@ -95,6 +115,8 @@ const initialState = {
       .endOf('month')
       .toDate(),
   ],
+  page: 0,
+  rowsPerPage: 25,
 };
 
 const ServicesStatistics = () => {
@@ -112,21 +134,22 @@ const ServicesStatistics = () => {
       selectedService,
       selectedStatus,
       showRangePicker,
+      totalItems,
       params: urlParams,
       dateRange: [startDate, endDate],
+      page,
+      rowsPerPage,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    setTimeout(fetchData, 50);
-  }, [urlParams]);
+  if (!isEqual(params, urlParams)) {
+    localDispatch(reducerActions.setUrlParams(params));
+  }
 
   useEffect(() => {
-    if (!isEqual(params, urlParams)) {
-      localDispatch(reducerActions.setUrlParams(params));
-    }
-  }, [params]);
+    fetchData();
+  }, [urlParams, page, rowsPerPage]);
 
   const fetchData = async () => {
     localDispatch(reducerActions.setIsLoading(true));
@@ -141,7 +164,11 @@ const ServicesStatistics = () => {
       Action.ViewServicesStatistics,
       JSON.stringify({ filter: requestData }),
     );
-    const response = await dataAPI.fetchServicesStatistics(requestData);
+    const response = await dataAPI.fetchServicesStatistics(
+      requestData,
+      page,
+      rowsPerPage,
+    );
     if (response.isError) {
       console.error(response.message);
     } else {
@@ -151,6 +178,7 @@ const ServicesStatistics = () => {
   };
 
   const handleFilterSubmit = () => {
+    console.log('handleFilterSubmit');
     fetchData();
   };
 
@@ -212,6 +240,14 @@ const ServicesStatistics = () => {
   const colorForStatus = status => {
     const data = Statuses.find(it => it.id === status);
     return data?.color;
+  };
+
+  const handleChangePage = (event, newPage) => {
+    localDispatch(reducerActions.setPage(newPage));
+  };
+
+  const handleChangeRowsPerPage = event => {
+    localDispatch(reducerActions.setRowsPerPage(event.target.value));
   };
 
   return (
@@ -295,42 +331,60 @@ const ServicesStatistics = () => {
           <span className='no-data-label'>{textForKey('No results')}</span>
         )}
         {statistics.length > 0 && (
-          <table className='data-table'>
-            <thead>
-              <tr>
-                <td>{textForKey('Date')}</td>
-                <td>{textForKey('Doctor')}</td>
-                <td>{textForKey('Service')}</td>
-                <td>{textForKey('Patient')}</td>
-                <td>{textForKey('Status')}</td>
-              </tr>
-            </thead>
-            <tbody>
-              {statistics.map(item => (
-                <tr key={item.id}>
-                  <td>
-                    {moment(item.dateAndTime).format('DD MMM YYYY HH:mm')}
-                  </td>
-                  <td>{item.doctorName}</td>
-                  <td>{item.serviceName}</td>
-                  <td>{item.patientName}</td>
-                  <td>
-                    <span
-                      className='status-label'
-                      style={{
-                        color: colorForStatus(item.status),
-                        backgroundColor: `${colorForStatus(item.status)}1A`,
-                      }}
-                    >
-                      {titleForStatus(item.status)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TableContainer classes={{ root: 'table-container' }}>
+            <Table classes={{ root: 'data-table' }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>{textForKey('Date')}</TableCell>
+                  <TableCell>{textForKey('Doctor')}</TableCell>
+                  <TableCell>{textForKey('Service')}</TableCell>
+                  <TableCell>{textForKey('Patient')}</TableCell>
+                  <TableCell>{textForKey('Status')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {statistics.map(item => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      {moment(item.dateAndTime).format('DD MMM YYYY HH:mm')}
+                    </TableCell>
+                    <TableCell>{item.doctorName}</TableCell>
+                    <TableCell>{item.serviceName}</TableCell>
+                    <TableCell>{item.patientName}</TableCell>
+                    <TableCell>
+                      <span
+                        className='status-label'
+                        style={{
+                          color: colorForStatus(item.status),
+                          backgroundColor: `${colorForStatus(item.status)}1A`,
+                        }}
+                      >
+                        {titleForStatus(item.status)}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
       </div>
+      <TablePagination
+        classes={{ root: 'table-pagination' }}
+        rowsPerPageOptions={[25, 50, 100]}
+        colSpan={4}
+        count={totalItems}
+        rowsPerPage={rowsPerPage}
+        labelRowsPerPage={textForKey('Rows per page')}
+        page={page}
+        component='div'
+        SelectProps={{
+          inputProps: { 'aria-label': 'rows per page' },
+          native: true,
+        }}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
       <EasyDateRangePicker
         onChange={handleDateChange}
         onClose={handleDatePickerClose}

@@ -951,9 +951,13 @@ export default {
    */
   fetchClinicInvoices: async () => {
     try {
-      const response = await Axios.get(`${baseURL}/clinics/invoices`);
-      const { data: responseData } = response;
-      return responseData;
+      const url = `${baseURL}/clinics/invoices`;
+      const response = await fetch(url, {
+        method: 'get',
+        headers: { Authorization: authManager.getUserToken() },
+      });
+      // const response = await Axios.get(`${baseURL}/clinics/invoices`);
+      return await response.json();
     } catch (e) {
       return {
         isError: true,
@@ -1074,15 +1078,9 @@ export default {
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
       const url = `${baseURL}/analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
-      const response = await fetch(url, {
-        method: 'get',
-        headers: { Authorization: authManager.getUserToken() },
-      });
-      // const response = await Axios.get(
-      //   `${baseURL}/analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
-      // );
-      const responseData = response.body;
-      return responseData.getReader();
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      return responseData;
     } catch (e) {
       return {
         isError: true,
@@ -1093,6 +1091,8 @@ export default {
 
   /**
    * Fetch services statistics
+   * @param {number} page
+   * @param {number} rowsPerPage
    * @param {Object} requestData
    * @param {string} requestData.serviceId
    * @param {string} requestData.doctorId
@@ -1101,12 +1101,12 @@ export default {
    * @param {string} requestData.status
    * @return {Promise<{isError: boolean, message: string|null, data: [Object]}|any>}
    */
-  fetchServicesStatistics: async requestData => {
+  fetchServicesStatistics: async (requestData, page, rowsPerPage) => {
     try {
       const { serviceId, doctorId, fromDate, toDate, status } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
-      const url = `${baseURL}/analytics/services?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
+      const url = `${baseURL}/analytics/services?page=${page}&rowsPerPage=${rowsPerPage}&serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;

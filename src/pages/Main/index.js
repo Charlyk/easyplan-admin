@@ -21,11 +21,9 @@ import {
   setCreateClinic,
   triggerUserLogout,
 } from '../../redux/actions/actions';
-import { closeServiceDetailsModal } from '../../redux/actions/serviceDetailsActions';
 import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
-import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
-import { updateLink } from '../../utils/helperFuncs';
+import { generateReducerActions, updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
 import Calendar from '../Calendar';
@@ -34,15 +32,12 @@ import Services from '../Services';
 import Settings from '../Settings';
 import Statistics from '../Statistics';
 import Users from '../Users';
-import Patients from "../Patients";
 
 const reducerTypes = {
   setCurrentPath: 'setCurrentPath',
 };
 
-const reducerActions = {
-  setCurrentPath: payload => ({ type: reducerTypes.setCurrentPath, payload }),
-};
+const actions = generateReducerActions(reducerTypes);
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -58,7 +53,6 @@ const Main = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
-  const serviceDetailsModal = useSelector(serviceDetailsModalSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
   const [{ currentPath }, localDispatch] = useReducer(reducer, {
     currentPath: location.pathname,
@@ -74,7 +68,7 @@ const Main = () => {
 
   useEffect(() => {
     if (authManager.isLoggedIn()) {
-      localDispatch(reducerActions.setCurrentPath(location.pathname));
+      localDispatch(actions.setCurrentPath(location.pathname));
     } else {
       history.push(updateLink('/login'));
     }
@@ -94,10 +88,6 @@ const Main = () => {
 
   const handleAppointmentModalClose = () => {
     dispatch(setAppointmentModal({ open: false }));
-  };
-
-  const handleCloseServiceDetails = () => {
-    dispatch(closeServiceDetailsModal(true));
   };
 
   if (!authManager.isLoggedIn()) {
@@ -146,7 +136,7 @@ const Main = () => {
               <Route path='/categories' component={Services} />
               <Route path='/users' component={Users} />
               <Route path='/calendar' component={Calendar} />
-              <Route path='/patients' component={Patients} />
+              <Route path='/patients' component={NewPatients} />
               <Route path='/settings' component={Settings} />
             </Switch>
           </div>
