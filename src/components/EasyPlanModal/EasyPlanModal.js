@@ -15,6 +15,7 @@ const EasyPlanModal = ({
   children,
   negativeBtnText,
   positiveBtnText,
+  positiveBtnIcon,
   isPositiveDisabled,
   isNegativeDisabled,
   isPositiveLoading,
@@ -66,7 +67,7 @@ const EasyPlanModal = ({
             onClick={onPositiveClick}
           >
             {positiveBtnText}
-            {!isPositiveLoading && <IconSuccess />}
+            {!isPositiveLoading && positiveBtnIcon}
           </LoadingButton>
         )}
       </Modal.Footer>
@@ -83,6 +84,7 @@ EasyPlanModal.propTypes = {
   hidePositiveBtn: PropTypes.bool,
   negativeBtnText: PropTypes.string,
   positiveBtnText: PropTypes.string,
+  positiveBtnIcon: PropTypes.any,
   isPositiveLoading: PropTypes.bool,
   isNegativeLoading: PropTypes.bool,
   isPositiveDisabled: PropTypes.bool,
@@ -98,5 +100,6 @@ EasyPlanModal.defaultProps = {
   onPositiveClick: () => null,
   negativeBtnText: textForKey('Close'),
   positiveBtnText: textForKey('Save'),
+  positiveBtnIcon: <IconSuccess fill='#fff' />,
   className: '',
 };

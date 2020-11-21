@@ -124,5 +124,42 @@
         margin-right: .5rem;
       }
     }
+
+    .actions-container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      align-items: center;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      height: 3.3rem;
+
+      .create-btn {
+        margin-left: .5rem;
+        color: #00E987;
+        border-color: #00E987;
+
+        &:focus, &:active, &:hover {
+          color: #00E987 !important;
+          border-color: #00E987 !important;
+          background-color: transparent !important;
+        }
+      }
+
+      .import-btn {
+        background-color: transparent;
+
+        &:focus, &:active, &:hover {
+          color: #3A83DC !important;
+          border-color: #3A83DC !important;
+          background-color: transparent !important;
+        }
+
+        svg {
+          fill: #3A83DC;
+        }
+      }
+    }
   }
 }

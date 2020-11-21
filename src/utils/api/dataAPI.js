@@ -1,30 +1,24 @@
-import axios from 'axios';
+import Axios from 'axios';
 import moment from 'moment';
 
 import { env } from '../constants';
 import authManager from '../settings/authManager';
 
+Axios.interceptors.request.use(async function(config) {
+  if (authManager.isLoggedIn()) {
+    config.headers.Authorization = authManager.getUserToken();
+  }
+  return config;
+});
+
 const baseURL =
   env === 'dev' || env === 'local'
-    ? 'https://data.dev.easyplan.pro/api/'
+    ? 'https://data.dev.easyplan.pro/api'
     : env === 'local'
-    ? 'http://localhost:5000/api/'
-    : 'https://data.prod.easyplan.pro/api/';
+    ? 'http://localhost:5000/api'
+    : 'https://data.prod.easyplan.pro/api';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
-
-const instance = () => {
-  let headers = null;
-  if (authManager.isLoggedIn()) {
-    headers = {
-      Authorization: authManager.getUserToken(),
-    };
-  }
-  return axios.create({
-    baseURL,
-    headers,
-  });
-};
 
 export default {
   /**
@@ -33,7 +27,7 @@ export default {
    */
   fetchCategories: async () => {
     try {
-      const response = await instance().get('categories');
+      const response = await Axios.get(`${baseURL}/categories`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -51,8 +45,8 @@ export default {
    */
   createCategory: async requestBody => {
     try {
-      const response = await instance().post(
-        'categories/v1/create',
+      const response = await Axios.post(
+        `${baseURL}/categories/v1/create`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -72,8 +66,8 @@ export default {
    */
   changeCategoryName: async requestBody => {
     try {
-      const response = await instance().put(
-        `categories/${requestBody.categoryId}`,
+      const response = await Axios.put(
+        `${baseURL}/categories/${requestBody.categoryId}`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -93,7 +87,9 @@ export default {
    */
   deleteCategory: async categoryId => {
     try {
-      const response = await instance().delete(`categories/${categoryId}`);
+      const response = await Axios.delete(
+        `${baseURL}/categories/${categoryId}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -119,7 +115,10 @@ export default {
    */
   createService: async requestBody => {
     try {
-      const response = await instance().post('services/v1/create', requestBody);
+      const response = await Axios.post(
+        `${baseURL}/services/v1/create`,
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -145,8 +144,8 @@ export default {
    */
   editService: async (requestBody, serviceId) => {
     try {
-      const response = await instance().put(
-        `services/v1/${serviceId}`,
+      const response = await Axios.put(
+        `${baseURL}/services/v1/${serviceId}`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -168,8 +167,8 @@ export default {
     try {
       const serviceIdParam =
         serviceId?.length > 0 ? `?serviceId=${serviceId}` : '';
-      const response = await instance().get(
-        `services/v1/doctors${serviceIdParam}`,
+      const response = await Axios.get(
+        `${baseURL}/services/v1/doctors${serviceIdParam}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -188,7 +187,9 @@ export default {
    */
   deleteService: async serviceId => {
     try {
-      const response = await instance().delete(`services/v1/${serviceId}`);
+      const response = await Axios.delete(
+        `${baseURL}/services/v1/${serviceId}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -208,7 +209,7 @@ export default {
     try {
       const categoryIdParam =
         categoryId?.length > 0 ? `?categoryId=${categoryId}` : '';
-      const response = await instance().get(`services${categoryIdParam}`);
+      const response = await Axios.get(`${baseURL}/services${categoryIdParam}`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -225,7 +226,7 @@ export default {
    */
   fetchUsers: async () => {
     try {
-      const response = await instance().get('users');
+      const response = await Axios.get(`${baseURL}/users`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -248,7 +249,7 @@ export default {
    */
   createUser: async requestBody => {
     try {
-      const response = await instance().post('users', requestBody);
+      const response = await Axios.post(`${baseURL}/users`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -272,7 +273,10 @@ export default {
    */
   updateUser: async (userId, requestBody) => {
     try {
-      const response = await instance().put(`users/${userId}`, requestBody);
+      const response = await Axios.put(
+        `${baseURL}/users/${userId}`,
+        requestBody,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -290,8 +294,8 @@ export default {
    */
   deleteUser: async userId => {
     try {
-      const url = `users/${userId}`;
-      const response = await instance().delete(url);
+      const url = `${baseURL}/users/${userId}`;
+      const response = await Axios.delete(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -313,7 +317,7 @@ export default {
    */
   createPatient: async requestBody => {
     try {
-      const response = await instance().post('patients', requestBody);
+      const response = await Axios.post(`${baseURL}/patients`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -326,11 +330,12 @@ export default {
 
   /**
    * Fetch all patients for selected clinic
-   * @return {Promise<{isError: boolean, message: string|null, data: [Object]}>}
+   * @return {Promise<{isError: boolean, message: string|null, data: { total: number, data: [Object]}}>}
    */
-  fetchAllPatients: async () => {
+  fetchAllPatients: async (page, itemsPerPage) => {
     try {
-      const response = await instance().get('patients');
+      const url = `${baseURL}/patients?page=${page}&itemsPerPage=${itemsPerPage}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -348,8 +353,8 @@ export default {
    */
   deletePatient: async patientId => {
     try {
-      const response = await instance().delete(
-        `patients?patientId=${patientId}`,
+      const response = await Axios.delete(
+        `${baseURL}/patients?patientId=${patientId}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -373,8 +378,8 @@ export default {
    */
   updatePatient: async (patientId, requestBody) => {
     try {
-      const response = await instance().put(
-        `patients/${patientId}`,
+      const response = await Axios.put(
+        `${baseURL}/patients/${patientId}`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -398,8 +403,8 @@ export default {
    */
   createPatientNote: async (patientId, requestBody) => {
     try {
-      const response = await instance().post(
-        `patients/${patientId}/notes`,
+      const response = await Axios.post(
+        `${baseURL}/patients/${patientId}/notes`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -419,7 +424,9 @@ export default {
    */
   fetchPatientNotes: async patientId => {
     try {
-      const response = await instance().get(`patients/${patientId}/notes`);
+      const response = await Axios.get(
+        `${baseURL}/patients/${patientId}/notes`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -437,8 +444,8 @@ export default {
    */
   fetchPatientAppointmentsNotes: async patientId => {
     try {
-      const response = await instance().get(
-        `patients/${patientId}/appointments-notes`,
+      const response = await Axios.get(
+        `${baseURL}/patients/${patientId}/appointments-notes`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -460,8 +467,8 @@ export default {
    */
   addXRayImage: async (patientId, requestBody) => {
     try {
-      const response = await instance().post(
-        `patients/${patientId}/x-ray`,
+      const response = await Axios.post(
+        `${baseURL}/patients/${patientId}/x-ray`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -481,7 +488,9 @@ export default {
    */
   fetchPatientXRayImages: async patientId => {
     try {
-      const response = await instance().get(`patients/${patientId}/x-ray`);
+      const response = await Axios.get(
+        `${baseURL}/patients/${patientId}/x-ray`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -498,7 +507,7 @@ export default {
    */
   fetchCalendarFilters: async () => {
     try {
-      const response = await instance().get(`schedules/filters`);
+      const response = await Axios.get(`${baseURL}/schedules/filters`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -516,7 +525,9 @@ export default {
    */
   searchPatients: async query => {
     try {
-      const response = await instance().get(`patients/search?query=${query}`);
+      const response = await Axios.get(
+        `${baseURL}/patients/search?query=${query}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -534,7 +545,9 @@ export default {
    */
   searchDoctors: async query => {
     try {
-      const response = await instance().get(`users/search?query=${query}`);
+      const response = await Axios.get(
+        `${baseURL}/users/search?query=${query}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -553,8 +566,8 @@ export default {
    */
   searchServices: async (query, doctorId) => {
     try {
-      const response = await instance().get(
-        `services/search?query=${query}&doctorId=${doctorId}`,
+      const response = await Axios.get(
+        `${baseURL}/services/search?query=${query}&doctorId=${doctorId}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -578,7 +591,7 @@ export default {
    */
   createClinic: async requestBody => {
     try {
-      const response = await instance().post(`clinics`, requestBody);
+      const response = await Axios.post(`${baseURL}/clinics`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -606,7 +619,7 @@ export default {
    */
   updateClinic: async requestBody => {
     try {
-      const response = await instance().put(`clinics`, requestBody);
+      const response = await Axios.put(`${baseURL}/clinics`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -623,7 +636,7 @@ export default {
    */
   fetchClinicDetails: async () => {
     try {
-      const response = await instance().get(`clinics/details`);
+      const response = await Axios.get(`${baseURL}/clinics/details`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -640,7 +653,7 @@ export default {
    */
   fetchUserServices: async () => {
     try {
-      const response = await instance().get(`services/v1/user-services`);
+      const response = await Axios.get(`${baseURL}/services/v1/user-services`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -662,11 +675,11 @@ export default {
   fetchAvailableTime: async (scheduleId, doctorId, serviceId, date) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
-      let url = `schedules/available-time?doctorId=${doctorId}&serviceId=${serviceId}&date=${stringDate}`;
+      let url = `${baseURL}/schedules/available-time?doctorId=${doctorId}&serviceId=${serviceId}&date=${stringDate}`;
       if (scheduleId?.length > 0) {
         url += `&scheduleId=${scheduleId}`;
       }
-      const response = await instance().get(url);
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -685,8 +698,8 @@ export default {
    */
   acceptClinicInvitation: async (token, password) => {
     try {
-      const response = await instance().put(
-        `users/accept-invitation/${token}`,
+      const response = await Axios.put(
+        `${baseURL}/users/accept-invitation/${token}`,
         { password: password?.length > 0 ? password : null },
       );
       const { data: responseData } = response;
@@ -717,7 +730,7 @@ export default {
    */
   createNewSchedule: async requestBody => {
     try {
-      const response = await instance().post(`schedules`, requestBody);
+      const response = await Axios.post(`${baseURL}/schedules`, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -737,8 +750,8 @@ export default {
   fetchSchedules: async (doctorId, date) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
-      const response = await instance().get(
-        `schedules?doctorId=${doctorId}&date=${stringDate}`,
+      const response = await Axios.get(
+        `${baseURL}/schedules?doctorId=${doctorId}&date=${stringDate}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -757,8 +770,8 @@ export default {
   fetchSchedulesAndPatients: async () => {
     try {
       const stringDate = moment().format('YYYY-MM-DD');
-      const response = await instance().get(
-        `schedules/doctor?date=${stringDate}`,
+      const response = await Axios.get(
+        `${baseURL}/schedules/doctor?date=${stringDate}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -778,8 +791,8 @@ export default {
    */
   fetchClinicWorkHours: async (weekDay, period) => {
     try {
-      const response = await instance().get(
-        `schedules/clinic-workhours?weekDay=${weekDay}&period=${period}`,
+      const response = await Axios.get(
+        `${baseURL}/schedules/clinic-workhours?weekDay=${weekDay}&period=${period}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -799,8 +812,8 @@ export default {
    */
   fetchClinicWorkHoursV2: async (weekDay, period = 'day') => {
     try {
-      const response = await instance().get(
-        `schedules/v2/clinic-workhours?weekDay=${weekDay}&period=${period}`,
+      const response = await Axios.get(
+        `${baseURL}/schedules/v2/clinic-workhours?weekDay=${weekDay}&period=${period}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -815,8 +828,8 @@ export default {
   fetchMonthSchedules: async (doctorId, date) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
-      const response = await instance().get(
-        `schedules/month-schedules?doctorId=${doctorId}&date=${stringDate}`,
+      const response = await Axios.get(
+        `${baseURL}/schedules/month-schedules?doctorId=${doctorId}&date=${stringDate}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -830,7 +843,9 @@ export default {
 
   fetchScheduleDetails: async scheduleId => {
     try {
-      const response = await instance().get(`schedules/details/${scheduleId}`);
+      const response = await Axios.get(
+        `${baseURL}/schedules/details/${scheduleId}`,
+      );
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -859,8 +874,8 @@ export default {
    */
   finalizeTreatment: async (patientId, requestBody) => {
     try {
-      const response = await instance().put(
-        `patients/${patientId}/finalize-treatment`,
+      const response = await Axios.put(
+        `${baseURL}/patients/${patientId}/finalize-treatment`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -880,8 +895,8 @@ export default {
    */
   fetchPatientSchedules: async patientId => {
     try {
-      const response = await instance().get(
-        `schedules/patient-schedules/${patientId}`,
+      const response = await Axios.get(
+        `${baseURL}/schedules/patient-schedules/${patientId}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -900,8 +915,8 @@ export default {
    */
   deleteSchedule: async scheduleId => {
     try {
-      const response = await instance().delete(
-        `schedules/${scheduleId}/delete`,
+      const response = await Axios.delete(
+        `${baseURL}/schedules/${scheduleId}/delete`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -919,7 +934,7 @@ export default {
    */
   getClinicDoctors: async () => {
     try {
-      const response = await instance().get('clinics/doctors');
+      const response = await Axios.get(`${baseURL}/clinics/doctors`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -936,7 +951,7 @@ export default {
    */
   fetchClinicInvoices: async () => {
     try {
-      const response = await instance().get('clinics/invoices');
+      const response = await Axios.get(`${baseURL}/clinics/invoices`);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -957,8 +972,8 @@ export default {
    */
   registerPayment: async requestBody => {
     try {
-      const response = await instance().post(
-        'clinics/register-payment',
+      const response = await Axios.post(
+        `${baseURL}/clinics/register-payment`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -978,8 +993,8 @@ export default {
    */
   fetchTreatmentPlan: async patientId => {
     try {
-      const response = await instance().get(
-        `patients/${patientId}/treatment-plan`,
+      const response = await Axios.get(
+        `${baseURL}/patients/${patientId}/treatment-plan`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -1005,8 +1020,8 @@ export default {
    */
   saveTreatmentPlan: async (patientId, plan) => {
     try {
-      const response = await instance().put(
-        `patients/${patientId}/treatment-plan`,
+      const response = await Axios.put(
+        `${baseURL}/patients/${patientId}/treatment-plan`,
         plan,
       );
       const { data: responseData } = response;
@@ -1032,8 +1047,8 @@ export default {
       const { doctorId, fromDate, toDate } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
-      const response = await instance().get(
-        `analytics/general?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
+      const response = await Axios.get(
+        `${baseURL}/analytics/general?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -1058,8 +1073,8 @@ export default {
       const { doctorId, fromDate, toDate } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
-      const response = await instance().get(
-        `analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
+      const response = await Axios.get(
+        `${baseURL}/analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
       );
       const { data: responseData } = response;
       return responseData;
@@ -1086,8 +1101,8 @@ export default {
       const { serviceId, doctorId, fromDate, toDate, status } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
-      const url = `analytics/services?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
-      const response = await instance().get(url);
+      const url = `${baseURL}/analytics/services?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1112,8 +1127,8 @@ export default {
       const { fromDate, toDate, doctorId, serviceId } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
-      const url = `analytics/doctors?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
-      const response = await instance().get(url);
+      const url = `${baseURL}/analytics/doctors?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1137,8 +1152,8 @@ export default {
       const { fromDate, toDate, userId } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
-      const url = `analytics/activity-logs?userId=${userId}&fromDate=${fromDateString}&toDate=${toDateString}`;
-      const response = await instance().get(url);
+      const url = `${baseURL}/analytics/activity-logs?userId=${userId}&fromDate=${fromDateString}&toDate=${toDateString}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1157,8 +1172,8 @@ export default {
    */
   sendAction: async (action, details) => {
     try {
-      const url = 'clinics/log-action';
-      const response = await instance().put(url, { action, details });
+      const url = `${baseURL}/clinics/log-action`;
+      const response = await Axios.put(url, { action, details });
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1176,8 +1191,8 @@ export default {
    */
   fetchInvoiceDetails: async invoiceId => {
     try {
-      const url = `clinics/invoice/${invoiceId}`;
-      const response = await instance().get(url);
+      const url = `${baseURL}/clinics/invoice/${invoiceId}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1194,8 +1209,8 @@ export default {
    */
   fetchBracesServices: async () => {
     try {
-      const url = 'services/braces';
-      const response = await instance().get(url);
+      const url = `${baseURL}/services/braces`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1213,8 +1228,8 @@ export default {
    */
   fetchPatientVisits: async patientId => {
     try {
-      const url = `patients/${patientId}/visits`;
-      const response = await instance().get(url);
+      const url = `${baseURL}/patients/${patientId}/visits`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1234,8 +1249,8 @@ export default {
    */
   editVisitNote: async (patientId, scheduleId, note) => {
     try {
-      const url = `patients/${patientId}/edit-visit/${scheduleId}`;
-      const response = await instance().put(url, { note });
+      const url = `${baseURL}/patients/${patientId}/edit-visit/${scheduleId}`;
+      const response = await Axios.put(url, { note });
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1254,8 +1269,8 @@ export default {
    */
   fetchDoctorPatientDetails: async (patientId, scheduleId) => {
     try {
-      const url = `patients/${patientId}/doctor-details/${scheduleId}`;
-      const response = await instance().get(url);
+      const url = `${baseURL}/patients/${patientId}/doctor-details/${scheduleId}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1274,8 +1289,8 @@ export default {
    */
   updateScheduleStatus: async (scheduleId, newStatus) => {
     try {
-      const url = `schedules/schedule-status?scheduleId=${scheduleId}&status=${newStatus}`;
-      const response = await instance().put(url);
+      const url = `${baseURL}/schedules/schedule-status?scheduleId=${scheduleId}&status=${newStatus}`;
+      const response = await Axios.put(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1293,8 +1308,8 @@ export default {
    */
   resendUserInvitation: async userId => {
     try {
-      const url = `users/resend-invitation?userId=${userId}`;
-      const response = await instance().put(url);
+      const url = `${baseURL}/users/resend-invitation?userId=${userId}`;
+      const response = await Axios.put(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1312,8 +1327,8 @@ export default {
    */
   inviteExistentUser: async body => {
     try {
-      const url = `users/invite-existent`;
-      const response = await instance().post(url, body);
+      const url = `${baseURL}/users/invite-existent`;
+      const response = await Axios.post(url, body);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1330,8 +1345,50 @@ export default {
    */
   deleteClinic: async () => {
     try {
-      const url = `clinics`;
-      const response = await instance().delete(url);
+      const url = `${baseURL}/clinics`;
+      const response = await Axios.delete(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch a list of supported providers
+   * @return {Promise<{isError: boolean, message: string, data: [string]}|any>}
+   */
+  fetchSupportedPatientsProviders: async () => {
+    try {
+      const url = `${baseURL}/patients/upload-providers`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Upload patients
+   * @param {Object} data
+   * @param {string} data.provider
+   * @param {File} data.file
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  uploadPatientsList: async data => {
+    try {
+      const url = `${baseURL}/patients/upload-patients`;
+      const body = new FormData();
+      body.append('file', data.file);
+      body.append('provider', data.provider);
+      const response = await Axios.post(url, body);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

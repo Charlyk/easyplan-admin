@@ -9,32 +9,37 @@ import {
   TableBody,
   Typography,
   CircularProgress,
-  TableFooter,
   TablePagination,
   TableContainer,
 } from '@material-ui/core';
+import UploadIcon from '@material-ui/icons/CloudUpload';
+import { Button } from 'react-bootstrap';
 
+import IconPlus from '../../assets/icons/iconPlus';
+import LoadingButton from '../../components/LoadingButton';
+import UploadPatientsModal from '../../components/UploadPatientsModal';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import PatientRow from './comps/PatientRow';
 
 const NewPatients = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [patients, setPatients] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [patients, setPatients] = useState({ total: 0, data: [] });
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     fetchPatients();
-  }, []);
+  }, [page, rowsPerPage]);
 
   const fetchPatients = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchAllPatients();
+    const response = await dataAPI.fetchAllPatients(page, rowsPerPage);
     if (response.isError) {
       console.error(response.message);
     } else {
-      console.log(response.data);
       setPatients(response.data);
     }
     setIsLoading(false);
@@ -49,52 +54,79 @@ const NewPatients = () => {
     setPage(0);
   };
 
+  const handleUploadPatients = async data => {
+    setIsUploading(true);
+    const response = await dataAPI.uploadPatientsList(data);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      console.log(response.data);
+    }
+    setIsUploading(false);
+  };
+
+  const handleStartUploadPatients = () => {
+    setShowUploadModal(true);
+  };
+
+  const closeUploading = () => {
+    setShowUploadModal(false);
+  };
+
+  const handleCreatePatient = () => {};
+
   return (
     <div className='new-patients-root'>
+      <UploadPatientsModal
+        open={showUploadModal}
+        onClose={closeUploading}
+        onUpload={handleUploadPatients}
+      />
       <div className='new-patients-root__content'>
         {isLoading && (
           <CircularProgress classes={{ root: 'patients-progress-bar' }} />
         )}
-        {!isLoading && (
-          <TableContainer classes={{ root: 'table-container' }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow classes={{ root: 'table-head-row' }}>
-                  <TableCell>
-                    <Typography classes={{ root: 'header-label' }}>
-                      {textForKey('Name')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: 'header-label' }}>
-                      {textForKey('Phone number')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: 'header-label' }}>
-                      {textForKey('Email')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: 'header-label' }}>
-                      {textForKey('Discount')}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
+
+        <TableContainer classes={{ root: 'table-container' }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow classes={{ root: 'table-head-row' }}>
+                <TableCell>
+                  <Typography classes={{ root: 'header-label' }}>
+                    {textForKey('Name')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: 'header-label' }}>
+                    {textForKey('Phone number')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: 'header-label' }}>
+                    {textForKey('Email')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: 'header-label' }}>
+                    {textForKey('Discount')}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            {!isLoading && (
               <TableBody>
-                {patients.map(patient => (
+                {patients.data.map(patient => (
                   <PatientRow key={patient.id} patient={patient} />
                 ))}
               </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+            )}
+          </Table>
+        </TableContainer>
 
         <TablePagination
           rowsPerPageOptions={[25, 50, 100]}
           colSpan={4}
-          count={patients.length}
+          count={patients.total}
           rowsPerPage={rowsPerPage}
           labelRowsPerPage={textForKey('Patients per page')}
           page={page}
@@ -106,6 +138,25 @@ const NewPatients = () => {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+        <div className='actions-container'>
+          <LoadingButton
+            variant='outline-primary'
+            className='btn-outline-primary import-btn'
+            isLoading={isUploading}
+            onClick={handleStartUploadPatients}
+          >
+            {textForKey('Import patients')}
+            <UploadIcon />
+          </LoadingButton>
+          <Button
+            variant='outline-primary'
+            className='create-btn'
+            onClick={handleCreatePatient}
+          >
+            {textForKey('Add patient')}
+            <IconPlus fill='#00E987' />
+          </Button>
+        </div>
       </div>
     </div>
   );

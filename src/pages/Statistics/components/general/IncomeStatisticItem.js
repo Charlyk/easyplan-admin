@@ -12,7 +12,7 @@ const IncomeStatisticItem = ({ title, icon, persons, amount }) => {
       <div className='item-data-wrapper'>
         <span className='title-label'>{title}</span>
         <span className='amount-label'>
-          {persons} {textForKey('persons')} / {amount} MDL
+          {persons} {textForKey('persons')} / {Math.round(amount)} MDL
         </span>
       </div>
       <div className='next-button'>
