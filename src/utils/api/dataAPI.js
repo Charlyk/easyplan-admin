@@ -1073,11 +1073,16 @@ export default {
       const { doctorId, fromDate, toDate } = requestData;
       const fromDateString = moment(fromDate).format('YYYY-MM-DD HH:mm:ss');
       const toDateString = moment(toDate).format('YYYY-MM-DD HH:mm:ss');
-      const response = await Axios.get(
-        `${baseURL}/analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
-      );
-      const { data: responseData } = response;
-      return responseData;
+      const url = `${baseURL}/analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
+      const response = await fetch(url, {
+        method: 'get',
+        headers: { Authorization: authManager.getUserToken() },
+      });
+      // const response = await Axios.get(
+      //   `${baseURL}/analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
+      // );
+      const responseData = response.body;
+      return responseData.getReader();
     } catch (e) {
       return {
         isError: true,

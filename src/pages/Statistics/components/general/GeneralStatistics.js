@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { Observable } from 'rxjs';
 
 import IconCheckMark from '../../../../assets/icons/iconCheckMark';
 import IconClock from '../../../../assets/icons/iconClock';
@@ -20,11 +21,45 @@ import StatisticFilter from '../StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
 
+const initialFinanceReport = {
+  expectations: {
+    persons: 0,
+    amount: 0,
+  },
+  confirmed: {
+    persons: 0,
+    amount: 0,
+  },
+  debts: {
+    persons: 0,
+    amount: 0,
+  },
+  paid: {
+    persons: 0,
+    amount: 0,
+  },
+  finished: {
+    persons: 0,
+    amount: 0,
+  },
+  canceled: {
+    persons: 0,
+    amount: 0,
+  },
+};
+
+let globalFinanceReport = initialFinanceReport;
+let financeReader = null;
+let financeSubscriber = null;
+
 const GeneralStatistics = () => {
   const doctors = useSelector(clinicDoctorsSelector);
   const pickerRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [statistics, setStatistics] = useState({ general: [], finance: null });
+  const [generalStatistics, setGeneralStatistics] = useState([]);
+  const [financeStatistics, setFinanceStatistics] = useState(
+    initialFinanceReport,
+  );
   const [selectedDoctor, setSelectedDoctor] = useState({ id: 'all' });
   const [showRangePicker, setShowRangePicker] = useState(false);
   const [[startDate, endDate], setDateRange] = useState([
@@ -38,10 +73,25 @@ const GeneralStatistics = () => {
 
   useEffect(() => {
     fetchStatistics();
+    return cancelPreviousSubscription;
   }, []);
+
+  const cancelPreviousSubscription = () => {
+    if (financeReader != null) {
+      financeReader.cancel();
+      financeReader = null;
+    }
+
+    if (financeSubscriber != null) {
+      financeSubscriber.unsubscribe();
+      financeSubscriber = null;
+    }
+  };
 
   const fetchStatistics = async () => {
     setIsLoading(true);
+    cancelPreviousSubscription();
+    globalFinanceReport = initialFinanceReport;
     const requestData = {
       doctorId: selectedDoctor.id,
       fromDate: startDate,
@@ -52,14 +102,104 @@ const GeneralStatistics = () => {
       JSON.stringify({ filter: requestData }),
     );
     const response = await dataAPI.fetchGeneralStatistics(requestData);
-    const financeResponse = await dataAPI.fetchFinanceStatistics(requestData);
 
     if (response.isError) {
       console.error(response.message);
     } else {
-      setStatistics({ general: response.data, finance: financeResponse.data });
+      setGeneralStatistics(response.data);
     }
+    financeSubscriber = fetchFinanceReports(
+      requestData,
+    ).subscribe(addFinanceReport, console.error, () => console.log('done'));
     setIsLoading(false);
+  };
+
+  /**
+   * Add finance report to state
+   * @param {Object} report
+   * @param {boolean} report.isError
+   * @param {string|null} report.message
+   * @param {{
+   *    canceled: {
+   *      persons: number, amount: number,
+   *    },
+   *    confirmed: {
+   *      persons: number, amount: number,
+   *    },
+   *    paid: {
+   *      persons: number, amount: number,
+   *    },
+   *    expectations: {
+   *      persons: number, amount: number,
+   *    },
+   *    finished: {
+   *      persons: number, amount: number,
+   *    },
+   *    debts: {
+   *      persons: number, amount: number,
+   *    },
+   *}} report.data
+   */
+  const addFinanceReport = report => {
+    if (report.isError) {
+      return;
+    }
+
+    const { data } = report;
+
+    globalFinanceReport = {
+      expectations: {
+        persons:
+          data.expectations.persons + globalFinanceReport.expectations.persons,
+        amount:
+          data.expectations.amount + globalFinanceReport.expectations.amount,
+      },
+      confirmed: {
+        persons: data.confirmed.persons + globalFinanceReport.confirmed.persons,
+        amount: data.confirmed.amount + globalFinanceReport.confirmed.amount,
+      },
+      debts: {
+        persons: data.debts.persons + globalFinanceReport.debts.persons,
+        amount: data.debts.amount + globalFinanceReport.debts.amount,
+      },
+      paid: {
+        persons: data.paid.persons + globalFinanceReport.paid.persons,
+        amount: data.paid.amount + globalFinanceReport.paid.amount,
+      },
+      finished: {
+        persons: data.finished.persons + globalFinanceReport.finished.persons,
+        amount: data.finished.amount + globalFinanceReport.finished.amount,
+      },
+      canceled: {
+        persons: data.canceled.persons + globalFinanceReport.canceled.persons,
+        amount: data.canceled.amount + globalFinanceReport.canceled.amount,
+      },
+    };
+    setFinanceStatistics(globalFinanceReport);
+  };
+
+  /**
+   * Fetch finance statistics
+   * @param requestData
+   * @return {Observable<Object>}
+   */
+  const fetchFinanceReports = requestData => {
+    return new Observable(async subscriber => {
+      financeReader = await dataAPI.fetchFinanceStatistics(requestData);
+      for (let i = 0; i < Number.MAX_VALUE; i++) {
+        const data = await financeReader.read();
+        const string = new TextDecoder('utf-8').decode(data.value);
+        const dataPart = string.split('data:')[1];
+        if (dataPart != null) {
+          const jsonResponse = JSON.parse(dataPart);
+          subscriber.next(jsonResponse);
+        }
+        if (data.done) {
+          subscriber.complete();
+          break;
+        }
+      }
+    });
   };
 
   const handleDoctorChange = event => {
@@ -75,10 +215,10 @@ const GeneralStatistics = () => {
     fetchStatistics();
   };
 
-  const statuses = statistics.general?.items || [];
+  const statuses = generalStatistics?.items || [];
 
   const getSchedulePercentage = item => {
-    const percent = (item.count / statistics.general.total) * 100;
+    const percent = (item.count / generalStatistics.total) * 100;
     return Number.isNaN(percent) ? 0 : percent;
   };
 
@@ -174,43 +314,43 @@ const GeneralStatistics = () => {
         ) : null}
       </div>
       <div className='right-content-wrapper'>
-        {statistics.finance != null && (
+        {financeStatistics != null && (
           <div className='items-wrapper'>
             <IncomeStatisticItem
               title={textForKey('Expectations')}
               icon={<IconClock />}
-              amount={statistics.finance?.expectations.amount}
-              persons={statistics.finance?.expectations.persons}
+              amount={financeStatistics?.expectations.amount}
+              persons={financeStatistics?.expectations.persons}
             />
             <IncomeStatisticItem
               title={textForKey('Confirmed')}
               icon={<IconCheckMark />}
-              amount={statistics.finance?.confirmed.amount}
-              persons={statistics.finance?.confirmed.persons}
+              amount={financeStatistics?.confirmed.amount}
+              persons={financeStatistics?.confirmed.persons}
             />
             <IncomeStatisticItem
               title={textForKey('Did not came')}
               icon={<IconXPerson />}
-              amount={statistics.finance?.canceled.amount}
-              persons={statistics.finance?.canceled.persons}
+              amount={financeStatistics?.canceled.amount}
+              persons={financeStatistics?.canceled.persons}
             />
             <IncomeStatisticItem
               title={textForKey('Finished')}
               icon={<IconSuccess fill='#ffffff' />}
-              amount={statistics.finance?.finished.amount}
-              persons={statistics.finance?.finished.persons}
+              amount={financeStatistics?.finished.amount}
+              persons={financeStatistics?.finished.persons}
             />
             <IncomeStatisticItem
               title={textForKey('Liabilities')}
               icon={<IconLiabilities />}
-              amount={statistics.finance?.debts.amount}
-              persons={statistics.finance?.debts.persons}
+              amount={financeStatistics?.debts.amount}
+              persons={financeStatistics?.debts.persons}
             />
             <IncomeStatisticItem
               title={textForKey('Paid')}
               icon={<IconCreditCard />}
-              amount={statistics.finance?.paid.amount}
-              persons={statistics.finance?.paid.persons}
+              amount={financeStatistics?.paid.amount}
+              persons={financeStatistics?.paid.persons}
             />
           </div>
         )}
