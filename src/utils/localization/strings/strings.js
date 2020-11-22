@@ -286,6 +286,10 @@ export default {
     duration: 'Duration',
     no_services_message: 'There are not services in this category :(',
     'patients per page': 'Patients per page',
+    'personal info': 'Personal Info',
+    appointments: 'Appointments',
+    'enter new note': 'Enter new note',
+    'no data here yet': 'No data here yet',
   },
   ro: {
     analytics: 'Analitică',
@@ -577,6 +581,10 @@ export default {
     duration: 'Durata',
     no_services_message: 'Încă nu sunt servicii în această categorie :(',
     'patients per page': 'Pacienți per pagină',
+    'personal info': 'Detalii pacient',
+    appointments: 'Programări',
+    'enter new note': 'Introduceți o nouă notiță',
+    'no data here yet': 'Încă nu sunt date aici',
   },
   ru: {
     analytics: 'Analytics',
@@ -862,5 +870,9 @@ export default {
     duration: 'Duration',
     no_services_message: 'There are not services in this category :(',
     'patients per page': 'Pacienți per pagină',
+    'personal info': 'Personal Info',
+    appointments: 'Appointments',
+    'enter new note': 'Enter new note',
+    'no data here yet': 'No data here yet',
   },
 };

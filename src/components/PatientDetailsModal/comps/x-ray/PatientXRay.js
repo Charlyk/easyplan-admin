@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
+import { CircularProgress, Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import IconPlus from '../../../../../assets/icons/iconPlus';
-import { updateXRaySelector } from '../../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
-import { textForKey } from '../../../../../utils/localization';
+import IconPlus from '../../../../assets/icons/iconPlus';
+import { updateXRaySelector } from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import XRayPhase from './XRayPhase';
 
 const ExpandedPhase = {
@@ -58,6 +59,9 @@ const PatientXRay = ({ patient, onAddXRay }) => {
 
   return (
     <div className='patient-x-ray'>
+      <Typography classes={{ root: 'title-label' }}>
+        {textForKey('X-Ray')}
+      </Typography>
       <div className='images-container'>
         {!state.isFetching && (
           <XRayPhase
@@ -84,7 +88,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           />
         )}
         {state.isFetching && (
-          <Spinner animation='border' className='patient-details-spinner' />
+          <CircularProgress className='patient-details-spinner' />
         )}
       </div>
       <div className='patient-x-ray__actions'>

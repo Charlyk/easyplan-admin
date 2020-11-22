@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
+import { CircularProgress, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
@@ -7,18 +8,18 @@ import PropTypes from 'prop-types';
 import { Form, FormControl, InputGroup, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import IconSuccess from '../../../../../assets/icons/iconSuccess';
-import EasyTab from '../../../../../components/EasyTab';
-import LoadingButton from '../../../../../components/LoadingButton';
-import { clinicServicesSelector } from '../../../../../redux/selectors/clinicSelector';
-import { userSelector } from '../../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
-import { Action, Role } from '../../../../../utils/constants';
+import IconSuccess from '../../../../assets/icons/iconSuccess';
+import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
+import { userSelector } from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Action, Role } from '../../../../utils/constants';
 import {
   generateReducerActions,
   logUserAction,
-} from '../../../../../utils/helperFuncs';
-import { textForKey } from '../../../../../utils/localization';
+} from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
+import EasyTab from '../../../EasyTab';
+import LoadingButton from '../../../LoadingButton';
 
 const diagnosisClass = ['1', '2', '3'];
 const diagnosisOcclusion = [
@@ -344,7 +345,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const classRow = (
     <tr>
-      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className='group-subtitle'>{textForKey('Class')}</span>
       </td>
       <td valign='top'>
@@ -370,7 +371,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const occlusionRow = (
     <tr>
-      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className='group-subtitle'>{textForKey('Occlusion')}</span>
       </td>
       <td valign='top'>
@@ -396,7 +397,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const fallenBracketsRow = (
     <tr>
-      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className='group-subtitle'>{textForKey('Fallen brackets')}</span>
       </td>
       <td valign='top'>
@@ -422,7 +423,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const radiographRow = (
     <tr>
-      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className='group-subtitle'>{textForKey('Radiografie')}</span>
       </td>
       <td valign='top'>
@@ -448,7 +449,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const bracesRow = (
     <tr>
-      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className='group-subtitle'>{textForKey('Braces')}</span>
       </td>
       <td valign='top'>
@@ -476,7 +477,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const treatmentTypeRow = (
     <tr>
-      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className='group-subtitle'>{textForKey('Service type')}</span>
       </td>
       <td valign='top'>
@@ -502,7 +503,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const molarCaninRow = (
     <tr>
-      <td valign='top' style={{ paddingTop: '1rem', minWidth: '7rem' }}>
+      <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
         <span className='group-subtitle'>{textForKey('Angle Class')}</span>
       </td>
       <td valign='top'>
@@ -571,9 +572,10 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   return (
     <div className='patient-treatment-plans'>
-      {isLoading && (
-        <Spinner animation='border' className='patient-details-spinner' />
-      )}
+      <Typography classes={{ root: 'title-label' }}>
+        {textForKey('Orthodontic plan')}
+      </Typography>
+      {isLoading && <CircularProgress className='patient-details-spinner' />}
       {!isLoading && (
         <React.Fragment>
           <div className='treatment-plan-modal-content'>
@@ -608,7 +610,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
               </tbody>
             </table>
             <Form.Group controlId='note'>
-              <Form.Label>{textForKey('Enter note')}</Form.Label>
+              <Form.Label>{textForKey('Notes')}</Form.Label>
               <InputGroup>
                 <FormControl
                   disabled={!isDoctor}

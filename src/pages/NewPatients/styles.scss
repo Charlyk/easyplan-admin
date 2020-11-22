@@ -23,6 +23,10 @@
       background-color: white;
       border-top: #ededed 1px solid;
 
+      .MuiButtonBase-root {
+        outline: none;
+      }
+
       .MuiTablePagination-caption, .MuiTablePagination-select {
         font-family: Inter, sans-serif;
         font-style: normal;
@@ -58,8 +62,13 @@
     }
 
     .table-body-row {
+      cursor: pointer;
       max-height: 2.9rem;
       height: 2.9rem;
+
+      &:hover {
+        background-color: #fcfcfc;
+      }
 
       .name-and-photo {
         svg {
@@ -98,13 +107,8 @@
 
       &.name {
         outline: none;
-        cursor: pointer;
-        color: #3A83DC;
+        color: #34344E;
         font-weight: 500;
-
-        &:hover {
-          text-decoration: underline;
-        }
       }
 
       &.email, &.phone {

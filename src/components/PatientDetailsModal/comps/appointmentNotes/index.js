@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { CircularProgress, Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { Spinner } from 'react-bootstrap';
@@ -8,8 +9,9 @@ import { useSelector } from 'react-redux';
 import {
   updateNotesSelector,
   userSelector,
-} from '../../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
+} from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import AppointmentNote from './AppointmentNote';
 
 const AppointmentNotes = ({ patient, onEditNote }) => {
@@ -34,11 +36,17 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
   };
 
   return (
-    <div className='patient-notes'>
-      <div className='patient-notes__notes-data'>
-        {isFetching && (
-          <Spinner animation='border' className='patient-details-spinner' />
-        )}
+    <div className='patient-notes-list'>
+      <Typography classes={{ root: 'title-label' }}>
+        {textForKey('Appointments notes')}
+      </Typography>
+      {visits.length === 0 && !isFetching && (
+        <Typography classes={{ root: 'no-data-label' }}>
+          {textForKey('No data here yet')} :(
+        </Typography>
+      )}
+      <div className='patient-notes-list__notes-data'>
+        {isFetching && <CircularProgress className='patient-details-spinner' />}
         {visits.map((visit, index) => (
           <AppointmentNote
             canEdit={visit.doctorId === currentUser.id}

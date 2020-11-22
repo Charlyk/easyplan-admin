@@ -48,10 +48,6 @@ const initialFinanceReport = {
   },
 };
 
-let globalFinanceReport = initialFinanceReport;
-let financeReader = null;
-let financeSubscriber = null;
-
 const GeneralStatistics = () => {
   const doctors = useSelector(clinicDoctorsSelector);
   const pickerRef = useRef(null);
@@ -73,25 +69,10 @@ const GeneralStatistics = () => {
 
   useEffect(() => {
     fetchStatistics();
-    return cancelPreviousSubscription;
   }, []);
-
-  const cancelPreviousSubscription = () => {
-    if (financeReader != null) {
-      financeReader.cancel();
-      financeReader = null;
-    }
-
-    if (financeSubscriber != null) {
-      financeSubscriber.unsubscribe();
-      financeSubscriber = null;
-    }
-  };
 
   const fetchStatistics = async () => {
     setIsLoading(true);
-    cancelPreviousSubscription();
-    globalFinanceReport = initialFinanceReport;
     const requestData = {
       doctorId: selectedDoctor.id,
       fromDate: startDate,
@@ -108,98 +89,14 @@ const GeneralStatistics = () => {
     } else {
       setGeneralStatistics(response.data);
     }
-    financeSubscriber = fetchFinanceReports(
-      requestData,
-    ).subscribe(addFinanceReport, console.error, () => console.log('done'));
-    setIsLoading(false);
-  };
 
-  /**
-   * Add finance report to state
-   * @param {Object} report
-   * @param {boolean} report.isError
-   * @param {string|null} report.message
-   * @param {{
-   *    canceled: {
-   *      persons: number, amount: number,
-   *    },
-   *    confirmed: {
-   *      persons: number, amount: number,
-   *    },
-   *    paid: {
-   *      persons: number, amount: number,
-   *    },
-   *    expectations: {
-   *      persons: number, amount: number,
-   *    },
-   *    finished: {
-   *      persons: number, amount: number,
-   *    },
-   *    debts: {
-   *      persons: number, amount: number,
-   *    },
-   *}} report.data
-   */
-  const addFinanceReport = report => {
-    if (report.isError) {
-      return;
+    const financeResponse = await dataAPI.fetchFinanceStatistics(requestData);
+    if (financeResponse.isError) {
+      console.error(financeResponse.message);
+    } else {
+      setFinanceStatistics(financeResponse.data);
     }
-
-    const { data } = report;
-
-    globalFinanceReport = {
-      expectations: {
-        persons:
-          data.expectations.persons + globalFinanceReport.expectations.persons,
-        amount:
-          data.expectations.amount + globalFinanceReport.expectations.amount,
-      },
-      confirmed: {
-        persons: data.confirmed.persons + globalFinanceReport.confirmed.persons,
-        amount: data.confirmed.amount + globalFinanceReport.confirmed.amount,
-      },
-      debts: {
-        persons: data.debts.persons + globalFinanceReport.debts.persons,
-        amount: data.debts.amount + globalFinanceReport.debts.amount,
-      },
-      paid: {
-        persons: data.paid.persons + globalFinanceReport.paid.persons,
-        amount: data.paid.amount + globalFinanceReport.paid.amount,
-      },
-      finished: {
-        persons: data.finished.persons + globalFinanceReport.finished.persons,
-        amount: data.finished.amount + globalFinanceReport.finished.amount,
-      },
-      canceled: {
-        persons: data.canceled.persons + globalFinanceReport.canceled.persons,
-        amount: data.canceled.amount + globalFinanceReport.canceled.amount,
-      },
-    };
-    setFinanceStatistics(globalFinanceReport);
-  };
-
-  /**
-   * Fetch finance statistics
-   * @param requestData
-   * @return {Observable<Object>}
-   */
-  const fetchFinanceReports = requestData => {
-    return new Observable(async subscriber => {
-      financeReader = await dataAPI.fetchFinanceStatistics(requestData);
-      for (let i = 0; i < Number.MAX_VALUE; i++) {
-        const data = await financeReader.read();
-        const string = new TextDecoder('utf-8').decode(data.value);
-        const dataPart = string.split('data:')[1];
-        if (dataPart != null) {
-          const jsonResponse = JSON.parse(dataPart);
-          subscriber.next(jsonResponse);
-        }
-        if (data.done) {
-          subscriber.complete();
-          break;
-        }
-      }
-    });
+    setIsLoading(false);
   };
 
   const handleDoctorChange = event => {

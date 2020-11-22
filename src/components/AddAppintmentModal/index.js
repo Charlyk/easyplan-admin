@@ -1,13 +1,10 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import { ClickAwayListener, Fade, Paper, Typography } from '@material-ui/core';
-import Popper from '@material-ui/core/Popper';
+import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { Calendar } from 'react-date-range';
-import * as locales from 'react-date-range/dist/locale';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 
@@ -16,10 +13,10 @@ import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, EmailRegex, ManualStatuses } from '../../utils/constants';
 import { logUserAction, urlToLambda } from '../../utils/helperFuncs';
-import { getAppLanguage, textForKey } from '../../utils/localization';
+import { textForKey } from '../../utils/localization';
+import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import EasyDatePicker from '../EasyDatePicker';
 
 const initialState = {
   patient: null,

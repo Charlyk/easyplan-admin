@@ -7,13 +7,28 @@ import IconAvatar from '../../../assets/icons/iconAvatar';
 import IconEmail from '../../../assets/icons/iconEmail';
 import IconPhone from '../../../assets/icons/iconPhone';
 
-const PatientRow = ({ patient }) => {
+const PatientRow = ({ patient, onSelect }) => {
+  const handlePatientNameClick = () => {
+    onSelect(patient);
+  };
+
+  const stopPropagation = event => {
+    event.stopPropagation();
+  };
+
   return (
-    <TableRow key={patient.id} classes={{ root: 'table-body-row' }}>
+    <TableRow
+      key={patient.id}
+      onClick={handlePatientNameClick}
+      classes={{ root: 'table-body-row' }}
+    >
       <TableCell classes={{ root: 'name-and-photo' }}>
         <Box display='flex' alignItems='center'>
           <IconAvatar />
-          <Typography classes={{ root: 'row-label name' }}>
+          <Typography
+            classes={{ root: 'row-label name' }}
+            onClick={handlePatientNameClick}
+          >
             {patient.fullName}
           </Typography>
         </Box>
@@ -21,7 +36,9 @@ const PatientRow = ({ patient }) => {
       <TableCell>
         <Typography classes={{ root: 'row-label phone' }}>
           <IconPhone />
-          <a href={`tel:${patient.phoneNumber}`}>{patient.phoneNumber}</a>
+          <a href={`tel:${patient.phoneNumber}`} onClick={stopPropagation}>
+            {patient.phoneNumber}
+          </a>
         </Typography>
       </TableCell>
       <TableCell>
@@ -32,6 +49,7 @@ const PatientRow = ({ patient }) => {
               href={`mailto:${patient.email}`}
               target='_blank'
               rel='noreferrer'
+              onClick={stopPropagation}
             >
               {patient.email}
             </a>
@@ -51,6 +69,7 @@ export default PatientRow;
 
 PatientRow.propTypes = {
   patient: PropTypes.shape({
+    id: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     fullName: PropTypes.string,
@@ -58,4 +77,5 @@ PatientRow.propTypes = {
     email: PropTypes.string,
     discount: PropTypes.number,
   }),
+  onSelect: PropTypes.func,
 };

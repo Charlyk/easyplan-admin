@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import EasyTab from '../../../../components/EasyTab';
+import AppointmentNotes from '../../../../components/PatientDetailsModal/comps/appointmentNotes';
+import PatientAppointments from '../../../../components/PatientDetailsModal/comps/appointments/PatientAppointments';
+import PatientNotes from '../../../../components/PatientDetailsModal/comps/notes/PatientNotes';
+import OrthodonticPlan from '../../../../components/PatientDetailsModal/comps/treatment-plans/OrthodonticPlan';
+import PatientXRay from '../../../../components/PatientDetailsModal/comps/x-ray/PatientXRay';
 import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
-import AppointmentNotes from './appointmentNotes';
-import PatientAppointments from './appointments/PatientAppointments';
-import PatientNotes from './notes/PatientNotes';
-import OrthodonticPlan from './treatment-plans/OrthodonticPlan';
-import PatientXRay from './x-ray/PatientXRay';
 import './styles.scss';
 
 const TabId = {

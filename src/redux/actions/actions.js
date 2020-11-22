@@ -178,3 +178,24 @@ export function toggleUpdateInvoices() {
     payload: '',
   };
 }
+
+/**
+ * Toggle patient details
+ * @param {Object} payload
+ * @param {boolean} payload.show
+ * @param {string|null} payload.patientId
+ * @return {{payload: *, type: string}}
+ */
+export function setPatientDetails(payload) {
+  return {
+    type: types.setPatientDetails,
+    payload,
+  };
+}
+
+export function togglePatientsListUpdate() {
+  return {
+    type: types.toggleUpdatePatients,
+    payload: '',
+  };
+}

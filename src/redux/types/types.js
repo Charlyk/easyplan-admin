@@ -24,6 +24,8 @@ export default {
   checkAppointments: 'checkAppointments',
   updateInvoices: 'updateInvoices',
   checkDoctorAppointments: 'checkDoctorAppointments',
+  setPatientDetails: 'setPatientDetails',
+  toggleUpdatePatients: 'toggleUpdatePatients',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,

@@ -216,9 +216,9 @@ const DoctorsStatistics = () => {
               {statistics.map(item => (
                 <tr key={item.doctorId}>
                   <td>{item.doctorName}</td>
-                  <td>{item.totalAmount} MDL</td>
-                  <td>{item.doctorAmount} MDL</td>
-                  <td>{item.clinicAmount} MDL</td>
+                  <td>{Math.round(item.totalAmount)} MDL</td>
+                  <td>{Math.round(item.doctorAmount)} MDL</td>
+                  <td>{Math.round(item.clinicAmount)} MDL</td>
                 </tr>
               ))}
             </tbody>
@@ -229,7 +229,7 @@ const DoctorsStatistics = () => {
                 <td />
                 <td align='left'>
                   {textForKey('Total')}:{' '}
-                  {sum(statistics.map(it => it.clinicAmount))} MDL
+                  {Math.round(sum(statistics.map(it => it.clinicAmount)))} MDL
                 </td>
               </tr>
             </tfoot>
