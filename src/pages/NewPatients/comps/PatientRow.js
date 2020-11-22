@@ -12,8 +12,16 @@ const PatientRow = ({ patient, onSelect }) => {
     onSelect(patient);
   };
 
+  const stopPropagation = event => {
+    event.stopPropagation();
+  };
+
   return (
-    <TableRow key={patient.id} classes={{ root: 'table-body-row' }}>
+    <TableRow
+      key={patient.id}
+      onClick={handlePatientNameClick}
+      classes={{ root: 'table-body-row' }}
+    >
       <TableCell classes={{ root: 'name-and-photo' }}>
         <Box display='flex' alignItems='center'>
           <IconAvatar />
@@ -28,7 +36,9 @@ const PatientRow = ({ patient, onSelect }) => {
       <TableCell>
         <Typography classes={{ root: 'row-label phone' }}>
           <IconPhone />
-          <a href={`tel:${patient.phoneNumber}`}>{patient.phoneNumber}</a>
+          <a href={`tel:${patient.phoneNumber}`} onClick={stopPropagation}>
+            {patient.phoneNumber}
+          </a>
         </Typography>
       </TableCell>
       <TableCell>
@@ -39,6 +49,7 @@ const PatientRow = ({ patient, onSelect }) => {
               href={`mailto:${patient.email}`}
               target='_blank'
               rel='noreferrer'
+              onClick={stopPropagation}
             >
               {patient.email}
             </a>
@@ -58,6 +69,7 @@ export default PatientRow;
 
 PatientRow.propTypes = {
   patient: PropTypes.shape({
+    id: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     fullName: PropTypes.string,

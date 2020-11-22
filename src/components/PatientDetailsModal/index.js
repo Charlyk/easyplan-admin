@@ -7,14 +7,21 @@ import { useDispatch } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconClose from '../../assets/icons/iconClose';
-import { setPatientNoteModal } from '../../redux/actions/actions';
+import {
+  setPatientNoteModal,
+  setPatientXRayModal,
+  togglePatientsListUpdate,
+} from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import PatientAppointments from './comps/appointments/PatientAppointments';
 import PatientNotes from './comps/notes/PatientNotes';
 import PatientPersonalData from './comps/PatientPersonalData';
 import './styles.scss';
-import AddNote from '../AddNote';
+import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
+import PatientXRay from './comps/x-ray/PatientXRay';
+import AppointmentNotes from './comps/appointmentNotes';
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -79,6 +86,7 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
       localDispatch(actions.setPatient(response.data));
     }
     localDispatch(actions.setIsFetching(false));
+    dispatch(togglePatientsListUpdate());
   };
 
   const handleAddNote = () => {
@@ -93,6 +101,10 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
     return currentMenu === itemId ? 'selected' : '';
   };
 
+  const handleAddXRayImages = () => {
+    dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
+  };
+
   return (
     <Modal centered show={show} size='xl' className='patient-details-modal'>
       <Modal.Body>
@@ -105,7 +117,7 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
         >
           <IconClose />
         </div>
-        {!isFetching && (
+        {patient != null && (
           <Box display='flex' position='relative' height='100%'>
             <div className='patient-menu-container'>
               <div className='name-and-avatar'>
@@ -113,7 +125,7 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
                   <IconAvatar />
                 </div>
                 <Typography classes={{ root: 'name-label' }}>
-                  Patient Name
+                  {patient?.fullName}
                 </Typography>
               </div>
               <Box mt='1rem' mb='1rem' className='menu-wrapper'>
@@ -124,7 +136,7 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
                     onClick={handleMenuClick}
                     className={menuItemClasses(MenuItem.personalInfo)}
                   >
-                    {textForKey('Personal information')}
+                    {textForKey('Personal info')}
                   </ListGroup.Item>
                   <ListGroup.Item
                     action
@@ -156,7 +168,7 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
                     onClick={handleMenuClick}
                     className={menuItemClasses(MenuItem.treatmentPlan)}
                   >
-                    {textForKey('Treatment plan')}
+                    {textForKey('Appointments notes')}
                   </ListGroup.Item>
                   <ListGroup.Item
                     action
@@ -172,10 +184,28 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
             {patient != null && (
               <div className='patient-details-container'>
                 {currentMenu === MenuItem.personalInfo && (
-                  <PatientPersonalData patient={patient} />
+                  <PatientPersonalData
+                    patient={patient}
+                    onPatientUpdated={fetchPatientDetails}
+                  />
                 )}
                 {currentMenu === MenuItem.notes && (
                   <PatientNotes patient={patient} onAddNote={handleAddNote} />
+                )}
+                {currentMenu === MenuItem.appointments && (
+                  <PatientAppointments patient={patient} />
+                )}
+                {currentMenu === MenuItem.xRay && (
+                  <PatientXRay
+                    patient={patient}
+                    onAddXRay={handleAddXRayImages}
+                  />
+                )}
+                {currentMenu === MenuItem.treatmentPlan && (
+                  <AppointmentNotes patient={patient} />
+                )}
+                {currentMenu === MenuItem.orthodonticPlan && (
+                  <OrthodonticPlan patient={patient} />
                 )}
               </div>
             )}

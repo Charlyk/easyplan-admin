@@ -96,6 +96,11 @@ function main(state = initialState, action) {
         ...state,
         patientDetails: action.payload,
       };
+    case types.toggleUpdatePatients:
+      return {
+        ...state,
+        updatePatients: !state.updatePatients,
+      };
     default:
       return state;
   }

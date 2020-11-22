@@ -7,8 +7,12 @@ import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 
 import IconSuccess from '../../../assets/icons/iconSuccess';
-import { EmailRegex } from '../../../utils/constants';
-import { generateReducerActions } from '../../../utils/helperFuncs';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action, EmailRegex } from '../../../utils/constants';
+import {
+  generateReducerActions,
+  logUserAction,
+} from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../../EasyDatePicker';
 import LoadingButton from '../../LoadingButton';
@@ -21,6 +25,7 @@ const initialState = {
   birthday: null,
   email: '',
   phoneNumber: '',
+  discount: '0',
 };
 
 const reducerTypes = {
@@ -32,6 +37,7 @@ const reducerTypes = {
   setShowDatePicker: 'setShowDatePicker',
   setPatient: 'setPatient',
   setIsSaving: 'setIsSaving',
+  setDiscount: 'setDiscount',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -52,6 +58,8 @@ const reducer = (state, action) => {
       const { isPhoneValid, newNumber } = action.payload;
       return { ...state, phoneNumber: newNumber, isPhoneValid };
     }
+    case reducerTypes.setDiscount:
+      return { ...state, discount: action.payload };
     case reducerTypes.setPatient: {
       const {
         firstName,
@@ -59,6 +67,7 @@ const reducer = (state, action) => {
         birthday,
         email,
         phoneNumber,
+        discount,
       } = action.payload;
       return {
         ...state,
@@ -67,6 +76,7 @@ const reducer = (state, action) => {
         birthday,
         email,
         phoneNumber,
+        discount: String(discount || '0'),
         isPhoneValid: true,
       };
     }
@@ -77,7 +87,7 @@ const reducer = (state, action) => {
   }
 };
 
-const PatientPersonalData = ({ patient }) => {
+const PatientPersonalData = ({ patient, onPatientUpdated }) => {
   const datePickerRef = useRef();
   const [
     {
@@ -89,6 +99,7 @@ const PatientPersonalData = ({ patient }) => {
       phoneNumber,
       isSaving,
       isPhoneValid,
+      discount,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -112,6 +123,8 @@ const PatientPersonalData = ({ patient }) => {
       case 'email':
         localDispatch(actions.setEmail(newValue));
         break;
+      case 'discount':
+        localDispatch(actions.setDiscount(newValue));
     }
   };
 
@@ -135,7 +148,34 @@ const PatientPersonalData = ({ patient }) => {
     localDispatch(actions.setShowDatePicker(false));
   };
 
-  const handleSavePatient = () => {};
+  const handleSavePatient = async () => {
+    localDispatch(actions.setIsSaving(true));
+    if (!isFormValid()) return;
+
+    const requestBody = {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      birthday,
+      discount: discount ? parseInt(discount) : 0,
+    };
+
+    if (patient.id != null) {
+      logUserAction(
+        Action.EditPatient,
+        JSON.stringify({ before: patient, after: requestBody }),
+      );
+    }
+
+    const response = await dataAPI.updatePatient(patient.id, requestBody);
+    if (response.isError) {
+      console.error(response.message);
+    } else {
+      await onPatientUpdated();
+    }
+    localDispatch(actions.setIsSaving(false));
+  };
 
   const formattedBirthday =
     birthday == null ? '' : moment(birthday).format('DD MMM YYYY');
@@ -200,6 +240,16 @@ const PatientPersonalData = ({ patient }) => {
             />
           </InputGroup>
         </Form.Group>
+        <Form.Group controlId='discount'>
+          <Form.Label>{textForKey('Discount')}</Form.Label>
+          <InputGroup>
+            <Form.Control
+              value={discount}
+              type='number'
+              onChange={handleFormChange}
+            />
+          </InputGroup>
+        </Form.Group>
         <Form.Group controlId='phoneNumber'>
           <Form.Label>{textForKey('Phone number')}</Form.Label>
           <InputGroup>
@@ -245,11 +295,14 @@ const PatientPersonalData = ({ patient }) => {
 export default PatientPersonalData;
 
 PatientPersonalData.propTypes = {
+  onPatientUpdated: PropTypes.func,
   patient: PropTypes.shape({
+    id: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     birthday: PropTypes.instanceOf(Date),
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
+    discount: PropTypes.number,
   }),
 };

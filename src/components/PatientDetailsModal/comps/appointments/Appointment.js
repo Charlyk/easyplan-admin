@@ -3,14 +3,14 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-import IconAppointmentCalendar from '../../../../../assets/icons/iconAppointmentCalendar';
-import IconAppointmentClock from '../../../../../assets/icons/iconAppointmentClock';
-import { textForKey } from '../../../../../utils/localization';
+import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
+import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock';
+import { textForKey } from '../../../../utils/localization';
 
 const Appointment = ({ appointment }) => {
   const scheduleData = moment(appointment.dateAndTime);
   return (
-    <div className='patient-appointments__item'>
+    <div className='patient-appointments-list__item'>
       <div className='appointment-info'>
         <div className='appointment-info-row'>
           <div className='appointment-info-title'>{textForKey('Doctor')}:</div>

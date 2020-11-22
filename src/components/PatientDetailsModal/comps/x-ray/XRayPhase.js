@@ -5,8 +5,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
-import { setImageModal } from '../../../../../redux/actions/imageModalActions';
-import { urlToLambda } from '../../../../../utils/helperFuncs';
+import { setImageModal } from '../../../../redux/actions/imageModalActions';
+import { urlToLambda } from '../../../../utils/helperFuncs';
 
 const XRayPhase = ({ title, images, isExpanded }) => {
   const dispatch = useDispatch();

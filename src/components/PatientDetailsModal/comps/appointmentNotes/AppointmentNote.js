@@ -3,8 +3,8 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-import IconEditService from '../../../../../assets/icons/iconEditService';
-import { textForKey } from '../../../../../utils/localization';
+import IconEditService from '../../../../assets/icons/iconEditService';
+import { textForKey } from '../../../../utils/localization';
 
 const AppointmentNote = ({ visit, canEdit, onEdit }) => {
   return (

@@ -192,3 +192,10 @@ export function setPatientDetails(payload) {
     payload,
   };
 }
+
+export function togglePatientsListUpdate() {
+  return {
+    type: types.toggleUpdatePatients,
+    payload: '',
+  };
+}

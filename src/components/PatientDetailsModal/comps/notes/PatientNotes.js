@@ -96,8 +96,13 @@ const PatientNotes = ({ patient }) => {
   return (
     <div className='patient-notes-list'>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Personal Info')}
+        {textForKey('Notes')}
       </Typography>
+      {state.notes.length === 0 && !state.isFetching && (
+        <Typography classes={{ root: 'no-data-label' }}>
+          {textForKey('No data here yet')} :(
+        </Typography>
+      )}
       {state.isFetching && (
         <CircularProgress className='patient-details-spinner' />
       )}
