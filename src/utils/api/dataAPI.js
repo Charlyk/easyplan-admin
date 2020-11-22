@@ -12,7 +12,7 @@ Axios.interceptors.request.use(async function(config) {
 });
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://data.dev.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:5000/api'
@@ -398,7 +398,7 @@ export default {
    * @param {Object} requestBody
    * @param {string} requestBody.note
    * @param {'notes'|'appointments'} requestBody.mode
-   * @param {string} requestBody.scheduleId
+   * @param {string?} requestBody.scheduleId
    * @return {Promise<{isError: boolean, message: string|null, data: {id: string, createdById: string, createdByName: string, noteText: string, created: string}|null}>}
    */
   createPatientNote: async (patientId, requestBody) => {
@@ -1394,6 +1394,25 @@ export default {
       body.append('file', data.file);
       body.append('provider', data.provider);
       const response = await Axios.post(url, body);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch patient details
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchPatientDetails: async patientId => {
+    try {
+      const url = `${baseURL}/patients/${patientId}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

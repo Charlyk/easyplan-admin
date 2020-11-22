@@ -68,3 +68,8 @@ export const logoutSelector = createSelector(
 );
 
 export const userSelector = createSelector(mainSelector, state => state.user);
+
+export const patientDetailsSelector = createSelector(
+  mainSelector,
+  state => state.patientDetails,
+);

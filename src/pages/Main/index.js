@@ -14,15 +14,20 @@ import {
 import AddAppointmentModal from '../../components/AddAppintmentModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
+import PatientDetailsModal from '../../components/PatientDetailsModal';
 import ServiceDetailsModal from '../../components/ServiceDetailsModal';
 import {
   changeSelectedClinic,
   setAppointmentModal,
   setCreateClinic,
+  setPatientDetails,
   triggerUserLogout,
 } from '../../redux/actions/actions';
 import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
-import { userSelector } from '../../redux/selectors/rootSelector';
+import {
+  patientDetailsSelector,
+  userSelector,
+} from '../../redux/selectors/rootSelector';
 import { generateReducerActions, updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
@@ -54,6 +59,7 @@ const Main = () => {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
+  const patientDetails = useSelector(patientDetailsSelector);
   const [{ currentPath }, localDispatch] = useReducer(reducer, {
     currentPath: location.pathname,
     openAppointmentModal: false,
@@ -90,6 +96,10 @@ const Main = () => {
     dispatch(setAppointmentModal({ open: false }));
   };
 
+  const handleClosePatientDetails = () => {
+    dispatch(setPatientDetails({ show: false, patientId: null }));
+  };
+
   if (!authManager.isLoggedIn()) {
     return <Redirect to={updateLink('/login')} />;
   }
@@ -105,6 +115,10 @@ const Main = () => {
   return (
     <div className='main-page' id='main-page'>
       <ServiceDetailsModal />
+      <PatientDetailsModal
+        {...patientDetails}
+        onClose={handleClosePatientDetails}
+      />
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
         schedule={appointmentModal?.schedule}

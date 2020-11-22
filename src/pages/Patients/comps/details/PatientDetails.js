@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import EasyTab from '../../../../components/EasyTab';
+import PatientNotes from '../../../../components/PatientDetailsModal/comps/notes/PatientNotes';
 import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import AppointmentNotes from './appointmentNotes';
 import PatientAppointments from './appointments/PatientAppointments';
-import PatientNotes from './notes/PatientNotes';
 import OrthodonticPlan from './treatment-plans/OrthodonticPlan';
 import PatientXRay from './x-ray/PatientXRay';
 import './styles.scss';

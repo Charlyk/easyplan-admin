@@ -7,13 +7,20 @@ import IconAvatar from '../../../assets/icons/iconAvatar';
 import IconEmail from '../../../assets/icons/iconEmail';
 import IconPhone from '../../../assets/icons/iconPhone';
 
-const PatientRow = ({ patient }) => {
+const PatientRow = ({ patient, onSelect }) => {
+  const handlePatientNameClick = () => {
+    onSelect(patient);
+  };
+
   return (
     <TableRow key={patient.id} classes={{ root: 'table-body-row' }}>
       <TableCell classes={{ root: 'name-and-photo' }}>
         <Box display='flex' alignItems='center'>
           <IconAvatar />
-          <Typography classes={{ root: 'row-label name' }}>
+          <Typography
+            classes={{ root: 'row-label name' }}
+            onClick={handlePatientNameClick}
+          >
             {patient.fullName}
           </Typography>
         </Box>
@@ -58,4 +65,5 @@ PatientRow.propTypes = {
     email: PropTypes.string,
     discount: PropTypes.number,
   }),
+  onSelect: PropTypes.func,
 };

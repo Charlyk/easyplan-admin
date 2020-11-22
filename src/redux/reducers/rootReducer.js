@@ -91,6 +91,11 @@ function main(state = initialState, action) {
         ...state,
         updateCalendarDoctorHeight: !state.updateCalendarDoctorHeight,
       };
+    case types.setPatientDetails:
+      return {
+        ...state,
+        patientDetails: action.payload,
+      };
     default:
       return state;
   }

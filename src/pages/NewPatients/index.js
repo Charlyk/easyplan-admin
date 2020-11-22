@@ -14,15 +14,18 @@ import {
 } from '@material-ui/core';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import { Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 
 import IconPlus from '../../assets/icons/iconPlus';
 import LoadingButton from '../../components/LoadingButton';
 import UploadPatientsModal from '../../components/UploadPatientsModal';
+import { setPatientDetails } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import PatientRow from './comps/PatientRow';
 
 const NewPatients = () => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -75,6 +78,10 @@ const NewPatients = () => {
 
   const handleCreatePatient = () => {};
 
+  const handlePatientSelected = patient => {
+    dispatch(setPatientDetails({ show: true, patientId: patient.id }));
+  };
+
   return (
     <div className='new-patients-root'>
       <UploadPatientsModal
@@ -116,7 +123,11 @@ const NewPatients = () => {
             {!isLoading && (
               <TableBody>
                 {patients.data.map(patient => (
-                  <PatientRow key={patient.id} patient={patient} />
+                  <PatientRow
+                    key={patient.id}
+                    patient={patient}
+                    onSelect={handlePatientSelected}
+                  />
                 ))}
               </TableBody>
             )}
