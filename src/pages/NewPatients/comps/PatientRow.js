@@ -59,7 +59,9 @@ const PatientRow = ({ patient, onSelect }) => {
         </Typography>
       </TableCell>
       <TableCell>
-        <Typography classes={{ root: 'row-label' }}>0%</Typography>
+        <Typography classes={{ root: 'row-label' }}>
+          {patient.discount}%
+        </Typography>
       </TableCell>
     </TableRow>
   );
