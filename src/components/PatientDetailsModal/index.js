@@ -18,6 +18,7 @@ import { textForKey } from '../../utils/localization';
 import AppointmentNotes from './comps/appointmentNotes';
 import PatientAppointments from './comps/appointments/PatientAppointments';
 import PatientNotes from './comps/notes/PatientNotes';
+import PatientDebtsList from './comps/PatientDebtsList';
 import PatientPersonalData from './comps/PatientPersonalData';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
@@ -31,6 +32,7 @@ const MenuItem = {
   treatmentPlan: 'treatmentPlan',
   orthodonticPlan: 'orthodonticPlan',
   delete: 'delete',
+  debts: 'debts',
 };
 
 const initialState = {
@@ -160,6 +162,14 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                   </ListGroup.Item>
                   <ListGroup.Item
                     action
+                    id={MenuItem.debts}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.debts)}
+                  >
+                    {textForKey('Debts')}
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    action
                     id={MenuItem.notes}
                     onClick={handleMenuClick}
                     className={menuItemClasses(MenuItem.notes)}
@@ -234,6 +244,9 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
               )}
               {currentMenu === MenuItem.orthodonticPlan && (
                 <OrthodonticPlan patient={patient} />
+              )}
+              {currentMenu === MenuItem.debts && (
+                <PatientDebtsList patient={patient} />
               )}
             </div>
           </Box>

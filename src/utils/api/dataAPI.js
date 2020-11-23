@@ -1387,16 +1387,14 @@ export default {
    * Upload patients
    * @param {Object} data
    * @param {string} data.provider
-   * @param {File} data.file
+   * @param {string} data.fileUrl
+   * @param {string} data.fileName
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   uploadPatientsList: async data => {
     try {
       const url = `${baseURL}/patients/upload-patients`;
-      const body = new FormData();
-      body.append('file', data.file);
-      body.append('provider', data.provider);
-      const response = await Axios.post(url, body);
+      const response = await Axios.post(url, data);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {
@@ -1415,6 +1413,25 @@ export default {
   fetchPatientDetails: async patientId => {
     try {
       const url = `${baseURL}/patients/${patientId}`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch patient debts
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: *, data: [Object]|null}>}
+   */
+  fetchPatientDebts: async patientId => {
+    try {
+      const url = `${baseURL}/patients/${patientId}/debts`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;

@@ -29,7 +29,10 @@ import {
 } from '../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { generateReducerActions } from '../../utils/helperFuncs';
+import {
+  generateReducerActions,
+  uploadFileToAWS,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import PatientRow from './comps/PatientRow';
 
@@ -194,11 +197,18 @@ const NewPatients = () => {
 
   const handleUploadPatients = async data => {
     localDispatch(actions.setIsUploading(true));
-    const response = await dataAPI.uploadPatientsList(data);
+    const fileName = data.file.name;
+    const { location: fileUrl } = await uploadFileToAWS(
+      'clients-uploads',
+      data.file,
+    );
+    const response = await dataAPI.uploadPatientsList({
+      fileName,
+      fileUrl,
+      provider: data.provider,
+    });
     if (response.isError) {
       console.error(response.message);
-    } else {
-      console.log(response.data);
     }
     localDispatch(actions.setIsUploading(false));
   };
