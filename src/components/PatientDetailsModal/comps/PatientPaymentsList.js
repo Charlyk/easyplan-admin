@@ -20,13 +20,12 @@ import { Statuses } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 
 const PatientPaymentsList = ({ patient }) => {
-  const updatePayments = useSelector(updatePatientPaymentsSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
 
   useEffect(() => {
     fetchInvoices();
-  }, [updatePayments]);
+  }, [patient]);
 
   const fetchInvoices = async () => {
     if (patient == null) return;
@@ -36,7 +35,6 @@ const PatientPaymentsList = ({ patient }) => {
       console.error(response.message);
     } else {
       setInvoices(response.data);
-      console.log(response.data);
     }
     setIsLoading(false);
   };
@@ -110,7 +108,7 @@ const PatientPaymentsList = ({ patient }) => {
   );
 };
 
-export default PatientPaymentsList;
+export default React.memo(PatientPaymentsList);
 
 PatientPaymentsList.propTypes = {
   patient: PropTypes.shape({

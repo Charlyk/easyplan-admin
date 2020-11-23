@@ -13,14 +13,16 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { setPaymentModal } from '../../../redux/actions/actions';
+import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
 import dataAPI from '../../../utils/api/dataAPI';
 import { textForKey } from '../../../utils/localization';
 
 const PatientDebtsList = ({ patient }) => {
   const dispatch = useDispatch();
+  const updatePayments = useSelector(updatePatientPaymentsSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [debts, setDebts] = useState([]);
   const [loadingDebt, setLoadingDebt] = useState(null);
@@ -29,7 +31,7 @@ const PatientDebtsList = ({ patient }) => {
     if (patient != null) {
       fetchDebts();
     }
-  }, [patient]);
+  }, [patient, updatePayments]);
 
   const fetchDebts = async () => {
     setIsLoading(true);

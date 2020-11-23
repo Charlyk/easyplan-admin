@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import {
   toggleAppointmentsUpdate,
+  togglePatientPaymentsUpdate,
   toggleUpdateInvoices,
 } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
@@ -82,6 +83,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     } else {
       dispatch(toggleAppointmentsUpdate());
       dispatch(toggleUpdateInvoices());
+      dispatch(togglePatientPaymentsUpdate());
       onClose();
     }
 
