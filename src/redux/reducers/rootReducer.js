@@ -101,6 +101,11 @@ function main(state = initialState, action) {
         ...state,
         updatePatients: !state.updatePatients,
       };
+    case types.toggleUpdatePatientPayments:
+      return {
+        ...state,
+        updatePatientPayments: !state.updatePatientPayments,
+      };
     default:
       return state;
   }

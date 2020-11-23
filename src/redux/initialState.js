@@ -15,4 +15,5 @@ export default Object.freeze({
   checkDoctorAppointments: false,
   patientDetails: { show: false, patientId: null, onDelete: null },
   updatePatients: false,
+  updatePatientPayments: false,
 });

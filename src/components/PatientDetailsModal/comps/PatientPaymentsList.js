@@ -12,18 +12,21 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
+import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
 import dataAPI from '../../../utils/api/dataAPI';
 import { Statuses } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 
 const PatientPaymentsList = ({ patient }) => {
+  const updatePayments = useSelector(updatePatientPaymentsSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
 
   useEffect(() => {
     fetchInvoices();
-  }, []);
+  }, [updatePayments]);
 
   const fetchInvoices = async () => {
     if (patient == null) return;

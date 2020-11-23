@@ -78,3 +78,8 @@ export const updatePatientsListSelector = createSelector(
   mainSelector,
   state => state.updatePatients,
 );
+
+export const updatePatientPaymentsSelector = createSelector(
+  mainSelector,
+  state => state.updatePatientPayments,
+);

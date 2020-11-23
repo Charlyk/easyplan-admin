@@ -200,3 +200,10 @@ export function togglePatientsListUpdate() {
     payload: '',
   };
 }
+
+export function togglePatientPaymentsUpdate() {
+  return {
+    type: types.toggleUpdatePatientPayments,
+    payload: '',
+  };
+}
