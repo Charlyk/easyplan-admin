@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
 import {
@@ -17,68 +17,129 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import IconPlus from '../../assets/icons/iconPlus';
+import CreatePatientModal from '../../components/CreatePatientModal';
 import LoadingButton from '../../components/LoadingButton';
 import UploadPatientsModal from '../../components/UploadPatientsModal';
 import { setPatientDetails } from '../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import PatientRow from './comps/PatientRow';
+
+const initialState = {
+  isLoading: false,
+  isUploading: false,
+  showUploadModal: false,
+  patients: { data: [], total: 0 },
+  rowsPerPage: 25,
+  page: 0,
+  showCreateModal: false,
+};
+
+const reducerTypes = {
+  setIsLoading: 'setIsLoading',
+  setIsUploading: 'setIsUploading',
+  setPatients: 'setPatients',
+  setRowsPerPage: 'setRowsPerPage',
+  setPage: 'setPage',
+  setShowUploadModal: 'setShowUploadModal',
+  setShowCreateModal: 'setShowCreateModal',
+};
+
+const actions = generateReducerActions(reducerTypes);
+
+/**
+ * Patients list reducer
+ * @param {Object} state
+ * @param {{ type: string, payload: any }} action
+ */
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setIsLoading:
+      return { ...state, isLoading: action.payload };
+    case reducerTypes.setIsUploading:
+      return { ...state, isUploading: action.payload };
+    case reducerTypes.setShowUploadModal:
+      return { ...state, showUploadModal: action.payload };
+    case reducerTypes.setPatients:
+      return { ...state, patients: action.payload };
+    case reducerTypes.setPage:
+      return { ...state, page: action.payload };
+    case reducerTypes.setRowsPerPage:
+      return { ...state, rowsPerPage: action.payload, page: 0 };
+    case reducerTypes.setShowCreateModal:
+      return { ...state, showCreateModal: action.payload };
+    default:
+      return state;
+  }
+};
 
 const NewPatients = () => {
   const dispatch = useDispatch();
   const updatePatients = useSelector(updatePatientsListSelector);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [patients, setPatients] = useState({ total: 0, data: [] });
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [page, setPage] = useState(0);
+  const [
+    {
+      isLoading,
+      isUploading,
+      showUploadModal,
+      patients,
+      rowsPerPage,
+      page,
+      showCreateModal,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetchPatients();
   }, [page, rowsPerPage, updatePatients]);
 
   const fetchPatients = async () => {
-    setIsLoading(true);
+    localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.fetchAllPatients(page, rowsPerPage);
     if (response.isError) {
       console.error(response.message);
     } else {
-      setPatients(response.data);
+      localDispatch(actions.setPatients(response.data));
     }
-    setIsLoading(false);
+    localDispatch(actions.setIsLoading(false));
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    localDispatch(actions.setPage(newPage));
   };
 
   const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    localDispatch(actions.setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
   const handleUploadPatients = async data => {
-    setIsUploading(true);
+    localDispatch(actions.setIsUploading(true));
     const response = await dataAPI.uploadPatientsList(data);
     if (response.isError) {
       console.error(response.message);
     } else {
       console.log(response.data);
     }
-    setIsUploading(false);
+    localDispatch(actions.setIsUploading(false));
   };
 
   const handleStartUploadPatients = () => {
-    setShowUploadModal(true);
+    localDispatch(actions.setShowUploadModal(true));
   };
 
   const closeUploading = () => {
-    setShowUploadModal(false);
+    localDispatch(actions.setShowUploadModal(false));
   };
 
-  const handleCreatePatient = () => {};
+  const handleCreatePatient = () => {
+    localDispatch(actions.setShowCreateModal(true));
+  };
+
+  const handleCloseCreatePatient = () => {
+    localDispatch(actions.setShowCreateModal(false));
+  };
 
   const handlePatientSelected = patient => {
     dispatch(setPatientDetails({ show: true, patientId: patient.id }));
@@ -90,6 +151,10 @@ const NewPatients = () => {
         open={showUploadModal}
         onClose={closeUploading}
         onUpload={handleUploadPatients}
+      />
+      <CreatePatientModal
+        open={showCreateModal}
+        onClose={handleCloseCreatePatient}
       />
       <div className='new-patients-root__content'>
         {isLoading && (

@@ -172,7 +172,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      await onPatientUpdated();
+      await onPatientUpdated(true);
     }
     localDispatch(actions.setIsSaving(false));
   };

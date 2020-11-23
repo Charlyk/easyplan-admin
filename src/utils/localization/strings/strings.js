@@ -290,6 +290,8 @@ export default {
     appointments: 'Appointments',
     'enter new note': 'Enter new note',
     'no data here yet': 'No data here yet',
+    create: 'Create',
+    'create patient': 'Create patient',
   },
   ro: {
     analytics: 'Analitică',
@@ -585,6 +587,8 @@ export default {
     appointments: 'Programări',
     'enter new note': 'Introduceți o nouă notiță',
     'no data here yet': 'Încă nu sunt date aici',
+    create: 'Crează',
+    'create patient': 'Adaugă pacient',
   },
   ru: {
     analytics: 'Analytics',
@@ -874,5 +878,7 @@ export default {
     appointments: 'Appointments',
     'enter new note': 'Enter new note',
     'no data here yet': 'No data here yet',
+    create: 'Create',
+    'create patient': 'Create patient',
   },
 };

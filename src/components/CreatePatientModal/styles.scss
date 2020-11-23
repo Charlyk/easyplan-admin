@@ -1,0 +1,40 @@
+.create-patient-modal {
+  .modal-content {
+
+    .modal-body {
+      overflow: visible;
+    }
+  }
+
+  .first-and-last-name {
+    display: flex;
+  }
+
+  .form-control[readonly] {
+    background-color: #FAFAFD;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+    margin-top: .5rem;
+  }
+
+  .form-label {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .7rem;
+    margin-bottom: 0;
+  }
+
+  .form-control {
+    width: 100%;
+    background-color: #FAFAFD;
+  }
+
+  .input-group {
+    textarea {
+      height: 5rem !important;
+    }
+  }
+}

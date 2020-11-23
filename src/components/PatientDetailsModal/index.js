@@ -15,13 +15,13 @@ import {
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import AppointmentNotes from './comps/appointmentNotes';
 import PatientAppointments from './comps/appointments/PatientAppointments';
 import PatientNotes from './comps/notes/PatientNotes';
 import PatientPersonalData from './comps/PatientPersonalData';
-import './styles.scss';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
-import AppointmentNotes from './comps/appointmentNotes';
+import './styles.scss';
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -76,7 +76,7 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
     fetchPatientDetails();
   }, [patientId]);
 
-  const fetchPatientDetails = async () => {
+  const fetchPatientDetails = async (updateList = false) => {
     if (patientId == null) return;
     localDispatch(actions.setIsFetching(true));
     const response = await dataAPI.fetchPatientDetails(patientId);
@@ -86,7 +86,9 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
       localDispatch(actions.setPatient(response.data));
     }
     localDispatch(actions.setIsFetching(false));
-    dispatch(togglePatientsListUpdate());
+    if (updateList) {
+      dispatch(togglePatientsListUpdate());
+    }
   };
 
   const handleAddNote = () => {
@@ -106,7 +108,13 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
   };
 
   return (
-    <Modal centered show={show} size='xl' className='patient-details-modal'>
+    <Modal
+      centered
+      show={show}
+      size='xl'
+      onHide={onClose}
+      className='patient-details-modal'
+    >
       <Modal.Body>
         {isFetching && <CircularProgress />}
         <div
@@ -181,34 +189,32 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
                 </ListGroup>
               </Box>
             </div>
-            {patient != null && (
-              <div className='patient-details-container'>
-                {currentMenu === MenuItem.personalInfo && (
-                  <PatientPersonalData
-                    patient={patient}
-                    onPatientUpdated={fetchPatientDetails}
-                  />
-                )}
-                {currentMenu === MenuItem.notes && (
-                  <PatientNotes patient={patient} onAddNote={handleAddNote} />
-                )}
-                {currentMenu === MenuItem.appointments && (
-                  <PatientAppointments patient={patient} />
-                )}
-                {currentMenu === MenuItem.xRay && (
-                  <PatientXRay
-                    patient={patient}
-                    onAddXRay={handleAddXRayImages}
-                  />
-                )}
-                {currentMenu === MenuItem.treatmentPlan && (
-                  <AppointmentNotes patient={patient} />
-                )}
-                {currentMenu === MenuItem.orthodonticPlan && (
-                  <OrthodonticPlan patient={patient} />
-                )}
-              </div>
-            )}
+            <div className='patient-details-container'>
+              {currentMenu === MenuItem.personalInfo && (
+                <PatientPersonalData
+                  patient={patient}
+                  onPatientUpdated={fetchPatientDetails}
+                />
+              )}
+              {currentMenu === MenuItem.notes && (
+                <PatientNotes patient={patient} onAddNote={handleAddNote} />
+              )}
+              {currentMenu === MenuItem.appointments && (
+                <PatientAppointments patient={patient} />
+              )}
+              {currentMenu === MenuItem.xRay && (
+                <PatientXRay
+                  patient={patient}
+                  onAddXRay={handleAddXRayImages}
+                />
+              )}
+              {currentMenu === MenuItem.treatmentPlan && (
+                <AppointmentNotes patient={patient} />
+              )}
+              {currentMenu === MenuItem.orthodonticPlan && (
+                <OrthodonticPlan patient={patient} />
+              )}
+            </div>
           </Box>
         )}
       </Modal.Body>

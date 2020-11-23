@@ -17,13 +17,14 @@ const EasyDatePicker = ({
   onClose,
   onChange,
   selectedDate,
+  disablePortal,
 }) => {
   return (
     <Popper
       className='easy-date-picker'
       anchorEl={pickerAnchor}
       open={open}
-      disablePortal
+      disablePortal={disablePortal}
       placement={placement}
       transition
     >
@@ -55,9 +56,11 @@ EasyDatePicker.propTypes = {
   pickerAnchor: PropTypes.any,
   minDate: PropTypes.instanceOf(Date),
   placement: PropTypes.string,
+  disablePortal: PropTypes.bool,
 };
 
 EasyDatePicker.defaultProps = {
   selectedDate: new Date(),
   placement: 'bottom',
+  disablePortal: true,
 };
