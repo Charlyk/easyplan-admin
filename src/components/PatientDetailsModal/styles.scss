@@ -75,6 +75,15 @@
           }
 
           .menu-wrapper {
+            #delete {
+              background-color: #F44081;
+              color: white;
+
+              &:hover {
+                background-color: #ee568d;
+              }
+            }
+
             .list-group-item {
               outline: none;
               font-family: Inter, sans-serif;

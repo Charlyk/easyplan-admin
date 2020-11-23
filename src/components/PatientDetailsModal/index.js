@@ -30,6 +30,7 @@ const MenuItem = {
   xRay: 'x-ray',
   treatmentPlan: 'treatmentPlan',
   orthodonticPlan: 'orthodonticPlan',
+  delete: 'delete',
 };
 
 const initialState = {
@@ -59,7 +60,7 @@ const reducer = (state, action) => {
   }
 };
 
-const PatientDetailsModal = ({ show, patientId, onClose }) => {
+const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
   const dispatch = useDispatch();
   const [{ currentMenu, isFetching, patient }, localDispatch] = useReducer(
     reducer,
@@ -95,8 +96,19 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
     dispatch(setPatientNoteModal({ open: true, patientId, mode: 'notes' }));
   };
 
+  const handleStartDeletePatient = () => {
+    if (typeof onDelete === 'function') {
+      onDelete(patient);
+    }
+  };
+
   const handleMenuClick = event => {
-    localDispatch(actions.setCurrentMenu(event.target.id));
+    const targetId = event.target.id;
+    if (targetId !== MenuItem.delete) {
+      localDispatch(actions.setCurrentMenu(targetId));
+    } else {
+      handleStartDeletePatient();
+    }
   };
 
   const menuItemClasses = itemId => {
@@ -186,6 +198,15 @@ const PatientDetailsModal = ({ show, patientId, onClose }) => {
                   >
                     {textForKey('Orthodontic plan')}
                   </ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    variant='danger'
+                    id={MenuItem.delete}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.delete)}
+                  >
+                    {textForKey('Delete')}
+                  </ListGroup.Item>
                 </ListGroup>
               </Box>
             </div>
@@ -228,8 +249,10 @@ PatientDetailsModal.propTypes = {
   patientId: PropTypes.string.isRequired,
   show: PropTypes.bool,
   onClose: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 PatientDetailsModal.defaultProps = {
   onClose: () => null,
+  onDelete: () => null,
 };

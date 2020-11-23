@@ -19,10 +19,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IconPlus from '../../assets/icons/iconPlus';
 import IconSearch from '../../assets/icons/iconSearch';
+import ConfirmationModal from '../../components/ConfirmationModal';
 import CreatePatientModal from '../../components/CreatePatientModal';
 import LoadingButton from '../../components/LoadingButton';
 import UploadPatientsModal from '../../components/UploadPatientsModal';
-import { setPatientDetails } from '../../redux/actions/actions';
+import {
+  setPatientDetails,
+  togglePatientsListUpdate,
+} from '../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
@@ -33,11 +37,14 @@ const initialState = {
   isLoading: false,
   isUploading: false,
   showUploadModal: false,
+  showDeleteDialog: false,
   patients: { data: [], total: 0 },
   rowsPerPage: 25,
   page: 0,
   showCreateModal: false,
   searchQuery: '',
+  patientToDelete: null,
+  isDeleting: false,
 };
 
 const reducerTypes = {
@@ -49,6 +56,9 @@ const reducerTypes = {
   setShowUploadModal: 'setShowUploadModal',
   setShowCreateModal: 'setShowCreateModal',
   setSearchQuery: 'setSearchQuery',
+  setShowDeleteDialog: 'setShowDeleteDialog',
+  setPatientToDelete: 'setPatientToDelete',
+  setIsDeleting: 'setIsDeleting',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -76,6 +86,17 @@ const reducer = (state, action) => {
       return { ...state, showCreateModal: action.payload };
     case reducerTypes.setSearchQuery:
       return { ...state, searchQuery: action.payload };
+    case reducerTypes.setShowDeleteDialog:
+      return { ...state, showDeleteDialog: action.payload };
+    case reducerTypes.setPatientToDelete:
+      return {
+        ...state,
+        patientToDelete: action.payload,
+        showDeleteDialog: Boolean(action.payload),
+        isDeleting: false,
+      };
+    case reducerTypes.setIsDeleting:
+      return { ...state, isDeleting: action.payload };
     default:
       return state;
   }
@@ -94,6 +115,9 @@ const NewPatients = () => {
       page,
       showCreateModal,
       searchQuery,
+      showDeleteDialog,
+      patientToDelete,
+      isDeleting,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -144,6 +168,30 @@ const NewPatients = () => {
     localDispatch(actions.setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
+  const handleDeletePatient = patient => {
+    localDispatch(actions.setPatientToDelete(patient));
+  };
+
+  const handleCloseDelete = () => {
+    localDispatch(actions.setPatientToDelete(null));
+  };
+
+  const handleDeleteConfirmed = async () => {
+    if (patientToDelete == null) return;
+    localDispatch(actions.setIsDeleting(true));
+    const response = await dataAPI.deletePatient(patientToDelete.id);
+    if (response.isError) {
+      console.error(response.message);
+      localDispatch(actions.setIsDeleting(false));
+    } else {
+      localDispatch(actions.setPatientToDelete(null));
+      dispatch(togglePatientsListUpdate());
+      dispatch(
+        setPatientDetails({ show: false, patientId: null, onDelete: null }),
+      );
+    }
+  };
+
   const handleUploadPatients = async data => {
     localDispatch(actions.setIsUploading(true));
     const response = await dataAPI.uploadPatientsList(data);
@@ -172,11 +220,25 @@ const NewPatients = () => {
   };
 
   const handlePatientSelected = patient => {
-    dispatch(setPatientDetails({ show: true, patientId: patient.id }));
+    dispatch(
+      setPatientDetails({
+        show: true,
+        patientId: patient.id,
+        onDelete: handleDeletePatient,
+      }),
+    );
   };
 
   return (
     <div className='new-patients-root'>
+      <ConfirmationModal
+        isLoading={isDeleting}
+        show={showDeleteDialog}
+        title={textForKey('Delete patient')}
+        message={textForKey('delete_patient_message')}
+        onConfirm={handleDeleteConfirmed}
+        onClose={handleCloseDelete}
+      />
       <UploadPatientsModal
         open={showUploadModal}
         onClose={closeUploading}

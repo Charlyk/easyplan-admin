@@ -292,6 +292,8 @@ export default {
     'no data here yet': 'No data here yet',
     create: 'Create',
     'create patient': 'Create patient',
+    'delete patient': 'Delete patient',
+    delete_patient_message: 'Are you sure you want to delete this patient?',
   },
   ro: {
     analytics: 'Analitică',
@@ -589,6 +591,9 @@ export default {
     'no data here yet': 'Încă nu sunt date aici',
     create: 'Crează',
     'create patient': 'Adaugă pacient',
+    'delete patient': 'Șterge pacient',
+    delete_patient_message:
+      'Sunteți sigur(ă) că doriți să ștergeți acest pacient?',
   },
   ru: {
     analytics: 'Analytics',
@@ -880,5 +885,7 @@ export default {
     'no data here yet': 'No data here yet',
     create: 'Create',
     'create patient': 'Create patient',
+    'delete patient': 'Delete patient',
+    delete_patient_message: 'Are you sure you want to delete this patient?',
   },
 };
