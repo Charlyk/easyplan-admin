@@ -139,7 +139,7 @@ const CreatePatientModal = ({ open, onClose }) => {
     localDispatch(
       actions.setPhoneNumber({
         phoneNumber: `+${value}`,
-        isPhoneValid: !event.target.classList.value.includes('invalid-number'),
+        isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
       }),
     );
   };
@@ -216,7 +216,6 @@ const CreatePatientModal = ({ open, onClose }) => {
         <Form.Label>{textForKey('Email')}</Form.Label>
         <InputGroup>
           <Form.Control
-            id='email'
             value={email}
             isInvalid={email.length > 0 && !isEmailValid}
             type='email'

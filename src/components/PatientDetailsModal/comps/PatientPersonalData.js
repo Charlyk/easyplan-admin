@@ -130,7 +130,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
 
   const handlePhoneChange = (value, data, event) => {
     const newNumber = `+${value}`;
-    const isPhoneValid = !event.target.classList.value.includes(
+    const isPhoneValid = !event.target?.classList.value.includes(
       'invalid-number',
     );
     localDispatch(actions.setPhoneNumber({ newNumber, isPhoneValid }));
