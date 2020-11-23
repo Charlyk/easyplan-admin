@@ -1442,4 +1442,23 @@ export default {
       };
     }
   },
+
+  /**
+   * Fetch patient payments
+   * @param {string} patientId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchPatientPayments: async patientId => {
+    try {
+      const url = `${baseURL}/patients/${patientId}/invoices`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

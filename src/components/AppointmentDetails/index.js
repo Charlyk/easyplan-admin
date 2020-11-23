@@ -11,7 +11,10 @@ import IconArrowDown from '../../assets/icons/iconArrowDown';
 import IconClose from '../../assets/icons/iconClose';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconTrash from '../../assets/icons/iconTrash';
-import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
+import {
+  setPatientDetails,
+  toggleAppointmentsUpdate,
+} from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
@@ -87,6 +90,16 @@ const AppointmentDetails = ({
     closeStatusesList();
     await dataAPI.updateScheduleStatus(schedule.id, status.id);
     dispatch(toggleAppointmentsUpdate());
+  };
+
+  const handlePatientClick = () => {
+    dispatch(
+      setPatientDetails({
+        show: true,
+        patientId: schedule.patientId,
+        onDelete: null,
+      }),
+    );
   };
 
   const isFinished =
@@ -236,7 +249,16 @@ const AppointmentDetails = ({
                     <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Name')}:
                     </td>
-                    <td>{schedule.patientName}</td>
+                    <td>
+                      <div
+                        role='button'
+                        tabIndex={0}
+                        onClick={handlePatientClick}
+                        className='patient-name'
+                      >
+                        {schedule.patientName}
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>

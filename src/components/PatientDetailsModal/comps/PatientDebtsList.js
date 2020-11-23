@@ -58,9 +58,14 @@ const PatientDebtsList = ({ patient }) => {
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Debts')}
       </Typography>
+      {isLoading && <CircularProgress className='patient-details-spinner' />}
+      {debts.length === 0 && !isLoading && (
+        <Typography classes={{ root: 'no-data-label' }}>
+          {textForKey('No data here yet')} :)
+        </Typography>
+      )}
       <div className='patient-debts-list__data-container'>
-        {isLoading && <CircularProgress className='patient-details-spinner' />}
-        {!isLoading && (
+        {!isLoading && debts.length > 0 && (
           <TableContainer>
             <Table>
               <TableHead>
@@ -75,8 +80,10 @@ const PatientDebtsList = ({ patient }) => {
                 {debts.map(item => (
                   <TableRow key={item.invoiceId}>
                     <TableCell align='left'>{item.serviceName}</TableCell>
-                    <TableCell align='right'>{item.amount}MDL</TableCell>
-                    <TableCell align='right'>
+                    <TableCell align='right' classes={{ root: 'amount-cell' }}>
+                      {item.amount}MDL
+                    </TableCell>
+                    <TableCell align='right' classes={{ root: 'amount-cell' }}>
                       {item.amount - item.paid}MDL
                     </TableCell>
                     <TableCell align='right'>

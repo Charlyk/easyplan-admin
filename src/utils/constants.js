@@ -200,6 +200,13 @@ export const Statuses = [
     icon: <IconSuccess fill='#3A83DC' />,
     manual: false,
   },
+  {
+    id: 'Paid',
+    name: textForKey('Paid'),
+    color: '#00E987',
+    icon: <IconCreditCard />,
+    manual: false,
+  },
 ];
 
 export const ManualStatuses = Statuses.filter(item => item.manual);

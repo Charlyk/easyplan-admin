@@ -23,6 +23,7 @@ import PatientPersonalData from './comps/PatientPersonalData';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
 import './styles.scss';
+import PatientPaymentsList from './comps/PatientPaymentsList';
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -33,6 +34,7 @@ const MenuItem = {
   orthodonticPlan: 'orthodonticPlan',
   delete: 'delete',
   debts: 'debts',
+  payments: 'payments',
 };
 
 const initialState = {
@@ -162,6 +164,14 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                   </ListGroup.Item>
                   <ListGroup.Item
                     action
+                    id={MenuItem.payments}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.payments)}
+                  >
+                    {textForKey('Payments')}
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    action
                     id={MenuItem.debts}
                     onClick={handleMenuClick}
                     className={menuItemClasses(MenuItem.debts)}
@@ -208,15 +218,17 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                   >
                     {textForKey('Orthodontic plan')}
                   </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    variant='danger'
-                    id={MenuItem.delete}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.delete)}
-                  >
-                    {textForKey('Delete')}
-                  </ListGroup.Item>
+                  {typeof onDelete === 'function' && (
+                    <ListGroup.Item
+                      action
+                      variant='danger'
+                      id={MenuItem.delete}
+                      onClick={handleMenuClick}
+                      className={menuItemClasses(MenuItem.delete)}
+                    >
+                      {textForKey('Delete')}
+                    </ListGroup.Item>
+                  )}
                 </ListGroup>
               </Box>
             </div>
@@ -247,6 +259,9 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
               )}
               {currentMenu === MenuItem.debts && (
                 <PatientDebtsList patient={patient} />
+              )}
+              {currentMenu === MenuItem.payments && (
+                <PatientPaymentsList patient={patient} />
               )}
             </div>
           </Box>

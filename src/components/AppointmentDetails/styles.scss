@@ -202,6 +202,21 @@
         }
       }
     }
+
+    .patient-name {
+      outline: none;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 32px;
+      color: #3A83DC;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .footer-wrapper {
