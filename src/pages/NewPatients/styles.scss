@@ -134,10 +134,57 @@
       padding-right: 1rem;
       align-items: center;
       position: absolute;
+      width: 55%;
       bottom: 0;
       left: 0;
       display: flex;
       height: 3.3rem;
+
+      .form-control[readonly] {
+        background-color: #FAFAFD;
+      }
+
+      .form-group {
+        flex: 1;
+        margin-bottom: 0;
+        margin-left: .5rem;
+      }
+
+      .positive-button {
+        flex: unset;
+        width: 100px;
+        margin-left: .5rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: .7rem;
+        margin-bottom: 0;
+        color: white;
+
+        svg {
+          width: .8rem;
+          height: .8rem;
+        }
+      }
+
+      .form-label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+      }
+
+      .form-control {
+        width: 100%;
+        background-color: #FAFAFD;
+      }
+
+      .input-group {
+        textarea {
+          height: 5rem !important;
+        }
+      }
 
       .create-btn {
         margin-left: .5rem;

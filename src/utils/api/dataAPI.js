@@ -332,9 +332,12 @@ export default {
    * Fetch all patients for selected clinic
    * @return {Promise<{isError: boolean, message: string|null, data: { total: number, data: [Object]}}>}
    */
-  fetchAllPatients: async (page, itemsPerPage) => {
+  fetchAllPatients: async (page, itemsPerPage, searchQuery) => {
     try {
-      const url = `${baseURL}/patients?page=${page}&itemsPerPage=${itemsPerPage}`;
+      let url = `${baseURL}/patients?page=${page}&itemsPerPage=${itemsPerPage}`;
+      if (searchQuery?.length > 0) {
+        url = `${url}&query=${searchQuery}`;
+      }
       const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;

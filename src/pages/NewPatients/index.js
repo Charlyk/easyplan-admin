@@ -11,12 +11,14 @@ import {
   CircularProgress,
   TablePagination,
   TableContainer,
+  Box,
 } from '@material-ui/core';
 import UploadIcon from '@material-ui/icons/CloudUpload';
-import { Button } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import IconPlus from '../../assets/icons/iconPlus';
+import IconSearch from '../../assets/icons/iconSearch';
 import CreatePatientModal from '../../components/CreatePatientModal';
 import LoadingButton from '../../components/LoadingButton';
 import UploadPatientsModal from '../../components/UploadPatientsModal';
@@ -35,6 +37,7 @@ const initialState = {
   rowsPerPage: 25,
   page: 0,
   showCreateModal: false,
+  searchQuery: '',
 };
 
 const reducerTypes = {
@@ -45,6 +48,7 @@ const reducerTypes = {
   setPage: 'setPage',
   setShowUploadModal: 'setShowUploadModal',
   setShowCreateModal: 'setShowCreateModal',
+  setSearchQuery: 'setSearchQuery',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -70,6 +74,8 @@ const reducer = (state, action) => {
       return { ...state, rowsPerPage: action.payload, page: 0 };
     case reducerTypes.setShowCreateModal:
       return { ...state, showCreateModal: action.payload };
+    case reducerTypes.setSearchQuery:
+      return { ...state, searchQuery: action.payload };
     default:
       return state;
   }
@@ -87,6 +93,7 @@ const NewPatients = () => {
       rowsPerPage,
       page,
       showCreateModal,
+      searchQuery,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -97,13 +104,36 @@ const NewPatients = () => {
 
   const fetchPatients = async () => {
     localDispatch(actions.setIsLoading(true));
-    const response = await dataAPI.fetchAllPatients(page, rowsPerPage);
+    const response = await dataAPI.fetchAllPatients(
+      page,
+      rowsPerPage,
+      searchQuery,
+    );
     if (response.isError) {
       console.error(response.message);
     } else {
       localDispatch(actions.setPatients(response.data));
     }
     localDispatch(actions.setIsLoading(false));
+  };
+
+  const handleSearchQueryChange = event => {
+    const newQuery = event.target.value;
+    localDispatch(actions.setSearchQuery(newQuery));
+  };
+
+  const handleSearchClick = () => {
+    if (page !== 0) {
+      localDispatch(actions.setPage(0));
+    } else {
+      fetchPatients();
+    }
+  };
+
+  const handleSearchFieldKeyDown = event => {
+    if (event.keyCode === 13) {
+      handleSearchClick();
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -234,6 +264,28 @@ const NewPatients = () => {
             {textForKey('Add patient')}
             <IconPlus fill='#00E987' />
           </Button>
+          <Box flex='1' display='flex'>
+            <Form.Group controlId='email'>
+              <InputGroup>
+                <Form.Control
+                  onKeyDown={handleSearchFieldKeyDown}
+                  value={searchQuery}
+                  onChange={handleSearchQueryChange}
+                  type='text'
+                  placeholder={`${textForKey('Search patient')}...`}
+                />
+              </InputGroup>
+            </Form.Group>
+            <LoadingButton
+              disabled={isLoading}
+              isLoading={isLoading}
+              className='positive-button'
+              onClick={handleSearchClick}
+            >
+              {textForKey('Search')}
+              <IconSearch />
+            </LoadingButton>
+          </Box>
         </div>
       </div>
     </div>
