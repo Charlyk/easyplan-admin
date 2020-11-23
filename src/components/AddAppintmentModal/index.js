@@ -606,7 +606,7 @@ const AddAppointmentModal = ({
     localDispatch(
       reducerActions.setPatientPhoneNumber({
         phoneNumber: `+${value}`,
-        isPhoneValid: !event.target.classList.value.includes('invalid-number'),
+        isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
       }),
     );
   };
