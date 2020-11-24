@@ -1,5 +1,6 @@
 import moment from 'moment';
 import S3 from 'react-aws-s3';
+import uuid from 'react-uuid';
 
 import {
   setClinic,
@@ -80,7 +81,7 @@ export function getAppointmentTop(
  */
 export async function uploadFileToAWS(path, file) {
   const s3client = new S3(S3Config(path));
-  return await s3client.uploadFile(file, file.name);
+  return await s3client.uploadFile(file, `${uuid()}-${file.name}`);
 }
 
 /**

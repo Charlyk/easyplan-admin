@@ -22,7 +22,7 @@ import IconSearch from '../../assets/icons/iconSearch';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import CreatePatientModal from '../../components/CreatePatientModal';
 import LoadingButton from '../../components/LoadingButton';
-import UploadPatientsModal from '../../components/UploadPatientsModal';
+import ImportDataModal from '../../components/UploadPatientsModal';
 import {
   setPatientDetails,
   togglePatientsListUpdate,
@@ -249,7 +249,7 @@ const NewPatients = () => {
         onConfirm={handleDeleteConfirmed}
         onClose={handleCloseDelete}
       />
-      <UploadPatientsModal
+      <ImportDataModal
         open={showUploadModal}
         onClose={closeUploading}
         onUpload={handleUploadPatients}

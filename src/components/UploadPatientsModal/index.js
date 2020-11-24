@@ -4,12 +4,12 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
+import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import dataAPI from '../../utils/api/dataAPI';
 
-const UploadPatientsModal = ({ open, onClose, onUpload }) => {
+const ImportDataModal = ({ title, open, onClose, onUpload }) => {
   const [file, setFile] = useState(null);
   const [providers, setProviders] = useState([]);
   const [provider, setProvider] = useState(null);
@@ -41,7 +41,7 @@ const UploadPatientsModal = ({ open, onClose, onUpload }) => {
     setIsLoading(false);
   };
 
-  const handleUploadPatients = () => {
+  const handleUpload = () => {
     onUpload({ file, provider });
     onClose();
   };
@@ -59,8 +59,8 @@ const UploadPatientsModal = ({ open, onClose, onUpload }) => {
       className='upload-patients-modal'
       open={open}
       onClose={onClose}
-      title={textForKey('Upload patients')}
-      onPositiveClick={handleUploadPatients}
+      title={title}
+      onPositiveClick={handleUpload}
       positiveBtnText={textForKey('Upload')}
       positiveBtnIcon={<UploadIcon />}
       isPositiveDisabled={file == null || provider == null}
@@ -100,10 +100,15 @@ const UploadPatientsModal = ({ open, onClose, onUpload }) => {
   );
 };
 
-export default UploadPatientsModal;
+export default ImportDataModal;
 
-UploadPatientsModal.propTypes = {
+ImportDataModal.propTypes = {
+  title: PropTypes.string,
   open: PropTypes.bool,
   onClose: PropTypes.func,
   onUpload: PropTypes.func,
+};
+
+ImportDataModal.defaultProps = {
+  title: textForKey('Upload patients'),
 };

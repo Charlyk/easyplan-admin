@@ -12,7 +12,7 @@ Axios.interceptors.request.use(async function(config) {
 });
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://data.dev.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:5000/api'
@@ -1452,6 +1452,29 @@ export default {
     try {
       const url = `${baseURL}/patients/${patientId}/invoices`;
       const response = await Axios.get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Import services from file
+   * @param {Object} requestBody
+   * @param {string} requestBody.fileUrl
+   * @param {string} requestBody.fileName
+   * @param {string} requestBody.provider
+   * @param {string} categoryId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  importServices: async (requestBody, categoryId) => {
+    try {
+      const url = `${baseURL}/services/${categoryId}/import`;
+      const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

@@ -296,6 +296,7 @@ export default {
     delete_patient_message: 'Are you sure you want to delete this patient?',
     'register payment': 'Register payment',
     payments: 'Payments',
+    'import services': 'Import services',
   },
   ro: {
     analytics: 'Analitică',
@@ -598,6 +599,7 @@ export default {
       'Sunteți sigur(ă) că doriți să ștergeți acest pacient?',
     'register payment': 'Înregistreaza achitare',
     payments: 'Achitări',
+    'import services': 'Importează servicii',
   },
   ru: {
     analytics: 'Analytics',
@@ -893,5 +895,6 @@ export default {
     delete_patient_message: 'Are you sure you want to delete this patient?',
     'register payment': 'Înregistreaza achitare',
     payments: 'Payments',
+    'import services': 'Import services',
   },
 };

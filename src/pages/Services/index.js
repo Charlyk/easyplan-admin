@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import './styles.scss';
 import {
@@ -8,6 +8,7 @@ import {
   Tooltip,
   CircularProgress,
 } from '@material-ui/core';
+import UploadIcon from '@material-ui/icons/CloudUpload';
 import sortBy from 'lodash/sortBy';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +17,8 @@ import IconEdit from '../../assets/icons/iconEdit';
 import IconPlus from '../../assets/icons/iconPlus';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import CreateCategoryModal from '../../components/CreateCategoryModal';
+import LoadingButton from '../../components/LoadingButton';
+import ImportDataModal from '../../components/UploadPatientsModal';
 import { setClinicServices } from '../../redux/actions/clinicActions';
 import {
   closeServiceDetailsModal,
@@ -26,6 +29,10 @@ import {
 import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
 import { updateServicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import {
+  generateReducerActions,
+  uploadFileToAWS,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ServiceRow from './comps/ServiceRow';
 
@@ -35,21 +42,65 @@ const categoryModalState = {
   create: 'create',
 };
 
+const initialState = {
+  categories: [],
+  isLoading: false,
+  category: { data: null, index: -1 },
+  deleteServiceModal: { open: false, service: null, isLoading: false },
+  categoryModal: { state: categoryModalState.closed },
+  showUploadModal: false,
+  isUploading: false,
+};
+
+const reducerTypes = {
+  setCategories: 'setCategories',
+  setIsLoading: 'setIsLoading',
+  setCategory: 'setCategory',
+  setDeleteServiceModal: 'setDeleteServiceModal',
+  setCategoryModal: 'setCategoryModal',
+  setShowUploadModal: 'setShowUploadModal',
+  setIsUploading: 'setIsUploading',
+};
+
+const actions = generateReducerActions(reducerTypes);
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setCategories:
+      return { ...state, categories: action.payload };
+    case reducerTypes.setIsLoading:
+      return { ...state, isLoading: action.payload };
+    case reducerTypes.setCategory:
+      return { ...state, category: action.payload };
+    case reducerTypes.setDeleteServiceModal:
+      return { ...state, deleteServiceModal: action.payload };
+    case reducerTypes.setCategoryModal:
+      return { ...state, categoryModal: action.payload };
+    case reducerTypes.setShowUploadModal:
+      return { ...state, showUploadModal: action.payload };
+    case reducerTypes.setIsUploading:
+      return { ...state, isUploading: action.payload };
+    default:
+      return state;
+  }
+};
+
 const Services = () => {
   const dispatch = useDispatch();
   const clinicServices = useSelector(clinicServicesSelector);
   const updateServices = useSelector(updateServicesSelector);
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [category, setCategory] = useState({ data: null, index: -1 });
-  const [deleteServiceModal, setDeleteServiceModal] = useState({
-    open: false,
-    service: null,
-    isLoading: false,
-  });
-  const [categoryModal, setCategoryModal] = useState({
-    state: categoryModalState.closed,
-  });
+  const [
+    {
+      categories,
+      isLoading,
+      category,
+      deleteServiceModal,
+      categoryModal,
+      showUploadModal,
+      isUploading,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetchCategories();
@@ -67,18 +118,18 @@ const Services = () => {
     if (category.data == null) {
       return;
     }
-    setIsLoading(true);
+    localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.fetchServices(null);
     if (response.isError) {
       console.error(response.message);
     } else {
       dispatch(setClinicServices(response.data));
     }
-    setIsLoading(false);
+    localDispatch(actions.setIsLoading(false));
   };
 
   const fetchCategories = async () => {
-    setIsLoading(true);
+    localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.fetchCategories();
     if (response.isError) {
       console.error(response.message);
@@ -86,11 +137,11 @@ const Services = () => {
       const { data } = response;
       const sortedData = sortBy(data, item => item.created);
       if (sortedData.length > 0 && category.data == null) {
-        setCategory({ data: sortedData[0], index: 0 });
+        localDispatch(actions.setCategory({ data: sortedData[0], index: 0 }));
       }
-      setCategories(sortedData);
+      localDispatch(actions.setCategories(sortedData));
     }
-    setIsLoading(false);
+    localDispatch(actions.setIsLoading(false));
   };
 
   const handleAddOrEditService = (event, service) => {
@@ -109,38 +160,88 @@ const Services = () => {
   };
 
   const handleDeleteService = service => {
-    setDeleteServiceModal({ open: true, service, isLoading: false });
+    localDispatch(
+      actions.setDeleteServiceModal({ open: true, service, isLoading: false }),
+    );
   };
 
   const handleCloseDeleteService = () => {
-    setDeleteServiceModal({ open: false, service: null, isLoading: false });
+    localDispatch(
+      actions.setDeleteServiceModal({
+        open: false,
+        service: null,
+        isLoading: false,
+      }),
+    );
   };
 
   const handleServiceDeleteConfirmed = async () => {
     if (deleteServiceModal.service == null) {
       return;
     }
-    setDeleteServiceModal({ ...deleteServiceModal, isLoading: true });
+    localDispatch(
+      actions.setDeleteServiceModal({ ...deleteServiceModal, isLoading: true }),
+    );
     await dataAPI.deleteService(deleteServiceModal.service.id);
     await fetchServices();
     handleCloseDeleteService();
   };
 
   const handleCreateCategory = () => {
-    setCategoryModal({ state: categoryModalState.create });
+    localDispatch(
+      actions.setCategoryModal({ state: categoryModalState.create }),
+    );
   };
 
   const handleEditCategory = () => {
-    setCategoryModal({ state: categoryModalState.edit });
+    localDispatch(actions.setCategoryModal({ state: categoryModalState.edit }));
   };
 
   const handleCloseCategoryModal = () => {
-    setCategoryModal({ state: categoryModalState.closed });
+    localDispatch(
+      actions.setCategoryModal({ state: categoryModalState.closed }),
+    );
+  };
+
+  const closeUploading = () => {
+    localDispatch(actions.setShowUploadModal(false));
+  };
+
+  const openUploading = () => {
+    localDispatch(actions.setShowUploadModal(true));
+  };
+
+  const handleUploadPatients = async data => {
+    if (category.data == null) return;
+    localDispatch(actions.setIsUploading(true));
+    const fileName = data.file.name;
+    const { location: fileUrl } = await uploadFileToAWS(
+      'clients-uploads',
+      data.file,
+    );
+    const response = await dataAPI.importServices(
+      {
+        fileName,
+        fileUrl,
+        provider: data.provider,
+      },
+      category.data.id,
+    );
+    if (response.isError) {
+      console.error(response.message);
+    }
+    await fetchServices();
+    localDispatch(actions.setIsUploading(false));
   };
 
   const handleCategorySave = data => {
     if (categoryModal.state === categoryModalState.edit) {
-      setCategory({ ...category, data: { ...category.data, name: data.name } });
+      localDispatch(
+        actions.setCategory({
+          ...category,
+          data: { ...category.data, name: data.name },
+        }),
+      );
     }
     handleCloseCategoryModal();
     fetchCategories();
@@ -149,7 +250,9 @@ const Services = () => {
   const handleTabChange = (event, newValue) => {
     if (category.index !== newValue) {
       const newCategory = categories[newValue];
-      setCategory({ data: newCategory, index: newValue });
+      localDispatch(
+        actions.setCategory({ data: newCategory, index: newValue }),
+      );
     }
   };
 
@@ -165,6 +268,12 @@ const Services = () => {
 
   return (
     <div className='services-root'>
+      <ImportDataModal
+        title={textForKey('Import services')}
+        open={showUploadModal}
+        onClose={closeUploading}
+        onUpload={handleUploadPatients}
+      />
       <ConfirmationModal
         onConfirm={handleServiceDeleteConfirmed}
         onClose={handleCloseDeleteService}
@@ -277,6 +386,15 @@ const Services = () => {
 
       {category.data != null && (
         <div className='services-root__footer'>
+          <LoadingButton
+            variant='outline-primary'
+            className='btn-outline-primary import-btn'
+            isLoading={isUploading}
+            onClick={openUploading}
+          >
+            {textForKey('Import services')}
+            <UploadIcon />
+          </LoadingButton>
           <Button
             variant='outline-primary edit-category-btn'
             onClick={handleEditCategory}
