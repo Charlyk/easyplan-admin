@@ -22,6 +22,7 @@ import IconSearch from '../../assets/icons/iconSearch';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import CreatePatientModal from '../../components/CreatePatientModal';
 import LoadingButton from '../../components/LoadingButton';
+import SetupExcelModal from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
 import {
   setPatientDetails,
@@ -48,6 +49,7 @@ const initialState = {
   searchQuery: '',
   patientToDelete: null,
   isDeleting: false,
+  excelData: null,
 };
 
 const reducerTypes = {
@@ -62,6 +64,7 @@ const reducerTypes = {
   setShowDeleteDialog: 'setShowDeleteDialog',
   setPatientToDelete: 'setPatientToDelete',
   setIsDeleting: 'setIsDeleting',
+  setExcelData: 'setExcelData',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -100,6 +103,8 @@ const reducer = (state, action) => {
       };
     case reducerTypes.setIsDeleting:
       return { ...state, isDeleting: action.payload };
+    case reducerTypes.setExcelData:
+      return { ...state, excelData: action.payload };
     default:
       return state;
   }
@@ -121,6 +126,7 @@ const NewPatients = () => {
       showDeleteDialog,
       patientToDelete,
       isDeleting,
+      excelData,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -209,6 +215,8 @@ const NewPatients = () => {
     });
     if (response.isError) {
       console.error(response.message);
+    } else {
+      localDispatch(actions.setExcelData(response.data));
     }
     localDispatch(actions.setIsUploading(false));
   };
@@ -239,8 +247,17 @@ const NewPatients = () => {
     );
   };
 
+  const closeSetupExcel = () => {
+    localDispatch(actions.setExcelData(null));
+  };
+
   return (
     <div className='new-patients-root'>
+      <SetupExcelModal
+        data={excelData}
+        open={excelData != null}
+        onClose={closeSetupExcel}
+      />
       <ConfirmationModal
         isLoading={isDeleting}
         show={showDeleteDialog}
