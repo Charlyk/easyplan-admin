@@ -1386,7 +1386,7 @@ export default {
   /**
    * Upload patients
    * @param {Object} data
-   * @param {string} data.provider
+   * @param {string} data.mode
    * @param {string} data.fileUrl
    * @param {string} data.fileName
    * @return {Promise<{isError: boolean, message: *}|any>}
@@ -1474,6 +1474,51 @@ export default {
   importServices: async (requestBody, categoryId) => {
     try {
       const url = `${baseURL}/services/${categoryId}/import`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Import services from file
+   * @param {Object} requestBody
+   * @param {string} requestBody.fileUrl
+   * @param {string} requestBody.fileName
+   * @param {Array.<{cellIndex: number, cellType: string}>} requestBody.cellTypes
+   * @param {string} categoryId
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  parseServices: async (requestBody, categoryId) => {
+    try {
+      const url = `${baseURL}/services/${categoryId}/parse`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Import services from file
+   * @param {Object} requestBody
+   * @param {string} requestBody.fileUrl
+   * @param {string} requestBody.fileName
+   * @param {Array.<{cellIndex: number, cellType: string}>} requestBody.cellTypes
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  submitPatientCells: async requestBody => {
+    try {
+      const url = `${baseURL}/patients/submit-cells`;
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
       return responseData;

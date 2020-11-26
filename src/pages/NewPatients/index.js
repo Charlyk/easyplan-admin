@@ -22,7 +22,7 @@ import IconSearch from '../../assets/icons/iconSearch';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import CreatePatientModal from '../../components/CreatePatientModal';
 import LoadingButton from '../../components/LoadingButton';
-import SetupExcelModal from '../../components/SetupExcelModal';
+import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
 import {
   setPatientDetails,
@@ -30,6 +30,7 @@ import {
 } from '../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { UploadDestination } from '../../utils/constants';
 import {
   generateReducerActions,
   uploadFileToAWS,
@@ -216,7 +217,13 @@ const NewPatients = () => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      localDispatch(actions.setExcelData(response.data));
+      localDispatch(
+        actions.setExcelData({
+          fileName,
+          fileUrl,
+          destination: UploadDestination.patients,
+        }),
+      );
     }
     localDispatch(actions.setIsUploading(false));
   };
@@ -254,6 +261,8 @@ const NewPatients = () => {
   return (
     <div className='new-patients-root'>
       <SetupExcelModal
+        mode={UploadMode.patients}
+        title={textForKey('Import patients')}
         data={excelData}
         open={excelData != null}
         onClose={closeSetupExcel}

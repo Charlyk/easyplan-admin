@@ -303,6 +303,8 @@ export default {
     photo: 'Photo',
     debt: 'Debt',
     discount: 'Discount',
+    required: 'Required',
+    'upload file': 'Upload file',
   },
   ro: {
     analytics: 'Analitică',
@@ -612,6 +614,8 @@ export default {
     photo: 'Foto',
     debt: 'Datorii',
     discount: 'Reducere',
+    required: 'Obligator',
+    'upload file': 'Selectează fișier (.xls, .xlsx)',
   },
   ru: {
     analytics: 'Analytics',
@@ -914,5 +918,7 @@ export default {
     photo: 'Photo',
     debt: 'Debt',
     discount: 'Discount',
+    required: 'Required',
+    'upload file': 'Upload file',
   },
 };

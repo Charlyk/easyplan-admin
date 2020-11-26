@@ -413,3 +413,7 @@ export const Action = {
   EditVisitNote: 'EditVisitNote',
   UpdatedOrthodonticPlan: 'UpdatedOrthodonticPlan',
 };
+
+export const UploadDestination = {
+  patients: 'patients',
+};
