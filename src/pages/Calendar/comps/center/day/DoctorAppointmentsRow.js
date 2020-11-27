@@ -203,6 +203,7 @@ const DoctorAppointmentsRow = ({
             key={hour}
             id={hour}
             className='appointment-cell'
+            valign='top'
           >
             {appointmentsForHour(hour).map((item, index) => (
               <AppointmentItem

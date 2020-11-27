@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
 import {
@@ -240,7 +240,11 @@ const Services = () => {
     localDispatch(
       actions.setSetupExcelModal({
         open: true,
-        data: { fileName, fileUrl, categoryId: category.data.id },
+        data: {
+          fileName,
+          fileUrl: encodeURI(fileUrl),
+          categoryId: category.data.id,
+        },
       }),
     );
     localDispatch(actions.setIsUploading(false));

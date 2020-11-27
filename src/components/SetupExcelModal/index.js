@@ -22,6 +22,7 @@ import './styles.scss';
 export const UploadMode = {
   patients: 'Patients',
   services: 'Services',
+  schedules: 'Schedules',
 };
 
 const initialState = {
@@ -51,7 +52,15 @@ const reducer = (state, action) => {
   }
 };
 
-const SetupExcelModal = ({ title, open, timeout, mode, data, onClose }) => {
+const SetupExcelModal = ({
+  title,
+  open,
+  timeout,
+  mode,
+  data,
+  onClose,
+  onCellsReady,
+}) => {
   const dispatch = useDispatch();
   const [{ excelData, isFetching, cellTypes }, localDispatch] = useReducer(
     reducer,
@@ -82,8 +91,10 @@ const SetupExcelModal = ({ title, open, timeout, mode, data, onClose }) => {
         response = await dataAPI.uploadPatientsList(data);
         break;
       case UploadMode.services:
-        console.log(data);
         response = await dataAPI.importServices(data, data.categoryId);
+        break;
+      case UploadMode.schedules:
+        response = await dataAPI.readExcelColumns(data);
         break;
     }
     if (response?.isError) {
@@ -154,6 +165,10 @@ const SetupExcelModal = ({ title, open, timeout, mode, data, onClose }) => {
         errorMessage = response.message;
         break;
       }
+      case UploadMode.schedules:
+        onCellsReady(requestBody);
+        onClose();
+        return;
     }
 
     if (isError) {
@@ -240,7 +255,7 @@ const SetupExcelModal = ({ title, open, timeout, mode, data, onClose }) => {
                   <tr key={`${row.rowNumber}-body-row`}>
                     {row.cells.map(cell => (
                       <td key={`${cell.columnIndex}-${row.rowNumber}-cell`}>
-                        {cell.cellValue}
+                        {cell.cellValue || ''}
                       </td>
                     ))}
                   </tr>
@@ -275,15 +290,21 @@ SetupExcelModal.propTypes = {
   open: PropTypes.bool,
   title: PropTypes.string,
   timeout: PropTypes.number,
-  mode: PropTypes.oneOf([UploadMode.patients, UploadMode.services]),
+  mode: PropTypes.oneOf([
+    UploadMode.patients,
+    UploadMode.services,
+    UploadMode.schedules,
+  ]),
   data: PropTypes.shape({
     categoryId: PropTypes.string,
     fileUrl: PropTypes.string,
     fileName: PropTypes.string,
   }),
   onClose: PropTypes.func,
+  onCellsReady: PropTypes.func,
 };
 
 SetupExcelModal.defaultProps = {
   timeout: 5000,
+  onCellsReady: () => null,
 };

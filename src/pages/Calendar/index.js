@@ -4,6 +4,11 @@ import './styles.scss';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
+import MapSchedulesDataModal, {
+  MappingData,
+} from '../../components/MapSchedulesDataModal';
+import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
+import ImportDataModal from '../../components/UploadPatientsModal';
 import {
   setAppointmentModal,
   setPaymentModal,
@@ -15,60 +20,48 @@ import {
 } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
+import {
+  fetchClinicData,
+  generateReducerActions,
+  logUserAction,
+  uploadFileToAWS,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
 import CalendarDoctors from './comps/left/CalendarDoctors';
 
 const reducerTypes = {
-  filters: 'filters',
-  selectedService: 'selectedService',
-  selectedDoctor: 'selectedDoctor',
+  setFilters: 'setFilters',
+  setSelectedService: 'setSelectedService',
+  setSelectedDoctor: 'setSelectedDoctor',
   setViewDate: 'setViewDate',
-  isFetching: 'isFetching',
+  setIsFetching: 'setIsFetching',
   setSelectedSchedule: 'setSelectedSchedule',
   setDeleteSchedule: 'setDeleteSchedule',
   setIsDeleting: 'setIsDeleting',
   setViewMode: 'setViewMode',
+  setShowImportModal: 'setShowImportModal',
+  setSetupExcelModal: 'setSetupExcelModal',
+  setIsUploading: 'setIsUploading',
+  setImportData: 'setImportData',
+  setMappingModal: 'setMappingModal',
 };
 
-const reducerActions = {
-  setViewDate: payload => ({ type: reducerTypes.setViewDate, payload }),
-  setFilters: payload => ({ type: reducerTypes.filters, payload }),
-  setSelectedService: payload => ({
-    type: reducerTypes.selectedService,
-    payload,
-  }),
-  setSelectedDoctor: payload => ({
-    type: reducerTypes.selectedDoctor,
-    payload,
-  }),
-  setIsFetching: payload => ({ type: reducerTypes.isFetching, payload }),
-  setSelectedSchedule: payload => ({
-    type: reducerTypes.setSelectedSchedule,
-    payload,
-  }),
-  setDeleteSchedule: payload => ({
-    type: reducerTypes.setDeleteSchedule,
-    payload,
-  }),
-  setIsDeleting: payload => ({ type: reducerTypes.setIsDeleting, payload }),
-  setViewMode: payload => ({ type: reducerTypes.setViewMode, payload }),
-};
+const reducerActions = generateReducerActions(reducerTypes);
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case reducerTypes.filters:
+    case reducerTypes.setFilters:
       return { ...state, filters: action.payload };
-    case reducerTypes.selectedService:
+    case reducerTypes.setSelectedService:
       return { ...state, selectedService: action.payload };
-    case reducerTypes.selectedDoctor:
+    case reducerTypes.setSelectedDoctor:
       return {
         ...state,
         selectedDoctor: action.payload,
         selectedSchedule: null,
       };
-    case reducerTypes.isFetching:
+    case reducerTypes.setIsFetching:
       return { ...state, isFetching: action.payload };
     case reducerTypes.setViewDate:
       return { ...state, viewDate: action.payload, selectedSchedule: null };
@@ -80,6 +73,19 @@ const reducer = (state, action) => {
       return { ...state, isDeleting: action.payload };
     case reducerTypes.setViewMode:
       return { ...state, viewMode: action.payload, selectedSchedule: null };
+    case reducerTypes.setShowImportModal:
+      return { ...state, showImportModal: action.payload };
+    case reducerTypes.setSetupExcelModal:
+      return { ...state, setupExcelModal: action.payload };
+    case reducerTypes.setIsUploading:
+      return { ...state, isUploading: action.payload };
+    case reducerTypes.setImportData:
+      return {
+        ...state,
+        importData: { ...state.importData, ...action.payload },
+      };
+    case reducerTypes.setMappingModal:
+      return { ...state, mappingModal: action.payload };
     default:
       return state;
   }
@@ -95,6 +101,20 @@ const initialState = {
   deleteSchedule: { open: false, schedule: null },
   isDeleting: false,
   viewMode: 'day',
+  showImportModal: false,
+  setupExcelModal: { open: false, data: null },
+  isUploading: false,
+  importData: {
+    fileUrl: null,
+    fileName: null,
+    cellTypes: [],
+    doctors: [],
+    services: [],
+  },
+  mappingModal: {
+    mode: MappingData.none,
+    data: null,
+  },
 };
 
 const Calendar = () => {
@@ -112,6 +132,11 @@ const Calendar = () => {
       deleteSchedule,
       isDeleting,
       viewMode,
+      showImportModal,
+      setupExcelModal,
+      isUploading,
+      importData,
+      mappingModal,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -199,8 +224,135 @@ const Calendar = () => {
     );
   };
 
+  const handleImportFileSelected = async data => {
+    localDispatch(reducerActions.setIsUploading(true));
+    const fileName = data.file.name;
+    const { location: fileUrl } = await uploadFileToAWS(
+      'clients-uploads',
+      data.file,
+    );
+    localDispatch(
+      reducerActions.setSetupExcelModal({
+        open: true,
+        data: {
+          fileName,
+          fileUrl: encodeURI(fileUrl),
+        },
+      }),
+    );
+    localDispatch(reducerActions.setIsUploading(false));
+  };
+
+  const handleOpenImportModal = () => {
+    localDispatch(reducerActions.setShowImportModal(true));
+  };
+
+  const handleCloseImportModal = () => {
+    localDispatch(reducerActions.setShowImportModal(false));
+  };
+
+  const handleCloseSetupExcelModal = () => {
+    localDispatch(
+      reducerActions.setSetupExcelModal({ open: false, data: null }),
+    );
+  };
+
+  const handleExcelCellsReady = data => {
+    localDispatch(reducerActions.setImportData(data));
+    localDispatch(
+      reducerActions.setMappingModal({ mode: MappingData.doctors, data }),
+    );
+  };
+
+  const handleCloseMappingModal = () => {
+    localDispatch(
+      reducerActions.setMappingModal({ mode: MappingData.none, data: null }),
+    );
+  };
+
+  const handleImportSchedules = async requestBody => {
+    localDispatch(reducerActions.setIsUploading(true));
+    const response = await dataAPI.importSchedules(requestBody);
+    if (response.isError) {
+      console.error(response.message);
+      localDispatch(reducerActions.setIsUploading(false));
+    } else {
+      setTimeout(() => {
+        dispatch(toggleAppointmentsUpdate());
+        localDispatch(reducerActions.setIsUploading(false));
+      }, 3000);
+    }
+  };
+
+  const handleMappingSubmit = result => {
+    switch (result.mode) {
+      case MappingData.doctors: {
+        localDispatch(
+          reducerActions.setImportData({ doctors: result.mappedItems }),
+        );
+        localDispatch(
+          reducerActions.setMappingModal({
+            mode: MappingData.services,
+            data: {
+              fileName: result.fileName,
+              fileUrl: result.fileUrl,
+              cellTypes: result.cellTypes,
+            },
+          }),
+        );
+        break;
+      }
+      case MappingData.services: {
+        const requestBody = {
+          ...importData,
+          services: result.mappedItems,
+        };
+
+        const isDataValid =
+          requestBody.fileUrl != null &&
+          requestBody.fileName != null &&
+          requestBody.cellTypes.length > 0 &&
+          requestBody.doctors.length > 0 &&
+          requestBody.services.length > 0;
+
+        if (isDataValid) {
+          handleImportSchedules(requestBody);
+        }
+
+        localDispatch(
+          reducerActions.setMappingModal({
+            mode: MappingData.none,
+            data: null,
+          }),
+        );
+        break;
+      }
+    }
+  };
+
   return (
     <div className='calendar-root'>
+      <MapSchedulesDataModal
+        data={mappingModal.data}
+        mode={mappingModal.mode}
+        onClose={handleCloseMappingModal}
+        onSubmit={handleMappingSubmit}
+      />
+      <SetupExcelModal
+        title={textForKey('Import schedules')}
+        onClose={handleCloseSetupExcelModal}
+        open={setupExcelModal.open}
+        data={setupExcelModal.data}
+        timeout={3000}
+        mode={UploadMode.schedules}
+        onCellsReady={handleExcelCellsReady}
+      />
+      <ImportDataModal
+        open={showImportModal}
+        onClose={handleCloseImportModal}
+        title={textForKey('Import schedules')}
+        onUpload={handleImportFileSelected}
+      />
       <ConfirmationModal
         isLoading={isDeleting}
         show={deleteSchedule.open}
@@ -222,6 +374,7 @@ const Calendar = () => {
       )}
       <div className='calendar-root__content__center-container'>
         <AppointmentsCalendar
+          isUploading={isUploading}
           onPayDebt={handlePayDebt}
           onDeleteSchedule={handleDeleteSchedule}
           onEditSchedule={handleEditSchedule}
@@ -231,6 +384,7 @@ const Calendar = () => {
           onScheduleSelect={handleScheduleSelected}
           onViewDateChange={handleViewDateChange}
           onViewModeChange={handleViewModeChange}
+          onImportSchedules={handleOpenImportModal}
           doctor={selectedDoctor}
           viewDate={viewDate}
         />

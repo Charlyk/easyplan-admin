@@ -1467,7 +1467,6 @@ export default {
    * @param {Object} requestBody
    * @param {string} requestBody.fileUrl
    * @param {string} requestBody.fileName
-   * @param {string} requestBody.provider
    * @param {string} categoryId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
@@ -1519,6 +1518,74 @@ export default {
   submitPatientCells: async requestBody => {
     try {
       const url = `${baseURL}/patients/submit-cells`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Import services from file
+   * @param {Object} requestBody
+   * @param {string} requestBody.fileUrl
+   * @param {string} requestBody.fileName
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  readExcelColumns: async requestBody => {
+    try {
+      const url = `${baseURL}/schedules/imported-columns`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Import services from file
+   * @param {Object} requestBody
+   * @param {string} requestBody.fileUrl
+   * @param {string} requestBody.fileName
+   * @param {string} path
+   * @param {Array.<{cellIndex: number, cellType: string}>} requestBody.cellTypes
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  fetchExcelDoctorsAndServices: async (requestBody, path = '') => {
+    try {
+      const url = `${baseURL}/schedules/excel-data/${path}`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Import services from file
+   * @param {Object} requestBody
+   * @param {string} requestBody.fileUrl
+   * @param {string} requestBody.fileName
+   * @param {Array.<{target: string, reference: string}>} requestBody.doctors
+   * @param {Array.<{target: string, reference: string}>} requestBody.services
+   * @param {Array.<{cellIndex: number, cellType: string}>} requestBody.cellTypes
+   * @return {Promise<{isError: boolean, message: *}|any>}
+   */
+  importSchedules: async requestBody => {
+    try {
+      const url = `${baseURL}/schedules/import`;
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
       return responseData;

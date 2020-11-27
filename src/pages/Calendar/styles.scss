@@ -352,6 +352,20 @@
         }
       }
 
+      .loading-button {
+        width: 2.5rem;
+      }
+
+      .import-btn {
+        position: absolute;
+        top: 0;
+        right: 13.7rem;
+
+        svg {
+          margin: 0;
+        }
+      }
+
       .date-wrapper {
         display: flex;
         align-items: center;

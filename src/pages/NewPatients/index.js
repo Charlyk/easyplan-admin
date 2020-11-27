@@ -209,22 +209,14 @@ const NewPatients = () => {
       'clients-uploads',
       data.file,
     );
-    const response = await dataAPI.uploadPatientsList({
-      fileName,
-      fileUrl,
-      provider: data.provider,
-    });
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      localDispatch(
-        actions.setExcelData({
-          fileName,
-          fileUrl,
-          destination: UploadDestination.patients,
-        }),
-      );
-    }
+
+    localDispatch(
+      actions.setExcelData({
+        fileName,
+        fileUrl: encodeURI(fileUrl),
+        destination: UploadDestination.patients,
+      }),
+    );
     localDispatch(actions.setIsUploading(false));
   };
 
@@ -279,6 +271,7 @@ const NewPatients = () => {
         open={showUploadModal}
         onClose={closeUploading}
         onUpload={handleUploadPatients}
+        title={textForKey('Import patients')}
       />
       <CreatePatientModal
         open={showCreateModal}

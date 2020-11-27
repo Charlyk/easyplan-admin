@@ -1,32 +1,31 @@
 import React from 'react';
 
+import { CircularProgress } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import './styles.scss';
 
-const LoadingButton = props => {
-  const {
-    children,
-    className,
-    onClick,
-    disabled,
-    spinnerVariant,
-    isLoading,
-  } = props;
+const LoadingButton = ({
+  children,
+  className,
+  onClick,
+  disabled,
+  isLoading,
+  variant,
+}) => {
   return (
     <Button
       className={`loading-button ${className}`}
       onClick={onClick}
       disabled={disabled}
+      variant={variant}
     >
       {!isLoading && children}
       {isLoading && (
-        <Spinner
-          className='loading-spinner'
-          animation='border'
-          variant={spinnerVariant}
-        />
+        <div className='spinner-wrapper'>
+          <CircularProgress className='loading-button-spinner' />
+        </div>
       )}
     </Button>
   );
@@ -41,4 +40,9 @@ LoadingButton.propTypes = {
   spinnerVariant: PropTypes.oneOf(['light']),
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  variant: PropTypes.string,
+};
+
+LoadingButton.defaultProps = {
+  variant: 'primary',
 };

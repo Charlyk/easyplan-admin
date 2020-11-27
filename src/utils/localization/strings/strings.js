@@ -164,7 +164,7 @@ export default {
     'appointment status': 'Appointment status',
     'treatment type': 'Treatment type',
     'service type': 'Service type',
-    note: 'Notes',
+    note: 'Note',
     'no treatment plan': 'No treatment plan',
     'create new password': 'Create new password',
     'change password message': 'Password must contain at leas 8 characters',
@@ -305,6 +305,8 @@ export default {
     discount: 'Discount',
     required: 'Required',
     'upload file': 'Upload file',
+    'unmapped items will not be imported':
+      'Unmapped items will not be imported',
   },
   ro: {
     analytics: 'Analitică',
@@ -472,7 +474,7 @@ export default {
     'appointment status': 'Statutul programării',
     'treatment type': 'Tip tratament',
     'service type': 'Tip serviciu',
-    note: 'Notițe',
+    note: 'Notă',
     'no treatment plan': 'Nu are plan de tratament',
     'create new password': 'Creează parola nouă',
     'change password message': 'Parola trebuie sa conțină minim 8 caractere.',
@@ -616,6 +618,8 @@ export default {
     discount: 'Reducere',
     required: 'Obligator',
     'upload file': 'Selectează fișier (.xls, .xlsx)',
+    'unmapped items will not be imported':
+      'Elementele ne mapate nu vor fi importate',
   },
   ru: {
     analytics: 'Analytics',
@@ -781,7 +785,7 @@ export default {
     'appointment status': 'Appointment status',
     'treatment type': 'Treatment type',
     'service type': 'Service type',
-    note: 'Notes',
+    note: 'Note',
     'no treatment plan': 'No treatment plan',
     'create new password': 'Create new password',
     'change password message': 'Password must contain at leas 8 characters',
@@ -920,5 +924,7 @@ export default {
     discount: 'Discount',
     required: 'Required',
     'upload file': 'Upload file',
+    'unmapped items will not be imported':
+      'Unmapped items will not be imported',
   },
 };
