@@ -22,6 +22,7 @@ import IconSearch from '../../assets/icons/iconSearch';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import CreatePatientModal from '../../components/CreatePatientModal';
 import LoadingButton from '../../components/LoadingButton';
+import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
 import {
   setPatientDetails,
@@ -29,6 +30,7 @@ import {
 } from '../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { UploadDestination } from '../../utils/constants';
 import {
   generateReducerActions,
   uploadFileToAWS,
@@ -48,6 +50,7 @@ const initialState = {
   searchQuery: '',
   patientToDelete: null,
   isDeleting: false,
+  excelData: null,
 };
 
 const reducerTypes = {
@@ -62,6 +65,7 @@ const reducerTypes = {
   setShowDeleteDialog: 'setShowDeleteDialog',
   setPatientToDelete: 'setPatientToDelete',
   setIsDeleting: 'setIsDeleting',
+  setExcelData: 'setExcelData',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -100,6 +104,8 @@ const reducer = (state, action) => {
       };
     case reducerTypes.setIsDeleting:
       return { ...state, isDeleting: action.payload };
+    case reducerTypes.setExcelData:
+      return { ...state, excelData: action.payload };
     default:
       return state;
   }
@@ -121,6 +127,7 @@ const NewPatients = () => {
       showDeleteDialog,
       patientToDelete,
       isDeleting,
+      excelData,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -202,14 +209,14 @@ const NewPatients = () => {
       'clients-uploads',
       data.file,
     );
-    const response = await dataAPI.uploadPatientsList({
-      fileName,
-      fileUrl,
-      provider: data.provider,
-    });
-    if (response.isError) {
-      console.error(response.message);
-    }
+
+    localDispatch(
+      actions.setExcelData({
+        fileName,
+        fileUrl: encodeURI(fileUrl),
+        destination: UploadDestination.patients,
+      }),
+    );
     localDispatch(actions.setIsUploading(false));
   };
 
@@ -239,8 +246,19 @@ const NewPatients = () => {
     );
   };
 
+  const closeSetupExcel = () => {
+    localDispatch(actions.setExcelData(null));
+  };
+
   return (
     <div className='new-patients-root'>
+      <SetupExcelModal
+        mode={UploadMode.patients}
+        title={textForKey('Import patients')}
+        data={excelData}
+        open={excelData != null}
+        onClose={closeSetupExcel}
+      />
       <ConfirmationModal
         isLoading={isDeleting}
         show={showDeleteDialog}
@@ -253,6 +271,7 @@ const NewPatients = () => {
         open={showUploadModal}
         onClose={closeUploading}
         onUpload={handleUploadPatients}
+        title={textForKey('Import patients')}
       />
       <CreatePatientModal
         open={showCreateModal}

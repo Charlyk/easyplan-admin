@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
 import {
@@ -18,6 +18,7 @@ import IconPlus from '../../assets/icons/iconPlus';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import CreateCategoryModal from '../../components/CreateCategoryModal';
 import LoadingButton from '../../components/LoadingButton';
+import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
 import { setClinicServices } from '../../redux/actions/clinicActions';
 import {
@@ -50,6 +51,7 @@ const initialState = {
   categoryModal: { state: categoryModalState.closed },
   showUploadModal: false,
   isUploading: false,
+  setupExcelModal: { open: false, data: null },
 };
 
 const reducerTypes = {
@@ -60,6 +62,7 @@ const reducerTypes = {
   setCategoryModal: 'setCategoryModal',
   setShowUploadModal: 'setShowUploadModal',
   setIsUploading: 'setIsUploading',
+  setSetupExcelModal: 'setSetupExcelModal',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -80,6 +83,8 @@ const reducer = (state, action) => {
       return { ...state, showUploadModal: action.payload };
     case reducerTypes.setIsUploading:
       return { ...state, isUploading: action.payload };
+    case reducerTypes.setSetupExcelModal:
+      return { ...state, setupExcelModal: action.payload };
     default:
       return state;
   }
@@ -98,6 +103,7 @@ const Services = () => {
       categoryModal,
       showUploadModal,
       isUploading,
+      setupExcelModal,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -182,9 +188,21 @@ const Services = () => {
     localDispatch(
       actions.setDeleteServiceModal({ ...deleteServiceModal, isLoading: true }),
     );
-    await dataAPI.deleteService(deleteServiceModal.service.id);
-    await fetchServices();
-    handleCloseDeleteService();
+    const response = await dataAPI.deleteService(deleteServiceModal.service.id);
+    if (response.isError) {
+      console.error(response.message);
+      localDispatch(
+        actions.setDeleteServiceModal({
+          ...deleteServiceModal,
+          isLoading: false,
+        }),
+      );
+    } else {
+      setTimeout(() => {
+        fetchServices();
+        handleCloseDeleteService();
+      }, 300);
+    }
   };
 
   const handleCreateCategory = () => {
@@ -219,18 +237,16 @@ const Services = () => {
       'clients-uploads',
       data.file,
     );
-    const response = await dataAPI.importServices(
-      {
-        fileName,
-        fileUrl,
-        provider: data.provider,
-      },
-      category.data.id,
+    localDispatch(
+      actions.setSetupExcelModal({
+        open: true,
+        data: {
+          fileName,
+          fileUrl: encodeURI(fileUrl),
+          categoryId: category.data.id,
+        },
+      }),
     );
-    if (response.isError) {
-      console.error(response.message);
-    }
-    await fetchServices();
     localDispatch(actions.setIsUploading(false));
   };
 
@@ -256,6 +272,10 @@ const Services = () => {
     }
   };
 
+  const handleCloseExcelModal = () => {
+    localDispatch(actions.setSetupExcelModal({ open: false, data: null }));
+  };
+
   const getServicesCount = category => {
     return clinicServices.filter(item => item.categoryId === category.id)
       .length;
@@ -268,6 +288,14 @@ const Services = () => {
 
   return (
     <div className='services-root'>
+      <SetupExcelModal
+        open={setupExcelModal.open}
+        data={setupExcelModal.data}
+        title={textForKey('Import services')}
+        mode={UploadMode.services}
+        onClose={handleCloseExcelModal}
+        timeout={1000}
+      />
       <ImportDataModal
         title={textForKey('Import services')}
         open={showUploadModal}

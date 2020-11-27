@@ -102,7 +102,7 @@ const InvoicesButton = () => {
       onClick={handleToggleInvoices}
     >
       <span className='button-text'>
-        {textForKey('For payment')} ({invoices.length})
+        {textForKey('For payment')} ({invoices?.length || 0})
       </span>
       {invoicesPaper}
     </div>

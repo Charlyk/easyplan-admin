@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 
-import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
+import { Box, ClickAwayListener, Fade, Paper } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
+import UploadIcon from '@material-ui/icons/CloudUpload';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -14,6 +15,7 @@ import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCal
 import IconPlus from '../../../../assets/icons/iconPlus';
 import AppointmentDetails from '../../../../components/AppointmentDetails';
 import EasyTab from '../../../../components/EasyTab';
+import LoadingButton from '../../../../components/LoadingButton';
 import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarSelector';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
@@ -33,6 +35,7 @@ const AppointmentsCalendar = ({
   doctor,
   viewDate,
   onPayDebt,
+  isUploading,
   onViewDateChange,
   onEditSchedule,
   onDeleteSchedule,
@@ -41,6 +44,7 @@ const AppointmentsCalendar = ({
   selectedSchedule,
   canAddAppointment,
   onAddAppointment,
+  onImportSchedules,
 }) => {
   const calendarAnchor = useRef(null);
   const updateAppointments = useSelector(updateAppointmentsSelector);
@@ -148,14 +152,24 @@ const AppointmentsCalendar = ({
             onClick={() => handleTabChange(CalendarView.month)}
           />
         </div>
-        <Button
-          className='positive-button'
-          disabled={!canAddAppointment}
-          onClick={onAddAppointment}
-        >
-          {textForKey('Add appointment')}
-          <IconPlus />
-        </Button>
+        <Box display='flex'>
+          <LoadingButton
+            isLoading={isUploading}
+            variant='outline-primary'
+            className='btn-outline-primary import-btn'
+            onClick={onImportSchedules}
+          >
+            <UploadIcon />
+          </LoadingButton>
+          <Button
+            className='positive-button'
+            disabled={!canAddAppointment}
+            onClick={onAddAppointment}
+          >
+            {textForKey('Add appointment')}
+            <IconPlus />
+          </Button>
+        </Box>
       </div>
       <div
         id='calendar-content'
@@ -199,6 +213,7 @@ const AppointmentsCalendar = ({
 export default AppointmentsCalendar;
 
 AppointmentsCalendar.propTypes = {
+  isUploading: PropTypes.bool,
   doctor: PropTypes.object,
   viewDate: PropTypes.instanceOf(Date),
   onDateChange: PropTypes.func,
@@ -210,6 +225,7 @@ AppointmentsCalendar.propTypes = {
   onDeleteSchedule: PropTypes.func,
   onEditSchedule: PropTypes.func,
   onPayDebt: PropTypes.func,
+  onImportSchedules: PropTypes.func,
   selectedSchedule: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
@@ -231,4 +247,5 @@ AppointmentsCalendar.defaultProps = {
   viewDate: new Date(),
   onViewDateChange: () => null,
   onScheduleSelect: () => null,
+  onImportSchedules: () => null,
 };
