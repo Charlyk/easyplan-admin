@@ -24,6 +24,7 @@ import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
+import '../../components/PatientDetailsModal/styles.scss';
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',

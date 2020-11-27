@@ -95,6 +95,37 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
+
+    .title-label {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 16px;
+      color: #34354C;
+    }
+
+    .no-data-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      color: #34354C;
+    }
+
+    .positive-button {
+      margin-bottom: 0;
+      flex: unset;
+    }
   }
 
   .positive-button {
