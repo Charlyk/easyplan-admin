@@ -236,6 +236,7 @@ const Services = () => {
     const { location: fileUrl } = await uploadFileToAWS(
       'clients-uploads',
       data.file,
+      true,
     );
     localDispatch(
       actions.setSetupExcelModal({

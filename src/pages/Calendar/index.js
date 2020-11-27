@@ -230,6 +230,7 @@ const Calendar = () => {
     const { location: fileUrl } = await uploadFileToAWS(
       'clients-uploads',
       data.file,
+      true,
     );
     localDispatch(
       reducerActions.setSetupExcelModal({

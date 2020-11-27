@@ -208,6 +208,7 @@ const NewPatients = () => {
     const { location: fileUrl } = await uploadFileToAWS(
       'clients-uploads',
       data.file,
+      true,
     );
 
     localDispatch(

@@ -77,11 +77,13 @@ export function getAppointmentTop(
  * Upload a file to AWS
  * @param {string} path
  * @param {Object} file
+ * @param {boolean} tmp
  * @return {Promise<Object|null>}
  */
-export async function uploadFileToAWS(path, file) {
+export async function uploadFileToAWS(path, file, tmp = false) {
   const s3client = new S3(S3Config(path));
-  return await s3client.uploadFile(file, `${uuid()}-${file.name}`);
+  const fileName = `${tmp ? 'tmp_' : ''}${uuid()}-${file.name}`;
+  return await s3client.uploadFile(file, fileName);
 }
 
 /**
