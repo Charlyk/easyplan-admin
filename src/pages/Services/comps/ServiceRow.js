@@ -54,6 +54,7 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
             {textForKey('Edit')} <IconEdit />
           </Button>
           <Button
+            disabled={service.bracket}
             className='services-root__delete-button'
             onClick={handleDeleteService}
           >
