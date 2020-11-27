@@ -252,7 +252,7 @@ const ServiceDetailsModal = () => {
             <LoadingButton
               onClick={handleDeleteService}
               className='delete-button'
-              disabled={isDeleting || isLoading}
+              disabled={isDeleting || isLoading || service.bracket}
               isLoading={isDeleting}
             >
               {textForKey('Delete')}
