@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import { Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -48,8 +48,7 @@ const reducer = (state, action) => {
 const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
   const windowSize = useWindowSize();
   const doctors = useSelector(clinicDoctorsSelector);
-  const clinicServices = useSelector(clinicServicesSelector);
-  const [{ hours, hourWidth }, localDispatch] = useReducer(
+  const [{ isLoading, hours, hourWidth }, localDispatch] = useReducer(
     reducer,
     initialState,
   );
@@ -100,43 +99,52 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
 
   return (
     <div id='day-view-root' className='calendar-doctors-view'>
-      <table>
-        <thead>
-          <tr>
-            <td width={210}>
-              <Typography classes={{ root: 'title-label' }}>
-                {textForKey('Doctors')}
-              </Typography>
-            </td>
-            {fixHours.map(item => (
-              <td
-                width={getCellWidth()}
-                style={{ maxWidth: getCellWidth() }}
-                key={item}
-              >
-                <HourView hour={item} />
-              </td>
-            ))}
-          </tr>
-        </thead>
-      </table>
-      <div className='calendar-doctors-view__appointments-wrapper'>
-        <table>
-          <tbody>
-            {doctors.map(item => (
-              <DoctorAppointmentsRow
-                onScheduleSelect={onScheduleSelect}
-                viewDate={viewDate}
-                hours={hours}
-                windowSize={windowSize}
-                key={item.id}
-                doctor={item}
-                hourWidth={hourWidth}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {!isLoading && fixHours.length === 0 && (
+        <Typography classes={{ root: 'day-off-label' }}>
+          {textForKey("It's a day off")}
+        </Typography>
+      )}
+      {!isLoading && fixHours.length > 0 && (
+        <Box display='flex' flexDirection='column'>
+          <table>
+            <thead>
+              <tr>
+                <td width={210}>
+                  <Typography classes={{ root: 'title-label' }}>
+                    {textForKey('Doctors')}
+                  </Typography>
+                </td>
+                {fixHours.map(item => (
+                  <td
+                    width={getCellWidth()}
+                    style={{ maxWidth: getCellWidth() }}
+                    key={item}
+                  >
+                    <HourView hour={item} />
+                  </td>
+                ))}
+              </tr>
+            </thead>
+          </table>
+          <div className='calendar-doctors-view__appointments-wrapper'>
+            <table>
+              <tbody>
+                {doctors.map(item => (
+                  <DoctorAppointmentsRow
+                    onScheduleSelect={onScheduleSelect}
+                    viewDate={viewDate}
+                    hours={hours}
+                    windowSize={windowSize}
+                    key={item.id}
+                    doctor={item}
+                    hourWidth={hourWidth}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Box>
+      )}
     </div>
   );
 };
