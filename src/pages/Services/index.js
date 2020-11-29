@@ -142,6 +142,10 @@ const Services = () => {
     } else {
       const { data } = response;
       const sortedData = sortBy(data, item => item.created);
+      sortedData.unshift({
+        id: 'all-services',
+        name: textForKey('All services'),
+      });
       if (sortedData.length > 0 && category.data == null) {
         localDispatch(actions.setCategory({ data: sortedData[0], index: 0 }));
       }
@@ -278,14 +282,19 @@ const Services = () => {
   };
 
   const getServicesCount = category => {
+    if (category.id === 'all-services') {
+      return clinicServices.length;
+    }
     return clinicServices.filter(item => item.categoryId === category.id)
       .length;
   };
 
-  const filteredServices =
-    category.data != null
+  const filteredServices = sortBy(
+    category.data != null && category.data.id !== 'all-services'
       ? clinicServices.filter(item => item.categoryId === category.data.id)
-      : [];
+      : clinicServices,
+    item => item.name,
+  );
 
   return (
     <div className='services-root'>
@@ -425,6 +434,7 @@ const Services = () => {
             <UploadIcon />
           </LoadingButton>
           <Button
+            disabled={category?.data?.id === 'all-services'}
             variant='outline-primary edit-category-btn'
             onClick={handleEditCategory}
           >
