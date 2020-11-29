@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
 import { remove, cloneDeep } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
+import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import SwitchButton from '../SwitchButton';
 
@@ -80,32 +83,7 @@ const Service = props => {
 };
 
 const DoctorServices = ({ show, data, onChange }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [services, setServices] = useState([]);
-
-  useEffect(() => {
-    if (services.length === 0 && !isLoading) {
-      fetchServices();
-    }
-  }, [services]);
-
-  const fetchServices = () => {
-    setIsLoading(true);
-    dataAPI
-      .fetchServices(null)
-      .then(response => {
-        if (response.isError) {
-          console.error(response.message);
-        } else {
-          setServices(response.data);
-        }
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
-  };
+  const clinicServices = useSelector(clinicServicesSelector);
 
   const handleServiceSelected = (service, price, percentage, isSelected) => {
     let newList = cloneDeep(data.services);
@@ -132,10 +110,11 @@ const DoctorServices = ({ show, data, onChange }) => {
     onChange(newList);
   };
 
+  const sortedServices = sortBy(clinicServices, item => item.name);
   const classes = clsx('doctor-services', show ? 'expanded' : 'collapsed');
   return (
     <div className={classes} style={{ height: show ? 'unset' : 0 }}>
-      {services.map(service => (
+      {sortedServices.map(service => (
         <Service
           key={service.id}
           service={service}
