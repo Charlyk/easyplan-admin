@@ -423,11 +423,11 @@
   }
 
   &__service {
-    height: 48px;
-    padding: .5rem 1.5rem;
+    padding: .5rem 1.5rem !important;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    border-bottom: #ededed 1px solid;
 
     .service-title {
       width: 8rem;

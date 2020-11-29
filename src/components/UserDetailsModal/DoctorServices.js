@@ -79,8 +79,7 @@ const Service = props => {
   );
 };
 
-const DoctorServices = props => {
-  const { show, data, onChange } = props;
+const DoctorServices = ({ show, data, onChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [services, setServices] = useState([]);
 
@@ -135,10 +134,7 @@ const DoctorServices = props => {
 
   const classes = clsx('doctor-services', show ? 'expanded' : 'collapsed');
   return (
-    <div
-      className={classes}
-      style={{ height: show ? 48 * services.length : 0 }}
-    >
+    <div className={classes} style={{ height: show ? 'unset' : 0 }}>
       {services.map(service => (
         <Service
           key={service.id}
