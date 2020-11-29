@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { FormControl } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
@@ -94,12 +94,16 @@ const CreateCategoryModal = props => {
       isPositiveLoading={isLoading}
       isPositiveDisabled={isLoading}
     >
-      <label htmlFor='basic-url'>{textForKey('Enter category name')}</label>
-      <FormControl
-        value={categoryName}
-        onChange={handleCategoryNameChange}
-        aria-label={textForKey('Enter category name')}
-      />
+      <Form.Group>
+        <Form.Label htmlFor='basic-url'>
+          {textForKey('Enter category name')}
+        </Form.Label>
+        <Form.Control
+          value={categoryName}
+          onChange={handleCategoryNameChange}
+          aria-label={textForKey('Enter category name')}
+        />
+      </Form.Group>
     </EasyPlanModal>
   );
 };

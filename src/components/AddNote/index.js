@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { FormControl } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
 import { triggerUpdateNotes } from '../../redux/actions/actions';
@@ -66,13 +66,15 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
       isPositiveDisabled={noteText.length === 0}
       onPositiveClick={handleSaveNote}
     >
-      <label>{textForKey('Enter note')}</label>
-      <FormControl
-        onChange={handleNoteChange}
-        value={noteText}
-        as='textarea'
-        aria-label={textForKey('Enter category name')}
-      />
+      <Form.Group>
+        <Form.Label>{textForKey('Enter note')}</Form.Label>
+        <Form.Control
+          onChange={handleNoteChange}
+          value={noteText}
+          as='textarea'
+          aria-label={textForKey('Enter category name')}
+        />
+      </Form.Group>
     </EasyPlanModal>
   );
 };
