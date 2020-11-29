@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { TableCell } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,7 +46,7 @@ const CalendarWeekDayView = ({
   };
 
   return (
-    <td className='week-day' valign='top'>
+    <TableCell className='week-day' valign='top' variant='body'>
       {schedules.map(schedule => (
         <WeekAppointmentItem
           onSelect={onScheduleSelect}
@@ -53,7 +54,7 @@ const CalendarWeekDayView = ({
           schedule={schedule}
         />
       ))}
-    </td>
+    </TableCell>
   );
 };
 

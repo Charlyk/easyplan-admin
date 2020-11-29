@@ -322,7 +322,7 @@
 
   &__center {
     position: relative;
-    max-height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -406,14 +406,14 @@
     }
 
     .center-content {
-      max-height: 100%;
-      overflow-y: scroll;
       flex: 1;
+      max-height: 95% !important;
       display: flex;
       flex-direction: column;
       border-radius: 4px;
       position: relative;
       background: #FFFFFF;
+      overflow: hidden;
       box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
 
       .day-off-label {
@@ -532,36 +532,48 @@
   }
 
   .week-view {
+    max-height: 100% !important;
     height: 100%;
-    padding: 1rem;
-    width: 100%;
+    flex: 1;
     display: flex;
     align-items: center;
 
-    table {
-      width: 100%;
+    .table-container {
       height: 100%;
+      overflow: scroll;
 
-      thead {
-        tr {
-          width: 100%;
-          border-bottom: #DBEEFB 1px solid;
+      .MuiTableCell-body {
+        border-bottom: none;
+      }
 
-          td {
-            cursor: pointer;
-            width: calc(100% / 7);
-            padding-bottom: .5rem;
-            border-right: #DBEEFB 1px solid;
+      table {
+        min-height: 100%;
+        flex: 1;
+        overflow: hidden;
+        border: none;
 
-            &:hover {
-              .day-title {
-                color: #3A83DC;
+        thead {
+          tr {
+            width: 100%;
+            border-bottom: #DBEEFB 1px solid;
+
+            th {
+              cursor: pointer;
+              width: calc(100% / 7);
+              padding-top: .7rem;
+              padding-bottom: .5rem;
+              border-right: #DBEEFB 1px solid;
+
+              &:hover {
+                .day-title {
+                  color: #3A83DC;
+                }
               }
             }
-          }
 
-          td:last-child {
-            border-right: none;
+            th:last-child {
+              border-right: none;
+            }
           }
         }
       }
@@ -582,6 +594,10 @@
       &.highlighted {
         color: #3A83DC;
       }
+
+      &.current-day {
+        color: #6397d7;
+      }
     }
 
     .week-day:last-child {
@@ -596,6 +612,7 @@
       align-items: flex-start;
       position: relative;
       border-right: #DBEEFB 1px solid;
+      vertical-align: top;
 
       .appointment-item {
         margin-bottom: .4rem;

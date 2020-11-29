@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableContainer,
+  TableRow,
+  TableCell,
+} from '@material-ui/core';
+import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
@@ -44,32 +53,40 @@ const CalendarWeekView = ({
 
   return (
     <div className='week-view'>
-      <table>
-        <thead>
-          <tr>
-            {week.map(item => (
-              <td key={item} onClick={() => handleDayClick(item)}>
-                <div className='day-title'>{item.format('DD dddd')}</div>
-              </td>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {week.map(day => (
-              <CalendarWeekDayView
-                viewDate={viewDate}
-                update={update}
-                selectedSchedule={selectedSchedule}
-                onScheduleSelect={onScheduleSelect}
-                doctorId={doctorId}
-                key={day}
-                day={day}
-              />
-            ))}
-          </tr>
-        </tbody>
-      </table>
+      <TableContainer classes={{ root: 'table-container' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {week.map(item => (
+                <TableCell key={item} onClick={() => handleDayClick(item)}>
+                  <div
+                    className={clsx('day-title', {
+                      'current-day': moment().isSame(item, 'day'),
+                    })}
+                  >
+                    {item.format('DD dddd')}
+                  </div>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {week.map(day => (
+                <CalendarWeekDayView
+                  viewDate={viewDate}
+                  update={update}
+                  selectedSchedule={selectedSchedule}
+                  onScheduleSelect={onScheduleSelect}
+                  doctorId={doctorId}
+                  key={day}
+                  day={day}
+                />
+              ))}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
