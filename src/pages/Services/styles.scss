@@ -32,9 +32,13 @@
       min-width: 11rem;
 
       &:focus, &:active, &:hover {
-        color: #3A83DC !important;
+        color: white !important;
         border-color: #3A83DC !important;
-        background-color: transparent !important;
+        background-color: #3A83DC !important;
+
+        svg {
+          fill: white;
+        }
       }
 
       svg {
@@ -51,6 +55,10 @@
         color: #00E987 !important;
         border-color: #00E987 !important;
         background-color: transparent !important;
+      }
+
+      &:disabled {
+        color: #00E987;
       }
     }
 

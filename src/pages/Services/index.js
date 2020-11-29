@@ -425,6 +425,7 @@ const Services = () => {
       {category.data != null && (
         <div className='services-root__footer'>
           <LoadingButton
+            disabled={category?.data?.id === 'all-services'}
             variant='outline-primary'
             className='btn-outline-primary import-btn'
             isLoading={isUploading}
@@ -442,6 +443,7 @@ const Services = () => {
             <IconEdit />
           </Button>
           <Button
+            disabled={category?.data?.id === 'all-services'}
             variant='outline-primary add-service-btn'
             onClick={handleAddOrEditService}
           >

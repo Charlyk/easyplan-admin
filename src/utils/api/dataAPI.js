@@ -1472,7 +1472,10 @@ export default {
    */
   importServices: async (requestBody, categoryId) => {
     try {
-      const url = `${baseURL}/services/${categoryId}/import`;
+      let url = `${baseURL}/services/import`;
+      if (categoryId != null) {
+        url += `/${categoryId}`;
+      }
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
       return responseData;
@@ -1495,7 +1498,10 @@ export default {
    */
   parseServices: async (requestBody, categoryId) => {
     try {
-      const url = `${baseURL}/services/${categoryId}/parse`;
+      let url = `${baseURL}/services/parse`;
+      if (categoryId != null) {
+        url += `/${categoryId}`;
+      }
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
       return responseData;
