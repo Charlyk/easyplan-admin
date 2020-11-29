@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { Typography } from '@material-ui/core';
+import {
+  Typography,
+  Table,
+  TableContainer,
+  TableRow,
+  TableCell,
+  TableHead,
+  TableBody,
+} from '@material-ui/core';
 import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment';
@@ -121,30 +129,28 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           {textForKey("It's a day off")}
         </Typography>
       )}
-      <table>
-        <thead>
-          <tr>
-            {hours.map(item => (
-              <td
-                align='center'
-                style={{ width: `calc(100% / ${hours.length})` }}
-                key={item}
-              >
-                {item}
-              </td>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {hours.map(item => (
-              <td align='center' valign='top' key={`patients-${item}`}>
-                {schedulesForHour(item).map(renderPatientItem)}
-              </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
+      <TableContainer classes={{ root: 'table-container' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {hours.map(item => (
+                <TableCell align='center' key={item}>
+                  {item}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {hours.map(item => (
+                <TableCell align='center' valign='top' key={`patients-${item}`}>
+                  {schedulesForHour(item).map(renderPatientItem)}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
