@@ -1,6 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
+import { Box } from '@material-ui/core';
+import { usePubNub } from 'pubnub-react';
+import { ProgressBar } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
@@ -18,10 +21,10 @@ import {
   clinicDoctorsSelector,
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import {
-  fetchClinicData,
   generateReducerActions,
   logUserAction,
   uploadFileToAWS,
@@ -45,6 +48,8 @@ const reducerTypes = {
   setIsUploading: 'setIsUploading',
   setImportData: 'setImportData',
   setMappingModal: 'setMappingModal',
+  setParsedValue: 'setParsedValue',
+  setIsParsing: 'setIsParsing',
 };
 
 const reducerActions = generateReducerActions(reducerTypes);
@@ -86,6 +91,10 @@ const reducer = (state, action) => {
       };
     case reducerTypes.setMappingModal:
       return { ...state, mappingModal: action.payload };
+    case reducerTypes.setParsedValue:
+      return { ...state, parsedValue: action.payload };
+    case reducerTypes.setIsParsing:
+      return { ...state, isParsing: action.payload };
     default:
       return state;
   }
@@ -115,10 +124,14 @@ const initialState = {
     mode: MappingData.none,
     data: null,
   },
+  isParsing: false,
+  parsedValue: 0,
 };
 
 const Calendar = () => {
+  const pubnub = usePubNub();
   const dispatch = useDispatch();
+  const currentUser = useSelector(userSelector);
   const services = useSelector(clinicServicesSelector);
   const doctors = useSelector(clinicDoctorsSelector);
   const [
@@ -137,9 +150,23 @@ const Calendar = () => {
       isUploading,
       importData,
       mappingModal,
+      isParsing,
+      parsedValue,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    pubnub.subscribe({
+      channels: [`${currentUser.id}-import_schedules_channel`],
+    });
+    pubnub.addListener({ message: handlePubnubMessageReceived });
+    return () => {
+      pubnub.unsubscribe({
+        channels: [`${currentUser.id}-import_schedules_channel`],
+      });
+    };
+  }, []);
 
   useEffect(() => {
     const newDoctors = doctors.map(item => {
@@ -154,6 +181,21 @@ const Calendar = () => {
       localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
     }
   }, [doctors, services]);
+
+  const handlePubnubMessageReceived = remoteMessage => {
+    const { message } = remoteMessage;
+    const { count, total, done } = message;
+    if (done) {
+      localDispatch(reducerActions.setParsedValue(100));
+      setTimeout(() => {
+        localDispatch(reducerActions.setIsParsing(false));
+        dispatch(toggleAppointmentsUpdate());
+      }, 3500);
+    } else {
+      const percentage = (count / total) * 100;
+      localDispatch(reducerActions.setParsedValue(Math.round(percentage)));
+    }
+  };
 
   const handleAppointmentModalOpen = () => {
     dispatch(
@@ -272,17 +314,11 @@ const Calendar = () => {
   };
 
   const handleImportSchedules = async requestBody => {
-    localDispatch(reducerActions.setIsUploading(true));
-    const response = await dataAPI.importSchedules(requestBody);
-    if (response.isError) {
-      console.error(response.message);
-      localDispatch(reducerActions.setIsUploading(false));
-    } else {
-      setTimeout(() => {
-        dispatch(toggleAppointmentsUpdate());
-        localDispatch(reducerActions.setIsUploading(false));
-      }, 3000);
-    }
+    localDispatch(reducerActions.setIsParsing(true));
+    pubnub.publish({
+      channel: 'import_schedules_channel',
+      message: { ...requestBody, sender: currentUser.id },
+    });
   };
 
   const handleMappingSubmit = result => {
@@ -330,6 +366,16 @@ const Calendar = () => {
       }
     }
   };
+
+  const parsingProgressBar = isParsing && (
+    <Box position='absolute' bottom='2.5rem' left='2.5rem' right='2.5rem'>
+      <ProgressBar
+        now={parsedValue}
+        label={`${parsedValue}%`}
+        animated={parsedValue === 100}
+      />
+    </Box>
+  );
 
   return (
     <div className='calendar-root'>
@@ -389,6 +435,7 @@ const Calendar = () => {
           doctor={selectedDoctor}
           viewDate={viewDate}
         />
+        {parsingProgressBar}
       </div>
     </div>
   );

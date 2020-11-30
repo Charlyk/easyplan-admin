@@ -10,6 +10,8 @@ import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
 import moment from 'moment';
+import PubNub from 'pubnub';
+import { PubNubProvider } from 'pubnub-react';
 import { Modal, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -58,6 +60,12 @@ import authAPI from './utils/api/authAPI';
 import { fetchClinicData, updateLink } from './utils/helperFuncs';
 import { getAppLanguage, textForKey } from './utils/localization';
 import authManager from './utils/settings/authManager';
+
+const pubnub = new PubNub({
+  publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
+  subscribeKey: 'sub-c-6cdb4ab0-32f2-11eb-8e02-129fdf4b0d84',
+  uuid: authManager.getUserToken() || PubNub.generateUUID(),
+});
 
 function App() {
   moment.locale(getAppLanguage());
@@ -261,12 +269,14 @@ function App() {
             component={ResetPasswordForm}
           />
           <Route path='/login' exact component={Login} />
-          <Route
-            path='/'
-            component={
-              selectedClinic?.roleInClinic === 'DOCTOR' ? DoctorsMain : Main
-            }
-          />
+          <PubNubProvider client={pubnub}>
+            <Route
+              path='/'
+              component={
+                selectedClinic?.roleInClinic === 'DOCTOR' ? DoctorsMain : Main
+              }
+            />
+          </PubNubProvider>
         </Switch>
       </React.Fragment>
     </Router>

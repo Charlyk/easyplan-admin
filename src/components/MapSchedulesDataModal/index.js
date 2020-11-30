@@ -36,6 +36,7 @@ const reducerTypes = {
   setIsFetching: 'setIsFetching',
   setItems: 'setItems',
   setMappedItems: 'setMappedItems',
+  reset: 'reset',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -52,6 +53,8 @@ const reducer = (state, action) => {
       return { ...state, items: action.payload, mappedItems: [] };
     case reducerTypes.setMappedItems:
       return { ...state, mappedItems: action.payload };
+    case reducerTypes.reset:
+      return initialState;
     default:
       return state;
   }
@@ -70,6 +73,12 @@ const MapSchedulesDataModal = ({ title, mode, data, onSubmit, onClose }) => {
     reducer,
     initialState,
   );
+
+  useEffect(() => {
+    if (mode === MappingData.none) {
+      localDispatch(actions.reset());
+    }
+  }, [mode]);
 
   useEffect(() => {
     if (data != null) {

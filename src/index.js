@@ -1,5 +1,7 @@
 import React from 'react';
 
+import PubNub from 'pubnub';
+import { PubNubProvider } from 'pubnub-react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -10,6 +12,8 @@ import App from './App';
 import rootReducer from './redux/reducers/rootReducer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { userSelector } from './redux/selectors/rootSelector';
+import authManager from './utils/settings/authManager';
 
 // enable redux devtool
 const composeEnhancers =

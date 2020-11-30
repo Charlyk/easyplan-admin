@@ -4,8 +4,9 @@ import { CircularProgress } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
+import { usePubNub } from 'pubnub-react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
@@ -13,9 +14,11 @@ import {
   togglePatientsListUpdate,
   triggerServicesUpdate,
 } from '../../redux/actions/actions';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import CircularProgressWithLabel from '../CircularProgressWithLabel';
 import LoadingButton from '../LoadingButton';
 import './styles.scss';
 
@@ -28,6 +31,8 @@ export const UploadMode = {
 const initialState = {
   excelData: { cellTypes: [], table: { rows: [] } },
   isFetching: false,
+  isParsing: false,
+  parsedValue: 0,
   cellTypes: [],
 };
 
@@ -35,6 +40,9 @@ const reducerTypes = {
   setExcelData: 'setExcelData',
   setIsFetching: 'setIsFetching',
   setCellTypes: 'setCellTypes',
+  setIsParsing: 'setIsParsing',
+  setParsedValue: 'setParsedValue',
+  reset: 'reset',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -47,6 +55,16 @@ const reducer = (state, action) => {
       return { ...state, isFetching: action.payload };
     case reducerTypes.setCellTypes:
       return { ...state, cellTypes: action.payload };
+    case reducerTypes.setIsParsing:
+      return {
+        ...state,
+        isParsing: action.payload,
+        isFetching: action.payload ? false : state.isFetching,
+      };
+    case reducerTypes.setParsedValue:
+      return { ...state, parsedValue: action.payload };
+    case reducerTypes.reset:
+      return initialState;
     default:
       return state;
   }
@@ -55,30 +73,74 @@ const reducer = (state, action) => {
 const SetupExcelModal = ({
   title,
   open,
-  timeout,
   mode,
   data,
   onClose,
   onCellsReady,
 }) => {
+  const pubnub = usePubNub();
   const dispatch = useDispatch();
-  const [{ excelData, isFetching, cellTypes }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const currentUser = useSelector(userSelector);
+  const [
+    { excelData, isFetching, cellTypes, isParsing, parsedValue },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (!open) {
-      localDispatch(actions.setCellTypes([]));
+    if (open) {
+      pubnub.subscribe({
+        channels: [
+          `${currentUser.id}-import_patients_channel`,
+          `${currentUser.id}-import_services_channel`,
+        ],
+      });
+
+      pubnub.addListener({ message: handlePubnubMessageReceived });
     }
+    return () => {
+      localDispatch(actions.reset());
+      pubnub.unsubscribe({
+        channels: [
+          `${currentUser.id}-import_patients_channel`,
+          `${currentUser.id}-import_services_channel`,
+        ],
+      });
+    };
   }, [open]);
 
   useEffect(() => {
     fetchExcelData();
   }, [data]);
 
+  const handlePubnubMessageReceived = remoteMessage => {
+    const { channel, message } = remoteMessage;
+    const { count, total, done } = message;
+
+    if (
+      !channel.includes('import_patients_channel') &&
+      !channel.includes('import_services_channel')
+    ) {
+      return;
+    }
+
+    if (done) {
+      localDispatch(actions.setParsedValue(100));
+      setTimeout(() => {
+        if (channel.includes('import_patients_channel')) {
+          dispatch(togglePatientsListUpdate());
+        } else if (channel.includes('import_services_channel')) {
+          dispatch(triggerServicesUpdate());
+        }
+        onClose();
+      }, 3500);
+    } else {
+      const percentage = (count / total) * 100;
+      localDispatch(actions.setParsedValue(percentage));
+    }
+  };
+
   const handleCloseModal = () => {
-    if (isFetching) return;
+    if (isFetching || isParsing) return;
     onClose();
   };
 
@@ -139,54 +201,39 @@ const SetupExcelModal = ({
   };
 
   const handleSubmit = async () => {
-    if (!isFormValid()) return;
-    localDispatch(actions.setIsFetching(true));
+    if (!isFormValid() || isFetching || isParsing) return;
     const requestBody = {
       fileUrl: data.fileUrl,
       fileName: data.fileName,
       cellTypes,
     };
-    let isError = false;
-    let errorMessage = '';
 
     switch (mode) {
       case UploadMode.patients: {
-        const response = await dataAPI.submitPatientCells(requestBody);
-        isError = response.isError;
-        errorMessage = response.message;
+        pubnub.publish({
+          channel: 'import_patients_channel',
+          message: { ...requestBody, sender: currentUser.id },
+        });
+        localDispatch(actions.setIsParsing(true));
         break;
       }
       case UploadMode.services: {
-        const response = await dataAPI.parseServices(
-          requestBody,
-          data.categoryId,
-        );
-        isError = response.isError;
-        errorMessage = response.message;
+        pubnub.publish({
+          channel: 'import_services_channel',
+          message: {
+            ...requestBody,
+            sender: currentUser.id,
+            categoryId: data.categoryId,
+          },
+        });
+        localDispatch(actions.setIsParsing(true));
         break;
       }
       case UploadMode.schedules:
+        localDispatch(actions.setIsFetching(true));
         onCellsReady(requestBody);
         onClose();
         return;
-    }
-
-    if (isError) {
-      console.error(errorMessage);
-      localDispatch(actions.setIsFetching(false));
-    } else {
-      setTimeout(() => {
-        localDispatch(actions.setIsFetching(false));
-        switch (mode) {
-          case UploadMode.patients:
-            dispatch(togglePatientsListUpdate());
-            break;
-          case UploadMode.services:
-            dispatch(triggerServicesUpdate());
-            break;
-        }
-        onClose();
-      }, timeout);
     }
   };
 
@@ -210,8 +257,11 @@ const SetupExcelModal = ({
         </div>
       </Modal.Header>
       <Modal.Body>
-        {isFetching && <CircularProgress className='patient-details-spinner' />}
-        {!isFetching && rows.length > 0 && (
+        {isParsing && <CircularProgressWithLabel value={parsedValue} />}
+        {isFetching && !isParsing && (
+          <CircularProgress classes={{ root: 'progress-bar-root' }} />
+        )}
+        {!isFetching && !isParsing && rows.length > 0 && (
           <div className='table-container'>
             <table>
               <thead>
@@ -271,10 +321,10 @@ const SetupExcelModal = ({
           <IconClose />
         </Button>
         <LoadingButton
-          isLoading={isFetching}
+          isLoading={isFetching || isParsing}
           onClick={handleSubmit}
           className='positive-button'
-          disabled={!isFormValid() || isFetching}
+          disabled={!isFormValid() || isFetching || isParsing}
         >
           {textForKey('Save')}
           <IconSuccess fill='#FFF' />

@@ -36,6 +36,7 @@ import {
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import authManager from '../../utils/settings/authManager';
 import PatientRow from './comps/PatientRow';
 
 const initialState = {

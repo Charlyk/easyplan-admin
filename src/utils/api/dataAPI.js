@@ -12,7 +12,7 @@ Axios.interceptors.request.use(async function(config) {
 });
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://data.dev.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:5000/api'
@@ -1524,9 +1524,14 @@ export default {
   submitPatientCells: async requestBody => {
     try {
       const url = `${baseURL}/patients/submit-cells`;
-      const response = await Axios.post(url, requestBody);
-      const { data: responseData } = response;
-      return responseData;
+      const response = await fetch({
+        url: url,
+        headers: { Authorization: authManager.getUserToken() },
+        method: 'post',
+        body: requestBody,
+      });
+      const responseData = response.body;
+      return responseData.getReader();
     } catch (e) {
       return {
         isError: true,
