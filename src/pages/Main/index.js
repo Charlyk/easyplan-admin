@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 
 import './styles.scss';
 
+import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useLocation,
@@ -54,6 +55,7 @@ const reducer = (state, action) => {
 };
 
 const Main = () => {
+  const pubnub = usePubNub();
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -67,6 +69,12 @@ const Main = () => {
   const selectedClinic = user?.clinics?.find(
     item => item.id === user.selectedClinic,
   );
+
+  useEffect(() => {
+    if (user != null) {
+      pubnub.setUUID(user.id);
+    }
+  }, [user]);
 
   const getPageTitle = () => {
     return paths[currentPath];

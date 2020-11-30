@@ -74,8 +74,9 @@ const RegisterForm = ({ onGoBack }) => {
     if (response.isError) {
       console.error(response.message);
       setErrorMessage(response.message);
-    } else {
+    } else if (response.data != null) {
       authManager.setUserToken(response.data.token);
+      authManager.setUserId(response.data.user.id);
       dispatch(setCurrentUser(response?.data?.user));
     }
     setIsLoading(false);

@@ -43,6 +43,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
       setErrorMessage(response.message);
     } else {
       authManager.setUserToken(response.data.token);
+      authManager.setUserId(response.data.user.id);
       dispatch(setCurrentUser(response.data.user));
       dispatch(fetchClinicData());
     }
