@@ -192,6 +192,9 @@ const Calendar = () => {
         dispatch(toggleAppointmentsUpdate());
       }, 3500);
     } else {
+      if (!isParsing) {
+        localDispatch(reducerActions.setIsParsing(true));
+      }
       const percentage = (count / total) * 100;
       localDispatch(reducerActions.setParsedValue(Math.round(percentage)));
     }
@@ -369,11 +372,17 @@ const Calendar = () => {
   };
 
   const parsingProgressBar = isParsing && (
-    <Box position='absolute' bottom='2.5rem' left='2.5rem' right='2.5rem'>
+    <Box
+      className='parsing-progress-wrapper'
+      position='absolute'
+      bottom='2.5rem'
+      left='2.5rem'
+      right='2.5rem'
+    >
       <ProgressBar
         now={parsedValue}
         label={`${parsedValue}%`}
-        animated={parsedValue === 100}
+        animated={parsedValue === 100 || parsedValue === 0}
       />
     </Box>
   );

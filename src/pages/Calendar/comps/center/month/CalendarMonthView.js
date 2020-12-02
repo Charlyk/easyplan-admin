@@ -46,6 +46,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
       console.error(response.isError);
     } else {
       const newSchedules = [];
+      console.log(response.data);
       for (let prop in response.data) {
         const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');
         newSchedules.push({ date, schedules: response.data[prop] });
