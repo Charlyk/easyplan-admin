@@ -16,6 +16,7 @@ import {
 } from '../../redux/actions/actions';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { env } from '../../utils/constants';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import CircularProgressWithLabel from '../CircularProgressWithLabel';
@@ -208,10 +209,12 @@ const SetupExcelModal = ({
       cellTypes,
     };
 
+    const environment = env === 'local' || env === 'dev' ? 'dev' : 'prod';
+
     switch (mode) {
       case UploadMode.patients: {
         pubnub.publish({
-          channel: 'import_patients_channel',
+          channel: `${environment}_import_patients_channel`,
           message: { ...requestBody, sender: currentUser.id },
         });
         localDispatch(actions.setIsParsing(true));
@@ -219,7 +222,7 @@ const SetupExcelModal = ({
       }
       case UploadMode.services: {
         pubnub.publish({
-          channel: 'import_services_channel',
+          channel: `${environment}_import_services_channel`,
           message: {
             ...requestBody,
             sender: currentUser.id,

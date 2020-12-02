@@ -12,7 +12,7 @@ Axios.interceptors.request.use(async function(config) {
 });
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://data.dev.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:5000/api'

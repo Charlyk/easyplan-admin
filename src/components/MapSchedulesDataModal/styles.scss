@@ -88,12 +88,19 @@
           padding: .5rem;
           border: #ededed 1px solid;
           min-width: 12rem;
-          font-family: Inter, sans-serif;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 1rem;
-          line-height: 1rem;
-          color: #34354C;
+
+          .data-label {
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 1rem;
+            color: #34354C;
+
+            &.placeholder {
+              color: #CDCEEA;
+            }
+          }
         }
       }
     }

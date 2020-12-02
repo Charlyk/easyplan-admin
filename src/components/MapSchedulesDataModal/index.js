@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 
 import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sortedBy from 'lodash/sortBy';
@@ -179,7 +180,19 @@ const MapSchedulesDataModal = ({ title, mode, data, onSubmit, onClose }) => {
               <tbody>
                 {items.map(item => (
                   <tr key={item}>
-                    <td>{item}</td>
+                    <td>
+                      <Typography
+                        classes={{
+                          root: clsx('data-label', {
+                            placeholder: item.length === 0,
+                          }),
+                        }}
+                      >
+                        {item.length > 0
+                          ? item
+                          : textForKey('No name specified')}
+                      </Typography>
+                    </td>
                     <td>
                       <Form.Group>
                         <Form.Control

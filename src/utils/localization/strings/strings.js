@@ -318,6 +318,7 @@ export default {
     visitdate: 'Visit date',
     'value in your file': 'Value in your file',
     'value in easyplan': 'Value in EasyPlan',
+    'no name specified': 'No name specified',
   },
   ro: {
     analytics: 'Analitică',
@@ -642,6 +643,7 @@ export default {
     visitdate: 'Data vizitei',
     'value in your file': 'Valoarea în fișier',
     'value in easyplan': 'Valoarea în EasyPlan',
+    'no name specified': 'Nu este specificat un nume',
   },
   ru: {
     analytics: 'Analytics',
@@ -959,5 +961,6 @@ export default {
     visitdate: 'Visit date',
     'value in your file': 'Value in your file',
     'value in easyplan': 'Value in EasyPlan',
+    'no name specified': 'No name specified',
   },
 };

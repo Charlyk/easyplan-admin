@@ -23,7 +23,7 @@ import {
 } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action } from '../../utils/constants';
+import { Action, env } from '../../utils/constants';
 import {
   generateReducerActions,
   logUserAction,
@@ -315,8 +315,10 @@ const Calendar = () => {
 
   const handleImportSchedules = async requestBody => {
     localDispatch(reducerActions.setIsParsing(true));
+    const environment = env === 'local' || env === 'dev' ? 'dev' : 'prod';
+    console.log('environment', environment);
     pubnub.publish({
-      channel: 'import_schedules_channel',
+      channel: `${environment}_import_schedules_channel`,
       message: { ...requestBody, sender: currentUser.id },
     });
   };
