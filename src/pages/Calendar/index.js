@@ -315,8 +315,7 @@ const Calendar = () => {
 
   const handleImportSchedules = async requestBody => {
     localDispatch(reducerActions.setIsParsing(true));
-    const environment = env === 'local' || env === 'dev' ? 'dev' : 'prod';
-    console.log('environment', environment);
+    const environment = env === '' ? 'prod' : env;
     pubnub.publish({
       channel: `${environment}_import_schedules_channel`,
       message: { ...requestBody, sender: currentUser.id },

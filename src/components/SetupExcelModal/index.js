@@ -209,7 +209,7 @@ const SetupExcelModal = ({
       cellTypes,
     };
 
-    const environment = env === 'local' || env === 'dev' ? 'dev' : 'prod';
+    const environment = env === '' ? 'prod' : env;
 
     switch (mode) {
       case UploadMode.patients: {
