@@ -12,11 +12,11 @@ Axios.interceptors.request.use(async function(config) {
 });
 
 const baseURL =
-  env === 'dev' || env === 'local'
-    ? 'https://data.dev.easyplan.pro/api'
+  env === 'dev'
+    ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:5000/api'
-    : 'https://data.prod.easyplan.pro/api';
+    : 'https://api.easyplan.pro/api';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 

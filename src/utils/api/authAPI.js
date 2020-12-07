@@ -5,11 +5,11 @@ import { textForKey } from '../localization';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
-    ? 'https://auth.dev.easyplan.pro/api/authentication'
+  env === 'dev'
+    ? 'https://api.easyplan.pro/api/authentication'
     : env === 'local'
     ? 'http://localhost:5000/api/authentication'
-    : 'https://auth.prod.easyplan.pro/api/authentication';
+    : 'https://api.easyplan.pro/api/authentication';
 
 export default {
   /**
