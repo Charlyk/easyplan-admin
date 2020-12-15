@@ -110,10 +110,6 @@ const Services = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchServices();
   }, [updateServices]);
 
   useEffect(() => {

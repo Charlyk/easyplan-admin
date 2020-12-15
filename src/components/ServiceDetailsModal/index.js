@@ -15,7 +15,7 @@ import { clinicDoctorsSelector } from '../../redux/selectors/clinicSelector';
 import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
+import { fetchClinicData, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ConfirmationModal from '../ConfirmationModal';
 import LeftSideModal from '../LeftSideModal';
@@ -80,10 +80,12 @@ const ServiceDetailsModal = () => {
 
   const mapDoctorsToServices = () => {
     return clinicDoctors.map(item => {
-      const itemService = item.services.find(it => it.id === service?.id);
+      const itemService = item.services.find(
+        it => it.serviceId === service?.id,
+      );
       return {
         doctorId: item.id,
-        doctorName: `${item.firstName} ${item.lastName}`,
+        doctorName: item.fullName,
         selected: itemService != null,
         price: itemService?.price,
         percentage: itemService?.percentage,
@@ -105,8 +107,9 @@ const ServiceDetailsModal = () => {
     } else {
       await createService();
     }
-    dispatch(triggerServicesUpdate());
+    dispatch(fetchClinicData());
     setIsLoading(false);
+    handleCloseModal();
   };
 
   const createService = async () => {
@@ -116,7 +119,6 @@ const ServiceDetailsModal = () => {
     } else {
       logUserAction(Action.CreateService, JSON.stringify(serviceInfo));
     }
-    handleCloseModal();
   };
 
   const editService = async () => {
@@ -132,7 +134,6 @@ const ServiceDetailsModal = () => {
         }),
       );
     }
-    handleCloseModal();
   };
 
   const deleteService = async () => {
@@ -143,7 +144,7 @@ const ServiceDetailsModal = () => {
     } else {
       logUserAction(Action.DeleteService, JSON.stringify(service));
       setDeleteConfirmationVisible(false);
-      dispatch(triggerCategoriesUpdate());
+      dispatch(fetchClinicData());
       handleCloseModal();
     }
     setIsDeleting(false);

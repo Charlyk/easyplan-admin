@@ -71,11 +71,11 @@ export default ServiceDoctors;
 
 ServiceDoctors.propTypes = {
   open: PropTypes.bool,
-  serviceId: PropTypes.string,
+  serviceId: PropTypes.number,
   doctors: PropTypes.arrayOf(
     PropTypes.shape({
       doctorName: PropTypes.string,
-      doctorId: PropTypes.string,
+      doctorId: PropTypes.number,
       percentage: PropTypes.number,
       price: PropTypes.number,
       selected: PropTypes.bool,

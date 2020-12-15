@@ -113,7 +113,7 @@ export default ServiceDoctor;
 ServiceDoctor.propTypes = {
   serviceData: PropTypes.shape({
     doctorName: PropTypes.string,
-    doctorId: PropTypes.string,
+    doctorId: PropTypes.number,
     percentage: PropTypes.number,
     price: PropTypes.number,
     selected: PropTypes.bool,

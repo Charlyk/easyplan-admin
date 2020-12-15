@@ -229,6 +229,12 @@
   border-radius: 4px;
   padding: 1.5rem;
 
+  .react-tel-input {
+    .form-control {
+      width: 100%;
+    }
+  }
+
   .form-title {
     width: 100%;
   }

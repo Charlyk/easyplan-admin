@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { Role } from '../../utils/constants';
+
 export const clinicSelector = state => state.clinic;
 
 export const clinicDetailsSelector = createSelector(
@@ -14,7 +16,7 @@ export const clinicUsersSelector = createSelector(
 
 export const clinicDoctorsSelector = createSelector(
   clinicUsersSelector,
-  users => users.filter(item => item.roleInClinic === 'DOCTOR'),
+  users => users.filter(item => item.roleInClinic === Role.doctor),
 );
 
 export const clinicServicesSelector = createSelector(
