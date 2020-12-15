@@ -215,7 +215,7 @@ export default {
 
   /**
    * Fetch all users for current clinic
-   * @return {Promise<{isError: boolean, message: string|null, data: [{id: string, firstName: string|null, lastName: string|null, avatar: string|null, phoneNumber: string|null, email: string, role: string}]}|null>}
+   * @return {Promise<{isError: boolean, message: string|null, data: { users: object[], invitations: object[] }|null}>}
    */
   fetchUsers: async () => {
     try {
@@ -1323,13 +1323,13 @@ export default {
 
   /**
    * Invite existent user to clinic
-   * @param {{ email: string, role: 'RECEPTION'|'DOCTOR'|'MANAGER'}} body
+   * @param {{ emailAddress: string, role: 'RECEPTION'|'DOCTOR'|'MANAGER'}} body
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  inviteExistentUser: async body => {
+  inviteUserToClinic: async body => {
     try {
-      const url = `${baseURL}/users/invite-existent`;
-      const response = await Axios.post(url, body);
+      const url = `${baseURL}/users/send-invitation`;
+      const response = await Axios.put(url, body);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

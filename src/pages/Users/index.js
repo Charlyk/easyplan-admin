@@ -3,12 +3,11 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
 import InviteUserModal from '../../components/InviteUserModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
-import { setClinicUsers } from '../../redux/actions/clinicActions';
 import { updateUsersSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Role } from '../../utils/constants';
@@ -18,7 +17,6 @@ import UserItem from './comps/UserItem';
 import UsersHeader from './comps/UsersHeader';
 
 const Users = props => {
-  const dispatch = useDispatch();
   const updateUsers = useSelector(updateUsersSelector);
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
   const [isInviting, setIsInviting] = useState({
@@ -29,9 +27,12 @@ const Users = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isInvitingExistent, setIsInvitingExistent] = useState(false);
   const [invitingExistentError, setInitingExistentError] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [data, setData] = useState({ users: [], invitations: [] });
   const [userToDelete, setUserToDelete] = useState(null);
-  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState({
+    open: false,
+    type: Role.reception,
+  });
   const [isUserModalOpen, setIsUserModalOpen] = useState({
     open: false,
     user: null,
@@ -52,12 +53,9 @@ const Users = props => {
     const response = await dataAPI.fetchUsers();
     if (response.isError) {
       console.error(response.message);
-      setUsers([]);
+      setData({ users: [], invitations: [] });
     } else {
-      setUsers(response.data);
-      dispatch(
-        setClinicUsers(response.data.filter(it => it.role === Role.doctor)),
-      );
+      setData(response.data);
     }
     setIsLoading(false);
   };
@@ -66,13 +64,13 @@ const Users = props => {
     setSelectedFilter(newFilter);
   };
 
-  const doctors = users.filter(item => item.role === Role.doctor);
+  const doctors = data.users.filter(item => item.role === Role.doctor);
 
-  const admins = users.filter(
+  const admins = data.users.filter(
     item => item.role === Role.admin || item.role === Role.manager,
   );
 
-  const reception = users.filter(item => item.role === Role.reception);
+  const reception = data.users.filter(item => item.role === Role.reception);
 
   const handleUserModalClose = () => {
     setIsUserModalOpen({ ...isUserModalOpen, open: false });
@@ -82,28 +80,31 @@ const Users = props => {
   };
 
   const handleUserModalOpen = (event, user, type = Role.manager) => {
-    setIsUserModalOpen({ open: true, user, type });
+    openInviteModal(type === Role.invitations ? Role.reception : type);
   };
 
   const handleInviteUser = async (email, role) => {
     setIsInvitingExistent(true);
     setInitingExistentError(null);
-    const response = await dataAPI.inviteExistentUser({ email, role });
+    const response = await dataAPI.inviteUserToClinic({
+      emailAddress: email,
+      role,
+    });
     if (response.isError) {
       setInitingExistentError(response.message);
     } else {
-      setShowInviteModal(false);
+      setShowInviteModal({ open: false, type: Role.reception });
       await fetchUsers();
     }
     setIsInvitingExistent(false);
   };
 
-  const openInviteModal = () => {
-    setShowInviteModal(true);
+  const openInviteModal = (type = Role.reception) => {
+    setShowInviteModal({ open: true, type });
   };
 
   const closeInviteModal = () => {
-    setShowInviteModal(false);
+    setShowInviteModal({ open: false, type: Role.reception });
   };
 
   const canShowType = type => {
@@ -111,23 +112,33 @@ const Users = props => {
   };
 
   const renderNoData = type => {
-    if (users.some(item => item.role === type) || isLoading) return null;
     let message = '';
     let buttonText = '';
     switch (type) {
       case Role.admin:
       case Role.manager:
+        if (data.users.some(item => item.role === type) || isLoading)
+          return null;
         if (admins.length > 0) return null;
         message = textForKey('No managers yet.');
         buttonText = textForKey('Add manager');
         break;
       case Role.doctor:
+        if (data.users.some(item => item.role === type) || isLoading)
+          return null;
         message = textForKey('No doctors yet.');
         buttonText = textForKey('Add doctor');
         break;
       case Role.reception:
+        if (data.users.some(item => item.role === type) || isLoading)
+          return null;
         message = textForKey('No receptionists yet.');
         buttonText = textForKey('Add receptionist');
+        break;
+      case Role.invitations:
+        if (data.invitations.length > 0 || isLoading) return null;
+        message = `${textForKey('No pending invitations')}.`;
+        buttonText = textForKey('Invite user');
         break;
       default:
         return null;
@@ -149,7 +160,7 @@ const Users = props => {
   };
 
   const renderSkeleton = () => {
-    if (!isLoading || users.length > 0) return null;
+    if (!isLoading || data.users.length > 0) return null;
     return (
       <div className='users-root__skeleton'>
         <Skeleton variant='rect' animation='wave' />
@@ -169,7 +180,10 @@ const Users = props => {
 
   const handleResendInvitation = async (event, user) => {
     setIsInviting({ loading: true, userId: user.id });
-    await dataAPI.resendUserInvitation(user.id);
+    await dataAPI.inviteUserToClinic({
+      emailAddress: user.email,
+      role: user.roleInClinic,
+    });
     setIsInviting({ loading: false, userId: null });
     setShowInvitationSent(true);
   };
@@ -197,10 +211,12 @@ const Users = props => {
       <InviteUserModal
         error={invitingExistentError}
         isLoading={isInvitingExistent}
-        open={showInviteModal}
+        open={showInviteModal.open}
+        type={showInviteModal.type}
         onInvite={handleInviteUser}
         onClose={closeInviteModal}
       />
+
       <ConfirmationModal
         show={Boolean(userToDelete)}
         onClose={closeDeleteUserDialog}
@@ -223,13 +239,34 @@ const Users = props => {
         user={isUserModalOpen.user}
         role={isUserModalOpen.type}
       />
+
       <UsersHeader
         onFilterChange={handleFilterChange}
         filter={selectedFilter}
-        onAddUser={handleUserModalOpen}
         onInviteUser={openInviteModal}
       />
+
       <div className='users-root__content'>
+        {canShowType(Role.invitations) && (
+          <div className='users-root__group'>
+            <span className='users-root__group-title'>
+              {textForKey('Invitations')}
+            </span>
+            {data.invitations.map(item => (
+              <UserItem
+                isInvitation={true}
+                isInviting={isInviting.userId === item.id && isInviting.loading}
+                onResend={handleResendInvitation}
+                user={item}
+                key={`invitation-${item.id}`}
+                onDelete={startUserDelete}
+                onEdit={handleUserModalOpen}
+              />
+            ))}
+            {renderSkeleton()}
+            {renderNoData(Role.invitations)}
+          </div>
+        )}
         {canShowType(Role.doctor) && (
           <div className='users-root__group'>
             <span className='users-root__group-title'>
@@ -240,7 +277,7 @@ const Users = props => {
                 isInviting={isInviting.userId === item.id && isInviting.loading}
                 onResend={handleResendInvitation}
                 user={item}
-                key={item.id}
+                key={`user-${item.id}`}
                 onDelete={startUserDelete}
                 onEdit={handleUserModalOpen}
               />
@@ -259,7 +296,7 @@ const Users = props => {
                 isInviting={isInviting.userId === item.id && isInviting.loading}
                 onResend={handleResendInvitation}
                 user={item}
-                key={item.id}
+                key={`user-${item.id}`}
                 onDelete={startUserDelete}
                 onEdit={handleUserModalOpen}
               />
@@ -278,7 +315,7 @@ const Users = props => {
                 isInviting={isInviting.userId === item.id && isInviting.loading}
                 onResend={handleResendInvitation}
                 user={item}
-                key={item.id}
+                key={`user-${item.id}`}
                 onDelete={startUserDelete}
                 onEdit={handleUserModalOpen}
               />

@@ -55,6 +55,7 @@ export const Role = {
   admin: 'ADMIN',
   manager: 'MANAGER',
   reception: 'RECEPTION',
+  invitations: 'INVITATIONS',
 };
 
 export const EmailRegex = /.+@.+\.[A-Za-z]+$/;

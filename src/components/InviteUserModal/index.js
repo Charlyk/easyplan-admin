@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
+import { Form, InputGroup } from 'react-bootstrap';
 
+import { EmailRegex, Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
 import './styles.scss';
-import { Form, InputGroup } from 'react-bootstrap';
 
-import { EmailRegex, Role } from '../../utils/constants';
-
-const InviteUserModal = ({ open, error, isLoading, onClose, onInvite }) => {
+const InviteUserModal = ({
+  open,
+  type,
+  error,
+  isLoading,
+  onClose,
+  onInvite,
+}) => {
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState(Role.reception);
+  const [role, setRole] = useState(type);
 
   useEffect(() => {
     if (!open) {
       setEmail('');
     }
   }, [open]);
+
+  useEffect(() => {
+    setRole(type);
+  }, [type]);
 
   const handleInviteUser = () => {
     onInvite(email, role);
@@ -81,6 +91,7 @@ export default InviteUserModal;
 InviteUserModal.propTypes = {
   error: PropTypes.string,
   open: PropTypes.bool,
+  type: PropTypes.oneOf([Role.reception, Role.manager, Role.doctor]),
   isLoading: PropTypes.bool,
   onClose: PropTypes.func,
   onInvite: PropTypes.func,

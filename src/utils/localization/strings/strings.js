@@ -322,6 +322,9 @@ export default {
     'applicable on all teeth': 'Applicable on all teeth',
     'applicable on single tooth': 'Applicable on single tooth',
     'braces service': 'Braces service',
+    'invite user': 'Invite user',
+    'no pending invitations': 'No pending invitations',
+    invitations: 'Invitations',
   },
   ro: {
     analytics: 'Analitică',
@@ -650,6 +653,9 @@ export default {
     'applicable on all teeth': 'Aplicabil pe toată dantura',
     'applicable on single tooth': 'Aplicabil pe un singur dinte',
     'braces service': 'Serviciu pentru aparatul dentar',
+    'invite user': 'Invită utilizator',
+    'no pending invitations': 'Nu sunt invitații în așteptare',
+    invitations: 'Invitații',
   },
   ru: {
     analytics: 'Analytics',
@@ -971,5 +977,8 @@ export default {
     'applicable on all teeth': 'Applicable on all teeth',
     'applicable on single tooth': 'Applicable on single tooth',
     'braces service': 'Braces service',
+    'invite user': 'Invite user',
+    'no pending invitations': 'No pending invitations',
+    invitations: 'Invitations',
   },
 };

@@ -7,9 +7,14 @@ export const clinicDetailsSelector = createSelector(
   state => state.clinic,
 );
 
-export const clinicDoctorsSelector = createSelector(
+export const clinicUsersSelector = createSelector(
   clinicDetailsSelector,
-  clinic => clinic.users.filter(item => item.roleInClinic === 'DOCTOR'),
+  clinic => clinic.users,
+);
+
+export const clinicDoctorsSelector = createSelector(
+  clinicUsersSelector,
+  users => users.filter(item => item.roleInClinic === 'DOCTOR'),
 );
 
 export const clinicServicesSelector = createSelector(

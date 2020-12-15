@@ -8,7 +8,7 @@ import EasyTab from '../../../components/EasyTab';
 import { Role } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 
-const UsersHeader = ({ onFilterChange, filter, onAddUser, onInviteUser }) => {
+const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {
   const handleTabClick = tabName => {
     onFilterChange(tabName);
   };
@@ -36,20 +36,18 @@ const UsersHeader = ({ onFilterChange, filter, onAddUser, onInviteUser }) => {
           onClick={() => handleTabClick(Role.admin)}
           selected={filter === Role.admin}
         />
+        <EasyTab
+          title={textForKey('Invitations')}
+          onClick={() => handleTabClick(Role.invitations)}
+          selected={filter === Role.invitations}
+        />
       </div>
       <div className='buttons-wrapper'>
         <Button
           className='positive-button'
-          onClick={event => onInviteUser(event)}
+          onClick={() => onInviteUser(Role.reception)}
         >
-          {textForKey('Invite existent user')}
-          <IconPlus />
-        </Button>
-        <Button
-          className='positive-button'
-          onClick={event => onAddUser(event, null)}
-        >
-          {textForKey('Add new user')}
+          {textForKey('Invite user')}
           <IconPlus />
         </Button>
       </div>
@@ -61,7 +59,12 @@ export default UsersHeader;
 
 UsersHeader.propTypes = {
   onFilterChange: PropTypes.func,
-  filter: PropTypes.oneOf([Role.all, Role.admin, Role.reception, Role.doctor]),
-  onAddUser: PropTypes.func,
+  filter: PropTypes.oneOf([
+    Role.all,
+    Role.admin,
+    Role.reception,
+    Role.doctor,
+    Role.invitations,
+  ]),
   onInviteUser: PropTypes.func,
 };

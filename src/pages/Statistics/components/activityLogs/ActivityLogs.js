@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import moment from 'moment';
 import { Button, Form } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 import ActionLogModal from '../../../../components/ActionLogModal';
 import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
+import { clinicUsersSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';
@@ -26,8 +28,8 @@ const initialState = {
 
 const ActivityLogs = () => {
   const pickerRef = useRef(null);
+  const users = useSelector(clinicUsersSelector);
   const [selectedUser, setSelectedUser] = useState(initialState.selectedUser);
-  const [users, setUsers] = useState([]);
   const [[startDate, endDate], setDateRange] = useState(initialState.dateRange);
   const [showDetails, setShowDetails] = useState({
     open: false,
@@ -40,20 +42,8 @@ const ActivityLogs = () => {
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
 
   useEffect(() => {
-    fetchUsers();
+    fetchActivityLogs();
   }, []);
-
-  const fetchUsers = async () => {
-    setIsLoading(true);
-    const response = await dataAPI.fetchUsers();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      setUsers(response.data);
-      await fetchActivityLogs();
-    }
-    setIsLoading(false);
-  };
 
   const fetchActivityLogs = async () => {
     setIsLoading(true);
@@ -85,7 +75,7 @@ const ActivityLogs = () => {
   };
 
   const handleUserChange = event => {
-    const newValue = event.target.value;
+    const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       setSelectedUser({ id: newValue });
       return;
@@ -161,7 +151,7 @@ const ActivityLogs = () => {
                   <td className='date-cell'>
                     {moment(item.created).format('DD MMM YYYY HH:mm')}
                   </td>
-                  <td className='user-cell'>{item.userName}</td>
+                  <td className='user-cell'>{item.user}</td>
                   <td className='details-cell'>{textForKey(item.action)}</td>
                   <td className='actions-cell'>
                     <Button
