@@ -130,9 +130,10 @@ const MainMenu = props => {
     handleCompanyClose();
   };
 
-  const selectedClinic =
-    currentUser?.clinics.find(item => item.id === currentUser.selectedClinic) ||
-    null;
+  const selectedClinic = currentUser.selectedClinic;
+  const userClinic = currentUser.clinics.find(
+    item => item.clinicId === selectedClinic?.id,
+  );
 
   const analyticsClass = clsx(
     'navigation__item div-item',
@@ -155,7 +156,7 @@ const MainMenu = props => {
       >
         <ClickAwayListener onClickAway={handleCompanyClose}>
           <span className='clinic-name'>
-            {selectedClinic?.clinicName || textForKey('Create clinic')}
+            {selectedClinic?.name || textForKey('Create clinic')}
           </span>
         </ClickAwayListener>
         <IconArrowDown />
@@ -170,7 +171,7 @@ const MainMenu = props => {
 
       <Nav defaultActiveKey={currentPath} className='navigation flex-column'>
         {menuItems.map(item => {
-          if (!item.roles.includes(selectedClinic?.roleInClinic)) return null;
+          if (!item.roles.includes(userClinic?.roleInClinic)) return null;
           if (item.type === 'group') {
             return (
               <Nav.Item key={item.id} as='div' className={analyticsClass}>

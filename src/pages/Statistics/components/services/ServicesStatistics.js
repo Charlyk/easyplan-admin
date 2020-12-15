@@ -83,8 +83,8 @@ const reducer = (state, action) => {
             .toDate();
       return {
         ...state,
-        selectedDoctor: { id: doctorId || 'all' },
-        selectedStatus: { id: status || 'all' },
+        selectedDoctor: { id: doctorId || -1 },
+        selectedStatus: { id: status || 'All' },
         dateRange: [fromDate, toDate],
         params: action.payload,
       };
@@ -97,9 +97,9 @@ const reducer = (state, action) => {
 };
 
 const initialState = {
-  selectedDoctor: { id: 'all' },
-  selectedService: { id: 'all' },
-  selectedStatus: { id: 'all' },
+  selectedDoctor: { id: -1 },
+  selectedService: { id: -1 },
+  selectedStatus: { id: 'All' },
   statistics: [],
   doctors: [],
   services: [],
@@ -156,9 +156,9 @@ const ServicesStatistics = () => {
     const requestData = {
       fromDate: startDate,
       toDate: endDate,
-      doctorId: selectedDoctor?.id || 'all',
-      serviceId: selectedService?.id || 'all',
-      status: selectedStatus?.id || 'all',
+      doctorId: selectedDoctor?.id || -1,
+      serviceId: selectedService?.id || -1,
+      status: selectedStatus?.id || 'All',
     };
     logUserAction(
       Action.ViewServicesStatistics,
@@ -204,8 +204,8 @@ const ServicesStatistics = () => {
 
   const handleDoctorChange = event => {
     const newValue = event.target.value;
-    if (newValue === 'all') {
-      localDispatch(reducerActions.setSelectedDoctor({ id: 'all' }));
+    if (newValue === -1) {
+      localDispatch(reducerActions.setSelectedDoctor({ id: -1 }));
       return;
     }
     const doctor = doctors.find(it => it.id === newValue);
@@ -214,8 +214,8 @@ const ServicesStatistics = () => {
 
   const handleServiceChange = event => {
     const newValue = event.target.value;
-    if (newValue === 'all') {
-      localDispatch(reducerActions.setSelectedService({ id: 'all' }));
+    if (newValue === -1) {
+      localDispatch(reducerActions.setSelectedService({ id: -1 }));
       return;
     }
     const service = services.find(it => it.id === newValue);
@@ -224,8 +224,8 @@ const ServicesStatistics = () => {
 
   const handleStatusChange = event => {
     const newValue = event.target.value;
-    if (newValue === 'all') {
-      localDispatch(reducerActions.setSelectedStatus({ id: 'all' }));
+    if (newValue === -1) {
+      localDispatch(reducerActions.setSelectedStatus({ id: 'All' }));
       return;
     }
     const status = Statuses.find(it => it.id === newValue);
@@ -264,7 +264,7 @@ const ServicesStatistics = () => {
             value={selectedService.id}
             custom
           >
-            <option value='all'>{textForKey('All services')}</option>
+            <option value={-1}>{textForKey('All services')}</option>
             {services.map(service => (
               <option key={service.id} value={service.id}>
                 {service.name}
@@ -283,7 +283,7 @@ const ServicesStatistics = () => {
             value={selectedDoctor.id}
             custom
           >
-            <option value='all'>{textForKey('All doctors')}</option>
+            <option value={-1}>{textForKey('All doctors')}</option>
             {doctors.map(doctor => (
               <option
                 key={doctor.id}
@@ -314,7 +314,7 @@ const ServicesStatistics = () => {
             value={selectedStatus.id}
             custom
           >
-            <option value='all'>{textForKey('All statuses')}</option>
+            <option value='All'>{textForKey('All statuses')}</option>
             {Statuses.map(status => (
               <option key={status.id} value={status.id}>
                 {status.name}

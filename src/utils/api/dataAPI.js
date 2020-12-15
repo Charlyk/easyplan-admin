@@ -4,18 +4,11 @@ import moment from 'moment';
 import { env } from '../constants';
 import authManager from '../settings/authManager';
 
-Axios.interceptors.request.use(async function(config) {
-  if (authManager.isLoggedIn()) {
-    config.headers.Authorization = authManager.getUserToken();
-  }
-  return config;
-});
-
 const baseURL =
   env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
-    ? 'http://localhost:5000/api'
+    ? 'http://localhost:8080/api'
     : 'https://api.easyplan.pro/api';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';

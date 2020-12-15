@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
-import { Form, FormControl, InputGroup, Spinner } from 'react-bootstrap';
+import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import IconSuccess from '../../../../assets/icons/iconSuccess';

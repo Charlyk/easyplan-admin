@@ -319,6 +319,9 @@ export default {
     'value in your file': 'Value in your file',
     'value in easyplan': 'Value in EasyPlan',
     'no name specified': 'No name specified',
+    'applicable on all teeth': 'Applicable on all teeth',
+    'applicable on single tooth': 'Applicable on single tooth',
+    'braces service': 'Braces service',
   },
   ro: {
     analytics: 'Analitică',
@@ -644,6 +647,9 @@ export default {
     'value in your file': 'Valoarea în fișier',
     'value in easyplan': 'Valoarea în EasyPlan',
     'no name specified': 'Nu este specificat un nume',
+    'applicable on all teeth': 'Aplicabil pe toată dantura',
+    'applicable on single tooth': 'Aplicabil pe un singur dinte',
+    'braces service': 'Serviciu pentru aparatul dentar',
   },
   ru: {
     analytics: 'Analytics',
@@ -962,5 +968,8 @@ export default {
     'value in your file': 'Value in your file',
     'value in easyplan': 'Value in EasyPlan',
     'no name specified': 'No name specified',
+    'applicable on all teeth': 'Applicable on all teeth',
+    'applicable on single tooth': 'Applicable on single tooth',
+    'braces service': 'Braces service',
   },
 };

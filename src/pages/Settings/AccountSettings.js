@@ -25,18 +25,18 @@ const AccountSettings = props => {
     avatarFile: null,
     firstName: currentUser.firstName,
     lastName: currentUser.lastName,
-    email: currentUser.username,
+    email: currentUser.email,
     phoneNumber: currentUser.phoneNumber,
     oldPassword: null,
     isPhoneValid: true,
   });
 
   useEffect(() => {
-    setData({ ...data, ...currentUser, email: currentUser?.username });
+    setData({ ...data, ...currentUser, email: currentUser?.email });
   }, [currentUser]);
 
   useEffect(() => {
-    const isChanged = data.email !== currentUser.username;
+    const isChanged = data.email !== currentUser.email;
     if (!isChanged) {
       setData({ ...data, oldPassword: null });
     }

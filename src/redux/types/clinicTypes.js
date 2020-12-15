@@ -1,5 +1,5 @@
 export default {
-  setClinicDoctors: 'setClinicDoctors',
+  setClinicUsers: 'setClinicUsers',
   setClinicServices: 'setClinicServices',
   setClinicDetails: 'setClinic',
 };

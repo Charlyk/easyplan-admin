@@ -14,11 +14,11 @@ const ClinicWorkingHours = () => {
   const dispatch = useDispatch();
   const clinic = useSelector(clinicDetailsSelector);
   const [isLoading, setIsLoading] = useState(false);
-  const [workDays, setWorkDays] = useState([]);
+  const [workdays, setWorkDays] = useState([]);
 
   useEffect(() => {
     setWorkDays(
-      clinic.workDays.map(it => ({
+      clinic.workdays.map(it => ({
         ...it,
         selected: !it.isDayOff,
       })),
@@ -26,7 +26,7 @@ const ClinicWorkingHours = () => {
   }, [clinic]);
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
-    const newDays = workDays.map(workDay => {
+    const newDays = workdays.map(workDay => {
       if (workDay.day !== day.day) {
         return workDay;
       }
@@ -44,14 +44,14 @@ const ClinicWorkingHours = () => {
 
   const submitForm = async () => {
     setIsLoading(true);
-    const response = await dataAPI.updateClinic({ ...clinic, workDays });
+    const response = await dataAPI.updateClinic({ ...clinic, workdays });
     console.log(response.data);
     dispatch(setClinic(response.data));
     setIsLoading(false);
   };
 
   const handleApplyToAll = day => {
-    const newDays = workDays.map(workDay => {
+    const newDays = workdays.map(workDay => {
       return {
         ...workDay,
         isDayOff: false,
@@ -68,7 +68,7 @@ const ClinicWorkingHours = () => {
       <span className='form-title'>{textForKey('Work Hours')}</span>
       <table className='days-wrapper'>
         <tbody>
-          {workDays.map((day, index) => (
+          {workdays.map((day, index) => (
             <WorkDay
               onApplyToAll={handleApplyToAll}
               day={day}

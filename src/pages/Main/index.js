@@ -67,7 +67,7 @@ const Main = () => {
     openAppointmentModal: false,
   });
   const selectedClinic = user?.clinics?.find(
-    item => item.id === user.selectedClinic,
+    item => item.clinicId === user.selectedClinic?.id,
   );
 
   useEffect(() => {
@@ -97,7 +97,8 @@ const Main = () => {
   };
 
   const handleChangeCompany = company => {
-    dispatch(changeSelectedClinic(company.id));
+    console.log(company);
+    dispatch(changeSelectedClinic(company.clinicId));
   };
 
   const handleAppointmentModalClose = () => {
@@ -123,10 +124,12 @@ const Main = () => {
   return (
     <div className='main-page' id='main-page'>
       <ServiceDetailsModal />
-      <PatientDetailsModal
-        {...patientDetails}
-        onClose={handleClosePatientDetails}
-      />
+      {patientDetails.patientId != null && (
+        <PatientDetailsModal
+          {...patientDetails}
+          onClose={handleClosePatientDetails}
+        />
+      )}
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
         schedule={appointmentModal?.schedule}

@@ -38,7 +38,7 @@ const CompanyDetailsForm = props => {
     phoneNumber: '',
     description: '',
     socialNetworks: '',
-    workDays: [],
+    workdays: [],
     currency: 'MDL',
     country: 'md',
     isPhoneValid: true,
@@ -51,13 +51,6 @@ const CompanyDetailsForm = props => {
       ...currentClinic,
     });
   }, [props, currentClinic]);
-
-  const handleBracketsChange = () => {
-    setData({
-      ...data,
-      hasBrackets: !data.hasBrackets,
-    });
-  };
 
   const handleLogoChange = event => {
     if (isSaving) return;
@@ -135,7 +128,7 @@ const CompanyDetailsForm = props => {
       currency: data.currency,
       country: data.country,
       description: data.description,
-      workDays: data.workDays,
+      workdays: data.workdays,
       hasBrackets: data.hasBrackets,
       logoUrl,
     };
@@ -240,14 +233,6 @@ const CompanyDetailsForm = props => {
           </Form.Group>
         </div>
         <div className='right'>
-          <Form.Group controlId='hasBrackets'>
-            <Form.Check
-              onChange={handleBracketsChange}
-              checked={data.hasBrackets}
-              type='checkbox'
-              label={textForKey('Offers Braces services')}
-            />
-          </Form.Group>
           <Form.Group style={{ flexDirection: 'column' }} controlId='currency'>
             <Form.Label>{textForKey('Currency')}</Form.Label>
             <Form.Control

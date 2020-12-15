@@ -11,7 +11,11 @@ import LoadingButton from '../../../components/LoadingButton';
 import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
-import { updateLink, uploadFileToAWS } from '../../../utils/helperFuncs';
+import {
+  fetchClinicData,
+  updateLink,
+  uploadFileToAWS,
+} from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
@@ -75,9 +79,13 @@ const RegisterForm = ({ onGoBack }) => {
       console.error(response.message);
       setErrorMessage(response.message);
     } else if (response.data != null) {
-      authManager.setUserToken(response.data.token);
-      authManager.setUserId(response.data.user.id);
-      dispatch(setCurrentUser(response?.data?.user));
+      const { token, user } = response.data;
+      authManager.setUserToken(token);
+      authManager.setUserId(user.id);
+      dispatch(setCurrentUser(user));
+      if (user.selectedClinic != null) {
+        dispatch(fetchClinicData());
+      }
     }
     setIsLoading(false);
   };

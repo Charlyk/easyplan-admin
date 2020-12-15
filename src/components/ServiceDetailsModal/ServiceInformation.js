@@ -120,12 +120,13 @@ const ServiceInformation = ({
               onChange={handleFormChange}
               value={data.serviceType}
             >
-              <option value='all'>
+              <option value='All'>
                 {textForKey('Applicable on all teeth')}
               </option>
-              <option value='single'>
+              <option value='Single'>
                 {textForKey('Applicable on single tooth')}
               </option>
+              <option value='Braces'>{textForKey('Braces service')}</option>
             </Form.Control>
           </Form.Group>
 

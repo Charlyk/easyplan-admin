@@ -91,7 +91,7 @@ PageHeader.propTypes = {
   titleComponent: PropTypes.element,
   isDoctor: PropTypes.bool,
   user: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     avatar: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,

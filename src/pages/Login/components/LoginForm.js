@@ -39,13 +39,17 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
     setErrorMessage(null);
     setIsLoading(true);
     const response = await authAPI.login(data.email, data.password);
+    console.log(response.data);
     if (response.isError) {
       setErrorMessage(response.message);
     } else {
-      authManager.setUserToken(response.data.token);
-      authManager.setUserId(response.data.user.id);
-      dispatch(setCurrentUser(response.data.user));
-      dispatch(fetchClinicData());
+      const { token, user } = response.data;
+      authManager.setUserToken(token);
+      authManager.setUserId(user.id);
+      dispatch(setCurrentUser(user));
+      if (user.selectedClinic != null) {
+        dispatch(fetchClinicData());
+      }
     }
     setIsLoading(false);
   };

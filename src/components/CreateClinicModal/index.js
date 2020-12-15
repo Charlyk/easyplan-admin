@@ -9,6 +9,7 @@ import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import authAPI from '../../utils/api/authAPI';
 
 const CreateClinicModal = ({ open, onCreate, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,20 +18,12 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
     clinicName: '',
     website: '',
     description: '',
-    hasBrackets: false,
   });
 
   const handleFormChange = event => {
     setData({
       ...data,
       [event.target.id]: event.target.value,
-    });
-  };
-
-  const handleBracketsChange = () => {
-    setData({
-      ...data,
-      hasBrackets: !data.hasBrackets,
     });
   };
 
@@ -58,13 +51,15 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
       website: data.website,
       description: data.description,
       logo,
-      hasBrackets: data.hasBrackets,
     });
 
     if (response.isError) {
       console.error(response.message);
     } else {
-      onCreate(response.data);
+      const userResponse = await authAPI.me();
+      if (!userResponse.isError) {
+        onCreate(userResponse.data);
+      }
     }
 
     setIsLoading(false);
@@ -135,14 +130,6 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
             aria-label='With textarea'
           />
         </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='hasBrackets'>
-        <Form.Check
-          onChange={handleBracketsChange}
-          checked={data.hasBrackets}
-          type='checkbox'
-          label={textForKey('Offers braces services')}
-        />
       </Form.Group>
     </EasyPlanModal>
   );

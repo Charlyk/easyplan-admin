@@ -124,30 +124,30 @@ function App() {
   };
 
   const startTimers = () => {
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.checkAppointments,
-        timerName: 'appointmentsTimer',
-        timerInterval: 10 * 1000,
-      },
-    });
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.updateInvoices,
-        timerName: 'invoicesTimer',
-        timerInterval: 10 * 1000,
-      },
-    });
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.checkDoctorAppointments,
-        timerName: 'doctorAppointmentsTimer',
-        timerInterval: 30 * 1000,
-      },
-    });
+    // dispatch({
+    //   type: START_TIMER,
+    //   payload: {
+    //     actionName: types.checkAppointments,
+    //     timerName: 'appointmentsTimer',
+    //     timerInterval: 10 * 1000,
+    //   },
+    // });
+    // dispatch({
+    //   type: START_TIMER,
+    //   payload: {
+    //     actionName: types.updateInvoices,
+    //     timerName: 'invoicesTimer',
+    //     timerInterval: 10 * 1000,
+    //   },
+    // });
+    // dispatch({
+    //   type: START_TIMER,
+    //   payload: {
+    //     actionName: types.checkDoctorAppointments,
+    //     timerName: 'doctorAppointmentsTimer',
+    //     timerInterval: 30 * 1000,
+    //   },
+    // });
   };
 
   const changeCurrentClinic = async clinicId => {

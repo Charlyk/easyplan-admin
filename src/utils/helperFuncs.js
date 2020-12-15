@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 
 import {
   setClinic,
-  setClinicDoctors,
+  setClinicUsers,
   setClinicServices,
 } from '../redux/actions/clinicActions';
 import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
@@ -256,17 +256,6 @@ export const fetchClinicData = () => async dispatch => {
   const clinicResponse = await dataAPI.fetchClinicDetails();
   if (!clinicResponse.isError) {
     dispatch(setClinic(clinicResponse.data));
-  }
-  // fetch clinic doctors
-  const doctorsResponse = await dataAPI.getClinicDoctors();
-  if (!doctorsResponse.isError) {
-    dispatch(setClinicDoctors(doctorsResponse.data));
-  }
-
-  // fetch clinic services
-  const servicesResponse = await dataAPI.fetchServices(null);
-  if (!servicesResponse.isError) {
-    dispatch(setClinicServices(servicesResponse.data));
   }
 };
 

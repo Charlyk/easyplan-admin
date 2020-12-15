@@ -16,10 +16,7 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
 
   if (!currentUser) return null;
 
-  const selectedClinic =
-    currentUser?.clinics.find(
-      item => item.id === currentUser?.selectedClinic,
-    ) || null;
+  const selectedClinic = currentUser.selectedClinic;
 
   const handleCompanySelected = company => {
     onChange(company);
@@ -47,7 +44,7 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
                   key={clinic.id}
                   className={clsx(
                     'option clinic',
-                    selectedClinic?.id === clinic.id && 'selected',
+                    selectedClinic?.id === clinic.clinicId && 'selected',
                   )}
                 >
                   {clinic.clinicName} <IconSuccess fill='#3A83DC' />

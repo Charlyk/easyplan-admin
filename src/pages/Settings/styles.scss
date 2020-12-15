@@ -46,6 +46,10 @@
 
       .form-group {
         width: max-content !important;
+
+        label {
+          min-width: 9rem;
+        }
       }
     }
 
@@ -173,8 +177,8 @@
       }
 
       .description-text-area {
-        min-height: 6.6rem;
-        max-height: 6.6rem;
+        min-height: 9.2rem;
+        max-height: 9.2rem;
       }
     }
   }

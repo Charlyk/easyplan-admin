@@ -4,9 +4,9 @@ import types from '../types/types';
  * Save clinic doctors into state
  * @param {Array.<Object>} payload
  */
-export function setClinicDoctors(payload) {
+export function setClinicUsers(payload) {
   return {
-    type: types.setClinicDoctors,
+    type: types.setClinicUsers,
     payload,
   };
 }

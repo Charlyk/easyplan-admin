@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import InviteUserModal from '../../components/InviteUserModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
-import { setClinicDoctors } from '../../redux/actions/clinicActions';
+import { setClinicUsers } from '../../redux/actions/clinicActions';
 import { updateUsersSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Role } from '../../utils/constants';
@@ -56,7 +56,7 @@ const Users = props => {
     } else {
       setUsers(response.data);
       dispatch(
-        setClinicDoctors(response.data.filter(it => it.role === Role.doctor)),
+        setClinicUsers(response.data.filter(it => it.role === Role.doctor)),
       );
     }
     setIsLoading(false);

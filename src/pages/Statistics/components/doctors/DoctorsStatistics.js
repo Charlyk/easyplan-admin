@@ -21,8 +21,8 @@ import StatisticFilter from '../StatisticFilter';
 
 const initialState = {
   isLoading: false,
-  selectedDoctor: { id: 'all' },
-  selectedService: { id: 'all' },
+  selectedDoctor: { id: -1 },
+  selectedService: { id: -1 },
   showRangePicker: false,
   dateRange: [
     moment()
@@ -87,7 +87,7 @@ const DoctorsStatistics = () => {
 
   const handleServiceChange = event => {
     const newValue = event.target.value;
-    if (newValue === 'all') {
+    if (newValue === -1) {
       localDispatch(reducerActions.setSelectedService({ id: newValue }));
       return;
     }
@@ -97,7 +97,7 @@ const DoctorsStatistics = () => {
 
   const handleDoctorChange = event => {
     const newValue = event.target.value;
-    if (newValue === 'all') {
+    if (newValue === -1) {
       localDispatch(reducerActions.setSelectedDoctor({ id: newValue }));
       return;
     }
@@ -130,8 +130,8 @@ const DoctorsStatistics = () => {
     const requestData = {
       fromDate: startDate,
       toDate: endDate,
-      doctorId: selectedDoctor?.id || 'all',
-      serviceId: selectedService?.id || 'all',
+      doctorId: selectedDoctor?.id || -1,
+      serviceId: selectedService?.id || -1,
     };
     logUserAction(
       Action.ViewDoctorsStatistics,
@@ -159,7 +159,7 @@ const DoctorsStatistics = () => {
             value={selectedService.id}
             custom
           >
-            <option value='all'>{textForKey('All services')}</option>
+            <option value={-1}>{textForKey('All services')}</option>
             {services.map(service => (
               <option key={service.id} value={service.id}>
                 {service.name}
@@ -177,7 +177,7 @@ const DoctorsStatistics = () => {
             value={selectedDoctor.id}
             custom
           >
-            <option value='all'>{textForKey('All doctors')}</option>
+            <option value={-1}>{textForKey('All doctors')}</option>
             {doctors.map(doctor => (
               <option
                 key={doctor.id}

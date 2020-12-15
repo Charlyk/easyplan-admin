@@ -56,7 +56,7 @@ const GeneralStatistics = () => {
   const [financeStatistics, setFinanceStatistics] = useState(
     initialFinanceReport,
   );
-  const [selectedDoctor, setSelectedDoctor] = useState({ id: 'all' });
+  const [selectedDoctor, setSelectedDoctor] = useState({ id: -1 });
   const [showRangePicker, setShowRangePicker] = useState(false);
   const [[startDate, endDate], setDateRange] = useState([
     moment()
@@ -101,7 +101,7 @@ const GeneralStatistics = () => {
 
   const handleDoctorChange = event => {
     const newValue = event.target.value;
-    if (newValue === 'all') {
+    if (newValue === -1) {
       setSelectedDoctor({ id: newValue });
     } else {
       setSelectedDoctor(doctors.find(item => item.id === newValue));
@@ -171,7 +171,7 @@ const GeneralStatistics = () => {
               id='inlineFormCustomSelect'
               custom
             >
-              <option value='all'>{textForKey('All doctors')}</option>
+              <option value={-1}>{textForKey('All doctors')}</option>
               {doctors.map(item => (
                 <option
                   key={item.id}

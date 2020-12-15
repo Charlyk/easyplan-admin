@@ -8,7 +8,7 @@ const baseURL =
   env === 'dev'
     ? 'https://api.easyplan.pro/api/authentication'
     : env === 'local'
-    ? 'http://localhost:5000/api/authentication'
+    ? 'http://localhost:8080/api/authentication'
     : 'https://api.easyplan.pro/api/authentication';
 
 export default {

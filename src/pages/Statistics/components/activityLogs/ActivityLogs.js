@@ -11,7 +11,7 @@ import StatisticFilter from '../StatisticFilter';
 
 const initialState = {
   isLoading: false,
-  selectedUser: { id: 'all' },
+  selectedUser: { id: -1 },
   showRangePicker: false,
   dateRange: [
     moment()
@@ -86,7 +86,7 @@ const ActivityLogs = () => {
 
   const handleUserChange = event => {
     const newValue = event.target.value;
-    if (newValue === 'all') {
+    if (newValue === -1) {
       setSelectedUser({ id: newValue });
       return;
     }
@@ -121,7 +121,7 @@ const ActivityLogs = () => {
             value={selectedUser.id}
             custom
           >
-            <option value='all'>{textForKey('All users')}</option>
+            <option value={-1}>{textForKey('All users')}</option>
             {users.map(item => (
               <option key={item.id} value={item.id}>
                 {item.firstName} {item.lastName}

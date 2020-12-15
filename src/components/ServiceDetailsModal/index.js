@@ -32,7 +32,7 @@ const initialService = {
   color: '',
   doctors: [],
   categoryId: null,
-  serviceType: 'all',
+  serviceType: 'All',
 };
 
 const ServiceDetailsModal = () => {
