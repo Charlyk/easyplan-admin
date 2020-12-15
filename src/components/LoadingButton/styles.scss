@@ -10,7 +10,8 @@
     .loading-button-spinner {
       height: 1.3rem !important;
       width: 1.3rem !important;
-      color: inherit;
+      position: unset !important;
+      color: white !important;
 
       .MuiCircularProgress-svg {
         margin: 0 !important;

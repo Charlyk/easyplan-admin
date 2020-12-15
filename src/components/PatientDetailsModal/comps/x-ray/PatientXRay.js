@@ -31,7 +31,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
 
   const getItemsOfType = (items, type) => {
     return sortBy(
-      items?.filter(item => item.type === type) || [],
+      items?.filter(item => item.imageType === type) || [],
       item => item.created,
     ).reverse();
   };

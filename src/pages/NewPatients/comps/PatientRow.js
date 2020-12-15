@@ -18,7 +18,7 @@ const PatientRow = ({ patient, onSelect }) => {
 
   return (
     <TableRow
-      key={patient.id}
+      key={`patient-${patient.id}`}
       onClick={handlePatientNameClick}
       classes={{ root: 'table-body-row' }}
     >
@@ -71,7 +71,7 @@ export default PatientRow;
 
 PatientRow.propTypes = {
   patient: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     fullName: PropTypes.string,

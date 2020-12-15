@@ -189,14 +189,16 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
 
   return (
     <div className='patient-personal-data'>
-      <EasyDatePicker
-        open={showDatePicker}
-        placement='bottom-start'
-        pickerAnchor={datePickerRef.current}
-        selectedDate={birthday || new Date()}
-        onClose={handleCloseDatePicker}
-        onChange={handleBirthdayChange}
-      />
+      {showDatePicker && (
+        <EasyDatePicker
+          open={showDatePicker}
+          placement='bottom-start'
+          pickerAnchor={datePickerRef.current}
+          selectedDate={birthday || new Date()}
+          onClose={handleCloseDatePicker}
+          onChange={handleBirthdayChange}
+        />
+      )}
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Personal Info')}
       </Typography>
@@ -281,7 +283,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
             className='positive-button'
             isLoading={isSaving}
             onClick={handleSavePatient}
-            disabled={!isFormValid()}
+            disabled={isSaving || !isFormValid()}
           >
             {textForKey('Save')}
             {!isSaving && <IconSuccess />}

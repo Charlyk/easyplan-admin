@@ -149,7 +149,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const services = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const currentClinic = currentUser.clinics.find(
-    it => it.id === currentUser.selectedClinic,
+    it => it.clinicId === currentUser.selectedClinic.id,
   );
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
   const bracesServices = services.filter(item => item.bracesService);
