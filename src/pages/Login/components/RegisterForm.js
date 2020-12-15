@@ -5,12 +5,13 @@ import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../assets/icons/iconAvatar';
 import LoadingButton from '../../../components/LoadingButton';
 import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
-import { EmailRegex } from '../../../utils/constants';
+import { EmailRegex, PasswordRegex } from '../../../utils/constants';
 import {
   fetchClinicData,
   updateLink,
@@ -76,6 +77,7 @@ const RegisterForm = ({ onGoBack }) => {
       phoneNumber: data.phoneNumber,
     });
     if (response.isError) {
+      toast.error(textForKey(response.message));
       console.error(response.message);
       setErrorMessage(response.message);
     } else if (response.data != null) {
@@ -95,7 +97,7 @@ const RegisterForm = ({ onGoBack }) => {
       data?.firstName?.length > 0 &&
       data.lastName.length > 0 &&
       data.username.match(EmailRegex) &&
-      data.password.length >= 8 &&
+      data.password.match(PasswordRegex) &&
       data.isPhoneValid
     );
   };
@@ -155,6 +157,9 @@ const RegisterForm = ({ onGoBack }) => {
             onChange={handleFormChange}
           />
         </InputGroup>
+        <Form.Text className='text-muted'>
+          {textForKey('passwordValidationMessage')}
+        </Form.Text>
       </Form.Group>
       <Form.Group controlId='phoneNumber'>
         <Form.Label>{textForKey('Phone number')}</Form.Label>

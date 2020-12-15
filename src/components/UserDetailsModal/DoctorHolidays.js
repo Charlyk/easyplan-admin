@@ -16,8 +16,8 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
       <IconUmbrella />
       <div className='doctor-holidays__holiday__data'>
         <div className='doctor-holidays__holiday__title'>
-          {moment(holiday.startDate).format('DD MMM yyyy')}{' '}
-          {textForKey('until')} {moment(holiday.endDate).format('DD MMM yyyy')}
+          {moment(holiday.startDate).format('DD MMM yyyy')} -{' '}
+          {moment(holiday.endDate).format('DD MMM yyyy')}
         </div>
         <div className='doctor-holidays__holiday__description'>
           {holiday.description?.length > 0
@@ -61,10 +61,10 @@ const DoctorHolidays = props => {
           {textForKey('Add holiday')}
         </Button>
       </div>
-      {data.holidays.map(holiday => (
+      {data.holidays.map((holiday, index) => (
         <DoctorHoliday
           holiday={holiday}
-          key={holiday.id}
+          key={`${index}-${holiday.id}-holiday`}
           onEdit={onCreateOrUpdate}
           onDelete={onDeleteHoliday}
         />
@@ -81,7 +81,7 @@ DoctorHolidays.propTypes = {
     lastName: PropTypes.string,
     holidays: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.number,
         startDate: PropTypes.string,
         endDate: PropTypes.string,
         description: PropTypes.string,
@@ -97,7 +97,7 @@ DoctorHoliday.propTypes = {
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
   holiday: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     startDate: PropTypes.string,
     endDate: PropTypes.string,
     description: PropTypes.string,

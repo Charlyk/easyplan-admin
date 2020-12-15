@@ -28,7 +28,7 @@ const DoctorsMain = () => {
   const currentUser = useSelector(userSelector);
   const selectedClinic =
     currentUser?.clinics?.find(
-      item => item.id === currentUser?.selectedClinic,
+      item => item.clinicId === currentUser?.selectedClinic.id,
     ) || null;
 
   if (!authManager.isLoggedIn()) {

@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import './index.scss';
-import 'react-phone-number-input/style.css';
-import 'react-phone-input-2/lib/style.css';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import 'moment/locale/ro';
-import 'moment/locale/en-gb';
-import 'moment/locale/ru';
 import moment from 'moment';
-import PubNub from 'pubnub';
-import { PubNubProvider } from 'pubnub-react';
+import { usePubNub } from 'pubnub-react';
 import { Modal, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -20,7 +10,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import { START_TIMER } from 'redux-timer-middleware';
+import { ToastContainer } from 'react-toastify';
 
 import AddNote from './components/AddNote';
 import AddXRay from './components/AddXRay';
@@ -39,6 +29,7 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
   setPaymentModal,
+  setUpdateCurrentUser,
   triggerUserLogout,
 } from './redux/actions/actions';
 import { setImageModal } from './redux/actions/imageModalActions';
@@ -55,20 +46,25 @@ import {
   updateCurrentUserSelector,
   userSelector,
 } from './redux/selectors/rootSelector';
-import types from './redux/types/types';
 import authAPI from './utils/api/authAPI';
 import { fetchClinicData, updateLink } from './utils/helperFuncs';
 import { getAppLanguage, textForKey } from './utils/localization';
+import { handleRemoteMessage } from './utils/pubnubUtils';
 import authManager from './utils/settings/authManager';
-
-const pubnub = new PubNub({
-  publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
-  subscribeKey: 'sub-c-6cdb4ab0-32f2-11eb-8e02-129fdf4b0d84',
-  uuid: authManager.getUserId() || PubNub.generateUUID(),
-});
+import 'react-toastify/dist/ReactToastify.css';
+import './index.scss';
+import 'react-phone-number-input/style.css';
+import 'react-phone-input-2/lib/style.css';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'moment/locale/ro';
+import 'moment/locale/en-gb';
+import 'moment/locale/ru';
 
 function App() {
   moment.locale(getAppLanguage());
+  const pubnub = usePubNub();
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
   const newClinicId = useSelector(newClinicIdSelector);
@@ -81,25 +77,33 @@ function App() {
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
-    item => item.id === currentUser?.selectedClinic,
+    item => item.clinicId === currentUser?.selectedClinic.id,
   );
   const [isAppLoading, setAppIsLoading] = useState(false);
 
   useEffect(() => {
-    startTimers();
-  }, []);
-
-  useEffect(() => {
     if (selectedClinic != null) {
       updateSiteTitle(selectedClinic.clinicName);
+      pubnub.subscribe({
+        channels: [`${selectedClinic.clinicId}-clinic-pubnub-channel`],
+      });
+      pubnub.addListener({ message: handlePubnubMessageReceived });
+      return () => {
+        pubnub.unsubscribe({
+          channels: [`${selectedClinic.clinicId}-clinic-pubnub-channel`],
+        });
+      };
     }
   }, [selectedClinic]);
 
   useEffect(() => {
-    if (currentUser == null) {
+    if (currentUser == null || updateCurrentUser) {
+      dispatch(setUpdateCurrentUser(false));
       fetchUser();
     } else if (currentUser.clinics.length === 0) {
       dispatch(setCreateClinic({ open: true, canClose: false }));
+    } else {
+      dispatch(setCreateClinic({ open: false, canClose: true }));
     }
   }, [currentUser, updateCurrentUser]);
 
@@ -108,6 +112,10 @@ function App() {
       changeCurrentClinic(newClinicId);
     }
   }, [newClinicId]);
+
+  const handlePubnubMessageReceived = ({ message }) => {
+    dispatch(handleRemoteMessage(message));
+  };
 
   const updateSiteTitle = (clinicName = '') => {
     const title = document.getElementById('site-title');
@@ -121,33 +129,6 @@ function App() {
   const redirectToHome = () => {
     setRedirectUser(true);
     setTimeout(() => setRedirectUser(false), 500);
-  };
-
-  const startTimers = () => {
-    // dispatch({
-    //   type: START_TIMER,
-    //   payload: {
-    //     actionName: types.checkAppointments,
-    //     timerName: 'appointmentsTimer',
-    //     timerInterval: 10 * 1000,
-    //   },
-    // });
-    // dispatch({
-    //   type: START_TIMER,
-    //   payload: {
-    //     actionName: types.updateInvoices,
-    //     timerName: 'invoicesTimer',
-    //     timerInterval: 10 * 1000,
-    //   },
-    // });
-    // dispatch({
-    //   type: START_TIMER,
-    //   payload: {
-    //     actionName: types.checkDoctorAppointments,
-    //     timerName: 'doctorAppointmentsTimer',
-    //     timerInterval: 30 * 1000,
-    //   },
-    // });
   };
 
   const changeCurrentClinic = async clinicId => {
@@ -176,8 +157,8 @@ function App() {
     } else {
       const { data: user } = response;
       if (user != null) {
-        await dispatch(fetchClinicData());
         dispatch(setCurrentUser(user));
+        await dispatch(fetchClinicData());
       } else {
         authManager.logOut();
         setRedirectUser(true);
@@ -227,6 +208,7 @@ function App() {
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
+        <ToastContainer />
         <RegisterPaymentModal
           {...paymentModal}
           onClose={handleClosePaymentModal}
@@ -269,14 +251,12 @@ function App() {
             component={ResetPasswordForm}
           />
           <Route path='/login' exact component={Login} />
-          <PubNubProvider client={pubnub}>
-            <Route
-              path='/'
-              component={
-                selectedClinic?.roleInClinic === 'DOCTOR' ? DoctorsMain : Main
-              }
-            />
-          </PubNubProvider>
+          <Route
+            path='/'
+            component={
+              selectedClinic?.roleInClinic === 'DOCTOR' ? DoctorsMain : Main
+            }
+          />
         </Switch>
       </React.Fragment>
     </Router>

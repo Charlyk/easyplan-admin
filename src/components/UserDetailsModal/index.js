@@ -2,33 +2,28 @@ import React, { useEffect, useState } from 'react';
 
 import { remove, cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
-import { Button, Tab, Tabs } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 
 import './styles.scss';
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
+import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action, EmailRegex, Role } from '../../utils/constants';
+import { Action, Role } from '../../utils/constants';
 import { logUserAction, uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
 import LoadingButton from '../LoadingButton';
-import AdminForm from './AdminForm';
 import CreateHolidayModal from './CreateHolidayModal';
 import DoctorForm from './DoctorForm';
-import ReceptionForm from './ReceptionForm';
 
 const initialData = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  phoneNumber: '',
-  avatarFile: null,
   services: [],
-  workDays: [
+  workdays: [
     {
       day: 2,
       startHour: null,
@@ -78,6 +73,7 @@ const initialData = {
 const UserDetailsModal = props => {
   const { onClose, show, user, role } = props;
   const dispatch = useDispatch();
+  const currentClinic = useSelector(clinicDetailsSelector);
   const [currentTab, setCurrentTab] = useState(role);
   const [isSaving, setIsSaving] = useState(false);
   const [userData, setUserData] = useState({
@@ -96,23 +92,38 @@ const UserDetailsModal = props => {
 
   useEffect(() => {
     if (user != null) {
-      setCurrentTab(user.role);
       logUserAction(Action.ViewUser, JSON.stringify(user));
-      setUserData({
-        ...initialData,
-        ...user,
-        userType: user.role,
-        workDays: user.workDays.map(item => ({
-          ...item,
-          selected: !item.isDayOff,
-        })),
-      });
+      setTimeout(() => {
+        fetchUserDetails();
+      }, 300);
     }
   }, [user]);
 
+  const fetchUserDetails = async () => {
+    const response = await dataAPI.fetchUserDetails(user.id);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      const { data: userDetails } = response;
+      const clinic = userDetails.clinics.find(
+        item => item.clinicId === currentClinic.id,
+      );
+      setUserData({
+        ...initialData,
+        services: clinic.services,
+        holidays: clinic.holidays,
+        workdays:
+          clinic.workdays?.map(item => ({
+            ...item,
+            selected: !item.isDayOff,
+          })) || [],
+      });
+    }
+  };
+
   const handleModalClose = () => {
     onClose();
-    setTimeout(() => handleTabSelect(Role.manager), 300);
+    setTimeout(() => handleTabSelect(Role.doctor), 300);
   };
 
   const handleTabSelect = newKey => {
@@ -130,23 +141,7 @@ const UserDetailsModal = props => {
     });
   };
 
-  const isFormValid = () => {
-    switch (currentTab) {
-      case Role.manager:
-      case Role.reception:
-      case Role.doctor:
-      case Role.admin:
-        return (
-          userData.firstName.replace(' ', '').length > 0 &&
-          userData.lastName.replace(' ', '').length > 0 &&
-          userData.email.match(EmailRegex)?.length > 0
-        );
-      default:
-        return false;
-    }
-  };
-
-  const saveUser = async avatarUrl => {
+  const saveUser = async () => {
     // clear components with no price and percentage
     const newServices = userData.services.map(item => {
       if (item.price != null || item.percentage != null) {
@@ -161,13 +156,10 @@ const UserDetailsModal = props => {
 
     const requestBody = {
       ...userData,
-      avatar: avatarUrl,
       services: newServices,
     };
 
-    if (user == null) {
-      await createUser(requestBody);
-    } else {
+    if (user != null) {
       await updateUser(requestBody);
     }
   };
@@ -175,7 +167,7 @@ const UserDetailsModal = props => {
   const updateUser = async requestBody => {
     const response = await dataAPI.updateUser(user.id, requestBody);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       logUserAction(
         Action.EditUser,
@@ -186,25 +178,9 @@ const UserDetailsModal = props => {
     }
   };
 
-  const createUser = async requestBody => {
-    const response = await dataAPI.createUser(requestBody);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      logUserAction(Action.CreateUser, JSON.stringify(requestBody));
-      dispatch(triggerUsersUpdate());
-      handleModalClose();
-    }
-  };
-
   const handleSaveForm = async () => {
     setIsSaving(true);
-    if (userData.avatarFile != null) {
-      const result = await uploadFileToAWS('avatars', userData.avatarFile);
-      await saveUser(result?.location);
-    } else {
-      await saveUser(null);
-    }
+    await saveUser();
     setIsSaving(false);
   };
 
@@ -212,13 +188,18 @@ const UserDetailsModal = props => {
     setIsCreatingHoliday({ open: true, holiday: holiday });
   };
 
-  const handleHolidayDelete = holiday => {
-    const newHolidays = cloneDeep(userData.holidays);
-    remove(newHolidays, item => item.id === holiday.id);
-    setUserData({
-      ...userData,
-      holidays: newHolidays,
-    });
+  const handleHolidayDelete = async holiday => {
+    const response = await dataAPI.deleteUserHoliday(user.id, holiday.id);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      const newHolidays = cloneDeep(userData.holidays);
+      remove(newHolidays, item => item.id === holiday.id);
+      setUserData({
+        ...userData,
+        holidays: newHolidays,
+      });
+    }
   };
 
   const handleSaveHoliday = holiday => {
@@ -236,7 +217,6 @@ const UserDetailsModal = props => {
       // it's a new holiday so we need to add it to the list
       newHolidays.push({
         ...holiday,
-        id: uuidv4(),
       });
     }
 
@@ -273,38 +253,14 @@ const UserDetailsModal = props => {
         onClose={handleCloseHolidayModal}
       />
       <div className='user-details-root'>
-        {user == null && (
-          <div className='user-details-root__tabs'>
-            <Tabs
-              defaultActiveKey={Role.manager}
-              activeKey={currentTab}
-              onSelect={handleTabSelect}
-            >
-              <Tab eventKey={Role.manager} title={textForKey('Manager')} />
-              <Tab
-                eventKey={Role.reception}
-                title={textForKey('Receptionist')}
-              />
-              <Tab eventKey={Role.doctor} title={textForKey('Doctor')} />
-            </Tabs>
-          </div>
-        )}
         <div className='user-details-root__content'>
-          {currentTab === Role.manager && (
-            <AdminForm onChange={handleFormChange} data={userData} />
-          )}
-          {currentTab === Role.reception && (
-            <ReceptionForm onChange={handleFormChange} data={userData} />
-          )}
-          {currentTab === Role.doctor && (
-            <DoctorForm
-              onCreateHoliday={handleCreateHoliday}
-              onDeleteHoliday={handleHolidayDelete}
-              onChange={handleFormChange}
-              data={userData}
-              showSteps={user == null}
-            />
-          )}
+          <DoctorForm
+            onCreateHoliday={handleCreateHoliday}
+            onDeleteHoliday={handleHolidayDelete}
+            onChange={handleFormChange}
+            data={userData}
+            showSteps={user == null}
+          />
         </div>
         <div className='user-details-root__footer'>
           <Button className='cancel-button' onClick={handleModalClose}>
@@ -314,7 +270,7 @@ const UserDetailsModal = props => {
           <LoadingButton
             onClick={handleSaveForm}
             className='positive-button'
-            disabled={!isFormValid() || isSaving}
+            disabled={isSaving}
             isLoading={isSaving}
           >
             {textForKey('Save')}
@@ -333,36 +289,12 @@ UserDetailsModal.propTypes = {
   role: PropTypes.string,
   show: PropTypes.bool.isRequired,
   user: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     avatar: PropTypes.string,
     phoneNumber: PropTypes.string,
     email: PropTypes.string,
-    role: PropTypes.oneOf([Role.manager, Role.doctor, Role.reception]),
-    status: PropTypes.string,
-    holidays: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        startDate: PropTypes.string,
-        endDate: PropTypes.string,
-        description: PropTypes.string,
-      }),
-    ),
-    services: PropTypes.arrayOf(
-      PropTypes.shape({
-        serviceId: PropTypes.string,
-        price: PropTypes.number,
-        percentage: PropTypes.number,
-      }),
-    ),
-    workDays: PropTypes.arrayOf(
-      PropTypes.shape({
-        day: PropTypes.number,
-        endHour: PropTypes.string,
-        startHour: PropTypes.string,
-        isDayOff: PropTypes.bool,
-      }),
-    ),
+    roleInClinic: PropTypes.oneOf([Role.manager, Role.doctor, Role.reception]),
   }),
 };

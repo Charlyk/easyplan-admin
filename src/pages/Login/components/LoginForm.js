@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import LoadingButton from '../../../components/LoadingButton';
 import { setCurrentUser } from '../../../redux/actions/actions';
@@ -41,6 +42,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
     const response = await authAPI.login(data.email, data.password);
     console.log(response.data);
     if (response.isError) {
+      toast.error(textForKey(response.message));
       setErrorMessage(response.message);
     } else {
       const { token, user } = response.data;

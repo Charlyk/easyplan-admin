@@ -10,7 +10,7 @@ const DoctorWorkHours = props => {
   const { show, data, onChange } = props;
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
-    const newDays = data.workDays.map(item => {
+    const newDays = data.workdays.map(item => {
       if (item.day !== day.day) return item;
       return {
         ...item,
@@ -24,7 +24,7 @@ const DoctorWorkHours = props => {
   };
 
   const handleApplyToAll = day => {
-    const newDays = data.workDays.map(item => {
+    const newDays = data.workdays.map(item => {
       return {
         ...item,
         startHour: day.startHour,
@@ -41,7 +41,7 @@ const DoctorWorkHours = props => {
     <div className={classes} style={{ height: show ? days.length * 48 : 0 }}>
       <table>
         <tbody>
-          {data.workDays.map((day, index) => (
+          {data.workdays.map((day, index) => (
             <WorkDay
               onApplyToAll={handleApplyToAll}
               key={day.day}
@@ -76,7 +76,7 @@ DoctorWorkHours.propTypes = {
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
     avatarFile: PropTypes.object,
-    workDays: PropTypes.arrayOf(
+    workdays: PropTypes.arrayOf(
       PropTypes.shape({
         day: PropTypes.number,
         startHour: PropTypes.string,

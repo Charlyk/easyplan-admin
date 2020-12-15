@@ -24,6 +24,14 @@
     align-items: center;
     justify-content: center;
     background-color: #E5E5E5;
+    position: relative;
+
+    .existent-accept-progress {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: #3A83DC !important;
+    }
   }
 
   .form-title {
@@ -124,6 +132,18 @@
   .form-wrapper {
     display: flex;
     flex-direction: column;
+    position: relative;
+
+    .react-tel-input {
+      .form-control {
+        width: 100%;
+      }
+    }
+
+    .upload-avatar-container {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
   }
 
   .loading-spinner {
@@ -149,7 +169,7 @@
   }
 
   .welcome-text {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   .success-message {

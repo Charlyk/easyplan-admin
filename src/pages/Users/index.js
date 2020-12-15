@@ -4,6 +4,7 @@ import './styles.scss';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
 import InviteUserModal from '../../components/InviteUserModal';
@@ -26,9 +27,10 @@ const Users = props => {
   const [showInvitationSent, setShowInvitationSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isInvitingExistent, setIsInvitingExistent] = useState(false);
-  const [invitingExistentError, setInitingExistentError] = useState(null);
+  const [invitingExistentError, setInvitingExistentError] = useState(null);
   const [data, setData] = useState({ users: [], invitations: [] });
   const [userToDelete, setUserToDelete] = useState(null);
+  const [invitationToDelete, setInvitationToDelete] = useState(null);
   const [showInviteModal, setShowInviteModal] = useState({
     open: false,
     type: Role.reception,
@@ -52,6 +54,7 @@ const Users = props => {
     setIsLoading(true);
     const response = await dataAPI.fetchUsers();
     if (response.isError) {
+      toast.error(textForKey(response.message));
       console.error(response.message);
       setData({ users: [], invitations: [] });
     } else {
@@ -64,13 +67,16 @@ const Users = props => {
     setSelectedFilter(newFilter);
   };
 
-  const doctors = data.users.filter(item => item.role === Role.doctor);
+  const doctors = data.users.filter(item => item.roleInClinic === Role.doctor);
 
   const admins = data.users.filter(
-    item => item.role === Role.admin || item.role === Role.manager,
+    item =>
+      item.roleInClinic === Role.admin || item.roleInClinic === Role.manager,
   );
 
-  const reception = data.users.filter(item => item.role === Role.reception);
+  const reception = data.users.filter(
+    item => item.roleInClinic === Role.reception,
+  );
 
   const handleUserModalClose = () => {
     setIsUserModalOpen({ ...isUserModalOpen, open: false });
@@ -80,21 +86,24 @@ const Users = props => {
   };
 
   const handleUserModalOpen = (event, user, type = Role.manager) => {
+    setIsUserModalOpen({ open: true, user, type });
+  };
+
+  const handleInviteUserStart = (event, type = Role.manager) => {
     openInviteModal(type === Role.invitations ? Role.reception : type);
   };
 
   const handleInviteUser = async (email, role) => {
     setIsInvitingExistent(true);
-    setInitingExistentError(null);
+    setInvitingExistentError(null);
     const response = await dataAPI.inviteUserToClinic({
       emailAddress: email,
       role,
     });
     if (response.isError) {
-      setInitingExistentError(response.message);
+      setInvitingExistentError(response.message);
     } else {
       setShowInviteModal({ open: false, type: Role.reception });
-      await fetchUsers();
     }
     setIsInvitingExistent(false);
   };
@@ -117,20 +126,20 @@ const Users = props => {
     switch (type) {
       case Role.admin:
       case Role.manager:
-        if (data.users.some(item => item.role === type) || isLoading)
+        if (data.users.some(item => item.roleInClinic === type) || isLoading)
           return null;
         if (admins.length > 0) return null;
         message = textForKey('No managers yet.');
         buttonText = textForKey('Add manager');
         break;
       case Role.doctor:
-        if (data.users.some(item => item.role === type) || isLoading)
+        if (data.users.some(item => item.roleInClinic === type) || isLoading)
           return null;
         message = textForKey('No doctors yet.');
         buttonText = textForKey('Add doctor');
         break;
       case Role.reception:
-        if (data.users.some(item => item.role === type) || isLoading)
+        if (data.users.some(item => item.roleInClinic === type) || isLoading)
           return null;
         message = textForKey('No receptionists yet.');
         buttonText = textForKey('Add receptionist');
@@ -151,7 +160,7 @@ const Users = props => {
         role='button'
         tabIndex={0}
         className='users-root__no-data'
-        onClick={event => handleUserModalOpen(event, null, role)}
+        onClick={event => handleInviteUserStart(event, role)}
       >
         {message}
         <div role='button'>{buttonText}</div>
@@ -170,12 +179,20 @@ const Users = props => {
     );
   };
 
-  const startUserDelete = (event, user) => {
-    setUserToDelete(user);
+  const startUserDelete = (event, user, isInvitation) => {
+    if (isInvitation) {
+      setInvitationToDelete(user);
+    } else {
+      setUserToDelete(user);
+    }
   };
 
   const closeDeleteUserDialog = () => {
     setUserToDelete(null);
+  };
+
+  const closeDeleteInvitationDialog = () => {
+    setInvitationToDelete(null);
   };
 
   const handleResendInvitation = async (event, user) => {
@@ -197,11 +214,30 @@ const Users = props => {
     setIsDeleting(true);
     const response = await dataAPI.deleteUser(userToDelete.id);
     if (response.isError) {
+      toast.error(textForKey(response.message));
       console.error(response.message);
     } else {
       logUserAction(Action.DeleteUser, JSON.stringify(userToDelete));
       setUserToDelete(null);
       await fetchUsers();
+    }
+    setIsDeleting(false);
+  };
+
+  const deleteInvitation = async () => {
+    if (!invitationToDelete) return;
+    setIsDeleting(true);
+    const response = await dataAPI.deleteClinicInvitation(
+      invitationToDelete.id,
+    );
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      logUserAction(
+        Action.DeleteInvitation,
+        JSON.stringify(invitationToDelete),
+      );
+      setInvitationToDelete(null);
     }
     setIsDeleting(false);
   };
@@ -223,6 +259,15 @@ const Users = props => {
         title={textForKey('Delete user')}
         message={textForKey('Are you sure you want to delete this user?')}
         onConfirm={deleteUser}
+        isLoading={isDeleting}
+      />
+
+      <ConfirmationModal
+        show={Boolean(invitationToDelete)}
+        onClose={closeDeleteInvitationDialog}
+        title={textForKey('Delete invitation')}
+        message={textForKey('Are you sure you want to delete this invitation?')}
+        onConfirm={deleteInvitation}
         isLoading={isDeleting}
       />
 

@@ -8,7 +8,6 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
-import dataAPI from '../../utils/api/dataAPI';
 import SwitchButton from '../SwitchButton';
 
 const Service = props => {
@@ -88,24 +87,24 @@ const DoctorServices = ({ show, data, onChange }) => {
   const handleServiceSelected = (service, price, percentage, isSelected) => {
     let newList = cloneDeep(data.services);
     if (isSelected) {
-      if (newList.some(item => item.id === service.id)) {
+      if (newList.some(item => item.serviceId === service.id)) {
         newList = newList.map(item => {
-          if (item.id !== service.id) return item;
+          if (item.serviceId !== service.id) return item;
           return {
-            id: service.id,
+            serviceId: service.id,
             price,
             percentage,
           };
         });
       } else {
         newList.push({
-          id: service.id,
+          serviceId: service.id,
           price,
           percentage,
         });
       }
     } else {
-      remove(newList, item => item.id === service.id);
+      remove(newList, item => item.serviceId === service.id);
     }
     onChange(newList);
   };
@@ -116,11 +115,13 @@ const DoctorServices = ({ show, data, onChange }) => {
     <div className={classes} style={{ height: show ? 'unset' : 0 }}>
       {sortedServices.map(service => (
         <Service
-          key={service.id}
+          key={`${service.id}-service`}
           service={service}
-          doctorService={data.services.find(item => item.id === service.id)}
+          doctorService={data.services.find(
+            item => item.serviceId === service.id,
+          )}
           onSelected={handleServiceSelected}
-          selected={data.services.some(item => item.id === service.id)}
+          selected={data.services.some(item => item.serviceId === service.id)}
         />
       ))}
     </div>
@@ -133,16 +134,16 @@ Service.propTypes = {
   selected: PropTypes.bool,
   onSelected: PropTypes.func,
   doctorService: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     price: PropTypes.number,
     percentage: PropTypes.number,
   }),
   service: PropTypes.shape({
-    categoryId: PropTypes.string,
+    categoryId: PropTypes.number,
     color: PropTypes.string,
     description: PropTypes.string,
     duration: PropTypes.number,
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
     price: PropTypes.number,
   }),
@@ -158,7 +159,8 @@ DoctorServices.propTypes = {
     avatarFile: PropTypes.object,
     services: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string,
+        serviceId: PropTypes.number,
+        id: PropTypes.number,
         price: PropTypes.number,
         percentage: PropTypes.number,
       }),

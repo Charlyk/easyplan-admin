@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import {
   checkDoctorAppointmentsSelector,
@@ -27,15 +28,12 @@ const DoctorPatients = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchPatients();
-  }, [viewDate]);
-
-  useEffect(() => {
-    fetchPatients();
-  }, [checkAppointments]);
+  }, [viewDate, checkAppointments]);
 
   const fetchPatients = async () => {
     const response = await dataAPI.fetchSchedules(currentUser.id, viewDate);
     if (response.isError) {
+      toast.error(response.message);
       console.error(response.message);
     } else {
       setSchedules(response.data);

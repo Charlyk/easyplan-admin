@@ -13,6 +13,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import authManager from './utils/settings/authManager';
 
 import Axios from 'axios';
+import { PubNubProvider } from 'pubnub-react';
+import PubNub from 'pubnub';
 
 Axios.interceptors.request.use(async function(config) {
   if (authManager.isLoggedIn()) {
@@ -32,10 +34,18 @@ const middlewares = [thunk, timerMiddleware];
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const ReduxStore = createStore(rootReducer, enhancer);
 
+const pubnub = new PubNub({
+  publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
+  subscribeKey: 'sub-c-6cdb4ab0-32f2-11eb-8e02-129fdf4b0d84',
+  uuid: authManager.getUserId() || PubNub.generateUUID(),
+});
+
 ReactDOM.render(
   <Provider store={ReduxStore}>
     <React.StrictMode>
-      <App />
+      <PubNubProvider client={pubnub}>
+        <App />
+      </PubNubProvider>
     </React.StrictMode>
   </Provider>,
   document.getElementById('root'),

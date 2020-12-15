@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
+import authAPI from '../../utils/api/authAPI';
 import dataAPI from '../../utils/api/dataAPI';
 import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import authAPI from '../../utils/api/authAPI';
 
 const CreateClinicModal = ({ open, onCreate, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);

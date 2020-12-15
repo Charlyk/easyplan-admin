@@ -120,7 +120,7 @@ export default {
     general: 'General',
     'general statistics': 'General statistics',
     'accept invitation message':
-      'Create a password that will be used to login to your account.',
+      'Please fill below fields to accept the invitation',
     'treatment plan': 'Treatment plan',
     diagnosis: 'Diagnosis',
     radiograph: 'Radiograph',
@@ -325,6 +325,9 @@ export default {
     'invite user': 'Invite user',
     'no pending invitations': 'No pending invitations',
     invitations: 'Invitations',
+    passwordvalidationmessage:
+      'Password must contain uppercase and lowercase letters, numbers and symbols should be at least 6 characters length',
+    invitation_accepted_success: 'Invitation successfully accepted',
   },
   ro: {
     analytics: 'Analitică',
@@ -448,7 +451,7 @@ export default {
     general: 'General',
     'general statistics': 'Statistica generală',
     'accept invitation message':
-      'Create a password that will be used to login to your account.',
+      'Completați câmpurile de mai jos pentru a accepta invitația.',
     'treatment plan': 'Plan de tratament',
     diagnosis: 'Diagnostică',
     radiograph: 'Radiografie',
@@ -656,6 +659,9 @@ export default {
     'invite user': 'Invită utilizator',
     'no pending invitations': 'Nu sunt invitații în așteptare',
     invitations: 'Invitații',
+    passwordvalidationmessage:
+      'Parola trebuie să conțină litere majuscule, minuscule, cifre și simboluri cu o lungime de minimum 6 caractere',
+    invitation_accepted_success: 'Invitația a fost acceptată cu succes',
   },
   ru: {
     analytics: 'Analytics',
@@ -778,7 +784,7 @@ export default {
     general: 'General',
     'general statistics': 'General statistics',
     'accept invitation message':
-      'Create a password that will be used to login to your account.',
+      'Please fill the fields below to accept the invitation.',
     'treatment plan': 'Treatment plan',
     diagnosis: 'Diagnosis',
     radiograph: 'Radiograph',
@@ -980,5 +986,8 @@ export default {
     'invite user': 'Invite user',
     'no pending invitations': 'No pending invitations',
     invitations: 'Invitations',
+    passwordvalidationmessage:
+      'Password must contain uppercase and lowercase letters, numbers and symbols should be at least 6 characters length',
+    invitation_accepted_success: 'Invitation successfully accepted',
   },
 };

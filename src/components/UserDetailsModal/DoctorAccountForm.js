@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
-import PhoneInput, { parsePhoneNumber } from 'react-phone-number-input';
+import PhoneInput from 'react-phone-number-input';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import { EmailRegex } from '../../utils/constants';
@@ -11,7 +11,6 @@ import { urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 const DoctorAccountForm = props => {
-  const fileRef = useRef(null);
   const { data, onChange, show } = props;
 
   const handleFormChange = event => {

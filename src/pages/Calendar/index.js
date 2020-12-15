@@ -5,6 +5,7 @@ import { Box } from '@material-ui/core';
 import { usePubNub } from 'pubnub-react';
 import { ProgressBar } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
 import MapSchedulesDataModal, {
@@ -22,6 +23,7 @@ import {
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
+import types from '../../redux/types/types';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, env } from '../../utils/constants';
 import {
@@ -161,7 +163,23 @@ const Calendar = () => {
       channels: [`${currentUser.id}-import_schedules_channel`],
     });
     pubnub.addListener({ message: handlePubnubMessageReceived });
+    dispatch({
+      type: START_TIMER,
+      payload: {
+        actionName: types.checkAppointments,
+        timerName: 'appointmentsTimer',
+        timerInterval: 10 * 1000,
+      },
+    });
     return () => {
+      dispatch({
+        type: STOP_TIMER,
+        payload: {
+          actionName: types.checkAppointments,
+          timerName: 'appointmentsTimer',
+          timerInterval: 10 * 1000,
+        },
+      });
       pubnub.unsubscribe({
         channels: [`${currentUser.id}-import_schedules_channel`],
       });

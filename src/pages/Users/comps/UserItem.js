@@ -19,7 +19,7 @@ const UserItem = props => {
   const { user, isInvitation, isInviting, onDelete, onEdit, onResend } = props;
 
   const handleDeleteUser = event => {
-    onDelete(event, user);
+    onDelete(event, user, isInvitation);
   };
 
   const handleEditUser = event => {
@@ -71,19 +71,14 @@ const UserItem = props => {
               {textForKey('Invite')} <IconRefresh fill='#FDC534' />
             </LoadingButton>
           ))}
-        {user.roleInClinic === Role.doctor && (
+        {user.roleInClinic === Role.doctor && !isInvitation && (
           <Button className='user-item__edit-button' onClick={handleEditUser}>
             {textForKey('Edit')} <IconEdit />
           </Button>
         )}
-        {!isInvitation && (
-          <Button
-            className='user-item__delete-button'
-            onClick={handleDeleteUser}
-          >
-            {textForKey('Delete')} <IconDelete />
-          </Button>
-        )}
+        <Button className='user-item__delete-button' onClick={handleDeleteUser}>
+          {textForKey('Delete')} <IconDelete />
+        </Button>
       </div>
     </div>
   );
@@ -95,7 +90,7 @@ UserItem.propTypes = {
   isInviting: PropTypes.bool,
   isInvitation: PropTypes.bool,
   user: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     phoneNumber: PropTypes.string,

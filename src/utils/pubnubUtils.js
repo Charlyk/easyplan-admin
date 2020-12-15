@@ -1,0 +1,43 @@
+import {
+  setUpdateCurrentUser,
+  toggleAppointmentsUpdate,
+  toggleCheckDoctorAppointments,
+  toggleUpdateInvoices,
+  triggerUsersUpdate,
+} from '../redux/actions/actions';
+
+export const handleRemoteMessage = message => dispatch => {
+  switch (message.action) {
+    case MessageAction.NewUserInvited:
+    case MessageAction.InvitationRemoved:
+    case MessageAction.ClinicInvitationAccepted:
+      dispatch(triggerUsersUpdate());
+      break;
+    case MessageAction.CreatedNewInvoice:
+      // update appointments list
+      dispatch(toggleAppointmentsUpdate());
+      // update invoices
+      dispatch(toggleUpdateInvoices());
+      break;
+    case MessageAction.NewPatientOnSite:
+      dispatch(toggleCheckDoctorAppointments());
+      break;
+    case MessageAction.ScheduleUpdatedOrCreated:
+      dispatch(toggleAppointmentsUpdate());
+      dispatch(toggleCheckDoctorAppointments());
+      break;
+    case MessageAction.UserRemovedFromClinic:
+      dispatch(setUpdateCurrentUser());
+      break;
+  }
+};
+
+const MessageAction = {
+  ClinicInvitationAccepted: 'ClinicInvitationAccepted',
+  CreatedNewInvoice: 'CreatedNewInvoice',
+  NewPatientOnSite: 'NewPatientOnSite',
+  ScheduleUpdatedOrCreated: 'ScheduleUpdatedOrCreated',
+  NewUserInvited: 'NewUserInvited',
+  InvitationRemoved: 'InvitationRemoved',
+  UserRemovedFromClinic: 'UserRemovedFromClinic',
+};

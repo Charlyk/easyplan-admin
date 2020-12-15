@@ -207,3 +207,17 @@ export function togglePatientPaymentsUpdate() {
     payload: '',
   };
 }
+
+export function toggleCheckDoctorAppointments() {
+  return {
+    type: types.checkDoctorAppointments,
+    payload: '',
+  };
+}
+
+export function setUpdateCurrentUser(update = true) {
+  return {
+    type: types.setUpdateCurrentUser,
+    payload: update,
+  };
+}

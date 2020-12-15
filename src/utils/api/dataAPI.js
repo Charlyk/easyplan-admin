@@ -255,7 +255,7 @@ export default {
 
   /**
    * Create new user
-   * @param {string} userId
+   * @param {number} userId
    * @param {Object} requestBody
    * @param {string} requestBody.firstName
    * @param {string} requestBody.lastName
@@ -688,15 +688,14 @@ export default {
 
   /**
    * Accept invitation to a clinic
-   * @param {string} token
-   * @param {string?} password
+   * @param {{ firstName: string, lastName: string, password: string, phoneNumber: string, invitationToken: string }} requestBody
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  acceptClinicInvitation: async (token, password) => {
+  acceptClinicInvitation: async requestBody => {
     try {
       const response = await Axios.put(
-        `${baseURL}/users/accept-invitation/${token}`,
-        { password: password?.length > 0 ? password : null },
+        `${baseURL}/users/accept-invitation`,
+        requestBody,
       );
       const { data: responseData } = response;
       return responseData;
@@ -1591,6 +1590,53 @@ export default {
     try {
       const url = `${baseURL}/schedules/import`;
       const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Delete user invitation from clinic
+   * @param {number} invitationId
+   * @return {Promise<{isError: boolean, message}|any>}
+   */
+  deleteClinicInvitation: async invitationId => {
+    try {
+      const url = `${baseURL}/clinics/invitations/delete?invitationId=${invitationId}`;
+      const response = await Axios.delete(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  fetchUserDetails: async userId => {
+    try {
+      const url = `${baseURL}/users/details/${userId}`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  deleteUserHoliday: async (userId, holidayId) => {
+    try {
+      const url = `${baseURL}/users/${userId}/holidays/${holidayId}`;
+      const response = await Axios.delete(url);
       const { data: responseData } = response;
       return responseData;
     } catch (e) {

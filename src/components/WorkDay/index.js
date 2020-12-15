@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
@@ -9,7 +10,6 @@ import { textForKey } from '../../utils/localization';
 import SwitchButton from '../SwitchButton';
 
 import './styles.scss';
-import Typography from '@material-ui/core/Typography';
 
 const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   const hours = createHoursList();

@@ -69,7 +69,7 @@ function main(state = initialState, action) {
     case types.setUpdateCurrentUser:
       return {
         ...state,
-        updateCurrentUser: !state.updateCurrentUser,
+        updateCurrentUser: action.payload,
       };
     case types.changeCurrentClinic:
       return {

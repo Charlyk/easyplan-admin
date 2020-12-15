@@ -59,6 +59,7 @@ export const Role = {
 };
 
 export const EmailRegex = /.+@.+\.[A-Za-z]+$/;
+export const PasswordRegex = /(?=^.{6,}$)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9]).*/;
 export const JwtRegex = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
 
 export const S3Config = dirname => ({
@@ -409,6 +410,7 @@ export const Action = {
   ViewUser: 'ViewUser',
   ViewUsers: 'ViewUsers',
   DeleteUser: 'DeleteUser',
+  DeleteInvitation: 'DeleteInvitation',
   CreatePatientNote: 'CreatePatientNote',
   AddPatientXRayImage: 'AddPatientXRayImage',
   EditVisitNote: 'EditVisitNote',
