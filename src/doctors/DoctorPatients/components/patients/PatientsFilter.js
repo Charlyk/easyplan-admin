@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
+import { useSelector } from 'react-redux';
 
-import dataAPI from '../../../../utils/api/dataAPI';
+import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
 import { Statuses } from '../../../../utils/constants';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
 
@@ -16,20 +17,7 @@ const PatientsFilter = ({
   onStatusChange,
   onDateChange,
 }) => {
-  const [services, setServices] = useState([]);
-
-  useEffect(() => {
-    fetchServices();
-  }, []);
-
-  const fetchServices = async () => {
-    const response = await dataAPI.fetchUserServices();
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      setServices(response.data);
-    }
-  };
+  const services = useSelector(clinicServicesSelector);
 
   return (
     <div className='patients-filter'>

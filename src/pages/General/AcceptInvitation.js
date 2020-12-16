@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import appLogo from '../../assets/images/easyplan-logo.svg';
 import LoadingButton from '../../components/LoadingButton';
-import { setCurrentUser, triggerUserLogout } from '../../redux/actions/actions';
+import { setCurrentUser } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { JwtRegex, PasswordRegex } from '../../utils/constants';
 import {
@@ -172,12 +172,16 @@ const AcceptInvitation = () => {
       authManager.setUserId(user.id);
       dispatch(setCurrentUser(user));
       if (user.selectedClinic != null) {
-        dispatch(fetchClinicData());
+        await dispatch(fetchClinicData());
       }
       toast.success(textForKey('invitation_accepted_success'));
-      localDispatch(actions.setIsInvitationAccepted(true));
+      setTimeout(() => {
+        localDispatch(actions.setIsInvitationAccepted(true));
+      }, 1500);
     }
-    localDispatch(actions.setIsLoading(false));
+    setTimeout(() => {
+      localDispatch(actions.setIsLoading(false));
+    }, 1500);
   };
 
   if (isInvitationAccepted) {

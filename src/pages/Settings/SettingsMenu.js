@@ -51,6 +51,22 @@ const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
         <div
           role='button'
           tabIndex={0}
+          onClick={() => onSelect('bracesSettings')}
+          className={clsx(
+            'settings-menu-item',
+            isSelected('bracesSettings') && 'selected',
+          )}
+        >
+          <span className='item-title'>{textForKey('Braces settings')}</span>
+          <div className='next-arrow'>
+            {isSelected('bracesSettings') && <IconNext />}
+          </div>
+        </div>
+      )}
+      {['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic) && (
+        <div
+          role='button'
+          tabIndex={0}
           onClick={() => onSelect('workingHours')}
           className={clsx(
             'settings-menu-item',

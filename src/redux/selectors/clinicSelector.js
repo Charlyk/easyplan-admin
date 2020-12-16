@@ -23,3 +23,8 @@ export const clinicServicesSelector = createSelector(
   clinicDetailsSelector,
   clinic => clinic.services,
 );
+
+export const clinicBracesSelector = createSelector(
+  clinicDetailsSelector,
+  clinic => clinic.braces,
+);

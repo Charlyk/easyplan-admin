@@ -184,6 +184,75 @@
   }
 }
 
+.braces-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40rem;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+
+  &__data-wrapper {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    table {
+      width: 100%;
+
+      td {
+        padding: .3rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 24px;
+        color: #34354C;
+
+        .input-group {
+          .form-control {
+            flex: 1 !important;
+            margin-right: 0 !important;
+          }
+
+          .input-group-append {
+            height: 2.1rem;
+
+            span {
+              font-family: Inter, sans-serif;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 24px;
+              color: #34354C;
+            }
+          }
+        }
+      }
+
+      th {
+        padding: .3rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 24px;
+        color: #34354C;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  .form-title {
+    width: 100%;
+  }
+
+  .positive-button {
+    max-width: 15rem;
+  }
+}
+
 .application-settings-form {
   background: #FFFFFF;
   box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);

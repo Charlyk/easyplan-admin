@@ -7,11 +7,7 @@ import thunk from 'redux-thunk';
 import timerMiddleware from 'redux-timer-middleware';
 
 import App from './App';
-import {
-  setCurrentUser,
-  toggleForceLogoutUser,
-  triggerUserLogout,
-} from './redux/actions/actions';
+import { toggleForceLogoutUser } from './redux/actions/actions';
 import rootReducer from './redux/reducers/rootReducer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -46,9 +42,7 @@ Axios.interceptors.response.use(
     const unauthorizedRequest = status === 401;
 
     if (unauthorizedRequest) {
-      setTimeout(() => {
-        ReduxStore.dispatch(toggleForceLogoutUser(true));
-      }, 100);
+      ReduxStore.dispatch(toggleForceLogoutUser(true));
     }
     return error;
   },

@@ -2081,4 +2081,29 @@ export default {
       };
     }
   },
+
+  /**
+   * Update clinic braces settings
+   * @param {Array.<{id: number, isEnabled: boolean, price: number, duration: number}>} requestBody
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  updateBracesSettings: async requestBody => {
+    try {
+      const url = `${baseURL}/clinics/braces-types`;
+      const response = await Axios.put(url, { services: requestBody });
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };

@@ -5,9 +5,13 @@ import {
   toggleUpdateInvoices,
   triggerUsersUpdate,
 } from '../redux/actions/actions';
+import { userSelector } from '../redux/selectors/rootSelector';
 
-export const handleRemoteMessage = message => dispatch => {
-  switch (message.action) {
+export const handleRemoteMessage = message => (dispatch, getState) => {
+  const appState = getState();
+  const currentUser = userSelector(appState);
+  const { action, targetUserId } = message;
+  switch (action) {
     case MessageAction.NewUserInvited:
     case MessageAction.InvitationRemoved:
     case MessageAction.ClinicInvitationAccepted:
@@ -27,7 +31,9 @@ export const handleRemoteMessage = message => dispatch => {
       dispatch(toggleCheckDoctorAppointments());
       break;
     case MessageAction.UserRemovedFromClinic:
-      dispatch(setUpdateCurrentUser());
+      if (currentUser.id === targetUserId) {
+        dispatch(setUpdateCurrentUser());
+      }
       break;
   }
 };

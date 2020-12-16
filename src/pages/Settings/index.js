@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import AccountSettings from './AccountSettings';
 import ApplicationSettings from './ApplicationSettings';
+import BracesSettings from './BracesSettings';
 import ClinicWorkingHours from './ClinicWorkingHours';
 import CompanyDetailsForm from './CompanyDetailsForm';
 import SecuritySettings from './SecuritySettings';
@@ -18,6 +19,7 @@ const SettingsForm = {
   accountSettings: 'accountSettings',
   securitySettings: 'securitySettings',
   appSettings: 'appSettings',
+  bracesSettings: 'bracesSettings',
 };
 
 const Settings = props => {
@@ -48,6 +50,7 @@ const Settings = props => {
         {currentForm === SettingsForm.accountSettings && <AccountSettings />}
         {currentForm === SettingsForm.securitySettings && <SecuritySettings />}
         {currentForm === SettingsForm.appSettings && <ApplicationSettings />}
+        {currentForm === SettingsForm.bracesSettings && <BracesSettings />}
       </div>
     </div>
   );

@@ -203,6 +203,14 @@
 .register-form {
   position: relative;
 
+  .form-group {
+    .react-tel-input {
+      .form-control {
+        width: 100%;
+      }
+    }
+  }
+
   .form-control {
     width: 100%;
   }

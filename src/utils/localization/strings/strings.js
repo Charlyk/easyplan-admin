@@ -330,6 +330,7 @@ export default {
     invitation_accepted_success: 'Invitation successfully accepted',
     doctor_do_not_provide_service:
       'Selected doctor does not provide selected service!',
+    'braces settings': 'Braces settings',
   },
   ro: {
     analytics: 'Analitică',
@@ -666,6 +667,7 @@ export default {
     invitation_accepted_success: 'Invitația a fost acceptată cu succes',
     doctor_do_not_provide_service:
       'Doctorul selectat nu prestează acest serviciu!',
+    'braces settings': 'Setări aparate dentare',
   },
   ru: {
     analytics: 'Analytics',
@@ -995,5 +997,6 @@ export default {
     invitation_accepted_success: 'Invitation successfully accepted',
     doctor_do_not_provide_service:
       'Selected doctor does not provide selected service!',
+    'braces settings': 'Braces settings',
   },
 };

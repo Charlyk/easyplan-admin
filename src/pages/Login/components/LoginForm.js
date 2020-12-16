@@ -40,7 +40,6 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
     setErrorMessage(null);
     setIsLoading(true);
     const response = await authAPI.login(data.email, data.password);
-    console.log(response.data);
     if (response.isError) {
       toast.error(textForKey(response.message));
       setErrorMessage(response.message);
