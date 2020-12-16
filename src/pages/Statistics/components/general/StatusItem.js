@@ -58,7 +58,7 @@ export default StatusItem;
 
 StatusItem.propTypes = {
   status: PropTypes.object,
-  doctorId: PropTypes.string,
+  doctorId: PropTypes.number,
   startDate: PropTypes.instanceOf(Date),
   endDate: PropTypes.instanceOf(Date),
   title: PropTypes.string,

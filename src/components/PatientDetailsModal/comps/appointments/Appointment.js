@@ -8,13 +8,13 @@ import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock'
 import { textForKey } from '../../../../utils/localization';
 
 const Appointment = ({ appointment }) => {
-  const scheduleData = moment(appointment.dateAndTime);
+  const scheduleData = moment(appointment.startTime);
   return (
     <div className='patient-appointments-list__item'>
       <div className='appointment-info'>
         <div className='appointment-info-row'>
           <div className='appointment-info-title'>{textForKey('Doctor')}:</div>
-          <div>{appointment.doctorName}</div>
+          <div>{appointment.doctor.fullName}</div>
         </div>
         <div className='appointment-info-row'>
           <div className='appointment-info-title'>{textForKey('Service')}:</div>
@@ -43,18 +43,19 @@ export default Appointment;
 
 Appointment.propTypes = {
   appointment: PropTypes.shape({
-    id: PropTypes.string,
-    patientId: PropTypes.string,
-    patientName: PropTypes.string,
-    patientPhone: PropTypes.string,
-    doctorId: PropTypes.string,
-    doctorName: PropTypes.string,
-    serviceId: PropTypes.string,
+    id: PropTypes.number,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
+    doctor: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
+    startTime: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.number,
     dateAndTime: PropTypes.string,
-    status: PropTypes.string,
-    note: PropTypes.string,
+    scheduleStatus: PropTypes.string,
   }),
 };

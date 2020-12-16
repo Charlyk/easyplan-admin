@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { Typography } from '@material-ui/core';
-import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 import { FormControl } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import {
   toggleAppointmentsUpdate,
@@ -20,13 +20,13 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [payAmount, setPayAmount] = useState(
-    invoice?.amount ? String(invoice.amount - invoice.paid) : '0',
+    invoice?.remainedAmount ? String(invoice.remainedAmount) : '0',
   );
   const [discount, setDiscount] = useState('');
 
   useEffect(() => {
     if (invoice != null) {
-      setPayAmount(String(invoice.amount - invoice.paid));
+      setPayAmount(String(invoice.remainedAmount));
       setDiscount(invoice.discount ? String(invoice.discount) : '');
     }
   }, [invoice]);
@@ -42,7 +42,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const handleAmountChange = event => {
     let newValue = event.target.value;
     if (newValue.length > 0 && parseFloat(newValue) > invoice?.amount) {
-      newValue = String(invoice?.amount);
+      newValue = String(invoice?.remainedAmount);
     }
     setPayAmount(newValue);
   };
@@ -56,11 +56,14 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   };
 
   const getTotal = () => {
-    if (discount.length === 0 || payAmount.length === 0) {
-      return payAmount;
+    const fixedDiscount = discount.length === 0 ? '0' : discount;
+    if (payAmount.length === 0) {
+      const discountAmount =
+        (parseInt(fixedDiscount) / 100) * parseFloat(payAmount);
+      return payAmount - discountAmount;
     }
-    const amount = sum(invoice?.services.map(item => item.price) || [0]);
-    const discountAmount = (parseInt(discount) / 100) * parseFloat(amount || 0);
+    const amount = invoice?.remainedAmount || 0;
+    const discountAmount = (parseInt(fixedDiscount) / 100) * parseFloat(amount);
     return payAmount - discountAmount;
   };
 
@@ -79,7 +82,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       discount: parseInt(discount),
     });
     if (response.isError) {
-      console.log(response.message);
+      toast.error(textForKey(response.message));
     } else {
       dispatch(toggleAppointmentsUpdate());
       dispatch(toggleUpdateInvoices());
@@ -104,11 +107,11 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       <div className='register-payment-content'>
         <div className='content-row'>
           <span className='title-text'>{textForKey('Doctor')}:</span>
-          <span className='content-text'>{invoice?.doctorName}</span>
+          <span className='content-text'>{invoice?.doctor.fullName}</span>
         </div>
         <div className='content-row'>
           <span className='title-text'>{textForKey('Patient')}:</span>
-          <span className='content-text'>{invoice?.patientName}</span>
+          <span className='content-text'>{invoice?.patient}</span>
         </div>
         <div className='services-wrapper'>
           <div className='content-row'>
@@ -137,12 +140,12 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
           <span className='title-text'>{textForKey('For payment')}:</span>
           <FormControl
             type='number'
-            max={invoice?.amount ? invoice.amount - invoice.paid : 0}
+            max={invoice?.remainedAmount}
             onChange={handleAmountChange}
             value={String(payAmount)}
           />
           <span className='content-text'>
-            {textForKey('from')} {invoice?.amount - invoice?.paid}
+            {textForKey('from')} {invoice?.remainedAmount || 0}
           </span>
         </div>
         <div className='content-row'>
@@ -169,16 +172,16 @@ export default RegisterPaymentModal;
 RegisterPaymentModal.propTypes = {
   open: PropTypes.bool,
   invoice: PropTypes.shape({
-    id: PropTypes.string,
-    doctorId: PropTypes.string,
-    doctorName: PropTypes.string,
-    patientId: PropTypes.string,
-    patientName: PropTypes.string,
-    scheduleId: PropTypes.string,
-    amount: PropTypes.number,
-    status: PropTypes.string,
-    paid: PropTypes.number,
-    discount: PropTypes.number,
+    id: PropTypes.number,
+    doctor: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
+    scheduleId: PropTypes.number,
+    patient: PropTypes.string,
+    totalAmount: PropTypes.number,
+    paidAmount: PropTypes.number,
+    remainedAmount: PropTypes.number,
     services: PropTypes.arrayOf(PropTypes.object),
   }),
   onClose: PropTypes.func,

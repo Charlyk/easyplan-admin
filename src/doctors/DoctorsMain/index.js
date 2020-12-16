@@ -90,11 +90,7 @@ const DoctorsMain = () => {
       <div className='doctor-data-container'>
         <Switch>
           <Route path='/' exact component={DoctorPatients} />
-          <Route
-            path='/:patientId/:scheduleId'
-            exact
-            component={DoctorPatientDetails}
-          />
+          <Route path='/:scheduleId' exact component={DoctorPatientDetails} />
         </Switch>
       </div>
     </div>

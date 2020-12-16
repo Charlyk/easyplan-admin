@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { triggerUpdateNotes } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
@@ -34,26 +35,44 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   const handleSaveNote = async () => {
     setIsLoading(true);
     if (mode === 'visits') {
-      await dataAPI.editVisitNote(patientId, scheduleId, noteText);
-      logUserAction(
-        Action.EditVisitNote,
-        JSON.stringify({ patientId, scheduleId, noteText }),
+      console.log(patientId, scheduleId);
+      const visitResponse = await dataAPI.editVisitNote(
+        patientId,
+        visit.id,
+        noteText,
       );
+      if (visitResponse.isError) {
+        toast.error(textForKey(visitResponse.message));
+      } else {
+        logUserAction(
+          Action.EditVisitNote,
+          JSON.stringify({ visitId: visit.id, scheduleId, noteText }),
+        );
+        dispatch(triggerUpdateNotes());
+        onClose();
+      }
     } else {
       const requestBody = {
         note: noteText,
         mode,
         scheduleId,
       };
-      await dataAPI.createPatientNote(patientId, requestBody);
-      logUserAction(
-        Action.CreatePatientNote,
-        JSON.stringify({ patientId, requestBody }),
+      const createNoteResponse = await dataAPI.createPatientNote(
+        patientId,
+        requestBody,
       );
+      if (createNoteResponse.isError) {
+        toast.error(textForKey(createNoteResponse.message));
+      } else {
+        logUserAction(
+          Action.CreatePatientNote,
+          JSON.stringify({ patientId, requestBody }),
+        );
+        dispatch(triggerUpdateNotes());
+        onClose();
+      }
     }
-    dispatch(triggerUpdateNotes());
     setIsLoading(false);
-    onClose();
   };
 
   return (
@@ -83,7 +102,7 @@ export default AddNote;
 
 AddNote.propTypes = {
   open: PropTypes.bool.isRequired,
-  patientId: PropTypes.string,
+  patientId: PropTypes.number,
   onClose: PropTypes.func,
   mode: PropTypes.string.isRequired,
   visit: PropTypes.object,

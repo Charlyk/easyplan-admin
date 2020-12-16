@@ -4,6 +4,7 @@ import sum from 'lodash/sum';
 import moment from 'moment';
 import { Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
 import {
@@ -86,7 +87,7 @@ const DoctorsStatistics = () => {
   }, []);
 
   const handleServiceChange = event => {
-    const newValue = event.target.value;
+    const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedService({ id: newValue }));
       return;
@@ -96,7 +97,7 @@ const DoctorsStatistics = () => {
   };
 
   const handleDoctorChange = event => {
-    const newValue = event.target.value;
+    const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedDoctor({ id: newValue }));
       return;
@@ -139,7 +140,7 @@ const DoctorsStatistics = () => {
     );
     const response = await dataAPI.fetchDoctorsStatistics(requestData);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       localDispatch(reducerActions.setStatistics(response.data));
     }
@@ -214,8 +215,8 @@ const DoctorsStatistics = () => {
             </thead>
             <tbody>
               {statistics.map(item => (
-                <tr key={item.doctorId}>
-                  <td>{item.doctorName}</td>
+                <tr key={item.id}>
+                  <td>{item.user.fullName}</td>
                   <td>{Math.round(item.totalAmount)} MDL</td>
                   <td>{Math.round(item.doctorAmount)} MDL</td>
                   <td>{Math.round(item.clinicAmount)} MDL</td>

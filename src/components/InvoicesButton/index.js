@@ -4,6 +4,7 @@ import './styles.scss';
 import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { setPaymentModal } from '../../redux/actions/actions';
 import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
@@ -26,7 +27,7 @@ const InvoicesButton = () => {
     setIsLoading(true);
     const response = await dataAPI.fetchClinicInvoices();
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       setInvoices(response.data);
     }
@@ -71,9 +72,9 @@ const InvoicesButton = () => {
                 <tbody>
                   {invoices.map(invoice => (
                     <tr key={invoice.id}>
-                      <td>{invoice.doctorName}</td>
-                      <td>{invoice.patientName}</td>
-                      <td align='right'>{invoice.amount - invoice.paid}MDL</td>
+                      <td>{invoice.doctor.fullName}</td>
+                      <td>{invoice.patient}</td>
+                      <td align='right'>{invoice.remainedAmount}MDL</td>
                       <td align='right'>
                         <Button
                           className='positive-button'

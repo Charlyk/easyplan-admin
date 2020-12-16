@@ -57,12 +57,11 @@ XRayPhase.propTypes = {
   title: PropTypes.string,
   images: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       imageUrl: PropTypes.string,
-      type: PropTypes.string,
+      imageType: PropTypes.string,
       created: PropTypes.string,
-      createdById: PropTypes.string,
-      createdByName: PropTypes.string,
+      createdBy: PropTypes.string,
     }),
   ),
   isExpanded: PropTypes.bool,

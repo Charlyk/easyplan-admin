@@ -14,6 +14,7 @@ import {
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { setPaymentModal } from '../../../redux/actions/actions';
 import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
@@ -37,7 +38,7 @@ const PatientDebtsList = ({ patient }) => {
     setIsLoading(true);
     const response = await dataAPI.fetchPatientDebts(patient.id);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       setDebts(response.data);
     }
@@ -45,14 +46,7 @@ const PatientDebtsList = ({ patient }) => {
   };
 
   const handlePayDebt = async debt => {
-    setLoadingDebt(debt.invoiceId);
-    const response = await dataAPI.fetchInvoiceDetails(debt.invoiceId);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      dispatch(setPaymentModal({ open: true, invoice: response.data }));
-    }
-    setLoadingDebt(null);
+    dispatch(setPaymentModal({ open: true, invoice: debt }));
   };
 
   return (
@@ -80,13 +74,15 @@ const PatientDebtsList = ({ patient }) => {
               </TableHead>
               <TableBody>
                 {debts.map(item => (
-                  <TableRow key={item.invoiceId}>
-                    <TableCell align='left'>{item.serviceName}</TableCell>
-                    <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      {item.amount}MDL
+                  <TableRow key={item.id}>
+                    <TableCell align='left'>
+                      {item.services.map(it => it.name).join(', ')}
                     </TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      {item.amount - item.paid}MDL
+                      {item.totalAmount}MDL
+                    </TableCell>
+                    <TableCell align='right' classes={{ root: 'amount-cell' }}>
+                      {item.remainedAmount}MDL
                     </TableCell>
                     <TableCell align='right'>
                       <Box
@@ -100,14 +96,7 @@ const PatientDebtsList = ({ patient }) => {
                           variant='outline-primary'
                           onClick={() => handlePayDebt(item)}
                         >
-                          {loadingDebt === item.invoiceId ? (
-                            <Spinner
-                              animation='border'
-                              className='pay-btn-spinner'
-                            />
-                          ) : (
-                            textForKey('Pay')
-                          )}
+                          {textForKey('Pay')}
                         </Button>
                       </Box>
                     </TableCell>
@@ -126,7 +115,7 @@ export default PatientDebtsList;
 
 PatientDebtsList.propTypes = {
   patient: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,

@@ -479,7 +479,7 @@ export default {
 
   /**
    * Fetch all X-Ray images for a patient
-   * @param {string} patientId
+   * @param {number} patientId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   fetchPatientXRayImages: async patientId => {
@@ -855,16 +855,8 @@ export default {
    * Finalize patient treatment
    * @param {string} patientId
    * @param {Object} requestBody
-   * @param {string} requestBody.scheduleId
-   * @param {Array.<{id: string, name: string, price: number, toothId: string?}>} requestBody.services
-   * @param {Array.<{id: string, name: string, price: number, toothId: string?}>} requestBody.selectedServices
-   * @param {Object} requestBody.treatmentPlan
-   * @param {string} requestBody.treatmentPlan.planClass
-   * @param {string} requestBody.treatmentPlan.occlusion
-   * @param {string} requestBody.treatmentPlan.included
-   * @param {string} requestBody.treatmentPlan.radiograph
-   * @param {Array.<string>} requestBody.treatmentPlan.fallenBrackets
-   * @param {{id: string, toothId: string?, name: string, price: number}} requestBody.treatmentPlan.service
+   * @param {number} requestBody.scheduleId
+   * @param {Array.<{id: number, toothId: string?, completed: boolean}>} requestBody.services
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   finalizeTreatment: async (patientId, requestBody) => {
@@ -967,7 +959,7 @@ export default {
    * @param {string} requestBody.invoiceId
    * @param {number} requestBody.amount
    * @param {number} requestBody.discount
-   * @return {Promise<void>}
+   * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
    */
   registerPayment: async requestBody => {
     try {
@@ -1263,13 +1255,12 @@ export default {
 
   /**
    * Fetch patient details for doctor
-   * @param {string} patientId
    * @param {string} scheduleId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  fetchDoctorPatientDetails: async (patientId, scheduleId) => {
+  fetchDoctorPatientDetails: async scheduleId => {
     try {
-      const url = `${baseURL}/patients/${patientId}/doctor-details/${scheduleId}`;
+      const url = `${baseURL}/schedules/${scheduleId}/doctor-details`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       return responseData;

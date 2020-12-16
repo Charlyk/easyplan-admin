@@ -216,7 +216,7 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
     >
       <div className='name-and-status'>
         <Typography noWrap classes={{ root: 'patient-name' }}>
-          {appointment.patientName}
+          {appointment.patient.fullName}
         </Typography>
         <div className='status-icon'>
           {appointment.scheduleStatus === 'OnSite' && <DoneIcon />}
@@ -240,8 +240,10 @@ AppointmentItem.propTypes = {
   appointments: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
-      patientId: PropTypes.number,
-      patientName: PropTypes.string,
+      patient: PropTypes.shape({
+        id: PropTypes.number,
+        fullName: PropTypes.string,
+      }),
       serviceName: PropTypes.string,
       serviceColor: PropTypes.string,
       start: PropTypes.object,
@@ -251,8 +253,10 @@ AppointmentItem.propTypes = {
   ),
   appointment: PropTypes.shape({
     id: PropTypes.number,
-    patientId: PropTypes.number,
-    patientName: PropTypes.string,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
     start: PropTypes.object,

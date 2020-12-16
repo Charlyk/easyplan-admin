@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
@@ -13,44 +13,34 @@ import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [planServices, setPlanServices] = useState([]);
+
+  useEffect(() => {
+    setPlanServices(services.map(item => ({ ...item, selected: false })));
+  }, [services]);
 
   const handleServiceToggle = service => {
-    const newServices = cloneDeep(selectedServices);
-    if (
-      newServices.some(
-        item =>
-          item.id === service.id &&
-          item.toothId === service.toothId &&
-          item.destination === service.destination,
-      )
-    ) {
-      remove(
-        newServices,
-        item =>
-          item.id === service.id &&
-          item.toothId === service.toothId &&
-          item.destination === service.destination,
-      );
-    } else {
-      newServices.push(service);
-    }
-    setSelectedServices(newServices);
+    const newServices = planServices.map(item => {
+      if (item.id !== service.id || item.toothId !== service.toothId) {
+        return item;
+      }
+
+      return {
+        ...item,
+        selected: !item.selected,
+      };
+    });
+    setPlanServices(newServices);
   };
 
   const handleSaveTreatment = () => {
-    onSave(services, selectedServices);
+    onSave(planServices);
   };
 
-  const totalPrice = sum(selectedServices.map(item => item.price));
+  const totalPrice = sum(
+    planServices.filter(item => item.selected).map(item => item.price),
+  );
 
-  const isChecked = item =>
-    selectedServices.some(
-      service =>
-        service.id === item.id &&
-        service.toothId === item.toothId &&
-        service.destination === item.destination,
-    );
   return (
     <EasyPlanModal
       open={open}
@@ -61,11 +51,11 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     >
       <div className='finalize-treatment-content'>
         <span className='modal-subtitle'>{textForKey('Services')}</span>
-        {services.map(item => (
+        {planServices.map(item => (
           <div
             role='button'
             tabIndex={0}
-            key={`${item.id}-${item.toothId}-${item.name}-${item.destination}`}
+            key={`${item.id}-${item.toothId}-${item.name}`}
             className='final-service-item'
             onClick={() => handleServiceToggle(item)}
           >
@@ -74,7 +64,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
             </span>
             <Box display='flex' alignItems='center'>
               <span className='service-price'>{item.price} MDL</span>
-              {isChecked(item) ? (
+              {item.selected ? (
                 <IconCheckBoxChecked />
               ) : (
                 <IconCheckBoxUnchecked />

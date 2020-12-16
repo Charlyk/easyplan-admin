@@ -141,7 +141,7 @@ export default PatientNotes;
 
 PatientNotes.propTypes = {
   patient: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     email: PropTypes.string,

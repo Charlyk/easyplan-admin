@@ -225,17 +225,17 @@ const reducer = (state, action) => {
       return { ...state, isCreatingSchedule: action.payload };
     case reducerTypes.setSchedule: {
       const schedule = action.payload;
-      const scheduleDate = moment(schedule.dateAndTime);
+      const scheduleDate = moment(schedule.startTime);
       return {
         ...state,
         scheduleId: schedule.id,
-        patient: { id: schedule.patientId, fullName: schedule.patientName },
-        doctor: { id: schedule.doctorId, fullName: schedule.doctorName },
-        service: { id: schedule.serviceId, name: schedule.serviceName },
-        appointmentNote: schedule.note,
+        patient: schedule.patient,
+        doctor: schedule.doctor,
+        service: schedule.service,
+        appointmentNote: schedule.noteText,
         appointmentDate: scheduleDate.toDate(),
         appointmentHour: scheduleDate.format('HH:mm'),
-        appointmentStatus: schedule.status,
+        appointmentStatus: schedule.scheduleStatus,
         isPatientValid: true,
         isDoctorValid: true,
         isServiceValid: true,
@@ -330,7 +330,7 @@ const AddAppointmentModal = ({
 
   useEffect(() => {
     if (schedule != null) {
-      localDispatch(reducerActions.setSchedule(schedule));
+      fetchScheduleDetails();
     }
   }, [schedule]);
 
@@ -369,6 +369,19 @@ const AddAppointmentModal = ({
   useEffect(() => {
     fetchAvailableHours();
   }, [doctor, schedule, service, appointmentDate]);
+
+  const fetchScheduleDetails = async () => {
+    if (schedule == null) {
+      return;
+    }
+    const response = await dataAPI.fetchScheduleDetails(schedule.id);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      console.log(response.data);
+      localDispatch(reducerActions.setSchedule(response.data));
+    }
+  };
 
   const fetchAvailableHours = async () => {
     if (doctor == null || service == null || appointmentDate == null) {
@@ -444,9 +457,7 @@ const AddAppointmentModal = ({
     const response = await dataAPI.searchPatients(query);
     if (response.isError) {
       toast.error(textForKey(response.message));
-      console.error(response.message);
     } else {
-      console.log(response.data);
       const patients = response.data.map(item => ({
         ...item,
         fullName: getLabelKey(item),
@@ -460,7 +471,7 @@ const AddAppointmentModal = ({
     localDispatch(reducerActions.setDoctorsLoading(true));
     const response = await dataAPI.searchDoctors(query);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       const doctors = response.data.map(item => ({
         ...item,
@@ -475,7 +486,7 @@ const AddAppointmentModal = ({
     localDispatch(reducerActions.setServicesLoading(true));
     const response = await dataAPI.searchServices(query, doctor.id);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       localDispatch(reducerActions.setServices(response.data));
     }

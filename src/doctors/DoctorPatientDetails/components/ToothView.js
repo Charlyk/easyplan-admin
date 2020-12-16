@@ -28,6 +28,7 @@ const ToothView = ({
         );
         return {
           ...service,
+          toothId: toothId,
           selected: selectedService != null,
         };
       }),
@@ -110,7 +111,7 @@ const ToothView = ({
 
   const infoServices = [
     ...toothServices.filter(item => item.selected),
-    ...completedServices,
+    ...completedServices.filter(item => item.toothId === toothId),
   ];
 
   const infoPopper =
@@ -168,10 +169,10 @@ const ToothView = ({
             direction === 'top' && 'top',
           )}
         >
-          {infoServices.map(item => (
+          {infoServices.map((item, index) => (
             <div
               className='service-indicator'
-              key={`${item.id}-${item.historyId}`}
+              key={`${item.id}-${item.toothId}-${index}`}
               style={{ backgroundColor: item.color }}
             />
           ))}

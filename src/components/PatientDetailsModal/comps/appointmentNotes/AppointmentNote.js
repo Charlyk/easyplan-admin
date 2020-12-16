@@ -52,10 +52,10 @@ AppointmentNote.propTypes = {
   canEdit: PropTypes.bool,
   onEdit: PropTypes.func,
   visit: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     note: PropTypes.string,
     doctorName: PropTypes.string,
-    doctorId: PropTypes.string,
+    doctorId: PropTypes.number,
     created: PropTypes.string,
     services: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,

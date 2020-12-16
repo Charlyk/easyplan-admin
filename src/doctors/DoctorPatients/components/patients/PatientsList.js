@@ -42,10 +42,10 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
       schedules.filter(schedule => {
         return (
           (filterData.patientName.length === 0 ||
-            schedule.patientName
+            schedule.patient.fullName
               .toLowerCase()
               .includes(filterData.patientName.toLowerCase()) ||
-            schedule.patientPhone.includes(
+            schedule.patient.phoneNumber.includes(
               filterData.patientName.toLowerCase(),
             )) &&
           (schedule == null ||
@@ -53,7 +53,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
             schedule.serviceId === filterData.serviceId) &&
           (schedule == null ||
             filterData.appointmentStatus === 'all' ||
-            filterData.appointmentStatus === schedule.status)
+            filterData.appointmentStatus === schedule.scheduleStatus)
         );
       }),
     );
@@ -75,10 +75,10 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
   const schedulesForHour = hour => {
     const [hours] = hour.split(':');
     const schedules = filteredSchedules.filter(schedule => {
-      const scheduleHour = moment(schedule.dateAndTime).format('HH');
+      const scheduleHour = moment(schedule.startTime).format('HH');
       return hours === scheduleHour;
     });
-    return sortBy(schedules, item => item.dateAndTime);
+    return sortBy(schedules, item => item.startTime);
   };
 
   const renderPatientItem = schedule => {
@@ -86,18 +86,15 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
       return null;
     }
 
-    const startDate = moment(schedule.dateAndTime);
-    const endDate = moment(schedule.dateAndTime).add(
-      schedule.serviceDuration,
-      'minutes',
-    );
+    const startDate = moment(schedule.startTime);
+    const endDate = moment(schedule.endTime);
 
     return (
       <div
         key={schedule.id}
         className={clsx(
           'schedule-item',
-          schedule.status === 'OnSite' && 'upcoming',
+          schedule.scheduleStatus === 'OnSite' && 'upcoming',
         )}
         style={{
           border: `${schedule.serviceColor} 1px solid`,
@@ -105,7 +102,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
         }}
       >
         <Typography noWrap classes={{ root: 'patient-name' }}>
-          {schedule.patientName}
+          {schedule.patient.fullName}
         </Typography>
         <Typography noWrap classes={{ root: 'service-name' }}>
           {schedule.serviceName}
@@ -114,7 +111,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
         </span>
         <div className='details-button'>
-          <Link to={updateLink(`/${schedule.patientId}/${schedule.id}`)}>
+          <Link to={updateLink(`/${schedule.id}`)}>
             <span className='button-text'>{textForKey('Details')}</span>
           </Link>
         </div>
@@ -166,31 +163,19 @@ PatientsList.propTypes = {
   }),
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
-      schedule: PropTypes.shape({
-        id: PropTypes.string,
-        patientId: PropTypes.string,
-        patientName: PropTypes.string,
-        patientPhone: PropTypes.string,
-        patientPhoto: PropTypes.string,
-        doctorId: PropTypes.string,
-        doctorName: PropTypes.string,
-        serviceId: PropTypes.string,
-        serviceName: PropTypes.string,
-        serviceColor: PropTypes.string,
-        serviceDuration: PropTypes.number,
-        dateAndTime: PropTypes.string,
-        status: PropTypes.string,
-        note: PropTypes.string,
-      }),
+      id: PropTypes.number,
       patient: PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.number,
+        phoneNumber: PropTypes.string,
         firstName: PropTypes.string,
         lastName: PropTypes.string,
         fullName: PropTypes.string,
-        email: PropTypes.string,
-        phoneNumber: PropTypes.string,
-        photo: PropTypes.string,
       }),
+      serviceName: PropTypes.string,
+      serviceColor: PropTypes.string,
+      start: PropTypes.object,
+      end: PropTypes.object,
+      scheduleStatus: PropTypes.string,
     }),
   ),
 };

@@ -21,10 +21,10 @@ export default PatientNote;
 
 PatientNote.propTypes = {
   note: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     noteText: PropTypes.string,
-    createdById: PropTypes.string,
     createdByName: PropTypes.string,
     created: PropTypes.string,
+    doctorId: PropTypes.number,
   }).isRequired,
 };

@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
 import './styles.scss';
+import { toast } from 'react-toastify';
+
 import IconAvatar from '../../assets/icons/iconAvatar';
 import FinalizeTreatmentModal from '../../components/FinalizeTreatmentModal';
 import LoadingButton from '../../components/LoadingButton';
@@ -25,6 +27,7 @@ import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
 import '../../components/PatientDetailsModal/styles.scss';
+import { userSelector } from '../../redux/selectors/rootSelector';
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -40,6 +43,7 @@ const initialState = {
   patient: null,
   toothServices: [],
   allServices: [],
+  bracesServices: [],
   selectedServices: [],
   completedServices: [],
   schedule: null,
@@ -185,22 +189,25 @@ const reducer = (state, action) => {
     case reducerTypes.setServices: {
       return {
         ...state,
-        allServices: action.payload.filter(it => it.serviceType === 'all'),
-        toothServices: action.payload.filter(it => it.serviceType !== 'all'),
+        allServices: action.payload.filter(it => it.serviceType === 'All'),
+        toothServices: action.payload.filter(it => it.serviceType === 'Single'),
+        bracesServices: action.payload.filter(
+          it => it.serviceType === 'Braces',
+        ),
       };
     }
     case reducerTypes.setScheduleDetails: {
-      const { services, patient, schedule } = action.payload;
+      const { patient, treatmentPlan } = action.payload;
       return {
         ...state,
         patient,
-        schedule,
-        completedServices: services
-          .filter(it => it.completed)
-          .map(historyToService),
-        selectedServices: services
-          .filter(it => !it.completed)
-          .map(historyToService),
+        schedule: action.payload,
+        selectedServices: treatmentPlan.services.filter(
+          item => !item.completed,
+        ),
+        completedServices: treatmentPlan.services.filter(
+          item => item.completed,
+        ),
       };
     }
     default:
@@ -210,15 +217,17 @@ const reducer = (state, action) => {
 
 const DoctorPatientDetails = () => {
   const dispatch = useDispatch();
-  const { patientId, scheduleId } = useParams();
+  const { scheduleId } = useParams();
   const history = useHistory();
-  const services = useSelector(clinicServicesSelector);
+  const clinicServices = useSelector(clinicServicesSelector);
+  const currentUser = useSelector(userSelector);
   const [
     {
       isLoading,
       patient,
       toothServices,
       allServices,
+      bracesServices,
       selectedServices,
       schedule,
       treatmentPlan,
@@ -228,43 +237,29 @@ const DoctorPatientDetails = () => {
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
-  const simpleServices = allServices.filter(
-    item => !item.bracket && !item.bracesService,
-  );
 
   useEffect(() => {
     fetchScheduleDetails();
-  }, [patientId]);
+  }, [scheduleId]);
 
   useEffect(() => {
-    localDispatch(actions.setServices(services));
-  }, [services]);
-
-  const fetchOrthodonticPlan = async () => {
-    const response = await dataAPI.fetchTreatmentPlan(patientId);
-    if (response.isError) {
-      console.error(response.message);
-    } else if (response.data != null) {
-      handleSaveTreatmentPlan(response.data);
-    }
-  };
+    localDispatch(actions.setServices(clinicServices));
+  }, [clinicServices]);
 
   const fetchScheduleDetails = async () => {
     localDispatch(actions.setIsLoading(true));
-    const response = await dataAPI.fetchDoctorPatientDetails(
-      patientId,
-      scheduleId,
-    );
-    if (!response.isError) {
+    const response = await dataAPI.fetchDoctorPatientDetails(scheduleId);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
       const { data } = response;
       localDispatch(actions.setScheduleDetails(data));
-      await fetchOrthodonticPlan();
     }
     localDispatch(actions.setIsLoading(false));
   };
 
   const handleServiceChecked = event => {
-    const serviceId = event.target.id;
+    const serviceId = parseInt(event.target.id);
     const newServices = cloneDeep(selectedServices);
     const service = allServices.find(item => item.id === serviceId);
     if (newServices.some(item => item.id === serviceId)) {
@@ -279,18 +274,20 @@ const DoctorPatientDetails = () => {
   };
 
   const handleAddNote = () => {
-    dispatch(setPatientNoteModal({ open: true, patientId, mode: 'notes' }));
+    dispatch(
+      setPatientNoteModal({ open: true, patientId: patient.id, mode: 'notes' }),
+    );
   };
 
   const handleAddXRay = () => {
-    dispatch(setPatientXRayModal({ open: true, patientId }));
+    dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
 
   const handleEditAppointmentNote = visit => {
     dispatch(
       setPatientNoteModal({
         open: true,
-        patientId,
+        patientId: patient.id,
         mode: 'visits',
         visit: visit,
         scheduleId,
@@ -336,35 +333,25 @@ const DoctorPatientDetails = () => {
     localDispatch(actions.setShowFinalizeTreatment(false));
   };
 
-  const finalizeTreatment = async (services, selectedServices) => {
+  const finalizeTreatment = async plannedServices => {
     handleCloseFinalizeTreatment();
     localDispatch(actions.setIsFinalizing(true));
 
     const requestBody = {
       scheduleId,
-      services: services.map(item => ({
+      services: plannedServices.map(item => ({
         id: item.id,
-        name: item.name,
-        price: item.price,
         toothId: item.toothId,
-        destination: item.destination,
+        completed: item.selected,
       })),
-      selectedServices: selectedServices.map(item => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        toothId: item.toothId,
-        destination: item.destination,
-      })),
-      treatmentPlan,
     };
 
     logUserAction(Action.FinalizeTreatment, JSON.stringify(requestBody));
 
-    const response = await dataAPI.finalizeTreatment(patientId, requestBody);
+    const response = await dataAPI.finalizeTreatment(patient.id, requestBody);
 
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
       localDispatch(actions.setIsFinalizing(false));
     } else {
       history.goBack();
@@ -372,9 +359,13 @@ const DoctorPatientDetails = () => {
   };
 
   const isFinished =
-    schedule?.status === 'CompletedNotPaid' ||
-    schedule?.status === 'CompletedPaid' ||
-    schedule?.status === 'PartialPaid';
+    schedule?.scheduleStatus === 'CompletedNotPaid' ||
+    schedule?.scheduleStatus === 'CompletedPaid' ||
+    schedule?.scheduleStatus === 'PartialPaid';
+
+  const canFinalize = schedule?.scheduleStatus === 'OnSite';
+
+  console.log(schedule);
 
   return (
     <div className='doctor-patient-root'>
@@ -406,7 +397,7 @@ const DoctorPatientDetails = () => {
               <span className='patient-info-title'>{textForKey('Date')}:</span>
               <span className='patient-info-value'>
                 {schedule
-                  ? moment(schedule.dateAndTime).format('DD MMM YYYY HH:mm')
+                  ? moment(schedule.startTime).format('DD MMM YYYY HH:mm')
                   : ''}
               </span>
             </div>
@@ -414,7 +405,7 @@ const DoctorPatientDetails = () => {
               <span className='patient-info-title'>
                 {textForKey('Doctor')}:
               </span>
-              <span className='patient-info-value'>{schedule?.doctorName}</span>
+              <span className='patient-info-value'>{currentUser.fullName}</span>
             </div>
           </div>
         </div>
@@ -430,7 +421,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId === item.toothId,
+                    service => service.toothId != null,
                   )}
                   toothId={item.toothId}
                 />
@@ -447,7 +438,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId === item.toothId,
+                    service => service.toothId != null,
                   )}
                   toothId={item.toothId}
                 />
@@ -464,7 +455,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId === item.toothId,
+                    service => service.toothId != null,
                   )}
                   toothId={item.toothId}
                   direction='top'
@@ -482,7 +473,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId === item.toothId,
+                    service => service.toothId != null,
                   )}
                   toothId={item.toothId}
                   direction='top'
@@ -493,7 +484,7 @@ const DoctorPatientDetails = () => {
         <div className='services-container'>
           <div className='available-services'>
             <span className='total-title'>{textForKey('Services')}</span>
-            {simpleServices.map(service => (
+            {allServices.map(service => (
               <Form.Group key={service.id} controlId={service.id}>
                 <Form.Check
                   onChange={handleServiceChecked}
@@ -535,11 +526,13 @@ const DoctorPatientDetails = () => {
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
-              disabled={selectedServices.length === 0 || isFinished}
+              disabled={
+                selectedServices.length === 0 || isFinished || !canFinalize
+              }
               className='positive-button'
             >
               {isFinished
-                ? textForKey(schedule.status)
+                ? textForKey(schedule.scheduleStatus)
                 : textForKey('Finalize')}
             </LoadingButton>
           </div>

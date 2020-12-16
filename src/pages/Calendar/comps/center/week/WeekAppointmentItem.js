@@ -44,7 +44,7 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
     >
       <div className='title-and-time'>
         <div className='name-and-status'>
-          <span className='service-name'>{schedule.patientName}</span>
+          <span className='service-name'>{schedule.patient.fullName}</span>
           <div className='status-icon'>
             {schedule.scheduleStatus === 'OnSite' && <DoneIcon />}
             {(schedule.scheduleStatus === 'CompletedPaid' ||
@@ -66,8 +66,10 @@ WeekAppointmentItem.propTypes = {
   signeLine: PropTypes.bool,
   schedule: PropTypes.shape({
     id: PropTypes.number,
-    patientId: PropTypes.number,
-    patientName: PropTypes.string,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
     startTime: PropTypes.string,

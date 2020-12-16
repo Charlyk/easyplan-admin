@@ -66,12 +66,7 @@ AppointmentNotes.propTypes = {
   onEditNote: PropTypes.func,
   scheduleId: PropTypes.string,
   patient: PropTypes.shape({
-    id: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    email: PropTypes.string,
-    phoneNumber: PropTypes.string,
-    photo: PropTypes.string,
+    id: PropTypes.number,
   }).isRequired,
 };
 

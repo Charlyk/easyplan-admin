@@ -103,8 +103,10 @@ CalendarWeekView.propTypes = {
   viewDate: PropTypes.instanceOf(Date),
   selectedSchedule: PropTypes.shape({
     id: PropTypes.number,
-    patientId: PropTypes.number,
-    patientName: PropTypes.string,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
     startTime: PropTypes.string,

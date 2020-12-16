@@ -88,11 +88,11 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
         }}
       >
         <div className='name-and-status'>
-          <span className='service-name'>{schedule.patientName}</span>
+          <span className='service-name'>{schedule.patient.fullName}</span>
           <div className='status-icon'>
-            {schedule.status === 'OnSite' && <DoneIcon />}
-            {(schedule.status === 'CompletedPaid' ||
-              schedule.status === 'PartialPaid') && <DoneAllIcon />}
+            {schedule.scheduleStatus === 'OnSite' && <DoneIcon />}
+            {(schedule.scheduleStatus === 'CompletedPaid' ||
+              schedule.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
           </div>
         </div>
       </div>

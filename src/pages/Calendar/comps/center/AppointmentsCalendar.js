@@ -227,19 +227,16 @@ AppointmentsCalendar.propTypes = {
   onPayDebt: PropTypes.func,
   onImportSchedules: PropTypes.func,
   selectedSchedule: PropTypes.shape({
-    id: PropTypes.string,
-    patientId: PropTypes.string,
-    patientName: PropTypes.string,
-    patientPhone: PropTypes.string,
-    doctorId: PropTypes.string,
-    doctorName: PropTypes.string,
-    serviceId: PropTypes.string,
+    id: PropTypes.number,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.number,
-    dateAndTime: PropTypes.string,
-    status: PropTypes.string,
-    note: PropTypes.string,
+    start: PropTypes.object,
+    end: PropTypes.object,
+    scheduleStatus: PropTypes.string,
   }),
 };
 

@@ -203,7 +203,10 @@ const Calendar = () => {
   }, [doctors, services]);
 
   const handlePubnubMessageReceived = remoteMessage => {
-    const { message } = remoteMessage;
+    const { message, channel } = remoteMessage;
+    if (channel !== `${currentUser.id}-import_schedules_channel`) {
+      return;
+    }
     const { count, total, done } = message;
     if (done) {
       localDispatch(reducerActions.setParsedValue(100));
@@ -213,6 +216,7 @@ const Calendar = () => {
       }, 3500);
     } else {
       if (!isParsing) {
+        console.log('set is parsing');
         localDispatch(reducerActions.setIsParsing(true));
       }
       const percentage = (count / total) * 100;

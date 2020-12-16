@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import dataAPI from '../../../utils/api/dataAPI';
 import { Statuses } from '../../../utils/constants';
@@ -30,7 +31,7 @@ const PatientPaymentsList = ({ patient }) => {
     setIsLoading(true);
     const response = await dataAPI.fetchPatientPayments(patient.id);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       setInvoices(response.data);
     }
@@ -76,12 +77,12 @@ const PatientPaymentsList = ({ patient }) => {
                       <TableCell>
                         {moment(item.created).format('DD MMM YYYY HH:mm')}
                       </TableCell>
-                      <TableCell>{item.doctorName}</TableCell>
+                      <TableCell>{item.doctor.fullName}</TableCell>
                       <TableCell
                         align='right'
                         classes={{ root: 'amount-cell' }}
                       >
-                        {item.paid}MDL
+                        {item.paidAmount}MDL
                       </TableCell>
                       <TableCell align='right'>
                         <div
@@ -110,7 +111,7 @@ export default React.memo(PatientPaymentsList);
 
 PatientPaymentsList.propTypes = {
   patient: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,

@@ -32,7 +32,6 @@ const AppointmentDetails = ({
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
   const [details, setDetails] = useState(null);
-  const [loadingDebt, setLoadingDebt] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
   const [scheduleStatus, setScheduleStatus] = useState(
@@ -66,14 +65,7 @@ const AppointmentDetails = ({
   };
 
   const handlePayDebt = async debt => {
-    setLoadingDebt(debt.invoiceId);
-    const response = await dataAPI.fetchInvoiceDetails(debt.invoiceId);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
-      onPayDebt(response.data);
-    }
-    setLoadingDebt(null);
+    onPayDebt(debt);
   };
 
   const openStatusesList = () => {
@@ -95,16 +87,16 @@ const AppointmentDetails = ({
     dispatch(
       setPatientDetails({
         show: true,
-        patientId: schedule.patientId,
+        patientId: schedule.patient.id,
         onDelete: null,
       }),
     );
   };
 
   const isFinished =
-    schedule.status === 'CompletedNotPaid' ||
-    schedule.status === 'CompletedPaid' ||
-    schedule.status === 'PartialPaid';
+    schedule.scheduleStatus === 'CompletedNotPaid' ||
+    schedule.scheduleStatus === 'CompletedPaid' ||
+    schedule.scheduleStatus === 'PartialPaid';
 
   const statusesList = (
     <Popper
@@ -160,7 +152,7 @@ const AppointmentDetails = ({
           <IconClose />
         </div>
         <span className='schedule-title'>
-          {schedule.patientName}:{' '}
+          {schedule.patient.fullName}:{' '}
           <span style={{ color: schedule.serviceColor }}>
             {schedule.serviceName}
           </span>
@@ -202,14 +194,16 @@ const AppointmentDetails = ({
                     >
                       {textForKey('Doctor')}:
                     </td>
-                    <td>{details.doctor.name}</td>
+                    <td>{details.doctor.fullName}</td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Date')}:
                     </td>
                     <td>
-                      {moment(details.startTime).format('dddd, DD MMM YYYY')}
+                      {upperFirst(
+                        moment(details.startTime).format('dddd, DD MMM YYYY'),
+                      )}
                     </td>
                   </tr>
                   <tr>
@@ -222,7 +216,7 @@ const AppointmentDetails = ({
                     <td style={{ paddingRight: '1rem' }}>
                       {upperFirst(textForKey('Created by'))}:
                     </td>
-                    <td>{details.createdBy.name}</td>
+                    <td>{details.createdBy.fullName}</td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
@@ -294,24 +288,18 @@ const AppointmentDetails = ({
                 </thead>
                 <tbody>
                   {details.patient.debts.map(item => (
-                    <tr key={item.invoiceId}>
-                      <td align='left'>{item.serviceName}</td>
-                      <td align='right'>{item.amount}MDL</td>
-                      <td align='right'>{item.amount - item.paid}MDL</td>
+                    <tr key={item.id}>
+                      <td align='left'>
+                        {item.services.map(it => it.name).join(', ')}
+                      </td>
+                      <td align='right'>{item.totalAmount}MDL</td>
+                      <td align='right'>{item.remainedAmount}MDL</td>
                       <td align='right'>
                         <Button
-                          disabled={loadingDebt != null}
                           variant='outline-primary'
                           onClick={() => handlePayDebt(item)}
                         >
-                          {loadingDebt === item.invoiceId ? (
-                            <Spinner
-                              animation='border'
-                              className='pay-btn-spinner'
-                            />
-                          ) : (
-                            textForKey('Pay')
-                          )}
+                          {textForKey('Pay')}
                         </Button>
                       </td>
                     </tr>
@@ -366,8 +354,10 @@ AppointmentDetails.propTypes = {
   onPayDebt: PropTypes.func,
   schedule: PropTypes.shape({
     id: PropTypes.number,
-    patientId: PropTypes.number,
-    patientName: PropTypes.string,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
     start: PropTypes.object,

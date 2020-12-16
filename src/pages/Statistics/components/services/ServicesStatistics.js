@@ -15,6 +15,7 @@ import { parse } from 'query-string';
 import { Form, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
 import {
@@ -170,7 +171,7 @@ const ServicesStatistics = () => {
       rowsPerPage,
     );
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       localDispatch(reducerActions.setStatistics(response.data));
     }
@@ -178,7 +179,6 @@ const ServicesStatistics = () => {
   };
 
   const handleFilterSubmit = () => {
-    console.log('handleFilterSubmit');
     fetchData();
   };
 
@@ -203,7 +203,7 @@ const ServicesStatistics = () => {
   };
 
   const handleDoctorChange = event => {
-    const newValue = event.target.value;
+    const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedDoctor({ id: -1 }));
       return;
@@ -213,7 +213,7 @@ const ServicesStatistics = () => {
   };
 
   const handleServiceChange = event => {
-    const newValue = event.target.value;
+    const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedService({ id: -1 }));
       return;
@@ -224,7 +224,7 @@ const ServicesStatistics = () => {
 
   const handleStatusChange = event => {
     const newValue = event.target.value;
-    if (newValue === -1) {
+    if (newValue === 'All') {
       localDispatch(reducerActions.setSelectedStatus({ id: 'All' }));
       return;
     }
@@ -348,9 +348,9 @@ const ServicesStatistics = () => {
                     <TableCell>
                       {moment(item.dateAndTime).format('DD MMM YYYY HH:mm')}
                     </TableCell>
-                    <TableCell>{item.doctorName}</TableCell>
+                    <TableCell>{item.doctor}</TableCell>
                     <TableCell>{item.serviceName}</TableCell>
-                    <TableCell>{item.patientName}</TableCell>
+                    <TableCell>{item.patient}</TableCell>
                     <TableCell>
                       <span
                         className='status-label'
