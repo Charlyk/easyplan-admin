@@ -7,6 +7,7 @@ export default Object.freeze({
   updateCurrentUser: false,
   newClinicId: null,
   logout: false,
+  forceLogout: false,
   user: null,
   updateAppointments: false,
   updateCalendarDoctorHeight: false,

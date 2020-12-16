@@ -25,6 +25,12 @@ export default {
         password,
       });
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -40,6 +46,12 @@ export default {
         username: email,
       });
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -63,6 +75,12 @@ export default {
       }
       const response = await Axios.get(`${baseURL}/v1/me`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -81,6 +99,12 @@ export default {
     try {
       const response = await Axios.post(`${baseURL}/v1/register`, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -108,6 +132,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -128,6 +158,12 @@ export default {
         `${baseURL}/v1/change-clinic/${clinicId}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -151,6 +187,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {

@@ -22,6 +22,12 @@ export default {
     try {
       const response = await Axios.get(`${baseURL}/categories`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -43,6 +49,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -64,6 +76,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -84,6 +102,12 @@ export default {
         `${baseURL}/categories/${categoryId}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -113,6 +137,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -142,6 +172,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -164,6 +200,12 @@ export default {
         `${baseURL}/services/v1/doctors${serviceIdParam}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -184,6 +226,12 @@ export default {
         `${baseURL}/services/v1/${serviceId}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -204,6 +252,12 @@ export default {
         categoryId?.length > 0 ? `?categoryId=${categoryId}` : '';
       const response = await Axios.get(`${baseURL}/services${categoryIdParam}`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -221,6 +275,12 @@ export default {
     try {
       const response = await Axios.get(`${baseURL}/users`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -244,6 +304,12 @@ export default {
     try {
       const response = await Axios.post(`${baseURL}/users`, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -271,6 +337,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -290,6 +362,12 @@ export default {
       const url = `${baseURL}/users/${userId}`;
       const response = await Axios.delete(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -312,6 +390,12 @@ export default {
     try {
       const response = await Axios.post(`${baseURL}/patients`, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -333,6 +417,12 @@ export default {
       }
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -353,6 +443,12 @@ export default {
         `${baseURL}/patients?patientId=${patientId}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -379,6 +475,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -404,6 +506,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -424,6 +532,12 @@ export default {
         `${baseURL}/patients/${patientId}/notes`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -444,6 +558,12 @@ export default {
         `${baseURL}/patients/${patientId}/appointments-notes`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -468,6 +588,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -488,6 +614,12 @@ export default {
         `${baseURL}/patients/${patientId}/x-ray`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -505,6 +637,12 @@ export default {
     try {
       const response = await Axios.get(`${baseURL}/schedules/filters`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -525,6 +663,12 @@ export default {
         `${baseURL}/patients/search?query=${query}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -545,6 +689,12 @@ export default {
         `${baseURL}/users/search?query=${query}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -566,6 +716,12 @@ export default {
         `${baseURL}/services/search?query=${query}&doctorId=${doctorId}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -589,6 +745,12 @@ export default {
     try {
       const response = await Axios.post(`${baseURL}/clinics`, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -617,6 +779,12 @@ export default {
     try {
       const response = await Axios.put(`${baseURL}/clinics`, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -634,6 +802,12 @@ export default {
     try {
       const response = await Axios.get(`${baseURL}/clinics/details`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -651,6 +825,12 @@ export default {
     try {
       const response = await Axios.get(`${baseURL}/services/v1/user-services`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -677,6 +857,12 @@ export default {
       }
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -698,6 +884,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -727,6 +919,12 @@ export default {
     try {
       const response = await Axios.post(`${baseURL}/schedules`, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -749,6 +947,12 @@ export default {
         `${baseURL}/schedules?doctorId=${doctorId}&date=${stringDate}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -769,6 +973,12 @@ export default {
         `${baseURL}/schedules/doctor?date=${stringDate}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -790,6 +1000,12 @@ export default {
         `${baseURL}/schedules/clinic-workhours?weekDay=${weekDay}&period=${period}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -811,6 +1027,12 @@ export default {
         `${baseURL}/schedules/v2/clinic-workhours?weekDay=${weekDay}&period=${period}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -827,6 +1049,12 @@ export default {
         `${baseURL}/schedules/month-schedules?doctorId=${doctorId}&date=${stringDate}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -842,6 +1070,12 @@ export default {
         `${baseURL}/schedules/details/${scheduleId}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -866,6 +1100,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -886,6 +1126,12 @@ export default {
         `${baseURL}/schedules/patient-schedules/${patientId}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -906,6 +1152,12 @@ export default {
         `${baseURL}/schedules/${scheduleId}/delete`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -923,6 +1175,12 @@ export default {
     try {
       const response = await Axios.get(`${baseURL}/clinics/doctors`);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -968,6 +1226,12 @@ export default {
         requestBody,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -988,6 +1252,12 @@ export default {
         `${baseURL}/patients/${patientId}/treatment-plan`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1016,6 +1286,12 @@ export default {
         plan,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1042,6 +1318,12 @@ export default {
         `${baseURL}/analytics/general?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`,
       );
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1067,6 +1349,12 @@ export default {
       const url = `${baseURL}/analytics/finance?doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1096,6 +1384,12 @@ export default {
       const url = `${baseURL}/analytics/services?page=${page}&rowsPerPage=${rowsPerPage}&serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}&status=${status}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1122,6 +1416,12 @@ export default {
       const url = `${baseURL}/analytics/doctors?serviceId=${serviceId}&doctorId=${doctorId}&fromDate=${fromDateString}&toDate=${toDateString}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1147,6 +1447,12 @@ export default {
       const url = `${baseURL}/analytics/activity-logs?userId=${userId}&fromDate=${fromDateString}&toDate=${toDateString}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1167,6 +1473,12 @@ export default {
       const url = `${baseURL}/clinics/log-action`;
       const response = await Axios.put(url, { action, details });
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1186,6 +1498,12 @@ export default {
       const url = `${baseURL}/clinics/invoice/${invoiceId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1204,6 +1522,12 @@ export default {
       const url = `${baseURL}/services/braces`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1223,6 +1547,12 @@ export default {
       const url = `${baseURL}/patients/${patientId}/visits`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1244,6 +1574,12 @@ export default {
       const url = `${baseURL}/patients/${patientId}/edit-visit/${scheduleId}`;
       const response = await Axios.put(url, { note });
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1263,6 +1599,12 @@ export default {
       const url = `${baseURL}/schedules/${scheduleId}/doctor-details`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1283,6 +1625,12 @@ export default {
       const url = `${baseURL}/schedules/schedule-status?scheduleId=${scheduleId}&status=${newStatus}`;
       const response = await Axios.put(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1302,6 +1650,12 @@ export default {
       const url = `${baseURL}/users/resend-invitation?userId=${userId}`;
       const response = await Axios.put(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1321,6 +1675,12 @@ export default {
       const url = `${baseURL}/users/send-invitation`;
       const response = await Axios.put(url, body);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1339,6 +1699,12 @@ export default {
       const url = `${baseURL}/clinics`;
       const response = await Axios.delete(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1357,6 +1723,12 @@ export default {
       const url = `${baseURL}/patients/upload-providers`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1379,6 +1751,12 @@ export default {
       const url = `${baseURL}/patients/upload-patients`;
       const response = await Axios.post(url, data);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1398,6 +1776,12 @@ export default {
       const url = `${baseURL}/patients/${patientId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1417,6 +1801,12 @@ export default {
       const url = `${baseURL}/patients/${patientId}/debts`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1436,6 +1826,12 @@ export default {
       const url = `${baseURL}/patients/${patientId}/invoices`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1461,6 +1857,12 @@ export default {
       }
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1487,6 +1889,12 @@ export default {
       }
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1535,6 +1943,12 @@ export default {
       const url = `${baseURL}/schedules/imported-columns`;
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1558,6 +1972,12 @@ export default {
       const url = `${baseURL}/schedules/excel-data/${path}`;
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1582,6 +2002,12 @@ export default {
       const url = `${baseURL}/schedules/import`;
       const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1601,6 +2027,12 @@ export default {
       const url = `${baseURL}/clinics/invitations/delete?invitationId=${invitationId}`;
       const response = await Axios.delete(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1615,6 +2047,12 @@ export default {
       const url = `${baseURL}/users/details/${userId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {
@@ -1629,6 +2067,12 @@ export default {
       const url = `${baseURL}/users/${userId}/holidays/${holidayId}`;
       const response = await Axios.delete(url);
       const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
       return responseData;
     } catch (e) {
       return {

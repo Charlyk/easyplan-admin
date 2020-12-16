@@ -99,6 +99,13 @@ export function triggerUserLogout(logout) {
   };
 }
 
+export function toggleForceLogoutUser(logout) {
+  return {
+    type: types.forceUserLogout,
+    payload: logout,
+  };
+}
+
 /**
  * Toggle appointment creation modal
  * @param {Object} modalData

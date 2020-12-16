@@ -10,7 +10,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 import AddNote from './components/AddNote';
 import AddXRay from './components/AddXRay';
@@ -30,6 +30,7 @@ import {
   setPatientXRayModal,
   setPaymentModal,
   setUpdateCurrentUser,
+  toggleForceLogoutUser,
   triggerUserLogout,
 } from './redux/actions/actions';
 import { setImageModal } from './redux/actions/imageModalActions';
@@ -41,6 +42,7 @@ import {
   paymentModalSelector,
 } from './redux/selectors/modalsSelector';
 import {
+  forceLogoutSelector,
   logoutSelector,
   newClinicIdSelector,
   updateCurrentUserSelector,
@@ -71,6 +73,7 @@ function App() {
   const updateCurrentUser = useSelector(updateCurrentUserSelector);
   const createClinic = useSelector(createClinicSelector);
   const logout = useSelector(logoutSelector);
+  const forceLogoutUser = useSelector(forceLogoutSelector);
   const paymentModal = useSelector(paymentModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
@@ -113,6 +116,12 @@ function App() {
     }
   }, [newClinicId]);
 
+  useEffect(() => {
+    if (forceLogoutUser) {
+      handleUserLogout();
+    }
+  }, [forceLogoutUser]);
+
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
   };
@@ -151,7 +160,7 @@ function App() {
     setAppIsLoading(true);
     const response = await authAPI.me();
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
       authManager.logOut();
       setRedirectUser(true);
     } else {
@@ -182,6 +191,7 @@ function App() {
     updateSiteTitle();
     dispatch(setCurrentUser(null));
     handleCancelLogout();
+    dispatch(toggleForceLogoutUser(false));
   };
 
   const handleCancelLogout = () => {

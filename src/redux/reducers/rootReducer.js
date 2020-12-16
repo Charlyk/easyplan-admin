@@ -81,6 +81,11 @@ function main(state = initialState, action) {
         ...state,
         logout: action.payload,
       };
+    case types.forceUserLogout:
+      return {
+        ...state,
+        forceLogout: action.payload,
+      };
     case types.updateAppointmentsList:
       return {
         ...state,

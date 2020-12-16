@@ -27,6 +27,7 @@ export default {
   setPatientDetails: 'setPatientDetails',
   toggleUpdatePatients: 'toggleUpdatePatients',
   toggleUpdatePatientPayments: 'toggleUpdatePatientPayments',
+  forceUserLogout: 'forceUserLogout',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,

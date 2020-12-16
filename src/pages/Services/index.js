@@ -12,6 +12,7 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import sortBy from 'lodash/sortBy';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconEdit from '../../assets/icons/iconEdit';
 import IconPlus from '../../assets/icons/iconPlus';
@@ -133,8 +134,8 @@ const Services = () => {
   const fetchCategories = async () => {
     localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.fetchCategories();
-    if (response.isError) {
-      console.error(response.message);
+    if (response == null || response?.isError) {
+      toast.error(textForKey(response?.message || 'something went wrong'));
     } else {
       const { data } = response;
       const sortedData = sortBy(data, item => item.created);

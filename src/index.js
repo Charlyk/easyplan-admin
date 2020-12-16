@@ -7,6 +7,11 @@ import thunk from 'redux-thunk';
 import timerMiddleware from 'redux-timer-middleware';
 
 import App from './App';
+import {
+  setCurrentUser,
+  toggleForceLogoutUser,
+  triggerUserLogout,
+} from './redux/actions/actions';
 import rootReducer from './redux/reducers/rootReducer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,13 +20,6 @@ import authManager from './utils/settings/authManager';
 import Axios from 'axios';
 import { PubNubProvider } from 'pubnub-react';
 import PubNub from 'pubnub';
-
-Axios.interceptors.request.use(async function(config) {
-  if (authManager.isLoggedIn()) {
-    config.headers.Authorization = authManager.getUserToken();
-  }
-  return config;
-});
 
 // enable redux devtool
 const composeEnhancers =
@@ -33,6 +31,28 @@ const composeEnhancers =
 const middlewares = [thunk, timerMiddleware];
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const ReduxStore = createStore(rootReducer, enhancer);
+
+Axios.interceptors.request.use(function(config) {
+  if (authManager.isLoggedIn()) {
+    config.headers.Authorization = authManager.getUserToken();
+  }
+  return config;
+});
+
+Axios.interceptors.response.use(
+  response => response,
+  error => {
+    const status = error?.response?.status;
+    const unauthorizedRequest = status === 401;
+
+    if (unauthorizedRequest) {
+      setTimeout(() => {
+        ReduxStore.dispatch(toggleForceLogoutUser(true));
+      }, 100);
+    }
+    return error;
+  },
+);
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
