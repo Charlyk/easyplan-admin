@@ -33,11 +33,11 @@ const CalendarWeekDayView = ({
       console.log(response.message);
     } else {
       const { data } = response;
-      const newData = sortBy(data, item => item.dateAndTime);
+      const newData = sortBy(data, item => item.startTime);
       setSchedules(newData);
       if (
         selectedSchedule != null &&
-        day.isSame(selectedSchedule.dateAndTime, 'day')
+        day.isSame(selectedSchedule.startTime, 'day')
       ) {
         onScheduleSelect(newData.find(item => item.id === selectedSchedule.id));
       }
@@ -63,23 +63,18 @@ export default CalendarWeekDayView;
 CalendarWeekDayView.propTypes = {
   viewDate: PropTypes.instanceOf(Date),
   update: PropTypes.bool,
-  doctorId: PropTypes.string,
+  doctorId: PropTypes.number,
   day: PropTypes.object,
   onScheduleSelect: PropTypes.func,
   selectedSchedule: PropTypes.shape({
-    id: PropTypes.string,
-    patientId: PropTypes.string,
+    id: PropTypes.number,
+    patientId: PropTypes.number,
     patientName: PropTypes.string,
-    patientPhone: PropTypes.string,
-    doctorId: PropTypes.string,
-    doctorName: PropTypes.string,
-    serviceId: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.string,
-    dateAndTime: PropTypes.string,
-    status: PropTypes.string,
-    note: PropTypes.string,
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
+    scheduleStatus: PropTypes.string,
   }),
 };
 

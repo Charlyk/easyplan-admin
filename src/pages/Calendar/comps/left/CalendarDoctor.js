@@ -39,13 +39,14 @@ export default CalendarDoctor;
 
 CalendarDoctor.propTypes = {
   doctor: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     avatar: PropTypes.string,
     services: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.number,
+        serviceId: PropTypes.number,
         name: PropTypes.string,
       }),
     ),

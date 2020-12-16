@@ -7,6 +7,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
@@ -442,8 +443,10 @@ const AddAppointmentModal = ({
     localDispatch(reducerActions.setPatientsLoading(true));
     const response = await dataAPI.searchPatients(query);
     if (response.isError) {
+      toast.error(textForKey(response.message));
       console.error(response.message);
     } else {
+      console.log(response.data);
       const patients = response.data.map(item => ({
         ...item,
         fullName: getLabelKey(item),
@@ -594,7 +597,7 @@ const AddAppointmentModal = ({
 
     // update states
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
       localDispatch(reducerActions.setIsCreatingSchedule(false));
     } else {
       onClose();

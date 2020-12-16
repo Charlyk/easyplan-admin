@@ -19,7 +19,7 @@ const CalendarDoctors = ({
   useEffect(() => {
     const newDoctors = doctors.filter(doctor => {
       if (selectedService == null && searchText.length === 0) return true;
-      const servicesIds = doctor.services.map(item => item.id);
+      const servicesIds = doctor.services.map(item => item.serviceId);
       const fullName = `${doctor.firstName} ${doctor.lastName}`.toLowerCase();
       return (
         (selectedService == null || servicesIds.includes(selectedService.id)) &&
@@ -71,26 +71,28 @@ CalendarDoctors.propTypes = {
   selectedService: PropTypes.object,
   isFetching: PropTypes.bool,
   selectedDoctor: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     avatar: PropTypes.string,
     services: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.number,
+        serviceId: PropTypes.number,
         name: PropTypes.string,
       }),
     ),
   }),
   doctors: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       avatar: PropTypes.string,
       services: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string,
+          id: PropTypes.number,
+          serviceId: PropTypes.number,
           name: PropTypes.string,
         }),
       ),

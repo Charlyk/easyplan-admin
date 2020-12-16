@@ -8,6 +8,7 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../assets/icons/iconAvatar';
 import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
@@ -22,6 +23,7 @@ import {
   checkShouldAnimateSchedule,
   generateReducerActions,
 } from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
 
 const initialState = {
   appointments: [],
@@ -71,15 +73,6 @@ const DoctorAppointmentsRow = ({
     localDispatch(actions.setPreviousHour(hourWidth));
   }, [hourWidth]);
 
-  const getRowHeight = doctor => {
-    const doctorElement = document.getElementById(`doctor-${doctor.id}`);
-    if (doctorElement == null) {
-      return 0;
-    }
-    const doctorRect = doctorElement.getBoundingClientRect();
-    return doctorRect.height;
-  };
-
   const getAppointmentPosition = appointment => {
     const fromMinutes = appointment.start.minute();
     const fromMinutesPercent = (fromMinutes / 60) * 100;
@@ -95,14 +88,14 @@ const DoctorAppointmentsRow = ({
     dispatch(setIsCalendarLoading(true));
     const response = await dataAPI.fetchSchedules(doctor.id, viewDate);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       const { data } = response;
       const newData = data.map(item => {
         return {
           ...item,
-          start: moment(item.dateAndTime),
-          end: moment(item.dateAndTime).add(item.serviceDuration, 'minutes'),
+          start: moment(item.startTime),
+          end: moment(item.endTime),
         };
       });
       localDispatch(actions.setAppointments(newData));
@@ -125,42 +118,8 @@ const DoctorAppointmentsRow = ({
     return sortBy(newItems, it => it.start);
   };
 
-  const getMargin = () => {
-    if (hours.length === 0) {
-      return 0;
-    }
-    const firstHour = hours[0];
-    const hourEl = document.getElementById(firstHour);
-    if (hourEl == null) {
-      return 0;
-    }
-    const hourRect = hourEl.getBoundingClientRect();
-    const parentRect = document
-      .getElementById('hours-container')
-      .getBoundingClientRect();
-    return hourRect.x - parentRect.x + hourRect.width / 2;
-  };
-
-  const getHourWidth = index => {
-    const newHours = hours.filter(it => it.split(':')[1] === '00');
-    if (index >= newHours.length) {
-      return 0;
-    }
-    const hourEl = document.getElementById(newHours[index]);
-    const nextHourEl = document.getElementById(newHours[index + 1]);
-    if (hourEl == null || nextHourEl == null) {
-      return 0;
-    }
-    const hourRect = hourEl.getBoundingClientRect();
-    const nextHourRect = nextHourEl.getBoundingClientRect();
-
-    const startX = hourRect.x + hourRect.width / 2;
-    const endX = nextHourRect.x + nextHourRect.width / 2;
-    return endX - startX;
-  };
-
   const doctorServices = () => {
-    const servicesIds = doctor.services.map(it => it.id);
+    const servicesIds = doctor.services.map(it => it.serviceId);
     return clinicServices
       .filter(item => servicesIds.includes(item.id))
       .map(it => it.name);
@@ -228,9 +187,6 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
   const dispatch = useDispatch();
   const checkAppointment = useSelector(checkAppointmentsSelector);
   const [animateSchedule, setAnimateSchedule] = useState(false);
-  const title = `${appointment.patientName} ${appointment.start.format(
-    'HH:mm',
-  )} - ${appointment.end.format('HH:mm')}`;
 
   useEffect(() => {
     setAnimateSchedule(dispatch(checkShouldAnimateSchedule(appointment)));
@@ -263,9 +219,9 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
           {appointment.patientName}
         </Typography>
         <div className='status-icon'>
-          {appointment.status === 'OnSite' && <DoneIcon />}
-          {(appointment.status === 'CompletedPaid' ||
-            appointment.status === 'PartialPaid') && <DoneAllIcon />}
+          {appointment.scheduleStatus === 'OnSite' && <DoneIcon />}
+          {(appointment.scheduleStatus === 'CompletedPaid' ||
+            appointment.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
         </div>
       </div>
       <Typography noWrap classes={{ root: 'patient-name' }}>
@@ -283,26 +239,25 @@ AppointmentItem.propTypes = {
   getPosition: PropTypes.func,
   appointments: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
-      start: PropTypes.any,
-      end: PropTypes.any,
-      dateAndTime: PropTypes.string,
-      doctorId: PropTypes.string,
-      serviceDuration: PropTypes.number,
+      id: PropTypes.number,
+      patientId: PropTypes.number,
+      patientName: PropTypes.string,
+      serviceName: PropTypes.string,
       serviceColor: PropTypes.string,
-      status: PropTypes.string,
+      start: PropTypes.object,
+      end: PropTypes.object,
+      scheduleStatus: PropTypes.string,
     }),
   ),
   appointment: PropTypes.shape({
-    id: PropTypes.string,
-    dateAndTime: PropTypes.string,
-    start: PropTypes.any,
-    end: PropTypes.any,
-    doctorId: PropTypes.string,
-    serviceDuration: PropTypes.number,
-    serviceColor: PropTypes.string,
+    id: PropTypes.number,
+    patientId: PropTypes.number,
     patientName: PropTypes.string,
-    status: PropTypes.string,
+    serviceName: PropTypes.string,
+    serviceColor: PropTypes.string,
+    start: PropTypes.object,
+    end: PropTypes.object,
+    scheduleStatus: PropTypes.string,
   }),
 };
 
@@ -312,7 +267,7 @@ DoctorAppointmentsRow.propTypes = {
   hours: PropTypes.arrayOf(PropTypes.string),
   hourWidth: PropTypes.number,
   doctor: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     services: PropTypes.arrayOf(PropTypes.object),

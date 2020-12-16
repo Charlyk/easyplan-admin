@@ -328,6 +328,8 @@ export default {
     passwordvalidationmessage:
       'Password must contain uppercase and lowercase letters, numbers and symbols should be at least 6 characters length',
     invitation_accepted_success: 'Invitation successfully accepted',
+    doctor_do_not_provide_service:
+      'Selected doctor does not provide selected service!',
   },
   ro: {
     analytics: 'Analitică',
@@ -662,6 +664,8 @@ export default {
     passwordvalidationmessage:
       'Parola trebuie să conțină litere majuscule, minuscule, cifre și simboluri cu o lungime de minimum 6 caractere',
     invitation_accepted_success: 'Invitația a fost acceptată cu succes',
+    doctor_do_not_provide_service:
+      'Doctorul selectat nu prestează acest serviciu!',
   },
   ru: {
     analytics: 'Analytics',
@@ -989,5 +993,7 @@ export default {
     passwordvalidationmessage:
       'Password must contain uppercase and lowercase letters, numbers and symbols should be at least 6 characters length',
     invitation_accepted_success: 'Invitation successfully accepted',
+    doctor_do_not_provide_service:
+      'Selected doctor does not provide selected service!',
   },
 };

@@ -188,10 +188,12 @@ const Calendar = () => {
 
   useEffect(() => {
     const newDoctors = doctors.map(item => {
-      const servicesIds = item.services.map(service => service.id);
+      const servicesIds = item.services.map(service => service.seviceId);
       return {
         ...item,
-        services: services.filter(service => servicesIds.includes(service.id)),
+        services: services.filter(service =>
+          servicesIds.includes(service.serviceId),
+        ),
       };
     });
     localDispatch(reducerActions.setFilters({ doctors: newDoctors, services }));

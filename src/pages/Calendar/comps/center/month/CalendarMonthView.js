@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
@@ -43,10 +44,9 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
     dispatch(setIsCalendarLoading(true));
     const response = await dataAPI.fetchMonthSchedules(doctorId, viewDate);
     if (response.isError) {
-      console.error(response.isError);
+      toast.error(textForKey(response.message));
     } else {
       const newSchedules = [];
-      console.log(response.data);
       for (let prop in response.data) {
         const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');
         newSchedules.push({ date, schedules: response.data[prop] });
@@ -145,7 +145,7 @@ export default CalendarMonthView;
 CalendarMonthView.propTypes = {
   opened: PropTypes.bool.isRequired,
   viewDate: PropTypes.instanceOf(Date),
-  doctorId: PropTypes.string,
+  doctorId: PropTypes.number,
   onDateClick: PropTypes.func,
 };
 

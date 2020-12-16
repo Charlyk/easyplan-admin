@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Button, Spinner } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
 import IconClose from '../../assets/icons/iconClose';
@@ -19,9 +22,6 @@ import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 
-import DoneIcon from '@material-ui/icons/Done';
-import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
-
 const AppointmentDetails = ({
   schedule,
   onClose,
@@ -31,28 +31,28 @@ const AppointmentDetails = ({
 }) => {
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
-  const [{ patient }, setDetails] = useState({
-    patient: null,
-    schedule: null,
-  });
+  const [details, setDetails] = useState(null);
   const [loadingDebt, setLoadingDebt] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
   const [scheduleStatus, setScheduleStatus] = useState(
-    Statuses.find(item => item.id === schedule.status),
+    Statuses.find(item => item.id === schedule.scheduleStatus),
   );
 
   useEffect(() => {
     fetchAppointmentDetails();
-    setScheduleStatus(Statuses.find(item => item.id === schedule.status));
+    setScheduleStatus(
+      Statuses.find(item => item.id === schedule.scheduleStatus),
+    );
   }, [schedule]);
 
   const fetchAppointmentDetails = async () => {
     setIsLoading(true);
     const response = await dataAPI.fetchScheduleDetails(schedule.id);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
+      console.log(response.data);
       setDetails(response.data);
     }
     setIsLoading(false);
@@ -168,9 +168,8 @@ const AppointmentDetails = ({
         </span>
       </div>
       <div className='content-wrapper'>
-        {isLoading ? (
-          <Spinner animation='border' className='spinner' />
-        ) : (
+        {isLoading && <Spinner animation='border' className='spinner' />}
+        {!isLoading && details != null && (
           <div className='info-wrapper'>
             <div
               ref={statusesAnchor}
@@ -204,41 +203,41 @@ const AppointmentDetails = ({
                     >
                       {textForKey('Doctor')}:
                     </td>
-                    <td>{schedule.doctorName}</td>
+                    <td>{details.doctor.name}</td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Date')}:
                     </td>
                     <td>
-                      {moment(schedule.dateAndTime).format('dddd, DD MMM YYYY')}
+                      {moment(details.startTime).format('dddd, DD MMM YYYY')}
                     </td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Hour')}:
                     </td>
-                    <td>{moment(schedule.dateAndTime).format('HH:mm')}</td>
+                    <td>{moment(details.startTime).format('HH:mm')}</td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
                       {upperFirst(textForKey('Created by'))}:
                     </td>
-                    <td>{schedule.createdByName}</td>
+                    <td>{details.createdBy.name}</td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
                       {upperFirst(textForKey('Created at'))}:
                     </td>
                     <td>
-                      {moment(schedule.created).format('DD MMM YYYY, HH:mm')}
+                      {moment(details.created).format('DD MMM YYYY, HH:mm')}
                     </td>
                   </tr>
                   <tr>
                     <td valign='top' style={{ paddingRight: '1rem' }}>
                       {textForKey('Note')}:
                     </td>
-                    <td valign='top'>{schedule.note}</td>
+                    <td valign='top'>{details.noteText}</td>
                   </tr>
                   <tr>
                     <td colSpan={2}>
@@ -256,7 +255,7 @@ const AppointmentDetails = ({
                         onClick={handlePatientClick}
                         className='patient-name'
                       >
-                        {schedule.patientName}
+                        {details.patient.fullName}
                       </div>
                     </td>
                   </tr>
@@ -265,8 +264,8 @@ const AppointmentDetails = ({
                       {textForKey('Phone')}:
                     </td>
                     <td>
-                      <a href={`tel:${schedule.patientPhone}`}>
-                        {schedule.patientPhone}
+                      <a href={`tel:${details.patient.phoneNumber}`}>
+                        {details.patient.phoneNumber}
                       </a>
                     </td>
                   </tr>
@@ -275,7 +274,9 @@ const AppointmentDetails = ({
                       {textForKey('Email')}:
                     </td>
                     <td>
-                      <a href={`mailto:${patient?.email}`}>{patient?.email}</a>
+                      <a href={`mailto:${details.patient.email}`}>
+                        {details.patient.email}
+                      </a>
                     </td>
                   </tr>
                 </tbody>
@@ -293,7 +294,7 @@ const AppointmentDetails = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {patient?.debts.map(item => (
+                  {details.patient.debts.map(item => (
                     <tr key={item.invoiceId}>
                       <td align='left'>{item.serviceName}</td>
                       <td align='right'>{item.amount}MDL</td>
@@ -316,7 +317,7 @@ const AppointmentDetails = ({
                       </td>
                     </tr>
                   ))}
-                  {patient?.debts.length === 0 && (
+                  {details.patient.debts.length === 0 && (
                     <tr>
                       <td colSpan={4} align='center'>
                         <div className='no-debts-label'>
@@ -365,22 +366,14 @@ AppointmentDetails.propTypes = {
   onDelete: PropTypes.func,
   onPayDebt: PropTypes.func,
   schedule: PropTypes.shape({
-    id: PropTypes.string,
-    patientId: PropTypes.string,
+    id: PropTypes.number,
+    patientId: PropTypes.number,
     patientName: PropTypes.string,
-    patientPhone: PropTypes.string,
-    doctorId: PropTypes.string,
-    doctorName: PropTypes.string,
-    serviceId: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.number,
-    createdById: PropTypes.string,
-    createdByName: PropTypes.string,
-    created: PropTypes.string,
-    dateAndTime: PropTypes.string,
-    status: PropTypes.string,
-    note: PropTypes.string,
+    start: PropTypes.object,
+    end: PropTypes.object,
+    scheduleStatus: PropTypes.string,
   }),
 };
 

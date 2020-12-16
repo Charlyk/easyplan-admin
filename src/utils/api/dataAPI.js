@@ -1283,7 +1283,7 @@ export default {
 
   /**
    * Change status for a schedule
-   * @param {string} scheduleId
+   * @param {number} scheduleId
    * @param {string} newStatus
    * @return {Promise<{isError: boolean, message: *}|any>}
    */

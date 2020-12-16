@@ -22,10 +22,8 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
 
   useEffect(() => {
     setHours([
-      moment(schedule.dateAndTime).format('HH:mm'),
-      moment(schedule.dateAndTime)
-        .add(schedule.serviceDuration, 'minutes')
-        .format('HH:mm'),
+      moment(schedule.startTime).format('HH:mm'),
+      moment(schedule.endTime).format('HH:mm'),
     ]);
   }, [schedule]);
 
@@ -48,9 +46,9 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
         <div className='name-and-status'>
           <span className='service-name'>{schedule.patientName}</span>
           <div className='status-icon'>
-            {schedule.status === 'OnSite' && <DoneIcon />}
-            {(schedule.status === 'CompletedPaid' ||
-              schedule.status === 'PartialPaid') && <DoneAllIcon />}
+            {schedule.scheduleStatus === 'OnSite' && <DoneIcon />}
+            {(schedule.scheduleStatus === 'CompletedPaid' ||
+              schedule.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
           </div>
         </div>
         <span className='item-time-text'>
@@ -67,19 +65,14 @@ WeekAppointmentItem.propTypes = {
   onSelect: PropTypes.func,
   signeLine: PropTypes.bool,
   schedule: PropTypes.shape({
-    id: PropTypes.string,
-    patientId: PropTypes.string,
+    id: PropTypes.number,
+    patientId: PropTypes.number,
     patientName: PropTypes.string,
-    patientPhone: PropTypes.string,
-    doctorId: PropTypes.string,
-    doctorName: PropTypes.string,
-    serviceId: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
-    serviceDuration: PropTypes.number,
-    dateAndTime: PropTypes.string,
-    status: PropTypes.string,
-    note: PropTypes.string,
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
+    scheduleStatus: PropTypes.string,
   }),
 };
 

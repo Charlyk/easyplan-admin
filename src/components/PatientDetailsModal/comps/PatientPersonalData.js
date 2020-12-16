@@ -299,10 +299,10 @@ export default PatientPersonalData;
 PatientPersonalData.propTypes = {
   onPatientUpdated: PropTypes.func,
   patient: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
-    birthday: PropTypes.instanceOf(Date),
+    birthday: PropTypes.string,
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
     discount: PropTypes.number,

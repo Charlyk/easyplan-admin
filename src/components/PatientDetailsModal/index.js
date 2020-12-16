@@ -274,7 +274,7 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
 export default PatientDetailsModal;
 
 PatientDetailsModal.propTypes = {
-  patientId: PropTypes.string.isRequired,
+  patientId: PropTypes.number.isRequired,
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onDelete: PropTypes.func,

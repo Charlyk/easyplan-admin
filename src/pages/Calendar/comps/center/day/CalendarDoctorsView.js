@@ -4,6 +4,7 @@ import { Box, Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../assets/icons/iconAvatar';
 import {
@@ -82,7 +83,7 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
     const day = moment(viewDate).isoWeekday();
     const response = await dataAPI.fetchClinicWorkHoursV2(day);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       localDispatch(actions.setHours(response.data));
     }
