@@ -52,7 +52,6 @@ const AppointmentDetails = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      console.log(response.data);
       setDetails(response.data);
     }
     setIsLoading(false);
