@@ -130,10 +130,7 @@ const MainMenu = props => {
     handleCompanyClose();
   };
 
-  const selectedClinic = currentUser.selectedClinic;
-  const userClinic = currentUser.clinics.find(
-    item => item.clinicId === selectedClinic?.id,
-  );
+  const userClinic = currentUser.clinics.find(item => item.isSelected);
 
   const analyticsClass = clsx(
     'navigation__item div-item',
@@ -156,7 +153,7 @@ const MainMenu = props => {
       >
         <ClickAwayListener onClickAway={handleCompanyClose}>
           <span className='clinic-name'>
-            {selectedClinic?.name || textForKey('Create clinic')}
+            {userClinic?.clinicName || textForKey('Create clinic')}
           </span>
         </ClickAwayListener>
         <IconArrowDown />

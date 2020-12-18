@@ -3,18 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { remove, cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { v4 as uuidv4 } from 'uuid';
 
 import './styles.scss';
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
-import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Role } from '../../utils/constants';
-import { logUserAction, uploadFileToAWS } from '../../utils/helperFuncs';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
 import LoadingButton from '../LoadingButton';
@@ -68,12 +66,12 @@ const initialData = {
     },
   ],
   holidays: [],
+  braces: [],
 };
 
 const UserDetailsModal = props => {
   const { onClose, show, user, role } = props;
   const dispatch = useDispatch();
-  const currentClinic = useSelector(clinicDetailsSelector);
   const [currentTab, setCurrentTab] = useState(role);
   const [isSaving, setIsSaving] = useState(false);
   const [userData, setUserData] = useState({
@@ -105,15 +103,13 @@ const UserDetailsModal = props => {
       toast.error(textForKey(response.message));
     } else {
       const { data: userDetails } = response;
-      const clinic = userDetails.clinics.find(
-        item => item.clinicId === currentClinic.id,
-      );
       setUserData({
         ...initialData,
-        services: clinic.services,
-        holidays: clinic.holidays,
+        services: userDetails.services,
+        holidays: userDetails.holidays,
+        braces: userDetails.braces,
         workdays:
-          clinic.workdays?.map(item => ({
+          userDetails.workdays?.map(item => ({
             ...item,
             selected: !item.isDayOff,
           })) || [],
@@ -142,21 +138,20 @@ const UserDetailsModal = props => {
   };
 
   const saveUser = async () => {
-    // clear components with no price and percentage
     const newServices = userData.services.map(item => {
-      if (item.price != null || item.percentage != null) {
-        return item;
-      }
+      if (item.price != null || item.percentage != null) return item;
+      return { ...item, price: 0 };
+    });
 
-      return {
-        ...item,
-        price: 0,
-      };
+    const newBraces = userData.braces.map(item => {
+      if (item.price != null || item.percentage != null) return item;
+      return { ...item, price: 0 };
     });
 
     const requestBody = {
       ...userData,
       services: newServices,
+      braces: newBraces,
     };
 
     if (user != null) {
@@ -165,6 +160,7 @@ const UserDetailsModal = props => {
   };
 
   const updateUser = async requestBody => {
+    console.log(requestBody);
     const response = await dataAPI.updateUser(user.id, requestBody);
     if (response.isError) {
       toast.error(textForKey(response.message));

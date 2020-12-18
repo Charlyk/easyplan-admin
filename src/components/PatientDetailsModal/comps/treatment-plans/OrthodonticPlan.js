@@ -9,7 +9,12 @@ import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import IconSuccess from '../../../../assets/icons/iconSuccess';
-import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
+import {
+  clinicBracesSelector,
+  clinicBracesServicesSelector,
+  clinicEnabledBracesSelector,
+  clinicServicesSelector,
+} from '../../../../redux/selectors/clinicSelector';
 import { userSelector } from '../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { Action, Role } from '../../../../utils/constants';
@@ -146,13 +151,11 @@ const reducer = (state, action) => {
 };
 
 const OrthodonticPlan = ({ patient, onSave }) => {
-  const services = useSelector(clinicServicesSelector);
+  const services = useSelector(clinicBracesServicesSelector);
+  const braces = useSelector(clinicEnabledBracesSelector);
   const currentUser = useSelector(userSelector);
-  const currentClinic = currentUser.clinics.find(
-    it => it.clinicId === currentUser.selectedClinic.id,
-  );
+  const currentClinic = currentUser.clinics.find(it => it.isSelected);
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
-  const bracesServices = services.filter(item => item.bracesService);
   const [
     { planType, bracketsPlan, isLoading, isSaving },
     localDispatch,
@@ -314,13 +317,28 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const handleSaveTreatmentPlan = async () => {
     localDispatch(actions.setIsSaving(true));
-    const response = await dataAPI.saveTreatmentPlan(patient.id, bracketsPlan);
+    console.log(bracketsPlan);
+    const updatedBraces = {
+      ...bracketsPlan,
+      mandible: {
+        ...bracketsPlan.mandible,
+        braces: bracketsPlan.mandible.braces.map(it => it.id),
+        services: bracketsPlan.mandible.treatmentTypes.map(it => it.id),
+      },
+      maxillary: {
+        ...bracketsPlan.maxillary,
+        braces: bracketsPlan.maxillary.braces.map(it => it.id),
+        services: bracketsPlan.maxillary.treatmentTypes.map(it => it.id),
+      },
+    };
+    console.log(updatedBraces);
+    const response = await dataAPI.saveTreatmentPlan(patient.id, updatedBraces);
     logUserAction(
       Action.UpdatedOrthodonticPlan,
       JSON.stringify({
         patient: patient.id,
         before: patient.treatmentPlan,
-        after: bracketsPlan,
+        after: updatedBraces,
       }),
     );
     if (response.isError) {
@@ -340,7 +358,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const occlusions = bracketsPlan[planType].occlusions;
   const radiographs = bracketsPlan[planType].radiographs;
   const fallenBraces = bracketsPlan[planType].fallenBraces;
-  const braces = bracketsPlan[planType].braces;
+  const selectedBraces = bracketsPlan[planType].braces;
   const treatmentTypes = bracketsPlan[planType].treatmentTypes;
 
   const classRow = (
@@ -454,22 +472,20 @@ const OrthodonticPlan = ({ patient, onSave }) => {
       </td>
       <td valign='top'>
         <div className='options-container'>
-          {services
-            .filter(item => item.bracket)
-            .map(item => (
-              <div
-                role='button'
-                tabIndex={0}
-                onClick={() => handleBracesChange(item)}
-                className={clsx(
-                  'option-button',
-                  braces.some(it => it.id === item.id) && 'selected',
-                )}
-                key={item.id}
-              >
-                <span className='option-text'>{textForKey(item.name)}</span>
-              </div>
-            ))}
+          {braces.map(item => (
+            <div
+              role='button'
+              tabIndex={0}
+              onClick={() => handleBracesChange(item)}
+              className={clsx(
+                'option-button',
+                selectedBraces.some(it => it.id === item.id) && 'selected',
+              )}
+              key={item.id}
+            >
+              <span className='option-text'>{textForKey(item.name)}</span>
+            </div>
+          ))}
         </div>
       </td>
     </tr>
@@ -482,7 +498,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
       </td>
       <td valign='top'>
         <div className='options-container'>
-          {bracesServices.map(item => (
+          {services.map(item => (
             <div
               role='button'
               tabIndex={0}

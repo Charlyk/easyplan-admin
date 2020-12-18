@@ -171,7 +171,8 @@ const AcceptInvitation = () => {
       authManager.setUserToken(token);
       authManager.setUserId(user.id);
       dispatch(setCurrentUser(user));
-      if (user.selectedClinic != null) {
+      const selectedClinic = user.clinics.find(item => item.isSelected);
+      if (selectedClinic != null) {
         await dispatch(fetchClinicData());
       }
       toast.success(textForKey('invitation_accepted_success'));

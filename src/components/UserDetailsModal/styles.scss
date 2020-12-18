@@ -714,6 +714,48 @@
   }
 }
 
+.doctor-braces-settings {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
+  transition: height .2s ease-out, padding-top .2s ease-out;
+
+  &.expanded {
+    margin-bottom: 1rem;
+  }
+
+  &.collapsed {
+    height: 0;
+    margin-bottom: 0;
+  }
+
+  &__header {
+    width: 100%;
+    display: flex;
+    margin-top: .5rem;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    &__title {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: #A1A2C6;
+    }
+
+    .btn-outline-primary {
+      text-transform: uppercase;
+    }
+  }
+}
+
 .holiday-modal {
 
   .modal-header {

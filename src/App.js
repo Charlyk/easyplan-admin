@@ -79,9 +79,7 @@ function App() {
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
-  const selectedClinic = currentUser?.clinics?.find(
-    item => item.clinicId === currentUser?.selectedClinic.id,
-  );
+  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
   const [isAppLoading, setAppIsLoading] = useState(false);
 
   useEffect(() => {

@@ -9,7 +9,10 @@ import PatientAppointments from '../../../../components/PatientDetailsModal/comp
 import PatientNotes from '../../../../components/PatientDetailsModal/comps/notes/PatientNotes';
 import OrthodonticPlan from '../../../../components/PatientDetailsModal/comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from '../../../../components/PatientDetailsModal/comps/x-ray/PatientXRay';
-import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
+import {
+  clinicDetailsSelector,
+  clinicEnabledBracesSelector,
+} from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import './styles.scss';
@@ -34,7 +37,7 @@ const PatientDetails = ({
   scheduleId,
   isDoctor,
 }) => {
-  const currentClinic = useSelector(clinicDetailsSelector);
+  const braces = useSelector(clinicEnabledBracesSelector);
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   const [hasNotes, setHasNotes] = useState(false);
 
@@ -106,14 +109,13 @@ const PatientDetails = ({
             selected={selectedTab === TabId.treatmentPlans}
           />
         )}
-        {showTabs.includes(TabId.orthodonticPlan) &&
-          currentClinic.hasBrackets && (
-            <EasyTab
-              title={textForKey('Orthodontic plan')}
-              onClick={() => handleTabClick(TabId.orthodonticPlan)}
-              selected={selectedTab === TabId.orthodonticPlan}
-            />
-          )}
+        {showTabs.includes(TabId.orthodonticPlan) && braces.length > 0 && (
+          <EasyTab
+            title={textForKey('Orthodontic plan')}
+            onClick={() => handleTabClick(TabId.orthodonticPlan)}
+            selected={selectedTab === TabId.orthodonticPlan}
+          />
+        )}
       </div>
       <div className='patient-details-root__content'>
         {selectedTab === TabId.appointmentsNotes && (
@@ -132,7 +134,7 @@ const PatientDetails = ({
         {selectedTab === TabId.xRay && (
           <PatientXRay onAddXRay={onAddXRay} patient={patient} />
         )}
-        {selectedTab === TabId.orthodonticPlan && currentClinic.hasBrackets && (
+        {selectedTab === TabId.orthodonticPlan && braces.length > 0 && (
           <OrthodonticPlan patient={patient} onSave={onSaveOrthodonticPlan} />
         )}
       </div>

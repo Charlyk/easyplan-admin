@@ -24,9 +24,7 @@ const SettingsForm = {
 
 const Settings = props => {
   const currentUser = useSelector(userSelector);
-  const selectedClinic = currentUser?.clinics.find(
-    item => item.clinicId === currentUser?.selectedClinic.id,
-  );
+  const selectedClinic = currentUser?.clinics.find(item => item.isSelected);
   const [currentForm, setCurrentForm] = useState(
     ['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)
       ? SettingsForm.companyDetails

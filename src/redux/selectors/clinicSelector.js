@@ -24,7 +24,17 @@ export const clinicServicesSelector = createSelector(
   clinic => clinic.services,
 );
 
+export const clinicBracesServicesSelector = createSelector(
+  clinicDetailsSelector,
+  clinic => clinic?.services?.filter(item => item.serviceType === 'Braces'),
+);
+
 export const clinicBracesSelector = createSelector(
   clinicDetailsSelector,
   clinic => clinic.braces,
+);
+
+export const clinicEnabledBracesSelector = createSelector(
+  clinicDetailsSelector,
+  clinic => clinic?.braces?.filter(item => item.isEnabled) || [],
 );

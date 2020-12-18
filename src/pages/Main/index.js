@@ -66,9 +66,7 @@ const Main = () => {
     currentPath: location.pathname,
     openAppointmentModal: false,
   });
-  const selectedClinic = user?.clinics?.find(
-    item => item.clinicId === user.selectedClinic?.id,
-  );
+  const selectedClinic = user?.clinics?.find(item => item.isSelected);
 
   useEffect(() => {
     if (user != null) {

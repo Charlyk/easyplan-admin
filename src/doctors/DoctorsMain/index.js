@@ -26,10 +26,7 @@ const DoctorsMain = () => {
   const buttonRef = useRef(null);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const currentUser = useSelector(userSelector);
-  const selectedClinic =
-    currentUser?.clinics?.find(
-      item => item.clinicId === currentUser?.selectedClinic.id,
-    ) || null;
+  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
 
   if (!authManager.isLoggedIn()) {
     return <Redirect to={updateLink('/login')} />;

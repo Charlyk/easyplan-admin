@@ -1,31 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import IconMinus from '../../assets/icons/iconMinus';
-import IconPlusBig from '../../assets/icons/iconPlusBig';
 import { textForKey } from '../../utils/localization';
+import DoctorBracesSettings from './DoctorBracesSettings';
 import DoctorHolidays from './DoctorHolidays';
 import DoctorServices from './DoctorServices';
 import DoctorWorkHours from './DoctorWorkHours';
 
-const GroupType = {
-  account: 'Account',
-  services: 'Services',
-  workHours: 'Work Hours',
-  holidays: 'Holidays',
-};
-
-const DoctorForm = props => {
-  const { data, onChange, showSteps, onCreateHoliday, onDeleteHoliday } = props;
-  const [expandedGroup, setExpandedGroup] = useState(GroupType.services);
-
-  const handleToggleForm = formId => {
-    setExpandedGroup(formId);
-  };
-
+const DoctorForm = ({ data, onChange, onCreateHoliday, onDeleteHoliday }) => {
   const handleServicesChange = services => {
     onChange({ services });
+  };
+
+  const handleBracesChange = braces => {
+    onChange({ braces });
   };
 
   const handleWorkDaysChange = workdays => {
@@ -37,89 +26,39 @@ const DoctorForm = props => {
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {showSteps && (
-              <div className='doctor-form__group-header__step'>
-                {textForKey('Step 2.')}
-              </div>
-            )}
             {textForKey('Provided services')}
           </div>
-          <div
-            tabIndex={0}
-            role='button'
-            className='doctor-form__group-header__button'
-            onClick={() => handleToggleForm(GroupType.services)}
-          >
-            {expandedGroup === GroupType.services ? (
-              <IconMinus />
-            ) : (
-              <IconPlusBig />
-            )}
-          </div>
         </div>
-        <DoctorServices
-          data={data}
-          onChange={handleServicesChange}
-          show={expandedGroup === GroupType.services}
-        />
+        <DoctorServices show data={data} onChange={handleServicesChange} />
       </div>
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {showSteps && (
-              <div className='doctor-form__group-header__step'>
-                {textForKey('Step 3.')}
-              </div>
-            )}
+            {textForKey('Braces')}
+          </div>
+        </div>
+        <DoctorBracesSettings show data={data} onChange={handleBracesChange} />
+      </div>
+
+      <div className='doctor-form__group'>
+        <div className='doctor-form__group-header'>
+          <div className='doctor-form__group-header__title-container'>
             {textForKey('Work hours')}
           </div>
-          <div
-            tabIndex={0}
-            role='button'
-            className='doctor-form__group-header__button'
-            onClick={() => handleToggleForm(GroupType.workHours)}
-          >
-            {expandedGroup === GroupType.workHours ? (
-              <IconMinus />
-            ) : (
-              <IconPlusBig />
-            )}
-          </div>
         </div>
-        <DoctorWorkHours
-          onChange={handleWorkDaysChange}
-          data={data}
-          show={expandedGroup === GroupType.workHours}
-        />
+        <DoctorWorkHours show data={data} onChange={handleWorkDaysChange} />
       </div>
 
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {showSteps && (
-              <div className='doctor-form__group-header__step'>
-                {textForKey('Step 4.')}
-              </div>
-            )}
             {textForKey('Holidays')}
-          </div>
-          <div
-            tabIndex={0}
-            role='button'
-            className='doctor-form__group-header__button'
-            onClick={() => handleToggleForm(GroupType.holidays)}
-          >
-            {expandedGroup === GroupType.holidays ? (
-              <IconMinus />
-            ) : (
-              <IconPlusBig />
-            )}
           </div>
         </div>
         <DoctorHolidays
+          show
           data={data}
-          show={expandedGroup === GroupType.holidays}
           onCreateOrUpdate={onCreateHoliday}
           onDeleteHoliday={onDeleteHoliday}
         />
