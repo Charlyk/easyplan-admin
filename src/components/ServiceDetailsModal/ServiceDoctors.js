@@ -50,8 +50,7 @@ const ServiceDoctors = ({
       <div className={contentClasses}>
         {doctors?.length === 0 && (
           <div className='service-doctors__content__no-data'>
-            {textForKey('No doctors yet.')}{' '}
-            <Link to={updateLink('/users')}>{textForKey('Add one +')}</Link>
+            {textForKey('No doctors yet.')}
           </div>
         )}
         {doctors?.map(doctor => (
