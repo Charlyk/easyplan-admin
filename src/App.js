@@ -212,6 +212,8 @@ function App() {
     dispatch(setImageModal({ open: false }));
   };
 
+  const reload = () => window.location.reload();
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
@@ -248,6 +250,10 @@ function App() {
           </Modal.Body>
         </Modal>
         <Switch>
+          <Route
+            path='/.well-known/pki-validation/E867FDA280F5C63EE5EBB6974D69D4B6.txt'
+            onEnter={reload}
+          />
           <Route
             path='/clinic-invitation/:isNew?/:token'
             exact

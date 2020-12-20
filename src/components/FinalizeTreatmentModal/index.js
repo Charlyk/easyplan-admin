@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 
 import IconCheckBoxChecked from '../../assets/icons/iconCheckBoxChecked';
 import IconCheckBoxUnchecked from '../../assets/icons/iconCheckBoxUnchecked';
+import { getServiceName } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import { getServiceName } from '../../utils/helperFuncs';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const [planServices, setPlanServices] = useState([]);

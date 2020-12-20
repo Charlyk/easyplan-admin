@@ -337,6 +337,7 @@ export default {
     restore: 'Restore',
     'are you sure you want to restore this service?':
       'Are you sure you want to restore this service?',
+    invoice_created: 'New invoice created!',
   },
   ro: {
     analytics: 'Analitică',
@@ -680,6 +681,7 @@ export default {
     restore: 'Restabilește',
     'are you sure you want to restore this service?':
       'Sunteți sigur(ă) că doriți să restabiliți acest serviciu?',
+    invoice_created: 'Un nou invoice a fost creat!',
   },
   ru: {
     analytics: 'Analytics',
@@ -1016,5 +1018,6 @@ export default {
     restore: 'Restore',
     'are you sure you want to restore this service?':
       'Are you sure you want to restore this service?',
+    invoice_created: 'New invoice created!',
   },
 };

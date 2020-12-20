@@ -1,0 +1,13 @@
+.invoice-toast-root {
+  flex: 1;
+  color: #34344E;
+  padding-left: .5rem;
+  display: flex;
+  align-items: center;
+
+  .invoice-icon {
+    width: 30px;
+    height: auto;
+    margin-right: .5rem;
+  }
+}

@@ -10,6 +10,7 @@ import { setPaymentModal } from '../../redux/actions/actions';
 import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
+import NewInvoiceToast from '../NewInvoiceToast';
 
 const InvoicesButton = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,9 @@ const InvoicesButton = () => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
+      if (response.data.length > invoices.length) {
+        toast(<NewInvoiceToast />);
+      }
       setInvoices(response.data);
     }
     setIsLoading(false);
