@@ -2,6 +2,15 @@
   background-color: #34344E;
   width: 16rem;
   padding: 2rem;
+  position: relative;
+
+  .trust-seal-image {
+    height: 25px;
+    width: auto;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+  }
 
   .clinic-name {
     flex: 1;

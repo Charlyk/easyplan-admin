@@ -15,7 +15,7 @@ import MenuEllipse from '../../assets/icons/menuEllipse';
 import MenuPatients from '../../assets/icons/menuPatients';
 import MenuSettings from '../../assets/icons/menuSettings';
 import MenuUsers from '../../assets/icons/menuUsers';
-import { env } from '../../utils/constants';
+import trustSeal from '../../assets/images/positivessl_trust_seal.png';
 import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ClinicSelector from '../ClinicSelector';
@@ -216,6 +216,11 @@ const MainMenu = props => {
           }
         })}
       </Nav>
+      <img
+        className='trust-seal-image'
+        src={trustSeal}
+        align='SSL Trust Seal'
+      />
     </div>
   );
 };
