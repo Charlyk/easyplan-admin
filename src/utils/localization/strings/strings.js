@@ -331,6 +331,12 @@ export default {
     doctor_do_not_provide_service:
       'Selected doctor does not provide selected service!',
     'braces settings': 'Braces settings',
+    'pending payment': 'Pending payment',
+    something_went_wrong: 'Ooops, something went wrong!',
+    'restore service': 'Restore service',
+    restore: 'Restore',
+    'are you sure you want to restore this service?':
+      'Are you sure you want to restore this service?',
   },
   ro: {
     analytics: 'Analitică',
@@ -668,6 +674,12 @@ export default {
     doctor_do_not_provide_service:
       'Doctorul selectat nu prestează acest serviciu!',
     'braces settings': 'Setări aparate dentare',
+    'pending payment': 'În așteptare',
+    something_went_wrong: 'Ooops, ceva nu a mers bine!',
+    'restore service': 'Restabilire serviciu',
+    restore: 'Restabilește',
+    'are you sure you want to restore this service?':
+      'Sunteți sigur(ă) că doriți să restabiliți acest serviciu?',
   },
   ru: {
     analytics: 'Analytics',
@@ -998,5 +1010,11 @@ export default {
     doctor_do_not_provide_service:
       'Selected doctor does not provide selected service!',
     'braces settings': 'Braces settings',
+    'pending payment': 'Pending payment',
+    something_went_wrong: 'Ooops, something went wrong!',
+    'restore service': 'Restore service',
+    restore: 'Restore',
+    'are you sure you want to restore this service?':
+      'Are you sure you want to restore this service?',
   },
 };

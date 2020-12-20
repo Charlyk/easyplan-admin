@@ -147,6 +147,13 @@ export const Statuses = [
     manual: false,
   },
   {
+    id: 'PendingPayment',
+    name: textForKey('Pending payment'),
+    color: '#ffb902',
+    icon: <IconAppointmentCalendar />,
+    manual: false,
+  },
+  {
     id: 'WaitingForPatient',
     name: textForKey('Waiting for patient'),
     color: '#ffb902',

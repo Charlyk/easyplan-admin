@@ -7,13 +7,12 @@ import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconSuccess from '../../../../assets/icons/iconSuccess';
 import {
-  clinicBracesSelector,
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
-  clinicServicesSelector,
 } from '../../../../redux/selectors/clinicSelector';
 import { userSelector } from '../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
@@ -26,7 +25,7 @@ import { textForKey } from '../../../../utils/localization';
 import EasyTab from '../../../EasyTab';
 import LoadingButton from '../../../LoadingButton';
 
-const diagnosisClass = ['1', '2', '3'];
+const diagnosisClass = [1, 2, 3];
 const diagnosisOcclusion = [
   'Inverse',
   'Anterior',
@@ -41,11 +40,11 @@ const diagnosisOcclusion = [
   'Transposition',
 ];
 const radiographic = ['Orthopantomogram', 'Cephalometric'];
-const fallenBracketsList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+const fallenBracketsList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const PlanType = {
-  mandible: 'mandible',
-  maxillary: 'maxillary',
+  mandible: 'Mandible',
+  maxillary: 'Maxillary',
 };
 
 const initialState = {
@@ -53,42 +52,34 @@ const initialState = {
   isSaving: false,
   planType: PlanType.mandible,
   bracketsPlan: {
-    mandible: {
+    Mandible: {
       classes: [],
       occlusions: [],
       radiographs: [],
       braces: [],
-      treatmentTypes: [],
+      services: [],
       fallenBraces: [],
       note: '',
-      malocclusion: {
-        molarCanin: {
-          molar: '',
-          canin: '',
-        },
-        caninMolar: {
-          molar: '',
-          canin: '',
-        },
+      angleClasses: {
+        molarCaninMolar: 0,
+        molarCaninCanin: 0,
+        caninMolarCanin: 0,
+        caninMolarMolar: 0,
       },
     },
-    maxillary: {
+    Maxillary: {
       classes: [],
       occlusions: [],
       radiographs: [],
       braces: [],
-      treatmentTypes: [],
+      services: [],
       fallenBraces: [],
       note: '',
-      malocclusion: {
-        molarCanin: {
-          molar: '',
-          canin: '',
-        },
-        caninMolar: {
-          molar: '',
-          canin: '',
-        },
+      angleClasses: {
+        molarCaninMolar: 0,
+        molarCaninCanin: 0,
+        caninMolarCanin: 0,
+        caninMolarMolar: 0,
       },
     },
   },
@@ -98,6 +89,10 @@ const reducerTypes = {
   setPlanType: 'setPlanType',
   setBracketsPlan: 'setBracketsPlan',
   setMalocclusion: 'setMalocclusion',
+  setMolarCaninMolar: 'setMolarCaninMolar',
+  setMolarCaninCanin: 'setMolarCaninCanin',
+  setCaninMolarMolar: 'setCaninMolarMolar',
+  setCaninMolarCanin: 'setCaninMolarCanin',
   setIsLoading: 'setIsLoading',
   setIsSaving: 'setIsSaving',
 };
@@ -112,6 +107,78 @@ const reducer = (state, action) => {
       return { ...state, isSaving: action.payload };
     case reducerTypes.setPlanType:
       return { ...state, planType: action.payload };
+    case reducerTypes.setMolarCaninMolar: {
+      const plan = cloneDeep(state.bracketsPlan);
+      const { planTypeName, value } = action.payload;
+      const planType = plan[planTypeName];
+      return {
+        ...state,
+        bracketsPlan: {
+          ...plan,
+          [planTypeName]: {
+            ...planType,
+            angleClasses: {
+              ...planType.angleClasses,
+              molarCaninMolar: value,
+            },
+          },
+        },
+      };
+    }
+    case reducerTypes.setMolarCaninCanin: {
+      const plan = cloneDeep(state.bracketsPlan);
+      const { planTypeName, value } = action.payload;
+      const planType = plan[planTypeName];
+      return {
+        ...state,
+        bracketsPlan: {
+          ...plan,
+          [planTypeName]: {
+            ...planType,
+            angleClasses: {
+              ...planType.angleClasses,
+              molarCaninCanin: value,
+            },
+          },
+        },
+      };
+    }
+    case reducerTypes.setCaninMolarMolar: {
+      const plan = cloneDeep(state.bracketsPlan);
+      const { planTypeName, value } = action.payload;
+      const planType = plan[planTypeName];
+      return {
+        ...state,
+        bracketsPlan: {
+          ...plan,
+          [planTypeName]: {
+            ...planType,
+            angleClasses: {
+              ...planType.angleClasses,
+              caninMolarMolar: value,
+            },
+          },
+        },
+      };
+    }
+    case reducerTypes.setCaninMolarCanin: {
+      const plan = cloneDeep(state.bracketsPlan);
+      const { planTypeName, value } = action.payload;
+      const planType = plan[planTypeName];
+      return {
+        ...state,
+        bracketsPlan: {
+          ...plan,
+          [planTypeName]: {
+            ...planType,
+            angleClasses: {
+              ...planType.angleClasses,
+              caninMolarCanin: value,
+            },
+          },
+        },
+      };
+    }
     case reducerTypes.setBracketsPlan: {
       const plan = cloneDeep(state.bracketsPlan);
       const { planTypeName, data } = action.payload;
@@ -123,24 +190,6 @@ const reducer = (state, action) => {
           [planTypeName]: {
             ...planType,
             ...data,
-          },
-        },
-      };
-    }
-    case reducerTypes.setMalocclusion: {
-      const currentType = state.planType;
-      const plan = cloneDeep(state.bracketsPlan);
-      const { type, data } = action.payload;
-      plan[currentType].malocclusion[type] = {
-        ...plan[currentType].malocclusion[type],
-        ...data,
-      };
-      return {
-        ...state,
-        bracketsPlan: {
-          ...plan,
-          [currentType]: {
-            ...plan[currentType],
           },
         },
       };
@@ -165,18 +214,15 @@ const OrthodonticPlan = ({ patient, onSave }) => {
     if (patient != null) {
       fetchOrthodonticPlan();
     }
-  }, [patient]);
+  }, [patient, planType]);
 
   const fetchOrthodonticPlan = async () => {
     localDispatch(actions.setIsLoading(true));
-    const response = await dataAPI.fetchTreatmentPlan(patient.id);
+    const response = await dataAPI.fetchBracesPlan(patient.id, planType);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else if (response.data != null) {
-      const mandible = response.data.mandible;
-      const maxillary = response.data.maxillary;
-      updatePlan({ ...mandible }, PlanType.mandible);
-      updatePlan({ ...maxillary }, PlanType.maxillary);
+      updatePlan(response.data);
     }
     localDispatch(actions.setIsLoading(false));
   };
@@ -256,20 +302,20 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const handleTreatmentTypesChange = newTreatment => {
     if (!isDoctor) return;
     let newTypes = updateServicesArray(
-      cloneDeep(bracketsPlan[planType].treatmentTypes),
+      cloneDeep(bracketsPlan[planType].services),
       newTreatment,
     );
-    updatePlan({ treatmentTypes: newTypes });
+    updatePlan({ services: newTypes });
   };
 
   const handleMolarCaninMolarChange = event => {
     if (!isDoctor) return;
     let newValue = event.target.value;
-    if (newValue === 'select') newValue = '';
+    if (newValue === 'select') newValue = '0';
     localDispatch(
-      actions.setMalocclusion({
-        type: 'molarCanin',
-        data: { molar: newValue },
+      actions.setMolarCaninMolar({
+        planTypeName: planType,
+        value: parseInt(newValue),
       }),
     );
   };
@@ -277,11 +323,11 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const handleMolarCaninCaninChange = event => {
     if (!isDoctor) return;
     let newValue = event.target.value;
-    if (newValue === 'select') newValue = '';
+    if (newValue === 'select') newValue = '0';
     localDispatch(
-      actions.setMalocclusion({
-        type: 'molarCanin',
-        data: { canin: newValue },
+      actions.setMolarCaninCanin({
+        planTypeName: planType,
+        value: parseInt(newValue),
       }),
     );
   };
@@ -289,11 +335,11 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const handleCaninMolarMolarChange = event => {
     if (!isDoctor) return;
     let newValue = event.target.value;
-    if (newValue === 'select') newValue = '';
+    if (newValue === 'select') newValue = '0';
     localDispatch(
-      actions.setMalocclusion({
-        type: 'caninMolar',
-        data: { molar: newValue },
+      actions.setCaninMolarMolar({
+        planTypeName: planType,
+        value: parseInt(newValue),
       }),
     );
   };
@@ -301,11 +347,11 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const handleCaninMolarCaninChange = event => {
     if (!isDoctor) return;
     let newValue = event.target.value;
-    if (newValue === 'select') newValue = '';
+    if (newValue === 'select') newValue = '0';
     localDispatch(
-      actions.setMalocclusion({
-        type: 'caninMolar',
-        data: { canin: newValue },
+      actions.setCaninMolarCanin({
+        planTypeName: planType,
+        value: parseInt(newValue),
       }),
     );
   };
@@ -317,21 +363,13 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 
   const handleSaveTreatmentPlan = async () => {
     localDispatch(actions.setIsSaving(true));
-    console.log(bracketsPlan);
+    const requestPlan = bracketsPlan[planType];
     const updatedBraces = {
-      ...bracketsPlan,
-      mandible: {
-        ...bracketsPlan.mandible,
-        braces: bracketsPlan.mandible.braces.map(it => it.id),
-        services: bracketsPlan.mandible.treatmentTypes.map(it => it.id),
-      },
-      maxillary: {
-        ...bracketsPlan.maxillary,
-        braces: bracketsPlan.maxillary.braces.map(it => it.id),
-        services: bracketsPlan.maxillary.treatmentTypes.map(it => it.id),
-      },
+      ...requestPlan,
+      planType,
+      braces: requestPlan.braces.map(it => it.id),
+      services: requestPlan.services.map(it => it.id),
     };
-    console.log(updatedBraces);
     const response = await dataAPI.saveTreatmentPlan(patient.id, updatedBraces);
     logUserAction(
       Action.UpdatedOrthodonticPlan,
@@ -359,7 +397,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const radiographs = bracketsPlan[planType].radiographs;
   const fallenBraces = bracketsPlan[planType].fallenBraces;
   const selectedBraces = bracketsPlan[planType].braces;
-  const treatmentTypes = bracketsPlan[planType].treatmentTypes;
+  const selectedServices = bracketsPlan[planType].services;
 
   const classRow = (
     <tr>
@@ -505,7 +543,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
               onClick={() => handleTreatmentTypesChange(item)}
               className={clsx(
                 'option-button',
-                treatmentTypes.some(it => it.id === item.id) && 'selected',
+                selectedServices.some(it => it.id === item.id) && 'selected',
               )}
               key={item.id}
             >
@@ -530,10 +568,10 @@ const OrthodonticPlan = ({ patient, onSave }) => {
             className='mr-sm-2'
             id='inlineFormCustomSelect'
             onChange={handleMolarCaninMolarChange}
-            value={bracketsPlan[planType].malocclusion.molarCanin.molar}
+            value={bracketsPlan[planType].angleClasses.molarCaninMolar}
             custom
           >
-            <option value='select'>{textForKey('Molar')}...</option>
+            <option value='0'>{textForKey('Molar')}...</option>
             <option value='1'>{textForKey('Molar')} 1</option>
             <option value='2'>{textForKey('Molar')} 2</option>
             <option value='3'>{textForKey('Molar')} 3</option>
@@ -544,10 +582,10 @@ const OrthodonticPlan = ({ patient, onSave }) => {
             className='mr-sm-2'
             id='inlineFormCustomSelect'
             onChange={handleMolarCaninCaninChange}
-            value={bracketsPlan[planType].malocclusion.molarCanin.canin}
+            value={bracketsPlan[planType].angleClasses.molarCaninCanin}
             custom
           >
-            <option value='select'>{textForKey('Canin')}...</option>
+            <option value='0'>{textForKey('Canin')}...</option>
             <option value='1'>{textForKey('Canin')} 1</option>
             <option value='2'>{textForKey('Canin')} 2</option>
             <option value='3'>{textForKey('Canin')} 3</option>
@@ -559,10 +597,10 @@ const OrthodonticPlan = ({ patient, onSave }) => {
             className='mr-sm-2'
             id='inlineFormCustomSelect'
             onChange={handleCaninMolarCaninChange}
-            value={bracketsPlan[planType].malocclusion.caninMolar.canin}
+            value={bracketsPlan[planType].angleClasses.caninMolarCanin}
             custom
           >
-            <option value='select'>{textForKey('Canin')}...</option>
+            <option value='0'>{textForKey('Canin')}...</option>
             <option value='1'>{textForKey('Canin')} 1</option>
             <option value='2'>{textForKey('Canin')} 2</option>
             <option value='3'>{textForKey('Canin')} 3</option>
@@ -573,10 +611,10 @@ const OrthodonticPlan = ({ patient, onSave }) => {
             className='mr-sm-2'
             id='inlineFormCustomSelect'
             onChange={handleCaninMolarMolarChange}
-            value={bracketsPlan[planType].malocclusion.caninMolar.molar}
+            value={bracketsPlan[planType].angleClasses.caninMolarMolar}
             custom
           >
-            <option value='select'>{textForKey('Molar')}...</option>
+            <option value='0'>{textForKey('Molar')}...</option>
             <option value='1'>{textForKey('Molar')} 1</option>
             <option value='2'>{textForKey('Molar')} 2</option>
             <option value='3'>{textForKey('Molar')} 3</option>

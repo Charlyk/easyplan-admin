@@ -28,10 +28,11 @@ import {
   setServiceModalCategory,
   setServiceModalService,
 } from '../../redux/actions/serviceDetailsActions';
-import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
+import { clinicAllServicesSelector } from '../../redux/selectors/clinicSelector';
 import { updateServicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import {
+  fetchClinicData,
   generateReducerActions,
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
@@ -93,7 +94,7 @@ const reducer = (state, action) => {
 
 const Services = () => {
   const dispatch = useDispatch();
-  const clinicServices = useSelector(clinicServicesSelector);
+  const clinicServices = useSelector(clinicAllServicesSelector);
   const updateServices = useSelector(updateServicesSelector);
   const [
     {
@@ -189,7 +190,9 @@ const Services = () => {
     localDispatch(
       actions.setDeleteServiceModal({ ...deleteServiceModal, isLoading: true }),
     );
-    const response = await dataAPI.deleteService(deleteServiceModal.service.id);
+    const response = deleteServiceModal.service.deleted
+      ? await dataAPI.restoreService(deleteServiceModal.service.id)
+      : await dataAPI.deleteService(deleteServiceModal.service.id);
     if (response.isError) {
       console.error(response.message);
       localDispatch(
@@ -202,6 +205,7 @@ const Services = () => {
       setTimeout(() => {
         fetchServices();
         handleCloseDeleteService();
+        dispatch(fetchClinicData());
       }, 300);
     }
   };
@@ -313,8 +317,16 @@ const Services = () => {
         onConfirm={handleServiceDeleteConfirmed}
         onClose={handleCloseDeleteService}
         isLoading={deleteServiceModal.isLoading}
-        title={textForKey('Delete service')}
-        message={textForKey('Are you sure you want to delete this service?')}
+        title={
+          deleteServiceModal.service?.deleted
+            ? textForKey('Restore service')
+            : textForKey('Delete service')
+        }
+        message={
+          deleteServiceModal.service?.deleted
+            ? textForKey('Are you sure you want to restore this service?')
+            : textForKey('Are you sure you want to delete this service?')
+        }
         show={deleteServiceModal.open}
       />
       <CreateCategoryModal

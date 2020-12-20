@@ -10,6 +10,7 @@ import {
 import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
 import dataAPI, { imageLambdaUrl } from './api/dataAPI';
 import { env, S3Config } from './constants';
+import { textForKey } from './localization';
 
 export function createHoursList() {
   return [].concat(
@@ -257,6 +258,17 @@ export const fetchClinicData = () => async dispatch => {
   if (!clinicResponse.isError) {
     dispatch(setClinic(clinicResponse.data));
   }
+};
+
+export const getServiceName = service => {
+  let name = service.name;
+  if (service.toothId != null) {
+    name = `${name} ${service.toothId}`;
+  }
+  if (service.destination != null) {
+    name = `${name} (${textForKey(service.destination)})`;
+  }
+  return name;
 };
 
 export const checkShouldAnimateSchedule = schedule => (dispatch, getState) => {

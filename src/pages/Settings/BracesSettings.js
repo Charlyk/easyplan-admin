@@ -32,8 +32,7 @@ const BracesSettings = () => {
     );
   };
 
-  const handlePriceChange = event => {
-    const serviceId = parseInt(event.target.id);
+  const handlePriceChange = (event, serviceId) => {
     const service = clinicBraces.find(item => item.id === serviceId);
     if (service == null) {
       return;
@@ -48,8 +47,7 @@ const BracesSettings = () => {
     );
   };
 
-  const handleDurationChange = event => {
-    const serviceId = parseInt(event.target.id);
+  const handleDurationChange = (event, serviceId) => {
     const service = clinicBraces.find(item => item.id === serviceId);
     if (service == null) {
       return;
@@ -110,8 +108,7 @@ const BracesSettings = () => {
                     <Form.Control
                       disabled={!item.isEnabled}
                       className='mr-sm-2'
-                      id={item.id}
-                      onChange={handlePriceChange}
+                      onChange={event => handlePriceChange(event, item.id)}
                       value={String(item.price)}
                     />
                     <InputGroup.Append>
@@ -124,8 +121,7 @@ const BracesSettings = () => {
                     <Form.Control
                       disabled={!item.isEnabled}
                       className='mr-sm-2'
-                      id={item.id}
-                      onChange={handleDurationChange}
+                      onChange={event => handleDurationChange(event, item.id)}
                       value={String(item.duration)}
                     />
                     <InputGroup.Append>

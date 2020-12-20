@@ -20,6 +20,7 @@ import {
   setPatientXRayModal,
 } from '../../redux/actions/actions';
 import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, teeth } from '../../utils/constants';
 import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
@@ -27,7 +28,6 @@ import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
 import '../../components/PatientDetailsModal/styles.scss';
-import { userSelector } from '../../redux/selectors/rootSelector';
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -70,25 +70,6 @@ const reducerTypes = {
 
 const actions = generateReducerActions(reducerTypes);
 
-const historyToService = it => ({
-  id: it.serviceId,
-  historyId: it.id,
-  name: it.serviceName,
-  color: it.serviceColor,
-  toothId: it.toothId,
-  price: it.servicePrice || 0,
-  destination: it.destination,
-});
-
-const serviceExists = (list, service, destination) => {
-  return list.some(
-    it =>
-      it.id === service.id &&
-      it.toothId === service.toothId &&
-      it.destination === destination,
-  );
-};
-
 const reducer = (state, action) => {
   switch (action.type) {
     case reducerTypes.setIsLoading:
@@ -106,82 +87,6 @@ const reducer = (state, action) => {
       return { ...state, schedule: action.payload };
     case reducerTypes.setShouldFillTreatmentPlan:
       return { ...state, shouldFillTreatmentPlan: action.payload };
-    case reducerTypes.setTreatmentPlan: {
-      const { mandible, maxillary } = action.payload;
-      const completedServices = state.completedServices;
-      let newServices = cloneDeep(state.selectedServices);
-      const mandibleServices = [
-        ...mandible.braces
-          .filter(
-            item =>
-              !serviceExists(
-                [...newServices, ...completedServices],
-                item,
-                'mandible',
-              ),
-          )
-          .map(item => ({
-            ...item,
-            bracket: true,
-            name: `${item.name} (${textForKey('Mandible')})`,
-            destination: 'mandible',
-          })),
-        ...mandible.treatmentTypes
-          .filter(
-            item =>
-              !serviceExists(
-                [...newServices, ...completedServices],
-                item,
-                'mandible',
-              ),
-          )
-          .map(item => ({
-            ...item,
-            bracket: true,
-            name: `${item.name} (${textForKey('Mandible')})`,
-            destination: 'mandible',
-          })),
-      ];
-      const maxillaryServices = [
-        ...maxillary.braces
-          .filter(
-            item =>
-              !serviceExists(
-                [...newServices, ...completedServices],
-                item,
-                'maxillary',
-              ),
-          )
-          .map(item => ({
-            ...item,
-            bracket: true,
-            name: `${item.name} (${textForKey('Maxillary')})`,
-            destination: 'maxillary',
-          })),
-        ...maxillary.treatmentTypes
-          .filter(
-            item =>
-              !serviceExists(
-                [...newServices, ...completedServices],
-                item,
-                'maxillary',
-              ),
-          )
-          .map(item => ({
-            ...item,
-            bracket: true,
-            name: `${item.name} (${textForKey('Maxillary')})`,
-            destination: 'maxillary',
-          })),
-      ];
-      remove(newServices, item => item.bracket);
-      newServices = [...newServices, ...mandibleServices, ...maxillaryServices];
-      return {
-        ...state,
-        treatmentPlan: action.payload,
-        selectedServices: newServices,
-      };
-    }
     case reducerTypes.setShowFinalizeTreatment:
       return { ...state, showFinalizeTreatment: action.payload };
     case reducerTypes.setIsFinalizing:
@@ -202,12 +107,14 @@ const reducer = (state, action) => {
         ...state,
         patient,
         schedule: action.payload,
-        selectedServices: treatmentPlan.services.filter(
-          item => !item.completed,
-        ),
-        completedServices: treatmentPlan.services.filter(
-          item => item.completed,
-        ),
+        selectedServices: [
+          ...treatmentPlan.services.filter(item => !item.completed),
+          ...treatmentPlan.braces.filter(item => !item.completed),
+        ],
+        completedServices: [
+          ...treatmentPlan.services.filter(item => item.completed),
+          ...treatmentPlan.braces.filter(item => !item.completed),
+        ],
       };
     }
     default:
@@ -227,10 +134,8 @@ const DoctorPatientDetails = () => {
       patient,
       toothServices,
       allServices,
-      bracesServices,
       selectedServices,
       schedule,
-      treatmentPlan,
       showFinalizeTreatment,
       isFinalizing,
       completedServices,
@@ -321,8 +226,8 @@ const DoctorPatientDetails = () => {
     return sum(prices);
   };
 
-  const handleSaveTreatmentPlan = plan => {
-    localDispatch(actions.setTreatmentPlan(plan));
+  const handleSaveTreatmentPlan = () => {
+    fetchScheduleDetails();
   };
 
   const handleFinalizeTreatment = () => {
@@ -343,6 +248,8 @@ const DoctorPatientDetails = () => {
         id: item.id,
         toothId: item.toothId,
         completed: item.selected,
+        destination: item.destination,
+        isBraces: item.isBraces,
       })),
     };
 
@@ -364,8 +271,6 @@ const DoctorPatientDetails = () => {
     schedule?.scheduleStatus === 'PartialPaid';
 
   const canFinalize = schedule?.scheduleStatus === 'OnSite';
-
-  console.log(schedule);
 
   return (
     <div className='doctor-patient-root'>

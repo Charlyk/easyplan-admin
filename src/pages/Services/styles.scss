@@ -169,6 +169,16 @@
     font-size: 12px !important;
     line-height: 16px !important;
 
+    &.positive {
+      border: 1px solid #00E987 !important;
+      color: #00E987 !important;
+
+      svg {
+        fill: #00E987;
+        margin-left: .5rem;
+      }
+    }
+
     svg {
       fill: #F44081;
       margin-left: .5rem;

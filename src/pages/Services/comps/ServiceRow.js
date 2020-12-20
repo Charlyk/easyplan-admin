@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
 import IconDelete from '../../../assets/icons/iconDelete';
 import IconEdit from '../../../assets/icons/iconEdit';
+import IconRefresh from '../../../assets/icons/iconRefresh';
 import { textForKey } from '../../../utils/localization';
 
 const ServiceRow = ({ service, onEditService, onDeleteService }) => {
@@ -55,10 +57,14 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
           </Button>
           <Button
             disabled={service.bracket}
-            className='services-root__delete-button'
+            className={clsx(
+              'services-root__delete-button',
+              service.deleted && 'positive',
+            )}
             onClick={handleDeleteService}
           >
-            {textForKey('Delete')} <IconDelete />
+            {service.deleted ? textForKey('Restore') : textForKey('Delete')}{' '}
+            {service.deleted ? <IconRefresh fill='#00E987' /> : <IconDelete />}
           </Button>
         </div>
       </td>

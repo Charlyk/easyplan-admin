@@ -241,6 +241,27 @@ export default {
     }
   },
 
+  restoreService: async serviceId => {
+    try {
+      const response = await Axios.get(
+        `${baseURL}/services/v1/${serviceId}/restore`,
+      );
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
   /**
    * Fetch all categories
    * @param {string|null} categoryId
@@ -1267,16 +1288,31 @@ export default {
     }
   },
 
+  fetchBracesPlan: async (patientId, planType) => {
+    try {
+      const response = await Axios.get(
+        `${baseURL}/patients/${patientId}/braces-plan/${planType}`,
+      );
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
   /**
    * Get patient treatment plan
    * @param patientId
    * @param {Object} plan
-   * @param {string} plan.planClass
-   * @param {string} plan.occlusion
-   * @param {string} plan.included
-   * @param {string} plan.radiograph
-   * @param {Array.<string>} plan.fallenBrackets
-   * @param {{id: string, toothId: string?, name: string, price: number}} plan.service
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   saveTreatmentPlan: async (patientId, plan) => {

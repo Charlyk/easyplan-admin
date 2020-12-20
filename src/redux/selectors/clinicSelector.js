@@ -21,7 +21,12 @@ export const clinicDoctorsSelector = createSelector(
 
 export const clinicServicesSelector = createSelector(
   clinicDetailsSelector,
-  clinic => clinic.services,
+  clinic => clinic.services?.filter(item => !item.deleted) || [],
+);
+
+export const clinicAllServicesSelector = createSelector(
+  clinicDetailsSelector,
+  clinic => clinic.services || [],
 );
 
 export const clinicBracesServicesSelector = createSelector(

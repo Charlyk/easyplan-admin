@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box } from '@material-ui/core';
-import cloneDeep from 'lodash/cloneDeep';
-import remove from 'lodash/remove';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 
@@ -11,17 +9,28 @@ import IconCheckBoxUnchecked from '../../assets/icons/iconCheckBoxUnchecked';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import { getServiceName } from '../../utils/helperFuncs';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const [planServices, setPlanServices] = useState([]);
 
   useEffect(() => {
-    setPlanServices(services.map(item => ({ ...item, selected: false })));
+    setPlanServices(
+      services.map(item => ({
+        ...item,
+        selected: false,
+        isBraces: item.serviceType == null,
+      })),
+    );
   }, [services]);
 
   const handleServiceToggle = service => {
     const newServices = planServices.map(item => {
-      if (item.id !== service.id || item.toothId !== service.toothId) {
+      if (
+        item.id !== service.id ||
+        item.toothId !== service.toothId ||
+        item.destination !== service.destination
+      ) {
         return item;
       }
 
@@ -59,9 +68,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
             className='final-service-item'
             onClick={() => handleServiceToggle(item)}
           >
-            <span className='service-name'>
-              {item.name} {item.toothId}
-            </span>
+            <span className='service-name'>{getServiceName(item)}</span>
             <Box display='flex' alignItems='center'>
               <span className='service-price'>{item.price} MDL</span>
               {item.selected ? (
@@ -89,7 +96,7 @@ FinalizeTreatmentModal.propTypes = {
   totalPrice: PropTypes.number,
   services: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,
