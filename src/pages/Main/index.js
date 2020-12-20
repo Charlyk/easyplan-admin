@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 
 import AddAppointmentModal from '../../components/AddAppintmentModal';
+import DataMigrationModal from '../../components/DataMigrationModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import PatientDetailsModal from '../../components/PatientDetailsModal';
@@ -128,6 +129,7 @@ const Main = () => {
           onClose={handleClosePatientDetails}
         />
       )}
+      <DataMigrationModal show={false} />
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
         schedule={appointmentModal?.schedule}

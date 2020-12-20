@@ -338,6 +338,12 @@ export default {
     'are you sure you want to restore this service?':
       'Are you sure you want to restore this service?',
     invoice_created: 'New invoice created!',
+    yclients_auth_explanation:
+      'We need to get access to your Yclients account in order to import the data in EasyPlan.',
+    'migrate data from yclients': 'Migrate data from Yclients',
+    'authenticate with yclients account': 'Authenticate with Yclients account',
+    'partner token': 'Partner authorization token',
+    authentication: 'Authentication',
   },
   ro: {
     analytics: 'Analitică',
@@ -682,6 +688,13 @@ export default {
     'are you sure you want to restore this service?':
       'Sunteți sigur(ă) că doriți să restabiliți acest serviciu?',
     invoice_created: 'Un nou invoice a fost creat!',
+    yclients_auth_explanation:
+      'Pentru a putea importa datele din Yclients în EasyPlan avem nevoie de acces la contul Dvs de Yclients.',
+    'migrate data from yclients': 'Migrare date din Yclients',
+    'authenticate with yclients account':
+      'Autentificațivă cu contul de Yclients',
+    'partner token': 'Tokenul de autorizare a partenerului',
+    authentication: 'Autentificare',
   },
   ru: {
     analytics: 'Analytics',
@@ -1019,5 +1032,11 @@ export default {
     'are you sure you want to restore this service?':
       'Are you sure you want to restore this service?',
     invoice_created: 'New invoice created!',
+    yclients_auth_explanation:
+      'We need to get access to your Yclients account in order to import the data in EasyPlan.',
+    'migrate data from yclients': 'Migrate data from Yclients',
+    'authenticate with yclients account': 'Authenticate with Yclients account',
+    'partner token': 'Partner authorization token',
+    authentication: 'Authentication',
   },
 };
