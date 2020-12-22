@@ -7,8 +7,6 @@ import moment from 'moment';
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
-
-import './styles.scss';
 import { toast } from 'react-toastify';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
@@ -28,6 +26,15 @@ import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
 import '../../components/PatientDetailsModal/styles.scss';
+import './styles.scss';
+
+const areSameServices = (first, second) => {
+  return (
+    first.id === second.id &&
+    first.toothId === second.toothId &&
+    first.destination === second.destination
+  );
+};
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -103,17 +110,38 @@ const reducer = (state, action) => {
     }
     case reducerTypes.setScheduleDetails: {
       const { patient, treatmentPlan } = action.payload;
+      const existentSelectedServices = cloneDeep(state.selectedServices);
+
+      // combine services and braces in one array
+      const newSelectedServices = [
+        ...treatmentPlan.services.filter(item => !item.completed),
+        ...treatmentPlan.braces.filter(item => !item.completed),
+      ];
+
+      // remove unused services from selected
+      const diffsToRemove = existentSelectedServices.filter(
+        item =>
+          item.serviceType == null &&
+          !newSelectedServices.some(it => areSameServices(it, item)),
+      );
+      remove(existentSelectedServices, item =>
+        diffsToRemove.some(it => areSameServices(it, item)),
+      );
+
+      // add new services to selected
+      const diffsToAdd = newSelectedServices.filter(
+        item => !existentSelectedServices.some(it => areSameServices(it, item)),
+      );
+      diffsToAdd.forEach(item => existentSelectedServices.push(item));
+
       return {
         ...state,
         patient,
         schedule: action.payload,
-        selectedServices: [
-          ...treatmentPlan.services.filter(item => !item.completed),
-          ...treatmentPlan.braces.filter(item => !item.completed),
-        ],
+        selectedServices: existentSelectedServices,
         completedServices: [
           ...treatmentPlan.services.filter(item => item.completed),
-          ...treatmentPlan.braces.filter(item => !item.completed),
+          ...treatmentPlan.braces.filter(item => item.completed),
         ],
       };
     }
