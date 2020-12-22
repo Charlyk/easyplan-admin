@@ -378,7 +378,6 @@ const AddAppointmentModal = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      console.log(response.data);
       localDispatch(reducerActions.setSchedule(response.data));
     }
   };

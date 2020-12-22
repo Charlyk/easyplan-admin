@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Tooltip, Typography } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
@@ -14,15 +14,9 @@ import IconAvatar from '../../../../../assets/icons/iconAvatar';
 import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { clinicServicesSelector } from '../../../../../redux/selectors/clinicSelector';
-import {
-  checkAppointmentsSelector,
-  updateAppointmentsSelector,
-} from '../../../../../redux/selectors/rootSelector';
+import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
-import {
-  checkShouldAnimateSchedule,
-  generateReducerActions,
-} from '../../../../../utils/helperFuncs';
+import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 
 const initialState = {
@@ -184,13 +178,7 @@ const DoctorAppointmentsRow = ({
 };
 
 const AppointmentItem = ({ appointment, hidden, onSelect }) => {
-  const dispatch = useDispatch();
-  const checkAppointment = useSelector(checkAppointmentsSelector);
-  const [animateSchedule, setAnimateSchedule] = useState(false);
-
-  useEffect(() => {
-    setAnimateSchedule(dispatch(checkShouldAnimateSchedule(appointment)));
-  }, [checkAppointment, appointment]);
+  const shouldAnimate = appointment.scheduleStatus === 'WaitingForPatient';
 
   const handleScheduleClick = () => {
     if (hidden) {
@@ -207,7 +195,7 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
         'HH:mm',
       )}>${appointment.end.format('HH:mm')}`}
       key={appointment.id}
-      className={clsx('appointment-item', animateSchedule && 'upcoming')}
+      className={clsx('appointment-item', shouldAnimate && 'upcoming')}
       onClick={handleScheduleClick}
       style={{
         border: `${appointment.serviceColor} 1px solid`,

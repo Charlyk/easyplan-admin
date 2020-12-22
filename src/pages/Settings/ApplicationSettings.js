@@ -14,9 +14,7 @@ const ApplicationSettings = () => {
   const dispatch = useDispatch();
   const clinic = useSelector(clinicDetailsSelector);
   const [isLoading, setIsLoading] = useState(false);
-  const [time, setTime] = useState(
-    String(clinic.notifyUpcomingAppointmentTimer),
-  );
+  const [time, setTime] = useState(String(clinic.timeBeforeOnSite));
 
   const handleFormChange = event => {
     const newValue = event.target.value;
@@ -32,7 +30,7 @@ const ApplicationSettings = () => {
     setIsLoading(true);
     const requestBody = {
       ...clinic,
-      notifyUpcomingAppointmentTimer: parseInt(time),
+      timeBeforeOnSite: parseInt(time),
     };
 
     const response = await dataAPI.updateClinic(requestBody);
