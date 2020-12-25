@@ -26,6 +26,7 @@ import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
 import {
   setPatientDetails,
+  toggleImportModal,
   togglePatientsListUpdate,
 } from '../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
@@ -223,7 +224,7 @@ const NewPatients = () => {
   };
 
   const handleStartUploadPatients = () => {
-    localDispatch(actions.setShowUploadModal(true));
+    dispatch(toggleImportModal(true));
   };
 
   const closeUploading = () => {

@@ -17,6 +17,7 @@ import {
   setAppointmentModal,
   setPaymentModal,
   toggleAppointmentsUpdate,
+  toggleImportModal,
 } from '../../redux/actions/actions';
 import {
   clinicDoctorsSelector,
@@ -314,7 +315,7 @@ const Calendar = () => {
   };
 
   const handleOpenImportModal = () => {
-    localDispatch(reducerActions.setShowImportModal(true));
+    dispatch(toggleImportModal(true));
   };
 
   const handleCloseImportModal = () => {

@@ -6,6 +6,7 @@ import {
   triggerUsersUpdate,
 } from '../redux/actions/actions';
 import { userSelector } from '../redux/selectors/rootSelector';
+import { fetchClinicData } from './helperFuncs';
 
 export const handleRemoteMessage = message => (dispatch, getState) => {
   const appState = getState();
@@ -35,6 +36,10 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
         dispatch(setUpdateCurrentUser());
       }
       break;
+    case MessageAction.ClinicDataImportStarted:
+    case MessageAction.ClinicDataImported:
+      dispatch(fetchClinicData());
+      break;
   }
 };
 
@@ -46,4 +51,6 @@ const MessageAction = {
   NewUserInvited: 'NewUserInvited',
   InvitationRemoved: 'InvitationRemoved',
   UserRemovedFromClinic: 'UserRemovedFromClinic',
+  ClinicDataImported: 'ClinicDataImported',
+  ClinicDataImportStarted: 'ClinicDataImportStarted',
 };

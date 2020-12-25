@@ -88,3 +88,8 @@ export const updatePatientPaymentsSelector = createSelector(
   mainSelector,
   state => state.updatePatientPayments,
 );
+
+export const isImportModalOpenSelector = createSelector(
+  mainSelector,
+  state => state.isImportModalOpen,
+);

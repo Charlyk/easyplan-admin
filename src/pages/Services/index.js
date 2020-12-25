@@ -21,6 +21,7 @@ import CreateCategoryModal from '../../components/CreateCategoryModal';
 import LoadingButton from '../../components/LoadingButton';
 import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
+import { toggleImportModal } from '../../redux/actions/actions';
 import { setClinicServices } from '../../redux/actions/clinicActions';
 import {
   closeServiceDetailsModal,
@@ -231,7 +232,7 @@ const Services = () => {
   };
 
   const openUploading = () => {
-    localDispatch(actions.setShowUploadModal(true));
+    dispatch(toggleImportModal(true));
   };
 
   const handleUploadPatients = async data => {

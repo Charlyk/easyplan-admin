@@ -4,6 +4,29 @@
   padding: 2rem;
   position: relative;
 
+  .import-data-wrapper {
+    background: white;
+    width: 85%;
+    padding: .7rem;
+    border-radius: 3px;
+
+    .import-progress-bar {
+      color: #3A83DC;
+      width: 1.2rem !important;
+      height: 1.2rem !important;
+    }
+
+    .import-data-label {
+      flex: 1;
+      color: #3A83DC;
+      font-weight: normal;
+      margin-left: 1rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 13px;
+    }
+  }
+
   .trust-seal-image {
     height: 25px;
     width: auto;

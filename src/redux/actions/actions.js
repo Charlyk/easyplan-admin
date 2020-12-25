@@ -228,3 +228,10 @@ export function setUpdateCurrentUser(update = true) {
     payload: update,
   };
 }
+
+export function toggleImportModal(open = false) {
+  return {
+    type: types.toggleImportModal,
+    payload: open,
+  };
+}

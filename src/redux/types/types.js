@@ -28,6 +28,7 @@ export default {
   toggleUpdatePatients: 'toggleUpdatePatients',
   toggleUpdatePatientPayments: 'toggleUpdatePatientPayments',
   forceUserLogout: 'forceUserLogout',
+  toggleImportModal: 'toggleImportModal',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,
