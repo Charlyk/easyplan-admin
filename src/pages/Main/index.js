@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 
 import AddAppointmentModal from '../../components/AddAppintmentModal';
+import DataMigrationModal from '../../components/DataMigrationModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
 import PatientDetailsModal from '../../components/PatientDetailsModal';
@@ -22,10 +23,12 @@ import {
   setAppointmentModal,
   setCreateClinic,
   setPatientDetails,
+  toggleImportModal,
   triggerUserLogout,
 } from '../../redux/actions/actions';
 import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
 import {
+  isImportModalOpenSelector,
   patientDetailsSelector,
   userSelector,
 } from '../../redux/selectors/rootSelector';
@@ -61,6 +64,7 @@ const Main = () => {
   const dispatch = useDispatch();
   const user = useSelector(userSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
+  const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
   const [{ currentPath }, localDispatch] = useReducer(reducer, {
     currentPath: location.pathname,
@@ -107,6 +111,10 @@ const Main = () => {
     dispatch(setPatientDetails({ show: false, patientId: null }));
   };
 
+  const handleCloseImportModal = () => {
+    dispatch(toggleImportModal());
+  };
+
   if (!authManager.isLoggedIn()) {
     return <Redirect to={updateLink('/login')} />;
   }
@@ -128,6 +136,10 @@ const Main = () => {
           onClose={handleClosePatientDetails}
         />
       )}
+      <DataMigrationModal
+        show={isImportModalOpen}
+        onClose={handleCloseImportModal}
+      />
       <AddAppointmentModal
         onClose={handleAppointmentModalClose}
         schedule={appointmentModal?.schedule}

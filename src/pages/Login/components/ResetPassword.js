@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import LoadingButton from '../../../components/LoadingButton';
 import authAPI from '../../../utils/api/authAPI';
@@ -17,11 +18,13 @@ const ResetPassword = ({ onGoBack }) => {
     setEmail(event.target.value);
   };
 
+  const isFormValid = email.match(EmailRegex);
+
   const handleResetPassword = async () => {
     setIsLoading(true);
     const response = await authAPI.requestResetPassword(email);
     if (response.isError) {
-      console.log(response.message);
+      toast.error(textForKey(response.message));
     } else {
       setIsSuccess(true);
     }
@@ -39,6 +42,7 @@ const ResetPassword = ({ onGoBack }) => {
           <Form.Label>{textForKey('Email')}</Form.Label>
           <InputGroup>
             <Form.Control
+              isInvalid={email.length > 0 && !isFormValid}
               value={email}
               type='email'
               onChange={handleFormChange}
@@ -64,7 +68,7 @@ const ResetPassword = ({ onGoBack }) => {
             isLoading={isLoading}
             onClick={handleResetPassword}
             className='positive-button'
-            disabled={!email.match(EmailRegex)}
+            disabled={!isFormValid}
           >
             {textForKey('Reset password')}
           </LoadingButton>

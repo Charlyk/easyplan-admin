@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ClickAwayListener } from '@material-ui/core';
+import {
+  Box,
+  CircularProgress,
+  ClickAwayListener,
+  Typography,
+} from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Nav } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
@@ -16,6 +22,7 @@ import MenuPatients from '../../assets/icons/menuPatients';
 import MenuSettings from '../../assets/icons/menuSettings';
 import MenuUsers from '../../assets/icons/menuUsers';
 import trustSeal from '../../assets/images/positivessl_trust_seal.png';
+import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ClinicSelector from '../ClinicSelector';
@@ -90,6 +97,7 @@ const menuItems = [
 
 const MainMenu = props => {
   const buttonRef = useRef(null);
+  const clinic = useSelector(clinicDetailsSelector);
   const { currentPath, currentUser, onCreateClinic, onChangeCompany } = props;
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
@@ -216,11 +224,22 @@ const MainMenu = props => {
           }
         })}
       </Nav>
-      <img
-        className='trust-seal-image'
-        src={trustSeal}
-        align='SSL Trust Seal'
-      />
+      {clinic.isImporting && (
+        <Box
+          className='import-data-wrapper'
+          position='absolute'
+          bottom='4rem'
+          left='1rem'
+          display='flex'
+          alignItems='center'
+        >
+          <CircularProgress classes={{ root: 'import-progress-bar' }} />
+          <Typography classes={{ root: 'import-data-label' }}>
+            {textForKey('Importing data in progress')}
+          </Typography>
+        </Box>
+      )}
+      <img className='trust-seal-image' src={trustSeal} alt='SSL Trust Seal' />
     </div>
   );
 };

@@ -111,6 +111,11 @@ function main(state = initialState, action) {
         ...state,
         updatePatientPayments: !state.updatePatientPayments,
       };
+    case types.toggleImportModal:
+      return {
+        ...state,
+        isImportModalOpen: action.payload,
+      };
     default:
       return state;
   }

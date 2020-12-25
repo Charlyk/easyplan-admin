@@ -338,6 +338,17 @@ export default {
     'are you sure you want to restore this service?':
       'Are you sure you want to restore this service?',
     invoice_created: 'New invoice created!',
+    yclients_auth_explanation:
+      'We need to get access to your Yclients account in order to import the data in EasyPlan.',
+    'migrate data from yclients': 'Migrate data from Yclients',
+    'authenticate with yclients account': 'Authenticate with Yclients account',
+    'partner token': 'Partner authorization token',
+    authentication: 'Authentication',
+    'select type of data to import': 'Select type of data to import',
+    'we are ready to start': 'We are ready to start',
+    start_migration_message:
+      'When clicking on start we will migrate all data from Yclients to EasyPlan and will setup all the fields for you. This will take some time so you can continue to explore the app and we will notify you when the data is ready.',
+    'importing data in progress': 'Importing data in progress',
   },
   ro: {
     analytics: 'Analitică',
@@ -682,6 +693,18 @@ export default {
     'are you sure you want to restore this service?':
       'Sunteți sigur(ă) că doriți să restabiliți acest serviciu?',
     invoice_created: 'Un nou invoice a fost creat!',
+    yclients_auth_explanation:
+      'Pentru a putea importa datele din Yclients în EasyPlan avem nevoie de acces la contul Dvs de Yclients.',
+    'migrate data from yclients': 'Migrare date din Yclients',
+    'authenticate with yclients account':
+      'Autentificațivă cu contul de Yclients',
+    'partner token': 'Tokenul de autorizare a partenerului',
+    authentication: 'Autentificare',
+    'select type of data to import': 'Selectați ce date doriți să importați',
+    'we are ready to start': 'Suntem gata de migrare',
+    start_migration_message:
+      'La click pe butonul START noi vom importa toate datele din Yclients în EasyPlan. Acest proces poate dura ceva timp așa că Dvs puteți continua să explorați aplicația iar noi vă vom notificat cand totul va fi gata.',
+    'importing data in progress': 'Importare date în progres',
   },
   ru: {
     analytics: 'Analytics',
@@ -1019,5 +1042,16 @@ export default {
     'are you sure you want to restore this service?':
       'Are you sure you want to restore this service?',
     invoice_created: 'New invoice created!',
+    yclients_auth_explanation:
+      'We need to get access to your Yclients account in order to import the data in EasyPlan.',
+    'migrate data from yclients': 'Migrate data from Yclients',
+    'authenticate with yclients account': 'Authenticate with Yclients account',
+    'partner token': 'Partner authorization token',
+    authentication: 'Authentication',
+    'select type of data to import': 'Select type of data to import',
+    'we are ready to start': 'We are ready to start',
+    start_migration_message:
+      'When clicking on start we will migrate all data from Yclients to EasyPlan and will setup all the fields for you. This will take some time so you can continue to explore the app and we will notify you when the data is ready.',
+    'importing data in progress': 'Importing data in progress',
   },
 };

@@ -17,4 +17,5 @@ export default Object.freeze({
   patientDetails: { show: false, patientId: null, onDelete: null },
   updatePatients: false,
   updatePatientPayments: false,
+  isImportModalOpen: false,
 });
