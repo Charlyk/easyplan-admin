@@ -1575,7 +1575,7 @@ export default {
 
   /**
    * Fetch patient visits
-   * @param {string} patientId
+   * @param {number} patientId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   fetchPatientVisits: async patientId => {

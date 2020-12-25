@@ -75,8 +75,8 @@ const GeneralStatistics = () => {
     setIsLoading(true);
     const requestData = {
       doctorId: selectedDoctor.id,
-      fromDate: startDate,
-      toDate: endDate,
+      fromDate: moment(startDate).format('YYYY-MM-DD'),
+      toDate: moment(endDate).format('YYYY-MM-DD'),
     };
     logUserAction(
       Action.ViewGeneralStatistics,
@@ -125,12 +125,7 @@ const GeneralStatistics = () => {
 
   const handleDateChange = data => {
     const { startDate, endDate } = data.range1;
-    setDateRange([
-      startDate,
-      moment(endDate)
-        .endOf('day')
-        .toDate(),
-    ]);
+    setDateRange([startDate, endDate]);
   };
 
   const handleDatePickerOpen = () => {
