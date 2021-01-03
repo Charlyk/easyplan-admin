@@ -1,7 +1,9 @@
 import moment from 'moment';
 import S3 from 'react-aws-s3';
+import { toast } from 'react-toastify';
 import uuid from 'react-uuid';
 
+import { setCurrentUser } from '../redux/actions/actions';
 import {
   setClinic,
   setClinicUsers,
@@ -11,6 +13,7 @@ import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
 import dataAPI, { imageLambdaUrl } from './api/dataAPI';
 import { env, S3Config } from './constants';
 import { textForKey } from './localization';
+import authManager from './settings/authManager';
 
 export function createHoursList() {
   return [].concat(
@@ -302,4 +305,20 @@ export const updateLink = link => {
   } else {
     return link;
   }
+};
+
+export const handleUserAuthenticated = (
+  { user, token },
+  callback = () => null,
+) => dispatch => {
+  authManager.setUserToken(token);
+  authManager.setUserId(user.id);
+  setTimeout(() => {
+    dispatch(setCurrentUser(user));
+    const selectedClinic = user.clinics.find(item => item.isSelected);
+    if (selectedClinic != null) {
+      dispatch(fetchClinicData());
+    }
+    callback();
+  }, 500);
 };

@@ -14,6 +14,7 @@ import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex, PasswordRegex } from '../../../utils/constants';
 import {
   fetchClinicData,
+  handleUserAuthenticated,
   updateLink,
   uploadFileToAWS,
 } from '../../../utils/helperFuncs';
@@ -81,16 +82,12 @@ const RegisterForm = ({ onGoBack }) => {
       console.error(response.message);
       setErrorMessage(response.message);
     } else if (response.data != null) {
-      const { token, user } = response.data;
-      authManager.setUserToken(token);
-      authManager.setUserId(user.id);
-      dispatch(setCurrentUser(user));
-      const selectedClinic = user.clinics.find(item => item.isSelected);
-      if (selectedClinic != null) {
-        dispatch(fetchClinicData());
-      }
+      const loginResponse = await authAPI.login(data.username, data.password);
+      dispatch(handleUserAuthenticated(loginResponse.data));
     }
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   };
 
   const isFormValid = () => {

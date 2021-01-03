@@ -11,7 +11,11 @@ import LoadingButton from '../../../components/LoadingButton';
 import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
-import { fetchClinicData, updateLink } from '../../../utils/helperFuncs';
+import {
+  fetchClinicData,
+  handleUserAuthenticated,
+  updateLink,
+} from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
 
@@ -44,16 +48,11 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
       toast.error(textForKey(response.message));
       setErrorMessage(response.message);
     } else {
-      const { token, user } = response.data;
-      authManager.setUserToken(token);
-      authManager.setUserId(user.id);
-      dispatch(setCurrentUser(user));
-      const selectedClinic = user.clinics.find(item => item.isSelected);
-      if (selectedClinic != null) {
-        dispatch(fetchClinicData());
-      }
+      dispatch(handleUserAuthenticated(response.data));
     }
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   };
 
   const isFormValid = () => {

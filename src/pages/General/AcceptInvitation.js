@@ -17,6 +17,7 @@ import { JwtRegex, PasswordRegex } from '../../utils/constants';
 import {
   fetchClinicData,
   generateReducerActions,
+  handleUserAuthenticated,
   updateLink,
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
@@ -166,23 +167,16 @@ const AcceptInvitation = () => {
       toast.error(textForKey(response.message));
       console.error(response.message);
     } else {
-      const { token, user } = response.data;
-      console.log(user);
-      authManager.setUserToken(token);
-      authManager.setUserId(user.id);
-      dispatch(setCurrentUser(user));
-      const selectedClinic = user.clinics.find(item => item.isSelected);
-      if (selectedClinic != null) {
-        await dispatch(fetchClinicData());
-      }
-      toast.success(textForKey('invitation_accepted_success'));
-      setTimeout(() => {
-        localDispatch(actions.setIsInvitationAccepted(true));
-      }, 1500);
+      dispatch(
+        handleUserAuthenticated(response.data, () => {
+          toast.success(textForKey('invitation_accepted_success'));
+          localDispatch(actions.setIsInvitationAccepted(true));
+        }),
+      );
     }
     setTimeout(() => {
       localDispatch(actions.setIsLoading(false));
-    }, 1500);
+    }, 500);
   };
 
   if (isInvitationAccepted) {
