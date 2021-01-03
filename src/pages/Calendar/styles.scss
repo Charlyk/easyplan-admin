@@ -344,7 +344,14 @@
       display: flex;
       align-items: center;
       position: relative;
-      padding-left: 1rem;
+
+      .arrow-button {
+        outline: none;
+
+        .button-icon {
+          color: #3A83DC;
+        }
+      }
 
       .positive-button {
         flex: unset;

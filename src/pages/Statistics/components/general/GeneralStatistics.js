@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { Observable } from 'rxjs';
 
 import IconCheckMark from '../../../../assets/icons/iconCheckMark';
 import IconClock from '../../../../assets/icons/iconClock';
@@ -186,7 +185,9 @@ const GeneralStatistics = () => {
             />
           </Form.Group>
         </StatisticFilter>
-        <span className='block-title'>{textForKey('Patients statistics')}</span>
+        <span className='block-title'>
+          {textForKey('Schedules statistics')}
+        </span>
         {statuses.length > 0 ? (
           <div className='statuses-container'>
             {statuses.map(item => (

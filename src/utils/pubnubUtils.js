@@ -2,6 +2,7 @@ import {
   setUpdateCurrentUser,
   toggleAppointmentsUpdate,
   toggleCheckDoctorAppointments,
+  togglePatientsListUpdate,
   toggleUpdateInvoices,
   triggerUsersUpdate,
 } from '../redux/actions/actions';
@@ -39,6 +40,7 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
     case MessageAction.ClinicDataImportStarted:
     case MessageAction.ClinicDataImported:
       dispatch(fetchClinicData());
+      dispatch(togglePatientsListUpdate());
       break;
   }
 };

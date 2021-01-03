@@ -134,8 +134,8 @@ export const getDays = viewDate => {
   const currentMonth = moment(viewDate);
   const daysInCurrentMonth = currentMonth.daysInMonth();
   const currentMonthIndex = currentMonth.month();
-  const previousMonthIndex = moment({ month: currentMonthIndex - 1 }).month();
-  const nextMonthIndex = currentMonth.add('months', 1).month();
+  const previousMonthIndex = currentMonth.subtract(1, 'month').month();
+  const nextMonthIndex = currentMonth.add(1, 'month').month();
 
   const daysInPreviousMonth = moment({
     month: previousMonthIndex,
@@ -144,12 +144,13 @@ export const getDays = viewDate => {
   const lastDay = lastDayOfMonth(viewDate);
 
   // add last days of previous month
+  const startDays = [];
   for (let i = 0; i < firstDay; i++) {
     const date = moment({
       month: previousMonthIndex,
       day: daysInPreviousMonth - i,
     });
-    days.unshift({
+    startDays.unshift({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
       month: previousMonthIndex,
@@ -158,12 +159,13 @@ export const getDays = viewDate => {
   }
 
   // add current month days
+  const daysInMonth = [];
   for (let i = 0; i < daysInCurrentMonth; i++) {
     const date = moment({
       month: currentMonthIndex,
       day: i + 1,
     });
-    days.push({
+    daysInMonth.push({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
       month: currentMonthIndex,
@@ -172,19 +174,20 @@ export const getDays = viewDate => {
   }
 
   // add next month days
+  const endDays = [];
   for (let i = 0; i < 6 - lastDay; i++) {
     const date = moment({
       month: nextMonthIndex,
       day: i + 1,
     });
-    days.push({
+    endDays.push({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
       month: nextMonthIndex,
       isCurrent: false,
     });
   }
-  return days;
+  return [...startDays, ...daysInMonth, ...endDays];
 };
 
 export function generateReducerActions(types) {

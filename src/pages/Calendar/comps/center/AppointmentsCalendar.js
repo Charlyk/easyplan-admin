@@ -1,8 +1,16 @@
 import React, { useRef, useState } from 'react';
 
-import { Box, ClickAwayListener, Fade, Paper } from '@material-ui/core';
+import {
+  Box,
+  ClickAwayListener,
+  Fade,
+  Paper,
+  IconButton,
+} from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import UploadIcon from '@material-ui/icons/CloudUpload';
+import ArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import ArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -12,6 +20,7 @@ import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
+import IconNext from '../../../../assets/icons/iconNext';
 import IconPlus from '../../../../assets/icons/iconPlus';
 import AppointmentDetails from '../../../../components/AppointmentDetails';
 import EasyTab from '../../../../components/EasyTab';
@@ -90,6 +99,30 @@ const AppointmentsCalendar = ({
     onScheduleSelect(null);
   };
 
+  const handleDateNavigation = navId => () => {
+    const currentDate = moment(viewDate);
+    switch (navId) {
+      case 'previous-date':
+        if (currentTab === CalendarView.day) {
+          onViewDateChange(currentDate.subtract(1, 'day').toDate());
+        } else if (currentTab === CalendarView.week) {
+          onViewDateChange(currentDate.subtract(1, 'week').toDate());
+        } else if (currentTab === CalendarView.month) {
+          onViewDateChange(currentDate.subtract(1, 'month').toDate());
+        }
+        break;
+      case 'next-date':
+        if (currentTab === CalendarView.day) {
+          onViewDateChange(currentDate.add(1, 'day').toDate());
+        } else if (currentTab === CalendarView.week) {
+          onViewDateChange(currentDate.add(1, 'week').toDate());
+        } else if (currentTab === CalendarView.month) {
+          onViewDateChange(currentDate.add(1, 'month').toDate());
+        }
+        break;
+    }
+  };
+
   const calendarPopper = (
     <Popper
       className='appointments-date-picker-root'
@@ -126,14 +159,28 @@ const AppointmentsCalendar = ({
         />
       )}
       <div className='center-header'>
-        <Button
-          ref={calendarAnchor}
-          className='positive-button calendar-btn'
-          onClick={handleOpenCalendar}
-        >
-          {getTitleText()}
-          <IconAppointmentCalendar fill='#fff' />
-        </Button>
+        <Box display='flex' alignItems='center'>
+          <IconButton
+            onClick={handleDateNavigation('previous-date')}
+            classes={{ root: 'arrow-button', label: 'button-icon' }}
+          >
+            <ArrowLeft />
+          </IconButton>
+          <Button
+            ref={calendarAnchor}
+            className='positive-button calendar-btn'
+            onClick={handleOpenCalendar}
+          >
+            {getTitleText()}
+            <IconAppointmentCalendar fill='#fff' />
+          </Button>
+          <IconButton
+            onClick={handleDateNavigation('next-date')}
+            classes={{ root: 'arrow-button', label: 'button-icon' }}
+          >
+            <ArrowRight />
+          </IconButton>
+        </Box>
         {calendarPopper}
         <div className='center-header__tabs'>
           <EasyTab

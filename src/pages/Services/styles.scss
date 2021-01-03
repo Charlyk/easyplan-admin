@@ -141,9 +141,9 @@
   }
 
   &__add-tab {
+    min-width: 50px !important;
     outline: none;
     background-color: #3A83DC !important;
-    min-width: unset !important;
     width: 50px !important;
     height: 50px !important;
     align-items: center;
@@ -221,6 +221,25 @@
     .tabs-container {
       display: flex;
       flex: 1;
+
+      .tab-data-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .tab-item-title {
+          font-family: Inter, sans-serif;
+          font-style: normal !important;
+          font-size: 12px !important;
+        }
+
+        .tab-items-count {
+          font-family: Inter, sans-serif;
+          font-style: normal !important;
+          font-size: 12px !important;
+          font-weight: bold;
+        }
+      }
     }
 
     .row-label {

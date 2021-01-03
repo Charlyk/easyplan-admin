@@ -283,6 +283,19 @@ const Services = () => {
     localDispatch(actions.setSetupExcelModal({ open: false, data: null }));
   };
 
+  const tabLabel = (title, count) => {
+    return (
+      <div className='tab-data-wrapper'>
+        <Typography noWrap classes={{ root: 'tab-item-title' }}>
+          {title}
+        </Typography>
+        <Typography noWrap classes={{ root: 'tab-items-count' }}>
+          {count}
+        </Typography>
+      </div>
+    );
+  };
+
   const getServicesCount = category => {
     if (category.id === 'all-services') {
       return clinicServices.length;
@@ -370,6 +383,8 @@ const Services = () => {
           </Tooltip>
           {category.data != null && (
             <Tabs
+              scrollButtons='auto'
+              variant='scrollable'
               classes={{ indicator: 'services-root__tab-indicator' }}
               value={category.index}
               indicatorColor='primary'
@@ -378,10 +393,13 @@ const Services = () => {
             >
               {categories.map((item, index) => (
                 <Tab
-                  style={{ outline: 'none' }}
+                  style={{ outline: 'none', maxHeight: 50, maxWidth: 'unset' }}
                   key={item.id}
                   value={index}
-                  label={`${textForKey(item.name)} (${getServicesCount(item)})`}
+                  label={tabLabel(
+                    textForKey(item.name),
+                    getServicesCount(item),
+                  )}
                 />
               ))}
             </Tabs>

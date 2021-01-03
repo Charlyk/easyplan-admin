@@ -349,6 +349,7 @@ export default {
     start_migration_message:
       'When clicking on start we will migrate all data from Yclients to EasyPlan and will setup all the fields for you. This will take some time so you can continue to explore the app and we will notify you when the data is ready.',
     'importing data in progress': 'Importing data in progress',
+    'schedules statistics': 'Schedules statistics',
   },
   ro: {
     analytics: 'Analitică',
@@ -705,6 +706,7 @@ export default {
     start_migration_message:
       'La click pe butonul START noi vom importa toate datele din Yclients în EasyPlan. Acest proces poate dura ceva timp așa că Dvs puteți continua să explorați aplicația iar noi vă vom notificat cand totul va fi gata.',
     'importing data in progress': 'Importare date în progres',
+    'schedules statistics': 'Statistica programărilor',
   },
   ru: {
     analytics: 'Analytics',
@@ -1053,5 +1055,6 @@ export default {
     start_migration_message:
       'When clicking on start we will migrate all data from Yclients to EasyPlan and will setup all the fields for you. This will take some time so you can continue to explore the app and we will notify you when the data is ready.',
     'importing data in progress': 'Importing data in progress',
+    'schedules statistics': 'Schedules statistics',
   },
 };
