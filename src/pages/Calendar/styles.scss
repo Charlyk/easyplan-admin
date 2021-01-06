@@ -820,6 +820,13 @@
   }
 }
 
+.calendar-service-tooltip-label {
+  font-size: .8rem !important;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  color: #fff;
+}
+
 .appointment-item {
   outline: none;
 
@@ -971,6 +978,7 @@
               display: flex;
               align-items: center;
               overflow: hidden;
+              cursor: pointer;
 
               .avatar-wrapper {
                 z-index: 1;

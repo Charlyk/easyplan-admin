@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import { Tooltip, Typography } from '@material-ui/core';
+import { Box, Tooltip, Typography } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
@@ -18,6 +18,7 @@ import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootS
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
+import '../../../styles.scss';
 
 const initialState = {
   appointments: [],
@@ -135,7 +136,20 @@ const DoctorAppointmentsRow = ({
             <div className='avatar-wrapper'>
               <IconAvatar />
             </div>
-            <Tooltip title={doctorServices().join(', ')}>
+            <Tooltip
+              title={
+                <Box display='flex' flexDirection='column' padding='0.5rem'>
+                  {doctorServices().map(item => (
+                    <Typography
+                      classes={{ root: 'calendar-service-tooltip-label' }}
+                      key={item}
+                    >
+                      - {item}
+                    </Typography>
+                  ))}
+                </Box>
+              }
+            >
               <div className='name-and-services'>
                 <Typography noWrap classes={{ root: 'doctor-name' }}>
                   {`${doctor.firstName} ${doctor.lastName}`}
