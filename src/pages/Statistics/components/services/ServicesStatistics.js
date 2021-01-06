@@ -23,7 +23,7 @@ import {
   clinicServicesSelector,
 } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
-import { Action, Statuses } from '../../../../utils/constants';
+import { Action, ScheduleStatuses } from '../../../../utils/constants';
 import {
   generateReducerActions,
   logUserAction,
@@ -228,17 +228,17 @@ const ServicesStatistics = () => {
       localDispatch(reducerActions.setSelectedStatus({ id: 'All' }));
       return;
     }
-    const status = Statuses.find(it => it.id === newValue);
+    const status = ScheduleStatuses.find(it => it.id === newValue);
     localDispatch(reducerActions.setSelectedStatus(status));
   };
 
   const titleForStatus = status => {
-    const data = Statuses.find(it => it.id === status);
+    const data = ScheduleStatuses.find(it => it.id === status);
     return data?.name;
   };
 
   const colorForStatus = status => {
-    const data = Statuses.find(it => it.id === status);
+    const data = ScheduleStatuses.find(it => it.id === status);
     return data?.color;
   };
 
@@ -315,7 +315,7 @@ const ServicesStatistics = () => {
             custom
           >
             <option value='All'>{textForKey('All statuses')}</option>
-            {Statuses.map(status => (
+            {ScheduleStatuses.map(status => (
               <option key={status.id} value={status.id}>
                 {status.name}
               </option>

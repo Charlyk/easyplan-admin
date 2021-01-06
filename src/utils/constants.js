@@ -147,6 +147,7 @@ export const Statuses = [
     color: '#ffb902',
     icon: <IconAppointmentCalendar />,
     manual: false,
+    isSchedule: true,
   },
   {
     id: 'PendingPayment',
@@ -154,6 +155,7 @@ export const Statuses = [
     color: '#ffb902',
     icon: <IconAppointmentCalendar />,
     manual: false,
+    isSchedule: false,
   },
   {
     id: 'WaitingForPatient',
@@ -161,6 +163,7 @@ export const Statuses = [
     color: '#ffb902',
     icon: <IconClock />,
     manual: false,
+    isSchedule: true,
   },
   {
     id: 'OnSite',
@@ -168,6 +171,7 @@ export const Statuses = [
     color: '#ffb902',
     icon: <IconCheckMark />,
     manual: true,
+    isSchedule: true,
   },
   {
     id: 'Late',
@@ -175,6 +179,7 @@ export const Statuses = [
     color: '#FDC534',
     icon: <IconClock />,
     manual: true,
+    isSchedule: true,
   },
   {
     id: 'Confirmed',
@@ -182,6 +187,7 @@ export const Statuses = [
     color: '#3A83DC',
     icon: <IconCheckMark />,
     manual: false,
+    isSchedule: true,
   },
   {
     id: 'Canceled',
@@ -189,6 +195,7 @@ export const Statuses = [
     color: '#F44081',
     icon: <IconXPerson />,
     manual: true,
+    isSchedule: true,
   },
   {
     id: 'CompletedNotPaid',
@@ -196,6 +203,7 @@ export const Statuses = [
     color: '#7DD7C8',
     icon: <IconSuccess fill='#3A83DC' />,
     manual: false,
+    isSchedule: true,
   },
   {
     id: 'CompletedPaid',
@@ -203,6 +211,7 @@ export const Statuses = [
     color: '#00E987',
     icon: <IconCreditCard />,
     manual: false,
+    isSchedule: true,
   },
   {
     id: 'PartialPaid',
@@ -210,6 +219,7 @@ export const Statuses = [
     color: '#9cfacc',
     icon: <IconSuccess fill='#3A83DC' />,
     manual: false,
+    isSchedule: false,
   },
   {
     id: 'Paid',
@@ -217,8 +227,11 @@ export const Statuses = [
     color: '#00E987',
     icon: <IconCreditCard />,
     manual: false,
+    isSchedule: false,
   },
 ];
+
+export const ScheduleStatuses = Statuses.filter(item => item.isSchedule);
 
 export const ManualStatuses = Statuses.filter(item => item.manual);
 
