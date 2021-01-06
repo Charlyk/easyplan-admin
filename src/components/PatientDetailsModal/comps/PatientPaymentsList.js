@@ -9,7 +9,9 @@ import {
   TableCell,
   TableRow,
   TableBody,
+  TableFooter,
 } from '@material-ui/core';
+import sumBy from 'lodash/sumBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
@@ -40,6 +42,14 @@ const PatientPaymentsList = ({ patient }) => {
 
   const getInvoiceStatus = item => {
     return Statuses.find(it => it.id === item.status);
+  };
+
+  const getInvoicesTotal = () => {
+    return sumBy(invoices, item => item.totalAmount);
+  };
+
+  const getInvoicesPaid = () => {
+    return sumBy(invoices, item => item.paidAmount);
   };
 
   return (
@@ -99,6 +109,17 @@ const PatientPaymentsList = ({ patient }) => {
                   );
                 })}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell align='right' colSpan={3}>
+                    {textForKey('Total')} / {textForKey('Paid')}
+                  </TableCell>
+                  <TableCell align='right'>
+                    {getInvoicesTotal()}MDL / {getInvoicesPaid()}MDL
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         )}
