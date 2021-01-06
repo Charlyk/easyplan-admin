@@ -406,12 +406,27 @@
     box-shadow: 0 -1px 90px -5px rgba(239, 242, 251, 0.8);
     border-radius: .1rem;
 
+    .appointment-status-indicator {
+      width: 20%;
+      padding: .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .status-name-label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: .8rem;
+        color: #34354C;
+      }
+    }
+
     .appointment-info {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      width: 50%;
+      width: 40%;
 
       .appointment-info-row {
         display: flex;
@@ -434,7 +449,7 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      width: 50%;
+      width: 40%;
 
       .appointment-time-row {
         width: 100%;

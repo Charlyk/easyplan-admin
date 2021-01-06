@@ -1,14 +1,17 @@
 import React from 'react';
 
+import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
 import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock';
+import { Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 
 const Appointment = ({ appointment }) => {
   const scheduleData = moment(appointment.startTime);
+  const status = Statuses.find(item => item.id === appointment.scheduleStatus);
   return (
     <div className='patient-appointments-list__item'>
       <div className='appointment-info'>
@@ -34,6 +37,17 @@ const Appointment = ({ appointment }) => {
             {scheduleData.format('HH:mm')}
           </div>
         </div>
+      </div>
+      <div
+        className='appointment-status-indicator'
+        style={{ backgroundColor: `${status.color}1A` }}
+      >
+        <Typography
+          classes={{ root: 'status-name-label' }}
+          style={{ color: status.color }}
+        >
+          {status?.name}
+        </Typography>
       </div>
     </div>
   );
