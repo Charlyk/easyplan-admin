@@ -55,4 +55,8 @@ const MessageAction = {
   UserRemovedFromClinic: 'UserRemovedFromClinic',
   ClinicDataImported: 'ClinicDataImported',
   ClinicDataImportStarted: 'ClinicDataImportStarted',
+  ImportingClinicServices: 'ImportingClinicServices',
+  ImportingClinicDetails: 'ImportingClinicDetails',
+  ImportingClinicPatients: 'ImportingClinicPatients',
+  ImportingClinicSchedules: 'ImportingClinicSchedules',
 };

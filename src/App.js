@@ -105,6 +105,7 @@ function App() {
       dispatch(setCreateClinic({ open: true, canClose: false }));
     } else {
       dispatch(setCreateClinic({ open: false, canClose: true }));
+      dispatch(fetchClinicData());
     }
   }, [currentUser, updateCurrentUser]);
 
@@ -142,12 +143,11 @@ function App() {
     setAppIsLoading(true);
     const response = await authAPI.changeClinic(clinicId);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       dispatch(setCurrentUser(response.data));
       redirectToHome();
     }
-    dispatch(fetchClinicData());
     setAppIsLoading(false);
   };
 
@@ -250,10 +250,6 @@ function App() {
           </Modal.Body>
         </Modal>
         <Switch>
-          <Route
-            path='/.well-known/pki-validation/E867FDA280F5C63EE5EBB6974D69D4B6.txt'
-            onEnter={reload}
-          />
           <Route
             path='/clinic-invitation/:isNew?/:token'
             exact

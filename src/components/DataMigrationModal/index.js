@@ -7,8 +7,10 @@ import PropTypes from 'prop-types';
 import './styles.scss';
 import { usePubNub } from 'pubnub-react';
 import { Modal } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 import IconClose from '../../assets/icons/iconClose';
+import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { env } from '../../utils/constants';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
@@ -101,6 +103,7 @@ const reducer = (state, action) => {
 };
 
 const DataMigrationModal = ({ show, onClose }) => {
+  const currentClinic = useSelector(clinicDetailsSelector);
   const pubnub = usePubNub();
   const [
     { activeStep, completedSteps, yClientsUser, dataTypes, company },
@@ -130,6 +133,7 @@ const DataMigrationModal = ({ show, onClose }) => {
       user: yClientsUser,
       dataTypes,
       company,
+      clinicId: currentClinic.id,
       authToken: authManager.getUserToken(),
     };
     pubnub.publish({

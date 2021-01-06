@@ -23,6 +23,7 @@ import MenuSettings from '../../assets/icons/menuSettings';
 import MenuUsers from '../../assets/icons/menuUsers';
 import trustSeal from '../../assets/images/positivessl_trust_seal.png';
 import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ClinicSelector from '../ClinicSelector';
@@ -98,7 +99,8 @@ const menuItems = [
 const MainMenu = props => {
   const buttonRef = useRef(null);
   const clinic = useSelector(clinicDetailsSelector);
-  const { currentPath, currentUser, onCreateClinic, onChangeCompany } = props;
+  const currentUser = useSelector(userSelector);
+  const { currentPath, onCreateClinic, onChangeCompany } = props;
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),

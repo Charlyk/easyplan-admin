@@ -62,7 +62,7 @@ const Main = () => {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
-  const user = useSelector(userSelector);
+  const currentUser = useSelector(userSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
   const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
@@ -70,13 +70,13 @@ const Main = () => {
     currentPath: location.pathname,
     openAppointmentModal: false,
   });
-  const selectedClinic = user?.clinics?.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
 
   useEffect(() => {
-    if (user != null) {
-      pubnub.setUUID(user.id);
+    if (currentUser != null) {
+      pubnub.setUUID(currentUser.id);
     }
-  }, [user]);
+  }, [currentUser]);
 
   const getPageTitle = () => {
     return paths[currentPath];
@@ -99,7 +99,6 @@ const Main = () => {
   };
 
   const handleChangeCompany = company => {
-    console.log(company);
     dispatch(changeSelectedClinic(company.clinicId));
   };
 
@@ -148,23 +147,21 @@ const Main = () => {
         date={appointmentModal?.date}
         patient={appointmentModal?.patient}
       />
-      {user != null && (
+      {currentUser != null && (
         <MainMenu
-          currentUser={user}
+          currentUser={currentUser}
           currentPath={currentPath}
           onCreateClinic={handleCreateClinic}
           onChangeCompany={handleChangeCompany}
         />
       )}
-      <div className='data-container'>
-        {user != null && selectedClinic != null && (
+      {currentUser != null && selectedClinic != null && (
+        <div className='data-container'>
           <PageHeader
             title={getPageTitle()}
-            user={user}
+            user={currentUser}
             onLogout={handleStartLogout}
           />
-        )}
-        {user != null && selectedClinic != null && (
           <div className='data'>
             <Switch>
               <Route path='/analytics' component={Statistics} />
@@ -175,8 +172,8 @@ const Main = () => {
               <Route path='/settings' component={Settings} />
             </Switch>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
