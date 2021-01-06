@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
+import VisibilityOn from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PropTypes from 'prop-types';
-import { Form, Image, InputGroup } from 'react-bootstrap';
+import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -9,11 +11,9 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../assets/icons/iconAvatar';
 import LoadingButton from '../../../components/LoadingButton';
-import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex, PasswordRegex } from '../../../utils/constants';
 import {
-  fetchClinicData,
   handleUserAuthenticated,
   updateLink,
   uploadFileToAWS,
@@ -25,6 +25,7 @@ const RegisterForm = ({ onGoBack }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [data, setData] = useState({
     firstName: '',
     lastName: '',
@@ -36,9 +37,13 @@ const RegisterForm = ({ onGoBack }) => {
   });
 
   const handleFormChange = event => {
+    let controlId = event.target.id;
+    if (controlId === 'newPassword') {
+      controlId = 'password';
+    }
     setData({
       ...data,
-      [event.target.id]: event.target.value,
+      [controlId]: event.target.value,
     });
   };
 
@@ -47,6 +52,10 @@ const RegisterForm = ({ onGoBack }) => {
     if (files != null) {
       setData({ ...data, avatarFile: files[0] });
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
   const handlePhoneChange = (value, _, event) => {
@@ -145,15 +154,24 @@ const RegisterForm = ({ onGoBack }) => {
           />
         </InputGroup>
       </Form.Group>
-      <Form.Group controlId='password'>
+      <Form.Group controlId='newPassword'>
         <Form.Label>{textForKey('Password')}</Form.Label>
         <InputGroup>
           <Form.Control
             autoComplete='new-password'
             value={data.password}
-            type='password'
+            type={isPasswordVisible ? 'text' : 'password'}
             onChange={handleFormChange}
           />
+          <InputGroup.Append className='password-visibility-append'>
+            <Button
+              onClick={togglePasswordVisibility}
+              variant='outline-primary'
+              className='visibility-toggle-btn'
+            >
+              {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
+            </Button>
+          </InputGroup.Append>
         </InputGroup>
         <Form.Text className='text-muted'>
           {textForKey('passwordValidationMessage')}

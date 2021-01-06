@@ -1,8 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
 
 import { CircularProgress } from '@material-ui/core';
+import VisibilityOn from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
-import { Form, Image, InputGroup } from 'react-bootstrap';
+import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 import { useParams, Redirect } from 'react-router-dom';
@@ -11,11 +13,9 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import appLogo from '../../assets/images/easyplan-logo.svg';
 import LoadingButton from '../../components/LoadingButton';
-import { setCurrentUser } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { JwtRegex, PasswordRegex } from '../../utils/constants';
 import {
-  fetchClinicData,
   generateReducerActions,
   handleUserAuthenticated,
   updateLink,
@@ -23,7 +23,6 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import './styles.scss';
-import authManager from '../../utils/settings/authManager';
 
 const initialState = {
   isLoading: false,
@@ -34,6 +33,7 @@ const initialState = {
   password: '',
   avatarFile: null,
   isInvitationAccepted: false,
+  isPasswordVisible: false,
 };
 
 const reducerTypes = {
@@ -45,6 +45,7 @@ const reducerTypes = {
   setPassword: 'setPassword',
   setAvatarFile: 'setAvatarFile',
   setIsInvitationAccepted: 'setIsInvitationAccepted',
+  setIsPasswordVisible: 'setIsPasswordVisible',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -71,6 +72,8 @@ const reducer = (state, action) => {
       return { ...state, avatarFile: action.payload };
     case reducerTypes.setIsInvitationAccepted:
       return { ...state, isInvitationAccepted: action.payload };
+    case reducerTypes.setIsPasswordVisible:
+      return { ...state, isPasswordVisible: action.payload };
     default:
       return state;
   }
@@ -89,6 +92,7 @@ const AcceptInvitation = () => {
       password,
       avatarFile,
       isInvitationAccepted,
+      isPasswordVisible,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -133,6 +137,10 @@ const AcceptInvitation = () => {
 
   const handlePasswordChange = event => {
     localDispatch(actions.setPassword(event.target.value));
+  };
+
+  const togglePasswordVisibility = () => {
+    localDispatch(actions.setIsPasswordVisible(!isPasswordVisible));
   };
 
   const isFormValid = () => {
@@ -273,8 +281,17 @@ const AcceptInvitation = () => {
                     autoComplete='new-password'
                     value={password}
                     onChange={handlePasswordChange}
-                    type='password'
+                    type={isPasswordVisible ? 'text' : 'password'}
                   />
+                  <InputGroup.Append className='password-visibility-append'>
+                    <Button
+                      onClick={togglePasswordVisibility}
+                      variant='outline-primary'
+                      className='visibility-toggle-btn'
+                    >
+                      {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
+                    </Button>
+                  </InputGroup.Append>
                 </InputGroup>
                 <Form.Text className='text-muted'>
                   {textForKey('passwordValidationMessage')}
