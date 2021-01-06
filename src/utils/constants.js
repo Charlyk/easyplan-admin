@@ -219,7 +219,7 @@ export const Statuses = [
     color: '#9cfacc',
     icon: <IconSuccess fill='#3A83DC' />,
     manual: false,
-    isSchedule: false,
+    isSchedule: true,
   },
   {
     id: 'Paid',
