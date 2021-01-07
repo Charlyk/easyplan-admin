@@ -134,7 +134,6 @@ const Main = () => {
 
   return (
     <div className='main-page' id='main-page'>
-      <div id='fb-root' />
       <CustomerChat />
       <ServiceDetailsModal />
       {patientDetails.patientId != null && (

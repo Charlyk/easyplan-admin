@@ -107,6 +107,10 @@ function App() {
       dispatch(setCreateClinic({ open: false, canClose: true }));
       dispatch(fetchClinicData());
     }
+
+    if (authManager.isLoggedIn()) {
+      window.FB.CustomerChat.hide();
+    }
   }, [currentUser, updateCurrentUser]);
 
   useEffect(() => {
@@ -217,6 +221,7 @@ function App() {
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
+        <div id='fb-root' />
         <ToastContainer />
         <RegisterPaymentModal
           {...paymentModal}
