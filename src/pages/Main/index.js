@@ -33,7 +33,6 @@ import {
   patientDetailsSelector,
   userSelector,
 } from '../../redux/selectors/rootSelector';
-import { fb } from '../../utils/facebookChat';
 import { generateReducerActions, updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';

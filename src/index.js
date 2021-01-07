@@ -64,6 +64,8 @@ const pubnub = new PubNub({
   uuid: authManager.getUserId() || PubNub.generateUUID(),
 });
 
+fb(FB => FB.CustomerChat.show(true));
+
 ReactDOM.render(
   <Provider store={ReduxStore}>
     <React.StrictMode>

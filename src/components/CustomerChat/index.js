@@ -15,17 +15,12 @@ class CustomerChat extends React.PureComponent {
     delete this.timeout;
   }
 
-  handleClick = () => {
-    fb(FB => FB.CustomerChat.show(true));
-  };
-
   render() {
     return (
       <div
         className='fb-customerchat'
         attribution='setup_tool'
         page_id='108785330910403'
-        onClick={this.handleClick}
         // theme_color="..."
         // logged_in_greeting="..."
         // logged_out_greeting="..."
