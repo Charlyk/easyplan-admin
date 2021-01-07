@@ -47,9 +47,6 @@ const reducerTypes = {
   setCurrentPath: 'setCurrentPath',
 };
 
-// initialize facebook chat
-window.FB.CustomerChat.show(false);
-
 const actions = generateReducerActions(reducerTypes);
 
 const reducer = (state, action) => {
@@ -75,6 +72,11 @@ const Main = () => {
     openAppointmentModal: false,
   });
   const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
+
+  useEffect(() => {
+    // initialize facebook chat
+    window.FB.CustomerChat.show(false);
+  }, []);
 
   useEffect(() => {
     if (currentUser != null) {
