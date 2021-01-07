@@ -2,7 +2,12 @@ import React from 'react';
 import './styles.scss';
 
 class CustomerChat extends React.PureComponent {
-  componentDidMount() {}
+  componentDidMount() {
+    setTimeout(() => {
+      window.FB.XFBML.parse();
+      console.log(window.FB);
+    }, 2000);
+  }
 
   componentWillUnmount() {
     clearTimeout(this.timeout);
