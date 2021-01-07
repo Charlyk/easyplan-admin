@@ -109,7 +109,7 @@ function App() {
     }
 
     if (authManager.isLoggedIn()) {
-      window.FB.CustomerChat.hide();
+      window.FB.CustomerChat.show(false);
     }
   }, [currentUser, updateCurrentUser]);
 
