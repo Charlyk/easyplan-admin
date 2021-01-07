@@ -1,14 +1,8 @@
 import React from 'react';
-
-import { fb } from '../../utils/facebookChat';
 import './styles.scss';
 
 class CustomerChat extends React.PureComponent {
-  componentDidMount() {
-    this.timeout = setTimeout(() => {
-      fb(FB => this.timeout && FB.XFBML.parse());
-    }, 2000);
-  }
+  componentDidMount() {}
 
   componentWillUnmount() {
     clearTimeout(this.timeout);

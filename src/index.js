@@ -17,7 +17,6 @@ import {
 import rootReducer from './redux/reducers/rootReducer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { fb } from './utils/facebookChat';
 import authManager from './utils/settings/authManager';
 
 // enable redux devtool
@@ -63,8 +62,6 @@ const pubnub = new PubNub({
   subscribeKey: 'sub-c-6cdb4ab0-32f2-11eb-8e02-129fdf4b0d84',
   uuid: authManager.getUserId() || PubNub.generateUUID(),
 });
-
-fb(FB => FB.CustomerChat.show(true));
 
 ReactDOM.render(
   <Provider store={ReduxStore}>
