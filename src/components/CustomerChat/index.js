@@ -5,7 +5,7 @@ class CustomerChat extends React.PureComponent {
   componentDidMount() {
     setTimeout(() => {
       window.FB.XFBML.parse();
-      console.log(window.FB);
+      window.FB.CustomerChat.show(true);
     }, 2000);
   }
 

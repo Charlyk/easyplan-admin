@@ -190,6 +190,7 @@ function App() {
     dispatch(setCurrentUser(null));
     handleCancelLogout();
     dispatch(toggleForceLogoutUser(false));
+    window.FB.CustomerChat.hide();
   };
 
   const handleCancelLogout = () => {
@@ -211,8 +212,6 @@ function App() {
   const handleCloseImageModal = () => {
     dispatch(setImageModal({ open: false }));
   };
-
-  const reload = () => window.location.reload();
 
   return (
     <Router basename='/'>
