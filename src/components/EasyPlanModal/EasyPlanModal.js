@@ -13,6 +13,7 @@ const EasyPlanModal = ({
   open,
   title,
   children,
+  size,
   negativeBtnText,
   positiveBtnText,
   positiveBtnIcon,
@@ -29,6 +30,7 @@ const EasyPlanModal = ({
   return (
     <Modal
       centered
+      size={size}
       className={`easyplan-modal-root easyplan-modal ${className}`}
       show={open}
       onHide={typeof onClose === 'function' ? onClose : () => null}
@@ -93,6 +95,7 @@ EasyPlanModal.propTypes = {
   onPositiveClick: PropTypes.func,
   onClose: PropTypes.func,
   className: PropTypes.string,
+  size: PropTypes.oneOf(['sm', 'lg', 'xl']),
 };
 
 EasyPlanModal.defaultProps = {
@@ -102,4 +105,5 @@ EasyPlanModal.defaultProps = {
   positiveBtnText: textForKey('Save'),
   positiveBtnIcon: <IconSuccess fill='#fff' />,
   className: '',
+  size: 'lg',
 };

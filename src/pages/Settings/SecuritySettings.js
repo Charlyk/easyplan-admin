@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconSuccess from '../../assets/icons/iconSuccess';
 import LoadingButton from '../../components/LoadingButton';
@@ -45,12 +46,17 @@ const SecuritySettings = props => {
       avatar: currentUser.avatar,
     });
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       authManager.setUserToken(response.data.token);
-      dispatch(setCurrentUser(response.data.user));
+      setTimeout(() => {
+        dispatch(setCurrentUser(response.data.user));
+        toast.success(textForKey('Saved successfully'));
+      }, 500);
     }
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   };
 
   return (

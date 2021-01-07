@@ -20,8 +20,14 @@ const Appointment = ({ appointment }) => {
           <div>{appointment.doctor.fullName}</div>
         </div>
         <div className='appointment-info-row'>
-          <div className='appointment-info-title'>{textForKey('Service')}:</div>
+          <div className='appointment-info-title'>
+            {textForKey('Services')}:
+          </div>
           <div>{appointment.serviceName}</div>
+        </div>
+        <div className='appointment-info-row'>
+          <div className='appointment-info-title'>{textForKey('Clinic')}:</div>
+          <div>{appointment.clinic.name}</div>
         </div>
       </div>
       <div className='appointment-time'>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconSuccess from '../../assets/icons/iconSuccess';
@@ -86,12 +87,17 @@ const AccountSettings = props => {
 
     const response = await authAPI.updateAccount(requestBody);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       authManager.setUserToken(response.data.token);
-      dispatch(setCurrentUser(response.data.user));
+      setTimeout(() => {
+        dispatch(setCurrentUser(response.data.user));
+        toast.success(textForKey('Saved successfully'));
+      }, 500);
     }
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   };
 
   const isFormValid = () => {

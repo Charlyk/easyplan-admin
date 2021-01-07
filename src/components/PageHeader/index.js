@@ -6,6 +6,7 @@ import { Image } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
+import IconEdit from '../../assets/icons/iconEdit';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
@@ -16,6 +17,12 @@ import InvoicesButton from '../InvoicesButton';
 
 const actions = [
   {
+    name: textForKey('Edit profile'),
+    key: 'edit-profile',
+    icon: <IconEdit />,
+    type: 'default',
+  },
+  {
     name: textForKey('Logout'),
     key: 'log-out',
     icon: <IconTurnOff />,
@@ -23,10 +30,15 @@ const actions = [
   },
 ];
 
-const PageHeader = props => {
+const PageHeader = ({
+  title,
+  titleComponent,
+  isDoctor,
+  onLogout,
+  onEditProfile,
+}) => {
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
-  const { title, titleComponent, isDoctor, onLogout } = props;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -38,7 +50,11 @@ const PageHeader = props => {
       case 'log-out':
         onLogout();
         break;
+      case 'edit-profile':
+        onEditProfile();
+        break;
     }
+    setIsActionsOpen(false);
   };
 
   return (
@@ -47,7 +63,7 @@ const PageHeader = props => {
         onClose={handleActionsClose}
         onSelect={handleActionSelected}
         open={isActionsOpen}
-        actions={actions}
+        actions={actions.filter(item => isDoctor || item.key === 'log-out')}
         anchorEl={actionsAnchor.current}
         placement='bottom-end'
       />
@@ -99,8 +115,10 @@ PageHeader.propTypes = {
   }),
   onSearch: PropTypes.func,
   onLogout: PropTypes.func,
+  onEditProfile: PropTypes.func,
 };
 
 PageHeader.defaultProps = {
   onLogout: () => null,
+  onEditProfile: () => null,
 };

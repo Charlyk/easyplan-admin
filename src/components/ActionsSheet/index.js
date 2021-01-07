@@ -10,7 +10,7 @@ const ActionsSheet = props => {
   const handleActionClick = action => onSelect(action);
 
   return (
-    <Popper {...props} placement={placement} transition>
+    <Popper {...props} placement={placement} style={{ zIndex: 999 }} transition>
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
           <Paper className='actions-sheet__paper'>

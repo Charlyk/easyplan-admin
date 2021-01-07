@@ -72,6 +72,7 @@ const PatientPaymentsList = ({ patient }) => {
                   <TableCell>{textForKey('Services')}</TableCell>
                   <TableCell>{textForKey('Date')}</TableCell>
                   <TableCell>{textForKey('Doctor')}</TableCell>
+                  <TableCell>{textForKey('Clinic')}</TableCell>
                   <TableCell align='right'>{textForKey('Amount')}</TableCell>
                   <TableCell align='right'>{textForKey('Status')}</TableCell>
                 </TableRow>
@@ -88,6 +89,9 @@ const PatientPaymentsList = ({ patient }) => {
                         {moment(item.created).format('DD MMM YYYY HH:mm')}
                       </TableCell>
                       <TableCell>{item.doctor.fullName}</TableCell>
+                      <TableCell style={{ width: 140 }}>
+                        {item.clinic.name}
+                      </TableCell>
                       <TableCell
                         align='right'
                         classes={{ root: 'amount-cell' }}
@@ -111,13 +115,12 @@ const PatientPaymentsList = ({ patient }) => {
               </TableBody>
               <TableFooter>
                 <TableRow>
-                  <TableCell align='right' colSpan={3}>
+                  <TableCell align='right' colSpan={4}>
                     {textForKey('Total')} / {textForKey('Paid')}
                   </TableCell>
                   <TableCell align='right'>
                     {getInvoicesTotal()}MDL / {getInvoicesPaid()}MDL
                   </TableCell>
-                  <TableCell />
                 </TableRow>
               </TableFooter>
             </Table>

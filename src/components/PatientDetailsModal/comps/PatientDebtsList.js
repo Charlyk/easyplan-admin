@@ -11,6 +11,7 @@ import {
   CircularProgress,
   Box,
 } from '@material-ui/core';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,7 +67,10 @@ const PatientDebtsList = ({ patient }) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align='left'>{textForKey('Service')}</TableCell>
+                  <TableCell align='left'>{textForKey('Services')}</TableCell>
+                  <TableCell align='right'>{textForKey('Date')}</TableCell>
+                  <TableCell align='right'>{textForKey('Doctor')}</TableCell>
+                  <TableCell align='right'>{textForKey('Clinic')}</TableCell>
                   <TableCell align='right'>{textForKey('Total')}</TableCell>
                   <TableCell align='right'>{textForKey('Remained')}</TableCell>
                   <TableCell align='right'>{textForKey('Actions')}</TableCell>
@@ -78,6 +82,11 @@ const PatientDebtsList = ({ patient }) => {
                     <TableCell align='left'>
                       {item.services.map(it => it.name).join(', ')}
                     </TableCell>
+                    <TableCell align='right'>
+                      {moment(item.created).format('DD MMM YYYY HH:MM')}
+                    </TableCell>
+                    <TableCell align='right'>{item.doctor.fullName}</TableCell>
+                    <TableCell align='right'>{item.clinic.name}</TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
                       {item.totalAmount}MDL
                     </TableCell>

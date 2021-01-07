@@ -1,6 +1,9 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Box, Tooltip, Typography } from '@material-ui/core';
+import IconClock from '@material-ui/icons/AccessTime';
+import IconMoney from '@material-ui/icons/AttachMoney';
+import IconClear from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
@@ -220,10 +223,18 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
         <Typography noWrap classes={{ root: 'patient-name' }}>
           {appointment.patient.fullName}
         </Typography>
-        <div className='status-icon'>
+        <div
+          className={clsx(
+            'status-icon',
+            appointment.scheduleStatus === 'DidNotCome' && 'negative',
+          )}
+        >
           {appointment.scheduleStatus === 'OnSite' && <DoneIcon />}
           {(appointment.scheduleStatus === 'CompletedPaid' ||
             appointment.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
+          {appointment.scheduleStatus === 'DidNotCome' && <IconClear />}
+          {appointment.scheduleStatus === 'CompletedNotPaid' && <IconMoney />}
+          {appointment.scheduleStatus === 'WaitingForPatient' && <IconClock />}
         </div>
       </div>
       <Typography noWrap classes={{ root: 'patient-name' }}>

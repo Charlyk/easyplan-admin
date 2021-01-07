@@ -1,6 +1,7 @@
 .actions-sheet {
 
   &__paper {
+    z-index: 9999;
     background-color: #FFFFFF;
     border-radius: 4px;
     box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);

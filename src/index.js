@@ -17,6 +17,7 @@ import {
 import rootReducer from './redux/reducers/rootReducer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { fb } from './utils/facebookChat';
 import authManager from './utils/settings/authManager';
 
 // enable redux devtool

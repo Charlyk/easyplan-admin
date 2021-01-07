@@ -1,9 +1,12 @@
 import React, { useRef, useState } from 'react';
 
+import { ClickAwayListener } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
 import ClinicSelector from '../../components/ClinicSelector';
+import EditProfileModal from '../../components/EditProfileModal';
 import PageHeader from '../../components/PageHeader';
 import {
   changeSelectedClinic,
@@ -18,13 +21,11 @@ import DoctorPatientDetails from '../DoctorPatientDetails';
 import DoctorPatients from '../DoctorPatients';
 import './styles.scss';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { ClickAwayListener } from '@material-ui/core';
-
 const DoctorsMain = () => {
   const dispatch = useDispatch();
   const buttonRef = useRef(null);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const currentUser = useSelector(userSelector);
   const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
 
@@ -52,12 +53,25 @@ const DoctorsMain = () => {
     dispatch(triggerUserLogout(true));
   };
 
+  const handleEditProfileClick = () => {
+    setIsEditingProfile(true);
+  };
+
+  const handleCloseEditProfile = () => {
+    setIsEditingProfile(false);
+  };
+
   return (
     <div className='doctors-main-root'>
+      <EditProfileModal
+        open={isEditingProfile}
+        onClose={handleCloseEditProfile}
+      />
       <div className='doctor-page-header-root'>
         <PageHeader
           isDoctor
           showLogo
+          onEditProfile={handleEditProfileClick}
           onLogout={handleStartLogout}
           titleComponent={
             <div

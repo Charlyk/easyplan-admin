@@ -150,6 +150,14 @@ export const Statuses = [
     isSchedule: true,
   },
   {
+    id: 'Confirmed',
+    name: textForKey('Confirmed'),
+    color: '#3A83DC',
+    icon: <IconCheckMark />,
+    manual: false,
+    isSchedule: true,
+  },
+  {
     id: 'PendingPayment',
     name: textForKey('Pending payment'),
     color: '#ffb902',
@@ -182,11 +190,11 @@ export const Statuses = [
     isSchedule: true,
   },
   {
-    id: 'Confirmed',
-    name: textForKey('Confirmed'),
-    color: '#3A83DC',
-    icon: <IconCheckMark />,
-    manual: false,
+    id: 'DidNotCome',
+    name: textForKey("Didn't show up"),
+    color: '#F44081',
+    icon: <IconXPerson />,
+    manual: true,
     isSchedule: true,
   },
   {

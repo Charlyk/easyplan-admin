@@ -1,14 +1,9 @@
 import moment from 'moment';
 import S3 from 'react-aws-s3';
-import { toast } from 'react-toastify';
 import uuid from 'react-uuid';
 
 import { setCurrentUser } from '../redux/actions/actions';
-import {
-  setClinic,
-  setClinicUsers,
-  setClinicServices,
-} from '../redux/actions/clinicActions';
+import { setClinic } from '../redux/actions/clinicActions';
 import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
 import dataAPI, { imageLambdaUrl } from './api/dataAPI';
 import { env, S3Config } from './constants';
@@ -133,7 +128,6 @@ export const lastDayOfMonth = viewDate => {
 };
 
 export const getDays = viewDate => {
-  const days = [];
   const currentMonth = moment(viewDate);
   const daysInCurrentMonth = currentMonth.daysInMonth();
   const currentMonthIndex = currentMonth.month();
@@ -150,14 +144,17 @@ export const getDays = viewDate => {
   const startDays = [];
   for (let i = 0; i < firstDay; i++) {
     const date = moment({
+      year: currentMonth.year(),
       month: previousMonthIndex,
       day: daysInPreviousMonth - i,
     });
+    const isSameDay = date.isSame(moment(), 'day');
     startDays.unshift({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
       month: previousMonthIndex,
       isCurrent: false,
+      isSameDay,
     });
   }
 
@@ -165,14 +162,17 @@ export const getDays = viewDate => {
   const daysInMonth = [];
   for (let i = 0; i < daysInCurrentMonth; i++) {
     const date = moment({
+      year: currentMonth.year(),
       month: currentMonthIndex,
       day: i + 1,
     });
+    const isSameDay = date.isSame(moment(), 'day');
     daysInMonth.push({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
       month: currentMonthIndex,
       isCurrent: true,
+      isSameDay,
     });
   }
 
@@ -180,14 +180,17 @@ export const getDays = viewDate => {
   const endDays = [];
   for (let i = 0; i < 6 - lastDay; i++) {
     const date = moment({
+      year: currentMonth.year(),
       month: nextMonthIndex,
       day: i + 1,
     });
+    const isSameDay = date.isSame(moment(), 'day');
     endDays.push({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
       month: nextMonthIndex,
       isCurrent: false,
+      isSameDay,
     });
   }
   return [...startDays, ...daysInMonth, ...endDays];

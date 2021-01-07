@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import IconClock from '@material-ui/icons/AccessTime';
+import IconMoney from '@material-ui/icons/AttachMoney';
+import IconClear from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
@@ -25,7 +28,6 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   const [isClosed, setIsClosed] = useState(!opened);
   const [schedules, setSchedules] = useState([]);
   const [monthDays, setMonthDays] = useState([]);
-  const currentDate = moment().format('DD');
 
   useEffect(() => {
     if (opened) {
@@ -36,6 +38,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
     }
     if (viewDate != null && doctorId != null && opened) {
       setMonthDays(getDays(viewDate));
+      setSchedules([]);
       fetchSchedules();
     }
   }, [viewDate, doctorId, opened, updateAppointments]);
@@ -89,10 +92,18 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
       >
         <div className='name-and-status'>
           <span className='service-name'>{schedule.patient.fullName}</span>
-          <div className='status-icon'>
+          <div
+            className={clsx(
+              'status-icon',
+              schedule.scheduleStatus === 'DidNotCome' && 'negative',
+            )}
+          >
             {schedule.scheduleStatus === 'OnSite' && <DoneIcon />}
             {(schedule.scheduleStatus === 'CompletedPaid' ||
               schedule.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
+            {schedule.scheduleStatus === 'DidNotCome' && <IconClear />}
+            {schedule.scheduleStatus === 'CompletedNotPaid' && <IconMoney />}
+            {schedule.scheduleStatus === 'WaitingForPatient' && <IconClock />}
           </div>
         </div>
       </div>
@@ -106,10 +117,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
         role='button'
         tabIndex={0}
         onClick={() => handleDayClick(day)}
-        className={clsx(
-          'item-data-container',
-          currentDate === day.date && day.isCurrent && 'current-date',
-        )}
+        className={clsx('item-data-container', day.isSameDay && 'current-date')}
         style={{ height: calendarRect?.height / rowsCount }}
         key={`${day.date}-${day.isCurrent}-${day.month}`}
       >

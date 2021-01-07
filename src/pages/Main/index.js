@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 
 import AddAppointmentModal from '../../components/AddAppintmentModal';
+import CustomerChat from '../../components/CustomerChat';
 import DataMigrationModal from '../../components/DataMigrationModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
@@ -32,6 +33,7 @@ import {
   patientDetailsSelector,
   userSelector,
 } from '../../redux/selectors/rootSelector';
+import { fb } from '../../utils/facebookChat';
 import { generateReducerActions, updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
@@ -128,6 +130,7 @@ const Main = () => {
 
   return (
     <div className='main-page' id='main-page'>
+      <CustomerChat />
       <ServiceDetailsModal />
       {patientDetails.patientId != null && (
         <PatientDetailsModal

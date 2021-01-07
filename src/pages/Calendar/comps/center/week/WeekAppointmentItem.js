@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import IconClock from '@material-ui/icons/AccessTime';
+import IconMoney from '@material-ui/icons/AttachMoney';
+import IconClear from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
@@ -45,10 +48,18 @@ const WeekAppointmentItem = ({ schedule, onSelect }) => {
       <div className='title-and-time'>
         <div className='name-and-status'>
           <span className='service-name'>{schedule.patient.fullName}</span>
-          <div className='status-icon'>
+          <div
+            className={clsx(
+              'status-icon',
+              schedule.scheduleStatus === 'DidNotCome' && 'negative',
+            )}
+          >
             {schedule.scheduleStatus === 'OnSite' && <DoneIcon />}
             {(schedule.scheduleStatus === 'CompletedPaid' ||
               schedule.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
+            {schedule.scheduleStatus === 'DidNotCome' && <IconClear />}
+            {schedule.scheduleStatus === 'CompletedNotPaid' && <IconMoney />}
+            {schedule.scheduleStatus === 'WaitingForPatient' && <IconClock />}
           </div>
         </div>
         <span className='item-time-text'>
