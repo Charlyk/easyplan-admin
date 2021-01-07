@@ -47,6 +47,9 @@ const reducerTypes = {
   setCurrentPath: 'setCurrentPath',
 };
 
+// initialize facebook chat
+window.FB.CustomerChat.show(false);
+
 const actions = generateReducerActions(reducerTypes);
 
 const reducer = (state, action) => {
