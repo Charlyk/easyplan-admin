@@ -209,6 +209,16 @@ const Users = props => {
     setShowInvitationSent(false);
   };
 
+  const handleRestoreUser = async (event, user) => {
+    const response = await dataAPI.restoreUser(user.id);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      logUserAction(Action.RestoreUser, JSON.stringify(userToDelete));
+      await fetchUsers();
+    }
+  };
+
   const deleteUser = async () => {
     if (!userToDelete) return;
     setIsDeleting(true);
@@ -325,6 +335,7 @@ const Users = props => {
                 key={`user-${item.id}`}
                 onDelete={startUserDelete}
                 onEdit={handleUserModalOpen}
+                onRestore={handleRestoreUser}
               />
             ))}
             {renderSkeleton()}
@@ -344,6 +355,7 @@ const Users = props => {
                 key={`user-${item.id}`}
                 onDelete={startUserDelete}
                 onEdit={handleUserModalOpen}
+                onRestore={handleRestoreUser}
               />
             ))}
             {renderSkeleton()}
@@ -363,6 +375,7 @@ const Users = props => {
                 key={`user-${item.id}`}
                 onDelete={startUserDelete}
                 onEdit={handleUserModalOpen}
+                onRestore={handleRestoreUser}
               />
             ))}
             {renderSkeleton()}

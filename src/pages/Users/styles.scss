@@ -123,11 +123,11 @@
     border-left: #FDC534 3px solid;
   }
 
-  &.confirmed {
+  &.active {
     border-left: #7DD7C8 3px solid;
   }
 
-  &.refused {
+  &.fired {
     border-left: #ec3276 3px solid;
   }
 
@@ -207,7 +207,7 @@
   }
 
   &__delete-button {
-    width: 6rem;
+    min-width: 6rem;
     height: 1.9rem;
     display: flex !important;
     align-items: center;
@@ -226,6 +226,30 @@
 
     svg {
       fill: #F44081;
+      margin-left: .5rem;
+    }
+  }
+
+  &__restore-button {
+    min-width: 6rem;
+    height: 1.9rem;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: .5rem;
+    background: rgba(244, 64, 129, 0.03) !important;
+    border: 1px solid #00E987 !important;
+    color: #00E987 !important;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 12px !important;
+    line-height: 16px !important;
+
+    svg {
+      fill: #00E987;
       margin-left: .5rem;
     }
   }

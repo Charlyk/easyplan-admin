@@ -15,11 +15,21 @@ import { Role } from '../../../utils/constants';
 import { urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
-const UserItem = props => {
-  const { user, isInvitation, isInviting, onDelete, onEdit, onResend } = props;
-
+const UserItem = ({
+  user,
+  isInvitation,
+  isInviting,
+  onDelete,
+  onEdit,
+  onResend,
+  onRestore,
+}) => {
   const handleDeleteUser = event => {
     onDelete(event, user, isInvitation);
+  };
+
+  const handleRestoreUser = event => {
+    onRestore(event, user);
   };
 
   const handleEditUser = event => {
@@ -30,7 +40,7 @@ const UserItem = props => {
     onResend(event, user);
   };
 
-  const rootClasses = clsx('user-item', user.status?.toLowerCase());
+  const rootClasses = clsx('user-item', user.isHidden ? 'fired' : 'active');
 
   return (
     <div className={rootClasses}>
@@ -76,9 +86,21 @@ const UserItem = props => {
             {textForKey('Edit')} <IconEdit />
           </Button>
         )}
-        <Button className='user-item__delete-button' onClick={handleDeleteUser}>
-          {textForKey('Delete')} <IconDelete />
-        </Button>
+        {user.isHidden ? (
+          <Button
+            className='user-item__restore-button'
+            onClick={handleRestoreUser}
+          >
+            {textForKey('Restore')} <IconRefresh fill='#00E987' />
+          </Button>
+        ) : (
+          <Button
+            className='user-item__delete-button'
+            onClick={handleDeleteUser}
+          >
+            {textForKey('Delete')} <IconDelete />
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -98,9 +120,11 @@ UserItem.propTypes = {
     avatar: PropTypes.string,
     roleInClinic: PropTypes.string,
     status: PropTypes.string,
+    isHidden: PropTypes.bool,
   }).isRequired,
   onResend: PropTypes.func,
   onDelete: PropTypes.func,
+  onRestore: PropTypes.func,
   onEdit: PropTypes.func,
 };
 
@@ -108,5 +132,6 @@ UserItem.defaultProps = {
   onDelete: () => null,
   onEdit: () => null,
   onResend: () => null,
+  onRestore: () => null,
   isInvitation: false,
 };

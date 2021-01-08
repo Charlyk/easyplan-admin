@@ -399,6 +399,31 @@ export default {
   },
 
   /**
+   * Remove user from current clinic
+   * @param {string} userId
+   * @return {Promise<{isError: boolean, message: string}>}
+   */
+  restoreUser: async userId => {
+    try {
+      const url = `${baseURL}/users/${userId}/restore`;
+      const response = await Axios.put(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
    * Create new patient
    * @param {Object} requestBody
    * @param {string|null} requestBody.email

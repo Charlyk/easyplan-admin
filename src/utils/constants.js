@@ -440,6 +440,7 @@ export const Action = {
   ViewUser: 'ViewUser',
   ViewUsers: 'ViewUsers',
   DeleteUser: 'DeleteUser',
+  RestoreUser: 'RestoreUser',
   DeleteInvitation: 'DeleteInvitation',
   CreatePatientNote: 'CreatePatientNote',
   AddPatientXRayImage: 'AddPatientXRayImage',
