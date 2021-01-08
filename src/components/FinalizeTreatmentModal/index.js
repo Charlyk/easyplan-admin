@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box } from '@material-ui/core';
+import { Box, IconButton, Typography } from '@material-ui/core';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 
-import IconCheckBoxChecked from '../../assets/icons/iconCheckBoxChecked';
-import IconCheckBoxUnchecked from '../../assets/icons/iconCheckBoxUnchecked';
+import IconMinus from '../../assets/icons/iconMinus';
+import IconPlus from '../../assets/icons/iconPlus';
 import { getServiceName } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
@@ -18,36 +18,80 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     setPlanServices(
       services.map(item => ({
         ...item,
-        selected: false,
-        isBraces: item.serviceType == null,
+        count: 0,
+        isBraces: item.serviceType === 'Braces',
       })),
     );
   }, [services]);
 
-  const handleServiceToggle = service => {
+  const handleItemPriceChanged = service => event => {
     const newServices = planServices.map(item => {
-      if (
-        item.id !== service.id ||
-        item.toothId !== service.toothId ||
-        item.destination !== service.destination
-      ) {
+      if (item.id !== service.id) {
         return item;
+      }
+
+      let newValue = event.target.value;
+
+      if (newValue.length === 0) {
+        newValue = '0';
+      }
+
+      if (newValue.length > 1 && newValue[0] === '0') {
+        newValue = newValue.replace(/^./, '');
       }
 
       return {
         ...item,
-        selected: !item.selected,
+        price: newValue,
       };
     });
     setPlanServices(newServices);
   };
 
   const handleSaveTreatment = () => {
-    onSave(planServices);
+    onSave(
+      planServices.map(item => ({
+        ...item,
+        price: parseFloat(item.price),
+      })),
+    );
+  };
+
+  const handleAddService = service => () => {
+    setPlanServices(
+      planServices.map(item => {
+        if (item.id !== service.id) {
+          return item;
+        }
+
+        return {
+          ...item,
+          count: item.count + 1,
+        };
+      }),
+    );
+  };
+
+  const handleRemoveService = service => () => {
+    setPlanServices(
+      planServices.map(item => {
+        if (item.id !== service.id) {
+          return item;
+        }
+
+        let newCount = item.count - 1;
+        if (newCount < 0) newCount = 0;
+
+        return {
+          ...item,
+          count: newCount,
+        };
+      }),
+    );
   };
 
   const totalPrice = sum(
-    planServices.filter(item => item.selected).map(item => item.price),
+    planServices.map(item => parseFloat(item.price) * item.count),
   );
 
   return (
@@ -66,16 +110,28 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
             tabIndex={0}
             key={`${item.id}-${item.toothId}-${item.name}`}
             className='final-service-item'
-            onClick={() => handleServiceToggle(item)}
           >
             <span className='service-name'>{getServiceName(item)}</span>
             <Box display='flex' alignItems='center'>
-              <span className='service-price'>{item.price} MDL</span>
-              {item.selected ? (
-                <IconCheckBoxChecked />
-              ) : (
-                <IconCheckBoxUnchecked />
-              )}
+              <input
+                className='service-price-input'
+                type='number'
+                value={item.price}
+                onChange={handleItemPriceChanged(item)}
+              />
+              <IconButton
+                onClick={handleRemoveService(item)}
+                style={{ outline: 'none' }}
+              >
+                <IconMinus fill='#3A83DC' />
+              </IconButton>
+              <Typography>{item.count}</Typography>
+              <IconButton
+                onClick={handleAddService(item)}
+                style={{ outline: 'none' }}
+              >
+                <IconPlus fill='#3A83DC' />
+              </IconButton>
             </Box>
           </div>
         ))}

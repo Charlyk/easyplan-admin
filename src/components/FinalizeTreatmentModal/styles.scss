@@ -3,6 +3,21 @@
   flex-direction: column;
   align-items: center;
 
+  .service-price-input {
+    outline: none;
+    border: #ced4da 1px solid;
+    border-radius: 4px;
+    padding: 1px 0;
+    width: 100px;
+    text-align: center;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    color: #34344E;
+  }
+
   .modal-subtitle {
     width: 100%;
     font-family: Inter, sans-serif;

@@ -1,10 +1,11 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sum from 'lodash/sum';
 import moment from 'moment';
 import { Form, Modal, Spinner } from 'react-bootstrap';
+import { Menu, MenuItem, Typeahead } from 'react-bootstrap-typeahead';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -25,8 +26,10 @@ import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
+
 import '../../components/PatientDetailsModal/styles.scss';
 import './styles.scss';
+import { Box, Paper, Typography } from '@material-ui/core';
 
 const areSameServices = (first, second) => {
   return (
@@ -89,7 +92,11 @@ const reducer = (state, action) => {
     case reducerTypes.setAllServices:
       return { ...state, allServices: action.payload };
     case reducerTypes.setSelectedServices:
-      return { ...state, selectedServices: action.payload };
+      return {
+        ...state,
+        selectedServices: action.payload,
+        servicesFieldValue: '',
+      };
     case reducerTypes.setSchedule:
       return { ...state, schedule: action.payload };
     case reducerTypes.setShouldFillTreatmentPlan:
@@ -154,6 +161,7 @@ const DoctorPatientDetails = () => {
   const dispatch = useDispatch();
   const { scheduleId } = useParams();
   const history = useHistory();
+  const servicesRef = useRef(null);
   const clinicServices = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const [
@@ -237,6 +245,18 @@ const DoctorPatientDetails = () => {
     localDispatch(actions.setSelectedServices(newServices));
   };
 
+  const handleRemoveSelectedService = service => {
+    let newServices = cloneDeep(selectedServices);
+    remove(
+      newServices,
+      item =>
+        item.id === service.id &&
+        item.toothId === service.toothId &&
+        item.destination === service.destination,
+    );
+    localDispatch(actions.setSelectedServices(newServices));
+  };
+
   const getPatientName = () => {
     if (patient?.firstName && patient?.lastName) {
       return `${patient.firstName} ${patient.lastName}`;
@@ -256,6 +276,15 @@ const DoctorPatientDetails = () => {
 
   const handleSaveTreatmentPlan = () => {
     fetchScheduleDetails();
+  };
+
+  const handleSelectedItemsChange = selectedItems => {
+    if (selectedItems.length === 0) return;
+    const newServices = cloneDeep(selectedServices);
+    if (!newServices.some(item => item.id === selectedItems[0].id)) {
+      newServices.push(selectedItems[0]);
+      localDispatch(actions.setSelectedServices(newServices));
+    }
   };
 
   const handleFinalizeTreatment = () => {
@@ -278,6 +307,8 @@ const DoctorPatientDetails = () => {
         completed: item.selected,
         destination: item.destination,
         isBraces: item.isBraces,
+        count: item.count,
+        price: item.price,
       })),
     };
 
@@ -414,48 +445,54 @@ const DoctorPatientDetails = () => {
               ))}
           </div>
         </div>
-        <div className='services-container'>
-          <div className='available-services'>
-            <span className='total-title'>{textForKey('Services')}</span>
-            {allServices.map(service => (
-              <Form.Group key={service.id} controlId={service.id}>
-                <Form.Check
-                  onChange={handleServiceChecked}
-                  type='checkbox'
-                  checked={selectedServices.some(
-                    item => item.id === service.id,
-                  )}
-                  label={service.name}
-                />
-              </Form.Group>
-            ))}
+        <Paper classes={{ root: 'services-container' }}>
+          <div className='input-wrapper'>
+            <Form.Group>
+              <Typeahead
+                ref={servicesRef}
+                placeholder={textForKey('Enter service name')}
+                id='services'
+                options={allServices}
+                filterBy={['name']}
+                labelKey='name'
+                selected={[]}
+                onChange={handleSelectedItemsChange}
+                renderMenu={(results, menuProps) => {
+                  return (
+                    <Menu {...menuProps}>
+                      {results.map((result, index) => (
+                        <MenuItem
+                          key={result.id}
+                          option={result}
+                          position={index}
+                        >
+                          {result.name}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  );
+                }}
+              />
+            </Form.Group>
           </div>
-          <div className='services-total'>
-            <span className='total-title'>
-              {textForKey('Provided services')}
-            </span>
 
-            {selectedServices.length === 0 && (
-              <span className='no-data-label'>
-                {textForKey('No selected services')}
-              </span>
-            )}
+          <div className='selected-services-wrapper'>
+            <table style={{ width: '100%' }}>
+              <tbody>
+                {selectedServices
+                  .filter(it => !it.completed)
+                  .map(service => (
+                    <FinalServiceItem
+                      onRemove={handleRemoveSelectedService}
+                      key={`${service.id}-${service.toothId}-${service.name}-${service.destination}`}
+                      service={service}
+                    />
+                  ))}
+              </tbody>
+            </table>
+          </div>
 
-            {selectedServices
-              .filter(it => !it.completed)
-              .map(service => (
-                <FinalServiceItem
-                  key={`${service.id}-${service.toothId}-${service.name}-${service.destination}`}
-                  service={service}
-                />
-              ))}
-
-            {selectedServices.length > 0 && (
-              <span className='total-price'>
-                {textForKey('Total')}: {getTotalPrice()} MDL
-              </span>
-            )}
-
+          <div className='selected-services-footer'>
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
@@ -469,7 +506,56 @@ const DoctorPatientDetails = () => {
                 : textForKey('Finalize')}
             </LoadingButton>
           </div>
-        </div>
+          {/*<div className='available-services'>*/}
+          {/*  <span className='total-title'>{textForKey('Services')}</span>*/}
+          {/*  <Paper classes={{ root: 'available-services-paper' }}>*/}
+          {/*    {allServices.map(service => (*/}
+          {/*      <Form.Group key={service.id} controlId={service.id}>*/}
+          {/*        <Form.Check*/}
+          {/*          onChange={handleServiceChecked}*/}
+          {/*          type='checkbox'*/}
+          {/*          checked={selectedServices.some(*/}
+          {/*            item => item.id === service.id,*/}
+          {/*          )}*/}
+          {/*          label={service.name}*/}
+          {/*        />*/}
+          {/*      </Form.Group>*/}
+          {/*    ))}*/}
+          {/*  </Paper>*/}
+          {/*</div>*/}
+          {/*<div className='services-total'>*/}
+          {/*  <span className='total-title'>*/}
+          {/*    {textForKey('Provided services')}*/}
+          {/*  </span>*/}
+
+          {/*  {selectedServices.length === 0 && (*/}
+          {/*    <span className='no-data-label'>*/}
+          {/*      {textForKey('No selected services')}*/}
+          {/*    </span>*/}
+          {/*  )}*/}
+
+          {/*  <Paper classes={{ root: 'offered-services-paper' }}>*/}
+          {/*    <table style={{ width: '100%' }}>*/}
+          {/*      <tbody>*/}
+          {/*        {selectedServices*/}
+          {/*          .filter(it => !it.completed)*/}
+          {/*          .map(service => (*/}
+          {/*            <FinalServiceItem*/}
+          {/*              key={`${service.id}-${service.toothId}-${service.name}-${service.destination}`}*/}
+          {/*              service={service}*/}
+          {/*            />*/}
+          {/*          ))}*/}
+          {/*      </tbody>*/}
+          {/*    </table>*/}
+          {/*  </Paper>*/}
+
+          {/*  {selectedServices.length > 0 && (*/}
+          {/*    <span className='total-price'>*/}
+          {/*      {textForKey('Total')}: {getTotalPrice()} MDL*/}
+          {/*    </span>*/}
+          {/*  )}*/}
+          {/*</div>*/}
+        </Paper>
       </div>
       <div className='right-container'>
         {patient && (
