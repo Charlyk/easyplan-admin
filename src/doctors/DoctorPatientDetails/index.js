@@ -184,7 +184,14 @@ const DoctorPatientDetails = () => {
   }, [scheduleId]);
 
   useEffect(() => {
-    localDispatch(actions.setServices(clinicServices));
+    const userServicesIds = (
+      currentUser.clinics.find(item => item.isSelected)?.services || []
+    ).map(it => it.serviceId);
+    localDispatch(
+      actions.setServices(
+        clinicServices.filter(item => userServicesIds.includes(item.id)),
+      ),
+    );
   }, [clinicServices]);
 
   const fetchScheduleDetails = async () => {
