@@ -13,7 +13,6 @@ import {
 } from 'react-router-dom';
 
 import AddAppointmentModal from '../../components/AddAppintmentModal';
-import CustomerChat from '../../components/CustomerChat';
 import DataMigrationModal from '../../components/DataMigrationModal';
 import MainMenu from '../../components/MainMenu';
 import PageHeader from '../../components/PageHeader';
@@ -72,11 +71,6 @@ const Main = () => {
     openAppointmentModal: false,
   });
   const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
-
-  useEffect(() => {
-    // initialize facebook chat
-    window.FB.CustomerChat.show(false);
-  }, []);
 
   useEffect(() => {
     if (currentUser != null) {
