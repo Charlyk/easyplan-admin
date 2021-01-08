@@ -355,6 +355,7 @@ export default {
     'edit profile': 'Edit profile',
     'current password is required': 'Current password is required',
     'saved successfully': 'Saved successfully!',
+    'view debt': 'View debt',
   },
   ro: {
     analytics: 'Analitică',
@@ -717,6 +718,7 @@ export default {
     'edit profile': 'Editează cont',
     'current password is required': 'Introduce-ți parola curentă',
     'saved successfully': 'Datele au fost salvate cu succes!',
+    'view debt': 'Vezi datoria',
   },
   ru: {
     analytics: 'Analytics',
@@ -1071,5 +1073,6 @@ export default {
     'edit profile': 'Edit profile',
     'current password is required': 'Current password is required',
     'saved successfully': 'Saved successfully!',
+    'view debt': 'View debt',
   },
 };

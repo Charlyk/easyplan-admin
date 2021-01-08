@@ -19,11 +19,11 @@ import AppointmentNotes from './comps/appointmentNotes';
 import PatientAppointments from './comps/appointments/PatientAppointments';
 import PatientNotes from './comps/notes/PatientNotes';
 import PatientDebtsList from './comps/PatientDebtsList';
+import PatientPaymentsList from './comps/PatientPaymentsList';
 import PatientPersonalData from './comps/PatientPersonalData';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
 import './styles.scss';
-import PatientPaymentsList from './comps/PatientPaymentsList';
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -41,12 +41,14 @@ const initialState = {
   currentMenu: MenuItem.personalInfo,
   isFetching: false,
   patient: null,
+  viewInvoice: null,
 };
 
 const reducerTypes = {
   setCurrentMenu: 'setCurrentMenu',
   setIsFetching: 'setIsFetching',
   setPatient: 'setPatient',
+  setViewInvoice: 'setViewInvoice',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -59,6 +61,16 @@ const reducer = (state, action) => {
       return { ...state, isFetching: action.payload };
     case reducerTypes.setPatient:
       return { ...state, patient: action.payload };
+    case reducerTypes.setViewInvoice:
+      if (action.payload != null) {
+        return {
+          ...state,
+          viewInvoice: action.payload,
+          currentMenu: MenuItem.debts,
+        };
+      } else {
+        return { ...state, viewInvoice: action.payload };
+      }
     default:
       return state;
   }
@@ -66,10 +78,10 @@ const reducer = (state, action) => {
 
 const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
   const dispatch = useDispatch();
-  const [{ currentMenu, isFetching, patient }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [
+    { currentMenu, isFetching, patient, viewInvoice },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (!show) {
@@ -113,6 +125,14 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
     } else {
       handleStartDeletePatient();
     }
+  };
+
+  const handleViewDebtClick = invoice => {
+    localDispatch(actions.setViewInvoice(invoice));
+  };
+
+  const handleDebtViewed = () => {
+    localDispatch(actions.setViewInvoice(null));
   };
 
   const menuItemClasses = itemId => {
@@ -258,10 +278,17 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                 <OrthodonticPlan patient={patient} />
               )}
               {currentMenu === MenuItem.debts && (
-                <PatientDebtsList patient={patient} />
+                <PatientDebtsList
+                  patient={patient}
+                  viewInvoice={viewInvoice}
+                  onDebtShowed={handleDebtViewed}
+                />
               )}
               {currentMenu === MenuItem.payments && (
-                <PatientPaymentsList patient={patient} />
+                <PatientPaymentsList
+                  patient={patient}
+                  onViewDebtClick={handleViewDebtClick}
+                />
               )}
             </div>
           </Box>

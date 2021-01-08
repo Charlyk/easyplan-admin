@@ -10,6 +10,7 @@ import {
   TableRow,
   TableBody,
   TableFooter,
+  Box,
 } from '@material-ui/core';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment';
@@ -20,7 +21,7 @@ import dataAPI from '../../../utils/api/dataAPI';
 import { Statuses } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 
-const PatientPaymentsList = ({ patient }) => {
+const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
 
@@ -50,6 +51,10 @@ const PatientPaymentsList = ({ patient }) => {
 
   const getInvoicesPaid = () => {
     return sumBy(invoices, item => item.paidAmount);
+  };
+
+  const handleViewDebtClick = invoice => () => {
+    onViewDebtClick(invoice);
   };
 
   return (
@@ -99,15 +104,25 @@ const PatientPaymentsList = ({ patient }) => {
                         {item.paidAmount}MDL
                       </TableCell>
                       <TableCell align='right'>
-                        <div
-                          className='invoice-status'
-                          style={{
-                            backgroundColor: `${status.color}33`,
-                            color: status.color,
-                          }}
-                        >
-                          {status.name}
-                        </div>
+                        <Box display='flex' flexDirection='column'>
+                          <div
+                            className='invoice-status'
+                            style={{
+                              backgroundColor: `${status.color}33`,
+                              color: status.color,
+                            }}
+                          >
+                            {status.name}
+                          </div>
+                          {status.id === 'PartialPaid' && (
+                            <Typography
+                              onClick={handleViewDebtClick(item)}
+                              classes={{ root: 'view-debt-btn' }}
+                            >
+                              {textForKey('View debt')}
+                            </Typography>
+                          )}
+                        </Box>
                       </TableCell>
                     </TableRow>
                   );
@@ -134,9 +149,14 @@ const PatientPaymentsList = ({ patient }) => {
 export default React.memo(PatientPaymentsList);
 
 PatientPaymentsList.propTypes = {
+  onViewDebtClick: PropTypes.func,
   patient: PropTypes.shape({
     id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,
+};
+
+PatientPaymentsList.defaultProps = {
+  onViewDebtClick: () => null,
 };

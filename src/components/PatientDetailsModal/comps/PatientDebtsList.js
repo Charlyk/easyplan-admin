@@ -11,9 +11,10 @@ import {
   CircularProgress,
   Box,
 } from '@material-ui/core';
+import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -22,12 +23,11 @@ import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSele
 import dataAPI from '../../../utils/api/dataAPI';
 import { textForKey } from '../../../utils/localization';
 
-const PatientDebtsList = ({ patient }) => {
+const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   const dispatch = useDispatch();
   const updatePayments = useSelector(updatePatientPaymentsSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [debts, setDebts] = useState([]);
-  const [loadingDebt, setLoadingDebt] = useState(null);
 
   useEffect(() => {
     if (patient != null) {
@@ -35,13 +35,31 @@ const PatientDebtsList = ({ patient }) => {
     }
   }, [patient, updatePayments]);
 
+  useEffect(() => {
+    if (viewInvoice == null) {
+      setDebts(
+        debts.map(item => ({
+          ...item,
+          isHighlighted: false,
+        })),
+      );
+    }
+  }, [viewInvoice]);
+
   const fetchDebts = async () => {
     setIsLoading(true);
     const response = await dataAPI.fetchPatientDebts(patient.id);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      setDebts(response.data);
+      setDebts(
+        response.data.map(item => ({
+          ...item,
+          isHighlighted: viewInvoice?.id === item.id,
+        })),
+      );
+
+      setTimeout(onDebtShowed, 600);
     }
     setIsLoading(false);
   };
@@ -78,7 +96,10 @@ const PatientDebtsList = ({ patient }) => {
               </TableHead>
               <TableBody>
                 {debts.map(item => (
-                  <TableRow key={item.id}>
+                  <TableRow
+                    key={item.id}
+                    className={clsx(item.isHighlighted && 'highlight')}
+                  >
                     <TableCell align='left'>
                       {item.services.map(it => it.name).join(', ')}
                     </TableCell>
@@ -101,7 +122,6 @@ const PatientDebtsList = ({ patient }) => {
                         justifyContent='flex-end'
                       >
                         <Button
-                          disabled={loadingDebt != null}
                           variant='outline-primary'
                           onClick={() => handlePayDebt(item)}
                         >
@@ -123,9 +143,15 @@ const PatientDebtsList = ({ patient }) => {
 export default PatientDebtsList;
 
 PatientDebtsList.propTypes = {
+  onDebtShowed: PropTypes.func,
+  viewInvoice: PropTypes.object,
   patient: PropTypes.shape({
     id: PropTypes.number,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }).isRequired,
+};
+
+PatientDebtsList.defaultProps = {
+  onDebtShowed: () => null,
 };
