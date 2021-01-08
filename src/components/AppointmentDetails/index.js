@@ -255,12 +255,23 @@ const AppointmentDetails = ({
                       {moment(details.created).format('DD MMM YYYY, HH:mm')}
                     </td>
                   </tr>
-                  <tr>
-                    <td valign='top' style={{ paddingRight: '1rem' }}>
-                      {textForKey('Note')}:
-                    </td>
-                    <td valign='top'>{details.noteText}</td>
-                  </tr>
+                  {scheduleStatus.id === 'Canceled' &&
+                    details.canceledReason != null && (
+                      <tr>
+                        <td style={{ paddingRight: '1rem' }}>
+                          {upperFirst(textForKey('Canceled reason'))}:
+                        </td>
+                        <td>{details.canceledReason}</td>
+                      </tr>
+                    )}
+                  {details.noteText?.length > 0 && (
+                    <tr>
+                      <td valign='top' style={{ paddingRight: '1rem' }}>
+                        {textForKey('Note')}:
+                      </td>
+                      <td valign='top'>{details.noteText}</td>
+                    </tr>
+                  )}
                   <tr>
                     <td colSpan={2}>
                       <div className='group-title'>{textForKey('Patient')}</div>
@@ -392,6 +403,7 @@ AppointmentDetails.propTypes = {
     start: PropTypes.object,
     end: PropTypes.object,
     scheduleStatus: PropTypes.string,
+    canceledReason: PropTypes.string,
   }),
 };
 

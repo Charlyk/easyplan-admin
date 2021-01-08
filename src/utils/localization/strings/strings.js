@@ -358,6 +358,7 @@ export default {
     'view debt': 'View debt',
     'why schedule is canceled': 'Why schedule is canceled',
     'enter reason below': 'Enter reason below',
+    'canceled reason': 'Canceled reason',
   },
   ro: {
     analytics: 'Analitică',
@@ -723,6 +724,7 @@ export default {
     'view debt': 'Vezi datoria',
     'why schedule is canceled': 'De ce a fost anulată programarea',
     'enter reason below': 'Introduceți motivul mai jos',
+    'canceled reason': 'Motivul anulării',
   },
   ru: {
     analytics: 'Analytics',
@@ -1080,5 +1082,6 @@ export default {
     'view debt': 'View debt',
     'why schedule is canceled': 'Why schedule is canceled',
     'enter reason below': 'Enter reason below',
+    'canceled reason': 'Canceled reason',
   },
 };

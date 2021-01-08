@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
@@ -44,17 +44,27 @@ const Appointment = ({ appointment }) => {
           </div>
         </div>
       </div>
-      <div
-        className='appointment-status-indicator'
-        style={{ backgroundColor: `${status.color}1A` }}
+      <Box
+        display='flex'
+        flexDirection='column'
+        width='20%'
+        alignItems='center'
       >
-        <Typography
-          classes={{ root: 'status-name-label' }}
-          style={{ color: status.color }}
+        <div
+          className='appointment-status-indicator'
+          style={{ backgroundColor: `${status.color}1A` }}
         >
-          {status?.name}
+          <Typography
+            classes={{ root: 'status-name-label' }}
+            style={{ color: status.color }}
+          >
+            {status?.name}
+          </Typography>
+        </div>
+        <Typography classes={{ root: 'canceled-reason-label' }}>
+          {appointment.canceledReason}
         </Typography>
-      </div>
+      </Box>
     </div>
   );
 };
@@ -72,10 +82,15 @@ Appointment.propTypes = {
       id: PropTypes.number,
       fullName: PropTypes.string,
     }),
+    clinic: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    }),
     startTime: PropTypes.string,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
     dateAndTime: PropTypes.string,
     scheduleStatus: PropTypes.string,
+    canceledReason: PropTypes.string,
   }),
 };
