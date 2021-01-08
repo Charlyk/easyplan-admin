@@ -107,10 +107,6 @@ function App() {
       dispatch(setCreateClinic({ open: false, canClose: true }));
       dispatch(fetchClinicData());
     }
-
-    if (authManager.isLoggedIn()) {
-      window.FB.CustomerChat.show(false);
-    }
   }, [currentUser, updateCurrentUser]);
 
   useEffect(() => {
