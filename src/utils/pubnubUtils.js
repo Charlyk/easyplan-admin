@@ -32,8 +32,10 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
       dispatch(toggleAppointmentsUpdate());
       dispatch(toggleCheckDoctorAppointments());
       break;
+    case MessageAction.UserRestoredInClinic:
     case MessageAction.UserRemovedFromClinic:
       if (currentUser.id === targetUserId) {
+        console.log('user updated');
         dispatch(setUpdateCurrentUser());
       }
       break;
@@ -53,6 +55,7 @@ const MessageAction = {
   NewUserInvited: 'NewUserInvited',
   InvitationRemoved: 'InvitationRemoved',
   UserRemovedFromClinic: 'UserRemovedFromClinic',
+  UserRestoredInClinic: 'UserRestoredInClinic',
   ClinicDataImported: 'ClinicDataImported',
   ClinicDataImportStarted: 'ClinicDataImportStarted',
   ImportingClinicServices: 'ImportingClinicServices',

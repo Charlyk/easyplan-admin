@@ -42,7 +42,7 @@ const DoctorsMain = () => {
   };
 
   const handleCompanyChange = company => {
-    dispatch(changeSelectedClinic(company.id));
+    dispatch(changeSelectedClinic(company.clinicId));
   };
 
   const handleCreateClinic = () => {

@@ -1679,12 +1679,13 @@ export default {
    * Change status for a schedule
    * @param {number} scheduleId
    * @param {string} newStatus
+   * @param {string?} canceledReason
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  updateScheduleStatus: async (scheduleId, newStatus) => {
+  updateScheduleStatus: async (scheduleId, newStatus, canceledReason) => {
     try {
       const url = `${baseURL}/schedules/schedule-status?scheduleId=${scheduleId}&status=${newStatus}`;
-      const response = await Axios.put(url);
+      const response = await Axios.put(url, { canceledReason });
       const { data: responseData } = response;
       if (responseData == null) {
         return {

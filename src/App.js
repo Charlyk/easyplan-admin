@@ -164,6 +164,7 @@ function App() {
     } else {
       const { data: user } = response;
       if (user != null) {
+        console.log(user);
         dispatch(setCurrentUser(user));
         await dispatch(fetchClinicData());
       } else {

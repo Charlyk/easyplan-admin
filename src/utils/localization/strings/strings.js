@@ -356,6 +356,8 @@ export default {
     'current password is required': 'Current password is required',
     'saved successfully': 'Saved successfully!',
     'view debt': 'View debt',
+    'why schedule is canceled': 'Why schedule is canceled',
+    'enter reason below': 'Enter reason below',
   },
   ro: {
     analytics: 'Analitică',
@@ -719,6 +721,8 @@ export default {
     'current password is required': 'Introduce-ți parola curentă',
     'saved successfully': 'Datele au fost salvate cu succes!',
     'view debt': 'Vezi datoria',
+    'why schedule is canceled': 'De ce a fost anulată programarea',
+    'enter reason below': 'Introduceți motivul mai jos',
   },
   ru: {
     analytics: 'Analytics',
@@ -1074,5 +1078,7 @@ export default {
     'current password is required': 'Current password is required',
     'saved successfully': 'Saved successfully!',
     'view debt': 'View debt',
+    'why schedule is canceled': 'Why schedule is canceled',
+    'enter reason below': 'Enter reason below',
   },
 };

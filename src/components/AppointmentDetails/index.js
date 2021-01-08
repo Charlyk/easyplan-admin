@@ -21,6 +21,7 @@ import {
 import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
+import SingleInputModal from '../SingleInputModal';
 
 const AppointmentDetails = ({
   schedule,
@@ -34,6 +35,9 @@ const AppointmentDetails = ({
   const [details, setDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
+  const [isCanceledReasonRequired, setIsCanceledReasonRequired] = useState(
+    false,
+  );
   const [scheduleStatus, setScheduleStatus] = useState(
     Statuses.find(item => item.id === schedule.scheduleStatus),
   );
@@ -76,11 +80,29 @@ const AppointmentDetails = ({
     setShowStatuses(false);
   };
 
-  const handleStatusSelected = async status => {
+  const changeScheduleStatus = async (status, reason = null) => {
     setScheduleStatus(status);
     closeStatusesList();
-    await dataAPI.updateScheduleStatus(schedule.id, status.id);
+    await dataAPI.updateScheduleStatus(schedule.id, status.id, reason);
     dispatch(toggleAppointmentsUpdate());
+    setIsCanceledReasonRequired(false);
+  };
+
+  const handleStatusSelected = async status => {
+    if (status.id === 'Canceled') {
+      setIsCanceledReasonRequired(true);
+      return;
+    }
+    await changeScheduleStatus(status);
+  };
+
+  const handleCanceledReasonSubmitted = async canceledReason => {
+    const status = Statuses.find(item => item.id === 'Canceled');
+    await changeScheduleStatus(status, canceledReason);
+  };
+
+  const handleCloseCanceledReasonModal = () => {
+    setIsCanceledReasonRequired(false);
   };
 
   const handlePatientClick = () => {
@@ -141,6 +163,13 @@ const AppointmentDetails = ({
 
   return (
     <div className='appointment-details-root'>
+      <SingleInputModal
+        onSubmit={handleCanceledReasonSubmitted}
+        onClose={handleCloseCanceledReasonModal}
+        open={isCanceledReasonRequired}
+        title={`${textForKey('Why schedule is canceled')}?`}
+        label={textForKey('Enter reason below')}
+      />
       {statusesList}
       <div className='header-wrapper'>
         <div
