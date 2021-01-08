@@ -154,6 +154,15 @@
     overflow-y: scroll;
     padding: unset;
 
+    .patient-name-label {
+      color: #3A83DC;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     .status-label {
       font-family: Inter, sans-serif;
       font-style: normal;

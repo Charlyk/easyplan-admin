@@ -13,11 +13,12 @@ import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import { parse } from 'query-string';
 import { Form, Spinner } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
+import { setPatientDetails } from '../../../../redux/actions/actions';
 import {
   clinicDoctorsSelector,
   clinicServicesSelector,
@@ -121,6 +122,7 @@ const initialState = {
 };
 
 const ServicesStatistics = () => {
+  const dispatch = useDispatch();
   const doctors = useSelector(clinicDoctorsSelector);
   const services = useSelector(clinicServicesSelector);
   const location = useLocation();
@@ -250,6 +252,16 @@ const ServicesStatistics = () => {
     localDispatch(reducerActions.setRowsPerPage(event.target.value));
   };
 
+  const handlePatientClick = patientId => () => {
+    dispatch(
+      setPatientDetails({
+        show: true,
+        patientId,
+        onDelete: null,
+      }),
+    );
+  };
+
   return (
     <div className='statistics-services'>
       <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
@@ -350,7 +362,12 @@ const ServicesStatistics = () => {
                     </TableCell>
                     <TableCell>{item.doctor}</TableCell>
                     <TableCell>{item.serviceName}</TableCell>
-                    <TableCell>{item.patient}</TableCell>
+                    <TableCell
+                      className='patient-name-label'
+                      onClick={handlePatientClick(item.patientId)}
+                    >
+                      {item.patient}
+                    </TableCell>
                     <TableCell>
                       <span
                         className='status-label'
