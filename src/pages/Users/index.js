@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
@@ -12,12 +12,13 @@ import UserDetailsModal from '../../components/UserDetailsModal';
 import { updateUsersSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Role } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
+import { fetchClinicData, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import UserItem from './comps/UserItem';
 import UsersHeader from './comps/UsersHeader';
 
 const Users = props => {
+  const dispatch = useDispatch();
   const updateUsers = useSelector(updateUsersSelector);
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
   const [isInviting, setIsInviting] = useState({
@@ -216,6 +217,7 @@ const Users = props => {
     } else {
       logUserAction(Action.RestoreUser, JSON.stringify(userToDelete));
       await fetchUsers();
+      dispatch(fetchClinicData());
     }
   };
 
@@ -230,6 +232,7 @@ const Users = props => {
       logUserAction(Action.DeleteUser, JSON.stringify(userToDelete));
       setUserToDelete(null);
       await fetchUsers();
+      dispatch(fetchClinicData());
     }
     setIsDeleting(false);
   };

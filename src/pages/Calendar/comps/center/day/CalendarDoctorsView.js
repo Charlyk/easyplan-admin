@@ -7,10 +7,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../assets/icons/iconAvatar';
-import {
-  clinicDoctorsSelector,
-  clinicServicesSelector,
-} from '../../../../../redux/selectors/clinicSelector';
+import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
 import { updateCalendarDoctorHeightSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
@@ -48,7 +45,7 @@ const reducer = (state, action) => {
 
 const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
   const windowSize = useWindowSize();
-  const doctors = useSelector(clinicDoctorsSelector);
+  const doctors = useSelector(clinicActiveDoctorsSelector);
   const [{ isLoading, hours, hourWidth }, localDispatch] = useReducer(
     reducer,
     initialState,

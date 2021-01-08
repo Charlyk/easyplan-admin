@@ -19,6 +19,11 @@ export const clinicDoctorsSelector = createSelector(
   users => users.filter(item => item.roleInClinic === Role.doctor),
 );
 
+export const clinicActiveDoctorsSelector = createSelector(
+  clinicDoctorsSelector,
+  doctors => doctors.filter(item => !item.isHidden),
+);
+
 export const clinicServicesSelector = createSelector(
   clinicDetailsSelector,
   clinic => clinic.services?.filter(item => !item.deleted) || [],

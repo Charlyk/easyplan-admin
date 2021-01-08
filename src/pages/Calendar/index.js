@@ -20,7 +20,7 @@ import {
   toggleImportModal,
 } from '../../redux/actions/actions';
 import {
-  clinicDoctorsSelector,
+  clinicActiveDoctorsSelector,
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
@@ -136,7 +136,7 @@ const Calendar = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
   const services = useSelector(clinicServicesSelector);
-  const doctors = useSelector(clinicDoctorsSelector);
+  const doctors = useSelector(clinicActiveDoctorsSelector);
   const [
     {
       filters,

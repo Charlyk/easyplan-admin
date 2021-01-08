@@ -6,12 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import IconClose from '../../assets/icons/iconClose';
 import IconDelete from '../../assets/icons/iconDelete';
 import IconSuccess from '../../assets/icons/iconSuccess';
-import {
-  triggerCategoriesUpdate,
-  triggerServicesUpdate,
-} from '../../redux/actions/actions';
 import { closeServiceDetailsModal } from '../../redux/actions/serviceDetailsActions';
-import { clinicDoctorsSelector } from '../../redux/selectors/clinicSelector';
+import { clinicActiveDoctorsSelector } from '../../redux/selectors/clinicSelector';
 import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
@@ -39,7 +35,7 @@ const ServiceDetailsModal = () => {
   const dispatch = useDispatch();
   const { category, service, open } = useSelector(serviceDetailsModalSelector);
   const modalData = useSelector(serviceDetailsModalSelector);
-  const clinicDoctors = useSelector(clinicDoctorsSelector);
+  const clinicDoctors = useSelector(clinicActiveDoctorsSelector);
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
