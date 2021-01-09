@@ -77,7 +77,7 @@ const AppointmentsCalendar = ({
         )}`;
       }
       case CalendarView.month:
-        return moment(viewDate).format('MMMM');
+        return moment(viewDate).format('MMMM YYYY');
     }
   };
 
