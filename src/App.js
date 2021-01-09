@@ -191,7 +191,6 @@ function App() {
     dispatch(setCurrentUser(null));
     handleCancelLogout();
     dispatch(toggleForceLogoutUser(false));
-    window.FB.CustomerChat.hide();
   };
 
   const handleCancelLogout = () => {
