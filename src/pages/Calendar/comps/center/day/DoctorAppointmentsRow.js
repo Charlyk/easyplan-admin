@@ -269,15 +269,16 @@ DoctorAppointmentsRow.propTypes = {
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
+      scheduleStatus: PropTypes.string,
+      serviceId: PropTypes.number,
+      serviceName: PropTypes.string,
+      serviceColor: PropTypes.string,
       patient: PropTypes.shape({
         id: PropTypes.number,
         fullName: PropTypes.string,
       }),
-      serviceName: PropTypes.string,
-      serviceColor: PropTypes.string,
       start: PropTypes.object,
       end: PropTypes.object,
-      scheduleStatus: PropTypes.string,
     }),
   ),
   doctor: PropTypes.shape({

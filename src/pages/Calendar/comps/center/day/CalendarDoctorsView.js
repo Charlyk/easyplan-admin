@@ -80,7 +80,7 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
       const { data: schedules } = response;
       const mappedSchedules = doctors.map(item => {
         const doctorSchedules =
-          schedules.find(it => it.doctor.id === item.id)?.schedules || [];
+          schedules.find(it => it.doctorId === item.id)?.schedules || [];
         return {
           doctor: item,
           schedules: doctorSchedules,
