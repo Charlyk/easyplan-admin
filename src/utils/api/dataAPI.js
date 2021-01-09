@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev'
+  env === 'dev' || env === 'local'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -982,7 +982,7 @@ export default {
 
   /**
    * Fetch all schedules for a doctor
-   * @param {string} doctorId
+   * @param {number} doctorId
    * @param {Date} date
    * @return {Promise<{isError: boolean, message: string|null}>}
    */
@@ -991,6 +991,28 @@ export default {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
         `${baseURL}/schedules?doctorId=${doctorId}&date=${stringDate}`,
+      );
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  fetchDaySchedules: async date => {
+    try {
+      const stringDate = moment(date).format('YYYY-MM-DD');
+      const response = await Axios.get(
+        `${baseURL}/schedules/day?&date=${stringDate}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {

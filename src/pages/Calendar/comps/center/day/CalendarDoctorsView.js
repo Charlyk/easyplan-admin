@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import { Box, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -8,7 +8,10 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../assets/icons/iconAvatar';
 import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
-import { updateCalendarDoctorHeightSelector } from '../../../../../redux/selectors/rootSelector';
+import {
+  updateAppointmentsSelector,
+  updateCalendarDoctorHeightSelector,
+} from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import { useWindowSize } from '../../../../../utils/hooks';
@@ -20,12 +23,14 @@ const initialState = {
   isLoading: false,
   hours: [],
   hourWidth: 0,
+  daySchedules: [],
 };
 
 const reducerTypes = {
   setIsLoading: 'setIsLoading',
   setHours: 'setHours',
   setHourWidth: 'setHourWidth',
+  setDaySchedules: 'setDaySchedules',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -38,6 +43,8 @@ const reducer = (state, action) => {
       return { ...state, hours: action.payload };
     case reducerTypes.setHourWidth:
       return { ...state, hourWidth: action.payload };
+    case reducerTypes.setDaySchedules:
+      return { ...state, daySchedules: action.payload };
     default:
       return state;
   }
@@ -46,18 +53,42 @@ const reducer = (state, action) => {
 const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
   const windowSize = useWindowSize();
   const doctors = useSelector(clinicActiveDoctorsSelector);
-  const [{ isLoading, hours, hourWidth }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const updateAppointments = useSelector(updateAppointmentsSelector);
+  const [
+    { isLoading, hours, hourWidth, daySchedules },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    localDispatch(
+      actions.setDaySchedules(
+        doctors.map(item => ({ doctor: item, schedules: [] })),
+      ),
+    );
     fetchWorkHours();
-  }, [viewDate]);
+  }, [viewDate, doctors, updateAppointments]);
 
   useEffect(() => {
     updateHourWidth();
   }, [hours, windowSize]);
+
+  const fetchDaySchedules = async () => {
+    const response = await dataAPI.fetchDaySchedules(viewDate);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      const { data: schedules } = response;
+      const mappedSchedules = doctors.map(item => {
+        const doctorSchedules =
+          schedules.find(it => it.doctor.id === item.id)?.schedules || [];
+        return {
+          doctor: item,
+          schedules: doctorSchedules,
+        };
+      });
+      localDispatch(actions.setDaySchedules(mappedSchedules));
+    }
+  };
 
   const updateHourWidth = () => {
     if (hours.length > 0) {
@@ -83,6 +114,7 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
       toast.error(textForKey(response.message));
     } else {
       localDispatch(actions.setHours(response.data));
+      await fetchDaySchedules();
     }
     localDispatch(actions.setIsLoading(false));
   };
@@ -92,22 +124,27 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
   const getCellWidth = () => {
     const element = document.getElementById('calendar-content');
     const elementRect = element.getBoundingClientRect();
-    return Math.abs((elementRect.width - 210) / fixHours.length);
+    return Math.abs((elementRect.width - 212) / fixHours.length);
   };
 
   return (
     <div id='day-view-root' className='calendar-doctors-view'>
+      {isLoading && (
+        <div className='loading-progress-wrapper'>
+          <CircularProgress classes={{ root: 'loading-schedules-progress' }} />
+        </div>
+      )}
       {!isLoading && fixHours.length === 0 && (
         <Typography classes={{ root: 'day-off-label' }}>
           {textForKey("It's a day off")}
         </Typography>
       )}
-      {!isLoading && fixHours.length > 0 && (
-        <Box display='flex' flexDirection='column'>
+      {fixHours.length > 0 && (
+        <Box display='flex' flexDirection='column' height='100%' width='100%'>
           <table>
             <thead>
               <tr>
-                <td width={210}>
+                <td width={211}>
                   <Typography classes={{ root: 'title-label' }}>
                     {textForKey('Doctors')}
                   </Typography>
@@ -127,14 +164,15 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
           <div className='calendar-doctors-view__appointments-wrapper'>
             <table>
               <tbody>
-                {doctors.map(item => (
+                {daySchedules.map(item => (
                   <DoctorAppointmentsRow
                     onScheduleSelect={onScheduleSelect}
                     viewDate={viewDate}
                     hours={hours}
                     windowSize={windowSize}
                     key={item.id}
-                    doctor={item}
+                    schedules={item.schedules || []}
+                    doctor={item.doctor}
                     hourWidth={hourWidth}
                   />
                 ))}

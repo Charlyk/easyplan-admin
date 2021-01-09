@@ -328,7 +328,8 @@
 
   &__center {
     position: relative;
-    flex: 1;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -419,7 +420,7 @@
     }
 
     .center-content {
-      flex: 1;
+      height: 95%;
       max-height: 95% !important;
       display: flex;
       flex-direction: column;
@@ -899,10 +900,22 @@
   align-items: flex-start;
   flex-direction: column;
   width: 100%;
-  overflow: scroll;
   height: 100%;
   background: #FFFFFF;
   border-radius: 4px;
+  position: relative;
+
+  .loading-progress-wrapper {
+    z-index: 5;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .loading-schedules-progress {
+      color: #3A83DC;
+    }
+  }
 
   table {
     width: 100%;
@@ -959,16 +972,15 @@
 
   &__appointments-wrapper {
     width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
 
     table {
-      width: 100%;
-
       tbody {
-        width: 100% !important;
-
         tr {
           td:first-child {
             max-width: 210px !important;

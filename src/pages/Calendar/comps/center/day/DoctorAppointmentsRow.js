@@ -46,6 +46,7 @@ const reducer = (state = initialState, action) => {
 
 const DoctorAppointmentsRow = ({
   doctor,
+  schedules,
   hours,
   hourWidth,
   viewDate,
@@ -61,10 +62,15 @@ const DoctorAppointmentsRow = ({
   );
 
   useEffect(() => {
-    if (doctor != null) {
-      fetchAppointments();
-    }
-  }, [doctor, updateAppointments, viewDate]);
+    const newData = schedules.map(item => {
+      return {
+        ...item,
+        start: moment(item.startTime),
+        end: moment(item.endTime),
+      };
+    });
+    localDispatch(actions.setAppointments(newData));
+  }, [schedules]);
 
   useEffect(() => {
     sizeDifference.current = Math.abs(hourWidth - previousHourWidth);
@@ -80,29 +86,6 @@ const DoctorAppointmentsRow = ({
       x: fromMinutesPercent,
       width: minutesWidth,
     };
-  };
-
-  const fetchAppointments = async () => {
-    dispatch(setIsCalendarLoading(true));
-    const response = await dataAPI.fetchSchedules(doctor.id, viewDate);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      const { data } = response;
-      const newData = data.map(item => {
-        return {
-          ...item,
-          start: moment(item.startTime),
-          end: moment(item.endTime),
-        };
-      });
-      localDispatch(actions.setAppointments(newData));
-
-      setTimeout(() => {
-        dispatch(toggleUpdateCalendarDoctorHeight());
-      }, 300);
-    }
-    dispatch(setIsCalendarLoading(false));
   };
 
   const appointmentsForHour = hour => {
@@ -128,12 +111,12 @@ const DoctorAppointmentsRow = ({
   const getCellWidth = () => {
     const element = document.getElementById('calendar-content');
     const elementRect = element.getBoundingClientRect();
-    return Math.abs((elementRect.width - 210) / fixHours.length);
+    return Math.abs((elementRect.width - 212) / fixHours.length);
   };
 
   return (
     <tr>
-      <td width={210}>
+      <td width={212}>
         <div className='doctor-row'>
           <div className='doctor-info-wrapper'>
             <div className='avatar-wrapper'>
@@ -283,6 +266,20 @@ DoctorAppointmentsRow.propTypes = {
   viewDate: PropTypes.instanceOf(Date),
   hours: PropTypes.arrayOf(PropTypes.string),
   hourWidth: PropTypes.number,
+  schedules: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      patient: PropTypes.shape({
+        id: PropTypes.number,
+        fullName: PropTypes.string,
+      }),
+      serviceName: PropTypes.string,
+      serviceColor: PropTypes.string,
+      start: PropTypes.object,
+      end: PropTypes.object,
+      scheduleStatus: PropTypes.string,
+    }),
+  ),
   doctor: PropTypes.shape({
     id: PropTypes.number,
     firstName: PropTypes.string,
