@@ -38,6 +38,7 @@ const reducerTypes = {
   setPatient: 'setPatient',
   setIsSaving: 'setIsSaving',
   setDiscount: 'setDiscount',
+  setEuroDebt: 'setEuroDebt',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -60,6 +61,8 @@ const reducer = (state, action) => {
     }
     case reducerTypes.setDiscount:
       return { ...state, discount: action.payload };
+    case reducerTypes.setEuroDebt:
+      return { ...state, euroDebt: action.payload };
     case reducerTypes.setPatient: {
       const {
         firstName,
@@ -68,6 +71,7 @@ const reducer = (state, action) => {
         email,
         phoneNumber,
         discount,
+        euroDebt,
       } = action.payload;
       return {
         ...state,
@@ -76,6 +80,7 @@ const reducer = (state, action) => {
         birthday,
         email,
         phoneNumber,
+        euroDebt,
         discount: String(discount || '0'),
         isPhoneValid: true,
       };
@@ -100,6 +105,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       isSaving,
       isPhoneValid,
       discount,
+      euroDebt,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -125,6 +131,8 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
         break;
       case 'discount':
         localDispatch(actions.setDiscount(newValue));
+      case 'euroDebt':
+        localDispatch(actions.setEuroDebt(newValue));
     }
   };
 
@@ -158,6 +166,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       email,
       phoneNumber,
       birthday,
+      euroDebt,
       discount: discount ? parseInt(discount) : 0,
     };
 
@@ -247,6 +256,16 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
           <InputGroup>
             <Form.Control
               value={discount}
+              type='number'
+              onChange={handleFormChange}
+            />
+          </InputGroup>
+        </Form.Group>
+        <Form.Group controlId='euroDebt'>
+          <Form.Label>{textForKey('Euro Debt')}</Form.Label>
+          <InputGroup>
+            <Form.Control
+              value={euroDebt}
               type='number'
               onChange={handleFormChange}
             />

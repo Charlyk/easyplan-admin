@@ -359,6 +359,7 @@ export default {
     'why schedule is canceled': 'Why schedule is canceled',
     'enter reason below': 'Enter reason below',
     'canceled reason': 'Canceled reason',
+    'euro debt': 'Euro Debt',
   },
   ro: {
     analytics: 'Analitică',
@@ -725,6 +726,7 @@ export default {
     'why schedule is canceled': 'De ce a fost anulată programarea',
     'enter reason below': 'Introduceți motivul mai jos',
     'canceled reason': 'Motivul anulării',
+    'euro debt': 'Datorie Euro',
   },
   ru: {
     analytics: 'Analytics',
@@ -1083,5 +1085,6 @@ export default {
     'why schedule is canceled': 'Why schedule is canceled',
     'enter reason below': 'Enter reason below',
     'canceled reason': 'Canceled reason',
+    'euro debt': 'Euro Debt',
   },
 };
