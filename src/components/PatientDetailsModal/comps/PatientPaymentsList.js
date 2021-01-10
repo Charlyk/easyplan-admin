@@ -78,6 +78,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
                   <TableCell>{textForKey('Date')}</TableCell>
                   <TableCell>{textForKey('Doctor')}</TableCell>
                   <TableCell>{textForKey('Clinic')}</TableCell>
+                  <TableCell>{textForKey('Discount')}</TableCell>
                   <TableCell align='right'>{textForKey('Amount')}</TableCell>
                   <TableCell align='right'>{textForKey('Status')}</TableCell>
                 </TableRow>
@@ -97,6 +98,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
                       <TableCell style={{ width: 140 }}>
                         {item.clinic.name}
                       </TableCell>
+                      <TableCell>{item.discount}%</TableCell>
                       <TableCell
                         align='right'
                         classes={{ root: 'amount-cell' }}

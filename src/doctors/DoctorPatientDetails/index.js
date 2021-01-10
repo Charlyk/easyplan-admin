@@ -29,7 +29,7 @@ import ToothView from './components/ToothView';
 
 import '../../components/PatientDetailsModal/styles.scss';
 import './styles.scss';
-import { Box, Paper, Typography } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 
 const areSameServices = (first, second) => {
   return (
@@ -316,6 +316,7 @@ const DoctorPatientDetails = () => {
         isBraces: item.isBraces,
         count: item.count,
         price: item.price,
+        isSelected: item.isSelected,
       })),
     };
 

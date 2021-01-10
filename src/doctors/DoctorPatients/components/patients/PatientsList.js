@@ -95,6 +95,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
         className={clsx(
           'schedule-item',
           schedule.scheduleStatus === 'OnSite' && 'upcoming',
+          schedule.isUrgent && 'urgent',
         )}
         style={{
           border: `${schedule.serviceColor} 1px solid`,
@@ -176,6 +177,7 @@ PatientsList.propTypes = {
       start: PropTypes.object,
       end: PropTypes.object,
       scheduleStatus: PropTypes.string,
+      isUrgent: PropTypes.bool,
     }),
   ),
 };

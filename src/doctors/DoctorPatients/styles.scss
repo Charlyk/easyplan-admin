@@ -150,6 +150,12 @@
     border-radius: .3rem;
     margin-bottom: .5rem;
 
+    &.urgent {
+      border-color: #ec3276 !important;
+      border-width: 2px !important;
+      box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);
+    }
+
     .patient-name {
       text-align: start;
       font-family: Inter, sans-serif;

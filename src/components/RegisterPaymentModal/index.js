@@ -12,6 +12,8 @@ import {
   toggleUpdateInvoices,
 } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
+import { Action } from '../../utils/constants';
+import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
@@ -75,15 +77,18 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     if (!isFormValid() || invoice == null) {
       return;
     }
-    setIsLoading(true);
-    const response = await dataAPI.registerPayment({
+    const requestBody = {
       invoiceId: invoice.id,
       amount: parseFloat(payAmount),
       discount: parseInt(discount),
-    });
+    };
+    setIsLoading(true);
+    const response = await dataAPI.registerPayment(requestBody);
     if (response.isError) {
       toast.error(textForKey(response.message));
+      logUserAction(Action.PayInvoice, JSON.stringify(response));
     } else {
+      logUserAction(Action.PayInvoice, JSON.stringify(requestBody));
       dispatch(toggleAppointmentsUpdate());
       dispatch(toggleUpdateInvoices());
       dispatch(togglePatientPaymentsUpdate());
@@ -128,7 +133,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
                   </td>
                   <td align='right'>
                     <Typography classes={{ root: 'service-price-label' }}>
-                      {service.price} MDL
+                      {service.price * service.count} MDL
                     </Typography>
                   </td>
                 </tr>

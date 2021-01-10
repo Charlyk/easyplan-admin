@@ -3,6 +3,14 @@
   flex-direction: column;
   align-items: center;
 
+  .service-check-box {
+    color: #3A83DC;
+
+    &.Mui-checked {
+      color: #3A83DC;
+    }
+  }
+
   .service-price-input {
     outline: none;
     border: #ced4da 1px solid;

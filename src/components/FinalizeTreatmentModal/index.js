@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, IconButton, Typography } from '@material-ui/core';
+import { Box, Checkbox, IconButton, Typography } from '@material-ui/core';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 
@@ -18,7 +18,8 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     setPlanServices(
       services.map(item => ({
         ...item,
-        count: 0,
+        count: 1,
+        isSelected: false,
         isBraces: item.serviceType === 'Braces',
       })),
     );
@@ -80,7 +81,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
         }
 
         let newCount = item.count - 1;
-        if (newCount < 0) newCount = 0;
+        if (newCount < 1) newCount = 1;
 
         return {
           ...item,
@@ -90,8 +91,35 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     );
   };
 
+  const handleServiceChecked = (event, isChecked) => {
+    const [serviceId, toothId, destination] = event.target.id.split('#');
+    const service = planServices.find(
+      item =>
+        item.id === parseInt(serviceId) &&
+        (item.toothId == null || item.toothId === toothId) &&
+        (item.destination == null || item.destination === destination),
+    );
+    setPlanServices(
+      planServices.map(item => {
+        if (
+          item.id !== service.id ||
+          item.toothId !== service.toothId ||
+          item.destination !== service.destination
+        ) {
+          return item;
+        }
+        return {
+          ...item,
+          isSelected: isChecked,
+        };
+      }),
+    );
+  };
+
   const totalPrice = sum(
-    planServices.map(item => parseFloat(item.price) * item.count),
+    planServices
+      .filter(item => item.isSelected)
+      .map(item => parseFloat(item.price) * item.count),
   );
 
   return (
@@ -132,6 +160,14 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
               >
                 <IconPlus fill='#3A83DC' />
               </IconButton>
+              <Checkbox
+                id={`${item.id}#${item.toothId}#${item.destination}`}
+                classes={{
+                  root: 'service-check-box',
+                }}
+                checked={item.isSelected}
+                onChange={handleServiceChecked}
+              />
             </Box>
           </div>
         ))}
