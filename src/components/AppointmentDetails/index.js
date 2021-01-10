@@ -119,7 +119,8 @@ const AppointmentDetails = ({
   const isFinished =
     schedule.scheduleStatus === 'CompletedNotPaid' ||
     schedule.scheduleStatus === 'CompletedPaid' ||
-    schedule.scheduleStatus === 'PartialPaid';
+    schedule.scheduleStatus === 'PartialPaid' ||
+    schedule.scheduleStatus === 'CompletedFree';
 
   const statusesList = (
     <Popper
