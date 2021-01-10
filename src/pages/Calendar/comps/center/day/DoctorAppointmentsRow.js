@@ -217,7 +217,8 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
         >
           {appointment.scheduleStatus === 'OnSite' && <DoneIcon />}
           {(appointment.scheduleStatus === 'CompletedPaid' ||
-            appointment.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
+            appointment.scheduleStatus === 'PartialPaid' ||
+            appointment.scheduleStatus === 'CompletedFree') && <DoneAllIcon />}
           {appointment.scheduleStatus === 'DidNotCome' && <IconClear />}
           {appointment.scheduleStatus === 'CompletedNotPaid' && <IconMoney />}
           {appointment.scheduleStatus === 'WaitingForPatient' && <IconClock />}

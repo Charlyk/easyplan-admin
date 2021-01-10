@@ -100,7 +100,8 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
           >
             {schedule.scheduleStatus === 'OnSite' && <DoneIcon />}
             {(schedule.scheduleStatus === 'CompletedPaid' ||
-              schedule.scheduleStatus === 'PartialPaid') && <DoneAllIcon />}
+              schedule.scheduleStatus === 'PartialPaid' ||
+              schedule.scheduleStatus === 'CompletedFree') && <DoneAllIcon />}
             {schedule.scheduleStatus === 'DidNotCome' && <IconClear />}
             {schedule.scheduleStatus === 'CompletedNotPaid' && <IconMoney />}
             {schedule.scheduleStatus === 'WaitingForPatient' && <IconClock />}
