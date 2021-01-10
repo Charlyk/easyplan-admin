@@ -12,6 +12,10 @@
   box-shadow: 0 1px 10px 10px #34344E1A;
   z-index: 10;
 
+  &.urgent {
+    border: #ec3276 1px solid;
+  }
+
   .statuses-popper-root {
     width: calc(100% - 2rem);
     z-index: 1000 !important;

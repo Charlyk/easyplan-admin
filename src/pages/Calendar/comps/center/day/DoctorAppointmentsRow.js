@@ -11,16 +11,11 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../assets/icons/iconAvatar';
-import { toggleUpdateCalendarDoctorHeight } from '../../../../../redux/actions/actions';
-import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { clinicServicesSelector } from '../../../../../redux/selectors/clinicSelector';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
-import { textForKey } from '../../../../../utils/localization';
 import '../../../styles.scss';
 
 const initialState = {
@@ -180,6 +175,10 @@ const DoctorAppointmentsRow = ({
 const AppointmentItem = ({ appointment, hidden, onSelect }) => {
   const shouldAnimate = appointment.scheduleStatus === 'WaitingForPatient';
 
+  if (appointment.isUrgent) {
+    console.log(appointment);
+  }
+
   const handleScheduleClick = () => {
     if (hidden) {
       return;
@@ -195,7 +194,11 @@ const AppointmentItem = ({ appointment, hidden, onSelect }) => {
         'HH:mm',
       )}>${appointment.end.format('HH:mm')}`}
       key={appointment.id}
-      className={clsx('appointment-item', shouldAnimate && 'upcoming')}
+      className={clsx(
+        'appointment-item',
+        shouldAnimate && 'upcoming',
+        appointment.isUrgent && 'urgent',
+      )}
       onClick={handleScheduleClick}
       style={{
         border: `${appointment.serviceColor} 1px solid`,
@@ -245,6 +248,7 @@ AppointmentItem.propTypes = {
       start: PropTypes.object,
       end: PropTypes.object,
       scheduleStatus: PropTypes.string,
+      isUrgent: PropTypes.bool,
     }),
   ),
   appointment: PropTypes.shape({
@@ -258,6 +262,7 @@ AppointmentItem.propTypes = {
     start: PropTypes.object,
     end: PropTypes.object,
     scheduleStatus: PropTypes.string,
+    isUrgent: PropTypes.bool,
   }),
 };
 

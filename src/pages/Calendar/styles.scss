@@ -860,6 +860,12 @@
     }
   }
 
+  &.urgent {
+    border-color: #ec3276 !important;
+    border-width: 2px !important;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);
+  }
+
   &.upcoming {
     animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
     animation-iteration-count: infinite;

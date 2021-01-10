@@ -82,6 +82,26 @@
   .form-group {
     margin-bottom: 0;
     margin-top: .5rem;
+
+    .form-check {
+      display: flex;
+      align-items: center;
+      user-select: none;
+
+      .form-check-label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: .85rem;
+        margin-bottom: 0;
+        color: #ec3276;
+      }
+
+      input {
+        margin-top: unset;
+        margin-bottom: unset;
+        color: #ec3276;
+      }
+    }
   }
 
   .form-label {

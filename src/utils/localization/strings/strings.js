@@ -360,6 +360,7 @@ export default {
     'enter reason below': 'Enter reason below',
     'canceled reason': 'Canceled reason',
     'euro debt': 'Euro Debt',
+    'is urgent': 'Is urgent!',
   },
   ro: {
     analytics: 'Analitică',
@@ -727,6 +728,7 @@ export default {
     'enter reason below': 'Introduceți motivul mai jos',
     'canceled reason': 'Motivul anulării',
     'euro debt': 'Datorie Euro',
+    'is urgent': 'Este urgent!',
   },
   ru: {
     analytics: 'Analytics',
@@ -1086,5 +1088,6 @@ export default {
     'enter reason below': 'Enter reason below',
     'canceled reason': 'Canceled reason',
     'euro debt': 'Euro Debt',
+    'is urgent': 'Is urgent!',
   },
 };

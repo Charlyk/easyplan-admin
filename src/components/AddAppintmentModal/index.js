@@ -44,6 +44,7 @@ const initialState = {
   appointmentHour: '',
   appointmentNote: '',
   appointmentStatus: 'Pending',
+  isUrgent: false,
   loading: { patients: false, services: false, doctors: false },
 };
 
@@ -78,6 +79,7 @@ const reducerTypes = {
   reset: 'reset',
   setPatientBirthday: 'setPatientBirthday',
   setPatientEmail: 'setPatientEmail',
+  setIsUrgent: 'setIsUrgent',
 };
 
 const reducerActions = {
@@ -89,6 +91,7 @@ const reducerActions = {
   setServices: payload => ({ type: reducerTypes.services, payload }),
   setHours: payload => ({ type: reducerTypes.setHours, payload }),
   setIsDoctorValid: payload => ({ type: reducerTypes.isDoctorValid, payload }),
+  setIsUrgent: payload => ({ type: reducerTypes.setIsUrgent, payload }),
   setIsFetchingHours: payload => ({
     type: reducerTypes.setIsFetchingHours,
     payload,
@@ -182,6 +185,8 @@ const reducer = (state, action) => {
       return { ...state, patients: action.payload };
     case reducerTypes.isPatientValid:
       return { ...state, isPatientValid: action.payload };
+    case reducerTypes.setIsUrgent:
+      return { ...state, isUrgent: action.payload };
     case reducerTypes.doctorsLoading:
       return {
         ...state,
@@ -324,6 +329,7 @@ const AddAppointmentModal = ({
       isDoctorValid,
       isServiceValid,
       isCreatingSchedule,
+      isUrgent,
     },
     localDispatch,
   ] = useReducer(reducer, { ...initialState });
@@ -533,6 +539,10 @@ const AddAppointmentModal = ({
     localDispatch(reducerActions.setAppointmentStatus(event.target.value));
   };
 
+  const handleIsUrgentChange = () => {
+    localDispatch(reducerActions.setIsUrgent(!isUrgent));
+  };
+
   const changePatientMode = () => {
     const isNew = !isNewPatient;
     localDispatch(reducerActions.setIsNewPatient(isNew));
@@ -580,6 +590,7 @@ const AddAppointmentModal = ({
       patientPhoneNumber,
       patientBirthday,
       patientEmail,
+      isUrgent,
       patientId: patient?.id,
       doctorId: doctor.id,
       serviceId: service.id,
@@ -845,6 +856,14 @@ const AddAppointmentModal = ({
           </Form.Group>
         </InputGroup.Append>
       </InputGroup>
+      <Form.Group controlId='isUrgent'>
+        <Form.Check
+          onChange={handleIsUrgentChange}
+          type='checkbox'
+          checked={isUrgent}
+          label={textForKey('Is urgent')}
+        />
+      </Form.Group>
       {schedule != null && (
         <Form.Group style={{ width: '100%' }}>
           <Form.Label>{textForKey('Status')}</Form.Label>

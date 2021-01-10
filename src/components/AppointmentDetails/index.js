@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
+import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -162,7 +163,12 @@ const AppointmentDetails = ({
   );
 
   return (
-    <div className='appointment-details-root'>
+    <div
+      className={clsx(
+        'appointment-details-root',
+        schedule.isUrgent && 'urgent',
+      )}
+    >
       <SingleInputModal
         onSubmit={handleCanceledReasonSubmitted}
         onClose={handleCloseCanceledReasonModal}
@@ -404,6 +410,7 @@ AppointmentDetails.propTypes = {
     end: PropTypes.object,
     scheduleStatus: PropTypes.string,
     canceledReason: PropTypes.string,
+    isUrgent: PropTypes.bool,
   }),
 };
 
