@@ -1,5 +1,6 @@
 import React from 'react';
 
+import IconFree from '@material-ui/icons/MoneyOff';
 import moment from 'moment';
 
 import IconAppointmentCalendar from '../assets/icons/iconAppointmentCalendar';
@@ -225,7 +226,7 @@ export const Statuses = [
     id: 'CompletedFree',
     name: textForKey('Completed. Free.'),
     color: '#00E987',
-    icon: <IconCreditCard />,
+    icon: <IconFree />,
     manual: false,
     isSchedule: true,
   },
