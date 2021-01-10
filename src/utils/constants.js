@@ -222,6 +222,14 @@ export const Statuses = [
     isSchedule: true,
   },
   {
+    id: 'CompletedFree',
+    name: textForKey('Completed. Free.'),
+    color: '#00E987',
+    icon: <IconCreditCard />,
+    manual: false,
+    isSchedule: true,
+  },
+  {
     id: 'PartialPaid',
     name: textForKey('Partial paid'),
     color: '#9cfacc',
