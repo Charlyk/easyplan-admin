@@ -1,0 +1,74 @@
+.sms-messages-root {
+  width: 100%;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    background: #FFFFFF;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: 4px;
+    padding: 1rem;
+    margin: .5rem 1rem 1rem;
+
+    .buttons-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .positive-button {
+      margin-left: .5rem;
+      flex: unset;
+      padding: .4rem 1rem;
+    }
+
+    &__tabs {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+
+  &__data-wrapper {
+    flex: 1;
+
+    thead > tr > td {
+      padding-left: .8rem;
+    }
+
+    thead > tr > th {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .8rem;
+      line-height: 24px;
+      padding: .2rem 1rem;
+      color: #A1A2C6;
+    }
+
+    tbody > tr {
+      margin-bottom: .3rem;
+      background: #FFFFFF;
+      box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+      border-radius: 4px;
+
+      td {
+        padding: .8rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        color: #34354C;
+      }
+    }
+
+    tfoot > tr > td {
+      padding-left: .8rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      color: #34354C;
+    }
+  }
+}

@@ -10,4 +10,5 @@ export default {
   '/analytics/general': textForKey('General statistics'),
   '/analytics/doctors': textForKey('Doctors statistics'),
   '/analytics/activity-logs': textForKey('Activity logs'),
+  '/messages': textForKey('Messages'),
 };

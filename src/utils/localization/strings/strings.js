@@ -362,6 +362,7 @@ export default {
     'euro debt': 'Euro Debt',
     'is urgent': 'Is urgent!',
     'completed. free.': 'Completed. Free.',
+    messages: 'Messages',
   },
   ro: {
     analytics: 'Analitică',
@@ -731,6 +732,7 @@ export default {
     'euro debt': 'Datorie Euro',
     'is urgent': 'Este urgent!',
     'completed. free.': 'Finisat. Gratuit.',
+    messages: 'Mesaje SMS',
   },
   ru: {
     analytics: 'Analytics',
@@ -1092,5 +1094,6 @@ export default {
     'euro debt': 'Euro Debt',
     'is urgent': 'Is urgent!',
     'completed. free.': 'Completed. Free.',
+    messages: 'Messages',
   },
 };

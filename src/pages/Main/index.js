@@ -39,6 +39,7 @@ import Calendar from '../Calendar';
 import NewPatients from '../NewPatients';
 import Services from '../Services';
 import Settings from '../Settings';
+import SMSMessages from '../SMSMessages';
 import Statistics from '../Statistics';
 import Users from '../Users';
 
@@ -169,6 +170,7 @@ const Main = () => {
               <Route path='/users' component={Users} />
               <Route path='/calendar' component={Calendar} />
               <Route path='/patients' component={NewPatients} />
+              <Route path='/messages' component={SMSMessages} />
               <Route path='/settings' component={Settings} />
             </Switch>
           </div>
