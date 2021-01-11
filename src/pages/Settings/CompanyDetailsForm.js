@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
+import upperFirst from 'lodash/upperFirst';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconLogoPlaceholder from '../../assets/icons/iconLogoPlaceholder';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import IconTrash from '../../assets/icons/iconTrash';
+import TelegramIcon from '../../assets/images/telegram_icon.png';
+import ViberIcon from '../../assets/images/viber_icon.png';
+import WhatsappIcon from '../../assets/images/whatsapp_icon.png';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import LoadingButton from '../../components/LoadingButton';
 import {
@@ -17,8 +22,12 @@ import { setClinic } from '../../redux/actions/clinicActions';
 import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { EmailRegex } from '../../utils/constants';
-import { uploadFileToAWS, urlToLambda } from '../../utils/helperFuncs';
+import { Action, EmailRegex } from '../../utils/constants';
+import {
+  logUserAction,
+  uploadFileToAWS,
+  urlToLambda,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 const CompanyDetailsForm = props => {
@@ -36,12 +45,18 @@ const CompanyDetailsForm = props => {
     email: '',
     website: '',
     phoneNumber: '',
+    telegramNumber: '',
+    viberNumber: '',
+    whatsappNumber: '',
     description: '',
     socialNetworks: '',
     workdays: [],
     currency: 'MDL',
     country: 'md',
-    isPhoneValid: true,
+    isValidPhoneNumber: true,
+    isValidViberNumber: true,
+    isValidTelegramNumber: true,
+    isValidWhatsappNumber: true,
     hasBrackets: false,
   });
 
@@ -68,12 +83,16 @@ const CompanyDetailsForm = props => {
     });
   };
 
-  const handlePhoneChange = (value, _, event) => {
+  const handlePhoneChange = phoneType => (value, _, event) => {
+    const validationFieldName = `isValid${upperFirst(phoneType)}`;
+    console.log(phoneType, validationFieldName);
     if (isSaving) return;
     setData({
       ...data,
-      phoneNumber: `+${value}`,
-      isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
+      [phoneType]: `+${value}`,
+      [validationFieldName]: !event.target?.classList.value.includes(
+        'invalid-number',
+      ),
     });
   };
 
@@ -104,7 +123,16 @@ const CompanyDetailsForm = props => {
       data.clinicName?.length > 3 &&
       (data.phoneNumber == null ||
         data.phoneNumber.length === 0 ||
-        data.isPhoneValid) &&
+        data.isValidPhoneNumber) &&
+      (data.telegramNumber == null ||
+        data.telegramNumber.length === 0 ||
+        data.isValidTelegramNumber) &&
+      (data.viberNumber == null ||
+        data.viberNumber.length === 0 ||
+        data.isValidViberNumber) &&
+      (data.whatsappNumber == null ||
+        data.whatsappNumber.length === 0 ||
+        data.isValidWhatsappNumber) &&
       (data.email == null ||
         data.email.length === 0 ||
         data.email.match(EmailRegex))
@@ -124,6 +152,9 @@ const CompanyDetailsForm = props => {
       clinicName: data.clinicName,
       email: data.email,
       phoneNumber: data.phoneNumber,
+      telegramNumber: data.telegramNumber,
+      viberNumber: data.viberNumber,
+      whatsappNumber: data.whatsappNumber,
       website: data.website,
       currency: data.currency,
       country: data.country,
@@ -133,12 +164,16 @@ const CompanyDetailsForm = props => {
       logoUrl,
     };
 
+    console.log(requestBody);
+
     const response = await dataAPI.updateClinic(requestBody);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
+      logUserAction(Action.EditClinic, JSON.stringify(requestBody));
       dispatch(setClinic(response.data));
       setData({ ...data, ...response.data });
+      toast.success(textForKey('Saved successfully'));
     }
     setIsSaving(false);
   };
@@ -206,7 +241,7 @@ const CompanyDetailsForm = props => {
             <Form.Label>{textForKey('Phone number')}</Form.Label>
             <InputGroup>
               <PhoneInput
-                onChange={handlePhoneChange}
+                onChange={handlePhoneChange('phoneNumber')}
                 value={data.phoneNumber || ''}
                 alwaysDefaultMask
                 countryCodeEditable={false}
@@ -221,6 +256,82 @@ const CompanyDetailsForm = props => {
               />
             </InputGroup>
           </Form.Group>
+          <Form.Group controlId='telegramNumber'>
+            <Form.Label>
+              <img
+                className='messenger-icon'
+                src={TelegramIcon}
+                alt='Telegram'
+              />
+              Telegram
+            </Form.Label>
+            <InputGroup>
+              <PhoneInput
+                onChange={handlePhoneChange('telegramNumber')}
+                value={data.telegramNumber || ''}
+                alwaysDefaultMask
+                countryCodeEditable={false}
+                country='md'
+                isValid={(inputNumber, country) => {
+                  const phoneNumber = inputNumber.replace(
+                    `${country.dialCode}`,
+                    '',
+                  );
+                  return phoneNumber.length === 0 || phoneNumber.length === 8;
+                }}
+              />
+            </InputGroup>
+          </Form.Group>
+          <Form.Group controlId='viberNumber'>
+            <Form.Label>
+              <img className='messenger-icon' src={ViberIcon} alt='Viber' />
+              Viber
+            </Form.Label>
+            <InputGroup>
+              <PhoneInput
+                onChange={handlePhoneChange('viberNumber')}
+                value={data.viberNumber || ''}
+                alwaysDefaultMask
+                countryCodeEditable={false}
+                country='md'
+                isValid={(inputNumber, country) => {
+                  const phoneNumber = inputNumber.replace(
+                    `${country.dialCode}`,
+                    '',
+                  );
+                  return phoneNumber.length === 0 || phoneNumber.length === 8;
+                }}
+              />
+            </InputGroup>
+          </Form.Group>
+          <Form.Group controlId='whatsappNumber'>
+            <Form.Label>
+              <img
+                className='messenger-icon'
+                src={WhatsappIcon}
+                alt='Whatsapp'
+              />
+              WhatsApp
+            </Form.Label>
+            <InputGroup>
+              <PhoneInput
+                onChange={handlePhoneChange('whatsappNumber')}
+                value={data.whatsappNumber || ''}
+                alwaysDefaultMask
+                countryCodeEditable={false}
+                country='md'
+                isValid={(inputNumber, country) => {
+                  const phoneNumber = inputNumber.replace(
+                    `${country.dialCode}`,
+                    '',
+                  );
+                  return phoneNumber.length === 0 || phoneNumber.length === 8;
+                }}
+              />
+            </InputGroup>
+          </Form.Group>
+        </div>
+        <div className='right'>
           <Form.Group controlId='website'>
             <Form.Label>{textForKey('Website')}</Form.Label>
             <InputGroup>
@@ -231,8 +342,6 @@ const CompanyDetailsForm = props => {
               />
             </InputGroup>
           </Form.Group>
-        </div>
-        <div className='right'>
           <Form.Group style={{ flexDirection: 'column' }} controlId='currency'>
             <Form.Label>{textForKey('Currency')}</Form.Label>
             <Form.Control
