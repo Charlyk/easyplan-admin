@@ -884,9 +884,7 @@
   }
 
   &.urgent {
-    border-color: #ec3276 !important;
-    border-width: 2px !important;
-    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 0 0 7px 1px #ec3276;
   }
 
   &.upcoming {
