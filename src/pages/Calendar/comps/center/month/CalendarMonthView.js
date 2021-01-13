@@ -21,6 +21,7 @@ import {
   logUserAction,
 } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
+import ScheduleItem from '../ScheduleItem';
 
 const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   const dispatch = useDispatch();
@@ -80,34 +81,12 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   };
 
   const renderSchedule = schedule => {
-    const shouldAnimate = dispatch(checkShouldAnimateSchedule(schedule));
     return (
-      <div
-        key={schedule.id}
-        className={clsx('appointment-item', shouldAnimate && 'upcoming')}
-        style={{
-          border: `1px solid ${schedule.serviceColor}`,
-          backgroundColor: `${schedule.serviceColor}1A`,
-        }}
-      >
-        <div className='name-and-status'>
-          <span className='service-name'>{schedule.patient.fullName}</span>
-          <div
-            className={clsx(
-              'status-icon',
-              schedule.scheduleStatus === 'DidNotCome' && 'negative',
-            )}
-          >
-            {schedule.scheduleStatus === 'OnSite' && <DoneIcon />}
-            {(schedule.scheduleStatus === 'CompletedPaid' ||
-              schedule.scheduleStatus === 'PartialPaid' ||
-              schedule.scheduleStatus === 'CompletedFree') && <DoneAllIcon />}
-            {schedule.scheduleStatus === 'DidNotCome' && <IconClear />}
-            {schedule.scheduleStatus === 'CompletedNotPaid' && <IconMoney />}
-            {schedule.scheduleStatus === 'WaitingForPatient' && <IconClock />}
-          </div>
-        </div>
-      </div>
+      <ScheduleItem
+        appointment={schedule}
+        hidden={schedule.isHidden}
+        showHour={false}
+      />
     );
   };
 
