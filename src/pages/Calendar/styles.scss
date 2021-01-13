@@ -788,8 +788,7 @@
   justify-content: center;
 
   &.urgent {
-    border: #ec3276 1px solid;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.5);
+    box-shadow: 0 0 7px 1px #ec3276;
   }
 
   &.upcoming {
