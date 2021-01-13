@@ -61,7 +61,11 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const handleAddService = service => () => {
     setPlanServices(
       planServices.map(item => {
-        if (item.id !== service.id) {
+        if (
+          item.id !== service.id ||
+          item.toothId !== service.toothId ||
+          item.destination !== service.destination
+        ) {
           return item;
         }
 
@@ -76,7 +80,11 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const handleRemoveService = service => () => {
     setPlanServices(
       planServices.map(item => {
-        if (item.id !== service.id) {
+        if (
+          item.id !== service.id ||
+          item.toothId !== service.toothId ||
+          item.destination !== service.destination
+        ) {
           return item;
         }
 
