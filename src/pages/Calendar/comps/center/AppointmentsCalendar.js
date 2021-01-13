@@ -20,7 +20,6 @@ import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
-import IconNext from '../../../../assets/icons/iconNext';
 import IconPlus from '../../../../assets/icons/iconPlus';
 import AppointmentDetails from '../../../../components/AppointmentDetails';
 import EasyTab from '../../../../components/EasyTab';

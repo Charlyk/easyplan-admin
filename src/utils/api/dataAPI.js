@@ -960,7 +960,8 @@ export default {
    * @param {string?} requestBody.patientPhoneNumber
    * @param {string} requestBody.doctorId
    * @param {string} requestBody.serviceId
-   * @param {string} requestBody.date
+   * @param {Date} requestBody.startDate
+   * @param {Date} requestBody.endDate
    * @param {string?} requestBody.note
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
