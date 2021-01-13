@@ -514,55 +514,6 @@ const DoctorPatientDetails = () => {
                 : textForKey('Finalize')}
             </LoadingButton>
           </div>
-          {/*<div className='available-services'>*/}
-          {/*  <span className='total-title'>{textForKey('Services')}</span>*/}
-          {/*  <Paper classes={{ root: 'available-services-paper' }}>*/}
-          {/*    {allServices.map(service => (*/}
-          {/*      <Form.Group key={service.id} controlId={service.id}>*/}
-          {/*        <Form.Check*/}
-          {/*          onChange={handleServiceChecked}*/}
-          {/*          type='checkbox'*/}
-          {/*          checked={selectedServices.some(*/}
-          {/*            item => item.id === service.id,*/}
-          {/*          )}*/}
-          {/*          label={service.name}*/}
-          {/*        />*/}
-          {/*      </Form.Group>*/}
-          {/*    ))}*/}
-          {/*  </Paper>*/}
-          {/*</div>*/}
-          {/*<div className='services-total'>*/}
-          {/*  <span className='total-title'>*/}
-          {/*    {textForKey('Provided services')}*/}
-          {/*  </span>*/}
-
-          {/*  {selectedServices.length === 0 && (*/}
-          {/*    <span className='no-data-label'>*/}
-          {/*      {textForKey('No selected services')}*/}
-          {/*    </span>*/}
-          {/*  )}*/}
-
-          {/*  <Paper classes={{ root: 'offered-services-paper' }}>*/}
-          {/*    <table style={{ width: '100%' }}>*/}
-          {/*      <tbody>*/}
-          {/*        {selectedServices*/}
-          {/*          .filter(it => !it.completed)*/}
-          {/*          .map(service => (*/}
-          {/*            <FinalServiceItem*/}
-          {/*              key={`${service.id}-${service.toothId}-${service.name}-${service.destination}`}*/}
-          {/*              service={service}*/}
-          {/*            />*/}
-          {/*          ))}*/}
-          {/*      </tbody>*/}
-          {/*    </table>*/}
-          {/*  </Paper>*/}
-
-          {/*  {selectedServices.length > 0 && (*/}
-          {/*    <span className='total-price'>*/}
-          {/*      {textForKey('Total')}: {getTotalPrice()} MDL*/}
-          {/*    </span>*/}
-          {/*  )}*/}
-          {/*</div>*/}
         </Paper>
       </div>
       <div className='right-container'>

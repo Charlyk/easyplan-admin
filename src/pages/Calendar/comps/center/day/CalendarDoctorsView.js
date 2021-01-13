@@ -170,7 +170,7 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
                     viewDate={viewDate}
                     hours={hours}
                     windowSize={windowSize}
-                    key={item.id}
+                    key={item.doctor.id}
                     schedules={item.schedules || []}
                     doctor={item.doctor}
                     hourWidth={hourWidth}

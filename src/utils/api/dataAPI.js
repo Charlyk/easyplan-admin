@@ -813,6 +813,9 @@ export default {
    * @param {string} requestBody.clinicName
    * @param {string|null} requestBody.email
    * @param {string|null} requestBody.phoneNumber
+   * @param {string|null} requestBody.telegramNumber
+   * @param {string|null} requestBody.viberNumber
+   * @param {string|null} requestBody.whatsappNumber
    * @param {string|null} requestBody.website
    * @param {string} requestBody.currency
    * @param {string} requestBody.country
@@ -957,7 +960,8 @@ export default {
    * @param {string?} requestBody.patientPhoneNumber
    * @param {string} requestBody.doctorId
    * @param {string} requestBody.serviceId
-   * @param {string} requestBody.date
+   * @param {Date} requestBody.startDate
+   * @param {Date} requestBody.endDate
    * @param {string?} requestBody.note
    * @return {Promise<{isError: boolean, message: *}|any>}
    */

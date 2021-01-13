@@ -4,16 +4,26 @@ import { Typography } from '@material-ui/core';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import {
+  AsyncTypeahead,
+  Menu,
+  MenuItem,
+  Typeahead,
+} from 'react-bootstrap-typeahead';
 import PhoneInput from 'react-phone-input-2';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
+import { clinicActiveDoctorsSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action, EmailRegex, ManualStatuses } from '../../utils/constants';
-import { logUserAction, urlToLambda } from '../../utils/helperFuncs';
+import { Action, EmailRegex } from '../../utils/constants';
+import {
+  generateReducerActions,
+  logUserAction,
+  urlToLambda,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
@@ -22,8 +32,10 @@ import './styles.scss';
 const initialState = {
   patient: null,
   patients: [],
+  availableStartTime: [],
+  availableEndTime: [],
+  availableTime: [],
   doctor: null,
-  doctors: [],
   service: null,
   services: [],
   hours: [],
@@ -42,6 +54,8 @@ const initialState = {
   appointmentDate: new Date(),
   scheduleId: null,
   appointmentHour: '',
+  startTime: '',
+  endTime: '',
   appointmentNote: '',
   appointmentStatus: 'Pending',
   isUrgent: false,
@@ -49,24 +63,23 @@ const initialState = {
 };
 
 const reducerTypes = {
-  patient: 'patient',
-  patients: 'patients',
-  doctor: 'doctor',
-  doctors: 'doctors',
-  service: 'service',
-  services: 'services',
+  setPatient: 'setPatient',
+  setPatients: 'setPatients',
+  setDoctor: 'setDoctor',
+  setService: 'setService',
+  setServices: 'setServices',
   setHours: 'setHours',
   setPatientFirstName: 'setPatientFirstName',
   setPatientLastName: 'setPatientLastName',
   setPatientPhoneNumber: 'setPatientPhoneNumber',
-  isPhoneValid: false,
+  setIsPhoneValid: 'SetIsPhoneValid',
   setIsNewPatient: 'setIsNewPatient',
-  patientsLoading: 'patientsLoading',
-  servicesLoading: 'servicesLoading',
-  doctorsLoading: 'doctorsLoading',
-  isPatientValid: 'isPatientValid',
-  isDoctorValid: 'isDoctorValid',
-  isServiceValid: 'isServiceValid',
+  setPatientsLoading: 'setPatientsLoading',
+  setServicesLoading: 'setServicesLoading',
+  setDoctorsLoading: 'setDoctorsLoading',
+  setIsPatientValid: 'setIsPatientValid',
+  setIsDoctorValid: 'setIsDoctorValid',
+  setIsServiceValid: 'setIsServiceValid',
   setIsFetchingHours: 'setIsFetchingHours',
   setShowDatePicker: 'setShowDatePicker',
   setShowBirthdayPicker: 'setShowBirthdayPicker',
@@ -76,137 +89,79 @@ const reducerTypes = {
   setAppointmentStatus: 'setAppointmentStatus',
   setIsCreatingSchedule: 'setIsCreatingSchedule',
   setSchedule: 'setSchedule',
-  reset: 'reset',
   setPatientBirthday: 'setPatientBirthday',
   setPatientEmail: 'setPatientEmail',
   setIsUrgent: 'setIsUrgent',
+  setStartTime: 'setStartTime',
+  setEndTime: 'setEndTime',
+  resetState: 'resetState',
+  setAvailableTime: 'setAvailableTime',
+  setAvailableStartTime: 'setAvailableStartTime',
+  setAvailableEndTime: 'setAvailableEndTime',
 };
 
-const reducerActions = {
-  setPatient: payload => ({ type: reducerTypes.patient, payload }),
-  setPatients: payload => ({ type: reducerTypes.patients, payload }),
-  setDoctor: payload => ({ type: reducerTypes.doctor, payload }),
-  setDoctors: payload => ({ type: reducerTypes.doctors, payload }),
-  setService: payload => ({ type: reducerTypes.service, payload }),
-  setServices: payload => ({ type: reducerTypes.services, payload }),
-  setHours: payload => ({ type: reducerTypes.setHours, payload }),
-  setIsDoctorValid: payload => ({ type: reducerTypes.isDoctorValid, payload }),
-  setIsUrgent: payload => ({ type: reducerTypes.setIsUrgent, payload }),
-  setIsFetchingHours: payload => ({
-    type: reducerTypes.setIsFetchingHours,
-    payload,
-  }),
-  setAppointmentDate: payload => ({
-    type: reducerTypes.setAppointmentDate,
-    payload,
-  }),
-  setIsServiceValid: payload => ({
-    type: reducerTypes.isServiceValid,
-    payload,
-  }),
-  setIsPatientValid: payload => ({
-    type: reducerTypes.isPatientValid,
-    payload,
-  }),
-  setPatientsLoading: payload => ({
-    type: reducerTypes.patientsLoading,
-    payload,
-  }),
-  setServicesLoading: payload => ({
-    type: reducerTypes.servicesLoading,
-    payload,
-  }),
-  setDoctorsLoading: payload => ({
-    type: reducerTypes.doctorsLoading,
-    payload,
-  }),
-  setShowDatePicker: payload => ({
-    type: reducerTypes.setShowDatePicker,
-    payload,
-  }),
-  setAppointmentNote: payload => ({
-    type: reducerTypes.setAppointmentNote,
-    payload,
-  }),
-  setAppointmentHour: payload => ({
-    type: reducerTypes.setAppointmentHour,
-    payload,
-  }),
-  setIsCreatingSchedule: payload => ({
-    type: reducerTypes.setIsCreatingSchedule,
-    payload,
-  }),
-  setSchedule: payload => ({ type: reducerTypes.setSchedule, payload }),
-  setAppointmentStatus: payload => ({
-    type: reducerTypes.setAppointmentStatus,
-    payload,
-  }),
-  resetState: () => ({ type: reducerTypes.reset }),
-  setIsNewPatient: payload => ({ type: reducerTypes.setIsNewPatient, payload }),
-  setPatientFirstName: payload => ({
-    type: reducerTypes.setPatientFirstName,
-    payload,
-  }),
-  setPatientLastName: payload => ({
-    type: reducerTypes.setPatientLastName,
-    payload,
-  }),
-  setPatientBirthday: payload => ({
-    type: reducerTypes.setPatientBirthday,
-    payload,
-  }),
-  setPatientEmail: payload => ({ type: reducerTypes.setPatientEmail, payload }),
-  /**
-   * Update patient phone
-   * @param {{phoneNumber: string, isPhoneValid: boolean}} payload
-   * @return {{payload: *, type: string}}
-   */
-  setPatientPhoneNumber: payload => ({
-    type: reducerTypes.setPatientPhoneNumber,
-    payload,
-  }),
-  setShowBirthdayPicker: payload => ({
-    type: reducerTypes.setShowBirthdayPicker,
-    payload,
-  }),
-};
+const actions = generateReducerActions(reducerTypes);
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case reducerTypes.patient:
-      return { ...state, patient: action.payload };
-    case reducerTypes.services:
+    case reducerTypes.setPatient:
+      return {
+        ...state,
+        patient: action.payload,
+        isPatientValid: action.payload != null,
+      };
+    case reducerTypes.setServices:
       return { ...state, services: action.payload };
-    case reducerTypes.doctor:
-      return { ...state, doctor: action.payload };
-    case reducerTypes.doctors:
-      return { ...state, doctors: action.payload };
-    case reducerTypes.patients:
+    case reducerTypes.setDoctor:
+      return {
+        ...state,
+        doctor: action.payload,
+        isDoctorValid: action.payload != null,
+      };
+    case reducerTypes.setPatients:
       return { ...state, patients: action.payload };
-    case reducerTypes.isPatientValid:
+    case reducerTypes.setIsPatientValid:
       return { ...state, isPatientValid: action.payload };
     case reducerTypes.setIsUrgent:
       return { ...state, isUrgent: action.payload };
-    case reducerTypes.doctorsLoading:
+    case reducerTypes.setStartTime: {
+      const startTime = action.payload;
+      const availableEndTime = state.availableTime.filter(
+        item => item > startTime,
+      );
+      return { ...state, startTime, availableEndTime };
+    }
+    case reducerTypes.setEndTime: {
+      const endTime = action.payload;
+      const availableStartTime = state.availableTime.filter(
+        item => item < endTime,
+      );
+      return { ...state, endTime, availableStartTime };
+    }
+    case reducerTypes.setDoctorsLoading:
       return {
         ...state,
         loading: { ...state.loading, doctors: action.payload },
       };
-    case reducerTypes.servicesLoading:
+    case reducerTypes.setServicesLoading:
       return {
         ...state,
         loading: { ...state.loading, services: action.payload },
       };
-    case reducerTypes.patientsLoading:
+    case reducerTypes.setPatientsLoading:
       return {
         ...state,
         loading: { ...state.loading, patients: action.payload },
       };
-    case reducerTypes.isDoctorValid:
+    case reducerTypes.setIsDoctorValid:
       return { ...state, isDoctorValid: action.payload };
-    case reducerTypes.service:
-      return { ...state, service: action.payload };
-    case reducerTypes.isServiceValid:
+    case reducerTypes.setService:
+      return {
+        ...state,
+        service: action.payload,
+        isServiceValid: action.payload != null,
+      };
+    case reducerTypes.setIsServiceValid:
       return { ...state, isServiceValid: action.payload };
     case reducerTypes.setShowDatePicker:
       return { ...state, showDatePicker: action.payload };
@@ -230,7 +185,8 @@ const reducer = (state, action) => {
       return { ...state, isCreatingSchedule: action.payload };
     case reducerTypes.setSchedule: {
       const schedule = action.payload;
-      const scheduleDate = moment(schedule.startTime);
+      const scheduleStartDate = moment(schedule.startTime);
+      const scheduleEndDate = moment(schedule.endTime);
       return {
         ...state,
         scheduleId: schedule.id,
@@ -238,8 +194,9 @@ const reducer = (state, action) => {
         doctor: schedule.doctor,
         service: schedule.service,
         appointmentNote: schedule.noteText,
-        appointmentDate: scheduleDate.toDate(),
-        appointmentHour: scheduleDate.format('HH:mm'),
+        appointmentDate: scheduleStartDate.toDate(),
+        startTime: scheduleStartDate.format('HH:mm'),
+        endTime: scheduleEndDate.format('HH:mm'),
         appointmentStatus: schedule.scheduleStatus,
         isPatientValid: true,
         isDoctorValid: true,
@@ -284,8 +241,35 @@ const reducer = (state, action) => {
         ...state,
         showBirthdayPicker: action.payload,
       };
+    case reducerTypes.setAvailableTime: {
+      const availableTime = action.payload;
+      const availableStartTime = action.payload;
+      const availableEndTime = action.payload.filter(
+        item => action.payload?.length > 0 && item > action.payload[0],
+      );
+      return {
+        ...state,
+        availableTime,
+        availableStartTime,
+        availableEndTime,
+        startTime:
+          availableStartTime?.length > 0 && state.startTime.length === 0
+            ? availableStartTime[0]
+            : state.startTime,
+        endTime:
+          availableEndTime?.length > 0 && state.endTime.length === 0
+            ? availableEndTime[0]
+            : state.endTime,
+      };
+    }
+    case reducerTypes.setAvailableStartTime:
+      return { ...state, availableStartTime: action.payload };
+    case reducerTypes.setAvailableEndTime:
+      return { ...state, availableEndTime: action.payload };
     case reducerTypes.reset:
       return initialState;
+    default:
+      return state;
   }
 };
 
@@ -300,16 +284,15 @@ const AddAppointmentModal = ({
   const dispatch = useDispatch();
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
+  const doctors = useSelector(clinicActiveDoctorsSelector);
   const [
     {
       patient,
       patients,
       doctor,
-      doctors,
       service,
       services,
       loading,
-      hours,
       scheduleId,
       patientLastName,
       patientFirstName,
@@ -319,7 +302,6 @@ const AddAppointmentModal = ({
       isPhoneValid,
       isNewPatient,
       appointmentDate,
-      appointmentHour,
       appointmentNote,
       appointmentStatus,
       showDatePicker,
@@ -330,9 +312,13 @@ const AddAppointmentModal = ({
       isServiceValid,
       isCreatingSchedule,
       isUrgent,
+      startTime,
+      endTime,
+      availableStartTime,
+      availableEndTime,
     },
     localDispatch,
-  ] = useReducer(reducer, { ...initialState });
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (schedule != null) {
@@ -342,39 +328,37 @@ const AddAppointmentModal = ({
 
   useEffect(() => {
     if (!open) {
-      localDispatch(reducerActions.resetState());
+      localDispatch(actions.resetState());
     }
   }, [open]);
 
   useEffect(() => {
     if (selectedDoctor != null) {
       localDispatch(
-        reducerActions.setDoctor({
+        actions.setDoctor({
           ...selectedDoctor,
           fullName: `${selectedDoctor.firstName} ${selectedDoctor.lastName}`,
         }),
       );
-      localDispatch(reducerActions.setIsDoctorValid(true));
     }
 
     if (date != null) {
-      localDispatch(reducerActions.setAppointmentDate(date));
+      localDispatch(actions.setAppointmentDate(date));
     }
 
     if (selectedPatient != null) {
       localDispatch(
-        reducerActions.setPatient({
+        actions.setPatient({
           ...selectedPatient,
           fullName: getLabelKey(selectedPatient),
         }),
       );
-      localDispatch(reducerActions.setIsPatientValid(true));
     }
   }, [selectedDoctor, date, selectedPatient]);
 
   useEffect(() => {
     fetchAvailableHours();
-  }, [doctor, schedule, service, appointmentDate]);
+  }, [doctor, service, appointmentDate]);
 
   const fetchScheduleDetails = async () => {
     if (schedule == null) {
@@ -384,15 +368,16 @@ const AddAppointmentModal = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      localDispatch(reducerActions.setSchedule(response.data));
+      localDispatch(actions.setSchedule(response.data));
     }
   };
 
   const fetchAvailableHours = async () => {
     if (doctor == null || service == null || appointmentDate == null) {
+      console.log(doctor, service, appointmentDate);
       return;
     }
-    localDispatch(reducerActions.setIsFetchingHours(true));
+    localDispatch(actions.setIsFetchingHours(true));
     const response = await dataAPI.fetchAvailableTime(
       scheduleId,
       doctor.id,
@@ -400,16 +385,11 @@ const AddAppointmentModal = ({
       appointmentDate,
     );
     if (response.isError) {
-      console.log(response.message);
+      toast.error(textForKey(response.message));
     } else {
-      localDispatch(reducerActions.setHours(response.data));
-      if (response.data.length > 0 && schedule == null) {
-        localDispatch(reducerActions.setAppointmentHour(response.data[0]));
-      } else if (schedule == null) {
-        localDispatch(reducerActions.setAppointmentHour(''));
-      }
+      localDispatch(actions.setAvailableTime(response.data));
     }
-    localDispatch(reducerActions.setIsFetchingHours(false));
+    localDispatch(actions.setIsFetchingHours(false));
   };
 
   const handlePatientChange = selectedPatients => {
@@ -417,37 +397,29 @@ const AddAppointmentModal = ({
       if (selectedPatients[0].customOption) {
         const { fullName } = selectedPatients[0];
         localDispatch(
-          reducerActions.setIsPatientValid(
-            fullName.replace('+373', '').length === 8,
-          ),
+          actions.setIsPatientValid(fullName.replace('+373', '').length === 8),
         );
       } else {
-        localDispatch(reducerActions.setPatient(selectedPatients[0]));
-        localDispatch(reducerActions.setIsPatientValid(true));
+        localDispatch(actions.setPatient(selectedPatients[0]));
       }
     } else {
-      localDispatch(reducerActions.setPatient(null));
-      localDispatch(reducerActions.setIsPatientValid(false));
+      localDispatch(actions.setPatient(null));
     }
   };
 
   const handleDoctorChange = selectedDoctors => {
     if (selectedDoctors.length > 0) {
-      localDispatch(reducerActions.setDoctor(selectedDoctors[0]));
-      localDispatch(reducerActions.setIsDoctorValid(true));
+      localDispatch(actions.setDoctor(selectedDoctors[0]));
     } else {
-      localDispatch(reducerActions.setDoctor(null));
-      localDispatch(reducerActions.setIsDoctorValid(false));
+      localDispatch(actions.setDoctor(null));
     }
   };
 
   const handleServiceChange = selectedServices => {
     if (selectedServices.length > 0) {
-      localDispatch(reducerActions.setService(selectedServices[0]));
-      localDispatch(reducerActions.setIsServiceValid(true));
+      localDispatch(actions.setService(selectedServices[0]));
     } else {
-      localDispatch(reducerActions.setService(null));
-      localDispatch(reducerActions.setIsServiceValid(false));
+      localDispatch(actions.setService(null));
     }
   };
 
@@ -458,7 +430,7 @@ const AddAppointmentModal = ({
   };
 
   const handlePatientSearch = async query => {
-    localDispatch(reducerActions.setPatientsLoading(true));
+    localDispatch(actions.setPatientsLoading(true));
     const response = await dataAPI.searchPatients(query);
     if (response.isError) {
       toast.error(textForKey(response.message));
@@ -467,88 +439,77 @@ const AddAppointmentModal = ({
         ...item,
         fullName: getLabelKey(item),
       }));
-      localDispatch(reducerActions.setPatients(patients));
+      localDispatch(actions.setPatients(patients));
     }
-    localDispatch(reducerActions.setPatientsLoading(false));
-  };
-
-  const handleDoctorSearch = async query => {
-    localDispatch(reducerActions.setDoctorsLoading(true));
-    const response = await dataAPI.searchDoctors(query);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      const doctors = response.data.map(item => ({
-        ...item,
-        fullName: getLabelKey(item),
-      }));
-      localDispatch(reducerActions.setDoctors(doctors));
-    }
-    localDispatch(reducerActions.setDoctorsLoading(false));
+    localDispatch(actions.setPatientsLoading(false));
   };
 
   const handleServiceSearch = async query => {
-    localDispatch(reducerActions.setServicesLoading(true));
+    localDispatch(actions.setServicesLoading(true));
     const response = await dataAPI.searchServices(query, doctor.id);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      localDispatch(reducerActions.setServices(response.data));
+      localDispatch(actions.setServices(response.data));
     }
-    localDispatch(reducerActions.setServicesLoading(false));
+    localDispatch(actions.setServicesLoading(false));
   };
 
   const handleDateFieldClick = () => {
-    localDispatch(reducerActions.setShowDatePicker(true));
+    localDispatch(actions.setShowDatePicker(true));
   };
 
   const handleCloseDatePicker = () => {
-    localDispatch(reducerActions.setShowDatePicker(false));
+    localDispatch(actions.setShowDatePicker(false));
   };
 
   const handleDateChange = newDate => {
-    localDispatch(reducerActions.setAppointmentDate(newDate));
+    localDispatch(actions.setAppointmentDate(newDate));
   };
 
   const handleBirthdayChange = newDate => {
-    localDispatch(reducerActions.setPatientBirthday(newDate));
+    localDispatch(actions.setPatientBirthday(newDate));
   };
 
   const handleEmailChange = event => {
     const newValue = event.target.value;
-    localDispatch(reducerActions.setPatientEmail(newValue));
+    localDispatch(actions.setPatientEmail(newValue));
   };
 
   const handleCloseBirthdayPicker = () => {
-    localDispatch(reducerActions.setShowBirthdayPicker(false));
+    localDispatch(actions.setShowBirthdayPicker(false));
   };
 
   const handleOpenBirthdayPicker = () => {
-    localDispatch(reducerActions.setShowBirthdayPicker(true));
+    localDispatch(actions.setShowBirthdayPicker(true));
   };
 
   const handleHourChange = event => {
-    localDispatch(reducerActions.setAppointmentHour(event.target.value));
+    const targetId = event.target.id;
+    switch (targetId) {
+      case 'startTime':
+        localDispatch(actions.setStartTime(event.target.value));
+        break;
+      case 'endTime':
+        localDispatch(actions.setEndTime(event.target.value));
+        break;
+    }
   };
 
   const handleNoteChange = event => {
-    localDispatch(reducerActions.setAppointmentNote(event.target.value));
-  };
-
-  const handleStatusChange = event => {
-    localDispatch(reducerActions.setAppointmentStatus(event.target.value));
+    localDispatch(actions.setAppointmentNote(event.target.value));
   };
 
   const handleIsUrgentChange = () => {
-    localDispatch(reducerActions.setIsUrgent(!isUrgent));
+    localDispatch(actions.setIsUrgent(!isUrgent));
   };
 
   const changePatientMode = () => {
     const isNew = !isNewPatient;
-    localDispatch(reducerActions.setIsNewPatient(isNew));
+    localDispatch(actions.setIsNewPatient(isNew));
     if (isNew) {
-      localDispatch(reducerActions.setPatient(null));
-      localDispatch(reducerActions.setIsPatientValid(false));
+      localDispatch(actions.setPatient(null));
+      localDispatch(actions.setIsPatientValid(false));
     }
   };
 
@@ -556,10 +517,10 @@ const AddAppointmentModal = ({
     const newValue = event.target.value;
     switch (event.target.id) {
       case 'patientFirstName':
-        localDispatch(reducerActions.setPatientFirstName(newValue));
+        localDispatch(actions.setPatientFirstName(newValue));
         break;
       case 'patientLastName':
-        localDispatch(reducerActions.setPatientLastName(newValue));
+        localDispatch(actions.setPatientLastName(newValue));
         break;
     }
   };
@@ -569,8 +530,8 @@ const AddAppointmentModal = ({
       isDoctorValid &&
       (isNewPatient || isPatientValid) &&
       isServiceValid &&
-      appointmentDate != null &&
-      appointmentHour.length > 0 &&
+      startTime?.length > 0 &&
+      endTime?.length > 0 &&
       (!isNewPatient || isPhoneValid)
     );
   };
@@ -579,11 +540,18 @@ const AddAppointmentModal = ({
     if (!isFormValid()) {
       return;
     }
-    localDispatch(reducerActions.setIsCreatingSchedule(true));
-    const [hour, minute] = appointmentHour.split(':');
-    const date = moment(appointmentDate);
-    date.set({ hour: parseInt(hour), minute: parseInt(minute) });
-    const scheduleDate = date.format();
+    localDispatch(actions.setIsCreatingSchedule(true));
+    // set start date
+    const [startHour, startMinute] = startTime.split(':');
+    const startDate = moment(appointmentDate);
+    startDate.set({ hour: parseInt(startHour), minute: parseInt(startMinute) });
+
+    // set end date
+    const [endHour, endMinute] = endTime.split(':');
+    const endDate = moment(appointmentDate);
+    endDate.set({ hour: parseInt(endHour), minute: parseInt(endMinute) });
+
+    // build request body
     const requestBody = {
       patientFirstName,
       patientLastName,
@@ -594,12 +562,16 @@ const AddAppointmentModal = ({
       patientId: patient?.id,
       doctorId: doctor.id,
       serviceId: service.id,
-      date: scheduleDate,
+      startDate: startDate.toDate(),
+      endDate: endDate.toDate(),
       note: appointmentNote,
       status: appointmentStatus,
       scheduleId: scheduleId,
     };
+
+    // perform the request
     const response = await dataAPI.createNewSchedule(requestBody);
+
     // log user action
     if (schedule != null) {
       logUserAction(
@@ -619,16 +591,16 @@ const AddAppointmentModal = ({
     // update states
     if (response.isError) {
       toast.error(textForKey(response.message));
-      localDispatch(reducerActions.setIsCreatingSchedule(false));
     } else {
       onClose();
       dispatch(toggleAppointmentsUpdate());
     }
+    localDispatch(actions.setIsCreatingSchedule(false));
   };
 
   const handlePhoneChange = (value, data, event) => {
     localDispatch(
-      reducerActions.setPatientPhoneNumber({
+      actions.setPatientPhoneNumber({
         phoneNumber: `+${value}`,
         isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
       }),
@@ -638,7 +610,7 @@ const AddAppointmentModal = ({
   const datePicker = (
     <EasyDatePicker
       minDate={new Date()}
-      open={showDatePicker}
+      open={Boolean(showDatePicker)}
       pickerAnchor={datePickerAnchor.current}
       onChange={handleDateChange}
       selectedDate={appointmentDate}
@@ -648,7 +620,7 @@ const AddAppointmentModal = ({
 
   const birthdayPicker = (
     <EasyDatePicker
-      open={showBirthdayPicker}
+      open={Boolean(showBirthdayPicker)}
       pickerAnchor={birthdayPickerAnchor.current}
       onChange={handleBirthdayChange}
       onClose={handleCloseBirthdayPicker}
@@ -791,19 +763,28 @@ const AddAppointmentModal = ({
       </div>
       <Form.Group controlId='doctor'>
         <Form.Label>{textForKey('Doctor')}</Form.Label>
-        <AsyncTypeahead
+        <Typeahead
           isValid={isDoctorValid}
           placeholder={textForKey('Enter doctor name or phone')}
           id='doctors'
           emptyLabel={textForKey('No results...')}
           searchText={textForKey('Searching...')}
-          isLoading={loading.doctors}
-          filterBy={['firstName', 'lastName', 'phoneNumber']}
+          filterBy={['firstName', 'lastName']}
           labelKey='fullName'
-          onSearch={handleDoctorSearch}
           options={doctors}
           selected={doctor ? [doctor] : []}
           onChange={handleDoctorChange}
+          renderMenu={(results, menuProps) => {
+            return (
+              <Menu {...menuProps}>
+                {results.map((result, index) => (
+                  <MenuItem key={result.id} option={result} position={index}>
+                    {result.fullName}
+                  </MenuItem>
+                ))}
+              </Menu>
+            );
+          }}
         />
       </Form.Group>
       <Form.Group controlId='service'>
@@ -824,37 +805,54 @@ const AddAppointmentModal = ({
           onChange={handleServiceChange}
         />
       </Form.Group>
-      <InputGroup className='date-and-time-group'>
-        <Form.Group className='date-form-group'>
-          <Form.Label>{textForKey('Date')}</Form.Label>
+      <Form.Group className='date-form-group'>
+        <Form.Label>{textForKey('Date')}</Form.Label>
+        <Form.Control
+          value={moment(appointmentDate).format('DD MMMM YYYY')}
+          ref={datePickerAnchor}
+          readOnly
+          onClick={handleDateFieldClick}
+        />
+      </Form.Group>
+      <InputGroup>
+        <Form.Group style={{ width: '50%' }} controlId='startTime'>
+          <Form.Label>{textForKey('Start time')}</Form.Label>
           <Form.Control
-            value={moment(appointmentDate).format('DD MMMM YYYY')}
-            ref={datePickerAnchor}
-            readOnly
-            onClick={handleDateFieldClick}
-          />
+            as='select'
+            onChange={handleHourChange}
+            value={startTime}
+            disabled={isFetchingHours || availableStartTime.length === 0}
+            custom
+          >
+            {availableStartTime.map(item => (
+              <option key={`start-${item}`} value={item}>
+                {item}
+              </option>
+            ))}
+            {availableStartTime.length === 0 && (
+              <option value={-1}>{textForKey('No available time')}</option>
+            )}
+          </Form.Control>
         </Form.Group>
-        <InputGroup.Append className='date-append'>
-          <Form.Group style={{ width: '100%' }}>
-            <Form.Label>{textForKey('Time')}</Form.Label>
-            <Form.Control
-              as='select'
-              onChange={handleHourChange}
-              value={appointmentHour}
-              disabled={isFetchingHours || hours.length === 0}
-              custom
-            >
-              {hours.map(item => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-              {hours.length === 0 && (
-                <option value={-1}>{textForKey('No available time')}</option>
-              )}
-            </Form.Control>
-          </Form.Group>
-        </InputGroup.Append>
+        <Form.Group style={{ width: '50%' }} controlId='endTime'>
+          <Form.Label>{textForKey('End time')}</Form.Label>
+          <Form.Control
+            as='select'
+            onChange={handleHourChange}
+            value={endTime}
+            disabled={isFetchingHours || availableEndTime.length === 0}
+            custom
+          >
+            {availableEndTime.map(item => (
+              <option key={`end-${item}`} value={item}>
+                {item}
+              </option>
+            ))}
+            {availableEndTime.length === 0 && (
+              <option value={-1}>{textForKey('No available time')}</option>
+            )}
+          </Form.Control>
+        </Form.Group>
       </InputGroup>
       <Form.Group controlId='isUrgent'>
         <Form.Check
@@ -864,23 +862,6 @@ const AddAppointmentModal = ({
           label={textForKey('Is urgent')}
         />
       </Form.Group>
-      {schedule != null && (
-        <Form.Group style={{ width: '100%' }}>
-          <Form.Label>{textForKey('Status')}</Form.Label>
-          <Form.Control
-            as='select'
-            onChange={handleStatusChange}
-            value={appointmentStatus}
-            custom
-          >
-            {ManualStatuses.map(status => (
-              <option key={status.id} value={status.id}>
-                {status.name}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-      )}
       <Form.Group controlId='description'>
         <Form.Label>{textForKey('Notes')}</Form.Label>
         <InputGroup>
@@ -907,13 +888,13 @@ AddAppointmentModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   patient: PropTypes.object,
   schedule: PropTypes.shape({
-    id: PropTypes.string,
-    patientId: PropTypes.string,
+    id: PropTypes.number,
+    patientId: PropTypes.number,
     patientName: PropTypes.string,
     patientPhone: PropTypes.string,
-    doctorId: PropTypes.string,
+    doctorId: PropTypes.number,
     doctorName: PropTypes.string,
-    serviceId: PropTypes.string,
+    serviceId: PropTypes.number,
     serviceName: PropTypes.string,
     serviceColor: PropTypes.string,
     serviceDuration: PropTypes.string,

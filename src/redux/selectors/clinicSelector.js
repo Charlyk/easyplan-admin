@@ -21,7 +21,13 @@ export const clinicDoctorsSelector = createSelector(
 
 export const clinicActiveDoctorsSelector = createSelector(
   clinicDoctorsSelector,
-  doctors => doctors.filter(item => !item.isHidden),
+  doctors =>
+    doctors
+      .filter(item => !item.isHidden)
+      .map(item => ({
+        ...item,
+        fullName: `${item.firstName} ${item.lastName}`,
+      })),
 );
 
 export const clinicServicesSelector = createSelector(

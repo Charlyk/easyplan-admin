@@ -147,6 +147,13 @@
   max-height: 100%;
   overflow-y: scroll;
 
+  .messenger-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: .5rem;
+    margin-bottom: .2rem;
+  }
+
   .data-wrapper {
     width: 100%;
     display: flex;
