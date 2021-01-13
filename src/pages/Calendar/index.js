@@ -229,7 +229,7 @@ const Calendar = () => {
     dispatch(
       setAppointmentModal({
         open: true,
-        doctor: selectedDoctor,
+        doctor: viewMode === 'day' ? null : selectedDoctor,
         date: viewDate,
       }),
     );

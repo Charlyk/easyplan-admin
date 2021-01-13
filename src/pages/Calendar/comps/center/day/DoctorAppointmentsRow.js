@@ -47,9 +47,7 @@ const DoctorAppointmentsRow = ({
   viewDate,
   onScheduleSelect,
 }) => {
-  const dispatch = useDispatch();
   const clinicServices = useSelector(clinicServicesSelector);
-  const updateAppointments = useSelector(updateAppointmentsSelector);
   const sizeDifference = useRef(0);
   const [{ appointments, previousHourWidth }, localDispatch] = useReducer(
     reducer,
@@ -90,7 +88,6 @@ const DoctorAppointmentsRow = ({
     let newItems = appointments.filter(item => {
       return item.start.hour() === hourTime.hour();
     });
-
     return sortBy(newItems, it => it.start);
   };
 
@@ -120,10 +117,10 @@ const DoctorAppointmentsRow = ({
             <Tooltip
               title={
                 <Box display='flex' flexDirection='column' padding='0.5rem'>
-                  {doctorServices().map(item => (
+                  {doctorServices().map((item, index) => (
                     <Typography
                       classes={{ root: 'calendar-service-tooltip-label' }}
-                      key={item}
+                      key={`${item}-${index}`}
                     >
                       - {item}
                     </Typography>
@@ -143,12 +140,12 @@ const DoctorAppointmentsRow = ({
           </div>
         </div>
       </td>
-      {fixHours.map(hour => {
+      {fixHours.map((hour, index) => {
         return (
           <td
             width={getCellWidth()}
             style={{ maxWidth: getCellWidth() }}
-            key={hour}
+            key={`${hour}-${index}`}
             id={hour}
             className='appointment-cell'
             valign='top'
@@ -158,7 +155,7 @@ const DoctorAppointmentsRow = ({
                 hidden={item.hidden}
                 zIndex={index + 1}
                 onSelect={onScheduleSelect}
-                key={item.id}
+                key={`${item.id}`}
                 getPosition={getAppointmentPosition}
                 appointments={appointments}
                 appointment={item}
