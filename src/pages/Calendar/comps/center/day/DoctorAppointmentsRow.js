@@ -1,22 +1,16 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Box, Tooltip, Typography } from '@material-ui/core';
-import IconClock from '@material-ui/icons/AccessTime';
-import IconMoney from '@material-ui/icons/AttachMoney';
-import IconClear from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import IconAvatar from '../../../../../assets/icons/iconAvatar';
 import { clinicServicesSelector } from '../../../../../redux/selectors/clinicSelector';
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import '../../../styles.scss';
+import ScheduleItem from '../ScheduleItem';
 
 const initialState = {
   appointments: [],
@@ -151,7 +145,7 @@ const DoctorAppointmentsRow = ({
             valign='top'
           >
             {appointmentsForHour(hour).map((item, index) => (
-              <AppointmentItem
+              <ScheduleItem
                 hidden={item.hidden}
                 zIndex={index + 1}
                 onSelect={onScheduleSelect}
@@ -167,101 +161,6 @@ const DoctorAppointmentsRow = ({
       })}
     </tr>
   );
-};
-
-const AppointmentItem = ({ appointment, hidden, onSelect }) => {
-  const shouldAnimate = appointment.scheduleStatus === 'WaitingForPatient';
-
-  if (appointment.isUrgent) {
-    console.log(appointment);
-  }
-
-  const handleScheduleClick = () => {
-    if (hidden) {
-      return;
-    }
-    onSelect(appointment);
-  };
-
-  return (
-    <div
-      role='button'
-      tabIndex={0}
-      id={`${appointment.id}-${appointment.start.format(
-        'HH:mm',
-      )}>${appointment.end.format('HH:mm')}`}
-      key={appointment.id}
-      className={clsx(
-        'appointment-item',
-        shouldAnimate && 'upcoming',
-        appointment.isUrgent && 'urgent',
-      )}
-      onClick={handleScheduleClick}
-      style={{
-        border: `${appointment.serviceColor} 1px solid`,
-        backgroundColor: `${appointment.serviceColor}1A`,
-      }}
-    >
-      <div className='name-and-status'>
-        <Typography noWrap classes={{ root: 'patient-name' }}>
-          {appointment.patient.fullName}
-        </Typography>
-        <div
-          className={clsx(
-            'status-icon',
-            appointment.scheduleStatus === 'DidNotCome' && 'negative',
-          )}
-        >
-          {appointment.scheduleStatus === 'OnSite' && <DoneIcon />}
-          {(appointment.scheduleStatus === 'CompletedPaid' ||
-            appointment.scheduleStatus === 'PartialPaid' ||
-            appointment.scheduleStatus === 'CompletedFree') && <DoneAllIcon />}
-          {appointment.scheduleStatus === 'DidNotCome' && <IconClear />}
-          {appointment.scheduleStatus === 'CompletedNotPaid' && <IconMoney />}
-          {appointment.scheduleStatus === 'WaitingForPatient' && <IconClock />}
-        </div>
-      </div>
-      <Typography noWrap classes={{ root: 'patient-name' }}>
-        {appointment.start.format('HH:mm')} - {appointment.end.format('HH:mm')}
-      </Typography>
-    </div>
-  );
-};
-
-AppointmentItem.propTypes = {
-  zIndex: PropTypes.number,
-  hidden: PropTypes.bool,
-  onSelect: PropTypes.func,
-  hourWidth: PropTypes.number,
-  getPosition: PropTypes.func,
-  appointments: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      patient: PropTypes.shape({
-        id: PropTypes.number,
-        fullName: PropTypes.string,
-      }),
-      serviceName: PropTypes.string,
-      serviceColor: PropTypes.string,
-      start: PropTypes.object,
-      end: PropTypes.object,
-      scheduleStatus: PropTypes.string,
-      isUrgent: PropTypes.bool,
-    }),
-  ),
-  appointment: PropTypes.shape({
-    id: PropTypes.number,
-    patient: PropTypes.shape({
-      id: PropTypes.number,
-      fullName: PropTypes.string,
-    }),
-    serviceName: PropTypes.string,
-    serviceColor: PropTypes.string,
-    start: PropTypes.object,
-    end: PropTypes.object,
-    scheduleStatus: PropTypes.string,
-    isUrgent: PropTypes.bool,
-  }),
 };
 
 DoctorAppointmentsRow.propTypes = {
