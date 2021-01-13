@@ -28,6 +28,7 @@ import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarS
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
+import CalendarDayView from './CalendarDayView';
 import CalendarDoctorsView from './day/CalendarDoctorsView';
 import CalendarMonthView from './month/CalendarMonthView';
 import CalendarWeekView from './week/CalendarWeekView';
@@ -198,7 +199,7 @@ const AppointmentsCalendar = ({
             onClick={() => handleTabChange(CalendarView.month)}
           />
         </div>
-        <Box display='flex'>
+        <Box display='flex' className='right-btns-wrapper'>
           <LoadingButton
             isLoading={isUploading}
             variant='outline-primary'
@@ -229,7 +230,7 @@ const AppointmentsCalendar = ({
           <Spinner animation='border' className='loading-spinner' />
         )}
         {currentTab === CalendarView.day && (
-          <CalendarDoctorsView
+          <CalendarDayView
             onScheduleSelect={onScheduleSelect}
             viewDate={viewDate}
             update={updateAppointments}
