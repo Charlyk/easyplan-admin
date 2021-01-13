@@ -362,6 +362,10 @@ export default {
     'euro debt': 'Euro Debt',
     'is urgent': 'Is urgent!',
     'completed. free.': 'Completed. Free.',
+    service_not_provided_by_user: 'Service not provided by doctor',
+    is_user_day_off: 'Is doctor day off',
+    is_clinic_day_off: 'Is clinic day off',
+    is_doctor_holiday: 'Is doctor holiday',
   },
   ro: {
     analytics: 'Analitică',
@@ -731,6 +735,10 @@ export default {
     'euro debt': 'Datorie Euro',
     'is urgent': 'Este urgent!',
     'completed. free.': 'Finisat. Gratuit.',
+    service_not_provided_by_user: 'Serviciul nu este oferit de doctor',
+    is_user_day_off: 'Doctorul are zi liberă',
+    is_clinic_day_off: 'Este zi liberă',
+    is_doctor_holiday: 'Doctorul este în vacanță',
   },
   ru: {
     analytics: 'Analytics',
@@ -1092,5 +1100,9 @@ export default {
     'euro debt': 'Euro Debt',
     'is urgent': 'Is urgent!',
     'completed. free.': 'Completed. Free.',
+    service_not_provided_by_user: 'Service not provided by doctor',
+    is_user_day_off: 'Is doctor day off',
+    is_clinic_day_off: 'Is clinic day off',
+    is_doctor_holiday: 'Is doctor holiday',
   },
 };

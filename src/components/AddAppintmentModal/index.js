@@ -243,23 +243,23 @@ const reducer = (state, action) => {
       };
     case reducerTypes.setAvailableTime: {
       const availableTime = action.payload;
-      const availableStartTime = action.payload;
-      const availableEndTime = action.payload.filter(
-        item => action.payload?.length > 0 && item > action.payload[0],
-      );
+      const startTime =
+        availableTime?.length > 0 && state.startTime.length === 0
+          ? availableTime[0]
+          : state.startTime;
+      const endTime =
+        availableTime?.length > 1 && state.endTime.length === 0
+          ? availableTime[1]
+          : state.endTime;
+      const availableStartTime = availableTime.filter(item => item < endTime);
+      const availableEndTime = availableTime.filter(item => item > startTime);
       return {
         ...state,
         availableTime,
         availableStartTime,
         availableEndTime,
-        startTime:
-          availableStartTime?.length > 0 && state.startTime.length === 0
-            ? availableStartTime[0]
-            : state.startTime,
-        endTime:
-          availableEndTime?.length > 0 && state.endTime.length === 0
-            ? availableEndTime[0]
-            : state.endTime,
+        startTime,
+        endTime,
       };
     }
     case reducerTypes.setAvailableStartTime:
@@ -388,6 +388,9 @@ const AddAppointmentModal = ({
       toast.error(textForKey(response.message));
     } else {
       localDispatch(actions.setAvailableTime(response.data));
+      if (response.data.length === 0) {
+        toast.error(textForKey(response.message));
+      }
     }
     localDispatch(actions.setIsFetchingHours(false));
   };
