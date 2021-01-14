@@ -374,7 +374,6 @@ const AddAppointmentModal = ({
 
   const fetchAvailableHours = async () => {
     if (doctor == null || service == null || appointmentDate == null) {
-      console.log(doctor, service, appointmentDate);
       return;
     }
     localDispatch(actions.setIsFetchingHours(true));
@@ -434,7 +433,8 @@ const AddAppointmentModal = ({
 
   const handlePatientSearch = async query => {
     localDispatch(actions.setPatientsLoading(true));
-    const response = await dataAPI.searchPatients(query);
+    const updatedQuery = query.replace('+', '');
+    const response = await dataAPI.searchPatients(updatedQuery);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {

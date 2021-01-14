@@ -140,10 +140,11 @@ const NewPatients = () => {
 
   const fetchPatients = async () => {
     localDispatch(actions.setIsLoading(true));
+    const updatedQuery = searchQuery.replace('+', '');
     const response = await dataAPI.fetchAllPatients(
       page,
       rowsPerPage,
-      searchQuery,
+      updatedQuery,
     );
     if (response.isError) {
       console.error(response.message);
