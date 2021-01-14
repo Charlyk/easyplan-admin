@@ -129,14 +129,21 @@ const reducer = (state, action) => {
       const availableEndTime = state.availableTime.filter(
         item => item > startTime,
       );
-      return { ...state, startTime, availableEndTime };
+      return {
+        ...state,
+        startTime,
+        availableEndTime,
+        endTime:
+          state.endTime < startTime
+            ? availableEndTime?.length > 0
+              ? availableEndTime[0]
+              : []
+            : state.endTime,
+      };
     }
     case reducerTypes.setEndTime: {
       const endTime = action.payload;
-      const availableStartTime = state.availableTime.filter(
-        item => item < endTime,
-      );
-      return { ...state, endTime, availableStartTime };
+      return { ...state, endTime };
     }
     case reducerTypes.setDoctorsLoading:
       return {
@@ -251,7 +258,7 @@ const reducer = (state, action) => {
         availableTime?.length > 1 && state.endTime.length === 0
           ? availableTime[1]
           : state.endTime;
-      const availableStartTime = availableTime.filter(item => item < endTime);
+      const availableStartTime = availableTime;
       const availableEndTime = availableTime.filter(item => item > startTime);
       return {
         ...state,
