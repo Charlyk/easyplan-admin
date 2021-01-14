@@ -266,7 +266,7 @@ const reducer = (state, action) => {
       return { ...state, availableStartTime: action.payload };
     case reducerTypes.setAvailableEndTime:
       return { ...state, availableEndTime: action.payload };
-    case reducerTypes.reset:
+    case reducerTypes.resetState:
       return initialState;
     default:
       return state;
