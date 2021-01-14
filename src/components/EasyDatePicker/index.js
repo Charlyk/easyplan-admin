@@ -55,7 +55,7 @@ EasyDatePicker.propTypes = {
   onChange: PropTypes.func,
   pickerAnchor: PropTypes.any,
   minDate: PropTypes.instanceOf(Date),
-  placement: PropTypes.string,
+  placement: PropTypes.oneOf(['bottom', 'top']),
   disablePortal: PropTypes.bool,
 };
 
