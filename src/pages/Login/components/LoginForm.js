@@ -32,12 +32,12 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
     });
   };
 
+  const isFormValid = () => {
+    return data.email.match(EmailRegex) && data.password.length > 4;
+  };
+
   const handleLogin = async () => {
-    if (
-      isLoading ||
-      !data.email.match(EmailRegex) ||
-      data.password.length < 8
-    ) {
+    if (isLoading || !isFormValid()) {
       return;
     }
 
@@ -53,10 +53,6 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
-  };
-
-  const isFormValid = () => {
-    return data.email.match(EmailRegex) && data.password.length > 4;
   };
 
   if (authManager.isLoggedIn()) {
