@@ -12,6 +12,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
@@ -84,6 +85,7 @@ const reducer = (state, action) => {
 
 const ImportSelectionStep = ({ userData, onImport }) => {
   const companiesRef = useRef(null);
+  const datePickerRef = useRef(null);
   const [
     {
       isLoading,
@@ -94,6 +96,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
       isDatePickerOpen,
       startDate,
       endDate,
+      dateType,
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -120,14 +123,13 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     if (!responseData.success) {
       toast.error(responseData);
     } else {
-      console.log(responseData.data);
       dispatch(actions.setCompanies(responseData.data));
     }
     dispatch(actions.setIsLoading(false));
   };
 
   const handleImportClick = () => {
-    onImport(dataTypes, selectedCompany);
+    onImport(dataTypes, selectedCompany, startDate, endDate);
   };
 
   const handleOpenCompanies = () => {
@@ -155,18 +157,34 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     dispatch(actions.setDataTypes(newDataTypes));
   };
 
-  const handleOpenDatePicker = () => type => {
-    dispatch(actions.setIsDatePickerOpen({ open: true, type }));
-  };
-
-  const handleDateChanged = newDate => {};
-
   const handleCloseDatePicker = () => {
     dispatch(actions.setIsDatePickerOpen({ open: false, type: 'start' }));
   };
 
+  const handleOpenDatePicker = type => {
+    dispatch(actions.setIsDatePickerOpen({ open: true, type }));
+  };
+
+  const handleDateFieldClick = event => {
+    datePickerRef.current = event.target;
+    const targetId = event.target.id;
+    handleOpenDatePicker(targetId);
+  };
+
+  const handleDateChanged = newDate => {
+    switch (dateType) {
+      case 'start':
+        dispatch(actions.setStartDate(newDate));
+        break;
+      case 'end':
+        dispatch(actions.setEndDate(newDate));
+        break;
+    }
+  };
+
   const datePicker = (
     <EasyDatePicker
+      pickerAnchor={datePickerRef.current}
       open={isDatePickerOpen}
       onChange={handleDateChanged}
       onClose={handleCloseDatePicker}
@@ -252,6 +270,24 @@ const ImportSelectionStep = ({ userData, onImport }) => {
         }
         label={textForKey('Services')}
       />
+      <Box display='flex'>
+        <Form.Group className='date-form-group' controlId='start'>
+          <Form.Label>{textForKey('Start date')}</Form.Label>
+          <Form.Control
+            value={moment(startDate).format('DD MMMM YYYY')}
+            readOnly
+            onClick={handleDateFieldClick}
+          />
+        </Form.Group>
+        <Form.Group className='date-form-group' controlId='end'>
+          <Form.Label>{textForKey('End date')}</Form.Label>
+          <Form.Control
+            value={moment(endDate).format('DD MMMM YYYY')}
+            readOnly
+            onClick={handleDateFieldClick}
+          />
+        </Form.Group>
+      </Box>
       <div
         onClick={handleOpenCompanies}
         role='button'
