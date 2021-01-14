@@ -3,6 +3,7 @@ import React, { useEffect, useReducer } from 'react';
 import { Stepper, Step, StepLabel, Typography } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { usePubNub } from 'pubnub-react';
@@ -31,6 +32,10 @@ const initialState = {
   yClientsUser: null,
   dataTypes: [],
   company: null,
+  startDate: moment()
+    .subtract(1, 'month')
+    .toDate(),
+  endDate: moment().toDate(),
 };
 
 const reducerTypes = {
@@ -84,7 +89,7 @@ const reducer = (state, action) => {
     case reducerTypes.setCompany:
       return { ...state, company: action.payload };
     case reducerTypes.setImportDetails: {
-      const { dataTypes, company } = action.payload;
+      const { dataTypes, company, startDate, endDate } = action.payload;
       const isValidData = dataTypes.length !== 0 && company != null;
       const newCompletedSteps = cloneDeep(state.completedSteps);
       if (isValidData) {
@@ -95,6 +100,8 @@ const reducer = (state, action) => {
         ...action.payload,
         completedSteps: newCompletedSteps,
         activeStep: isValidData ? 2 : 1,
+        startDate,
+        endDate,
       };
     }
     default:
@@ -106,7 +113,15 @@ const DataMigrationModal = ({ show, onClose }) => {
   const currentClinic = useSelector(clinicDetailsSelector);
   const pubnub = usePubNub();
   const [
-    { activeStep, completedSteps, yClientsUser, dataTypes, company },
+    {
+      activeStep,
+      completedSteps,
+      yClientsUser,
+      dataTypes,
+      company,
+      startDate,
+      endDate,
+    },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -120,8 +135,15 @@ const DataMigrationModal = ({ show, onClose }) => {
     localDispatch(actions.setYClientsUser(userData));
   };
 
-  const handleDataTypesSelected = (newTypes, company) => {
-    localDispatch(actions.setImportDetails({ dataTypes: newTypes, company }));
+  const handleDataTypesSelected = (newTypes, company, startDate, endDate) => {
+    localDispatch(
+      actions.setImportDetails({
+        dataTypes: newTypes,
+        company,
+        startDate,
+        endDate,
+      }),
+    );
   };
 
   const handleStartMigration = () => {
@@ -135,6 +157,8 @@ const DataMigrationModal = ({ show, onClose }) => {
       company,
       clinicId: currentClinic.id,
       authToken: authManager.getUserToken(),
+      startDate,
+      endDate,
     };
     pubnub.publish({
       channel: `${environment}-migrate-data-from-another-app-channel`,
