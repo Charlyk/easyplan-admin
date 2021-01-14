@@ -129,14 +129,21 @@ const reducer = (state, action) => {
       const availableEndTime = state.availableTime.filter(
         item => item > startTime,
       );
-      return { ...state, startTime, availableEndTime };
+      return {
+        ...state,
+        startTime,
+        availableEndTime,
+        endTime:
+          state.endTime < startTime
+            ? availableEndTime?.length > 0
+              ? availableEndTime[0]
+              : []
+            : state.endTime,
+      };
     }
     case reducerTypes.setEndTime: {
       const endTime = action.payload;
-      const availableStartTime = state.availableTime.filter(
-        item => item < endTime,
-      );
-      return { ...state, endTime, availableStartTime };
+      return { ...state, endTime };
     }
     case reducerTypes.setDoctorsLoading:
       return {
@@ -251,7 +258,7 @@ const reducer = (state, action) => {
         availableTime?.length > 1 && state.endTime.length === 0
           ? availableTime[1]
           : state.endTime;
-      const availableStartTime = availableTime.filter(item => item < endTime);
+      const availableStartTime = availableTime;
       const availableEndTime = availableTime.filter(item => item > startTime);
       return {
         ...state,
@@ -266,7 +273,7 @@ const reducer = (state, action) => {
       return { ...state, availableStartTime: action.payload };
     case reducerTypes.setAvailableEndTime:
       return { ...state, availableEndTime: action.payload };
-    case reducerTypes.reset:
+    case reducerTypes.resetState:
       return initialState;
     default:
       return state;
@@ -291,7 +298,6 @@ const AddAppointmentModal = ({
       patients,
       doctor,
       service,
-      services,
       loading,
       scheduleId,
       patientLastName,
@@ -374,14 +380,13 @@ const AddAppointmentModal = ({
 
   const fetchAvailableHours = async () => {
     if (doctor == null || service == null || appointmentDate == null) {
-      console.log(doctor, service, appointmentDate);
       return;
     }
     localDispatch(actions.setIsFetchingHours(true));
     const response = await dataAPI.fetchAvailableTime(
       scheduleId,
       doctor.id,
-      service.id,
+      service.serviceId || service.id,
       appointmentDate,
     );
     if (response.isError) {
@@ -434,7 +439,8 @@ const AddAppointmentModal = ({
 
   const handlePatientSearch = async query => {
     localDispatch(actions.setPatientsLoading(true));
-    const response = await dataAPI.searchPatients(query);
+    const updatedQuery = query.replace('+', '');
+    const response = await dataAPI.searchPatients(updatedQuery);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
@@ -445,17 +451,6 @@ const AddAppointmentModal = ({
       localDispatch(actions.setPatients(patients));
     }
     localDispatch(actions.setPatientsLoading(false));
-  };
-
-  const handleServiceSearch = async query => {
-    localDispatch(actions.setServicesLoading(true));
-    const response = await dataAPI.searchServices(query, doctor.id);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      localDispatch(actions.setServices(response.data));
-    }
-    localDispatch(actions.setServicesLoading(false));
   };
 
   const handleDateFieldClick = () => {
@@ -564,7 +559,7 @@ const AddAppointmentModal = ({
       isUrgent,
       patientId: patient?.id,
       doctorId: doctor.id,
-      serviceId: service.id,
+      serviceId: service.serviceId || service.id,
       startDate: startDate.toDate(),
       endDate: endDate.toDate(),
       note: appointmentNote,
@@ -782,7 +777,9 @@ const AddAppointmentModal = ({
               <Menu {...menuProps}>
                 {results.map((result, index) => (
                   <MenuItem key={result.id} option={result} position={index}>
-                    {result.fullName}
+                    <Typography classes={{ root: 'result-item-text' }}>
+                      {result.fullName}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -792,20 +789,30 @@ const AddAppointmentModal = ({
       </Form.Group>
       <Form.Group controlId='service'>
         <Form.Label>{textForKey('Service')}</Form.Label>
-        <AsyncTypeahead
-          disabled={doctor == null}
+        <Typeahead
           isValid={isServiceValid}
           placeholder={textForKey('Enter service name')}
-          id='services'
+          id='doctors'
           emptyLabel={`${textForKey('No results')}`}
           searchText={`${textForKey('Searching')}...`}
-          isLoading={loading.services}
           filterBy={['name']}
           labelKey='name'
-          onSearch={handleServiceSearch}
-          options={services}
+          options={doctor?.services || []}
           selected={service ? [service] : []}
           onChange={handleServiceChange}
+          renderMenu={(results, menuProps) => {
+            return (
+              <Menu {...menuProps}>
+                {results.map((result, index) => (
+                  <MenuItem key={result.id} option={result} position={index}>
+                    <Typography classes={{ root: 'result-item-text' }}>
+                      {result.name}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            );
+          }}
         />
       </Form.Group>
       <Form.Group className='date-form-group'>
