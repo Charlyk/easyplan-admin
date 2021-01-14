@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
@@ -17,6 +18,7 @@ import IconArrowDown from '../../assets/icons/iconArrowDown';
 import { YClientAPIUrl } from '../../utils/constants';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import EasyDatePicker from '../EasyDatePicker';
 import LoadingButton from '../LoadingButton';
 
 const initialState = {
@@ -25,6 +27,12 @@ const initialState = {
   companies: [],
   showCompanies: false,
   selectedCompany: null,
+  isDatePickerOpen: false,
+  startDate: moment()
+    .subtract(1, 'month')
+    .toDate(),
+  endDate: moment().toDate(),
+  dateType: 'start',
 };
 
 const reducerTypes = {
@@ -33,12 +41,28 @@ const reducerTypes = {
   setCompanies: 'setCompanies',
   setShowCompanies: 'setShowCompanies',
   setSelectedCompany: 'setSelectedCompany',
+  setIsDatePickerOpen: 'setIsDatePickerOpen',
+  setStartDate: 'setStartDate',
+  setEndDate: 'setEndDate',
+  setDateType: 'setDateType',
 };
 
 const actions = generateReducerActions(reducerTypes);
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case reducerTypes.setDateType:
+      return { ...state, dateType: action.payload };
+    case reducerTypes.setIsDatePickerOpen:
+      return {
+        ...state,
+        isDatePickerOpen: action.payload.open,
+        dateType: action.payload.type,
+      };
+    case reducerTypes.setStartDate:
+      return { ...state, startDate: action.payload, isDatePickerOpen: false };
+    case reducerTypes.setEndDate:
+      return { ...state, endDate: action.payload, isDatePickerOpen: false };
     case reducerTypes.setIsLoading:
       return { ...state, isLoading: action.payload };
     case reducerTypes.setDataTypes:
@@ -61,7 +85,16 @@ const reducer = (state, action) => {
 const ImportSelectionStep = ({ userData, onImport }) => {
   const companiesRef = useRef(null);
   const [
-    { isLoading, dataTypes, companies, showCompanies, selectedCompany },
+    {
+      isLoading,
+      dataTypes,
+      companies,
+      showCompanies,
+      selectedCompany,
+      isDatePickerOpen,
+      startDate,
+      endDate,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -122,12 +155,32 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     dispatch(actions.setDataTypes(newDataTypes));
   };
 
+  const handleOpenDatePicker = () => type => {
+    dispatch(actions.setIsDatePickerOpen({ open: true, type }));
+  };
+
+  const handleDateChanged = newDate => {};
+
+  const handleCloseDatePicker = () => {
+    dispatch(actions.setIsDatePickerOpen({ open: false, type: 'start' }));
+  };
+
+  const datePicker = (
+    <EasyDatePicker
+      open={isDatePickerOpen}
+      onChange={handleDateChanged}
+      onClose={handleCloseDatePicker}
+      placement='bottom'
+    />
+  );
+
   return (
     <Box
       display='flex'
       flexDirection='column'
       className='import-selection-step'
     >
+      {datePicker}
       <Typography classes={{ root: 'form-title' }}>
         {textForKey('Select type of data to import')}
       </Typography>
