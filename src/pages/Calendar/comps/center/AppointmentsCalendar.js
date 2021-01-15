@@ -29,7 +29,6 @@ import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSele
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import CalendarDayView from './CalendarDayView';
-import CalendarDoctorsView from './day/CalendarDoctorsView';
 import CalendarMonthView from './month/CalendarMonthView';
 import CalendarWeekView from './week/CalendarWeekView';
 
@@ -234,6 +233,7 @@ const AppointmentsCalendar = ({
             onScheduleSelect={onScheduleSelect}
             viewDate={viewDate}
             update={updateAppointments}
+            onCreateSchedule={onAddAppointment}
           />
         )}
         <CalendarWeekView

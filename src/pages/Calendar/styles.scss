@@ -1144,44 +1144,251 @@
 
 .calendar-day-view {
   display: flex;
-  width: 100%;
-  max-height: 100%;
-  overflow-y: scroll;
+  height: 100%;
+  flex-direction: column;
   position: relative;
 
-  .day-hours-container {
-    flex-direction: column;
-    align-items: center;
-    padding-left: .5rem;
-    padding-right: .5rem;
-    margin-top: 2rem;
+  .day-data-container {
+    overflow-y: auto;
+    display: flex;
+    width: 100%;
+    height: calc(100% - 50px);
+    position: relative;
 
-    .day-hour-item {
-      height: 3rem;
-      max-height: unset;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 14px;
-      color: #34344E;
-      display: flex;
+    .loading-progress-wrapper {
+      z-index: 5;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      .loading-schedules-progress {
+        color: #3A83DC;
+      }
+    }
+
+    .day-hours-container {
+      height: fit-content;
+      flex-direction: column;
       align-items: center;
+      padding-left: .5rem;
+      padding-right: .5rem;
+      width: 55px;
+      position: relative;
+
+      .day-hour-item {
+        height: 60px;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        color: #34344E;
+        display: flex;
+        align-items: center;
+        user-select: none;
+      }
+    }
+
+    .day-schedules-container {
+      display: flex;
+      height: fit-content;
+      width: calc(100% - 55px);
+      position: relative;
+      cursor: pointer;
+
+      .day-schedules-column {
+        height: inherit;
+        border-right: #ededed 1px solid;
+        position: relative;
+
+        .day-view-schedule {
+          position: absolute;
+          height: fit-content;
+          outline: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          min-height: 30px;
+          padding-left: .3rem;
+          background-color: #f3f3f3;
+          border-radius: 3px;
+          box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+
+          &.upcoming {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+            animation-iteration-count: infinite;
+          }
+
+          &.urgent {
+            box-shadow: 0 0 7px 1px #ec3276;
+          }
+
+          &__status-indicator {
+            height: calc(100% - 10px);
+            width: 4px;
+            border-radius: 2px;
+          }
+
+          &__wrapper {
+            margin-top: 2px;
+            width: 99%;
+            height: 98%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+
+            .header {
+              width: 100%;
+              height: 30px;
+              min-height: 30px;
+              max-height: 30px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding-left: .5rem;
+              padding-right: .5rem;
+
+              .hour-label {
+                color: #34344E;
+                font-family: Inter, sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+              }
+
+              .status-icon {
+                width: 1.2rem;
+                height: 1.2rem;
+                display: flex;
+                margin-left: .2rem;
+                align-items: center;
+                justify-content: center;
+
+                &.negative {
+                  svg {
+                    width: 1.2rem;
+                    height: 1.2rem;
+                    fill: #ec3276 !important;
+                  }
+                }
+
+                svg {
+                  width: 1.2rem;
+                  height: 1.2rem;
+                  fill: #00E987 !important;
+                }
+              }
+            }
+
+            .info {
+              padding-top: .3rem;
+              padding-bottom: .3rem;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: flex-start;
+              width: 100%;
+              height: 100%;
+              overflow: hidden;
+
+              table {
+                width: 100%;
+              }
+
+              .info-title {
+                font-family: Inter, sans-serif;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 12px;
+              }
+
+              .info-label {
+                font-family: Inter, sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+
+        &:last-child {
+          border-right: none;
+        }
+
+        .day-schedule-item-container {
+          width: 100%;
+          height: 30px;
+          position: relative;
+
+          .create-schedule-view {
+            outline: none;
+            padding-left: .5rem;
+            padding-right: .5rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #3A83DC;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .hour-text {
+              color: white;
+              font-family: Inter, sans-serif;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 10px;
+            }
+          }
+        }
+
+        .create-schedule-indicator {
+          height: 30px;
+          background-color: #00ac00;
+          position: absolute;
+          left: 0;
+          width: 100%;
+        }
+      }
+
+      .hour-line {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #e5e5e5;
+      }
     }
   }
 
-  .schedules-table {
-    position: relative;
+  .day-doctors-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding-left: 55px;
+    border-bottom: #ededed 1px solid;
 
-    &__head {
-      position: relative;
+    &__item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding-left: .3rem;
+      padding-right: .3rem;
 
-      &__row {
-        height: 2rem;
-        position: relative;
-
-        &__cell {
-          padding: .3rem;
-        }
+      .doctor-name {
+        user-select: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: .8rem !important;
+        color: #34344E;
       }
     }
   }

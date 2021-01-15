@@ -284,6 +284,8 @@ const AddAppointmentModal = ({
   open,
   doctor: selectedDoctor,
   patient: selectedPatient,
+  startHour: selectedStartTime,
+  endHour: selectedEndTime,
   date,
   schedule,
   onClose,
@@ -365,6 +367,11 @@ const AddAppointmentModal = ({
   useEffect(() => {
     fetchAvailableHours();
   }, [doctor, service, appointmentDate]);
+
+  useEffect(() => {
+    localDispatch(actions.setStartTime(selectedStartTime || ''));
+    localDispatch(actions.setEndTime(selectedEndTime || ''));
+  }, [selectedStartTime, selectedEndTime]);
 
   const fetchScheduleDetails = async () => {
     if (schedule == null) {
@@ -897,6 +904,8 @@ AddAppointmentModal.propTypes = {
   doctor: PropTypes.object,
   onClose: PropTypes.func.isRequired,
   patient: PropTypes.object,
+  startHour: PropTypes.string,
+  endHour: PropTypes.string,
   schedule: PropTypes.shape({
     id: PropTypes.number,
     patientId: PropTypes.number,
