@@ -1374,6 +1374,7 @@
     border-bottom: #ededed 1px solid;
 
     &__item {
+      outline: none;
       flex: 1;
       display: flex;
       align-items: center;
@@ -1381,6 +1382,7 @@
       overflow: hidden;
       padding-left: .3rem;
       padding-right: .3rem;
+      cursor: pointer;
 
       .doctor-name {
         user-select: none;
@@ -1389,6 +1391,10 @@
         font-weight: normal;
         font-size: .8rem !important;
         color: #34344E;
+
+        &:hover {
+          color: #3A83DC;
+        }
       }
     }
   }

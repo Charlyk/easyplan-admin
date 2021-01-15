@@ -6,7 +6,6 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import { Statuses } from '../../../../../utils/constants';
-import { colorShade } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 
 const offsetDistance = 30;

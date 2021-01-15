@@ -6,6 +6,7 @@ import { extendMoment } from 'moment-range';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { timer } from 'rxjs';
 
 import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
@@ -91,28 +92,34 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       toast.error(textForKey(response.message));
     } else {
       const { data: schedules } = response;
-      const mappedSchedules = doctors.map(item => {
+      const mappedSchedules = [];
+      for (let item of doctors) {
         const doctorSchedules =
           schedules.find(it => it.doctorId === item.id)?.schedules || [];
         const newSchedules = [];
         for (let schedule of doctorSchedules) {
           const scheduleRange = moment.range(
-            schedule.startTime,
-            schedule.endTime,
+            moment(schedule.startTime),
+            moment(schedule.endTime),
           );
-          newSchedules.push({
-            ...schedule,
-            offset: newSchedules.filter(item => {
-              const itemRange = moment.range(item.startTime, item.endTime);
-              return itemRange.intersect(scheduleRange);
-            }).length,
-          });
+          if (schedule.offset == null) {
+            schedule.offset = 0;
+          }
+          schedule.offset += newSchedules.filter(item => {
+            const itemRange = moment.range(
+              moment(item.startTime),
+              moment(item.endTime),
+            );
+            return itemRange.intersect(scheduleRange);
+          }).length;
+          newSchedules.push(schedule);
+          await timer(500);
         }
-        return {
+        mappedSchedules.push({
           doctor: item,
           schedules: newSchedules,
-        };
-      });
+        });
+      }
       localDispatch(actions.setSchedules(mappedSchedules));
     }
     localDispatch(actions.setIsLoading(false));
