@@ -225,11 +225,13 @@ const Calendar = () => {
     }
   };
 
-  const handleAppointmentModalOpen = () => {
+  const handleAppointmentModalOpen = (doctor, startHour, endHour) => {
     dispatch(
       setAppointmentModal({
         open: true,
-        doctor: viewMode === 'day' ? null : selectedDoctor,
+        doctor: viewMode === 'day' ? doctor : selectedDoctor,
+        startHour,
+        endHour,
         date: viewDate,
       }),
     );
