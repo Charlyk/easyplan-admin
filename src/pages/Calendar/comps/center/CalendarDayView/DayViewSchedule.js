@@ -86,8 +86,12 @@ const DayViewSchedule = ({
       )}
       onClick={handleScheduleClick}
       style={{
-        left: `calc(${schedule.offset} * ${offsetDistance}px)`,
-        width: `calc(99.5% - ${schedule.offset} * ${offsetDistance}px)`,
+        left: isHighlighted
+          ? 0
+          : `calc(${schedule.offset} * ${offsetDistance}px)`,
+        width: isHighlighted
+          ? '100%'
+          : `calc(99.5% - ${schedule.offset} * ${offsetDistance}px)`,
         top: getTopPosition(),
         zIndex: isHighlighted ? 2000 : 100 + index,
         height: getScheduleHeight(),
