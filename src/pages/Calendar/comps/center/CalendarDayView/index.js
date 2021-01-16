@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { timer } from 'rxjs';
 
+import AddPauseModal from '../../../../../components/AddPauseModal';
 import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
@@ -25,6 +26,14 @@ const initialState = {
   createIndicator: { visible: false, top: 0, doctorId: -1 },
   parentTop: 0,
   schedules: [],
+  pauseModal: {
+    open: false,
+    doctor: null,
+    startTime: null,
+    endTime: null,
+    id: null,
+    comment: '',
+  },
 };
 
 const reducerTypes = {
@@ -34,6 +43,7 @@ const reducerTypes = {
   setCreateIndicatorPosition: 'setCreateIndicatorPosition',
   setParentTop: 'setParentTop',
   setSchedules: 'setSchedules',
+  setPauseModal: 'setPauseModal',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -56,6 +66,8 @@ const reducer = (state, action) => {
         ...state,
         createIndicator: { ...state.createIndicator, top: action.payload },
       };
+    case reducerTypes.setPauseModal:
+      return { ...state, pauseModal: action.payload };
     default:
       return state;
   }
@@ -67,7 +79,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
   const [
-    { isLoading, hours, parentTop, schedules },
+    { isLoading, hours, parentTop, schedules, pauseModal },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -164,12 +176,42 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     return rect.height;
   };
 
+  const handleOpenPauseModal = (doctor, startTime, endTime, id, comment) => {
+    localDispatch(
+      actions.setPauseModal({
+        open: true,
+        doctor,
+        startTime,
+        endTime,
+        id,
+        comment,
+      }),
+    );
+  };
+
+  const handleClosePauseModal = () => {
+    localDispatch(actions.setPauseModal(initialState.pauseModal));
+  };
+
   const handleAddSchedule = doctor => (startHour, endHour) => {
     onCreateSchedule(doctor, startHour, endHour);
   };
 
   const handleScheduleClick = schedule => {
-    onScheduleSelect(schedule);
+    if (schedule.type === 'Schedule') {
+      onScheduleSelect(schedule);
+    } else {
+      const doctor = doctors.find(item => item.id === schedule.doctorId);
+      if (doctor != null) {
+        handleCreatePause(
+          doctor,
+          schedule.startTime,
+          schedule.endTime,
+          schedule.id,
+          schedule.comment,
+        );
+      }
+    }
   };
 
   const getScheduleItemsContainer = () => {
@@ -180,6 +222,16 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         return { start: hours[index - 1], end: hour };
       }
     });
+  };
+
+  const handleCreatePause = (
+    doctor,
+    startHour = null,
+    endHour = null,
+    id = null,
+    comment = null,
+  ) => {
+    handleOpenPauseModal(doctor, startHour, endHour, id, comment);
   };
 
   const getSchedulesForDoctor = doctorId => {
@@ -193,9 +245,14 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
 
   return (
     <Box className='calendar-day-view' id='calendar-day-view'>
+      <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
       <div className='day-doctors-container'>
         {doctors.map(doctor => (
-          <DoctorItem doctor={doctor} key={doctor.id} />
+          <DoctorItem
+            doctor={doctor}
+            key={doctor.id}
+            onAddPause={handleCreatePause}
+          />
         ))}
       </div>
       <div className='day-data-container' ref={dataRef}>

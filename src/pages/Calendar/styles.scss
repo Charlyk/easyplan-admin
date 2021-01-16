@@ -1255,6 +1255,12 @@
                 font-style: normal;
                 font-weight: normal;
                 font-size: 12px;
+
+                &.pause {
+                  color: white;
+                  width: 100%;
+                  text-align: center;
+                }
               }
 
               .status-icon {
@@ -1328,6 +1334,35 @@
                     font-weight: normal;
                     font-size: 12px;
                   }
+                }
+              }
+
+              .pause-wrapper {
+                flex: 1;
+                align-items: center;
+                justify-content: center;
+                padding-left: .3rem;
+                padding-right: .3rem;
+
+                .comment-label {
+                  margin-top: 1rem;
+                  color: white;
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 12px;
+                  width: 100%;
+                  text-align: center;
+                }
+
+                .pause-label {
+                  width: 100%;
+                  text-align: center;
+                  color: white;
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 15px;
                 }
               }
             }
@@ -1404,6 +1439,33 @@
       padding-left: .3rem;
       padding-right: .3rem;
       cursor: pointer;
+
+      .menu-option {
+        display: flex;
+        align-items: center;
+
+        svg {
+          fill: #3A83DC;
+          margin-right: .5rem;
+          height: 20px;
+          width: 20px;
+        }
+
+        &:hover {
+          .option-label {
+            color: #3A83DC;
+          }
+        }
+
+        .option-label {
+          user-select: none;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: .8rem !important;
+          color: #34344E;
+        }
+      }
 
       .doctor-name {
         user-select: none;

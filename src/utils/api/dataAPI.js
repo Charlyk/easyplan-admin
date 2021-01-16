@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -2179,6 +2179,55 @@ export default {
     try {
       const url = `${baseURL}/clinics/braces-types`;
       const response = await Axios.put(url, { services: requestBody });
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Create calendar pause record
+   * @param {object} requestBody
+   * @param {number} requestBody.doctorId
+   * @param {Date} requestBody.startTime
+   * @param {Date} requestBody.endTime
+   * @param {string?} requestBody.comment
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  createPauseRecord: async requestBody => {
+    try {
+      const url = `${baseURL}/pauses`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  getPauseAvailableTime: async requestBody => {
+    try {
+      const url = `${baseURL}/pauses/available-time`;
+      const response = await Axios.put(url, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {
         return {

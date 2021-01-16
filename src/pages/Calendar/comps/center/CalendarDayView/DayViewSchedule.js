@@ -19,6 +19,7 @@ const DayViewSchedule = ({
   firstHour,
   onScheduleSelect,
 }) => {
+  const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
   const [isHighlighted, setIsHighlighted] = useState(false);
   const startTime = moment(schedule.startTime);
@@ -28,7 +29,7 @@ const DayViewSchedule = ({
   const scheduleStatus = Statuses.find(
     item => item.id === schedule.scheduleStatus,
   );
-  const shouldAnimate = scheduleStatus.id === 'WaitingForPatient';
+  const shouldAnimate = scheduleStatus?.id === 'WaitingForPatient';
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -65,7 +66,7 @@ const DayViewSchedule = ({
   const handlePointerEnter = () => {
     highlightTimeout.current = setTimeout(() => {
       setIsHighlighted(true);
-    }, 400);
+    }, 300);
   };
 
   const handlePointerLeave = () => {
@@ -95,57 +96,73 @@ const DayViewSchedule = ({
         top: getTopPosition(),
         zIndex: isHighlighted ? 500 : 100 + index,
         height: getScheduleHeight(),
+        backgroundColor: isPause ? '#FDC534' : '#f3f3f3',
       }}
     >
       <div
         className='day-view-schedule__status-indicator'
-        style={{ backgroundColor: scheduleStatus.color }}
+        style={{ backgroundColor: scheduleStatus?.color || 'white' }}
       />
       <div className='day-view-schedule__wrapper'>
         <div className='header'>
-          <Typography noWrap classes={{ root: 'hour-label' }}>
-            {startHour} - {endHour} {schedule.patient.fullName}
+          <Typography
+            noWrap
+            classes={{ root: clsx('hour-label', isPause && 'pause') }}
+          >
+            {startHour} - {endHour}{' '}
+            {schedule.type === 'Schedule' && schedule.patient.fullName}
           </Typography>
-          {scheduleStatus.statusIcon != null && (
+          {scheduleStatus?.statusIcon != null && (
             <div
               className={clsx(
                 'status-icon',
-                (scheduleStatus.id === 'DidNotCome' ||
-                  scheduleStatus.id === 'Canceled') &&
+                (scheduleStatus?.id === 'DidNotCome' ||
+                  scheduleStatus?.id === 'Canceled') &&
                   'negative',
               )}
             >
-              {scheduleStatus.statusIcon}
+              {scheduleStatus?.statusIcon}
             </div>
           )}
         </div>
         <div className='info'>
-          <div className='info-wrapper'>
-            <div className='info-row'>
-              <Typography classes={{ root: 'info-title' }}>
-                {textForKey('Service')}:
+          {schedule.type === 'Schedule' ? (
+            <div className='info-wrapper'>
+              <div className='info-row'>
+                <Typography classes={{ root: 'info-title' }}>
+                  {textForKey('Service')}:
+                </Typography>
+                <Typography noWrap classes={{ root: 'info-label' }}>
+                  {schedule.serviceName}
+                </Typography>
+              </div>
+              <div className='info-row'>
+                <Typography classes={{ root: 'info-title' }}>
+                  {textForKey('Patient')}:
+                </Typography>
+                <Typography noWrap classes={{ root: 'info-label' }}>
+                  {schedule.patient.fullName}
+                </Typography>
+              </div>
+              <div className='info-row'>
+                <Typography classes={{ root: 'info-title' }}>
+                  {textForKey('Status')}:
+                </Typography>
+                <Typography noWrap classes={{ root: 'info-label' }}>
+                  {scheduleStatus?.name}
+                </Typography>
+              </div>
+            </div>
+          ) : (
+            <div className='pause-wrapper'>
+              <Typography classes={{ root: 'pause-label' }}>
+                {textForKey('Pause')}
               </Typography>
-              <Typography noWrap classes={{ root: 'info-label' }}>
-                {schedule.serviceName}
+              <Typography classes={{ root: 'comment-label' }}>
+                {schedule.comment}
               </Typography>
             </div>
-            <div className='info-row'>
-              <Typography classes={{ root: 'info-title' }}>
-                {textForKey('Patient')}:
-              </Typography>
-              <Typography noWrap classes={{ root: 'info-label' }}>
-                {schedule.patient.fullName}
-              </Typography>
-            </div>
-            <div className='info-row'>
-              <Typography classes={{ root: 'info-title' }}>
-                {textForKey('Status')}:
-              </Typography>
-              <Typography noWrap classes={{ root: 'info-label' }}>
-                {scheduleStatus.name}
-              </Typography>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
@@ -164,6 +181,8 @@ DayViewSchedule.propTypes = {
     serviceName: PropTypes.string,
     isUrgent: PropTypes.bool,
     offset: PropTypes.number,
+    type: PropTypes.oneOf(['Schedule', 'Pause']),
+    comment: PropTypes.string,
     patient: PropTypes.shape({
       id: PropTypes.number,
       fullName: PropTypes.string,
