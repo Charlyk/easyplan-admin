@@ -776,7 +776,7 @@ const AddAppointmentModal = ({
           searchText={textForKey('Searching...')}
           filterBy={['firstName', 'lastName']}
           labelKey='fullName'
-          options={doctors}
+          options={doctors.filter(item => !item.isInVacation)}
           selected={doctor ? [doctor] : []}
           onChange={handleDoctorChange}
           renderMenu={(results, menuProps) => {
