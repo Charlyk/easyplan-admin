@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
-import { Tooltip, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -8,8 +8,9 @@ import PropTypes from 'prop-types';
 import { Statuses } from '../../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 
-const offsetDistance = 30;
+const offsetDistance = 20;
 const minScheduleHeight = 30;
+const entireMinHeight = 100;
 
 const DayViewSchedule = ({
   schedule,
@@ -18,6 +19,8 @@ const DayViewSchedule = ({
   firstHour,
   onScheduleSelect,
 }) => {
+  const highlightTimeout = useRef(-1);
+  const [isHighlighted, setIsHighlighted] = useState(false);
   const startTime = moment(schedule.startTime);
   const endTime = moment(schedule.endTime);
   const startHour = startTime.format('HH:mm');
@@ -33,7 +36,11 @@ const DayViewSchedule = ({
     const scheduleDuration = moment
       .duration(endTime.diff(startTime))
       .asMinutes();
-    return scheduleDuration * 2;
+    const height = scheduleDuration * 2;
+    if (height < entireMinHeight) {
+      return isHighlighted ? entireMinHeight : height;
+    }
+    return height;
   };
 
   const getTopPosition = () => {
@@ -55,10 +62,23 @@ const DayViewSchedule = ({
     onScheduleSelect(schedule);
   };
 
+  const handlePointerEnter = () => {
+    highlightTimeout.current = setTimeout(() => {
+      setIsHighlighted(true);
+    }, 400);
+  };
+
+  const handlePointerLeave = () => {
+    clearTimeout(highlightTimeout.current);
+    setIsHighlighted(false);
+  };
+
   return (
     <div
       role='button'
       tabIndex={0}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       className={clsx(
         'day-view-schedule',
         shouldAnimate && 'upcoming',
@@ -69,7 +89,7 @@ const DayViewSchedule = ({
         left: `calc(${schedule.offset} * ${offsetDistance}px)`,
         width: `calc(99.5% - ${schedule.offset} * ${offsetDistance}px)`,
         top: getTopPosition(),
-        zIndex: 100 + index,
+        zIndex: isHighlighted ? 2000 : 100 + index,
         height: getScheduleHeight(),
       }}
     >
@@ -78,87 +98,50 @@ const DayViewSchedule = ({
         style={{ backgroundColor: scheduleStatus.color }}
       />
       <div className='day-view-schedule__wrapper'>
-        <Tooltip
-          placement='top'
-          title={`${startHour} - ${endHour} ${schedule.patient.fullName}`}
-        >
-          <div className='header'>
-            <Typography noWrap classes={{ root: 'hour-label' }}>
-              {startHour} - {endHour} {schedule.patient.fullName}
-            </Typography>
-            {scheduleStatus.statusIcon != null && (
-              <div
-                className={clsx(
-                  'status-icon',
-                  (scheduleStatus.id === 'DidNotCome' ||
-                    scheduleStatus.id === 'Canceled') &&
-                    'negative',
-                )}
-              >
-                {scheduleStatus.statusIcon}
-              </div>
-            )}
-          </div>
-        </Tooltip>
+        <div className='header'>
+          <Typography noWrap classes={{ root: 'hour-label' }}>
+            {startHour} - {endHour} {schedule.patient.fullName}
+          </Typography>
+          {scheduleStatus.statusIcon != null && (
+            <div
+              className={clsx(
+                'status-icon',
+                (scheduleStatus.id === 'DidNotCome' ||
+                  scheduleStatus.id === 'Canceled') &&
+                  'negative',
+              )}
+            >
+              {scheduleStatus.statusIcon}
+            </div>
+          )}
+        </div>
         <div className='info'>
-          <table>
-            <tbody>
-              <tr>
-                <td
-                  valign='top'
-                  style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                >
-                  <Typography classes={{ root: 'info-title' }}>
-                    {textForKey('Service')}:
-                  </Typography>
-                </td>
-                <td
-                  valign='top'
-                  style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                >
-                  <Typography classes={{ root: 'info-label' }}>
-                    {schedule.serviceName}
-                  </Typography>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  valign='top'
-                  style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                >
-                  <Typography classes={{ root: 'info-title' }}>
-                    {textForKey('Patient')}:
-                  </Typography>
-                </td>
-                <td
-                  valign='top'
-                  style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                >
-                  <Typography classes={{ root: 'info-label' }}>
-                    {schedule.patient.fullName}
-                  </Typography>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  valign='top'
-                  style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                >
-                  <Typography classes={{ root: 'info-title' }}>
-                    {textForKey('Status')}:
-                  </Typography>
-                </td>
-                <td
-                  valign='top'
-                  style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                >
-                  <Typography classes={{ root: 'info-label' }}>
-                    {scheduleStatus.name}
-                  </Typography>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className='info-wrapper'>
+            <div className='info-row'>
+              <Typography classes={{ root: 'info-title' }}>
+                {textForKey('Service')}:
+              </Typography>
+              <Typography noWrap classes={{ root: 'info-label' }}>
+                {schedule.serviceName}
+              </Typography>
+            </div>
+            <div className='info-row'>
+              <Typography classes={{ root: 'info-title' }}>
+                {textForKey('Patient')}:
+              </Typography>
+              <Typography noWrap classes={{ root: 'info-label' }}>
+                {schedule.patient.fullName}
+              </Typography>
+            </div>
+            <div className='info-row'>
+              <Typography classes={{ root: 'info-title' }}>
+                {textForKey('Status')}:
+              </Typography>
+              <Typography noWrap classes={{ root: 'info-label' }}>
+                {scheduleStatus.name}
+              </Typography>
+            </div>
+          </div>
         </div>
       </div>
     </div>

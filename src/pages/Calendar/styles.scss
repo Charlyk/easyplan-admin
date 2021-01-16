@@ -1292,22 +1292,43 @@
               height: 100%;
               overflow: hidden;
 
-              table {
+              .info-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                justify-content: flex-start;
                 width: 100%;
-              }
+                overflow: hidden;
+                padding-left: .5rem;
+                padding-right: .5rem;
+                height: 60px;
 
-              .info-title {
-                font-family: Inter, sans-serif;
-                font-style: normal;
-                font-weight: bold;
-                font-size: 12px;
-              }
+                .info-row {
+                  width: 100%;
+                  display: flex;
+                  align-items: start;
+                  overflow: hidden;
+                  height: 20px;
+                  min-height: 20px;
 
-              .info-label {
-                font-family: Inter, sans-serif;
-                font-style: normal;
-                font-weight: normal;
-                font-size: 12px;
+                  .info-title {
+                    height: 100%;
+                    font-family: Inter, sans-serif;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 12px;
+                    margin-right: .3rem;
+                    width: 60px;
+                  }
+
+                  .info-label {
+                    height: 100%;
+                    font-family: Inter, sans-serif;
+                    font-style: normal;
+                    font-weight: normal;
+                    font-size: 12px;
+                  }
+                }
               }
             }
           }

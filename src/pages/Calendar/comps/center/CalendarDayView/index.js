@@ -93,10 +93,12 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     } else {
       const { data: schedules } = response;
       const mappedSchedules = [];
+      // map schedules by adding an offset for schedules that intersect other schedules
       for (let item of doctors) {
         const doctorSchedules =
           schedules.find(it => it.doctorId === item.id)?.schedules || [];
         const newSchedules = [];
+        // check if schedules intersect other schedules and update their offset
         for (let schedule of doctorSchedules) {
           const scheduleRange = moment.range(
             moment(schedule.startTime),
@@ -105,13 +107,18 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           if (schedule.offset == null) {
             schedule.offset = 0;
           }
-          schedule.offset += newSchedules.filter(item => {
+          // update new schedule offset based on already added schedules
+          for (let item of newSchedules) {
             const itemRange = moment.range(
               moment(item.startTime),
               moment(item.endTime),
             );
-            return itemRange.intersect(scheduleRange);
-          }).length;
+            const hasIntersection = scheduleRange.intersect(itemRange) != null;
+            if (hasIntersection) {
+              schedule.offset = (item.offset || 0) + 1;
+            }
+          }
+          // add the new schedules to array to check the next one against it
           newSchedules.push(schedule);
           await timer(500);
         }
