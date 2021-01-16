@@ -97,6 +97,7 @@ const DayViewSchedule = ({
         zIndex: isHighlighted ? 500 : 100 + index,
         height: getScheduleHeight(),
         backgroundColor: isPause ? '#FDC534' : '#f3f3f3',
+        border: isHighlighted ? '#3A83DC 1px solid' : 'none',
       }}
     >
       <div
