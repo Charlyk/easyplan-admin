@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import PropTypes from 'prop-types';
@@ -298,7 +299,10 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
                 id={`${doctor.id}&column`}
                 key={`${doctor.id}-column`}
                 style={{ width: doctorRect.width, height: getHoursHeight() }}
-                className='day-schedules-column'
+                className={clsx(
+                  'day-schedules-column',
+                  doctor.isInVacation && 'disabled',
+                )}
               >
                 {getSchedulesForDoctor(doctor.id).map((schedule, index) => (
                   <DayViewSchedule
@@ -315,6 +319,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
                 {getScheduleItemsContainer().map(hour => {
                   return (
                     <ScheduleItemContainer
+                      disabled={doctor.isInVacation}
                       onAddSchedule={handleAddSchedule(doctor)}
                       startHour={hour.start}
                       endHour={hour.end}

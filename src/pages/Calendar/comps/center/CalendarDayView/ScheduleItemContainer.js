@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
 
 import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import IconPlus from '../../../../../assets/icons/iconPlus';
 
-const ScheduleItemContainer = ({ startHour, endHour, onAddSchedule }) => {
+const ScheduleItemContainer = ({
+  startHour,
+  endHour,
+  disabled,
+  onAddSchedule,
+}) => {
   const [showCreateView, setShowCreateView] = useState(false);
+
+  if (disabled) {
+    return null;
+  }
 
   const handlePointerEnter = () => {
     setShowCreateView(true);
@@ -54,6 +64,7 @@ ScheduleItemContainer.propTypes = {
   startHour: PropTypes.string,
   endHour: PropTypes.string,
   onAddSchedule: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 ScheduleItemContainer.defaultProps = {

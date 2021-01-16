@@ -6,6 +6,7 @@ import {
   ClickAwayListener,
   Typography,
 } from '@material-ui/core';
+import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -27,6 +28,7 @@ const DoctorItem = ({ doctor, onAddPause }) => {
   };
 
   const handleOpenMenu = () => {
+    if (doctor.isInVacation) return;
     setIsMenuOpen(true);
   };
 
@@ -63,7 +65,10 @@ const DoctorItem = ({ doctor, onAddPause }) => {
       role='button'
       tabIndex={0}
       onClick={handleOpenMenu}
-      className='day-doctors-container__item'
+      className={clsx(
+        'day-doctors-container__item',
+        doctor.isInVacation && 'disabled',
+      )}
       id={doctor.id}
     >
       {optionsMenu}
@@ -80,7 +85,17 @@ const DoctorItem = ({ doctor, onAddPause }) => {
 export default DoctorItem;
 
 DoctorItem.propTypes = {
-  doctor: PropTypes.object,
+  doctor: PropTypes.shape({
+    id: PropTypes.number,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    isInVacation: PropTypes.bool,
+    services: PropTypes.arrayOf(
+      PropTypes.shape({
+        serviceId: PropTypes.number,
+      }),
+    ),
+  }),
   onAddPause: PropTypes.func,
 };
 
