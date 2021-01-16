@@ -10,10 +10,6 @@ import { Statuses } from '../../../../utils/constants';
 const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
   const shouldAnimate = appointment.scheduleStatus === 'WaitingForPatient';
 
-  if (appointment.isUrgent) {
-    console.log(appointment);
-  }
-
   const handleScheduleClick = () => {
     if (hidden) {
       return;

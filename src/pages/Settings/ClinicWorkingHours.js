@@ -45,7 +45,6 @@ const ClinicWorkingHours = () => {
   const submitForm = async () => {
     setIsLoading(true);
     const response = await dataAPI.updateClinic({ ...clinic, workdays });
-    console.log(response.data);
     dispatch(setClinic(response.data));
     setIsLoading(false);
   };

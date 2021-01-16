@@ -366,6 +366,10 @@ export default {
     is_user_day_off: 'Is doctor day off',
     is_clinic_day_off: 'Is clinic day off',
     is_doctor_holiday: 'Is doctor holiday',
+    'add pause': 'Add pause',
+    'start time': 'Start time',
+    'end time': 'End time',
+    pause: 'Pause',
   },
   ro: {
     analytics: 'Analitică',
@@ -739,6 +743,10 @@ export default {
     is_user_day_off: 'Doctorul are zi liberă',
     is_clinic_day_off: 'Este zi liberă',
     is_doctor_holiday: 'Doctorul este în vacanță',
+    'add pause': 'Adaugă pauză',
+    'start time': 'Început',
+    'end time': 'Sfârșit',
+    pause: 'Pauză',
   },
   ru: {
     analytics: 'Analytics',
@@ -1104,5 +1112,9 @@ export default {
     is_user_day_off: 'Is doctor day off',
     is_clinic_day_off: 'Is clinic day off',
     is_doctor_holiday: 'Is doctor holiday',
+    'add pause': 'Add pause',
+    'start time': 'Start time',
+    'end time': 'End time',
+    pause: 'Pause',
   },
 };

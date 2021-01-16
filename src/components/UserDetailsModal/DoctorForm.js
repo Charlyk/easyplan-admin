@@ -26,24 +26,6 @@ const DoctorForm = ({ data, onChange, onCreateHoliday, onDeleteHoliday }) => {
       <div className='doctor-form__group'>
         <div className='doctor-form__group-header'>
           <div className='doctor-form__group-header__title-container'>
-            {textForKey('Provided services')}
-          </div>
-        </div>
-        <DoctorServices show data={data} onChange={handleServicesChange} />
-      </div>
-
-      <div className='doctor-form__group'>
-        <div className='doctor-form__group-header'>
-          <div className='doctor-form__group-header__title-container'>
-            {textForKey('Braces')}
-          </div>
-        </div>
-        <DoctorBracesSettings show data={data} onChange={handleBracesChange} />
-      </div>
-
-      <div className='doctor-form__group'>
-        <div className='doctor-form__group-header'>
-          <div className='doctor-form__group-header__title-container'>
             {textForKey('Work hours')}
           </div>
         </div>
@@ -62,6 +44,24 @@ const DoctorForm = ({ data, onChange, onCreateHoliday, onDeleteHoliday }) => {
           onCreateOrUpdate={onCreateHoliday}
           onDeleteHoliday={onDeleteHoliday}
         />
+      </div>
+
+      <div className='doctor-form__group'>
+        <div className='doctor-form__group-header'>
+          <div className='doctor-form__group-header__title-container'>
+            {textForKey('Provided services')}
+          </div>
+        </div>
+        <DoctorServices show data={data} onChange={handleServicesChange} />
+      </div>
+
+      <div className='doctor-form__group'>
+        <div className='doctor-form__group-header'>
+          <div className='doctor-form__group-header__title-container'>
+            {textForKey('Braces')}
+          </div>
+        </div>
+        <DoctorBracesSettings show data={data} onChange={handleBracesChange} />
       </div>
     </div>
   );

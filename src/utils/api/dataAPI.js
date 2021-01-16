@@ -2194,4 +2194,53 @@ export default {
       };
     }
   },
+
+  /**
+   * Create calendar pause record
+   * @param {object} requestBody
+   * @param {number} requestBody.doctorId
+   * @param {Date} requestBody.startTime
+   * @param {Date} requestBody.endTime
+   * @param {string?} requestBody.comment
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  createPauseRecord: async requestBody => {
+    try {
+      const url = `${baseURL}/pauses`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  getPauseAvailableTime: async requestBody => {
+    try {
+      const url = `${baseURL}/pauses/available-time`;
+      const response = await Axios.put(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
 };
