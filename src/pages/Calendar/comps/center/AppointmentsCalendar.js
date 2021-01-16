@@ -122,6 +122,10 @@ const AppointmentsCalendar = ({
     }
   };
 
+  const handleAddAppointment = () => {
+    onAddAppointment();
+  };
+
   const calendarPopper = (
     <Popper
       className='appointments-date-picker-root'
@@ -210,7 +214,7 @@ const AppointmentsCalendar = ({
           <Button
             className='positive-button'
             disabled={!canAddAppointment}
-            onClick={onAddAppointment}
+            onClick={handleAddAppointment}
           >
             {textForKey('Add appointment')}
             <IconPlus />
