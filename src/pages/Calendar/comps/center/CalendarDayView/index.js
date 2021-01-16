@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { timer } from 'rxjs';
 
+import NoSchedulesImg from '../../../../../assets/images/no_schedules.png';
 import AddPauseModal from '../../../../../components/AddPauseModal';
 import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
@@ -23,10 +24,11 @@ const moment = extendMoment(Moment);
 
 const initialState = {
   hours: [],
-  isLoading: false,
+  isLoading: true,
   createIndicator: { visible: false, top: 0, doctorId: -1 },
   parentTop: 0,
   schedules: [],
+  hasSchedules: false,
   pauseModal: {
     open: false,
     doctor: null,
@@ -89,7 +91,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       dataRef.current.scrollTo({ top: 0, behavior: 'auto' });
     }
     localDispatch(actions.setSchedules([]));
-    fetchWorkHours();
+    fetchDaySchedules();
   }, [viewDate, doctors, updateAppointments]);
 
   useEffect(() => {
@@ -104,7 +106,8 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      const { data: schedules } = response;
+      const { schedules, dayHours } = response.data;
+      localDispatch(actions.setHours(dayHours));
       const mappedSchedules = [];
       // map schedules by adding an offset for schedules that intersect other schedules
       for (let item of doctors) {
@@ -143,19 +146,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       localDispatch(actions.setSchedules(mappedSchedules));
     }
     localDispatch(actions.setIsLoading(false));
-  };
-
-  const fetchWorkHours = async () => {
-    localDispatch(actions.setIsLoading(true));
-    const day = moment(viewDate).isoWeekday();
-    const response = await dataAPI.fetchClinicWorkHoursV2(day);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-      localDispatch(actions.setIsLoading(false));
-    } else {
-      localDispatch(actions.setHours(response.data));
-      fetchDaySchedules();
-    }
   };
 
   const getLinePositionForHour = hour => {
@@ -247,21 +237,35 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   return (
     <Box className='calendar-day-view' id='calendar-day-view'>
       <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
-      <div className='day-doctors-container'>
-        {doctors.map(doctor => (
-          <DoctorItem
-            doctor={doctor}
-            key={doctor.id}
-            onAddPause={handleCreatePause}
-          />
-        ))}
-      </div>
+      {hours.length !== 0 && (
+        <div className='day-doctors-container'>
+          {doctors.map(doctor => (
+            <DoctorItem
+              doctor={doctor}
+              key={doctor.id}
+              onAddPause={handleCreatePause}
+            />
+          ))}
+        </div>
+      )}
       <div className='day-data-container' ref={dataRef}>
         {isLoading && (
           <div className='loading-progress-wrapper'>
             <CircularProgress
               classes={{ root: 'loading-schedules-progress' }}
             />
+          </div>
+        )}
+        {!isLoading && hours.length === 0 && (
+          <div className='no-data-wrapper'>
+            <img
+              className='no-data-image'
+              src={NoSchedulesImg}
+              alt='No schedules'
+            />
+            <Typography classes={{ root: 'no-data-label' }}>
+              {textForKey('No schedules for this day')}.
+            </Typography>
           </div>
         )}
         <div className='day-hours-container' id='day-hours-container'>

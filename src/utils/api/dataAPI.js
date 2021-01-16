@@ -1016,7 +1016,7 @@ export default {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
-        `${baseURL}/schedules/day?&date=${stringDate}`,
+        `${baseURL}/schedules/v2/day?&date=${stringDate}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {
