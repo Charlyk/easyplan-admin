@@ -2,6 +2,8 @@
   background-color: #34344E;
   width: 13rem;
   padding: 2rem;
+  height: 100%;
+  overflow-y: scroll;
   position: relative;
 
   .import-data-wrapper {
@@ -30,7 +32,7 @@
   .trust-seal-image {
     height: 25px;
     width: auto;
-    position: absolute;
+    position: fixed;
     bottom: 1rem;
     left: 1rem;
   }
