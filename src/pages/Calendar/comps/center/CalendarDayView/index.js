@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import NoSchedulesImg from '../../../../../assets/images/no_schedules.png';
 import AddPauseModal from '../../../../../components/AddPauseModal';
 import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
@@ -362,7 +361,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           <div className='no-data-wrapper'>
             <img
               className='no-data-image'
-              src={NoSchedulesImg}
+              src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/rsz_4584.png'
               alt='No schedules'
             />
             <Typography classes={{ root: 'no-data-label' }}>

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import appLogo from '../../assets/images/easyplan-logo.svg';
 import './styles.scss';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
@@ -12,7 +11,7 @@ const FormType = {
   register: 'register',
 };
 
-const Login = props => {
+const Login = () => {
   const [currentForm, setCurrentForm] = useState(FormType.login);
 
   const handleResetPasswordBack = () => {
@@ -30,7 +29,10 @@ const Login = props => {
   return (
     <div className='login-form-root'>
       <div className='logo-container'>
-        <img src={appLogo} alt='EasyPlan' />
+        <img
+          src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+          alt='EasyPlan'
+        />
       </div>
       <div className='form-container'>
         {currentForm === FormType.login && (
