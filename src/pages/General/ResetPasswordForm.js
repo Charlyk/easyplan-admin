@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
-import { useParams, useHistory, Redirect } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import appLogo from '../../assets/images/easyplan-logo.svg';
 import LoadingButton from '../../components/LoadingButton';
 import './styles.scss';
 import authAPI from '../../utils/api/authAPI';
@@ -60,7 +59,10 @@ const ResetPasswordForm = () => {
   return (
     <div className='general-page'>
       <div className='logo-container'>
-        <img src={appLogo} alt='EasyPlan' />
+        <img
+          src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+          alt='EasyPlan'
+        />
       </div>
       <div className='form-container'>
         <div className='form-root accept-invitation'>
