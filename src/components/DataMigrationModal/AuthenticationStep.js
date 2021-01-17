@@ -10,10 +10,17 @@ import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import LoadingButton from '../LoadingButton';
 
+// const initialState = {
+//   username: 'dentino.dentus@gmail.com',
+//   password: 'tezpd4',
+//   partnerToken: 'u8xzkdpkgfc73uektn64',
+//   isLoading: false,
+// };
+
 const initialState = {
-  username: 'dentino.dentus@gmail.com',
-  password: 'tezpd4',
-  partnerToken: 'u8xzkdpkgfc73uektn64',
+  username: '',
+  password: '',
+  partnerToken: '',
   isLoading: false,
 };
 

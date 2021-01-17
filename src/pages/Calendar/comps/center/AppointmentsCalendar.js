@@ -20,7 +20,6 @@ import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
-import IconNext from '../../../../assets/icons/iconNext';
 import IconPlus from '../../../../assets/icons/iconPlus';
 import AppointmentDetails from '../../../../components/AppointmentDetails';
 import EasyTab from '../../../../components/EasyTab';
@@ -29,7 +28,7 @@ import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarS
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
-import CalendarDoctorsView from './day/CalendarDoctorsView';
+import CalendarDayView from './CalendarDayView';
 import CalendarMonthView from './month/CalendarMonthView';
 import CalendarWeekView from './week/CalendarWeekView';
 
@@ -123,6 +122,10 @@ const AppointmentsCalendar = ({
     }
   };
 
+  const handleAddAppointment = () => {
+    onAddAppointment();
+  };
+
   const calendarPopper = (
     <Popper
       className='appointments-date-picker-root'
@@ -199,7 +202,7 @@ const AppointmentsCalendar = ({
             onClick={() => handleTabChange(CalendarView.month)}
           />
         </div>
-        <Box display='flex'>
+        <Box display='flex' className='right-btns-wrapper'>
           <LoadingButton
             isLoading={isUploading}
             variant='outline-primary'
@@ -211,7 +214,7 @@ const AppointmentsCalendar = ({
           <Button
             className='positive-button'
             disabled={!canAddAppointment}
-            onClick={onAddAppointment}
+            onClick={handleAddAppointment}
           >
             {textForKey('Add appointment')}
             <IconPlus />
@@ -230,10 +233,11 @@ const AppointmentsCalendar = ({
           <Spinner animation='border' className='loading-spinner' />
         )}
         {currentTab === CalendarView.day && (
-          <CalendarDoctorsView
+          <CalendarDayView
             onScheduleSelect={onScheduleSelect}
             viewDate={viewDate}
             update={updateAppointments}
+            onCreateSchedule={onAddAppointment}
           />
         )}
         <CalendarWeekView

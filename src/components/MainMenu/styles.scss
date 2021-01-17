@@ -1,7 +1,9 @@
 .main-menu {
   background-color: #34344E;
-  width: 16rem;
+  width: 13rem;
   padding: 2rem;
+  height: 100%;
+  overflow-y: scroll;
   position: relative;
 
   .import-data-wrapper {
@@ -30,7 +32,7 @@
   .trust-seal-image {
     height: 25px;
     width: auto;
-    position: absolute;
+    position: fixed;
     bottom: 1rem;
     left: 1rem;
   }
@@ -162,7 +164,7 @@
 
       .child-container {
         height: 0;
-        margin-left: 1.5rem;
+        margin-left: 1px;
         margin-top: unset;
         overflow: hidden;
 
@@ -180,7 +182,7 @@
           color: #FAFAFD;
           user-select: none;
           text-decoration: none;
-          padding: .5rem 1rem;
+          padding: .5rem .5rem;
           font-weight: 300;
 
           &.active {

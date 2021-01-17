@@ -147,6 +147,8 @@ const Main = () => {
         doctor={appointmentModal?.doctor}
         date={appointmentModal?.date}
         patient={appointmentModal?.patient}
+        startHour={appointmentModal?.startHour}
+        endHour={appointmentModal?.endHour}
       />
       {currentUser != null && (
         <MainMenu

@@ -1,5 +1,9 @@
 import React from 'react';
 
+import IconMoney from '@material-ui/icons/AttachMoney';
+import IconClear from '@material-ui/icons/Clear';
+import DoneIcon from '@material-ui/icons/Done';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import IconFree from '@material-ui/icons/MoneyOff';
 import moment from 'moment';
 
@@ -131,6 +135,7 @@ export function createHoursList() {
     ]),
   );
 }
+
 export const days = [
   textForKey('Sunday'),
   textForKey('Monday'),
@@ -147,6 +152,7 @@ export const Statuses = [
     name: textForKey('Pending'),
     color: '#ffb902',
     icon: <IconAppointmentCalendar />,
+    statusIcon: null,
     manual: false,
     isSchedule: true,
   },
@@ -155,6 +161,7 @@ export const Statuses = [
     name: textForKey('Confirmed'),
     color: '#3A83DC',
     icon: <IconCheckMark />,
+    statusIcon: null,
     manual: false,
     isSchedule: true,
   },
@@ -163,6 +170,7 @@ export const Statuses = [
     name: textForKey('Pending payment'),
     color: '#ffb902',
     icon: <IconAppointmentCalendar />,
+    statusIcon: null,
     manual: false,
     isSchedule: false,
   },
@@ -171,14 +179,16 @@ export const Statuses = [
     name: textForKey('Waiting for patient'),
     color: '#ffb902',
     icon: <IconClock />,
+    statusIcon: <IconClock />,
     manual: false,
     isSchedule: true,
   },
   {
     id: 'OnSite',
     name: textForKey('On site'),
-    color: '#ffb902',
+    color: '#00E987',
     icon: <IconCheckMark />,
+    statusIcon: <DoneIcon />,
     manual: true,
     isSchedule: true,
   },
@@ -187,6 +197,7 @@ export const Statuses = [
     name: textForKey('Late'),
     color: '#FDC534',
     icon: <IconClock />,
+    statusIcon: null,
     manual: true,
     isSchedule: true,
   },
@@ -195,6 +206,7 @@ export const Statuses = [
     name: textForKey("Didn't show up"),
     color: '#F44081',
     icon: <IconXPerson />,
+    statusIcon: <IconClear />,
     manual: true,
     isSchedule: true,
   },
@@ -203,6 +215,7 @@ export const Statuses = [
     name: textForKey('Canceled'),
     color: '#F44081',
     icon: <IconXPerson />,
+    statusIcon: <IconClear />,
     manual: true,
     isSchedule: true,
   },
@@ -211,6 +224,7 @@ export const Statuses = [
     name: textForKey('Completed not paid'),
     color: '#7DD7C8',
     icon: <IconSuccess fill='#3A83DC' />,
+    statusIcon: <IconMoney />,
     manual: false,
     isSchedule: true,
   },
@@ -219,6 +233,7 @@ export const Statuses = [
     name: textForKey('Paid'),
     color: '#00E987',
     icon: <IconCreditCard />,
+    statusIcon: <DoneAllIcon />,
     manual: false,
     isSchedule: true,
   },
@@ -227,6 +242,7 @@ export const Statuses = [
     name: textForKey('Completed. Free.'),
     color: '#00E987',
     icon: <IconFree />,
+    statusIcon: <DoneAllIcon />,
     manual: false,
     isSchedule: true,
   },
@@ -235,6 +251,7 @@ export const Statuses = [
     name: textForKey('Partial paid'),
     color: '#9cfacc',
     icon: <IconSuccess fill='#3A83DC' />,
+    statusIcon: <DoneAllIcon />,
     manual: false,
     isSchedule: true,
   },
@@ -243,6 +260,7 @@ export const Statuses = [
     name: textForKey('Paid'),
     color: '#00E987',
     icon: <IconCreditCard />,
+    statusIcon: null,
     manual: false,
     isSchedule: false,
   },
