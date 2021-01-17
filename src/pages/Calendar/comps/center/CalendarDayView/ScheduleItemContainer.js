@@ -53,7 +53,10 @@ const ScheduleItemContainer = ({
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
     >
-      {showCreateView && startHour != null && createScheduleView}
+      {showCreateView &&
+        startHour != null &&
+        endHour != null &&
+        createScheduleView}
     </div>
   );
 };

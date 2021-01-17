@@ -21,8 +21,24 @@ import ScheduleItemContainer from './ScheduleItemContainer';
 
 const moment = extendMoment(Moment);
 
+const createContainerHours = hours => {
+  const updateHours = [];
+  for (let hour of hours) {
+    const hourParts = hour.split(':');
+    const [hours, minutes] = hourParts;
+    updateHours.push(hour);
+    if (minutes === '00') {
+      updateHours.push(`${hours}:15`);
+    } else if (minutes === '30') {
+      updateHours.push(`${hours}:45`);
+    }
+  }
+  return updateHours;
+};
+
 const initialState = {
   hours: [],
+  hoursContainers: [],
   isLoading: true,
   createIndicator: { visible: false, top: 0, doctorId: -1 },
   parentTop: 0,
@@ -46,14 +62,18 @@ const reducerTypes = {
   setParentTop: 'setParentTop',
   setSchedules: 'setSchedules',
   setPauseModal: 'setPauseModal',
+  setHoursContainers: 'setHoursContainers',
+  setSchedulesData: 'setSchedulesData',
 };
 
 const actions = generateReducerActions(reducerTypes);
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case reducerTypes.setHours:
-      return { ...state, hours: action.payload };
+    case reducerTypes.setHours: {
+      const updateHours = createContainerHours(action.payload);
+      return { ...state, hours: action.payload, hoursContainers: updateHours };
+    }
     case reducerTypes.setParentTop:
       return { ...state, parentTop: action.payload };
     case reducerTypes.setIsLoading:
@@ -70,6 +90,18 @@ const reducer = (state, action) => {
       };
     case reducerTypes.setPauseModal:
       return { ...state, pauseModal: action.payload };
+    case reducerTypes.setHoursContainers:
+      return { ...state, hoursContainers: action.payload };
+    case reducerTypes.setSchedulesData: {
+      const { schedules, dayHours } = action.payload;
+      const updateHours = createContainerHours(dayHours);
+      return {
+        ...state,
+        schedules,
+        hours: dayHours,
+        hoursContainers: updateHours,
+      };
+    }
     default:
       return state;
   }
@@ -81,7 +113,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
   const [
-    { isLoading, hours, parentTop, schedules, pauseModal },
+    { isLoading, hours, parentTop, schedules, pauseModal, hoursContainers },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -89,13 +121,15 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (dataRef.current != null) {
       dataRef.current.scrollTo({ top: 0, behavior: 'auto' });
     }
-    localDispatch(actions.setSchedules([]));
-    fetchDaySchedules();
+    if (viewDate != null) {
+      localDispatch(actions.setSchedules([]));
+      fetchHours();
+    }
   }, [viewDate]);
 
   useEffect(() => {
-    if (!isLoading) {
-      fetchDaySchedules(true);
+    if (!isLoading && hours.length === 0 && viewDate != null) {
+      fetchHours(true);
     }
   }, [updateAppointments, doctors]);
 
@@ -106,52 +140,74 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   }, [schedulesRef.current]);
 
+  const fetchHours = async () => {
+    localDispatch(actions.setIsLoading(true));
+    const timezone = moment.tz.guess(true);
+    const response = await dataAPI.fetchDaySchedulesHours(viewDate, timezone);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      localDispatch(actions.setHours(response.data));
+      await fetchDaySchedules(true);
+    }
+    localDispatch(actions.setIsLoading(false));
+  };
+
   const fetchDaySchedules = async (silent = false) => {
-    localDispatch(actions.setIsLoading(!silent));
+    if (!silent) {
+      localDispatch(actions.setIsLoading(true));
+    }
     const timezone = moment.tz.guess(true);
     const response = await dataAPI.fetchDaySchedules(viewDate, timezone);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
       const { schedules, dayHours } = response.data;
-      localDispatch(actions.setHours(dayHours));
-      const mappedSchedules = [];
-      // map schedules by adding an offset for schedules that intersect other schedules
-      for (let item of doctors) {
-        const doctorSchedules =
-          schedules.find(it => it.doctorId === item.id)?.schedules || [];
-        const newSchedules = [];
-        // check if schedules intersect other schedules and update their offset
-        for (let schedule of doctorSchedules) {
-          const scheduleRange = moment.range(
-            moment(schedule.startTime),
-            moment(schedule.endTime),
-          );
-          if (schedule.offset == null) {
-            schedule.offset = 0;
-          }
-          // update new schedule offset based on already added schedules
-          for (let item of newSchedules) {
-            const itemRange = moment.range(
-              moment(item.startTime),
-              moment(item.endTime),
-            );
-            const hasIntersection = scheduleRange.intersect(itemRange) != null;
-            if (hasIntersection) {
-              schedule.offset = (item.offset || 0) + 1;
-            }
-          }
-          // add the new schedules to array to check the next one against it
-          newSchedules.push(schedule);
-        }
-        mappedSchedules.push({
-          doctor: item,
-          schedules: newSchedules,
-        });
-      }
-      localDispatch(actions.setSchedules(mappedSchedules));
+      await updateSchedules(schedules, dayHours);
     }
-    localDispatch(actions.setIsLoading(false));
+    if (!silent) {
+      localDispatch(actions.setIsLoading(false));
+    }
+  };
+
+  const updateSchedules = async (schedules, hours) => {
+    const mappedSchedules = [];
+    // map schedules by adding an offset for schedules that intersect other schedules
+    for (let item of doctors) {
+      const doctorSchedules =
+        schedules.find(it => it.doctorId === item.id)?.schedules || [];
+      const newSchedules = [];
+      // check if schedules intersect other schedules and update their offset
+      for (let schedule of doctorSchedules) {
+        const scheduleRange = moment.range(
+          moment(schedule.startTime),
+          moment(schedule.endTime),
+        );
+        if (schedule.offset == null) {
+          schedule.offset = 0;
+        }
+        // update new schedule offset based on already added schedules
+        for (let item of newSchedules) {
+          const itemRange = moment.range(
+            moment(item.startTime),
+            moment(item.endTime),
+          );
+          const hasIntersection = scheduleRange.intersect(itemRange) != null;
+          if (hasIntersection) {
+            schedule.offset = (item.offset || 0) + 1;
+          }
+        }
+        // add the new schedules to array to check the next one against it
+        newSchedules.push(schedule);
+      }
+      mappedSchedules.push({
+        doctor: item,
+        schedules: newSchedules,
+      });
+    }
+    localDispatch(
+      actions.setSchedulesData({ schedules: mappedSchedules, dayHours: hours }),
+    );
   };
 
   const getLinePositionForHour = hour => {
@@ -211,12 +267,41 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   };
 
-  const getScheduleItemsContainer = () => {
-    return hours.map((hour, index) => {
+  const getScheduleItemsContainer = doctor => {
+    return hoursContainers.map((hour, index) => {
       if (index === 0) {
-        return { start: null, end: hour };
+        return (
+          <ScheduleItemContainer
+            disabled={doctor.isInVacation}
+            onAddSchedule={handleAddSchedule(doctor)}
+            startHour={null}
+            endHour={hour}
+            key={`schedule-item-${hour}`}
+            className='day-schedule-item-container'
+          />
+        );
+      } else if (index + 1 === hoursContainers.length) {
+        return (
+          <ScheduleItemContainer
+            disabled={doctor.isInVacation}
+            onAddSchedule={handleAddSchedule(doctor)}
+            startHour={hoursContainers[index]}
+            endHour={null}
+            key={`${hoursContainers[index]}-schedule-item`}
+            className='day-schedule-item-container'
+          />
+        );
       } else {
-        return { start: hours[index - 1], end: hour };
+        return (
+          <ScheduleItemContainer
+            disabled={doctor.isInVacation}
+            onAddSchedule={handleAddSchedule(doctor)}
+            startHour={hoursContainers[index - 1]}
+            endHour={hour}
+            key={`${hoursContainers[index - 1]}-schedule-item-${hour}`}
+            className='day-schedule-item-container'
+          />
+        );
       }
     });
   };
@@ -233,7 +318,18 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
 
   const getSchedulesForDoctor = doctorId => {
     const scheduleData = schedules.find(item => item.doctor.id === doctorId);
-    return scheduleData?.schedules || [];
+    return (scheduleData?.schedules || []).map((schedule, index) => (
+      <DayViewSchedule
+        key={schedule.id}
+        parentTop={parentTop}
+        schedule={schedule}
+        index={index}
+        viewDate={viewDate}
+        onScheduleSelect={handleScheduleClick}
+        offset={0}
+        firstHour={hours[0]}
+      />
+    ));
   };
 
   const halfHours = hours.filter(
@@ -285,63 +381,43 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
             </Typography>
           ))}
         </div>
-        <div
-          ref={schedulesRef}
-          className='day-schedules-container'
-          id='day-schedules-container'
-        >
-          {halfHours.map(hour => (
-            <div
-              id={`${hour}-line`}
-              className='hour-line'
-              style={{ top: getLinePositionForHour(hour) }}
-              key={`${hour}-line`}
-            />
-          ))}
-          {doctors.map(doctor => {
-            const doctorRect = document
-              .getElementById(doctor.id)
-              ?.getBoundingClientRect() || {
-              width: 0,
-            };
-            return (
+        {!isLoading && (
+          <div
+            ref={schedulesRef}
+            className='day-schedules-container'
+            id='day-schedules-container'
+          >
+            {halfHours.map(hour => (
               <div
-                id={`${doctor.id}&column`}
-                key={`${doctor.id}-column`}
-                style={{ width: doctorRect.width, height: getHoursHeight() }}
-                className={clsx(
-                  'day-schedules-column',
-                  doctor.isInVacation && 'disabled',
-                )}
-              >
-                {getSchedulesForDoctor(doctor.id).map((schedule, index) => (
-                  <DayViewSchedule
-                    key={schedule.id}
-                    parentTop={parentTop}
-                    schedule={schedule}
-                    index={index}
-                    viewDate={viewDate}
-                    onScheduleSelect={handleScheduleClick}
-                    offset={0}
-                    firstHour={hours[0]}
-                  />
-                ))}
-                {getScheduleItemsContainer().map(hour => {
-                  return (
-                    <ScheduleItemContainer
-                      disabled={doctor.isInVacation}
-                      onAddSchedule={handleAddSchedule(doctor)}
-                      startHour={hour.start}
-                      endHour={hour.end}
-                      key={`${hour.start}-schedule-item`}
-                      className='day-schedule-item-container'
-                    />
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+                id={`${hour}-line`}
+                className='hour-line'
+                style={{ top: getLinePositionForHour(hour) }}
+                key={`${hour}-line`}
+              />
+            ))}
+            {doctors.map(doctor => {
+              const doctorRect = document
+                .getElementById(doctor.id)
+                ?.getBoundingClientRect() || {
+                width: 0,
+              };
+              return (
+                <div
+                  id={`${doctor.id}&column`}
+                  key={`${doctor.id}-column`}
+                  style={{ width: doctorRect.width, height: getHoursHeight() }}
+                  className={clsx(
+                    'day-schedules-column',
+                    doctor.isInVacation && 'disabled',
+                  )}
+                >
+                  {getScheduleItemsContainer(doctor)}
+                  {getSchedulesForDoctor(doctor.id)}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </Box>
   );
