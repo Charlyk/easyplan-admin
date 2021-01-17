@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 import {
   Box,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -314,6 +315,11 @@ const Users = props => {
       />
 
       <div className='users-root__content'>
+        {isLoading && (
+          <div className='loading-wrapper'>
+            <CircularProgress classes={{ root: 'users-loading' }} />
+          </div>
+        )}
         <TableContainer classes={{ root: 'table-container' }}>
           <Table classes={{ root: 'data-table' }}>
             <TableBody>
