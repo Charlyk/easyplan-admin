@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import './styles.scss';
-
-import Skeleton from '@material-ui/lab/Skeleton';
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -157,26 +164,28 @@ const Users = props => {
     const role = type === Role.admin ? Role.manager : type;
 
     return (
-      <div
-        role='button'
-        tabIndex={0}
-        className='users-root__no-data'
-        onClick={event => handleInviteUserStart(event, role)}
-      >
-        {message}
-        <div role='button'>{buttonText}</div>
-      </div>
-    );
-  };
-
-  const renderSkeleton = () => {
-    if (!isLoading || data.users.length > 0) return null;
-    return (
-      <div className='users-root__skeleton'>
-        <Skeleton variant='rect' animation='wave' />
-        <Skeleton variant='rect' animation='wave' />
-        <Skeleton variant='rect' animation='wave' />
-      </div>
+      <TableRow classes={{ root: 'users-root__no-data' }}>
+        <TableCell colSpan={5}>
+          <Box
+            width='100%'
+            display='flex'
+            alignItems='center'
+            justifyContent='center'
+          >
+            <Typography classes={{ root: 'no-data-label' }}>
+              {message}
+            </Typography>
+            <div
+              role='button'
+              className='add-data-btn'
+              tabIndex={0}
+              onClick={event => handleInviteUserStart(event, role)}
+            >
+              {buttonText}
+            </div>
+          </Box>
+        </TableCell>
+      </TableRow>
     );
   };
 
@@ -305,86 +314,108 @@ const Users = props => {
       />
 
       <div className='users-root__content'>
-        {canShowType(Role.invitations) && (
-          <div className='users-root__group'>
-            <span className='users-root__group-title'>
-              {textForKey('Invitations')}
-            </span>
-            {data.invitations.map(item => (
-              <UserItem
-                isInvitation={true}
-                isInviting={isInviting.userId === item.id && isInviting.loading}
-                onResend={handleResendInvitation}
-                user={item}
-                key={`invitation-${item.id}`}
-                onDelete={startUserDelete}
-                onEdit={handleUserModalOpen}
-              />
-            ))}
-            {renderSkeleton()}
-            {renderNoData(Role.invitations)}
-          </div>
-        )}
-        {canShowType(Role.doctor) && (
-          <div className='users-root__group'>
-            <span className='users-root__group-title'>
-              {textForKey('Doctors')}
-            </span>
-            {doctors.map(item => (
-              <UserItem
-                isInviting={isInviting.userId === item.id && isInviting.loading}
-                onResend={handleResendInvitation}
-                user={item}
-                key={`user-${item.id}`}
-                onDelete={startUserDelete}
-                onEdit={handleUserModalOpen}
-                onRestore={handleRestoreUser}
-              />
-            ))}
-            {renderSkeleton()}
-            {renderNoData(Role.doctor)}
-          </div>
-        )}
-        {canShowType(Role.reception) && (
-          <div className='users-root__group'>
-            <span className='users-root__group-title'>
-              {textForKey('Receptionists')}
-            </span>
-            {reception.map(item => (
-              <UserItem
-                isInviting={isInviting.userId === item.id && isInviting.loading}
-                onResend={handleResendInvitation}
-                user={item}
-                key={`user-${item.id}`}
-                onDelete={startUserDelete}
-                onEdit={handleUserModalOpen}
-                onRestore={handleRestoreUser}
-              />
-            ))}
-            {renderSkeleton()}
-            {renderNoData(Role.reception)}
-          </div>
-        )}
-        {canShowType(Role.admin) && (
-          <div className='users-root__group'>
-            <span className='users-root__group-title'>
-              {textForKey('Administrators')}
-            </span>
-            {admins.map(item => (
-              <UserItem
-                isInviting={isInviting.userId === item.id && isInviting.loading}
-                onResend={handleResendInvitation}
-                user={item}
-                key={`user-${item.id}`}
-                onDelete={startUserDelete}
-                onEdit={handleUserModalOpen}
-                onRestore={handleRestoreUser}
-              />
-            ))}
-            {renderSkeleton()}
-            {renderNoData(Role.admin)}
-          </div>
-        )}
+        <TableContainer classes={{ root: 'table-container' }}>
+          <Table classes={{ root: 'data-table' }}>
+            <TableBody>
+              {canShowType(Role.invitations) && (
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <span className='users-root__group-title'>
+                      {textForKey('Invitations')}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              )}
+              {canShowType(Role.invitations) &&
+                data.invitations.map(item => (
+                  <UserItem
+                    isInvitation={true}
+                    isInviting={
+                      isInviting.userId === item.id && isInviting.loading
+                    }
+                    onResend={handleResendInvitation}
+                    user={item}
+                    key={`invitation-${item.id}`}
+                    onDelete={startUserDelete}
+                    onEdit={handleUserModalOpen}
+                  />
+                ))}
+              {canShowType(Role.invitations) && renderNoData(Role.invitations)}
+              {canShowType(Role.doctor) && (
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <span className='users-root__group-title'>
+                      {textForKey('Doctors')}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              )}
+              {canShowType(Role.doctor) &&
+                doctors.map(item => (
+                  <UserItem
+                    isInviting={
+                      isInviting.userId === item.id && isInviting.loading
+                    }
+                    onResend={handleResendInvitation}
+                    user={item}
+                    key={`user-${item.id}`}
+                    onDelete={startUserDelete}
+                    onEdit={handleUserModalOpen}
+                    onRestore={handleRestoreUser}
+                  />
+                ))}
+              {canShowType(Role.doctor) && renderNoData(Role.doctor)}
+              {canShowType(Role.reception) && (
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <span className='users-root__group-title'>
+                      {textForKey('Receptionists')}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              )}
+              {canShowType(Role.reception) &&
+                reception.map(item => (
+                  <UserItem
+                    isInviting={
+                      isInviting.userId === item.id && isInviting.loading
+                    }
+                    onResend={handleResendInvitation}
+                    user={item}
+                    key={`user-${item.id}`}
+                    onDelete={startUserDelete}
+                    onEdit={handleUserModalOpen}
+                    onRestore={handleRestoreUser}
+                  />
+                ))}
+              {canShowType(Role.reception) && renderNoData(Role.reception)}
+              {canShowType(Role.admin) && (
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <span className='users-root__group-title'>
+                      {textForKey('Administrators')}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              )}
+              {canShowType(Role.admin) &&
+                admins.map(item => (
+                  <UserItem
+                    isInviting={
+                      isInviting.userId === item.id && isInviting.loading
+                    }
+                    onResend={handleResendInvitation}
+                    user={item}
+                    key={`user-${item.id}`}
+                    onDelete={startUserDelete}
+                    onEdit={handleUserModalOpen}
+                    onRestore={handleRestoreUser}
+                  />
+                ))}
+              {canShowType(Role.admin) && renderNoData(Role.admin)}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );
