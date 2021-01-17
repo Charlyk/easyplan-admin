@@ -109,13 +109,13 @@
 }
 
 .user-item {
-  padding: .5rem 1rem;
-  margin-left: 2rem;
-  margin-right: 2rem;
-  margin-top: .8rem;
+  padding: 8px 16px;
+  margin-left: 32px;
+  margin-right: 32px;
+  margin-top: 10px;
   background: #FFFFFF;
   box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
-  border-radius: .3rem;
+  border-radius: 4px;
   display: flex;
   align-items: center;
 
@@ -151,19 +151,19 @@
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
-    font-size: .85rem;
+    font-size: 13px;
     line-height: 20px;
     color: #34354C;
 
     svg {
       fill: #CDCEEA;
-      margin-right: .5rem;
+      margin-right: 8px;
     }
   }
 
   &__avatar {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 40px;
+    height: 40px;
     object-fit: cover;
   }
 
@@ -172,7 +172,7 @@
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
-    font-size: .85rem;
+    font-size: 13px;
     line-height: 20px;
     color: #34354C;
   }
@@ -185,7 +185,7 @@
   }
 
   &__edit-button {
-    height: 1.9rem;
+    height: 30px;
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -207,8 +207,8 @@
   }
 
   &__delete-button {
-    min-width: 6rem;
-    height: 1.9rem;
+    min-width: 96px;
+    height: 30px;
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -226,13 +226,13 @@
 
     svg {
       fill: #F44081;
-      margin-left: .5rem;
+      margin-left: 8px;
     }
   }
 
   &__restore-button {
-    min-width: 6rem;
-    height: 1.9rem;
+    min-width: 96px;
+    height: 30px;
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -250,7 +250,7 @@
 
     svg {
       fill: #00E987;
-      margin-left: .5rem;
+      margin-left: 8px;
     }
   }
 
@@ -259,8 +259,8 @@
     background: #FDC5341a !important;
     border: 1px solid #FDC534 !important;
     color: #FDC534 !important;
-    width: 6rem;
-    height: 1.9rem;
+    width: 96px;
+    height: 30px;
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -275,7 +275,7 @@
 
     svg {
       fill: #FDC534;
-      margin-left: .5rem;
+      margin-left: 8px;
     }
   }
 }
