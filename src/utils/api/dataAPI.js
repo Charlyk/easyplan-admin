@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev'
+  env === 'dev' || env === 'local'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -1012,11 +1012,11 @@ export default {
     }
   },
 
-  fetchDaySchedules: async date => {
+  fetchDaySchedules: async (date, timezone) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
-        `${baseURL}/schedules/day?&date=${stringDate}`,
+        `${baseURL}/schedules/v2/day?&date=${stringDate}&timezone=${timezone}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {

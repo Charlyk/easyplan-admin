@@ -1145,6 +1145,7 @@
 .calendar-day-view {
   display: flex;
   height: 100%;
+  width: 100%;
   flex-direction: column;
   position: relative;
 
@@ -1154,6 +1155,29 @@
     width: 100%;
     height: calc(100% - 50px);
     position: relative;
+
+    .no-data-wrapper {
+      width: 100%;
+      min-width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+
+      .no-data-label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 1rem !important;
+        color: #34344E;
+      }
+
+      .no-data-image {
+        width: 400px;
+        height: auto;
+      }
+    }
 
     .loading-progress-wrapper {
       z-index: 5;

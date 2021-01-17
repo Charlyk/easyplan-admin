@@ -370,6 +370,7 @@ export default {
     'start time': 'Start time',
     'end time': 'End time',
     pause: 'Pause',
+    'no schedules for this day': 'No schedules for this day',
   },
   ro: {
     analytics: 'Analitică',
@@ -747,6 +748,7 @@ export default {
     'start time': 'Început',
     'end time': 'Sfârșit',
     pause: 'Pauză',
+    'no schedules for this day': 'Nu sunt programări pentru această zi',
   },
   ru: {
     analytics: 'Analytics',
@@ -1116,5 +1118,6 @@ export default {
     'start time': 'Start time',
     'end time': 'End time',
     pause: 'Pause',
+    'no schedules for this day': 'No schedules for this day',
   },
 };
