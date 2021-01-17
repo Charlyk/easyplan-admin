@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { Box, TableCell, TableRow, Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
 
@@ -43,66 +45,96 @@ const UserItem = ({
   const rootClasses = clsx('user-item', user.isHidden ? 'fired' : 'active');
 
   return (
-    <div className={rootClasses}>
+    <TableRow classes={{ root: rootClasses }}>
       {!isInvitation && (
-        <div className='user-item__name-and-avatar'>
-          {user.avatar ? (
-            <Image
-              className='user-item__avatar'
-              roundedCircle
-              src={urlToLambda(user.avatar)}
+        <TableCell
+          valign='middle'
+          classes={{ root: 'user-item__name-and-avatar' }}
+        >
+          <Box height='100%' display='flex' alignItems='center'>
+            <div
+              className={clsx(
+                'status-indicator',
+                user.isHidden ? 'fired' : 'active',
+              )}
             />
-          ) : (
-            <IconAvatar />
-          )}
-          <div className='user-item__name'>
-            {user.firstName} {user.lastName}
-          </div>
-        </div>
+            <div className='user-item__avatar'>
+              {user.avatar ? (
+                <Image
+                  className='user-item__avatar'
+                  roundedCircle
+                  src={urlToLambda(user.avatar)}
+                />
+              ) : (
+                <IconAvatar />
+              )}
+            </div>
+            <Typography classes={{ root: 'user-item__name' }}>
+              {upperFirst(user.firstName.toLowerCase())}{' '}
+              {upperFirst(user.lastName.toLowerCase())}
+            </Typography>
+          </Box>
+        </TableCell>
       )}
       {!isInvitation && (
-        <div className='user-item__contact'>
-          <IconPhone />
-          {user.phoneNumber ? user.phoneNumber : textForKey('No phone number')}
-        </div>
+        <TableCell valign='middle' classes={{ root: 'user-item__contact' }}>
+          <Box display='flex' alignItems='center'>
+            <IconPhone />
+            <Typography classes={{ root: 'contact-label' }}>
+              {user.phoneNumber
+                ? user.phoneNumber
+                : textForKey('No phone number')}
+            </Typography>
+          </Box>
+        </TableCell>
       )}
-      <div className='user-item__contact'>
-        <IconEmail />
-        {user.email}
-      </div>
-      <div className='user-item__action-buttons'>
-        {user.status === 'Pending' ||
-          (isInvitation && (
-            <LoadingButton
-              isLoading={isInviting}
-              className='user-item__resend-button'
-              onClick={handleResendInvitation}
+      <TableCell
+        valign='middle'
+        colSpan={isInvitation ? 3 : 1}
+        classes={{ root: 'user-item__contact' }}
+      >
+        <Box display='flex' alignItems='center'>
+          <IconEmail />
+          <Typography classes={{ root: 'contact-label' }}>
+            {user.email}
+          </Typography>
+        </Box>
+      </TableCell>
+      <TableCell valign='middle'>
+        <div className='user-item__action-buttons'>
+          {user.status === 'Pending' ||
+            (isInvitation && (
+              <LoadingButton
+                isLoading={isInviting}
+                className='user-item__resend-button'
+                onClick={handleResendInvitation}
+              >
+                {textForKey('Invite')} <IconRefresh fill='#FDC534' />
+              </LoadingButton>
+            ))}
+          {user.roleInClinic === Role.doctor && !isInvitation && (
+            <Button className='user-item__edit-button' onClick={handleEditUser}>
+              {textForKey('Edit')} <IconEdit />
+            </Button>
+          )}
+          {user.isHidden ? (
+            <Button
+              className='user-item__restore-button'
+              onClick={handleRestoreUser}
             >
-              {textForKey('Invite')} <IconRefresh fill='#FDC534' />
-            </LoadingButton>
-          ))}
-        {user.roleInClinic === Role.doctor && !isInvitation && (
-          <Button className='user-item__edit-button' onClick={handleEditUser}>
-            {textForKey('Edit')} <IconEdit />
-          </Button>
-        )}
-        {user.isHidden ? (
-          <Button
-            className='user-item__restore-button'
-            onClick={handleRestoreUser}
-          >
-            {textForKey('Restore')} <IconRefresh fill='#00E987' />
-          </Button>
-        ) : (
-          <Button
-            className='user-item__delete-button'
-            onClick={handleDeleteUser}
-          >
-            {textForKey('Delete')} <IconDelete />
-          </Button>
-        )}
-      </div>
-    </div>
+              {textForKey('Restore')} <IconRefresh fill='#00E987' />
+            </Button>
+          ) : (
+            <Button
+              className='user-item__delete-button'
+              onClick={handleDeleteUser}
+            >
+              {textForKey('Delete')} <IconDelete />
+            </Button>
+          )}
+        </div>
+      </TableCell>
+    </TableRow>
   );
 };
 
