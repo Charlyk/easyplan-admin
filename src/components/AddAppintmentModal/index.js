@@ -194,6 +194,7 @@ const reducer = (state, action) => {
       const schedule = action.payload;
       const scheduleStartDate = moment(schedule.startTime);
       const scheduleEndDate = moment(schedule.endTime);
+      console.log(scheduleStartDate);
       return {
         ...state,
         scheduleId: schedule.id,
@@ -369,8 +370,10 @@ const AddAppointmentModal = ({
   }, [doctor, service, appointmentDate]);
 
   useEffect(() => {
-    localDispatch(actions.setStartTime(selectedStartTime || ''));
-    localDispatch(actions.setEndTime(selectedEndTime || ''));
+    if (schedule == null) {
+      localDispatch(actions.setStartTime(selectedStartTime || ''));
+      localDispatch(actions.setEndTime(selectedEndTime || ''));
+    }
   }, [selectedStartTime, selectedEndTime]);
 
   const fetchScheduleDetails = async () => {

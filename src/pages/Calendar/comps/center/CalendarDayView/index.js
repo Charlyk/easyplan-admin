@@ -2,12 +2,11 @@ import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { timer } from 'rxjs';
 
 import NoSchedulesImg from '../../../../../assets/images/no_schedules.png';
 import AddPauseModal from '../../../../../components/AddPauseModal';
@@ -92,7 +91,13 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
     localDispatch(actions.setSchedules([]));
     fetchDaySchedules();
-  }, [viewDate, doctors, updateAppointments]);
+  }, [viewDate]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      fetchDaySchedules(true);
+    }
+  }, [updateAppointments, doctors]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {
@@ -101,8 +106,10 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   }, [schedulesRef.current]);
 
-  const fetchDaySchedules = async () => {
-    const response = await dataAPI.fetchDaySchedules(viewDate);
+  const fetchDaySchedules = async (silent = false) => {
+    localDispatch(actions.setIsLoading(!silent));
+    const timezone = moment.tz.guess(true);
+    const response = await dataAPI.fetchDaySchedules(viewDate, timezone);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
@@ -136,7 +143,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           }
           // add the new schedules to array to check the next one against it
           newSchedules.push(schedule);
-          await timer(500);
         }
         mappedSchedules.push({
           doctor: item,

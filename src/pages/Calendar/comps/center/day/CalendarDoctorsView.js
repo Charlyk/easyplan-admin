@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -73,7 +73,8 @@ const CalendarDoctorsView = ({ viewDate, onScheduleSelect }) => {
   }, [hours, windowSize]);
 
   const fetchDaySchedules = async () => {
-    const response = await dataAPI.fetchDaySchedules(viewDate);
+    const timezone = moment.tz.guess(true);
+    const response = await dataAPI.fetchDaySchedules(viewDate, timezone);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
