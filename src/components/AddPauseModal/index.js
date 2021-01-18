@@ -236,6 +236,7 @@ const AddPauseModal = ({
 
   const datePicker = (
     <EasyDatePicker
+      disablePortal
       minDate={new Date()}
       open={Boolean(showDatePicker)}
       pickerAnchor={datePickerAnchor.current}
