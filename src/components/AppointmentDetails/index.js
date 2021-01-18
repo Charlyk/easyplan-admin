@@ -58,7 +58,11 @@ const AppointmentDetails = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      setDetails(response.data);
+      const { data: details } = response;
+      setDetails(details);
+      setScheduleStatus(
+        Statuses.find(item => item.id === details.scheduleStatus),
+      );
     }
     setIsLoading(false);
   };
@@ -123,6 +127,10 @@ const AppointmentDetails = ({
     schedule.scheduleStatus === 'CompletedPaid' ||
     schedule.scheduleStatus === 'PartialPaid' ||
     schedule.scheduleStatus === 'CompletedFree';
+
+  const patientName = details?.patient.fullName || schedule.patient.fullName;
+  const serviceName = details?.service.name || schedule.serviceName;
+  const serviceColor = details?.service.color || schedule.serviceColor;
 
   const statusesList = (
     <Popper
@@ -190,10 +198,8 @@ const AppointmentDetails = ({
           <IconClose />
         </div>
         <span className='schedule-title'>
-          {schedule.patient.fullName}:{' '}
-          <span style={{ color: schedule.serviceColor }}>
-            {schedule.serviceName}
-          </span>
+          {patientName}:{' '}
+          <span style={{ color: serviceColor }}>{serviceName}</span>
         </span>
       </div>
       <div className='content-wrapper'>
@@ -248,7 +254,10 @@ const AppointmentDetails = ({
                     <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Hour')}:
                     </td>
-                    <td>{moment(details.startTime).format('HH:mm')}</td>
+                    <td>
+                      {moment(details.startTime).format('HH:mm')} -{' '}
+                      {moment(details.endTime).format('HH:mm')}
+                    </td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
