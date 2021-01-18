@@ -35,6 +35,7 @@ import {
 import { generateReducerActions, updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
+import sessionManager from '../../utils/settings/sessionManager';
 import Calendar from '../Calendar';
 import NewPatients from '../NewPatients';
 import Services from '../Services';
@@ -70,7 +71,9 @@ const Main = () => {
     currentPath: location.pathname,
     openAppointmentModal: false,
   });
-  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics?.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
 
   useEffect(() => {
     if (currentUser != null) {

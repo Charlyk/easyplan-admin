@@ -63,6 +63,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
+import sessionManager from './utils/settings/sessionManager';
 
 function App() {
   moment.locale(getAppLanguage());
@@ -79,7 +80,9 @@ function App() {
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
-  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics?.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
   const [isAppLoading, setAppIsLoading] = useState(false);
 
   useEffect(() => {
@@ -105,6 +108,7 @@ function App() {
       dispatch(setCreateClinic({ open: true, canClose: false }));
     } else {
       dispatch(setCreateClinic({ open: false, canClose: true }));
+      updateSelectedClinic();
       dispatch(fetchClinicData());
     }
   }, [currentUser, updateCurrentUser]);
@@ -123,6 +127,12 @@ function App() {
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
+  };
+
+  const updateSelectedClinic = () => {
+    sessionManager.setSelectedClinicId(
+      selectedClinic.clinicId || currentUser?.clinics[0].clinicId || -1,
+    );
   };
 
   const updateSiteTitle = (clinicName = '') => {
@@ -145,6 +155,8 @@ function App() {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
+      console.log(clinicId);
+      sessionManager.setSelectedClinicId(clinicId);
       dispatch(setCurrentUser(response.data));
       redirectToHome();
     }
@@ -186,6 +198,7 @@ function App() {
 
   const handleUserLogout = () => {
     authManager.logOut();
+    sessionManager.removeSelectedClinicId();
     updateSiteTitle();
     dispatch(setCurrentUser(null));
     handleCancelLogout();

@@ -28,6 +28,7 @@ import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import { updateAppointmentsSelector } from '../../redux/selectors/rootSelector';
 
 const initialState = {
   patient: null,

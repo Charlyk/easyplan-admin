@@ -9,6 +9,7 @@ import dataAPI, { imageLambdaUrl } from './api/dataAPI';
 import { env, S3Config } from './constants';
 import { textForKey } from './localization';
 import authManager from './settings/authManager';
+import sessionManager from './settings/sessionManager';
 
 export function createHoursList() {
   return [].concat(
@@ -316,6 +317,11 @@ export const handleUserAuthenticated = (
 ) => dispatch => {
   authManager.setUserToken(token);
   authManager.setUserId(user.id);
+  const selectedClinic =
+    user.clinics.length > 0
+      ? user.clinics.find(it => it.isSelected) || user.clinics[0]
+      : { clinicId: -1 };
+  sessionManager.setSelectedClinicId(selectedClinic.clinicId);
   setTimeout(() => {
     dispatch(setCurrentUser(user));
     const selectedClinic = user.clinics.find(item => item.isSelected);
