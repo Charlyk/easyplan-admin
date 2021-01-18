@@ -28,7 +28,25 @@ import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import { updateAppointmentsSelector } from '../../redux/selectors/rootSelector';
+
+const filterAvailableTime = (availableTime, startTime) => {
+  return availableTime.filter(item => {
+    const [startH, startM] = startTime.split(':');
+    const [h, m] = item.split(':');
+    const startDate = moment().set({
+      hour: parseInt(startH),
+      minute: parseInt(startM),
+      second: 0,
+    });
+    const endDate = moment().set({
+      hour: parseInt(h),
+      minute: parseInt(m),
+      second: 0,
+    });
+    const diff = Math.ceil(endDate.diff(startDate) / 1000 / 60);
+    return diff >= 15;
+  });
+};
 
 const initialState = {
   patient: null,
@@ -127,19 +145,20 @@ const reducer = (state, action) => {
       return { ...state, isUrgent: action.payload };
     case reducerTypes.setStartTime: {
       const startTime = action.payload;
-      const availableEndTime = state.availableTime.filter(
-        item => item > startTime,
+      const endTime = state.endTime;
+      const availableEndTime = filterAvailableTime(
+        state.availableTime,
+        startTime,
       );
       return {
         ...state,
         startTime,
         availableEndTime,
-        endTime:
-          state.endTime < startTime
-            ? availableEndTime?.length > 0
-              ? availableEndTime[0]
-              : []
-            : state.endTime,
+        endTime: availableEndTime.includes(endTime)
+          ? endTime
+          : availableEndTime.length > 0
+          ? availableEndTime[0]
+          : '',
       };
     }
     case reducerTypes.setEndTime: {
@@ -163,12 +182,13 @@ const reducer = (state, action) => {
       };
     case reducerTypes.setIsDoctorValid:
       return { ...state, isDoctorValid: action.payload };
-    case reducerTypes.setService:
+    case reducerTypes.setService: {
       return {
         ...state,
         service: action.payload,
         isServiceValid: action.payload != null,
       };
+    }
     case reducerTypes.setIsServiceValid:
       return { ...state, isServiceValid: action.payload };
     case reducerTypes.setShowDatePicker:
@@ -255,19 +275,15 @@ const reducer = (state, action) => {
         availableTime?.length > 0 && state.startTime.length === 0
           ? availableTime[0]
           : state.startTime;
-      const endTime =
-        availableTime?.length > 1 && state.endTime.length === 0
-          ? availableTime[1]
-          : state.endTime;
+
       const availableStartTime = availableTime;
-      const availableEndTime = availableTime.filter(item => item > startTime);
+      const availableEndTime = filterAvailableTime(availableTime, startTime);
       return {
         ...state,
         availableTime,
         availableStartTime,
         availableEndTime,
         startTime,
-        endTime,
       };
     }
     case reducerTypes.setAvailableStartTime:
@@ -408,12 +424,37 @@ const AddAppointmentModal = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      localDispatch(actions.setAvailableTime(response.data));
-      if (response.data.length === 0) {
+      const { data: availableTime } = response;
+      localDispatch(actions.setAvailableTime(availableTime));
+      if (availableTime.length === 0) {
         toast.error(textForKey(response.message));
+      } else {
+        updateEndTimeBasedOnService(availableTime);
       }
     }
     localDispatch(actions.setIsFetchingHours(false));
+  };
+
+  const updateEndTimeBasedOnService = availableTime => {
+    if (schedule != null) {
+      return;
+    }
+    setTimeout(() => {
+      const start =
+        availableTime.length > 0 && startTime.length === 0
+          ? availableTime[0]
+          : startTime;
+      const [h, m] = start.split(':');
+      const end = moment(appointmentDate)
+        .set({
+          hour: parseInt(h),
+          minute: parseInt(m),
+          second: 0,
+        })
+        .add(service.duration, 'minutes')
+        .format('HH:mm');
+      localDispatch(actions.setEndTime(end));
+    }, 300);
   };
 
   const handlePatientChange = selectedPatients => {
