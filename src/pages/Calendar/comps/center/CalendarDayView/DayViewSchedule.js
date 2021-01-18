@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
@@ -22,6 +22,7 @@ const DayViewSchedule = ({
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
   const [isHighlighted, setIsHighlighted] = useState(false);
+  const [itemRect, setItemRect] = useState({ height: 0, top: 0 });
   const startTime = moment(schedule.startTime);
   const endTime = moment(schedule.endTime);
   const startHour = startTime.format('HH:mm');
@@ -30,6 +31,12 @@ const DayViewSchedule = ({
     item => item.id === schedule.scheduleStatus,
   );
   const shouldAnimate = scheduleStatus?.id === 'WaitingForPatient';
+
+  useEffect(() => {
+    const height = getScheduleHeight();
+    const top = getTopPosition();
+    setItemRect({ height, top });
+  }, [schedule, firstHour, viewDate]);
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -46,17 +53,17 @@ const DayViewSchedule = ({
 
   const getTopPosition = () => {
     const startTime = moment(schedule.startTime);
-    const firstHourComps = firstHour.split(':');
+    const [hours, minutes] = firstHour.split(':');
     const clinicStartTime = moment(viewDate).set({
-      hour: parseInt(firstHourComps[0]),
-      minute: parseInt(firstHourComps[1]),
+      hour: parseInt(hours),
+      minute: parseInt(minutes),
       second: 0,
     });
     const scheduleDayDuration = moment
       .duration(startTime.diff(clinicStartTime))
       .asMinutes();
     const newTop = scheduleDayDuration * 2 + minScheduleHeight;
-    return newTop;
+    return Math.abs(newTop);
   };
 
   const handleScheduleClick = () => {
@@ -93,9 +100,9 @@ const DayViewSchedule = ({
         width: isHighlighted
           ? '100%'
           : `calc(99.5% - ${schedule.offset} * ${offsetDistance}px)`,
-        top: getTopPosition(),
+        top: itemRect.top,
         zIndex: isHighlighted ? 500 : 100 + index,
-        height: getScheduleHeight(),
+        height: itemRect.height,
         backgroundColor: isPause ? '#FDC534' : '#f3f3f3',
         border: isHighlighted ? '#3A83DC 1px solid' : 'none',
       }}
