@@ -138,7 +138,11 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       localDispatch(actions.setSchedules([]));
       debounceFetching();
     }
-  }, [viewDate, updateAppointments, doctors]);
+  }, [viewDate, doctors]);
+
+  useEffect(() => {
+    debounceFetching(true);
+  }, [updateAppointments]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {
@@ -155,12 +159,10 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       toast.error(textForKey(response.message));
     } else {
       localDispatch(actions.setHours(response.data));
-      await fetchDaySchedules(true);
+      await fetchDaySchedules();
     }
     localDispatch(actions.setIsLoading(false));
   };
-
-  const debounceFetching = useCallback(debounce(fetchHours, 50), []);
 
   const fetchDaySchedules = async (silent = false) => {
     if (!silent) {
@@ -171,15 +173,19 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      const { schedules } = response.data;
-      await updateSchedules(schedules);
+      const { schedules, dayHours } = response.data;
+      await updateSchedules(schedules, dayHours);
     }
     if (!silent) {
       localDispatch(actions.setIsLoading(false));
     }
   };
 
-  const updateSchedules = async schedules => {
+  const debounceFetching = useCallback(debounce(fetchDaySchedules, 500), [
+    viewDate,
+  ]);
+
+  const updateSchedules = async (schedules, dayHours) => {
     const mappedSchedules = [];
     // map schedules by adding an offset for schedules that intersect other schedules
     for (let item of schedules) {
@@ -213,7 +219,9 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         schedules: newSchedules,
       });
     }
-    localDispatch(actions.setSchedules(mappedSchedules));
+    localDispatch(
+      actions.setSchedulesData({ schedules: mappedSchedules, dayHours }),
+    );
   };
 
   const getLinePositionForHour = hour => {
@@ -325,6 +333,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
 
   const getSchedulesForDoctor = doctorId => {
     const scheduleData = schedules.find(item => item.doctorId === doctorId);
+    if (scheduleData == null) return null;
     return (scheduleData?.schedules || []).map((schedule, index) => (
       <DayViewSchedule
         key={schedule.id}
@@ -388,43 +397,41 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
             </Typography>
           ))}
         </div>
-        {!isLoading && (
-          <div
-            ref={schedulesRef}
-            className='day-schedules-container'
-            id='day-schedules-container'
-          >
-            {halfHours.map(hour => (
+        <div
+          ref={schedulesRef}
+          className='day-schedules-container'
+          id='day-schedules-container'
+        >
+          {halfHours.map(hour => (
+            <div
+              id={`${hour}-line`}
+              className='hour-line'
+              style={{ top: getLinePositionForHour(hour) }}
+              key={`${hour}-line`}
+            />
+          ))}
+          {doctors.map(doctor => {
+            const doctorRect = document
+              .getElementById(doctor.id)
+              ?.getBoundingClientRect() || {
+              width: 0,
+            };
+            return (
               <div
-                id={`${hour}-line`}
-                className='hour-line'
-                style={{ top: getLinePositionForHour(hour) }}
-                key={`${hour}-line`}
-              />
-            ))}
-            {doctors.map(doctor => {
-              const doctorRect = document
-                .getElementById(doctor.id)
-                ?.getBoundingClientRect() || {
-                width: 0,
-              };
-              return (
-                <div
-                  id={`${doctor.id}&column`}
-                  key={`${doctor.id}-column`}
-                  style={{ width: doctorRect.width, height: getHoursHeight() }}
-                  className={clsx(
-                    'day-schedules-column',
-                    doctor.isInVacation && 'disabled',
-                  )}
-                >
-                  {getScheduleItemsContainer(doctor.id)}
-                  {getSchedulesForDoctor(doctor.id)}
-                </div>
-              );
-            })}
-          </div>
-        )}
+                id={`${doctor.id}&column`}
+                key={`${doctor.id}-column`}
+                style={{ width: doctorRect.width, height: getHoursHeight() }}
+                className={clsx(
+                  'day-schedules-column',
+                  doctor.isInVacation && 'disabled',
+                )}
+              >
+                {getSchedulesForDoctor(doctor.id)}
+                {getScheduleItemsContainer(doctor.id)}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </Box>
   );
