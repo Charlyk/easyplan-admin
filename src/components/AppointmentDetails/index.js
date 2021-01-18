@@ -87,8 +87,8 @@ const AppointmentDetails = ({
     setScheduleStatus(status);
     closeStatusesList();
     await dataAPI.updateScheduleStatus(schedule.id, status.id, reason);
-    dispatch(toggleAppointmentsUpdate());
     setIsCanceledReasonRequired(false);
+    dispatch(toggleAppointmentsUpdate());
   };
 
   const handleStatusSelected = async status => {

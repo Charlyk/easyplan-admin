@@ -1731,7 +1731,7 @@ export default {
    * Change status for a schedule
    * @param {number} scheduleId
    * @param {string} newStatus
-   * @param {string?} canceledReason
+   * @param {string|null} canceledReason
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   updateScheduleStatus: async (scheduleId, newStatus, canceledReason) => {

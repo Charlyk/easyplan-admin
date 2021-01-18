@@ -370,6 +370,16 @@
   .remove-btn {
     outline: none;
 
+    &.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+      cursor: not-allowed;
+
+      svg {
+        fill: #6F7091;
+      }
+    }
+
     svg {
       fill: #3A83DC;
     }

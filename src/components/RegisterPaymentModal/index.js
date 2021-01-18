@@ -30,6 +30,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     if (invoice != null) {
       setPayAmount(String(invoice.remainedAmount));
       setDiscount(invoice.discount ? String(invoice.discount) : '');
+      console.log(invoice);
     }
   }, [invoice]);
 

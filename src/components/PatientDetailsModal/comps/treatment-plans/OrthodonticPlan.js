@@ -380,7 +380,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
       }),
     );
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       await fetchOrthodonticPlan();
       onSave(bracketsPlan);
