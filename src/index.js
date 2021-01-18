@@ -18,6 +18,7 @@ import rootReducer from './redux/reducers/rootReducer';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import authManager from './utils/settings/authManager';
+import sessionManager from './utils/settings/sessionManager';
 
 // enable redux devtool
 const composeEnhancers =
@@ -33,6 +34,9 @@ const ReduxStore = createStore(rootReducer, enhancer);
 Axios.interceptors.request.use(function(config) {
   if (authManager.isLoggedIn()) {
     config.headers.Authorization = authManager.getUserToken();
+    config.headers[
+      'X-EasyPlan-Clinic-Id'
+    ] = sessionManager.getSelectedClinicId();
   }
   return config;
 });

@@ -63,6 +63,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
+import sessionManager from './utils/settings/sessionManager';
 
 function App() {
   moment.locale(getAppLanguage());
@@ -105,6 +106,7 @@ function App() {
       dispatch(setCreateClinic({ open: true, canClose: false }));
     } else {
       dispatch(setCreateClinic({ open: false, canClose: true }));
+      updateSelectedClinic();
       dispatch(fetchClinicData());
     }
   }, [currentUser, updateCurrentUser]);
@@ -123,6 +125,10 @@ function App() {
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
+  };
+
+  const updateSelectedClinic = () => {
+    sessionManager.setSelectedClinicId(currentUser?.clinics[0].clinicId || -1);
   };
 
   const updateSiteTitle = (clinicName = '') => {
@@ -145,6 +151,7 @@ function App() {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
+      sessionManager.setSelectedClinicId(clinicId);
       dispatch(setCurrentUser(response.data));
       redirectToHome();
     }
