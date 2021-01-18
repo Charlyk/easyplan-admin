@@ -30,7 +30,7 @@ const InvoicesButton = () => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      if (response.data.length > invoices.length) {
+      if (response?.data?.length > invoices.length) {
         toast(<NewInvoiceToast />);
       }
       setInvoices(response.data);
