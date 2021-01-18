@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { env } from '../constants';
 import authManager from '../settings/authManager';
+import sessionManager from '../settings/sessionManager';
 
 const baseURL =
   env === 'dev'
@@ -1293,7 +1294,10 @@ export default {
       const url = `${baseURL}/clinics/invoices`;
       const response = await fetch(url, {
         method: 'get',
-        headers: { Authorization: authManager.getUserToken() },
+        headers: {
+          Authorization: authManager.getUserToken(),
+          'X-EasyPlan-Clinic-Id': sessionManager.getSelectedClinicId(),
+        },
       });
       // const response = await Axios.get(`${baseURL}/clinics/invoices`);
       return await response.json();
@@ -1727,7 +1731,7 @@ export default {
    * Change status for a schedule
    * @param {number} scheduleId
    * @param {string} newStatus
-   * @param {string?} canceledReason
+   * @param {string|null} canceledReason
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   updateScheduleStatus: async (scheduleId, newStatus, canceledReason) => {

@@ -8,7 +8,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Button, Spinner } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
@@ -19,6 +19,7 @@ import {
   setPatientDetails,
   toggleAppointmentsUpdate,
 } from '../../redux/actions/actions';
+import { updateAppointmentsSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
@@ -33,6 +34,7 @@ const AppointmentDetails = ({
 }) => {
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
+  const updateAppointments = useSelector(updateAppointmentsSelector);
   const [details, setDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
@@ -48,7 +50,7 @@ const AppointmentDetails = ({
     setScheduleStatus(
       Statuses.find(item => item.id === schedule.scheduleStatus),
     );
-  }, [schedule]);
+  }, [schedule, updateAppointments]);
 
   const fetchAppointmentDetails = async () => {
     setIsLoading(true);
@@ -85,8 +87,8 @@ const AppointmentDetails = ({
     setScheduleStatus(status);
     closeStatusesList();
     await dataAPI.updateScheduleStatus(schedule.id, status.id, reason);
-    dispatch(toggleAppointmentsUpdate());
     setIsCanceledReasonRequired(false);
+    dispatch(toggleAppointmentsUpdate());
   };
 
   const handleStatusSelected = async status => {

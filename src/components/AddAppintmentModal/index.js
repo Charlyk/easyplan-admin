@@ -28,6 +28,7 @@ import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import { updateAppointmentsSelector } from '../../redux/selectors/rootSelector';
 
 const initialState = {
   patient: null,
@@ -592,12 +593,16 @@ const AddAppointmentModal = ({
         JSON.stringify({
           before: schedule,
           after: response.data || response,
+          request: requestBody,
         }),
       );
     } else {
       logUserAction(
         Action.CreateAppointment,
-        JSON.stringify(response.data || response),
+        JSON.stringify({
+          response: response.data || response,
+          request: requestBody,
+        }),
       );
     }
 
