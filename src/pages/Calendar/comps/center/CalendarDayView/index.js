@@ -127,7 +127,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   }, [viewDate]);
 
   useEffect(() => {
-    if (!isLoading && hours.length === 0 && viewDate != null) {
+    if (!isLoading) {
       fetchHours(true);
     }
   }, [updateAppointments, doctors]);
@@ -161,20 +161,24 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      const { schedules, dayHours } = response.data;
-      await updateSchedules(schedules, dayHours);
+      const { schedules } = response.data;
+      await updateSchedules(schedules);
     }
     if (!silent) {
       localDispatch(actions.setIsLoading(false));
     }
   };
 
-  const updateSchedules = async (schedules, hours) => {
+  const updateSchedules = async schedules => {
     const mappedSchedules = [];
     // map schedules by adding an offset for schedules that intersect other schedules
-    for (let item of doctors) {
+    for (let item of schedules) {
       const doctorSchedules =
-        schedules.find(it => it.doctorId === item.id)?.schedules || [];
+        schedules.find(it => it.doctorId === item.doctorId)?.schedules || [];
+      const doctor = doctors.find(it => it.id === item.doctorId);
+      if (doctor == null) {
+        continue;
+      }
       const newSchedules = [];
       // check if schedules intersect other schedules and update their offset
       for (let schedule of doctorSchedules) {
@@ -200,13 +204,11 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         newSchedules.push(schedule);
       }
       mappedSchedules.push({
-        doctor: item,
+        doctor: doctor,
         schedules: newSchedules,
       });
     }
-    localDispatch(
-      actions.setSchedulesData({ schedules: mappedSchedules, dayHours: hours }),
-    );
+    localDispatch(actions.setSchedules(mappedSchedules));
   };
 
   const getLinePositionForHour = hour => {
