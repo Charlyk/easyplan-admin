@@ -462,7 +462,7 @@ const Calendar = () => {
           onPayDebt={handlePayDebt}
           onDeleteSchedule={handleDeleteSchedule}
           onEditSchedule={handleEditSchedule}
-          canAddAppointment={selectedDoctor != null}
+          canAddAppointment
           onAddAppointment={handleAppointmentModalOpen}
           selectedSchedule={selectedSchedule}
           onScheduleSelect={handleScheduleSelected}
