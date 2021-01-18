@@ -118,15 +118,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
   const [
-    {
-      isLoading,
-      isFetching,
-      hours,
-      parentTop,
-      schedules,
-      pauseModal,
-      hoursContainers,
-    },
+    { isLoading, hours, parentTop, schedules, pauseModal, hoursContainers },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -134,15 +126,10 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (dataRef.current != null) {
       dataRef.current.scrollTo({ top: 0, behavior: 'auto' });
     }
-    if (viewDate != null && !isFetching) {
-      localDispatch(actions.setSchedules([]));
-      debounceFetching();
+    if (viewDate != null) {
+      debounceFetching(false);
     }
-  }, [viewDate, doctors]);
-
-  useEffect(() => {
-    debounceFetching(true);
-  }, [updateAppointments]);
+  }, [viewDate, doctors, updateAppointments]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {
@@ -150,19 +137,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       localDispatch(actions.setParentTop(schedulesRect.top));
     }
   }, [schedulesRef.current]);
-
-  const fetchHours = async () => {
-    localDispatch(actions.setIsLoading(true));
-    const timezone = moment.tz.guess(true);
-    const response = await dataAPI.fetchDaySchedulesHours(viewDate, timezone);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      localDispatch(actions.setHours(response.data));
-      await fetchDaySchedules();
-    }
-    localDispatch(actions.setIsLoading(false));
-  };
 
   const fetchDaySchedules = async (silent = false) => {
     if (!silent) {
@@ -176,12 +150,13 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       const { schedules, dayHours } = response.data;
       await updateSchedules(schedules, dayHours);
     }
+    console.log('fetching', silent);
     if (!silent) {
       localDispatch(actions.setIsLoading(false));
     }
   };
 
-  const debounceFetching = useCallback(debounce(fetchDaySchedules, 500), [
+  const debounceFetching = useCallback(debounce(fetchDaySchedules, 100), [
     viewDate,
   ]);
 
@@ -281,9 +256,8 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   };
 
-  const getScheduleItemsContainer = doctorId => {
+  const getScheduleItemsContainer = doctor => {
     return hoursContainers.map((hour, index) => {
-      const doctor = doctors.find(it => it.id === doctorId);
       if (index === 0) {
         return (
           <ScheduleItemContainer
@@ -427,7 +401,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
                 )}
               >
                 {getSchedulesForDoctor(doctor.id)}
-                {getScheduleItemsContainer(doctor.id)}
+                {getScheduleItemsContainer(doctor)}
               </div>
             );
           })}
@@ -448,4 +422,5 @@ CalendarDayView.propTypes = {
 CalendarDayView.defaultProps = {
   onCreateSchedule: () => null,
   onScheduleSelect: () => null,
+  viewDate: new Date(),
 };

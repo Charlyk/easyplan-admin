@@ -194,7 +194,6 @@ const reducer = (state, action) => {
       const schedule = action.payload;
       const scheduleStartDate = moment(schedule.startTime);
       const scheduleEndDate = moment(schedule.endTime);
-      console.log(scheduleStartDate);
       return {
         ...state,
         scheduleId: schedule.id,
@@ -384,7 +383,13 @@ const AddAppointmentModal = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      localDispatch(actions.setSchedule(response.data));
+      const { data: scheduleDetails } = response;
+      localDispatch(
+        actions.setSchedule({
+          ...scheduleDetails,
+          doctor: doctors.find(it => it.id === scheduleDetails.doctor.id),
+        }),
+      );
     }
   };
 
