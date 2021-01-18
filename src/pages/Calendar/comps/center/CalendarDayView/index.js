@@ -39,6 +39,7 @@ const initialState = {
   hours: [],
   hoursContainers: [],
   isLoading: true,
+  isFetching: false,
   createIndicator: { visible: false, top: 0, doctorId: -1 },
   parentTop: 0,
   schedules: [],
@@ -76,7 +77,11 @@ const reducer = (state, action) => {
     case reducerTypes.setParentTop:
       return { ...state, parentTop: action.payload };
     case reducerTypes.setIsLoading:
-      return { ...state, isLoading: action.payload };
+      return {
+        ...state,
+        isLoading: action.payload,
+        isFetching: action.payload,
+      };
     case reducerTypes.setCreateIndicator: {
       return { ...state, createIndicator: action.payload };
     }
@@ -112,7 +117,15 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
   const [
-    { isLoading, hours, parentTop, schedules, pauseModal, hoursContainers },
+    {
+      isLoading,
+      isFetching,
+      hours,
+      parentTop,
+      schedules,
+      pauseModal,
+      hoursContainers,
+    },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -120,17 +133,11 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (dataRef.current != null) {
       dataRef.current.scrollTo({ top: 0, behavior: 'auto' });
     }
-    if (viewDate != null) {
+    if (viewDate != null && !isFetching) {
       localDispatch(actions.setSchedules([]));
-      fetchHours();
-    }
-  }, [viewDate]);
-
-  useEffect(() => {
-    if (!isLoading) {
       fetchHours(true);
     }
-  }, [updateAppointments, doctors]);
+  }, [viewDate, updateAppointments, doctors]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {
