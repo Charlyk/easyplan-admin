@@ -162,7 +162,7 @@ export const Statuses = [
     color: '#3A83DC',
     icon: <IconCheckMark />,
     statusIcon: null,
-    manual: false,
+    manual: true,
     isSchedule: true,
   },
   {
