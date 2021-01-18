@@ -1,7 +1,8 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import debounce from 'lodash/debounce';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -135,7 +136,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
     if (viewDate != null && !isFetching) {
       localDispatch(actions.setSchedules([]));
-      fetchHours(true);
+      debounceFetching();
     }
   }, [viewDate, updateAppointments, doctors]);
 
@@ -159,6 +160,8 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     localDispatch(actions.setIsLoading(false));
   };
 
+  const debounceFetching = useCallback(debounce(fetchHours, 50), []);
+
   const fetchDaySchedules = async (silent = false) => {
     if (!silent) {
       localDispatch(actions.setIsLoading(true));
@@ -180,12 +183,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     const mappedSchedules = [];
     // map schedules by adding an offset for schedules that intersect other schedules
     for (let item of schedules) {
-      const doctorSchedules =
-        schedules.find(it => it.doctorId === item.doctorId)?.schedules || [];
-      const doctor = doctors.find(it => it.id === item.doctorId);
-      if (doctor == null) {
-        continue;
-      }
+      const doctorSchedules = item.schedules;
       const newSchedules = [];
       // check if schedules intersect other schedules and update their offset
       for (let schedule of doctorSchedules) {
@@ -211,7 +209,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         newSchedules.push(schedule);
       }
       mappedSchedules.push({
-        doctor: doctor,
+        doctorId: item.doctorId,
         schedules: newSchedules,
       });
     }
@@ -275,8 +273,9 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   };
 
-  const getScheduleItemsContainer = doctor => {
+  const getScheduleItemsContainer = doctorId => {
     return hoursContainers.map((hour, index) => {
+      const doctor = doctors.find(it => it.id === doctorId);
       if (index === 0) {
         return (
           <ScheduleItemContainer
@@ -325,7 +324,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   };
 
   const getSchedulesForDoctor = doctorId => {
-    const scheduleData = schedules.find(item => item.doctor.id === doctorId);
+    const scheduleData = schedules.find(item => item.doctorId === doctorId);
     return (scheduleData?.schedules || []).map((schedule, index) => (
       <DayViewSchedule
         key={schedule.id}
@@ -419,7 +418,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
                     doctor.isInVacation && 'disabled',
                   )}
                 >
-                  {getScheduleItemsContainer(doctor)}
+                  {getScheduleItemsContainer(doctor.id)}
                   {getSchedulesForDoctor(doctor.id)}
                 </div>
               );
