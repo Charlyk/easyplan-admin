@@ -36,7 +36,7 @@ const DayViewSchedule = ({
     const height = getScheduleHeight();
     const top = getTopPosition();
     setItemRect({ height, top });
-  }, [schedule, firstHour, viewDate]);
+  }, [schedule, firstHour, viewDate, isHighlighted]);
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
