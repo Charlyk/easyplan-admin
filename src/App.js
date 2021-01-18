@@ -131,7 +131,7 @@ function App() {
 
   const updateSelectedClinic = () => {
     sessionManager.setSelectedClinicId(
-      selectedClinic.clinicId || currentUser?.clinics[0].clinicId || -1,
+      selectedClinic?.clinicId || currentUser?.clinics[0].clinicId || -1,
     );
   };
 
