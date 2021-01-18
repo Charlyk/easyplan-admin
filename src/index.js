@@ -32,7 +32,7 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const ReduxStore = createStore(rootReducer, enhancer);
 
 Axios.interceptors.request.use(function(config) {
-  // config.headers['X-EasyPlan-Clinic-Id'] = sessionManager.getSelectedClinicId();
+  config.headers['X-EasyPlan-Clinic-Id'] = sessionManager.getSelectedClinicId();
   if (authManager.isLoggedIn()) {
     config.headers.Authorization = authManager.getUserToken();
   }
