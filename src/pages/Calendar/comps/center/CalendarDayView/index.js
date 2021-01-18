@@ -150,7 +150,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       const { schedules, dayHours } = response.data;
       await updateSchedules(schedules, dayHours);
     }
-    console.log('fetching', silent);
     if (!silent) {
       localDispatch(actions.setIsLoading(false));
     }

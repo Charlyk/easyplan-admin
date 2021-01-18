@@ -20,6 +20,7 @@ import authManager from '../../utils/settings/authManager';
 import DoctorPatientDetails from '../DoctorPatientDetails';
 import DoctorPatients from '../DoctorPatients';
 import './styles.scss';
+import sessionManager from '../../utils/settings/sessionManager';
 
 const DoctorsMain = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,9 @@ const DoctorsMain = () => {
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const currentUser = useSelector(userSelector);
-  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics?.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
 
   if (!authManager.isLoggedIn()) {
     return <Redirect to={updateLink('/login')} />;

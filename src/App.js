@@ -80,7 +80,9 @@ function App() {
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
-  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics?.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
   const [isAppLoading, setAppIsLoading] = useState(false);
 
   useEffect(() => {
@@ -128,7 +130,9 @@ function App() {
   };
 
   const updateSelectedClinic = () => {
-    sessionManager.setSelectedClinicId(currentUser?.clinics[0].clinicId || -1);
+    sessionManager.setSelectedClinicId(
+      selectedClinic.clinicId || currentUser?.clinics[0].clinicId || -1,
+    );
   };
 
   const updateSiteTitle = (clinicName = '') => {
@@ -151,6 +155,7 @@ function App() {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
+      console.log(clinicId);
       sessionManager.setSelectedClinicId(clinicId);
       dispatch(setCurrentUser(response.data));
       redirectToHome();
@@ -193,6 +198,7 @@ function App() {
 
   const handleUserLogout = () => {
     authManager.logOut();
+    sessionManager.removeSelectedClinicId();
     updateSiteTitle();
     dispatch(setCurrentUser(null));
     handleCancelLogout();

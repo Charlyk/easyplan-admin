@@ -20,4 +20,8 @@ export default {
     }
     return -1;
   },
+
+  removeSelectedClinicId: () => {
+    sessionStorage.removeItem(clinicIdKey);
+  },
 };

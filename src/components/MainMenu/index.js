@@ -26,6 +26,7 @@ import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import sessionManager from '../../utils/settings/sessionManager';
 import ClinicSelector from '../ClinicSelector';
 
 const menuItems = [
@@ -140,7 +141,9 @@ const MainMenu = props => {
     handleCompanyClose();
   };
 
-  const userClinic = currentUser.clinics.find(item => item.isSelected);
+  const userClinic = currentUser.clinics.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
 
   const analyticsClass = clsx(
     'navigation__item div-item',
