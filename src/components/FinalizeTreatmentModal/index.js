@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Checkbox, IconButton, Typography } from '@material-ui/core';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlus from '../../assets/icons/iconPlus';
@@ -15,14 +16,13 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const [planServices, setPlanServices] = useState([]);
 
   useEffect(() => {
-    setPlanServices(
-      services.map(item => ({
-        ...item,
-        count: 1,
-        isSelected: false,
-        isBraces: item.serviceType === 'Braces',
-      })),
-    );
+    const newServices = services.map(item => ({
+      ...item,
+      count: 1,
+      isSelected: false,
+      isBraces: item.serviceType == null,
+    }));
+    setPlanServices(newServices);
   }, [services]);
 
   const handleItemPriceChanged = service => event => {
@@ -50,6 +50,10 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   };
 
   const handleSaveTreatment = () => {
+    if (!planServices.some(it => it.isSelected)) {
+      toast(textForKey('Please select at least one service'));
+      return;
+    }
     onSave(
       planServices.map(item => ({
         ...item,
@@ -134,6 +138,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     <EasyPlanModal
       open={open}
       onClose={onClose}
+      isPositiveDisabled={!planServices.some(it => it.isSelected)}
       onPositiveClick={handleSaveTreatment}
       positiveBtnText={textForKey('Finalize')}
       title={textForKey('Finalize treatment')}

@@ -123,9 +123,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (dataRef.current != null) {
-      dataRef.current.scrollTo({ top: 0, behavior: 'auto' });
-    }
     if (viewDate != null) {
       debounceFetching(false);
     }

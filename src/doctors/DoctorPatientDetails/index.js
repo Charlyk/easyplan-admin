@@ -91,12 +91,17 @@ const reducer = (state, action) => {
     }
     case reducerTypes.setAllServices:
       return { ...state, allServices: action.payload };
-    case reducerTypes.setSelectedServices:
+    case reducerTypes.setSelectedServices: {
+      const { services, canRemove } = action.payload;
       return {
         ...state,
-        selectedServices: action.payload,
+        selectedServices: services.map(item => ({
+          ...item,
+          canRemove: canRemove,
+        })),
         servicesFieldValue: '',
       };
+    }
     case reducerTypes.setSchedule:
       return { ...state, schedule: action.payload };
     case reducerTypes.setShouldFillTreatmentPlan:
@@ -121,8 +126,12 @@ const reducer = (state, action) => {
 
       // combine services and braces in one array
       const newSelectedServices = [
-        ...treatmentPlan.services.filter(item => !item.completed),
-        ...treatmentPlan.braces.filter(item => !item.completed),
+        ...treatmentPlan.services
+          .filter(item => !item.completed)
+          .map(it => ({ ...it, canRemove: false })),
+        ...treatmentPlan.braces
+          .filter(item => !item.completed)
+          .map(it => ({ ...it, canRemove: false })),
       ];
 
       // remove unused services from selected
@@ -218,7 +227,9 @@ const DoctorPatientDetails = () => {
     } else {
       newServices.unshift(service);
     }
-    localDispatch(actions.setSelectedServices(newServices));
+    localDispatch(
+      actions.setSelectedServices({ services: newServices, canRemove: true }),
+    );
   };
 
   const handleAddNote = () => {
@@ -249,7 +260,9 @@ const DoctorPatientDetails = () => {
     for (let service of services) {
       newServices.unshift({ ...service, toothId });
     }
-    localDispatch(actions.setSelectedServices(newServices));
+    localDispatch(
+      actions.setSelectedServices({ services: newServices, canRemove: true }),
+    );
   };
 
   const handleRemoveSelectedService = service => {
@@ -261,7 +274,9 @@ const DoctorPatientDetails = () => {
         item.toothId === service.toothId &&
         item.destination === service.destination,
     );
-    localDispatch(actions.setSelectedServices(newServices));
+    localDispatch(
+      actions.setSelectedServices({ services: newServices, canRemove: true }),
+    );
   };
 
   const getPatientName = () => {
@@ -290,7 +305,9 @@ const DoctorPatientDetails = () => {
     const newServices = cloneDeep(selectedServices);
     if (!newServices.some(item => item.id === selectedItems[0].id)) {
       newServices.push(selectedItems[0]);
-      localDispatch(actions.setSelectedServices(newServices));
+      localDispatch(
+        actions.setSelectedServices({ services: newServices, canRemove: true }),
+      );
     }
   };
 
@@ -491,6 +508,7 @@ const DoctorPatientDetails = () => {
                   .filter(it => !it.completed)
                   .map(service => (
                     <FinalServiceItem
+                      canRemove={service.canRemove}
                       onRemove={handleRemoveSelectedService}
                       key={`${service.id}-${service.toothId}-${service.name}-${service.destination}`}
                       service={service}

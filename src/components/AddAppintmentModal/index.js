@@ -593,12 +593,16 @@ const AddAppointmentModal = ({
         JSON.stringify({
           before: schedule,
           after: response.data || response,
+          request: requestBody,
         }),
       );
     } else {
       logUserAction(
         Action.CreateAppointment,
-        JSON.stringify(response.data || response),
+        JSON.stringify({
+          response: response.data || response,
+          request: requestBody,
+        }),
       );
     }
 
