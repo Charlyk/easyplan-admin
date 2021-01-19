@@ -155,7 +155,6 @@ function App() {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      console.log(clinicId);
       sessionManager.setSelectedClinicId(clinicId);
       dispatch(setCurrentUser(response.data));
       redirectToHome();

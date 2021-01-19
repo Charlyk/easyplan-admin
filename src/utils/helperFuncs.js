@@ -321,11 +321,12 @@ export const handleUserAuthenticated = (
     user.clinics.length > 0
       ? user.clinics.find(it => it.isSelected) || user.clinics[0]
       : { clinicId: -1 };
+  console.log(selectedClinic);
   sessionManager.setSelectedClinicId(selectedClinic.clinicId);
   setTimeout(() => {
     dispatch(setCurrentUser(user));
     const selectedClinic = user.clinics.find(
-      item => item.clinicId === sessionManager.setSelectedClinicId(),
+      item => item.clinicId === sessionManager.getSelectedClinicId(),
     );
     if (selectedClinic != null) {
       dispatch(fetchClinicData());
