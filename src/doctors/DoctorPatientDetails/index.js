@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
+import { Paper } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import sum from 'lodash/sum';
@@ -24,12 +25,12 @@ import dataAPI from '../../utils/api/dataAPI';
 import { Action, teeth } from '../../utils/constants';
 import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import sessionManager from '../../utils/settings/sessionManager';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
 
 import '../../components/PatientDetailsModal/styles.scss';
 import './styles.scss';
-import { Paper } from '@material-ui/core';
 
 const areSameServices = (first, second) => {
   return (
@@ -193,9 +194,13 @@ const DoctorPatientDetails = () => {
   }, [scheduleId]);
 
   useEffect(() => {
+    // get services provided by current user
     const userServicesIds = (
-      currentUser.clinics.find(item => item.isSelected)?.services || []
+      currentUser.clinics.find(
+        item => item.clinicId === sessionManager.getSelectedClinicId(),
+      )?.services || []
     ).map(it => it.serviceId);
+    // filter clinic services to get only provided by current user services
     localDispatch(
       actions.setServices(
         clinicServices.filter(item => userServicesIds.includes(item.id)),
@@ -213,23 +218,6 @@ const DoctorPatientDetails = () => {
       localDispatch(actions.setScheduleDetails(data));
     }
     localDispatch(actions.setIsLoading(false));
-  };
-
-  const handleServiceChecked = event => {
-    const serviceId = parseInt(event.target.id);
-    const newServices = cloneDeep(selectedServices);
-    const service = allServices.find(item => item.id === serviceId);
-    if (newServices.some(item => item.id === serviceId)) {
-      remove(
-        newServices,
-        item => item.id === serviceId && item.toothId == null,
-      );
-    } else {
-      newServices.unshift(service);
-    }
-    localDispatch(
-      actions.setSelectedServices({ services: newServices, canRemove: true }),
-    );
   };
 
   const handleAddNote = () => {

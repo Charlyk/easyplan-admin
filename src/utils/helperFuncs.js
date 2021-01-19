@@ -324,7 +324,9 @@ export const handleUserAuthenticated = (
   sessionManager.setSelectedClinicId(selectedClinic.clinicId);
   setTimeout(() => {
     dispatch(setCurrentUser(user));
-    const selectedClinic = user.clinics.find(item => item.isSelected);
+    const selectedClinic = user.clinics.find(
+      item => item.clinicId === sessionManager.setSelectedClinicId(),
+    );
     if (selectedClinic != null) {
       dispatch(fetchClinicData());
     }
