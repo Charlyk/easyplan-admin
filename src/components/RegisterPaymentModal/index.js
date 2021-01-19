@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import { Typography } from '@material-ui/core';
+import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
-import { FormControl } from 'react-bootstrap';
+import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -13,65 +14,136 @@ import {
 } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
+import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
+const initialState = {
+  isLoading: false,
+  payAmount: '0',
+  discount: '0',
+  services: [],
+};
+
+const reducerTypes = {
+  setIsLoading: 'setIsLoading',
+  setPayAmount: 'setPayAmount',
+  setDiscount: 'setDiscount',
+  setupInvoiceData: 'setupInvoiceData',
+  resetState: 'resetState',
+  setServices: 'setServices',
+};
+
+const actions = generateReducerActions(reducerTypes);
+
+/**
+ * Payment modal reducer
+ * @param {Object} state
+ * @param {{ type: string, payload: any}} action
+ */
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setIsLoading:
+      return { ...state, isLoading: action.payload };
+    case reducerTypes.setPayAmount:
+      return { ...state, payAmount: action.payload };
+    case reducerTypes.setDiscount:
+      return { ...state, discount: action.payload };
+    case reducerTypes.setServices:
+      return { ...state, services: action.payload };
+    case reducerTypes.setupInvoiceData:
+      return {
+        ...state,
+        payAmount: action.payload.remainedAmount,
+        discount: action.payload.discount,
+        services: action.payload.services,
+      };
+    case reducerTypes.resetState:
+      return initialState;
+    default:
+      return state;
+  }
+};
+
 const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
-  const [payAmount, setPayAmount] = useState(
-    invoice?.remainedAmount ? String(invoice.remainedAmount) : '0',
-  );
-  const [discount, setDiscount] = useState('');
+  const [
+    { isLoading, payAmount, discount, services },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
+  const totalAmount = sumBy(services, item => item.totalPrice);
 
   useEffect(() => {
     if (invoice != null) {
-      setPayAmount(String(invoice.remainedAmount));
-      setDiscount(invoice.discount ? String(invoice.discount) : '');
-      console.log(invoice);
+      localDispatch(actions.setupInvoiceData(invoice));
     }
   }, [invoice]);
 
   useEffect(() => {
     if (!open) {
-      setIsLoading(false);
-      setPayAmount('');
-      setDiscount('');
+      localDispatch(actions.resetState());
     }
   }, [open]);
 
-  const handleAmountChange = event => {
-    let newValue = event.target.value;
-    if (newValue.length > 0 && parseFloat(newValue) > invoice?.amount) {
-      newValue = String(invoice?.remainedAmount);
+  const adjustValueToNumber = (newValue, maxAmount) => {
+    if (newValue.length === 0) {
+      newValue = '0';
     }
-    setPayAmount(newValue);
+
+    if (newValue.length > 1 && newValue[0] === '0') {
+      newValue = newValue.replace(/^./, '');
+    }
+
+    newValue = parseFloat(newValue);
+
+    if (newValue > maxAmount) {
+      newValue = maxAmount;
+    }
+    return newValue;
+  };
+
+  const handleAmountChange = event => {
+    let newValue = adjustValueToNumber(
+      event.target.value,
+      invoice?.status === 'PendingPayment'
+        ? totalAmount
+        : invoice?.remainedAmount || 0,
+    );
+    localDispatch(actions.setPayAmount(String(newValue)));
   };
 
   const handleDiscountChange = event => {
-    let newValue = event.target.value;
-    if (newValue.length > 0 && parseInt(newValue) > 100) {
-      newValue = String(100);
-    }
-    setDiscount(newValue);
+    let newValue = adjustValueToNumber(event.target.value, 100);
+    localDispatch(actions.setDiscount(String(newValue)));
+  };
+
+  const handleServicePriceChanged = service => event => {
+    const newValue = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
+    const newServices = services.map(item => {
+      if (item.id !== service.id) {
+        return item;
+      }
+
+      return {
+        ...item,
+        totalPrice: newValue,
+      };
+    });
+    localDispatch(actions.setServices(newServices));
   };
 
   const getTotal = () => {
-    const fixedDiscount = discount.length === 0 ? '0' : discount;
     if (payAmount.length === 0) {
-      const discountAmount =
-        (parseInt(fixedDiscount) / 100) * parseFloat(payAmount);
+      const discountAmount = (parseInt(discount) / 100) * parseFloat(payAmount);
       return payAmount - discountAmount;
     }
-    const amount = invoice?.remainedAmount || 0;
-    const discountAmount = (parseInt(fixedDiscount) / 100) * parseFloat(amount);
+    const discountAmount = parseFloat(totalAmount) * (parseInt(discount) / 100);
     return payAmount - discountAmount;
   };
 
   const isFormValid = () => {
-    return payAmount.length > 0;
+    return parseFloat(payAmount) > 0;
   };
 
   const handleSubmit = async () => {
@@ -82,8 +154,12 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       invoiceId: invoice.id,
       amount: parseFloat(payAmount),
       discount: parseInt(discount),
+      services: services.map(item => ({
+        id: item.id,
+        finalPrice: item.totalPrice,
+      })),
     };
-    setIsLoading(true);
+    localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.registerPayment(requestBody);
     if (response.isError) {
       toast.error(textForKey(response.message));
@@ -95,8 +171,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       dispatch(togglePatientPaymentsUpdate());
       onClose();
     }
-
-    setIsLoading(false);
+    localDispatch(actions.setIsLoading(false));
   };
 
   return (
@@ -125,17 +200,25 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
           </div>
           <table>
             <tbody>
-              {invoice?.services.map(service => (
+              {services.map(service => (
                 <tr key={service.id}>
                   <td>
                     <Typography classes={{ root: 'service-name-label' }}>{`${
                       service.name
                     } ${service.toothId || ''}`}</Typography>
                   </td>
-                  <td align='right'>
-                    <Typography classes={{ root: 'service-price-label' }}>
-                      {service.price * service.count} MDL
-                    </Typography>
+                  <td align='right' valign='middle'>
+                    <InputGroup>
+                      <Form.Control
+                        disabled={invoice?.status !== 'PendingPayment'}
+                        onChange={handleServicePriceChanged(service)}
+                        type='number'
+                        value={String(service.totalPrice)}
+                      />
+                      <InputGroup.Append>
+                        <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+                      </InputGroup.Append>
+                    </InputGroup>
                   </td>
                 </tr>
               ))}
@@ -144,29 +227,42 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
         </div>
         <div className='content-row'>
           <span className='title-text'>{textForKey('For payment')}:</span>
-          <FormControl
-            type='number'
-            max={invoice?.remainedAmount}
-            onChange={handleAmountChange}
-            value={String(payAmount)}
-          />
-          <span className='content-text'>
-            {textForKey('from')} {invoice?.remainedAmount || 0}
+          <InputGroup>
+            <FormControl
+              type='number'
+              max={totalAmount}
+              onChange={handleAmountChange}
+              value={String(payAmount)}
+            />
+            <InputGroup.Append>
+              <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
+          <span className='total-label'>
+            {textForKey('from')}{' '}
+            {invoice?.status === 'PendingPayment'
+              ? totalAmount
+              : invoice?.remainedAmount || 0}
           </span>
         </div>
         <div className='content-row'>
           <span className='title-text'>{textForKey('Discount')}:</span>
-          <FormControl
-            type='number'
-            max={100}
-            onChange={handleDiscountChange}
-            value={String(discount)}
-          />
-          <span className='content-text'>%</span>
+          <InputGroup>
+            <FormControl
+              className='discount-form-control'
+              type='number'
+              max={100}
+              onChange={handleDiscountChange}
+              value={String(discount)}
+            />
+            <InputGroup.Append>
+              <InputGroup.Text id='basic-addon1'>%</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
         </div>
         <div className='content-row'>
           <span className='title-text'>{textForKey('Total')}:</span>
-          <span className='content-text'>{getTotal()}</span>
+          <span className='total-label'>{getTotal()} MDL</span>
         </div>
       </div>
     </EasyPlanModal>
@@ -189,6 +285,7 @@ RegisterPaymentModal.propTypes = {
     paidAmount: PropTypes.number,
     remainedAmount: PropTypes.number,
     services: PropTypes.arrayOf(PropTypes.object),
+    status: PropTypes.oneOf(['PendingPayment', 'Paid', 'PartialPaid']),
   }),
   onClose: PropTypes.func,
 };

@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
+import {
+  ClickAwayListener,
+  Fade,
+  Paper,
+  Popper,
+  Typography,
+} from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
@@ -348,7 +354,9 @@ const AppointmentDetails = ({
                   {details.patient.debts.map(item => (
                     <tr key={item.id}>
                       <td align='left'>
-                        {item.services.map(it => it.name).join(', ')}
+                        <Typography noWrap classes={{ root: 'services-label' }}>
+                          {item.services.map(it => it.name).join(', ')}
+                        </Typography>
                       </td>
                       <td align='right'>{item.totalAmount}MDL</td>
                       <td align='right'>{item.remainedAmount}MDL</td>

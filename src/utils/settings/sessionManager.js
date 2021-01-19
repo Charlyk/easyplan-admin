@@ -14,9 +14,19 @@ export default {
    * return {number}
    */
   getSelectedClinicId: () => {
+    if (sessionStorage.key(clinicIdKey) == null) {
+      return -1;
+    }
+
     const clinicId = sessionStorage.getItem(clinicIdKey);
     if (clinicId != null && clinicId.length > 0) {
-      return parseInt(clinicId);
+      try {
+        const parsedId = parseInt(clinicId);
+        if (Number.isNaN(parsedId)) return -1;
+        return parsedId;
+      } catch (e) {
+        return -1;
+      }
     }
     return -1;
   },
