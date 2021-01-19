@@ -54,12 +54,18 @@
   }
 
   .patient-mode-button {
+    user-select: none;
     margin-top: .2rem;
     outline: none;
     display: flex;
     align-self: flex-end;
     justify-content: flex-end;
     width: 100%;
+
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
 
     span {
       outline: none;
@@ -77,6 +83,11 @@
 
   .form-control[readonly] {
     background-color: #FAFAFD;
+  }
+
+  .form-control:disabled {
+    opacity: .8;
+    background-color: #ededed !important;
   }
 
   .form-group {

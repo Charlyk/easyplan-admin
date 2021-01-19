@@ -398,11 +398,7 @@ const AppointmentDetails = ({
           {textForKey('Delete')}
           <IconTrash />
         </Button>
-        <Button
-          className='positive-button'
-          disabled={isFinished}
-          onClick={handleEditSchedule}
-        >
+        <Button className='positive-button' onClick={handleEditSchedule}>
           {textForKey('Edit')}
           <IconEdit />
         </Button>

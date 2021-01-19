@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
@@ -689,12 +690,23 @@ const AddAppointmentModal = ({
 
   const isLoading = isFetchingHours || isCreatingSchedule;
 
+  const isFinished =
+    isLoading ||
+    appointmentStatus === 'CompletedNotPaid' ||
+    appointmentStatus === 'CompletedPaid' ||
+    appointmentStatus === 'PartialPaid' ||
+    appointmentStatus === 'CompletedFree';
+
   return (
     <EasyPlanModal
       onClose={onClose}
       open={open}
       className='add-appointment-root'
-      title={textForKey('Add appointment')}
+      title={
+        schedule == null
+          ? textForKey('Add appointment')
+          : textForKey('Edit appointment')
+      }
       isPositiveDisabled={!isFormValid() || isLoading}
       onPositiveClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
@@ -773,6 +785,7 @@ const AddAppointmentModal = ({
         <Form.Group controlId='patient'>
           <Form.Label>{textForKey('Patient')}</Form.Label>
           <AsyncTypeahead
+            disabled={isFinished}
             isValid={isPatientValid}
             placeholder={textForKey('Enter patient name or phone')}
             id='patients'
@@ -811,7 +824,7 @@ const AddAppointmentModal = ({
         </Form.Group>
       )}
       <div
-        className='patient-mode-button'
+        className={clsx('patient-mode-button', { disabled: isFinished })}
         role='button'
         tabIndex={0}
         onClick={changePatientMode}
@@ -823,6 +836,7 @@ const AddAppointmentModal = ({
       <Form.Group controlId='doctor'>
         <Form.Label>{textForKey('Doctor')}</Form.Label>
         <Typeahead
+          disabled={isFinished}
           isValid={isDoctorValid}
           placeholder={textForKey('Enter doctor name or phone')}
           id='doctors'
@@ -851,6 +865,7 @@ const AddAppointmentModal = ({
       <Form.Group controlId='service'>
         <Form.Label>{textForKey('Service')}</Form.Label>
         <Typeahead
+          disabled={isFinished}
           isValid={isServiceValid}
           placeholder={textForKey('Enter service name')}
           id='doctors'
@@ -879,6 +894,7 @@ const AddAppointmentModal = ({
       <Form.Group className='date-form-group'>
         <Form.Label>{textForKey('Date')}</Form.Label>
         <Form.Control
+          disabled={isFinished}
           value={moment(appointmentDate).format('DD MMMM YYYY')}
           ref={datePickerAnchor}
           readOnly

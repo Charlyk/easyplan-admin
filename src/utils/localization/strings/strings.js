@@ -371,6 +371,7 @@ export default {
     'end time': 'End time',
     pause: 'Pause',
     'no schedules for this day': 'No schedules for this day',
+    'edit appointment': 'Edit appointment',
   },
   ro: {
     analytics: 'Analitică',
@@ -749,6 +750,7 @@ export default {
     'end time': 'Sfârșit',
     pause: 'Pauză',
     'no schedules for this day': 'Nu sunt programări pentru această zi',
+    'edit appointment': 'Editează programare',
   },
   ru: {
     analytics: 'Analytics',
@@ -1119,5 +1121,6 @@ export default {
     'end time': 'End time',
     pause: 'Pause',
     'no schedules for this day': 'No schedules for this day',
+    'edit appointment': 'Edit appointment',
   },
 };
