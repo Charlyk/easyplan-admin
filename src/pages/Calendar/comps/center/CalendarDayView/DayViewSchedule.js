@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -113,25 +113,31 @@ const DayViewSchedule = ({
       />
       <div className='day-view-schedule__wrapper'>
         <div className='header'>
-          <Typography
-            noWrap
-            classes={{ root: clsx('hour-label', isPause && 'pause') }}
-          >
-            {startHour} - {endHour}{' '}
-            {schedule.type === 'Schedule' && schedule.patient.fullName}
-          </Typography>
-          {scheduleStatus?.statusIcon != null && (
-            <div
-              className={clsx(
-                'status-icon',
-                (scheduleStatus?.id === 'DidNotCome' ||
-                  scheduleStatus?.id === 'Canceled') &&
-                  'negative',
-              )}
-            >
-              {scheduleStatus?.statusIcon}
-            </div>
+          {schedule.type === 'Schedule' && (
+            <Typography noWrap classes={{ root: 'patient-name-label' }}>
+              {schedule.patient.fullName}
+            </Typography>
           )}
+          <Box display='flex' alignItems='center'>
+            <Typography
+              noWrap
+              classes={{ root: clsx('hour-label', isPause && 'pause') }}
+            >
+              {startHour} - {endHour}
+            </Typography>
+            {scheduleStatus?.statusIcon != null && (
+              <div
+                className={clsx(
+                  'status-icon',
+                  (scheduleStatus?.id === 'DidNotCome' ||
+                    scheduleStatus?.id === 'Canceled') &&
+                    'negative',
+                )}
+              >
+                {scheduleStatus?.statusIcon}
+              </div>
+            )}
+          </Box>
         </div>
         <div className='info'>
           {schedule.type === 'Schedule' ? (

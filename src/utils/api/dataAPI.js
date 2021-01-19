@@ -1932,7 +1932,7 @@ export default {
 
   /**
    * Fetch patient payments
-   * @param {string} patientId
+   * @param {number} patientId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   fetchPatientPayments: async patientId => {
