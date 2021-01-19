@@ -6,7 +6,7 @@ import authManager from '../settings/authManager';
 import sessionManager from '../settings/sessionManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
