@@ -202,7 +202,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
             {textForKey('For payment')}:
           </Typography>
           <Typography classes={{ root: 'amount-label' }}>
-            {totalAmount} MDL
+            {getTotal()} MDL
           </Typography>
         </Box>
         <Box
