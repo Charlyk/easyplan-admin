@@ -3,10 +3,9 @@ import moment from 'moment';
 
 import { env } from '../constants';
 import authManager from '../settings/authManager';
-import sessionManager from '../settings/sessionManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -1292,15 +1291,15 @@ export default {
   fetchClinicInvoices: async () => {
     try {
       const url = `${baseURL}/clinics/invoices`;
-      const response = await fetch(url, {
-        method: 'get',
-        headers: {
-          Authorization: authManager.getUserToken(),
-          'X-EasyPlan-Clinic-Id': sessionManager.getSelectedClinicId(),
-        },
-      });
-      // const response = await Axios.get(`${baseURL}/clinics/invoices`);
-      return await response.json();
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
     } catch (e) {
       return {
         isError: true,
@@ -1603,7 +1602,7 @@ export default {
 
   /**
    * Fetch invoice details
-   * @param {string} invoiceId
+   * @param {number} invoiceId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   fetchInvoiceDetails: async invoiceId => {
