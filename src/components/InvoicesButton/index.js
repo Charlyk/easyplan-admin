@@ -30,10 +30,12 @@ const InvoicesButton = () => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      if (response?.data?.length > invoices.length) {
+      const { data: newInvoices } = response;
+      console.log(newInvoices);
+      if (newInvoices?.length > invoices.length) {
         toast(<NewInvoiceToast />);
       }
-      setInvoices(response.data);
+      setInvoices(newInvoices);
     }
     setIsLoading(false);
   };
@@ -76,9 +78,9 @@ const InvoicesButton = () => {
                 <tbody>
                   {invoices.map(invoice => (
                     <tr key={invoice.id}>
-                      <td>{invoice.doctor.fullName}</td>
-                      <td>{invoice.patient}</td>
-                      <td align='right'>{invoice.remainedAmount}MDL</td>
+                      <td>{invoice.doctorFullName}</td>
+                      <td>{invoice.patientFullName}</td>
+                      <td align='right'>{invoice.amount}MDL</td>
                       <td align='right'>
                         <Button
                           className='positive-button'

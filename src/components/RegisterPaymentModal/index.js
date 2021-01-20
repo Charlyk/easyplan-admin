@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import { Box, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Typography } from '@material-ui/core';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
 import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
@@ -21,10 +21,13 @@ import './styles.scss';
 
 const initialState = {
   isLoading: false,
+  isFetching: true,
   payAmount: '0',
   discount: '0',
   services: [],
   showConfirmationMenu: false,
+  invoiceStatus: 'PendingPayment',
+  invoiceDetails: null,
 };
 
 const reducerTypes = {
@@ -35,6 +38,8 @@ const reducerTypes = {
   resetState: 'resetState',
   setServices: 'setServices',
   setShowConfirmationMenu: 'setShowConfirmationMenu',
+  setInvoiceStatus: 'setInvoiceStatus',
+  setIsFetching: 'setIsFetching',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -56,12 +61,18 @@ const reducer = (state, action) => {
       return { ...state, services: action.payload };
     case reducerTypes.setShowConfirmationMenu:
       return { ...state, showConfirmationMenu: action.payload };
+    case reducerTypes.setInvoiceStatus:
+      return { ...state, invoiceStatus: action.payload };
+    case reducerTypes.setIsFetching:
+      return { ...state, isFetching: action.payload };
     case reducerTypes.setupInvoiceData:
       return {
         ...state,
+        invoiceDetails: action.payload,
         payAmount: action.payload.remainedAmount,
         discount: action.payload.discount,
         services: action.payload.services,
+        invoiceStatus: action.payload.status,
       };
     case reducerTypes.resetState:
       return initialState;
@@ -73,15 +84,23 @@ const reducer = (state, action) => {
 const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const dispatch = useDispatch();
   const [
-    { isLoading, payAmount, discount, services, showConfirmationMenu },
+    {
+      isLoading,
+      payAmount,
+      discount,
+      services,
+      invoiceStatus,
+      invoiceDetails,
+      showConfirmationMenu,
+      isFetching,
+    },
     localDispatch,
   ] = useReducer(reducer, initialState);
   const totalAmount = sumBy(services, item => item.totalPrice);
 
   useEffect(() => {
     if (invoice != null) {
-      localDispatch(actions.setupInvoiceData(invoice));
-      console.log(invoice);
+      fetchInvoiceDetails();
     }
   }, [invoice]);
 
@@ -90,6 +109,21 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       localDispatch(actions.resetState());
     }
   }, [open]);
+
+  const fetchInvoiceDetails = async () => {
+    if (invoice == null) {
+      return;
+    }
+    localDispatch(actions.setIsFetching(true));
+    const response = await dataAPI.fetchInvoiceDetails(invoice.id);
+    if (response.isError) {
+      toast(textForKey(response.message));
+    } else {
+      const { data: invoiceDetails } = response;
+      localDispatch(actions.setupInvoiceData(invoiceDetails));
+    }
+    localDispatch(actions.setIsFetching(false));
+  };
 
   const adjustValueToNumber = (newValue, maxAmount) => {
     if (newValue.length === 0) {
@@ -233,91 +267,103 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       title={textForKey('Register payment')}
       open={open}
       onClose={onClose}
-      isPositiveLoading={isLoading}
+      isPositiveLoading={isLoading || isFetching}
+      isPositiveDisabled={isLoading || isFetching}
       onPositiveClick={handleSubmitPayment}
       positiveBtnText={textForKey('Submit')}
     >
       {showConfirmationMenu && confirmationMenu}
-      <div className='register-payment-content'>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Doctor')}:</span>
-          <span className='content-text'>{invoice?.doctor.fullName}</span>
+      {isFetching && (
+        <div className='register-payment-loading'>
+          <CircularProgress classes={{ root: 'register-payment-progress' }} />
         </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Patient')}:</span>
-          <span className='content-text'>{invoice?.patient}</span>
-        </div>
-        <div className='services-wrapper'>
+      )}
+      {!isFetching && (
+        <div className='register-payment-content'>
           <div className='content-row'>
-            <span className='title-text'>{textForKey('Services')}</span>
+            <span className='title-text'>{textForKey('Doctor')}:</span>
+            <span className='content-text'>
+              {invoiceDetails?.doctor.fullName}
+            </span>
           </div>
-          <table>
-            <tbody>
-              {services.map(service => (
-                <tr key={service.id}>
-                  <td>
-                    <Typography classes={{ root: 'service-name-label' }}>{`${
-                      service.name
-                    } ${service.toothId || ''}`}</Typography>
-                  </td>
-                  <td align='right' valign='middle'>
-                    <InputGroup>
-                      <Form.Control
-                        disabled={invoice?.status !== 'PendingPayment'}
-                        onChange={handleServicePriceChanged(service)}
-                        type='number'
-                        value={String(service.totalPrice)}
-                      />
-                      <InputGroup.Append>
-                        <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
-                      </InputGroup.Append>
-                    </InputGroup>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Patient')}:</span>
+            <span className='content-text'>{invoiceDetails?.patient}</span>
+          </div>
+          <div className='services-wrapper'>
+            <div className='content-row'>
+              <span className='title-text'>{textForKey('Services')}</span>
+            </div>
+            <table>
+              <tbody>
+                {services.map(service => (
+                  <tr key={service.id}>
+                    <td>
+                      <Typography classes={{ root: 'service-name-label' }}>{`${
+                        service.name
+                      } ${service.toothId || ''}`}</Typography>
+                    </td>
+                    <td align='right' valign='middle'>
+                      <InputGroup>
+                        <Form.Control
+                          disabled={invoiceDetails?.status !== 'PendingPayment'}
+                          onChange={handleServicePriceChanged(service)}
+                          type='number'
+                          value={String(service.totalPrice)}
+                        />
+                        <InputGroup.Append>
+                          <InputGroup.Text id='basic-addon1'>
+                            MDL
+                          </InputGroup.Text>
+                        </InputGroup.Append>
+                      </InputGroup>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('For payment')}:</span>
+            <InputGroup>
+              <FormControl
+                type='number'
+                max={totalAmount}
+                onChange={handleAmountChange}
+                value={String(payAmount)}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+            <span className='total-label'>
+              {textForKey('from')}{' '}
+              {invoiceStatus === 'PendingPayment'
+                ? totalAmount
+                : invoiceDetails?.remainedAmount || 0}
+            </span>
+          </div>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Discount')}:</span>
+            <InputGroup>
+              <FormControl
+                className='discount-form-control'
+                type='number'
+                max={100}
+                onChange={handleDiscountChange}
+                value={String(discount)}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text id='basic-addon1'>%</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+          </div>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Total')}:</span>
+            <span className='total-label'>{getTotal()} MDL</span>
+          </div>
         </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('For payment')}:</span>
-          <InputGroup>
-            <FormControl
-              type='number'
-              max={totalAmount}
-              onChange={handleAmountChange}
-              value={String(payAmount)}
-            />
-            <InputGroup.Append>
-              <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
-            </InputGroup.Append>
-          </InputGroup>
-          <span className='total-label'>
-            {textForKey('from')}{' '}
-            {invoice?.status === 'PendingPayment'
-              ? totalAmount
-              : invoice?.remainedAmount || 0}
-          </span>
-        </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Discount')}:</span>
-          <InputGroup>
-            <FormControl
-              className='discount-form-control'
-              type='number'
-              max={100}
-              onChange={handleDiscountChange}
-              value={String(discount)}
-            />
-            <InputGroup.Append>
-              <InputGroup.Text id='basic-addon1'>%</InputGroup.Text>
-            </InputGroup.Append>
-          </InputGroup>
-        </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Total')}:</span>
-          <span className='total-label'>{getTotal()} MDL</span>
-        </div>
-      </div>
+      )}
     </EasyPlanModal>
   );
 };
