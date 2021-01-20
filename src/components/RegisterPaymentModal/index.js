@@ -81,6 +81,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   useEffect(() => {
     if (invoice != null) {
       localDispatch(actions.setupInvoiceData(invoice));
+      console.log(invoice);
     }
   }, [invoice]);
 
@@ -125,7 +126,11 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const handleServicePriceChanged = service => event => {
     const newValue = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
     const newServices = services.map(item => {
-      if (item.id !== service.id) {
+      if (
+        item.id !== service.id ||
+        item.toothId !== service.toothId ||
+        item.destination !== item.destination
+      ) {
         return item;
       }
 
