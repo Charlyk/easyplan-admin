@@ -22,6 +22,7 @@ import {
   logUserAction,
 } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
+import sessionManager from '../../../../utils/settings/sessionManager';
 import EasyTab from '../../../EasyTab';
 import LoadingButton from '../../../LoadingButton';
 
@@ -203,7 +204,9 @@ const OrthodonticPlan = ({ patient, onSave }) => {
   const services = useSelector(clinicBracesServicesSelector);
   const braces = useSelector(clinicEnabledBracesSelector);
   const currentUser = useSelector(userSelector);
-  const currentClinic = currentUser.clinics.find(it => it.isSelected);
+  const currentClinic = currentUser.clinics.find(
+    it => it.clinicId === sessionManager.getSelectedClinicId(),
+  );
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
   const [
     { planType, bracketsPlan, isLoading, isSaving },

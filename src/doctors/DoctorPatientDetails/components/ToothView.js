@@ -195,7 +195,7 @@ ToothView.propTypes = {
   onServicesChange: PropTypes.func,
   services: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,
@@ -206,7 +206,7 @@ ToothView.propTypes = {
   direction: PropTypes.oneOf(['bottom', 'top']),
   selectedServices: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,
@@ -215,7 +215,7 @@ ToothView.propTypes = {
   ),
   completedServices: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,
