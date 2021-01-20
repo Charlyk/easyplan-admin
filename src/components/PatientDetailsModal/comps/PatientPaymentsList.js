@@ -77,7 +77,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
   return (
     <div className='patient-payments-list'>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Payments')}
+        {textForKey('Schedules stats')}
       </Typography>
       {isLoading && <CircularProgress className='patient-details-spinner' />}
       {invoices.length === 0 && !isLoading && (

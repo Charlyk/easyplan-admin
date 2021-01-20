@@ -14,7 +14,11 @@ import {
 } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
-import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
+import {
+  adjustValueToNumber,
+  generateReducerActions,
+  logUserAction,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
@@ -123,23 +127,6 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       localDispatch(actions.setupInvoiceData(invoiceDetails));
     }
     localDispatch(actions.setIsFetching(false));
-  };
-
-  const adjustValueToNumber = (newValue, maxAmount) => {
-    if (newValue.length === 0) {
-      newValue = '0';
-    }
-
-    if (newValue.length > 1 && newValue[0] === '0') {
-      newValue = newValue.replace(/^./, '');
-    }
-
-    newValue = parseFloat(newValue);
-
-    if (newValue > maxAmount) {
-      newValue = maxAmount;
-    }
-    return newValue;
   };
 
   const handleAmountChange = event => {

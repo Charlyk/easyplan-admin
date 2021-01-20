@@ -358,3 +358,20 @@ export const colorShade = (col, amt) => {
 
   return `#${rr}${gg}${bb}`;
 };
+
+export const adjustValueToNumber = (newValue, maxAmount) => {
+  if (newValue.length === 0) {
+    newValue = '0';
+  }
+
+  if (newValue.length > 1 && newValue[0] === '0') {
+    newValue = newValue.replace(/^./, '');
+  }
+
+  newValue = parseFloat(newValue);
+
+  if (newValue > maxAmount) {
+    newValue = maxAmount;
+  }
+  return newValue;
+};

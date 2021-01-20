@@ -1,3 +1,4 @@
+import addPaymentModalTypes from './addPaymentModalTypes';
 import calendar from './calendar';
 import clinicTypes from './clinicTypes';
 import imageModalTypes from './imageModalTypes';
@@ -33,4 +34,5 @@ export default {
   ...calendar,
   ...imageModalTypes,
   ...seriveDetailsModalTypes,
+  ...addPaymentModalTypes,
 };

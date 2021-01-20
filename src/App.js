@@ -13,6 +13,7 @@ import {
 import { toast, ToastContainer } from 'react-toastify';
 
 import AddNote from './components/AddNote';
+import AddPaymentModal from './components/AddPaymentModal';
 import AddXRay from './components/AddXRay';
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
@@ -64,6 +65,8 @@ import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
 import sessionManager from './utils/settings/sessionManager';
+import { addPaymentModalSelector } from './redux/selectors/addPaymentModalSelector';
+import { setAddPaymentModal } from './redux/actions/addPaymentModalActions';
 
 function App() {
   moment.locale(getAppLanguage());
@@ -78,6 +81,7 @@ function App() {
   const paymentModal = useSelector(paymentModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
+  const addPaymentModal = useSelector(addPaymentModalSelector);
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
@@ -224,6 +228,10 @@ function App() {
     dispatch(setImageModal({ open: false }));
   };
 
+  const handleCloseAddPaymentModal = () => {
+    dispatch(setAddPaymentModal({ open: false }));
+  };
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
@@ -237,6 +245,10 @@ function App() {
         <AddXRay {...patientXRayModal} onClose={handleClosePatientXRayModal} />
         <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
         <FullScreenImageModal {...imageModal} onClose={handleCloseImageModal} />
+        <AddPaymentModal
+          {...addPaymentModal}
+          onClose={handleCloseAddPaymentModal}
+        />
         <ConfirmationModal
           title={textForKey('Logout')}
           message={textForKey('logout message')}

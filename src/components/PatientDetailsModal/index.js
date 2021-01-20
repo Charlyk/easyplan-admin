@@ -4,6 +4,7 @@ import { Box, Typography, CircularProgress } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Modal, ListGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconClose from '../../assets/icons/iconClose';
@@ -12,6 +13,7 @@ import {
   setPatientXRayModal,
   togglePatientsListUpdate,
 } from '../../redux/actions/actions';
+import { setAddPaymentModal } from '../../redux/actions/addPaymentModalActions';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
@@ -24,6 +26,7 @@ import PatientPersonalData from './comps/PatientPersonalData';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
 import './styles.scss';
+import PatientPurchasesList from './comps/PatientPurchasesList';
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -35,6 +38,8 @@ const MenuItem = {
   delete: 'delete',
   debts: 'debts',
   payments: 'payments',
+  purchases: 'purchases',
+  addPayment: 'addPayment',
 };
 
 const initialState = {
@@ -98,7 +103,7 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
     localDispatch(actions.setIsFetching(true));
     const response = await dataAPI.fetchPatientDetails(patientId);
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       localDispatch(actions.setPatient(response.data));
     }
@@ -120,10 +125,12 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
 
   const handleMenuClick = event => {
     const targetId = event.target.id;
-    if (targetId !== MenuItem.delete) {
-      localDispatch(actions.setCurrentMenu(targetId));
-    } else {
+    if (targetId === MenuItem.delete) {
       handleStartDeletePatient();
+    } else if (targetId === MenuItem.addPayment) {
+      dispatch(setAddPaymentModal({ open: true, patient }));
+    } else {
+      localDispatch(actions.setCurrentMenu(targetId));
     }
   };
 
@@ -188,6 +195,14 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                     onClick={handleMenuClick}
                     className={menuItemClasses(MenuItem.payments)}
                   >
+                    {textForKey('Schedules stats')}
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    id={MenuItem.purchases}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.purchases)}
+                  >
                     {textForKey('Payments')}
                   </ListGroup.Item>
                   <ListGroup.Item
@@ -237,6 +252,15 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                     className={menuItemClasses(MenuItem.orthodonticPlan)}
                   >
                     {textForKey('Orthodontic plan')}
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    id={MenuItem.addPayment}
+                    onClick={handleMenuClick}
+                    variant='success'
+                    className={menuItemClasses(MenuItem.addPayment)}
+                  >
+                    {textForKey('Add payment')}
                   </ListGroup.Item>
                   {typeof onDelete === 'function' && (
                     <ListGroup.Item
@@ -289,6 +313,9 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                   patient={patient}
                   onViewDebtClick={handleViewDebtClick}
                 />
+              )}
+              {currentMenu === MenuItem.purchases && (
+                <PatientPurchasesList patient={patient} />
               )}
             </div>
           </Box>
