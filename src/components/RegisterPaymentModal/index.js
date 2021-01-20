@@ -1,9 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
-import { Typography } from '@material-ui/core';
+import { Box, Menu, MenuItem, Paper, Typography } from '@material-ui/core';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
-import { Form, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -24,6 +24,7 @@ const initialState = {
   payAmount: '0',
   discount: '0',
   services: [],
+  showConfirmationMenu: false,
 };
 
 const reducerTypes = {
@@ -33,6 +34,7 @@ const reducerTypes = {
   setupInvoiceData: 'setupInvoiceData',
   resetState: 'resetState',
   setServices: 'setServices',
+  setShowConfirmationMenu: 'setShowConfirmationMenu',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -52,6 +54,8 @@ const reducer = (state, action) => {
       return { ...state, discount: action.payload };
     case reducerTypes.setServices:
       return { ...state, services: action.payload };
+    case reducerTypes.setShowConfirmationMenu:
+      return { ...state, showConfirmationMenu: action.payload };
     case reducerTypes.setupInvoiceData:
       return {
         ...state,
@@ -69,7 +73,7 @@ const reducer = (state, action) => {
 const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const dispatch = useDispatch();
   const [
-    { isLoading, payAmount, discount, services },
+    { isLoading, payAmount, discount, services, showConfirmationMenu },
     localDispatch,
   ] = useReducer(reducer, initialState);
   const totalAmount = sumBy(services, item => item.totalPrice);
@@ -142,6 +146,14 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     return payAmount - discountAmount;
   };
 
+  const handleSubmitPayment = () => {
+    localDispatch(actions.setShowConfirmationMenu(true));
+  };
+
+  const handleCloseConfirmationMenu = () => {
+    localDispatch(actions.setShowConfirmationMenu(false));
+  };
+
   const handleSubmit = async () => {
     if (invoice == null) {
       return;
@@ -170,6 +182,46 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     localDispatch(actions.setIsLoading(false));
   };
 
+  const confirmationMenu = (
+    <div className='confirmation-container'>
+      <div className='confirmation-menu'>
+        <Box
+          display='flex'
+          flexDirection='column'
+          width='100%'
+          height='100%'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <Typography classes={{ root: 'amount-title' }}>
+            {textForKey('For payment')}:
+          </Typography>
+          <Typography classes={{ root: 'amount-label' }}>
+            {totalAmount} MDL
+          </Typography>
+        </Box>
+        <Box
+          display='flex'
+          alignItems='center'
+          width='100%'
+          height='35px'
+          justifyContent='space-between'
+        >
+          <Button
+            style={{ marginRight: '.5rem' }}
+            className='cancel-button'
+            onClick={handleCloseConfirmationMenu}
+          >
+            {textForKey('Edit')}
+          </Button>
+          <Button className='positive-button' onClick={handleSubmit}>
+            {textForKey('Pay')}
+          </Button>
+        </Box>
+      </div>
+    </div>
+  );
+
   return (
     <EasyPlanModal
       className='register-payment-modal'
@@ -177,9 +229,10 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       open={open}
       onClose={onClose}
       isPositiveLoading={isLoading}
-      onPositiveClick={handleSubmit}
+      onPositiveClick={handleSubmitPayment}
       positiveBtnText={textForKey('Submit')}
     >
+      {showConfirmationMenu && confirmationMenu}
       <div className='register-payment-content'>
         <div className='content-row'>
           <span className='title-text'>{textForKey('Doctor')}:</span>
