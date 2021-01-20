@@ -46,11 +46,28 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
   };
 
   const getInvoicesTotal = () => {
-    return sumBy(invoices, item => item.totalAmount);
+    return sumBy(invoices, item => {
+      const discountAmount = item.totalAmount * (item.discount / 100);
+      return item.totalAmount - discountAmount;
+    });
   };
 
   const getInvoicesPaid = () => {
-    return sumBy(invoices, item => item.paidAmount);
+    return sumBy(invoices, item => {
+      if (item.status === 'Paid') {
+        const discountAmount = item.paidAmount * (item.discount / 100);
+        return item.paidAmount - discountAmount;
+      }
+      return item.paidAmount;
+    });
+  };
+
+  const getInvoicePaidAmount = invoice => {
+    if (invoice.status === 'Paid') {
+      const discountAmount = invoice.paidAmount * (invoice.discount / 100);
+      return invoice.paidAmount - discountAmount;
+    }
+    return invoice.paidAmount;
   };
 
   const handleViewDebtClick = invoice => () => {
@@ -103,7 +120,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
                         align='right'
                         classes={{ root: 'amount-cell' }}
                       >
-                        {item.paidAmount}MDL
+                        {getInvoicePaidAmount(item)}MDL
                       </TableCell>
                       <TableCell align='right'>
                         <Box display='flex' flexDirection='column'>
