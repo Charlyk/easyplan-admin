@@ -68,6 +68,11 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
     dispatch(setPaymentModal({ open: true, invoice: debt }));
   };
 
+  const getInvoiceTotalAmount = invoice => {
+    const discountAmount = invoice.totalAmount * (invoice.discount / 100);
+    return invoice.totalAmount - discountAmount;
+  };
+
   return (
     <div className='patient-debts-list'>
       <Typography classes={{ root: 'title-label' }}>
@@ -109,7 +114,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
                     <TableCell align='right'>{item.doctor.fullName}</TableCell>
                     <TableCell align='right'>{item.clinic.name}</TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      {item.totalAmount}MDL
+                      {getInvoiceTotalAmount(item)}MDL
                     </TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
                       {item.remainedAmount}MDL
