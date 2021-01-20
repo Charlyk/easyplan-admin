@@ -413,6 +413,8 @@
     width: 100%;
     background: #FFFFFF;
     border-radius: 4px !important;
+    max-height: 20rem;
+    overflow-y: scroll;
 
     .options-wrapper {
       display: flex;
