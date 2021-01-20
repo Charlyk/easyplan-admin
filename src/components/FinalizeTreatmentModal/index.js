@@ -27,7 +27,11 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
 
   const handleItemPriceChanged = service => event => {
     const newServices = planServices.map(item => {
-      if (item.id !== service.id) {
+      if (
+        item.id !== service.id ||
+        item.toothId !== service.toothId ||
+        item.destination !== service.destination
+      ) {
         return item;
       }
 
