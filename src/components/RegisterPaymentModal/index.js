@@ -1,6 +1,6 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
-import { Box, Menu, MenuItem, Paper, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
 import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
