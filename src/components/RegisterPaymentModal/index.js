@@ -145,9 +145,9 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const handleAmountChange = event => {
     let newValue = adjustValueToNumber(
       event.target.value,
-      invoice?.status === 'PendingPayment'
+      invoiceDetails?.status === 'PendingPayment'
         ? totalAmount
-        : invoice?.remainedAmount || 0,
+        : invoiceDetails?.remainedAmount || 0,
     );
     localDispatch(actions.setPayAmount(String(newValue)));
   };
