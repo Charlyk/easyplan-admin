@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -2253,6 +2253,57 @@ export default {
     try {
       const url = `${baseURL}/pauses/available-time`;
       const response = await Axios.put(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Add a purchase to a patient
+   * @param {{ amount: number, discount: number, comment: string }} requestBody
+   * @param {number} patientId
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  addPatientPurchase: async (patientId, requestBody) => {
+    try {
+      const url = `${baseURL}/patients/purchases/${patientId}`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch all purchases for a patient
+   * @param {number} patientId
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  getPatientPurchases: async patientId => {
+    try {
+      const url = `${baseURL}/patients/purchases/${patientId}`;
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
         return {

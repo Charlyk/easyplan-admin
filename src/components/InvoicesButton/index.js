@@ -31,7 +31,6 @@ const InvoicesButton = () => {
       toast.error(textForKey(response.message));
     } else {
       const { data: newInvoices } = response;
-      console.log(newInvoices);
       if (newInvoices?.length > invoices.length) {
         toast(<NewInvoiceToast />);
       }
