@@ -142,12 +142,8 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     return payAmount - discountAmount;
   };
 
-  const isFormValid = () => {
-    return parseFloat(payAmount) > 0;
-  };
-
   const handleSubmit = async () => {
-    if (!isFormValid() || invoice == null) {
+    if (invoice == null) {
       return;
     }
     const requestBody = {
@@ -182,7 +178,6 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       onClose={onClose}
       isPositiveLoading={isLoading}
       onPositiveClick={handleSubmit}
-      isPositiveDisabled={!isFormValid()}
       positiveBtnText={textForKey('Submit')}
     >
       <div className='register-payment-content'>

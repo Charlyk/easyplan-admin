@@ -3,6 +3,7 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import { Paper } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
+import sortBy from 'lodash/sortBy';
 import sum from 'lodash/sum';
 import moment from 'moment';
 import { Form, Modal, Spinner } from 'react-bootstrap';
@@ -112,13 +113,42 @@ const reducer = (state, action) => {
     case reducerTypes.setIsFinalizing:
       return { ...state, isFinalizing: action.payload };
     case reducerTypes.setServices: {
+      // get services aplicable on all teeth
+      const allTeethServices = action.payload.filter(
+        it => it.serviceType === 'All',
+      );
+      // get services applicable on a single tooth
+      const toothServices = action.payload.filter(
+        item => item.serviceType === 'Single',
+      );
+      // get all braces services
+      const allBracesServices = action.payload.filter(
+        it => it.serviceType === 'Braces',
+      );
+      // map braces serivces to add mandible destination
+      const mandibleBracesServices = allBracesServices.map(item => ({
+        ...item,
+        destination: 'Mandible',
+      }));
+      // map maxillary services to add maxillary destination
+      const maxillaryBracesServices = allBracesServices.map(item => ({
+        ...item,
+        destination: 'Maxillary',
+      }));
+
+      // create an array with all services
+      const allServices = [
+        ...allTeethServices,
+        ...mandibleBracesServices,
+        ...maxillaryBracesServices,
+      ];
+
+      // save filtered services to state
       return {
         ...state,
-        allServices: action.payload.filter(it => it.serviceType === 'All'),
-        toothServices: action.payload.filter(it => it.serviceType === 'Single'),
-        bracesServices: action.payload.filter(
-          it => it.serviceType === 'Braces',
-        ),
+        allServices: sortBy(allServices, item => item.name),
+        toothServices: sortBy(toothServices, item => item.name),
+        bracesServices: sortBy(toothServices, item => item.name),
       };
     }
     case reducerTypes.setScheduleDetails: {
@@ -291,7 +321,13 @@ const DoctorPatientDetails = () => {
   const handleSelectedItemsChange = selectedItems => {
     if (selectedItems.length === 0) return;
     const newServices = cloneDeep(selectedServices);
-    if (!newServices.some(item => item.id === selectedItems[0].id)) {
+    console.log(selectedItems);
+    const serviceExists = newServices.some(
+      item =>
+        item.id === selectedItems[0].id &&
+        item.destination === selectedItems[0].destination,
+    );
+    if (!serviceExists) {
       newServices.push(selectedItems[0]);
       localDispatch(
         actions.setSelectedServices({ services: newServices, canRemove: true }),
@@ -475,11 +511,13 @@ const DoctorPatientDetails = () => {
                     <Menu {...menuProps}>
                       {results.map((result, index) => (
                         <MenuItem
-                          key={result.id}
+                          key={`${result.id}-${result.destination}`}
                           option={result}
                           position={index}
                         >
-                          {result.name}
+                          {result.name}{' '}
+                          {result.destination &&
+                            `(${textForKey(result.destination)})`}
                         </MenuItem>
                       ))}
                     </Menu>

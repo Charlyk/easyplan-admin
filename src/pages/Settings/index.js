@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-import SettingsMenu from './SettingsMenu';
-
-import './styles.scss';
 import { useSelector } from 'react-redux';
 
 import { userSelector } from '../../redux/selectors/rootSelector';
@@ -13,6 +10,8 @@ import BracesSettings from './BracesSettings';
 import ClinicWorkingHours from './ClinicWorkingHours';
 import CompanyDetailsForm from './CompanyDetailsForm';
 import SecuritySettings from './SecuritySettings';
+import SettingsMenu from './SettingsMenu';
+import './styles.scss';
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
