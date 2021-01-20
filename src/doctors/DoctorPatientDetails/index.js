@@ -24,7 +24,11 @@ import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, teeth } from '../../utils/constants';
-import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
+import {
+  generateReducerActions,
+  getServiceName,
+  logUserAction,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import sessionManager from '../../utils/settings/sessionManager';
 import FinalServiceItem from './components/FinalServiceItem';
@@ -515,9 +519,7 @@ const DoctorPatientDetails = () => {
                           option={result}
                           position={index}
                         >
-                          {result.name}{' '}
-                          {result.destination &&
-                            `(${textForKey(result.destination)})`}
+                          {getServiceName(result)}
                         </MenuItem>
                       ))}
                     </Menu>
