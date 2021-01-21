@@ -1220,6 +1220,7 @@
       height: fit-content;
       width: calc(100% - 55px);
       position: relative;
+      overflow-x: hidden;
 
       .day-schedules-column {
         height: inherit;
