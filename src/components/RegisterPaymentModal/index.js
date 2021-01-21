@@ -132,7 +132,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const handleAmountChange = event => {
     let newValue = adjustValueToNumber(
       event.target.value,
-      invoiceDetails?.status === 'PendingPayment'
+      invoiceDetails?.status !== 'Paid'
         ? totalAmount
         : invoiceDetails?.remainedAmount || 0,
     );
@@ -293,7 +293,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
                     <td align='right' valign='middle'>
                       <InputGroup>
                         <Form.Control
-                          disabled={invoiceDetails?.status !== 'PendingPayment'}
+                          disabled={invoiceDetails?.status === 'Paid'}
                           onChange={handleServicePriceChanged(service)}
                           type='number'
                           value={String(service.totalPrice)}
@@ -325,7 +325,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
             </InputGroup>
             <span className='total-label'>
               {textForKey('from')}{' '}
-              {invoiceStatus === 'PendingPayment'
+              {invoiceStatus !== 'Paid'
                 ? totalAmount
                 : invoiceDetails?.remainedAmount || 0}
             </span>
