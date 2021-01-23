@@ -370,6 +370,14 @@
   .remove-btn {
     outline: none;
 
+    &.completed {
+      pointer-events: none;
+      cursor: not-allowed;
+      svg {
+        fill: #00ac00;
+      }
+    }
+
     &.disabled {
       opacity: 0.3;
       pointer-events: none;
@@ -386,12 +394,24 @@
   }
 
   .service-name {
+    display: flex;
+    align-items: center;
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
     line-height: 20px;
     color: #34354C;
+
+    .completed-by-label {
+      margin-left: .5rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 20px;
+      color: #cccccd;
+    }
   }
 
   .service-price {

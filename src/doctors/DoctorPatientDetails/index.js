@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Paper } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
+import orderBy from 'lodash/orderBy';
 import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import sum from 'lodash/sum';
@@ -20,7 +21,10 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../redux/actions/actions';
-import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
+import {
+  clinicCurrencySelector,
+  clinicServicesSelector,
+} from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, teeth } from '../../utils/constants';
@@ -40,9 +44,31 @@ import './styles.scss';
 const areSameServices = (first, second) => {
   return (
     first.id === second.id &&
-    first.toothId === second.toothId &&
-    first.destination === second.destination
+    ((first.toothId == null && second.toothId == null) ||
+      first.toothId === second.toothId) &&
+    ((first.destination == null && second.destination == null) ||
+      first.destination === second.destination) &&
+    first.completed === second.completed &&
+    first.completedAt === second.completedAt
   );
+};
+
+const updateService = (invoice, clinicCurrency) => service => {
+  const invoiceService = invoice?.services.find(
+    item =>
+      item.serviceId === service.id &&
+      ((item.toothId == null && service.toothId == null) ||
+        item.toothId === service.toothId) &&
+      ((item.destination == null && service.destination == null) ||
+        item.destination === service.destination),
+  );
+  return {
+    ...service,
+    canRemove: false,
+    currency: invoiceService == null ? clinicCurrency : invoiceService.currency,
+    count: invoiceService == null ? 1 : invoiceService.count,
+    price: invoiceService == null ? service.price : invoiceService.amount,
+  };
 };
 
 const TabId = {
@@ -98,12 +124,11 @@ const reducer = (state, action) => {
     case reducerTypes.setAllServices:
       return { ...state, allServices: action.payload };
     case reducerTypes.setSelectedServices: {
-      const { services, canRemove } = action.payload;
+      const { services } = action.payload;
       return {
         ...state,
         selectedServices: services.map(item => ({
           ...item,
-          canRemove: canRemove,
         })),
         servicesFieldValue: '',
       };
@@ -117,7 +142,7 @@ const reducer = (state, action) => {
     case reducerTypes.setIsFinalizing:
       return { ...state, isFinalizing: action.payload };
     case reducerTypes.setServices: {
-      // get services aplicable on all teeth
+      // get services applicable on all teeth
       const allTeethServices = action.payload.filter(
         it => it.serviceType === 'All',
       );
@@ -129,7 +154,7 @@ const reducer = (state, action) => {
       const allBracesServices = action.payload.filter(
         it => it.serviceType === 'Braces',
       );
-      // map braces serivces to add mandible destination
+      // map braces services to add mandible destination
       const mandibleBracesServices = allBracesServices.map(item => ({
         ...item,
         destination: 'Mandible',
@@ -156,18 +181,25 @@ const reducer = (state, action) => {
       };
     }
     case reducerTypes.setScheduleDetails: {
-      const { patient, treatmentPlan } = action.payload;
+      const { data, clinicCurrency } = action.payload;
+      const { patient, treatmentPlan, invoice } = data;
       const existentSelectedServices = cloneDeep(state.selectedServices);
 
+      // update treatmentPlanServices
+      const planServices = treatmentPlan.services.map(
+        updateService(invoice, clinicCurrency),
+      );
+      // update plan braces
+      const planBraces = treatmentPlan.braces.map(
+        updateService(invoice, clinicCurrency),
+      );
+
       // combine services and braces in one array
-      const newSelectedServices = [
-        ...treatmentPlan.services
-          .filter(item => !item.completed)
-          .map(it => ({ ...it, canRemove: false })),
-        ...treatmentPlan.braces
-          .filter(item => !item.completed)
-          .map(it => ({ ...it, canRemove: false })),
-      ];
+      const newSelectedServices = orderBy(
+        [...planServices, ...planBraces],
+        ['completed', 'created'],
+        ['asc', 'desc'],
+      );
 
       // remove unused services from selected
       const diffsToRemove = existentSelectedServices.filter(
@@ -188,7 +220,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         patient,
-        schedule: action.payload,
+        schedule: data,
         selectedServices: existentSelectedServices,
         completedServices: [
           ...treatmentPlan.services.filter(item => item.completed),
@@ -208,6 +240,7 @@ const DoctorPatientDetails = () => {
   const servicesRef = useRef(null);
   const clinicServices = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const [
     {
       isLoading,
@@ -224,8 +257,10 @@ const DoctorPatientDetails = () => {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    fetchScheduleDetails();
-  }, [scheduleId]);
+    if (scheduleId != null && clinicCurrency != null) {
+      fetchScheduleDetails();
+    }
+  }, [scheduleId, clinicCurrency]);
 
   useEffect(() => {
     // get services provided by current user
@@ -249,7 +284,7 @@ const DoctorPatientDetails = () => {
       toast.error(textForKey(response.message));
     } else {
       const { data } = response;
-      localDispatch(actions.setScheduleDetails(data));
+      localDispatch(actions.setScheduleDetails({ data, clinicCurrency }));
     }
     localDispatch(actions.setIsLoading(false));
   };
@@ -278,13 +313,17 @@ const DoctorPatientDetails = () => {
 
   const handleToothServicesChange = ({ toothId, services }) => {
     let newServices = cloneDeep(selectedServices);
-    remove(newServices, item => item.toothId === toothId);
+    remove(newServices, item => item.toothId === toothId && !item.completed);
     for (let service of services) {
-      newServices.unshift({ ...service, toothId });
+      newServices.unshift({
+        ...service,
+        toothId,
+        canRemove: true,
+        currency: clinicCurrency,
+        count: 1,
+      });
     }
-    localDispatch(
-      actions.setSelectedServices({ services: newServices, canRemove: true }),
-    );
+    localDispatch(actions.setSelectedServices({ services: newServices }));
   };
 
   const handleRemoveSelectedService = service => {
@@ -296,9 +335,7 @@ const DoctorPatientDetails = () => {
         item.toothId === service.toothId &&
         item.destination === service.destination,
     );
-    localDispatch(
-      actions.setSelectedServices({ services: newServices, canRemove: true }),
-    );
+    localDispatch(actions.setSelectedServices({ services: newServices }));
   };
 
   const getPatientName = () => {
@@ -325,17 +362,22 @@ const DoctorPatientDetails = () => {
   const handleSelectedItemsChange = selectedItems => {
     if (selectedItems.length === 0) return;
     const newServices = cloneDeep(selectedServices);
-    console.log(selectedItems);
     const serviceExists = newServices.some(
       item =>
         item.id === selectedItems[0].id &&
-        item.destination === selectedItems[0].destination,
+        (item.toothId == null || item.toothId === selectedItems[0].toothId) &&
+        (item.destination == null ||
+          item.destination === selectedItems[0].destination) &&
+        !item.completed,
     );
     if (!serviceExists) {
-      newServices.push(selectedItems[0]);
-      localDispatch(
-        actions.setSelectedServices({ services: newServices, canRemove: true }),
-      );
+      newServices.unshift({
+        ...selectedItems[0],
+        canRemove: true,
+        currency: clinicCurrency,
+        count: 1,
+      });
+      localDispatch(actions.setSelectedServices({ services: newServices }));
     }
   };
 
@@ -353,28 +395,34 @@ const DoctorPatientDetails = () => {
 
     const requestBody = {
       scheduleId,
+      patientId: patient.id,
       services: plannedServices.map(item => ({
-        id: item.id,
+        serviceId: item.id,
         toothId: item.toothId,
-        completed: item.selected,
+        completed: item.isSelected,
         destination: item.destination,
         isBraces: item.isBraces,
         count: item.count,
         price: item.price,
-        isSelected: item.isSelected,
+        currency: item.currency || clinicCurrency,
       })),
     };
 
     logUserAction(Action.FinalizeTreatment, JSON.stringify(requestBody));
 
-    const response = await dataAPI.finalizeTreatment(patient.id, requestBody);
+    const response = await dataAPI.savePatientTreatmentPlan(requestBody);
 
     if (response.isError) {
       toast.error(textForKey(response.message));
+      console.error(response);
       localDispatch(actions.setIsFinalizing(false));
     } else {
       history.goBack();
     }
+  };
+
+  const keyForService = service => {
+    return `${service.id}-${service.toothId}-${service.name}-${service.destination}-${service.completed}-${service.completedAt}`;
   };
 
   const isFinished =
@@ -382,7 +430,9 @@ const DoctorPatientDetails = () => {
     schedule?.scheduleStatus === 'CompletedPaid' ||
     schedule?.scheduleStatus === 'PartialPaid';
 
-  const canFinalize = schedule?.scheduleStatus === 'OnSite';
+  const canFinalize =
+    schedule?.scheduleStatus === 'OnSite' ||
+    schedule?.scheduleStatus === 'CompletedNotPaid';
 
   return (
     <div className='doctor-patient-root'>
@@ -532,16 +582,14 @@ const DoctorPatientDetails = () => {
           <div className='selected-services-wrapper'>
             <table style={{ width: '100%' }}>
               <tbody>
-                {selectedServices
-                  .filter(it => !it.completed)
-                  .map(service => (
-                    <FinalServiceItem
-                      canRemove={service.canRemove}
-                      onRemove={handleRemoveSelectedService}
-                      key={`${service.id}-${service.toothId}-${service.name}-${service.destination}`}
-                      service={service}
-                    />
-                  ))}
+                {selectedServices.map(service => (
+                  <FinalServiceItem
+                    canRemove={service.canRemove}
+                    onRemove={handleRemoveSelectedService}
+                    key={keyForService(service)}
+                    service={service}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
@@ -550,13 +598,13 @@ const DoctorPatientDetails = () => {
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
-              disabled={
-                selectedServices.length === 0 || isFinished || !canFinalize
-              }
+              disabled={selectedServices.length === 0 || !canFinalize}
               className='positive-button'
             >
-              {isFinished
-                ? textForKey(schedule.scheduleStatus)
+              {!canFinalize
+                ? textForKey(schedule?.scheduleStatus)
+                : isFinished
+                ? textForKey('Edit')
                 : textForKey('Finalize')}
             </LoadingButton>
           </div>

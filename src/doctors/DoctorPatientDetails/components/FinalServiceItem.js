@@ -1,26 +1,39 @@
 import React from 'react';
 
-import { IconButton } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import IconRemove from '@material-ui/icons/Clear';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
+import IconCheckMark from '../../../assets/icons/iconCheckMark';
 import { getServiceName } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 
 const FinalServiceItem = ({ service, canRemove, onRemove }) => {
   return (
     <tr className='final-service-root'>
       <td>
-        <span className='service-name'>{getServiceName(service)}</span>
+        <Typography classes={{ root: 'service-name' }}>
+          {getServiceName(service)}
+          {service.completedBy && (
+            <Typography classes={{ root: 'completed-by-label' }}>
+              {textForKey('completed by')} {service.completedBy}
+            </Typography>
+          )}
+        </Typography>
       </td>
       <td width={130} align='right' valign='middle'>
-        <span className='service-price'>{service.price} MDL</span>
         <IconButton
           disabled={!canRemove}
           onClick={() => onRemove(service)}
-          classes={{ root: clsx('remove-btn', !canRemove && 'disabled') }}
+          classes={{
+            root: clsx('remove-btn', {
+              disabled: !canRemove && !service.completed,
+              completed: service.completed,
+            }),
+          }}
         >
-          <IconRemove />
+          {service.completed ? <IconCheckMark /> : <IconRemove />}
         </IconButton>
       </td>
     </tr>

@@ -23,13 +23,14 @@ const ToothView = ({
   useEffect(() => {
     setToothServices(
       services.map(service => {
-        const selectedService = selectedServices.find(
-          item => item.id === service.id && item.toothId === toothId,
-        );
+        const selectedService = selectedServices
+          .filter(item => !item.completed)
+          .find(item => item.id === service.id && item.toothId === toothId);
         return {
           ...service,
           toothId: toothId,
           selected: selectedService != null,
+          canRemove: selectedService?.canRemove,
         };
       }),
     );
@@ -92,6 +93,7 @@ const ToothView = ({
                     controlId={`tooth-${service.id}`}
                   >
                     <Form.Check
+                      disabled={service.canRemove === false}
                       onChange={() =>
                         handleServiceSelected(service, !service.selected)
                       }

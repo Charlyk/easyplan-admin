@@ -18,4 +18,5 @@ export default Object.freeze({
   updatePatients: false,
   updatePatientPayments: false,
   isImportModalOpen: false,
+  updateExchangeRates: false,
 });

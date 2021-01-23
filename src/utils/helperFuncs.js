@@ -271,7 +271,6 @@ export const fetchClinicData = () => async dispatch => {
 };
 
 export const getServiceName = service => {
-  console.log(service);
   let name = service.name;
   if (service.toothId != null) {
     name = `${name} ${service.toothId}`;

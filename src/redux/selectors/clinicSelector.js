@@ -14,6 +14,35 @@ export const clinicUsersSelector = createSelector(
   clinic => clinic.users,
 );
 
+export const allCurrenciesSelector = createSelector(
+  clinicDetailsSelector,
+  state => state.allCurrencies,
+);
+
+export const clinicCurrencySelector = createSelector(
+  clinicDetailsSelector,
+  state => state.currency,
+);
+
+export const clinicExchangeRatesSelector = createSelector(
+  clinicDetailsSelector,
+  state => {
+    const currencies = state.availableCurrencies;
+    const clinicCurrency = state.allCurrencies?.find(
+      item => item.id === state.currency,
+    );
+    if (clinicCurrency == null) {
+      return currencies;
+    }
+    currencies.unshift({
+      currency: clinicCurrency.id,
+      currencyName: clinicCurrency.name,
+      value: 1,
+    });
+    return currencies;
+  },
+);
+
 export const clinicDoctorsSelector = createSelector(
   clinicUsersSelector,
   users => users.filter(item => item.roleInClinic === Role.doctor),

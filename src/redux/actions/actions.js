@@ -237,3 +237,10 @@ export function toggleImportModal(open = false) {
     payload: open,
   };
 }
+
+export function toggleExchangeRateUpdate() {
+  return {
+    type: types.toggleExchangeRateUpdate,
+    payload: '',
+  };
+}

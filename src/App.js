@@ -67,6 +67,9 @@ import 'moment/locale/ru';
 import sessionManager from './utils/settings/sessionManager';
 import { addPaymentModalSelector } from './redux/selectors/addPaymentModalSelector';
 import { setAddPaymentModal } from './redux/actions/addPaymentModalActions';
+import { isExchangeRateModalOpenSelector } from './redux/selectors/exchangeRatesModalSelector';
+import ExchangeRates from './components/ExchangeRates';
+import { setIsExchangeRatesModalOpen } from './redux/actions/exchangeRatesActions';
 
 function App() {
   moment.locale(getAppLanguage());
@@ -82,6 +85,7 @@ function App() {
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const addPaymentModal = useSelector(addPaymentModalSelector);
+  const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
@@ -232,12 +236,20 @@ function App() {
     dispatch(setAddPaymentModal({ open: false }));
   };
 
+  const handleCloseExchangeRateModal = () => {
+    dispatch(setIsExchangeRatesModalOpen(false));
+  };
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
         <div id='fb-root' />
         <ToastContainer />
+        <ExchangeRates
+          open={isExchangeRatesModalOpen}
+          onClose={handleCloseExchangeRateModal}
+        />
         <RegisterPaymentModal
           {...paymentModal}
           onClose={handleClosePaymentModal}

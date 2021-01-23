@@ -1,27 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Box, Checkbox, IconButton, Typography } from '@material-ui/core';
+import {
+  Box,
+  Checkbox,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@material-ui/core';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
+import { Form, InputGroup, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlus from '../../assets/icons/iconPlus';
+import {
+  clinicCurrencySelector,
+  clinicExchangeRatesSelector,
+} from '../../redux/selectors/clinicSelector';
 import { getServiceName } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
+  const menuRef = useRef(null);
+  const [serviceToChange, setServiceToChange] = useState(null);
   const [planServices, setPlanServices] = useState([]);
+  const rates = useSelector(clinicExchangeRatesSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
 
   useEffect(() => {
     const newServices = services.map(item => ({
       ...item,
-      count: 1,
-      isSelected: false,
+      isSelected: item.completed,
       isBraces: item.serviceType == null,
     }));
+    console.log(newServices);
     setPlanServices(newServices);
   }, [services]);
 
@@ -132,14 +149,64 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     );
   };
 
+  const handleCurrencyClick = service => event => {
+    menuRef.current = event.target;
+    setServiceToChange(service);
+  };
+
+  const handleCurrencySelected = rate => () => {
+    const newServices = planServices.map(item => {
+      if (
+        item.id !== serviceToChange.id ||
+        item.toothId !== serviceToChange.toothId ||
+        item.destination !== serviceToChange.destination
+      ) {
+        return item;
+      }
+      return {
+        ...item,
+        currency: rate.currency,
+      };
+    });
+    setPlanServices(newServices);
+    handleCloseCurrency();
+  };
+
+  const handleCloseCurrency = () => {
+    setServiceToChange(null);
+  };
+
+  const getServiceRate = service => {
+    return (
+      rates?.find(item => item.currency === service.currency) || {
+        value: 1,
+        currency: clinicCurrency,
+      }
+    );
+  };
+
   const totalPrice = sum(
     planServices
       .filter(item => item.isSelected)
-      .map(item => parseFloat(item.price) * item.count),
+      .map(item => {
+        const itemRate = getServiceRate(item);
+        return parseFloat(item.price) * itemRate.value * item.count;
+      }),
+  );
+
+  const ratesMenu = (
+    <Menu open={Boolean(serviceToChange)} anchorEl={menuRef.current}>
+      {rates?.map(rate => (
+        <MenuItem onClick={handleCurrencySelected(rate)} key={rate.currency}>
+          {rate.currency} - {rate.currencyName}
+        </MenuItem>
+      ))}
+    </Menu>
   );
 
   return (
     <EasyPlanModal
+      className='finalize-treatment-root'
       open={open}
       onClose={onClose}
       isPositiveDisabled={!planServices.some(it => it.isSelected)}
@@ -147,49 +214,61 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
       positiveBtnText={textForKey('Finalize')}
       title={textForKey('Finalize treatment')}
     >
+      {ratesMenu}
       <div className='finalize-treatment-content'>
         <span className='modal-subtitle'>{textForKey('Services')}</span>
         {planServices.map(item => (
           <div
             role='button'
             tabIndex={0}
-            key={`${item.id}-${item.toothId}-${item.name}`}
+            key={`${item.id}-${item.toothId}-${item.name}-${item.completed}-${item.completedAt}`}
             className='final-service-item'
           >
             <span className='service-name'>{getServiceName(item)}</span>
             <Box display='flex' alignItems='center'>
-              <input
-                className='service-price-input'
-                type='number'
-                value={item.price}
-                onChange={handleItemPriceChanged(item)}
-              />
               <IconButton
                 onClick={handleRemoveService(item)}
                 style={{ outline: 'none' }}
               >
                 <IconMinus fill='#3A83DC' />
               </IconButton>
-              <Typography>{item.count}</Typography>
+              <Typography classes={{ root: 'count-label' }}>
+                {item.count}
+              </Typography>
               <IconButton
                 onClick={handleAddService(item)}
                 style={{ outline: 'none' }}
               >
                 <IconPlus fill='#3A83DC' />
               </IconButton>
+              <InputGroup className='price-form-group'>
+                <Form.Control
+                  type='number'
+                  onChange={handleItemPriceChanged(item)}
+                  value={String(item.price)}
+                />
+                <InputGroup.Append>
+                  <Button
+                    onClick={handleCurrencyClick(item)}
+                    variant='outline-primary'
+                  >
+                    {item.currency || clinicCurrency}
+                  </Button>
+                </InputGroup.Append>
+              </InputGroup>
               <Checkbox
-                id={`${item.id}#${item.toothId}#${item.destination}`}
+                id={`${item.id}#${item.toothId}#${item.destination}#${item.completed}#${item.completedAt}`}
                 classes={{
                   root: 'service-check-box',
                 }}
-                checked={item.isSelected}
+                checked={Boolean(item.isSelected)}
                 onChange={handleServiceChecked}
               />
             </Box>
           </div>
         ))}
         <div className='totals-text-wrapper'>
-          {textForKey('Total')}: {totalPrice} MDL
+          {textForKey('Total')}: {totalPrice} {clinicCurrency}
         </div>
       </div>
     </EasyPlanModal>

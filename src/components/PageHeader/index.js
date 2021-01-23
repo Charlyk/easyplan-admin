@@ -1,15 +1,18 @@
 import React, { useRef, useState } from 'react';
 
 import './styles.scss';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Image } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { Button, Image } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
+import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
+import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
@@ -37,8 +40,10 @@ const PageHeader = ({
   onLogout,
   onEditProfile,
 }) => {
+  const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
+  const currentClinic = useSelector(clinicDetailsSelector);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -55,6 +60,10 @@ const PageHeader = ({
         break;
     }
     setIsActionsOpen(false);
+  };
+
+  const handleOpenExchangeRatesModal = () => {
+    dispatch(setIsExchangeRatesModalOpen(true));
   };
 
   return (
@@ -75,6 +84,17 @@ const PageHeader = ({
       </div>
       {!isDoctor && <InvoicesButton />}
       <div className='page-header__actions'>
+        {!isDoctor && (
+          <Button
+            onClick={handleOpenExchangeRatesModal}
+            className={clsx('exchange-rate-btn', {
+              upcoming: currentClinic.updateExchangeRates,
+            })}
+            variant='outline-primary'
+          >
+            {textForKey('Exchange rate')}
+          </Button>
+        )}
         <div className='page-header__notifications'>
           <IconNotifications />
         </div>

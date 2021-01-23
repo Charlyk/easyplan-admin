@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -1367,7 +1367,7 @@ export default {
   fetchBracesPlan: async (patientId, planType) => {
     try {
       const response = await Axios.get(
-        `${baseURL}/patients/${patientId}/braces-plan/${planType}`,
+        `${baseURL}/treatment-plans/orthodontic?patientId=${patientId}&planType=${planType}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1393,9 +1393,9 @@ export default {
    */
   saveTreatmentPlan: async (patientId, plan) => {
     try {
-      const response = await Axios.put(
-        `${baseURL}/patients/${patientId}/treatment-plan`,
-        plan,
+      const response = await Axios.post(
+        `${baseURL}/treatment-plans/orthodontic`,
+        { ...plan, patientId },
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -2304,6 +2304,75 @@ export default {
     try {
       const url = `${baseURL}/patients/purchases/${patientId}`;
       const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Update exchange rates for a clinic
+   * @param {Array.<{currency: string, value: number}>} requestBody
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  updateClinicExchangeRates: async requestBody => {
+    try {
+      const url = `${baseURL}/clinics/exchange-rates`;
+      const response = await Axios.put(url, { rates: requestBody });
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Get exchange rates for a clinic
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  fetchClinicExchangeRates: async () => {
+    try {
+      const url = `${baseURL}/clinics/exchange-rates`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  savePatientTreatmentPlan: async requestBody => {
+    try {
+      const url = `${baseURL}/treatment-plans/general`;
+      const response = await Axios.post(url, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {
         return {

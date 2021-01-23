@@ -2,6 +2,7 @@ import {
   setUpdateCurrentUser,
   toggleAppointmentsUpdate,
   toggleCheckDoctorAppointments,
+  toggleExchangeRateUpdate,
   togglePatientsListUpdate,
   toggleUpdateInvoices,
   triggerUsersUpdate,
@@ -44,6 +45,9 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
       dispatch(fetchClinicData());
       dispatch(togglePatientsListUpdate());
       break;
+    case MessageAction.ExchangeRatesUpdated:
+      dispatch(toggleExchangeRateUpdate());
+      break;
   }
 };
 
@@ -62,4 +66,5 @@ const MessageAction = {
   ImportingClinicDetails: 'ImportingClinicDetails',
   ImportingClinicPatients: 'ImportingClinicPatients',
   ImportingClinicSchedules: 'ImportingClinicSchedules',
+  ExchangeRatesUpdated: 'ExchangeRatesUpdated',
 };
