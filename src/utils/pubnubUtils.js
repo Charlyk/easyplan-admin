@@ -2,10 +2,13 @@ import {
   setUpdateCurrentUser,
   toggleAppointmentsUpdate,
   toggleCheckDoctorAppointments,
+  toggleExchangeRateUpdate,
   togglePatientsListUpdate,
+  toggleUpdateDoctorAppointment,
   toggleUpdateInvoices,
   triggerUsersUpdate,
 } from '../redux/actions/actions';
+import { setClinicExchangeRatesUpdateRequired } from '../redux/actions/clinicActions';
 import { userSelector } from '../redux/selectors/rootSelector';
 import { fetchClinicData } from './helperFuncs';
 
@@ -44,6 +47,17 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
       dispatch(fetchClinicData());
       dispatch(togglePatientsListUpdate());
       break;
+    case MessageAction.ExchangeRatesUpdated:
+      dispatch(toggleExchangeRateUpdate());
+      break;
+    case MessageAction.NewPaymentRegistered:
+      dispatch(toggleUpdateInvoices());
+      dispatch(toggleCheckDoctorAppointments());
+      dispatch(toggleUpdateDoctorAppointment());
+      break;
+    case MessageAction.ExchangeRatesUpdateRequired:
+      dispatch(setClinicExchangeRatesUpdateRequired(true));
+      break;
   }
 };
 
@@ -62,4 +76,7 @@ const MessageAction = {
   ImportingClinicDetails: 'ImportingClinicDetails',
   ImportingClinicPatients: 'ImportingClinicPatients',
   ImportingClinicSchedules: 'ImportingClinicSchedules',
+  ExchangeRatesUpdated: 'ExchangeRatesUpdated',
+  NewPaymentRegistered: 'NewPaymentRegistered',
+  ExchangeRatesUpdateRequired: 'ExchangeRatesUpdateRequired',
 };

@@ -28,6 +28,7 @@ import {
 import { updateAppointmentsSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
+import { formattedAmount } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import SingleInputModal from '../SingleInputModal';
 
@@ -353,14 +354,18 @@ const AppointmentDetails = ({
                 <tbody>
                   {details.patient.debts.map(item => (
                     <tr key={item.id}>
-                      <td align='left'>
+                      <td align='left' className='services-cell'>
                         <Typography noWrap classes={{ root: 'services-label' }}>
-                          {item.services.map(it => it.name).join(', ')}
+                          {item.services.join(', ')}
                         </Typography>
                       </td>
-                      <td align='right'>{item.totalAmount}MDL</td>
-                      <td align='right'>{item.remainedAmount}MDL</td>
-                      <td align='right'>
+                      <td align='right' className='totals-cell'>
+                        {formattedAmount(item.totalAmount, item.currency)}
+                      </td>
+                      <td align='right' className='remained-cell'>
+                        {formattedAmount(item.remainedAmount, item.currency)}
+                      </td>
+                      <td align='right' className='actions-cell'>
                         <Button
                           variant='outline-primary'
                           onClick={() => handlePayDebt(item)}

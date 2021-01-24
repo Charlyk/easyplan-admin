@@ -7,8 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { setPaymentModal } from '../../redux/actions/actions';
+import {
+  clinicCurrencySelector,
+  clinicExchangeRatesSelector,
+} from '../../redux/selectors/clinicSelector';
 import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { formattedAmount } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import NewInvoiceToast from '../NewInvoiceToast';
 
@@ -16,15 +21,20 @@ const InvoicesButton = () => {
   const dispatch = useDispatch();
   const updateInvoices = useSelector(updateInvoicesSelector);
   const buttonRef = useRef(null);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
+  const exchangeRates = useSelector(clinicExchangeRatesSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [showInvoices, setShowInvoices] = useState(false);
 
   useEffect(() => {
     fetchInvoices();
-  }, [updateInvoices]);
+  }, [updateInvoices, exchangeRates]);
 
   const fetchInvoices = async () => {
+    if (exchangeRates.length === 0 || isLoading) {
+      return;
+    }
     setIsLoading(true);
     const response = await dataAPI.fetchClinicInvoices();
     if (response.isError) {
@@ -79,7 +89,9 @@ const InvoicesButton = () => {
                     <tr key={invoice.id}>
                       <td>{invoice.doctorFullName}</td>
                       <td>{invoice.patientFullName}</td>
-                      <td align='right'>{invoice.amount}MDL</td>
+                      <td align='right'>
+                        {formattedAmount(invoice.totalAmount, clinicCurrency)}
+                      </td>
                       <td align='right'>
                         <Button
                           className='positive-button'

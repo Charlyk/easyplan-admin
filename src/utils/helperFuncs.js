@@ -271,7 +271,6 @@ export const fetchClinicData = () => async dispatch => {
 };
 
 export const getServiceName = service => {
-  console.log(service);
   let name = service.name;
   if (service.toothId != null) {
     name = `${name} ${service.toothId}`;
@@ -359,6 +358,23 @@ export const colorShade = (col, amt) => {
   return `#${rr}${gg}${bb}`;
 };
 
+export function roundToTwo(num) {
+  return +(Math.round(num + 'e+2') + 'e-2');
+}
+
+/**
+ * Format number as price with currency
+ * @param {number} amount
+ * @param {string} currency
+ * @return {string}
+ */
+export const formattedAmount = (amount, currency) => {
+  return Intl.NumberFormat('ro-RO', {
+    style: 'currency',
+    currency: currency || 'MDL',
+  }).format(amount);
+};
+
 export const adjustValueToNumber = (newValue, maxAmount) => {
   if (newValue.length === 0) {
     newValue = '0';
@@ -373,5 +389,5 @@ export const adjustValueToNumber = (newValue, maxAmount) => {
   if (newValue > maxAmount) {
     newValue = maxAmount;
   }
-  return newValue;
+  return roundToTwo(newValue);
 };

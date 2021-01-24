@@ -21,6 +21,7 @@ import { toast } from 'react-toastify';
 import { setPaymentModal } from '../../../redux/actions/actions';
 import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
 import dataAPI from '../../../utils/api/dataAPI';
+import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
@@ -92,7 +93,6 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
                 <TableRow>
                   <TableCell align='left'>{textForKey('Services')}</TableCell>
                   <TableCell align='right'>{textForKey('Date')}</TableCell>
-                  <TableCell align='right'>{textForKey('Doctor')}</TableCell>
                   <TableCell align='right'>{textForKey('Clinic')}</TableCell>
                   <TableCell align='right'>{textForKey('Total')}</TableCell>
                   <TableCell align='right'>{textForKey('Remained')}</TableCell>
@@ -106,18 +106,20 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
                     className={clsx(item.isHighlighted && 'highlight')}
                   >
                     <TableCell align='left'>
-                      {item.services.map(it => it.name).join(', ')}
+                      {item.services.join(', ')}
                     </TableCell>
                     <TableCell align='right'>
                       {moment(item.created).format('DD MMM YYYY HH:MM')}
                     </TableCell>
-                    <TableCell align='right'>{item.doctor.fullName}</TableCell>
-                    <TableCell align='right'>{item.clinic.name}</TableCell>
+                    <TableCell align='right'>{item.clinicName}</TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      {getInvoiceTotalAmount(item)}MDL
+                      {formattedAmount(
+                        getInvoiceTotalAmount(item),
+                        item.currency,
+                      )}
                     </TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      {item.remainedAmount}MDL
+                      {formattedAmount(item.remainedAmount, item.currency)}
                     </TableCell>
                     <TableCell align='right'>
                       <Box

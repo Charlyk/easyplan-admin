@@ -237,3 +237,17 @@ export function toggleImportModal(open = false) {
     payload: open,
   };
 }
+
+export function toggleExchangeRateUpdate() {
+  return {
+    type: types.toggleExchangeRateUpdate,
+    payload: '',
+  };
+}
+
+export function toggleUpdateDoctorAppointment() {
+  return {
+    type: types.updateDoctorAppointment,
+    payload: '',
+  };
+}
