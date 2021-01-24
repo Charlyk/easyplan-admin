@@ -43,6 +43,11 @@ export const clinicExchangeRatesSelector = createSelector(
   },
 );
 
+export const clinicExchangeRatesUpdateRequiredSelector = createSelector(
+  clinicDetailsSelector,
+  state => state.updateExchangeRates,
+);
+
 export const clinicDoctorsSelector = createSelector(
   clinicUsersSelector,
   users => users.filter(item => item.roleInClinic === Role.doctor),

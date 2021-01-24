@@ -8,6 +8,7 @@ import {
   toggleUpdateInvoices,
   triggerUsersUpdate,
 } from '../redux/actions/actions';
+import { setClinicExchangeRatesUpdateRequired } from '../redux/actions/clinicActions';
 import { userSelector } from '../redux/selectors/rootSelector';
 import { fetchClinicData } from './helperFuncs';
 
@@ -54,6 +55,9 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
       dispatch(toggleCheckDoctorAppointments());
       dispatch(toggleUpdateDoctorAppointment());
       break;
+    case MessageAction.ExchangeRatesUpdateRequired:
+      dispatch(setClinicExchangeRatesUpdateRequired(true));
+      break;
   }
 };
 
@@ -74,4 +78,5 @@ const MessageAction = {
   ImportingClinicSchedules: 'ImportingClinicSchedules',
   ExchangeRatesUpdated: 'ExchangeRatesUpdated',
   NewPaymentRegistered: 'NewPaymentRegistered',
+  ExchangeRatesUpdateRequired: 'ExchangeRatesUpdateRequired',
 };

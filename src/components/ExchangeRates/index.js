@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
@@ -78,10 +77,10 @@ const ExchangeRates = ({ open, onClose }) => {
   const allCurrencies = useSelector(allCurrenciesSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
   const selectedClinic = useSelector(selectedClinicSelector);
-  const [
-    { isLoading, rates, initialRates, isSaving },
-    localDispatch,
-  ] = useReducer(reducer, initialState);
+  const [{ isLoading, rates, isSaving }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     debounceFetchClinic();
@@ -146,11 +145,13 @@ const ExchangeRates = ({ open, onClose }) => {
     localDispatch(actions.setRates(newRates));
   };
 
-  const getAvailableCurrencies = () => {
+  const getAvailableCurrencies = exception => {
     if (allCurrencies == null) return [];
     const existentRates = rates.map(it => it.currency);
     return allCurrencies.filter(
-      it => !existentRates.includes(it.id) && it.id !== clinicCurrency,
+      it =>
+        (!existentRates.includes(it.id) && it.id !== clinicCurrency) ||
+        it.id === exception,
     );
   };
 
@@ -183,7 +184,7 @@ const ExchangeRates = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       isPositiveLoading={isSaving || isLoading}
-      isPositiveDisabled={isLoading || isSaving || isEqual(rates, initialRates)}
+      isPositiveDisabled={isLoading || isSaving}
       title={textForKey('Exchange rate')}
       onPositiveClick={handleSaveRates}
     >
@@ -209,7 +210,7 @@ const ExchangeRates = ({ open, onClose }) => {
                         value={rate.currency}
                         custom
                       >
-                        {(allCurrencies || []).map(currency => (
+                        {getAvailableCurrencies(rate.currency).map(currency => (
                           <option
                             key={`item-${currency.id}`}
                             value={currency.id}

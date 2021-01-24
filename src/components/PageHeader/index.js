@@ -12,7 +12,7 @@ import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
 import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
-import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
+import { clinicExchangeRatesUpdateRequiredSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
@@ -43,7 +43,9 @@ const PageHeader = ({
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
-  const currentClinic = useSelector(clinicDetailsSelector);
+  const isExchangeUpdateRequired = useSelector(
+    clinicExchangeRatesUpdateRequiredSelector,
+  );
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -88,7 +90,7 @@ const PageHeader = ({
           <Button
             onClick={handleOpenExchangeRatesModal}
             className={clsx('exchange-rate-btn', {
-              upcoming: currentClinic.updateExchangeRates,
+              upcoming: isExchangeUpdateRequired,
             })}
             variant='outline-primary'
           >

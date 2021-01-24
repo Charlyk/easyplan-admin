@@ -29,3 +29,15 @@ export function setClinic(payload) {
     payload,
   };
 }
+
+/**
+ * Update clinic exchange rates status
+ * @param {boolean} isRequired
+ * @return {{payload, type: string}}
+ */
+export function setClinicExchangeRatesUpdateRequired(isRequired) {
+  return {
+    type: types.setClinicExchangeRatesUpdateRequired,
+    payload: isRequired,
+  };
+}
