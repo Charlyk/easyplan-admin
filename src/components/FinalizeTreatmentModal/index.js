@@ -38,7 +38,6 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
       isSelected: item.completed,
       isBraces: item.serviceType == null,
     }));
-    console.log(newServices);
     setPlanServices(newServices);
   }, [services]);
 

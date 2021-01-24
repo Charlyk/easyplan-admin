@@ -13,14 +13,21 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
   return (
     <tr className='final-service-root'>
       <td>
-        <Typography classes={{ root: 'service-name' }}>
-          {getServiceName(service)}
+        <div className='service-wrapper'>
+          <Typography classes={{ root: 'service-name' }}>
+            {getServiceName(service)}
+          </Typography>
           {service.completedBy && (
             <Typography classes={{ root: 'completed-by-label' }}>
               {textForKey('completed by')} {service.completedBy}
             </Typography>
           )}
-        </Typography>
+          {!service.completed && service.addedByName && (
+            <Typography classes={{ root: 'completed-by-label' }}>
+              {textForKey('added by')} {service.addedByName}
+            </Typography>
+          )}
+        </div>
       </td>
       <td width={130} align='right' valign='middle'>
         <IconButton

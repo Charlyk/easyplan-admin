@@ -361,11 +361,10 @@
 }
 
 .final-service-root {
-  height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: .5rem;
+  border-bottom: #ededed 1px solid;
 
   .remove-btn {
     outline: none;
@@ -393,18 +392,25 @@
     }
   }
 
-  .service-name {
+  .service-wrapper {
     display: flex;
-    align-items: center;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    color: #34354C;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .service-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: #34354C;
+    }
 
     .completed-by-label {
-      margin-left: .5rem;
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;

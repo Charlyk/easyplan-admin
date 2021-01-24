@@ -1286,11 +1286,12 @@ export default {
 
   /**
    * Fetch clinic invoices
+   * @param {string} status
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  fetchClinicInvoices: async () => {
+  fetchClinicInvoices: async (status = 'PendingPayment') => {
     try {
-      const url = `${baseURL}/clinics/invoices`;
+      const url = `${baseURL}/invoices?status=${status}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1607,7 +1608,7 @@ export default {
    */
   fetchInvoiceDetails: async invoiceId => {
     try {
-      const url = `${baseURL}/clinics/invoice/${invoiceId}`;
+      const url = `${baseURL}/invoices/${invoiceId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
@@ -2373,6 +2374,39 @@ export default {
     try {
       const url = `${baseURL}/treatment-plans/general`;
       const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Update patient treatment plan
+   * @param {Object} requestBody
+   * @param {number} requestBody.patientId
+   * @param {number} requestBody.scheduleId
+   * @param {Array.<{serviceId: number, toothId: string|number, price: number, destination: string, currency: string}>} requestBody.services
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  updatePatientTreatmentPlan: async requestBody => {
+    try {
+      const url = `${baseURL}/treatment-plans/general`;
+      requestBody.services = requestBody.services.map(item => ({
+        ...item,
+        completed: false,
+        count: 1,
+      }));
+      const response = await Axios.put(url, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {
         return {

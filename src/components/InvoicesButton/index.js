@@ -2,11 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import './styles.scss';
 import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
+import sumBy from 'lodash/sumBy';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { setPaymentModal } from '../../redux/actions/actions';
+import {
+  clinicCurrencySelector,
+  clinicExchangeRatesSelector,
+} from '../../redux/selectors/clinicSelector';
 import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { textForKey } from '../../utils/localization';
@@ -16,27 +21,52 @@ const InvoicesButton = () => {
   const dispatch = useDispatch();
   const updateInvoices = useSelector(updateInvoicesSelector);
   const buttonRef = useRef(null);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
+  const exchangeRates = useSelector(clinicExchangeRatesSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [showInvoices, setShowInvoices] = useState(false);
 
   useEffect(() => {
     fetchInvoices();
-  }, [updateInvoices]);
+  }, [updateInvoices, exchangeRates]);
 
   const fetchInvoices = async () => {
+    if (isLoading) {
+      return;
+    }
     setIsLoading(true);
     const response = await dataAPI.fetchClinicInvoices();
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
       const { data: newInvoices } = response;
-      if (newInvoices?.length > invoices.length) {
+      const updatedInvoices = newInvoices.map(invoice => {
+        return {
+          ...invoice,
+          services: computeServicePrice(invoice),
+        };
+      });
+      if (updatedInvoices?.length > invoices.length) {
         toast(<NewInvoiceToast />);
       }
-      setInvoices(newInvoices);
+      setInvoices(updatedInvoices);
     }
     setIsLoading(false);
+  };
+
+  const computeServicePrice = invoice => {
+    return invoice.services.map(service => {
+      const serviceExchange = exchangeRates.find(
+        rate => rate.currency === service.currency,
+      ) || { value: 1 };
+      const servicePrice =
+        service.amount * serviceExchange.value * service.count;
+      return {
+        ...service,
+        totalPrice: servicePrice - invoice.paidAmount,
+      };
+    });
   };
 
   const handleToggleInvoices = () => {
@@ -50,6 +80,13 @@ const InvoicesButton = () => {
 
   const handlePayInvoice = invoice => {
     dispatch(setPaymentModal({ open: true, invoice }));
+  };
+
+  const getInvoicePrice = invoice => {
+    return sumBy(
+      invoice.services,
+      service => service.totalPrice || service.amount * service.count,
+    );
   };
 
   const invoicesPaper = (
@@ -79,7 +116,10 @@ const InvoicesButton = () => {
                     <tr key={invoice.id}>
                       <td>{invoice.doctorFullName}</td>
                       <td>{invoice.patientFullName}</td>
-                      <td align='right'>{invoice.amount}MDL</td>
+                      <td align='right'>
+                        {getInvoicePrice(invoice)}
+                        {clinicCurrency}
+                      </td>
                       <td align='right'>
                         <Button
                           className='positive-button'

@@ -389,6 +389,7 @@ export default {
     patient_not_found: 'Patient was not found',
     'completed by': 'completed by',
     'finalize treatment': 'Finalize treatment',
+    'added by': 'added by',
   },
   ro: {
     analytics: 'Analitică',
@@ -785,6 +786,7 @@ export default {
     patient_not_found: 'Pacientul nu a fost găsit',
     'completed by': 'finisat de',
     'finalize treatment': 'Finalizare tratament',
+    'added by': 'adăugat de',
   },
   ru: {
     analytics: 'Analytics',
@@ -1173,5 +1175,6 @@ export default {
     patient_not_found: 'Patient was not found',
     'completed by': 'completed by',
     'finalize treatment': 'Finalize treatment',
+    'added by': 'added by',
   },
 };

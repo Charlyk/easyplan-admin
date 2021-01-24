@@ -457,6 +457,7 @@ export const Action = {
   EditClinic: 'EditClinic',
   PayInvoice: 'PayInvoice',
   FinalizeTreatment: 'FinalizeTreatment',
+  UpdateTreatmentPlan: 'UpdateTreatmentPlan',
   ViewGeneralStatistics: 'ViewGeneralStatistics',
   ViewServicesStatistics: 'ViewServicesStatistics',
   ViewDoctorsStatistics: 'ViewDoctorsStatistics',

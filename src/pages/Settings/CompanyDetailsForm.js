@@ -86,7 +86,6 @@ const CompanyDetailsForm = props => {
 
   const handlePhoneChange = phoneType => (value, _, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
-    console.log(phoneType, validationFieldName);
     if (isSaving) return;
     setData({
       ...data,
@@ -353,7 +352,7 @@ const CompanyDetailsForm = props => {
               value={data.currency}
             >
               {data.allCurrencies.map(currency => (
-                <option key={currency} value={currency.id}>
+                <option key={currency.id} value={currency.id}>
                   {currency.id} - {currency.name}
                 </option>
               ))}

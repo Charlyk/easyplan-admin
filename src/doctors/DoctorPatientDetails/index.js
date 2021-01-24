@@ -47,9 +47,7 @@ const areSameServices = (first, second) => {
     ((first.toothId == null && second.toothId == null) ||
       first.toothId === second.toothId) &&
     ((first.destination == null && second.destination == null) ||
-      first.destination === second.destination) &&
-    first.completed === second.completed &&
-    first.completedAt === second.completedAt
+      first.destination === second.destination)
   );
 };
 
@@ -195,17 +193,11 @@ const reducer = (state, action) => {
       );
 
       // combine services and braces in one array
-      const newSelectedServices = orderBy(
-        [...planServices, ...planBraces],
-        ['completed', 'created'],
-        ['asc', 'desc'],
-      );
+      const newSelectedServices = [...planServices, ...planBraces];
 
       // remove unused services from selected
       const diffsToRemove = existentSelectedServices.filter(
-        item =>
-          item.serviceType == null &&
-          !newSelectedServices.some(it => areSameServices(it, item)),
+        item => !newSelectedServices.some(it => areSameServices(it, item)),
       );
       remove(existentSelectedServices, item =>
         diffsToRemove.some(it => areSameServices(it, item)),
@@ -217,11 +209,17 @@ const reducer = (state, action) => {
       );
       diffsToAdd.forEach(item => existentSelectedServices.push(item));
 
+      const sortedSelectedServices = orderBy(
+        existentSelectedServices,
+        ['completed', 'created'],
+        ['asc', 'desc'],
+      );
+
       return {
         ...state,
         patient,
         schedule: data,
-        selectedServices: existentSelectedServices,
+        selectedServices: sortedSelectedServices,
         completedServices: [
           ...treatmentPlan.services.filter(item => item.completed),
           ...treatmentPlan.braces.filter(item => item.completed),
@@ -381,8 +379,21 @@ const DoctorPatientDetails = () => {
     }
   };
 
+  const isFinished =
+    schedule?.scheduleStatus === 'CompletedNotPaid' ||
+    schedule?.scheduleStatus === 'CompletedPaid' ||
+    schedule?.scheduleStatus === 'PartialPaid';
+
+  const canFinalize =
+    schedule?.scheduleStatus === 'OnSite' ||
+    schedule?.scheduleStatus === 'CompletedNotPaid';
+
   const handleFinalizeTreatment = () => {
-    localDispatch(actions.setShowFinalizeTreatment(true));
+    if (canFinalize) {
+      localDispatch(actions.setShowFinalizeTreatment(true));
+    } else {
+      finalizeTreatment(selectedServices);
+    }
   };
 
   const handleCloseFinalizeTreatment = () => {
@@ -402,7 +413,7 @@ const DoctorPatientDetails = () => {
         completed: item.isSelected,
         destination: item.destination,
         isBraces: item.isBraces,
-        count: item.count,
+        count: item.count || 1,
         price: item.price,
         currency: item.currency || clinicCurrency,
       })),
@@ -410,7 +421,9 @@ const DoctorPatientDetails = () => {
 
     logUserAction(Action.FinalizeTreatment, JSON.stringify(requestBody));
 
-    const response = await dataAPI.savePatientTreatmentPlan(requestBody);
+    const response = canFinalize
+      ? await dataAPI.savePatientTreatmentPlan(requestBody)
+      : await dataAPI.updatePatientTreatmentPlan(requestBody);
 
     if (response.isError) {
       toast.error(textForKey(response.message));
@@ -424,15 +437,6 @@ const DoctorPatientDetails = () => {
   const keyForService = service => {
     return `${service.id}-${service.toothId}-${service.name}-${service.destination}-${service.completed}-${service.completedAt}`;
   };
-
-  const isFinished =
-    schedule?.scheduleStatus === 'CompletedNotPaid' ||
-    schedule?.scheduleStatus === 'CompletedPaid' ||
-    schedule?.scheduleStatus === 'PartialPaid';
-
-  const canFinalize =
-    schedule?.scheduleStatus === 'OnSite' ||
-    schedule?.scheduleStatus === 'CompletedNotPaid';
 
   return (
     <div className='doctor-patient-root'>
@@ -598,12 +602,10 @@ const DoctorPatientDetails = () => {
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
-              disabled={selectedServices.length === 0 || !canFinalize}
+              disabled={selectedServices.length === 0}
               className='positive-button'
             >
-              {!canFinalize
-                ? textForKey(schedule?.scheduleStatus)
-                : isFinished
+              {!canFinalize || isFinished
                 ? textForKey('Edit')
                 : textForKey('Finalize')}
             </LoadingButton>

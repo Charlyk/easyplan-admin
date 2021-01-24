@@ -1,10 +1,12 @@
 import React, { useEffect, useReducer } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
+import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
+import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { Button, FormControl, InputGroup } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import {
@@ -12,6 +14,10 @@ import {
   togglePatientPaymentsUpdate,
   toggleUpdateInvoices,
 } from '../../redux/actions/actions';
+import {
+  clinicCurrencySelector,
+  clinicExchangeRatesSelector,
+} from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import {
@@ -22,6 +28,20 @@ import {
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+
+const computeServicePrice = (invoice, exchangeRates) => {
+  return invoice.services.map(service => {
+    const serviceExchange = exchangeRates.find(
+      rate => rate.currency === service.currency,
+    ) || { value: 1 };
+    const servicePrice = service.amount * serviceExchange.value * service.count;
+    return {
+      ...service,
+      created: moment(service.created).toDate(),
+      totalPrice: servicePrice,
+    };
+  });
+};
 
 const initialState = {
   isLoading: false,
@@ -69,15 +89,25 @@ const reducer = (state, action) => {
       return { ...state, invoiceStatus: action.payload };
     case reducerTypes.setIsFetching:
       return { ...state, isFetching: action.payload };
-    case reducerTypes.setupInvoiceData:
+    case reducerTypes.setupInvoiceData: {
+      const { invoiceDetails, exchangeRates } = action.payload;
+      const updatedServices = computeServicePrice(
+        invoiceDetails,
+        exchangeRates,
+      );
+      const servicesPrice = sumBy(updatedServices, item => item.totalPrice);
       return {
         ...state,
-        invoiceDetails: action.payload,
-        payAmount: action.payload.remainedAmount,
-        discount: action.payload.discount,
-        services: action.payload.services,
-        invoiceStatus: action.payload.status,
+        invoiceDetails: {
+          ...invoiceDetails,
+          services: updatedServices,
+        },
+        payAmount: servicesPrice - invoiceDetails.paidAmount,
+        discount: invoiceDetails.discount,
+        services: updatedServices,
+        invoiceStatus: invoiceDetails.status,
       };
+    }
     case reducerTypes.resetState:
       return initialState;
     default:
@@ -101,12 +131,14 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     localDispatch,
   ] = useReducer(reducer, initialState);
   const totalAmount = sumBy(services, item => item.totalPrice);
+  const exchangeRates = useSelector(clinicExchangeRatesSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
 
   useEffect(() => {
     if (invoice != null) {
       fetchInvoiceDetails();
     }
-  }, [invoice]);
+  }, [invoice, exchangeRates]);
 
   useEffect(() => {
     if (!open) {
@@ -115,7 +147,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   }, [open]);
 
   const fetchInvoiceDetails = async () => {
-    if (invoice == null) {
+    if (invoice == null || exchangeRates.length === 0) {
       return;
     }
     localDispatch(actions.setIsFetching(true));
@@ -124,7 +156,9 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       toast(textForKey(response.message));
     } else {
       const { data: invoiceDetails } = response;
-      localDispatch(actions.setupInvoiceData(invoiceDetails));
+      localDispatch(
+        actions.setupInvoiceData({ invoiceDetails, exchangeRates }),
+      );
     }
     localDispatch(actions.setIsFetching(false));
   };
@@ -269,13 +303,11 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
         <div className='register-payment-content'>
           <div className='content-row'>
             <span className='title-text'>{textForKey('Doctor')}:</span>
-            <span className='content-text'>
-              {invoiceDetails?.doctor.fullName}
-            </span>
+            <span className='content-text'>{invoiceDetails?.doctor.name}</span>
           </div>
           <div className='content-row'>
             <span className='title-text'>{textForKey('Patient')}:</span>
-            <span className='content-text'>{invoiceDetails?.patient}</span>
+            <span className='content-text'>{invoiceDetails?.patient.name}</span>
           </div>
           <div className='services-wrapper'>
             <div className='content-row'>
@@ -291,19 +323,9 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
                       } ${service.toothId || ''}`}</Typography>
                     </td>
                     <td align='right' valign='middle'>
-                      <InputGroup>
-                        <Form.Control
-                          disabled={invoiceDetails?.status === 'Paid'}
-                          onChange={handleServicePriceChanged(service)}
-                          type='number'
-                          value={String(service.totalPrice)}
-                        />
-                        <InputGroup.Append>
-                          <InputGroup.Text id='basic-addon1'>
-                            MDL
-                          </InputGroup.Text>
-                        </InputGroup.Append>
-                      </InputGroup>
+                      <Typography classes={{ root: 'service-price-label' }}>
+                        {service.amount * service.count} {service.currency}
+                      </Typography>
                     </td>
                   </tr>
                 ))}
@@ -320,14 +342,17 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
                 value={String(payAmount)}
               />
               <InputGroup.Append>
-                <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+                <InputGroup.Text id='basic-addon1'>
+                  {clinicCurrency}
+                </InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
             <span className='total-label'>
               {textForKey('from')}{' '}
               {invoiceStatus !== 'Paid'
                 ? totalAmount
-                : invoiceDetails?.remainedAmount || 0}
+                : invoiceDetails?.remainedAmount || 0}{' '}
+              {clinicCurrency}
             </span>
           </div>
           <div className='content-row'>
@@ -347,7 +372,9 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
           </div>
           <div className='content-row'>
             <span className='title-text'>{textForKey('Total')}:</span>
-            <span className='total-label'>{getTotal()} MDL</span>
+            <span className='total-label'>
+              {getTotal()} {clinicCurrency}
+            </span>
           </div>
         </div>
       )}
@@ -361,17 +388,12 @@ RegisterPaymentModal.propTypes = {
   open: PropTypes.bool,
   invoice: PropTypes.shape({
     id: PropTypes.number,
-    doctor: PropTypes.shape({
-      id: PropTypes.number,
-      fullName: PropTypes.string,
-    }),
-    scheduleId: PropTypes.number,
-    patient: PropTypes.string,
-    totalAmount: PropTypes.number,
+    scheduleDate: PropTypes.string,
     paidAmount: PropTypes.number,
-    remainedAmount: PropTypes.number,
-    services: PropTypes.arrayOf(PropTypes.object),
     status: PropTypes.oneOf(['PendingPayment', 'Paid', 'PartialPaid']),
+    doctorFullName: PropTypes.string,
+    patientFullName: PropTypes.string,
+    services: PropTypes.arrayOf(PropTypes.object),
   }),
   onClose: PropTypes.func,
 };
