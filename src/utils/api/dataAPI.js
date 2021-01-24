@@ -1312,15 +1312,15 @@ export default {
   /**
    * Register patient payment
    * @param {Object} requestBody
-   * @param {string} requestBody.invoiceId
-   * @param {number} requestBody.amount
+   * @param {number} invoiceId
+   * @param {number} requestBody.paidAmount
    * @param {number} requestBody.discount
    * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
    */
-  registerPayment: async requestBody => {
+  registerPayment: async (invoiceId, requestBody) => {
     try {
-      const response = await Axios.post(
-        `${baseURL}/clinics/register-payment`,
+      const response = await Axios.put(
+        `${baseURL}/invoices/${invoiceId}`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -1912,7 +1912,7 @@ export default {
    */
   fetchPatientDebts: async patientId => {
     try {
-      const url = `${baseURL}/patients/${patientId}/debts`;
+      const url = `${baseURL}/invoices/debts?patientId=${patientId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {

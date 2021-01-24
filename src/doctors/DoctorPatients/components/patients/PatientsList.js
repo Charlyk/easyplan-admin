@@ -124,9 +124,9 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           <Typography noWrap classes={{ root: 'patient-name' }}>
             {scheduleStatus.name}
           </Typography>
-          <span className='time-label'>
+          <Typography noWrap classes={{ root: 'time-label' }}>
             {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
-          </span>
+          </Typography>
           <div className='details-button'>
             <Link to={updateLink(`/${schedule.id}`)}>
               <span className='button-text'>{textForKey('Details')}</span>

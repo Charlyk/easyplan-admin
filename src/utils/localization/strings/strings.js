@@ -390,6 +390,7 @@ export default {
     'completed by': 'completed by',
     'finalize treatment': 'Finalize treatment',
     'added by': 'added by',
+    'schedule time': 'Schedule time',
   },
   ro: {
     analytics: 'Analitică',
@@ -787,6 +788,7 @@ export default {
     'completed by': 'finisat de',
     'finalize treatment': 'Finalizare tratament',
     'added by': 'adăugat de',
+    'schedule time': 'Ora programării',
   },
   ru: {
     analytics: 'Analytics',
@@ -1176,5 +1178,6 @@ export default {
     'completed by': 'completed by',
     'finalize treatment': 'Finalize treatment',
     'added by': 'added by',
+    'schedule time': 'Schedule time',
   },
 };

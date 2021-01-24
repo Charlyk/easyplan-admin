@@ -191,14 +191,6 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
                   </ListGroup.Item>
                   <ListGroup.Item
                     action
-                    id={MenuItem.payments}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.payments)}
-                  >
-                    {textForKey('Schedules stats')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
                     id={MenuItem.purchases}
                     onClick={handleMenuClick}
                     className={menuItemClasses(MenuItem.purchases)}

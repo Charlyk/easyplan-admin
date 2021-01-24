@@ -4,6 +4,7 @@ import {
   toggleCheckDoctorAppointments,
   toggleExchangeRateUpdate,
   togglePatientsListUpdate,
+  toggleUpdateDoctorAppointment,
   toggleUpdateInvoices,
   triggerUsersUpdate,
 } from '../redux/actions/actions';
@@ -48,6 +49,11 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
     case MessageAction.ExchangeRatesUpdated:
       dispatch(toggleExchangeRateUpdate());
       break;
+    case MessageAction.NewPaymentRegistered:
+      dispatch(toggleUpdateInvoices());
+      dispatch(toggleCheckDoctorAppointments());
+      dispatch(toggleUpdateDoctorAppointment());
+      break;
   }
 };
 
@@ -67,4 +73,5 @@ const MessageAction = {
   ImportingClinicPatients: 'ImportingClinicPatients',
   ImportingClinicSchedules: 'ImportingClinicSchedules',
   ExchangeRatesUpdated: 'ExchangeRatesUpdated',
+  NewPaymentRegistered: 'NewPaymentRegistered',
 };

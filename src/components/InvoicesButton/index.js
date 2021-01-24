@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import './styles.scss';
 import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
-import sumBy from 'lodash/sumBy';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -14,6 +13,7 @@ import {
 } from '../../redux/selectors/clinicSelector';
 import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
+import { formattedAmount } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import NewInvoiceToast from '../NewInvoiceToast';
 
@@ -32,7 +32,7 @@ const InvoicesButton = () => {
   }, [updateInvoices, exchangeRates]);
 
   const fetchInvoices = async () => {
-    if (isLoading) {
+    if (exchangeRates.length === 0 || isLoading) {
       return;
     }
     setIsLoading(true);
@@ -41,32 +41,12 @@ const InvoicesButton = () => {
       toast.error(textForKey(response.message));
     } else {
       const { data: newInvoices } = response;
-      const updatedInvoices = newInvoices.map(invoice => {
-        return {
-          ...invoice,
-          services: computeServicePrice(invoice),
-        };
-      });
-      if (updatedInvoices?.length > invoices.length) {
+      if (newInvoices?.length > invoices.length) {
         toast(<NewInvoiceToast />);
       }
-      setInvoices(updatedInvoices);
+      setInvoices(newInvoices);
     }
     setIsLoading(false);
-  };
-
-  const computeServicePrice = invoice => {
-    return invoice.services.map(service => {
-      const serviceExchange = exchangeRates.find(
-        rate => rate.currency === service.currency,
-      ) || { value: 1 };
-      const servicePrice =
-        service.amount * serviceExchange.value * service.count;
-      return {
-        ...service,
-        totalPrice: servicePrice - invoice.paidAmount,
-      };
-    });
   };
 
   const handleToggleInvoices = () => {
@@ -80,13 +60,6 @@ const InvoicesButton = () => {
 
   const handlePayInvoice = invoice => {
     dispatch(setPaymentModal({ open: true, invoice }));
-  };
-
-  const getInvoicePrice = invoice => {
-    return sumBy(
-      invoice.services,
-      service => service.totalPrice || service.amount * service.count,
-    );
   };
 
   const invoicesPaper = (
@@ -117,8 +90,7 @@ const InvoicesButton = () => {
                       <td>{invoice.doctorFullName}</td>
                       <td>{invoice.patientFullName}</td>
                       <td align='right'>
-                        {getInvoicePrice(invoice)}
-                        {clinicCurrency}
+                        {formattedAmount(invoice.totalAmount, clinicCurrency)}
                       </td>
                       <td align='right'>
                         <Button

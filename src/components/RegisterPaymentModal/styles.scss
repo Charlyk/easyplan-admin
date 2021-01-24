@@ -152,7 +152,7 @@
 
       .input-group {
         height: 100%;
-        width: 9rem;
+        width: 10rem;
         margin-top: 0;
         margin-right: .5rem;
         display: flex;
@@ -160,6 +160,10 @@
         .form-control {
           height: 100%;
           flex: 1;
+        }
+
+        .form-control[disabled] {
+          background-color: #ededed;
         }
 
         .input-group-append {

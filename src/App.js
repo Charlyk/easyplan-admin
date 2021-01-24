@@ -70,6 +70,7 @@ import { setAddPaymentModal } from './redux/actions/addPaymentModalActions';
 import { isExchangeRateModalOpenSelector } from './redux/selectors/exchangeRatesModalSelector';
 import ExchangeRates from './components/ExchangeRates';
 import { setIsExchangeRatesModalOpen } from './redux/actions/exchangeRatesActions';
+import dataAPI from './utils/api/dataAPI';
 
 function App() {
   moment.locale(getAppLanguage());

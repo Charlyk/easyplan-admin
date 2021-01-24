@@ -125,6 +125,11 @@ function main(state = initialState, action) {
         ...state,
         updateExchangeRates: !state.updateExchangeRates,
       };
+    case types.updateDoctorAppointment:
+      return {
+        ...state,
+        updateDoctorAppointments: !state.updateDoctorAppointments,
+      };
     default:
       return state;
   }

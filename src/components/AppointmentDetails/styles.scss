@@ -151,7 +151,8 @@
     }
 
     .debts-wrapper {
-      flex: 1;
+      width: 100%;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
 
@@ -178,8 +179,6 @@
       }
 
       table {
-        max-width: 100%;
-        overflow: hidden;
         thead {
           tr {
             td {
@@ -193,8 +192,13 @@
             }
           }
         }
+
         tbody {
+          width: 100%;
+
           tr {
+            width: 100%;
+
             td {
               padding-right: 1rem;
               font-family: Inter, sans-serif;
@@ -203,9 +207,16 @@
               font-size: 14px;
               line-height: 32px;
               color: #34344E;
+            }
 
+            .actions-cell {
+              width: 15%;
+            }
+
+            .services-cell {
+              width: 55%;
               .services-label {
-                max-width: 180px;
+                max-width: 120px;
                 padding-right: 1rem;
                 font-family: Inter, sans-serif;
                 font-style: normal;
@@ -214,6 +225,14 @@
                 line-height: 32px;
                 color: #34344E;
               }
+            }
+
+            .totals-cell {
+              width: 15%;
+            }
+
+            .remained-cell {
+              width: 15%;
             }
           }
         }

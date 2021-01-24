@@ -32,6 +32,7 @@ export default {
   forceUserLogout: 'forceUserLogout',
   toggleImportModal: 'toggleImportModal',
   toggleExchangeRateUpdate: 'toggleExchangeRateUpdate',
+  updateDoctorAppointment: 'updateDoctorAppointment',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,

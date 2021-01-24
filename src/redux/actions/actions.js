@@ -244,3 +244,10 @@ export function toggleExchangeRateUpdate() {
     payload: '',
   };
 }
+
+export function toggleUpdateDoctorAppointment() {
+  return {
+    type: types.updateDoctorAppointment,
+    payload: '',
+  };
+}

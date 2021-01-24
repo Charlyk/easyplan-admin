@@ -25,9 +25,12 @@ import {
   clinicCurrencySelector,
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
-import { userSelector } from '../../redux/selectors/rootSelector';
+import {
+  updateDoctorAppointmentDetailsSelector,
+  userSelector,
+} from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action, teeth } from '../../utils/constants';
+import { Action, Statuses, teeth } from '../../utils/constants';
 import {
   generateReducerActions,
   getServiceName,
@@ -184,13 +187,13 @@ const reducer = (state, action) => {
       const existentSelectedServices = cloneDeep(state.selectedServices);
 
       // update treatmentPlanServices
-      const planServices = treatmentPlan.services.map(
-        updateService(invoice, clinicCurrency),
-      );
+      const planServices = treatmentPlan.services
+        .map(updateService(invoice, clinicCurrency))
+        .map(item => ({ ...item, isExistent: true }));
       // update plan braces
-      const planBraces = treatmentPlan.braces.map(
-        updateService(invoice, clinicCurrency),
-      );
+      const planBraces = treatmentPlan.braces
+        .map(updateService(invoice, clinicCurrency))
+        .map(item => ({ ...item, isExistent: true }));
 
       // combine services and braces in one array
       const newSelectedServices = [...planServices, ...planBraces];
@@ -239,6 +242,7 @@ const DoctorPatientDetails = () => {
   const clinicServices = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
+  const updateSchedule = useSelector(updateDoctorAppointmentDetailsSelector);
   const [
     {
       isLoading,
@@ -253,12 +257,24 @@ const DoctorPatientDetails = () => {
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
+  const scheduleStatus = Statuses.find(
+    item => item.id === schedule?.scheduleStatus,
+  );
+
+  const isFinished =
+    schedule?.scheduleStatus === 'CompletedNotPaid' ||
+    schedule?.scheduleStatus === 'CompletedPaid' ||
+    schedule?.scheduleStatus === 'PartialPaid';
+
+  const canFinalize =
+    schedule?.scheduleStatus === 'OnSite' ||
+    schedule?.scheduleStatus === 'CompletedNotPaid';
 
   useEffect(() => {
     if (scheduleId != null && clinicCurrency != null) {
       fetchScheduleDetails();
     }
-  }, [scheduleId, clinicCurrency]);
+  }, [scheduleId, clinicCurrency, updateSchedule]);
 
   useEffect(() => {
     // get services provided by current user
@@ -275,6 +291,9 @@ const DoctorPatientDetails = () => {
     );
   }, [clinicServices]);
 
+  /**
+   * Fetch current schedule details from server
+   */
   const fetchScheduleDetails = async () => {
     localDispatch(actions.setIsLoading(true));
     const response = await dataAPI.fetchDoctorPatientDetails(scheduleId);
@@ -287,16 +306,26 @@ const DoctorPatientDetails = () => {
     localDispatch(actions.setIsLoading(false));
   };
 
+  /**
+   * Handle start adding a note for patient
+   */
   const handleAddNote = () => {
     dispatch(
       setPatientNoteModal({ open: true, patientId: patient.id, mode: 'notes' }),
     );
   };
 
+  /**
+   * Handle start adding x-ray image
+   */
   const handleAddXRay = () => {
     dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
 
+  /**
+   * Handle appointment note change started
+   * @param {Object} visit
+   */
   const handleEditAppointmentNote = visit => {
     dispatch(
       setPatientNoteModal({
@@ -309,6 +338,11 @@ const DoctorPatientDetails = () => {
     );
   };
 
+  /**
+   * Handle tooth services list changed
+   * @param {string} toothId
+   * @param {Array.<Object>} services
+   */
   const handleToothServicesChange = ({ toothId, services }) => {
     let newServices = cloneDeep(selectedServices);
     remove(newServices, item => item.toothId === toothId && !item.completed);
@@ -319,11 +353,16 @@ const DoctorPatientDetails = () => {
         canRemove: true,
         currency: clinicCurrency,
         count: 1,
+        isExistent: false,
       });
     }
     localDispatch(actions.setSelectedServices({ services: newServices }));
   };
 
+  /**
+   * Handle remove service from services list
+   * @param {Object} service
+   */
   const handleRemoveSelectedService = service => {
     let newServices = cloneDeep(selectedServices);
     remove(
@@ -336,6 +375,10 @@ const DoctorPatientDetails = () => {
     localDispatch(actions.setSelectedServices({ services: newServices }));
   };
 
+  /**
+   * Get patient full name
+   * @return {string}
+   */
   const getPatientName = () => {
     if (patient?.firstName && patient?.lastName) {
       return `${patient.firstName} ${patient.lastName}`;
@@ -348,15 +391,50 @@ const DoctorPatientDetails = () => {
     }
   };
 
+  /**
+   * Get treatment total price
+   * @return {*}
+   */
   const getTotalPrice = () => {
     const prices = selectedServices.map(item => item.price);
     return sum(prices);
   };
 
+  /**
+   * Get final services list (services that are not complete or are completed but are related to this schedule
+   * @return {Array.<Object>}
+   */
+  const finalServicesList = () => {
+    return selectedServices.filter(service => {
+      const isCompletedInAnotherSchedule =
+        service.completed && service.scheduleId !== parseInt(scheduleId);
+      return !isCompletedInAnotherSchedule;
+    });
+  };
+
+  /**
+   * Check if submit button is disabled
+   * @return {boolean}
+   */
+  const isButtonDisabled = () => {
+    const newServices = selectedServices.filter(item => !item.isExistent);
+    return (
+      (!canFinalize && newServices.length === 0) ||
+      finalServicesList().length === 0
+    );
+  };
+
+  /**
+   * Handle orthodontic plan saved
+   */
   const handleSaveTreatmentPlan = () => {
     fetchScheduleDetails();
   };
 
+  /**
+   * Handle new service selected from search box
+   * @param {Array.<Object>} selectedItems
+   */
   const handleSelectedItemsChange = selectedItems => {
     if (selectedItems.length === 0) return;
     const newServices = cloneDeep(selectedServices);
@@ -366,7 +444,7 @@ const DoctorPatientDetails = () => {
         (item.toothId == null || item.toothId === selectedItems[0].toothId) &&
         (item.destination == null ||
           item.destination === selectedItems[0].destination) &&
-        !item.completed,
+        (!item.completed || item.scheduleId === parseInt(scheduleId)),
     );
     if (!serviceExists) {
       newServices.unshift({
@@ -374,21 +452,20 @@ const DoctorPatientDetails = () => {
         canRemove: true,
         currency: clinicCurrency,
         count: 1,
+        isExistent: false,
       });
       localDispatch(actions.setSelectedServices({ services: newServices }));
     }
   };
 
-  const isFinished =
-    schedule?.scheduleStatus === 'CompletedNotPaid' ||
-    schedule?.scheduleStatus === 'CompletedPaid' ||
-    schedule?.scheduleStatus === 'PartialPaid';
-
-  const canFinalize =
-    schedule?.scheduleStatus === 'OnSite' ||
-    schedule?.scheduleStatus === 'CompletedNotPaid';
-
+  /**
+   * Initiate treatment finalization
+   */
   const handleFinalizeTreatment = () => {
+    if (isButtonDisabled()) {
+      // can't finalize or save this plan
+      return;
+    }
     if (canFinalize) {
       localDispatch(actions.setShowFinalizeTreatment(true));
     } else {
@@ -396,18 +473,52 @@ const DoctorPatientDetails = () => {
     }
   };
 
+  /**
+   * Close finalize treatment modal
+   */
   const handleCloseFinalizeTreatment = () => {
     localDispatch(actions.setShowFinalizeTreatment(false));
   };
 
+  /**
+   * Get submit button text
+   * @return {string}
+   */
+  const buttonText = () => {
+    const newServices = selectedServices.filter(item => !item.isExistent);
+    let text = textForKey('Finalize');
+    if ((!canFinalize && newServices.length > 0) || isFinished) {
+      text = textForKey('Edit');
+    }
+    if (!canFinalize && newServices.length === 0 && isFinished) {
+      text = scheduleStatus?.name;
+    }
+    return text;
+  };
+
+  /**
+   * Save patient treatment plan services
+   * @param {Array.<Object>} plannedServices
+   * @return {Promise<void>}
+   */
   const finalizeTreatment = async plannedServices => {
+    if (isButtonDisabled()) {
+      // user can't finalize this treatment plan
+      return;
+    }
     handleCloseFinalizeTreatment();
     localDispatch(actions.setIsFinalizing(true));
+
+    let services = plannedServices;
+    if (!canFinalize) {
+      services = plannedServices.filter(item => !item.isExistent);
+    }
 
     const requestBody = {
       scheduleId,
       patientId: patient.id,
-      services: plannedServices.map(item => ({
+      services: services.map(item => ({
+        id: item.planServiceId,
         serviceId: item.id,
         toothId: item.toothId,
         completed: item.isSelected,
@@ -430,10 +541,18 @@ const DoctorPatientDetails = () => {
       console.error(response);
       localDispatch(actions.setIsFinalizing(false));
     } else {
+      if (!canFinalize) {
+        toast.success(textForKey('Saved successfully'));
+      }
       history.goBack();
     }
   };
 
+  /**
+   * Get unique html key for a service item
+   * @param {Object} service
+   * @return {string}
+   */
   const keyForService = service => {
     return `${service.id}-${service.toothId}-${service.name}-${service.destination}-${service.completed}-${service.completedAt}`;
   };
@@ -443,7 +562,7 @@ const DoctorPatientDetails = () => {
       <FinalizeTreatmentModal
         onSave={finalizeTreatment}
         totalPrice={getTotalPrice()}
-        services={selectedServices}
+        services={finalServicesList()}
         open={showFinalizeTreatment}
         onClose={handleCloseFinalizeTreatment}
       />
@@ -586,11 +705,11 @@ const DoctorPatientDetails = () => {
           <div className='selected-services-wrapper'>
             <table style={{ width: '100%' }}>
               <tbody>
-                {selectedServices.map(service => (
+                {selectedServices.map((service, index) => (
                   <FinalServiceItem
                     canRemove={service.canRemove}
                     onRemove={handleRemoveSelectedService}
-                    key={keyForService(service)}
+                    key={`${keyForService(service)}#${index}`}
                     service={service}
                   />
                 ))}
@@ -602,12 +721,10 @@ const DoctorPatientDetails = () => {
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
-              disabled={selectedServices.length === 0}
+              disabled={isButtonDisabled()}
               className='positive-button'
             >
-              {!canFinalize || isFinished
-                ? textForKey('Edit')
-                : textForKey('Finalize')}
+              {buttonText()}
             </LoadingButton>
           </div>
         </Paper>

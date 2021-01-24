@@ -82,6 +82,11 @@ export const selectedClinicSelector = createSelector(userSelector, user =>
   ),
 );
 
+export const updateDoctorAppointmentDetailsSelector = createSelector(
+  mainSelector,
+  state => state.updateDoctorAppointments,
+);
+
 export const patientDetailsSelector = createSelector(
   mainSelector,
   state => state.patientDetails,

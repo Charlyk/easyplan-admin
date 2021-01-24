@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 
 import dataAPI from '../../../utils/api/dataAPI';
 import { Statuses } from '../../../utils/constants';
+import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
@@ -120,7 +121,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
                         align='right'
                         classes={{ root: 'amount-cell' }}
                       >
-                        {getInvoicePaidAmount(item)}MDL
+                        {formattedAmount(getInvoicePaidAmount(item, 'MDL'))}
                       </TableCell>
                       <TableCell align='right'>
                         <Box display='flex' flexDirection='column'>

@@ -17,7 +17,10 @@ import { toast } from 'react-toastify';
 
 import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
 import dataAPI from '../../../utils/api/dataAPI';
-import { generateReducerActions } from '../../../utils/helperFuncs';
+import {
+  formattedAmount,
+  generateReducerActions,
+} from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const initialState = {
@@ -74,8 +77,7 @@ const PatientPurchasesList = ({ patient }) => {
   };
 
   const getAmount = payment => {
-    const discountAmount = payment.amount * (payment.discount / 100);
-    return payment.amount - discountAmount;
+    return formattedAmount(payment.amount, payment.currency);
   };
 
   return (
@@ -98,7 +100,6 @@ const PatientPurchasesList = ({ patient }) => {
                   <TableCell>{textForKey('Received by')}</TableCell>
                   <TableCell>{textForKey('Date')}</TableCell>
                   <TableCell>{textForKey('Paid for')}</TableCell>
-                  <TableCell align='right'>{textForKey('Discount')}</TableCell>
                   <TableCell align='right'>{textForKey('Amount')}</TableCell>
                 </TableRow>
               </TableHead>
@@ -112,9 +113,8 @@ const PatientPurchasesList = ({ patient }) => {
                     <TableCell>
                       {payment.comment || textForKey('Appointment')}
                     </TableCell>
-                    <TableCell align='right'>{payment.discount}%</TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      {getAmount(payment)} MDL
+                      {getAmount(payment)}
                     </TableCell>
                   </TableRow>
                 ))}
