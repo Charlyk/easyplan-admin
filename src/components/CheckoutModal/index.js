@@ -66,7 +66,7 @@ const getDiscount = (total, discount) => {
   // check if discounted total is not less than 0 or not greater then total amount
   if (discountedTotal > total) discountedTotal = total;
   if (discountedTotal < 0) discountedTotal = 0;
-  return discountedTotal;
+  return roundToTwo(discountedTotal);
 };
 
 const initialState = {
@@ -164,19 +164,23 @@ const reducer = (state, action) => {
       const servicesPrice = parseFloat(
         sumBy(updatedServices, item => item.totalPrice),
       ).toFixed(2);
+
+      const invoiceTotal = isDebt
+        ? invoiceDetails.totalAmount
+        : roundToTwo(servicesPrice);
+      const invoiceDiscount = isDebt
+        ? invoiceDetails.discount
+        : invoiceDetails.patient.discount;
+      const discountedAmount = getDiscount(invoiceTotal, invoiceDiscount);
       return {
         ...state,
         invoiceDetails: {
           ...invoiceDetails,
           services: updatedServices,
         },
-        payAmount: isDebt
-          ? invoiceDetails.totalAmount - invoiceDetails.paidAmount
-          : roundToTwo(servicesPrice - invoiceDetails.paidAmount),
-        totalAmount: isDebt
-          ? invoiceDetails.totalAmount - invoiceDetails.paidAmount
-          : roundToTwo(servicesPrice),
-        discount: invoiceDetails.discount,
+        payAmount: discountedAmount - invoiceDetails.paidAmount,
+        totalAmount: discountedAmount,
+        discount: invoiceDiscount,
         services: updatedServices,
         invoiceStatus: invoiceDetails.status,
         isDebt,
