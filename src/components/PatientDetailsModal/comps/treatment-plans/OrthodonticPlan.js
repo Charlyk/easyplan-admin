@@ -200,7 +200,7 @@ const reducer = (state, action) => {
   }
 };
 
-const OrthodonticPlan = ({ patient, onSave }) => {
+const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   const services = useSelector(clinicBracesServicesSelector);
   const braces = useSelector(clinicEnabledBracesSelector);
   const currentUser = useSelector(userSelector);
@@ -370,6 +370,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
     const updatedBraces = {
       ...requestPlan,
       planType,
+      scheduleId,
       braces: requestPlan.braces.map(it => it.id),
       services: requestPlan.services.map(it => it.id),
     };
@@ -700,6 +701,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 export default OrthodonticPlan;
 
 OrthodonticPlan.propTypes = {
+  scheduleId: PropTypes.number,
   patient: PropTypes.object,
   onSave: PropTypes.func,
 };

@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -1286,11 +1286,12 @@ export default {
 
   /**
    * Fetch clinic invoices
+   * @param {string} status
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  fetchClinicInvoices: async () => {
+  fetchClinicInvoices: async (status = 'PendingPayment') => {
     try {
-      const url = `${baseURL}/clinics/invoices`;
+      const url = `${baseURL}/invoices?status=${status}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1311,15 +1312,15 @@ export default {
   /**
    * Register patient payment
    * @param {Object} requestBody
-   * @param {string} requestBody.invoiceId
-   * @param {number} requestBody.amount
+   * @param {number} invoiceId
+   * @param {number} requestBody.paidAmount
    * @param {number} requestBody.discount
    * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
    */
-  registerPayment: async requestBody => {
+  registerPayment: async (invoiceId, requestBody) => {
     try {
-      const response = await Axios.post(
-        `${baseURL}/clinics/register-payment`,
+      const response = await Axios.put(
+        `${baseURL}/invoices/${invoiceId}`,
         requestBody,
       );
       const { data: responseData } = response;
@@ -1367,7 +1368,7 @@ export default {
   fetchBracesPlan: async (patientId, planType) => {
     try {
       const response = await Axios.get(
-        `${baseURL}/patients/${patientId}/braces-plan/${planType}`,
+        `${baseURL}/treatment-plans/orthodontic?patientId=${patientId}&planType=${planType}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1393,9 +1394,9 @@ export default {
    */
   saveTreatmentPlan: async (patientId, plan) => {
     try {
-      const response = await Axios.put(
-        `${baseURL}/patients/${patientId}/treatment-plan`,
-        plan,
+      const response = await Axios.post(
+        `${baseURL}/treatment-plans/orthodontic`,
+        { ...plan, patientId },
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1607,7 +1608,7 @@ export default {
    */
   fetchInvoiceDetails: async invoiceId => {
     try {
-      const url = `${baseURL}/clinics/invoice/${invoiceId}`;
+      const url = `${baseURL}/invoices/${invoiceId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1911,7 +1912,7 @@ export default {
    */
   fetchPatientDebts: async patientId => {
     try {
-      const url = `${baseURL}/patients/${patientId}/debts`;
+      const url = `${baseURL}/invoices/debts?patientId=${patientId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
@@ -2304,6 +2305,108 @@ export default {
     try {
       const url = `${baseURL}/patients/purchases/${patientId}`;
       const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Update exchange rates for a clinic
+   * @param {Array.<{currency: string, value: number}>} requestBody
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  updateClinicExchangeRates: async requestBody => {
+    try {
+      const url = `${baseURL}/clinics/exchange-rates`;
+      const response = await Axios.put(url, { rates: requestBody });
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Get exchange rates for a clinic
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  fetchClinicExchangeRates: async () => {
+    try {
+      const url = `${baseURL}/clinics/exchange-rates`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  savePatientTreatmentPlan: async requestBody => {
+    try {
+      const url = `${baseURL}/treatment-plans/general`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Update patient treatment plan
+   * @param {Object} requestBody
+   * @param {number} requestBody.patientId
+   * @param {number} requestBody.scheduleId
+   * @param {Array.<{serviceId: number, toothId: string|number, price: number, destination: string, currency: string}>} requestBody.services
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  updatePatientTreatmentPlan: async requestBody => {
+    try {
+      const url = `${baseURL}/treatment-plans/general`;
+      requestBody.services = requestBody.services.map(item => ({
+        ...item,
+        completed: false,
+        count: 1,
+      }));
+      const response = await Axios.put(url, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {
         return {

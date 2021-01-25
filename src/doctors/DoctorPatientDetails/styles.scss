@@ -361,14 +361,21 @@
 }
 
 .final-service-root {
-  height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: .5rem;
+  border-bottom: #ededed 1px solid;
 
   .remove-btn {
     outline: none;
+
+    &.completed {
+      pointer-events: none;
+      cursor: not-allowed;
+      svg {
+        fill: #00ac00;
+      }
+    }
 
     &.disabled {
       opacity: 0.3;
@@ -385,13 +392,32 @@
     }
   }
 
-  .service-name {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    color: #34354C;
+  .service-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .service-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: #34354C;
+    }
+
+    .completed-by-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 20px;
+      color: #cccccd;
+    }
   }
 
   .service-price {

@@ -17,6 +17,7 @@ import AddPaymentModal from './components/AddPaymentModal';
 import AddXRay from './components/AddXRay';
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
+import ExchangeRates from './components/ExchangeRates';
 import FullScreenImageModal from './components/FullScreenImageModal';
 import RegisterPaymentModal from './components/RegisterPaymentModal';
 import DoctorsMain from './doctors/DoctorsMain';
@@ -34,7 +35,11 @@ import {
   toggleForceLogoutUser,
   triggerUserLogout,
 } from './redux/actions/actions';
+import { setAddPaymentModal } from './redux/actions/addPaymentModalActions';
+import { setIsExchangeRatesModalOpen } from './redux/actions/exchangeRatesActions';
 import { setImageModal } from './redux/actions/imageModalActions';
+import { addPaymentModalSelector } from './redux/selectors/addPaymentModalSelector';
+import { isExchangeRateModalOpenSelector } from './redux/selectors/exchangeRatesModalSelector';
 import { imageModalSelector } from './redux/selectors/imageModalSelector';
 import {
   createClinicSelector,
@@ -65,8 +70,6 @@ import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
 import sessionManager from './utils/settings/sessionManager';
-import { addPaymentModalSelector } from './redux/selectors/addPaymentModalSelector';
-import { setAddPaymentModal } from './redux/actions/addPaymentModalActions';
 
 function App() {
   moment.locale(getAppLanguage());
@@ -82,6 +85,7 @@ function App() {
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const addPaymentModal = useSelector(addPaymentModalSelector);
+  const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
@@ -232,12 +236,22 @@ function App() {
     dispatch(setAddPaymentModal({ open: false }));
   };
 
+  const handleCloseExchangeRateModal = () => {
+    dispatch(setIsExchangeRatesModalOpen(false));
+  };
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
         <div id='fb-root' />
         <ToastContainer />
+        {isExchangeRatesModalOpen && (
+          <ExchangeRates
+            open={isExchangeRatesModalOpen}
+            onClose={handleCloseExchangeRateModal}
+          />
+        )}
         <RegisterPaymentModal
           {...paymentModal}
           onClose={handleClosePaymentModal}

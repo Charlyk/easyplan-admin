@@ -7,6 +7,7 @@ import appointmentModal from './appointmentModal';
 import calendar from './calendar';
 import clinic from './clinic';
 import createClinicModal from './createClinicModal';
+import exchangeRatesModal from './exchangeRatesModal';
 import imageModal from './imageModal';
 import patientNoteModal from './patientNoteModal';
 import patientXRayModal from './patientXRayModal';
@@ -25,6 +26,7 @@ export default combineReducers({
   imageModal,
   serviceDetailsModal,
   addPaymentModal,
+  exchangeRatesModal,
 });
 
 function main(state = initialState, action) {
@@ -117,6 +119,16 @@ function main(state = initialState, action) {
       return {
         ...state,
         isImportModalOpen: action.payload,
+      };
+    case types.toggleExchangeRateUpdate:
+      return {
+        ...state,
+        updateExchangeRates: !state.updateExchangeRates,
+      };
+    case types.updateDoctorAppointment:
+      return {
+        ...state,
+        updateDoctorAppointments: !state.updateDoctorAppointments,
       };
     default:
       return state;
