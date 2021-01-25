@@ -110,7 +110,8 @@ const ExchangeRates = ({ open, onClose }) => {
     selectedClinic,
   ]);
 
-  const handleRateCurrencyChange = rate => () => {
+  const handleRateCurrencyChange = rate => event => {
+    const newCurrency = event.target.value;
     const newRates = rates.map(item => {
       if (item.currency !== rate.currency) {
         return item;
@@ -118,7 +119,7 @@ const ExchangeRates = ({ open, onClose }) => {
 
       return {
         ...item,
-        currency: rate.currency,
+        currency: newCurrency,
       };
     });
     localDispatch(actions.setRates(newRates));
