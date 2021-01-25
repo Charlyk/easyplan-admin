@@ -10,6 +10,7 @@ import IconSuccess from '../../../assets/icons/iconSuccess';
 import dataAPI from '../../../utils/api/dataAPI';
 import { Action, EmailRegex } from '../../../utils/constants';
 import {
+  adjustValueToNumber,
   generateReducerActions,
   logUserAction,
 } from '../../../utils/helperFuncs';
@@ -25,7 +26,8 @@ const initialState = {
   birthday: null,
   email: '',
   phoneNumber: '',
-  discount: '0',
+  discount: 0,
+  euroDebt: 0,
 };
 
 const reducerTypes = {
@@ -130,9 +132,13 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
         localDispatch(actions.setEmail(newValue));
         break;
       case 'discount':
-        localDispatch(actions.setDiscount(newValue));
+        localDispatch(actions.setDiscount(adjustValueToNumber(newValue, 100)));
+        break;
       case 'euroDebt':
-        localDispatch(actions.setEuroDebt(newValue));
+        localDispatch(
+          actions.setEuroDebt(adjustValueToNumber(newValue, Number.MAX_VALUE)),
+        );
+        break;
     }
   };
 
@@ -255,7 +261,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
           <Form.Label>{textForKey('Discount')}</Form.Label>
           <InputGroup>
             <Form.Control
-              value={discount}
+              value={String(discount)}
               type='number'
               onChange={handleFormChange}
             />
@@ -265,7 +271,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
           <Form.Label>{textForKey('Euro Debt')}</Form.Label>
           <InputGroup>
             <Form.Control
-              value={euroDebt}
+              value={String(euroDebt)}
               type='number'
               onChange={handleFormChange}
             />
