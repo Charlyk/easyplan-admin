@@ -34,11 +34,13 @@ export const clinicExchangeRatesSelector = createSelector(
     if (clinicCurrency == null) {
       return currencies;
     }
-    currencies.unshift({
-      currency: clinicCurrency.id,
-      currencyName: clinicCurrency.name,
-      value: 1,
-    });
+    if (!currencies.some(it => it.currency === clinicCurrency.id)) {
+      currencies.unshift({
+        currency: clinicCurrency.id,
+        currencyName: clinicCurrency.name,
+        value: 1,
+      });
+    }
     return currencies;
   },
 );
