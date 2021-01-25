@@ -280,7 +280,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
 
   const getDateHour = date => {
     if (date == null) return '';
-    return moment(date).format('HH:mm');
+    return moment(date).format('DD MMM YYYY HH:mm');
   };
 
   const scheduleTime = `${getDateHour(

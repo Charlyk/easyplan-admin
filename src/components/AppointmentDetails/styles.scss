@@ -7,7 +7,7 @@
   height: 91%;
   transform: translateY(-50%);
   border-radius: .3rem;
-  width: 30rem;
+  width: 500px;
   background-color: white;
   box-shadow: 0 1px 10px 10px #34344E1A;
   z-index: 1000;
@@ -179,6 +179,8 @@
       }
 
       table {
+        table-layout: fixed;
+        width: 100%;
         thead {
           tr {
             td {
@@ -207,17 +209,17 @@
               font-size: 14px;
               line-height: 32px;
               color: #34344E;
+              margin-right: 0;
             }
 
             .actions-cell {
-              width: 15%;
+
             }
 
             .services-cell {
-              width: 55%;
+
               .services-label {
-                max-width: 120px;
-                padding-right: 1rem;
+                max-width: 300px;
                 font-family: Inter, sans-serif;
                 font-style: normal;
                 font-weight: normal;
@@ -228,11 +230,20 @@
             }
 
             .totals-cell {
-              width: 15%;
+
+              .clinic-name-label {
+                max-width: 100px;
+                padding-right: 1rem;
+                font-family: Inter, sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 32px;
+                color: #34344E;
+              }
             }
 
             .remained-cell {
-              width: 15%;
             }
           }
         }
