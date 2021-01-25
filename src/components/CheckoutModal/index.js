@@ -316,6 +316,18 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
     );
   };
 
+  const getDateHour = date => {
+    if (date == null) return '';
+    return moment(date).format('HH:mm');
+  };
+
+  const startDate = moment(invoiceDetails?.schedule.startTime).format(
+    'DD MMM YYYY',
+  );
+  const startHour = getDateHour(invoiceDetails?.schedule.startTime);
+  const endHour = getDateHour(invoiceDetails?.schedule.endTime);
+  const scheduleTime = `${startDate} ${startHour} - ${endHour}`;
+
   return (
     <Modal
       open={open}
@@ -367,6 +379,7 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
                   value={invoiceDetails.patient.name}
                   onValueClick={handlePatientClick}
                 />
+                <DetailsRow title={textForKey('Date')} value={scheduleTime} />
                 <TableRow>
                   <TableCell
                     align='center'
