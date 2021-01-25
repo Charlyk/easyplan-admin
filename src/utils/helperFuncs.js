@@ -386,6 +386,10 @@ export const adjustValueToNumber = (newValue, maxAmount) => {
 
   newValue = parseFloat(newValue);
 
+  if (newValue < 0) {
+    newValue = 0;
+  }
+
   if (newValue > maxAmount) {
     newValue = maxAmount;
   }
