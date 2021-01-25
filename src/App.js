@@ -70,6 +70,7 @@ import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
 import sessionManager from './utils/settings/sessionManager';
+import CheckoutModal from './components/CheckoutModal';
 
 function App() {
   moment.locale(getAppLanguage());
@@ -244,6 +245,9 @@ function App() {
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
+        {paymentModal.open && (
+          <CheckoutModal {...paymentModal} onClose={handleClosePaymentModal} />
+        )}
         <div id='fb-root' />
         <ToastContainer />
         {isExchangeRatesModalOpen && (
@@ -252,40 +256,59 @@ function App() {
             onClose={handleCloseExchangeRateModal}
           />
         )}
-        <RegisterPaymentModal
-          {...paymentModal}
-          onClose={handleClosePaymentModal}
-        />
-        <AddXRay {...patientXRayModal} onClose={handleClosePatientXRayModal} />
-        <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
-        <FullScreenImageModal {...imageModal} onClose={handleCloseImageModal} />
-        <AddPaymentModal
-          {...addPaymentModal}
-          onClose={handleCloseAddPaymentModal}
-        />
-        <ConfirmationModal
-          title={textForKey('Logout')}
-          message={textForKey('logout message')}
-          onConfirm={handleUserLogout}
-          onClose={handleCancelLogout}
-          show={logout}
-        />
-        <CreateClinicModal
-          onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
-          open={createClinic?.open}
-          onCreate={handleClinicCreated}
-        />
-        <Modal
-          centered
-          className='loading-modal'
-          show={isAppLoading}
-          onHide={() => null}
-        >
-          <Modal.Body>
-            <Spinner animation='border' />
-            {textForKey('App initialization')}...
-          </Modal.Body>
-        </Modal>
+        {patientXRayModal.open && (
+          <AddXRay
+            {...patientXRayModal}
+            onClose={handleClosePatientXRayModal}
+          />
+        )}
+        {patientNoteModal.open && (
+          <AddNote
+            {...patientNoteModal}
+            onClose={handleClosePatientNoteModal}
+          />
+        )}
+        {imageModal.open && (
+          <FullScreenImageModal
+            {...imageModal}
+            onClose={handleCloseImageModal}
+          />
+        )}
+        {addPaymentModal.open && (
+          <AddPaymentModal
+            {...addPaymentModal}
+            onClose={handleCloseAddPaymentModal}
+          />
+        )}
+        {logout && (
+          <ConfirmationModal
+            title={textForKey('Logout')}
+            message={textForKey('logout message')}
+            onConfirm={handleUserLogout}
+            onClose={handleCancelLogout}
+            show={logout}
+          />
+        )}
+        {createClinic?.open && (
+          <CreateClinicModal
+            onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
+            open={createClinic?.open}
+            onCreate={handleClinicCreated}
+          />
+        )}
+        {isAppLoading && (
+          <Modal
+            centered
+            className='loading-modal'
+            show={isAppLoading}
+            onHide={() => null}
+          >
+            <Modal.Body>
+              <Spinner animation='border' />
+              {textForKey('App initialization')}...
+            </Modal.Body>
+          </Modal>
+        )}
         <Switch>
           <Route
             path='/clinic-invitation/:isNew?/:token'
