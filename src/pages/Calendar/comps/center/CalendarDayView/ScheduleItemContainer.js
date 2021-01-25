@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Typography } from '@material-ui/core';
-import clsx from 'clsx';
+import { Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 import IconPlus from '../../../../../assets/icons/iconPlus';
@@ -46,10 +45,24 @@ const ScheduleItemContainer = ({
     </div>
   );
 
+  const getBorderTop = () => {
+    if (startHour == null) {
+      return 'none';
+    }
+
+    const [hour, minute] = startHour.split(':');
+    if ((minute === '15' || minute === '45') && endHour != null) {
+      return 'none';
+    } else {
+      return '#DBEEFB 1px solid';
+    }
+  };
+
   return (
-    <div
+    <Box
       id={`container-${startHour}`}
       className='day-schedule-item-container'
+      style={{ borderTop: getBorderTop() }}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
     >
@@ -57,7 +70,7 @@ const ScheduleItemContainer = ({
         startHour != null &&
         endHour != null &&
         createScheduleView}
-    </div>
+    </Box>
   );
 };
 
