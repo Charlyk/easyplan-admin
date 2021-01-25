@@ -346,7 +346,7 @@ const AppointmentDetails = ({
                 <thead>
                   <tr>
                     <td align='left'>{textForKey('Service')}</td>
-                    <td align='right'>{textForKey('Total')}</td>
+                    <td align='left'>{textForKey('Clinic')}</td>
                     <td align='right'>{textForKey('Remained')}</td>
                     <td align='right'>{textForKey('Actions')}</td>
                   </tr>
@@ -359,8 +359,13 @@ const AppointmentDetails = ({
                           {item.services.join(', ')}
                         </Typography>
                       </td>
-                      <td align='right' className='totals-cell'>
-                        {formattedAmount(item.totalAmount, item.currency)}
+                      <td align='left' className='totals-cell'>
+                        <Typography
+                          noWrap
+                          classes={{ root: 'clinic-name-label' }}
+                        >
+                          {item.clinicName}
+                        </Typography>
                       </td>
                       <td align='right' className='remained-cell'>
                         {formattedAmount(item.remainedAmount, item.currency)}
