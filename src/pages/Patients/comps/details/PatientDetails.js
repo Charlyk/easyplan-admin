@@ -126,7 +126,7 @@ const PatientDetails = ({
           />
         )}
         {selectedTab === TabId.appointments && (
-          <PatientAppointments patient={patient} />
+          <PatientAppointments patient={patient} isDoctor={isDoctor} />
         )}
         {selectedTab === TabId.notes && (
           <PatientNotes patient={patient} onAddNote={onAddNote} />

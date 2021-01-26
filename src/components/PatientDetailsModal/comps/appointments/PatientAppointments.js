@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 
 import { CircularProgress, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import IconPlus from '../../../../assets/icons/iconPlus';
@@ -36,7 +36,7 @@ const reducer = (state, action) => {
   }
 };
 
-const PatientAppointments = ({ patient }) => {
+const PatientAppointments = ({ patient, isDoctor }) => {
   const dispatch = useDispatch();
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const [{ schedules, isLoading }, localDispatch] = useReducer(
@@ -81,16 +81,18 @@ const PatientAppointments = ({ patient }) => {
           <Appointment key={item.id} appointment={item} />
         ))}
       </div>
-      <div className='patient-appointments-list__actions'>
-        <Button
-          className='btn-outline-primary'
-          variant='outline-primary'
-          onClick={handleAddAppointment}
-        >
-          {textForKey('Add appointment')}
-          <IconPlus fill={null} />
-        </Button>
-      </div>
+      {!isDoctor && (
+        <div className='patient-appointments-list__actions'>
+          <Button
+            className='btn-outline-primary'
+            variant='outline-primary'
+            onClick={handleAddAppointment}
+          >
+            {textForKey('Add appointment')}
+            <IconPlus fill={null} />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
@@ -99,4 +101,5 @@ export default PatientAppointments;
 
 PatientAppointments.propTypes = {
   patient: PropTypes.object,
+  isDoctor: PropTypes.bool,
 };
