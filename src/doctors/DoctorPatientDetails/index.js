@@ -741,6 +741,7 @@ const DoctorPatientDetails = () => {
             patient={patient}
             defaultTab={TabId.notes}
             showTabs={[
+              TabId.appointments,
               TabId.orthodonticPlan,
               TabId.appointmentsNotes,
               TabId.xRay,

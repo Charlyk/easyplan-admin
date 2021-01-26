@@ -195,19 +195,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     );
   };
 
-  const getLinePositionForHour = hour => {
-    const parentElement = document.getElementById('day-hours-container');
-    const parentRect = parentElement.getBoundingClientRect();
-    const element = document.getElementById(hour);
-    const elementRect = element?.getBoundingClientRect() || {
-      top: 0,
-      height: 30,
-    };
-    return Math.abs(
-      elementRect.height / 2 + (elementRect.top - parentRect.top),
-    );
-  };
-
   const getHoursHeight = () => {
     const element = document.getElementById('day-hours-container');
     const rect = element?.getBoundingClientRect() || { height: 0 };
@@ -372,14 +359,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           className='day-schedules-container'
           id='day-schedules-container'
         >
-          {halfHours.map(hour => (
-            <div
-              id={`${hour}-line`}
-              className='hour-line'
-              style={{ top: getLinePositionForHour(hour) }}
-              key={`${hour}-line`}
-            />
-          ))}
           {doctors.map(doctor => {
             const doctorRect = document
               .getElementById(doctor.id)
