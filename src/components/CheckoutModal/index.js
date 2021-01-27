@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 
 import {
   Box,
@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import clsx from 'clsx';
+import debounce from 'lodash/debounce';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -30,6 +31,7 @@ import {
   toggleUpdateInvoices,
 } from '../../redux/actions/actions';
 import {
+  clinicActiveDoctorsSelector,
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
 } from '../../redux/selectors/clinicSelector';
@@ -71,14 +73,31 @@ const getDiscount = (total, discount) => {
 
 const initialState = {
   isLoading: false,
-  isFetching: true,
+  isFetching: false,
   isDebt: false,
   payAmount: '0',
   discount: '0',
   services: [],
   showConfirmationMenu: false,
+  isSearchingPatient: false,
   invoiceStatus: 'PendingPayment',
-  invoiceDetails: null,
+  searchResults: [],
+  invoiceDetails: {
+    status: 'PendingPayment',
+    services: [],
+    totalAmount: 0,
+    discount: 0,
+    paidAmount: 0,
+    schedule: null,
+    doctor: {
+      id: -1,
+      name: '',
+    },
+    patient: {
+      id: -1,
+      name: '',
+    },
+  },
   totalAmount: 0,
 };
 
@@ -92,6 +111,10 @@ const reducerTypes = {
   setShowConfirmationMenu: 'setShowConfirmationMenu',
   setInvoiceStatus: 'setInvoiceStatus',
   setIsFetching: 'setIsFetching',
+  setDoctor: 'setDoctor',
+  setPatient: 'setPatient',
+  setIsSearchingPatient: 'setIsSearchingPatient',
+  setSearchResults: 'setSearchResults',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -188,15 +211,39 @@ const reducer = (state, action) => {
     }
     case reducerTypes.resetState:
       return initialState;
+    case reducerTypes.setDoctor:
+      return {
+        ...state,
+        invoiceDetails: { ...state.invoiceDetails, doctor: action.payload },
+      };
+    case reducerTypes.setPatient: {
+      const patient = action.payload;
+      return {
+        ...state,
+        invoiceDetails: {
+          ...state.invoiceDetails,
+          patient,
+          discount: patient.discount || 0,
+        },
+      };
+    }
+    case reducerTypes.setIsSearchingPatient:
+      return { ...state, isSearchingPatient: action.payload };
+    case reducerTypes.setSearchResults:
+      return {
+        ...state,
+        searchResults: action.payload,
+      };
     default:
       return state;
   }
 };
 
-const CheckoutModal = ({ open, invoice, onClose }) => {
+const CheckoutModal = ({ open, invoice, isNew, onClose }) => {
   const dispatch = useDispatch();
   const exchangeRates = useSelector(clinicExchangeRatesSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
+  const doctors = useSelector(clinicActiveDoctorsSelector);
   const updateInvoices = useSelector(updateInvoicesSelector);
   const [
     {
@@ -208,6 +255,8 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
       isFetching,
       totalAmount,
       isDebt,
+      isSearchingPatient,
+      searchResults,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -222,7 +271,7 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
     if (invoice != null) {
       fetchInvoiceDetails();
     }
-  }, [invoice, exchangeRates, updateInvoices]);
+  }, [isNew, invoice, exchangeRates, updateInvoices]);
 
   const fetchInvoiceDetails = async () => {
     if (invoice == null || exchangeRates.length === 0) {
@@ -239,6 +288,41 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
       );
     }
     localDispatch(actions.setIsFetching(false));
+  };
+
+  const handleSearchPatients = async (event, newValue) => {
+    if (newValue.length < 3) {
+      localDispatch(actions.setSearchResults([]));
+      localDispatch(actions.setIsSearchingPatient(false));
+      return;
+    }
+    const updatedQuery = newValue.replace('+', '');
+    localDispatch(actions.setIsSearchingPatient(true));
+    const response = await dataAPI.searchPatients(updatedQuery);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      const { data } = response;
+      localDispatch(
+        actions.setSearchResults(
+          data.map(item => ({ ...item, name: item.fullName })),
+        ),
+      );
+    }
+    localDispatch(actions.setIsSearchingPatient(false));
+  };
+
+  const handlePatientFieldChange = useCallback(
+    debounce(handleSearchPatients, 500),
+    [],
+  );
+
+  const handleDoctorSelected = (event, doctor) => {
+    localDispatch(actions.setDoctor(doctor));
+  };
+
+  const handlePatientSelected = (event, patient) => {
+    localDispatch(actions.setPatient(patient));
   };
 
   const handleDiscountChanged = ({ value }) => {
@@ -303,7 +387,7 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
   };
 
   const handlePatientClick = () => {
-    if (invoiceDetails == null) {
+    if (invoiceDetails.patient.id === -1) {
       return;
     }
     onClose();
@@ -321,11 +405,12 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
     return moment(date).format('HH:mm');
   };
 
-  const startDate = moment(invoiceDetails?.schedule.startTime).format(
-    'DD MMM YYYY',
-  );
-  const startHour = getDateHour(invoiceDetails?.schedule.startTime);
-  const endHour = getDateHour(invoiceDetails?.schedule.endTime);
+  const startDate =
+    invoiceDetails?.schedule != null
+      ? moment(invoiceDetails?.schedule.startTime).format('DD MMM YYYY')
+      : '';
+  const startHour = getDateHour(invoiceDetails?.schedule?.startTime);
+  const endHour = getDateHour(invoiceDetails?.schedule?.endTime);
   const scheduleTime = `${startDate} ${startHour} - ${endHour}`;
 
   return (
@@ -366,104 +451,127 @@ const CheckoutModal = ({ open, invoice, onClose }) => {
           <Typography classes={{ root: 'data-container__title' }}>
             {textForKey('Details')}
           </Typography>
-          {!isFetching && invoiceDetails != null && (
+          {!isFetching && (
             <TableContainer classes={{ root: 'details-table-container' }}>
               <Table classes={{ root: 'details-table' }}>
-                <DetailsRow
-                  title={textForKey('Doctor')}
-                  value={invoiceDetails.doctor.name}
-                />
-                <DetailsRow
-                  clickableValue
-                  title={textForKey('Patient')}
-                  value={invoiceDetails.patient.name}
-                  onValueClick={handlePatientClick}
-                />
-                <DetailsRow title={textForKey('Date')} value={scheduleTime} />
-                <TableRow>
-                  <TableCell
-                    align='center'
-                    colSpan={2}
-                    classes={{
-                      root: clsx(
-                        'details-table__row__cell',
-                        'for-payment-title-cell',
-                      ),
-                    }}
-                  >
-                    <Typography classes={{ root: 'label' }}>
-                      {textForKey('For payment')}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    align='center'
-                    colSpan={2}
-                    classes={{
-                      root: clsx(
-                        'details-table__row__cell',
-                        'for-payment-field-cell',
-                      ),
-                    }}
-                  >
-                    <NumberFormat
-                      autoFocus
-                      value={payAmount === 0 ? '' : String(payAmount)}
-                      thousandSeparator
-                      onValueChange={handlePayAmountChange}
-                      suffix={clinicCurrency}
-                      placeholder={`0${clinicCurrency}`}
+                <TableBody>
+                  <DetailsRow
+                    isValueInput={isNew}
+                    onValueSelected={handleDoctorSelected}
+                    valuePlaceholder={`${textForKey(
+                      'Select doctor',
+                    )} (${textForKey('Optional')})`}
+                    options={doctors.map(it => ({
+                      ...it,
+                      name: `${it.firstName} ${it.lastName}`,
+                    }))}
+                    title={textForKey('Doctor')}
+                    value={invoiceDetails.doctor}
+                  />
+                  <DetailsRow
+                    searchable
+                    isLoading={isSearchingPatient}
+                    onSearch={handlePatientFieldChange}
+                    onValueSelected={handlePatientSelected}
+                    clickableValue={!isNew}
+                    isValueInput={isNew}
+                    options={searchResults}
+                    valuePlaceholder={textForKey('Select patient')}
+                    title={textForKey('Patient')}
+                    value={invoiceDetails.patient}
+                    onValueClick={handlePatientClick}
+                  />
+                  {!isNew && (
+                    <DetailsRow
+                      title={textForKey('Date')}
+                      value={scheduleTime}
                     />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colSpan={2}
-                    align='center'
-                    classes={{
-                      root: clsx(
-                        'details-table__row__cell',
-                        'total-amount-cell',
-                      ),
-                    }}
-                  >
-                    <Typography classes={{ root: 'label' }}>
-                      {textForKey('from')}{' '}
-                      {formattedAmount(totalAmount, clinicCurrency)}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colSpan={2}
-                    align='center'
-                    classes={{
-                      root: clsx(
-                        'details-table__row__cell',
-                        'total-discount-cell',
-                      ),
-                    }}
-                  >
-                    <Box
-                      display='flex'
-                      alignItems='center'
-                      justifyContent='center'
-                      width='100%'
+                  )}
+                  <TableRow>
+                    <TableCell
+                      align='center'
+                      colSpan={2}
+                      classes={{
+                        root: clsx(
+                          'details-table__row__cell',
+                          'for-payment-title-cell',
+                        ),
+                      }}
                     >
                       <Typography classes={{ root: 'label' }}>
-                        {textForKey('Discount')}
+                        {textForKey('For payment')}
                       </Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      align='center'
+                      colSpan={2}
+                      classes={{
+                        root: clsx(
+                          'details-table__row__cell',
+                          'for-payment-field-cell',
+                        ),
+                      }}
+                    >
                       <NumberFormat
-                        disabled={isDebt}
-                        value={discount === 0 ? '' : String(discount)}
-                        onValueChange={handleDiscountChanged}
-                        suffix='%'
-                        placeholder='0%'
+                        autoFocus
+                        value={payAmount === 0 ? '' : String(payAmount)}
+                        thousandSeparator
+                        onValueChange={handlePayAmountChange}
+                        suffix={clinicCurrency}
+                        placeholder={`0${clinicCurrency}`}
                       />
-                    </Box>
-                  </TableCell>
-                </TableRow>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      colSpan={2}
+                      align='center'
+                      classes={{
+                        root: clsx(
+                          'details-table__row__cell',
+                          'total-amount-cell',
+                        ),
+                      }}
+                    >
+                      <Typography classes={{ root: 'label' }}>
+                        {textForKey('from')}{' '}
+                        {formattedAmount(totalAmount, clinicCurrency)}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      colSpan={2}
+                      align='center'
+                      classes={{
+                        root: clsx(
+                          'details-table__row__cell',
+                          'total-discount-cell',
+                        ),
+                      }}
+                    >
+                      <Box
+                        display='flex'
+                        alignItems='center'
+                        justifyContent='center'
+                        width='100%'
+                      >
+                        <Typography classes={{ root: 'label' }}>
+                          {textForKey('Discount')}
+                        </Typography>
+                        <NumberFormat
+                          disabled={isDebt}
+                          value={discount === 0 ? '' : String(discount)}
+                          onValueChange={handleDiscountChanged}
+                          suffix='%'
+                          placeholder='0%'
+                        />
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               </Table>
             </TableContainer>
           )}
@@ -509,5 +617,6 @@ CheckoutModal.propTypes = {
     patientFullName: PropTypes.string,
     services: PropTypes.arrayOf(PropTypes.object),
   }),
+  isNew: PropTypes.bool,
   onClose: PropTypes.func,
 };

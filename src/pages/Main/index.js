@@ -138,20 +138,24 @@ const Main = () => {
           onClose={handleClosePatientDetails}
         />
       )}
-      <DataMigrationModal
-        show={isImportModalOpen}
-        onClose={handleCloseImportModal}
-      />
-      <AddAppointmentModal
-        onClose={handleAppointmentModalClose}
-        schedule={appointmentModal?.schedule}
-        open={appointmentModal?.open}
-        doctor={appointmentModal?.doctor}
-        date={appointmentModal?.date}
-        patient={appointmentModal?.patient}
-        startHour={appointmentModal?.startHour}
-        endHour={appointmentModal?.endHour}
-      />
+      {isImportModalOpen && (
+        <DataMigrationModal
+          show={isImportModalOpen}
+          onClose={handleCloseImportModal}
+        />
+      )}
+      {appointmentModal?.open && (
+        <AddAppointmentModal
+          onClose={handleAppointmentModalClose}
+          schedule={appointmentModal?.schedule}
+          open={appointmentModal?.open}
+          doctor={appointmentModal?.doctor}
+          date={appointmentModal?.date}
+          patient={appointmentModal?.patient}
+          startHour={appointmentModal?.startHour}
+          endHour={appointmentModal?.endHour}
+        />
+      )}
       {currentUser != null && (
         <MainMenu
           currentUser={currentUser}

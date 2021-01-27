@@ -1,6 +1,10 @@
 import types from '../types/types';
 
-const initialState = Object.freeze({ open: false, invoice: null });
+const initialState = Object.freeze({
+  open: false,
+  invoice: null,
+  isNew: false,
+});
 
 export default function paymentModal(state = initialState, action) {
   switch (action.type) {

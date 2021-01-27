@@ -226,7 +226,7 @@ function App() {
   };
 
   const handleClosePaymentModal = () => {
-    dispatch(setPaymentModal({ open: false, invoice: null }));
+    dispatch(setPaymentModal({ open: false, invoice: null, isNew: false }));
   };
 
   const handleCloseImageModal = () => {

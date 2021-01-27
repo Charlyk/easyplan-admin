@@ -81,6 +81,24 @@
                 padding-right: 0;
               }
 
+              .autocomplete-root {
+                &__input-root {
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 13px;
+                  color: #34344E;
+
+                  &::before {
+                    border-bottom: none;
+                  }
+
+                  &::after {
+                    border-bottom: none;
+                  }
+                }
+              }
+
               .text {
                 font-family: Inter, sans-serif;
                 font-style: normal;
@@ -109,6 +127,15 @@
 
               &.value {
 
+              }
+
+              &.field {
+                padding-top: 0;
+                padding-bottom: 0;
+
+                .searching-progress {
+                  color: #3A83DC;
+                }
               }
 
               &.for-payment-title-cell {
@@ -378,5 +405,13 @@
   font-style: normal !important;
   font-weight: normal !important;
   font-size: 12px !important;
+  color: #34344E !important;
+}
+
+.autocomplete-root-option-label {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
   color: #34344E !important;
 }

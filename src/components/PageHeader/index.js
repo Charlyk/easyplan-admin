@@ -13,6 +13,7 @@ import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
 import IconPlus from '../../assets/icons/iconPlus';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
+import { setPaymentModal } from '../../redux/actions/actions';
 import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
 import { clinicExchangeRatesUpdateRequiredSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
@@ -54,6 +55,9 @@ const PageHeader = ({
 
   const handleActionsOpen = () => setIsActionsOpen(true);
 
+  const handleOpenPaymentModal = () =>
+    dispatch(setPaymentModal({ open: true, isNew: true, invoice: null }));
+
   const handleActionSelected = action => {
     switch (action.key) {
       case 'log-out':
@@ -90,7 +94,10 @@ const PageHeader = ({
         <Box display='flex' alignItems='center'>
           <InvoicesButton />
           <Tooltip title={textForKey('Add payment')}>
-            <IconButton classes={{ root: 'add-invoice-btn' }}>
+            <IconButton
+              classes={{ root: 'add-invoice-btn' }}
+              onClick={handleOpenPaymentModal}
+            >
               <IconPlus fill='#3A83DC' />
             </IconButton>
           </Tooltip>
