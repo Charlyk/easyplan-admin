@@ -8,11 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
-import MapSchedulesDataModal, {
-  MappingData,
-} from '../../components/MapSchedulesDataModal';
-import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
-import ImportDataModal from '../../components/UploadPatientsModal';
+import { MappingData } from '../../components/MapSchedulesDataModal';
 import {
   setAppointmentModal,
   setPaymentModal,
@@ -26,12 +22,8 @@ import {
 import { userSelector } from '../../redux/selectors/rootSelector';
 import types from '../../redux/types/types';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action, env } from '../../utils/constants';
-import {
-  generateReducerActions,
-  logUserAction,
-  uploadFileToAWS,
-} from '../../utils/helperFuncs';
+import { Action } from '../../utils/constants';
+import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
 import CalendarDoctors from './comps/left/CalendarDoctors';
@@ -148,11 +140,7 @@ const Calendar = () => {
       deleteSchedule,
       isDeleting,
       viewMode,
-      showImportModal,
-      setupExcelModal,
       isUploading,
-      importData,
-      mappingModal,
       isParsing,
       parsedValue,
     },
@@ -296,106 +284,8 @@ const Calendar = () => {
     );
   };
 
-  const handleImportFileSelected = async data => {
-    localDispatch(reducerActions.setIsUploading(true));
-    const fileName = data.file.name;
-    const { location: fileUrl } = await uploadFileToAWS(
-      'clients-uploads',
-      data.file,
-      true,
-    );
-    localDispatch(
-      reducerActions.setSetupExcelModal({
-        open: true,
-        data: {
-          fileName,
-          fileUrl: encodeURI(fileUrl),
-        },
-      }),
-    );
-    localDispatch(reducerActions.setIsUploading(false));
-  };
-
   const handleOpenImportModal = () => {
     dispatch(toggleImportModal(true));
-  };
-
-  const handleCloseImportModal = () => {
-    localDispatch(reducerActions.setShowImportModal(false));
-  };
-
-  const handleCloseSetupExcelModal = () => {
-    localDispatch(
-      reducerActions.setSetupExcelModal({ open: false, data: null }),
-    );
-  };
-
-  const handleExcelCellsReady = data => {
-    localDispatch(reducerActions.setImportData(data));
-    localDispatch(
-      reducerActions.setMappingModal({ mode: MappingData.doctors, data }),
-    );
-  };
-
-  const handleCloseMappingModal = () => {
-    localDispatch(
-      reducerActions.setMappingModal({ mode: MappingData.none, data: null }),
-    );
-  };
-
-  const handleImportSchedules = async requestBody => {
-    localDispatch(reducerActions.setIsParsing(true));
-    const environment = env === '' ? 'prod' : env;
-    pubnub.publish({
-      channel: `${environment}_import_schedules_channel`,
-      message: { ...requestBody, sender: currentUser.id },
-    });
-  };
-
-  const handleMappingSubmit = result => {
-    switch (result.mode) {
-      case MappingData.doctors: {
-        localDispatch(
-          reducerActions.setImportData({ doctors: result.mappedItems }),
-        );
-        localDispatch(
-          reducerActions.setMappingModal({
-            mode: MappingData.services,
-            data: {
-              fileName: result.fileName,
-              fileUrl: result.fileUrl,
-              cellTypes: result.cellTypes,
-            },
-          }),
-        );
-        break;
-      }
-      case MappingData.services: {
-        const requestBody = {
-          ...importData,
-          services: result.mappedItems,
-        };
-
-        const isDataValid =
-          requestBody.fileUrl != null &&
-          requestBody.fileName != null &&
-          requestBody.cellTypes.length > 0 &&
-          requestBody.doctors.length > 0 &&
-          requestBody.services.length > 0;
-
-        if (isDataValid) {
-          handleImportSchedules(requestBody);
-        }
-
-        localDispatch(
-          reducerActions.setMappingModal({
-            mode: MappingData.none,
-            data: null,
-          }),
-        );
-        break;
-      }
-    }
   };
 
   const parsingProgressBar = isParsing && (
