@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 import './styles.scss';
+import { Box, IconButton, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
@@ -10,6 +11,7 @@ import IconAvatar from '../../assets/icons/iconAvatar';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
+import IconPlus from '../../assets/icons/iconPlus';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
 import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
 import { clinicExchangeRatesUpdateRequiredSelector } from '../../redux/selectors/clinicSelector';
@@ -84,7 +86,16 @@ const PageHeader = ({
       >
         {titleComponent || title}
       </div>
-      {!isDoctor && <InvoicesButton />}
+      {!isDoctor && (
+        <Box display='flex' alignItems='center'>
+          <InvoicesButton />
+          <Tooltip title={textForKey('Add payment')}>
+            <IconButton classes={{ root: 'add-invoice-btn' }}>
+              <IconPlus fill='#3A83DC' />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )}
       <div className='page-header__actions'>
         {!isDoctor && (
           <Button
