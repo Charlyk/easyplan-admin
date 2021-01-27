@@ -1315,6 +1315,8 @@ export default {
    * @param {number} invoiceId
    * @param {number} requestBody.paidAmount
    * @param {number} requestBody.discount
+   * @param {number} requestBody.totalAmount
+   * @param {Array.<{id: number, serviceId: number, currency: string, count: number, price: number}>} requestBody.services
    * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
    */
   registerPayment: async (invoiceId, requestBody) => {
@@ -1323,6 +1325,36 @@ export default {
         `${baseURL}/invoices/${invoiceId}`,
         requestBody,
       );
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Register patient payment
+   * @param {Object} requestBody
+   * @param {number} requestBody.patientId
+   * @param {number} requestBody.doctorId?
+   * @param {number} requestBody.paidAmount
+   * @param {number} requestBody.discount
+   * @param {number} requestBody.totalAmount
+   * @param {Array.<{id: number, serviceId: number, currency: string, count: number, price: number}>} requestBody.services
+   * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
+   */
+  createNewInvoice: async requestBody => {
+    try {
+      const response = await Axios.post(`${baseURL}/invoices`, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {
         return {

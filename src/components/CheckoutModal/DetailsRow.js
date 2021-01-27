@@ -38,7 +38,7 @@ const DetailsRow = ({
       <TextField
         {...params}
         placeholder={valuePlaceholder}
-        value={value}
+        value={value.name}
         InputProps={{
           ...params.InputProps,
           endAdornment: (
@@ -101,7 +101,6 @@ const DetailsRow = ({
       >
         {isValueInput ? (
           <Autocomplete
-            openText={'Type to search'}
             classes={{
               root: 'autocomplete-root',
               inputRoot: 'autocomplete-root__input-root',

@@ -10,7 +10,7 @@
     transform: translate(-50%, -50%);
 
     .data-container {
-      width: 60%;
+      width: 50%;
       height: 100%;
       position: relative;
       padding: 1rem;
@@ -232,9 +232,36 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      width: 40%;
+      width: 50%;
       background-color: #F4FAFE;
       border-right: #ededed 1px solid;
+
+      .autocomplete-root {
+        border-top: #ededed 1px solid;
+        padding: .5rem 1rem 1rem;
+
+        &__input-root {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 13px;
+          color: #34344E;
+
+          &::after {
+            border-bottom-color: #3A83DC;
+          }
+        }
+      }
+
+      &__add-btn {
+        outline: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        color: #3A83DC;
+        border-top: #ededed 1px solid;
+      }
 
       &__title {
         padding: 1rem;
@@ -251,7 +278,7 @@
       .services-table-container {
         padding-left: 1rem;
         padding-right: 1rem;
-        max-height: 450px;
+        height: 450px;
 
         .services-table {
           border-spacing: 0 .8rem;
@@ -283,7 +310,7 @@
                   overflow: hidden;
 
                   .service-name {
-                    max-width: 131px;
+                    max-width: 195px;
                     font-family: Inter, sans-serif;
                     font-style: normal;
                     font-weight: normal;
@@ -377,6 +404,24 @@
                         color: #34344E;
                         padding: .4rem;
                       }
+                    }
+                  }
+                }
+
+                &.delete {
+                  padding: 0;
+                  width: 35px;
+
+                  .delete-service-button {
+                    outline: none;
+                    width: 35px;
+                    height: 35px;
+                    padding: .5rem;
+
+                    svg {
+                      fill: #ec3276;
+                      width: 30px;
+                      height: 30px;
                     }
                   }
                 }

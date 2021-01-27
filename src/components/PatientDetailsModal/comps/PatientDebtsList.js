@@ -66,7 +66,14 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   };
 
   const handlePayDebt = async debt => {
-    dispatch(setPaymentModal({ open: true, invoice: debt }));
+    dispatch(
+      setPaymentModal({
+        open: true,
+        invoice: debt,
+        openPatientDetailsOnClose: true,
+        isNew: false,
+      }),
+    );
   };
 
   const getInvoiceTotalAmount = invoice => {

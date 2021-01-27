@@ -226,7 +226,14 @@ function App() {
   };
 
   const handleClosePaymentModal = () => {
-    dispatch(setPaymentModal({ open: false, invoice: null, isNew: false }));
+    dispatch(
+      setPaymentModal({
+        open: false,
+        invoice: null,
+        isNew: false,
+        openPatientDetailsOnClose: false,
+      }),
+    );
   };
 
   const handleCloseImageModal = () => {
@@ -245,36 +252,36 @@ function App() {
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
-        {paymentModal.open && (
+        {paymentModal.open && authManager.isLoggedIn() && (
           <CheckoutModal {...paymentModal} onClose={handleClosePaymentModal} />
         )}
         <div id='fb-root' />
         <ToastContainer />
-        {isExchangeRatesModalOpen && (
+        {isExchangeRatesModalOpen && authManager.isLoggedIn() && (
           <ExchangeRates
             open={isExchangeRatesModalOpen}
             onClose={handleCloseExchangeRateModal}
           />
         )}
-        {patientXRayModal.open && (
+        {patientXRayModal.open && authManager.isLoggedIn() && (
           <AddXRay
             {...patientXRayModal}
             onClose={handleClosePatientXRayModal}
           />
         )}
-        {patientNoteModal.open && (
+        {patientNoteModal.open && authManager.isLoggedIn() && (
           <AddNote
             {...patientNoteModal}
             onClose={handleClosePatientNoteModal}
           />
         )}
-        {imageModal.open && (
+        {imageModal.open && authManager.isLoggedIn() && (
           <FullScreenImageModal
             {...imageModal}
             onClose={handleCloseImageModal}
           />
         )}
-        {addPaymentModal.open && (
+        {addPaymentModal.open && authManager.isLoggedIn() && (
           <AddPaymentModal
             {...addPaymentModal}
             onClose={handleCloseAddPaymentModal}
@@ -289,7 +296,7 @@ function App() {
             show={logout}
           />
         )}
-        {createClinic?.open && (
+        {createClinic?.open && authManager.isLoggedIn() && (
           <CreateClinicModal
             onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
             open={createClinic?.open}

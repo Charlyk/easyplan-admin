@@ -110,7 +110,9 @@ const Main = () => {
   };
 
   const handleClosePatientDetails = () => {
-    dispatch(setPatientDetails({ show: false, patientId: null }));
+    dispatch(
+      setPatientDetails({ show: false, patientId: null, onDelete: () => null }),
+    );
   };
 
   const handleCloseImportModal = () => {
