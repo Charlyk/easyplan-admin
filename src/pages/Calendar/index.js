@@ -416,35 +416,16 @@ const Calendar = () => {
 
   return (
     <div className='calendar-root'>
-      <MapSchedulesDataModal
-        data={mappingModal.data}
-        mode={mappingModal.mode}
-        onClose={handleCloseMappingModal}
-        onSubmit={handleMappingSubmit}
-      />
-      <SetupExcelModal
-        title={textForKey('Import schedules')}
-        onClose={handleCloseSetupExcelModal}
-        open={setupExcelModal.open}
-        data={setupExcelModal.data}
-        timeout={3000}
-        mode={UploadMode.schedules}
-        onCellsReady={handleExcelCellsReady}
-      />
-      <ImportDataModal
-        open={showImportModal}
-        onClose={handleCloseImportModal}
-        title={textForKey('Import schedules')}
-        onUpload={handleImportFileSelected}
-      />
-      <ConfirmationModal
-        isLoading={isDeleting}
-        show={deleteSchedule.open}
-        title={textForKey('Delete appointment')}
-        message={textForKey('delete appointment message')}
-        onConfirm={handleConfirmDeleteSchedule}
-        onClose={handleCloseDeleteSchedule}
-      />
+      {deleteSchedule.open && (
+        <ConfirmationModal
+          isLoading={isDeleting}
+          show={deleteSchedule.open}
+          title={textForKey('Delete appointment')}
+          message={textForKey('delete appointment message')}
+          onConfirm={handleConfirmDeleteSchedule}
+          onClose={handleCloseDeleteSchedule}
+        />
+      )}
       {viewMode !== 'day' && (
         <div className='calendar-root__content__left-container'>
           <CalendarDoctors
