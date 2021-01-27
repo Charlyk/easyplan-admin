@@ -81,7 +81,13 @@ const reducer = (state, action) => {
   }
 };
 
-const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
+const PatientDetailsModal = ({
+  show,
+  patientId,
+  menuItem,
+  onClose,
+  onDelete,
+}) => {
   const dispatch = useDispatch();
   const [
     { currentMenu, isFetching, patient, viewInvoice },
@@ -93,6 +99,12 @@ const PatientDetailsModal = ({ show, patientId, onClose, onDelete }) => {
       localDispatch(actions.setCurrentMenu(MenuItem.personalInfo));
     }
   }, [show]);
+
+  useEffect(() => {
+    if (menuItem != null) {
+      localDispatch(actions.setCurrentMenu(menuItem));
+    }
+  }, [menuItem]);
 
   useEffect(() => {
     fetchPatientDetails();

@@ -192,7 +192,7 @@ export function toggleUpdateInvoices() {
  * Toggle patient details
  * @param {Object} payload
  * @param {boolean} payload.show
- * @param {number|null} payload.patientId
+ * @param {number?} payload.patientId
  * @param {function|null} payload.onDelete
  * @return {{payload: *, type: string}}
  */

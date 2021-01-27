@@ -391,6 +391,9 @@ export default {
     'finalize treatment': 'Finalize treatment',
     'added by': 'added by',
     'schedule time': 'Schedule time',
+    'no options': 'No options',
+    'select doctor': 'Select doctor',
+    'select patient': 'Select patient',
   },
   ro: {
     analytics: 'Analitică',
@@ -789,6 +792,9 @@ export default {
     'finalize treatment': 'Finalizare tratament',
     'added by': 'adăugat de',
     'schedule time': 'Ora programării',
+    'no options': 'Nu sunt rezultate',
+    'select doctor': 'Alege doctor',
+    'select patient': 'Alege pacient',
   },
   ru: {
     analytics: 'Analytics',
@@ -1179,5 +1185,8 @@ export default {
     'finalize treatment': 'Finalize treatment',
     'added by': 'added by',
     'schedule time': 'Schedule time',
+    'no options': 'No options',
+    'select doctor': 'Select doctor',
+    'select patient': 'Select patient',
   },
 };

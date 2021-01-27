@@ -16,10 +16,11 @@ import { useSelector } from 'react-redux';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlus from '../../assets/icons/iconPlus';
+import IconTrash from '../../assets/icons/iconTrash';
 import { clinicExchangeRatesSelector } from '../../redux/selectors/clinicSelector';
 import { adjustValueToNumber } from '../../utils/helperFuncs';
 
-const ServiceRow = ({ service, canEdit, onChange }) => {
+const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {
   const [currency, setCurrency] = useState(service.currency);
   const [price, setPrice] = useState(service.amount);
   const [count, setCount] = useState(service.count);
@@ -35,6 +36,10 @@ const ServiceRow = ({ service, canEdit, onChange }) => {
     const newPrice = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
     onChange({ ...service, amount: newPrice });
     setPrice(newPrice);
+  };
+
+  const handleDeleteService = () => {
+    onDelete(service);
   };
 
   const handleServiceCountChange = buttonId => () => {
@@ -141,6 +146,19 @@ const ServiceRow = ({ service, canEdit, onChange }) => {
           ))}
         </TextField>
       </TableCell>
+      {canDelete && (
+        <TableCell
+          size='small'
+          classes={{ root: clsx('services-table__body__row__cell', 'delete') }}
+        >
+          <IconButton
+            classes={{ root: 'delete-service-button' }}
+            onClick={handleDeleteService}
+          >
+            <IconTrash />
+          </IconButton>
+        </TableCell>
+      )}
     </TableRow>
   );
 };
@@ -150,10 +168,14 @@ export default ServiceRow;
 ServiceRow.propTypes = {
   service: PropTypes.object,
   canEdit: PropTypes.bool,
+  canDelete: PropTypes.bool,
   onChange: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 ServiceRow.defaultProps = {
   canEdit: true,
+  canDelete: false,
+  onDelete: () => null,
   onChange: () => null,
 };
