@@ -14,7 +14,12 @@ export default Object.freeze({
   checkAppointments: false,
   updateInvoices: false,
   checkDoctorAppointments: false,
-  patientDetails: { show: false, patientId: null, onDelete: null },
+  patientDetails: {
+    show: false,
+    patientId: null,
+    onDelete: null,
+    menuItem: null,
+  },
   updatePatients: false,
   updatePatientPayments: false,
   isImportModalOpen: false,
