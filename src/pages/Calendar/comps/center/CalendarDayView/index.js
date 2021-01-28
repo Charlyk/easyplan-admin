@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
 import debounce from 'lodash/debounce';
@@ -42,7 +48,7 @@ const initialState = {
   isFetching: false,
   createIndicator: { visible: false, top: 0, doctorId: -1 },
   parentTop: 0,
-  schedules: [],
+  schedules: new Map(),
   hasSchedules: false,
   pauseModal: {
     open: false,
@@ -134,6 +140,10 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   }, [schedulesRef.current]);
 
+  /**
+   * Fetch a list of schedules for specified {@link viewDate}
+   * @param {boolean} silent - either show or not loading indicator
+   */
   const fetchDaySchedules = async (silent = false) => {
     if (!silent) {
       localDispatch(actions.setIsLoading(true));
@@ -142,57 +152,86 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     const response = await dataAPI.fetchDaySchedules(viewDate, timezone);
     if (response.isError) {
       toast.error(textForKey(response.message));
-      localDispatch(actions.setIsLoading(false));
     } else {
       const { schedules, dayHours } = response.data;
-      updateSchedules(schedules, dayHours);
+      const schedulesMap = new Map();
+      for (let item of schedules) {
+        schedulesMap.set(item.doctorId, item.schedules);
+      }
+      localDispatch(
+        actions.setSchedulesData({ schedules: schedulesMap, dayHours }),
+      );
     }
+    localDispatch(actions.setIsLoading(false));
   };
 
   const debounceFetching = useCallback(debounce(fetchDaySchedules, 100), [
     viewDate,
   ]);
 
-  const updateSchedules = async (schedules, dayHours) => {
-    const mappedSchedules = [];
-    // map schedules by adding an offset for schedules that intersect other schedules
-    for (let item of schedules) {
-      const doctorSchedules = item.schedules;
-      const newSchedules = [];
-      // check if schedules intersect other schedules and update their offset
-      for (let schedule of doctorSchedules) {
-        const scheduleRange = moment.range(
-          moment(schedule.startTime),
-          moment(schedule.endTime),
-        );
-        if (schedule.offset == null) {
-          schedule.offset = 0;
-        }
-        // update new schedule offset based on already added schedules
-        for (let item of newSchedules) {
-          const itemRange = moment.range(
-            moment(item.startTime),
-            moment(item.endTime),
-          );
-          const hasIntersection = scheduleRange.intersect(itemRange) != null;
-          if (hasIntersection) {
-            schedule.offset = (item.offset || 0) + 1;
-          }
-        }
-        // add the new schedules to array to check the next one against it
-        newSchedules.push(schedule);
+  /**
+   * setup an offset with schedules that intersect each other time
+   * @param {Array.<Object>} schedules
+   * @return {Array.<Object>}
+   */
+  const addOffsetToSchedules = schedules => {
+    const newSchedules = [];
+    // check if schedules intersect other schedules and update their offset
+    for (let schedule of schedules) {
+      const scheduleRange = moment.range(
+        moment(schedule.startTime),
+        moment(schedule.endTime),
+      );
+      if (schedule.offset == null) {
+        schedule.offset = 0;
       }
-      mappedSchedules.push({
-        doctorId: item.doctorId,
-        schedules: newSchedules,
-      });
+      // update new schedule offset based on already added schedules
+      for (let item of newSchedules) {
+        const itemRange = moment.range(
+          moment(item.startTime),
+          moment(item.endTime),
+        );
+        const hasIntersection = scheduleRange.intersect(itemRange) != null;
+        if (hasIntersection) {
+          schedule.offset = (item.offset || 0) + 1;
+        }
+      }
+      // add the new schedules to array to check the next one against it
+      newSchedules.push(schedule);
     }
-    localDispatch(
-      actions.setSchedulesData({ schedules: mappedSchedules, dayHours }),
-    );
-    localDispatch(actions.setIsLoading(false));
+    return newSchedules;
   };
 
+  /**
+   * Update schedules by adding an offset
+   * @param {Map.<number, [Object]>} schedules
+   * @return {Map<number, [Object]>}
+   */
+  const updateSchedules = schedules => {
+    // map schedules by adding an offset for schedules that intersect other schedules
+    if (schedules == null) {
+      return new Map();
+    }
+    const schedulesWithOffset = new Map();
+    schedules.forEach((value, key) => {
+      schedulesWithOffset.set(key, addOffsetToSchedules(value));
+    });
+    return schedulesWithOffset;
+  };
+
+  const schedulesWithOffset = useMemo(() => updateSchedules(schedules), [
+    schedules,
+    hours,
+  ]);
+
+  /**
+   * Open pause details modal
+   * @param {Object} doctor
+   * @param {Date} startTime
+   * @param {Date} endTime
+   * @param {number} id
+   * @param {string} comment
+   */
   const handleOpenPauseModal = (doctor, startTime, endTime, id, comment) => {
     localDispatch(
       actions.setPauseModal({
@@ -206,14 +245,26 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     );
   };
 
+  /**
+   * Close pause details modal
+   */
   const handleClosePauseModal = () => {
     localDispatch(actions.setPauseModal(initialState.pauseModal));
   };
 
+  /**
+   * Trigger add schedule callback
+   * @param {Object} doctor
+   * @return {function(*=, *=): void}
+   */
   const handleAddSchedule = doctor => (startHour, endHour) => {
     onCreateSchedule(doctor, startHour, endHour);
   };
 
+  /**
+   * Handle user clicked on a schedule
+   * @param {Object} schedule
+   */
   const handleScheduleClick = schedule => {
     if (schedule.type === 'Schedule') {
       onScheduleSelect(schedule);
@@ -231,6 +282,14 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   };
 
+  /**
+   * Create a pause record
+   * @param {Object} doctor
+   * @param {Date|null} startHour
+   * @param {Date|null} endHour
+   * @param {number|null} id
+   * @param {string|null} comment
+   */
   const handleCreatePause = (
     doctor,
     startHour = null,
@@ -241,10 +300,13 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     handleOpenPauseModal(doctor, startHour, endHour, id, comment);
   };
 
+  /**
+   * Get a list of schedules for doctor with specified id
+   * @param {number} doctorId
+   * @return {[Object]|[]}
+   */
   const getSchedulesForDoctor = doctorId => {
-    const scheduleData = schedules.find(item => item.doctorId === doctorId);
-    if (scheduleData == null) return null;
-    return scheduleData?.schedules || [];
+    return schedulesWithOffset.get(doctorId) || [];
   };
 
   const halfHours = hours.filter(
@@ -301,8 +363,9 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           className='day-schedules-container'
           id='day-schedules-container'
         >
-          {doctors?.map(doctor => (
+          {doctors?.map((doctor, index) => (
             <DoctorColumn
+              index={index}
               key={doctor.id}
               viewDate={viewDate}
               firstHour={hours[0]}
