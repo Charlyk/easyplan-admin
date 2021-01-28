@@ -30,7 +30,7 @@ const ScheduleItemContainer = ({
   };
 
   const createScheduleView = (
-    <div
+    <span
       className='create-schedule-view'
       role='button'
       tabIndex={0}
@@ -42,7 +42,7 @@ const ScheduleItemContainer = ({
         </Typography>
       )}
       <IconPlus fill='#fff' />
-    </div>
+    </span>
   );
 
   const getBorderTop = () => {
@@ -74,7 +74,7 @@ const ScheduleItemContainer = ({
   );
 };
 
-export default ScheduleItemContainer;
+export default React.memo(ScheduleItemContainer);
 
 ScheduleItemContainer.propTypes = {
   startHour: PropTypes.string,

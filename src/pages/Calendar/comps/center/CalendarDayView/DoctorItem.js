@@ -9,23 +9,13 @@ import {
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 
 import IconClock from '../../../../../assets/icons/iconClock';
-import { clinicServicesSelector } from '../../../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../../../utils/localization';
 
 const DoctorItem = ({ doctor, onAddPause }) => {
   const doctorAnchor = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const clinicServices = useSelector(clinicServicesSelector);
-
-  const doctorServices = () => {
-    const servicesIds = doctor.services.map(it => it.serviceId);
-    return clinicServices
-      .filter(item => servicesIds.includes(item.id))
-      .map(it => it.name);
-  };
 
   const handleOpenMenu = () => {
     if (doctor.isInVacation) return;
