@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
-import clsx from 'clsx';
 import debounce from 'lodash/debounce';
+import isEqual from 'lodash/isEqual';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -15,9 +15,8 @@ import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootS
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
-import DayViewSchedule from './DayViewSchedule';
+import DoctorColumn from './DoctorColumn';
 import DoctorItem from './DoctorItem';
-import ScheduleItemContainer from './ScheduleItemContainer';
 
 const moment = extendMoment(Moment);
 
@@ -143,12 +142,10 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     const response = await dataAPI.fetchDaySchedules(viewDate, timezone);
     if (response.isError) {
       toast.error(textForKey(response.message));
+      localDispatch(actions.setIsLoading(false));
     } else {
       const { schedules, dayHours } = response.data;
-      await updateSchedules(schedules, dayHours);
-    }
-    if (!silent) {
-      localDispatch(actions.setIsLoading(false));
+      updateSchedules(schedules, dayHours);
     }
   };
 
@@ -193,12 +190,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     localDispatch(
       actions.setSchedulesData({ schedules: mappedSchedules, dayHours }),
     );
-  };
-
-  const getHoursHeight = () => {
-    const element = document.getElementById('day-hours-container');
-    const rect = element?.getBoundingClientRect() || { height: 0 };
-    return rect.height;
+    localDispatch(actions.setIsLoading(false));
   };
 
   const handleOpenPauseModal = (doctor, startTime, endTime, id, comment) => {
@@ -239,45 +231,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   };
 
-  const getScheduleItemsContainer = doctor => {
-    return hoursContainers.map((hour, index) => {
-      if (index === 0) {
-        return (
-          <ScheduleItemContainer
-            disabled={doctor.isInVacation}
-            onAddSchedule={handleAddSchedule(doctor)}
-            startHour={null}
-            endHour={hour}
-            key={`schedule-item-${hour}`}
-            className='day-schedule-item-container'
-          />
-        );
-      } else if (index + 1 === hoursContainers.length) {
-        return (
-          <ScheduleItemContainer
-            disabled={doctor.isInVacation}
-            onAddSchedule={handleAddSchedule(doctor)}
-            startHour={hoursContainers[index]}
-            endHour={null}
-            key={`${hoursContainers[index]}-schedule-item`}
-            className='day-schedule-item-container'
-          />
-        );
-      } else {
-        return (
-          <ScheduleItemContainer
-            disabled={doctor.isInVacation}
-            onAddSchedule={handleAddSchedule(doctor)}
-            startHour={hoursContainers[index - 1]}
-            endHour={hour}
-            key={`${hoursContainers[index - 1]}-schedule-item-${hour}`}
-            className='day-schedule-item-container'
-          />
-        );
-      }
-    });
-  };
-
   const handleCreatePause = (
     doctor,
     startHour = null,
@@ -291,18 +244,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   const getSchedulesForDoctor = doctorId => {
     const scheduleData = schedules.find(item => item.doctorId === doctorId);
     if (scheduleData == null) return null;
-    return (scheduleData?.schedules || []).map((schedule, index) => (
-      <DayViewSchedule
-        key={schedule.id}
-        parentTop={parentTop}
-        schedule={schedule}
-        index={index}
-        viewDate={viewDate}
-        onScheduleSelect={handleScheduleClick}
-        offset={0}
-        firstHour={hours[0]}
-      />
-    ));
+    return scheduleData?.schedules || [];
   };
 
   const halfHours = hours.filter(
@@ -359,34 +301,28 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           className='day-schedules-container'
           id='day-schedules-container'
         >
-          {doctors.map(doctor => {
-            const doctorRect = document
-              .getElementById(doctor.id)
-              ?.getBoundingClientRect() || {
-              width: 0,
-            };
-            return (
-              <div
-                id={`${doctor.id}&column`}
-                key={`${doctor.id}-column`}
-                style={{ width: doctorRect.width, height: getHoursHeight() }}
-                className={clsx(
-                  'day-schedules-column',
-                  doctor.isInVacation && 'disabled',
-                )}
-              >
-                {getSchedulesForDoctor(doctor.id)}
-                {getScheduleItemsContainer(doctor)}
-              </div>
-            );
-          })}
+          {doctors?.map(doctor => (
+            <DoctorColumn
+              key={doctor.id}
+              viewDate={viewDate}
+              firstHour={hours[0]}
+              schedules={getSchedulesForDoctor(doctor.id)}
+              parentTop={parentTop}
+              onAddSchedule={handleAddSchedule}
+              doctor={doctor}
+              hoursContainers={hoursContainers}
+              onScheduleClick={handleScheduleClick}
+            />
+          ))}
         </div>
       </div>
     </Box>
   );
 };
 
-export default CalendarDayView;
+export default React.memo(CalendarDayView, (prevProps, nextProps) => {
+  return isEqual(prevProps.viewDate, nextProps.viewDate);
+});
 
 CalendarDayView.propTypes = {
   viewDate: PropTypes.instanceOf(Date),

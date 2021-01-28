@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { Box, Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
@@ -107,12 +108,12 @@ const DayViewSchedule = ({
         border: isHighlighted ? '#3A83DC 1px solid' : 'none',
       }}
     >
-      <div
+      <span
         className='day-view-schedule__status-indicator'
         style={{ backgroundColor: scheduleStatus?.color || 'white' }}
       />
-      <div className='day-view-schedule__wrapper'>
-        <div className='header'>
+      <Box className='day-view-schedule__wrapper'>
+        <Box className='header'>
           {schedule.type === 'Schedule' && (
             <Typography noWrap classes={{ root: 'patient-name-label' }}>
               {schedule.patient.fullName}
@@ -126,7 +127,7 @@ const DayViewSchedule = ({
               {startHour} - {endHour}
             </Typography>
             {scheduleStatus?.statusIcon != null && (
-              <div
+              <span
                 className={clsx(
                   'status-icon',
                   (scheduleStatus?.id === 'DidNotCome' ||
@@ -135,13 +136,13 @@ const DayViewSchedule = ({
                 )}
               >
                 {scheduleStatus?.statusIcon}
-              </div>
+              </span>
             )}
           </Box>
-        </div>
-        <div className='info'>
+        </Box>
+        <Box className='info'>
           {schedule.type === 'Schedule' ? (
-            <div className='info-wrapper'>
+            <Box className='info-wrapper'>
               <div className='info-row'>
                 <Typography classes={{ root: 'info-title' }}>
                   {textForKey('Service')}:
@@ -166,7 +167,7 @@ const DayViewSchedule = ({
                   {scheduleStatus?.name}
                 </Typography>
               </div>
-            </div>
+            </Box>
           ) : (
             <div className='pause-wrapper'>
               <Typography classes={{ root: 'pause-label' }}>
@@ -177,13 +178,18 @@ const DayViewSchedule = ({
               </Typography>
             </div>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     </div>
   );
 };
 
-export default DayViewSchedule;
+export default React.memo(DayViewSchedule, (prevProps, nextProps) => {
+  return (
+    isEqual(prevProps.schedule, nextProps.schedule) &&
+    isEqual(prevProps.viewDate, nextProps.viewDate)
+  );
+});
 
 DayViewSchedule.propTypes = {
   schedule: PropTypes.shape({
