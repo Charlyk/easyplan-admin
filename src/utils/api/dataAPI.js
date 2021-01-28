@@ -1034,6 +1034,28 @@ export default {
     }
   },
 
+  fetchDayDoctorSchedules: async (date, doctorId) => {
+    try {
+      const stringDate = moment(date).format('YYYY-MM-DD');
+      const response = await Axios.get(
+        `${baseURL}/schedules/v2/day/doctor?&date=${stringDate}&doctorId=${doctorId}`,
+      );
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
   fetchDaySchedulesHours: async (date, timezone) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');

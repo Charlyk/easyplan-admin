@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 
 import clsx from 'clsx';
+import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 
 import DayViewSchedule from './DayViewSchedule';
@@ -11,10 +12,12 @@ const DoctorColumn = ({
   schedules,
   parentTop,
   viewDate,
+  index,
   firstHour,
   hoursContainers,
   onScheduleClick,
   onAddSchedule,
+  onItemRendered,
 }) => {
   const doctorRect = document
     .getElementById(String(doctor.id))
@@ -25,6 +28,19 @@ const DoctorColumn = ({
     const rect = element?.getBoundingClientRect() || { height: 0 };
     return rect.height;
   };
+
+  useLayoutEffect(() => {
+    debounceItemRendered();
+  });
+
+  const triggerColumnRendered = () => {
+    onItemRendered(index);
+  };
+
+  const debounceItemRendered = useCallback(
+    debounce(triggerColumnRendered, 200),
+    [],
+  );
 
   const renderHoursContainers = hoursContainers.map((hour, index) => {
     if (index === 0) {
@@ -63,6 +79,10 @@ const DoctorColumn = ({
     }
   });
 
+  const memoizedHoursContainer = useMemo(() => renderHoursContainers, [
+    hoursContainers,
+  ]);
+
   return (
     <div
       id={`${doctor.id}&column`}
@@ -85,7 +105,7 @@ const DoctorColumn = ({
           firstHour={firstHour}
         />
       ))}
-      {renderHoursContainers}
+      {memoizedHoursContainer}
     </div>
   );
 };
@@ -104,9 +124,13 @@ DoctorColumn.propTypes = {
   schedules: PropTypes.arrayOf(PropTypes.object),
   onScheduleClick: PropTypes.func,
   onAddSchedule: PropTypes.func,
+  onItemRendered: PropTypes.func,
+  index: PropTypes.number,
 };
 
 DoctorColumn.defaultProps = {
   schedules: [],
   hoursContainers: [],
+  onItemRendered: () => null,
+  index: 0,
 };
