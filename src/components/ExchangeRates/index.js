@@ -16,6 +16,7 @@ import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
+import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -125,8 +126,7 @@ const ExchangeRates = ({ open, onClose }) => {
     localDispatch(actions.setRates(newRates));
   };
 
-  const handleRateValueChange = rate => event => {
-    const newValue = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
+  const handleRateValueChange = rate => ({ floatValue }) => {
     const newRates = rates.map(item => {
       if (item.currency !== rate.currency) {
         return item;
@@ -134,7 +134,7 @@ const ExchangeRates = ({ open, onClose }) => {
 
       return {
         ...item,
-        value: newValue,
+        value: floatValue,
       };
     });
     localDispatch(actions.setRates(newRates));
@@ -168,7 +168,17 @@ const ExchangeRates = ({ open, onClose }) => {
 
   const handleSaveRates = async () => {
     localDispatch(actions.setIsSaving(true));
-    const response = await dataAPI.updateClinicExchangeRates(rates);
+    const requestBody = rates.map(item => {
+      if (item.value != null) {
+        return item;
+      }
+
+      return {
+        ...item,
+        value: 1,
+      };
+    });
+    const response = await dataAPI.updateClinicExchangeRates(requestBody);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
@@ -223,11 +233,11 @@ const ExchangeRates = ({ open, onClose }) => {
                     </Form.Group>
                   </TableCell>
                   <TableCell align='center' width='33%'>
-                    <Form.Group className='date-form-group'>
-                      <Form.Control
-                        type='number'
-                        onChange={handleRateValueChange(rate)}
-                        value={String(rate.value)}
+                    <Form.Group className='rate-form-group'>
+                      <NumberFormat
+                        placeholder='0'
+                        onValueChange={handleRateValueChange(rate)}
+                        value={rate.value || ''}
                       />
                     </Form.Group>
                   </TableCell>

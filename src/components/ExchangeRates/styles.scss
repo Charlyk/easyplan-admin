@@ -5,6 +5,16 @@
     pointer-events: none;
   }
 
+  .rate-form-group {
+    input {
+      outline: none;
+      border: #ced4da 1px solid;
+      border-radius: 4px;
+      height: 33px;
+      text-align: center;
+    }
+  }
+
   .MuiTableCell-root {
     padding: .3rem;
     border-bottom: none;
