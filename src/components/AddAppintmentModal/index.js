@@ -1,7 +1,8 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import debounce from 'lodash/debounce';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
@@ -495,20 +496,27 @@ const AddAppointmentModal = ({
       : option.phoneNumber;
   };
 
-  const handlePatientSearch = async query => {
+  const handlePatientSearch = useCallback(
+    debounce(async query => {
+      const updatedQuery = query.replace('+', '');
+      const response = await dataAPI.searchPatients(updatedQuery);
+      if (response.isError) {
+        toast.error(textForKey(response.message));
+      } else {
+        const patients = response.data.map(item => ({
+          ...item,
+          fullName: getLabelKey(item),
+        }));
+        localDispatch(actions.setPatients(patients));
+      }
+      localDispatch(actions.setPatientsLoading(false));
+    }, 400),
+    [],
+  );
+
+  const handleSearchQueryChange = query => {
     localDispatch(actions.setPatientsLoading(true));
-    const updatedQuery = query.replace('+', '');
-    const response = await dataAPI.searchPatients(updatedQuery);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      const patients = response.data.map(item => ({
-        ...item,
-        fullName: getLabelKey(item),
-      }));
-      localDispatch(actions.setPatients(patients));
-    }
-    localDispatch(actions.setPatientsLoading(false));
+    handlePatientSearch(query);
   };
 
   const handleDateFieldClick = () => {
@@ -789,12 +797,13 @@ const AddAppointmentModal = ({
             isValid={isPatientValid}
             placeholder={textForKey('Enter patient name or phone')}
             id='patients'
-            emptyLabel={textForKey('No results...')}
-            searchText={textForKey('Searching...')}
+            emptyLabel={`${textForKey('No results')}...`}
+            searchText={`${textForKey('Searching')}...`}
             isLoading={loading.patients}
-            filterBy={['firstName', 'lastName', 'phoneNumber']}
+            useCache={false}
+            filterBy={['firstName', 'lastName', 'phoneNumber', 'fullName']}
             labelKey='fullName'
-            onSearch={handlePatientSearch}
+            onSearch={handleSearchQueryChange}
             options={patients}
             selected={patient ? [patient] : []}
             onChange={handlePatientChange}
