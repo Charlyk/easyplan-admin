@@ -510,7 +510,7 @@ const AddAppointmentModal = ({
         localDispatch(actions.setPatients(patients));
       }
       localDispatch(actions.setPatientsLoading(false));
-    }, 400),
+    }, 500),
     [],
   );
 
@@ -675,6 +675,8 @@ const AddAppointmentModal = ({
     );
   };
 
+  const filterByCallback = () => true;
+
   const datePicker = (
     <EasyDatePicker
       minDate={new Date()}
@@ -800,15 +802,15 @@ const AddAppointmentModal = ({
             emptyLabel={`${textForKey('No results')}...`}
             searchText={`${textForKey('Searching')}...`}
             isLoading={loading.patients}
-            useCache={false}
-            filterBy={['firstName', 'lastName', 'phoneNumber', 'fullName']}
+            filterBy={filterByCallback}
+            minLength={2}
             labelKey='fullName'
             onSearch={handleSearchQueryChange}
             options={patients}
             selected={patient ? [patient] : []}
             onChange={handlePatientChange}
             renderMenuItemChildren={option => (
-              <div className='patient-result-item'>
+              <div className='patient-result-item' id={option.id}>
                 <div className='patient-avatar-wrapper'>
                   {option.photo == null ? (
                     <IconAvatar />
