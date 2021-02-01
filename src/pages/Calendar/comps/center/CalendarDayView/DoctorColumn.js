@@ -93,6 +93,7 @@ const DoctorColumn = ({
         doctor.isInVacation && 'disabled',
       )}
     >
+      {memoizedHoursContainer}
       {schedules?.map((schedule, index) => (
         <DayViewSchedule
           key={schedule.id}
@@ -105,7 +106,6 @@ const DoctorColumn = ({
           firstHour={firstHour}
         />
       ))}
-      {memoizedHoursContainer}
     </div>
   );
 };
