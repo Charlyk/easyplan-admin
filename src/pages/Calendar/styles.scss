@@ -347,6 +347,17 @@
       align-items: center;
       position: relative;
 
+      .controls-wrapper {
+        .today-btn {
+          outline: none;
+          color: #3A83DC;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+        }
+      }
+
       .arrow-button {
         outline: none;
 
