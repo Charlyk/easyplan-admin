@@ -196,7 +196,10 @@ const DayViewSchedule = ({
 };
 
 export default React.memo(DayViewSchedule, (prevProps, nextProps) => {
-  return isEqual(prevProps.schedule, nextProps.schedule);
+  return (
+    isEqual(prevProps.schedule, nextProps.schedule) &&
+    isEqual(prevProps.viewDate, nextProps.viewDate)
+  );
 });
 
 DayViewSchedule.propTypes = {
