@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { Box, Typography } from '@material-ui/core';
-import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 
 import IconPlus from '../../../../../assets/icons/iconPlus';
@@ -75,13 +74,7 @@ const ScheduleItemContainer = ({
   );
 };
 
-export default React.memo(ScheduleItemContainer, (prevProps, nextProps) => {
-  return (
-    isEqual(prevProps.startHour, nextProps.startHour) &&
-    isEqual(prevProps.endHour, nextProps.endHour) &&
-    isEqual(prevProps.disabled, nextProps.disabled)
-  );
-});
+export default React.memo(ScheduleItemContainer);
 
 ScheduleItemContainer.propTypes = {
   startHour: PropTypes.string,
