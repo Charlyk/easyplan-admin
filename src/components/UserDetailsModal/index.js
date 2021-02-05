@@ -12,7 +12,7 @@ import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Role } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
+import { fetchClinicData, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
 import LoadingButton from '../LoadingButton';
@@ -170,6 +170,7 @@ const UserDetailsModal = props => {
         JSON.stringify({ before: user, after: requestBody }),
       );
       dispatch(triggerUsersUpdate());
+      dispatch(fetchClinicData());
       handleModalClose();
     }
   };
