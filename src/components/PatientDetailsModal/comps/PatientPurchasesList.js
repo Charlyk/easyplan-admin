@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 
 import {
+  Box,
   CircularProgress,
   Table,
   TableBody,
@@ -10,11 +11,13 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+import sumBy from 'lodash/sumBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+import { clinicCurrencySelector } from '../../../redux/selectors/clinicSelector';
 import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
 import dataAPI from '../../../utils/api/dataAPI';
 import {
@@ -53,6 +56,7 @@ const reducer = (state, action) => {
 
 const PatientPurchasesList = ({ patient }) => {
   const updatePayments = useSelector(updatePatientPaymentsSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const [{ isLoading, payments }, localDispatch] = useReducer(
     reducer,
     initialState,
@@ -79,6 +83,11 @@ const PatientPurchasesList = ({ patient }) => {
   const getAmount = payment => {
     return formattedAmount(payment.amount, payment.currency);
   };
+
+  const totalAmount = formattedAmount(
+    sumBy(payments, item => item.amount),
+    clinicCurrency,
+  );
 
   return (
     <div className='patient-purchases-list'>
@@ -118,6 +127,29 @@ const PatientPurchasesList = ({ patient }) => {
                     </TableCell>
                   </TableRow>
                 ))}
+                <TableRow>
+                  <TableCell
+                    align='right'
+                    colSpan={4}
+                    style={{ borderBottom: 'none' }}
+                  >
+                    <Box
+                      display='flex'
+                      width='100%'
+                      alignItems='center'
+                      justifyContent='flex-end'
+                    >
+                      <Typography classes={{ root: 'totals-text' }}>
+                        {textForKey('Total')}:
+                      </Typography>
+                      <Typography
+                        classes={{ root: 'totals-text totals-amount' }}
+                      >
+                        {totalAmount}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
