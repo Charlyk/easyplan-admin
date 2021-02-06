@@ -17,6 +17,7 @@ import {
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
 } from '../../redux/selectors/clinicSelector';
+import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import {
   adjustValueToNumber,
@@ -27,12 +28,11 @@ import {
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 
 const computeServicePrice = (invoice, exchangeRates) => {
-  return invoice.services.map(service => {
+  return invoice.services.map((service) => {
     const serviceExchange = exchangeRates.find(
-      rate => rate.currency === service.currency,
+      (rate) => rate.currency === service.currency,
     ) || { value: 1 };
     const servicePrice = service.amount * serviceExchange.value * service.count;
     return {
@@ -84,7 +84,7 @@ const reducer = (state, action) => {
     case reducerTypes.setDiscount: {
       // compute new total amount
       const newDiscount = action.payload;
-      const servicesTotal = sumBy(state.services, item => item.totalPrice);
+      const servicesTotal = sumBy(state.services, (item) => item.totalPrice);
       const discountAmount = servicesTotal * (newDiscount / 100);
       let discountedTotal = servicesTotal - discountAmount;
       // check if discounted total is not less than 0 or not greater then total amount
@@ -118,7 +118,7 @@ const reducer = (state, action) => {
         exchangeRates,
       );
       const servicesPrice = parseFloat(
-        sumBy(updatedServices, item => item.totalPrice),
+        sumBy(updatedServices, (item) => item.totalPrice),
       ).toFixed(2);
       return {
         ...state,
@@ -195,12 +195,12 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     localDispatch(actions.setIsFetching(false));
   };
 
-  const handleAmountChange = event => {
+  const handleAmountChange = (event) => {
     let newValue = adjustValueToNumber(event.target.value, totalAmount);
     localDispatch(actions.setPayAmount(newValue));
   };
 
-  const handleDiscountChange = event => {
+  const handleDiscountChange = (event) => {
     let newValue = adjustValueToNumber(event.target.value, 100.0);
 
     localDispatch(actions.setDiscount(newValue));
@@ -278,7 +278,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
     </div>
   );
 
-  const getDateHour = date => {
+  const getDateHour = (date) => {
     if (date == null) return '';
     return moment(date).format('DD MMM YYYY HH:mm');
   };
@@ -324,7 +324,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
             </div>
             <table>
               <tbody>
-                {services.map(service => (
+                {services.map((service) => (
                   <tr key={service.id}>
                     <td>
                       <Typography classes={{ root: 'service-name-label' }}>{`${

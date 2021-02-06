@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgress, Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import {
@@ -30,7 +29,7 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      setVisits(sortBy(response.data, item => item.created).reverse() || []);
+      setVisits(sortBy(response.data, (item) => item.created).reverse() || []);
     }
     setIsFetching(false);
   };

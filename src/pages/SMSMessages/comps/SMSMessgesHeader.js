@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import IconPlus from '../../../assets/icons/iconPlus';
 import { textForKey } from '../../../utils/localization';
 
-const SMSMessagesHeader = props => {
+const SMSMessagesHeader = () => {
   return (
     <div className='sms-messages-root__header'>
       <Button className='positive-button'>

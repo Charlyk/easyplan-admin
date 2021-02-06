@@ -9,10 +9,7 @@ import PatientAppointments from '../../../../components/PatientDetailsModal/comp
 import PatientNotes from '../../../../components/PatientDetailsModal/comps/notes/PatientNotes';
 import OrthodonticPlan from '../../../../components/PatientDetailsModal/comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from '../../../../components/PatientDetailsModal/comps/x-ray/PatientXRay';
-import {
-  clinicDetailsSelector,
-  clinicEnabledBracesSelector,
-} from '../../../../redux/selectors/clinicSelector';
+import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import './styles.scss';
@@ -62,7 +59,7 @@ const PatientDetails = ({
 
   if (!patient) return null;
 
-  const handleTabClick = selectedTab => {
+  const handleTabClick = (selectedTab) => {
     setSelectedTab(selectedTab);
   };
 

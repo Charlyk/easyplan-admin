@@ -23,10 +23,10 @@ import PatientNotes from './comps/notes/PatientNotes';
 import PatientDebtsList from './comps/PatientDebtsList';
 import PatientPaymentsList from './comps/PatientPaymentsList';
 import PatientPersonalData from './comps/PatientPersonalData';
+import PatientPurchasesList from './comps/PatientPurchasesList';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
 import './styles.scss';
-import PatientPurchasesList from './comps/PatientPurchasesList';
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -135,7 +135,7 @@ const PatientDetailsModal = ({
     }
   };
 
-  const handleMenuClick = event => {
+  const handleMenuClick = (event) => {
     const targetId = event.target.id;
     if (targetId === MenuItem.delete) {
       handleStartDeletePatient();
@@ -146,7 +146,7 @@ const PatientDetailsModal = ({
     }
   };
 
-  const handleViewDebtClick = invoice => {
+  const handleViewDebtClick = (invoice) => {
     localDispatch(actions.setViewInvoice(invoice));
   };
 
@@ -154,7 +154,7 @@ const PatientDetailsModal = ({
     localDispatch(actions.setViewInvoice(null));
   };
 
-  const menuItemClasses = itemId => {
+  const menuItemClasses = (itemId) => {
     return currentMenu === itemId ? 'selected' : '';
   };
 

@@ -16,7 +16,7 @@ import { uploadFileToAWS, urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
 
-const AccountSettings = props => {
+const AccountSettings = () => {
   const currentUser = useSelector(userSelector);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ const AccountSettings = props => {
     setIsEmailChanged(isChanged);
   }, [data.email]);
 
-  const handleLogoChange = event => {
+  const handleLogoChange = (event) => {
     if (isLoading) return;
     const files = event.target.files;
     if (files != null) {
@@ -52,7 +52,7 @@ const AccountSettings = props => {
     }
   };
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     if (isLoading) return;
     setData({
       ...data,
