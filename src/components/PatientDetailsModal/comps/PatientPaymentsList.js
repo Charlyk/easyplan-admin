@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 
 import dataAPI from '../../../utils/api/dataAPI';
 import { Statuses } from '../../../utils/constants';
+import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
@@ -46,11 +47,28 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
   };
 
   const getInvoicesTotal = () => {
-    return sumBy(invoices, item => item.totalAmount);
+    return sumBy(invoices, item => {
+      const discountAmount = item.totalAmount * (item.discount / 100);
+      return item.totalAmount - discountAmount;
+    });
   };
 
   const getInvoicesPaid = () => {
-    return sumBy(invoices, item => item.paidAmount);
+    return sumBy(invoices, item => {
+      if (item.status === 'Paid') {
+        const discountAmount = item.paidAmount * (item.discount / 100);
+        return item.paidAmount - discountAmount;
+      }
+      return item.paidAmount;
+    });
+  };
+
+  const getInvoicePaidAmount = invoice => {
+    if (invoice.status === 'Paid') {
+      const discountAmount = invoice.paidAmount * (invoice.discount / 100);
+      return invoice.paidAmount - discountAmount;
+    }
+    return invoice.paidAmount;
   };
 
   const handleViewDebtClick = invoice => () => {
@@ -60,7 +78,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
   return (
     <div className='patient-payments-list'>
       <Typography classes={{ root: 'title-label' }}>
-        {textForKey('Payments')}
+        {textForKey('Schedules stats')}
       </Typography>
       {isLoading && <CircularProgress className='patient-details-spinner' />}
       {invoices.length === 0 && !isLoading && (
@@ -103,7 +121,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
                         align='right'
                         classes={{ root: 'amount-cell' }}
                       >
-                        {item.paidAmount}MDL
+                        {formattedAmount(getInvoicePaidAmount(item, 'MDL'))}
                       </TableCell>
                       <TableCell align='right'>
                         <Box display='flex' flexDirection='column'>

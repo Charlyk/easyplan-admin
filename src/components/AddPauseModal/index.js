@@ -12,6 +12,26 @@ import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import './styles.scss';
+
+const filterAvailableTime = (availableTime, startTime) => {
+  return availableTime.filter(item => {
+    const [startH, startM] = startTime.split(':');
+    const [h, m] = item.split(':');
+    const startDate = moment().set({
+      hour: parseInt(startH),
+      minute: parseInt(startM),
+      second: 0,
+    });
+    const endDate = moment().set({
+      hour: parseInt(h),
+      minute: parseInt(m),
+      second: 0,
+    });
+    const diff = Math.ceil(endDate.diff(startDate) / 1000 / 60);
+    return diff >= 15;
+  });
+};
 
 const initialState = {
   showDatePicker: false,
@@ -49,19 +69,20 @@ const reducer = (state, action) => {
       return { ...state, pauseDate: action.payload };
     case reducerTypes.setStartHour: {
       const startHour = action.payload;
-      const availableEndTime = state.availableAllTime.filter(
-        item => item > startHour,
+      const endHour = state.endHour;
+      const availableEndTime = filterAvailableTime(
+        state.availableAllTime,
+        startHour,
       );
       return {
         ...state,
         startHour,
         availableEndTime,
-        endHour:
-          state.endHour < startHour
-            ? availableEndTime?.length > 0
-              ? availableEndTime[0]
-              : []
-            : state.endHour,
+        endHour: availableEndTime.includes(endHour)
+          ? endHour
+          : availableEndTime.length > 0
+          ? availableEndTime[0]
+          : '',
       };
     }
     case reducerTypes.setEndHour:
@@ -76,21 +97,14 @@ const reducer = (state, action) => {
         availableAllTime?.length > 0 && state.startHour.length === 0
           ? availableAllTime[0]
           : state.startHour;
-      const endHour =
-        availableAllTime?.length > 1 && state.endHour.length === 0
-          ? availableAllTime[1]
-          : state.endHour;
       const availableStartTime = availableAllTime;
-      const availableEndTime = availableAllTime.filter(
-        item => item > startHour,
-      );
+      const availableEndTime = filterAvailableTime(availableAllTime, startHour);
       return {
         ...state,
         availableAllTime,
         availableStartTime,
         availableEndTime,
         startHour,
-        endHour,
       };
     }
     case reducerTypes.setAvailableStartTime:
@@ -160,9 +174,33 @@ const AddPauseModal = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      localDispatch(actions.setAvailableAllTime(response.data));
+      const { data: availableTime } = response;
+      localDispatch(actions.setAvailableAllTime(availableTime));
+      updateEndTimeBasedOnService(availableTime);
     }
     localDispatch(actions.setIsFetchingHours(false));
+  };
+
+  const updateEndTimeBasedOnService = availableTime => {
+    if (id != null) {
+      return;
+    }
+    setTimeout(() => {
+      const start =
+        availableTime.length > 0 && startHour.length === 0
+          ? availableTime[0]
+          : startHour;
+      const [h, m] = start.split(':');
+      const end = moment(pauseDate)
+        .set({
+          hour: parseInt(h),
+          minute: parseInt(m),
+          second: 0,
+        })
+        .add(15, 'minutes')
+        .format('HH:mm');
+      localDispatch(actions.setEndHour(end));
+    }, 300);
   };
 
   const handleDateChange = newDate => {
@@ -236,6 +274,7 @@ const AddPauseModal = ({
 
   const datePicker = (
     <EasyDatePicker
+      placement='bottom'
       minDate={new Date()}
       open={Boolean(showDatePicker)}
       pickerAnchor={datePickerAnchor.current}
@@ -258,7 +297,7 @@ const AddPauseModal = ({
     <EasyPlanModal
       onClose={onClose}
       open={open}
-      className='add-appointment-root'
+      className='add-pause-root'
       title={`${textForKey('Add pause')}: ${doctor?.firstName} ${
         doctor?.lastName
       }`}

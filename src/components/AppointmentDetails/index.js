@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
+import {
+  ClickAwayListener,
+  Fade,
+  Paper,
+  Popper,
+  Typography,
+} from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
@@ -8,7 +14,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Button, Spinner } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
@@ -19,8 +25,10 @@ import {
   setPatientDetails,
   toggleAppointmentsUpdate,
 } from '../../redux/actions/actions';
+import { updateAppointmentsSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
+import { formattedAmount } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import SingleInputModal from '../SingleInputModal';
 
@@ -33,6 +41,7 @@ const AppointmentDetails = ({
 }) => {
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
+  const updateAppointments = useSelector(updateAppointmentsSelector);
   const [details, setDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
@@ -48,7 +57,7 @@ const AppointmentDetails = ({
     setScheduleStatus(
       Statuses.find(item => item.id === schedule.scheduleStatus),
     );
-  }, [schedule]);
+  }, [schedule, updateAppointments]);
 
   const fetchAppointmentDetails = async () => {
     setIsLoading(true);
@@ -56,7 +65,11 @@ const AppointmentDetails = ({
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      setDetails(response.data);
+      const { data: details } = response;
+      setDetails(details);
+      setScheduleStatus(
+        Statuses.find(item => item.id === details.scheduleStatus),
+      );
     }
     setIsLoading(false);
   };
@@ -85,8 +98,8 @@ const AppointmentDetails = ({
     setScheduleStatus(status);
     closeStatusesList();
     await dataAPI.updateScheduleStatus(schedule.id, status.id, reason);
-    dispatch(toggleAppointmentsUpdate());
     setIsCanceledReasonRequired(false);
+    dispatch(toggleAppointmentsUpdate());
   };
 
   const handleStatusSelected = async status => {
@@ -121,6 +134,10 @@ const AppointmentDetails = ({
     schedule.scheduleStatus === 'CompletedPaid' ||
     schedule.scheduleStatus === 'PartialPaid' ||
     schedule.scheduleStatus === 'CompletedFree';
+
+  const patientName = details?.patient.fullName || schedule.patient.fullName;
+  const serviceName = details?.service.name || schedule.serviceName;
+  const serviceColor = details?.service.color || schedule.serviceColor;
 
   const statusesList = (
     <Popper
@@ -188,10 +205,8 @@ const AppointmentDetails = ({
           <IconClose />
         </div>
         <span className='schedule-title'>
-          {schedule.patient.fullName}:{' '}
-          <span style={{ color: schedule.serviceColor }}>
-            {schedule.serviceName}
-          </span>
+          {patientName}:{' '}
+          <span style={{ color: serviceColor }}>{serviceName}</span>
         </span>
       </div>
       <div className='content-wrapper'>
@@ -246,7 +261,10 @@ const AppointmentDetails = ({
                     <td style={{ paddingRight: '1rem' }}>
                       {textForKey('Hour')}:
                     </td>
-                    <td>{moment(details.startTime).format('HH:mm')}</td>
+                    <td>
+                      {moment(details.startTime).format('HH:mm')} -{' '}
+                      {moment(details.endTime).format('HH:mm')}
+                    </td>
                   </tr>
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
@@ -328,7 +346,7 @@ const AppointmentDetails = ({
                 <thead>
                   <tr>
                     <td align='left'>{textForKey('Service')}</td>
-                    <td align='right'>{textForKey('Total')}</td>
+                    <td align='left'>{textForKey('Clinic')}</td>
                     <td align='right'>{textForKey('Remained')}</td>
                     <td align='right'>{textForKey('Actions')}</td>
                   </tr>
@@ -336,12 +354,23 @@ const AppointmentDetails = ({
                 <tbody>
                   {details.patient.debts.map(item => (
                     <tr key={item.id}>
-                      <td align='left'>
-                        {item.services.map(it => it.name).join(', ')}
+                      <td align='left' className='services-cell'>
+                        <Typography noWrap classes={{ root: 'services-label' }}>
+                          {item.services.join(', ')}
+                        </Typography>
                       </td>
-                      <td align='right'>{item.totalAmount}MDL</td>
-                      <td align='right'>{item.remainedAmount}MDL</td>
-                      <td align='right'>
+                      <td align='left' className='totals-cell'>
+                        <Typography
+                          noWrap
+                          classes={{ root: 'clinic-name-label' }}
+                        >
+                          {item.clinicName}
+                        </Typography>
+                      </td>
+                      <td align='right' className='remained-cell'>
+                        {formattedAmount(item.remainedAmount, item.currency)}
+                      </td>
+                      <td align='right' className='actions-cell'>
                         <Button
                           variant='outline-primary'
                           onClick={() => handlePayDebt(item)}
@@ -379,11 +408,7 @@ const AppointmentDetails = ({
           {textForKey('Delete')}
           <IconTrash />
         </Button>
-        <Button
-          className='positive-button'
-          disabled={isFinished}
-          onClick={handleEditSchedule}
-        >
+        <Button className='positive-button' onClick={handleEditSchedule}>
           {textForKey('Edit')}
           <IconEdit />
         </Button>

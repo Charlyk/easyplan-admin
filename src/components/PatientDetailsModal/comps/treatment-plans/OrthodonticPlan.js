@@ -22,6 +22,7 @@ import {
   logUserAction,
 } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
+import sessionManager from '../../../../utils/settings/sessionManager';
 import EasyTab from '../../../EasyTab';
 import LoadingButton from '../../../LoadingButton';
 
@@ -199,11 +200,13 @@ const reducer = (state, action) => {
   }
 };
 
-const OrthodonticPlan = ({ patient, onSave }) => {
+const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   const services = useSelector(clinicBracesServicesSelector);
   const braces = useSelector(clinicEnabledBracesSelector);
   const currentUser = useSelector(userSelector);
-  const currentClinic = currentUser.clinics.find(it => it.isSelected);
+  const currentClinic = currentUser.clinics.find(
+    it => it.clinicId === sessionManager.getSelectedClinicId(),
+  );
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
   const [
     { planType, bracketsPlan, isLoading, isSaving },
@@ -367,6 +370,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
     const updatedBraces = {
       ...requestPlan,
       planType,
+      scheduleId,
       braces: requestPlan.braces.map(it => it.id),
       services: requestPlan.services.map(it => it.id),
     };
@@ -380,7 +384,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
       }),
     );
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       await fetchOrthodonticPlan();
       onSave(bracketsPlan);
@@ -697,6 +701,7 @@ const OrthodonticPlan = ({ patient, onSave }) => {
 export default OrthodonticPlan;
 
 OrthodonticPlan.propTypes = {
+  scheduleId: PropTypes.number,
   patient: PropTypes.object,
   onSave: PropTypes.func,
 };

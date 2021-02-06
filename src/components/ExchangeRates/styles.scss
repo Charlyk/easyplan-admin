@@ -1,0 +1,49 @@
+.exchange-rates-root {
+
+  .form-control[readonly] {
+    background-color: #ededed !important;
+    pointer-events: none;
+  }
+
+  .rate-form-group {
+    input {
+      outline: none;
+      border: #ced4da 1px solid;
+      border-radius: 4px;
+      height: 33px;
+      text-align: center;
+    }
+  }
+
+  .MuiTableCell-root {
+    padding: .3rem;
+    border-bottom: none;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 24px;
+    margin-right: .3rem;
+    color: #34354C;
+  }
+
+  .add-button {
+    outline: none;
+    border-bottom: none;
+    font-family: Inter, sans-serif;
+    text-transform: none;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 24px;
+    margin-right: .3rem;
+    color: #3A83DC;
+  }
+
+  .remove-button {
+    outline: none;
+    svg {
+      fill: #ec3276;
+    }
+  }
+}

@@ -1,15 +1,21 @@
 import React, { useRef, useState } from 'react';
 
 import './styles.scss';
+import { Box, IconButton, Tooltip } from '@material-ui/core';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Image } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { Button, Image } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import IconEdit from '../../assets/icons/iconEdit';
 import IconMore from '../../assets/icons/iconMore';
 import IconNotifications from '../../assets/icons/iconNotifications';
+import IconPlus from '../../assets/icons/iconPlus';
 import IconTurnOff from '../../assets/icons/iconTurnOff';
+import { setPaymentModal } from '../../redux/actions/actions';
+import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
+import { clinicExchangeRatesUpdateRequiredSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
@@ -37,13 +43,20 @@ const PageHeader = ({
   onLogout,
   onEditProfile,
 }) => {
+  const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
+  const isExchangeUpdateRequired = useSelector(
+    clinicExchangeRatesUpdateRequiredSelector,
+  );
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
 
   const handleActionsOpen = () => setIsActionsOpen(true);
+
+  const handleOpenPaymentModal = () =>
+    dispatch(setPaymentModal({ open: true, isNew: true, invoice: null }));
 
   const handleActionSelected = action => {
     switch (action.key) {
@@ -55,6 +68,10 @@ const PageHeader = ({
         break;
     }
     setIsActionsOpen(false);
+  };
+
+  const handleOpenExchangeRatesModal = () => {
+    dispatch(setIsExchangeRatesModalOpen(true));
   };
 
   return (
@@ -73,8 +90,31 @@ const PageHeader = ({
       >
         {titleComponent || title}
       </div>
-      {!isDoctor && <InvoicesButton />}
+      {!isDoctor && (
+        <Box display='flex' alignItems='center'>
+          <InvoicesButton />
+          <Tooltip title={textForKey('Add payment')}>
+            <IconButton
+              classes={{ root: 'add-invoice-btn' }}
+              onClick={handleOpenPaymentModal}
+            >
+              <IconPlus fill='#3A83DC' />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )}
       <div className='page-header__actions'>
+        {!isDoctor && (
+          <Button
+            onClick={handleOpenExchangeRatesModal}
+            className={clsx('exchange-rate-btn', {
+              upcoming: isExchangeUpdateRequired,
+            })}
+            variant='outline-primary'
+          >
+            {textForKey('Exchange rate')}
+          </Button>
+        )}
         <div className='page-header__notifications'>
           <IconNotifications />
         </div>

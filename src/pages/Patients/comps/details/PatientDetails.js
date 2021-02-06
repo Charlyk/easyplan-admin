@@ -126,7 +126,7 @@ const PatientDetails = ({
           />
         )}
         {selectedTab === TabId.appointments && (
-          <PatientAppointments patient={patient} />
+          <PatientAppointments patient={patient} isDoctor={isDoctor} />
         )}
         {selectedTab === TabId.notes && (
           <PatientNotes patient={patient} onAddNote={onAddNote} />
@@ -135,7 +135,11 @@ const PatientDetails = ({
           <PatientXRay onAddXRay={onAddXRay} patient={patient} />
         )}
         {selectedTab === TabId.orthodonticPlan && braces.length > 0 && (
-          <OrthodonticPlan patient={patient} onSave={onSaveOrthodonticPlan} />
+          <OrthodonticPlan
+            patient={patient}
+            scheduleId={scheduleId}
+            onSave={onSaveOrthodonticPlan}
+          />
         )}
       </div>
     </div>

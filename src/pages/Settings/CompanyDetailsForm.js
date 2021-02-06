@@ -52,6 +52,7 @@ const CompanyDetailsForm = props => {
     socialNetworks: '',
     workdays: [],
     currency: 'MDL',
+    allCurrencies: [],
     country: 'md',
     isValidPhoneNumber: true,
     isValidViberNumber: true,
@@ -85,7 +86,6 @@ const CompanyDetailsForm = props => {
 
   const handlePhoneChange = phoneType => (value, _, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
-    console.log(phoneType, validationFieldName);
     if (isSaving) return;
     setData({
       ...data,
@@ -343,7 +343,7 @@ const CompanyDetailsForm = props => {
             </InputGroup>
           </Form.Group>
           <Form.Group style={{ flexDirection: 'column' }} controlId='currency'>
-            <Form.Label>{textForKey('Currency')}</Form.Label>
+            <Form.Label>{textForKey('Default currency')}</Form.Label>
             <Form.Control
               as='select'
               className='mr-sm-2'
@@ -351,9 +351,11 @@ const CompanyDetailsForm = props => {
               onChange={handleFormChange}
               value={data.currency}
             >
-              <option value='MDL'>{textForKey('Moldavian Leu')}</option>
-              <option value='RON'>{textForKey('Romanian Leu')}</option>
-              <option value='EUR'>{textForKey('Euro')}</option>
+              {data.allCurrencies.map(currency => (
+                <option key={currency.id} value={currency.id}>
+                  {currency.id} - {currency.name}
+                </option>
+              ))}
             </Form.Control>
           </Form.Group>
           <Form.Group style={{ flexDirection: 'column' }} controlId='country'>

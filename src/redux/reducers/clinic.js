@@ -4,6 +4,7 @@ const initialState = Object.freeze({
   clinic: {
     users: [],
     services: [],
+    updateExchangeRates: false,
   },
 });
 
@@ -17,7 +18,12 @@ export default function clinic(state = initialState, action) {
         clinic: { ...state.clinic, services: action.payload },
       };
     case types.setClinicDetails:
-      return { ...state, clinic: action.payload };
+      return { clinic: action.payload };
+    case types.setClinicExchangeRatesUpdateRequired:
+      return {
+        ...state,
+        clinic: { ...state.clinic, updateExchangeRates: action.payload },
+      };
     default:
       return state;
   }

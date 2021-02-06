@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import sessionManager from '../../utils/settings/sessionManager';
+
 export const mainSelector = state => state.main;
 
 export const updateCalendarDoctorHeightSelector = createSelector(
@@ -74,6 +76,17 @@ export const forceLogoutSelector = createSelector(
 
 export const userSelector = createSelector(mainSelector, state => state.user);
 
+export const selectedClinicSelector = createSelector(userSelector, user =>
+  (user?.clinics || []).find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  ),
+);
+
+export const updateDoctorAppointmentDetailsSelector = createSelector(
+  mainSelector,
+  state => state.updateDoctorAppointments,
+);
+
 export const patientDetailsSelector = createSelector(
   mainSelector,
   state => state.patientDetails,
@@ -92,4 +105,9 @@ export const updatePatientPaymentsSelector = createSelector(
 export const isImportModalOpenSelector = createSelector(
   mainSelector,
   state => state.isImportModalOpen,
+);
+
+export const updateExchangeRatesSelector = createSelector(
+  mainSelector,
+  state => state.updateExchangeRates,
 );

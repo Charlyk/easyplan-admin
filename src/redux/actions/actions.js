@@ -192,7 +192,7 @@ export function toggleUpdateInvoices() {
  * Toggle patient details
  * @param {Object} payload
  * @param {boolean} payload.show
- * @param {number|null} payload.patientId
+ * @param {number?} payload.patientId
  * @param {function|null} payload.onDelete
  * @return {{payload: *, type: string}}
  */
@@ -235,5 +235,19 @@ export function toggleImportModal(open = false) {
   return {
     type: types.toggleImportModal,
     payload: open,
+  };
+}
+
+export function toggleExchangeRateUpdate() {
+  return {
+    type: types.toggleExchangeRateUpdate,
+    payload: '',
+  };
+}
+
+export function toggleUpdateDoctorAppointment() {
+  return {
+    type: types.updateDoctorAppointment,
+    payload: '',
   };
 }

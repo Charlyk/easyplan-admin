@@ -8,6 +8,7 @@ import {
   TableCell,
   TableHead,
   TableBody,
+  Box,
 } from '@material-ui/core';
 import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
@@ -16,6 +17,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import dataAPI from '../../../../utils/api/dataAPI';
+import { Statuses } from '../../../../utils/constants';
 import { updateLink } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 
@@ -88,6 +90,9 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
 
     const startDate = moment(schedule.startTime);
     const endDate = moment(schedule.endTime);
+    const scheduleStatus = Statuses.find(
+      item => item.id === schedule.scheduleStatus,
+    );
 
     return (
       <div
@@ -97,25 +102,37 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           schedule.scheduleStatus === 'OnSite' && 'upcoming',
           schedule.isUrgent && 'urgent',
         )}
-        style={{
-          border: `${schedule.serviceColor} 1px solid`,
-          backgroundColor: `${schedule.serviceColor}1A`,
-        }}
       >
-        <Typography noWrap classes={{ root: 'patient-name' }}>
-          {schedule.patient.fullName}
-        </Typography>
-        <Typography noWrap classes={{ root: 'service-name' }}>
-          {schedule.serviceName}
-        </Typography>
-        <span className='time-label'>
-          {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
-        </span>
-        <div className='details-button'>
-          <Link to={updateLink(`/${schedule.id}`)}>
-            <span className='button-text'>{textForKey('Details')}</span>
-          </Link>
-        </div>
+        <Box
+          display='flex'
+          flexDirection='column'
+          alignItems='flex-start'
+          justifyContent='flex-start'
+          width='100%'
+          overflow='hidden'
+        >
+          <div
+            className='schedule-item__status-indicator'
+            style={{ backgroundColor: scheduleStatus.color }}
+          />
+          <Typography noWrap classes={{ root: 'patient-name' }}>
+            {schedule.patient.fullName}
+          </Typography>
+          <Typography noWrap classes={{ root: 'service-name' }}>
+            {schedule.serviceName}
+          </Typography>
+          <Typography noWrap classes={{ root: 'patient-name' }}>
+            {scheduleStatus.name}
+          </Typography>
+          <Typography noWrap classes={{ root: 'time-label' }}>
+            {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
+          </Typography>
+          <div className='details-button'>
+            <Link to={updateLink(`/${schedule.id}`)}>
+              <span className='button-text'>{textForKey('Details')}</span>
+            </Link>
+          </div>
+        </Box>
       </div>
     );
   };

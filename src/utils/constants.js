@@ -162,7 +162,7 @@ export const Statuses = [
     color: '#3A83DC',
     icon: <IconCheckMark />,
     statusIcon: null,
-    manual: false,
+    manual: true,
     isSchedule: true,
   },
   {
@@ -457,6 +457,7 @@ export const Action = {
   EditClinic: 'EditClinic',
   PayInvoice: 'PayInvoice',
   FinalizeTreatment: 'FinalizeTreatment',
+  UpdateTreatmentPlan: 'UpdateTreatmentPlan',
   ViewGeneralStatistics: 'ViewGeneralStatistics',
   ViewServicesStatistics: 'ViewServicesStatistics',
   ViewDoctorsStatistics: 'ViewDoctorsStatistics',

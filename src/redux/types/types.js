@@ -1,5 +1,7 @@
+import addPaymentModalTypes from './addPaymentModalTypes';
 import calendar from './calendar';
 import clinicTypes from './clinicTypes';
+import exchangeRatesTypes from './exchangeRatesTypes';
 import imageModalTypes from './imageModalTypes';
 import seriveDetailsModalTypes from './seriveDetailsModalTypes';
 
@@ -29,8 +31,12 @@ export default {
   toggleUpdatePatientPayments: 'toggleUpdatePatientPayments',
   forceUserLogout: 'forceUserLogout',
   toggleImportModal: 'toggleImportModal',
+  toggleExchangeRateUpdate: 'toggleExchangeRateUpdate',
+  updateDoctorAppointment: 'updateDoctorAppointment',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,
   ...seriveDetailsModalTypes,
+  ...addPaymentModalTypes,
+  ...exchangeRatesTypes,
 };

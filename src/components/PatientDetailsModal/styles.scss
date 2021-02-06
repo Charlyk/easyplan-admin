@@ -13,6 +13,23 @@
         padding: 0;
         height: 100%;
 
+        .totals-text {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          color: #34344E;
+
+          &.totals-amount {
+            color: #3A83DC;
+            margin-left: .5rem;
+          }
+        }
+
+        .totals-amount {
+
+        }
+
         .MuiCircularProgress-root {
           color: #3A83DC;
           position: absolute;
@@ -857,4 +874,13 @@
       color: #34354C;
     }
   }
+}
+
+.patient-purchases-list {
+  width: 100%;
+  max-height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }

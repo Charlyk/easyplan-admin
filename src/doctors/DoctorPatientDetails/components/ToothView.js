@@ -23,13 +23,14 @@ const ToothView = ({
   useEffect(() => {
     setToothServices(
       services.map(service => {
-        const selectedService = selectedServices.find(
-          item => item.id === service.id && item.toothId === toothId,
-        );
+        const selectedService = selectedServices
+          .filter(item => !item.completed)
+          .find(item => item.id === service.id && item.toothId === toothId);
         return {
           ...service,
           toothId: toothId,
           selected: selectedService != null,
+          canRemove: selectedService?.canRemove,
         };
       }),
     );
@@ -92,6 +93,7 @@ const ToothView = ({
                     controlId={`tooth-${service.id}`}
                   >
                     <Form.Check
+                      disabled={service.canRemove === false}
                       onChange={() =>
                         handleServiceSelected(service, !service.selected)
                       }
@@ -195,7 +197,7 @@ ToothView.propTypes = {
   onServicesChange: PropTypes.func,
   services: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,
@@ -206,7 +208,7 @@ ToothView.propTypes = {
   direction: PropTypes.oneOf(['bottom', 'top']),
   selectedServices: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,
@@ -215,7 +217,7 @@ ToothView.propTypes = {
   ),
   completedServices: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
-import SettingsMenu from './SettingsMenu';
-
-import './styles.scss';
 import { useSelector } from 'react-redux';
 
 import { userSelector } from '../../redux/selectors/rootSelector';
+import sessionManager from '../../utils/settings/sessionManager';
 import AccountSettings from './AccountSettings';
 import ApplicationSettings from './ApplicationSettings';
 import BracesSettings from './BracesSettings';
 import ClinicWorkingHours from './ClinicWorkingHours';
 import CompanyDetailsForm from './CompanyDetailsForm';
 import SecuritySettings from './SecuritySettings';
+import SettingsMenu from './SettingsMenu';
+import './styles.scss';
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -22,9 +22,11 @@ const SettingsForm = {
   bracesSettings: 'bracesSettings',
 };
 
-const Settings = props => {
+const Settings = () => {
   const currentUser = useSelector(userSelector);
-  const selectedClinic = currentUser?.clinics.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
   const [currentForm, setCurrentForm] = useState(
     ['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)
       ? SettingsForm.companyDetails

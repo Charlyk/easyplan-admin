@@ -22,22 +22,35 @@
     z-index: 999;
     margin-top: 1rem;
     cursor: default;
+    max-height: 100%;
+    position: relative;
 
     .invoices-paper {
-      padding: 1rem;
       width: 35rem;
       border: #3A83DC 1px solid;
       border-radius: 4px;
       background-color: #F4FAFE;
+      max-height: 30rem;
+      overflow-y: scroll;
 
       table {
         border-collapse: separate;
         border-spacing: 0 .5rem;
+        padding: 1rem;
         width: 100%;
 
         thead {
+          background-color: #F4FAFE;
+          height: 30px;
           tr {
+            background-color: #F4FAFE;
+            height: 30px;
+
             td {
+              position: sticky;
+              top: 0;
+              height: 40px;
+              background-color: #F4FAFE;
               padding-left: 1rem;
               padding-right: 1rem;
               font-family: Inter, sans-serif;

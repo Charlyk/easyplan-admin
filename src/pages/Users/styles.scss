@@ -9,15 +9,9 @@
     -webkit-user-select: none;
     height: 4rem;
     display: flex;
+    min-height: 60px;
     align-items: center;
     justify-content: center;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: 0.01em;
-    color: #A1A2C6;
     padding: .5rem 1rem;
     margin-left: 2rem;
     margin-right: 2rem;
@@ -26,12 +20,29 @@
     box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
     border-radius: .3rem;
 
-    div {
+    .no-data-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #A1A2C6;
+    }
+
+    .add-data-btn {
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
       margin-left: .2rem;
       color: #3A83DC;
 
       &:hover {
-        opacity: 0.8;
+        text-decoration: underline;
       }
     }
   }
@@ -44,7 +55,6 @@
     font-weight: 600;
     font-size: .8rem;
     color: #A1A2C6;
-    margin-left: 3.5rem;
   }
 
   &__group {
@@ -56,9 +66,25 @@
   &__content {
     overflow-y: scroll;
     width: 100%;
+    height: 100%;
     display: flex;
+    position: relative;
     flex-direction: column;
-    padding-bottom: 3rem;
+
+    .loading-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      .users-loading {
+        color: #3A83DC;
+      }
+    }
+
+    .table-container {
+      padding: 1rem 2rem;
+    }
   }
 
   &__skeleton {
@@ -76,6 +102,33 @@
       margin-left: 2rem;
       margin-right: 2rem;
       margin-top: .8rem;
+    }
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 .8rem;
+    table-layout: auto;
+
+    tbody > tr {
+      height: 100%;
+      box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+
+      .status-cell {
+        width: 3px;
+      }
+
+      td {
+        padding: .8rem;
+        font-family: Inter, sans-serif;
+        border-bottom: unset;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        color: #34354C;
+      }
     }
   }
 }
@@ -109,37 +162,34 @@
 }
 
 .user-item {
-  padding: 8px 16px;
-  margin-left: 32px;
-  margin-right: 32px;
-  margin-top: 10px;
-  background: #FFFFFF;
-  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
+  background-color: white;
 
-  &.pending {
-    border-left: #FDC534 3px solid;
-  }
+  .status-indicator {
+    height: 40px;
+    width: 3px;
+    margin-right: 10px;
+    border-radius: 6px;
 
-  &.active {
-    border-left: #7DD7C8 3px solid;
-  }
+    &.pending {
+      border-right: #FDC534 3px solid;
+    }
 
-  &.fired {
-    border-left: #ec3276 3px solid;
+    &.active {
+      border-right: #7DD7C8 3px solid;
+    }
+
+    &.fired {
+      border-right: #ec3276 3px solid;
+    }
   }
 
   &__name-and-avatar {
-    width: 25%;
-    display: flex;
     flex-direction: row;
     align-items: center;
 
     svg {
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 40px !important;
+      height: 40px !important;
     }
   }
 
@@ -148,16 +198,19 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 13px;
-    line-height: 20px;
-    color: #34354C;
 
     svg {
       fill: #CDCEEA;
       margin-right: 8px;
+    }
+
+    .contact-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 13px;
+      line-height: 20px;
+      color: #34354C;
     }
   }
 
@@ -168,13 +221,13 @@
   }
 
   &__name {
-    margin-left: .5rem;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 13px;
-    line-height: 20px;
-    color: #34354C;
+    margin-left: .5rem !important;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    line-height: 20px !important;
+    color: #34354C !important;
   }
 
   &__action-buttons {

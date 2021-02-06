@@ -347,6 +347,17 @@
       align-items: center;
       position: relative;
 
+      .controls-wrapper {
+        .today-btn {
+          outline: none;
+          color: #3A83DC;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+        }
+      }
+
       .arrow-button {
         outline: none;
 
@@ -378,6 +389,7 @@
         position: absolute;
         right: 1rem;
         top: 0;
+        width: 200px;
 
         &.calendar-btn {
           position: unset;
@@ -1148,6 +1160,7 @@
   width: 100%;
   flex-direction: column;
   position: relative;
+  overflow-x: hidden;
 
   .day-data-container {
     overflow-y: auto;
@@ -1218,6 +1231,7 @@
       height: fit-content;
       width: calc(100% - 55px);
       position: relative;
+      overflow-x: hidden;
 
       .day-schedules-column {
         height: inherit;
@@ -1289,6 +1303,14 @@
                   width: 100%;
                   text-align: center;
                 }
+              }
+
+              .patient-name-label {
+                color: #34344E;
+                font-family: Inter, sans-serif;
+                font-style: normal;
+                font-weight: bold;
+                font-size: 12px;
               }
 
               .status-icon {

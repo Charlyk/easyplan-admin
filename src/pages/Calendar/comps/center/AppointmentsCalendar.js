@@ -6,6 +6,7 @@ import {
   Fade,
   Paper,
   IconButton,
+  Button as MaterialButton,
 } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import UploadIcon from '@material-ui/icons/CloudUpload';
@@ -94,6 +95,10 @@ const AppointmentsCalendar = ({
     handleCloseCalendar();
   };
 
+  const handleTodayClick = () => {
+    handleDateChange(new Date());
+  };
+
   const handleDetailsClose = () => {
     onScheduleSelect(null);
   };
@@ -162,7 +167,7 @@ const AppointmentsCalendar = ({
         />
       )}
       <div className='center-header'>
-        <Box display='flex' alignItems='center'>
+        <Box display='flex' alignItems='center' className='controls-wrapper'>
           <IconButton
             onClick={handleDateNavigation('previous-date')}
             classes={{ root: 'arrow-button', label: 'button-icon' }}
@@ -183,6 +188,12 @@ const AppointmentsCalendar = ({
           >
             <ArrowRight />
           </IconButton>
+          <MaterialButton
+            onClick={handleTodayClick}
+            classes={{ root: 'today-btn' }}
+          >
+            {textForKey('Today')}
+          </MaterialButton>
         </Box>
         {calendarPopper}
         <div className='center-header__tabs'>

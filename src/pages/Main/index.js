@@ -35,6 +35,7 @@ import {
 import { generateReducerActions, updateLink } from '../../utils/helperFuncs';
 import paths from '../../utils/paths';
 import authManager from '../../utils/settings/authManager';
+import sessionManager from '../../utils/settings/sessionManager';
 import Calendar from '../Calendar';
 import NewPatients from '../NewPatients';
 import Services from '../Services';
@@ -71,7 +72,9 @@ const Main = () => {
     currentPath: location.pathname,
     openAppointmentModal: false,
   });
-  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics?.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
 
   useEffect(() => {
     if (currentUser != null) {
@@ -108,7 +111,9 @@ const Main = () => {
   };
 
   const handleClosePatientDetails = () => {
-    dispatch(setPatientDetails({ show: false, patientId: null }));
+    dispatch(
+      setPatientDetails({ show: false, patientId: null, onDelete: () => null }),
+    );
   };
 
   const handleCloseImportModal = () => {
@@ -136,20 +141,24 @@ const Main = () => {
           onClose={handleClosePatientDetails}
         />
       )}
-      <DataMigrationModal
-        show={isImportModalOpen}
-        onClose={handleCloseImportModal}
-      />
-      <AddAppointmentModal
-        onClose={handleAppointmentModalClose}
-        schedule={appointmentModal?.schedule}
-        open={appointmentModal?.open}
-        doctor={appointmentModal?.doctor}
-        date={appointmentModal?.date}
-        patient={appointmentModal?.patient}
-        startHour={appointmentModal?.startHour}
-        endHour={appointmentModal?.endHour}
-      />
+      {isImportModalOpen && (
+        <DataMigrationModal
+          show={isImportModalOpen}
+          onClose={handleCloseImportModal}
+        />
+      )}
+      {appointmentModal?.open && (
+        <AddAppointmentModal
+          onClose={handleAppointmentModalClose}
+          schedule={appointmentModal?.schedule}
+          open={appointmentModal?.open}
+          doctor={appointmentModal?.doctor}
+          date={appointmentModal?.date}
+          patient={appointmentModal?.patient}
+          startHour={appointmentModal?.startHour}
+          endHour={appointmentModal?.endHour}
+        />
+      )}
       {currentUser != null && (
         <MainMenu
           currentUser={currentUser}

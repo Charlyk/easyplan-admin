@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev'
+  env === 'dev' || env === 'local'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -1034,6 +1034,28 @@ export default {
     }
   },
 
+  fetchDayDoctorSchedules: async (date, doctorId) => {
+    try {
+      const stringDate = moment(date).format('YYYY-MM-DD');
+      const response = await Axios.get(
+        `${baseURL}/schedules/v2/day/doctor?&date=${stringDate}&doctorId=${doctorId}`,
+      );
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
   fetchDaySchedulesHours: async (date, timezone) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
@@ -1286,17 +1308,21 @@ export default {
 
   /**
    * Fetch clinic invoices
+   * @param {string} status
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  fetchClinicInvoices: async () => {
+  fetchClinicInvoices: async (status = 'PendingPayment') => {
     try {
-      const url = `${baseURL}/clinics/invoices`;
-      const response = await fetch(url, {
-        method: 'get',
-        headers: { Authorization: authManager.getUserToken() },
-      });
-      // const response = await Axios.get(`${baseURL}/clinics/invoices`);
-      return await response.json();
+      const url = `${baseURL}/invoices?status=${status}`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
     } catch (e) {
       return {
         isError: true,
@@ -1308,17 +1334,49 @@ export default {
   /**
    * Register patient payment
    * @param {Object} requestBody
-   * @param {string} requestBody.invoiceId
-   * @param {number} requestBody.amount
+   * @param {number} invoiceId
+   * @param {number} requestBody.paidAmount
    * @param {number} requestBody.discount
+   * @param {number} requestBody.totalAmount
+   * @param {Array.<{id: number, serviceId: number, currency: string, count: number, price: number}>} requestBody.services
    * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
    */
-  registerPayment: async requestBody => {
+  registerPayment: async (invoiceId, requestBody) => {
     try {
-      const response = await Axios.post(
-        `${baseURL}/clinics/register-payment`,
+      const response = await Axios.put(
+        `${baseURL}/invoices/${invoiceId}`,
         requestBody,
       );
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Register patient payment
+   * @param {Object} requestBody
+   * @param {number} requestBody.patientId
+   * @param {number} requestBody.doctorId?
+   * @param {number} requestBody.paidAmount
+   * @param {number} requestBody.discount
+   * @param {number} requestBody.totalAmount
+   * @param {Array.<{id: number, serviceId: number, currency: string, count: number, price: number}>} requestBody.services
+   * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
+   */
+  createNewInvoice: async requestBody => {
+    try {
+      const response = await Axios.post(`${baseURL}/invoices`, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {
         return {
@@ -1364,7 +1422,7 @@ export default {
   fetchBracesPlan: async (patientId, planType) => {
     try {
       const response = await Axios.get(
-        `${baseURL}/patients/${patientId}/braces-plan/${planType}`,
+        `${baseURL}/treatment-plans/orthodontic?patientId=${patientId}&planType=${planType}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1390,9 +1448,9 @@ export default {
    */
   saveTreatmentPlan: async (patientId, plan) => {
     try {
-      const response = await Axios.put(
-        `${baseURL}/patients/${patientId}/treatment-plan`,
-        plan,
+      const response = await Axios.post(
+        `${baseURL}/treatment-plans/orthodontic`,
+        { ...plan, patientId },
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1599,12 +1657,12 @@ export default {
 
   /**
    * Fetch invoice details
-   * @param {string} invoiceId
+   * @param {number} invoiceId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   fetchInvoiceDetails: async invoiceId => {
     try {
-      const url = `${baseURL}/clinics/invoice/${invoiceId}`;
+      const url = `${baseURL}/invoices/${invoiceId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1727,7 +1785,7 @@ export default {
    * Change status for a schedule
    * @param {number} scheduleId
    * @param {string} newStatus
-   * @param {string?} canceledReason
+   * @param {string|null} canceledReason
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   updateScheduleStatus: async (scheduleId, newStatus, canceledReason) => {
@@ -1908,7 +1966,7 @@ export default {
    */
   fetchPatientDebts: async patientId => {
     try {
-      const url = `${baseURL}/patients/${patientId}/debts`;
+      const url = `${baseURL}/invoices/debts?patientId=${patientId}`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1928,7 +1986,7 @@ export default {
 
   /**
    * Fetch patient payments
-   * @param {string} patientId
+   * @param {number} patientId
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
   fetchPatientPayments: async patientId => {
@@ -2249,6 +2307,159 @@ export default {
   getPauseAvailableTime: async requestBody => {
     try {
       const url = `${baseURL}/pauses/available-time`;
+      const response = await Axios.put(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Add a purchase to a patient
+   * @param {{ amount: number, discount: number, comment: string }} requestBody
+   * @param {number} patientId
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  addPatientPurchase: async (patientId, requestBody) => {
+    try {
+      const url = `${baseURL}/patients/purchases/${patientId}`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch all purchases for a patient
+   * @param {number} patientId
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  getPatientPurchases: async patientId => {
+    try {
+      const url = `${baseURL}/patients/purchases/${patientId}`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Update exchange rates for a clinic
+   * @param {Array.<{currency: string, value: number}>} requestBody
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  updateClinicExchangeRates: async requestBody => {
+    try {
+      const url = `${baseURL}/clinics/exchange-rates`;
+      const response = await Axios.put(url, { rates: requestBody });
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Get exchange rates for a clinic
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  fetchClinicExchangeRates: async () => {
+    try {
+      const url = `${baseURL}/clinics/exchange-rates`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  savePatientTreatmentPlan: async requestBody => {
+    try {
+      const url = `${baseURL}/treatment-plans/general`;
+      const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Update patient treatment plan
+   * @param {Object} requestBody
+   * @param {number} requestBody.patientId
+   * @param {number} requestBody.scheduleId
+   * @param {Array.<{serviceId: number, toothId: string|number, price: number, destination: string, currency: string}>} requestBody.services
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  updatePatientTreatmentPlan: async requestBody => {
+    try {
+      const url = `${baseURL}/treatment-plans/general`;
+      requestBody.services = requestBody.services.map(item => ({
+        ...item,
+        completed: false,
+        count: 1,
+      }));
       const response = await Axios.put(url, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
-import { Typography } from '@material-ui/core';
+import { Box, CircularProgress, Typography } from '@material-ui/core';
+import sumBy from 'lodash/sumBy';
+import moment from 'moment';
 import PropTypes from 'prop-types';
-import { FormControl } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { Button, FormControl, InputGroup } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import {
@@ -11,92 +13,279 @@ import {
   togglePatientPaymentsUpdate,
   toggleUpdateInvoices,
 } from '../../redux/actions/actions';
+import {
+  clinicCurrencySelector,
+  clinicExchangeRatesSelector,
+} from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
+import {
+  adjustValueToNumber,
+  formattedAmount,
+  generateReducerActions,
+  roundToTwo,
+} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
+import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
+
+const computeServicePrice = (invoice, exchangeRates) => {
+  return invoice.services.map(service => {
+    const serviceExchange = exchangeRates.find(
+      rate => rate.currency === service.currency,
+    ) || { value: 1 };
+    const servicePrice = service.amount * serviceExchange.value * service.count;
+    return {
+      ...service,
+      created: moment(service.created).toDate(),
+      totalPrice: roundToTwo(servicePrice),
+    };
+  });
+};
+
+const initialState = {
+  isLoading: false,
+  isFetching: true,
+  isDebt: false,
+  payAmount: '0',
+  discount: '0',
+  services: [],
+  showConfirmationMenu: false,
+  invoiceStatus: 'PendingPayment',
+  invoiceDetails: null,
+  totalAmount: 0,
+};
+
+const reducerTypes = {
+  setIsLoading: 'setIsLoading',
+  setPayAmount: 'setPayAmount',
+  setDiscount: 'setDiscount',
+  setupInvoiceData: 'setupInvoiceData',
+  resetState: 'resetState',
+  setServices: 'setServices',
+  setShowConfirmationMenu: 'setShowConfirmationMenu',
+  setInvoiceStatus: 'setInvoiceStatus',
+  setIsFetching: 'setIsFetching',
+};
+
+const actions = generateReducerActions(reducerTypes);
+
+/**
+ * Payment modal reducer
+ * @param {Object} state
+ * @param {{ type: string, payload: any}} action
+ */
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setIsLoading:
+      return { ...state, isLoading: action.payload };
+    case reducerTypes.setPayAmount:
+      return { ...state, payAmount: action.payload };
+    case reducerTypes.setDiscount: {
+      // compute new total amount
+      const newDiscount = action.payload;
+      const servicesTotal = sumBy(state.services, item => item.totalPrice);
+      const discountAmount = servicesTotal * (newDiscount / 100);
+      let discountedTotal = servicesTotal - discountAmount;
+      // check if discounted total is not less than 0 or not greater then total amount
+      if (discountedTotal > servicesTotal) discountedTotal = servicesTotal;
+      if (discountedTotal < 0) discountedTotal = 0;
+      // check if current entered pay amount is not greater than discounted total
+      let currentPayAmount = state.payAmount;
+      if (currentPayAmount > discountedTotal) {
+        currentPayAmount = discountedTotal;
+      }
+      return {
+        ...state,
+        discount: action.payload,
+        totalAmount: roundToTwo(discountedTotal),
+        payAmount: roundToTwo(currentPayAmount),
+      };
+    }
+    case reducerTypes.setServices:
+      return { ...state, services: action.payload };
+    case reducerTypes.setShowConfirmationMenu:
+      return { ...state, showConfirmationMenu: action.payload };
+    case reducerTypes.setInvoiceStatus:
+      return { ...state, invoiceStatus: action.payload };
+    case reducerTypes.setIsFetching:
+      return { ...state, isFetching: action.payload };
+    case reducerTypes.setupInvoiceData: {
+      const { invoiceDetails, exchangeRates } = action.payload;
+      const isDebt = invoiceDetails.status === 'PartialPaid';
+      const updatedServices = computeServicePrice(
+        invoiceDetails,
+        exchangeRates,
+      );
+      const servicesPrice = parseFloat(
+        sumBy(updatedServices, item => item.totalPrice),
+      ).toFixed(2);
+      return {
+        ...state,
+        invoiceDetails: {
+          ...invoiceDetails,
+          services: updatedServices,
+        },
+        payAmount: isDebt
+          ? invoiceDetails.totalAmount - invoiceDetails.paidAmount
+          : roundToTwo(servicesPrice - invoiceDetails.paidAmount),
+        totalAmount: isDebt
+          ? invoiceDetails.totalAmount - invoiceDetails.paidAmount
+          : roundToTwo(servicesPrice),
+        discount: invoiceDetails.discount,
+        services: updatedServices,
+        invoiceStatus: invoiceDetails.status,
+        isDebt,
+      };
+    }
+    case reducerTypes.resetState:
+      return initialState;
+    default:
+      return state;
+  }
+};
 
 const RegisterPaymentModal = ({ open, invoice, onClose }) => {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
-  const [payAmount, setPayAmount] = useState(
-    invoice?.remainedAmount ? String(invoice.remainedAmount) : '0',
-  );
-  const [discount, setDiscount] = useState('');
+  const [
+    {
+      isLoading,
+      payAmount,
+      discount,
+      services,
+      invoiceStatus,
+      invoiceDetails,
+      showConfirmationMenu,
+      isFetching,
+      totalAmount,
+      isDebt,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
+  const exchangeRates = useSelector(clinicExchangeRatesSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
+  const updateInvoices = useSelector(updateInvoicesSelector);
 
   useEffect(() => {
     if (invoice != null) {
-      setPayAmount(String(invoice.remainedAmount));
-      setDiscount(invoice.discount ? String(invoice.discount) : '');
+      fetchInvoiceDetails();
     }
-  }, [invoice]);
+  }, [invoice, exchangeRates, updateInvoices]);
 
   useEffect(() => {
     if (!open) {
-      setIsLoading(false);
-      setPayAmount('');
-      setDiscount('');
+      localDispatch(actions.resetState());
     }
   }, [open]);
 
-  const handleAmountChange = event => {
-    let newValue = event.target.value;
-    if (newValue.length > 0 && parseFloat(newValue) > invoice?.amount) {
-      newValue = String(invoice?.remainedAmount);
+  const fetchInvoiceDetails = async () => {
+    if (invoice == null || exchangeRates.length === 0) {
+      return;
     }
-    setPayAmount(newValue);
+    localDispatch(actions.setIsFetching(true));
+    const response = await dataAPI.fetchInvoiceDetails(invoice.id);
+    if (response.isError) {
+      toast(textForKey(response.message));
+    } else {
+      const { data: invoiceDetails } = response;
+      localDispatch(
+        actions.setupInvoiceData({ invoiceDetails, exchangeRates }),
+      );
+    }
+    localDispatch(actions.setIsFetching(false));
+  };
+
+  const handleAmountChange = event => {
+    let newValue = adjustValueToNumber(event.target.value, totalAmount);
+    localDispatch(actions.setPayAmount(newValue));
   };
 
   const handleDiscountChange = event => {
-    let newValue = event.target.value;
-    if (newValue.length > 0 && parseInt(newValue) > 100) {
-      newValue = String(100);
-    }
-    setDiscount(newValue);
+    let newValue = adjustValueToNumber(event.target.value, 100.0);
+
+    localDispatch(actions.setDiscount(newValue));
   };
 
-  const getTotal = () => {
-    const fixedDiscount = discount.length === 0 ? '0' : discount;
-    if (payAmount.length === 0) {
-      const discountAmount =
-        (parseInt(fixedDiscount) / 100) * parseFloat(payAmount);
-      return payAmount - discountAmount;
-    }
-    const amount = invoice?.remainedAmount || 0;
-    const discountAmount = (parseInt(fixedDiscount) / 100) * parseFloat(amount);
-    return payAmount - discountAmount;
+  const handleSubmitPayment = () => {
+    localDispatch(actions.setShowConfirmationMenu(true));
   };
 
-  const isFormValid = () => {
-    return payAmount.length > 0;
+  const handleCloseConfirmationMenu = () => {
+    localDispatch(actions.setShowConfirmationMenu(false));
   };
 
   const handleSubmit = async () => {
-    if (!isFormValid() || invoice == null) {
+    if (invoiceDetails == null) {
       return;
     }
     const requestBody = {
-      invoiceId: invoice.id,
-      amount: parseFloat(payAmount),
-      discount: parseInt(discount),
+      paidAmount: payAmount,
+      discount: discount,
     };
-    setIsLoading(true);
-    const response = await dataAPI.registerPayment(requestBody);
+    localDispatch(actions.setIsLoading(true));
+    const response = await dataAPI.registerPayment(
+      invoiceDetails.id,
+      requestBody,
+    );
     if (response.isError) {
       toast.error(textForKey(response.message));
-      logUserAction(Action.PayInvoice, JSON.stringify(response));
     } else {
-      logUserAction(Action.PayInvoice, JSON.stringify(requestBody));
       dispatch(toggleAppointmentsUpdate());
       dispatch(toggleUpdateInvoices());
       dispatch(togglePatientPaymentsUpdate());
       onClose();
     }
-
-    setIsLoading(false);
+    localDispatch(actions.setIsLoading(false));
   };
+
+  const confirmationMenu = (
+    <div className='confirmation-container'>
+      <div className='confirmation-menu'>
+        <Box
+          display='flex'
+          flexDirection='column'
+          width='100%'
+          height='100%'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <Typography classes={{ root: 'amount-title' }}>
+            {textForKey('For payment')}:
+          </Typography>
+          <Typography classes={{ root: 'amount-label' }}>
+            {formattedAmount(payAmount, clinicCurrency)}
+          </Typography>
+        </Box>
+        <Box
+          display='flex'
+          alignItems='center'
+          width='100%'
+          height='35px'
+          justifyContent='space-between'
+        >
+          <Button
+            style={{ marginRight: '.5rem' }}
+            className='cancel-button'
+            onClick={handleCloseConfirmationMenu}
+          >
+            {textForKey('Edit')}
+          </Button>
+          <Button className='positive-button' onClick={handleSubmit}>
+            {textForKey('Pay')}
+          </Button>
+        </Box>
+      </div>
+    </div>
+  );
+
+  const getDateHour = date => {
+    if (date == null) return '';
+    return moment(date).format('DD MMM YYYY HH:mm');
+  };
+
+  const scheduleTime = `${getDateHour(
+    invoiceDetails?.schedule.startTime,
+  )} - ${getDateHour(invoiceDetails?.schedule.endTime)}`;
 
   return (
     <EasyPlanModal
@@ -104,70 +293,106 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
       title={textForKey('Register payment')}
       open={open}
       onClose={onClose}
-      isPositiveLoading={isLoading}
-      onPositiveClick={handleSubmit}
-      isPositiveDisabled={!isFormValid()}
+      isPositiveLoading={isLoading || isFetching}
+      isPositiveDisabled={isLoading || isFetching}
+      onPositiveClick={handleSubmitPayment}
       positiveBtnText={textForKey('Submit')}
     >
-      <div className='register-payment-content'>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Doctor')}:</span>
-          <span className='content-text'>{invoice?.doctor.fullName}</span>
+      {showConfirmationMenu && confirmationMenu}
+      {isFetching && (
+        <div className='register-payment-loading'>
+          <CircularProgress classes={{ root: 'register-payment-progress' }} />
         </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Patient')}:</span>
-          <span className='content-text'>{invoice?.patient}</span>
-        </div>
-        <div className='services-wrapper'>
+      )}
+      {!isFetching && (
+        <div className='register-payment-content'>
           <div className='content-row'>
-            <span className='title-text'>{textForKey('Services')}</span>
+            <span className='title-text'>{textForKey('Doctor')}:</span>
+            <span className='content-text'>{invoiceDetails?.doctor.name}</span>
           </div>
-          <table>
-            <tbody>
-              {invoice?.services.map(service => (
-                <tr key={service.id}>
-                  <td>
-                    <Typography classes={{ root: 'service-name-label' }}>{`${
-                      service.name
-                    } ${service.toothId || ''}`}</Typography>
-                  </td>
-                  <td align='right'>
-                    <Typography classes={{ root: 'service-price-label' }}>
-                      {service.price * service.count} MDL
-                    </Typography>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Patient')}:</span>
+            <span className='content-text'>{invoiceDetails?.patient.name}</span>
+          </div>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Schedule time')}:</span>
+            <span className='content-text'>{scheduleTime}</span>
+          </div>
+          <div className='services-wrapper'>
+            <div className='content-row'>
+              <span className='title-text'>{textForKey('Services')}</span>
+            </div>
+            <table>
+              <tbody>
+                {services.map(service => (
+                  <tr key={service.id}>
+                    <td>
+                      <Typography classes={{ root: 'service-name-label' }}>{`${
+                        service.name
+                      } ${service.toothId || ''}`}</Typography>
+                    </td>
+                    <td align='right' valign='middle'>
+                      <Typography classes={{ root: 'service-price-label' }}>
+                        {formattedAmount(
+                          service.amount * service.count,
+                          service.currency,
+                        )}
+                      </Typography>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('For payment')}:</span>
+            <InputGroup>
+              <FormControl
+                id='paid-amount'
+                type='number'
+                step='any'
+                max={totalAmount}
+                onChange={handleAmountChange}
+                value={String(payAmount)}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text id='basic-addon1'>
+                  {clinicCurrency}
+                </InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+            <span className='total-label'>
+              {textForKey('from')}{' '}
+              {invoiceStatus !== 'Paid'
+                ? formattedAmount(totalAmount, clinicCurrency)
+                : invoiceDetails?.remainedAmount || 0}
+            </span>
+          </div>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Discount')}:</span>
+            <InputGroup>
+              <FormControl
+                disabled={isDebt}
+                id='discount'
+                className='discount-form-control'
+                type='number'
+                max={100}
+                onChange={handleDiscountChange}
+                value={String(discount)}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text id='basic-addon1'>%</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+          </div>
+          <div className='content-row'>
+            <span className='title-text'>{textForKey('Total')}:</span>
+            <span className='total-label'>
+              {formattedAmount(payAmount, clinicCurrency)}
+            </span>
+          </div>
         </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('For payment')}:</span>
-          <FormControl
-            type='number'
-            max={invoice?.remainedAmount}
-            onChange={handleAmountChange}
-            value={String(payAmount)}
-          />
-          <span className='content-text'>
-            {textForKey('from')} {invoice?.remainedAmount || 0}
-          </span>
-        </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Discount')}:</span>
-          <FormControl
-            type='number'
-            max={100}
-            onChange={handleDiscountChange}
-            value={String(discount)}
-          />
-          <span className='content-text'>%</span>
-        </div>
-        <div className='content-row'>
-          <span className='title-text'>{textForKey('Total')}:</span>
-          <span className='content-text'>{getTotal()}</span>
-        </div>
-      </div>
+      )}
     </EasyPlanModal>
   );
 };
@@ -178,15 +403,11 @@ RegisterPaymentModal.propTypes = {
   open: PropTypes.bool,
   invoice: PropTypes.shape({
     id: PropTypes.number,
-    doctor: PropTypes.shape({
-      id: PropTypes.number,
-      fullName: PropTypes.string,
-    }),
-    scheduleId: PropTypes.number,
-    patient: PropTypes.string,
-    totalAmount: PropTypes.number,
+    scheduleDate: PropTypes.string,
     paidAmount: PropTypes.number,
-    remainedAmount: PropTypes.number,
+    status: PropTypes.oneOf(['PendingPayment', 'Paid', 'PartialPaid']),
+    doctorFullName: PropTypes.string,
+    patientFullName: PropTypes.string,
     services: PropTypes.arrayOf(PropTypes.object),
   }),
   onClose: PropTypes.func,

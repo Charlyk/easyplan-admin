@@ -9,6 +9,7 @@ import dataAPI, { imageLambdaUrl } from './api/dataAPI';
 import { env, S3Config } from './constants';
 import { textForKey } from './localization';
 import authManager from './settings/authManager';
+import sessionManager from './settings/sessionManager';
 
 export function createHoursList() {
   return [].concat(
@@ -316,9 +317,17 @@ export const handleUserAuthenticated = (
 ) => dispatch => {
   authManager.setUserToken(token);
   authManager.setUserId(user.id);
+  const selectedClinic =
+    user.clinics.length > 0
+      ? user.clinics.find(it => it.isSelected) || user.clinics[0]
+      : { clinicId: -1 };
+  console.log(selectedClinic);
+  sessionManager.setSelectedClinicId(selectedClinic.clinicId);
   setTimeout(() => {
     dispatch(setCurrentUser(user));
-    const selectedClinic = user.clinics.find(item => item.isSelected);
+    const selectedClinic = user.clinics.find(
+      item => item.clinicId === sessionManager.getSelectedClinicId(),
+    );
     if (selectedClinic != null) {
       dispatch(fetchClinicData());
     }
@@ -347,4 +356,42 @@ export const colorShade = (col, amt) => {
   const bb = (b.length < 2 ? '0' : '') + b;
 
   return `#${rr}${gg}${bb}`;
+};
+
+export function roundToTwo(num) {
+  return +(Math.round(num + 'e+2') + 'e-2');
+}
+
+/**
+ * Format number as price with currency
+ * @param {number} amount
+ * @param {string} currency
+ * @return {string}
+ */
+export const formattedAmount = (amount, currency) => {
+  return Intl.NumberFormat('ro-RO', {
+    style: 'currency',
+    currency: currency || 'MDL',
+  }).format(amount);
+};
+
+export const adjustValueToNumber = (newValue, maxAmount) => {
+  if (newValue.length === 0) {
+    newValue = '0';
+  }
+
+  if (newValue.length > 1 && newValue[0] === '0') {
+    newValue = newValue.replace(/^./, '');
+  }
+
+  newValue = parseFloat(newValue);
+
+  if (newValue < 0) {
+    newValue = 0;
+  }
+
+  if (newValue > maxAmount) {
+    newValue = maxAmount;
+  }
+  return roundToTwo(newValue);
 };

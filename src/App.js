@@ -13,9 +13,11 @@ import {
 import { toast, ToastContainer } from 'react-toastify';
 
 import AddNote from './components/AddNote';
+import AddPaymentModal from './components/AddPaymentModal';
 import AddXRay from './components/AddXRay';
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
+import ExchangeRates from './components/ExchangeRates';
 import FullScreenImageModal from './components/FullScreenImageModal';
 import RegisterPaymentModal from './components/RegisterPaymentModal';
 import DoctorsMain from './doctors/DoctorsMain';
@@ -33,7 +35,11 @@ import {
   toggleForceLogoutUser,
   triggerUserLogout,
 } from './redux/actions/actions';
+import { setAddPaymentModal } from './redux/actions/addPaymentModalActions';
+import { setIsExchangeRatesModalOpen } from './redux/actions/exchangeRatesActions';
 import { setImageModal } from './redux/actions/imageModalActions';
+import { addPaymentModalSelector } from './redux/selectors/addPaymentModalSelector';
+import { isExchangeRateModalOpenSelector } from './redux/selectors/exchangeRatesModalSelector';
 import { imageModalSelector } from './redux/selectors/imageModalSelector';
 import {
   createClinicSelector,
@@ -63,6 +69,8 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
+import sessionManager from './utils/settings/sessionManager';
+import CheckoutModal from './components/CheckoutModal';
 
 function App() {
   moment.locale(getAppLanguage());
@@ -77,9 +85,13 @@ function App() {
   const paymentModal = useSelector(paymentModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
+  const addPaymentModal = useSelector(addPaymentModalSelector);
+  const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
-  const selectedClinic = currentUser?.clinics?.find(item => item.isSelected);
+  const selectedClinic = currentUser?.clinics?.find(
+    item => item.clinicId === sessionManager.getSelectedClinicId(),
+  );
   const [isAppLoading, setAppIsLoading] = useState(false);
 
   useEffect(() => {
@@ -105,6 +117,7 @@ function App() {
       dispatch(setCreateClinic({ open: true, canClose: false }));
     } else {
       dispatch(setCreateClinic({ open: false, canClose: true }));
+      updateSelectedClinic();
       dispatch(fetchClinicData());
     }
   }, [currentUser, updateCurrentUser]);
@@ -123,6 +136,12 @@ function App() {
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
+  };
+
+  const updateSelectedClinic = () => {
+    sessionManager.setSelectedClinicId(
+      selectedClinic?.clinicId || currentUser?.clinics[0].clinicId || -1,
+    );
   };
 
   const updateSiteTitle = (clinicName = '') => {
@@ -145,6 +164,7 @@ function App() {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
+      sessionManager.setSelectedClinicId(clinicId);
       dispatch(setCurrentUser(response.data));
       redirectToHome();
     }
@@ -186,6 +206,7 @@ function App() {
 
   const handleUserLogout = () => {
     authManager.logOut();
+    sessionManager.removeSelectedClinicId();
     updateSiteTitle();
     dispatch(setCurrentUser(null));
     handleCancelLogout();
@@ -205,49 +226,96 @@ function App() {
   };
 
   const handleClosePaymentModal = () => {
-    dispatch(setPaymentModal({ open: false, invoice: null }));
+    dispatch(
+      setPaymentModal({
+        open: false,
+        invoice: null,
+        isNew: false,
+        openPatientDetailsOnClose: false,
+      }),
+    );
   };
 
   const handleCloseImageModal = () => {
     dispatch(setImageModal({ open: false }));
   };
 
+  const handleCloseAddPaymentModal = () => {
+    dispatch(setAddPaymentModal({ open: false }));
+  };
+
+  const handleCloseExchangeRateModal = () => {
+    dispatch(setIsExchangeRatesModalOpen(false));
+  };
+
   return (
     <Router basename='/'>
       {redirectUser && <Redirect to={updateLink('/')} />}
       <React.Fragment>
+        {paymentModal.open && authManager.isLoggedIn() && (
+          <CheckoutModal {...paymentModal} onClose={handleClosePaymentModal} />
+        )}
         <div id='fb-root' />
         <ToastContainer />
-        <RegisterPaymentModal
-          {...paymentModal}
-          onClose={handleClosePaymentModal}
-        />
-        <AddXRay {...patientXRayModal} onClose={handleClosePatientXRayModal} />
-        <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
-        <FullScreenImageModal {...imageModal} onClose={handleCloseImageModal} />
-        <ConfirmationModal
-          title={textForKey('Logout')}
-          message={textForKey('logout message')}
-          onConfirm={handleUserLogout}
-          onClose={handleCancelLogout}
-          show={logout}
-        />
-        <CreateClinicModal
-          onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
-          open={createClinic?.open}
-          onCreate={handleClinicCreated}
-        />
-        <Modal
-          centered
-          className='loading-modal'
-          show={isAppLoading}
-          onHide={() => null}
-        >
-          <Modal.Body>
-            <Spinner animation='border' />
-            {textForKey('App initialization')}...
-          </Modal.Body>
-        </Modal>
+        {isExchangeRatesModalOpen && authManager.isLoggedIn() && (
+          <ExchangeRates
+            open={isExchangeRatesModalOpen}
+            onClose={handleCloseExchangeRateModal}
+          />
+        )}
+        {patientXRayModal.open && authManager.isLoggedIn() && (
+          <AddXRay
+            {...patientXRayModal}
+            onClose={handleClosePatientXRayModal}
+          />
+        )}
+        {patientNoteModal.open && authManager.isLoggedIn() && (
+          <AddNote
+            {...patientNoteModal}
+            onClose={handleClosePatientNoteModal}
+          />
+        )}
+        {imageModal.open && authManager.isLoggedIn() && (
+          <FullScreenImageModal
+            {...imageModal}
+            onClose={handleCloseImageModal}
+          />
+        )}
+        {addPaymentModal.open && authManager.isLoggedIn() && (
+          <AddPaymentModal
+            {...addPaymentModal}
+            onClose={handleCloseAddPaymentModal}
+          />
+        )}
+        {logout && (
+          <ConfirmationModal
+            title={textForKey('Logout')}
+            message={textForKey('logout message')}
+            onConfirm={handleUserLogout}
+            onClose={handleCancelLogout}
+            show={logout}
+          />
+        )}
+        {createClinic?.open && authManager.isLoggedIn() && (
+          <CreateClinicModal
+            onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
+            open={createClinic?.open}
+            onCreate={handleClinicCreated}
+          />
+        )}
+        {isAppLoading && (
+          <Modal
+            centered
+            className='loading-modal'
+            show={isAppLoading}
+            onHide={() => null}
+          >
+            <Modal.Body>
+              <Spinner animation='border' />
+              {textForKey('App initialization')}...
+            </Modal.Body>
+          </Modal>
+        )}
         <Switch>
           <Route
             path='/clinic-invitation/:isNew?/:token'

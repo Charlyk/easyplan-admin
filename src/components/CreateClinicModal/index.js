@@ -50,6 +50,7 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
       clinicName: data.clinicName,
       website: data.website,
       description: data.description,
+      defaultCurrency: 'MDL',
       logo,
     });
 
