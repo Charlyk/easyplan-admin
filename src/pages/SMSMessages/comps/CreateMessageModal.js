@@ -155,11 +155,11 @@ const CreateMessageModal = ({ open, onClose }) => {
           value={messageType}
           custom
         >
+          <option value={messageTypeEnum.ScheduleNotification}>
+            {textForKey('Appointment notification')}
+          </option>
           <option value={messageTypeEnum.PromotionalMessage}>
             {textForKey('Promotional message')}
-          </option>
-          <option value={messageTypeEnum.OnetimeMessage}>
-            {textForKey('One time message')}
           </option>
           <option value={messageTypeEnum.HolidayCongrats}>
             {textForKey('Holiday congratulations')}
@@ -167,12 +167,13 @@ const CreateMessageModal = ({ open, onClose }) => {
           <option value={messageTypeEnum.BirthdayCongrats}>
             {textForKey('Birthday congratulations')}
           </option>
-          <option value={messageTypeEnum.ScheduleNotification}>
-            {textForKey('Appointment notification')}
+          <option value={messageTypeEnum.OnetimeMessage}>
+            {textForKey('One time message')}
           </option>
         </Form.Control>
       </Form.Group>
-      {messageType === messageTypeEnum.HolidayCongrats && (
+      {(messageType === messageTypeEnum.HolidayCongrats ||
+        messageType === messageTypeEnum.PromotionalMessage) && (
         <Form.Group className='date-form-group'>
           <Form.Label>{textForKey('Date')}</Form.Label>
           <Form.Control
