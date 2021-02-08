@@ -32,7 +32,6 @@ import {
 import dataAPI from '../../utils/api/dataAPI';
 import { Role } from '../../utils/constants';
 import {
-  adjustValueToNumber,
   fetchClinicData,
   generateReducerActions,
 } from '../../utils/helperFuncs';

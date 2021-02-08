@@ -9,9 +9,7 @@ import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import { logUserAction, uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-
 import './styles.scss';
-
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
 const AddXRay = ({ open, patientId, onClose }) => {

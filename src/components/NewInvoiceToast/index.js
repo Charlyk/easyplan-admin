@@ -1,11 +1,11 @@
 import React from 'react';
 
-import invoiceIcon from '../../assets/icons/icon_invoice.png';
-
-import './styles.scss';
 import { Typography } from '@material-ui/core';
 
+import invoiceIcon from '../../assets/icons/icon_invoice.png';
 import { textForKey } from '../../utils/localization';
+
+import './styles.scss';
 
 const NewInvoiceToast = () => {
   return (

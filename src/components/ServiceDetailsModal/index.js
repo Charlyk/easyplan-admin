@@ -15,10 +15,10 @@ import { fetchClinicData, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ConfirmationModal from '../ConfirmationModal';
 import LeftSideModal from '../LeftSideModal';
-import './styles.scss';
 import LoadingButton from '../LoadingButton';
 import ServiceDoctors from './ServiceDoctors';
 import ServiceInformation from './ServiceInformation';
+import './styles.scss';
 
 const initialService = {
   name: '',

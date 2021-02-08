@@ -34,7 +34,12 @@ const LeftSideModal = props => {
 
   return (
     <div className={mainClasses}>
-      <div className={backdropClasses} onClick={onClose} />
+      <div
+        role='button'
+        tabIndex={0}
+        className={backdropClasses}
+        onClick={onClose}
+      />
       <div className={contentClasses}>
         <ModalHeader title={title} steps={steps} onClose={onClose} />
         {children}

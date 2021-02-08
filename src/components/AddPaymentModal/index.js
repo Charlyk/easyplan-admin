@@ -7,11 +7,9 @@ import { toast } from 'react-toastify';
 
 import { togglePatientPaymentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
-import { Action } from '../../utils/constants';
 import {
   adjustValueToNumber,
   generateReducerActions,
-  logUserAction,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';

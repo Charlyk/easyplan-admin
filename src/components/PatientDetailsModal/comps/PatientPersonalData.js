@@ -207,7 +207,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       {showDatePicker && (
         <EasyDatePicker
           open={showDatePicker}
-          placement='bottom-start'
+          placement='bottom'
           pickerAnchor={datePickerRef.current}
           selectedDate={birthday || new Date()}
           onClose={handleCloseDatePicker}

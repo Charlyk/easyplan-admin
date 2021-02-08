@@ -23,10 +23,10 @@ import PatientNotes from './comps/notes/PatientNotes';
 import PatientDebtsList from './comps/PatientDebtsList';
 import PatientPaymentsList from './comps/PatientPaymentsList';
 import PatientPersonalData from './comps/PatientPersonalData';
+import PatientPurchasesList from './comps/PatientPurchasesList';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
 import './styles.scss';
-import PatientPurchasesList from './comps/PatientPurchasesList';
 
 const MenuItem = {
   personalInfo: 'personal-info',

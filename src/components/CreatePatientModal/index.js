@@ -154,7 +154,7 @@ const CreatePatientModal = ({ open, onClose }) => {
 
   const birthdayPicker = (
     <EasyDatePicker
-      placement='bottom-start'
+      placement='bottom'
       open={showBirthdayPicker}
       pickerAnchor={birthdayPickerAnchor.current}
       onChange={handleBirthdayChange}

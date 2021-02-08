@@ -2,11 +2,9 @@ import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlusBig from '../../assets/icons/iconPlusBig';
-import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ServiceDoctor from './ServiceDoctor';
 
