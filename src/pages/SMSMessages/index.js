@@ -1,10 +1,21 @@
 import React, { useEffect, useReducer } from 'react';
 
-import { Table, TableCell, TableHead, TableRow } from '@material-ui/core';
+import {
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
+import { toast } from 'react-toastify';
 
+import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import CreateMessageModal from './comps/CreateMessageModal';
+import SMSMessageItem from './comps/SMSMessageItem';
 import SMSMessagesHeader from './comps/SMSMessgesHeader';
 import './styles.scss';
 
@@ -36,13 +47,25 @@ const reducer = (state, action) => {
 };
 
 const SMSMessages = () => {
-  const [{ isCreatingMessage }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [
+    { isCreatingMessage, isLoading, messages },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
+
   useEffect(() => {
-    console.log(isCreatingMessage);
+    fetchMessages();
   }, []);
+
+  const fetchMessages = async (silent) => {
+    localDispatch(actions.setIsLoading(!silent));
+    const response = await dataAPI.fetchSMSMessages();
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      localDispatch(actions.setMessages(response.data));
+    }
+    localDispatch(actions.setIsLoading(false));
+  };
 
   const handleStartCreateMessage = () => {
     localDispatch(actions.setIsCreatingMessage(true));
@@ -52,24 +75,44 @@ const SMSMessages = () => {
     localDispatch(actions.setIsCreatingMessage(false));
   };
 
+  const handleMessageCreated = async () => {
+    await fetchMessages(true);
+    handleCloseCreateMessage();
+  };
+
   return (
     <div className='sms-messages-root'>
       <CreateMessageModal
         onClose={handleCloseCreateMessage}
+        onCreateMessage={handleMessageCreated}
         open={isCreatingMessage}
       />
       <SMSMessagesHeader onCreate={handleStartCreateMessage} />
       <div className='sms-messages-root__data-wrapper'>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{textForKey('Title')}</TableCell>
-              <TableCell>{textForKey('Message')}</TableCell>
-              <TableCell>{textForKey('Message type')}</TableCell>
-              <TableCell>{textForKey('Send time')}</TableCell>
-            </TableRow>
-          </TableHead>
-        </Table>
+        {isLoading && (
+          <div className='progress-wrapper'>
+            <CircularProgress classes={{ root: 'progress' }} />
+          </div>
+        )}
+        {!isLoading && (
+          <TableContainer classes={{ root: 'table-container' }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>{textForKey('Title')}</TableCell>
+                  <TableCell>{textForKey('Message')}</TableCell>
+                  <TableCell>{textForKey('Message type')}</TableCell>
+                  <TableCell>{textForKey('Send time')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {messages.map((message) => (
+                  <SMSMessageItem key={message.id} message={message} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </div>
     </div>
   );

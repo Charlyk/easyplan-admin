@@ -395,6 +395,37 @@ export default {
     'no options': 'No options',
     'select doctor': 'Select doctor',
     'select patient': 'Select patient',
+    schedulenotificationdesc:
+      'This message will be sent every day to patients that have an upcoming appointment.',
+    birthdaycongratsdesc:
+      'This message will be sent to patients on their birthday date.',
+    holidaycongratsdesc:
+      'This message will be sent yearly on the specified date.',
+    promotionalmessagedesc:
+      'This message will be sent a single time to all patients on the specified date.',
+    onetimemessagedesc:
+      'This message will be sent to all patients right after saving the message',
+    messagetitledesc:
+      'Title is visible only to you, patients will not receive this title',
+    'time before schedule': 'Time before schedule',
+    'message title': 'Message title',
+    language: 'Language',
+    languagedesc: 'Write a message for each language',
+    'message text': 'Message text',
+    'message type': 'Message type',
+    hours: 'Hours',
+    minutes: 'Minutes',
+    schedulenotification: 'Schedule notification',
+    birthdaycongrats: 'Birthday congratulations',
+    holidaycongrats: 'Holiday congratulations',
+    promotionalmessage: 'Promotional message',
+    onetimemessage: 'One time message',
+    'patient full name': 'Patient full name',
+    'patient first name': 'Patient first name',
+    'patient last name': 'Patient last name',
+    'confirmation link': 'Confirmation link',
+    'schedule hour': 'Schedule hour',
+    'schedule date': 'Schedule date',
   },
   ro: {
     analytics: 'Analitică',
@@ -797,6 +828,37 @@ export default {
     'no options': 'Nu sunt rezultate',
     'select doctor': 'Alege doctor',
     'select patient': 'Alege pacient',
+    schedulenotificationdesc:
+      'Acest mesaj va fi transmis în fiecare zi pacienților care au o programare în acea zi.',
+    birthdaycongratsdesc:
+      'Acest mesaj va fi transmis pacienților în ziua lor de naștere (dacă este indicată).',
+    holidaycongratsdesc:
+      'Acest mesaj va fi transmis la toți pacienții în fiecare an la data selectată mai jos',
+    promotionalmessagedesc:
+      'Acest mesaj va fi transmis la toți pacienții o singură dată la data selectată mai jos',
+    onetimemessagedesc:
+      'Acest mesaj va fi transmis la toți pacienții o singură dată imediat dupa ce salvați mesajul',
+    messagetitledesc:
+      'Titlul mesajului este vizibil doar pentru Dvs, pacienții nu vor vedea acest titlu.',
+    'time before schedule': 'Timp înainte de programare',
+    'message title': 'Titlul mesajului',
+    language: 'Limba',
+    languagedesc: 'Scrieți mesajul in fiecare limba disponibilă.',
+    'message text': 'Textul mesajului',
+    'message type': 'Tipul mesajului',
+    hours: 'Ore',
+    minutes: 'Minute',
+    schedulenotification: 'Notificare despre programare',
+    birthdaycongrats: 'Felicitări cu ziua de naștere',
+    holidaycongrats: 'Felicitări cu săarbatoare',
+    promotionalmessage: 'Mesaj promoțional',
+    onetimemessage: 'Mesaj transmis o singură dată',
+    'patient full name': 'Nume deplin a pacientului',
+    'patient first name': 'Prenumele pacientului',
+    'patient last name': 'Numele pacientului',
+    'confirmation link': 'Link de confirmare',
+    'schedule hour': 'Ora programării',
+    'schedule date': 'Data programării',
   },
   ru: {
     analytics: 'Analytics',
@@ -1191,5 +1253,36 @@ export default {
     'no options': 'No options',
     'select doctor': 'Select doctor',
     'select patient': 'Select patient',
+    schedulenotificationdesc:
+      'This message will be sent every day to patients that have an upcoming appointment.',
+    birthdaycongratsdesc:
+      'This message will be sent to patients on their birthday date.',
+    holidaycongratsdesc:
+      'This message will be sent yearly on the specified date.',
+    promotionalmessagedesc:
+      'This message will be sent a single time to all patients on the specified date.',
+    onetimemessagedesc:
+      'This message will be sent to all patients right after saving the message',
+    messagetitledescdesc:
+      'Title is visible only to you, patients will not receive this title',
+    'time before schedule': 'Time before schedule',
+    'message title': 'Message title',
+    language: 'Language',
+    languagedesc: 'Scrieți mesajul in fiecare limba disponibilă.',
+    'message text': 'Message text',
+    'message type': 'Message type',
+    hours: 'Hours',
+    minutes: 'Minutes',
+    schedulenotification: 'Schedule notification',
+    birthdaycongrats: 'Birthday congratulations',
+    holidaycongrats: 'Holiday congratulations',
+    promotionalmessage: 'Promotional message',
+    onetimemessage: 'One time message',
+    'patient full name': 'Patient full name',
+    'patient first name': 'Patient first name',
+    'patient last name': 'Patient last name',
+    'confirmation link': 'Confirmation link',
+    'schedule hour': 'Schedule hour',
+    'schedule date': 'Schedule date',
   },
 };
