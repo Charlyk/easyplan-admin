@@ -15,11 +15,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import AddNote from './components/AddNote';
 import AddPaymentModal from './components/AddPaymentModal';
 import AddXRay from './components/AddXRay';
+import CheckoutModal from './components/CheckoutModal';
 import ConfirmationModal from './components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
 import ExchangeRates from './components/ExchangeRates';
 import FullScreenImageModal from './components/FullScreenImageModal';
-import RegisterPaymentModal from './components/RegisterPaymentModal';
 import DoctorsMain from './doctors/DoctorsMain';
 import AcceptInvitation from './pages/General/AcceptInvitation';
 import ResetPasswordForm from './pages/General/ResetPasswordForm';
@@ -70,7 +70,6 @@ import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
 import sessionManager from './utils/settings/sessionManager';
-import CheckoutModal from './components/CheckoutModal';
 
 function App() {
   moment.locale(getAppLanguage());

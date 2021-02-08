@@ -17,6 +17,7 @@ import {
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
 } from '../../redux/selectors/clinicSelector';
+import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import {
   adjustValueToNumber,
@@ -27,7 +28,6 @@ import {
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
-import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 
 const computeServicePrice = (invoice, exchangeRates) => {
   return invoice.services.map(service => {

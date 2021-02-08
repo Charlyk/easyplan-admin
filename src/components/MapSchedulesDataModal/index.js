@@ -61,7 +61,7 @@ const reducer = (state, action) => {
   }
 };
 
-const MapSchedulesDataModal = ({ title, mode, data, onSubmit, onClose }) => {
+const MapSchedulesDataModal = ({ mode, data, onSubmit, onClose }) => {
   const clinicDoctors = sortedBy(
     useSelector(clinicDoctorsSelector),
     item => item.firstName,

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgress, Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import {

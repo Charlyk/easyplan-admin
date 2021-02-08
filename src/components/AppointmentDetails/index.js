@@ -145,7 +145,7 @@ const AppointmentDetails = ({
       className='statuses-popper-root'
       anchorEl={statusesAnchor.current}
       open={showStatuses}
-      placement='bottom-start'
+      placement='bottom'
       transition
     >
       {({ TransitionProps }) => (
@@ -322,7 +322,12 @@ const AppointmentDetails = ({
                       {textForKey('Phone')}:
                     </td>
                     <td>
-                      <a href={`tel:${details.patient.phoneNumber}`}>
+                      <a
+                        href={`tel:${details.patient.phoneNumber.replace(
+                          '+',
+                          '',
+                        )}`}
+                      >
                         {details.patient.phoneNumber}
                       </a>
                     </td>

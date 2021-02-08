@@ -36,7 +36,10 @@ const PatientRow = ({ patient, onSelect }) => {
       <TableCell>
         <Typography classes={{ root: 'row-label phone' }}>
           <IconPhone />
-          <a href={`tel:${patient.phoneNumber}`} onClick={stopPropagation}>
+          <a
+            href={`tel:${patient.phoneNumber.replace('+', '')}`}
+            onClick={stopPropagation}
+          >
             {patient.phoneNumber}
           </a>
         </Typography>

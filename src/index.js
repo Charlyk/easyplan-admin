@@ -67,11 +67,9 @@ const pubnub = new PubNub({
 
 ReactDOM.render(
   <Provider store={ReduxStore}>
-    <React.StrictMode>
-      <PubNubProvider client={pubnub}>
-        <App />
-      </PubNubProvider>
-    </React.StrictMode>
+    <PubNubProvider client={pubnub}>
+      <App />
+    </PubNubProvider>
   </Provider>,
   document.getElementById('root'),
 );
