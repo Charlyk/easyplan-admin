@@ -426,6 +426,8 @@ export default {
     'confirmation link': 'Confirmation link',
     'schedule hour': 'Schedule hour',
     'schedule date': 'Schedule date',
+    disable: 'Disable',
+    enable: 'Enable',
   },
   ro: {
     analytics: 'Analitică',
@@ -850,7 +852,7 @@ export default {
     minutes: 'Minute',
     schedulenotification: 'Notificare despre programare',
     birthdaycongrats: 'Felicitări cu ziua de naștere',
-    holidaycongrats: 'Felicitări cu săarbatoare',
+    holidaycongrats: 'Felicitări cu sărbătoare',
     promotionalmessage: 'Mesaj promoțional',
     onetimemessage: 'Mesaj transmis o singură dată',
     'patient full name': 'Nume deplin a pacientului',
@@ -859,6 +861,8 @@ export default {
     'confirmation link': 'Link de confirmare',
     'schedule hour': 'Ora programării',
     'schedule date': 'Data programării',
+    disable: 'Dezactivează',
+    enable: 'Activează',
   },
   ru: {
     analytics: 'Analytics',
@@ -1284,5 +1288,7 @@ export default {
     'confirmation link': 'Confirmation link',
     'schedule hour': 'Schedule hour',
     'schedule date': 'Schedule date',
+    disable: 'Disable',
+    enable: 'Enable',
   },
 };

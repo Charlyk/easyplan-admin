@@ -1,5 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
+import { Box } from '@material-ui/core';
+import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
@@ -12,7 +14,7 @@ import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import '../styles.scss';
 
-const charactesRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
+const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
 
 const messageTypeEnum = {
   ScheduleNotification: 'ScheduleNotification',
@@ -112,6 +114,7 @@ const reducerTypes = {
   setMessageTimeType: 'setMessageTimeType',
   setMessageTime: 'setMessageTime',
   setMaxLength: 'setMaxLength',
+  setMessageData: 'setMessageData',
   resetState: 'resetState',
 };
 
@@ -124,16 +127,9 @@ const reducer = (state, action) => {
     case reducerTypes.setLanguage:
       return { ...state, language: action.payload };
     case reducerTypes.setMessage: {
-      const lang = state.language;
-      const messageValue = action.payload[lang];
-      let maxLength = 160;
-      if (charactesRegex.test(messageValue)) {
-        maxLength = 60;
-      }
       return {
         ...state,
         message: { ...state.message, ...action.payload },
-        maxLength,
       };
     }
     case reducerTypes.setMessageTitle:
@@ -150,6 +146,18 @@ const reducer = (state, action) => {
       return { ...state, messageTime: action.payload };
     case reducerTypes.setMaxLength:
       return { ...state, maxLength: action.payload };
+    case reducerTypes.setMessageData: {
+      const message = action.payload;
+      return {
+        ...state,
+        messageTitle: message.title,
+        message: JSON.parse(message.message),
+        messageType: message.type,
+        messageTimeType: message.timeType,
+        messageTime: message.sendTime,
+        messageDate: moment(message.sendDate).toDate(),
+      };
+    }
     case reducerTypes.resetState:
       return initialState;
     default:
@@ -157,7 +165,12 @@ const reducer = (state, action) => {
   }
 };
 
-const CreateMessageModal = ({ open, onClose, onCreateMessage }) => {
+const CreateMessageModal = ({
+  open,
+  message: messageData,
+  onClose,
+  onCreateMessage,
+}) => {
   const datePickerAnchor = useRef(null);
   const [
     {
@@ -180,6 +193,21 @@ const CreateMessageModal = ({ open, onClose, onCreateMessage }) => {
       localDispatch(actions.resetState());
     }
   }, [open]);
+
+  useEffect(() => {
+    if (messageData != null) {
+      localDispatch(actions.setMessageData(messageData));
+    }
+  }, [messageData]);
+
+  useEffect(() => {
+    const messageValue = message[language];
+    let maxLength = 160;
+    if (charactersRegex.test(messageValue)) {
+      maxLength = 60;
+    }
+    localDispatch(actions.setMaxLength(maxLength));
+  }, [message, language]);
 
   const handleMessageChange = (event) => {
     const newMessage = event.target.value;
@@ -221,12 +249,15 @@ const CreateMessageModal = ({ open, onClose, onCreateMessage }) => {
   const handleTagClick = (tag) => () => {
     const currentMessage = message[language];
     localDispatch(
-      actions.setMessage({ [language]: `${currentMessage}${tag.id} ` }),
+      actions.setMessage({ [language]: `${currentMessage}${tag.id}` }),
     );
   };
 
+  const currentLength = message[language].length;
+  const isLengthExceeded = currentLength > maxLength;
+
   const isFormValid = availableLanguages.some(
-    (language) => message[language].length > 0,
+    (language) => message[language].length > 0 && !isLengthExceeded,
   );
 
   const handleSubmit = async () => {
@@ -242,7 +273,10 @@ const CreateMessageModal = ({ open, onClose, onCreateMessage }) => {
       timeBeforeSchedule: messageTime,
       messageDate: moment(messageDate).format('YYYY-MM-DD'),
     };
-    const response = await dataAPI.createNewSMSMessage(requestBody);
+    const response =
+      messageData == null
+        ? await dataAPI.createNewSMSMessage(requestBody)
+        : await dataAPI.editSMSMessage(messageData.id, requestBody);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
@@ -264,8 +298,6 @@ const CreateMessageModal = ({ open, onClose, onCreateMessage }) => {
       onClose={handleCloseDatePicker}
     />
   );
-
-  const currentLength = message[language].length;
 
   return (
     <EasyPlanModal
@@ -303,15 +335,24 @@ const CreateMessageModal = ({ open, onClose, onCreateMessage }) => {
             <option value='en'>English</option>
           </Form.Control>
           <Form.Control
+            isInvalid={isLengthExceeded}
             as='textarea'
             value={message[language]}
             onChange={handleMessageChange}
             aria-label='With textarea'
           />
-          <Form.Text>
-            {currentLength}/{maxLength}
-          </Form.Text>
-          <Form.Text>{textForKey('languagedesc')}</Form.Text>
+          <Box
+            display='flex'
+            alignItems='center'
+            justifyContent='space-between'
+          >
+            <Form.Text>{textForKey('languagedesc')}</Form.Text>
+            <Form.Text
+              className={clsx('message-length', { exceeded: isLengthExceeded })}
+            >
+              {currentLength}/{maxLength}
+            </Form.Text>
+          </Box>
           <div className='tags-wrapper'>
             {availableTags.map((tag) => (
               <span
@@ -396,6 +437,22 @@ export default CreateMessageModal;
 
 CreateMessageModal.propTypes = {
   open: PropTypes.bool,
+  message: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    message: PropTypes.string,
+    type: PropTypes.oneOf([
+      'ScheduleNotification',
+      'BirthdayCongrats',
+      'HolidayCongrats',
+      'PromotionalMessage',
+      'OnetimeMessage',
+    ]),
+    timeType: PropTypes.oneOf(['Hour', 'Minute']),
+    sendTime: PropTypes.number,
+    sendDate: PropTypes.string,
+    disabled: PropTypes.bool,
+  }),
   onClose: PropTypes.func,
   onCreateMessage: PropTypes.func,
 };

@@ -2503,6 +2503,32 @@ export default {
   },
 
   /**
+   * Create new sms message
+   * @param {{messageTitle: string, messageText: string, messageType: string, timeType: string, timeBeforeSchedule: number?, messageDate: string?}} requestBody
+   * @param {number} messageId
+   * @return {Promise<{isError: boolean, message: string|null, data: any}>}
+   */
+  editSMSMessage: async (messageId, requestBody) => {
+    try {
+      const url = `${baseURL}/sms/${messageId}`;
+      const response = await Axios.put(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
    * Fetch all messages for selected clinic
    * @return {Promise<{isError: boolean, message: string, data: [Object]|null}>}
    */
@@ -2510,6 +2536,59 @@ export default {
     try {
       const url = `${baseURL}/sms`;
       const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Set message is disabled
+   * @param {number} messageId
+   * @param {boolean} disabled
+   * @return {Promise<{isError: boolean, message: string}>}
+   */
+  setMessageDisabled: async (messageId, disabled) => {
+    try {
+      const url = `${baseURL}/sms/${messageId}/${
+        disabled ? 'disable' : 'enable'
+      }`;
+      const response = await Axios.put(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Delete sms message
+   * @param {number} messageId
+   * @return {Promise<{isError: boolean, message: string}>}
+   */
+  deleteMessage: async (messageId) => {
+    try {
+      const url = `${baseURL}/sms/${messageId}`;
+      const response = await Axios.delete(url);
       const { data: responseData } = response;
       if (responseData == null) {
         return {
