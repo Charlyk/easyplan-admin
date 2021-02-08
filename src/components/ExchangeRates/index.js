@@ -99,7 +99,7 @@ const ExchangeRates = ({ open, onClose }) => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      const sortedItems = sortBy(response.data, item => item.created);
+      const sortedItems = sortBy(response.data, (item) => item.created);
       localDispatch(actions.setRates(sortedItems));
       localDispatch(actions.setInitialRates(sortedItems));
     }
@@ -110,9 +110,9 @@ const ExchangeRates = ({ open, onClose }) => {
     selectedClinic,
   ]);
 
-  const handleRateCurrencyChange = rate => event => {
+  const handleRateCurrencyChange = (rate) => (event) => {
     const newCurrency = event.target.value;
-    const newRates = rates.map(item => {
+    const newRates = rates.map((item) => {
       if (item.currency !== rate.currency) {
         return item;
       }
@@ -125,8 +125,8 @@ const ExchangeRates = ({ open, onClose }) => {
     localDispatch(actions.setRates(newRates));
   };
 
-  const handleRateValueChange = rate => ({ floatValue }) => {
-    const newRates = rates.map(item => {
+  const handleRateValueChange = (rate) => ({ floatValue }) => {
+    const newRates = rates.map((item) => {
       if (item.currency !== rate.currency) {
         return item;
       }
@@ -139,17 +139,17 @@ const ExchangeRates = ({ open, onClose }) => {
     localDispatch(actions.setRates(newRates));
   };
 
-  const handleRemoveRate = rate => () => {
+  const handleRemoveRate = (rate) => () => {
     const newRates = cloneDeep(rates);
-    remove(newRates, item => item.currency === rate.currency);
+    remove(newRates, (item) => item.currency === rate.currency);
     localDispatch(actions.setRates(newRates));
   };
 
-  const getAvailableCurrencies = exception => {
+  const getAvailableCurrencies = (exception) => {
     if (allCurrencies == null) return [];
-    const existentRates = rates.map(it => it.currency);
+    const existentRates = rates.map((it) => it.currency);
     return allCurrencies.filter(
-      it =>
+      (it) =>
         (!existentRates.includes(it.id) && it.id !== clinicCurrency) ||
         it.id === exception,
     );
@@ -167,7 +167,7 @@ const ExchangeRates = ({ open, onClose }) => {
 
   const handleSaveRates = async () => {
     localDispatch(actions.setIsSaving(true));
-    const requestBody = rates.map(item => {
+    const requestBody = rates.map((item) => {
       if (item.value != null) {
         return item;
       }
@@ -210,7 +210,7 @@ const ExchangeRates = ({ open, onClose }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rates.map(rate => (
+              {rates.map((rate) => (
                 <TableRow key={rate.currency}>
                   <TableCell align='center' width='33%'>
                     <Form.Group>
@@ -220,14 +220,16 @@ const ExchangeRates = ({ open, onClose }) => {
                         value={rate.currency}
                         custom
                       >
-                        {getAvailableCurrencies(rate.currency).map(currency => (
-                          <option
-                            key={`item-${currency.id}`}
-                            value={currency.id}
-                          >
-                            {currency.id} - {currency.name}
-                          </option>
-                        ))}
+                        {getAvailableCurrencies(rate.currency).map(
+                          (currency) => (
+                            <option
+                              key={`item-${currency.id}`}
+                              value={currency.id}
+                            >
+                              {currency.id} - {currency.name}
+                            </option>
+                          ),
+                        )}
                       </Form.Control>
                     </Form.Group>
                   </TableCell>

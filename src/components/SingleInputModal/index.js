@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
-import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
@@ -16,7 +15,7 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
     }
   }, [open]);
 
-  const handleFieldChange = event => {
+  const handleFieldChange = (event) => {
     setValue(event.target.value);
   };
 

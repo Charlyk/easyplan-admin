@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import './styles.scss';
 import ModalHeader from './ModalHeader';
 
-const LeftSideModal = props => {
+const LeftSideModal = (props) => {
   const { show, onClose, children, title, steps } = props;
   const [isHidden, setIsHidden] = useState(true);
 

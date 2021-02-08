@@ -8,11 +8,9 @@ import { Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import LoadingButton from '../../../components/LoadingButton';
-import { setCurrentUser } from '../../../redux/actions/actions';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
 import {
-  fetchClinicData,
   handleUserAuthenticated,
   updateLink,
 } from '../../../utils/helperFuncs';
@@ -25,7 +23,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     setData({
       ...data,
       [event.target.id]: event.target.value,

@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import IconClock from '@material-ui/icons/AccessTime';
-import IconMoney from '@material-ui/icons/AttachMoney';
-import IconClear from '@material-ui/icons/Clear';
-import DoneIcon from '@material-ui/icons/Done';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -15,11 +10,7 @@ import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { Action } from '../../../../../utils/constants';
-import {
-  checkShouldAnimateSchedule,
-  getDays,
-  logUserAction,
-} from '../../../../../utils/helperFuncs';
+import { getDays, logUserAction } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 import ScheduleItem from '../ScheduleItem';
 
@@ -71,16 +62,16 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
     .getElementById('calendar-content')
     ?.getBoundingClientRect();
 
-  const handleDayClick = day => {
+  const handleDayClick = (day) => {
     const date = moment(day.fullDate, 'YYYY-DD-MM').toDate();
     onDateClick(date);
   };
 
-  const getSchedules = day => {
-    return schedules.find(item => item.date === day.date)?.schedules || [];
+  const getSchedules = (day) => {
+    return schedules.find((item) => item.date === day.date)?.schedules || [];
   };
 
-  const renderSchedule = schedule => {
+  const renderSchedule = (schedule) => {
     return (
       <ScheduleItem
         appointment={schedule}
@@ -90,7 +81,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
     );
   };
 
-  const renderDayItem = day => {
+  const renderDayItem = (day) => {
     const daySchedules = getSchedules(day);
     return (
       <div

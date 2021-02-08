@@ -12,7 +12,7 @@ import authAPI from '../../utils/api/authAPI';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
 
-const SecuritySettings = props => {
+const SecuritySettings = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +22,7 @@ const SecuritySettings = props => {
     confirmPassword: '',
   });
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     setData({
       ...data,
       [event.target.id]: event.target.value,

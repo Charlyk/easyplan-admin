@@ -6,6 +6,7 @@ import {
   ClickAwayListener,
   Typography,
 } from '@material-ui/core';
+import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import './styles.scss';
@@ -88,6 +89,14 @@ const menuItems = [
     href: '/patients',
   },
   {
+    id: 'messages',
+    type: 'link',
+    roles: ['ADMIN', 'MANAGER'],
+    text: textForKey('Messages'),
+    icon: <IconMessages />,
+    href: '/messages',
+  },
+  {
     id: 'settings',
     type: 'link',
     roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
@@ -97,7 +106,7 @@ const menuItems = [
   },
 ];
 
-const MainMenu = props => {
+const MainMenu = (props) => {
   const buttonRef = useRef(null);
   const clinic = useSelector(clinicDetailsSelector);
   const currentUser = useSelector(userSelector);
@@ -127,11 +136,11 @@ const MainMenu = props => {
     setIsClinicsOpen(false);
   };
 
-  const isActive = itemHref => {
+  const isActive = (itemHref) => {
     return currentPath.startsWith(itemHref);
   };
 
-  const handleCompanySelected = company => {
+  const handleCompanySelected = (company) => {
     onChangeCompany(company);
     handleCompanyClose();
   };
@@ -142,7 +151,7 @@ const MainMenu = props => {
   };
 
   const userClinic = currentUser.clinics.find(
-    item => item.clinicId === sessionManager.getSelectedClinicId(),
+    (item) => item.clinicId === sessionManager.getSelectedClinicId(),
   );
 
   const analyticsClass = clsx(
@@ -180,7 +189,7 @@ const MainMenu = props => {
       </div>
 
       <Nav defaultActiveKey={currentPath} className='navigation flex-column'>
-        {menuItems.map(item => {
+        {menuItems.map((item) => {
           if (!item.roles.includes(userClinic?.roleInClinic)) return null;
           if (item.type === 'group') {
             return (
@@ -195,12 +204,13 @@ const MainMenu = props => {
                   {item.text}
                 </div>
                 <div className={analyticsChildClass}>
-                  {item.children.map(child => {
+                  {item.children.map((child) => {
                     return (
                       <Nav.Item key={child.href}>
                         <Link
-                          className={`link-item ${isActive(child.href) &&
-                            'active'}`}
+                          className={`link-item ${
+                            isActive(child.href) && 'active'
+                          }`}
                           to={updateLink(child.href)}
                         >
                           <MenuEllipse />
@@ -216,9 +226,9 @@ const MainMenu = props => {
             return (
               <Nav.Item key={item.id}>
                 <Link
-                  className={`navigation__item link-item ${isActive(
-                    item.href,
-                  ) && 'active'}`}
+                  className={`navigation__item link-item ${
+                    isActive(item.href) && 'active'
+                  }`}
                   to={updateLink(item.href)}
                 >
                   {item.icon}

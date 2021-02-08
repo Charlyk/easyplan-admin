@@ -5,7 +5,7 @@ import { textForKey } from '../localization';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api/authentication'
     : env === 'local'
     ? 'http://localhost:8080/api/authentication'
@@ -40,7 +40,7 @@ export default {
     }
   },
 
-  requestResetPassword: async email => {
+  requestResetPassword: async (email) => {
     try {
       const response = await Axios.post(`${baseURL}/v1/reset-password`, {
         username: email,
@@ -95,7 +95,7 @@ export default {
    * @param {{firstName: string, lastName: string, avatar: string, username: string, password: string, phoneNumber: string}} requestBody
    * @return {Promise<{isError: boolean, message: *}|any>}
    */
-  register: async requestBody => {
+  register: async (requestBody) => {
     try {
       const response = await Axios.post(`${baseURL}/v1/register`, requestBody);
       const { data: responseData } = response;
@@ -125,7 +125,7 @@ export default {
    * @param {string?} requestBody.lastName
    * @return {Promise<{isError: boolean, message: string|null, data: {token: string, user: object}}>}
    */
-  updateAccount: async requestBody => {
+  updateAccount: async (requestBody) => {
     try {
       const response = await Axios.put(
         `${baseURL}/v1/update-account`,
@@ -152,7 +152,7 @@ export default {
    * @param {string} clinicId
    * @return {Promise<{isError: boolean, message: string|null, data: Object}>}
    */
-  changeClinic: async clinicId => {
+  changeClinic: async (clinicId) => {
     try {
       const response = await Axios.get(
         `${baseURL}/v1/change-clinic/${clinicId}`,
@@ -180,7 +180,7 @@ export default {
    * @param {string} requestBody.resetToken
    * @return {Promise<void>}
    */
-  changeUserPassword: async requestBody => {
+  changeUserPassword: async (requestBody) => {
     try {
       const response = await Axios.put(
         `${baseURL}/v1/reset-password`,

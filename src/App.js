@@ -89,7 +89,7 @@ function App() {
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
-    item => item.clinicId === sessionManager.getSelectedClinicId(),
+    (item) => item.clinicId === sessionManager.getSelectedClinicId(),
   );
   const [isAppLoading, setAppIsLoading] = useState(false);
 
@@ -157,7 +157,7 @@ function App() {
     setTimeout(() => setRedirectUser(false), 500);
   };
 
-  const changeCurrentClinic = async clinicId => {
+  const changeCurrentClinic = async (clinicId) => {
     setAppIsLoading(true);
     const response = await authAPI.changeClinic(clinicId);
     if (response.isError) {
@@ -197,7 +197,7 @@ function App() {
     dispatch(setCreateClinic({ open: false, canClose: false }));
   };
 
-  const handleClinicCreated = data => {
+  const handleClinicCreated = (data) => {
     handleCloseCreateClinic();
     dispatch(setCurrentUser(data));
     dispatch(fetchClinicData());
