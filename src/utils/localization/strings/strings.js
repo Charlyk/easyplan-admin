@@ -428,6 +428,8 @@ export default {
     'schedule date': 'Schedule date',
     disable: 'Disable',
     enable: 'Enable',
+    'confirming schedule': 'Confirming schedule...',
+    message_exists: 'Message already exists',
   },
   ro: {
     analytics: 'Analitică',
@@ -863,6 +865,8 @@ export default {
     'schedule date': 'Data programării',
     disable: 'Dezactivează',
     enable: 'Activează',
+    'confirming schedule': 'Confirmăm programarea...',
+    message_exists: 'Acest tip de mesaj deja există',
   },
   ru: {
     analytics: 'Analytics',
@@ -1290,5 +1294,7 @@ export default {
     'schedule date': 'Schedule date',
     disable: 'Disable',
     enable: 'Enable',
+    'confirming schedule': 'Confirming schedule...',
+    message_exists: 'Message already exists',
   },
 };

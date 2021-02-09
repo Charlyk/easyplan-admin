@@ -1809,6 +1809,32 @@ export default {
   },
 
   /**
+   * Set schedule as confirmed
+   * @param {number} scheduleId
+   * @param {number} patientId
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  setScheduleConfirmed: async (scheduleId, patientId) => {
+    try {
+      const url = `${baseURL}/confirmation/schedule/${scheduleId}/${patientId}`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
    * Resend invitation to clinic for user
    * @param {string} userId
    * @return {Promise<{isError: boolean, message: *}|any>}

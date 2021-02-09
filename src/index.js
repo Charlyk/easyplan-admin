@@ -44,6 +44,7 @@ Axios.interceptors.response.use(
   (error) => {
     const status = error?.response?.status;
     const method = error?.response?.config?.method;
+    console.log(error.response);
     const unauthorizedRequest =
       status === 401 &&
       (method === 'get' ||

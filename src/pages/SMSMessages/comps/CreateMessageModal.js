@@ -204,7 +204,7 @@ const CreateMessageModal = ({
     const messageValue = message[language];
     let maxLength = 160;
     if (charactersRegex.test(messageValue)) {
-      maxLength = 60;
+      maxLength = 70;
     }
     localDispatch(actions.setMaxLength(maxLength));
   }, [message, language]);

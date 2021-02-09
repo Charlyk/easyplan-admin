@@ -25,6 +25,7 @@ import AcceptInvitation from './pages/General/AcceptInvitation';
 import ResetPasswordForm from './pages/General/ResetPasswordForm';
 import Login from './pages/Login';
 import Main from './pages/Main';
+import ScheduleConfirmation from './pages/ScheduleConfirmation';
 import {
   setCreateClinic,
   setCurrentUser,
@@ -316,6 +317,11 @@ function App() {
           </Modal>
         )}
         <Switch>
+          <Route
+            exact
+            path='/confirmation/:scheduleId/:patientId'
+            component={ScheduleConfirmation}
+          />
           <Route
             path='/clinic-invitation/:isNew?/:token'
             exact
