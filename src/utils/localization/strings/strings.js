@@ -432,6 +432,9 @@ export default {
     message_exists: 'Message already exists',
     'create message': 'Create message',
     delete_message_desc: 'Are you sure you want to delete this message?',
+    title: 'Title',
+    message: 'Message',
+    'send time': 'Send time',
   },
   ro: {
     analytics: 'Analitică',
@@ -871,6 +874,9 @@ export default {
     message_exists: 'Acest tip de mesaj deja există',
     'create message': 'Crează mesaj',
     delete_message_desc: 'Sunteți sigur(ă) că doriți să ștergeți acest mesaj?',
+    title: 'Titlu',
+    message: 'Textul mesajului',
+    'send time': 'Timpul trimiterii',
   },
   ru: {
     analytics: 'Analytics',
@@ -1302,5 +1308,8 @@ export default {
     message_exists: 'Message already exists',
     'create message': 'Create message',
     delete_message_desc: 'Are you sure you want to delete this message?',
+    title: 'Title',
+    message: 'Message',
+    'send time': 'Send time',
   },
 };
