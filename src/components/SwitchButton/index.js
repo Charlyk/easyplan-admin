@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import './styles.scss';
 
-const SwitchButton = props => {
+const SwitchButton = (props) => {
   const { isChecked, onChange } = props;
 
   const handleToggle = () => {
@@ -19,7 +19,12 @@ const SwitchButton = props => {
   );
 
   return (
-    <div className={bgClasses} onClick={handleToggle}>
+    <div
+      role='button'
+      tabIndex={0}
+      className={bgClasses}
+      onClick={handleToggle}
+    >
       <div className={indicatorClasses} />
     </div>
   );

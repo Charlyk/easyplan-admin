@@ -17,10 +17,10 @@ import { userSelector } from '../../redux/selectors/rootSelector';
 import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
+import sessionManager from '../../utils/settings/sessionManager';
 import DoctorPatientDetails from '../DoctorPatientDetails';
 import DoctorPatients from '../DoctorPatients';
 import './styles.scss';
-import sessionManager from '../../utils/settings/sessionManager';
 
 const DoctorsMain = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const DoctorsMain = () => {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const currentUser = useSelector(userSelector);
   const selectedClinic = currentUser?.clinics?.find(
-    item => item.clinicId === sessionManager.getSelectedClinicId(),
+    (item) => item.clinicId === sessionManager.getSelectedClinicId(),
   );
 
   if (!authManager.isLoggedIn()) {
@@ -44,7 +44,7 @@ const DoctorsMain = () => {
     setIsSelectorOpen(true);
   };
 
-  const handleCompanyChange = company => {
+  const handleCompanyChange = (company) => {
     dispatch(changeSelectedClinic(company.clinicId));
   };
 

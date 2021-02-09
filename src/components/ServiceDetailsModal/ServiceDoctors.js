@@ -51,7 +51,7 @@ const ServiceDoctors = ({
             {textForKey('No doctors yet.')}
           </div>
         )}
-        {doctors?.map(doctor => (
+        {doctors?.map((doctor) => (
           <ServiceDoctor
             onChange={onDoctorChange}
             key={doctor.doctorId}

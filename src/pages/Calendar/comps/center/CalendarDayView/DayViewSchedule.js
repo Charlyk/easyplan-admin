@@ -23,22 +23,15 @@ const DayViewSchedule = ({
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
   const [isHighlighted, setIsHighlighted] = useState(false);
-  const [visible, setVisible] = useState(true);
   const [itemRect, setItemRect] = useState({ height: 0, top: 0 });
   const startTime = moment(schedule.startTime);
   const endTime = moment(schedule.endTime);
   const startHour = startTime.format('HH:mm');
   const endHour = endTime.format('HH:mm');
   const scheduleStatus = Statuses.find(
-    item => item.id === schedule.scheduleStatus,
+    (item) => item.id === schedule.scheduleStatus,
   );
   const shouldAnimate = scheduleStatus?.id === 'WaitingForPatient';
-
-  useEffect(() => {
-    // setTimeout(() => {
-    //   setVisible(true);
-    // }, 300);
-  }, []);
 
   useEffect(() => {
     const height = getScheduleHeight();
@@ -88,10 +81,6 @@ const DayViewSchedule = ({
     clearTimeout(highlightTimeout.current);
     setIsHighlighted(false);
   };
-
-  if (!visible) {
-    return null;
-  }
 
   return (
     <div

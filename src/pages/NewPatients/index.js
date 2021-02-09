@@ -37,7 +37,6 @@ import {
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import authManager from '../../utils/settings/authManager';
 import PatientRow from './comps/PatientRow';
 
 const initialState = {
@@ -154,7 +153,7 @@ const NewPatients = () => {
     localDispatch(actions.setIsLoading(false));
   };
 
-  const handleSearchQueryChange = event => {
+  const handleSearchQueryChange = (event) => {
     const newQuery = event.target.value;
     localDispatch(actions.setSearchQuery(newQuery));
   };
@@ -167,7 +166,7 @@ const NewPatients = () => {
     }
   };
 
-  const handleSearchFieldKeyDown = event => {
+  const handleSearchFieldKeyDown = (event) => {
     if (event.keyCode === 13) {
       handleSearchClick();
     }
@@ -177,11 +176,11 @@ const NewPatients = () => {
     localDispatch(actions.setPage(newPage));
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     localDispatch(actions.setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
-  const handleDeletePatient = patient => {
+  const handleDeletePatient = (patient) => {
     localDispatch(actions.setPatientToDelete(patient));
   };
 
@@ -205,7 +204,7 @@ const NewPatients = () => {
     }
   };
 
-  const handleUploadPatients = async data => {
+  const handleUploadPatients = async (data) => {
     localDispatch(actions.setIsUploading(true));
     const fileName = data.file.name;
     const { location: fileUrl } = await uploadFileToAWS(
@@ -240,7 +239,7 @@ const NewPatients = () => {
     localDispatch(actions.setShowCreateModal(false));
   };
 
-  const handlePatientSelected = patient => {
+  const handlePatientSelected = (patient) => {
     dispatch(
       setPatientDetails({
         show: true,
@@ -314,7 +313,7 @@ const NewPatients = () => {
             </TableHead>
             {!isLoading && (
               <TableBody>
-                {patients.data.map(patient => (
+                {patients.data.map((patient) => (
                   <PatientRow
                     key={patient.id}
                     patient={patient}

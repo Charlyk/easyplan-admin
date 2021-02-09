@@ -29,7 +29,7 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      setVisits(sortBy(response.data, item => item.created).reverse() || []);
+      setVisits(sortBy(response.data, (item) => item.created).reverse() || []);
     }
     setIsFetching(false);
   };

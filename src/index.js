@@ -31,7 +31,7 @@ const middlewares = [thunk, timerMiddleware];
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const ReduxStore = createStore(rootReducer, enhancer);
 
-Axios.interceptors.request.use(function(config) {
+Axios.interceptors.request.use(function (config) {
   config.headers['X-EasyPlan-Clinic-Id'] = sessionManager.getSelectedClinicId();
   if (authManager.isLoggedIn()) {
     config.headers.Authorization = authManager.getUserToken();
@@ -40,10 +40,11 @@ Axios.interceptors.request.use(function(config) {
 });
 
 Axios.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     const status = error?.response?.status;
     const method = error?.response?.config?.method;
+    console.log(error.response);
     const unauthorizedRequest =
       status === 401 &&
       (method === 'get' ||

@@ -25,6 +25,7 @@ import AcceptInvitation from './pages/General/AcceptInvitation';
 import ResetPasswordForm from './pages/General/ResetPasswordForm';
 import Login from './pages/Login';
 import Main from './pages/Main';
+import ScheduleConfirmation from './pages/ScheduleConfirmation';
 import {
   setCreateClinic,
   setCurrentUser,
@@ -89,7 +90,7 @@ function App() {
   const imageModal = useSelector(imageModalSelector);
   const [redirectUser, setRedirectUser] = useState(false);
   const selectedClinic = currentUser?.clinics?.find(
-    item => item.clinicId === sessionManager.getSelectedClinicId(),
+    (item) => item.clinicId === sessionManager.getSelectedClinicId(),
   );
   const [isAppLoading, setAppIsLoading] = useState(false);
 
@@ -157,7 +158,7 @@ function App() {
     setTimeout(() => setRedirectUser(false), 500);
   };
 
-  const changeCurrentClinic = async clinicId => {
+  const changeCurrentClinic = async (clinicId) => {
     setAppIsLoading(true);
     const response = await authAPI.changeClinic(clinicId);
     if (response.isError) {
@@ -197,7 +198,7 @@ function App() {
     dispatch(setCreateClinic({ open: false, canClose: false }));
   };
 
-  const handleClinicCreated = data => {
+  const handleClinicCreated = (data) => {
     handleCloseCreateClinic();
     dispatch(setCurrentUser(data));
     dispatch(fetchClinicData());
@@ -316,6 +317,11 @@ function App() {
           </Modal>
         )}
         <Switch>
+          <Route
+            exact
+            path='/confirmation/:scheduleId/:patientId'
+            component={ScheduleConfirmation}
+          />
           <Route
             path='/clinic-invitation/:isNew?/:token'
             exact

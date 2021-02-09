@@ -135,7 +135,7 @@ const PatientDetailsModal = ({
     }
   };
 
-  const handleMenuClick = event => {
+  const handleMenuClick = (event) => {
     const targetId = event.target.id;
     if (targetId === MenuItem.delete) {
       handleStartDeletePatient();
@@ -146,7 +146,7 @@ const PatientDetailsModal = ({
     }
   };
 
-  const handleViewDebtClick = invoice => {
+  const handleViewDebtClick = (invoice) => {
     localDispatch(actions.setViewInvoice(invoice));
   };
 
@@ -154,7 +154,7 @@ const PatientDetailsModal = ({
     localDispatch(actions.setViewInvoice(null));
   };
 
-  const menuItemClasses = itemId => {
+  const menuItemClasses = (itemId) => {
     return currentMenu === itemId ? 'selected' : '';
   };
 

@@ -84,16 +84,16 @@ const AddPaymentModal = ({ open, patient, onClose }) => {
     }
   };
 
-  const handleCommentChange = event => {
+  const handleCommentChange = (event) => {
     localDispatch(actions.setComment(event.target.value));
   };
 
-  const handleAmountChange = event => {
+  const handleAmountChange = (event) => {
     const newValue = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
     localDispatch(actions.setAmount(newValue));
   };
 
-  const handleDiscountChange = event => {
+  const handleDiscountChange = (event) => {
     const newValue = adjustValueToNumber(event.target.value, 100);
     localDispatch(actions.setDiscount(newValue));
   };

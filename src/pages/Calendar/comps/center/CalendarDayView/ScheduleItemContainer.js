@@ -50,7 +50,7 @@ const ScheduleItemContainer = ({
       return 'none';
     }
 
-    const [hour, minute] = startHour.split(':');
+    const minute = startHour.split(':')[1];
     if ((minute === '15' || minute === '45') && endHour != null) {
       return 'none';
     } else {

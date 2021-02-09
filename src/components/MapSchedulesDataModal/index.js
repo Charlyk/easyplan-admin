@@ -64,11 +64,11 @@ const reducer = (state, action) => {
 const MapSchedulesDataModal = ({ mode, data, onSubmit, onClose }) => {
   const clinicDoctors = sortedBy(
     useSelector(clinicDoctorsSelector),
-    item => item.firstName,
+    (item) => item.firstName,
   );
   const clinicServices = sortedBy(
     useSelector(clinicServicesSelector),
-    item => item.name,
+    (item) => item.name,
   );
   const [{ isFetching, items, mappedItems }, localDispatch] = useReducer(
     reducer,
@@ -106,14 +106,14 @@ const MapSchedulesDataModal = ({ mode, data, onSubmit, onClose }) => {
     onSubmit({ ...data, mappedItems, mode });
   };
 
-  const handleItemMapped = event => {
+  const handleItemMapped = (event) => {
     const eventId = event.target.id;
     const eventValue = event.target.value;
     let newItems = cloneDeep(mappedItems);
     if (eventValue === 'None') {
-      remove(newItems, item => item.target === eventId);
-    } else if (newItems.some(item => item.target === eventId)) {
-      newItems = newItems.map(item => {
+      remove(newItems, (item) => item.target === eventId);
+    } else if (newItems.some((item) => item.target === eventId)) {
+      newItems = newItems.map((item) => {
         if (item.target !== eventId) {
           return item;
         }
@@ -133,13 +133,13 @@ const MapSchedulesDataModal = ({ mode, data, onSubmit, onClose }) => {
   const renderOptions = () => {
     switch (mode) {
       case MappingData.doctors:
-        return clinicDoctors.map(item => (
+        return clinicDoctors.map((item) => (
           <option key={item.id} value={item.id}>
             {`${item.firstName} ${item.lastName}`}
           </option>
         ));
       default:
-        return clinicServices.map(item => (
+        return clinicServices.map((item) => (
           <option key={item.id} value={item.id}>
             {item.name}
           </option>
@@ -178,7 +178,7 @@ const MapSchedulesDataModal = ({ mode, data, onSubmit, onClose }) => {
                 </tr>
               </thead>
               <tbody>
-                {items.map(item => (
+                {items.map((item) => (
                   <tr key={item}>
                     <td>
                       <Typography
