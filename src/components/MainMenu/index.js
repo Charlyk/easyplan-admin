@@ -6,7 +6,7 @@ import {
   ClickAwayListener,
   Typography,
 } from '@material-ui/core';
-import IconMessages from '@material-ui/icons/Message';
+// import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import './styles.scss';
