@@ -435,6 +435,7 @@ export default {
     title: 'Title',
     message: 'Message',
     'send time': 'Send time',
+    'delete message': 'Delete message',
   },
   ro: {
     analytics: 'Analitică',
@@ -877,6 +878,7 @@ export default {
     title: 'Titlu',
     message: 'Textul mesajului',
     'send time': 'Timpul trimiterii',
+    'delete message': 'Șterge mesaj',
   },
   ru: {
     analytics: 'Analytics',
@@ -1311,5 +1313,6 @@ export default {
     title: 'Title',
     message: 'Message',
     'send time': 'Send time',
+    'delete message': 'Delete message',
   },
 };
