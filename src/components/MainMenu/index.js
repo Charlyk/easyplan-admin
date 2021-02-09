@@ -88,14 +88,14 @@ const menuItems = [
     icon: <MenuPatients />,
     href: '/patients',
   },
-  // {
-  //   id: 'messages',
-  //   type: 'link',
-  //   roles: ['ADMIN', 'MANAGER'],
-  //   text: textForKey('Messages'),
-  //   icon: <IconMessages />,
-  //   href: '/messages',
-  // },
+  {
+    id: 'messages',
+    type: 'link',
+    roles: ['ADMIN', 'MANAGER'],
+    text: textForKey('Messages'),
+    icon: <IconMessages />,
+    href: '/messages',
+  },
   {
     id: 'settings',
     type: 'link',
