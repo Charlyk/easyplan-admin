@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -2505,7 +2505,7 @@ export default {
 
   /**
    * Create new sms message
-   * @param {{messageTitle: string, messageText: string, messageType: string, timeType: string, timeBeforeSchedule: number?, messageDate: string?}} requestBody
+   * @param {{messageTitle: string, messageText: string, messageType: string, hour: string, messageDate: string?}} requestBody
    * @return {Promise<{isError: boolean, message: string|null, data: any}>}
    */
   createNewSMSMessage: async (requestBody) => {
@@ -2530,7 +2530,7 @@ export default {
 
   /**
    * Create new sms message
-   * @param {{messageTitle: string, messageText: string, messageType: string, timeType: string, timeBeforeSchedule: number?, messageDate: string?}} requestBody
+   * @param {{messageTitle: string, messageText: string, messageType: string, hour: string, messageDate: string?}} requestBody
    * @param {number} messageId
    * @return {Promise<{isError: boolean, message: string|null, data: any}>}
    */

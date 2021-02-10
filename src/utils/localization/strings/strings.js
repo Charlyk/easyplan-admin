@@ -396,7 +396,7 @@ export default {
     'select doctor': 'Select doctor',
     'select patient': 'Select patient',
     schedulenotificationdesc:
-      'This message will be sent every day to patients that have an upcoming appointment.',
+      'This message will be sent one day before upcoming appointment.',
     birthdaycongratsdesc:
       'This message will be sent to patients on their birthday date.',
     holidaycongratsdesc:
@@ -436,6 +436,7 @@ export default {
     message: 'Message',
     'send time': 'Send time',
     'delete message': 'Delete message',
+    'send notification at': 'Send notification at',
   },
   ro: {
     analytics: 'Analitică',
@@ -839,7 +840,7 @@ export default {
     'select doctor': 'Alege doctor',
     'select patient': 'Alege pacient',
     schedulenotificationdesc:
-      'Acest mesaj va fi transmis în fiecare zi pacienților care au o programare în acea zi.',
+      'Acest mesaj va fi transmis pacienților cu o zi înainte de programare.',
     birthdaycongratsdesc:
       'Acest mesaj va fi transmis pacienților în ziua lor de naștere (dacă este indicată).',
     holidaycongratsdesc:
@@ -879,6 +880,7 @@ export default {
     message: 'Textul mesajului',
     'send time': 'Timpul trimiterii',
     'delete message': 'Șterge mesaj',
+    'send notification at': 'Ora de trimitere a mesajului',
   },
   ru: {
     analytics: 'Analytics',
@@ -1274,7 +1276,7 @@ export default {
     'select doctor': 'Select doctor',
     'select patient': 'Select patient',
     schedulenotificationdesc:
-      'This message will be sent every day to patients that have an upcoming appointment.',
+      'This message will be sent a day before the upcoming appointment.',
     birthdaycongratsdesc:
       'This message will be sent to patients on their birthday date.',
     holidaycongratsdesc:
@@ -1314,5 +1316,6 @@ export default {
     message: 'Message',
     'send time': 'Send time',
     'delete message': 'Delete message',
+    'send notification at': 'Send notification at',
   },
 };
