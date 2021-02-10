@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Axios from 'axios';
+import moment from 'moment';
 import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
 import ReactDOM from 'react-dom';
@@ -32,7 +33,9 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const ReduxStore = createStore(rootReducer, enhancer);
 
 Axios.interceptors.request.use(function (config) {
+  const timezone = moment.tz.guess(true);
   config.headers['X-EasyPlan-Clinic-Id'] = sessionManager.getSelectedClinicId();
+  config.headers['x-EasyPlan-TimeZone'] = timezone;
   if (authManager.isLoggedIn()) {
     config.headers.Authorization = authManager.getUserToken();
   }

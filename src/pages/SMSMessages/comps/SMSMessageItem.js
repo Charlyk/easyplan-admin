@@ -29,14 +29,11 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
   const messageTime = () => {
     switch (message.type) {
       case 'ScheduleNotification':
-        if (message.sendTime > 1 || message.sendTime < 1) {
-          return `${message.sendTime} ${textForKey(message.timeType + 's')}`;
-        } else {
-          return `${message.sendTime} ${textForKey(message.timeType)}`;
-        }
+      case 'BirthdayCongrats':
+        return message.hour;
       case 'HolidayCongrats':
       case 'PromotionalMessage':
-        return moment(message.sendDate).format('DD MMMM');
+        return `${moment(message.sendDate).format('DD MMMM')} ${message.hour}`;
       default:
         return '-';
     }
@@ -138,8 +135,7 @@ SMSMessageItem.propTypes = {
       'PromotionalMessage',
       'OnetimeMessage',
     ]),
-    timeType: PropTypes.oneOf(['Hour', 'Minute']),
-    sendTime: PropTypes.number,
+    hour: PropTypes.string,
     sendDate: PropTypes.string,
     disabled: PropTypes.bool,
   }),

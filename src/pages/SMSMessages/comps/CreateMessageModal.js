@@ -4,7 +4,7 @@ import { Box } from '@material-ui/core';
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import EasyDatePicker from '../../../components/EasyDatePicker';
@@ -23,6 +23,18 @@ const messageTypeEnum = {
   PromotionalMessage: 'PromotionalMessage',
   OnetimeMessage: 'OnetimeMessage',
 };
+
+const availableHours = [
+  '10:00',
+  '11:00',
+  '12:00',
+  '13:00',
+  '14:00',
+  '15:00',
+  '16:00',
+  '17:00',
+  '18:00',
+];
 
 const tags = [
   {
@@ -96,8 +108,7 @@ const initialState = {
   message: { ro: '', en: '', ru: '' },
   messageTitle: '',
   messageType: messageTypeEnum.ScheduleNotification,
-  messageTimeType: 'Minute',
-  messageTime: 0,
+  hourToSend: availableHours[0],
   showDatePicker: false,
   messageDate: new Date(),
   maxLength: 160,
@@ -111,8 +122,7 @@ const reducerTypes = {
   setMessageType: 'setMessageType',
   setShowDatePicker: 'setShowDatePicker',
   setMessageDate: 'setMessageDate',
-  setMessageTimeType: 'setMessageTimeType',
-  setMessageTime: 'setMessageTime',
+  setHourToSend: 'setHourToSend',
   setMaxLength: 'setMaxLength',
   setMessageData: 'setMessageData',
   resetState: 'resetState',
@@ -140,10 +150,8 @@ const reducer = (state, action) => {
       return { ...state, showDatePicker: action.payload };
     case reducerTypes.setMessageDate:
       return { ...state, messageDate: action.payload, showDatePicker: false };
-    case reducerTypes.setMessageTimeType:
-      return { ...state, messageTimeType: action.payload };
-    case reducerTypes.setMessageTime:
-      return { ...state, messageTime: action.payload };
+    case reducerTypes.setHourToSend:
+      return { ...state, hourToSend: action.payload };
     case reducerTypes.setMaxLength:
       return { ...state, maxLength: action.payload };
     case reducerTypes.setMessageData: {
@@ -153,8 +161,7 @@ const reducer = (state, action) => {
         messageTitle: message.title,
         message: JSON.parse(message.message),
         messageType: message.type,
-        messageTimeType: message.timeType,
-        messageTime: message.sendTime,
+        hourToSend: message.hour,
         messageDate: moment(message.sendDate).toDate(),
       };
     }
@@ -181,8 +188,7 @@ const CreateMessageModal = ({
       messageTitle,
       showDatePicker,
       messageDate,
-      messageTimeType,
-      messageTime,
+      hourToSend,
       maxLength,
     },
     localDispatch,
@@ -238,12 +244,8 @@ const CreateMessageModal = ({
     localDispatch(actions.setShowDatePicker(false));
   };
 
-  const handleMessageTimeTypeChange = (event) => {
-    localDispatch(actions.setMessageTimeType(event.target.value));
-  };
-
-  const handleMessageTimeChange = (event) => {
-    localDispatch(actions.setMessageTime(event.target.value));
+  const handleMessageHourChange = (event) => {
+    localDispatch(actions.setHourToSend(event.target.value));
   };
 
   const handleTagClick = (tag) => () => {
@@ -269,9 +271,8 @@ const CreateMessageModal = ({
       messageTitle,
       messageText: JSON.stringify(message),
       messageType,
-      timeType: messageTimeType,
-      timeBeforeSchedule: messageTime,
       messageDate: moment(messageDate).format('YYYY-MM-DD'),
+      hour: hourToSend,
     };
     const response =
       messageData == null
@@ -405,28 +406,22 @@ const CreateMessageModal = ({
             />
           </Form.Group>
         )}
-        {messageType === messageTypeEnum.ScheduleNotification && (
-          <InputGroup controlId='timeBeforeSchedule'>
-            <Form.Label>{textForKey('Time before schedule')}</Form.Label>
-            <div className='input-group-fields'>
-              <Form.Control
-                type='number'
-                value={messageTime}
-                onChange={handleMessageTimeChange}
-              />
-              <InputGroup.Append>
-                <Form.Control
-                  as='select'
-                  onChange={handleMessageTimeTypeChange}
-                  value={messageTimeType}
-                  custom
-                >
-                  <option value='Minute'>{textForKey('Minutes')}</option>
-                  <option value='Hour'>{textForKey('Hours')}</option>
-                </Form.Control>
-              </InputGroup.Append>
-            </div>
-          </InputGroup>
+        {messageType !== messageTypeEnum.OnetimeMessage && (
+          <Form.Group controlId='hourToSendAt'>
+            <Form.Label>{textForKey('Send notification at')}:</Form.Label>
+            <Form.Control
+              as='select'
+              onChange={handleMessageHourChange}
+              value={hourToSend}
+              custom
+            >
+              {availableHours.map((hour) => (
+                <option key={hour} value={hour}>
+                  {hour}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
         )}
       </div>
     </EasyPlanModal>
