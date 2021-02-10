@@ -257,15 +257,6 @@ const PatientDetailsModal = ({
                   >
                     {textForKey('Orthodontic plan')}
                   </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.addPayment}
-                    onClick={handleMenuClick}
-                    variant='success'
-                    className={menuItemClasses(MenuItem.addPayment)}
-                  >
-                    {textForKey('Add payment')}
-                  </ListGroup.Item>
                   {typeof onDelete === 'function' && (
                     <ListGroup.Item
                       action
