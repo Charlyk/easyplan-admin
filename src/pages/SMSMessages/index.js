@@ -8,10 +8,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../components/ConfirmationModal';
+import { hasSMSAliasSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
@@ -72,6 +75,7 @@ const reducer = (state, action) => {
 };
 
 const SMSMessages = () => {
+  const hasSMSAlias = useSelector(hasSMSAliasSelector);
   const [
     {
       isCreatingMessage,
@@ -181,14 +185,23 @@ const SMSMessages = () => {
           open={isCreatingMessage}
         />
       )}
-      <SMSMessagesHeader onCreate={handleStartCreateMessage} />
+      <SMSMessagesHeader
+        canCreate={hasSMSAlias}
+        onCreate={handleStartCreateMessage}
+      />
       <div className='sms-messages-root__data-wrapper'>
-        {isLoading && (
+        {hasSMSAlias && isLoading && (
           <div className='progress-wrapper'>
             <CircularProgress classes={{ root: 'progress' }} />
           </div>
         )}
-        {!isLoading && (
+        {!hasSMSAlias && (
+          <Typography classes={{ root: 'no-alias-label' }}>
+            {textForKey('no_sms_alias_message')}
+            <a href='tel:37360112286'>+373 (60) 112286</a>
+          </Typography>
+        )}
+        {hasSMSAlias && !isLoading && (
           <TableContainer classes={{ root: 'table-container' }}>
             <Table>
               <TableHead>

@@ -437,6 +437,8 @@ export default {
     'send time': 'Send time',
     'delete message': 'Delete message',
     'send notification at': 'Send notification at',
+    no_sms_alias_message:
+      'SMS notification service is not enabled. Please contact us to enable it.',
   },
   ro: {
     analytics: 'Analitică',
@@ -881,6 +883,8 @@ export default {
     'send time': 'Timpul trimiterii',
     'delete message': 'Șterge mesaj',
     'send notification at': 'Ora de trimitere a mesajului',
+    no_sms_alias_message:
+      'Serviciul notificări SMS nu este conectat. Pentru a conecta vă rugăm să ne contactați.',
   },
   ru: {
     analytics: 'Analytics',
@@ -1317,5 +1321,7 @@ export default {
     'send time': 'Send time',
     'delete message': 'Delete message',
     'send notification at': 'Send notification at',
+    no_sms_alias_message:
+      'SMS notification service is not enabled. Please contact us to enable it.',
   },
 };
