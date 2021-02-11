@@ -19,6 +19,7 @@ import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentNotes from './comps/appointmentNotes';
 import PatientAppointments from './comps/appointments/PatientAppointments';
+import PatientMessages from './comps/messages/PatientMessages';
 import PatientNotes from './comps/notes/PatientNotes';
 import PatientDebtsList from './comps/PatientDebtsList';
 import PatientPaymentsList from './comps/PatientPaymentsList';
@@ -40,6 +41,7 @@ const MenuItem = {
   payments: 'payments',
   purchases: 'purchases',
   addPayment: 'addPayment',
+  messages: 'messages',
 };
 
 const initialState = {
@@ -162,6 +164,49 @@ const PatientDetailsModal = ({
     dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
 
+  const menuContent = () => {
+    switch (currentMenu) {
+      case MenuItem.personalInfo:
+        return (
+          <PatientPersonalData
+            patient={patient}
+            onPatientUpdated={fetchPatientDetails}
+          />
+        );
+      case MenuItem.notes:
+        return <PatientNotes patient={patient} onAddNote={handleAddNote} />;
+      case MenuItem.appointments:
+        return <PatientAppointments patient={patient} />;
+      case MenuItem.xRay:
+        return (
+          <PatientXRay patient={patient} onAddXRay={handleAddXRayImages} />
+        );
+      case MenuItem.treatmentPlan:
+        return <AppointmentNotes patient={patient} />;
+      case MenuItem.orthodonticPlan:
+        return <OrthodonticPlan patient={patient} />;
+      case MenuItem.debts:
+        return (
+          <PatientDebtsList
+            patient={patient}
+            viewInvoice={viewInvoice}
+            onDebtShowed={handleDebtViewed}
+          />
+        );
+      case MenuItem.payments:
+        return (
+          <PatientPaymentsList
+            patient={patient}
+            onViewDebtClick={handleViewDebtClick}
+          />
+        );
+      case MenuItem.purchases:
+        return <PatientPurchasesList patient={patient} />;
+      case MenuItem.messages:
+        return <PatientMessages patient={patient} />;
+    }
+  };
+
   return (
     <Modal
       centered
@@ -257,6 +302,14 @@ const PatientDetailsModal = ({
                   >
                     {textForKey('Orthodontic plan')}
                   </ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    id={MenuItem.messages}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.messages)}
+                  >
+                    {textForKey('Messages')}
+                  </ListGroup.Item>
                   {typeof onDelete === 'function' && (
                     <ListGroup.Item
                       action
@@ -271,48 +324,7 @@ const PatientDetailsModal = ({
                 </ListGroup>
               </Box>
             </div>
-            <div className='patient-details-container'>
-              {currentMenu === MenuItem.personalInfo && (
-                <PatientPersonalData
-                  patient={patient}
-                  onPatientUpdated={fetchPatientDetails}
-                />
-              )}
-              {currentMenu === MenuItem.notes && (
-                <PatientNotes patient={patient} onAddNote={handleAddNote} />
-              )}
-              {currentMenu === MenuItem.appointments && (
-                <PatientAppointments patient={patient} />
-              )}
-              {currentMenu === MenuItem.xRay && (
-                <PatientXRay
-                  patient={patient}
-                  onAddXRay={handleAddXRayImages}
-                />
-              )}
-              {currentMenu === MenuItem.treatmentPlan && (
-                <AppointmentNotes patient={patient} />
-              )}
-              {currentMenu === MenuItem.orthodonticPlan && (
-                <OrthodonticPlan patient={patient} />
-              )}
-              {currentMenu === MenuItem.debts && (
-                <PatientDebtsList
-                  patient={patient}
-                  viewInvoice={viewInvoice}
-                  onDebtShowed={handleDebtViewed}
-                />
-              )}
-              {currentMenu === MenuItem.payments && (
-                <PatientPaymentsList
-                  patient={patient}
-                  onViewDebtClick={handleViewDebtClick}
-                />
-              )}
-              {currentMenu === MenuItem.purchases && (
-                <PatientPurchasesList patient={patient} />
-              )}
-            </div>
+            <div className='patient-details-container'>{menuContent()}</div>
           </Box>
         )}
       </Modal.Body>
