@@ -5,10 +5,12 @@ import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import EasyDatePicker from '../../../components/EasyDatePicker';
 import EasyPlanModal from '../../../components/EasyPlanModal/EasyPlanModal';
+import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
@@ -47,6 +49,8 @@ const tags = [
       'PromotionalMessage',
       'OnetimeMessage',
     ],
+    length: 19,
+    placeholder: '###################',
   },
   {
     id: '{{patientFirstName}}',
@@ -58,6 +62,8 @@ const tags = [
       'PromotionalMessage',
       'OnetimeMessage',
     ],
+    length: 20,
+    placeholder: '####################',
   },
   {
     id: '{{patientLastName}}',
@@ -69,26 +75,36 @@ const tags = [
       'PromotionalMessage',
       'OnetimeMessage',
     ],
+    length: 19,
+    placeholder: '###################',
   },
   {
     id: '{{confirmationLink}}',
     label: textForKey('Confirmation link'),
     availableFor: ['ScheduleNotification'],
+    length: 23,
+    placeholder: '#######################',
   },
   {
     id: '{{clinicName}}',
     label: textForKey('Clinic name'),
     availableFor: ['ScheduleNotification'],
+    length: 14,
+    placeholder: '##############',
   },
   {
     id: '{{scheduleHour}}',
     label: textForKey('Schedule hour'),
     availableFor: ['ScheduleNotification'],
+    length: 5,
+    placeholder: '#####',
   },
   {
     id: '{{scheduleDate}}',
     label: textForKey('Schedule date'),
     availableFor: ['ScheduleNotification'],
+    length: 10,
+    placeholder: '##########',
   },
 ];
 
@@ -179,6 +195,7 @@ const CreateMessageModal = ({
   onCreateMessage,
 }) => {
   const datePickerAnchor = useRef(null);
+  const currentClinic = useSelector(clinicDetailsSelector);
   const [
     {
       isLoading,
@@ -255,11 +272,21 @@ const CreateMessageModal = ({
     );
   };
 
-  const currentLength = message[language].length;
-  const isLengthExceeded = currentLength > maxLength;
+  const getRealMessageLength = (language) => {
+    let messageValue = message[language];
+    tags.forEach((tag) => {
+      messageValue = messageValue.replace(
+        tag.id,
+        tag.id !== '{{clinicName}}' ? tag.placeholder : currentClinic.smsAlias,
+      );
+    });
+    return messageValue.length;
+  };
+
+  const isLengthExceeded = getRealMessageLength(language) > maxLength;
 
   const isFormValid = availableLanguages.some(
-    (language) => message[language].length > 0 && !isLengthExceeded,
+    (language) => getRealMessageLength(language) > 0 && !isLengthExceeded,
   );
 
   const handleSubmit = async () => {
@@ -351,7 +378,7 @@ const CreateMessageModal = ({
             <Form.Text
               className={clsx('message-length', { exceeded: isLengthExceeded })}
             >
-              {currentLength}/{maxLength}
+              {getRealMessageLength(language)}/{maxLength}
             </Form.Text>
           </Box>
           <div className='tags-wrapper'>
