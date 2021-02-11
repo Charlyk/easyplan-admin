@@ -884,3 +884,130 @@
   flex-direction: column;
   position: relative;
 }
+
+.patients-messages-list {
+  width: 100%;
+  max-height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #f8f8f8;
+
+  .form-group {
+    margin-bottom: 0 !important;
+    flex: 1;
+    margin-right: 1rem;
+  }
+
+  &__notes-data {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+    min-height: 10rem;
+    overflow-y: scroll;
+    position: relative;
+
+    .loading-spinner {
+      position: absolute;
+      top: 45%;
+      left: 45%;
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 1rem 1.5rem;
+    box-shadow: 0px -20px 40px -5px rgba(239, 242, 251, 0.8);
+  }
+
+  &__item {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;
+    padding: .5rem 1rem;
+    background-color: #FFF;
+    border-radius: 5px;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+
+    .message-text {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: #34344E;
+      margin-bottom: .4rem;
+    }
+
+    .sent-by-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 11px;
+      color: #6F7091;
+    }
+
+    &__creator-info {
+      display: flex;
+
+      &__doctor-title {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 16px;
+        color: #34354C;
+        margin-right: .3rem;
+      }
+
+      &__doctor-name {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 16px;
+        color: #34354C;
+      }
+    }
+
+    &__note-date {
+      font-family: Inter, sans-serif;
+      margin-bottom: .5rem;
+      margin-left: 1rem;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #A1A2C6;
+    }
+
+    &__note-data-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    &__note-text {
+      background: #FFFFFF;
+      box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+      border-radius: 4px;
+      width: 100%;
+      padding: 1rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #6F7091;
+    }
+  }
+}

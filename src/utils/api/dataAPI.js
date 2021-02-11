@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev'
+  env === 'dev' || env === 'local'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -2512,6 +2512,57 @@ export default {
     try {
       const url = `${baseURL}/sms`;
       const response = await Axios.post(url, requestBody);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch all messages received by a patient
+   * @param {number} patientId
+   * @return {Promise<{isError: boolean, message: string, data: any|null}>}
+   */
+  fetchPatientMessages: async (patientId) => {
+    try {
+      const url = `${baseURL}/sms/patients/${patientId}`;
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Sent SMS message to single patient
+   * @param {number} patientId
+   * @param {string} message
+   * @return {Promise<{isError: boolean, message: string, data: any|null}>}
+   */
+  sendMessageToPatient: async (patientId, message) => {
+    try {
+      const url = `${baseURL}/sms/patients/${patientId}`;
+      const response = await Axios.post(url, { messageText: message });
       const { data: responseData } = response;
       if (responseData == null) {
         return {

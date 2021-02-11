@@ -439,6 +439,10 @@ export default {
     'send notification at': 'Send notification at',
     no_sms_alias_message:
       'SMS notification service is not enabled. Please contact us to enable it.',
+    'sent by': 'Sent by',
+    at: 'at',
+    'enter new message': 'Enter new message',
+    'send message': 'Send message',
   },
   ro: {
     analytics: 'Analitică',
@@ -885,6 +889,10 @@ export default {
     'send notification at': 'Ora de trimitere a mesajului',
     no_sms_alias_message:
       'Serviciul notificări SMS nu este conectat. Pentru a conecta vă rugăm să ne contactați.',
+    'sent by': 'Trimis de',
+    at: 'la',
+    'enter new message': 'Introduce un mesaj nou',
+    'send message': 'Trimite mesaj',
   },
   ru: {
     analytics: 'Analytics',
@@ -1323,5 +1331,9 @@ export default {
     'send notification at': 'Send notification at',
     no_sms_alias_message:
       'SMS notification service is not enabled. Please contact us to enable it.',
+    'sent by': 'Sent by',
+    at: 'at',
+    'enter new message': 'Enter new message',
+    'send message': 'Send message',
   },
 };
