@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -1814,10 +1814,36 @@ export default {
    * @param {number} patientId
    * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
    */
-  setScheduleConfirmed: async (scheduleId, patientId) => {
+  getScheduleInfo: async (scheduleId, patientId) => {
     try {
       const url = `${baseURL}/confirmation/schedule/${scheduleId}/${patientId}`;
       const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Set schedule as confirmed
+   * @param {number} scheduleId
+   * @param {number} patientId
+   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
+   */
+  setScheduleConfirmed: async (scheduleId, patientId) => {
+    try {
+      const url = `${baseURL}/confirmation/schedule`;
+      const response = await Axios.post(url, { scheduleId, patientId });
       const { data: responseData } = response;
       if (responseData == null) {
         return {
