@@ -443,6 +443,7 @@ export default {
     at: 'at',
     'enter new message': 'Enter new message',
     'send message': 'Send message',
+    'schedule info not found': 'Schedule info not found',
   },
   ro: {
     analytics: 'Analitică',
@@ -893,6 +894,7 @@ export default {
     at: 'la',
     'enter new message': 'Introduce un mesaj nou',
     'send message': 'Trimite mesaj',
+    'schedule info not found': 'Informația despre programare nu a fost găsită',
   },
   ru: {
     analytics: 'Analytics',
@@ -1335,5 +1337,6 @@ export default {
     at: 'at',
     'enter new message': 'Enter new message',
     'send message': 'Send message',
+    'schedule info not found': 'Schedule info not found',
   },
 };
