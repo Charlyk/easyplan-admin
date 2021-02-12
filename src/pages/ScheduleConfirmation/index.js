@@ -15,6 +15,7 @@ import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import AppLogoBlue from '../../assets/icons/appLogoBlue';
 import LoadingButton from '../../components/LoadingButton';
 import dataAPI from '../../utils/api/dataAPI';
 import { urlToLambda } from '../../utils/helperFuncs';
@@ -154,6 +155,15 @@ const ScheduleConfirmation = () => {
             : textForKey('Confirm')}
         </LoadingButton>
       )}
+
+      <div className='footer'>
+        <Typography classes={{ root: 'label' }}>
+          powered by{' '}
+          <a href='https://easyplan.pro'>
+            <AppLogoBlue />
+          </a>
+        </Typography>
+      </div>
     </Box>
   );
 };
