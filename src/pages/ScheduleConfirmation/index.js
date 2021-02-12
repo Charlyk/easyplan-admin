@@ -159,7 +159,7 @@ const ScheduleConfirmation = () => {
       <div className='footer'>
         <Typography classes={{ root: 'label' }}>
           powered by{' '}
-          <a href='https://easyplan.pro'>
+          <a href='https://easyplan.pro' target='_blank' rel='noreferrer'>
             <AppLogoBlue />
           </a>
         </Typography>
