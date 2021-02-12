@@ -6,4 +6,44 @@
     width: 50px;
     height: 50px;
   }
+
+  .logo-image {
+    width: 130px;
+    height: auto;
+    margin-bottom: 2rem;
+  }
+
+  .table-container {
+    margin-bottom: 1rem;
+
+    .title-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .data-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+    }
+
+    table > tbody > tr > td {
+      border-bottom: none;
+      padding-top: .4rem;
+      padding-bottom: .4rem;
+    }
+  }
+
+  .positive-button {
+    height: 34px;
+    flex: unset;
+
+    &.confirmed {
+      pointer-events: none;
+      background-color: #00ac00;
+    }
+  }
 }

@@ -1,34 +1,64 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, CircularProgress, Typography } from '@material-ui/core';
+import {
+  Box,
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@material-ui/core';
+import clsx from 'clsx';
+import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import IconCheckMark from '../../assets/icons/iconCheckMark';
+import LoadingButton from '../../components/LoadingButton';
 import dataAPI from '../../utils/api/dataAPI';
+import { urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+
 import './styles.scss';
 
 const ScheduleConfirmation = () => {
   const { scheduleId, patientId } = useParams();
+  const [schedule, setSchedule] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    confirmSchedule();
+    getScheduleInfo();
   }, [scheduleId, patientId]);
 
-  const confirmSchedule = async () => {
+  const getScheduleInfo = async () => {
     setIsLoading(true);
-    const response = await dataAPI.setScheduleConfirmed(scheduleId, patientId);
+    const response = await dataAPI.getScheduleInfo(scheduleId, patientId);
     if (response.isError) {
       toast.error(textForKey(response.message));
-      setIsSuccess(false);
     } else {
-      setIsSuccess(true);
+      setSchedule(response.data);
     }
     setIsLoading(false);
   };
+
+  const confirmSchedule = async () => {
+    setIsConfirming(true);
+    const response = await dataAPI.setScheduleConfirmed(scheduleId, patientId);
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+      setIsError(true);
+    } else {
+      await getScheduleInfo();
+    }
+    setIsConfirming(false);
+  };
+
+  const logoSrc = schedule?.clinicLogo
+    ? urlToLambda(schedule.clinicLogo, 130)
+    : null;
 
   return (
     <Box
@@ -41,14 +71,89 @@ const ScheduleConfirmation = () => {
       className='schedule-confirmation-root'
     >
       {isLoading && <CircularProgress style={{ color: '#3A83DC' }} />}
-      {isSuccess && <IconCheckMark />}
-      <Typography>
-        {isLoading
-          ? textForKey('Confirming schedule')
-          : isSuccess
-          ? textForKey('Confirmed')
-          : 'Error'}
-      </Typography>
+      {logoSrc && (
+        <img className='logo-image' src={logoSrc} alt='Clinic logo' />
+      )}
+      {schedule != null &&
+        !isLoading &&
+        schedule.status === 'Confirmed' &&
+        !isError && (
+          <TableContainer classes={{ root: 'table-container' }}>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={2} align='center'>
+                    <Typography classes={{ root: 'title-label' }}>
+                      {textForKey('Detalii programare')}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <Typography align='right' classes={{ root: 'data-label' }}>
+                      {textForKey('Date')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography classes={{ root: 'data-label' }}>
+                      {moment(schedule.startTime).format('DD.MM.YYYY')}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align='right'>
+                    <Typography classes={{ root: 'data-label' }}>
+                      {textForKey('Hour')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography classes={{ root: 'data-label' }}>
+                      {moment(schedule.startTime).format('HH:mm')}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <Typography align='right' classes={{ root: 'data-label' }}>
+                      {textForKey('Doctor')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography classes={{ root: 'data-label' }}>
+                      {schedule.doctorName}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <Typography align='right' classes={{ root: 'data-label' }}>
+                      {textForKey('Service')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography classes={{ root: 'data-label' }}>
+                      {schedule.service}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      {schedule != null && !isLoading && (
+        <LoadingButton
+          isLoading={isConfirming}
+          disabled={isConfirming || schedule.status === 'Confirmed'}
+          className={clsx('positive-button', {
+            confirmed: schedule.status === 'Confirmed',
+          })}
+          onClick={confirmSchedule}
+        >
+          {schedule.status === 'Confirmed'
+            ? textForKey('Confirmed')
+            : textForKey('Confirm')}
+        </LoadingButton>
+      )}
     </Box>
   );
 };

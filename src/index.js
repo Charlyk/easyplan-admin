@@ -45,11 +45,12 @@ Axios.interceptors.request.use(function (config) {
 Axios.interceptors.response.use(
   (response) => response,
   (error) => {
+    const url = error?.response?.config?.url || '';
     const status = error?.response?.status;
     const method = error?.response?.config?.method;
-    console.log(error.response);
     const unauthorizedRequest =
       status === 401 &&
+      !url.includes('/confirmation') &&
       (method === 'get' ||
         method === 'post' ||
         method === 'put' ||
