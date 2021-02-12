@@ -26,7 +26,7 @@ import './styles.scss';
 const ScheduleConfirmation = () => {
   const { scheduleId, patientId } = useParams();
   const [schedule, setSchedule] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -72,6 +72,11 @@ const ScheduleConfirmation = () => {
       className='schedule-confirmation-root'
     >
       {isLoading && <CircularProgress style={{ color: '#3A83DC' }} />}
+      {!isLoading && schedule == null && (
+        <Typography classes={{ root: 'no-data-label' }}>
+          {textForKey('Schedule info not found')}
+        </Typography>
+      )}
       {logoSrc && (
         <img className='logo-image' src={logoSrc} alt='Clinic logo' />
       )}
