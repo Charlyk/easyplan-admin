@@ -58,7 +58,7 @@ const PageHeader = ({
   const handleOpenPaymentModal = () =>
     dispatch(setPaymentModal({ open: true, isNew: true, invoice: null }));
 
-  const handleActionSelected = action => {
+  const handleActionSelected = (action) => {
     switch (action.key) {
       case 'log-out':
         onLogout();
@@ -80,7 +80,7 @@ const PageHeader = ({
         onClose={handleActionsClose}
         onSelect={handleActionSelected}
         open={isActionsOpen}
-        actions={actions.filter(item => isDoctor || item.key === 'log-out')}
+        actions={actions.filter((item) => isDoctor || item.key === 'log-out')}
         anchorEl={actionsAnchor.current}
         placement='bottom-end'
       />
@@ -91,7 +91,7 @@ const PageHeader = ({
         {titleComponent || title}
       </div>
       {!isDoctor && (
-        <Box display='flex' alignItems='center'>
+        <Box display='flex' alignItems='center' justifyContent='center'>
           <InvoicesButton />
           <Tooltip title={textForKey('Add payment')}>
             <IconButton

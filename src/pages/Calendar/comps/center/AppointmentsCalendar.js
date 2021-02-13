@@ -61,7 +61,7 @@ const AppointmentsCalendar = ({
   const [currentTab, setCurrentTab] = useState(CalendarView.day);
   const [calendarVisible, setCalendarVisible] = useState(false);
 
-  const handleTabChange = newTab => {
+  const handleTabChange = (newTab) => {
     setCurrentTab(newTab);
     onViewModeChange(newTab);
   };
@@ -81,7 +81,7 @@ const AppointmentsCalendar = ({
     }
   };
 
-  const handleMonthDateClick = date => {
+  const handleMonthDateClick = (date) => {
     onViewDateChange(date);
     handleTabChange(CalendarView.day);
   };
@@ -90,7 +90,7 @@ const AppointmentsCalendar = ({
 
   const handleCloseCalendar = () => setCalendarVisible(false);
 
-  const handleDateChange = date => {
+  const handleDateChange = (date) => {
     onViewDateChange(date);
     handleCloseCalendar();
   };
@@ -103,7 +103,7 @@ const AppointmentsCalendar = ({
     onScheduleSelect(null);
   };
 
-  const handleDateNavigation = navId => () => {
+  const handleDateNavigation = (navId) => () => {
     const currentDate = moment(viewDate);
     switch (navId) {
       case 'previous-date':
@@ -167,7 +167,12 @@ const AppointmentsCalendar = ({
         />
       )}
       <div className='center-header'>
-        <Box display='flex' alignItems='center' className='controls-wrapper'>
+        <Box
+          display='flex'
+          alignItems='center'
+          className='controls-wrapper'
+          mb='5px'
+        >
           <IconButton
             onClick={handleDateNavigation('previous-date')}
             classes={{ root: 'arrow-button', label: 'button-icon' }}
@@ -223,7 +228,7 @@ const AppointmentsCalendar = ({
             <UploadIcon />
           </LoadingButton>
           <Button
-            className='positive-button'
+            className='positive-button add-appointment-btn'
             disabled={!canAddAppointment}
             onClick={handleAddAppointment}
           >

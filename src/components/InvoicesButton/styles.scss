@@ -1,7 +1,7 @@
 .invoices-button-root {
   outline: none;
   width: 15rem;
-  height: 3rem;
+  height: 34px;
   background: #F4FAFE;
   border: 1px solid #3A83DC;
   box-sizing: border-box;
@@ -30,13 +30,13 @@
       border: #3A83DC 1px solid;
       border-radius: 4px;
       background-color: #F4FAFE;
-      max-height: 30rem;
+      max-height: 25rem;
       overflow-y: scroll;
 
       table {
         border-collapse: separate;
         border-spacing: 0 .5rem;
-        padding: 1rem;
+        padding: 0 1rem 1rem;
         width: 100%;
 
         thead {
@@ -49,14 +49,14 @@
             td {
               position: sticky;
               top: 0;
-              height: 40px;
+              height: 30px;
               background-color: #F4FAFE;
               padding-left: 1rem;
               padding-right: 1rem;
               font-family: Inter, sans-serif;
               font-style: normal;
               font-weight: 600;
-              font-size: 16px;
+              font-size: 12px;
               line-height: 24px;
               color: #3A83DC;
             }
@@ -74,12 +74,12 @@
               font-family: Inter, sans-serif;
               font-style: normal;
               font-weight: normal;
-              font-size: 14px;
-              line-height: 20px;
+              font-size: 12px;
               color: #34354C;
 
               .positive-button {
                 height: 1.5rem;
+                font-size: 12px;
               }
             }
           }
@@ -98,8 +98,7 @@
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 14px;
     color: #3A83DC;
     text-transform: uppercase;
   }
