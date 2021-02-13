@@ -12,11 +12,14 @@ import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../../LoadingButton';
 import PatientMessage from './PatientMessage';
 
+const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
+
 const initialState = {
   isFetching: false,
   isSendingMessage: false,
   messages: [],
   newMessageText: '',
+  maxLength: 160,
 };
 
 const reducerTypes = {
@@ -24,6 +27,7 @@ const reducerTypes = {
   setMessages: 'setMessages',
   setNewMessageText: 'setNewMessageText',
   setIsSendingMessage: 'setIsSendingMessage',
+  setMaxLength: 'setMaxLength',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -38,6 +42,8 @@ const reducer = (state, action) => {
       return { ...state, messages: action.payload };
     case reducerTypes.setIsSendingMessage:
       return { ...state, isSendingMessage: action.payload };
+    case reducerTypes.setMaxLength:
+      return { ...state, maxLength: action.payload };
     default:
       return state;
   }
@@ -49,6 +55,15 @@ const PatientMessages = ({ patient }) => {
   useEffect(() => {
     fetchMessages();
   }, []);
+
+  useEffect(() => {
+    const messageValue = state.newMessageText;
+    let maxLength = 160;
+    if (charactersRegex.test(messageValue)) {
+      maxLength = 70;
+    }
+    localDispatch(actions.setMaxLength(maxLength));
+  }, [state.newMessageText]);
 
   const fetchMessages = async () => {
     if (patient == null) return;
@@ -72,8 +87,11 @@ const PatientMessages = ({ patient }) => {
     }
   };
 
+  const currentLength = state.newMessageText.length;
+  const isValidMessage = currentLength <= state.maxLength;
+
   const handleSendMessage = async () => {
-    if (state.newMessageText.length === 0) {
+    if (state.newMessageText.length === 0 || !isValidMessage) {
       return;
     }
     localDispatch(actions.setIsSendingMessage(true));
@@ -112,6 +130,7 @@ const PatientMessages = ({ patient }) => {
         <Form.Group controlId='newMessageText'>
           <InputGroup>
             <Form.Control
+              isInvalid={!isValidMessage}
               onKeyDown={handleInputKeyDown}
               value={state.newMessageText}
               type='text'
@@ -122,7 +141,11 @@ const PatientMessages = ({ patient }) => {
         </Form.Group>
         <LoadingButton
           isLoading={state.isSendingMessage}
-          disabled={state.isFetching || state.newMessageText.length === 0}
+          disabled={
+            state.isFetching ||
+            state.newMessageText.length === 0 ||
+            !isValidMessage
+          }
           className='positive-button'
           onClick={handleSendMessage}
         >

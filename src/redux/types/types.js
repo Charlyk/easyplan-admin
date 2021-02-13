@@ -3,6 +3,7 @@ import calendar from './calendar';
 import clinicTypes from './clinicTypes';
 import exchangeRatesTypes from './exchangeRatesTypes';
 import imageModalTypes from './imageModalTypes';
+import patientTypes from './patientTypes';
 import seriveDetailsModalTypes from './seriveDetailsModalTypes';
 
 export default {
@@ -39,4 +40,5 @@ export default {
   ...seriveDetailsModalTypes,
   ...addPaymentModalTypes,
   ...exchangeRatesTypes,
+  ...patientTypes,
 };

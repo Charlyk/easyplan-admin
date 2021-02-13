@@ -10,6 +10,7 @@ import createClinicModal from './createClinicModal';
 import exchangeRatesModal from './exchangeRatesModal';
 import imageModal from './imageModal';
 import patientNoteModal from './patientNoteModal';
+import patient from './patientReducer';
 import patientXRayModal from './patientXRayModal';
 import paymentModal from './paymentModal';
 import serviceDetailsModal from './serviceDetailsReducer';
@@ -27,6 +28,7 @@ export default combineReducers({
   serviceDetailsModal,
   addPaymentModal,
   exchangeRatesModal,
+  patient,
 });
 
 function main(state = initialState, action) {
