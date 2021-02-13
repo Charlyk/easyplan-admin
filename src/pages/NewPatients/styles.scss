@@ -4,7 +4,7 @@
   flex: 1;
   overflow: hidden;
   position: relative;
-  padding: 1.5rem;
+  padding: 10px;
 
   &__content {
     height: 100%;
@@ -31,7 +31,7 @@
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: .8rem !important;
+        font-size: 11px !important;
       }
     }
 
@@ -73,8 +73,8 @@
       .name-and-photo {
         svg {
           margin-right: .8rem !important;
-          width: 40px;
-          height: 40px;
+          width: 30px;
+          height: 30px;
         }
       }
 
@@ -92,7 +92,7 @@
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: 600;
-      font-size: .7rem !important;
+      font-size: 11px !important;
       margin-bottom: 0;
     }
 
@@ -102,7 +102,7 @@
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
-      font-size: .8rem !important;
+      font-size: 11px !important;
       margin-bottom: 0;
 
       &.name {
@@ -151,19 +151,20 @@
       }
 
       .positive-button {
+        height: 30px;
         flex: unset;
         width: 100px;
         margin-left: .5rem;
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: .7rem;
+        font-size: 11px;
         margin-bottom: 0;
         color: white;
 
         svg {
-          width: .8rem;
-          height: .8rem;
+          width: 12px;
+          height: 12px;
         }
       }
 
@@ -171,11 +172,12 @@
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: 600;
-        font-size: .7rem;
+        font-size: 11px;
         margin-bottom: 0;
       }
 
       .form-control {
+        height: 30px;
         width: 100%;
         background-color: #FAFAFD;
       }
@@ -187,9 +189,11 @@
       }
 
       .create-btn {
+        height: 30px;
         margin-left: .5rem;
         color: #00E987;
         border-color: #00E987;
+        font-size: 11px;
 
         &:focus, &:active, &:hover {
           color: #00E987 !important;
@@ -199,6 +203,8 @@
       }
 
       .import-btn {
+        font-size: 11px;
+        height: 30px;
         width: 11rem !important;
         background-color: transparent;
 
