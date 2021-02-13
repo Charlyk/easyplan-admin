@@ -44,6 +44,11 @@
       margin-bottom: 1rem;
       width: 100%;
 
+      img {
+        width: 100px;
+        object-fit: contain;
+      }
+
       .form-group {
         width: max-content !important;
 

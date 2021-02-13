@@ -30,7 +30,7 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
-const CompanyDetailsForm = props => {
+const CompanyDetailsForm = (props) => {
   const dispatch = useDispatch();
   const currentClinic = useSelector(clinicDetailsSelector);
   const currentUser = useSelector(userSelector);
@@ -68,7 +68,7 @@ const CompanyDetailsForm = props => {
     });
   }, [props, currentClinic]);
 
-  const handleLogoChange = event => {
+  const handleLogoChange = (event) => {
     if (isSaving) return;
     const files = event.target.files;
     if (files != null) {
@@ -76,7 +76,7 @@ const CompanyDetailsForm = props => {
     }
   };
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     if (isSaving) return;
     setData({
       ...data,
@@ -84,7 +84,7 @@ const CompanyDetailsForm = props => {
     });
   };
 
-  const handlePhoneChange = phoneType => (value, _, event) => {
+  const handlePhoneChange = (phoneType) => (value, _, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
     if (isSaving) return;
     setData({
@@ -180,7 +180,7 @@ const CompanyDetailsForm = props => {
 
   const logoSrc =
     (data.logoFile && window.URL.createObjectURL(data.logoFile)) ||
-    (data.logoUrl ? urlToLambda(data.logoUrl, 64) : null);
+    (data.logoUrl ? urlToLambda(data.logoUrl, 150) : null);
 
   return (
     <div className='company-details-form'>
@@ -196,11 +196,7 @@ const CompanyDetailsForm = props => {
       <div className='data-wrapper'>
         <div className='left'>
           <div className='upload-avatar-container'>
-            {logoSrc ? (
-              <Image roundedCircle src={logoSrc} />
-            ) : (
-              <IconLogoPlaceholder />
-            )}
+            {logoSrc ? <Image src={logoSrc} /> : <IconLogoPlaceholder />}
             <span style={{ margin: '1rem' }} className='info-text'>
               {textForKey('JPG or PNG, Max size of 800kb')}
             </span>
@@ -351,7 +347,7 @@ const CompanyDetailsForm = props => {
               onChange={handleFormChange}
               value={data.currency}
             >
-              {data.allCurrencies.map(currency => (
+              {data.allCurrencies.map((currency) => (
                 <option key={currency.id} value={currency.id}>
                   {currency.id} - {currency.name}
                 </option>
