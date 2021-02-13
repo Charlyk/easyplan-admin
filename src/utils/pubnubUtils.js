@@ -9,13 +9,14 @@ import {
   triggerUsersUpdate,
 } from '../redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from '../redux/actions/clinicActions';
+import { setSMSMessageStatus } from '../redux/actions/patientActions';
 import { userSelector } from '../redux/selectors/rootSelector';
 import { fetchClinicData } from './helperFuncs';
 
-export const handleRemoteMessage = message => (dispatch, getState) => {
+export const handleRemoteMessage = (message) => (dispatch, getState) => {
   const appState = getState();
   const currentUser = userSelector(appState);
-  const { action, targetUserId } = message;
+  const { action, targetUserId, payload } = message;
   switch (action) {
     case MessageAction.NewUserInvited:
     case MessageAction.InvitationRemoved:
@@ -58,6 +59,13 @@ export const handleRemoteMessage = message => (dispatch, getState) => {
     case MessageAction.ExchangeRatesUpdateRequired:
       dispatch(setClinicExchangeRatesUpdateRequired(true));
       break;
+    case MessageAction.UpdateMessageStatus: {
+      if (payload == null) {
+        return;
+      }
+      dispatch(setSMSMessageStatus({ id: payload.id, status: payload.status }));
+      break;
+    }
   }
 };
 
@@ -79,4 +87,5 @@ const MessageAction = {
   ExchangeRatesUpdated: 'ExchangeRatesUpdated',
   NewPaymentRegistered: 'NewPaymentRegistered',
   ExchangeRatesUpdateRequired: 'ExchangeRatesUpdateRequired',
+  UpdateMessageStatus: 'UpdateMessageStatus',
 };

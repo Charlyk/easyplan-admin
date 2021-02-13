@@ -25,4 +25,9 @@ export default Object.freeze({
   isImportModalOpen: false,
   updateExchangeRates: false,
   updateDoctorAppointments: false,
+  patient: {
+    smsMessages: {
+      updateMessageStatus: null,
+    },
+  },
 });

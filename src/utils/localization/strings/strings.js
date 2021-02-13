@@ -444,6 +444,10 @@ export default {
     'enter new message': 'Enter new message',
     'send message': 'Send message',
     'schedule info not found': 'Schedule info not found',
+    'delivered successfully': 'Delivered successfully',
+    'pending delivery': 'Pending delivery',
+    'message not delivered': 'Message not delivered',
+    'unknown delivery status': 'Unknown delivery status',
   },
   ro: {
     analytics: 'Analitică',
@@ -895,6 +899,10 @@ export default {
     'enter new message': 'Introduce un mesaj nou',
     'send message': 'Trimite mesaj',
     'schedule info not found': 'Informația despre programare nu a fost găsită',
+    'delivered successfully': 'Transmis cu succes',
+    'pending delivery': 'În așteptare trimitere',
+    'message not delivered': 'Mesajul nu a fost transmis',
+    'unknown delivery status': 'Statut ne cunoscut',
   },
   ru: {
     analytics: 'Analytics',
@@ -1338,5 +1346,9 @@ export default {
     'enter new message': 'Enter new message',
     'send message': 'Send message',
     'schedule info not found': 'Schedule info not found',
+    'delivered successfully': 'Delivered successfully',
+    'pending delivery': 'Pending delivery',
+    'message not delivered': 'Message not delivered',
+    'unknown delivery status': 'Unknown delivery status',
   },
 };
