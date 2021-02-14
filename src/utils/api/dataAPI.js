@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 const baseURL =
-  env === 'dev' || env === 'local'
+  env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -2692,6 +2692,39 @@ export default {
     try {
       const url = `${baseURL}/sms/${messageId}`;
       const response = await Axios.delete(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch patient history
+   * @param {number} patientId
+   * @param {Date|null} startDate
+   * @param {Date|null} endDate
+   * @return {Promise<{isError: boolean, message: string, data: any}>}
+   */
+  getPatientHistory: async (patientId, startDate = null, endDate = null) => {
+    try {
+      let url = `${baseURL}/history/patient/${patientId}`;
+      if (startDate != null) {
+        url = `${url}?startDate=${moment(startDate).format('YYYY-MM-DD')}`;
+      }
+      if (endDate != null) {
+        url = `${url}&endDate=${moment(endDate).format('YYYY-MM-DD')}`;
+      }
+      const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
         return {

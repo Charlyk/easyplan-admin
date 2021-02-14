@@ -19,6 +19,7 @@ import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentNotes from './comps/appointmentNotes';
 import PatientAppointments from './comps/appointments/PatientAppointments';
+import PatientHistory from './comps/history/PatientHistory';
 import PatientMessages from './comps/messages/PatientMessages';
 import PatientNotes from './comps/notes/PatientNotes';
 import PatientDebtsList from './comps/PatientDebtsList';
@@ -42,6 +43,7 @@ const MenuItem = {
   purchases: 'purchases',
   addPayment: 'addPayment',
   messages: 'messages',
+  history: 'history',
 };
 
 const initialState = {
@@ -204,6 +206,8 @@ const PatientDetailsModal = ({
         return <PatientPurchasesList patient={patient} />;
       case MenuItem.messages:
         return <PatientMessages patient={patient} />;
+      case MenuItem.history:
+        return <PatientHistory patient={patient} />;
     }
   };
 
@@ -309,6 +313,14 @@ const PatientDetailsModal = ({
                     className={menuItemClasses(MenuItem.messages)}
                   >
                     {textForKey('Messages')}
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    id={MenuItem.history}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.history)}
+                  >
+                    {textForKey('History of changes')}
                   </ListGroup.Item>
                   {typeof onDelete === 'function' && (
                     <ListGroup.Item
