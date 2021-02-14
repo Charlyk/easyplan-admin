@@ -13,7 +13,7 @@ import { textForKey } from '../../../../utils/localization';
 const Field = ({ field }) => {
   const isDate = (value) => {
     const regex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}/;
-    return value.match(regex);
+    return value?.match(regex);
   };
 
   const getValue = (value) => {
