@@ -79,7 +79,7 @@ const reducer = (state, action) => {
         ...state,
         firstName,
         lastName,
-        birthday: moment(birthday).toDate(),
+        birthday: birthday ? moment(birthday).toDate() : null,
         email,
         phoneNumber,
         euroDebt,

@@ -474,6 +474,8 @@ export default {
     sendstatus: 'Statut',
     'history of changes': 'History of changes',
     onsite: 'On site',
+    phonenumber: 'Phone number',
+    gender: 'Gender',
   },
   ro: {
     analytics: 'Analitică',
@@ -956,6 +958,8 @@ export default {
     sendstatus: 'Statut',
     'history of changes': 'Istoria modificarilor',
     onsite: 'Pe loc',
+    phonenumber: 'Număr de telefon',
+    gender: 'Sex',
   },
   ru: {
     analytics: 'Analytics',
@@ -1429,5 +1433,7 @@ export default {
     sendstatus: 'Send status',
     'history of changes': 'History of changes',
     onsite: 'On site',
+    phonenumber: 'Phone number',
+    gender: 'Gender',
   },
 };
