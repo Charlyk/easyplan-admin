@@ -79,7 +79,7 @@ const reducer = (state, action) => {
         ...state,
         firstName,
         lastName,
-        birthday,
+        birthday: moment(birthday).toDate(),
         email,
         phoneNumber,
         euroDebt,
@@ -118,7 +118,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
     }
   }, [patient]);
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     const eventId = event.target.id;
     const newValue = event.target.value;
     switch (eventId) {
@@ -150,7 +150,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
     localDispatch(actions.setPhoneNumber({ newNumber, isPhoneValid }));
   };
 
-  const handleBirthdayChange = newDate => {
+  const handleBirthdayChange = (newDate) => {
     localDispatch(actions.setBirthday(newDate));
   };
 
