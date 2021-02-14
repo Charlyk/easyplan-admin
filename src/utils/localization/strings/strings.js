@@ -473,6 +473,7 @@ export default {
     messagetext: 'Textul mesajului',
     sendstatus: 'Statut',
     'history of changes': 'History of changes',
+    onsite: 'On site',
   },
   ro: {
     analytics: 'Analitică',
@@ -954,6 +955,7 @@ export default {
     messagetext: 'Textul mesajului',
     sendstatus: 'Statut',
     'history of changes': 'Istoria modificarilor',
+    onsite: 'Pe loc',
   },
   ru: {
     analytics: 'Analytics',
@@ -1426,5 +1428,6 @@ export default {
     messagetext: 'Message text',
     sendstatus: 'Send status',
     'history of changes': 'History of changes',
+    onsite: 'On site',
   },
 };

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import IconArrowNext from '../../../../assets/icons/iconArrowNext';
@@ -10,6 +11,18 @@ import IconPlus from '../../../../assets/icons/iconPlus';
 import { textForKey } from '../../../../utils/localization';
 
 const Field = ({ field }) => {
+  const isDate = (value) => {
+    const regex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}/;
+    return value.match(regex);
+  };
+
+  const getValue = (value) => {
+    if (isDate(value)) {
+      return moment(value).format('DD.MM.YYYY HH:mm');
+    }
+    return value;
+  };
+
   return (
     <tr className='field'>
       <td style={{ padding: '.3rem' }}>
@@ -20,7 +33,7 @@ const Field = ({ field }) => {
       {field.startValue && (
         <td style={{ padding: '.3rem' }} align='center'>
           <Typography noWrap classes={{ root: 'field-text' }}>
-            {field.startValue}
+            {textForKey(getValue(field.startValue))}
           </Typography>
         </td>
       )}
@@ -35,7 +48,7 @@ const Field = ({ field }) => {
         align='center'
       >
         <Typography noWrap classes={{ root: 'field-text' }}>
-          {field.endValue}
+          {textForKey(getValue(field.endValue))}
         </Typography>
       </td>
     </tr>
@@ -50,6 +63,7 @@ const HistoryItem = ({ item }) => {
       return <IconEdit />;
     }
   };
+
   return (
     <div className='patient-history__item'>
       <div className='history-title-container'>
@@ -58,7 +72,7 @@ const HistoryItem = ({ item }) => {
           {item.user.fullName}
         </Typography>
         <Typography classes={{ root: 'history-title-label' }}>
-          {textForKey(`${item.action}action`)}
+          {textForKey(`${item.action}action`)} ({item.targetId})
         </Typography>
       </div>
       <table>
@@ -77,6 +91,7 @@ export default HistoryItem;
 HistoryItem.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.number,
+    targetId: PropTypes.string,
     created: PropTypes.string,
     user: PropTypes.shape({
       id: PropTypes.number,
