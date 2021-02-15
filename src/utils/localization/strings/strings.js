@@ -493,6 +493,8 @@ export default {
     pendingpayment: 'Pending payment',
     waitingforpatient: 'Waiting for patient',
     exchangeratevalueatpaymenttime: 'Cursul valutar',
+    sentby: 'Sent by',
+    comment: 'Comment',
   },
   ro: {
     analytics: 'Analitică',
@@ -994,6 +996,8 @@ export default {
     pendingpayment: 'În așteptare',
     waitingforpatient: 'În așteptare pacient',
     exchangeratevalueatpaymenttime: 'Cursul valutar',
+    sentby: 'Trimis de',
+    comment: 'Comentariu',
   },
   ru: {
     analytics: 'Analytics',
@@ -1486,5 +1490,7 @@ export default {
     pendingpayment: 'Pending payment',
     waitingforpatient: 'Waiting for patient',
     exchangeratevalueatpaymenttime: 'Cursul valutar',
+    sentby: 'Sent by',
+    comment: 'Comment',
   },
 };
