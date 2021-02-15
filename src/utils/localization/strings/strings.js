@@ -489,6 +489,7 @@ export default {
     priceatexecutiontime: 'Price at execution time',
     priceatpaymenttime: 'Price at payment time',
     notetext: 'Note text',
+    invoice_already_paid: 'Invoice already paid',
   },
   ro: {
     analytics: 'Analitică',
@@ -986,6 +987,7 @@ export default {
     priceatexecutiontime: 'Prețul inițial',
     priceatpaymenttime: 'Prețul la achitare',
     notetext: 'Textul notiței',
+    invoice_already_paid: 'Acest invoice este deja achitat!',
   },
   ru: {
     analytics: 'Analytics',
@@ -1474,5 +1476,6 @@ export default {
     priceatexecutiontime: 'Price at execution time',
     priceatpaymenttime: 'Price at payment time',
     notetext: 'Note text',
+    invoice_already_paid: 'Invoice already paid',
   },
 };
