@@ -26,7 +26,7 @@ import DoctorItem from './DoctorItem';
 
 const moment = extendMoment(Moment);
 
-const createContainerHours = hours => {
+const createContainerHours = (hours) => {
   const updateHours = [];
   for (let hour of hours) {
     const hourParts = hour.split(':');
@@ -52,6 +52,7 @@ const initialState = {
   hasSchedules: false,
   pauseModal: {
     open: false,
+    viewDate: Date(),
     doctor: null,
     startTime: null,
     endTime: null,
@@ -174,7 +175,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
    * @param {Array.<Object>} schedules
    * @return {Array.<Object>}
    */
-  const addOffsetToSchedules = schedules => {
+  const addOffsetToSchedules = (schedules) => {
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
     for (let schedule of schedules) {
@@ -207,7 +208,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
    * @param {Map.<number, [Object]>} schedules
    * @return {Map<number, [Object]>}
    */
-  const updateSchedules = schedules => {
+  const updateSchedules = (schedules) => {
     // map schedules by adding an offset for schedules that intersect other schedules
     if (schedules == null) {
       return new Map();
@@ -241,6 +242,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         endTime,
         id,
         comment,
+        viewDate: moment(viewDate),
       }),
     );
   };
@@ -257,7 +259,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
    * @param {Object} doctor
    * @return {function(*=, *=): void}
    */
-  const handleAddSchedule = doctor => (startHour, endHour) => {
+  const handleAddSchedule = (doctor) => (startHour, endHour) => {
     onCreateSchedule(doctor, startHour, endHour);
   };
 
@@ -265,11 +267,11 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
    * Handle user clicked on a schedule
    * @param {Object} schedule
    */
-  const handleScheduleClick = schedule => {
+  const handleScheduleClick = (schedule) => {
     if (schedule.type === 'Schedule') {
       onScheduleSelect(schedule);
     } else {
-      const doctor = doctors.find(item => item.id === schedule.doctorId);
+      const doctor = doctors.find((item) => item.id === schedule.doctorId);
       if (doctor != null) {
         handleCreatePause(
           doctor,
@@ -305,12 +307,12 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
    * @param {number} doctorId
    * @return {[Object]|[]}
    */
-  const getSchedulesForDoctor = doctorId => {
+  const getSchedulesForDoctor = (doctorId) => {
     return schedulesWithOffset.get(doctorId) || [];
   };
 
   const halfHours = hours.filter(
-    item => item.split(':')[1] === '00' || item.split(':')[1] === '30',
+    (item) => item.split(':')[1] === '00' || item.split(':')[1] === '30',
   );
 
   return (
@@ -318,7 +320,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
       {hours.length !== 0 && (
         <div className='day-doctors-container'>
-          {doctors.map(doctor => (
+          {doctors.map((doctor) => (
             <DoctorItem
               doctor={doctor}
               key={doctor.id}
@@ -348,7 +350,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           </div>
         )}
         <div className='day-hours-container' id='day-hours-container'>
-          {halfHours.map(hour => (
+          {halfHours.map((hour) => (
             <Typography
               id={hour}
               classes={{ root: 'day-hour-item' }}
