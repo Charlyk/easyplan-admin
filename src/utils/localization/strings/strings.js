@@ -490,6 +490,8 @@ export default {
     priceatpaymenttime: 'Price at payment time',
     notetext: 'Note text',
     invoice_already_paid: 'Invoice already paid',
+    pendingpayment: 'Pending payment',
+    waitingforpatient: 'Waiting for patient',
   },
   ro: {
     analytics: 'Analitică',
@@ -988,6 +990,8 @@ export default {
     priceatpaymenttime: 'Prețul la achitare',
     notetext: 'Textul notiței',
     invoice_already_paid: 'Acest invoice este deja achitat!',
+    pendingpayment: 'În așteptare',
+    waitingforpatient: 'În așteptare pacient',
   },
   ru: {
     analytics: 'Analytics',
@@ -1477,5 +1481,8 @@ export default {
     priceatpaymenttime: 'Price at payment time',
     notetext: 'Note text',
     invoice_already_paid: 'Invoice already paid',
+    pendingpayment: 'Pending payment',
+    waitingforpatient: 'Waiting for patient',
+    exchangeratevalueatpaymenttime: 'Cursul valutar',
   },
 };
