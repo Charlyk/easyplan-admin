@@ -15,7 +15,7 @@ import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
 const filterAvailableTime = (availableTime, startTime) => {
-  return availableTime.filter(item => {
+  return availableTime.filter((item) => {
     const [startH, startM] = startTime.split(':');
     const [h, m] = item.split(':');
     const startDate = moment().set({
@@ -66,7 +66,7 @@ const reducer = (state, action) => {
     case reducerTypes.setShowDatePicker:
       return { ...state, showDatePicker: action.payload };
     case reducerTypes.setPauseDate:
-      return { ...state, pauseDate: action.payload };
+      return { ...state, pauseDate: action.payload, showDatePicker: false };
     case reducerTypes.setStartHour: {
       const startHour = action.payload;
       const endHour = state.endHour;
@@ -120,6 +120,7 @@ const reducer = (state, action) => {
 
 const AddPauseModal = ({
   open,
+  viewDate,
   doctor,
   id,
   startTime,
@@ -158,8 +159,14 @@ const AddPauseModal = ({
     const endHour = moment(endTime).format('HH:mm');
     localDispatch(actions.setStartHour(startHour));
     localDispatch(actions.setEndHour(endHour));
-    localDispatch(actions.setPauseDate(moment(startTime).toDate()));
   }, [startTime, endTime]);
+
+  useEffect(() => {
+    if (viewDate != null && typeof viewDate === 'object') {
+      localDispatch(actions.setPauseDate(viewDate.toDate()));
+      console.log(typeof viewDate === 'string', viewDate.toDate());
+    }
+  }, [viewDate]);
 
   useEffect(() => {
     localDispatch(actions.setComment(defaultComment));
@@ -168,7 +175,7 @@ const AddPauseModal = ({
   const fetchPauseAvailableTime = async () => {
     localDispatch(actions.setIsFetchingHours(true));
     const response = await dataAPI.getPauseAvailableTime({
-      date: pauseDate,
+      date: pauseDate || viewDate,
       doctorId: doctor.id,
     });
     if (response.isError) {
@@ -181,7 +188,7 @@ const AddPauseModal = ({
     localDispatch(actions.setIsFetchingHours(false));
   };
 
-  const updateEndTimeBasedOnService = availableTime => {
+  const updateEndTimeBasedOnService = (availableTime) => {
     if (id != null) {
       return;
     }
@@ -203,7 +210,7 @@ const AddPauseModal = ({
     }, 300);
   };
 
-  const handleDateChange = newDate => {
+  const handleDateChange = (newDate) => {
     localDispatch(actions.setPauseDate(newDate));
   };
 
@@ -256,11 +263,11 @@ const AddPauseModal = ({
     localDispatch(actions.setShowDatePicker(true));
   };
 
-  const handleCommentChange = event => {
+  const handleCommentChange = (event) => {
     localDispatch(actions.setComment(event.target.value));
   };
 
-  const handleHourChange = event => {
+  const handleHourChange = (event) => {
     const targetId = event.target.id;
     switch (targetId) {
       case 'startTime':
@@ -324,7 +331,7 @@ const AddPauseModal = ({
             disabled={isFetchingHours || availableStartTime.length === 0}
             custom
           >
-            {availableStartTime.map(item => (
+            {availableStartTime.map((item) => (
               <option key={`start-${item}`} value={item}>
                 {item}
               </option>
@@ -343,7 +350,7 @@ const AddPauseModal = ({
             disabled={isFetchingHours || availableEndTime.length === 0}
             custom
           >
-            {availableEndTime.map(item => (
+            {availableEndTime.map((item) => (
               <option key={`end-${item}`} value={item}>
                 {item}
               </option>
@@ -359,7 +366,7 @@ const AddPauseModal = ({
         <InputGroup>
           <Form.Control
             as='textarea'
-            value={comment}
+            value={comment || ''}
             onChange={handleCommentChange}
             aria-label='With textarea'
           />
@@ -374,6 +381,7 @@ export default AddPauseModal;
 
 AddPauseModal.propTypes = {
   open: PropTypes.bool,
+  viewDate: PropTypes.instanceOf(Date),
   onClose: PropTypes.func,
   doctor: PropTypes.shape({
     id: PropTypes.number,
