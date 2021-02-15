@@ -71,7 +71,11 @@ const ScheduleConfirmation = () => {
       justifyContent='center'
       className='schedule-confirmation-root'
     >
-      {isLoading && <CircularProgress style={{ color: '#3A83DC' }} />}
+      {isLoading && (
+        <Box>
+          <CircularProgress style={{ color: '#3A83DC' }} />
+        </Box>
+      )}
       {!isLoading && schedule == null && (
         <Typography classes={{ root: 'no-data-label' }}>
           {textForKey('Schedule info not found')}
@@ -80,72 +84,69 @@ const ScheduleConfirmation = () => {
       {logoSrc && (
         <img className='logo-image' src={logoSrc} alt='Clinic logo' />
       )}
-      {schedule != null &&
-        !isLoading &&
-        schedule.status !== 'Confirmed' &&
-        !isError && (
-          <TableContainer classes={{ root: 'table-container' }}>
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <TableCell colSpan={2} align='center'>
-                    <Typography classes={{ root: 'title-label' }}>
-                      {textForKey('Detalii programare')}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Typography align='right' classes={{ root: 'data-label' }}>
-                      {textForKey('Date')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: 'data-label' }}>
-                      {moment(schedule.startTime).format('DD.MM.YYYY')}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell align='right'>
-                    <Typography classes={{ root: 'data-label' }}>
-                      {textForKey('Hour')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: 'data-label' }}>
-                      {moment(schedule.startTime).format('HH:mm')}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Typography align='right' classes={{ root: 'data-label' }}>
-                      {textForKey('Doctor')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: 'data-label' }}>
-                      {schedule.doctorName}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Typography align='right' classes={{ root: 'data-label' }}>
-                      {textForKey('Service')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: 'data-label' }}>
-                      {schedule.service}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+      {schedule != null && !isLoading && !isError && (
+        <TableContainer classes={{ root: 'table-container' }}>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={2} align='center'>
+                  <Typography classes={{ root: 'title-label' }}>
+                    {textForKey('Detalii programare')}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Typography align='right' classes={{ root: 'data-label' }}>
+                    {textForKey('Date')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: 'data-label' }}>
+                    {moment(schedule.startTime).format('DD.MM.YYYY')}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align='right'>
+                  <Typography classes={{ root: 'data-label' }}>
+                    {textForKey('Hour')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: 'data-label' }}>
+                    {moment(schedule.startTime).format('HH:mm')}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Typography align='right' classes={{ root: 'data-label' }}>
+                    {textForKey('Doctor')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: 'data-label' }}>
+                    {schedule.doctorName}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Typography align='right' classes={{ root: 'data-label' }}>
+                    {textForKey('Service')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: 'data-label' }}>
+                    {schedule.service}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
       {schedule != null && !isLoading && (
         <LoadingButton
           isLoading={isConfirming}
