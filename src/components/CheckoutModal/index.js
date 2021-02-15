@@ -52,9 +52,9 @@ import './styles.scss';
 import ServicesList from './ServicesList';
 
 const computeServicePrice = (services, exchangeRates) => {
-  return services.map(service => {
+  return services.map((service) => {
     const serviceExchange = exchangeRates.find(
-      rate => rate.currency === service.currency,
+      (rate) => rate.currency === service.currency,
     ) || { value: 1 };
     const servicePrice = service.amount * serviceExchange.value * service.count;
     return {
@@ -136,7 +136,7 @@ const reducer = (state, action) => {
     case reducerTypes.setDiscount: {
       // compute new total amount
       const newDiscount = action.payload;
-      const servicesTotal = sumBy(state.services, item => item.totalPrice);
+      const servicesTotal = sumBy(state.services, (item) => item.totalPrice);
       let discountedTotal = getDiscount(servicesTotal, newDiscount);
       // check if current entered pay amount is not greater than discounted total
       let currentPayAmount = state.payAmount;
@@ -159,7 +159,7 @@ const reducer = (state, action) => {
       // compute services total price
       const updatedServices = computeServicePrice(services, exchangeRates);
       const servicesPrice = parseFloat(
-        sumBy(updatedServices, item => item.totalPrice),
+        sumBy(updatedServices, (item) => item.totalPrice),
       ).toFixed(2);
       // compute new total amount
       const newTotalAmount = isDebt
@@ -188,7 +188,7 @@ const reducer = (state, action) => {
         exchangeRates,
       );
       const servicesPrice = parseFloat(
-        sumBy(updatedServices, item => item.totalPrice),
+        sumBy(updatedServices, (item) => item.totalPrice),
       ).toFixed(2);
 
       const invoiceTotal = isDebt
@@ -329,7 +329,10 @@ const CheckoutModal = ({
       const { data } = response;
       localDispatch(
         actions.setSearchResults(
-          data.map(item => ({ ...item, name: item.fullName })),
+          data.map((item) => ({
+            ...item,
+            name: `${item.fullName} (${item.phoneNumber})`,
+          })),
         ),
       );
     }
@@ -359,8 +362,8 @@ const CheckoutModal = ({
     localDispatch(actions.setPayAmount(newAmount));
   };
 
-  const handleServiceChanged = newService => {
-    const newServices = services.map(service => {
+  const handleServiceChanged = (newService) => {
+    const newServices = services.map((service) => {
       if (
         service.id !== newService.id ||
         service.toothId !== newService.toothId ||
@@ -375,8 +378,10 @@ const CheckoutModal = ({
     );
   };
 
-  const handleNewServiceSelected = service => {
-    const serviceExists = services.some(item => item.serviceId === service.id);
+  const handleNewServiceSelected = (service) => {
+    const serviceExists = services.some(
+      (item) => item.serviceId === service.id,
+    );
     if (serviceExists) {
       return;
     }
@@ -395,9 +400,9 @@ const CheckoutModal = ({
     );
   };
 
-  const handleServiceRemoved = service => {
+  const handleServiceRemoved = (service) => {
     const newServices = cloneDeep(services);
-    remove(newServices, item => item.serviceId === service.serviceId);
+    remove(newServices, (item) => item.serviceId === service.serviceId);
     localDispatch(
       actions.setServices({ services: newServices, exchangeRates }),
     );
@@ -405,13 +410,13 @@ const CheckoutModal = ({
 
   const getRequestBody = () => {
     const servicesPrice = parseFloat(
-      sumBy(services, item => item.totalPrice),
+      sumBy(services, (item) => item.totalPrice),
     ).toFixed(2);
     const requestBody = {
       paidAmount: payAmount,
       discount: discount,
       totalAmount: servicesPrice,
-      services: services.map(item => ({
+      services: services.map((item) => ({
         id: item.id,
         serviceId: item.serviceId,
         price: item.amount,
@@ -475,7 +480,7 @@ const CheckoutModal = ({
     );
   };
 
-  const getDateHour = date => {
+  const getDateHour = (date) => {
     if (date == null) return '';
     return moment(date).format('HH:mm');
   };
@@ -488,11 +493,11 @@ const CheckoutModal = ({
   const scheduleTime = `${startDate} ${startHour} - ${endHour}`;
 
   const filteredServices = isNew
-    ? clinicServices.filter(clinicService => {
+    ? clinicServices.filter((clinicService) => {
         return (
           invoiceDetails.doctor.id === -1 ||
           invoiceDetails.doctor.services.some(
-            item => item.serviceId === clinicService.id,
+            (item) => item.serviceId === clinicService.id,
           )
         );
       })
@@ -543,7 +548,7 @@ const CheckoutModal = ({
                       valuePlaceholder={`${textForKey(
                         'Select doctor',
                       )} (${textForKey('Optional')})`}
-                      options={doctors.map(it => ({
+                      options={doctors.map((it) => ({
                         ...it,
                         name: `${it.firstName} ${it.lastName}`,
                       }))}
