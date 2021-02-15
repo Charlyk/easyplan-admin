@@ -82,7 +82,7 @@ const ScheduleConfirmation = () => {
       )}
       {schedule != null &&
         !isLoading &&
-        schedule.status === 'Confirmed' &&
+        schedule.status !== 'Confirmed' &&
         !isError && (
           <TableContainer classes={{ root: 'table-container' }}>
             <Table>
