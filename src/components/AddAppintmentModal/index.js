@@ -31,7 +31,14 @@ import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
-const filterAvailableTime = (availableTime, startTime, service) => {
+/**
+ * Filter available time based on start time and service duration
+ * @param {Array.<string>} availableTime
+ * @param {string} startTime
+ * @param {{ duration: number}|null} service
+ * @return {Array.<string>}
+ */
+const filterAvailableTime = (availableTime, startTime, service = null) => {
   return availableTime.filter((item) => {
     const [startH, startM] = startTime.split(':');
     const [h, m] = item.split(':');
@@ -46,9 +53,20 @@ const filterAvailableTime = (availableTime, startTime, service) => {
       second: 0,
     });
     const diff = Math.ceil(endDate.diff(startDate) / 1000 / 60);
-    console.log(diff, service.duration, diff >= (service?.duration || 15));
-    return diff >= service?.duration || 15;
+    return diff >= (service?.duration || 15);
   });
+};
+
+/**
+ * Get the end hour for a schedule based on service duration
+ * @param {Array.<string>} availableTime
+ * @param {string} startTime
+ * @param {{ duration: number}|null} service
+ * @return {string}
+ */
+const getEndTimeBasedOnService = (availableTime, startTime, service) => {
+  const filteredTime = filterAvailableTime(availableTime, startTime, service);
+  return filteredTime.length > 0 ? filteredTime[0] : '';
 };
 
 const initialState = {
@@ -148,11 +166,14 @@ const reducer = (state, action) => {
       return { ...state, isUrgent: action.payload };
     case reducerTypes.setStartTime: {
       const startTime = action.payload;
-      const endTime = state.endTime;
-      const availableEndTime = filterAvailableTime(
+      const endTime = getEndTimeBasedOnService(
         state.availableTime,
         startTime,
         state.service,
+      );
+      const availableEndTime = filterAvailableTime(
+        state.availableTime,
+        startTime,
       );
       return {
         ...state,
@@ -280,18 +301,21 @@ const reducer = (state, action) => {
           ? availableTime[0]
           : state.startTime;
 
-      const availableStartTime = availableTime;
-      const availableEndTime = filterAvailableTime(
+      const endTime = getEndTimeBasedOnService(
         availableTime,
         startTime,
         state.service,
       );
+
+      const availableStartTime = availableTime;
+      const availableEndTime = filterAvailableTime(availableTime, startTime);
       return {
         ...state,
         availableTime,
         availableStartTime,
         availableEndTime,
         startTime,
+        endTime,
       };
     }
     case reducerTypes.setAvailableStartTime:
