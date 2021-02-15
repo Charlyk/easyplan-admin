@@ -31,7 +31,7 @@ import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 import './styles.scss';
 
-const filterAvailableTime = (availableTime, startTime) => {
+const filterAvailableTime = (availableTime, startTime, service) => {
   return availableTime.filter((item) => {
     const [startH, startM] = startTime.split(':');
     const [h, m] = item.split(':');
@@ -46,7 +46,8 @@ const filterAvailableTime = (availableTime, startTime) => {
       second: 0,
     });
     const diff = Math.ceil(endDate.diff(startDate) / 1000 / 60);
-    return diff >= 15;
+    console.log(diff, service.duration, diff >= (service?.duration || 15));
+    return diff >= service?.duration || 15;
   });
 };
 
@@ -151,6 +152,7 @@ const reducer = (state, action) => {
       const availableEndTime = filterAvailableTime(
         state.availableTime,
         startTime,
+        state.service,
       );
       return {
         ...state,
@@ -279,7 +281,11 @@ const reducer = (state, action) => {
           : state.startTime;
 
       const availableStartTime = availableTime;
-      const availableEndTime = filterAvailableTime(availableTime, startTime);
+      const availableEndTime = filterAvailableTime(
+        availableTime,
+        startTime,
+        state.service,
+      );
       return {
         ...state,
         availableTime,
