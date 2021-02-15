@@ -72,7 +72,8 @@ const HistoryItem = ({ item }) => {
           {item.user.fullName}
         </Typography>
         <Typography classes={{ root: 'history-title-label' }}>
-          {textForKey(`${item.action}action`)} ({item.targetId})
+          {textForKey(`${item.action}action`)}{' '}
+          {moment(item.created).format('DD.MM.YYYY HH:mm')} ({item.targetId})
         </Typography>
       </div>
       <table>
