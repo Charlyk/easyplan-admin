@@ -492,6 +492,7 @@ export default {
     invoice_already_paid: 'Invoice already paid',
     pendingpayment: 'Pending payment',
     waitingforpatient: 'Waiting for patient',
+    exchangeratevalueatpaymenttime: 'Cursul valutar',
   },
   ro: {
     analytics: 'Analitică',
@@ -992,6 +993,7 @@ export default {
     invoice_already_paid: 'Acest invoice este deja achitat!',
     pendingpayment: 'În așteptare',
     waitingforpatient: 'În așteptare pacient',
+    exchangeratevalueatpaymenttime: 'Cursul valutar',
   },
   ru: {
     analytics: 'Analytics',
