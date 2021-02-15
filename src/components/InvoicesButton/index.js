@@ -58,7 +58,7 @@ const InvoicesButton = () => {
     setShowInvoices(false);
   };
 
-  const handlePayInvoice = invoice => {
+  const handlePayInvoice = (invoice) => {
     dispatch(setPaymentModal({ open: true, invoice }));
   };
 
@@ -85,7 +85,7 @@ const InvoicesButton = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {invoices.map(invoice => (
+                  {invoices.map((invoice) => (
                     <tr key={invoice.id}>
                       <td>{invoice.doctorFullName}</td>
                       <td>{invoice.patientFullName}</td>

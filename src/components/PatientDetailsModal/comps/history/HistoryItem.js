@@ -32,7 +32,7 @@ const Field = ({ field }) => {
       </td>
       {field.startValue && (
         <td style={{ padding: '.3rem' }} align='center'>
-          <Typography noWrap classes={{ root: 'field-text' }}>
+          <Typography classes={{ root: 'field-text' }}>
             {textForKey(getValue(field.startValue))}
           </Typography>
         </td>
@@ -47,7 +47,7 @@ const Field = ({ field }) => {
         style={{ padding: '.3rem' }}
         align='center'
       >
-        <Typography noWrap classes={{ root: 'field-text' }}>
+        <Typography classes={{ root: 'field-text' }}>
           {textForKey(getValue(field.endValue))}
         </Typography>
       </td>
