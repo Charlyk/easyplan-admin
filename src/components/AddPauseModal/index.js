@@ -3,10 +3,8 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
@@ -128,7 +126,6 @@ const AddPauseModal = ({
   comment: defaultComment,
   onClose,
 }) => {
-  const dispatch = useDispatch();
   const datePickerAnchor = useRef(null);
   const [
     {
@@ -253,7 +250,6 @@ const AddPauseModal = ({
       toast.error(textForKey(response.message));
     } else {
       onClose();
-      dispatch(toggleAppointmentsUpdate());
     }
     // toggle loading spinner
     localDispatch(actions.setIsLoading(false));

@@ -99,13 +99,13 @@ const DayViewSchedule = ({
           ? 0
           : `calc(${schedule.offset} * ${offsetDistance}px)`,
         width: isHighlighted
-          ? '100%'
+          ? '99.5%'
           : `calc(99.5% - ${schedule.offset} * ${offsetDistance}px)`,
         top: itemRect.top,
         zIndex: isHighlighted ? 500 : 100 + index,
         height: itemRect.height,
         backgroundColor: isPause ? '#FDC534' : '#f3f3f3',
-        border: isHighlighted ? '#3A83DC 1px solid' : 'none',
+        border: isHighlighted && !isPause ? '#3A83DC 1px solid' : 'none',
       }}
     >
       <span
