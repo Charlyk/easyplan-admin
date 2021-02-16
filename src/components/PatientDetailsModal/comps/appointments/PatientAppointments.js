@@ -7,7 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IconPlus from '../../../../assets/icons/iconPlus';
 import { setAppointmentModal } from '../../../../redux/actions/actions';
-import { updateScheduleSelector } from '../../../../redux/selectors/scheduleSelector';
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../../../redux/selectors/scheduleSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
@@ -39,6 +42,7 @@ const reducer = (state, action) => {
 const PatientAppointments = ({ patient, isDoctor }) => {
   const dispatch = useDispatch();
   const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const [{ schedules, isLoading }, localDispatch] = useReducer(
     reducer,
     initialState,
@@ -51,14 +55,16 @@ const PatientAppointments = ({ patient, isDoctor }) => {
   }, [patient]);
 
   useEffect(() => {
-    if (updateSchedule == null) {
+    if (updateSchedule == null && deleteSchedule == null) {
       return;
     }
-    const isSamePatient = updateSchedule?.patient?.id === patient?.id;
+    const isSamePatient =
+      updateSchedule?.patient?.id === patient?.id ||
+      deleteSchedule?.patient?.id === patient?.id;
     if (isSamePatient) {
       fetchSchedules();
     }
-  }, [updateSchedule]);
+  }, [updateSchedule, deleteSchedule]);
 
   const fetchSchedules = async () => {
     localDispatch(actions.setIsLoading(true));
