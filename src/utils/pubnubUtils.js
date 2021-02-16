@@ -10,13 +10,15 @@ import {
 } from '../redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from '../redux/actions/clinicActions';
 import { setSMSMessageStatus } from '../redux/actions/patientActions';
+import { toggleUpdateSchedule } from '../redux/actions/schedule';
 import { userSelector } from '../redux/selectors/rootSelector';
 import { fetchClinicData } from './helperFuncs';
 
 export const handleRemoteMessage = (message) => (dispatch, getState) => {
   const appState = getState();
   const currentUser = userSelector(appState);
-  const { action, targetUserId, payload } = message;
+  const { action, targetUserId, payload: messagePayload } = message;
+  const payload = messagePayload != null ? JSON.parse(messagePayload) : null;
   switch (action) {
     case MessageAction.NewUserInvited:
     case MessageAction.InvitationRemoved:
@@ -33,13 +35,11 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       dispatch(toggleCheckDoctorAppointments());
       break;
     case MessageAction.ScheduleUpdatedOrCreated:
-      dispatch(toggleAppointmentsUpdate());
-      dispatch(toggleCheckDoctorAppointments());
+      dispatch(toggleUpdateSchedule(payload));
       break;
     case MessageAction.UserRestoredInClinic:
     case MessageAction.UserRemovedFromClinic:
       if (currentUser.id === targetUserId) {
-        console.log('user updated');
         dispatch(setUpdateCurrentUser());
       }
       break;

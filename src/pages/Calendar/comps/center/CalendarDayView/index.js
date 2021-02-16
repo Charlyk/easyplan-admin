@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 
 import AddPauseModal from '../../../../../components/AddPauseModal';
 import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
+import { updateScheduleSelector } from '../../../../../redux/selectors/scheduleSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
@@ -120,7 +120,7 @@ const reducer = (state, action) => {
 
 const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   const doctors = useSelector(clinicActiveDoctorsSelector);
-  const updateAppointments = useSelector(updateAppointmentsSelector);
+  const updateSchedule = useSelector(updateScheduleSelector);
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
   const [
@@ -132,7 +132,24 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (viewDate != null) {
       debounceFetching(false);
     }
-  }, [viewDate, doctors, updateAppointments]);
+  }, [viewDate, doctors]);
+
+  useEffect(() => {
+    console.log(updateSchedule);
+    if (updateSchedule != null) {
+      const newSchedulesMap = new Map();
+      for (const [doctorId, items] of schedules.entries()) {
+        const newSchedules = items.map((item) => {
+          if (item.id !== updateSchedule.id) {
+            return item;
+          }
+          return updateSchedule;
+        });
+        newSchedulesMap.set(doctorId, newSchedules);
+      }
+      localDispatch(actions.setSchedules(newSchedulesMap));
+    }
+  }, [updateSchedule]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {

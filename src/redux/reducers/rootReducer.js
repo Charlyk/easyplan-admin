@@ -13,6 +13,7 @@ import patientNoteModal from './patientNoteModal';
 import patient from './patientReducer';
 import patientXRayModal from './patientXRayModal';
 import paymentModal from './paymentModal';
+import schedule from './scheduleReducer';
 import serviceDetailsModal from './serviceDetailsReducer';
 
 export default combineReducers({
@@ -29,6 +30,7 @@ export default combineReducers({
   addPaymentModal,
   exchangeRatesModal,
   patient,
+  schedule,
 });
 
 function main(state = initialState, action) {
