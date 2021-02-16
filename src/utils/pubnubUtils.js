@@ -37,6 +37,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
     case MessageAction.NewPatientOnSite:
       dispatch(toggleCheckDoctorAppointments());
       break;
+    case MessageAction.PauseRecordUpdatedOrCreated:
     case MessageAction.ScheduleUpdatedOrCreated:
       dispatch(toggleUpdateSchedule(payload));
       setTimeout(() => dispatch(toggleUpdateSchedule(null)), 400);
@@ -82,6 +83,7 @@ const MessageAction = {
   CreatedNewInvoice: 'CreatedNewInvoice',
   NewPatientOnSite: 'NewPatientOnSite',
   ScheduleUpdatedOrCreated: 'ScheduleUpdatedOrCreated',
+  PauseRecordUpdatedOrCreated: 'PauseRecordUpdatedOrCreated',
   NewUserInvited: 'NewUserInvited',
   InvitationRemoved: 'InvitationRemoved',
   UserRemovedFromClinic: 'UserRemovedFromClinic',
