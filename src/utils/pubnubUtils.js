@@ -10,7 +10,10 @@ import {
 } from '../redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from '../redux/actions/clinicActions';
 import { setSMSMessageStatus } from '../redux/actions/patientActions';
-import { toggleUpdateSchedule } from '../redux/actions/schedule';
+import {
+  toggleDeleteSchedule,
+  toggleUpdateSchedule,
+} from '../redux/actions/scheduleActions';
 import { userSelector } from '../redux/selectors/rootSelector';
 import { fetchClinicData } from './helperFuncs';
 
@@ -36,6 +39,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       break;
     case MessageAction.ScheduleUpdatedOrCreated:
       dispatch(toggleUpdateSchedule(payload));
+      setTimeout(() => dispatch(toggleUpdateSchedule(null)), 400);
       break;
     case MessageAction.UserRestoredInClinic:
     case MessageAction.UserRemovedFromClinic:
@@ -58,6 +62,10 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       break;
     case MessageAction.ExchangeRatesUpdateRequired:
       dispatch(setClinicExchangeRatesUpdateRequired(true));
+      break;
+    case MessageAction.ScheduleDeleted:
+      dispatch(toggleDeleteSchedule(payload));
+      setTimeout(() => dispatch(toggleDeleteSchedule(null)), 400);
       break;
     case MessageAction.UpdateMessageStatus: {
       if (payload == null) {
@@ -88,4 +96,5 @@ const MessageAction = {
   NewPaymentRegistered: 'NewPaymentRegistered',
   ExchangeRatesUpdateRequired: 'ExchangeRatesUpdateRequired',
   UpdateMessageStatus: 'UpdateMessageStatus',
+  ScheduleDeleted: 'ScheduleDeleted',
 };

@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap';
 import IconDelete from '../../../assets/icons/iconDelete';
 import IconEdit from '../../../assets/icons/iconEdit';
 import IconRefresh from '../../../assets/icons/iconRefresh';
+import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const ServiceRow = ({ service, onEditService, onDeleteService }) => {
@@ -44,7 +45,7 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
       </td>
       <td align='right'>
         <Typography noWrap classes={{ root: 'row-label' }}>
-          {service.price} MDL
+          {formattedAmount(service.price, service.currency)}
         </Typography>
       </td>
       <td align='right'>

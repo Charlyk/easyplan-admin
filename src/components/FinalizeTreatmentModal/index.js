@@ -33,7 +33,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const clinicCurrency = useSelector(clinicCurrencySelector);
 
   useEffect(() => {
-    const newServices = services.map(item => ({
+    const newServices = services.map((item) => ({
       ...item,
       isSelected: item.completed,
       isBraces: item.serviceType == null,
@@ -41,8 +41,8 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     setPlanServices(newServices);
   }, [services]);
 
-  const handleItemPriceChanged = service => event => {
-    const newServices = planServices.map(item => {
+  const handleItemPriceChanged = (service) => (event) => {
+    const newServices = planServices.map((item) => {
       if (
         item.id !== service.id ||
         item.toothId !== service.toothId ||
@@ -70,21 +70,21 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   };
 
   const handleSaveTreatment = () => {
-    if (!planServices.some(it => it.isSelected)) {
+    if (!planServices.some((it) => it.isSelected)) {
       toast(textForKey('Please select at least one service'));
       return;
     }
     onSave(
-      planServices.map(item => ({
+      planServices.map((item) => ({
         ...item,
         price: parseFloat(item.price),
       })),
     );
   };
 
-  const handleAddService = service => () => {
+  const handleAddService = (service) => () => {
     setPlanServices(
-      planServices.map(item => {
+      planServices.map((item) => {
         if (
           item.id !== service.id ||
           item.toothId !== service.toothId ||
@@ -101,9 +101,9 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     );
   };
 
-  const handleRemoveService = service => () => {
+  const handleRemoveService = (service) => () => {
     setPlanServices(
-      planServices.map(item => {
+      planServices.map((item) => {
         if (
           item.id !== service.id ||
           item.toothId !== service.toothId ||
@@ -126,13 +126,13 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const handleServiceChecked = (event, isChecked) => {
     const [serviceId, toothId, destination] = event.target.id.split('#');
     const service = planServices.find(
-      item =>
+      (item) =>
         item.id === parseInt(serviceId) &&
         (item.toothId == null || item.toothId === toothId) &&
         (item.destination == null || item.destination === destination),
     );
     setPlanServices(
-      planServices.map(item => {
+      planServices.map((item) => {
         if (
           item.id !== service.id ||
           item.toothId !== service.toothId ||
@@ -148,13 +148,13 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     );
   };
 
-  const handleCurrencyClick = service => event => {
+  const handleCurrencyClick = (service) => (event) => {
     menuRef.current = event.target;
     setServiceToChange(service);
   };
 
-  const handleCurrencySelected = rate => () => {
-    const newServices = planServices.map(item => {
+  const handleCurrencySelected = (rate) => () => {
+    const newServices = planServices.map((item) => {
       if (
         item.id !== serviceToChange.id ||
         item.toothId !== serviceToChange.toothId ||
@@ -175,9 +175,9 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
     setServiceToChange(null);
   };
 
-  const getServiceRate = service => {
+  const getServiceRate = (service) => {
     return (
-      rates?.find(item => item.currency === service.currency) || {
+      rates?.find((item) => item.currency === service.currency) || {
         value: 1,
         currency: clinicCurrency,
       }
@@ -186,8 +186,8 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
 
   const totalPrice = sum(
     planServices
-      .filter(item => item.isSelected)
-      .map(item => {
+      .filter((item) => item.isSelected)
+      .map((item) => {
         const itemRate = getServiceRate(item);
         return parseFloat(item.price) * itemRate.value * item.count;
       }),
@@ -195,7 +195,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
 
   const ratesMenu = (
     <Menu open={Boolean(serviceToChange)} anchorEl={menuRef.current}>
-      {rates?.map(rate => (
+      {rates?.map((rate) => (
         <MenuItem onClick={handleCurrencySelected(rate)} key={rate.currency}>
           {rate.currency} - {rate.currencyName}
         </MenuItem>
@@ -208,7 +208,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
       className='finalize-treatment-root'
       open={open}
       onClose={onClose}
-      isPositiveDisabled={!planServices.some(it => it.isSelected)}
+      isPositiveDisabled={!planServices.some((it) => it.isSelected)}
       onPositiveClick={handleSaveTreatment}
       positiveBtnText={textForKey('Finalize')}
       title={textForKey('Finalize treatment')}
@@ -216,7 +216,7 @@ const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
       {ratesMenu}
       <div className='finalize-treatment-content'>
         <span className='modal-subtitle'>{textForKey('Services')}</span>
-        {planServices.map(item => (
+        {planServices.map((item) => (
           <div
             role='button'
             tabIndex={0}

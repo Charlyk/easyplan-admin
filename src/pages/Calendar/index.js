@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 
 import './styles.scss';
 import { Box } from '@material-ui/core';
@@ -176,11 +176,11 @@ const Calendar = () => {
   }, []);
 
   useEffect(() => {
-    const newDoctors = doctors.map(item => {
-      const servicesIds = item.services.map(service => service.seviceId);
+    const newDoctors = doctors.map((item) => {
+      const servicesIds = item.services.map((service) => service.seviceId);
       return {
         ...item,
-        services: services.filter(service =>
+        services: services.filter((service) =>
           servicesIds.includes(service.serviceId),
         ),
       };
@@ -191,7 +191,7 @@ const Calendar = () => {
     }
   }, [doctors, services]);
 
-  const handlePubnubMessageReceived = remoteMessage => {
+  const handlePubnubMessageReceived = (remoteMessage) => {
     const { message, channel } = remoteMessage;
     if (channel !== `${currentUser.id}-import_schedules_channel`) {
       return;
@@ -213,50 +213,53 @@ const Calendar = () => {
     }
   };
 
-  const handleAppointmentModalOpen = (doctor, startHour, endHour) => {
-    dispatch(
-      setAppointmentModal({
-        open: true,
-        doctor: viewMode === 'day' ? doctor : selectedDoctor,
-        startHour,
-        endHour,
-        date: viewDate,
-      }),
-    );
-  };
+  const handleAppointmentModalOpen = useCallback(
+    (doctor, startHour, endHour) => {
+      dispatch(
+        setAppointmentModal({
+          open: true,
+          doctor: viewMode === 'day' ? doctor : selectedDoctor,
+          startHour,
+          endHour,
+          date: viewDate,
+        }),
+      );
+    },
+    [],
+  );
 
-  const handleDoctorSelected = doctor => {
+  const handleDoctorSelected = (doctor) => {
     localDispatch(reducerActions.setSelectedDoctor(doctor));
   };
 
-  const handleViewDateChange = newDate => {
+  const handleViewDateChange = useCallback((newDate) => {
     localDispatch(reducerActions.setViewDate(newDate));
-  };
+  }, []);
 
-  const handleScheduleSelected = schedule => {
+  const handleScheduleSelected = useCallback((schedule) => {
     localDispatch(reducerActions.setSelectedSchedule(schedule));
-  };
+  }, []);
 
-  const handleViewModeChange = newMode => {
+  const handleViewModeChange = useCallback((newMode) => {
     localDispatch(reducerActions.setViewMode(newMode));
-  };
+  }, []);
 
-  const handlePayDebt = debt => {
+  const handlePayDebt = useCallback((debt) => {
     dispatch(setPaymentModal({ open: true, invoice: debt }));
-  };
+  }, []);
 
-  const handleEditSchedule = schedule => {
+  const handleEditSchedule = useCallback((schedule) => {
     dispatch(
       setAppointmentModal({
         open: true,
         schedule,
       }),
     );
-  };
+  }, []);
 
-  const handleDeleteSchedule = schedule => {
+  const handleDeleteSchedule = useCallback((schedule) => {
     localDispatch(reducerActions.setDeleteSchedule({ open: true, schedule }));
-  };
+  }, []);
 
   const handleConfirmDeleteSchedule = async () => {
     if (deleteSchedule.schedule == null) {
@@ -275,7 +278,7 @@ const Calendar = () => {
     if (selectedSchedule.id === deleteSchedule.schedule.id) {
       localDispatch(reducerActions.setSelectedSchedule(null));
     }
-    dispatch(toggleAppointmentsUpdate());
+    // dispatch(toggleAppointmentsUpdate());
   };
 
   const handleCloseDeleteSchedule = () => {
@@ -284,9 +287,9 @@ const Calendar = () => {
     );
   };
 
-  const handleOpenImportModal = () => {
+  const handleOpenImportModal = useCallback(() => {
     dispatch(toggleImportModal(true));
-  };
+  }, []);
 
   const parsingProgressBar = isParsing && (
     <Box

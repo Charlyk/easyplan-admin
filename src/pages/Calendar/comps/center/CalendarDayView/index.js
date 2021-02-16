@@ -7,8 +7,10 @@ import React, {
 } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
+import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
+import remove from 'lodash/remove';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -17,7 +19,10 @@ import { toast } from 'react-toastify';
 
 import AddPauseModal from '../../../../../components/AddPauseModal';
 import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
-import { updateScheduleSelector } from '../../../../../redux/selectors/scheduleSelector';
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../../../../redux/selectors/scheduleSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
@@ -121,6 +126,7 @@ const reducer = (state, action) => {
 const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   const doctors = useSelector(clinicActiveDoctorsSelector);
   const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
   const [
@@ -135,21 +141,54 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   }, [viewDate, doctors]);
 
   useEffect(() => {
-    console.log(updateSchedule);
-    if (updateSchedule != null) {
-      const newSchedulesMap = new Map();
-      for (const [doctorId, items] of schedules.entries()) {
-        const newSchedules = items.map((item) => {
-          if (item.id !== updateSchedule.id) {
-            return item;
-          }
-          return updateSchedule;
-        });
-        newSchedulesMap.set(doctorId, newSchedules);
-      }
-      localDispatch(actions.setSchedules(newSchedulesMap));
+    if (updateSchedule == null) {
+      return;
     }
+    const newSchedulesMap = new Map();
+    for (const [doctorId, items] of schedules.entries()) {
+      if (updateSchedule.doctorId !== doctorId) {
+        newSchedulesMap.set(doctorId, items);
+        // don't have to do anything to this doctor schedules
+        continue;
+      }
+      // check if schedule exists
+      const scheduleExists = items.some(
+        (item) => item.id === updateSchedule.id,
+      );
+      const newSchedules = scheduleExists
+        ? items.map((item) => {
+            if (item.id !== updateSchedule.id) {
+              return item;
+            }
+            return updateSchedule;
+          })
+        : cloneDeep(items);
+      if (!scheduleExists) {
+        // if schedule does not exist add it to the list
+        newSchedules.push(updateSchedule);
+      }
+      newSchedulesMap.set(doctorId, newSchedules);
+    }
+    localDispatch(actions.setSchedules(newSchedulesMap));
   }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule == null) {
+      return;
+    }
+    const newSchedulesMap = new Map();
+    for (const [doctorId, items] of schedules.entries()) {
+      if (deleteSchedule.doctorId !== doctorId) {
+        newSchedulesMap.set(doctorId, items);
+        // don't have to do anything to this doctor schedules
+        continue;
+      }
+      const newSchedules = cloneDeep(items);
+      remove(newSchedules, (item) => item.id === deleteSchedule.id);
+      newSchedulesMap.set(doctorId, newSchedules);
+    }
+    localDispatch(actions.setSchedules(newSchedulesMap));
+  }, [deleteSchedule]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {

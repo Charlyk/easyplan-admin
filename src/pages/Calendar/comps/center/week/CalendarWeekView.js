@@ -11,7 +11,9 @@ import {
 import clsx from 'clsx';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
+import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import { Action } from '../../../../../utils/constants';
 import {
   getCurrentWeek,
@@ -26,8 +28,8 @@ const CalendarWeekView = ({
   onDateClick,
   selectedSchedule,
   onScheduleSelect,
-  update,
 }) => {
+  const updateAppointments = useSelector(updateAppointmentsSelector);
   const [isClosed, setIsClosed] = useState(!opened);
   const [week, setWeek] = useState(getCurrentWeek(viewDate));
 
@@ -43,9 +45,9 @@ const CalendarWeekView = ({
 
   useEffect(() => {
     setWeek(getCurrentWeek(viewDate));
-  }, [viewDate]);
+  }, [viewDate, updateAppointments]);
 
-  const handleDayClick = day => {
+  const handleDayClick = (day) => {
     onDateClick(day.toDate());
   };
 
@@ -57,7 +59,7 @@ const CalendarWeekView = ({
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {week.map(item => (
+              {week.map((item) => (
                 <TableCell key={item} onClick={() => handleDayClick(item)}>
                   <div
                     className={clsx('day-title', {
@@ -72,10 +74,10 @@ const CalendarWeekView = ({
           </TableHead>
           <TableBody>
             <TableRow>
-              {week.map(day => (
+              {week.map((day) => (
                 <CalendarWeekDayView
                   viewDate={viewDate}
-                  update={update}
+                  update={updateAppointments}
                   selectedSchedule={selectedSchedule}
                   onScheduleSelect={onScheduleSelect}
                   doctorId={doctorId}
@@ -94,7 +96,6 @@ const CalendarWeekView = ({
 export default CalendarWeekView;
 
 CalendarWeekView.propTypes = {
-  update: PropTypes.bool,
   onScheduleSelect: PropTypes.func,
   opened: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),

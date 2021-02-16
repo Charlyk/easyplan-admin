@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
-import './styles.scss';
+import cloneDeep from 'lodash/cloneDeep';
+import remove from 'lodash/remove';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { userSelector } from '../../redux/selectors/rootSelector';
-import { updateScheduleSelector } from '../../redux/selectors/scheduleSelector';
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import PatientsFilter from './components/patients/PatientsFilter';
 import PatientsList from './components/patients/PatientsList';
+import './styles.scss';
 
 const DoctorPatients = () => {
   const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
@@ -30,16 +36,34 @@ const DoctorPatients = () => {
 
   useEffect(() => {
     if (updateSchedule != null) {
-      const newSchedules = schedules.map((item) => {
-        if (item.id !== updateSchedule.id) {
-          return item;
-        }
+      const scheduleExists = schedules.some(
+        (item) =>
+          item.id === updateSchedule.id && item.doctorId === currentUser.id,
+      );
+      const newSchedules = scheduleExists
+        ? schedules.map((item) => {
+            if (item.id !== updateSchedule.id) {
+              return item;
+            }
 
-        return updateSchedule;
-      });
+            return updateSchedule;
+          })
+        : cloneDeep(schedules);
+      if (!scheduleExists) {
+        newSchedules.push(updateSchedule);
+      }
       setSchedules(newSchedules);
     }
   }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule == null) {
+      return;
+    }
+    const newSchedules = cloneDeep(schedules);
+    remove(newSchedules, (item) => item.id === deleteSchedule.id);
+    setSchedules(newSchedules);
+  }, [deleteSchedule]);
 
   const fetchPatients = async () => {
     const response = await dataAPI.fetchSchedules(currentUser.id, viewDate);

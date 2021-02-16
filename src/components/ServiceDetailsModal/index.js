@@ -7,7 +7,10 @@ import IconClose from '../../assets/icons/iconClose';
 import IconDelete from '../../assets/icons/iconDelete';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { closeServiceDetailsModal } from '../../redux/actions/serviceDetailsActions';
-import { clinicActiveDoctorsSelector } from '../../redux/selectors/clinicSelector';
+import {
+  clinicActiveDoctorsSelector,
+  clinicCurrencySelector,
+} from '../../redux/selectors/clinicSelector';
 import { serviceDetailsModalSelector } from '../../redux/selectors/serviceDetailsSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
@@ -29,6 +32,7 @@ const initialService = {
   doctors: [],
   categoryId: null,
   serviceType: 'All',
+  currency: 'MDL',
 };
 
 const ServiceDetailsModal = () => {
@@ -36,6 +40,7 @@ const ServiceDetailsModal = () => {
   const { category, service, open } = useSelector(serviceDetailsModalSelector);
   const modalData = useSelector(serviceDetailsModalSelector);
   const clinicDoctors = useSelector(clinicActiveDoctorsSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -43,7 +48,10 @@ const ServiceDetailsModal = () => {
     false,
   );
   const [isFormValid, setIsFormValid] = useState(false);
-  const [serviceInfo, setServiceInfo] = useState({ ...initialService });
+  const [serviceInfo, setServiceInfo] = useState({
+    ...initialService,
+    currency: clinicCurrency,
+  });
 
   useEffect(() => {
     const { category, service, open } = modalData;
@@ -75,9 +83,9 @@ const ServiceDetailsModal = () => {
   }, [serviceInfo]);
 
   const mapDoctorsToServices = () => {
-    return clinicDoctors.map(item => {
+    return clinicDoctors.map((item) => {
       const itemService = item.services.find(
-        it => it.serviceId === service?.id,
+        (it) => it.serviceId === service?.id,
       );
       return {
         doctorId: item.id,
@@ -92,7 +100,7 @@ const ServiceDetailsModal = () => {
   const handleSaveService = async () => {
     setIsLoading(true);
     if (serviceInfo.price.length === 0) serviceInfo.price = '0';
-    serviceInfo.doctors = serviceInfo.doctors.map(item => {
+    serviceInfo.doctors = serviceInfo.doctors.map((item) => {
       if (item.selected && item.price == null && !item.percentage == null) {
         item.price = 0;
       }
@@ -171,8 +179,8 @@ const ServiceDetailsModal = () => {
     dispatch(closeServiceDetailsModal(true));
   };
 
-  const handleDoctorChange = doctorService => {
-    const newServices = serviceInfo.doctors.map(item => {
+  const handleDoctorChange = (doctorService) => {
+    const newServices = serviceInfo.doctors.map((item) => {
       if (item.doctorId !== doctorService.doctorId) {
         return item;
       }
@@ -185,7 +193,7 @@ const ServiceDetailsModal = () => {
     });
   };
 
-  const handleInfoChanged = newInfo => {
+  const handleInfoChanged = (newInfo) => {
     setServiceInfo(newInfo);
   };
 
@@ -219,6 +227,7 @@ const ServiceDetailsModal = () => {
       <div className='service-details-modal'>
         <div className='service-details-modal__data'>
           <ServiceInformation
+            clinicCurrency={clinicCurrency}
             onChange={handleInfoChanged}
             data={serviceInfo}
             onToggle={handleInfoToggle}

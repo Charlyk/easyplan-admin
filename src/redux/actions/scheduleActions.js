@@ -6,3 +6,10 @@ export function toggleUpdateSchedule(payload) {
     payload,
   };
 }
+
+export function toggleDeleteSchedule(payload) {
+  return {
+    type: types.toggleDeleteSchedule,
+    payload,
+  };
+}
