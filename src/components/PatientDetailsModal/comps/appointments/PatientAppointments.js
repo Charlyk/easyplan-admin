@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IconPlus from '../../../../assets/icons/iconPlus';
 import { setAppointmentModal } from '../../../../redux/actions/actions';
-import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
+import { updateScheduleSelector } from '../../../../redux/selectors/scheduleSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
@@ -38,7 +38,7 @@ const reducer = (state, action) => {
 
 const PatientAppointments = ({ patient, isDoctor }) => {
   const dispatch = useDispatch();
-  const updateAppointments = useSelector(updateAppointmentsSelector);
+  const updateSchedule = useSelector(updateScheduleSelector);
   const [{ schedules, isLoading }, localDispatch] = useReducer(
     reducer,
     initialState,
@@ -48,7 +48,17 @@ const PatientAppointments = ({ patient, isDoctor }) => {
     if (patient != null) {
       fetchSchedules();
     }
-  }, [patient, updateAppointments]);
+  }, [patient]);
+
+  useEffect(() => {
+    if (updateSchedule == null) {
+      return;
+    }
+    const isSamePatient = updateSchedule?.patient?.id === patient?.id;
+    if (isSamePatient) {
+      fetchSchedules();
+    }
+  }, [updateSchedule]);
 
   const fetchSchedules = async () => {
     localDispatch(actions.setIsLoading(true));
@@ -77,7 +87,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
       )}
       <div className='patient-appointments-list__appointments-data'>
         {isLoading && <CircularProgress className='patient-details-spinner' />}
-        {schedules.map(item => (
+        {schedules.map((item) => (
           <Appointment key={item.id} appointment={item} />
         ))}
       </div>

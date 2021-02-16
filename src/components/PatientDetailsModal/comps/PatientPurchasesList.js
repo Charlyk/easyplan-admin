@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { clinicCurrencySelector } from '../../../redux/selectors/clinicSelector';
-import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
+import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
 import dataAPI from '../../../utils/api/dataAPI';
 import {
   formattedAmount,
@@ -55,7 +55,7 @@ const reducer = (state, action) => {
 };
 
 const PatientPurchasesList = ({ patient }) => {
-  const updatePayments = useSelector(updatePatientPaymentsSelector);
+  const updateInvoice = useSelector(updateInvoiceSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
   const [{ isLoading, payments }, localDispatch] = useReducer(
     reducer,
@@ -66,7 +66,14 @@ const PatientPurchasesList = ({ patient }) => {
     if (patient != null) {
       fetchPurchases();
     }
-  }, [patient, updatePayments]);
+  }, [patient]);
+
+  useEffect(() => {
+    if (updateInvoice?.patientId !== patient?.id) {
+      return;
+    }
+    fetchPurchases();
+  }, [updateInvoice]);
 
   const fetchPurchases = async () => {
     localDispatch(actions.setIsLoading(true));
@@ -80,12 +87,12 @@ const PatientPurchasesList = ({ patient }) => {
     localDispatch(actions.setIsLoading(false));
   };
 
-  const getAmount = payment => {
+  const getAmount = (payment) => {
     return formattedAmount(payment.amount, payment.currency);
   };
 
   const totalAmount = formattedAmount(
-    sumBy(payments, item => item.amount),
+    sumBy(payments, (item) => item.amount),
     clinicCurrency,
   );
 
@@ -113,7 +120,7 @@ const PatientPurchasesList = ({ patient }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {payments.map(payment => (
+                {payments.map((payment) => (
                   <TableRow key={payment.id}>
                     <TableCell>{payment.userName}</TableCell>
                     <TableCell>

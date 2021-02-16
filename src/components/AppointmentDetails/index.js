@@ -25,6 +25,7 @@ import {
   setPatientDetails,
   toggleAppointmentsUpdate,
 } from '../../redux/actions/actions';
+import { updateInvoiceSelector } from '../../redux/selectors/invoicesSelector';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
@@ -46,6 +47,7 @@ const AppointmentDetails = ({
   const statusesAnchor = useRef(null);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
+  const updateInvoice = useSelector(updateInvoiceSelector);
   const [details, setDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
@@ -75,6 +77,23 @@ const AppointmentDetails = ({
       onClose();
     }
   }, [deleteSchedule]);
+
+  useEffect(() => {
+    if (updateInvoice == null) {
+      return;
+    }
+
+    const newDebts = details.patient.debts.map((item) => {
+      if (item.id !== updateInvoice.id) {
+        return item;
+      }
+      return updateInvoice;
+    });
+    setDetails({
+      ...details,
+      patient: { ...details.patient, debts: newDebts },
+    });
+  }, [updateInvoice]);
 
   const fetchAppointmentDetails = async (schedule) => {
     if (schedule == null) {

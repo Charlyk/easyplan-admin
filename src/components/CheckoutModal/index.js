@@ -38,6 +38,7 @@ import {
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
 } from '../../redux/selectors/clinicSelector';
+import { updateInvoiceSelector } from '../../redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import {
@@ -256,6 +257,7 @@ const CheckoutModal = ({
   onClose,
 }) => {
   const dispatch = useDispatch();
+  const updateInvoice = useSelector(updateInvoiceSelector);
   const exchangeRates = useSelector(clinicExchangeRatesSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
   const clinicServices = useSelector(clinicAllServicesSelector);
@@ -296,6 +298,17 @@ const CheckoutModal = ({
       fetchInvoiceDetails();
     }
   }, [isNew, invoice, exchangeRates, updateInvoices]);
+
+  useEffect(() => {
+    if (
+      invoice == null ||
+      updateInvoice == null ||
+      updateInvoice.id !== invoice.id
+    ) {
+      return;
+    }
+    fetchInvoiceDetails();
+  }, [updateInvoice]);
 
   const fetchInvoiceDetails = async () => {
     if (invoice == null || exchangeRates.length === 0) {

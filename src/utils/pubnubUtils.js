@@ -1,14 +1,13 @@
 import {
   setUpdateCurrentUser,
   toggleAppointmentsUpdate,
-  toggleCheckDoctorAppointments,
   toggleExchangeRateUpdate,
   togglePatientsListUpdate,
-  toggleUpdateDoctorAppointment,
   toggleUpdateInvoices,
   triggerUsersUpdate,
 } from '../redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from '../redux/actions/clinicActions';
+import { toggleUpdateInvoice } from '../redux/actions/invoiceActions';
 import { setSMSMessageStatus } from '../redux/actions/patientActions';
 import {
   toggleDeleteSchedule,
@@ -34,9 +33,6 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       // update invoices
       dispatch(toggleUpdateInvoices());
       break;
-    case MessageAction.NewPatientOnSite:
-      dispatch(toggleCheckDoctorAppointments());
-      break;
     case MessageAction.PauseRecordUpdatedOrCreated:
     case MessageAction.ScheduleUpdatedOrCreated:
       dispatch(toggleUpdateSchedule(payload));
@@ -56,17 +52,16 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
     case MessageAction.ExchangeRatesUpdated:
       dispatch(toggleExchangeRateUpdate());
       break;
-    case MessageAction.NewPaymentRegistered:
-      dispatch(toggleUpdateInvoices());
-      dispatch(toggleCheckDoctorAppointments());
-      dispatch(toggleUpdateDoctorAppointment());
-      break;
     case MessageAction.ExchangeRatesUpdateRequired:
       dispatch(setClinicExchangeRatesUpdateRequired(true));
       break;
     case MessageAction.ScheduleDeleted:
       dispatch(toggleDeleteSchedule(payload));
       setTimeout(() => dispatch(toggleDeleteSchedule(null)), 400);
+      break;
+    case MessageAction.NewPaymentRegistered:
+      dispatch(toggleUpdateInvoice(payload));
+      setTimeout(() => dispatch(toggleUpdateInvoice(null)), 400);
       break;
     case MessageAction.UpdateMessageStatus: {
       if (payload == null) {
