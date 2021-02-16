@@ -25,10 +25,11 @@ import {
   clinicCurrencySelector,
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import {
-  updateDoctorAppointmentDetailsSelector,
-  userSelector,
-} from '../../redux/selectors/rootSelector';
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Statuses, teeth } from '../../utils/constants';
 import {
@@ -40,7 +41,6 @@ import { textForKey } from '../../utils/localization';
 import sessionManager from '../../utils/settings/sessionManager';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
-
 import '../../components/PatientDetailsModal/styles.scss';
 import './styles.scss';
 
@@ -243,7 +243,8 @@ const DoctorPatientDetails = () => {
   const clinicServices = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
-  const updateSchedule = useSelector(updateDoctorAppointmentDetailsSelector);
+  const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const [
     {
       isLoading,
@@ -275,7 +276,27 @@ const DoctorPatientDetails = () => {
     if (scheduleId != null && clinicCurrency != null) {
       fetchScheduleDetails();
     }
-  }, [scheduleId, clinicCurrency, updateSchedule]);
+  }, [scheduleId, clinicCurrency]);
+
+  useEffect(() => {
+    if (
+      updateSchedule == null ||
+      scheduleId == null ||
+      updateSchedule.id !== parseInt(scheduleId) ||
+      clinicCurrency == null
+    ) {
+      return;
+    }
+    fetchScheduleDetails();
+  }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule.id !== parseFloat(scheduleId)) {
+      return;
+    }
+    toast.warn(textForKey('Schedule was deleted'));
+    history.goBack();
+  }, [deleteSchedule]);
 
   useEffect(() => {
     // get services provided by current user
