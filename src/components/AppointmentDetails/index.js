@@ -25,7 +25,11 @@ import {
   setPatientDetails,
   toggleAppointmentsUpdate,
 } from '../../redux/actions/actions';
-import { updateAppointmentsSelector } from '../../redux/selectors/rootSelector';
+import { updateInvoiceSelector } from '../../redux/selectors/invoicesSelector';
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
 import { formattedAmount } from '../../utils/helperFuncs';
@@ -41,7 +45,9 @@ const AppointmentDetails = ({
 }) => {
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
-  const updateAppointments = useSelector(updateAppointmentsSelector);
+  const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
+  const updateInvoice = useSelector(updateInvoiceSelector);
   const [details, setDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
@@ -49,17 +55,50 @@ const AppointmentDetails = ({
     false,
   );
   const [scheduleStatus, setScheduleStatus] = useState(
-    Statuses.find(item => item.id === schedule.scheduleStatus),
+    Statuses.find((item) => item.id === schedule.scheduleStatus),
   );
 
   useEffect(() => {
-    fetchAppointmentDetails();
+    fetchAppointmentDetails(schedule);
     setScheduleStatus(
-      Statuses.find(item => item.id === schedule.scheduleStatus),
+      Statuses.find((item) => item.id === schedule.scheduleStatus),
     );
-  }, [schedule, updateAppointments]);
+  }, [schedule]);
 
-  const fetchAppointmentDetails = async () => {
+  useEffect(() => {
+    if (updateSchedule != null && schedule.id === updateSchedule.id) {
+      fetchAppointmentDetails(updateSchedule);
+    }
+  }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule != null && deleteSchedule.id === schedule.id) {
+      // close details fi current schedule was deleted
+      onClose();
+    }
+  }, [deleteSchedule]);
+
+  useEffect(() => {
+    if (updateInvoice == null) {
+      return;
+    }
+
+    const newDebts = details.patient.debts.map((item) => {
+      if (item.id !== updateInvoice.id) {
+        return item;
+      }
+      return updateInvoice;
+    });
+    setDetails({
+      ...details,
+      patient: { ...details.patient, debts: newDebts },
+    });
+  }, [updateInvoice]);
+
+  const fetchAppointmentDetails = async (schedule) => {
+    if (schedule == null) {
+      return;
+    }
     setIsLoading(true);
     const response = await dataAPI.fetchScheduleDetails(schedule.id);
     if (response.isError) {
@@ -68,7 +107,7 @@ const AppointmentDetails = ({
       const { data: details } = response;
       setDetails(details);
       setScheduleStatus(
-        Statuses.find(item => item.id === details.scheduleStatus),
+        Statuses.find((item) => item.id === details.scheduleStatus),
       );
     }
     setIsLoading(false);
@@ -82,7 +121,7 @@ const AppointmentDetails = ({
     onDelete(schedule);
   };
 
-  const handlePayDebt = async debt => {
+  const handlePayDebt = async (debt) => {
     onPayDebt(debt);
   };
 
@@ -102,7 +141,7 @@ const AppointmentDetails = ({
     dispatch(toggleAppointmentsUpdate());
   };
 
-  const handleStatusSelected = async status => {
+  const handleStatusSelected = async (status) => {
     if (status.id === 'Canceled') {
       setIsCanceledReasonRequired(true);
       return;
@@ -110,8 +149,8 @@ const AppointmentDetails = ({
     await changeScheduleStatus(status);
   };
 
-  const handleCanceledReasonSubmitted = async canceledReason => {
-    const status = Statuses.find(item => item.id === 'Canceled');
+  const handleCanceledReasonSubmitted = async (canceledReason) => {
+    const status = Statuses.find((item) => item.id === 'Canceled');
     await changeScheduleStatus(status, canceledReason);
   };
 
@@ -153,7 +192,7 @@ const AppointmentDetails = ({
           <Paper className='statuses-popper-root__paper'>
             <ClickAwayListener onClickAway={closeStatusesList}>
               <div>
-                {ManualStatuses.map(status => (
+                {ManualStatuses.map((status) => (
                   <div
                     role='button'
                     tabIndex={0}
@@ -357,7 +396,7 @@ const AppointmentDetails = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {details.patient.debts.map(item => (
+                  {details.patient.debts.map((item) => (
                     <tr key={item.id}>
                       <td align='left' className='services-cell'>
                         <Typography noWrap classes={{ root: 'services-label' }}>

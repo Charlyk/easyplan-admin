@@ -495,6 +495,7 @@ export default {
     exchangeratevalueatpaymenttime: 'Cursul valutar',
     sentby: 'Sent by',
     comment: 'Comment',
+    'Schedule was deleted': 'Schedule was deleted',
   },
   ro: {
     analytics: 'Analitică',
@@ -998,6 +999,7 @@ export default {
     exchangeratevalueatpaymenttime: 'Cursul valutar',
     sentby: 'Trimis de',
     comment: 'Comentariu',
+    'Schedule was deleted': 'Programarea a fost ștearsă!',
   },
   ru: {
     analytics: 'Analytics',
@@ -1492,5 +1494,6 @@ export default {
     exchangeratevalueatpaymenttime: 'Cursul valutar',
     sentby: 'Sent by',
     comment: 'Comment',
+    'Schedule was deleted': 'Schedule was deleted',
   },
 };

@@ -19,14 +19,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { setPaymentModal } from '../../../redux/actions/actions';
-import { updatePatientPaymentsSelector } from '../../../redux/selectors/rootSelector';
+import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
 import dataAPI from '../../../utils/api/dataAPI';
 import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   const dispatch = useDispatch();
-  const updatePayments = useSelector(updatePatientPaymentsSelector);
+  const updateInvoice = useSelector(updateInvoiceSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [debts, setDebts] = useState([]);
 
@@ -34,12 +34,25 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
     if (patient != null) {
       fetchDebts();
     }
-  }, [patient, updatePayments]);
+  }, [patient]);
+
+  useEffect(() => {
+    if (updateInvoice == null) {
+      return;
+    }
+    const newDebts = debts.map((item) => {
+      if (item.id !== updateInvoice.id) {
+        return item;
+      }
+      return updateInvoice;
+    });
+    setDebts(newDebts);
+  }, [updateInvoice]);
 
   useEffect(() => {
     if (viewInvoice == null) {
       setDebts(
-        debts.map(item => ({
+        debts.map((item) => ({
           ...item,
           isHighlighted: false,
         })),
@@ -54,7 +67,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
       toast.error(textForKey(response.message));
     } else {
       setDebts(
-        response.data.map(item => ({
+        response.data.map((item) => ({
           ...item,
           isHighlighted: viewInvoice?.id === item.id,
         })),
@@ -65,7 +78,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
     setIsLoading(false);
   };
 
-  const handlePayDebt = async debt => {
+  const handlePayDebt = async (debt) => {
     dispatch(
       setPaymentModal({
         open: true,
@@ -76,7 +89,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
     );
   };
 
-  const getInvoiceTotalAmount = invoice => {
+  const getInvoiceTotalAmount = (invoice) => {
     const discountAmount = invoice.totalAmount * (invoice.discount / 100);
     return invoice.totalAmount - discountAmount;
   };
@@ -107,7 +120,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {debts.map(item => (
+                {debts.map((item) => (
                   <TableRow
                     key={item.id}
                     className={clsx(item.isHighlighted && 'highlight')}

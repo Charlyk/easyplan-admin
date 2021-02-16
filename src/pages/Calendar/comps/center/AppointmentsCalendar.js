@@ -26,7 +26,6 @@ import AppointmentDetails from '../../../../components/AppointmentDetails';
 import EasyTab from '../../../../components/EasyTab';
 import LoadingButton from '../../../../components/LoadingButton';
 import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarSelector';
-import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import CalendarDayView from './CalendarDayView';
@@ -56,7 +55,6 @@ const AppointmentsCalendar = ({
   onImportSchedules,
 }) => {
   const calendarAnchor = useRef(null);
-  const updateAppointments = useSelector(updateAppointmentsSelector);
   const isLoading = useSelector(isCalendarLoadingSelector);
   const [currentTab, setCurrentTab] = useState(CalendarView.day);
   const [calendarVisible, setCalendarVisible] = useState(false);
@@ -252,7 +250,6 @@ const AppointmentsCalendar = ({
           <CalendarDayView
             onScheduleSelect={onScheduleSelect}
             viewDate={viewDate}
-            update={updateAppointments}
             onCreateSchedule={onAddAppointment}
           />
         )}
@@ -263,14 +260,12 @@ const AppointmentsCalendar = ({
           onDateClick={handleMonthDateClick}
           doctorId={doctor?.id}
           opened={currentTab === CalendarView.week}
-          update={updateAppointments}
         />
         <CalendarMonthView
           onDateClick={handleMonthDateClick}
           viewDate={viewDate}
           doctorId={doctor?.id}
           opened={currentTab === CalendarView.month}
-          update={updateAppointments}
         />
       </div>
     </div>

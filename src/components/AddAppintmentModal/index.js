@@ -90,6 +90,7 @@ const initialState = {
   isPatientValid: false,
   isDoctorValid: false,
   isServiceValid: false,
+  isEditing: false,
   showDatePicker: false,
   appointmentDate: new Date(),
   scheduleId: null,
@@ -254,6 +255,7 @@ const reducer = (state, action) => {
         isPatientValid: true,
         isDoctorValid: true,
         isServiceValid: true,
+        isEditing: true,
       };
     }
     case reducerTypes.setIsNewPatient: {
@@ -301,11 +303,9 @@ const reducer = (state, action) => {
           ? availableTime[0]
           : state.startTime;
 
-      const endTime = getEndTimeBasedOnService(
-        availableTime,
-        startTime,
-        state.service,
-      );
+      const endTime = !state.isEditing
+        ? getEndTimeBasedOnService(availableTime, startTime, state.service)
+        : state.endTime;
 
       const availableStartTime = availableTime;
       const availableEndTime = filterAvailableTime(availableTime, startTime);

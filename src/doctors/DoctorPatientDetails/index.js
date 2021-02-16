@@ -25,10 +25,11 @@ import {
   clinicCurrencySelector,
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
+import { userSelector } from '../../redux/selectors/rootSelector';
 import {
-  updateDoctorAppointmentDetailsSelector,
-  userSelector,
-} from '../../redux/selectors/rootSelector';
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Statuses, teeth } from '../../utils/constants';
 import {
@@ -40,7 +41,6 @@ import { textForKey } from '../../utils/localization';
 import sessionManager from '../../utils/settings/sessionManager';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
-
 import '../../components/PatientDetailsModal/styles.scss';
 import './styles.scss';
 
@@ -54,9 +54,9 @@ const areSameServices = (first, second) => {
   );
 };
 
-const updateService = (invoice, clinicCurrency) => service => {
+const updateService = (invoice, clinicCurrency) => (service) => {
   const invoiceService = invoice?.services.find(
-    item =>
+    (item) =>
       item.serviceId === service.id &&
       ((item.toothId == null && service.toothId == null) ||
         item.toothId === service.toothId) &&
@@ -128,7 +128,7 @@ const reducer = (state, action) => {
       const { services } = action.payload;
       return {
         ...state,
-        selectedServices: services.map(item => ({
+        selectedServices: services.map((item) => ({
           ...item,
         })),
         servicesFieldValue: '',
@@ -145,23 +145,23 @@ const reducer = (state, action) => {
     case reducerTypes.setServices: {
       // get services applicable on all teeth
       const allTeethServices = action.payload.filter(
-        it => it.serviceType === 'All',
+        (it) => it.serviceType === 'All',
       );
       // get services applicable on a single tooth
       const toothServices = action.payload.filter(
-        item => item.serviceType === 'Single',
+        (item) => item.serviceType === 'Single',
       );
       // get all braces services
       const allBracesServices = action.payload.filter(
-        it => it.serviceType === 'Braces',
+        (it) => it.serviceType === 'Braces',
       );
       // map braces services to add mandible destination
-      const mandibleBracesServices = allBracesServices.map(item => ({
+      const mandibleBracesServices = allBracesServices.map((item) => ({
         ...item,
         destination: 'Mandible',
       }));
       // map maxillary services to add maxillary destination
-      const maxillaryBracesServices = allBracesServices.map(item => ({
+      const maxillaryBracesServices = allBracesServices.map((item) => ({
         ...item,
         destination: 'Maxillary',
       }));
@@ -176,9 +176,9 @@ const reducer = (state, action) => {
       // save filtered services to state
       return {
         ...state,
-        allServices: sortBy(allServices, item => item.name),
-        toothServices: sortBy(toothServices, item => item.name),
-        bracesServices: sortBy(toothServices, item => item.name),
+        allServices: sortBy(allServices, (item) => item.name),
+        toothServices: sortBy(toothServices, (item) => item.name),
+        bracesServices: sortBy(toothServices, (item) => item.name),
       };
     }
     case reducerTypes.setScheduleDetails: {
@@ -189,28 +189,29 @@ const reducer = (state, action) => {
       // update treatmentPlanServices
       const planServices = treatmentPlan.services
         .map(updateService(invoice, clinicCurrency))
-        .map(item => ({ ...item, isExistent: true }));
+        .map((item) => ({ ...item, isExistent: true }));
       // update plan braces
       const planBraces = treatmentPlan.braces
         .map(updateService(invoice, clinicCurrency))
-        .map(item => ({ ...item, isExistent: true }));
+        .map((item) => ({ ...item, isExistent: true }));
 
       // combine services and braces in one array
       const newSelectedServices = [...planServices, ...planBraces];
 
       // remove unused services from selected
       const diffsToRemove = existentSelectedServices.filter(
-        item => !newSelectedServices.some(it => areSameServices(it, item)),
+        (item) => !newSelectedServices.some((it) => areSameServices(it, item)),
       );
-      remove(existentSelectedServices, item =>
-        diffsToRemove.some(it => areSameServices(it, item)),
+      remove(existentSelectedServices, (item) =>
+        diffsToRemove.some((it) => areSameServices(it, item)),
       );
 
       // add new services to selected
       const diffsToAdd = newSelectedServices.filter(
-        item => !existentSelectedServices.some(it => areSameServices(it, item)),
+        (item) =>
+          !existentSelectedServices.some((it) => areSameServices(it, item)),
       );
-      diffsToAdd.forEach(item => existentSelectedServices.push(item));
+      diffsToAdd.forEach((item) => existentSelectedServices.push(item));
 
       const sortedSelectedServices = orderBy(
         existentSelectedServices,
@@ -224,8 +225,8 @@ const reducer = (state, action) => {
         schedule: data,
         selectedServices: sortedSelectedServices,
         completedServices: [
-          ...treatmentPlan.services.filter(item => item.completed),
-          ...treatmentPlan.braces.filter(item => item.completed),
+          ...treatmentPlan.services.filter((item) => item.completed),
+          ...treatmentPlan.braces.filter((item) => item.completed),
         ],
       };
     }
@@ -242,7 +243,8 @@ const DoctorPatientDetails = () => {
   const clinicServices = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
-  const updateSchedule = useSelector(updateDoctorAppointmentDetailsSelector);
+  const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const [
     {
       isLoading,
@@ -258,7 +260,7 @@ const DoctorPatientDetails = () => {
     localDispatch,
   ] = useReducer(reducer, initialState);
   const scheduleStatus = Statuses.find(
-    item => item.id === schedule?.scheduleStatus,
+    (item) => item.id === schedule?.scheduleStatus,
   );
 
   const isFinished =
@@ -274,19 +276,39 @@ const DoctorPatientDetails = () => {
     if (scheduleId != null && clinicCurrency != null) {
       fetchScheduleDetails();
     }
-  }, [scheduleId, clinicCurrency, updateSchedule]);
+  }, [scheduleId, clinicCurrency]);
+
+  useEffect(() => {
+    if (
+      updateSchedule == null ||
+      scheduleId == null ||
+      updateSchedule.id !== parseInt(scheduleId) ||
+      clinicCurrency == null
+    ) {
+      return;
+    }
+    fetchScheduleDetails();
+  }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule.id !== parseFloat(scheduleId)) {
+      return;
+    }
+    toast.warn(textForKey('Schedule was deleted'));
+    history.goBack();
+  }, [deleteSchedule]);
 
   useEffect(() => {
     // get services provided by current user
     const userServicesIds = (
       currentUser.clinics.find(
-        item => item.clinicId === sessionManager.getSelectedClinicId(),
+        (item) => item.clinicId === sessionManager.getSelectedClinicId(),
       )?.services || []
-    ).map(it => it.serviceId);
+    ).map((it) => it.serviceId);
     // filter clinic services to get only provided by current user services
     localDispatch(
       actions.setServices(
-        clinicServices.filter(item => userServicesIds.includes(item.id)),
+        clinicServices.filter((item) => userServicesIds.includes(item.id)),
       ),
     );
   }, [clinicServices]);
@@ -326,7 +348,7 @@ const DoctorPatientDetails = () => {
    * Handle appointment note change started
    * @param {Object} visit
    */
-  const handleEditAppointmentNote = visit => {
+  const handleEditAppointmentNote = (visit) => {
     dispatch(
       setPatientNoteModal({
         open: true,
@@ -345,13 +367,12 @@ const DoctorPatientDetails = () => {
    */
   const handleToothServicesChange = ({ toothId, services }) => {
     let newServices = cloneDeep(selectedServices);
-    remove(newServices, item => item.toothId === toothId && !item.completed);
+    remove(newServices, (item) => item.toothId === toothId && !item.completed);
     for (let service of services) {
       newServices.unshift({
         ...service,
         toothId,
         canRemove: true,
-        currency: clinicCurrency,
         count: 1,
         isExistent: false,
       });
@@ -363,11 +384,11 @@ const DoctorPatientDetails = () => {
    * Handle remove service from services list
    * @param {Object} service
    */
-  const handleRemoveSelectedService = service => {
+  const handleRemoveSelectedService = (service) => {
     let newServices = cloneDeep(selectedServices);
     remove(
       newServices,
-      item =>
+      (item) =>
         item.id === service.id &&
         item.toothId === service.toothId &&
         item.destination === service.destination,
@@ -396,7 +417,7 @@ const DoctorPatientDetails = () => {
    * @return {*}
    */
   const getTotalPrice = () => {
-    const prices = selectedServices.map(item => item.price);
+    const prices = selectedServices.map((item) => item.price);
     return sum(prices);
   };
 
@@ -405,7 +426,7 @@ const DoctorPatientDetails = () => {
    * @return {Array.<Object>}
    */
   const finalServicesList = () => {
-    return selectedServices.filter(service => {
+    return selectedServices.filter((service) => {
       const isCompletedInAnotherSchedule =
         service.completed && service.scheduleId !== parseInt(scheduleId);
       return !isCompletedInAnotherSchedule;
@@ -417,7 +438,7 @@ const DoctorPatientDetails = () => {
    * @return {boolean}
    */
   const isButtonDisabled = () => {
-    const newServices = selectedServices.filter(item => !item.isExistent);
+    const newServices = selectedServices.filter((item) => !item.isExistent);
     return (
       (!canFinalize && newServices.length === 0) ||
       finalServicesList().length === 0
@@ -435,11 +456,11 @@ const DoctorPatientDetails = () => {
    * Handle new service selected from search box
    * @param {Array.<Object>} selectedItems
    */
-  const handleSelectedItemsChange = selectedItems => {
+  const handleSelectedItemsChange = (selectedItems) => {
     if (selectedItems.length === 0) return;
     const newServices = cloneDeep(selectedServices);
     const serviceExists = newServices.some(
-      item =>
+      (item) =>
         item.id === selectedItems[0].id &&
         (item.toothId == null || item.toothId === selectedItems[0].toothId) &&
         (item.destination == null ||
@@ -450,7 +471,6 @@ const DoctorPatientDetails = () => {
       newServices.unshift({
         ...selectedItems[0],
         canRemove: true,
-        currency: clinicCurrency,
         count: 1,
         isExistent: false,
       });
@@ -485,7 +505,7 @@ const DoctorPatientDetails = () => {
    * @return {string}
    */
   const buttonText = () => {
-    const newServices = selectedServices.filter(item => !item.isExistent);
+    const newServices = selectedServices.filter((item) => !item.isExistent);
     let text = textForKey('Finalize');
     if ((!canFinalize && newServices.length > 0) || isFinished) {
       text = textForKey('Edit');
@@ -501,7 +521,7 @@ const DoctorPatientDetails = () => {
    * @param {Array.<Object>} plannedServices
    * @return {Promise<void>}
    */
-  const finalizeTreatment = async plannedServices => {
+  const finalizeTreatment = async (plannedServices) => {
     if (isButtonDisabled()) {
       // user can't finalize this treatment plan
       return;
@@ -511,13 +531,13 @@ const DoctorPatientDetails = () => {
 
     let services = plannedServices;
     if (!canFinalize) {
-      services = plannedServices.filter(item => !item.isExistent);
+      services = plannedServices.filter((item) => !item.isExistent);
     }
 
     const requestBody = {
       scheduleId,
       patientId: patient.id,
-      services: services.map(item => ({
+      services: services.map((item) => ({
         id: item.planServiceId,
         serviceId: item.id,
         toothId: item.toothId,
@@ -553,7 +573,7 @@ const DoctorPatientDetails = () => {
    * @param {Object} service
    * @return {string}
    */
-  const keyForService = service => {
+  const keyForService = (service) => {
     return `${service.id}-${service.toothId}-${service.name}-${service.destination}-${service.completed}-${service.completedAt}`;
   };
 
@@ -602,8 +622,8 @@ const DoctorPatientDetails = () => {
         <div className='tooth-container'>
           <div className='top-left'>
             {teeth
-              .filter(it => it.type === 'top-left')
-              .map(item => (
+              .filter((it) => it.type === 'top-left')
+              .map((item) => (
                 <ToothView
                   key={item.toothId}
                   onServicesChange={handleToothServicesChange}
@@ -611,7 +631,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId != null,
+                    (service) => service.toothId != null,
                   )}
                   toothId={item.toothId}
                 />
@@ -619,8 +639,8 @@ const DoctorPatientDetails = () => {
           </div>
           <div className='top-right'>
             {teeth
-              .filter(it => it.type === 'top-right')
-              .map(item => (
+              .filter((it) => it.type === 'top-right')
+              .map((item) => (
                 <ToothView
                   key={item.toothId}
                   onServicesChange={handleToothServicesChange}
@@ -628,7 +648,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId != null,
+                    (service) => service.toothId != null,
                   )}
                   toothId={item.toothId}
                 />
@@ -636,8 +656,8 @@ const DoctorPatientDetails = () => {
           </div>
           <div className='bottom-left'>
             {teeth
-              .filter(it => it.type === 'bottom-left')
-              .map(item => (
+              .filter((it) => it.type === 'bottom-left')
+              .map((item) => (
                 <ToothView
                   key={item.toothId}
                   onServicesChange={handleToothServicesChange}
@@ -645,7 +665,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId != null,
+                    (service) => service.toothId != null,
                   )}
                   toothId={item.toothId}
                   direction='top'
@@ -654,8 +674,8 @@ const DoctorPatientDetails = () => {
           </div>
           <div className='bottom-right'>
             {teeth
-              .filter(it => it.type === 'bottom-right')
-              .map(item => (
+              .filter((it) => it.type === 'bottom-right')
+              .map((item) => (
                 <ToothView
                   key={item.toothId}
                   onServicesChange={handleToothServicesChange}
@@ -663,7 +683,7 @@ const DoctorPatientDetails = () => {
                   services={toothServices}
                   selectedServices={selectedServices}
                   completedServices={completedServices.filter(
-                    service => service.toothId != null,
+                    (service) => service.toothId != null,
                   )}
                   toothId={item.toothId}
                   direction='top'

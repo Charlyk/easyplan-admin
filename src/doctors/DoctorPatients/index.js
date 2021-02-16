@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
-import './styles.scss';
+import cloneDeep from 'lodash/cloneDeep';
+import remove from 'lodash/remove';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+import { userSelector } from '../../redux/selectors/rootSelector';
 import {
-  checkDoctorAppointmentsSelector,
-  userSelector,
-} from '../../redux/selectors/rootSelector';
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import PatientsFilter from './components/patients/PatientsFilter';
 import PatientsList from './components/patients/PatientsList';
+import './styles.scss';
 
 const DoctorPatients = () => {
-  const checkAppointments = useSelector(checkDoctorAppointmentsSelector);
+  const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const currentUser = useSelector(userSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [schedules, setSchedules] = useState([]);
@@ -28,41 +32,71 @@ const DoctorPatients = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchPatients();
-  }, [viewDate, checkAppointments]);
+  }, [viewDate]);
+
+  useEffect(() => {
+    if (updateSchedule != null) {
+      const scheduleExists = schedules.some(
+        (item) =>
+          item.id === updateSchedule.id && item.doctorId === currentUser.id,
+      );
+      const newSchedules = scheduleExists
+        ? schedules.map((item) => {
+            if (item.id !== updateSchedule.id) {
+              return item;
+            }
+
+            return updateSchedule;
+          })
+        : cloneDeep(schedules);
+      if (!scheduleExists) {
+        newSchedules.push(updateSchedule);
+      }
+      setSchedules(newSchedules);
+    }
+  }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule == null) {
+      return;
+    }
+    const newSchedules = cloneDeep(schedules);
+    remove(newSchedules, (item) => item.id === deleteSchedule.id);
+    setSchedules(newSchedules);
+  }, [deleteSchedule]);
 
   const fetchPatients = async () => {
     const response = await dataAPI.fetchSchedules(currentUser.id, viewDate);
     if (response.isError) {
       toast.error(response.message);
-      console.error(response.message);
     } else {
       setSchedules(response.data);
     }
     setIsLoading(false);
   };
 
-  const handlePatientNameChange = event => {
+  const handlePatientNameChange = (event) => {
     setFilterData({
       ...filterData,
       patientName: event.target.value,
     });
   };
 
-  const handleServiceChange = event => {
+  const handleServiceChange = (event) => {
     setFilterData({
       ...filterData,
       serviceId: event.target.value,
     });
   };
 
-  const handleAppointmentStatusChange = event => {
+  const handleAppointmentStatusChange = (event) => {
     setFilterData({
       ...filterData,
       appointmentStatus: event.target.value,
     });
   };
 
-  const handleDateChange = newDate => {
+  const handleDateChange = (newDate) => {
     setViewDate(newDate);
   };
 

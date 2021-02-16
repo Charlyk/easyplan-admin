@@ -8,9 +8,11 @@ import {
   ToggleButton,
   InputGroup,
 } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
 import IconMinus from '../../assets/icons/iconMinus';
 import IconPlusBig from '../../assets/icons/iconPlusBig';
+import { availableCurrenciesSelector } from '../../redux/selectors/clinicSelector';
 import { textForKey } from '../../utils/localization';
 
 const ServiceInformation = ({
@@ -20,11 +22,12 @@ const ServiceInformation = ({
   data,
   onChange,
 }) => {
+  const currencies = useSelector(availableCurrenciesSelector);
   const handleInfoExpand = () => {
     onToggle();
   };
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     if (typeof event === 'string') {
       onChange({
         ...data,
@@ -103,7 +106,20 @@ const ServiceInformation = ({
                 onChange={handleFormChange}
               />
               <InputGroup.Append>
-                <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+                <Form.Control
+                  id='currency'
+                  as='select'
+                  className='mr-sm-2'
+                  custom
+                  onChange={handleFormChange}
+                  value={data.currency}
+                >
+                  {currencies.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Form.Control>
               </InputGroup.Append>
             </InputGroup>
           </Form.Group>
@@ -222,6 +238,7 @@ export default ServiceInformation;
 ServiceInformation.propTypes = {
   isExpanded: PropTypes.bool.isRequired,
   showStep: PropTypes.bool,
+  clinicCurrency: PropTypes.string,
   data: PropTypes.shape({
     name: PropTypes.string,
     duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -229,6 +246,7 @@ ServiceInformation.propTypes = {
     description: PropTypes.string,
     serviceType: PropTypes.string,
     color: PropTypes.string,
+    currency: PropTypes.string,
   }),
   onChange: PropTypes.func,
   onToggle: PropTypes.func.isRequired,

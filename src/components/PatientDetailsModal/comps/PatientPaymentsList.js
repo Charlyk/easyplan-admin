@@ -15,20 +15,30 @@ import {
 import sumBy from 'lodash/sumBy';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
 import dataAPI from '../../../utils/api/dataAPI';
 import { Statuses } from '../../../utils/constants';
 import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
 const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
+  const updateInvoice = useSelector(updateInvoiceSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
 
   useEffect(() => {
     fetchInvoices();
   }, [patient]);
+
+  useEffect(() => {
+    if (updateInvoice?.patientId !== patient?.id) {
+      return;
+    }
+    fetchInvoices();
+  }, [updateInvoice]);
 
   const fetchInvoices = async () => {
     if (patient == null) return;
@@ -42,19 +52,19 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
     setIsLoading(false);
   };
 
-  const getInvoiceStatus = item => {
-    return Statuses.find(it => it.id === item.status);
+  const getInvoiceStatus = (item) => {
+    return Statuses.find((it) => it.id === item.status);
   };
 
   const getInvoicesTotal = () => {
-    return sumBy(invoices, item => {
+    return sumBy(invoices, (item) => {
       const discountAmount = item.totalAmount * (item.discount / 100);
       return item.totalAmount - discountAmount;
     });
   };
 
   const getInvoicesPaid = () => {
-    return sumBy(invoices, item => {
+    return sumBy(invoices, (item) => {
       if (item.status === 'Paid') {
         const discountAmount = item.paidAmount * (item.discount / 100);
         return item.paidAmount - discountAmount;
@@ -63,7 +73,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
     });
   };
 
-  const getInvoicePaidAmount = invoice => {
+  const getInvoicePaidAmount = (invoice) => {
     if (invoice.status === 'Paid') {
       const discountAmount = invoice.paidAmount * (invoice.discount / 100);
       return invoice.paidAmount - discountAmount;
@@ -71,7 +81,7 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
     return invoice.paidAmount;
   };
 
-  const handleViewDebtClick = invoice => () => {
+  const handleViewDebtClick = (invoice) => () => {
     onViewDebtClick(invoice);
   };
 
@@ -102,12 +112,12 @@ const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {invoices.map(item => {
+                {invoices.map((item) => {
                   const status = getInvoiceStatus(item);
                   return (
                     <TableRow key={item.id}>
                       <TableCell style={{ maxWidth: '12rem' }}>
-                        {item.services.map(it => it.name).join(', ')}
+                        {item.services.map((it) => it.name).join(', ')}
                       </TableCell>
                       <TableCell>
                         {moment(item.created).format('DD MMM YYYY HH:mm')}

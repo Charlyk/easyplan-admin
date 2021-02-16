@@ -8,14 +8,13 @@ import PropTypes from 'prop-types';
 import './styles.scss';
 import { usePubNub } from 'pubnub-react';
 import { Modal } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 
 import IconClose from '../../assets/icons/iconClose';
-import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { env } from '../../utils/constants';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
+import sessionManager from '../../utils/settings/sessionManager';
 import AuthenticationStep from './AuthenticationStep';
 import DataMigrationFinalStep from './DataMigrationFinalStep';
 import ImportSelectionStep from './ImportSelectionStep';
@@ -32,9 +31,7 @@ const initialState = {
   yClientsUser: null,
   dataTypes: [],
   company: null,
-  startDate: moment()
-    .subtract(1, 'month')
-    .toDate(),
+  startDate: moment().subtract(1, 'month').toDate(),
   endDate: moment().toDate(),
 };
 
@@ -59,7 +56,7 @@ const reducer = (state, action) => {
     case reducerTypes.setYClientsUser: {
       const newCompletedSteps = cloneDeep(state.completedSteps);
       if (action.payload == null) {
-        remove(newCompletedSteps, item => item === 0);
+        remove(newCompletedSteps, (item) => item === 0);
       } else {
         newCompletedSteps.push(0);
       }
@@ -73,7 +70,7 @@ const reducer = (state, action) => {
     case reducerTypes.setDataTypes: {
       const newCompletedSteps = cloneDeep(state.completedSteps);
       if (action.payload == null) {
-        remove(newCompletedSteps, item => item === 1);
+        remove(newCompletedSteps, (item) => item === 1);
       } else {
         newCompletedSteps.push(1);
       }
@@ -110,7 +107,6 @@ const reducer = (state, action) => {
 };
 
 const DataMigrationModal = ({ show, onClose }) => {
-  const currentClinic = useSelector(clinicDetailsSelector);
   const pubnub = usePubNub();
   const [
     {
@@ -131,7 +127,7 @@ const DataMigrationModal = ({ show, onClose }) => {
     }
   }, [show]);
 
-  const handleUserAuthenticatedWithYClients = userData => {
+  const handleUserAuthenticatedWithYClients = (userData) => {
     localDispatch(actions.setYClientsUser(userData));
   };
 
@@ -155,7 +151,7 @@ const DataMigrationModal = ({ show, onClose }) => {
       user: yClientsUser,
       dataTypes,
       company,
-      clinicId: currentClinic.id,
+      clinicId: sessionManager.getSelectedClinicId(),
       authToken: authManager.getUserToken(),
       startDate,
       endDate,
@@ -167,7 +163,7 @@ const DataMigrationModal = ({ show, onClose }) => {
     handleModalClose();
   };
 
-  const getStepContent = step => {
+  const getStepContent = (step) => {
     switch (step) {
       case 0:
         return (
@@ -192,7 +188,7 @@ const DataMigrationModal = ({ show, onClose }) => {
     onClose();
   };
 
-  const isStepCompleted = step => {
+  const isStepCompleted = (step) => {
     return completedSteps.includes(step);
   };
 

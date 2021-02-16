@@ -22,10 +22,10 @@ const ToothView = ({
 
   useEffect(() => {
     setToothServices(
-      services.map(service => {
+      services.map((service) => {
         const selectedService = selectedServices
-          .filter(item => !item.completed)
-          .find(item => item.id === service.id && item.toothId === toothId);
+          .filter((item) => !item.completed)
+          .find((item) => item.id === service.id && item.toothId === toothId);
         return {
           ...service,
           toothId: toothId,
@@ -37,7 +37,7 @@ const ToothView = ({
   }, [services, selectedServices]);
 
   const handleServiceSelected = (service, selected) => {
-    const newServices = toothServices.map(item => {
+    const newServices = toothServices.map((item) => {
       if (item.id !== service.id) {
         return item;
       }
@@ -51,7 +51,7 @@ const ToothView = ({
     setToothServices(newServices);
     onServicesChange({
       toothId,
-      services: newServices.filter(item => item.selected),
+      services: newServices.filter((item) => item.selected),
     });
   };
 
@@ -87,7 +87,7 @@ const ToothView = ({
           <Paper className='tooth-paper'>
             <ClickAwayListener onClickAway={handleCloseServicesPopper}>
               <div className='options-wrapper'>
-                {toothServices.map(service => (
+                {toothServices.map((service) => (
                   <Form.Group
                     key={service.id}
                     controlId={`tooth-${service.id}`}
@@ -112,8 +112,8 @@ const ToothView = ({
   );
 
   const infoServices = [
-    ...toothServices.filter(item => item.selected),
-    ...completedServices.filter(item => item.toothId === toothId),
+    ...toothServices.filter((item) => item.selected),
+    ...completedServices.filter((item) => item.toothId === toothId),
   ];
 
   const infoPopper =
@@ -129,7 +129,7 @@ const ToothView = ({
           <Fade {...TransitionProps} timeout={350}>
             <Paper className='services-tooth-paper'>
               <div className='options-wrapper'>
-                {infoServices.map(item => (
+                {infoServices.map((item) => (
                   <div
                     key={`${item.id}-${item.historyId}`}
                     className='option-row'

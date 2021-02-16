@@ -29,6 +29,17 @@ export const clinicCurrencySelector = createSelector(
   (state) => state.currency,
 );
 
+export const availableCurrenciesSelector = createSelector(
+  clinicDetailsSelector,
+  (clinic) =>
+    clinic?.availableCurrencies != null
+      ? [
+          ...clinic.availableCurrencies.map((item) => item.currency),
+          clinic.currency,
+        ]
+      : [],
+);
+
 export const clinicExchangeRatesSelector = createSelector(
   clinicDetailsSelector,
   (state) => {
@@ -78,7 +89,8 @@ export const clinicServicesSelector = createSelector(
 
 export const clinicAllServicesSelector = createSelector(
   clinicDetailsSelector,
-  (clinic) => clinic.services || [],
+  (clinic) =>
+    clinic.services?.filter((item) => item.serviceType !== 'System') || [],
 );
 
 export const clinicBracesServicesSelector = createSelector(
