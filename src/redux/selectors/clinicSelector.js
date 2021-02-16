@@ -78,7 +78,8 @@ export const clinicServicesSelector = createSelector(
 
 export const clinicAllServicesSelector = createSelector(
   clinicDetailsSelector,
-  (clinic) => clinic.services || [],
+  (clinic) =>
+    clinic.services?.filter((item) => item.serviceType !== 'System') || [],
 );
 
 export const clinicBracesServicesSelector = createSelector(

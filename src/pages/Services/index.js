@@ -140,7 +140,8 @@ const Services = () => {
       toast.error(textForKey(response?.message || 'something went wrong'));
     } else {
       const { data } = response;
-      const sortedData = sortBy(data, item => item.created);
+      const filteredData = data.filter((item) => !item.isSystem);
+      const sortedData = sortBy(filteredData, (item) => item.created);
       sortedData.unshift({
         id: 'all-services',
         name: textForKey('All services'),
@@ -163,12 +164,12 @@ const Services = () => {
     );
   };
 
-  const handleEditService = service => {
+  const handleEditService = (service) => {
     dispatch(setServiceModalService(service));
     dispatch(closeServiceDetailsModal(false));
   };
 
-  const handleDeleteService = service => {
+  const handleDeleteService = (service) => {
     localDispatch(
       actions.setDeleteServiceModal({ open: true, service, isLoading: false }),
     );
@@ -235,7 +236,7 @@ const Services = () => {
     dispatch(toggleImportModal(true));
   };
 
-  const handleUploadPatients = async data => {
+  const handleUploadPatients = async (data) => {
     if (category.data == null) return;
     localDispatch(actions.setIsUploading(true));
     const fileName = data.file.name;
@@ -257,7 +258,7 @@ const Services = () => {
     localDispatch(actions.setIsUploading(false));
   };
 
-  const handleCategorySave = data => {
+  const handleCategorySave = (data) => {
     if (categoryModal.state === categoryModalState.edit) {
       localDispatch(
         actions.setCategory({
@@ -296,19 +297,19 @@ const Services = () => {
     );
   };
 
-  const getServicesCount = category => {
+  const getServicesCount = (category) => {
     if (category.id === 'all-services') {
       return clinicServices.length;
     }
-    return clinicServices.filter(item => item.categoryId === category.id)
+    return clinicServices.filter((item) => item.categoryId === category.id)
       .length;
   };
 
   const filteredServices = sortBy(
     category.data != null && category.data.id !== 'all-services'
-      ? clinicServices.filter(item => item.categoryId === category.data.id)
+      ? clinicServices.filter((item) => item.categoryId === category.data.id)
       : clinicServices,
-    item => item.name,
+    (item) => item.name,
   );
 
   return (
@@ -437,7 +438,7 @@ const Services = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredServices.map(item => (
+              {filteredServices.map((item) => (
                 <ServiceRow
                   key={item.id}
                   service={item}

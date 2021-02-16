@@ -11,9 +11,9 @@ import { textForKey } from '../../utils/localization';
 import LoadingButton from '../LoadingButton';
 
 // const initialState = {
-//   username: 'dentino.dentus@gmail.com',
-//   password: 'tezpd4',
-//   partnerToken: 'u8xzkdpkgfc73uektn64',
+//   username: 'elichka.gyace@bk.ru',
+//   password: 'Ortho1234',
+//   partnerToken: 'y49fr7krc3krc2nb2xmf',
 //   isLoading: false,
 // };
 
@@ -54,7 +54,7 @@ const AuthenticationStep = ({ onLogin }) => {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     const targetId = event.target.id;
     switch (targetId) {
       case 'username':
