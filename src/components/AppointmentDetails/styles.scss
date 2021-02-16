@@ -70,7 +70,7 @@
 
   .header-wrapper {
     width: 100%;
-    padding: 1rem;
+    padding: .5rem;
     display: flex;
     align-items: center;
     margin-top: -.2rem;
@@ -87,8 +87,7 @@
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: bold;
-      font-size: 20px;
-      line-height: 32px;
+      font-size: 16px;
       color: #34344E;
     }
   }
@@ -112,7 +111,7 @@
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 32px;
       color: #34344E;
     }
@@ -135,7 +134,7 @@
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 32px;
       padding: .2rem 1rem;
 
@@ -148,6 +147,14 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+
+      table > tbody > tr > td {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13px;
+        color: #34344E;
+      }
     }
 
     .debts-wrapper {
@@ -181,18 +188,14 @@
       table {
         table-layout: fixed;
         width: 100%;
-        thead {
-          tr {
-            td {
-              padding-right: 1rem;
-              font-family: Inter, sans-serif;
-              font-style: normal;
-              font-weight: bold;
-              font-size: 14px;
-              line-height: 32px;
-              color: #34344E;
-            }
-          }
+
+        thead > tr > td {
+          padding-right: 1rem;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          color: #34344E;
         }
 
         tbody {
@@ -207,13 +210,17 @@
               font-style: normal;
               font-weight: normal;
               font-size: 14px;
-              line-height: 32px;
               color: #34344E;
               margin-right: 0;
             }
 
             .actions-cell {
-
+              .btn-outline-primary {
+                height: 25px;
+                margin-top: 1px;
+                margin-bottom: 1px;
+                font-size: 12px;
+              }
             }
 
             .services-cell {
@@ -223,27 +230,29 @@
                 font-family: Inter, sans-serif;
                 font-style: normal;
                 font-weight: normal;
-                font-size: 14px;
-                line-height: 32px;
+                font-size: 12px;
                 color: #34344E;
               }
             }
 
             .totals-cell {
-
               .clinic-name-label {
                 max-width: 100px;
                 padding-right: 1rem;
                 font-family: Inter, sans-serif;
                 font-style: normal;
                 font-weight: normal;
-                font-size: 14px;
-                line-height: 32px;
+                font-size: 12px;
                 color: #34344E;
               }
             }
 
             .remained-cell {
+              font-family: Inter, sans-serif;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              color: #34344E;
             }
           }
         }
@@ -256,8 +265,7 @@
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
-      font-size: 16px;
-      line-height: 32px;
+      font-size: 14px;
       color: #3A83DC;
 
       &:hover {
