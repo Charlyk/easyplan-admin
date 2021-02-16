@@ -25,7 +25,10 @@ import {
   setPatientDetails,
   toggleAppointmentsUpdate,
 } from '../../redux/actions/actions';
-import { updateScheduleSelector } from '../../redux/selectors/scheduleSelector';
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector,
+} from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
 import { formattedAmount } from '../../utils/helperFuncs';
@@ -42,6 +45,7 @@ const AppointmentDetails = ({
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
   const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const [details, setDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatuses, setShowStatuses] = useState(false);
@@ -64,6 +68,13 @@ const AppointmentDetails = ({
       fetchAppointmentDetails(updateSchedule);
     }
   }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule != null && deleteSchedule.id === schedule.id) {
+      // close details fi current schedule was deleted
+      onClose();
+    }
+  }, [deleteSchedule]);
 
   const fetchAppointmentDetails = async (schedule) => {
     if (schedule == null) {
