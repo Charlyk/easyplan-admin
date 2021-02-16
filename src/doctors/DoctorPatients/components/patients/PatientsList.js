@@ -40,14 +40,15 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
   }, [schedules]);
 
   const filterPatients = () => {
+    console.log(schedules);
     setFilteredSchedules(
-      schedules.filter(schedule => {
+      schedules.filter((schedule) => {
         return (
           (filterData.patientName.length === 0 ||
             schedule.patient.fullName
               .toLowerCase()
-              .includes(filterData.patientName.toLowerCase()) ||
-            schedule.patient.phoneNumber.includes(
+              ?.includes(filterData.patientName.toLowerCase()) ||
+            schedule.patient.phoneNumber?.includes(
               filterData.patientName.toLowerCase(),
             )) &&
           (schedule == null ||
@@ -69,21 +70,21 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      setHours(response.data.filter(it => it.split(':')[1] === '00'));
+      setHours(response.data.filter((it) => it.split(':')[1] === '00'));
     }
     setIsLoading(false);
   };
 
-  const schedulesForHour = hour => {
+  const schedulesForHour = (hour) => {
     const [hours] = hour.split(':');
-    const schedules = filteredSchedules.filter(schedule => {
+    const schedules = filteredSchedules.filter((schedule) => {
       const scheduleHour = moment(schedule.startTime).format('HH');
       return hours === scheduleHour;
     });
-    return sortBy(schedules, item => item.startTime);
+    return sortBy(schedules, (item) => item.startTime);
   };
 
-  const renderPatientItem = schedule => {
+  const renderPatientItem = (schedule) => {
     if (schedule == null) {
       return null;
     }
@@ -91,7 +92,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
     const startDate = moment(schedule.startTime);
     const endDate = moment(schedule.endTime);
     const scheduleStatus = Statuses.find(
-      item => item.id === schedule.scheduleStatus,
+      (item) => item.id === schedule.scheduleStatus,
     );
 
     return (
@@ -148,7 +149,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {hours.map(item => (
+              {hours.map((item) => (
                 <TableCell align='center' key={item}>
                   {item}
                 </TableCell>
@@ -157,7 +158,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           </TableHead>
           <TableBody>
             <TableRow>
-              {hours.map(item => (
+              {hours.map((item) => (
                 <TableCell align='center' valign='top' key={`patients-${item}`}>
                   {schedulesForHour(item).map(renderPatientItem)}
                 </TableCell>

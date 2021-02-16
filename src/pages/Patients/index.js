@@ -55,7 +55,7 @@ const Patients = () => {
     setIsFetching(false);
   };
 
-  const handlePatientSave = async patientData => {
+  const handlePatientSave = async (patientData) => {
     setIsSaving(true);
     if (patientData.id != null) {
       logUserAction(
@@ -79,7 +79,7 @@ const Patients = () => {
     setIsSaving(false);
   };
 
-  const handlePatientDelete = patient => {
+  const handlePatientDelete = (patient) => {
     setDeletePatient({ ...deletePatient, open: true, patient });
   };
 
@@ -97,14 +97,14 @@ const Patients = () => {
     handleCancelDelete();
   };
 
-  const handlePatientSelected = patient => {
+  const handlePatientSelected = (patient) => {
     logUserAction(Action.ViewPatient, JSON.stringify(patient));
     setSelectedPatient(patient);
     setIsAdding(false);
   };
 
-  const handlePatientsSearch = searchQuery => {
-    const filtered = patients.all.filter(item => {
+  const handlePatientsSearch = (searchQuery) => {
+    const filtered = patients.all.filter((item) => {
       const fullName = `${item.firstName || ''} ${item.lastName || ''}`
         .replace(' ', '')
         .toLowerCase();
