@@ -164,8 +164,12 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           })
         : cloneDeep(items);
       if (!scheduleExists) {
-        // if schedule does not exist add it to the list
-        newSchedules.push(updateSchedule);
+        const currentDate = moment(viewDate);
+        const scheduleDate = moment(updateSchedule.startTime);
+        if (scheduleDate.isSame(currentDate, 'day')) {
+          // if schedule does not exist add it to the list
+          newSchedules.push(updateSchedule);
+        }
       }
       newSchedulesMap.set(doctorId, newSchedules);
     }
