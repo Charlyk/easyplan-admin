@@ -141,39 +141,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   }, [viewDate, doctors]);
 
   useEffect(() => {
-    if (updateSchedule == null) {
-      return;
-    }
-    const newSchedulesMap = new Map();
-    for (const [doctorId, items] of schedules.entries()) {
-      if (updateSchedule.doctorId !== doctorId) {
-        newSchedulesMap.set(doctorId, items);
-        // don't have to do anything to this doctor schedules
-        continue;
-      }
-      // check if schedule exists
-      const scheduleExists = items.some(
-        (item) => item.id === updateSchedule.id,
-      );
-      const newSchedules = scheduleExists
-        ? items.map((item) => {
-            if (item.id !== updateSchedule.id) {
-              return item;
-            }
-            return updateSchedule;
-          })
-        : cloneDeep(items);
-      if (!scheduleExists) {
-        const currentDate = moment(viewDate);
-        const scheduleDate = moment(updateSchedule.startTime);
-        if (scheduleDate.isSame(currentDate, 'day')) {
-          // if schedule does not exist add it to the list
-          newSchedules.push(updateSchedule);
-        }
-      }
-      newSchedulesMap.set(doctorId, newSchedules);
-    }
-    localDispatch(actions.setSchedules(newSchedulesMap));
+    handleScheduleUpdate();
   }, [updateSchedule]);
 
   useEffect(() => {
@@ -200,6 +168,50 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       localDispatch(actions.setParentTop(schedulesRect.top));
     }
   }, [schedulesRef.current]);
+
+  const handleScheduleUpdate = async () => {
+    if (updateSchedule == null) {
+      return;
+    }
+    const newSchedulesMap = new Map();
+    for (const [doctorId, items] of schedules.entries()) {
+      if (updateSchedule.doctorId !== doctorId) {
+        newSchedulesMap.set(doctorId, items);
+        // don't have to do anything to this doctor schedules
+        continue;
+      }
+      // check if schedule exists
+      const scheduleExists = items.some(
+        (item) => item.id === updateSchedule.id,
+      );
+      const newSchedules = scheduleExists
+        ? items.map((item) => {
+            if (item.id !== updateSchedule.id) {
+              return item;
+            }
+            return updateSchedule;
+          })
+        : cloneDeep(items);
+      if (!scheduleExists) {
+        const currentDate = moment(viewDate);
+        const scheduleDate = moment(updateSchedule.startTime);
+        if (scheduleDate.isSame(currentDate, 'days')) {
+          // if schedule does not exist add it to the list
+          newSchedules.push(updateSchedule);
+          const timezone = moment.tz.guess(true);
+          const response = await dataAPI.fetchDaySchedulesHours(
+            scheduleDate.toDate(),
+            timezone,
+          );
+          if (!response.isError) {
+            localDispatch(actions.setHours(response.data));
+          }
+        }
+      }
+      newSchedulesMap.set(doctorId, newSchedules);
+    }
+    localDispatch(actions.setSchedules(newSchedulesMap));
+  };
 
   /**
    * Fetch a list of schedules for specified {@link viewDate}
