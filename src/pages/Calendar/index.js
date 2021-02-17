@@ -225,7 +225,7 @@ const Calendar = () => {
         }),
       );
     },
-    [],
+    [viewDate],
   );
 
   const handleDoctorSelected = (doctor) => {

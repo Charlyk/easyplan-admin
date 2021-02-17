@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
+import moment from 'moment';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -49,8 +50,12 @@ const DoctorPatients = () => {
             return updateSchedule;
           })
         : cloneDeep(schedules);
-      if (!scheduleExists) {
-        newSchedules.push(updateSchedule);
+      if (!scheduleExists && updateSchedule.doctorId === currentUser.id) {
+        const currentDay = moment(viewDate);
+        const scheduleDay = moment(updateSchedule.startTime);
+        if (currentDay.isSame(scheduleDay, 'days')) {
+          newSchedules.push(updateSchedule);
+        }
       }
       setSchedules(newSchedules);
     }
