@@ -26,10 +26,7 @@ import {
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
-import {
-  deleteScheduleSelector,
-  updateScheduleSelector,
-} from '../../redux/selectors/scheduleSelector';
+import { deleteScheduleSelector } from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Statuses, teeth } from '../../utils/constants';
 import {
