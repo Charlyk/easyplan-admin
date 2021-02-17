@@ -243,7 +243,6 @@ const DoctorPatientDetails = () => {
   const clinicServices = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
-  const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const [
     {
@@ -277,18 +276,6 @@ const DoctorPatientDetails = () => {
       fetchScheduleDetails();
     }
   }, [scheduleId, clinicCurrency]);
-
-  useEffect(() => {
-    if (
-      updateSchedule == null ||
-      scheduleId == null ||
-      updateSchedule.id !== parseInt(scheduleId) ||
-      clinicCurrency == null
-    ) {
-      return;
-    }
-    fetchScheduleDetails();
-  }, [updateSchedule]);
 
   useEffect(() => {
     if (deleteSchedule?.id !== parseFloat(scheduleId)) {
