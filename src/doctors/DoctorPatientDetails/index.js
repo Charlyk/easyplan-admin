@@ -291,7 +291,7 @@ const DoctorPatientDetails = () => {
   }, [updateSchedule]);
 
   useEffect(() => {
-    if (deleteSchedule.id !== parseFloat(scheduleId)) {
+    if (deleteSchedule?.id !== parseFloat(scheduleId)) {
       return;
     }
     toast.warn(textForKey('Schedule was deleted'));
