@@ -26,10 +26,7 @@ import {
   clinicServicesSelector,
 } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
-import {
-  deleteScheduleSelector,
-  updateScheduleSelector,
-} from '../../redux/selectors/scheduleSelector';
+import { deleteScheduleSelector } from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { Action, Statuses, teeth } from '../../utils/constants';
 import {
@@ -243,7 +240,6 @@ const DoctorPatientDetails = () => {
   const clinicServices = useSelector(clinicServicesSelector);
   const currentUser = useSelector(userSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
-  const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const [
     {
@@ -277,18 +273,6 @@ const DoctorPatientDetails = () => {
       fetchScheduleDetails();
     }
   }, [scheduleId, clinicCurrency]);
-
-  useEffect(() => {
-    if (
-      updateSchedule == null ||
-      scheduleId == null ||
-      updateSchedule.id !== parseInt(scheduleId) ||
-      clinicCurrency == null
-    ) {
-      return;
-    }
-    fetchScheduleDetails();
-  }, [updateSchedule]);
 
   useEffect(() => {
     if (deleteSchedule?.id !== parseFloat(scheduleId)) {
