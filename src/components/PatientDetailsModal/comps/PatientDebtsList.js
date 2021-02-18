@@ -18,9 +18,10 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+import IconPrint from '../../../assets/icons/iconPrint';
 import { setPaymentModal } from '../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
-import dataAPI from '../../../utils/api/dataAPI';
+import dataAPI, { baseURL } from '../../../utils/api/dataAPI';
 import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 
@@ -148,6 +149,14 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
                         alignItems='center'
                         justifyContent='flex-end'
                       >
+                        <a
+                          href={`${baseURL}/invoices/receipt/${item.id}?mode=invoice`}
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ marginRight: '.5rem' }}
+                        >
+                          <IconPrint fill='#3A83DC' />
+                        </a>
                         <Button
                           variant='outline-primary'
                           onClick={() => handlePayDebt(item)}

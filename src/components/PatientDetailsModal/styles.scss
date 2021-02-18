@@ -428,6 +428,14 @@
     box-shadow: 0 -1px 90px -5px rgba(239, 242, 251, 0.8);
     border-radius: .1rem;
 
+    .print-label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #3A83DC;
+    }
+
     .canceled-reason-label {
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -791,6 +799,12 @@
     .amount-cell {
       color: #3A83DC;
       font-weight: 600;
+    }
+
+    .print-cell {
+      max-width: 30px;
+      width: 30px;
+      padding: 0 !important;
     }
   }
 }
