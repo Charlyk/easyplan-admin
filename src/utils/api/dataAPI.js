@@ -4,7 +4,7 @@ import moment from 'moment';
 import { env } from '../constants';
 import authManager from '../settings/authManager';
 
-const baseURL =
+export const baseURL =
   env === 'dev'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'

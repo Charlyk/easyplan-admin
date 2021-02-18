@@ -6,12 +6,15 @@ import PropTypes from 'prop-types';
 
 import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
 import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock';
+import { baseURL } from '../../../../utils/api/dataAPI';
 import { Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 
 const Appointment = ({ appointment }) => {
   const scheduleData = moment(appointment.startTime);
-  const status = Statuses.find(item => item.id === appointment.scheduleStatus);
+  const status = Statuses.find(
+    (item) => item.id === appointment.scheduleStatus,
+  );
   return (
     <div className='patient-appointments-list__item'>
       <div className='appointment-info'>
@@ -61,6 +64,15 @@ const Appointment = ({ appointment }) => {
             {status?.name}
           </Typography>
         </div>
+        {(status?.id === 'CompletedPaid' || status?.id === 'PartialPaid') && (
+          <a
+            href={`${baseURL}/invoices/receipt/${appointment.id}?mode=schedule`}
+            target='_blank'
+            rel='noreferrer'
+          >
+            <span className='print-label'>{textForKey('Print receipt')}</span>
+          </a>
+        )}
         <Typography classes={{ root: 'canceled-reason-label' }}>
           {appointment.canceledReason}
         </Typography>

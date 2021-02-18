@@ -496,6 +496,7 @@ export default {
     sentby: 'Sent by',
     comment: 'Comment',
     'Schedule was deleted': 'Schedule was deleted',
+    'print receipt': 'Print receipt',
   },
   ro: {
     analytics: 'Analitică',
@@ -1000,6 +1001,7 @@ export default {
     sentby: 'Trimis de',
     comment: 'Comentariu',
     'Schedule was deleted': 'Programarea a fost ștearsă!',
+    'print receipt': 'Printează bon',
   },
   ru: {
     analytics: 'Analytics',
@@ -1495,5 +1497,6 @@ export default {
     sentby: 'Sent by',
     comment: 'Comment',
     'Schedule was deleted': 'Schedule was deleted',
+    'print receipt': 'Print receipt',
   },
 };

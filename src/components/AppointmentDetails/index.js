@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import {
+  Box,
   ClickAwayListener,
   Fade,
   Paper,
@@ -30,7 +31,7 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector,
 } from '../../redux/selectors/scheduleSelector';
-import dataAPI from '../../utils/api/dataAPI';
+import dataAPI, { baseURL } from '../../utils/api/dataAPI';
 import { ManualStatuses, Statuses } from '../../utils/constants';
 import { formattedAmount } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
@@ -440,22 +441,34 @@ const AppointmentDetails = ({
         )}
       </div>
       <div className='footer-wrapper'>
-        <Button className='cancel-button' onClick={onClose}>
-          {textForKey('Close')}
-          <IconClose />
-        </Button>
-        <Button
-          className='delete-button'
-          disabled={isFinished}
-          onClick={handleDeleteSchedule}
-        >
-          {textForKey('Delete')}
-          <IconTrash />
-        </Button>
-        <Button className='positive-button' onClick={handleEditSchedule}>
-          {textForKey('Edit')}
-          <IconEdit />
-        </Button>
+        <Box width='100%' display='flex'>
+          <Button className='cancel-button' onClick={onClose}>
+            {textForKey('Close')}
+            <IconClose />
+          </Button>
+          <Button
+            className='delete-button'
+            disabled={isFinished}
+            onClick={handleDeleteSchedule}
+          >
+            {textForKey('Delete')}
+            <IconTrash />
+          </Button>
+          <Button className='positive-button' onClick={handleEditSchedule}>
+            {textForKey('Edit')}
+            <IconEdit />
+          </Button>
+        </Box>
+        {(scheduleStatus.id === 'CompletedPaid' ||
+          scheduleStatus.id === 'PartialPaid') && (
+          <a
+            href={`${baseURL}/invoices/receipt/${schedule.id}?mode=schedule`}
+            target='_blank'
+            rel='noreferrer'
+          >
+            <span className='print-label'>{textForKey('Print receipt')}</span>
+          </a>
+        )}
       </div>
     </div>
   );

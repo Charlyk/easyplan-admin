@@ -17,9 +17,10 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+import IconPrint from '../../../assets/icons/iconPrint';
 import { clinicCurrencySelector } from '../../../redux/selectors/clinicSelector';
 import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
-import dataAPI from '../../../utils/api/dataAPI';
+import dataAPI, { baseURL } from '../../../utils/api/dataAPI';
 import {
   formattedAmount,
   generateReducerActions,
@@ -130,7 +131,21 @@ const PatientPurchasesList = ({ patient }) => {
                       {payment.comment || textForKey('Appointment')}
                     </TableCell>
                     <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      {getAmount(payment)}
+                      <Box
+                        display='flex'
+                        alignItems='center'
+                        justifyContent='flex-end'
+                      >
+                        {getAmount(payment)}
+                        <a
+                          href={`${baseURL}/invoices/receipt/${payment.invoiceId}?mode=invoice`}
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ marginLeft: '.5rem' }}
+                        >
+                          <IconPrint fill='#3A83DC' />
+                        </a>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))}
