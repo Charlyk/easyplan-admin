@@ -173,7 +173,15 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (updateSchedule == null) {
       return;
     }
+    const scheduleDate = moment(updateSchedule.startTime);
     const newSchedulesMap = new Map();
+    if (newSchedulesMap.size === 0) {
+      newSchedulesMap.set(updateSchedule.doctorId, [updateSchedule]);
+      await fetchDaySchedules(scheduleDate.toDate());
+      localDispatch(actions.setSchedules(newSchedulesMap));
+      return;
+    }
+
     for (const [doctorId, items] of schedules.entries()) {
       if (updateSchedule.doctorId !== doctorId) {
         newSchedulesMap.set(doctorId, items);
@@ -194,23 +202,22 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         : cloneDeep(items);
       if (!scheduleExists) {
         const currentDate = moment(viewDate);
-        const scheduleDate = moment(updateSchedule.startTime);
         if (scheduleDate.isSame(currentDate, 'days')) {
-          // if schedule does not exist add it to the list
+          // schedule does not exist so we need to add it to the list
           newSchedules.push(updateSchedule);
-          const timezone = moment.tz.guess(true);
-          const response = await dataAPI.fetchDaySchedulesHours(
-            scheduleDate.toDate(),
-            timezone,
-          );
-          if (!response.isError) {
-            localDispatch(actions.setHours(response.data));
-          }
+          await fetchDayHours(scheduleDate.toDate());
         }
       }
       newSchedulesMap.set(doctorId, newSchedules);
     }
     localDispatch(actions.setSchedules(newSchedulesMap));
+  };
+
+  const fetchDayHours = async (date) => {
+    const response = await dataAPI.fetchDaySchedulesHours(date);
+    if (!response.isError) {
+      localDispatch(actions.setHours(response.data));
+    }
   };
 
   /**
