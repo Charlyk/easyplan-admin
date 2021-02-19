@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import IconAvatar from '../../assets/icons/iconAvatar';
 import authAPI from '../../utils/api/authAPI';
@@ -9,25 +11,43 @@ import dataAPI from '../../utils/api/dataAPI';
 import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+
 import './styles.scss';
 
 const CreateClinicModal = ({ open, onCreate, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [timeZones, setTimeZones] = useState([]);
   const [data, setData] = useState({
     logoFile: null,
     clinicName: '',
     website: '',
     description: '',
+    timeZone: moment.tz.guess(true),
   });
 
-  const handleFormChange = event => {
+  useEffect(() => {
+    fetchTimeZones();
+  }, []);
+
+  const fetchTimeZones = async () => {
+    setIsLoading(true);
+    const response = await dataAPI.getAvailableTimeZones();
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      setTimeZones(response.data);
+    }
+    setIsLoading(false);
+  };
+
+  const handleFormChange = (event) => {
     setData({
       ...data,
       [event.target.id]: event.target.value,
     });
   };
 
-  const handleLogoChange = event => {
+  const handleLogoChange = (event) => {
     const files = event.target.files;
     if (files != null) {
       setData({ ...data, logoFile: files[0] });
@@ -76,7 +96,7 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
       open={open}
       onClose={onClose}
       onPositiveClick={submitForm}
-      isPositiveDisabled={!isFormValid()}
+      isPositiveDisabled={!isFormValid() || isLoading}
       isPositiveLoading={isLoading}
       title={textForKey('Create clinic')}
     >
@@ -118,6 +138,21 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
             onChange={handleFormChange}
           />
         </InputGroup>
+      </Form.Group>
+      <Form.Group controlId='timeZone'>
+        <Form.Label>{textForKey('Time zone')}</Form.Label>
+        <Form.Control
+          as='select'
+          onChange={handleFormChange}
+          value={data.timeZone}
+          custom
+        >
+          {timeZones.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </Form.Control>
       </Form.Group>
       <Form.Group controlId='description'>
         <Form.Label>{`${textForKey('About clinic')} (${textForKey(

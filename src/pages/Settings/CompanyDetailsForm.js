@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import upperFirst from 'lodash/upperFirst';
+import moment from 'moment';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,13 +31,14 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
-const CompanyDetailsForm = (props) => {
+const CompanyDetailsForm = () => {
   const dispatch = useDispatch();
   const currentClinic = useSelector(clinicDetailsSelector);
   const currentUser = useSelector(userSelector);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteModal, setDeleteModal] = useState({ open: false });
+  const [timeZones, setTimeZones] = useState([]);
   const [data, setData] = useState({
     id: '',
     logoUrl: null,
@@ -54,6 +56,7 @@ const CompanyDetailsForm = (props) => {
     currency: 'MDL',
     allCurrencies: [],
     country: 'md',
+    timeZone: moment.tz.guess(true),
     isValidPhoneNumber: true,
     isValidViberNumber: true,
     isValidTelegramNumber: true,
@@ -62,11 +65,26 @@ const CompanyDetailsForm = (props) => {
   });
 
   useEffect(() => {
+    fetchTimeZones();
+  }, []);
+
+  useEffect(() => {
     setData({
       ...data,
       ...currentClinic,
     });
-  }, [props, currentClinic]);
+  }, [currentClinic]);
+
+  const fetchTimeZones = async () => {
+    setIsSaving(true);
+    const response = await dataAPI.getAvailableTimeZones();
+    if (response.isError) {
+      toast.error(textForKey(response.message));
+    } else {
+      setTimeZones(response.data);
+    }
+    setIsSaving(false);
+  };
 
   const handleLogoChange = (event) => {
     if (isSaving) return;
@@ -365,6 +383,22 @@ const CompanyDetailsForm = (props) => {
             >
               <option value='md'>{textForKey('Republic of Moldova')}</option>
               <option value='ro'>{textForKey('Romania')}</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group style={{ flexDirection: 'column' }} controlId='timeZone'>
+            <Form.Label>{textForKey('Time zone')}</Form.Label>
+            <Form.Control
+              as='select'
+              className='mr-sm-2'
+              custom
+              onChange={handleFormChange}
+              value={data.timeZone}
+            >
+              {timeZones.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
             </Form.Control>
           </Form.Group>
           <Form.Group controlId='description'>

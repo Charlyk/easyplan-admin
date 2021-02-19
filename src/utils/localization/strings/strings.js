@@ -497,6 +497,7 @@ export default {
     comment: 'Comment',
     'Schedule was deleted': 'Schedule was deleted',
     'print receipt': 'Print receipt',
+    'time zone': 'Time zone',
   },
   ro: {
     analytics: 'Analitică',
@@ -1002,6 +1003,7 @@ export default {
     comment: 'Comentariu',
     'Schedule was deleted': 'Programarea a fost ștearsă!',
     'print receipt': 'Printează bon',
+    'time zone': 'Fus orar',
   },
   ru: {
     analytics: 'Analytics',
@@ -1498,5 +1500,6 @@ export default {
     comment: 'Comment',
     'Schedule was deleted': 'Schedule was deleted',
     'print receipt': 'Print receipt',
+    'time zone': 'Time zone',
   },
 };

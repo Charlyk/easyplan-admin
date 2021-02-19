@@ -5,7 +5,7 @@ import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 export const baseURL =
-  env === 'dev'
+  env === 'dev' || env === 'local'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
@@ -2724,6 +2724,30 @@ export default {
       if (endDate != null) {
         url = `${url}&endDate=${moment(endDate).format('YYYY-MM-DD')}`;
       }
+      const response = await Axios.get(url);
+      const { data: responseData } = response;
+      if (responseData == null) {
+        return {
+          isError: true,
+          message: 'something_went_wrong',
+        };
+      }
+      return responseData;
+    } catch (e) {
+      return {
+        isError: true,
+        message: e.message,
+      };
+    }
+  },
+
+  /**
+   * Fetch a list of available timezones
+   * @return {Promise<{isError: boolean, message: string, data: Array.<string>|null}>}
+   */
+  getAvailableTimeZones: async () => {
+    try {
+      let url = `${baseURL}/clinics/available-timezones`;
       const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
