@@ -228,8 +228,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     if (!silent) {
       localDispatch(actions.setIsLoading(true));
     }
-    const timezone = moment.tz.guess(true);
-    const response = await dataAPI.fetchDaySchedules(viewDate, timezone);
+    const response = await dataAPI.fetchDaySchedules(viewDate);
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
