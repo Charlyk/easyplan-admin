@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Tooltip, Typography } from '@material-ui/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 

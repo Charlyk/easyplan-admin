@@ -2,23 +2,27 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import IconArrowNext from '../../../../assets/icons/iconArrowNext';
 import IconEdit from '../../../../assets/icons/iconEdit';
 import IconPlus from '../../../../assets/icons/iconPlus';
+import { clinicTimeZoneSelector } from '../../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../../utils/localization';
 
 const Field = ({ field }) => {
+  const timeZone = useSelector(clinicTimeZoneSelector);
+
   const isDate = (value) => {
-    const regex = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}/;
+    const regex = /\d{4}-\d{2}-\d{2}(\s|T)\d{2}:\d{2}:\d{2}.\d{3}/;
     return value?.match(regex);
   };
 
   const getValue = (value) => {
     if (isDate(value)) {
-      return moment(value).format('DD.MM.YYYY HH:mm');
+      return moment(value).tz(timeZone).format('DD.MM.YYYY HH:mm');
     }
     return value;
   };
@@ -92,7 +96,7 @@ export default HistoryItem;
 HistoryItem.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.number,
-    targetId: PropTypes.string,
+    targetId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     created: PropTypes.string,
     user: PropTypes.shape({
       id: PropTypes.number,

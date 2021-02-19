@@ -5,7 +5,7 @@ import IconClear from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import IconFree from '@material-ui/icons/MoneyOff';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import IconAppointmentCalendar from '../assets/icons/iconAppointmentCalendar';
 import IconCheckMark from '../assets/icons/iconCheckMark';
@@ -69,7 +69,7 @@ export const JwtRegex = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$
 
 export const YClientAPIUrl = 'https://api.yclients.com/api';
 
-export const S3Config = dirname => ({
+export const S3Config = (dirname) => ({
   bucketName: 'easyplan-pro-files',
   dirName: dirname,
   region: 'eu-central-1',
@@ -266,9 +266,9 @@ export const Statuses = [
   },
 ];
 
-export const ScheduleStatuses = Statuses.filter(item => item.isSchedule);
+export const ScheduleStatuses = Statuses.filter((item) => item.isSchedule);
 
-export const ManualStatuses = Statuses.filter(item => item.manual);
+export const ManualStatuses = Statuses.filter((item) => item.manual);
 
 export const teeth = [
   {

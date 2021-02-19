@@ -121,7 +121,7 @@ const AddPaymentModal = ({ open, patient, onClose }) => {
           value={String(amount)}
         />
         <InputGroup.Append>
-          <InputGroup.Text id='basic-addon1'>MDL</InputGroup.Text>
+          <InputGroup.Text>MDL</InputGroup.Text>
         </InputGroup.Append>
       </InputGroup>
       <Form.Label>{textForKey('Discount')}</Form.Label>
@@ -134,7 +134,7 @@ const AddPaymentModal = ({ open, patient, onClose }) => {
           value={String(discount)}
         />
         <InputGroup.Append>
-          <InputGroup.Text id='basic-addon1'>%</InputGroup.Text>
+          <InputGroup.Text>%</InputGroup.Text>
         </InputGroup.Append>
       </InputGroup>
       <Form.Group controlId='comment'>

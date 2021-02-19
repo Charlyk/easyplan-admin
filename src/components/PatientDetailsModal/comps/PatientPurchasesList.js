@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import sumBy from 'lodash/sumBy';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';

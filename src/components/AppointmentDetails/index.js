@@ -11,7 +11,7 @@ import {
 import DoneIcon from '@material-ui/icons/Done';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { Button, Spinner } from 'react-bootstrap';

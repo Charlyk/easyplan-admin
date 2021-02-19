@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
@@ -115,7 +115,7 @@ const CreatePatientModal = ({ open, onClose }) => {
     localDispatch(actions.setIsLoading(false));
   };
 
-  const handlePatientDataChange = event => {
+  const handlePatientDataChange = (event) => {
     const targetId = event.target.id;
     const newValue = event.target.value;
     switch (targetId) {
@@ -131,7 +131,7 @@ const CreatePatientModal = ({ open, onClose }) => {
     }
   };
 
-  const handleBirthdayChange = newDate => {
+  const handleBirthdayChange = (newDate) => {
     localDispatch(actions.setBirthday(newDate));
   };
 

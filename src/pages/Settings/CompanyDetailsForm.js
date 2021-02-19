@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import upperFirst from 'lodash/upperFirst';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';

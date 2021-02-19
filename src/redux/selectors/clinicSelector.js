@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { createSelector } from 'reselect';
 
 import { Role } from '../../utils/constants';
@@ -7,6 +8,11 @@ export const clinicSelector = (state) => state.clinic;
 export const clinicDetailsSelector = createSelector(
   clinicSelector,
   (state) => state.clinic,
+);
+
+export const clinicTimeZoneSelector = createSelector(
+  clinicSelector,
+  (clinic) => clinic?.timeZone || moment.tz.guess(true),
 );
 
 export const hasSMSAliasSelector = createSelector(

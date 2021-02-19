@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
 import sum from 'lodash/sum';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -26,12 +26,8 @@ const initialState = {
   selectedService: { id: -1 },
   showRangePicker: false,
   dateRange: [
-    moment()
-      .startOf('month')
-      .toDate(),
-    moment()
-      .endOf('month')
-      .toDate(),
+    moment().startOf('month').toDate(),
+    moment().endOf('month').toDate(),
   ],
   statistics: [],
 };
@@ -86,23 +82,23 @@ const DoctorsStatistics = () => {
     fetchData();
   }, []);
 
-  const handleServiceChange = event => {
+  const handleServiceChange = (event) => {
     const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedService({ id: newValue }));
       return;
     }
-    const service = services.find(item => item.id === newValue);
+    const service = services.find((item) => item.id === newValue);
     localDispatch(reducerActions.setSelectedService(service));
   };
 
-  const handleDoctorChange = event => {
+  const handleDoctorChange = (event) => {
     const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedDoctor({ id: newValue }));
       return;
     }
-    const doctor = doctors.find(item => item.id === newValue);
+    const doctor = doctors.find((item) => item.id === newValue);
     localDispatch(reducerActions.setSelectedDoctor(doctor));
   };
 
@@ -114,14 +110,12 @@ const DoctorsStatistics = () => {
     localDispatch(reducerActions.setShowRangePicker(false));
   };
 
-  const handleDateChange = data => {
+  const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(
       reducerActions.setDateRange([
         startDate,
-        moment(endDate)
-          .endOf('day')
-          .toDate(),
+        moment(endDate).endOf('day').toDate(),
       ]),
     );
   };
@@ -161,7 +155,7 @@ const DoctorsStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All services')}</option>
-            {services.map(service => (
+            {services.map((service) => (
               <option key={service.id} value={service.id}>
                 {service.name}
               </option>
@@ -179,7 +173,7 @@ const DoctorsStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All doctors')}</option>
-            {doctors.map(doctor => (
+            {doctors.map((doctor) => (
               <option
                 key={doctor.id}
                 value={doctor.id}
@@ -214,7 +208,7 @@ const DoctorsStatistics = () => {
               </tr>
             </thead>
             <tbody>
-              {statistics.map(item => (
+              {statistics.map((item) => (
                 <tr key={item.id}>
                   <td>{item.user.fullName}</td>
                   <td>{Math.round(item.totalAmount)} MDL</td>
@@ -230,7 +224,7 @@ const DoctorsStatistics = () => {
                 <td />
                 <td align='left'>
                   {textForKey('Total')}:{' '}
-                  {Math.round(sum(statistics.map(it => it.clinicAmount)))} MDL
+                  {Math.round(sum(statistics.map((it) => it.clinicAmount)))} MDL
                 </td>
               </tr>
             </tfoot>

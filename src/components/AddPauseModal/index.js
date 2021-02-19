@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -377,7 +377,7 @@ export default AddPauseModal;
 
 AddPauseModal.propTypes = {
   open: PropTypes.bool,
-  viewDate: PropTypes.instanceOf(Date),
+  viewDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
   onClose: PropTypes.func,
   doctor: PropTypes.shape({
     id: PropTypes.number,

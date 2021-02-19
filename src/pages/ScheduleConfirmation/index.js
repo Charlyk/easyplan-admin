@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import clsx from 'clsx';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

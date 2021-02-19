@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import {

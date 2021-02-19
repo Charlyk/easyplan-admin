@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
@@ -58,12 +58,8 @@ const GeneralStatistics = () => {
   const [selectedDoctor, setSelectedDoctor] = useState({ id: -1 });
   const [showRangePicker, setShowRangePicker] = useState(false);
   const [[startDate, endDate], setDateRange] = useState([
-    moment()
-      .startOf('week')
-      .toDate(),
-    moment()
-      .endOf('week')
-      .toDate(),
+    moment().startOf('week').toDate(),
+    moment().endOf('week').toDate(),
   ]);
 
   useEffect(() => {
@@ -98,12 +94,12 @@ const GeneralStatistics = () => {
     setIsLoading(false);
   };
 
-  const handleDoctorChange = event => {
+  const handleDoctorChange = (event) => {
     const newValue = event.target.value;
     if (newValue === -1) {
       setSelectedDoctor({ id: newValue });
     } else {
-      setSelectedDoctor(doctors.find(item => item.id === newValue));
+      setSelectedDoctor(doctors.find((item) => item.id === newValue));
     }
   };
 
@@ -113,7 +109,7 @@ const GeneralStatistics = () => {
 
   const statuses = generalStatistics?.items || [];
 
-  const getSchedulePercentage = item => {
+  const getSchedulePercentage = (item) => {
     const percent = (item.count / generalStatistics.total) * 100;
     return Number.isNaN(percent) ? 0 : percent;
   };
@@ -122,7 +118,7 @@ const GeneralStatistics = () => {
     setShowRangePicker(false);
   };
 
-  const handleDateChange = data => {
+  const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     setDateRange([startDate, endDate]);
   };
@@ -131,13 +127,13 @@ const GeneralStatistics = () => {
     setShowRangePicker(true);
   };
 
-  const titleForStatus = statusItem => {
-    const data = Statuses.find(it => it.id === statusItem.status);
+  const titleForStatus = (statusItem) => {
+    const data = Statuses.find((it) => it.id === statusItem.status);
     return data?.name;
   };
 
-  const iconForStatus = statusItem => {
-    const data = Statuses.find(it => it.id === statusItem.status);
+  const iconForStatus = (statusItem) => {
+    const data = Statuses.find((it) => it.id === statusItem.status);
     return data?.icon;
   };
 
@@ -166,7 +162,7 @@ const GeneralStatistics = () => {
               custom
             >
               <option value={-1}>{textForKey('All doctors')}</option>
-              {doctors.map(item => (
+              {doctors.map((item) => (
                 <option
                   key={item.id}
                   value={item.id}
@@ -190,7 +186,7 @@ const GeneralStatistics = () => {
         </span>
         {statuses.length > 0 ? (
           <div className='statuses-container'>
-            {statuses.map(item => (
+            {statuses.map((item) => (
               <StatusItem
                 status={item}
                 personsCount={item.count}

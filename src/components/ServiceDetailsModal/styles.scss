@@ -170,6 +170,13 @@
       height: 33.19px;
     }
 
+    .price-group {
+      margin-bottom: 1rem;
+      .custom-select {
+        margin-right: 0 !important;
+      }
+    }
+
     .input-group {
       textarea {
         height: 80px;

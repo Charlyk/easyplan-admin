@@ -19,7 +19,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import remove from 'lodash/remove';
 import sumBy from 'lodash/sumBy';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';

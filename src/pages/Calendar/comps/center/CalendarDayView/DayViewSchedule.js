@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import isEqual from 'lodash/isEqual';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
 import { Statuses } from '../../../../../utils/constants';

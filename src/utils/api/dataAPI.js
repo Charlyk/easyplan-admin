@@ -1,11 +1,11 @@
 import Axios from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { env } from '../constants';
 import authManager from '../settings/authManager';
 
 export const baseURL =
-  env === 'dev'
+  env === 'dev' || env === 'local'
     ? 'https://api.easyplan.pro/api'
     : env === 'local'
     ? 'http://localhost:8080/api'
