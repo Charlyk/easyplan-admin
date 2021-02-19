@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
@@ -15,14 +15,7 @@ const initialState = {
   isLoading: false,
   selectedUser: { id: -1 },
   showRangePicker: false,
-  dateRange: [
-    moment()
-      .startOf('day')
-      .toDate(),
-    moment()
-      .endOf('day')
-      .toDate(),
-  ],
+  dateRange: [moment().startOf('day').toDate(), moment().endOf('day').toDate()],
   activityLogs: [],
 };
 
@@ -69,22 +62,22 @@ const ActivityLogs = () => {
     setShowRangePicker(false);
   };
 
-  const handleDateChange = data => {
+  const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     setDateRange([startDate, endDate]);
   };
 
-  const handleUserChange = event => {
+  const handleUserChange = (event) => {
     const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       setSelectedUser({ id: newValue });
       return;
     }
-    const user = users.find(it => it.id === newValue);
+    const user = users.find((it) => it.id === newValue);
     setSelectedUser(user);
   };
 
-  const handleShowDetails = log => {
+  const handleShowDetails = (log) => {
     setShowDetails({ open: true, activityLog: log });
   };
 
@@ -112,7 +105,7 @@ const ActivityLogs = () => {
             custom
           >
             <option value={-1}>{textForKey('All users')}</option>
-            {users.map(item => (
+            {users.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.firstName} {item.lastName}
               </option>
@@ -146,7 +139,7 @@ const ActivityLogs = () => {
               </tr>
             </thead>
             <tbody>
-              {activityLogs.map(item => (
+              {activityLogs.map((item) => (
                 <tr key={item.id}>
                   <td className='date-cell'>
                     {moment(item.created).format('DD MMM YYYY HH:mm')}

@@ -6,7 +6,7 @@ import orderBy from 'lodash/orderBy';
 import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import sum from 'lodash/sum';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { Menu, MenuItem, Typeahead } from 'react-bootstrap-typeahead';
 import { useDispatch, useSelector } from 'react-redux';

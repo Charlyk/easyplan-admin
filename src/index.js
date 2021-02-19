@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Axios from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
 import ReactDOM from 'react-dom';

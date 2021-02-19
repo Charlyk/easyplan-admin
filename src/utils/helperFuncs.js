@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import S3 from 'react-aws-s3';
 import uuid from 'react-uuid';
 
@@ -106,7 +106,7 @@ export function logUserAction(action, details) {
   dataAPI.sendAction(action, details);
 }
 
-export const getCurrentWeek = date => {
+export const getCurrentWeek = (date) => {
   const currentDate = moment(date);
   const weekStart = currentDate.clone().startOf('isoWeek');
   const days = [];
@@ -116,19 +116,15 @@ export const getCurrentWeek = date => {
   return days;
 };
 
-export const firstDayOfMonth = viewDate => {
-  return moment(viewDate)
-    .startOf('month')
-    .weekday();
+export const firstDayOfMonth = (viewDate) => {
+  return moment(viewDate).startOf('month').weekday();
 };
 
-export const lastDayOfMonth = viewDate => {
-  return moment(viewDate)
-    .endOf('month')
-    .weekday();
+export const lastDayOfMonth = (viewDate) => {
+  return moment(viewDate).endOf('month').weekday();
 };
 
-export const getDays = viewDate => {
+export const getDays = (viewDate) => {
   const currentMonth = moment(viewDate);
   const daysInCurrentMonth = currentMonth.daysInMonth();
   const currentMonthIndex = currentMonth.month();
@@ -200,7 +196,7 @@ export const getDays = viewDate => {
 export function generateReducerActions(types) {
   const actions = {};
   for (const type of Object.keys(types)) {
-    actions[type] = payload => ({ type: type, payload });
+    actions[type] = (payload) => ({ type: type, payload });
   }
   return actions;
 }
@@ -262,15 +258,17 @@ export function overlap(dateRanges) {
   );
 }
 
-export const fetchClinicData = () => async dispatch => {
+export const fetchClinicData = () => async (dispatch) => {
   // fetch clinic details
   const clinicResponse = await dataAPI.fetchClinicDetails();
   if (!clinicResponse.isError) {
-    dispatch(setClinic(clinicResponse.data));
+    const clinicData = clinicResponse.data;
+    moment.tz.setDefault(clinicData.timeZone);
+    dispatch(setClinic(clinicData));
   }
 };
 
-export const getServiceName = service => {
+export const getServiceName = (service) => {
   let name = service.name;
   if (service.toothId != null) {
     name = `${name} ${service.toothId}`;
@@ -281,7 +279,10 @@ export const getServiceName = service => {
   return name;
 };
 
-export const checkShouldAnimateSchedule = schedule => (dispatch, getState) => {
+export const checkShouldAnimateSchedule = (schedule) => (
+  dispatch,
+  getState,
+) => {
   if (schedule != null) {
     const appState = getState();
     const currentClinic = clinicDetailsSelector(appState);
@@ -303,7 +304,7 @@ export const checkShouldAnimateSchedule = schedule => (dispatch, getState) => {
  * @param {string} link
  * @return {string|*}
  */
-export const updateLink = link => {
+export const updateLink = (link) => {
   if (env.length > 0) {
     return link.includes('?') ? `${link}&env=${env}` : `${link}?env=${env}`;
   } else {
@@ -314,18 +315,18 @@ export const updateLink = link => {
 export const handleUserAuthenticated = (
   { user, token },
   callback = () => null,
-) => dispatch => {
+) => (dispatch) => {
   authManager.setUserToken(token);
   authManager.setUserId(user.id);
   const selectedClinic =
     user.clinics.length > 0
-      ? user.clinics.find(it => it.isSelected) || user.clinics[0]
+      ? user.clinics.find((it) => it.isSelected) || user.clinics[0]
       : { clinicId: -1 };
   sessionManager.setSelectedClinicId(selectedClinic.clinicId);
   setTimeout(() => {
     dispatch(setCurrentUser(user));
     const selectedClinic = user.clinics.find(
-      item => item.clinicId === sessionManager.getSelectedClinicId(),
+      (item) => item.clinicId === sessionManager.getSelectedClinicId(),
     );
     if (selectedClinic != null) {
       dispatch(fetchClinicData());

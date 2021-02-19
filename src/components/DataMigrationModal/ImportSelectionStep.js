@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -29,9 +29,7 @@ const initialState = {
   showCompanies: false,
   selectedCompany: null,
   isDatePickerOpen: false,
-  startDate: moment()
-    .subtract(1, 'month')
-    .toDate(),
+  startDate: moment().subtract(1, 'month').toDate(),
   endDate: moment().toDate(),
   dateType: 'start',
 };
@@ -140,9 +138,9 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     dispatch(actions.setShowCompanies(false));
   };
 
-  const handleCompanySelected = event => {
+  const handleCompanySelected = (event) => {
     const companyId = event.target.value;
-    const company = companies.find(item => item.id === companyId);
+    const company = companies.find((item) => item.id === companyId);
     dispatch(actions.setSelectedCompany(company));
   };
 
@@ -152,7 +150,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     if (isChecked) {
       newDataTypes.push(dataType);
     } else {
-      remove(newDataTypes, item => item === dataType);
+      remove(newDataTypes, (item) => item === dataType);
     }
     dispatch(actions.setDataTypes(newDataTypes));
   };
@@ -161,17 +159,17 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     dispatch(actions.setIsDatePickerOpen({ open: false, type: 'start' }));
   };
 
-  const handleOpenDatePicker = type => {
+  const handleOpenDatePicker = (type) => {
     dispatch(actions.setIsDatePickerOpen({ open: true, type }));
   };
 
-  const handleDateFieldClick = event => {
+  const handleDateFieldClick = (event) => {
     datePickerRef.current = event.target;
     const targetId = event.target.id;
     handleOpenDatePicker(targetId);
   };
 
-  const handleDateChanged = newDate => {
+  const handleDateChanged = (newDate) => {
     switch (dateType) {
       case 'start':
         dispatch(actions.setStartDate(newDate));
@@ -305,7 +303,7 @@ const ImportSelectionStep = ({ userData, onImport }) => {
         anchorEl={companiesRef.current}
         onClose={handleCloseCompanies}
       >
-        {companies.map(item => (
+        {companies.map((item) => (
           <MenuItem
             selected={selectedCompany?.id === item.id}
             onClick={handleCompanySelected}

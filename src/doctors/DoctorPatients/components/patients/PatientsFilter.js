@@ -27,34 +27,38 @@ const PatientsFilter = ({
           <Form.Control onChange={onNameChange} type='text' />
         </InputGroup>
       </Form.Group>
-      <Form.Group style={{ flexDirection: 'column' }}>
+      <Form.Group
+        style={{ flexDirection: 'column' }}
+        controlId='inlineFormCustomSelect'
+      >
         <Form.Label>{textForKey('Service')}</Form.Label>
         <Form.Control
           as='select'
           className='mr-sm-2'
-          id='inlineFormCustomSelect'
           onChange={onServiceChange}
           custom
         >
           <option value='all'>{textForKey('All services')}</option>
-          {services.map(item => (
+          {services.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
           ))}
         </Form.Control>
       </Form.Group>
-      <Form.Group style={{ flexDirection: 'column' }}>
+      <Form.Group
+        style={{ flexDirection: 'column' }}
+        controlId='inlineFormCustomSelect'
+      >
         <Form.Label>{textForKey('Appointment status')}</Form.Label>
         <Form.Control
           as='select'
           className='mr-sm-2'
-          id='inlineFormCustomSelect'
           onChange={onStatusChange}
           custom
         >
           <option value='all'>{textForKey('All statuses')}</option>
-          {Statuses.map(status => (
+          {Statuses.map((status) => (
             <option key={status.id} value={status.id}>
               {status.name}
             </option>

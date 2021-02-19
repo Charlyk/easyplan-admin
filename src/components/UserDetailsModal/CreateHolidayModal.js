@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { DateRange } from 'react-date-range';
@@ -11,9 +11,7 @@ import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
 const initialRange = {
   startDate: moment().toDate(),
-  endDate: moment()
-    .add(3, 'days')
-    .toDate(),
+  endDate: moment().add(3, 'days').toDate(),
   key: 'selection',
   color: '#3A83DC',
 };
@@ -44,11 +42,11 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
    * @param {string} item.selection.color
    * @param {string} item.selection.key
    */
-  const handleDateSelected = item => {
+  const handleDateSelected = (item) => {
     setDateRanges([item.selection]);
   };
 
-  const handleDescriptionChange = event => {
+  const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
 

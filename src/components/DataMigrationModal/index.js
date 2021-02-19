@@ -3,7 +3,7 @@ import React, { useEffect, useReducer } from 'react';
 import { Stepper, Step, StepLabel, Typography } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import './styles.scss';
 import { usePubNub } from 'pubnub-react';

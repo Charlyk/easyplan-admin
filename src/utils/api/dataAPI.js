@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { env } from '../constants';
 import authManager from '../settings/authManager';
@@ -1012,11 +1012,11 @@ export default {
     }
   },
 
-  fetchDaySchedules: async (date, timezone) => {
+  fetchDaySchedules: async (date) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
-        `${baseURL}/schedules/v2/day?&date=${stringDate}&timezone=${timezone}`,
+        `${baseURL}/schedules/v2/day?&date=${stringDate}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -1056,11 +1056,11 @@ export default {
     }
   },
 
-  fetchDaySchedulesHours: async (date, timezone) => {
+  fetchDaySchedulesHours: async (date) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
-        `${baseURL}/schedules/day-hours?&date=${stringDate}&timezone=${timezone}`,
+        `${baseURL}/schedules/day-hours?&date=${stringDate}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {

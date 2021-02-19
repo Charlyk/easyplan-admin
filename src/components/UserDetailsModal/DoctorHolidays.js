@@ -1,7 +1,7 @@
 import React from 'react';
 
 import clsx from 'clsx';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
@@ -45,7 +45,7 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
   );
 };
 
-const DoctorHolidays = props => {
+const DoctorHolidays = (props) => {
   const { show, data, onCreateOrUpdate, onDeleteHoliday } = props;
   const classes = clsx('doctor-holidays', show ? 'expanded' : 'collapsed');
   return (

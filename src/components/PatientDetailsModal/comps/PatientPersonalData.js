@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
 import { Box, Typography } from '@material-ui/core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';

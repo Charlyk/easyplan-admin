@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
@@ -40,14 +40,14 @@ const PatientAccount = ({ patient, isAdding, isSaving, onSave, onDelete }) => {
     });
   }, [patient]);
 
-  const handleFormChange = event => {
+  const handleFormChange = (event) => {
     setPatientData({
       ...patientData,
       [event.target.id]: event.target.value,
     });
   };
 
-  const handleDateChange = newDate => {
+  const handleDateChange = (newDate) => {
     setPatientData({
       ...patientData,
       birthday: newDate,

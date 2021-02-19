@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
 import { Statuses } from '../../../../utils/constants';
@@ -18,7 +18,7 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
   };
 
   const scheduleStatus = Statuses.find(
-    item => item.id === appointment.scheduleStatus,
+    (item) => item.id === appointment.scheduleStatus,
   );
 
   const startTime = moment(appointment.startTime);

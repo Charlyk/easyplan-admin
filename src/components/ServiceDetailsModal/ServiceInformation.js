@@ -91,38 +91,37 @@ const ServiceInformation = ({
                 onChange={handleFormChange}
               />
               <InputGroup.Append>
-                <InputGroup.Text id='basic-addon1'>min</InputGroup.Text>
+                <InputGroup.Text>min</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
           </Form.Group>
 
-          <Form.Group controlId='price'>
-            <Form.Label>{textForKey('Service price')}</Form.Label>
-            <InputGroup>
+          <Form.Label>{textForKey('Service price')}</Form.Label>
+          <InputGroup className='price-group'>
+            <Form.Control
+              id='price'
+              type='number'
+              value={data.price}
+              min='0'
+              onChange={handleFormChange}
+            />
+            <InputGroup.Append>
               <Form.Control
-                type='number'
-                value={data.price}
-                min='0'
+                id='currency'
+                as='select'
+                className='mr-sm-2'
+                custom
                 onChange={handleFormChange}
-              />
-              <InputGroup.Append>
-                <Form.Control
-                  id='currency'
-                  as='select'
-                  className='mr-sm-2'
-                  custom
-                  onChange={handleFormChange}
-                  value={data.currency}
-                >
-                  {currencies.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </Form.Control>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
+                value={data.currency}
+              >
+                {currencies.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </Form.Control>
+            </InputGroup.Append>
+          </InputGroup>
 
           <Form.Group
             controlId='serviceType'

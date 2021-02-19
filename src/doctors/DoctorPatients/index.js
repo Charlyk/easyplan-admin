@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';

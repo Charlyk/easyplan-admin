@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { usePubNub } from 'pubnub-react';
 import { Modal, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';

@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 

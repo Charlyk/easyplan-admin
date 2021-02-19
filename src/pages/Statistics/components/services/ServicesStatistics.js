@@ -10,7 +10,7 @@ import {
   TablePagination,
 } from '@material-ui/core';
 import isEqual from 'lodash/isEqual';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { parse } from 'query-string';
 import { Form, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,14 +75,10 @@ const reducer = (state, action) => {
       const { doctorId, status, startDate, endDate } = action.payload;
       const fromDate = startDate
         ? moment(startDate, 'YYYY-MM-DD HH:mm:ss').toDate()
-        : moment()
-            .startOf('month')
-            .toDate();
+        : moment().startOf('month').toDate();
       const toDate = endDate
         ? moment(endDate, 'YYYY-MM-DD HH:mm:ss').toDate()
-        : moment()
-            .endOf('month')
-            .toDate();
+        : moment().endOf('month').toDate();
       return {
         ...state,
         selectedDoctor: { id: doctorId || -1 },
@@ -110,12 +106,8 @@ const initialState = {
   urlParams: {},
   totalItems: 0,
   dateRange: [
-    moment()
-      .startOf('month')
-      .toDate(),
-    moment()
-      .endOf('month')
-      .toDate(),
+    moment().startOf('month').toDate(),
+    moment().endOf('month').toDate(),
   ],
   page: 0,
   rowsPerPage: 25,
@@ -192,55 +184,53 @@ const ServicesStatistics = () => {
     localDispatch(reducerActions.setShowRangePicker(false));
   };
 
-  const handleDateChange = data => {
+  const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(
       reducerActions.setDateRange([
         startDate,
-        moment(endDate)
-          .endOf('day')
-          .toDate(),
+        moment(endDate).endOf('day').toDate(),
       ]),
     );
   };
 
-  const handleDoctorChange = event => {
+  const handleDoctorChange = (event) => {
     const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedDoctor({ id: -1 }));
       return;
     }
-    const doctor = doctors.find(it => it.id === newValue);
+    const doctor = doctors.find((it) => it.id === newValue);
     localDispatch(reducerActions.setSelectedDoctor(doctor));
   };
 
-  const handleServiceChange = event => {
+  const handleServiceChange = (event) => {
     const newValue = parseInt(event.target.value);
     if (newValue === -1) {
       localDispatch(reducerActions.setSelectedService({ id: -1 }));
       return;
     }
-    const service = services.find(it => it.id === newValue);
+    const service = services.find((it) => it.id === newValue);
     localDispatch(reducerActions.setSelectedService(service));
   };
 
-  const handleStatusChange = event => {
+  const handleStatusChange = (event) => {
     const newValue = event.target.value;
     if (newValue === 'All') {
       localDispatch(reducerActions.setSelectedStatus({ id: 'All' }));
       return;
     }
-    const status = ScheduleStatuses.find(it => it.id === newValue);
+    const status = ScheduleStatuses.find((it) => it.id === newValue);
     localDispatch(reducerActions.setSelectedStatus(status));
   };
 
-  const titleForStatus = status => {
-    const data = ScheduleStatuses.find(it => it.id === status);
+  const titleForStatus = (status) => {
+    const data = ScheduleStatuses.find((it) => it.id === status);
     return data?.name;
   };
 
-  const colorForStatus = status => {
-    const data = ScheduleStatuses.find(it => it.id === status);
+  const colorForStatus = (status) => {
+    const data = ScheduleStatuses.find((it) => it.id === status);
     return data?.color;
   };
 
@@ -248,11 +238,11 @@ const ServicesStatistics = () => {
     localDispatch(reducerActions.setPage(newPage));
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     localDispatch(reducerActions.setRowsPerPage(event.target.value));
   };
 
-  const handlePatientClick = patientId => () => {
+  const handlePatientClick = (patientId) => () => {
     dispatch(
       setPatientDetails({
         show: true,
@@ -277,7 +267,7 @@ const ServicesStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All services')}</option>
-            {services.map(service => (
+            {services.map((service) => (
               <option key={service.id} value={service.id}>
                 {service.name}
               </option>
@@ -296,7 +286,7 @@ const ServicesStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All doctors')}</option>
-            {doctors.map(doctor => (
+            {doctors.map((doctor) => (
               <option
                 key={doctor.id}
                 value={doctor.id}
@@ -327,7 +317,7 @@ const ServicesStatistics = () => {
             custom
           >
             <option value='All'>{textForKey('All statuses')}</option>
-            {ScheduleStatuses.map(status => (
+            {ScheduleStatuses.map((status) => (
               <option key={status.id} value={status.id}>
                 {status.name}
               </option>
@@ -355,7 +345,7 @@ const ServicesStatistics = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {statistics.map(item => (
+                {statistics.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell>
                       {moment(item.dateAndTime).format('DD MMM YYYY HH:mm')}

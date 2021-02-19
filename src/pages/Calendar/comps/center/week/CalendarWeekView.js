@@ -9,7 +9,7 @@ import {
   TableCell,
 } from '@material-ui/core';
 import clsx from 'clsx';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 

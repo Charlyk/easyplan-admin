@@ -13,7 +13,7 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import ArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import ArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import clsx from 'clsx';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Button, Spinner } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';

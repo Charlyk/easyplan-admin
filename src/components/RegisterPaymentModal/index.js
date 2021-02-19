@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
 import sumBy from 'lodash/sumBy';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Button, FormControl, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -356,9 +356,7 @@ const RegisterPaymentModal = ({ open, invoice, onClose }) => {
                 value={String(payAmount)}
               />
               <InputGroup.Append>
-                <InputGroup.Text id='basic-addon1'>
-                  {clinicCurrency}
-                </InputGroup.Text>
+                <InputGroup.Text>{clinicCurrency}</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
             <span className='total-label'>
