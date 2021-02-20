@@ -103,7 +103,9 @@ const ScheduleConfirmation = () => {
                 </TableCell>
                 <TableCell>
                   <Typography classes={{ root: 'data-label' }}>
-                    {moment(schedule.startTime).format('DD.MM.YYYY')}
+                    {moment(schedule.startTime)
+                      .tz(schedule.timeZone)
+                      .format('DD.MM.YYYY')}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -115,7 +117,9 @@ const ScheduleConfirmation = () => {
                 </TableCell>
                 <TableCell>
                   <Typography classes={{ root: 'data-label' }}>
-                    {moment(schedule.startTime).format('HH:mm')}
+                    {moment(schedule.startTime)
+                      .tz(schedule.timeZone)
+                      .format('HH:mm')}
                   </Typography>
                 </TableCell>
               </TableRow>
