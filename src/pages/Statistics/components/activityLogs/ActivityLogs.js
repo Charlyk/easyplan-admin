@@ -9,7 +9,9 @@ import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
 import { clinicUsersSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
-import StatisticFilter from '../StatisticFilter';
+import StatisticFilter from '../StatisticFilter/StatisticFilter';
+import styles from './ActivityLogs.module.scss';
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 
 const initialState = {
   isLoading: false,
@@ -86,7 +88,7 @@ const ActivityLogs = () => {
   };
 
   return (
-    <div className='activity-logs'>
+    <div className={styles['activity-logs']}>
       <ActionLogModal
         open={showDetails.open}
         activityLog={showDetails.activityLog}
@@ -124,40 +126,49 @@ const ActivityLogs = () => {
           />
         </Form.Group>
       </StatisticFilter>
-      <div className='data-container'>
+      <div className={styles['data-container']}>
         {!isLoading && activityLogs.length === 0 && (
-          <span className='no-data-label'>{textForKey('No results')}</span>
+          <span className={styles['no-data-label']}>{textForKey('No results')}</span>
+        )}
+        {isLoading && (
+          <div className={styles.progressWrapper}>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+          </div>
         )}
         {activityLogs.length > 0 && (
-          <table className='data-table'>
-            <thead>
-              <tr>
-                <td className='date-cell'>{textForKey('Date')}</td>
-                <td className='user-cell'>{textForKey('User')}</td>
-                <td className='details-cell'>{textForKey('Details')}</td>
-                <td className='actions-cell'>{textForKey('Actions')}</td>
-              </tr>
-            </thead>
-            <tbody>
-              {activityLogs.map((item) => (
-                <tr key={item.id}>
-                  <td className='date-cell'>
-                    {moment(item.created).format('DD MMM YYYY HH:mm')}
-                  </td>
-                  <td className='user-cell'>{item.user}</td>
-                  <td className='details-cell'>{textForKey(item.action)}</td>
-                  <td className='actions-cell'>
-                    <Button
-                      className='positive-button'
-                      onClick={() => handleShowDetails(item)}
-                    >
-                      {textForKey('View Details')}
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TableContainer classes={{ root: styles.tableContainer }}>
+            <Table className={styles['data-table']}>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={styles['date-cell']}>{textForKey('Date')}</TableCell>
+                  <TableCell className={styles['user-cell']}>{textForKey('User')}</TableCell>
+                  <TableCell className={styles['details-cell']}>{textForKey('Details')}</TableCell>
+                  <TableCell className={styles['actions-cell']} align='right'>{textForKey('Actions')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {activityLogs.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className={styles['date-cell']}>
+                      {moment(item.created).format('DD MMM YYYY HH:mm')}
+                    </TableCell>
+                    <TableCell className={styles['user-cell']}>{item.user}</TableCell>
+                    <TableCell className={styles['details-cell']}>{textForKey(item.action)}</TableCell>
+                    <TableCell className={styles['actions-cell']} align='right'>
+                      <div className={styles.btnWrapper}>
+                        <Button
+                          className={'positive-button'}
+                          onClick={() => handleShowDetails(item)}
+                        >
+                          {textForKey('View Details')}
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
       </div>
       <EasyDateRangePicker

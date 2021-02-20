@@ -16,8 +16,6 @@ import {
   toggleForceLogoutUser,
 } from './redux/actions/actions';
 import rootReducer from './redux/reducers/rootReducer';
-import * as serviceWorker from './serviceWorker';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import authManager from './utils/settings/authManager';
 import sessionManager from './utils/settings/sessionManager';
 
@@ -70,16 +68,15 @@ const pubnub = new PubNub({
   uuid: authManager.getUserId() || PubNub.generateUUID(),
 });
 
-ReactDOM.render(
+export default ReactDOM.render(
   <Provider store={ReduxStore}>
     <PubNubProvider client={pubnub}>
       <App />
     </PubNubProvider>
   </Provider>,
-  document.getElementById('root'),
+  typeof document !== 'undefined' && document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

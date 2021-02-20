@@ -28,7 +28,6 @@ import PatientPersonalData from './comps/PatientPersonalData';
 import PatientPurchasesList from './comps/PatientPurchasesList';
 import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
 import PatientXRay from './comps/x-ray/PatientXRay';
-import './styles.scss';
 
 const MenuItem = {
   personalInfo: 'personal-info',

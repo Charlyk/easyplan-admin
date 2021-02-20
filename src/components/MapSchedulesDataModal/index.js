@@ -18,7 +18,7 @@ import {
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import './styles.scss';
+import './MapSchedulesDataModal.module.scss';
 import LoadingButton from '../LoadingButton';
 
 export const MappingData = {

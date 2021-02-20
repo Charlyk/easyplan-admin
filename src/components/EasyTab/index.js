@@ -2,18 +2,18 @@ import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import './styles.scss';
+import styles from './EasyTab.module.scss';
 
 const EasyTab = ({ title, selected, highlighted, onClick }) => {
   const tabClass = clsx(
-    'easy-tab',
-    selected ? 'selected' : 'default',
-    highlighted && 'highlighted',
+    styles['easy-tab'],
+    selected ? styles.selected : styles.default,
+    highlighted && styles.highlighted,
   );
   return (
     <div role='button' tabIndex={0} onClick={onClick} className={tabClass}>
       {title}
-      <div className='tab-indicator' />
+      <div className={styles['tab-indicator']} />
     </div>
   );
 };

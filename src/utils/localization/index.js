@@ -5,7 +5,7 @@ import strings from './strings/strings';
  * @param {'en'|'ro'|'ru'} newLanguage
  */
 export function setAppLanguage(newLanguage) {
-  localStorage.setItem('appLanguage', newLanguage);
+  typeof localStorage !== 'undefined' && localStorage.setItem('appLanguage', newLanguage);
 }
 
 /**
@@ -13,7 +13,7 @@ export function setAppLanguage(newLanguage) {
  * @return {string}
  */
 export function getAppLanguage() {
-  const lang = localStorage.getItem('appLanguage');
+  const lang = typeof localStorage !== "undefined" ? localStorage.getItem('appLanguage') : null;
   return lang ? lang : 'ro';
 }
 

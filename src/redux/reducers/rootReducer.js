@@ -59,7 +59,7 @@ function main(state = initialState, action) {
     case types.updateUsersList:
       return {
         ...state,
-        updateUsers: !state.updateUsers,
+        updateUsers: action.payload,
       };
     case types.updateXRay:
       return {

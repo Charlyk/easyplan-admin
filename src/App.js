@@ -60,13 +60,6 @@ import { fetchClinicData, updateLink } from './utils/helperFuncs';
 import { getAppLanguage, textForKey } from './utils/localization';
 import { handleRemoteMessage } from './utils/pubnubUtils';
 import authManager from './utils/settings/authManager';
-import 'react-toastify/dist/ReactToastify.css';
-import './index.scss';
-import 'react-phone-number-input/style.css';
-import 'react-phone-input-2/lib/style.css';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
@@ -148,7 +141,7 @@ function App() {
     const title = document.getElementById('site-title');
     if (title != null && clinicName.length > 0) {
       title.innerText = `EasyPlan - ${clinicName}`;
-    } else {
+    } else if (title != null) {
       title.innerText = `EasyPlan`;
     }
   };

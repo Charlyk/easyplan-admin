@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 
-import './styles.scss';
 import { Box, IconButton, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -20,6 +19,7 @@ import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from '../ActionsSheet';
 import InvoicesButton from '../InvoicesButton';
+import styles from './PageHeader.module.scss';
 
 const actions = [
   {
@@ -43,6 +43,7 @@ const PageHeader = ({
   onLogout,
   onEditProfile,
 }) => {
+  console.log(styles)
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);
@@ -75,7 +76,7 @@ const PageHeader = ({
   };
 
   return (
-    <div className='page-header'>
+    <div className={styles['page-header']}>
       <ActionsSheet
         onClose={handleActionsClose}
         onSelect={handleActionSelected}
@@ -85,7 +86,7 @@ const PageHeader = ({
         placement='bottom-end'
       />
       <div
-        className='page-header__title'
+        className={styles['page-header__title']}
         style={{ marginTop: titleComponent != null ? 0 : '0.5rem' }}
       >
         {titleComponent || title}
@@ -95,7 +96,7 @@ const PageHeader = ({
           <InvoicesButton />
           <Tooltip title={textForKey('Add payment')}>
             <IconButton
-              classes={{ root: 'add-invoice-btn' }}
+              classes={{ root: styles['add-invoice-btn'] }}
               onClick={handleOpenPaymentModal}
             >
               <IconPlus fill='#3A83DC' />
@@ -103,24 +104,24 @@ const PageHeader = ({
           </Tooltip>
         </Box>
       )}
-      <div className='page-header__actions'>
+      <div className={styles['page-header__actions']}>
         {!isDoctor && (
           <Button
             onClick={handleOpenExchangeRatesModal}
-            className={clsx('exchange-rate-btn', {
-              upcoming: isExchangeUpdateRequired,
+            className={clsx(styles['exchange-rate-btn'], {
+              [styles.upcoming]: isExchangeUpdateRequired,
             })}
             variant='outline-primary'
           >
             {textForKey('Exchange rate')}
           </Button>
         )}
-        <div className='page-header__notifications'>
+        <div className={styles['page-header__notifications']}>
           <IconNotifications />
         </div>
-        <div className='avatar-container'>
+        <div className={styles['avatar-container']}>
           {user?.avatar ? (
-            <Image roundedCircle className='avatar-image' src={user.avatar} />
+            <Image roundedCircle className={styles['avatar-image']} src={user.avatar} />
           ) : (
             <IconAvatar />
           )}
@@ -129,7 +130,7 @@ const PageHeader = ({
           role='button'
           tabIndex={0}
           onClick={handleActionsOpen}
-          className='page-header__notifications'
+          className={styles['page-header__notifications']}
           ref={actionsAnchor}
         >
           <IconMore />

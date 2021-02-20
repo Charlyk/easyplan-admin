@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import './styles.scss';
+import styles from './LeftSideModal.module.scss';
 import ModalHeader from './ModalHeader';
 
 const LeftSideModal = (props) => {
@@ -21,16 +21,16 @@ const LeftSideModal = (props) => {
   }, [show]);
 
   const contentClasses = clsx(
-    'left-side-modal__content',
-    show ? 'show' : 'hide',
+    styles['left-side-modal__content'],
+    show ? styles.show : styles.hide,
   );
 
   const backdropClasses = clsx(
-    'left-side-modal__backdrop',
-    show ? 'show' : 'hide',
+    styles['left-side-modal__backdrop'],
+    show ? styles.show : styles.hide,
   );
 
-  const mainClasses = clsx('left-side-modal', isHidden && 'hide');
+  const mainClasses = clsx(styles['left-side-modal'], isHidden && styles.hide);
 
   return (
     <div className={mainClasses}>

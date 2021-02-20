@@ -20,12 +20,13 @@ export function triggerServicesUpdate() {
 
 /**
  * Trigger users list update
+ * @param {boolean} update
  * @return {{payload: string, type: string}}
  */
-export function triggerUsersUpdate() {
+export function triggerUsersUpdate(update) {
   return {
     type: types.updateUsersList,
-    payload: '',
+    payload: update,
   };
 }
 

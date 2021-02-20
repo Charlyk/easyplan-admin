@@ -27,7 +27,7 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import './RegisterPaymentModal.module.scss';
 
 const computeServicePrice = (invoice, exchangeRates) => {
   return invoice.services.map((service) => {

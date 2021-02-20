@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Popper, Paper, Fade, ClickAwayListener } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import './styles.scss';
+import styles from './ActionsSheet.module.scss';
+import clsx from "clsx";
 
 const ActionsSheet = props => {
   const { actions, onSelect, onClose, placement } = props;
@@ -13,7 +14,7 @@ const ActionsSheet = props => {
     <Popper {...props} placement={placement} style={{ zIndex: 999 }} transition>
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='actions-sheet__paper'>
+          <Paper className={styles['actions-sheet__paper']}>
             <ClickAwayListener onClickAway={onClose}>
               <div>
                 {actions.map(action => (
@@ -21,7 +22,7 @@ const ActionsSheet = props => {
                     role='button'
                     tabIndex={0}
                     onClick={() => handleActionClick(action)}
-                    className={`actions-sheet__item ${action.type}`}
+                    className={clsx(styles['actions-sheet__item'], action.type)}
                     key={action.key}
                   >
                     {action.icon}

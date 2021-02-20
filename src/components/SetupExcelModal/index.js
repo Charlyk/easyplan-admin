@@ -21,7 +21,7 @@ import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import CircularProgressWithLabel from '../CircularProgressWithLabel';
 import LoadingButton from '../LoadingButton';
-import './styles.scss';
+import './SetupExcelModal.module.scss';
 
 export const UploadMode = {
   patients: 'Patients',

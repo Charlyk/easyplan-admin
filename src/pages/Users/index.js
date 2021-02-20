@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import './styles.scss';
+import styles from './Users.module.scss';
 import {
   Box,
   CircularProgress,
@@ -22,10 +22,11 @@ import dataAPI from '../../utils/api/dataAPI';
 import { Action, Role } from '../../utils/constants';
 import { fetchClinicData, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import UserItem from './comps/UserItem';
-import UsersHeader from './comps/UsersHeader';
+import UserItem from './UserItem';
+import UsersHeader from './UserHeader';
+import { triggerUsersUpdate } from "../../redux/actions/actions";
 
-const Users = props => {
+const Users = () => {
   const dispatch = useDispatch();
   const updateUsers = useSelector(updateUsersSelector);
   const [selectedFilter, setSelectedFilter] = useState(Role.all);
@@ -53,14 +54,18 @@ const Users = props => {
 
   useEffect(() => {
     logUserAction(Action.ViewUsers);
+    fetchUsers();
   }, []);
 
   useEffect(() => {
-    fetchUsers();
-  }, [props, updateUsers]);
+    if (updateUsers) {
+      fetchUsers(true);
+      dispatch(triggerUsersUpdate(false));
+    }
+  }, [updateUsers]);
 
-  const fetchUsers = async () => {
-    setIsLoading(true);
+  const fetchUsers = async (silent = false) => {
+    if (!silent) setIsLoading(true);
     const response = await dataAPI.fetchUsers();
     if (response.isError) {
       toast.error(textForKey(response.message));
@@ -165,7 +170,7 @@ const Users = props => {
     const role = type === Role.admin ? Role.manager : type;
 
     return (
-      <TableRow classes={{ root: 'users-root__no-data' }}>
+      <TableRow classes={{ root: styles['users-root__no-data'] }}>
         <TableCell colSpan={5}>
           <Box
             width='100%'
@@ -173,12 +178,12 @@ const Users = props => {
             alignItems='center'
             justifyContent='center'
           >
-            <Typography classes={{ root: 'no-data-label' }}>
+            <Typography classes={{ root: styles['no-data-label'] }}>
               {message}
             </Typography>
             <div
               role='button'
-              className='add-data-btn'
+              className={styles['add-data-btn']}
               tabIndex={0}
               onClick={event => handleInviteUserStart(event, role)}
             >
@@ -266,7 +271,7 @@ const Users = props => {
   };
 
   return (
-    <div className='users-root'>
+    <div className={styles['users-root']}>
       <InviteUserModal
         error={invitingExistentError}
         isLoading={isInvitingExistent}
@@ -314,25 +319,27 @@ const Users = props => {
         onInviteUser={openInviteModal}
       />
 
-      <div className='users-root__content'>
-        {isLoading && (
-          <div className='loading-wrapper'>
-            <CircularProgress classes={{ root: 'users-loading' }} />
-          </div>
-        )}
-        <TableContainer classes={{ root: 'table-container' }}>
-          <Table classes={{ root: 'data-table' }}>
-            <TableBody>
-              {canShowType(Role.invitations) && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <span className='users-root__group-title'>
+      {isLoading && (
+        <div className={styles['loading-wrapper']}>
+          <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+        </div>
+      )}
+
+      <div className={styles['users-root__content']}>
+        {!isLoading && (
+          <TableContainer classes={{ root: styles['table-container'] }}>
+            <Table classes={{ root: styles['data-table'] }}>
+              <TableBody>
+                {canShowType(Role.invitations) && (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                    <span className={styles['users-root__group-title']}>
                       {textForKey('Invitations')}
                     </span>
-                  </TableCell>
-                </TableRow>
-              )}
-              {canShowType(Role.invitations) &&
+                    </TableCell>
+                  </TableRow>
+                )}
+                {canShowType(Role.invitations) &&
                 data.invitations.map(item => (
                   <UserItem
                     isInvitation={true}
@@ -346,17 +353,17 @@ const Users = props => {
                     onEdit={handleUserModalOpen}
                   />
                 ))}
-              {canShowType(Role.invitations) && renderNoData(Role.invitations)}
-              {canShowType(Role.doctor) && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <span className='users-root__group-title'>
+                {canShowType(Role.invitations) && renderNoData(Role.invitations)}
+                {canShowType(Role.doctor) && (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                    <span className={styles['users-root__group-title']}>
                       {textForKey('Doctors')}
                     </span>
-                  </TableCell>
-                </TableRow>
-              )}
-              {canShowType(Role.doctor) &&
+                    </TableCell>
+                  </TableRow>
+                )}
+                {canShowType(Role.doctor) &&
                 doctors.map(item => (
                   <UserItem
                     isInviting={
@@ -370,17 +377,17 @@ const Users = props => {
                     onRestore={handleRestoreUser}
                   />
                 ))}
-              {canShowType(Role.doctor) && renderNoData(Role.doctor)}
-              {canShowType(Role.reception) && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <span className='users-root__group-title'>
+                {canShowType(Role.doctor) && renderNoData(Role.doctor)}
+                {canShowType(Role.reception) && (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                    <span className={styles['users-root__group-title']}>
                       {textForKey('Receptionists')}
                     </span>
-                  </TableCell>
-                </TableRow>
-              )}
-              {canShowType(Role.reception) &&
+                    </TableCell>
+                  </TableRow>
+                )}
+                {canShowType(Role.reception) &&
                 reception.map(item => (
                   <UserItem
                     isInviting={
@@ -394,17 +401,17 @@ const Users = props => {
                     onRestore={handleRestoreUser}
                   />
                 ))}
-              {canShowType(Role.reception) && renderNoData(Role.reception)}
-              {canShowType(Role.admin) && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <span className='users-root__group-title'>
+                {canShowType(Role.reception) && renderNoData(Role.reception)}
+                {canShowType(Role.admin) && (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                    <span className={styles['users-root__group-title']}>
                       {textForKey('Administrators')}
                     </span>
-                  </TableCell>
-                </TableRow>
-              )}
-              {canShowType(Role.admin) &&
+                    </TableCell>
+                  </TableRow>
+                )}
+                {canShowType(Role.admin) &&
                 admins.map(item => (
                   <UserItem
                     isInviting={
@@ -418,10 +425,11 @@ const Users = props => {
                     onRestore={handleRestoreUser}
                   />
                 ))}
-              {canShowType(Role.admin) && renderNoData(Role.admin)}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                {canShowType(Role.admin) && renderNoData(Role.admin)}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </div>
     </div>
   );

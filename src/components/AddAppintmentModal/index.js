@@ -29,7 +29,7 @@ import {
 import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import styles from './AddAppointment.module.scss';
 
 /**
  * Filter available time based on start time and service duration
@@ -741,7 +741,7 @@ const AddAppointmentModal = ({
     <EasyPlanModal
       onClose={onClose}
       open={open}
-      className='add-appointment-root'
+      className={styles.addAppointmentRoot}
       title={
         schedule == null
           ? textForKey('Add appointment')
@@ -754,7 +754,7 @@ const AddAppointmentModal = ({
       {isNewPatient && (
         <Form.Group>
           <Form.Label>{textForKey('Patient name')}</Form.Label>
-          <div className='first-and-last-name'>
+          <div className={styles.firstAndLastName}>
             <Form.Control
               id='patientLastName'
               value={patientLastName}
@@ -840,8 +840,8 @@ const AddAppointmentModal = ({
             selected={patient ? [patient] : []}
             onChange={handlePatientChange}
             renderMenuItemChildren={(option) => (
-              <div className='patient-result-item' id={option.id}>
-                <div className='patient-avatar-wrapper'>
+              <div className={styles.patientResultItem} id={option.id}>
+                <div className={styles.patientAvatarWrapper}>
                   {option.photo == null ? (
                     <IconAvatar />
                   ) : (
@@ -851,11 +851,11 @@ const AddAppointmentModal = ({
                     />
                   )}
                 </div>
-                <div className='patient-info-wrapper'>
-                  <Typography classes={{ root: 'patient-name' }}>
+                <div className={styles.patientInfoWrapper}>
+                  <Typography classes={{ root: styles.patientName }}>
                     {option.fullName}
                   </Typography>
-                  <Typography classes={{ root: 'patient-phone' }}>
+                  <Typography classes={{ root: styles.patientPhone }}>
                     {option.phoneNumber}
                   </Typography>
                 </div>
@@ -865,7 +865,7 @@ const AddAppointmentModal = ({
         </Form.Group>
       )}
       <div
-        className={clsx('patient-mode-button', { disabled: isFinished })}
+        className={clsx(styles.patientModeButton, { [styles.disabled]: isFinished })}
         role='button'
         tabIndex={0}
         onClick={changePatientMode}
@@ -893,7 +893,7 @@ const AddAppointmentModal = ({
               <Menu {...menuProps}>
                 {results.map((result, index) => (
                   <MenuItem key={result.id} option={result} position={index}>
-                    <Typography classes={{ root: 'result-item-text' }}>
+                    <Typography classes={{ root: styles.resultItemText }}>
                       {result.fullName}
                     </Typography>
                   </MenuItem>
@@ -922,7 +922,7 @@ const AddAppointmentModal = ({
               <Menu {...menuProps}>
                 {results.map((result, index) => (
                   <MenuItem key={result.id} option={result} position={index}>
-                    <Typography classes={{ root: 'result-item-text' }}>
+                    <Typography classes={{ root: styles.resultItemText }}>
                       {result.name}
                     </Typography>
                   </MenuItem>
@@ -932,7 +932,7 @@ const AddAppointmentModal = ({
           }}
         />
       </Form.Group>
-      <Form.Group className='date-form-group'>
+      <Form.Group className={styles.dateFormGroup}>
         <Form.Label>{textForKey('Date')}</Form.Label>
         <Form.Control
           disabled={isFinished}

@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import './styles.scss';
+import styles from './NewPatients.module.scss';
 import {
   Table,
   TableHead,
@@ -37,7 +37,8 @@ import {
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import PatientRow from './comps/PatientRow';
+import PatientRow from './PatientRow';
+import clsx from "clsx";
 
 const initialState = {
   isLoading: false,
@@ -254,7 +255,7 @@ const NewPatients = () => {
   };
 
   return (
-    <div className='new-patients-root'>
+    <div className={styles['new-patients-root']}>
       <SetupExcelModal
         mode={UploadMode.patients}
         title={textForKey('Import patients')}
@@ -280,32 +281,32 @@ const NewPatients = () => {
         open={showCreateModal}
         onClose={handleCloseCreatePatient}
       />
-      <div className='new-patients-root__content'>
+      <div className={styles['new-patients-root__content']}>
         {isLoading && (
-          <CircularProgress classes={{ root: 'patients-progress-bar' }} />
+          <CircularProgress classes={{ root: styles['patients-progress-bar'] }} />
         )}
 
-        <TableContainer classes={{ root: 'table-container' }}>
+        <TableContainer classes={{ root: styles['table-container'] }}>
           <Table stickyHeader>
             <TableHead>
-              <TableRow classes={{ root: 'table-head-row' }}>
+              <TableRow classes={{ root: styles['table-head-row'] }}>
                 <TableCell>
-                  <Typography classes={{ root: 'header-label' }}>
+                  <Typography classes={{ root: styles['header-label'] }}>
                     {textForKey('Name')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography classes={{ root: 'header-label' }}>
+                  <Typography classes={{ root: styles['header-label'] }}>
                     {textForKey('Phone number')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography classes={{ root: 'header-label' }}>
+                  <Typography classes={{ root: styles['header-label'] }}>
                     {textForKey('Email')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography classes={{ root: 'header-label' }}>
+                  <Typography classes={{ root: styles['header-label'] }}>
                     {textForKey('Discount')}
                   </Typography>
                 </TableCell>
@@ -340,10 +341,10 @@ const NewPatients = () => {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
-        <div className='actions-container'>
+        <div className={styles['actions-container']}>
           <LoadingButton
             variant='outline-primary'
-            className='btn-outline-primary import-btn'
+            className={clsx(styles['btn-outline-primary'], styles['import-btn'])}
             isLoading={isUploading}
             onClick={handleStartUploadPatients}
           >
@@ -352,7 +353,7 @@ const NewPatients = () => {
           </LoadingButton>
           <Button
             variant='outline-primary'
-            className='create-btn'
+            className={styles['create-btn']}
             onClick={handleCreatePatient}
           >
             {textForKey('Add patient')}

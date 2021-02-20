@@ -3,7 +3,7 @@ import React from 'react';
 import { CircularProgress, Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import './styles.scss';
+import './CircularProgressWithLabel.module.scss';
 
 const CircularProgressWithLabel = props => {
   return (

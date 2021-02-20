@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import './styles.scss';
+import styles from './Main.module.scss';
 
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -133,7 +133,7 @@ const Main = () => {
   }
 
   return (
-    <div className='main-page' id='main-page'>
+    <div className={styles['main-page']} id='main-page'>
       <ServiceDetailsModal />
       {patientDetails.patientId != null && (
         <PatientDetailsModal
@@ -168,13 +168,13 @@ const Main = () => {
         />
       )}
       {currentUser != null && selectedClinic != null && (
-        <div className='data-container'>
+        <div className={styles['data-container']}>
           <PageHeader
             title={getPageTitle()}
             user={currentUser}
             onLogout={handleStartLogout}
           />
-          <div className='data'>
+          <div className={styles.data}>
             <Switch>
               <Route path='/analytics' component={Statistics} />
               <Route path='/categories' component={Services} />

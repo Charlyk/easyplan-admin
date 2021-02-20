@@ -13,7 +13,7 @@ import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import './styles.scss';
+import styles from './AppointmentDetails.module.scss';
 import { Button, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -182,7 +182,7 @@ const AppointmentDetails = ({
   const statusesList = (
     <Popper
       disablePortal
-      className='statuses-popper-root'
+      className={styles.statusesPopperRoot}
       anchorEl={statusesAnchor.current}
       open={showStatuses}
       placement='bottom'
@@ -190,7 +190,7 @@ const AppointmentDetails = ({
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='statuses-popper-root__paper'>
+          <Paper className={styles.paper}>
             <ClickAwayListener onClickAway={closeStatusesList}>
               <div>
                 {ManualStatuses.map((status) => (
@@ -198,15 +198,15 @@ const AppointmentDetails = ({
                     role='button'
                     tabIndex={0}
                     onClick={() => handleStatusSelected(status)}
-                    className={`statuses-popper-root__item`}
+                    className={styles.item}
                     key={status.id}
                   >
-                    <div className='name-and-icon'>
+                    <div className={styles.nameAndIcon}>
                       {status.icon}
                       {status.name}
                     </div>
                     {scheduleStatus.id === status.id && (
-                      <div className='checkmark-wrapper'>
+                      <div className={styles.checkmarkWrapper}>
                         <DoneIcon />
                       </div>
                     )}

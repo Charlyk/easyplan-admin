@@ -2,7 +2,7 @@ import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import './styles.scss';
+import styles from './SwitchButton.module.scss';
 
 const SwitchButton = (props) => {
   const { isChecked, onChange } = props;
@@ -11,11 +11,11 @@ const SwitchButton = (props) => {
     onChange(!isChecked);
   };
 
-  const bgClasses = clsx('switch-button', isChecked ? 'selected' : 'default');
+  const bgClasses = clsx(styles['switch-button'], isChecked ? styles.selected : styles.default);
 
   const indicatorClasses = clsx(
-    'switch-button__selection-indicator',
-    isChecked ? 'selected' : 'default',
+    styles['switch-button__selection-indicator'],
+    isChecked ? styles.selected : styles.default,
   );
 
   return (

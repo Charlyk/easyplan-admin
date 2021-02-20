@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import './styles.scss';
+import './UserDetailsModal.module.scss';
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
@@ -169,7 +169,7 @@ const UserDetailsModal = props => {
         Action.EditUser,
         JSON.stringify({ before: user, after: requestBody }),
       );
-      dispatch(triggerUsersUpdate());
+      dispatch(triggerUsersUpdate(true));
       dispatch(fetchClinicData());
       handleModalClose();
     }

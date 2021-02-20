@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import './styles.scss';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ResetPassword from './components/ResetPassword';

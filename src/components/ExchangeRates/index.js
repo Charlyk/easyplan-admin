@@ -38,7 +38,7 @@ import {
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import './ExchangeRates.module.scss';
 
 const initialState = {
   isLoading: true,

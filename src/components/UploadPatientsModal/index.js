@@ -6,7 +6,7 @@ import { Form } from 'react-bootstrap';
 
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import './UploadPatientsModal.module.scss';
 
 const ImportDataModal = ({ title, open, onClose, onUpload }) => {
   const [file, setFile] = useState(null);

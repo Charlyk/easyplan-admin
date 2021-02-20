@@ -18,7 +18,7 @@ import {
   logUserAction,
 } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import StatisticFilter from '../StatisticFilter';
+import StatisticFilter from '../StatisticFilter/StatisticFilter';
 
 const initialState = {
   isLoading: false,

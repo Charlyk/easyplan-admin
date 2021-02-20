@@ -4,18 +4,19 @@ import PropTypes from 'prop-types';
 
 import IconNext from '../../../../assets/icons/iconNext';
 import { textForKey } from '../../../../utils/localization';
+import styles from '../../Statistics.module.scss';
 
 const IncomeStatisticItem = ({ title, icon, persons, amount }) => {
   return (
-    <div className='income-statistic-item'>
-      <div className='icon-wrapper'>{icon}</div>
-      <div className='item-data-wrapper'>
-        <span className='title-label'>{title}</span>
-        <span className='amount-label'>
+    <div className={styles['income-statistic-item']}>
+      <div className={styles['icon-wrapper']}>{icon}</div>
+      <div className={styles['item-data-wrapper']}>
+        <span className={styles['title-label']}>{title}</span>
+        <span className={styles['amount-label']}>
           {persons} {textForKey('persons')} / {Math.round(amount)} MDL
         </span>
       </div>
-      <div className='next-button'>
+      <div className={styles['next-button']}>
         <IconNext />
       </div>
     </div>

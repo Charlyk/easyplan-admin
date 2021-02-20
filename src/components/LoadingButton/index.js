@@ -4,8 +4,6 @@ import { CircularProgress } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
-import './styles.scss';
-
 const LoadingButton = ({
   children,
   className,

@@ -11,7 +11,7 @@ import ClinicWorkingHours from './ClinicWorkingHours';
 import CompanyDetailsForm from './CompanyDetailsForm';
 import SecuritySettings from './SecuritySettings';
 import SettingsMenu from './SettingsMenu';
-import './styles.scss';
+import styles from './Settings.module.scss';
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -36,15 +36,15 @@ const Settings = () => {
   const handleFormChange = newForm => setCurrentForm(newForm);
 
   return (
-    <div className='settings-root'>
-      <div className='settings-root__menu'>
+    <div className={styles['settings-root']}>
+      <div className={styles['settings-root__menu']}>
         <SettingsMenu
           currentOption={currentForm}
           onSelect={handleFormChange}
           selectedClinic={selectedClinic}
         />
       </div>
-      <div className='settings-root__form'>
+      <div className={styles['settings-root__form']}>
         {currentForm === SettingsForm.companyDetails && <CompanyDetailsForm />}
         {currentForm === SettingsForm.workingHours && <ClinicWorkingHours />}
         {currentForm === SettingsForm.accountSettings && <AccountSettings />}

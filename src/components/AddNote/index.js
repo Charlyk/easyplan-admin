@@ -10,7 +10,7 @@ import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import './styles.scss';
+import styles from './AddNote.module.scss';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
@@ -79,7 +79,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
     <EasyPlanModal
       onClose={onClose}
       open={open}
-      className='add-note-root'
+      className={styles.addNoteRoot}
       title={textForKey('Create note')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={noteText.length === 0}

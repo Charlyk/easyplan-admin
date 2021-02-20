@@ -25,7 +25,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
     case MessageAction.NewUserInvited:
     case MessageAction.InvitationRemoved:
     case MessageAction.ClinicInvitationAccepted:
-      dispatch(triggerUsersUpdate());
+      dispatch(triggerUsersUpdate(true));
       break;
     case MessageAction.CreatedNewInvoice:
       // update appointments list

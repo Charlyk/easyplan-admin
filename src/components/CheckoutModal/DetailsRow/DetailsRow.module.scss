@@ -1,0 +1,157 @@
+.details-row {
+  .cell {
+    border-bottom: #ededed 1px solid;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    .autocomplete-root {
+      .input-root {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13px;
+        color: #34344E;
+
+        &::before {
+          border-bottom: none;
+        }
+
+        &::after {
+          border-bottom: none;
+        }
+      }
+    }
+
+    .text {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 13px;
+      color: #34344E;
+
+      &.clickable-value {
+        color: #3A83DC;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    &.title {
+      width: 50px;
+
+      .text {
+        font-weight: bold;
+        width: 50px;
+      }
+    }
+
+    &.value {
+
+    }
+
+    &.field {
+      padding-top: 0;
+      padding-bottom: 0;
+
+      .searching-progress {
+        color: #3A83DC;
+      }
+    }
+
+    &.for-payment-title-cell {
+      border-bottom: none;
+
+      .label {
+        margin-top: 0;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 20px;
+        color: #34344E;
+      }
+    }
+
+    &.for-payment-field-cell {
+      border-bottom: none;
+
+      input {
+        background-color: white;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        border: none;
+        outline: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 50px;
+        width: 100%;
+        color: #3A83DC;
+        text-align: center;
+
+        &::placeholder {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 50px;
+          color: #3A83DC;
+        }
+      }
+    }
+
+    &.total-amount-cell {
+      border-bottom: none;
+
+      .label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        color: #34344E;
+      }
+    }
+
+    &.total-discount-cell {
+      border-bottom: none;
+
+      .label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        color: #34344E;
+      }
+
+      input {
+        background-color: white;
+        border: none;
+        outline: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        width: 100px;
+        color: #3A83DC;
+        text-align: center;
+
+        &::placeholder {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 24px;
+          color: #3A83DC;
+        }
+      }
+    }
+  }
+}

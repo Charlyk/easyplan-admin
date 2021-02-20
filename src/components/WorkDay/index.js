@@ -9,11 +9,11 @@ import { createHoursList, days } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import SwitchButton from '../SwitchButton';
 
-import './styles.scss';
+import styles from './WorkDay.module.scss';
 
 const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   const hours = createHoursList();
-  const titleClasses = clsx('day-title', day.selected ? 'selected' : 'default');
+  const titleClasses = clsx(styles['day-title'], day.selected ? styles.selected : styles.default);
 
   const handleDayToggle = () => {
     onChange(day, day.startHour, day.endHour, !day.selected);
@@ -44,16 +44,16 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   };
 
   return (
-    <tr className='work-day'>
+    <tr className={styles['work-day']}>
       <td style={{ padding: '.5rem' }}>
-        <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
+        <SwitchButton isChecked={day.selected} onChange={handleDayToggle}/>
       </td>
       <td style={{ width: '20%' }}>
         <div className={titleClasses}>{days[day.day - 1]}</div>
       </td>
       {!day.selected && (
         <td colSpan={4}>
-          <div className='work-day__day-off'>{textForKey('Day off')}</div>
+          <div className={styles['work-day__day-off']}>{textForKey('Day off')}</div>
         </td>
       )}
       {day.selected && (
@@ -79,7 +79,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
       )}
       {day.selected && (
         <td style={{ padding: '.3rem' }}>
-          <Typography noWrap classes={{ root: 'separator-text' }}>
+          <Typography noWrap classes={{ root: styles['separator-text'] }}>
             {textForKey('to')}
           </Typography>
         </td>
@@ -112,9 +112,9 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
             tabIndex={0}
             onClick={handleApplyToAll}
             className={clsx(
-              'apply-to-all-btn',
-              (day.startHour == null || day.endHour == null) && 'disabled',
-              !isFirst && 'hidden',
+              styles['apply-to-all-btn'],
+              (day.startHour == null || day.endHour == null) && styles.disabled,
+              !isFirst && styles.hidden,
             )}
           >
             {textForKey('Apply to all')}

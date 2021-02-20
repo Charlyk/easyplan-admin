@@ -16,9 +16,10 @@ import dataAPI from '../../../../utils/api/dataAPI';
 import { Action, Statuses } from '../../../../utils/constants';
 import { logUserAction } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import StatisticFilter from '../StatisticFilter';
+import StatisticFilter from '../StatisticFilter/StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
+import styles from '../../Statistics.module.scss';
 
 const initialFinanceReport = {
   expectations: {
@@ -138,10 +139,10 @@ const GeneralStatistics = () => {
   };
 
   return (
-    <div className='general-statistics' id='general-statistics'>
+    <div className={styles['general-statistics']} id='general-statistics'>
       <Modal
         centered
-        className='loading-modal'
+        className={styles['loading-modal']}
         show={isLoading && statuses.length === 0}
         onHide={() => null}
       >
@@ -150,7 +151,7 @@ const GeneralStatistics = () => {
           {isLoading && textForKey('Loading statistics')}...
         </Modal.Body>
       </Modal>
-      <div className='main-data-container'>
+      <div className={styles['main-data-container']}>
         <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
           <Form.Group>
             <Form.Label>{textForKey('Doctor')}</Form.Label>
@@ -181,11 +182,11 @@ const GeneralStatistics = () => {
             />
           </Form.Group>
         </StatisticFilter>
-        <span className='block-title'>
+        <span className={styles['block-title']}>
           {textForKey('Schedules statistics')}
         </span>
         {statuses.length > 0 ? (
-          <div className='statuses-container'>
+          <div className={styles['statuses-container']}>
             {statuses.map((item) => (
               <StatusItem
                 status={item}
@@ -202,9 +203,9 @@ const GeneralStatistics = () => {
           </div>
         ) : null}
       </div>
-      <div className='right-content-wrapper'>
+      <div className={styles['right-content-wrapper']}>
         {financeStatistics != null && (
-          <div className='items-wrapper'>
+          <div className={styles['items-wrapper']}>
             <IncomeStatisticItem
               title={textForKey('Expectations')}
               icon={<IconClock />}

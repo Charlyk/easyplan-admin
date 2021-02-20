@@ -6,10 +6,11 @@ import {
   ClickAwayListener,
   Typography,
 } from '@material-ui/core';
+import Image from 'next/image'
 import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import './styles.scss';
+import styles from './MainMenu.module.scss';
 import { Nav } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -22,7 +23,6 @@ import MenuEllipse from '../../assets/icons/menuEllipse';
 import MenuPatients from '../../assets/icons/menuPatients';
 import MenuSettings from '../../assets/icons/menuSettings';
 import MenuUsers from '../../assets/icons/menuUsers';
-import trustSeal from '../../assets/images/positivessl_trust_seal.png';
 import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { updateLink } from '../../utils/helperFuncs';
@@ -116,6 +116,8 @@ const MainMenu = (props) => {
     currentPath.startsWith('/analytics'),
   );
 
+  console.log(styles)
+
   useEffect(() => {
     setIsAnalyticsExpanded(isAnalyticsEnabled());
   }, [currentPath]);
@@ -155,26 +157,27 @@ const MainMenu = (props) => {
   );
 
   const analyticsClass = clsx(
-    'navigation__item div-item',
-    isAnalyticsEnabled() && 'active',
+    styles['navigation__item'],
+    styles['div-item'],
+    isAnalyticsEnabled() && styles.active,
   );
 
   const analyticsChildClass = clsx(
-    'child-container',
-    isAnalyticsExpanded && 'expanded',
+    styles['child-container'],
+    isAnalyticsExpanded && styles.expanded,
   );
 
   return (
-    <div className='main-menu'>
+    <div className={styles['main-menu']}>
       <div
         role='button'
         tabIndex={0}
         ref={buttonRef}
-        className='main-menu__logo-container'
+        className={styles['main-menu__logo-container']}
         onClick={handleCompanyClick}
       >
         <ClickAwayListener onClickAway={handleCompanyClose}>
-          <span className='clinic-name'>
+          <span className={styles['clinic-name']}>
             {userClinic?.clinicName || textForKey('Create clinic')}
           </span>
         </ClickAwayListener>
@@ -188,7 +191,7 @@ const MainMenu = (props) => {
         />
       </div>
 
-      <Nav defaultActiveKey={currentPath} className='navigation flex-column'>
+      <Nav defaultActiveKey={currentPath} className={clsx(styles.navigation, 'flex-column')}>
         {menuItems.map((item) => {
           if (!item.roles.includes(userClinic?.roleInClinic)) return null;
           if (item.type === 'group') {
@@ -196,7 +199,7 @@ const MainMenu = (props) => {
               <Nav.Item key={item.id} as='div' className={analyticsClass}>
                 <div
                   tabIndex={0}
-                  className='title-container'
+                  className={styles['title-container']}
                   role='button'
                   onClick={handleAnalyticsClick}
                 >
@@ -208,9 +211,7 @@ const MainMenu = (props) => {
                     return (
                       <Nav.Item key={child.href}>
                         <Link
-                          className={`link-item ${
-                            isActive(child.href) && 'active'
-                          }`}
+                          className={clsx(styles['link-item'], isActive(child.href) && styles.active)}
                           to={updateLink(child.href)}
                         >
                           <MenuEllipse />
@@ -226,9 +227,7 @@ const MainMenu = (props) => {
             return (
               <Nav.Item key={item.id}>
                 <Link
-                  className={`navigation__item link-item ${
-                    isActive(item.href) && 'active'
-                  }`}
+                  className={clsx(styles['navigation__item'], styles['link-item'], isActive(item.href) && styles.active)}
                   to={updateLink(item.href)}
                 >
                   {item.icon}
@@ -241,20 +240,20 @@ const MainMenu = (props) => {
       </Nav>
       {clinic.isImporting && (
         <Box
-          className='import-data-wrapper'
+          className={styles['import-data-wrapper']}
           position='absolute'
           bottom='4rem'
           left='1rem'
           display='flex'
           alignItems='center'
         >
-          <CircularProgress classes={{ root: 'import-progress-bar' }} />
-          <Typography classes={{ root: 'import-data-label' }}>
+          <CircularProgress classes={{ root: styles['import-progress-bar'] }} />
+          <Typography classes={{ root: styles['import-data-label'] }}>
             {textForKey('Importing data in progress')}
           </Typography>
         </Box>
       )}
-      <img className='trust-seal-image' src={trustSeal} alt='SSL Trust Seal' />
+      <Image className='trust-seal-image' height={25} width='auto' src='/positivessl_trust_seal.png' alt='SSL Trust Seal' />
     </div>
   );
 };

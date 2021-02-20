@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import './styles.scss';
+import styles from './InvoicesButton.module.scss';
 import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -64,7 +64,7 @@ const InvoicesButton = () => {
 
   const invoicesPaper = (
     <Popper
-      className='invoices-popper-root'
+      className={styles['invoices-popper-root']}
       anchorEl={buttonRef.current}
       open={showInvoices}
       placement='bottom'
@@ -73,7 +73,7 @@ const InvoicesButton = () => {
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='invoices-paper'>
+          <Paper className={styles['invoices-paper']}>
             <ClickAwayListener onClickAway={handleCloseInvoices}>
               <table>
                 <thead>
@@ -94,7 +94,7 @@ const InvoicesButton = () => {
                       </td>
                       <td align='right'>
                         <Button
-                          className='positive-button'
+                          className={styles['positive-button']}
                           onClick={() => handlePayInvoice(invoice)}
                         >
                           {textForKey('Pay')}
@@ -115,11 +115,11 @@ const InvoicesButton = () => {
     <div
       role='button'
       tabIndex={0}
-      className='invoices-button-root'
+      className={styles['invoices-button-root']}
       ref={buttonRef}
       onClick={handleToggleInvoices}
     >
-      <span className='button-text'>
+      <span className={styles['button-text']}>
         {textForKey('For payment')} ({invoices?.length || 0})
       </span>
       {invoicesPaper}

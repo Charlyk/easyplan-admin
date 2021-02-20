@@ -13,7 +13,7 @@ import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import './CreatePatientModal.module.scss';
 
 const initialState = {
   firstName: '',

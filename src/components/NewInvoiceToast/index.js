@@ -2,16 +2,13 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 
-import invoiceIcon from '../../assets/icons/icon_invoice.png';
+import Image from 'next/image'
 import { textForKey } from '../../utils/localization';
-import './styles.scss';
-
-import './styles.scss';
 
 const NewInvoiceToast = () => {
   return (
     <div className='invoice-toast-root'>
-      <img className='invoice-icon' src={invoiceIcon} alt='New invoice' />
+      <Image className='invoice-icon' layout='fill' src='/icon_invoice.png' alt='New invoice' />
       <Typography>{textForKey('invoice_created')}</Typography>
     </div>
   );

@@ -13,7 +13,7 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import styles from './AddPaymentModal.module.scss';
 
 const initialState = {
   amount: 0,
@@ -107,7 +107,7 @@ const AddPaymentModal = ({ open, patient, onClose }) => {
       onClose={onClose}
       open={open}
       size='sm'
-      className='add-payment-root'
+      className={styles.addPaymentRoot}
       title={textForKey('Add payment')}
       isPositiveDisabled={!isFormValid() || isLoading}
       onPositiveClick={handleAddPayment}
@@ -127,7 +127,6 @@ const AddPaymentModal = ({ open, patient, onClose }) => {
       <Form.Label>{textForKey('Discount')}</Form.Label>
       <InputGroup>
         <FormControl
-          className='discount-form-control'
           type='number'
           max={100}
           onChange={handleDiscountChange}

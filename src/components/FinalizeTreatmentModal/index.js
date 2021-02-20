@@ -23,7 +23,7 @@ import {
 import { getServiceName } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import './FinalizeTreatmentModal.module.scss';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const menuRef = useRef(null);

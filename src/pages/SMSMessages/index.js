@@ -18,10 +18,10 @@ import { hasSMSAliasSelector } from '../../redux/selectors/clinicSelector';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import CreateMessageModal from './comps/CreateMessageModal';
-import SMSMessageItem from './comps/SMSMessageItem';
-import SMSMessagesHeader from './comps/SMSMessgesHeader';
-import './styles.scss';
+import CreateMessageModal from './CreateMessageModal';
+import SMSMessageItem from './SMSMessageItem';
+import SMSMessagesHeader from './SMSMessagesHeader';
+import styles from './SMSMessages.module.scss';
 
 const initialState = {
   isLoading: false,
@@ -166,7 +166,7 @@ const SMSMessages = () => {
   };
 
   return (
-    <div className='sms-messages-root'>
+    <div className={styles['sms-messages-root']}>
       {needsDeleteConfirmation && (
         <ConfirmationModal
           title={textForKey('Delete message')}
@@ -189,20 +189,20 @@ const SMSMessages = () => {
         canCreate={hasSMSAlias}
         onCreate={handleStartCreateMessage}
       />
-      <div className='sms-messages-root__data-wrapper'>
+      <div className={styles['sms-messages-root__data-wrapper']}>
         {hasSMSAlias && isLoading && (
-          <div className='progress-wrapper'>
-            <CircularProgress classes={{ root: 'progress' }} />
+          <div className={styles['progress-wrapper']}>
+            <CircularProgress classes={{ root: styles.progress }} />
           </div>
         )}
         {!hasSMSAlias && (
-          <Typography classes={{ root: 'no-alias-label' }}>
+          <Typography classes={{ root: styles['no-alias-label'] }}>
             {textForKey('no_sms_alias_message')}
             <a href='tel:37360112286'>+373 (60) 112286</a>
           </Typography>
         )}
         {hasSMSAlias && !isLoading && (
-          <TableContainer classes={{ root: 'table-container' }}>
+          <TableContainer classes={{ root: styles['table-container'] }}>
             <Table>
               <TableHead>
                 <TableRow>

@@ -1,0 +1,45 @@
+.settings-root {
+  display: flex;
+  padding: 1.5rem;
+  height: 100%;
+
+  &__menu {
+    width: 22%;
+    max-height: 100%;
+  }
+
+  &__form {
+    width: 76%;
+    max-height: 100%;
+    margin-left: 1rem;
+
+    .form-title {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: #34354C;
+      margin-bottom: 1rem;
+    }
+
+    .upload-avatar-container {
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      width: 100%;
+
+      img {
+        width: 100px;
+        object-fit: contain;
+      }
+
+      .form-group {
+        width: max-content !important;
+
+        label {
+          min-width: 9rem;
+        }
+      }
+    }
+  }
+}

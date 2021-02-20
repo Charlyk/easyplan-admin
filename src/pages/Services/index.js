@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import './styles.scss';
+import styles from './Services.module.scss';
 import {
   Typography,
   Tabs,
@@ -38,7 +38,8 @@ import {
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import ServiceRow from './comps/ServiceRow';
+import ServiceRow from './ServiceRow';
+import clsx from "clsx";
 
 const categoryModalState = {
   closed: 'closed',
@@ -286,11 +287,11 @@ const Services = () => {
 
   const tabLabel = (title, count) => {
     return (
-      <div className='tab-data-wrapper'>
-        <Typography noWrap classes={{ root: 'tab-item-title' }}>
+      <div className={styles['tab-data-wrapper']}>
+        <Typography noWrap classes={{ root: styles['tab-item-title'] }}>
           {title}
         </Typography>
-        <Typography noWrap classes={{ root: 'tab-items-count' }}>
+        <Typography noWrap classes={{ root: styles['tab-items-count'] }}>
           {count}
         </Typography>
       </div>
@@ -313,7 +314,7 @@ const Services = () => {
   );
 
   return (
-    <div className='services-root'>
+    <div className={styles['services-root']}>
       <SetupExcelModal
         open={setupExcelModal.open}
         data={setupExcelModal.data}
@@ -352,14 +353,18 @@ const Services = () => {
         onClose={handleCloseCategoryModal}
         onSaved={handleCategorySave}
       />
-      <div className='services-root__content-wrapper'>
-        {isLoading && <CircularProgress />}
+      <div className={styles['services-root__content-wrapper']}>
+        {isLoading && (
+          <div className={styles.progressWrapper}>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+          </div>
+        )}
         {!isLoading && filteredServices.length === 0 && (
-          <div className='services-root__no-data-wrapper'>
-            <Typography classes={{ root: 'no-data-label' }}>
+          <div className={styles['services-root__no-data-wrapper']}>
+            <Typography classes={{ root: styles['no-data-label'] }}>
               {textForKey('no_services_message')}
               <span
-                className='add-btn'
+                className={styles['add-btn']}
                 role='button'
                 tabIndex={0}
                 onClick={handleAddOrEditService}
@@ -370,13 +375,13 @@ const Services = () => {
             </Typography>
           </div>
         )}
-        <div className='tabs-container'>
+        <div className={styles['tabs-container']}>
           <Tooltip title={textForKey('Add category')}>
             <div
               role='button'
               tabIndex={0}
               onClick={handleCreateCategory}
-              className='services-root__add-tab'
+              className={styles['services-root__add-tab']}
               style={{ outline: 'none' }}
             >
               <IconPlus fill='#FFFF' />
@@ -386,7 +391,7 @@ const Services = () => {
             <Tabs
               scrollButtons='auto'
               variant='scrollable'
-              classes={{ indicator: 'services-root__tab-indicator' }}
+              classes={{ indicator: styles['services-root__tab-indicator'] }}
               value={category.index}
               indicatorColor='primary'
               textColor='primary'
@@ -411,27 +416,27 @@ const Services = () => {
             <thead>
               <tr>
                 <td>
-                  <Typography classes={{ root: 'row-label title-label' }}>
+                  <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
                     {textForKey('Service name')}
                   </Typography>
                 </td>
                 <td align='left'>
-                  <Typography classes={{ root: 'row-label title-label' }}>
+                  <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
                     {textForKey('Description')}
                   </Typography>
                 </td>
                 <td align='right'>
-                  <Typography classes={{ root: 'row-label title-label' }}>
+                  <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
                     {textForKey('Duration')}
                   </Typography>
                 </td>
                 <td align='right'>
-                  <Typography classes={{ root: 'row-label title-label' }}>
+                  <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
                     {textForKey('Price')}
                   </Typography>
                 </td>
                 <td align='right'>
-                  <Typography classes={{ root: 'row-label title-label' }}>
+                  <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
                     {textForKey('Actions')}
                   </Typography>
                 </td>
@@ -452,11 +457,11 @@ const Services = () => {
       </div>
 
       {category.data != null && (
-        <div className='services-root__footer'>
+        <div className={styles['services-root__footer']}>
           <LoadingButton
             disabled={category?.data?.id === 'all-services'}
             variant='outline-primary'
-            className='btn-outline-primary import-btn'
+            className={clsx(styles['btn-outline-primary'], styles['import-btn'])}
             isLoading={isUploading}
             onClick={openUploading}
           >
@@ -465,7 +470,8 @@ const Services = () => {
           </LoadingButton>
           <Button
             disabled={category?.data?.id === 'all-services'}
-            variant='outline-primary edit-category-btn'
+            variant='outline-primary'
+            className={styles['edit-category-btn']}
             onClick={handleEditCategory}
           >
             {textForKey('Edit category')}
@@ -473,7 +479,8 @@ const Services = () => {
           </Button>
           <Button
             disabled={category?.data?.id === 'all-services'}
-            variant='outline-primary add-service-btn'
+            variant='outline-primary'
+            className={styles['add-service-btn']}
             onClick={handleAddOrEditService}
           >
             {textForKey('Add service')}

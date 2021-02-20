@@ -49,7 +49,7 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import DetailsRow from './DetailsRow';
-import './styles.scss';
+import styles from './CheckoutModal.module.scss';
 import ServicesList from './ServicesList';
 
 const computeServicePrice = (services, exchangeRates) => {
@@ -523,9 +523,9 @@ const CheckoutModal = ({
     <Modal
       open={open}
       onBackdropClick={handleCloseModal}
-      className='checkout-modal-root'
+      className={styles.checkoutModalRoot}
     >
-      <Paper classes={{ root: clsx('checkout-modal-root__paper', 'lg') }}>
+      <Paper classes={{ root: clsx(styles.paper, 'lg') }}>
         <ServicesList
           canAddService={isNew}
           isDebt={isDebt}
@@ -535,24 +535,24 @@ const CheckoutModal = ({
           onServiceSelected={handleNewServiceSelected}
           onServiceDeleted={handleServiceRemoved}
         />
-        <Box className='data-container'>
+        <Box className={styles.dataContainer}>
           <IconButton
-            classes={{ root: 'close-button' }}
+            classes={{ root: styles.closeButton }}
             onClick={handleCloseModal}
           >
             <IconClose />
           </IconButton>
           {isFetching && (
-            <div className='loading-wrapper'>
-              <CircularProgress classes={{ root: 'loading-progress' }} />
+            <div className={styles.loadingWrapper}>
+              <CircularProgress classes={{ root: styles.loadingProgress }} />
             </div>
           )}
-          <Typography classes={{ root: 'data-container__title' }}>
+          <Typography classes={{ root: styles.title }}>
             {textForKey('Details')}
           </Typography>
           {!isFetching && (
-            <TableContainer classes={{ root: 'details-table-container' }}>
-              <Table classes={{ root: 'details-table' }}>
+            <TableContainer classes={{ root: styles.detailsTableContainer }}>
+              <Table classes={{ root: styles.detailsTable }}>
                 <TableBody>
                   {invoiceDetails.doctor != null && (
                     <DetailsRow
@@ -594,12 +594,12 @@ const CheckoutModal = ({
                       colSpan={2}
                       classes={{
                         root: clsx(
-                          'details-table__row__cell',
-                          'for-payment-title-cell',
+                          styles.cell,
+                          styles.forPaymentTitleCell,
                         ),
                       }}
                     >
-                      <Typography classes={{ root: 'label' }}>
+                      <Typography classes={{ root: styles.label }}>
                         {textForKey('For payment')}
                       </Typography>
                     </TableCell>
@@ -610,8 +610,8 @@ const CheckoutModal = ({
                       colSpan={2}
                       classes={{
                         root: clsx(
-                          'details-table__row__cell',
-                          'for-payment-field-cell',
+                          styles.cell,
+                          styles.forPaymentFieldCell,
                         ),
                       }}
                     >
@@ -631,12 +631,12 @@ const CheckoutModal = ({
                       align='center'
                       classes={{
                         root: clsx(
-                          'details-table__row__cell',
-                          'total-amount-cell',
+                          styles.cell,
+                          styles.totalAmountCell,
                         ),
                       }}
                     >
-                      <Typography classes={{ root: 'label' }}>
+                      <Typography classes={{ root: styles.label }}>
                         {textForKey('from')}{' '}
                         {formattedAmount(totalAmount, clinicCurrency)}
                       </Typography>
@@ -648,8 +648,8 @@ const CheckoutModal = ({
                       align='center'
                       classes={{
                         root: clsx(
-                          'details-table__row__cell',
-                          'total-discount-cell',
+                          styles.cell,
+                          styles.totalDiscountCell,
                         ),
                       }}
                     >
@@ -659,7 +659,7 @@ const CheckoutModal = ({
                         justifyContent='center'
                         width='100%'
                       >
-                        <Typography classes={{ root: 'label' }}>
+                        <Typography classes={{ root: styles.label }}>
                           {textForKey('Discount')}
                         </Typography>
                         <NumberFormat
@@ -687,7 +687,7 @@ const CheckoutModal = ({
                 <Button
                   disabled={!canPay}
                   onClick={handleSubmit}
-                  classes={{ root: 'data-container__pay-btn' }}
+                  classes={{ root: styles.payBtn }}
                   variant='contained'
                 >
                   {textForKey('Pay')}{' '}
@@ -695,7 +695,7 @@ const CheckoutModal = ({
                 </Button>
               ) : (
                 <CircularProgress
-                  classes={{ root: 'data-container__paying' }}
+                  classes={{ root: styles.paying }}
                 />
               )}
             </Box>

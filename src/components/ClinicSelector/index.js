@@ -9,7 +9,7 @@ import IconPlus from '../../assets/icons/iconPlus';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
-import './styles.scss';
+import './ClinicSelector.module.scss';
 
 const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
   const currentUser = useSelector(userSelector);

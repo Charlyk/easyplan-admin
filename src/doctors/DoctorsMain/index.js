@@ -20,7 +20,7 @@ import authManager from '../../utils/settings/authManager';
 import sessionManager from '../../utils/settings/sessionManager';
 import DoctorPatientDetails from '../DoctorPatientDetails';
 import DoctorPatients from '../DoctorPatients';
-import './styles.scss';
+import './DoctorsMain.module.scss';
 
 const DoctorsMain = () => {
   const dispatch = useDispatch();

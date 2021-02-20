@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './styles.scss';
+import styles from './Statistics.module.scss';
 import { Route, Switch } from 'react-router-dom';
 
 import ActivityLogs from './components/activityLogs/ActivityLogs';
@@ -10,7 +10,7 @@ import ServicesStatistics from './components/services/ServicesStatistics';
 
 const Statistics = () => {
   return (
-    <div className='statistics-root' id='statistics-root'>
+    <div className={styles['statistics-root']} id='statistics-root'>
       <Switch>
         <Route path='/analytics/general' component={GeneralStatistics} />
         <Route path='/analytics/services' component={ServicesStatistics} />

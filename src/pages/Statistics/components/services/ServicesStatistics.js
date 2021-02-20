@@ -7,7 +7,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TablePagination,
+  TablePagination, CircularProgress,
 } from '@material-ui/core';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
@@ -30,7 +30,8 @@ import {
   logUserAction,
 } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import StatisticFilter from '../StatisticFilter';
+import StatisticFilter from '../StatisticFilter/StatisticFilter';
+import styles from './ServicesStatistics.module.scss';
 
 const reducerTypes = {
   setSelectedDoctor: 'setSelectedDoctor',
@@ -253,7 +254,7 @@ const ServicesStatistics = () => {
   };
 
   return (
-    <div className='statistics-services'>
+    <div className={styles['statistics-services']}>
       <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
         <Form.Group style={{ flexDirection: 'column' }}>
           <Form.Label>{textForKey('Service')}</Form.Label>
@@ -325,16 +326,18 @@ const ServicesStatistics = () => {
           </Form.Control>
         </Form.Group>
       </StatisticFilter>
-      <div className='data-container'>
+      <div className={styles['data-container']}>
         {isLoading && statistics.length === 0 && (
-          <Spinner animation='border' className='statistics-loading-spinner' />
+          <div className={styles.progressWrapper}>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+          </div>
         )}
         {!isLoading && statistics.length === 0 && (
-          <span className='no-data-label'>{textForKey('No results')}</span>
+          <span className={styles['no-data-label']}>{textForKey('No results')}</span>
         )}
         {statistics.length > 0 && (
-          <TableContainer classes={{ root: 'table-container' }}>
-            <Table classes={{ root: 'data-table' }}>
+          <TableContainer classes={{ root: styles['table-container'] }}>
+            <Table classes={{ root: styles['data-table'] }}>
               <TableHead>
                 <TableRow>
                   <TableCell>{textForKey('Date')}</TableCell>
@@ -353,14 +356,14 @@ const ServicesStatistics = () => {
                     <TableCell>{item.doctor}</TableCell>
                     <TableCell>{item.serviceName}</TableCell>
                     <TableCell
-                      className='patient-name-label'
+                      className={styles['patient-name-label']}
                       onClick={handlePatientClick(item.patientId)}
                     >
                       {item.patient}
                     </TableCell>
                     <TableCell>
                       <span
-                        className='status-label'
+                        className={styles['status-label']}
                         style={{
                           color: colorForStatus(item.status),
                           backgroundColor: `${colorForStatus(item.status)}1A`,
@@ -377,7 +380,7 @@ const ServicesStatistics = () => {
         )}
       </div>
       <TablePagination
-        classes={{ root: 'table-pagination' }}
+        classes={{ root: styles['table-pagination'] }}
         rowsPerPageOptions={[25, 50, 100]}
         colSpan={4}
         count={totalItems}

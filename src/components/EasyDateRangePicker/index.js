@@ -7,7 +7,7 @@ import { DateRangePicker } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { getAppLanguage } from '../../utils/localization';
-import './styles.scss';
+import './EasyDateRangePicker.module.scss';
 import { localizedInputRanges, localizedStaticRanges } from './ranges';
 
 const EasyDateRangePicker = ({

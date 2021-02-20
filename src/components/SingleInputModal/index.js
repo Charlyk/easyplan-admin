@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import './SingleInputModal.module.scss';
 
 const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
   const [value, setValue] = useState('');

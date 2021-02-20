@@ -15,7 +15,7 @@ import { uploadFileToAWS, urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import './EditProfileModal.module.scss';
 
 const EditProfileModal = ({ open, onClose }) => {
   const currentUser = useSelector(userSelector);

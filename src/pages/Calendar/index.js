@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 
-import './styles.scss';
+import './Calendar.module.scss';
 import { Box } from '@material-ui/core';
 import { usePubNub } from 'pubnub-react';
 import { ProgressBar } from 'react-bootstrap';

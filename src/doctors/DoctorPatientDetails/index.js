@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import FinalizeTreatmentModal from '../../components/FinalizeTreatmentModal';
 import LoadingButton from '../../components/LoadingButton';
-import PatientDetails from '../../pages/Patients/comps/details/PatientDetails';
+import PatientDetails from './components/PatientDetails/PatientDetails';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
@@ -38,8 +38,7 @@ import { textForKey } from '../../utils/localization';
 import sessionManager from '../../utils/settings/sessionManager';
 import FinalServiceItem from './components/FinalServiceItem';
 import ToothView from './components/ToothView';
-import '../../components/PatientDetailsModal/styles.scss';
-import './styles.scss';
+import './DoctorPatientDetails.module.scss';
 
 const areSameServices = (first, second) => {
   return (

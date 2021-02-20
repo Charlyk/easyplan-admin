@@ -1,25 +1,25 @@
 export default {
   setUserToken: token => {
-    localStorage.setItem('auth_token', token);
+    typeof localStorage !== 'undefined' && localStorage.setItem('auth_token', token);
   },
 
   setUserId: userId => {
-    localStorage.setItem('user_id', userId);
+    typeof localStorage !== 'undefined' && localStorage.setItem('user_id', userId);
   },
 
   getUserToken: () => {
-    return localStorage.getItem('auth_token');
+    return typeof localStorage !== 'undefined' ? localStorage.getItem('auth_token') : '';
   },
 
   getUserId: () => {
-    return localStorage.getItem('user_id');
+    return typeof localStorage !== 'undefined' ? localStorage.getItem('user_id') : '';
   },
 
   isLoggedIn: () => {
-    return localStorage.getItem('auth_token') != null;
+    return typeof localStorage !== 'undefined'? localStorage.getItem('auth_token') != null : false;
   },
 
   logOut: () => {
-    localStorage.removeItem('auth_token');
+    typeof localStorage !== 'undefined' && localStorage.removeItem('auth_token');
   },
 };

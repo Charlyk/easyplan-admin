@@ -10,7 +10,7 @@ import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './styles.scss';
+import styles from './AddPauseModal.module.scss';
 
 const filterAvailableTime = (availableTime, startTime) => {
   return availableTime.filter((item) => {
@@ -300,7 +300,7 @@ const AddPauseModal = ({
     <EasyPlanModal
       onClose={onClose}
       open={open}
-      className='add-pause-root'
+      className={styles.addPauseRoot}
       title={`${textForKey('Add pause')}: ${doctor?.firstName} ${
         doctor?.lastName
       }`}
@@ -308,7 +308,7 @@ const AddPauseModal = ({
       onPositiveClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >
-      <Form.Group className='date-form-group'>
+      <Form.Group className={styles.dateFormGroup}>
         <Form.Label>{textForKey('Date')}</Form.Label>
         <Form.Control
           value={moment(pauseDate).format('DD MMMM YYYY')}

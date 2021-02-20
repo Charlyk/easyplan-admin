@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 import PropTypes from 'prop-types';
-import './styles.scss';
+import './Services.module.scss';
 import { Button } from 'react-bootstrap';
 
 import IconPlus from '../../assets/icons/iconPlus';

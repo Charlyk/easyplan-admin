@@ -15,7 +15,7 @@ import {
 import dataAPI from '../../utils/api/dataAPI';
 import PatientsFilter from './components/patients/PatientsFilter';
 import PatientsList from './components/patients/PatientsList';
-import './styles.scss';
+import './DoctorPatients.module.scss';
 
 const DoctorPatients = () => {
   const updateSchedule = useSelector(updateScheduleSelector);

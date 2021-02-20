@@ -21,7 +21,7 @@ import LeftSideModal from '../LeftSideModal';
 import LoadingButton from '../LoadingButton';
 import ServiceDoctors from './ServiceDoctors';
 import ServiceInformation from './ServiceInformation';
-import './styles.scss';
+import styles from './ServiceDetailsModal.module.scss';
 
 const initialService = {
   name: '',
@@ -224,8 +224,8 @@ const ServiceDetailsModal = () => {
         title={textForKey('Delete service')}
         message={textForKey('Are you sure you want to delete this service?')}
       />
-      <div className='service-details-modal'>
-        <div className='service-details-modal__data'>
+      <div className={styles['service-details-modal']}>
+        <div className={styles['service-details-modal__data']}>
           <ServiceInformation
             clinicCurrency={clinicCurrency}
             onChange={handleInfoChanged}
@@ -245,7 +245,7 @@ const ServiceDetailsModal = () => {
           />
         </div>
 
-        <div className='service-details-modal__footer'>
+        <div className={styles['service-details-modal__footer']}>
           <Button
             className='cancel-button'
             disabled={isLoading || isDeleting}

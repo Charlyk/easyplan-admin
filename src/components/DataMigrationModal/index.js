@@ -5,7 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import './styles.scss';
+import './DataMigrationModal.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { Modal } from 'react-bootstrap';
 

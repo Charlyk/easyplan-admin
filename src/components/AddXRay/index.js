@@ -11,7 +11,7 @@ import { logUserAction, uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
-import './styles.scss';
+import styles from './AddXRay.module.scss';
 
 const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
     <EasyPlanModal
       onClose={onClose}
       open={open}
-      className='add-x-ray-root'
+      className={styles.addXRayRoot}
       title={textForKey('Add X-Ray image')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={imageFile == null || phase == null}

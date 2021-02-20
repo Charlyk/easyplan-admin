@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { textForKey } from '../../utils/localization';
-import './styles.scss';
+import './EasyPlanModal.module.scss';
 import LoadingButton from '../LoadingButton';
 
 const EasyPlanModal = ({

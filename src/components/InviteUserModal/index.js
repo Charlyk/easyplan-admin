@@ -7,7 +7,7 @@ import { EmailRegex, Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
 
-import './styles.scss';
+import './InviteUserModal.module.scss';
 
 const InviteUserModal = ({
   open,

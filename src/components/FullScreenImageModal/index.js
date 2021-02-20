@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Modal, Spinner } from 'react-bootstrap';
-import './styles.scss';
+import './FullScreenImageModal.module.scss';
 
 const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
   const [isLoading, setIsLoading] = useState(true);

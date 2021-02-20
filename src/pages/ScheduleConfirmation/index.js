@@ -21,7 +21,7 @@ import dataAPI from '../../utils/api/dataAPI';
 import { urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
-import './styles.scss';
+import './ScheduleConfirmation.module.scss';
 
 const ScheduleConfirmation = () => {
   const { scheduleId, patientId } = useParams();

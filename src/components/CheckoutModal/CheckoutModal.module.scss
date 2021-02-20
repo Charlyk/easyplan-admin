@@ -1,0 +1,258 @@
+.checkout-modal-root {
+  .paper {
+    outline: none;
+    position: absolute;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    border-radius: 10px !important;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+
+    .data-container {
+      width: 50%;
+      height: 100%;
+      position: relative;
+      padding: 1rem;
+
+      .close-button {
+        outline: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      .loading-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        .loading-progress {
+          color: #3A83DC;
+          width: 45px !important;
+          height: 45px !important;
+        }
+      }
+
+      .title {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        color: #34344E;
+      }
+
+      .paying {
+        color: #3A83DC;
+        width: 30px !important;
+        height: 30px !important;
+      }
+
+      .pay-btn {
+        outline: none;
+        background-color: #3A83DC;
+        color: white;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+
+        &:hover {
+          background-color: #5c93d6;
+        }
+      }
+
+      .details-table-container {
+        margin-top: 1.5rem;
+        height: 375px;
+
+        .details-table {
+          .row {
+            .cell {
+              border-bottom: #ededed 1px solid;
+              padding-top: .5rem;
+              padding-bottom: .5rem;
+
+              &:first-child {
+                padding-left: 0;
+              }
+
+              &:last-child {
+                padding-right: 0;
+              }
+
+              .autocomplete-root {
+                .input-root {
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 13px;
+                  color: #34344E;
+
+                  &::before {
+                    border-bottom: none;
+                  }
+
+                  &::after {
+                    border-bottom: none;
+                  }
+                }
+              }
+
+              .text {
+                font-family: Inter, sans-serif;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 13px;
+                color: #34344E;
+
+                &.clickable-value {
+                  color: #3A83DC;
+                  cursor: pointer;
+
+                  &:hover {
+                    text-decoration: underline;
+                  }
+                }
+              }
+
+              &.title {
+                width: 50px;
+
+                .text {
+                  font-weight: bold;
+                  width: 50px;
+                }
+              }
+
+              &.value {
+
+              }
+
+              &.field {
+                padding-top: 0;
+                padding-bottom: 0;
+
+                .searching-progress {
+                  color: #3A83DC;
+                }
+              }
+
+              &.for-payment-title-cell {
+                border-bottom: none;
+
+                .label {
+                  margin-top: 0;
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 20px;
+                  color: #34344E;
+                }
+              }
+
+              &.for-payment-field-cell {
+                border-bottom: none;
+
+                input {
+                  background-color: white;
+                  margin-top: 0;
+                  margin-bottom: 1rem;
+                  border: none;
+                  outline: none;
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 50px;
+                  width: 100%;
+                  color: #3A83DC;
+                  text-align: center;
+
+                  &::placeholder {
+                    font-family: Inter, sans-serif;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 50px;
+                    color: #3A83DC;
+                  }
+                }
+              }
+
+              &.total-amount-cell {
+                border-bottom: none;
+
+                .label {
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 16px;
+                  color: #34344E;
+                }
+              }
+
+              &.total-discount-cell {
+                border-bottom: none;
+
+                .label {
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 16px;
+                  color: #34344E;
+                }
+
+                input {
+                  background-color: white;
+                  border: none;
+                  outline: none;
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: bold;
+                  font-size: 24px;
+                  width: 100px;
+                  color: #3A83DC;
+                  text-align: center;
+
+                  &::placeholder {
+                    font-family: Inter, sans-serif;
+                    font-style: normal;
+                    font-weight: bold;
+                    font-size: 24px;
+                    color: #3A83DC;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.sm {
+      width: 300px;
+      min-height: 300px;
+    }
+
+    &.lg {
+      width: 1000px;
+      max-width: 90%;
+      height: 500px;
+    }
+  }
+}
+
+.checkout-modal-currency-item {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 12px !important;
+  color: #34344E !important;
+}
+
+.autocomplete-root-option-label {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
+  color: #34344E !important;
+}

@@ -21,7 +21,7 @@ import {
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import './styles.scss';
+import './AcceptInvitation.module.scss';
 
 const initialState = {
   isLoading: false,

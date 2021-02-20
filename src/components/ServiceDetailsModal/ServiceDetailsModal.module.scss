@@ -1,0 +1,90 @@
+.service-details-modal {
+  display: flex;
+  flex-direction: column;
+  background-color: #FAFAFD;
+  height: calc(100% - 121px);
+
+  &__header {
+    width: 100%;
+    padding: .5rem;
+    background-color: #FFFFFF;
+
+    &__close-container {
+      display: flex;
+      width: 100%;
+      align-items: flex-end;
+      justify-content: flex-end;
+      outline: none;
+
+      .close-btn {
+        outline: none;
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+      }
+    }
+
+    &__title {
+      margin-left: 1.3rem;
+      margin-top: -.8rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 32px;
+      line-height: 48px;
+    }
+
+    &__breadcrumb-container {
+      margin: .5rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+
+      svg {
+        margin-left: .5rem;
+        margin-right: .5rem;
+      }
+    }
+
+    &__breadcrumb {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 20px;
+      color: #A1A2C6;
+
+      &.current {
+        color: #34354C;
+      }
+    }
+  }
+
+  &__data {
+    padding: 1rem;
+    flex: 1;
+    overflow-y: scroll;
+  }
+
+  &__footer {
+    width: 100%;
+    display: flex;
+    height: 6rem;
+    z-index: 2;
+    padding: 2rem 1rem;
+    background-color: white;
+    box-shadow: 0px -20px 40px -5px rgba(239, 242, 251, 0.8);
+
+    :global(.cancel-button) {
+      margin-right: .5rem;
+    }
+
+    :global(.delete-button) {
+      margin-right: .5rem;
+    }
+  }
+}

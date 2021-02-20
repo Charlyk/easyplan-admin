@@ -47,7 +47,7 @@ import IconTooth48 from '../assets/icons/iconTooth48';
 import IconXPerson from '../assets/icons/iconXPerson';
 import { textForKey } from './localization';
 
-const host = window.location.host;
+const host = typeof window !== 'undefined' ? window?.location.host : '';
 export const env = host.startsWith('develop')
   ? 'dev'
   : host.startsWith('localhost')
