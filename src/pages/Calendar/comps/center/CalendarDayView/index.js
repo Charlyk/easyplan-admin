@@ -175,7 +175,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
     const scheduleDate = moment(updateSchedule.startTime);
     const newSchedulesMap = new Map();
-    if (newSchedulesMap.size === 0) {
+    if (schedules.size === 0) {
       newSchedulesMap.set(updateSchedule.doctorId, [updateSchedule]);
       await fetchDayHours(scheduleDate.toDate());
       localDispatch(actions.setSchedules(newSchedulesMap));
