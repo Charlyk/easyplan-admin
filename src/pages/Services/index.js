@@ -128,7 +128,7 @@ const Services = () => {
     if (response.isError) {
       console.error(response.message);
     } else {
-      dispatch(setClinicServices(sortBy(response.data, (item) => item.name)));
+      dispatch(setClinicServices(response.data));
     }
     localDispatch(actions.setIsLoading(false));
   };
