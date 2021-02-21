@@ -83,6 +83,8 @@ const DoctorColumn = ({
     hoursContainers,
   ]);
 
+  console.log(memoizedHoursContainer);
+
   return (
     <div
       id={`${doctor.id}&column`}
