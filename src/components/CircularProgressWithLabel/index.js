@@ -3,21 +3,21 @@ import React from 'react';
 import { CircularProgress, Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import './CircularProgressWithLabel.module.scss';
+import styles from './CircularProgressWithLabel.module.scss';
 
 const CircularProgressWithLabel = props => {
   return (
     <Box
-      className='circular-progress-with-label'
+      className={styles['circular-progress-with-label']}
       position='relative'
       display='inline-flex'
     >
       <CircularProgress
-        classes={{ root: 'label-progress-bar' }}
+        classes={{ root: styles['label-progress-bar'] }}
         variant='determinate'
         {...props}
       />
-      <Box className='value-wrapper'>
+      <Box className={styles['value-wrapper']}>
         <Typography
           variant='caption'
           component='div'

@@ -9,7 +9,7 @@ import IconPlus from '../../assets/icons/iconPlus';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
-import './ClinicSelector.module.scss';
+import styles from './ClinicSelector.module.scss';
 
 const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
   const currentUser = useSelector(userSelector);
@@ -23,7 +23,7 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
 
   return (
     <Popper
-      className='companies-popper-root'
+      className={styles['companies-popper-root']}
       anchorEl={anchorEl}
       disablePortal
       open={open}
@@ -32,8 +32,8 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='companies-paper'>
-            <div className='options-wrapper'>
+          <Paper className={styles['companies-paper']}>
+            <div className={styles['options-wrapper']}>
               {currentUser?.clinics.map(clinic => (
                 <div
                   role='button'
@@ -41,8 +41,9 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
                   onClick={() => handleCompanySelected(clinic)}
                   key={clinic.id}
                   className={clsx(
-                    'option clinic',
-                    clinic.isSelected && 'selected',
+                    styles.option,
+                    styles.clinic,
+                    clinic.isSelected && styles.selected,
                   )}
                 >
                   {clinic.clinicName} <IconSuccess fill='#3A83DC' />
@@ -51,7 +52,7 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
               <div
                 role='button'
                 tabIndex={0}
-                className='option'
+                className={styles.option}
                 onClick={onCreate}
               >
                 <IconPlus fill='#34344E' />

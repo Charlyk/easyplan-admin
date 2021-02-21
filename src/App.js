@@ -64,6 +64,7 @@ import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
 import sessionManager from './utils/settings/sessionManager';
+import { CircularProgress } from "@material-ui/core";
 
 function App() {
   moment.locale(getAppLanguage());
@@ -304,7 +305,7 @@ function App() {
             onHide={() => null}
           >
             <Modal.Body>
-              <Spinner animation='border' />
+              <CircularProgress classes={{ root: 'circular-progress-bar' }} />
               {textForKey('App initialization')}...
             </Modal.Body>
           </Modal>

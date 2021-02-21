@@ -16,6 +16,7 @@ import {
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
+import styles from './LoginForm.module.scss';
 
 const LoginForm = ({ onResetPassword, onSignUp }) => {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
   }
 
   return (
-    <div className={clsx('form-root login-form', isLoading && 'disabled')}>
+    <div className={clsx('form-root', styles['login-form'], isLoading && styles.disabled)}>
       <span className='welcome-text'>{textForKey('Welcome to EasyPlan')}</span>
       <span className='form-title'>{textForKey('Log in to your account')}</span>
       {errorMessage && (
@@ -75,12 +76,12 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
         </InputGroup>
       </Form.Group>
       <Form.Group controlId='password'>
-        <div className='forgot-password-container'>
+        <div className={styles['forgot-password-container']}>
           <Form.Label>{textForKey('Password')}</Form.Label>
           <div
             role='button'
             tabIndex={0}
-            className='forgot-button'
+            className={styles['forgot-button']}
             onClick={onResetPassword}
           >
             {textForKey('Forgot your password')}?
@@ -95,12 +96,12 @@ const LoginForm = ({ onResetPassword, onSignUp }) => {
         </InputGroup>
       </Form.Group>
       <div className='footer'>
-        <div className='footer-sign-up'>
+        <div className={styles['footer-sign-up']}>
           <span className='text'>{textForKey("Don't have an account")}?</span>
           <div
             role='button'
             tabIndex={0}
-            className='sign-up-btn'
+            className={styles['sign-up-btn']}
             onClick={onSignUp}
           >
             {textForKey('Sign Up')}

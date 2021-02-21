@@ -3,6 +3,8 @@ import React from 'react';
 import { CircularProgress } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
+import styles from './LoadingButton.module.scss';
+import clsx from "clsx";
 
 const LoadingButton = ({
   children,
@@ -14,15 +16,15 @@ const LoadingButton = ({
 }) => {
   return (
     <Button
-      className={`loading-button ${className}`}
+      className={clsx(styles['loading-button'], className)}
       onClick={onClick}
       disabled={disabled}
       variant={variant}
     >
       {!isLoading && children}
       {isLoading && (
-        <div className='spinner-wrapper'>
-          <CircularProgress className='loading-button-spinner' />
+        <div className={styles['spinner-wrapper']}>
+          <CircularProgress classes={{ root: styles['loading-button-spinner'] }} />
         </div>
       )}
     </Button>

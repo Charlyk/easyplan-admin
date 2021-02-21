@@ -20,6 +20,7 @@ import StatisticFilter from '../StatisticFilter/StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
 import styles from '../../Statistics.module.scss';
+import { CircularProgress } from "@material-ui/core";
 
 const initialFinanceReport = {
   expectations: {
@@ -142,12 +143,12 @@ const GeneralStatistics = () => {
     <div className={styles['general-statistics']} id='general-statistics'>
       <Modal
         centered
-        className={styles['loading-modal']}
+        className={'loading-modal'}
         show={isLoading && statuses.length === 0}
         onHide={() => null}
       >
         <Modal.Body>
-          <Spinner animation='border' />
+          <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           {isLoading && textForKey('Loading statistics')}...
         </Modal.Body>
       </Modal>

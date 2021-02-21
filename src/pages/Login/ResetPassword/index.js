@@ -8,6 +8,8 @@ import LoadingButton from '../../../components/LoadingButton';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
+import styles from './ResetPassword.module.scss';
+import clsx from "clsx";
 
 const ResetPassword = ({ onGoBack }) => {
   const [email, setEmail] = useState('');
@@ -32,7 +34,7 @@ const ResetPassword = ({ onGoBack }) => {
   };
 
   return (
-    <div className='form-root reset-password-form'>
+    <div className={clsx('form-root', styles['reset-password-form'])}>
       <span className='form-title'>{textForKey('Reset Password')}</span>
       <span className='welcome-text'>
         {textForKey('reset_password_message')}
@@ -50,7 +52,7 @@ const ResetPassword = ({ onGoBack }) => {
           </InputGroup>
         </Form.Group>
       ) : (
-        <span className='success-text'>
+        <span className={styles['success-text']}>
           {textForKey("We've sent an email with further instructions.")}
         </span>
       )}

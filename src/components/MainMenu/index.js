@@ -253,7 +253,11 @@ const MainMenu = (props) => {
           </Typography>
         </Box>
       )}
-      <Image className='trust-seal-image' height={25} width='auto' src='/positivessl_trust_seal.png' alt='SSL Trust Seal' />
+      <img
+        className={styles['trust-seal-image']}
+        src='/positivessl_trust_seal.png'
+        alt='SSL Trust Seal'
+      />
     </div>
   );
 };

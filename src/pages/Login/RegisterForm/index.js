@@ -20,6 +20,8 @@ import {
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
+import styles from './RegisterForm.module.scss';
+import clsx from "clsx";
 
 const RegisterForm = ({ onGoBack }) => {
   const dispatch = useDispatch();
@@ -117,7 +119,7 @@ const RegisterForm = ({ onGoBack }) => {
     data.avatarFile && window.URL.createObjectURL(data.avatarFile);
 
   return (
-    <div className='form-root register-form'>
+    <div className={clsx('form-root', styles['register-form'])}>
       <span className='form-title'>{textForKey('Create new account')}</span>
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
@@ -163,17 +165,17 @@ const RegisterForm = ({ onGoBack }) => {
             type={isPasswordVisible ? 'text' : 'password'}
             onChange={handleFormChange}
           />
-          <InputGroup.Append className='password-visibility-append'>
+          <InputGroup.Append className={styles['password-visibility-append']}>
             <Button
               onClick={togglePasswordVisibility}
               variant='outline-primary'
-              className='visibility-toggle-btn'
+              className={styles['visibility-toggle-btn']}
             >
               {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <Form.Text className='text-muted'>
+        <Form.Text className={styles['text-muted']}>
           {textForKey('passwordValidationMessage')}
         </Form.Text>
       </Form.Group>
