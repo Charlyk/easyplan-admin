@@ -19,10 +19,11 @@
   }
 
   .company-selector-container {
+    height: 30px;
+    min-width: 130px;
     user-select: none;
     position: relative;
     outline: none;
-    width: 15rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,10 +37,10 @@
     .clinic-name {
       flex: 1;
       color: #34344E;
-      font-weight: 600;
+      font-weight: normal;
       font-family: Inter, sans-serif;
       font-style: normal;
-      font-size: 14px;
+      font-size: 12px;
       line-height: 24px;
     }
 

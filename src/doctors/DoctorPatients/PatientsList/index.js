@@ -16,10 +16,11 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import dataAPI from '../../../../utils/api/dataAPI';
-import { Statuses } from '../../../../utils/constants';
-import { updateLink } from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Statuses } from '../../../utils/constants';
+import { updateLink } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import styles from './PatientsList.module.scss';
 
 const PatientsList = ({ schedules, viewDate, filterData }) => {
   const [filteredSchedules, setFilteredSchedules] = useState(schedules);
@@ -99,9 +100,9 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
       <div
         key={schedule.id}
         className={clsx(
-          'schedule-item',
-          schedule.scheduleStatus === 'OnSite' && 'upcoming',
-          schedule.isUrgent && 'urgent',
+          styles['schedule-item'],
+          schedule.scheduleStatus === 'OnSite' && styles.upcoming,
+          schedule.isUrgent && styles.urgent,
         )}
       >
         <Box
@@ -113,24 +114,24 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
           overflow='hidden'
         >
           <div
-            className='schedule-item__status-indicator'
+            className={styles['schedule-item__status-indicator']}
             style={{ backgroundColor: scheduleStatus.color }}
           />
-          <Typography noWrap classes={{ root: 'patient-name' }}>
+          <Typography noWrap classes={{ root: styles['patient-name'] }}>
             {schedule.patient.fullName}
           </Typography>
-          <Typography noWrap classes={{ root: 'service-name' }}>
+          <Typography noWrap classes={{ root: styles['service-name'] }}>
             {schedule.serviceName}
           </Typography>
-          <Typography noWrap classes={{ root: 'patient-name' }}>
+          <Typography noWrap classes={{ root: styles['patient-name'] }}>
             {scheduleStatus.name}
           </Typography>
-          <Typography noWrap classes={{ root: 'time-label' }}>
+          <Typography noWrap classes={{ root: styles['time-label'] }}>
             {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
           </Typography>
-          <div className='details-button'>
+          <div className={styles['details-button']}>
             <Link to={updateLink(`/${schedule.id}`)}>
-              <span className='button-text'>{textForKey('Details')}</span>
+              <span className={styles['button-text']}>{textForKey('Details')}</span>
             </Link>
           </div>
         </Box>
@@ -139,13 +140,13 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
   };
 
   return (
-    <div className='patients-list-root'>
+    <div className={styles['patients-list-root']}>
       {!isLoading && hours.length === 0 && (
-        <Typography classes={{ root: 'day-off-label' }}>
+        <Typography classes={{ root: styles['day-off-label'] }}>
           {textForKey("It's a day off")}
         </Typography>
       )}
-      <TableContainer classes={{ root: 'table-container' }}>
+      <TableContainer classes={{ root: styles['table-container'] }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>

@@ -595,7 +595,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             <option value='2'>{textForKey('Canin')} 2</option>
             <option value='3'>{textForKey('Canin')} 3</option>
           </Form.Control>
-          <div className='separator' />
+          <div className='separator'/>
           <Form.Control
             disabled={!isDoctor}
             as='select'
@@ -634,7 +634,11 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Orthodontic plan')}
       </Typography>
-      {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
+      {isLoading && (
+        <div className='progress-bar-wrapper'>
+          <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+        </div>
+      )}
       {!isLoading && (
         <React.Fragment>
           <div className={styles['treatment-plan-modal-content']}>
@@ -652,20 +656,20 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             </div>
             <table>
               <tbody>
-                <tr>
-                  <td>
+              <tr>
+                <td>
                     <span className={styles['group-title']}>
                       {textForKey('Diagnosis')}
                     </span>
-                  </td>
-                </tr>
-                {classRow}
-                {occlusionRow}
-                {molarCaninRow}
-                {radiographRow}
-                {bracesRow}
-                {treatmentTypeRow}
-                {fallenBracketsRow}
+                </td>
+              </tr>
+              {classRow}
+              {occlusionRow}
+              {molarCaninRow}
+              {radiographRow}
+              {bracesRow}
+              {treatmentTypeRow}
+              {fallenBracketsRow}
               </tbody>
             </table>
             <Form.Group controlId='note'>
@@ -691,7 +695,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
             onClick={handleSaveTreatmentPlan}
           >
             {textForKey('Save')}
-            <IconSuccess />
+            <IconSuccess/>
           </LoadingButton>
         </div>
       )}

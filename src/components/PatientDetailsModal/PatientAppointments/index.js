@@ -93,7 +93,11 @@ const PatientAppointments = ({ patient, isDoctor }) => {
         </Typography>
       )}
       <div className={styles['patient-appointments-list__appointments-data']}>
-        {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
+        {isLoading && (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+          </div>
+        )}
         {schedules.map((item) => (
           <Appointment key={item.id} appointment={item} />
         ))}

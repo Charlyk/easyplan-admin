@@ -1,0 +1,49 @@
+.patients-filter {
+  width: 20rem;
+  display: flex;
+  padding: 1rem;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  background: #FFFFFF;
+  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+
+  :global(.custom-select) {
+    font-size: .7rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+  }
+
+  :global(.form-group) {
+    width: 100%;
+  }
+
+  :global(.form-label) {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .7rem;
+    margin-bottom: 0;
+  }
+
+  :global(.form-control) {
+    background-color: #FAFAFD;
+  }
+
+  :global(.positive-button) {
+    margin-top: 1rem;
+  }
+
+  :global(.rdrCalendarWrapper) {
+    max-width: 100%;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 12px;
+
+    :global(.rdrMonth) {
+      max-width: 100%;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import { Fade, Paper, Popper, ClickAwayListener } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
+import styles from './ToothView.module.scss';
 
 const ToothView = ({
   icon,
@@ -76,7 +77,7 @@ const ToothView = ({
 
   const servicesPopper = (
     <Popper
-      className='tooth-popper-root'
+      className={styles['tooth-popper-root']}
       anchorEl={anchorEl.current}
       open={showServices}
       placement='bottom'
@@ -84,9 +85,9 @@ const ToothView = ({
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='tooth-paper'>
+          <Paper className={styles['tooth-paper']}>
             <ClickAwayListener onClickAway={handleCloseServicesPopper}>
-              <div className='options-wrapper'>
+              <div className={styles['options-wrapper']}>
                 {toothServices.map((service) => (
                   <Form.Group
                     key={service.id}
@@ -119,7 +120,7 @@ const ToothView = ({
   const infoPopper =
     infoServices.length > 0 ? (
       <Popper
-        className='tooth-services-paper-root'
+        className={styles['tooth-services-paper-root']}
         anchorEl={infoAnchor.current}
         open={showInfo}
         placement='right'
@@ -127,18 +128,18 @@ const ToothView = ({
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper className='services-tooth-paper'>
-              <div className='options-wrapper'>
+            <Paper className={styles['services-tooth-paper']}>
+              <div className={styles['options-wrapper']}>
                 {infoServices.map((item) => (
                   <div
                     key={`${item.id}-${item.historyId}`}
-                    className='option-row'
+                    className={styles['option-row']}
                   >
                     <div
-                      className='service-color-indicator'
+                      className={styles['service-color-indicator']}
                       style={{ backgroundColor: item.color }}
                     />
-                    <span className='service-name'>{item.name}</span>
+                    <span className={styles['service-name']}>{item.name}</span>
                   </div>
                 ))}
               </div>
@@ -149,9 +150,9 @@ const ToothView = ({
     ) : null;
 
   return (
-    <div className='tooth-view'>
+    <div className={styles['tooth-view']}>
       {direction === 'top' && (
-        <span className='tooth-text' ref={anchorEl}>
+        <span className={styles['tooth-text']} ref={anchorEl}>
           {toothId}
         </span>
       )}
@@ -161,19 +162,19 @@ const ToothView = ({
         ref={infoAnchor}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={clsx('tooth-icon', direction === 'top' && 'top')}
+        className={clsx(styles['tooth-icon'], direction === 'top' && styles.top)}
         onClick={handleOpenServicesPopper}
       >
         {icon}
         <div
           className={clsx(
-            'tooth-services-container',
-            direction === 'top' && 'top',
+            styles['tooth-services-container'],
+            direction === 'top' && styles.top,
           )}
         >
           {infoServices.map((item, index) => (
             <div
-              className='service-indicator'
+              className={styles['service-indicator']}
               key={`${item.id}-${item.toothId}-${index}`}
               style={{ backgroundColor: item.color }}
             />
@@ -181,7 +182,7 @@ const ToothView = ({
         </div>
       </div>
       {direction === 'bottom' && (
-        <span className='tooth-text' ref={anchorEl}>
+        <span className={styles['tooth-text']} ref={anchorEl}>
           {toothId}
         </span>
       )}

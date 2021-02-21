@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
+import sortBy from 'lodash/sortBy';
 import { Form, InputGroup } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
-import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
-import { Statuses } from '../../../../utils/constants';
-import { getAppLanguage, textForKey } from '../../../../utils/localization';
+import { clinicServicesSelector } from '../../../redux/selectors/clinicSelector';
+import { Statuses } from '../../../utils/constants';
+import { getAppLanguage, textForKey } from '../../../utils/localization';
+import styles from './PatientsFilter.module.scss';
 
 const PatientsFilter = ({
   selectedDate,
@@ -19,8 +21,12 @@ const PatientsFilter = ({
 }) => {
   const services = useSelector(clinicServicesSelector);
 
+  const sortedServices = useMemo(() => {
+    return sortBy(services, item => item.name.toLowerCase())
+  }, [services])
+
   return (
-    <div className='patients-filter'>
+    <div className={styles['patients-filter']}>
       <Form.Group controlId='patientName'>
         <Form.Label>{textForKey('Patient')}</Form.Label>
         <InputGroup>
@@ -39,7 +45,7 @@ const PatientsFilter = ({
           custom
         >
           <option value='all'>{textForKey('All services')}</option>
-          {services.map((item) => (
+          {sortedServices.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>

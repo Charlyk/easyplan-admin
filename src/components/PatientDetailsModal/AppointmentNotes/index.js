@@ -46,7 +46,11 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
         </Typography>
       )}
       <div className={styles['patient-visits-list__visits-data']}>
-        {isFetching && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
+        {isFetching && (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+          </div>
+        )}
         {visits.map((visit, index) => (
           <AppointmentNote
             canEdit={visit.doctorId === currentUser.id}

@@ -3,15 +3,16 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import EasyTab from '../../../../components/EasyTab';
-import AppointmentNotes from '../../../../components/PatientDetailsModal/AppointmentNotes';
-import PatientAppointments from '../../../../components/PatientDetailsModal/PatientAppointments';
-import PatientNotes from '../../../../components/PatientDetailsModal/PatientNotes';
-import OrthodonticPlan from '../../../../components/PatientDetailsModal/OrthodonticPlan';
-import PatientXRay from '../../../../components/PatientDetailsModal/PatientXRay';
-import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
-import { textForKey } from '../../../../utils/localization';
+import EasyTab from '../../../components/EasyTab';
+import AppointmentNotes from '../../../components/PatientDetailsModal/AppointmentNotes';
+import PatientAppointments from '../../../components/PatientDetailsModal/PatientAppointments';
+import PatientNotes from '../../../components/PatientDetailsModal/PatientNotes';
+import OrthodonticPlan from '../../../components/PatientDetailsModal/OrthodonticPlan';
+import PatientXRay from '../../../components/PatientDetailsModal/PatientXRay';
+import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { textForKey } from '../../../utils/localization';
+import styles from './PatientDetails.module.scss';
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -63,8 +64,8 @@ const PatientDetails = ({
   };
 
   return (
-    <div className='patient-details-root'>
-      <div className='patient-details-root__header'>
+    <div className={styles['patient-details-root']}>
+      <div className={styles['patient-details-root__header']}>
         {showTabs.includes(TabId.appointmentsNotes) && (
           <EasyTab
             title={textForKey('Appointments notes')}
@@ -113,7 +114,7 @@ const PatientDetails = ({
           />
         )}
       </div>
-      <div className='patient-details-root__content'>
+      <div className={styles['patient-details-root__content']}>
         {selectedTab === TabId.appointmentsNotes && (
           <AppointmentNotes
             scheduleId={scheduleId}

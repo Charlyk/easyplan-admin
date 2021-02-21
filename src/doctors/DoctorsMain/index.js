@@ -20,7 +20,7 @@ import authManager from '../../utils/settings/authManager';
 import sessionManager from '../../utils/settings/sessionManager';
 import DoctorPatientDetails from '../DoctorPatientDetails';
 import DoctorPatients from '../DoctorPatients';
-import './DoctorsMain.module.scss';
+import styles from './DoctorsMain.module.scss';
 
 const DoctorsMain = () => {
   const dispatch = useDispatch();
@@ -65,12 +65,12 @@ const DoctorsMain = () => {
   };
 
   return (
-    <div className='doctors-main-root'>
+    <div className={styles['doctors-main-root']}>
       <EditProfileModal
         open={isEditingProfile}
         onClose={handleCloseEditProfile}
       />
-      <div className='doctor-page-header-root'>
+      <div className={styles['doctor-page-header-root']}>
         <PageHeader
           isDoctor
           showLogo
@@ -80,12 +80,12 @@ const DoctorsMain = () => {
             <div
               role='button'
               tabIndex={0}
-              className='company-selector-container'
+              className={styles['company-selector-container']}
               ref={buttonRef}
               onClick={handleCompanyOpen}
             >
               <ClickAwayListener onClickAway={handleCompanyClose}>
-                <span className='clinic-name'>
+                <span className={styles['clinic-name']}>
                   {selectedClinic?.clinicName || textForKey('Create clinic')}
                 </span>
               </ClickAwayListener>
@@ -101,7 +101,7 @@ const DoctorsMain = () => {
           }
         />
       </div>
-      <div className='doctor-data-container'>
+      <div className={styles['doctor-data-container']}>
         <Switch>
           <Route path='/' exact component={DoctorPatients} />
           <Route path='/:scheduleId' exact component={DoctorPatientDetails} />

@@ -445,6 +445,13 @@ body {
   }
 }
 
+.progress-bar-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .circular-progress-bar {
   color: #3A83DC !important;
   width: 30px !important;

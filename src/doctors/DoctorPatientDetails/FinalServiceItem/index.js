@@ -8,22 +8,23 @@ import PropTypes from 'prop-types';
 import IconCheckMark from '../../../assets/icons/iconCheckMark';
 import { getServiceName } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
+import styles from './FinalServiceItem.module.scss';
 
 const FinalServiceItem = ({ service, canRemove, onRemove }) => {
   return (
-    <tr className='final-service-root'>
+    <tr className={styles['final-service-root']}>
       <td>
-        <div className='service-wrapper'>
-          <Typography classes={{ root: 'service-name' }}>
+        <div className={styles['service-wrapper']}>
+          <Typography classes={{ root: styles['service-name'] }}>
             {getServiceName(service)}
           </Typography>
           {service.completedBy && (
-            <Typography classes={{ root: 'completed-by-label' }}>
+            <Typography classes={{ root: styles['completed-by-label'] }}>
               {textForKey('completed by')} {service.completedBy}
             </Typography>
           )}
           {!service.completed && service.addedByName && (
-            <Typography classes={{ root: 'completed-by-label' }}>
+            <Typography classes={{ root: styles['completed-by-label'] }}>
               {textForKey('added by')} {service.addedByName}
             </Typography>
           )}
@@ -34,9 +35,9 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
           disabled={!canRemove}
           onClick={() => onRemove(service)}
           classes={{
-            root: clsx('remove-btn', {
-              disabled: !canRemove && !service.completed,
-              completed: service.completed,
+            root: clsx(styles['remove-btn'], {
+              [styles.disabled]: !canRemove && !service.completed,
+              [styles.completed]: service.completed,
             }),
           }}
         >

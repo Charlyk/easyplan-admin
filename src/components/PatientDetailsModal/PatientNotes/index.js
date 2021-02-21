@@ -105,11 +105,13 @@ const PatientNotes = ({ patient }) => {
         </Typography>
       )}
       {state.isFetching && (
-        <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+        <div className='progress-bar-wrapper'>
+          <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+        </div>
       )}
       <div className={styles['patient-notes-list__notes-data']}>
         {state.notes.map(note => (
-          <PatientNote key={note.id} note={note} />
+          <PatientNote key={note.id} note={note}/>
         ))}
       </div>
       <Box display='flex' width='100%' className={styles['patient-notes-list__actions']}>
@@ -131,7 +133,7 @@ const PatientNotes = ({ patient }) => {
           onClick={handleAddNote}
         >
           {textForKey('Add note')}
-          <IconPlus fill={null} />
+          <IconPlus fill={null}/>
         </LoadingButton>
       </Box>
     </div>

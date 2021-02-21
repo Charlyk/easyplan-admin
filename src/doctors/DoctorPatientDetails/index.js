@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../assets/icons/iconAvatar';
 import FinalizeTreatmentModal from '../../components/FinalizeTreatmentModal';
 import LoadingButton from '../../components/LoadingButton';
-import PatientDetails from './components/PatientDetails/PatientDetails';
+import PatientDetails from './PatientDetails';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
@@ -36,9 +36,9 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import sessionManager from '../../utils/settings/sessionManager';
-import FinalServiceItem from './components/FinalServiceItem';
-import ToothView from './components/ToothView';
-import './DoctorPatientDetails.module.scss';
+import FinalServiceItem from './FinalServiceItem';
+import ToothView from './ToothView';
+import styles from './DoctorPatientDetails.module.scss';
 
 const areSameServices = (first, second) => {
   return (
@@ -561,7 +561,7 @@ const DoctorPatientDetails = () => {
   };
 
   return (
-    <div className='doctor-patient-root'>
+    <div className={styles['doctor-patient-root']}>
       <FinalizeTreatmentModal
         onSave={finalizeTreatment}
         totalPrice={getTotalPrice()}
@@ -581,29 +581,29 @@ const DoctorPatientDetails = () => {
           {isFinalizing && textForKey('Finalizing treatment...')}
         </Modal.Body>
       </Modal>
-      <div className='left-container'>
-        <div className='patient-info'>
+      <div className={styles['left-container']}>
+        <div className={styles['patient-info']}>
           <IconAvatar />
-          <div className='personal-data-container'>
-            <span className='patient-name'>{getPatientName()}</span>
-            <div className='patient-info-row'>
-              <span className='patient-info-title'>{textForKey('Date')}:</span>
-              <span className='patient-info-value'>
+          <div className={styles['personal-data-container']}>
+            <span className={styles['patient-name']}>{getPatientName()}</span>
+            <div className={styles['patient-info-row']}>
+              <span className={styles['patient-info-title']}>{textForKey('Date')}:</span>
+              <span className={styles['patient-info-value']}>
                 {schedule
                   ? moment(schedule.startTime).format('DD MMM YYYY HH:mm')
                   : ''}
               </span>
             </div>
-            <div className='patient-info-row'>
-              <span className='patient-info-title'>
+            <div className={styles['patient-info-row']}>
+              <span className={styles['patient-info-title']}>
                 {textForKey('Doctor')}:
               </span>
-              <span className='patient-info-value'>{currentUser.fullName}</span>
+              <span className={styles['patient-info-value']}>{currentUser.fullName}</span>
             </div>
           </div>
         </div>
-        <div className='tooth-container'>
-          <div className='top-left'>
+        <div className={styles['tooth-container']}>
+          <div className={styles['top-left']}>
             {teeth
               .filter((it) => it.type === 'top-left')
               .map((item) => (
@@ -620,7 +620,7 @@ const DoctorPatientDetails = () => {
                 />
               ))}
           </div>
-          <div className='top-right'>
+          <div className={styles['top-right']}>
             {teeth
               .filter((it) => it.type === 'top-right')
               .map((item) => (
@@ -637,7 +637,7 @@ const DoctorPatientDetails = () => {
                 />
               ))}
           </div>
-          <div className='bottom-left'>
+          <div className={styles['bottom-left']}>
             {teeth
               .filter((it) => it.type === 'bottom-left')
               .map((item) => (
@@ -655,7 +655,7 @@ const DoctorPatientDetails = () => {
                 />
               ))}
           </div>
-          <div className='bottom-right'>
+          <div className={styles['bottom-right']}>
             {teeth
               .filter((it) => it.type === 'bottom-right')
               .map((item) => (
@@ -674,8 +674,8 @@ const DoctorPatientDetails = () => {
               ))}
           </div>
         </div>
-        <Paper classes={{ root: 'services-container' }}>
-          <div className='input-wrapper'>
+        <Paper classes={{ root: styles['services-container'] }}>
+          <div className={styles['input-wrapper']}>
             <Form.Group>
               <Typeahead
                 ref={servicesRef}
@@ -705,7 +705,7 @@ const DoctorPatientDetails = () => {
             </Form.Group>
           </div>
 
-          <div className='selected-services-wrapper'>
+          <div className={styles['selected-services-wrapper']}>
             <table style={{ width: '100%' }}>
               <tbody>
                 {selectedServices.map((service, index) => (
@@ -720,7 +720,7 @@ const DoctorPatientDetails = () => {
             </table>
           </div>
 
-          <div className='selected-services-footer'>
+          <div className={styles['selected-services-footer']}>
             <LoadingButton
               isLoading={isFinalizing}
               onClick={handleFinalizeTreatment}
@@ -732,7 +732,7 @@ const DoctorPatientDetails = () => {
           </div>
         </Paper>
       </div>
-      <div className='right-container'>
+      <div className={styles['right-container']}>
         {patient && (
           <PatientDetails
             isDoctor

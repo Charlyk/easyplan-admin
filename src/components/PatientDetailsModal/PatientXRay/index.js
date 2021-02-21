@@ -89,7 +89,9 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           />
         )}
         {state.isFetching && (
-          <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+          <div className='progress-bar-wrapper'>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+          </div>
         )}
       </div>
       <div className={styles['patient-x-ray__actions']}>
@@ -100,7 +102,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           disabled={state.isFetching}
         >
           {textForKey('Add image')}
-          <IconPlus fill={null} />
+          <IconPlus fill={null}/>
         </Button>
       </div>
     </div>

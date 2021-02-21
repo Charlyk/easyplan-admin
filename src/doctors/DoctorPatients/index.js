@@ -13,9 +13,10 @@ import {
   updateScheduleSelector,
 } from '../../redux/selectors/scheduleSelector';
 import dataAPI from '../../utils/api/dataAPI';
-import PatientsFilter from './components/patients/PatientsFilter';
-import PatientsList from './components/patients/PatientsList';
-import './DoctorPatients.module.scss';
+import PatientsFilter from './PatientsFilter';
+import PatientsList from './PatientsList';
+import styles from './DoctorPatients.module.scss';
+import { CircularProgress } from "@material-ui/core";
 
 const DoctorPatients = () => {
   const updateSchedule = useSelector(updateScheduleSelector);
@@ -106,8 +107,8 @@ const DoctorPatients = () => {
   };
 
   return (
-    <div className='doctor-patients-root'>
-      <div className='filter-wrapper'>
+    <div className={styles['doctor-patients-root']}>
+      <div className={styles['filter-wrapper']}>
         <PatientsFilter
           selectedDate={viewDate}
           onDateChange={handleDateChange}
@@ -116,9 +117,9 @@ const DoctorPatients = () => {
           onStatusChange={handleAppointmentStatusChange}
         />
       </div>
-      <div className='data-wrapper'>
+      <div className={styles['data-wrapper']}>
         {isLoading && (
-          <Spinner animation='border' className='loading-spinner' />
+          <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
         )}
         <PatientsList
           filterData={filterData}
