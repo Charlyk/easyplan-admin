@@ -1,5 +1,4 @@
 import React from "react";
-import { wrapper } from "../store";
 import NextApp from "./_app";
 
 function AppEntry() {
