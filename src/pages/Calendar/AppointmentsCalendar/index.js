@@ -6,7 +6,7 @@ import {
   Fade,
   Paper,
   IconButton,
-  Button as MaterialButton,
+  Button as MaterialButton, CircularProgress,
 } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import UploadIcon from '@material-ui/icons/CloudUpload';
@@ -20,17 +20,18 @@ import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
-import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
-import IconPlus from '../../../../assets/icons/iconPlus';
-import AppointmentDetails from '../../../../components/AppointmentDetails';
-import EasyTab from '../../../../components/EasyTab';
-import LoadingButton from '../../../../components/LoadingButton';
-import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarSelector';
-import { getCurrentWeek } from '../../../../utils/helperFuncs';
-import { getAppLanguage, textForKey } from '../../../../utils/localization';
+import IconAppointmentCalendar from '../../../assets/icons/iconAppointmentCalendar';
+import IconPlus from '../../../assets/icons/iconPlus';
+import AppointmentDetails from '../../../components/AppointmentDetails';
+import EasyTab from '../../../components/EasyTab';
+import LoadingButton from '../../../components/LoadingButton';
+import { isCalendarLoadingSelector } from '../../../redux/selectors/calendarSelector';
+import { getCurrentWeek } from '../../../utils/helperFuncs';
+import { getAppLanguage, textForKey } from '../../../utils/localization';
 import CalendarDayView from './CalendarDayView';
-import CalendarMonthView from './month/CalendarMonthView';
-import CalendarWeekView from './week/CalendarWeekView';
+import CalendarMonthView from './CalendarMonthView';
+import CalendarWeekView from './CalendarWeekView';
+import styles from './AppointmentsCalendar.module.scss'
 
 const CalendarView = {
   day: 'day',
@@ -131,7 +132,7 @@ const AppointmentsCalendar = ({
 
   const calendarPopper = (
     <Popper
-      className='appointments-date-picker-root'
+      className={styles['appointments-date-picker-root']}
       anchorEl={calendarAnchor.current}
       open={calendarVisible}
       placement='bottom'
@@ -139,7 +140,7 @@ const AppointmentsCalendar = ({
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='calendar-paper'>
+          <Paper className={styles['calendar-paper']}>
             <ClickAwayListener onClickAway={handleCloseCalendar}>
               <Calendar
                 locale={locales[getAppLanguage()]}
@@ -154,7 +155,7 @@ const AppointmentsCalendar = ({
   );
 
   return (
-    <div className={clsx('calendar-root__center', 'full-height')}>
+    <div className={clsx(styles.appointmentsCalendar, 'full-height')}>
       {selectedSchedule != null && (
         <AppointmentDetails
           onPayDebt={onPayDebt}
@@ -164,22 +165,22 @@ const AppointmentsCalendar = ({
           onClose={handleDetailsClose}
         />
       )}
-      <div className='center-header'>
+      <div className={styles['center-header']}>
         <Box
           display='flex'
           alignItems='center'
-          className='controls-wrapper'
+          className={styles['controls-wrapper']}
           mb='5px'
         >
           <IconButton
             onClick={handleDateNavigation('previous-date')}
-            classes={{ root: 'arrow-button', label: 'button-icon' }}
+            classes={{ root: styles['arrow-button'], label: styles['button-icon'] }}
           >
             <ArrowLeft />
           </IconButton>
           <Button
             ref={calendarAnchor}
-            className='positive-button calendar-btn'
+            className={clsx('positive-button', styles['calendar-btn'])}
             onClick={handleOpenCalendar}
           >
             {getTitleText()}
@@ -187,19 +188,19 @@ const AppointmentsCalendar = ({
           </Button>
           <IconButton
             onClick={handleDateNavigation('next-date')}
-            classes={{ root: 'arrow-button', label: 'button-icon' }}
+            classes={{ root: styles['arrow-button'], label: styles['button-icon'] }}
           >
             <ArrowRight />
           </IconButton>
           <MaterialButton
             onClick={handleTodayClick}
-            classes={{ root: 'today-btn' }}
+            classes={{ root: styles['today-btn'] }}
           >
             {textForKey('Today')}
           </MaterialButton>
         </Box>
         {calendarPopper}
-        <div className='center-header__tabs'>
+        <div className={styles['center-header__tabs']}>
           <EasyTab
             title={textForKey('Day')}
             selected={currentTab === CalendarView.day}
@@ -216,17 +217,17 @@ const AppointmentsCalendar = ({
             onClick={() => handleTabChange(CalendarView.month)}
           />
         </div>
-        <Box display='flex' className='right-btns-wrapper'>
+        <Box display='flex' className={styles['right-btns-wrapper']}>
           <LoadingButton
             isLoading={isUploading}
             variant='outline-primary'
-            className='btn-outline-primary import-btn'
+            className={clsx('btn-outline-primary', styles['import-btn'])}
             onClick={onImportSchedules}
           >
             <UploadIcon />
           </LoadingButton>
           <Button
-            className='positive-button add-appointment-btn'
+            className={clsx('positive-button', styles['add-appointment-btn'])}
             disabled={!canAddAppointment}
             onClick={handleAddAppointment}
           >
@@ -241,10 +242,12 @@ const AppointmentsCalendar = ({
           marginRight: 0,
           marginLeft: currentTab === CalendarView.day ? '0' : '1rem',
         }}
-        className='center-content'
+        className={styles['center-content']}
       >
         {isLoading && (
-          <Spinner animation='border' className='loading-spinner' />
+          <div className={styles.progressWrapper}>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+          </div>
         )}
         {currentTab === CalendarView.day && (
           <CalendarDayView

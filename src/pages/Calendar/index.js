@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 
-import './Calendar.module.scss';
+import styles from './Calendar.module.scss';
 import { Box } from '@material-ui/core';
 import { usePubNub } from 'pubnub-react';
 import { ProgressBar } from 'react-bootstrap';
@@ -25,8 +25,8 @@ import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import AppointmentsCalendar from './comps/center/AppointmentsCalendar';
-import CalendarDoctors from './comps/left/CalendarDoctors';
+import AppointmentsCalendar from './AppointmentsCalendar';
+import CalendarDoctors from './AppointmentsCalendar/CalendarDoctors';
 
 const reducerTypes = {
   setFilters: 'setFilters',
@@ -308,7 +308,7 @@ const Calendar = () => {
   );
 
   return (
-    <div className='calendar-root'>
+    <div className={styles['calendar-root']}>
       {deleteSchedule.open && (
         <ConfirmationModal
           isLoading={isDeleting}
@@ -320,7 +320,7 @@ const Calendar = () => {
         />
       )}
       {viewMode !== 'day' && (
-        <div className='calendar-root__content__left-container'>
+        <div className={styles['calendar-root__content__left-container']}>
           <CalendarDoctors
             isFetching={isFetching}
             selectedDoctor={selectedDoctor}
@@ -330,7 +330,7 @@ const Calendar = () => {
           />
         </div>
       )}
-      <div className='calendar-root__content__center-container'>
+      <div className={styles['calendar-root__content__center-container']}>
         <AppointmentsCalendar
           isUploading={isUploading}
           onPayDebt={handlePayDebt}

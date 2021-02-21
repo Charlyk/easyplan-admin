@@ -17,17 +17,18 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import AddPauseModal from '../../../../../components/AddPauseModal';
-import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
+import AddPauseModal from '../../../../components/AddPauseModal';
+import { clinicActiveDoctorsSelector } from '../../../../redux/selectors/clinicSelector';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
-} from '../../../../../redux/selectors/scheduleSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
-import { generateReducerActions } from '../../../../../utils/helperFuncs';
-import { textForKey } from '../../../../../utils/localization';
+} from '../../../../redux/selectors/scheduleSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import DoctorColumn from './DoctorColumn';
 import DoctorItem from './DoctorItem';
+import styles from './CalendarDayView.module.scss';
 
 const moment = extendMoment(Moment);
 
@@ -394,10 +395,10 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   );
 
   return (
-    <Box className='calendar-day-view' id='calendar-day-view'>
+    <Box className={styles['calendar-day-view']} id='calendar-day-view'>
       <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
       {hours.length !== 0 && (
-        <div className='day-doctors-container'>
+        <div className={styles['day-doctors-container']}>
           {doctors.map((doctor) => (
             <DoctorItem
               doctor={doctor}
@@ -407,31 +408,31 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
           ))}
         </div>
       )}
-      <div className='day-data-container' ref={dataRef}>
+      <div className={styles['day-data-container']} ref={dataRef}>
         {isLoading && (
-          <div className='loading-progress-wrapper'>
+          <div className={styles['loading-progress-wrapper']}>
             <CircularProgress
-              classes={{ root: 'loading-schedules-progress' }}
+              classes={{ root: 'circular-progress-bar' }}
             />
           </div>
         )}
         {!isLoading && hours.length === 0 && (
-          <div className='no-data-wrapper'>
+          <div className={styles['no-data-wrapper']}>
             <img
-              className='no-data-image'
+              className={styles['no-data-image']}
               src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/rsz_4584.png'
               alt='No schedules'
             />
-            <Typography classes={{ root: 'no-data-label' }}>
+            <Typography classes={{ root: styles['no-data-label'] }}>
               {textForKey('No schedules for this day')}.
             </Typography>
           </div>
         )}
-        <div className='day-hours-container' id='day-hours-container'>
+        <div className={styles['day-hours-container']} id='day-hours-container'>
           {halfHours.map((hour) => (
             <Typography
               id={hour}
-              classes={{ root: 'day-hour-item' }}
+              classes={{ root: styles['day-hour-item'] }}
               key={hour}
             >
               {hour}
@@ -440,7 +441,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         </div>
         <div
           ref={schedulesRef}
-          className='day-schedules-container'
+          className={styles['day-schedules-container']}
           id='day-schedules-container'
         >
           {doctors?.map((doctor, index) => (

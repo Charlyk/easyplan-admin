@@ -5,7 +5,8 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import { Statuses } from '../../../../utils/constants';
+import { Statuses } from '../../../utils/constants';
+import styles from './ScheduleItem.module.scss';
 
 const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
   const shouldAnimate = appointment.scheduleStatus === 'WaitingForPatient';
@@ -33,28 +34,28 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
       )}`}
       key={appointment.id}
       className={clsx(
-        'schedule-item',
-        shouldAnimate && 'upcoming',
-        appointment.isUrgent && 'urgent',
+        styles['schedule-item'],
+        shouldAnimate && styles.upcoming,
+        appointment.isUrgent && styles.urgent,
       )}
       onClick={handleScheduleClick}
       style={{ backgroundColor: `${scheduleStatus.color}47` }}
     >
       <div
-        className='service-indicator'
+        className={styles['service-indicator']}
         style={{ backgroundColor: appointment.serviceColor }}
       />
-      <div className='name-and-status'>
-        <Typography noWrap classes={{ root: 'patient-name' }}>
+      <div className={styles['name-and-status']}>
+        <Typography noWrap classes={{ root: styles['patient-name'] }}>
           {appointment.patient.fullName}
         </Typography>
         {scheduleStatus.statusIcon != null && (
           <div
             className={clsx(
-              'status-icon',
+              styles['status-icon'],
               (scheduleStatus.id === 'DidNotCome' ||
                 scheduleStatus.id === 'Canceled') &&
-                'negative',
+                styles.negative,
             )}
           >
             {scheduleStatus.statusIcon}
@@ -62,7 +63,7 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
         )}
       </div>
       {showHour && (
-        <Typography noWrap classes={{ root: 'schedule-time' }}>
+        <Typography noWrap classes={{ root: styles['schedule-time'] }}>
           {startTime.format('HH:mm')} - {endTime.format('HH:mm')}
         </Typography>
       )}

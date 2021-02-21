@@ -1,6 +1,6 @@
 .add-appointment-root {
 
-  .modal-content {
+  :global(.modal-content) {
     box-shadow: 0 1px 10px 10px #34344E1A;
   }
 
@@ -8,7 +8,7 @@
     display: flex;
   }
 
-  .rbt-menu > .dropdown-item {
+  :global(.rbt-menu) > :global(.dropdown-item) {
     padding: .2rem 1rem;
   }
 
@@ -81,25 +81,25 @@
     }
   }
 
-  .form-control[readonly] {
+  :global(.form-control[readonly]) {
     background-color: #FAFAFD;
   }
 
-  .form-control:disabled {
+  :global(.form-control:disabled) {
     opacity: .8;
     background-color: #ededed !important;
   }
 
-  .form-group {
+  :global(.form-group) {
     margin-bottom: 0;
-    margin-top: .5rem;
+    margin-top: 0;
 
-    .form-check {
+    :global(.form-check) {
       display: flex;
       align-items: center;
       user-select: none;
 
-      .form-check-label {
+      :global(.form-check-label) {
         font-family: Inter, sans-serif;
         font-style: normal;
         font-size: .85rem;
@@ -115,7 +115,7 @@
     }
   }
 
-  .form-label {
+  :global(.form-label) {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: 600;
@@ -123,12 +123,12 @@
     margin-bottom: 0;
   }
 
-  .form-control {
+  :global(.form-control) {
     width: 100%;
     background-color: #FAFAFD;
   }
 
-  .input-group {
+  :global(.input-group) {
     textarea {
       height: 5rem !important;
     }
@@ -142,22 +142,24 @@
     cursor: pointer;
   }
 
-  .rbt-aux {
+  :global(.rbt-aux) {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     right: .5rem;
   }
 
-  .custom-select {
+  :global(.custom-select) {
     height: 2.1rem;
-    font-size: .8rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 13px;
   }
 
   .date-and-time-group {
     width: 100%;
 
-    .form-control[readonly] {
+    :global(.form-control[readonly]) {
       background-color: white;
     }
 
@@ -174,13 +176,13 @@
 .appointment-date-picker-root {
   z-index: 2000;
   .calendar-paper {
-    .rdrMonthAndYearWrapper {
+    :global(.rdrMonthAndYearWrapper) {
       padding-top: 0;
       height: 30px;
     }
 
-    .rdrMonths {
-      .rdrMonth {
+    :global(.rdrMonths) {
+      :global(.rdrMonth) {
         padding: 0;
       }
     }

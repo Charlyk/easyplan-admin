@@ -13,13 +13,14 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import { Action } from '../../../../../utils/constants';
+import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
+import { Action } from '../../../../utils/constants';
 import {
   getCurrentWeek,
   logUserAction,
-} from '../../../../../utils/helperFuncs';
+} from '../../../../utils/helperFuncs';
 import CalendarWeekDayView from './CalendarWeekDayView';
+import styles from './CalendarWeekView.module.scss';
 
 const CalendarWeekView = ({
   opened,
@@ -54,16 +55,16 @@ const CalendarWeekView = ({
   if (isClosed) return null;
 
   return (
-    <div className='week-view'>
-      <TableContainer classes={{ root: 'table-container' }}>
+    <div className={styles['week-view']}>
+      <TableContainer classes={{ root: styles['table-container'] }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
               {week.map((item) => (
                 <TableCell key={item} onClick={() => handleDayClick(item)}>
                   <div
-                    className={clsx('day-title', {
-                      'current-day': moment().isSame(item, 'day'),
+                    className={clsx(styles['day-title'], {
+                      [styles['current-day']]: moment().isSame(item, 'day'),
                     })}
                   >
                     {item.format('DD dddd')}

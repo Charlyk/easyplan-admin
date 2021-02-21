@@ -4,8 +4,9 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 
-import DayViewSchedule from './DayViewSchedule';
-import ScheduleItemContainer from './ScheduleItemContainer';
+import DayViewSchedule from '../DayViewSchedule';
+import ScheduleItemContainer from '../ScheduleItemContainer';
+import styles from './DoctorColumn.module.scss';
 
 const DoctorColumn = ({
   doctor,
@@ -89,8 +90,8 @@ const DoctorColumn = ({
       key={`${doctor.id}-column`}
       style={{ width: doctorRect.width, height: getHoursHeight() }}
       className={clsx(
-        'day-schedules-column',
-        doctor.isInVacation && 'disabled',
+        styles['day-schedules-column'],
+        doctor.isInVacation && styles.disabled,
       )}
     >
       {memoizedHoursContainer}

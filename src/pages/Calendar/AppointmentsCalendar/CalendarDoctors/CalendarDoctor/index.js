@@ -4,7 +4,8 @@ import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconAvatar from '../../../../assets/icons/iconAvatar';
+import IconAvatar from '../../../../../assets/icons/iconAvatar';
+import styles from './CalendarDoctor.module.scss';
 
 const CalendarDoctor = ({ doctor, isSelected, onSelect }) => {
   const services = doctor.services.map(item => item.name).join(', ');
@@ -17,17 +18,17 @@ const CalendarDoctor = ({ doctor, isSelected, onSelect }) => {
     <div
       role='button'
       tabIndex={0}
-      className={clsx('doctor-item', isSelected && 'selected')}
+      className={clsx(styles['doctor-item'], isSelected && styles.selected)}
       onClick={handleDoctorClick}
     >
       <div>
         <IconAvatar />
       </div>
-      <div className='name-and-service'>
-        <Typography noWrap classes={{ root: 'doctor-name' }}>
+      <div className={styles['name-and-service']}>
+        <Typography noWrap classes={{ root: styles['doctor-name'] }}>
           {doctor.firstName} {doctor.lastName}
         </Typography>
-        <Typography noWrap classes={{ root: 'service-name' }}>
+        <Typography noWrap classes={{ root: styles['service-name'] }}>
           {services}
         </Typography>
       </div>

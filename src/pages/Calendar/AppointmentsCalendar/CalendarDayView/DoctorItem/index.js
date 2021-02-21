@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 
 import IconClock from '../../../../../assets/icons/iconClock';
 import { textForKey } from '../../../../../utils/localization';
+import styles from './DoctorItem.module.scss';
 
 const DoctorItem = ({ doctor, onAddPause }) => {
   const doctorAnchor = useRef(null);
@@ -40,9 +41,9 @@ const DoctorItem = ({ doctor, onAddPause }) => {
       open={isMenuOpen}
       onClose={handleCloseMenu}
     >
-      <MenuItem onClick={handleAddPause} classes={{ root: 'menu-option' }}>
+      <MenuItem onClick={handleAddPause} classes={{ root: styles['menu-option'] }}>
         <IconClock />
-        <Typography classes={{ root: 'option-label' }}>
+        <Typography classes={{ root: styles['option-label'] }}>
           {textForKey('Add pause')}
         </Typography>
       </MenuItem>
@@ -56,14 +57,14 @@ const DoctorItem = ({ doctor, onAddPause }) => {
       tabIndex={0}
       onClick={handleOpenMenu}
       className={clsx(
-        'day-doctors-container__item',
-        doctor.isInVacation && 'disabled',
+        styles.doctorItem,
+        doctor.isInVacation && styles.disabled,
       )}
       id={doctor.id}
     >
       {optionsMenu}
       <ClickAwayListener onClickAway={handleCloseMenu}>
-        <Typography noWrap classes={{ root: 'doctor-name' }}>
+        <Typography noWrap classes={{ root: styles['doctor-name'] }}>
           {upperFirst(doctor.firstName.toLowerCase())}{' '}
           {upperFirst(doctor.lastName.toLowerCase())}
         </Typography>

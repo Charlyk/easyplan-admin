@@ -5,6 +5,7 @@ import { Form, InputGroup, Spinner } from 'react-bootstrap';
 
 import { textForKey } from '../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
+import styles from './CalendarDoctors.module.scss';
 
 const CalendarDoctors = ({
   doctors,
@@ -34,9 +35,9 @@ const CalendarDoctors = ({
   };
 
   return (
-    <div className='calendar-root__doctors'>
-      <div className='doctors-header'>Doctors</div>
-      <div className='doctors-search'>
+    <div className={styles.calendarDoctors}>
+      <div className={styles['doctors-header']}>Doctors</div>
+      <div className={styles['doctors-search']}>
         <Form.Group>
           <InputGroup>
             <Form.Control
@@ -48,9 +49,9 @@ const CalendarDoctors = ({
           </InputGroup>
         </Form.Group>
       </div>
-      <div className='doctors-content'>
+      <div className={styles['doctors-content']}>
         {isFetching && (
-          <Spinner animation='border' className='loading-spinner' />
+          <Spinner animation='border' className={styles['loading-spinner']} />
         )}
         {filteredDoctors.map(doctor => (
           <CalendarDoctor

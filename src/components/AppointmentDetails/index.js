@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import {
-  Box,
+  Box, CircularProgress,
   ClickAwayListener,
   Fade,
   Paper,
@@ -182,7 +182,7 @@ const AppointmentDetails = ({
   const statusesList = (
     <Popper
       disablePortal
-      className={styles.statusesPopperRoot}
+      className={styles['statuses-popper-root']}
       anchorEl={statusesAnchor.current}
       open={showStatuses}
       placement='bottom'
@@ -201,12 +201,12 @@ const AppointmentDetails = ({
                     className={styles.item}
                     key={status.id}
                   >
-                    <div className={styles.nameAndIcon}>
+                    <div className={styles['name-and-icon']}>
                       {status.icon}
                       {status.name}
                     </div>
                     {scheduleStatus.id === status.id && (
-                      <div className={styles.checkmarkWrapper}>
+                      <div className={styles['checkmark-wrapper']}>
                         <DoneIcon />
                       </div>
                     )}
@@ -223,8 +223,8 @@ const AppointmentDetails = ({
   return (
     <div
       className={clsx(
-        'appointment-details-root',
-        schedule.isUrgent && 'urgent',
+        styles['appointment-details-root'],
+        schedule.isUrgent && styles.urgent,
       )}
     >
       <SingleInputModal
@@ -235,30 +235,30 @@ const AppointmentDetails = ({
         label={textForKey('Enter reason below')}
       />
       {statusesList}
-      <div className='header-wrapper'>
+      <div className={styles['header-wrapper']}>
         <div
           role='button'
           tabIndex={0}
           onClick={onClose}
-          className='close-button'
+          className={styles['close-button']}
         >
           <IconClose />
         </div>
-        <span className='schedule-title'>
+        <span className={styles['schedule-title']}>
           {patientName}:{' '}
           <span style={{ color: serviceColor }}>{serviceName}</span>
         </span>
       </div>
-      <div className='content-wrapper'>
-        {isLoading && <Spinner animation='border' className='spinner' />}
+      <div className={styles['content-wrapper']}>
+        {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }}/>}
         {!isLoading && details != null && (
-          <div className='info-wrapper'>
+          <div className={styles['info-wrapper']}>
             <div
               ref={statusesAnchor}
               role='button'
               tabIndex={0}
               onClick={!isFinished ? openStatusesList : () => null}
-              className='schedule-status'
+              className={styles['schedule-status']}
               style={{
                 color: scheduleStatus.color,
                 backgroundColor: `${scheduleStatus.color}1A`,
@@ -268,12 +268,12 @@ const AppointmentDetails = ({
               {scheduleStatus.name}
               <IconArrowDown fill={scheduleStatus.color} />
             </div>
-            <div className='schedule-info-wrapper'>
+            <div className={styles['schedule-info-wrapper']}>
               <table>
                 <tbody>
                   <tr>
                     <td colSpan={2}>
-                      <div className='group-title'>{textForKey('Info')}</div>
+                      <div className={styles['group-title']}>{textForKey('Info')}</div>
                     </td>
                   </tr>
                   <tr>
@@ -339,7 +339,7 @@ const AppointmentDetails = ({
                   )}
                   <tr>
                     <td colSpan={2}>
-                      <div className='group-title'>{textForKey('Patient')}</div>
+                      <div className={styles['group-title']}>{textForKey('Patient')}</div>
                     </td>
                   </tr>
                   <tr>
@@ -351,7 +351,7 @@ const AppointmentDetails = ({
                         role='button'
                         tabIndex={0}
                         onClick={handlePatientClick}
-                        className='patient-name'
+                        className={styles['patient-name']}
                       >
                         {details.patient.fullName}
                       </div>
@@ -385,8 +385,8 @@ const AppointmentDetails = ({
                 </tbody>
               </table>
             </div>
-            <div className='debts-wrapper'>
-              <div className='group-title'>{textForKey('Debts')}</div>
+            <div className={styles['debts-wrapper']}>
+              <div className={styles['group-title']}>{textForKey('Debts')}</div>
               <table>
                 <thead>
                   <tr>
@@ -399,23 +399,23 @@ const AppointmentDetails = ({
                 <tbody>
                   {details.patient.debts.map((item) => (
                     <tr key={item.id}>
-                      <td align='left' className='services-cell'>
-                        <Typography noWrap classes={{ root: 'services-label' }}>
+                      <td align='left' className={styles['services-cell']}>
+                        <Typography noWrap classes={{ root: styles['services-label'] }}>
                           {item.services.join(', ')}
                         </Typography>
                       </td>
-                      <td align='left' className='totals-cell'>
+                      <td align='left' className={styles['totals-cell']}>
                         <Typography
                           noWrap
-                          classes={{ root: 'clinic-name-label' }}
+                          classes={{ root: styles['clinic-name-label'] }}
                         >
                           {item.clinicName}
                         </Typography>
                       </td>
-                      <td align='right' className='remained-cell'>
+                      <td align='right' className={styles['remained-cell']}>
                         {formattedAmount(item.remainedAmount, item.currency)}
                       </td>
-                      <td align='right' className='actions-cell'>
+                      <td align='right' className={styles['actions-cell']}>
                         <Button
                           variant='outline-primary'
                           onClick={() => handlePayDebt(item)}
@@ -428,7 +428,7 @@ const AppointmentDetails = ({
                   {details.patient.debts.length === 0 && (
                     <tr>
                       <td colSpan={4} align='center'>
-                        <div className='no-debts-label'>
+                        <div className={styles['no-debts-label']}>
                           {textForKey('No debts found')}
                         </div>
                       </td>
@@ -440,7 +440,7 @@ const AppointmentDetails = ({
           </div>
         )}
       </div>
-      <div className='footer-wrapper'>
+      <div className={styles['footer-wrapper']}>
         <Box width='100%' display='flex'>
           <Button className='cancel-button' onClick={onClose}>
             {textForKey('Close')}
@@ -466,7 +466,7 @@ const AppointmentDetails = ({
             target='_blank'
             rel='noreferrer'
           >
-            <span className='print-label'>{textForKey('Print receipt')}</span>
+            <span className={styles['print-label']}>{textForKey('Print receipt')}</span>
           </a>
         )}
       </div>

@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../../utils/api/dataAPI';
-import ScheduleItem from '../ScheduleItem';
+import ScheduleItem from '../../../ScheduleItem';
+import styles from './CalendarWeekDayView.module.scss'
 
 const CalendarWeekDayView = ({
   viewDate,
@@ -46,7 +47,7 @@ const CalendarWeekDayView = ({
   };
 
   return (
-    <TableCell className='week-day' valign='top' variant='body'>
+    <TableCell className={styles['week-day']} variant='body'>
       {schedules.map(schedule => (
         <ScheduleItem
           hidden={schedule.hidden}

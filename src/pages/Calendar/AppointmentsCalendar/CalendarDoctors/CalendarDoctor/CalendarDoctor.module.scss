@@ -1,0 +1,49 @@
+.doctor-item {
+  outline: none;
+  margin-bottom: .5rem;
+  padding: .5rem;
+  width: 92%;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  border: .1rem solid #F4FAFE;
+  box-sizing: border-box;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover, &.selected {
+    background-color: #F4FAFE;
+    border: .1rem solid #3A83DC;
+  }
+
+  svg {
+    height: 30px;
+    width: 30px;
+  }
+
+  .name-and-service {
+    padding-right: .4rem;
+    margin-left: .4rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .doctor-name {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #34354C;
+    }
+
+    .service-name {
+      margin-top: .1rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 11px;
+      color: #34344E;
+    }
+  }
+}

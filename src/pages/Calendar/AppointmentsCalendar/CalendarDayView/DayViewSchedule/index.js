@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 import { Statuses } from '../../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
+import styles from './DayViewSchedule.module.scss';
 
 const offsetDistance = 20;
 const minScheduleHeight = 30;
@@ -89,9 +90,9 @@ const DayViewSchedule = ({
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className={clsx(
-        'day-view-schedule',
-        shouldAnimate && 'upcoming',
-        schedule.isUrgent && 'urgent',
+        styles['day-view-schedule'],
+        shouldAnimate && styles.upcoming,
+        schedule.isUrgent && styles.urgent,
       )}
       onClick={handleScheduleClick}
       style={{
@@ -109,30 +110,30 @@ const DayViewSchedule = ({
       }}
     >
       <span
-        className='day-view-schedule__status-indicator'
+        className={styles['day-view-schedule__status-indicator']}
         style={{ backgroundColor: scheduleStatus?.color || 'white' }}
       />
-      <Box className='day-view-schedule__wrapper'>
-        <Box className='header'>
+      <Box className={styles['day-view-schedule__wrapper']}>
+        <Box className={styles['header']}>
           {schedule.type === 'Schedule' && (
-            <Typography noWrap classes={{ root: 'patient-name-label' }}>
+            <Typography noWrap classes={{ root: styles['patient-name-label'] }}>
               {schedule.patient.fullName}
             </Typography>
           )}
           <Box display='flex' alignItems='center'>
             <Typography
               noWrap
-              classes={{ root: clsx('hour-label', isPause && 'pause') }}
+              classes={{ root: clsx(styles['hour-label'], isPause && styles.pause) }}
             >
               {startHour} - {endHour}
             </Typography>
             {scheduleStatus?.statusIcon != null && (
               <span
                 className={clsx(
-                  'status-icon',
+                  styles['status-icon'],
                   (scheduleStatus?.id === 'DidNotCome' ||
                     scheduleStatus?.id === 'Canceled') &&
-                    'negative',
+                    styles.negative,
                 )}
               >
                 {scheduleStatus?.statusIcon}
@@ -140,40 +141,40 @@ const DayViewSchedule = ({
             )}
           </Box>
         </Box>
-        <Box className='info'>
+        <Box className={styles['info']}>
           {schedule.type === 'Schedule' ? (
-            <Box className='info-wrapper'>
-              <div className='info-row'>
-                <Typography classes={{ root: 'info-title' }}>
+            <Box className={styles['info-wrapper']}>
+              <div className={styles['info-row']}>
+                <Typography classes={{ root: styles['info-title'] }}>
                   {textForKey('Service')}:
                 </Typography>
-                <Typography noWrap classes={{ root: 'info-label' }}>
+                <Typography noWrap classes={{ root: styles['info-label'] }}>
                   {schedule.serviceName}
                 </Typography>
               </div>
-              <div className='info-row'>
-                <Typography classes={{ root: 'info-title' }}>
+              <div className={styles['info-row']}>
+                <Typography classes={{ root: styles['info-title'] }}>
                   {textForKey('Patient')}:
                 </Typography>
-                <Typography noWrap classes={{ root: 'info-label' }}>
+                <Typography noWrap classes={{ root: styles['info-label'] }}>
                   {schedule.patient.fullName}
                 </Typography>
               </div>
-              <div className='info-row'>
-                <Typography classes={{ root: 'info-title' }}>
+              <div className={styles['info-row']}>
+                <Typography classes={{ root: styles['info-title'] }}>
                   {textForKey('Status')}:
                 </Typography>
-                <Typography noWrap classes={{ root: 'info-label' }}>
+                <Typography noWrap classes={{ root: styles['info-label'] }}>
                   {scheduleStatus?.name}
                 </Typography>
               </div>
             </Box>
           ) : (
-            <div className='pause-wrapper'>
-              <Typography classes={{ root: 'pause-label' }}>
+            <div className={styles['pause-wrapper']}>
+              <Typography classes={{ root: styles['pause-label'] }}>
                 {textForKey('Pause')}
               </Typography>
-              <Typography classes={{ root: 'comment-label' }}>
+              <Typography classes={{ root: styles['comment-label'] }}>
                 {schedule.comment}
               </Typography>
             </div>

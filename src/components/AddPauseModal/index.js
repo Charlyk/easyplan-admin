@@ -300,7 +300,7 @@ const AddPauseModal = ({
     <EasyPlanModal
       onClose={onClose}
       open={open}
-      className={styles.addPauseRoot}
+      className={styles['add-pause-root']}
       title={`${textForKey('Add pause')}: ${doctor?.firstName} ${
         doctor?.lastName
       }`}
@@ -308,7 +308,7 @@ const AddPauseModal = ({
       onPositiveClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >
-      <Form.Group className={styles.dateFormGroup}>
+      <Form.Group className={styles['date-form-group']}>
         <Form.Label>{textForKey('Date')}</Form.Label>
         <Form.Control
           value={moment(pauseDate).format('DD MMMM YYYY')}

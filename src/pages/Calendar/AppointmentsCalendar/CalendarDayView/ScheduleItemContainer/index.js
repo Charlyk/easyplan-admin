@@ -4,6 +4,7 @@ import { Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 import IconPlus from '../../../../../assets/icons/iconPlus';
+import styles from './ScheduleItemContainer.module.scss';
 
 const ScheduleItemContainer = ({
   startHour,
@@ -31,13 +32,13 @@ const ScheduleItemContainer = ({
 
   const createScheduleView = (
     <span
-      className='create-schedule-view'
+      className={styles['create-schedule-view']}
       role='button'
       tabIndex={0}
       onClick={handleAddScheduleClink}
     >
       {startHour != null && (
-        <Typography classes={{ root: 'hour-text' }}>
+        <Typography classes={{ root: styles['hour-text'] }}>
           {startHour} - {endHour}
         </Typography>
       )}
@@ -61,7 +62,7 @@ const ScheduleItemContainer = ({
   return (
     <Box
       id={`container-${startHour}`}
-      className='day-schedule-item-container'
+      className={styles['day-schedule-item-container']}
       style={{ borderTop: getBorderTop() }}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}

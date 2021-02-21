@@ -1,0 +1,32 @@
+.day-schedule-item-container {
+  width: 100%;
+  height: 30px;
+  position: relative;
+
+  .create-schedule-view {
+    outline: none;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #3A83DC;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &.disabled {
+      background-color: #ced4da;
+    }
+
+    .hour-text {
+      color: white;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 10px;
+    }
+  }
+}

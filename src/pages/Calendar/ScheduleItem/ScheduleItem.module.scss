@@ -1,0 +1,76 @@
+.schedule-item {
+  width: 100%;
+  outline: none;
+  background-color: white;
+  position: relative;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.5);
+  padding: 1px .2rem 1px .5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &.urgent {
+    box-shadow: 0 0 7px 1px #ec3276;
+  }
+
+  &.upcoming {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    animation-iteration-count: infinite;
+  }
+
+  .name-and-status {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .patient-name {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 11px;
+      color: #34344E;
+    }
+
+    .status-icon {
+      width: 1.2rem;
+      height: 1.2rem;
+      display: flex;
+      margin-left: .2rem;
+      align-items: center;
+      justify-content: center;
+
+      &.negative {
+        svg {
+          width: 1.2rem;
+          height: 1.2rem;
+          fill: #ec3276 !important;
+        }
+      }
+
+      svg {
+        width: 1.2rem;
+        height: 1.2rem;
+        fill: #00E987 !important;
+      }
+    }
+  }
+
+  .schedule-time {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 11px;
+    color: #34344E;
+    width: 100%;
+  }
+
+  .service-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+  }
+}

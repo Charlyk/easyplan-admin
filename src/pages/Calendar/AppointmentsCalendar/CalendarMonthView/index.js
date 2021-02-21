@@ -6,13 +6,14 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
-import { Action } from '../../../../../utils/constants';
-import { getDays, logUserAction } from '../../../../../utils/helperFuncs';
-import { textForKey } from '../../../../../utils/localization';
-import ScheduleItem from '../ScheduleItem';
+import { setIsCalendarLoading } from '../../../../redux/actions/calendar';
+import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Action } from '../../../../utils/constants';
+import { getDays, logUserAction } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
+import ScheduleItem from '../../ScheduleItem';
+import styles from './CalendarMonthView.module.scss';
 
 const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
   const dispatch = useDispatch();
@@ -88,24 +89,25 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
         role='button'
         tabIndex={0}
         onClick={() => handleDayClick(day)}
-        className={clsx('item-data-container', day.isSameDay && 'current-date')}
+        className={clsx(styles['item-data-container'], day.isSameDay && styles['current-date'])}
         style={{ height: calendarRect?.height / rowsCount }}
         key={`${day.date}-${day.isCurrent}-${day.month}`}
       >
         <span
           className={clsx(
-            'item-text month-day',
-            !day.isCurrent && 'next-month',
+            styles['item-text'],
+            styles['month-day'],
+            !day.isCurrent && styles['next-month'],
           )}
         >
           {day.date}
         </span>
         {day.isCurrent && (
-          <div className='appointments-container'>
+          <div className={styles['appointments-container']}>
             {daySchedules.slice(0, 3).map(renderSchedule)}
             {daySchedules.length > 3 && (
-              <div className='view-more-container'>
-                <span className='view-more-button'>
+              <div className={styles['view-more-container']}>
+                <span className={styles['view-more-button']}>
                   {textForKey('View more')} ({daySchedules.length - 3})
                 </span>
               </div>
@@ -116,7 +118,7 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
     );
   };
 
-  return <div className='month-view'>{monthDays.map(renderDayItem)}</div>;
+  return <div className={styles['month-view']}>{monthDays.map(renderDayItem)}</div>;
 };
 
 export default CalendarMonthView;
