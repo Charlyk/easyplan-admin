@@ -1,35 +1,21 @@
+import { PubNubProvider } from "pubnub-react";
+import CreateReactAppEntryPoint from "../src/App";
+import { wrapper } from "../store";
+import React from "react";
+import Axios from "axios";
+import moment from "moment-timezone";
+import sessionManager from "../src/utils/settings/sessionManager";
+import authManager from "../src/utils/settings/authManager";
+import { setCreateClinic, toggleForceLogoutUser } from "../src/redux/actions/actions";
+import PubNub from "pubnub";
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../public/index.scss';
-import React, { useEffect, useState } from "react";
-import CreateReactAppEntryPoint from "../src/App";
-import PubNub from "pubnub";
-import authManager from "../src/utils/settings/authManager";
-import { applyMiddleware, compose, createStore } from "redux";
-import thunk from "redux-thunk";
-import timerMiddleware from "redux-timer-middleware";
-import rootReducer from "../src/redux/reducers/rootReducer";
-import { Provider } from "react-redux";
-import { PubNubProvider } from "pubnub-react";
-import Axios from "axios";
-import moment from "moment-timezone";
-import sessionManager from "../src/utils/settings/sessionManager";
-import { setCreateClinic, toggleForceLogoutUser } from "../src/redux/actions/actions";
-
-// enable redux devtool
-const composeEnhancers =
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-    })
-    : compose;
-const middlewares = [thunk, timerMiddleware];
-const enhancer = composeEnhancers(applyMiddleware(...middlewares));
-const ReduxStore = createStore(rootReducer, enhancer);
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../public/index.scss'
 
 Axios.interceptors.request.use(function (config) {
   const timezone = moment.tz.guess(true);
@@ -70,23 +56,17 @@ const pubnub = new PubNub({
 });
 
 function NextApp() {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted || typeof window === 'undefined') {
+  if (typeof window === 'undefined') {
     return null
   }
 
   return (
-    <Provider store={ReduxStore}>
+    <>
       <PubNubProvider client={pubnub}>
-        <CreateReactAppEntryPoint />
+        {typeof window === 'undefined' ? null : <CreateReactAppEntryPoint/>}
       </PubNubProvider>
-    </Provider>
+    </>
   );
 }
 
-export default NextApp
+export default wrapper.withRedux(NextApp)

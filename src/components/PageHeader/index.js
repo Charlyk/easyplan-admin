@@ -43,7 +43,6 @@ const PageHeader = ({
   onLogout,
   onEditProfile,
 }) => {
-  console.log(styles)
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const user = useSelector(userSelector);

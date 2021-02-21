@@ -245,7 +245,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     localDispatch(actions.setIsLoading(false));
   };
 
-  const debounceFetching = useCallback(debounce(fetchDaySchedules, 100), [
+  const debounceFetching = useCallback(debounce(fetchDaySchedules, 150), [
     viewDate,
   ]);
 
@@ -463,6 +463,28 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     </Box>
   );
 };
+
+CalendarDayView.getInitialProps = async () => {
+  const response = await dataAPI.fetchDaySchedules(new Date());
+  console.log(response);
+  if (response.isError) {
+    toast.error(textForKey(response.message));
+    return {
+      schedules: new Map(),
+      dayHours: [],
+    }
+  } else {
+    const { schedules, dayHours } = response.data;
+    const schedulesMap = new Map();
+    for (let item of schedules) {
+      schedulesMap.set(item.doctorId, item.schedules);
+    }
+    return {
+      schedules: schedulesMap,
+      dayHours
+    }
+  }
+}
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
   return isEqual(prevProps.viewDate, nextProps.viewDate);

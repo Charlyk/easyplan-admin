@@ -116,8 +116,6 @@ const MainMenu = (props) => {
     currentPath.startsWith('/analytics'),
   );
 
-  console.log(styles)
-
   useEffect(() => {
     setIsAnalyticsExpanded(isAnalyticsEnabled());
   }, [currentPath]);

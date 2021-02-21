@@ -320,7 +320,7 @@ const Users = () => {
       />
 
       {isLoading && (
-        <div className={styles['loading-wrapper']}>
+        <div className='progress-bar-wrapper'>
           <CircularProgress classes={{ root: 'circular-progress-bar' }} />
         </div>
       )}

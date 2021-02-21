@@ -283,7 +283,9 @@ const NewPatients = () => {
       />
       <div className={styles['new-patients-root__content']}>
         {isLoading && (
-          <CircularProgress classes={{ root: styles['patients-progress-bar'] }} />
+          <div className='progress-bar-wrapper'>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+          </div>
         )}
 
         <TableContainer classes={{ root: styles['table-container'] }}>
