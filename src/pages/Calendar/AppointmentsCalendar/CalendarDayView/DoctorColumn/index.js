@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
@@ -29,10 +29,6 @@ const DoctorColumn = ({
     const rect = element?.getBoundingClientRect() || { height: 0 };
     return rect.height;
   };
-
-  useLayoutEffect(() => {
-    debounceItemRendered();
-  });
 
   const triggerColumnRendered = () => {
     onItemRendered(index);

@@ -119,7 +119,7 @@ const AuthenticationStep = ({ onLogin }) => {
         <Form.Label>{textForKey('Password')}</Form.Label>
         <InputGroup>
           <Form.Control
-            autocomplete='new-password'
+            autoComplete='new-password'
             value={password}
             type='password'
             onChange={handleFormChange}
