@@ -5,7 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import './DataMigrationModal.module.scss';
+import styles from './DataMigrationModal.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { Modal } from 'react-bootstrap';
 
@@ -194,14 +194,14 @@ const DataMigrationModal = ({ show, onClose }) => {
 
   return (
     <Modal
-      className='data-migration-modal-root'
+      className={styles['data-migration-modal-root']}
       centered
       show={show}
       size='xl'
       onHide={handleModalClose}
     >
       <Modal.Header>
-        <Typography classes={{ root: 'modal-title-label' }}>
+        <Typography classes={{ root: styles['modal-title-label'] }}>
           {textForKey('Migrate data from Yclients')}
         </Typography>
         <div

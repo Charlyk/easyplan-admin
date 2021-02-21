@@ -1,6 +1,6 @@
 .data-migration-modal-root {
-  .modal-header {
-    background-color: #DBEEFB;
+  :global(.modal-header) {
+    background-color: #F4FAFE;
     border-bottom: none;
     position: relative;
 
@@ -12,7 +12,7 @@
       color: #34344E;
     }
 
-    .close-button {
+    :global(.close-button) {
       position: absolute;
       right: 1rem;
       top: 50%;
@@ -25,7 +25,7 @@
       }
     }
   }
-  .modal-body {
+  :global(.modal-body) {
     min-height: 500px;
     width: 100%;
     display: flex;
@@ -52,7 +52,7 @@
       color: #34354C;
     }
 
-    .form-label {
+    :global(.form-label) {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: 600;
@@ -60,7 +60,7 @@
       margin-bottom: 0;
     }
 
-    .form-control {
+    :global(.form-control) {
       background-color: #FAFAFD;
     }
 
@@ -74,108 +74,23 @@
       border-radius: 4px;
     }
   }
-  .modal-footer {
+  :global(.modal-footer) {
     justify-content: center;
 
-    .MuiStepper-root {
+    :global(.MuiStepper-root) {
       padding: 0;
 
-      .MuiStepConnector-root {
+      :global(.MuiStepConnector-root) {
         width: 50px;
       }
 
-      .MuiStepIcon-root.MuiStepIcon-active {
+      :global(.MuiStepIcon-root.MuiStepIcon-active) {
         color: #3A83DC;
       }
 
-      .MuiStepIcon-root.MuiStepIcon-completed {
+      :global(.MuiStepIcon-root.MuiStepIcon-completed) {
         color: #3A83DC;
       }
     }
-  }
-}
-
-.authentication-step {
-  min-width: 20rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .form-group {
-    width: 20rem;
-  }
-
-  .explanation-label {
-    margin-top: 1rem;
-    max-width: 20rem;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    color: #34344E;
-    text-align: center;
-  }
-}
-
-.import-selection-step {
-  .company-button {
-    outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: .5rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    width: 100%;
-    padding: .5rem;
-    border: #3A83DC 1px solid;
-    border-radius: 4px;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 13px;
-    color: #34354C;
-  }
-
-  .checkbox-root {
-    padding: 0 !important;
-    color: #3A83DC !important;
-    margin-right: .5rem;
-  }
-
-  .checkbox-label {
-    font-family: Inter, sans-serif !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    font-size: 13px !important;
-    color: #34354C !important;
-    user-select: none;
-  }
-
-  .companies-menu-paper {
-    width: 20rem;
-
-    .MuiMenuItem-root {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 13px;
-      color: #34354C;
-    }
-  }
-}
-
-.import-final-step {
-  .positive-button {
-    margin-top: 2rem;
-  }
-
-  .import-message {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    text-align: center;
-    font-size: 13px;
-    color: #34354C;
   }
 }

@@ -1,5 +1,7 @@
 .checkout-modal-root {
-  .paper {
+  &__paper {
+    width: 80%;
+    min-width: 800px;
     outline: none;
     position: absolute;
     display: flex;
@@ -26,12 +28,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-
-        .loading-progress {
-          color: #3A83DC;
-          width: 45px !important;
-          height: 45px !important;
-        }
+        transform: translate(-50%, -50%);
       }
 
       .title {
@@ -67,8 +64,8 @@
         height: 375px;
 
         .details-table {
-          .row {
-            .cell {
+          &__row {
+            &__cell {
               border-bottom: #ededed 1px solid;
               padding-top: .5rem;
               padding-bottom: .5rem;
@@ -82,7 +79,7 @@
               }
 
               .autocomplete-root {
-                .input-root {
+                :global(.input-root) {
                   font-family: Inter, sans-serif;
                   font-style: normal;
                   font-weight: normal;
@@ -239,20 +236,4 @@
       height: 500px;
     }
   }
-}
-
-.checkout-modal-currency-item {
-  font-family: Inter, sans-serif !important;
-  font-style: normal !important;
-  font-weight: normal !important;
-  font-size: 12px !important;
-  color: #34344E !important;
-}
-
-.autocomplete-root-option-label {
-  font-family: Inter, sans-serif !important;
-  font-style: normal !important;
-  font-weight: normal !important;
-  font-size: 13px !important;
-  color: #34344E !important;
 }

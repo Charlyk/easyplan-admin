@@ -12,7 +12,7 @@ import {
   generateReducerActions,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 import styles from './AddPaymentModal.module.scss';
 
 const initialState = {

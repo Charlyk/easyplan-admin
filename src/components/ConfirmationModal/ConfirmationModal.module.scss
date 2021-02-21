@@ -1,13 +1,9 @@
 .confirmation-modal {
-  .modal-dialog {
-    width: 20%;
-  }
-
-  .modal-content {
+  :global(.modal-content) {
     box-shadow: 0 1px 10px 10px #34344E1A;
   }
 
-  .modal-body {
+  :global(.modal-body) {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -17,12 +13,12 @@
     color: #34354C;
   }
 
-  .modal-footer {
-    .cancel-button {
+  :global(.modal-footer) {
+    :global(.cancel-button) {
       width: 50%;
     }
 
-    .positive-button {
+    :global(.positive-button) {
       width: 50%;
     }
   }

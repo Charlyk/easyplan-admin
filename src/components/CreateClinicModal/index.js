@@ -10,7 +10,7 @@ import authAPI from '../../utils/api/authAPI';
 import dataAPI from '../../utils/api/dataAPI';
 import { uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 
 import './CreateClinicModal.module.scss';
 

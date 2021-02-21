@@ -9,7 +9,7 @@ import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import { logUserAction, uploadFileToAWS } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 
 import styles from './AddXRay.module.scss';
 

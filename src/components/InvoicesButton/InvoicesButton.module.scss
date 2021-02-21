@@ -77,7 +77,7 @@
               font-size: 12px;
               color: #34354C;
 
-              .positive-button {
+              :global(.positive-button) {
                 height: 1.5rem;
                 font-size: 12px;
               }

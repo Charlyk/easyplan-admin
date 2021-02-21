@@ -6,4 +6,10 @@
     border-radius: 4px;
     overflow: hidden;
   }
+
+  :global(.rdrCalendarWrapper) {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 11px;
+  }
 }

@@ -94,7 +94,7 @@ const InvoicesButton = () => {
                       </td>
                       <td align='right'>
                         <Button
-                          className={styles['positive-button']}
+                          className={'positive-button'}
                           onClick={() => handlePayInvoice(invoice)}
                         >
                           {textForKey('Pay')}

@@ -46,8 +46,7 @@ const DetailsRow = ({
             <React.Fragment>
               {isLoading && (
                 <CircularProgress
-                  classes={{ root: styles.searchingProgress }}
-                  size={20}
+                  classes={{ root: 'circular-progress-bar' }}
                 />
               )}
               {params.InputProps.endAdornment}
@@ -87,7 +86,7 @@ const DetailsRow = ({
   };
 
   return (
-    <TableRow classes={{ root: styles.detailsRow }}>
+    <TableRow classes={{ root: styles['details-row'] }}>
       <TableCell
         classes={{
           root: clsx(styles.cell, styles.title),
@@ -103,8 +102,8 @@ const DetailsRow = ({
         {isValueInput ? (
           <Autocomplete
             classes={{
-              root: styles.autocompleteRoot,
-              inputRoot: styles.inputRoot,
+              root: styles['autocomplete-root'],
+              inputRoot: styles['input-root'],
             }}
             noOptionsText={
               searchable
@@ -127,7 +126,7 @@ const DetailsRow = ({
             onClick={handleValueClick}
             classes={{
               root: clsx(styles.text, {
-                [styles.clickableValue]: clickableValue,
+                [styles['clickable-value']]: clickableValue,
               }),
             }}
           >

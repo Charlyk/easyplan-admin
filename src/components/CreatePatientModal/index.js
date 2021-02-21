@@ -12,7 +12,7 @@ import { Action, EmailRegex } from '../../utils/constants';
 import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 import './CreatePatientModal.module.scss';
 
 const initialState = {

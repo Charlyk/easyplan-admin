@@ -523,9 +523,9 @@ const CheckoutModal = ({
     <Modal
       open={open}
       onBackdropClick={handleCloseModal}
-      className={styles.checkoutModalRoot}
+      className={styles['checkout-modal-root']}
     >
-      <Paper classes={{ root: clsx(styles.paper, 'lg') }}>
+      <Paper classes={{ root: styles['checkout-modal-root__paper'] }}>
         <ServicesList
           canAddService={isNew}
           isDebt={isDebt}
@@ -535,24 +535,24 @@ const CheckoutModal = ({
           onServiceSelected={handleNewServiceSelected}
           onServiceDeleted={handleServiceRemoved}
         />
-        <Box className={styles.dataContainer}>
+        <Box className={styles['data-container']}>
           <IconButton
-            classes={{ root: styles.closeButton }}
+            classes={{ root: styles['close-button'] }}
             onClick={handleCloseModal}
           >
             <IconClose />
           </IconButton>
           {isFetching && (
-            <div className={styles.loadingWrapper}>
-              <CircularProgress classes={{ root: styles.loadingProgress }} />
+            <div className={styles['loading-wrapper']}>
+              <CircularProgress classes={{ root: 'circular-progress-bar' }} />
             </div>
           )}
           <Typography classes={{ root: styles.title }}>
             {textForKey('Details')}
           </Typography>
           {!isFetching && (
-            <TableContainer classes={{ root: styles.detailsTableContainer }}>
-              <Table classes={{ root: styles.detailsTable }}>
+            <TableContainer classes={{ root: styles['details-table-container'] }}>
+              <Table classes={{ root: styles['details-table'] }}>
                 <TableBody>
                   {invoiceDetails.doctor != null && (
                     <DetailsRow
@@ -594,8 +594,8 @@ const CheckoutModal = ({
                       colSpan={2}
                       classes={{
                         root: clsx(
-                          styles.cell,
-                          styles.forPaymentTitleCell,
+                          styles['details-table__row__cell'],
+                          styles['for-payment-title-cell'],
                         ),
                       }}
                     >
@@ -610,8 +610,8 @@ const CheckoutModal = ({
                       colSpan={2}
                       classes={{
                         root: clsx(
-                          styles.cell,
-                          styles.forPaymentFieldCell,
+                          styles['details-table__row__cell'],
+                          styles['for-payment-field-cell'],
                         ),
                       }}
                     >
@@ -631,8 +631,8 @@ const CheckoutModal = ({
                       align='center'
                       classes={{
                         root: clsx(
-                          styles.cell,
-                          styles.totalAmountCell,
+                          styles['details-table__row__cell'],
+                          styles['total-amount-cell'],
                         ),
                       }}
                     >
@@ -648,8 +648,8 @@ const CheckoutModal = ({
                       align='center'
                       classes={{
                         root: clsx(
-                          styles.cell,
-                          styles.totalDiscountCell,
+                          styles['details-table__row__cell'],
+                          styles['total-discount-cell'],
                         ),
                       }}
                     >
@@ -687,7 +687,7 @@ const CheckoutModal = ({
                 <Button
                   disabled={!canPay}
                   onClick={handleSubmit}
-                  classes={{ root: styles.payBtn }}
+                  classes={{ root: styles['pay-btn'] }}
                   variant='contained'
                 >
                   {textForKey('Pay')}{' '}

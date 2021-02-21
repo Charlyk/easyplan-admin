@@ -7,7 +7,8 @@ import dataAPI from '../../utils/api/dataAPI';
 import { Action } from '../../utils/constants';
 import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
+import styles from './CreateCategoryModal.module.scss';
 
 const CreateCategoryModal = props => {
   const { show, onClose, onSaved, category } = props;
@@ -89,10 +90,11 @@ const CreateCategoryModal = props => {
       onClose={handleModalClose}
       open={show}
       title={getTitle()}
-      className='create-category-modal'
+      className={styles['create-category-modal']}
       onPositiveClick={handleCategorySave}
       isPositiveLoading={isLoading}
       isPositiveDisabled={isLoading}
+      size='sm'
     >
       <Form.Group>
         <Form.Label htmlFor='basic-url'>

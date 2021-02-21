@@ -1,4 +1,4 @@
-.row {
+.serviceRow {
   overflow: hidden;
   box-shadow: 0 0 1px 1px rgba(0, 0, 0, .05);
   border-radius: 5px;
@@ -61,9 +61,9 @@
       .price-input {
         width: 80px;
 
-        .MuiOutlinedInput-root {
-          &.Mui-focused {
-            .MuiOutlinedInput-notchedOutline {
+        :global(.MuiOutlinedInput-root) {
+          &:global(.Mui-focused) {
+            :global(.MuiOutlinedInput-notchedOutline) {
               border-color: #3A83DC !important;
               border-width: 1px;
             }
@@ -86,15 +86,15 @@
 
       .currency-input {
 
-        .MuiOutlinedInput-root {
-          .MuiSelect-iconOutlined {
+        :global(.MuiOutlinedInput-root) {
+          :global(.MuiSelect-iconOutlined) {
             right: .1rem;
             top: 50%;
             transform: translateY(-50%);
             width: 1rem;
             height: 1rem;
           }
-          .MuiSelect-outlined {
+          :global(.MuiSelect-outlined) {
             font-family: Inter, sans-serif;
             font-style: normal;
             font-weight: normal;
@@ -102,8 +102,8 @@
             color: #34344E;
             padding: .3rem 1.1rem .3rem .3rem;
           }
-          &.Mui-focused {
-            .MuiOutlinedInput-notchedOutline {
+          &:global(.Mui-focused) {
+            :global(.MuiOutlinedInput-notchedOutline) {
               border-color: #3A83DC !important;
               border-width: 1px;
             }

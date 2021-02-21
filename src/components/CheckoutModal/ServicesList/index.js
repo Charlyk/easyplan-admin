@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   Box,
@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import sortBy from 'lodash/sortBy';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 import PropTypes from 'prop-types';
 
@@ -53,15 +54,19 @@ const ServicesList = ({
     onServiceSelected(service);
   };
 
+  const sortedServices = useMemo(() => {
+    return sortBy(availableServices, item => item.name.toLowerCase())
+  }, [availableServices])
+
   const getOptionLabel = option => option.name;
 
   return (
-    <Box className={styles.servicesList}>
+    <Box className={styles['services-list']}>
       <Typography classes={{ root: styles.title }}>
         {textForKey('Services')}
       </Typography>
-      <TableContainer classes={{ root: styles.servicesTableContainer }}>
-        <Table classes={{ root: styles.servicesTable }}>
+      <TableContainer classes={{ root: styles['services-table-container'] }}>
+        <Table classes={{ root: styles['services-table'] }}>
           <TableBody classes={{ root: styles.body }}>
             {services.map((service, index) => (
               <ServiceRow
@@ -80,15 +85,15 @@ const ServicesList = ({
         <Autocomplete
           key={autocompleteClearKey}
           classes={{
-            root: styles.autocompleteRoot,
-            inputRoot: styles.inputRoot,
+            root: styles['autocomplete-root'],
+            inputRoot: styles['input-root'],
           }}
           value={null}
           onChange={handleServiceSelected}
           getOptionLabel={getOptionLabel}
           filterOptions={filterOptions}
           renderInput={autocompleteInput}
-          options={availableServices}
+          options={sortedServices}
           renderOption={autocompleteOption}
         />
       )}

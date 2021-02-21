@@ -75,12 +75,12 @@ const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {
   };
 
   return (
-    <TableRow classes={{ root: styles.row }}>
+    <TableRow classes={{ root: styles.serviceRow }}>
       <TableCell
         classes={{ root: clsx(styles.cell, styles.name) }}
       >
         <Tooltip title={serviceTitle()}>
-          <Typography noWrap classes={{ root: styles.serviceName }}>
+          <Typography noWrap classes={{ root: styles['service-name'] }}>
             {serviceTitle()}
           </Typography>
         </Tooltip>
@@ -92,15 +92,15 @@ const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {
         <Box display='flex' alignItems='center' width='80px'>
           <IconButton
             disabled={!canEdit}
-            classes={{ root: styles.actionButton }}
+            classes={{ root: styles['action-button'] }}
             onClick={handleServiceCountChange('minus')}
           >
             <IconMinus fill='#3A83DC' />
           </IconButton>
-          <Typography classes={{ root: styles.counterLabel }}>{count}</Typography>
+          <Typography classes={{ root: styles['counter-label'] }}>{count}</Typography>
           <IconButton
             disabled={!canEdit}
-            classes={{ root: styles.actionButton }}
+            classes={{ root: styles['action-button'] }}
             onClick={handleServiceCountChange('plus')}
           >
             <IconPlus fill='#3A83DC' />
@@ -118,7 +118,7 @@ const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {
           value={String(price)}
           onChange={handlePriceChange}
           variant='outlined'
-          classes={{ root: styles.priceInput }}
+          classes={{ root: styles['price-input'] }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -130,7 +130,7 @@ const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {
       >
         <TextField
           disabled={!canEdit}
-          classes={{ root: styles.currencyInput }}
+          classes={{ root: styles['currency-input'] }}
           select
           value={currency || 'MDL'}
           onChange={handleCurrencyChange}
@@ -153,7 +153,7 @@ const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {
           classes={{ root: clsx(styles.cell, styles.delete) }}
         >
           <IconButton
-            classes={{ root: styles.deleteServiceButton }}
+            classes={{ root: styles['delete-service-button'] }}
             onClick={handleDeleteService}
           >
             <IconTrash />

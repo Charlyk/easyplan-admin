@@ -37,8 +37,8 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import authManager from '../../utils/settings/authManager';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
-import './ExchangeRates.module.scss';
+import EasyPlanModal from '../EasyPlanModal';
+import styles from './ExchangeRates.module.scss';
 
 const initialState = {
   isLoading: true,
@@ -190,7 +190,7 @@ const ExchangeRates = ({ open, onClose }) => {
 
   return (
     <EasyPlanModal
-      className='exchange-rates-root'
+      className={styles['exchange-rates-root']}
       open={open}
       onClose={onClose}
       isPositiveLoading={isSaving || isLoading}
@@ -234,7 +234,7 @@ const ExchangeRates = ({ open, onClose }) => {
                     </Form.Group>
                   </TableCell>
                   <TableCell align='center' width='33%'>
-                    <Form.Group className='rate-form-group'>
+                    <Form.Group className={styles['rate-form-group']}>
                       <NumberFormat
                         placeholder='0'
                         onValueChange={handleRateValueChange(rate)}
@@ -250,7 +250,7 @@ const ExchangeRates = ({ open, onClose }) => {
                   <TableCell>
                     <IconButton
                       onClick={handleRemoveRate(rate)}
-                      classes={{ root: 'remove-button' }}
+                      classes={{ root: styles['remove-button'] }}
                     >
                       <IconClose />
                     </IconButton>
@@ -261,7 +261,7 @@ const ExchangeRates = ({ open, onClose }) => {
                 <TableCell valign='middle' align='center' colSpan={4}>
                   <Button
                     disabled={getAvailableCurrencies().length === 0}
-                    classes={{ root: 'add-button' }}
+                    classes={{ root: styles['add-button'] }}
                     onClick={handleAddExchangeRate}
                   >
                     {textForKey('Add Rate')}

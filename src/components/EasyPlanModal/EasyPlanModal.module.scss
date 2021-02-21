@@ -2,20 +2,77 @@
   max-height: 100%;
   overflow: hidden;
 
-  .modal-content {
+  :global(.modal-content) {
+    :global(.modal-header) {
+      padding: 1rem;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: #34354C;
+      background-color: #F4FAFE;
+
+      .close-btn {
+        outline: none;
+        cursor: pointer;
+        width: 1rem;
+        height: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+          width: 1rem;
+          height: 1rem;
+        }
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+      }
+
+      :global(.modal-title) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        color: #34354C;
+      }
+    }
+
+    :global(.modal-body) {
+      padding: 1rem;
+    }
+
+    :global(.modal-footer) {
+      align-items: center;
+      justify-content: center;
+      border: none;
+      flex-wrap: nowrap;
+    }
+  }
+
+  :global(.modal-content) {
     max-height: 800px;
 
-    .modal-body {
-      .form-control[readonly] {
+    :global(.modal-body) {
+      :global(.form-control[readonly]) {
         background-color: #FAFAFD;
       }
 
-      .form-group {
+      :global(.form-group) {
         margin-bottom: 0;
         margin-top: .5rem;
       }
 
-      .form-label {
+      :global(.form-label) {
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: 600;
@@ -23,25 +80,25 @@
         margin-bottom: 0;
       }
 
-      .form-control {
+      :global(.form-control) {
         width: 100%;
         background-color: #FAFAFD;
       }
 
-      .input-group {
+      :global(.input-group) {
         textarea {
           height: 5rem !important;
         }
       }
 
-      .rbt-aux {
+      :global(.rbt-aux) {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         right: .5rem;
       }
 
-      .custom-select {
+      :global(.custom-select) {
         height: 2.1rem;
         font-size: .8rem;
       }
@@ -49,6 +106,16 @@
 
     .easyplan-modal-body {
       overflow-y: scroll;
+    }
+  }
+
+  :global(.rdrCalendarWrapper) {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 11px;
+
+    :global(.rdrMonths) {
+      justify-content: center;
     }
   }
 }

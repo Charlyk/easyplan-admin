@@ -28,7 +28,7 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 import styles from './AddAppointment.module.scss';
 
 /**

@@ -22,7 +22,7 @@ import {
 } from '../../redux/selectors/clinicSelector';
 import { getServiceName } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 import './FinalizeTreatmentModal.module.scss';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {

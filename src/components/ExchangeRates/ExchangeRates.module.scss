@@ -1,6 +1,6 @@
 .exchange-rates-root {
 
-  .form-control[readonly] {
+  :global(.form-control[readonly]) {
     background-color: #ededed !important;
     pointer-events: none;
   }
@@ -15,7 +15,7 @@
     }
   }
 
-  .MuiTableCell-root {
+  :global(.MuiTableCell-root) {
     padding: .3rem;
     border-bottom: none;
     font-family: Inter, sans-serif;

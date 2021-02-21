@@ -64,8 +64,9 @@
       padding-top: 0;
       padding-bottom: 0;
 
-      .searching-progress {
-        color: #3A83DC;
+      :global(.circular-progress-bar) {
+        width: 15px !important;
+        height: 15px !important;
       }
     }
 

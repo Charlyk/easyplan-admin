@@ -7,7 +7,7 @@ import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { getAppLanguage } from '../../utils/localization';
-import './EasyDatePicker.module.scss';
+import styles from './EasyDatePicker.module.scss';
 
 const EasyDatePicker = ({
   open,
@@ -21,7 +21,7 @@ const EasyDatePicker = ({
 }) => {
   return (
     <Popper
-      className='easy-date-picker'
+      className={styles['easy-date-picker']}
       anchorEl={pickerAnchor}
       open={open}
       disablePortal={disablePortal}
@@ -30,7 +30,7 @@ const EasyDatePicker = ({
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='calendar-paper'>
+          <Paper className={styles['calendar-paper']}>
             <ClickAwayListener onClickAway={onClose}>
               <Calendar
                 minDate={minDate}

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { remove, cloneDeep } from 'lodash';
+import { remove, cloneDeep, isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import './UserDetailsModal.module.scss';
+import styles from './UserDetailsModal.module.scss';
 import IconClose from '../../assets/icons/iconClose';
 import IconSuccess from '../../assets/icons/iconSuccess';
 import { triggerUsersUpdate } from '../../redux/actions/actions';
@@ -160,7 +160,6 @@ const UserDetailsModal = props => {
   };
 
   const updateUser = async requestBody => {
-    console.log(requestBody);
     const response = await dataAPI.updateUser(user.id, requestBody);
     if (response.isError) {
       toast.error(textForKey(response.message));
@@ -186,6 +185,15 @@ const UserDetailsModal = props => {
   };
 
   const handleHolidayDelete = async holiday => {
+    if (history.id == null) {
+      const newHolidays = cloneDeep(userData.holidays);
+      remove(newHolidays, item => isEqual(item, holiday));
+      setUserData({
+        ...userData,
+        holidays: newHolidays,
+      });
+      return;
+    }
     const response = await dataAPI.deleteUserHoliday(user.id, holiday.id);
     if (response.isError) {
       toast.error(textForKey(response.message));
@@ -199,12 +207,23 @@ const UserDetailsModal = props => {
     }
   };
 
+  const areSameHolidays = (first, second) => {
+    return (
+      (first.id != null && second.id != null && first.id === second.id) ||
+      (isEqual(first.startDate, second.startDate) &&
+        isEqual(first.endDate, second.endDate))
+    )
+  }
+
   const handleSaveHoliday = holiday => {
     let newHolidays = cloneDeep(userData.holidays);
-    if (newHolidays.some(item => item.id === holiday.id)) {
+    const exists = newHolidays.some(item => {
+      return areSameHolidays(item, holiday)
+    })
+    if (exists) {
       // holiday already in the list so we need just to update it
       newHolidays = newHolidays.map(item => {
-        if (item.id !== holiday.id) return item;
+        if (!areSameHolidays(item, holiday)) return item;
         return {
           ...item,
           ...holiday,
@@ -249,8 +268,8 @@ const UserDetailsModal = props => {
         onCreate={handleSaveHoliday}
         onClose={handleCloseHolidayModal}
       />
-      <div className='user-details-root'>
-        <div className='user-details-root__content'>
+      <div className={styles['user-details-root']}>
+        <div className={styles['user-details-root__content']}>
           <DoctorForm
             onCreateHoliday={handleCreateHoliday}
             onDeleteHoliday={handleHolidayDelete}
@@ -259,7 +278,7 @@ const UserDetailsModal = props => {
             showSteps={user == null}
           />
         </div>
-        <div className='user-details-root__footer'>
+        <div className={styles['user-details-root__footer']}>
           <Button className='cancel-button' onClick={handleModalClose}>
             {textForKey('Close')}
             <IconClose />

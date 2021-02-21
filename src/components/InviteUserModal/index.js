@@ -5,9 +5,9 @@ import { Form, InputGroup } from 'react-bootstrap';
 
 import { EmailRegex, Role } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 
-import './InviteUserModal.module.scss';
+import styles from './InviteUserModal.module.scss';
 
 const InviteUserModal = ({
   open,
@@ -49,12 +49,13 @@ const InviteUserModal = ({
   return (
     <EasyPlanModal
       open={open}
-      className='invite-user-modal'
+      className={styles['invite-user-modal']}
       onClose={onClose}
       onPositiveClick={handleInviteUser}
       title={textForKey('Invite user')}
       positiveBtnText={textForKey('Invite')}
       isPositiveLoading={isLoading}
+      size='sm'
       isPositiveDisabled={!email.match(EmailRegex)}
     >
       <Form.Group controlId='email'>
@@ -81,7 +82,7 @@ const InviteUserModal = ({
           <option value={Role.manager}>{textForKey(Role.manager)}</option>
         </Form.Control>
       </Form.Group>
-      {error && <span className='error-message'>{textForKey(error)}</span>}
+      {error && <span className={styles['error-message']}>{textForKey(error)}</span>}
     </EasyPlanModal>
   );
 };

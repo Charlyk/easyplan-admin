@@ -7,7 +7,7 @@ import { DateRangePicker } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { getAppLanguage } from '../../utils/localization';
-import './EasyDateRangePicker.module.scss';
+import styles from './EasyDateRangePicker.module.scss';
 import { localizedInputRanges, localizedStaticRanges } from './ranges';
 
 const EasyDateRangePicker = ({
@@ -19,7 +19,7 @@ const EasyDateRangePicker = ({
 }) => {
   return (
     <Popper
-      className='easy-date-range-picker'
+      className={styles['easy-date-range-picker']}
       anchorEl={pickerAnchor}
       open={open}
       disablePortal
@@ -28,7 +28,7 @@ const EasyDateRangePicker = ({
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className='calendar-paper'>
+          <Paper className={styles['calendar-paper']}>
             <ClickAwayListener onClickAway={onClose}>
               <DateRangePicker
                 staticRanges={localizedStaticRanges}

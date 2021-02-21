@@ -26,7 +26,7 @@ import {
   roundToTwo,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 import './RegisterPaymentModal.module.scss';
 
 const computeServicePrice = (invoice, exchangeRates) => {

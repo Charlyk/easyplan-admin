@@ -2,9 +2,9 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import './ConfirmationModal.module.scss';
+import styles from './ConfirmationModal.module.scss';
 import { textForKey } from '../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 
 const ConfirmationModal = props => {
   const { show, title, message, onConfirm, onClose, isLoading } = props;
@@ -15,9 +15,10 @@ const ConfirmationModal = props => {
       title={title}
       hidePositiveBtn={onConfirm == null}
       isPositiveLoading={isLoading}
-      className='confirmation-modal'
+      className={styles['confirmation-modal']}
       positiveBtnText={textForKey('Confirm')}
       onPositiveClick={onConfirm}
+      size='sm'
     >
       {message}
     </EasyPlanModal>

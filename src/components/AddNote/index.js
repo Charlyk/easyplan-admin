@@ -11,7 +11,7 @@ import { Action } from '../../utils/constants';
 import { logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import styles from './AddNote.module.scss';
-import EasyPlanModal from '../EasyPlanModal/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   const dispatch = useDispatch();

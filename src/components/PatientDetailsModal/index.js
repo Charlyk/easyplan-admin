@@ -17,17 +17,18 @@ import { setAddPaymentModal } from '../../redux/actions/addPaymentModalActions';
 import dataAPI from '../../utils/api/dataAPI';
 import { generateReducerActions } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import AppointmentNotes from './comps/appointmentNotes';
-import PatientAppointments from './comps/appointments/PatientAppointments';
-import PatientHistory from './comps/history/PatientHistory';
-import PatientMessages from './comps/messages/PatientMessages';
-import PatientNotes from './comps/notes/PatientNotes';
-import PatientDebtsList from './comps/PatientDebtsList';
+import AppointmentNotes from './AppointmentNotes';
+import PatientAppointments from './PatientAppointments';
+import PatientHistory from './PatientHistory';
+import PatientMessages from './PatientMessages';
+import PatientNotes from './PatientNotes';
+import PatientDebtsList from './PatientDebtsList';
 import PatientPaymentsList from './comps/PatientPaymentsList';
-import PatientPersonalData from './comps/PatientPersonalData';
-import PatientPurchasesList from './comps/PatientPurchasesList';
-import OrthodonticPlan from './comps/treatment-plans/OrthodonticPlan';
-import PatientXRay from './comps/x-ray/PatientXRay';
+import PatientPersonalData from './PatientPersonalData';
+import PatientPurchasesList from './PatientPurchasesList';
+import OrthodonticPlan from './OrthodonticPlan';
+import PatientXRay from './PatientXRay';
+import styles from './PatientDetailsModal.module.scss'
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -158,7 +159,7 @@ const PatientDetailsModal = ({
   };
 
   const menuItemClasses = (itemId) => {
-    return currentMenu === itemId ? 'selected' : '';
+    return currentMenu === itemId ? styles.selected : '';
   };
 
   const handleAddXRayImages = () => {
@@ -216,30 +217,30 @@ const PatientDetailsModal = ({
       show={show}
       size='xl'
       onHide={onClose}
-      className='patient-details-modal'
+      className={styles['patient-details-modal']}
     >
       <Modal.Body>
         {isFetching && <CircularProgress />}
         <div
           role='button'
           tabIndex={0}
-          className='close-button'
+          className={styles['close-button']}
           onClick={onClose}
         >
           <IconClose />
         </div>
         {patient != null && (
           <Box display='flex' position='relative' height='100%'>
-            <div className='patient-menu-container'>
-              <div className='name-and-avatar'>
-                <div className='avatar-wrapper'>
+            <div className={styles['patient-menu-container']}>
+              <div className={styles['name-and-avatar']}>
+                <div className={styles['avatar-wrapper']}>
                   <IconAvatar />
                 </div>
-                <Typography classes={{ root: 'name-label' }}>
+                <Typography classes={{ root: styles['name-label'] }}>
                   {patient?.fullName}
                 </Typography>
               </div>
-              <Box mt='1rem' mb='1rem' className='menu-wrapper'>
+              <Box mt='1rem' mb='1rem' className={styles['menu-wrapper']}>
                 <ListGroup>
                   <ListGroup.Item
                     action
@@ -335,7 +336,7 @@ const PatientDetailsModal = ({
                 </ListGroup>
               </Box>
             </div>
-            <div className='patient-details-container'>{menuContent()}</div>
+            <div className={styles['patient-details-container']}>{menuContent()}</div>
           </Box>
         )}
       </Modal.Body>
