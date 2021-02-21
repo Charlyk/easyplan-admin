@@ -293,7 +293,7 @@
       color: #3A83DC;
     }
 
-    .delete-button {
+    :global(.delete-button) {
       margin-left: .5rem;
       margin-right: .5rem;
     }
