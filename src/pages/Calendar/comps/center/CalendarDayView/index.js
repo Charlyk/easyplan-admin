@@ -76,6 +76,7 @@ const reducerTypes = {
   setPauseModal: 'setPauseModal',
   setHoursContainers: 'setHoursContainers',
   setSchedulesData: 'setSchedulesData',
+  addSchedules: 'addSchedules',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -116,6 +117,16 @@ const reducer = (state, action) => {
         schedules,
         hours: dayHours,
         hoursContainers: updateHours,
+      };
+    }
+    case reducerTypes.addSchedules: {
+      const { doctorId, schedules: newSchedules } = action.payload;
+      const schedulesClone =
+        state.schedule != null ? cloneDeep(state.schedule) : new Map();
+      schedulesClone.set(doctorId, newSchedules);
+      return {
+        ...state,
+        schedules: schedulesClone,
       };
     }
     default:
