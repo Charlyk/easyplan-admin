@@ -1,13 +1,11 @@
+import React, { useEffect } from "react";
 import { PubNubProvider } from "pubnub-react";
-import CreateReactAppEntryPoint from "../src/App";
 import { wrapper } from "../store";
-import React from "react";
-import Axios from "axios";
-import moment from "moment-timezone";
-import sessionManager from "../src/utils/settings/sessionManager";
 import authManager from "../src/utils/settings/authManager";
-import { setCreateClinic, toggleForceLogoutUser } from "../src/redux/actions/actions";
+import AppComponent from '../src/App';
 import PubNub from "pubnub";
+import { login, me } from "../api/user";
+import { CookiesProvider, useCookies } from "react-cookie";
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -16,38 +14,11 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../public/index.scss'
-
-Axios.interceptors.request.use(function (config) {
-  const timezone = moment.tz.guess(true);
-  config.headers['X-EasyPlan-Clinic-Id'] = sessionManager.getSelectedClinicId();
-  config.headers['x-EasyPlan-TimeZone'] = timezone;
-  if (authManager.isLoggedIn()) {
-    config.headers.Authorization = authManager.getUserToken();
-  }
-  return config;
-});
-
-Axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const url = error?.response?.config?.url || '';
-    const status = error?.response?.status;
-    const method = error?.response?.config?.method;
-    const unauthorizedRequest =
-      status === 401 &&
-      !url.includes('/confirmation') &&
-      (method === 'get' ||
-        method === 'post' ||
-        method === 'put' ||
-        method === 'delete');
-
-    if (unauthorizedRequest) {
-      ReduxStore.dispatch(toggleForceLogoutUser(true));
-      ReduxStore.dispatch(setCreateClinic({ open: false, canClose: true }));
-    }
-    return error;
-  },
-);
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../src/redux/actions/actions";
+import moment from "moment-timezone";
+import { setClinic } from "../src/redux/actions/clinicActions";
+import { fetchClinicDetails } from "../api/clinic";
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
@@ -55,17 +26,46 @@ const pubnub = new PubNub({
   uuid: authManager.getUserId() || PubNub.generateUUID(),
 });
 
-function NextApp() {
-  if (typeof window === 'undefined') {
-    return null
+function NextApp({ Component, pageProps }) {
+  const [cookie, setCookie] = useCookies(['auth_token', 'clinic_id']);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    saveAuthData();
+  }, []);
+
+  const saveAuthData = async () => {
+    const response = await login('eduard.albu@gmail.com', 'CDTjm055!');
+    if (response.isError) {
+      console.error(response);
+      return;
+    }
+
+    const { token, user } = response.data;
+    const selectedClinic = user.clinics.find(item => item.isSelected) || user.clinics[0];
+    const headers = {
+      Authorization: token,
+      'X-EasyPlan-Clinic-Id': selectedClinic.clinicId,
+    }
+    const clinicResponse = await fetchClinicDetails(headers)
+    if (!clinicResponse.isError) {
+      const clinicData = clinicResponse.data;
+      moment.tz.setDefault(clinicData.timeZone);
+      dispatch(setClinic(clinicData));
+    }
+    setCookie('auth_token', token);
+    setCookie('clinic_id', selectedClinic.clinicId);
+    dispatch(setCurrentUser(user));
   }
 
   return (
-    <>
-      <PubNubProvider client={pubnub}>
-        {typeof window === 'undefined' ? null : <CreateReactAppEntryPoint/>}
-      </PubNubProvider>
-    </>
+    <PubNubProvider client={pubnub}>
+      <CookiesProvider>
+        <AppComponent>
+          <Component {...pageProps} />
+        </AppComponent>
+      </CookiesProvider>
+    </PubNubProvider>
   );
 }
 

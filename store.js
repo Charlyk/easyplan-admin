@@ -13,7 +13,7 @@ const composeEnhancers =
     : compose;
 const middlewares = [thunk, timerMiddleware];
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
-const ReduxStore = createStore(rootReducer, enhancer);
+export const ReduxStore = createStore(rootReducer, enhancer);
 
 // create a makeStore function
 const makeStore = () => ReduxStore;

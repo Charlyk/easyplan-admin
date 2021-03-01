@@ -4,12 +4,12 @@ import moment from 'moment-timezone';
 import { env } from '../constants';
 import authManager from '../settings/authManager';
 
-export const baseURL =
-  env === 'dev' || env === 'local'
-    ? 'https://api.easyplan.pro/api'
-    : env === 'local'
-    ? 'http://localhost:8080/api'
-    : 'https://api.easyplan.pro/api';
+export const baseURL = 'https://api.easyplan.pro/api'
+  // env === 'dev'
+  //   ? 'https://api.easyplan.pro/api'
+  //   : env === 'local'
+  //   ? 'http://localhost:8080/api'
+  //   : 'http://localhost:8080/api';
 export const imageLambdaUrl =
   'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
 
@@ -1034,86 +1034,11 @@ export default {
     }
   },
 
-  fetchDayDoctorSchedules: async (date, doctorId) => {
-    try {
-      const stringDate = moment(date).format('YYYY-MM-DD');
-      const response = await Axios.get(
-        `${baseURL}/schedules/v2/day/doctor?&date=${stringDate}&doctorId=${doctorId}`,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
   fetchDaySchedulesHours: async (date) => {
     try {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
         `${baseURL}/schedules/day-hours?&date=${stringDate}`,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Fetch a list of all patients and schedules for current user
-   * @return {Promise<{isError: boolean, message: *}|any>}
-   */
-  fetchSchedulesAndPatients: async () => {
-    try {
-      const stringDate = moment().format('YYYY-MM-DD');
-      const response = await Axios.get(
-        `${baseURL}/schedules/doctor?date=${stringDate}`,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Fetch a list of working hours for current clinic at a specified week day
-   * @param {number} weekDay
-   * @param {'week'|'day'} period
-   * @return {Promise<{isError: boolean, message: string|null, data: [string]}>}
-   */
-  fetchClinicWorkHours: async (weekDay, period) => {
-    try {
-      const response = await Axios.get(
-        `${baseURL}/schedules/clinic-workhours?weekDay=${weekDay}&period=${period}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {

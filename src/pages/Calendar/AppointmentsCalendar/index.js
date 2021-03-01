@@ -15,7 +15,7 @@ import ArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Button, Spinner } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
@@ -41,6 +41,7 @@ const CalendarView = {
 };
 
 const AppointmentsCalendar = ({
+  children,
   doctor,
   viewDate,
   onPayDebt,
@@ -249,27 +250,28 @@ const AppointmentsCalendar = ({
             <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
           </div>
         )}
-        {currentTab === CalendarView.day && (
-          <CalendarDayView
-            onScheduleSelect={onScheduleSelect}
-            viewDate={viewDate}
-            onCreateSchedule={onAddAppointment}
-          />
-        )}
-        <CalendarWeekView
-          selectedSchedule={selectedSchedule}
-          onScheduleSelect={onScheduleSelect}
-          viewDate={viewDate}
-          onDateClick={handleMonthDateClick}
-          doctorId={doctor?.id}
-          opened={currentTab === CalendarView.week}
-        />
-        <CalendarMonthView
-          onDateClick={handleMonthDateClick}
-          viewDate={viewDate}
-          doctorId={doctor?.id}
-          opened={currentTab === CalendarView.month}
-        />
+        {children}
+        {/*{currentTab === CalendarView.day && (*/}
+        {/*  <CalendarDayView*/}
+        {/*    onScheduleSelect={onScheduleSelect}*/}
+        {/*    viewDate={viewDate}*/}
+        {/*    onCreateSchedule={onAddAppointment}*/}
+        {/*  />*/}
+        {/*)}*/}
+        {/*<CalendarWeekView*/}
+        {/*  selectedSchedule={selectedSchedule}*/}
+        {/*  onScheduleSelect={onScheduleSelect}*/}
+        {/*  viewDate={viewDate}*/}
+        {/*  onDateClick={handleMonthDateClick}*/}
+        {/*  doctorId={doctor?.id}*/}
+        {/*  opened={currentTab === CalendarView.week}*/}
+        {/*/>*/}
+        {/*<CalendarMonthView*/}
+        {/*  onDateClick={handleMonthDateClick}*/}
+        {/*  viewDate={viewDate}*/}
+        {/*  doctorId={doctor?.id}*/}
+        {/*  opened={currentTab === CalendarView.month}*/}
+        {/*/>*/}
       </div>
     </div>
   );

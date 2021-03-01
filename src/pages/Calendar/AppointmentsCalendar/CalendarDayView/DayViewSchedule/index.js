@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography } from '@material-ui/core';
 import clsx from 'clsx';
@@ -36,8 +36,7 @@ const DayViewSchedule = ({
 
   useEffect(() => {
     const height = getScheduleHeight();
-    const top = getTopPosition();
-    setItemRect({ height, top });
+    setItemRect({ height, top: topPosition });
   }, [schedule, firstHour, viewDate, isHighlighted]);
 
   const getScheduleHeight = () => {
@@ -53,7 +52,10 @@ const DayViewSchedule = ({
     return height;
   };
 
-  const getTopPosition = () => {
+  const topPosition = useMemo(() => {
+    if (firstHour == null) {
+      return 0
+    }
     const startTime = moment(schedule.startTime);
     const [hours, minutes] = firstHour.split(':');
     const clinicStartTime = moment(viewDate).set({
@@ -66,7 +68,7 @@ const DayViewSchedule = ({
       .asMinutes();
     const newTop = scheduleDayDuration * 2 + minScheduleHeight;
     return Math.abs(newTop);
-  };
+  }, [firstHour, schedule]);
 
   const handleScheduleClick = () => {
     onScheduleSelect(schedule);

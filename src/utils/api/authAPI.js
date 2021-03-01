@@ -4,12 +4,12 @@ import { env } from '../constants';
 import { textForKey } from '../localization';
 import authManager from '../settings/authManager';
 
-const baseURL =
-  env === 'dev' || env === 'local'
-    ? 'https://api.easyplan.pro/api/authentication'
-    : env === 'local'
-    ? 'http://localhost:8080/api/authentication'
-    : 'https://api.easyplan.pro/api/authentication';
+export const baseURL = 'https://api.easyplan.pro/api/authentication'
+  // env === 'dev'
+  //   ? 'https://api.easyplan.pro/api/authentication'
+  //   : env === 'local'
+  //   ? 'http://localhost:8080/api/authentication'
+  //   : 'http://localhost:8080/api/authentication';
 
 export default {
   /**

@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import clsx from 'clsx';
-import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 
 import DayViewSchedule from '../DayViewSchedule';
@@ -10,6 +9,7 @@ import styles from './DoctorColumn.module.scss';
 
 const DoctorColumn = ({
   doctor,
+  doctorsCount,
   schedules,
   parentTop,
   viewDate,
@@ -18,26 +18,10 @@ const DoctorColumn = ({
   hoursContainers,
   onScheduleClick,
   onAddSchedule,
-  onItemRendered,
 }) => {
   const doctorRect = document
     .getElementById(String(doctor.id))
     ?.getBoundingClientRect() || { width: 0 };
-
-  const getHoursHeight = () => {
-    const element = document.getElementById('day-hours-container');
-    const rect = element?.getBoundingClientRect() || { height: 0 };
-    return rect.height;
-  };
-
-  const triggerColumnRendered = () => {
-    onItemRendered(index);
-  };
-
-  const debounceItemRendered = useCallback(
-    debounce(triggerColumnRendered, 200),
-    [],
-  );
 
   const renderHoursContainers = hoursContainers.map((hour, index) => {
     if (index === 0) {
@@ -76,21 +60,17 @@ const DoctorColumn = ({
     }
   });
 
-  const memoizedHoursContainer = useMemo(() => renderHoursContainers, [
-    hoursContainers,
-  ]);
-
   return (
     <div
       id={`${doctor.id}&column`}
       key={`${doctor.id}-column`}
-      style={{ width: doctorRect.width, height: getHoursHeight() }}
+      style={{ width: `calc(100% / ${doctorsCount})` }}
       className={clsx(
         styles['day-schedules-column'],
         doctor.isInVacation && styles.disabled,
       )}
     >
-      {memoizedHoursContainer}
+      {renderHoursContainers}
       {schedules?.map((schedule, index) => (
         <DayViewSchedule
           key={schedule.id}
@@ -107,7 +87,7 @@ const DoctorColumn = ({
   );
 };
 
-export default React.memo(DoctorColumn);
+export default DoctorColumn;
 
 DoctorColumn.propTypes = {
   doctor: PropTypes.shape({

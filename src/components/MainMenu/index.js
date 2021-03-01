@@ -6,14 +6,13 @@ import {
   ClickAwayListener,
   Typography,
 } from '@material-ui/core';
-import Image from 'next/image'
 import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import styles from './MainMenu.module.scss';
 import { Nav } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 import IconArrowDown from '../../assets/icons/iconArrowDown';
 import MenuAnalytics from '../../assets/icons/menuAnalytics';
@@ -24,10 +23,8 @@ import MenuPatients from '../../assets/icons/menuPatients';
 import MenuSettings from '../../assets/icons/menuSettings';
 import MenuUsers from '../../assets/icons/menuUsers';
 import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
-import { userSelector } from '../../redux/selectors/rootSelector';
 import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import sessionManager from '../../utils/settings/sessionManager';
 import ClinicSelector from '../ClinicSelector';
 
 const menuItems = [
@@ -35,7 +32,7 @@ const menuItems = [
     id: 'analytics',
     type: 'group',
     text: textForKey('Analytics'),
-    icon: <MenuAnalytics />,
+    icon: <MenuAnalytics/>,
     roles: ['ADMIN', 'MANAGER'],
     children: [
       {
@@ -61,7 +58,7 @@ const menuItems = [
     type: 'link',
     roles: ['ADMIN', 'MANAGER'],
     text: textForKey('Services'),
-    icon: <MenuCategories />,
+    icon: <MenuCategories/>,
     href: '/categories',
   },
   {
@@ -69,7 +66,7 @@ const menuItems = [
     type: 'link',
     roles: ['ADMIN', 'MANAGER'],
     text: textForKey('Users'),
-    icon: <MenuUsers />,
+    icon: <MenuUsers/>,
     href: '/users',
   },
   {
@@ -77,7 +74,7 @@ const menuItems = [
     type: 'link',
     roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('Calendar'),
-    icon: <MenuCalendar />,
+    icon: <MenuCalendar/>,
     href: '/calendar',
   },
   {
@@ -85,7 +82,7 @@ const menuItems = [
     type: 'link',
     roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('Patients'),
-    icon: <MenuPatients />,
+    icon: <MenuPatients/>,
     href: '/patients',
   },
   {
@@ -93,7 +90,7 @@ const menuItems = [
     type: 'link',
     roles: ['ADMIN', 'MANAGER'],
     text: textForKey('Messages'),
-    icon: <IconMessages />,
+    icon: <IconMessages/>,
     href: '/messages',
   },
   {
@@ -101,16 +98,14 @@ const menuItems = [
     type: 'link',
     roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('Settings'),
-    icon: <MenuSettings />,
+    icon: <MenuSettings/>,
     href: '/settings',
   },
 ];
 
-const MainMenu = (props) => {
+const MainMenu = ({ currentPath, currentUser, selectedClinicId, onCreateClinic, onChangeCompany }) => {
   const buttonRef = useRef(null);
   const clinic = useSelector(clinicDetailsSelector);
-  const currentUser = useSelector(userSelector);
-  const { currentPath, onCreateClinic, onChangeCompany } = props;
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
@@ -151,7 +146,7 @@ const MainMenu = (props) => {
   };
 
   const userClinic = currentUser.clinics.find(
-    (item) => item.clinicId === sessionManager.getSelectedClinicId(),
+    (item) => item.clinicId === selectedClinicId,
   );
 
   const analyticsClass = clsx(
@@ -179,7 +174,7 @@ const MainMenu = (props) => {
             {userClinic?.clinicName || textForKey('Create clinic')}
           </span>
         </ClickAwayListener>
-        <IconArrowDown />
+        <IconArrowDown/>
         <ClinicSelector
           anchorEl={buttonRef}
           onClose={handleCompanyClose}
@@ -208,12 +203,11 @@ const MainMenu = (props) => {
                   {item.children.map((child) => {
                     return (
                       <Nav.Item key={child.href}>
-                        <Link
-                          className={clsx(styles['link-item'], isActive(child.href) && styles.active)}
-                          to={updateLink(child.href)}
-                        >
-                          <MenuEllipse />
-                          {child.text}
+                        <Link href={updateLink(child.href)}>
+                          <div className={clsx(styles['link-item'], isActive(child.href) && styles.active)}>
+                            <MenuEllipse/>
+                            {child.text}
+                          </div>
                         </Link>
                       </Nav.Item>
                     );
@@ -224,12 +218,11 @@ const MainMenu = (props) => {
           } else {
             return (
               <Nav.Item key={item.id}>
-                <Link
-                  className={clsx(styles['navigation__item'], styles['link-item'], isActive(item.href) && styles.active)}
-                  to={updateLink(item.href)}
-                >
-                  {item.icon}
-                  {item.text}
+                <Link href={updateLink(item.href)}>
+                  <div className={clsx(styles['navigation__item'], styles['link-item'], isActive(item.href) && styles.active)}>
+                    {item.icon}
+                    {item.text}
+                  </div>
                 </Link>
               </Nav.Item>
             );
@@ -245,7 +238,7 @@ const MainMenu = (props) => {
           display='flex'
           alignItems='center'
         >
-          <CircularProgress classes={{ root: styles['import-progress-bar'] }} />
+          <CircularProgress classes={{ root: styles['import-progress-bar'] }}/>
           <Typography classes={{ root: styles['import-data-label'] }}>
             {textForKey('Importing data in progress')}
           </Typography>

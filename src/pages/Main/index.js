@@ -5,10 +5,6 @@ import styles from './Main.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  useLocation,
-  useHistory,
-  Switch,
-  Route,
   Redirect,
 } from 'react-router-dom';
 
@@ -59,21 +55,18 @@ const reducer = (state, action) => {
   }
 };
 
-const Main = () => {
+const Main = ({ children, currentUser, selectedClinicId }) => {
   const pubnub = usePubNub();
-  const location = useLocation();
-  const history = useHistory();
   const dispatch = useDispatch();
-  const currentUser = useSelector(userSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
   const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
   const [{ currentPath }, localDispatch] = useReducer(reducer, {
-    currentPath: location.pathname,
+    currentPath: '/',
     openAppointmentModal: false,
   });
   const selectedClinic = currentUser?.clinics?.find(
-    item => item.clinicId === sessionManager.getSelectedClinicId(),
+    item => item.clinicId === selectedClinicId,
   );
 
   useEffect(() => {
@@ -85,14 +78,6 @@ const Main = () => {
   const getPageTitle = () => {
     return paths[currentPath];
   };
-
-  useEffect(() => {
-    if (authManager.isLoggedIn()) {
-      localDispatch(actions.setCurrentPath(location.pathname));
-    } else {
-      history.push(updateLink('/login'));
-    }
-  }, [location]);
 
   const handleStartLogout = () => {
     dispatch(triggerUserLogout(true));
@@ -120,17 +105,17 @@ const Main = () => {
     dispatch(toggleImportModal());
   };
 
-  if (!authManager.isLoggedIn()) {
-    return <Redirect to={updateLink('/login')} />;
-  }
+  // if (!authManager.isLoggedIn()) {
+  //   return <Redirect to={updateLink('/login')} />;
+  // }
 
-  if (currentPath === '/') {
-    if (['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)) {
-      return <Redirect to={updateLink('/analytics/general')} />;
-    } else if (selectedClinic?.roleInClinic === 'RECEPTION') {
-      return <Redirect to={updateLink('/calendar')} />;
-    }
-  }
+  // if (currentPath === '/') {
+  //   if (['ADMIN', 'MANAGER'].includes(selectedClinic?.roleInClinic)) {
+  //     return <Redirect to={updateLink('/analytics/general')} />;
+  //   } else if (selectedClinic?.roleInClinic === 'RECEPTION') {
+  //     return <Redirect to={updateLink('/calendar')} />;
+  //   }
+  // }
 
   return (
     <div className={styles['main-page']} id='main-page'>
@@ -161,6 +146,7 @@ const Main = () => {
       )}
       {currentUser != null && (
         <MainMenu
+          selectedClinicId={selectedClinicId}
           currentUser={currentUser}
           currentPath={currentPath}
           onCreateClinic={handleCreateClinic}
@@ -175,15 +161,16 @@ const Main = () => {
             onLogout={handleStartLogout}
           />
           <div className={styles.data}>
-            <Switch>
-              <Route path='/analytics' component={Statistics} />
-              <Route path='/categories' component={Services} />
-              <Route path='/users' component={Users} />
-              <Route path='/calendar' component={Calendar} />
-              <Route path='/patients' component={NewPatients} />
-              <Route path='/messages' component={SMSMessages} />
-              <Route path='/settings' component={Settings} />
-            </Switch>
+            {children}
+            {/*<Switch>*/}
+            {/*  <Route path='/analytics' component={Statistics} />*/}
+            {/*  <Route path='/categories' component={Services} />*/}
+            {/*  <Route path='/users' component={Users} />*/}
+            {/*  <Route path='/calendar' component={Calendar} />*/}
+            {/*  <Route path='/patients' component={NewPatients} />*/}
+            {/*  <Route path='/messages' component={SMSMessages} />*/}
+            {/*  <Route path='/settings' component={Settings} />*/}
+            {/*</Switch>*/}
           </div>
         </div>
       )}

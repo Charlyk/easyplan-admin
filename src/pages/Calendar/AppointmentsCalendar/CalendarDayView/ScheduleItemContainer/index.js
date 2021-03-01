@@ -75,7 +75,7 @@ const ScheduleItemContainer = ({
   );
 };
 
-export default React.memo(ScheduleItemContainer);
+export default ScheduleItemContainer;
 
 ScheduleItemContainer.propTypes = {
   startHour: PropTypes.string,

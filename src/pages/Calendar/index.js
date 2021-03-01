@@ -27,6 +27,8 @@ import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './AppointmentsCalendar';
 import CalendarDoctors from './AppointmentsCalendar/CalendarDoctors';
+import moment from "moment-timezone";
+import { useRouter } from "next/router";
 
 const reducerTypes = {
   setFilters: 'setFilters',
@@ -123,10 +125,10 @@ const initialState = {
   parsedValue: 0,
 };
 
-const Calendar = () => {
+const Calendar = ({ children, viewDate, currentUser }) => {
   const pubnub = usePubNub();
   const dispatch = useDispatch();
-  const currentUser = useSelector(userSelector);
+  const router = useRouter();
   const services = useSelector(clinicServicesSelector);
   const doctors = useSelector(clinicActiveDoctorsSelector);
   const [
@@ -135,7 +137,6 @@ const Calendar = () => {
       selectedService,
       selectedDoctor,
       isFetching,
-      viewDate,
       selectedSchedule,
       deleteSchedule,
       isDeleting,
@@ -205,7 +206,6 @@ const Calendar = () => {
       }, 3500);
     } else {
       if (!isParsing) {
-        console.log('set is parsing');
         localDispatch(reducerActions.setIsParsing(true));
       }
       const percentage = (count / total) * 100;
@@ -233,7 +233,11 @@ const Calendar = () => {
   };
 
   const handleViewDateChange = useCallback((newDate) => {
-    localDispatch(reducerActions.setViewDate(newDate));
+    const stringDate = moment(newDate).format('YYYY-MM-DD');
+    router.replace({
+      pathname: '/calendar/day/[date]',
+      query: { date: stringDate },
+    });
   }, []);
 
   const handleScheduleSelected = useCallback((schedule) => {
@@ -278,7 +282,6 @@ const Calendar = () => {
     if (selectedSchedule.id === deleteSchedule.schedule.id) {
       localDispatch(reducerActions.setSelectedSchedule(null));
     }
-    // dispatch(toggleAppointmentsUpdate());
   };
 
   const handleCloseDeleteSchedule = () => {
@@ -345,7 +348,9 @@ const Calendar = () => {
           onImportSchedules={handleOpenImportModal}
           doctor={selectedDoctor}
           viewDate={viewDate}
-        />
+        >
+          {children}
+        </AppointmentsCalendar>
         {parsingProgressBar}
       </div>
     </div>

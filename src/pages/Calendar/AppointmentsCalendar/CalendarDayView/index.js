@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useReducer,
@@ -8,14 +7,11 @@ import React, {
 
 import { Box, CircularProgress, Typography } from '@material-ui/core';
 import cloneDeep from 'lodash/cloneDeep';
-import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 import remove from 'lodash/remove';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 
 import AddPauseModal from '../../../../components/AddPauseModal';
 import { clinicActiveDoctorsSelector } from '../../../../redux/selectors/clinicSelector';
@@ -50,11 +46,11 @@ const createContainerHours = (hours) => {
 const initialState = {
   hours: [],
   hoursContainers: [],
-  isLoading: true,
+  isLoading: false,
   isFetching: false,
   createIndicator: { visible: false, top: 0, doctorId: -1 },
   parentTop: 0,
-  schedules: new Map(),
+  schedulesMap: new Map(),
   hasSchedules: false,
   pauseModal: {
     open: false,
@@ -99,7 +95,7 @@ const reducer = (state, action) => {
       return { ...state, createIndicator: action.payload };
     }
     case reducerTypes.setSchedules:
-      return { ...state, schedules: action.payload };
+      return { ...state, schedulesMap: action.payload };
     case reducerTypes.setCreateIndicatorPosition:
       return {
         ...state,
@@ -114,7 +110,7 @@ const reducer = (state, action) => {
       const updateHours = createContainerHours(dayHours);
       return {
         ...state,
-        schedules,
+        schedulesMap: schedules,
         hours: dayHours,
         hoursContainers: updateHours,
       };
@@ -124,22 +120,16 @@ const reducer = (state, action) => {
   }
 };
 
-const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
+const CalendarDayView = ({ schedules, viewDate, dayHours, onScheduleSelect, onCreateSchedule }) => {
   const doctors = useSelector(clinicActiveDoctorsSelector);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
   const [
-    { isLoading, hours, parentTop, schedules, pauseModal, hoursContainers },
+    { isLoading, parentTop, hours, pauseModal, hoursContainers, schedulesMap },
     localDispatch,
   ] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    if (viewDate != null) {
-      debounceFetching(false);
-    }
-  }, [viewDate, doctors]);
 
   useEffect(() => {
     handleScheduleUpdate();
@@ -170,20 +160,32 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
   }, [schedulesRef.current]);
 
+  useEffect(() => {
+    const updatedSchedules = new Map();
+    schedules.forEach(item => {
+      updatedSchedules.set(item.doctorId, item.schedules);
+    });
+    localDispatch(actions.setSchedules(updatedSchedules));
+  }, [schedules]);
+
+  useEffect(() => {
+    localDispatch(actions.setHours(dayHours));
+  }, [dayHours]);
+
   const handleScheduleUpdate = async () => {
     if (updateSchedule == null) {
       return;
     }
     const scheduleDate = moment(updateSchedule.startTime);
     const newSchedulesMap = new Map();
-    if (schedules.size === 0) {
+    if (schedulesMap.size === 0) {
       newSchedulesMap.set(updateSchedule.doctorId, [updateSchedule]);
       await fetchDayHours(scheduleDate.toDate());
       localDispatch(actions.setSchedules(newSchedulesMap));
       return;
     }
 
-    for (const [doctorId, items] of schedules.entries()) {
+    for (const [doctorId, items] of schedulesMap.entries()) {
       if (updateSchedule.doctorId !== doctorId) {
         newSchedulesMap.set(doctorId, items);
         // don't have to do anything to this doctor schedules
@@ -220,34 +222,6 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
       localDispatch(actions.setHours(response.data));
     }
   };
-
-  /**
-   * Fetch a list of schedules for specified {@link viewDate}
-   * @param {boolean} silent - either show or not loading indicator
-   */
-  const fetchDaySchedules = async (silent = false) => {
-    if (!silent) {
-      localDispatch(actions.setIsLoading(true));
-    }
-    const response = await dataAPI.fetchDaySchedules(viewDate);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      const { schedules, dayHours } = response.data;
-      const schedulesMap = new Map();
-      for (let item of schedules) {
-        schedulesMap.set(item.doctorId, item.schedules);
-      }
-      localDispatch(
-        actions.setSchedulesData({ schedules: schedulesMap, dayHours }),
-      );
-    }
-    localDispatch(actions.setIsLoading(false));
-  };
-
-  const debounceFetching = useCallback(debounce(fetchDaySchedules, 150), [
-    viewDate,
-  ]);
 
   /**
    * setup an offset with schedules that intersect each other time
@@ -294,13 +268,15 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
     }
     const schedulesWithOffset = new Map();
     schedules.forEach((value, key) => {
-      schedulesWithOffset.set(key, addOffsetToSchedules(value));
+      if (Array.isArray(value)) {
+        schedulesWithOffset.set(key, addOffsetToSchedules(value));
+      }
     });
     return schedulesWithOffset;
   };
 
-  const schedulesWithOffset = useMemo(() => updateSchedules(schedules), [
-    schedules,
+  const schedulesWithOffset = useMemo(() => updateSchedules(schedulesMap), [
+    schedulesMap,
     hours,
   ]);
 
@@ -446,6 +422,7 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
         >
           {doctors?.map((doctor, index) => (
             <DoctorColumn
+              doctorsCount={doctors?.length || 0}
               index={index}
               key={doctor.id}
               viewDate={viewDate}
@@ -464,12 +441,11 @@ const CalendarDayView = ({ viewDate, onScheduleSelect, onCreateSchedule }) => {
   );
 };
 
-export default React.memo(CalendarDayView, (prevProps, nextProps) => {
-  return isEqual(prevProps.viewDate, nextProps.viewDate);
-});
+export default CalendarDayView;
 
 CalendarDayView.propTypes = {
-  viewDate: PropTypes.instanceOf(Date),
+  schedules: PropTypes.any,
+  dayHours: PropTypes.arrayOf(PropTypes.string),
   onScheduleSelect: PropTypes.func,
   onCreateSchedule: PropTypes.func,
 };

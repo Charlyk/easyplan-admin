@@ -14,7 +14,7 @@ export default {
    * return {number}
    */
   getSelectedClinicId: () => {
-    if (sessionStorage.key(clinicIdKey) == null) {
+    if (typeof window === 'undefined' || sessionStorage.key(clinicIdKey) == null) {
       return -1;
     }
 
