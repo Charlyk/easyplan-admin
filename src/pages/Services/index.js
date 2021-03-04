@@ -309,7 +309,7 @@ const Services = () => {
     category.data != null && category.data.id !== 'all-services'
       ? clinicServices.filter((item) => item.categoryId === category.data.id)
       : clinicServices,
-    (item) => item.name,
+    (service) => service.name.toLowerCase(),
   );
 
   return (

@@ -14,8 +14,8 @@
 
   .table-pagination {
     background-color: white;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+    margin-left: 8px;
+    margin-right: 8px;
     margin-bottom: 1rem;
 
     .MuiTablePagination-toolbar {
@@ -37,10 +37,10 @@
     overflow-y: scroll;
     position: relative;
     align-items: center;
-    padding: 2rem 1.5rem 1.5rem;
+    padding: 0 8px 8px;
 
     .table-container {
-      padding: .5rem 1.5rem;
+      padding: .5rem 8px;
     }
 
     .no-data-label {
@@ -264,8 +264,8 @@
     }
 
     .statuses-container {
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
+      margin-left: 8px;
+      margin-right: 8px;
       flex: 1;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
@@ -378,9 +378,9 @@
   }
 
   .right-content-wrapper {
-    margin-top: 1.5rem;
-    margin-right: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-top: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
     max-height: 100%;
     border-radius: 4px;
     flex: 1;
@@ -460,8 +460,8 @@
 }
 
 .statistics-filter-root {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin-left: 8px;
+  margin-right: 8px;
   height: 5rem;
   padding: 1rem;
   background: #FFFFFF;

@@ -1,5 +1,15 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
+import sortBy from 'lodash/sortBy';
 import sum from 'lodash/sum';
 import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
@@ -8,12 +18,14 @@ import { toast } from 'react-toastify';
 
 import EasyDateRangePicker from '../../../../components/EasyDateRangePicker';
 import {
+  clinicCurrencySelector,
   clinicDoctorsSelector,
   clinicServicesSelector,
 } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { Action } from '../../../../utils/constants';
 import {
+  formattedAmount,
   generateReducerActions,
   logUserAction,
 } from '../../../../utils/helperFuncs';
@@ -66,6 +78,7 @@ const DoctorsStatistics = () => {
   const pickerRef = useRef(null);
   const doctors = useSelector(clinicDoctorsSelector);
   const services = useSelector(clinicServicesSelector);
+  const currency = useSelector(clinicCurrencySelector);
   const [
     {
       isLoading,
@@ -136,7 +149,12 @@ const DoctorsStatistics = () => {
     if (response.isError) {
       toast.error(textForKey(response.message));
     } else {
-      localDispatch(reducerActions.setStatistics(response.data));
+      const { data: statistics } = response;
+      localDispatch(
+        reducerActions.setStatistics(
+          sortBy(statistics, (it) => it.doctor.fullName.toLowerCase()),
+        ),
+      );
     }
     localDispatch(reducerActions.setIsLoading(false));
   };
@@ -155,7 +173,7 @@ const DoctorsStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All services')}</option>
-            {services.map((service) => (
+            {sortBy(services, (it) => it.name.toLowerCase()).map((service) => (
               <option key={service.id} value={service.id}>
                 {service.name}
               </option>
@@ -173,7 +191,9 @@ const DoctorsStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All doctors')}</option>
-            {doctors.map((doctor) => (
+            {sortBy(doctors, (it) =>
+              `${it.firstName} ${it.lastName}`.toLowerCase(),
+            ).map((doctor) => (
               <option
                 key={doctor.id}
                 value={doctor.id}
@@ -198,37 +218,48 @@ const DoctorsStatistics = () => {
           <span className='no-data-label'>{textForKey('No results')}</span>
         )}
         {statistics.length > 0 && (
-          <table className='data-table'>
-            <thead>
-              <tr>
-                <td>{textForKey('Doctor')}</td>
-                <td>{textForKey('Total income')}</td>
-                <td>{textForKey('Doctor part')}</td>
-                <td>{textForKey('Clinic profit')}</td>
-              </tr>
-            </thead>
-            <tbody>
-              {statistics.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.user.fullName}</td>
-                  <td>{Math.round(item.totalAmount)} MDL</td>
-                  <td>{Math.round(item.doctorAmount)} MDL</td>
-                  <td>{Math.round(item.clinicAmount)} MDL</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td />
-                <td />
-                <td />
-                <td align='left'>
-                  {textForKey('Total')}:{' '}
-                  {Math.round(sum(statistics.map((it) => it.clinicAmount)))} MDL
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <TableContainer>
+            <Table classes={{ root: 'data-table' }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>{textForKey('Doctor')}</TableCell>
+                  <TableCell>{textForKey('Total income')}</TableCell>
+                  <TableCell>{textForKey('Doctor part')}</TableCell>
+                  <TableCell>{textForKey('Clinic profit')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {statistics.map((item, index) => (
+                  <TableRow key={`${item.doctor.id}-${index}`}>
+                    <TableCell>{item.doctor.fullName}</TableCell>
+                    <TableCell>
+                      {formattedAmount(item.totalAmount, currency)}
+                    </TableCell>
+                    <TableCell>
+                      {formattedAmount(item.doctorAmount, currency)}
+                    </TableCell>
+                    <TableCell>
+                      {formattedAmount(item.clinicAmount, currency)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell />
+                  <TableCell />
+                  <TableCell />
+                  <TableCell align='left'>
+                    {textForKey('Total')}:{' '}
+                    {formattedAmount(
+                      sum(statistics.map((it) => it.clinicAmount)),
+                      currency,
+                    )}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
         )}
       </div>
       <EasyDateRangePicker
