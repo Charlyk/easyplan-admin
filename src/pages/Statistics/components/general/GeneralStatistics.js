@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment-timezone';
 import { Form, Modal, Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import IconCheckMark from '../../../../assets/icons/iconCheckMark';
 import IconClock from '../../../../assets/icons/iconClock';
@@ -80,14 +81,14 @@ const GeneralStatistics = () => {
     const response = await dataAPI.fetchGeneralStatistics(requestData);
 
     if (response.isError) {
-      console.error(response.message);
+      toast.error(textForKey(response.message));
     } else {
       setGeneralStatistics(response.data);
     }
 
     const financeResponse = await dataAPI.fetchFinanceStatistics(requestData);
     if (financeResponse.isError) {
-      console.error(financeResponse.message);
+      toast.error(textForKey(financeResponse.message));
     } else {
       setFinanceStatistics(financeResponse.data);
     }
