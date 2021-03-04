@@ -223,9 +223,9 @@ const DoctorsStatistics = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {statistics.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.user.fullName}</TableCell>
+                {statistics.map((item, index) => (
+                  <TableRow key={`${item.doctor.id}-${index}`}>
+                    <TableCell>{item.doctor.fullName}</TableCell>
                     <TableCell>
                       {formattedAmount(item.totalAmount, currency)}
                     </TableCell>
