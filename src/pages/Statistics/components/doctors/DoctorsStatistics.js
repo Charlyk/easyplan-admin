@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import sortBy from 'lodash/sortBy';
 import sum from 'lodash/sum';
 import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
@@ -149,8 +150,11 @@ const DoctorsStatistics = () => {
       toast.error(textForKey(response.message));
     } else {
       const { data: statistics } = response;
-      console.log(statistics);
-      localDispatch(reducerActions.setStatistics(statistics));
+      localDispatch(
+        reducerActions.setStatistics(
+          sortBy(statistics, (it) => it.doctor.fullName.toLowerCase()),
+        ),
+      );
     }
     localDispatch(reducerActions.setIsLoading(false));
   };
@@ -169,7 +173,7 @@ const DoctorsStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All services')}</option>
-            {services.map((service) => (
+            {sortBy(services, (it) => it.name.toLowerCase()).map((service) => (
               <option key={service.id} value={service.id}>
                 {service.name}
               </option>
@@ -187,7 +191,9 @@ const DoctorsStatistics = () => {
             custom
           >
             <option value={-1}>{textForKey('All doctors')}</option>
-            {doctors.map((doctor) => (
+            {sortBy(doctors, (it) =>
+              `${it.firstName} ${it.lastName}`.toLowerCase(),
+            ).map((doctor) => (
               <option
                 key={doctor.id}
                 value={doctor.id}
@@ -245,8 +251,10 @@ const DoctorsStatistics = () => {
                   <TableCell />
                   <TableCell align='left'>
                     {textForKey('Total')}:{' '}
-                    {Math.round(sum(statistics.map((it) => it.clinicAmount)))}{' '}
-                    MDL
+                    {formattedAmount(
+                      sum(statistics.map((it) => it.clinicAmount)),
+                      currency,
+                    )}
                   </TableCell>
                 </TableRow>
               </TableFooter>
