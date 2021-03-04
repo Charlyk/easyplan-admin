@@ -6,14 +6,18 @@ import { useSelector } from 'react-redux';
 import IconNext from '../../../../assets/icons/iconNext';
 import { clinicCurrencySelector } from '../../../../redux/selectors/clinicSelector';
 import { formattedAmount } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 
-const IncomeStatisticItem = ({ title, icon, amount }) => {
+const IncomeStatisticItem = ({ title, icon, persons, amount }) => {
   const currency = useSelector(clinicCurrencySelector);
   return (
     <div className='income-statistic-item'>
       <div className='icon-wrapper'>{icon}</div>
       <div className='item-data-wrapper'>
         <span className='title-label'>{title}</span>
+        <span className='amount-label'>
+          {persons} {textForKey('persons')}
+        </span>
         <span className='amount-label'>
           {formattedAmount(amount, currency)}
         </span>
