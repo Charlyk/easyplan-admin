@@ -125,7 +125,7 @@ const PatientPurchasesList = ({ patient }) => {
                   <TableRow key={payment.id}>
                     <TableCell>{payment.userName}</TableCell>
                     <TableCell>
-                      {moment(payment.created).format('DD MMM YYYY HH:mm')}
+                      {moment(payment.created).format('DD.MM.YYYY HH:mm')}
                     </TableCell>
                     <TableCell>
                       {payment.comment || textForKey('Appointment')}
