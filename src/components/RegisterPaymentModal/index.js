@@ -12,20 +12,20 @@ import {
   toggleAppointmentsUpdate,
   togglePatientPaymentsUpdate,
   toggleUpdateInvoices,
-} from '../../redux/actions/actions';
+} from '../../../redux/actions/actions';
 import {
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
-} from '../../redux/selectors/clinicSelector';
-import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
+} from '../../../redux/selectors/clinicSelector';
+import { updateInvoicesSelector } from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
 import {
   adjustValueToNumber,
   formattedAmount,
   generateReducerActions,
   roundToTwo,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import './RegisterPaymentModal.module.scss';
 

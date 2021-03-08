@@ -14,8 +14,8 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import IconMore from '../../../assets/icons/iconMore';
-import { getAppLanguage, textForKey } from '../../../utils/localization';
+import IconMore from '../../../../components/icons/iconMore';
+import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import styles from './SMSMessageItem.module.scss';
 
 const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {

@@ -5,10 +5,10 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import IconPlus from '../../assets/icons/iconPlus';
-import IconSuccess from '../../assets/icons/iconSuccess';
-import { userSelector } from '../../redux/selectors/rootSelector';
-import { textForKey } from '../../utils/localization';
+import IconPlus from '../../../components/icons/iconPlus';
+import IconSuccess from '../../../components/icons/iconSuccess';
+import { userSelector } from '../../../redux/selectors/rootSelector';
+import { textForKey } from '../../../utils/localization';
 import styles from './ClinicSelector.module.scss';
 
 const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {

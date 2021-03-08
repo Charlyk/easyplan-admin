@@ -7,9 +7,9 @@ import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
-import { clinicServicesSelector } from '../../../redux/selectors/clinicSelector';
-import { Statuses } from '../../../utils/constants';
-import { getAppLanguage, textForKey } from '../../../utils/localization';
+import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
+import { Statuses } from '../../../../utils/constants';
+import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import styles from './PatientsFilter.module.scss';
 
 const PatientsFilter = ({

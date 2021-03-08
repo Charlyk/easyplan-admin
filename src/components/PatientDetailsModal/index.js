@@ -6,17 +6,17 @@ import { Modal, ListGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
-import IconClose from '../../assets/icons/iconClose';
+import IconAvatar from '../../../components/icons/iconAvatar';
+import IconClose from '../../../components/icons/iconClose';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
   togglePatientsListUpdate,
-} from '../../redux/actions/actions';
-import { setAddPaymentModal } from '../../redux/actions/addPaymentModalActions';
-import dataAPI from '../../utils/api/dataAPI';
-import { generateReducerActions } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../redux/actions/actions';
+import { setAddPaymentModal } from '../../../redux/actions/addPaymentModalActions';
+import dataAPI from '../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import AppointmentNotes from './AppointmentNotes';
 import PatientAppointments from './PatientAppointments';
 import PatientHistory from './PatientHistory';

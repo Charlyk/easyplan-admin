@@ -1,14 +1,13 @@
 import React from "react";
 import { wrapper } from "../store";
-import Main from "../src/pages/Main";
-import Calendar from '../src/pages/Calendar';
+import MainComponent from "../components/common/MainComponent";
 
 const MainPage = () => {
 
   return (
-    <Main>
-      <Calendar />
-    </Main>
+    <MainComponent>
+
+    </MainComponent>
   )
 }
 

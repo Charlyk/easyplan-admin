@@ -6,11 +6,11 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import IconArrowNext from '../../../../assets/icons/iconArrowNext';
-import IconEdit from '../../../../assets/icons/iconEdit';
-import IconPlus from '../../../../assets/icons/iconPlus';
-import { clinicTimeZoneSelector } from '../../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../../utils/localization';
+import IconArrowNext from '../../../../../components/icons/iconArrowNext';
+import IconEdit from '../../../../../components/icons/iconEdit';
+import IconPlus from '../../../../../components/icons/iconPlus';
+import { clinicTimeZoneSelector } from '../../../../../redux/selectors/clinicSelector';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './HistoryItem.module.scss'
 import clsx from "clsx";
 

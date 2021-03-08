@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSelector';
+import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
 import DoctorServiceItem from '../DoctorServiceItem';
 import styles from './DoctorBracesSettings.module.scss';
 

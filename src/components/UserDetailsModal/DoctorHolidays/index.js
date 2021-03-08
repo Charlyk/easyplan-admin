@@ -5,10 +5,10 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
-import IconDelete from '../../../assets/icons/iconDelete';
-import IconEdit from '../../../assets/icons/iconEdit';
-import IconUmbrella from '../../../assets/icons/iconUmbrella';
-import { textForKey } from '../../../utils/localization';
+import IconDelete from '../../../../components/icons/iconDelete';
+import IconEdit from '../../../../components/icons/iconEdit';
+import IconUmbrella from '../../../../components/icons/iconUmbrella';
+import { textForKey } from '../../../../utils/localization';
 import styles from './DoctorHolidays.module.scss';
 
 const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {

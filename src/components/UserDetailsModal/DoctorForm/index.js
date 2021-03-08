@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import DoctorBracesSettings from '../DoctorBracesSettings';
 import DoctorHolidays from '../DoctorHolidays';
 import DoctorServices from '../DoctorServices';

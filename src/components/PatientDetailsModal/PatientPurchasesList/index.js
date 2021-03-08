@@ -17,15 +17,15 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconPrint from '../../../assets/icons/iconPrint';
-import { clinicCurrencySelector } from '../../../redux/selectors/clinicSelector';
-import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
-import dataAPI, { baseURL } from '../../../utils/api/dataAPI';
+import IconPrint from '../../../../components/icons/iconPrint';
+import { clinicCurrencySelector } from '../../../../redux/selectors/clinicSelector';
+import { updateInvoiceSelector } from '../../../../redux/selectors/invoicesSelector';
+import dataAPI, { baseURL } from '../../../../utils/api/dataAPI';
 import {
   formattedAmount,
   generateReducerActions,
-} from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+} from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import styles from './PatientPurchasesList.module.scss'
 
 const initialState = {

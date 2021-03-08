@@ -4,12 +4,12 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import LoadingButton from '../../components/LoadingButton';
+import LoadingButton from '../../../components/LoadingButton';
 import './ResetPassword.module.scss';
-import authAPI from '../../utils/api/authAPI';
-import { JwtRegex, PasswordRegex } from '../../utils/constants';
-import { updateLink } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import authAPI from '../../../utils/api/authAPI';
+import { JwtRegex, PasswordRegex } from '../../../utils/constants';
+import { updateLink } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 
 const ResetPasswordForm = () => {
   const { token } = useParams();

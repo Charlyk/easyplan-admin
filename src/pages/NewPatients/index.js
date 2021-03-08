@@ -17,26 +17,26 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconPlus from '../../assets/icons/iconPlus';
-import IconSearch from '../../assets/icons/iconSearch';
-import ConfirmationModal from '../../components/ConfirmationModal';
+import IconPlus from '../../../components/icons/iconPlus';
+import IconSearch from '../../../components/icons/iconSearch';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 import CreatePatientModal from '../../components/CreatePatientModal';
-import LoadingButton from '../../components/LoadingButton';
+import LoadingButton from '../../../components/LoadingButton';
 import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
 import {
   setPatientDetails,
   toggleImportModal,
   togglePatientsListUpdate,
-} from '../../redux/actions/actions';
-import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { UploadDestination } from '../../utils/constants';
+} from '../../../redux/actions/actions';
+import { updatePatientsListSelector } from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { UploadDestination } from '../../../utils/constants';
 import {
   generateReducerActions,
   uploadFileToAWS,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import PatientRow from './PatientRow';
 import clsx from "clsx";
 

@@ -3,8 +3,8 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconArrowNext from '../../assets/icons/iconArrowNext';
-import IconClose from '../../assets/icons/iconClose';
+import IconArrowNext from '../../../components/icons/iconArrowNext';
+import IconClose from '../../../components/icons/iconClose';
 import styles from './LeftSideModal.module.scss';
 
 const ModalHeader = props => {

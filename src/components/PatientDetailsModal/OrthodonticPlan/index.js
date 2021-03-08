@@ -9,22 +9,22 @@ import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconSuccess from '../../../assets/icons/iconSuccess';
+import IconSuccess from '../../../../components/icons/iconSuccess';
 import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
-} from '../../../redux/selectors/clinicSelector';
-import { userSelector } from '../../../redux/selectors/rootSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { Action, Role } from '../../../utils/constants';
+} from '../../../../redux/selectors/clinicSelector';
+import { userSelector } from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Action, Role } from '../../../../utils/constants';
 import {
   generateReducerActions,
   logUserAction,
-} from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import sessionManager from '../../../utils/settings/sessionManager';
+} from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
+import sessionManager from '../../../../utils/settings/sessionManager';
 import EasyTab from '../../EasyTab';
-import LoadingButton from '../../LoadingButton';
+import LoadingButton from '../../../../components/LoadingButton';
 import styles from './OrthodonticPlan.module.scss';
 
 const diagnosisClass = [1, 2, 3];

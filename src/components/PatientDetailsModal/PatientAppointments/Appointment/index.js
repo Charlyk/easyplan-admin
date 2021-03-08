@@ -4,11 +4,11 @@ import { Box, Typography } from '@material-ui/core';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import IconAppointmentCalendar from '../../../../assets/icons/iconAppointmentCalendar';
-import IconAppointmentClock from '../../../../assets/icons/iconAppointmentClock';
-import { baseURL } from '../../../../utils/api/dataAPI';
-import { Statuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
+import IconAppointmentCalendar from '../../../../../components/icons/iconAppointmentCalendar';
+import IconAppointmentClock from '../../../../../components/icons/iconAppointmentClock';
+import { baseURL } from '../../../../../utils/api/dataAPI';
+import { Statuses } from '../../../../../utils/constants';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './Appointment.module.scss';
 
 const Appointment = ({ appointment }) => {

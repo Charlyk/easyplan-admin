@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './PatientNote.module.scss';
 
 const PatientNote = ({ note }) => {

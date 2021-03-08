@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { setIsCalendarLoading } from '../../../../redux/actions/calendar';
-import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
-import { Action } from '../../../../utils/constants';
-import { getDays, logUserAction } from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
+import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
+import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../../utils/api/dataAPI';
+import { Action } from '../../../../../utils/constants';
+import { getDays, logUserAction } from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
 import ScheduleItem from '../../ScheduleItem';
 import styles from './CalendarMonthView.module.scss';
 

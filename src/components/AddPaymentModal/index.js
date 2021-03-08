@@ -5,13 +5,13 @@ import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { togglePatientPaymentsUpdate } from '../../redux/actions/actions';
-import dataAPI from '../../utils/api/dataAPI';
+import { togglePatientPaymentsUpdate } from '../../../redux/actions/actions';
+import dataAPI from '../../../utils/api/dataAPI';
 import {
   adjustValueToNumber,
   generateReducerActions,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import styles from './AddPaymentModal.module.scss';
 

@@ -10,17 +10,17 @@ import { useDispatch } from 'react-redux';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
-import LoadingButton from '../../components/LoadingButton';
-import dataAPI from '../../utils/api/dataAPI';
-import { JwtRegex, PasswordRegex } from '../../utils/constants';
+import IconAvatar from '../../../components/icons/iconAvatar';
+import LoadingButton from '../../../components/LoadingButton';
+import dataAPI from '../../../utils/api/dataAPI';
+import { JwtRegex, PasswordRegex } from '../../../utils/constants';
 import {
   generateReducerActions,
   handleUserAuthenticated,
   updateLink,
   uploadFileToAWS,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import './AcceptInvitation.module.scss';
 
 const initialState = {

@@ -15,12 +15,12 @@ import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import IconArrowDown from '../../../assets/icons/iconArrowDown';
-import { YClientAPIUrl } from '../../../utils/constants';
-import { generateReducerActions } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+import IconArrowDown from '../../../../components/icons/iconArrowDown';
+import { YClientAPIUrl } from '../../../../utils/constants';
+import { generateReducerActions } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import EasyDatePicker from '../../EasyDatePicker';
-import LoadingButton from '../../LoadingButton';
+import LoadingButton from '../../../../components/LoadingButton';
 import styles from './ImportSelectionStep.module.scss';
 
 const initialState = {

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { userSelector } from '../../redux/selectors/rootSelector';
-import sessionManager from '../../utils/settings/sessionManager';
+import { userSelector } from '../../../redux/selectors/rootSelector';
+import sessionManager from '../../../utils/settings/sessionManager';
 import AccountSettings from './AccountSettings';
 import ApplicationSettings from './ApplicationSettings';
 import BracesSettings from './BracesSettings';

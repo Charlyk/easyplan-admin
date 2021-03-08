@@ -6,17 +6,17 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 
-import IconSuccess from '../../../assets/icons/iconSuccess';
-import dataAPI from '../../../utils/api/dataAPI';
-import { Action, EmailRegex } from '../../../utils/constants';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Action, EmailRegex } from '../../../../utils/constants';
 import {
   adjustValueToNumber,
   generateReducerActions,
   logUserAction,
-} from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+} from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import EasyDatePicker from '../../EasyDatePicker';
-import LoadingButton from '../../LoadingButton';
+import LoadingButton from '../../../../components/LoadingButton';
 import styles from './PatientPersonalData.module.scss'
 
 const initialState = {

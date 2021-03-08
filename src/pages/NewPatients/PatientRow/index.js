@@ -3,9 +3,9 @@ import React from 'react';
 import { TableCell, TableRow, Typography, Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import IconAvatar from '../../../assets/icons/iconAvatar';
-import IconEmail from '../../../assets/icons/iconEmail';
-import IconPhone from '../../../assets/icons/iconPhone';
+import IconAvatar from '../../../../components/icons/iconAvatar';
+import IconEmail from '../../../../components/icons/iconEmail';
+import IconPhone from '../../../../components/icons/iconPhone';
 import styles from './PatientRow.module.scss';
 import clsx from "clsx";
 

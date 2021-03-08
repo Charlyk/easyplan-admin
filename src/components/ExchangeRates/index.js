@@ -20,23 +20,23 @@ import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconClose from '../../assets/icons/iconClose';
+import IconClose from '../../../components/icons/iconClose';
 import {
   allCurrenciesSelector,
   clinicCurrencySelector,
-} from '../../redux/selectors/clinicSelector';
+} from '../../../redux/selectors/clinicSelector';
 import {
   selectedClinicSelector,
   updateExchangeRatesSelector,
-} from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { Role } from '../../utils/constants';
+} from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Role } from '../../../utils/constants';
 import {
   fetchClinicData,
   generateReducerActions,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
-import authManager from '../../utils/settings/authManager';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import authManager from '../../../utils/settings/authManager';
 import EasyPlanModal from '../EasyPlanModal';
 import styles from './ExchangeRates.module.scss';
 

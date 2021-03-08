@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux';
 import {
   updateNotesSelector,
   userSelector,
-} from '../../../redux/selectors/rootSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { textForKey } from '../../../utils/localization';
+} from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import AppointmentNote from './AppointmentNote';
 import styles from './AppointmentNotes.module.scss';
 

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
-import { EmailRegex, Role } from '../../utils/constants';
-import { textForKey } from '../../utils/localization';
+import { EmailRegex, Role } from '../../../utils/constants';
+import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 
 import styles from './InviteUserModal.module.scss';

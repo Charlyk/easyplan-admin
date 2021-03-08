@@ -6,11 +6,11 @@ import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 
-import { togglePatientsListUpdate } from '../../redux/actions/actions';
-import dataAPI from '../../utils/api/dataAPI';
-import { Action, EmailRegex } from '../../utils/constants';
-import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import { togglePatientsListUpdate } from '../../../redux/actions/actions';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action, EmailRegex } from '../../../utils/constants';
+import { generateReducerActions, logUserAction } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal';
 import './CreatePatientModal.module.scss';

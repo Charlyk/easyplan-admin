@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconSuccess from '../../../assets/icons/iconSuccess';
-import LoadingButton from '../../../components/LoadingButton';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import LoadingButton from '../../../../components/LoadingButton';
 import WorkDay from '../../../components/WorkDay';
-import { setClinic } from '../../../redux/actions/clinicActions';
-import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { textForKey } from '../../../utils/localization';
+import { setClinic } from '../../../../redux/actions/clinicActions';
+import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import styles from './ClinicWorkingHours.module.scss';
 
 const ClinicWorkingHours = () => {

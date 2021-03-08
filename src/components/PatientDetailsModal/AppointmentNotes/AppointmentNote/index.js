@@ -3,8 +3,8 @@ import React from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import IconEditService from '../../../../assets/icons/iconEditService';
-import { textForKey } from '../../../../utils/localization';
+import IconEditService from '../../../../../components/icons/iconEditService';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './AppointmentNote.module.scss';
 
 const AppointmentNote = ({ visit, canEdit, onEdit }) => {

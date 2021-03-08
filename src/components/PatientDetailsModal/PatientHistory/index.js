@@ -4,8 +4,8 @@ import { CircularProgress, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import dataAPI from '../../../utils/api/dataAPI';
-import { textForKey } from '../../../utils/localization';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import HistoryItem from './HistoryItem';
 import styles from './PatientHistory.module.scss';
 

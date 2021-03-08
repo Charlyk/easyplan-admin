@@ -13,29 +13,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
+import IconAvatar from '../../../components/icons/iconAvatar';
 import FinalizeTreatmentModal from '../../components/FinalizeTreatmentModal';
-import LoadingButton from '../../components/LoadingButton';
+import LoadingButton from '../../../components/LoadingButton';
 import PatientDetails from './PatientDetails';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
-} from '../../redux/actions/actions';
+} from '../../../redux/actions/actions';
 import {
   clinicCurrencySelector,
   clinicServicesSelector,
-} from '../../redux/selectors/clinicSelector';
-import { userSelector } from '../../redux/selectors/rootSelector';
-import { deleteScheduleSelector } from '../../redux/selectors/scheduleSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { Action, Statuses, teeth } from '../../utils/constants';
+} from '../../../redux/selectors/clinicSelector';
+import { userSelector } from '../../../redux/selectors/rootSelector';
+import { deleteScheduleSelector } from '../../../redux/selectors/scheduleSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action, Statuses, teeth } from '../../../utils/constants';
 import {
   generateReducerActions,
   getServiceName,
   logUserAction,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
-import sessionManager from '../../utils/settings/sessionManager';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import sessionManager from '../../../utils/settings/sessionManager';
 import FinalServiceItem from './FinalServiceItem';
 import ToothView from './ToothView';
 import styles from './DoctorPatientDetails.module.scss';

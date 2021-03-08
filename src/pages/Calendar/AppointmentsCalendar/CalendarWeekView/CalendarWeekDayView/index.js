@@ -5,9 +5,9 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
+import { setIsCalendarLoading } from '../../../../../../redux/actions/calendar';
+import { updateAppointmentsSelector } from '../../../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../../../utils/api/dataAPI';
 import ScheduleItem from '../../../ScheduleItem';
 import styles from './CalendarWeekDayView.module.scss'
 

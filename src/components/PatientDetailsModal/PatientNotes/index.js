@@ -5,16 +5,16 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import IconPlus from '../../../assets/icons/iconPlus';
-import { updateNotesSelector } from '../../../redux/selectors/rootSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { Action } from '../../../utils/constants';
+import IconPlus from '../../../../components/icons/iconPlus';
+import { updateNotesSelector } from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Action } from '../../../../utils/constants';
 import {
   generateReducerActions,
   logUserAction,
-} from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import LoadingButton from '../../LoadingButton';
+} from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
+import LoadingButton from '../../../../components/LoadingButton';
 import PatientNote from './PatientNote';
 import styles from './PatientNotes.module.scss';
 

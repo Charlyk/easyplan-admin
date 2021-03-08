@@ -8,19 +8,19 @@ import { usePubNub } from 'pubnub-react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconClose from '../../assets/icons/iconClose';
-import IconSuccess from '../../assets/icons/iconSuccess';
+import IconClose from '../../../components/icons/iconClose';
+import IconSuccess from '../../../components/icons/iconSuccess';
 import {
   togglePatientsListUpdate,
   triggerServicesUpdate,
-} from '../../redux/actions/actions';
-import { userSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { env } from '../../utils/constants';
-import { generateReducerActions } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../redux/actions/actions';
+import { userSelector } from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { env } from '../../../utils/constants';
+import { generateReducerActions } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import CircularProgressWithLabel from '../CircularProgressWithLabel';
-import LoadingButton from '../LoadingButton';
+import LoadingButton from '../../../components/LoadingButton';
 import './SetupExcelModal.module.scss';
 
 export const UploadMode = {
@@ -130,7 +130,7 @@ const SetupExcelModal = ({
         if (channel.includes('import_patients_channel')) {
           dispatch(togglePatientsListUpdate());
         } else if (channel.includes('import_services_channel')) {
-          dispatch(triggerServicesUpdate());
+          dispatch(triggerServicesUpdate(true));
         }
         onClose();
       }, 3500);

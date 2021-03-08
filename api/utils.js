@@ -7,6 +7,14 @@ Axios.interceptors.request.use(function (config) {
   return config;
 });
 
+export function getHeaders(req) {
+  const { auth_token, clinic_id } = parseCookies(req);
+  return {
+    'Authorization': auth_token,
+    'X-EasyPlan-Clinic-Id': clinic_id
+  }
+}
+
 export function parseCookies(req) {
-  return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
+  return cookie.parse(req?.headers?.cookie || '');
 }

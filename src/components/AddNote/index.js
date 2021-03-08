@@ -5,11 +5,11 @@ import { Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { triggerUpdateNotes } from '../../redux/actions/actions';
-import dataAPI from '../../utils/api/dataAPI';
-import { Action } from '../../utils/constants';
-import { logUserAction } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import { triggerUpdateNotes } from '../../../redux/actions/actions';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action } from '../../../utils/constants';
+import { logUserAction } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import styles from './AddNote.module.scss';
 import EasyPlanModal from '../EasyPlanModal';
 

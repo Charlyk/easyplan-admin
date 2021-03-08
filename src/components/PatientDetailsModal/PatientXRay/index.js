@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import IconPlus from '../../../assets/icons/iconPlus';
-import { updateXRaySelector } from '../../../redux/selectors/rootSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { textForKey } from '../../../utils/localization';
+import IconPlus from '../../../../components/icons/iconPlus';
+import { updateXRaySelector } from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import XRayPhase from './XRayPhase';
 import styles from './PatientXRay.module.scss'
 

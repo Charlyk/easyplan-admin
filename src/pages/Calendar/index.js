@@ -7,24 +7,24 @@ import { ProgressBar } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 
-import ConfirmationModal from '../../components/ConfirmationModal';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 import { MappingData } from '../../components/MapSchedulesDataModal';
 import {
   setAppointmentModal,
   setPaymentModal,
   toggleAppointmentsUpdate,
   toggleImportModal,
-} from '../../redux/actions/actions';
+} from '../../../redux/actions/actions';
 import {
   clinicActiveDoctorsSelector,
   clinicServicesSelector,
-} from '../../redux/selectors/clinicSelector';
-import { userSelector } from '../../redux/selectors/rootSelector';
-import types from '../../redux/types/types';
-import dataAPI from '../../utils/api/dataAPI';
-import { Action } from '../../utils/constants';
-import { generateReducerActions, logUserAction } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../redux/selectors/clinicSelector';
+import { userSelector } from '../../../redux/selectors/rootSelector';
+import types from '../../../redux/types/types';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action } from '../../../utils/constants';
+import { generateReducerActions, logUserAction } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import AppointmentsCalendar from './AppointmentsCalendar';
 import CalendarDoctors from './AppointmentsCalendar/CalendarDoctors';
 import moment from "moment-timezone";

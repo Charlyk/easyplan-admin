@@ -14,11 +14,11 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import IconMinus from '../../../assets/icons/iconMinus';
-import IconPlus from '../../../assets/icons/iconPlus';
-import IconTrash from '../../../assets/icons/iconTrash';
-import { clinicExchangeRatesSelector } from '../../../redux/selectors/clinicSelector';
-import { adjustValueToNumber } from '../../../utils/helperFuncs';
+import IconMinus from '../../../../components/icons/iconMinus';
+import IconPlus from '../../../../components/icons/iconPlus';
+import IconTrash from '../../../../components/icons/iconTrash';
+import { clinicExchangeRatesSelector } from '../../../../redux/selectors/clinicSelector';
+import { adjustValueToNumber } from '../../../../utils/helperFuncs';
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {

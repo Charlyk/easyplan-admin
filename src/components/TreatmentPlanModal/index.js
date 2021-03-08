@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import { clinicServicesSelector } from '../../redux/selectors/clinicSelector';
-import { generateReducerActions } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import { clinicServicesSelector } from '../../../redux/selectors/clinicSelector';
+import { generateReducerActions } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import './styles.scss';
 import EasyTab from '../EasyTab';

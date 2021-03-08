@@ -14,17 +14,17 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from '../../components/ConfirmationModal';
+import ConfirmationModal from '../../../components/ConfirmationModal';
 import InviteUserModal from '../../components/InviteUserModal';
 import UserDetailsModal from '../../components/UserDetailsModal';
-import { updateUsersSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { Action, Role } from '../../utils/constants';
-import { fetchClinicData, logUserAction } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import { updateUsersSelector } from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action, Role } from '../../../utils/constants';
+import { fetchClinicData, logUserAction } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import UserItem from './UserItem';
 import UsersHeader from './UserHeader';
-import { triggerUsersUpdate } from "../../redux/actions/actions";
+import { triggerUsersUpdate } from "../../../redux/actions/actions";
 
 const Users = () => {
   const dispatch = useDispatch();

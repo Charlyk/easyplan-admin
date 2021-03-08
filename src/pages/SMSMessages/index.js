@@ -13,11 +13,11 @@ import {
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from '../../components/ConfirmationModal';
-import { hasSMSAliasSelector } from '../../redux/selectors/clinicSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { generateReducerActions } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import ConfirmationModal from '../../../components/ConfirmationModal';
+import { hasSMSAliasSelector } from '../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import CreateMessageModal from './CreateMessageModal';
 import SMSMessageItem from './SMSMessageItem';
 import SMSMessagesHeader from './SMSMessagesHeader';

@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
-import IconPlus from '../../../assets/icons/iconPlus';
-import { textForKey } from '../../../utils/localization';
+import IconPlus from '../../../../components/icons/iconPlus';
+import { textForKey } from '../../../../utils/localization';
 import styles from './SMSMessagesHeader.module.scss'
 
 const SMSMessagesHeader = ({ canCreate, onCreate }) => {

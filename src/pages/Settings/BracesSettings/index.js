@@ -5,16 +5,16 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconSuccess from '../../../assets/icons/iconSuccess';
-import LoadingButton from '../../../components/LoadingButton';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import LoadingButton from '../../../../components/LoadingButton';
 import SwitchButton from '../../../components/SwitchButton';
-import { setClinic } from '../../../redux/actions/clinicActions';
+import { setClinic } from '../../../../redux/actions/clinicActions';
 import {
   clinicBracesSelector,
   clinicDetailsSelector,
-} from '../../../redux/selectors/clinicSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { textForKey } from '../../../utils/localization';
+} from '../../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import styles from './BracesSettings.module.scss';
 
 const BracesSettings = () => {

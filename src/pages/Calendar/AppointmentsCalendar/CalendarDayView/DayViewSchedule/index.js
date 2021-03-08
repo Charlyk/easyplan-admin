@@ -6,8 +6,8 @@ import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import { Statuses } from '../../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { Statuses } from '../../../../../../utils/constants';
+import { textForKey } from '../../../../../../utils/localization';
 import styles from './DayViewSchedule.module.scss';
 
 const offsetDistance = 20;
@@ -24,7 +24,6 @@ const DayViewSchedule = ({
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
   const [isHighlighted, setIsHighlighted] = useState(false);
-  const [itemRect, setItemRect] = useState({ height: 0, top: 0 });
   const startTime = moment(schedule.startTime);
   const endTime = moment(schedule.endTime);
   const startHour = startTime.format('HH:mm');
@@ -33,11 +32,6 @@ const DayViewSchedule = ({
     (item) => item.id === schedule.scheduleStatus,
   );
   const shouldAnimate = scheduleStatus?.id === 'WaitingForPatient';
-
-  useEffect(() => {
-    const height = getScheduleHeight();
-    setItemRect({ height, top: topPosition });
-  }, [schedule, firstHour, viewDate, isHighlighted]);
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -84,6 +78,9 @@ const DayViewSchedule = ({
     clearTimeout(highlightTimeout.current);
     setIsHighlighted(false);
   };
+
+  const height = getScheduleHeight();
+  const itemRect = { height, top: topPosition }
 
   return (
     <div

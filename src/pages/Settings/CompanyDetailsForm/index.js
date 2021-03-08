@@ -8,26 +8,26 @@ import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconLogoPlaceholder from '../../../assets/icons/iconLogoPlaceholder';
-import IconSuccess from '../../../assets/icons/iconSuccess';
-import IconTrash from '../../../assets/icons/iconTrash';
-import ConfirmationModal from '../../../components/ConfirmationModal';
-import LoadingButton from '../../../components/LoadingButton';
+import IconLogoPlaceholder from '../../../../components/icons/iconLogoPlaceholder';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import IconTrash from '../../../../components/icons/iconTrash';
+import ConfirmationModal from '../../../../components/ConfirmationModal';
+import LoadingButton from '../../../../components/LoadingButton';
 import {
   changeSelectedClinic,
   setCreateClinic,
-} from '../../../redux/actions/actions';
-import { setClinic } from '../../../redux/actions/clinicActions';
-import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
-import { userSelector } from '../../../redux/selectors/rootSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { Action, EmailRegex } from '../../../utils/constants';
+} from '../../../../redux/actions/actions';
+import { setClinic } from '../../../../redux/actions/clinicActions';
+import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
+import { userSelector } from '../../../../redux/selectors/rootSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Action, EmailRegex } from '../../../../utils/constants';
 import {
   logUserAction,
   uploadFileToAWS,
   urlToLambda,
-} from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+} from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import styles from './CompanyDetailsForm.module.scss'
 
 const CompanyDetailsForm = () => {

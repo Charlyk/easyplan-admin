@@ -19,46 +19,44 @@ const DoctorColumn = ({
   onScheduleClick,
   onAddSchedule,
 }) => {
-  const doctorRect = document
-    .getElementById(String(doctor.id))
-    ?.getBoundingClientRect() || { width: 0 };
-
-  const renderHoursContainers = hoursContainers.map((hour, index) => {
-    if (index === 0) {
-      return (
-        <ScheduleItemContainer
-          disabled={doctor.isInVacation}
-          onAddSchedule={onAddSchedule(doctor)}
-          startHour={null}
-          endHour={hour}
-          key={`schedule-item-${hour}`}
-          className='day-schedule-item-container'
-        />
-      );
-    } else if (index + 1 === hoursContainers.length) {
-      return (
-        <ScheduleItemContainer
-          disabled={doctor.isInVacation}
-          onAddSchedule={onAddSchedule(doctor)}
-          startHour={hoursContainers[index]}
-          endHour={null}
-          key={`${hoursContainers[index]}-schedule-item`}
-          className='day-schedule-item-container'
-        />
-      );
-    } else {
-      return (
-        <ScheduleItemContainer
-          disabled={doctor.isInVacation}
-          onAddSchedule={onAddSchedule(doctor)}
-          startHour={hoursContainers[index - 1]}
-          endHour={hour}
-          key={`${hoursContainers[index - 1]}-schedule-item-${hour}`}
-          className='day-schedule-item-container'
-        />
-      );
-    }
-  });
+  const renderHoursContainers = useMemo(() => {
+    return hoursContainers.map((hour, index) => {
+      if (index === 0) {
+        return (
+          <ScheduleItemContainer
+            disabled={doctor.isInVacation}
+            onAddSchedule={onAddSchedule(doctor)}
+            startHour={null}
+            endHour={hour}
+            key={`schedule-item-${hour}`}
+            className='day-schedule-item-container'
+          />
+        );
+      } else if (index + 1 === hoursContainers.length) {
+        return (
+          <ScheduleItemContainer
+            disabled={doctor.isInVacation}
+            onAddSchedule={onAddSchedule(doctor)}
+            startHour={hoursContainers[index]}
+            endHour={null}
+            key={`${hoursContainers[index]}-schedule-item`}
+            className='day-schedule-item-container'
+          />
+        );
+      } else {
+        return (
+          <ScheduleItemContainer
+            disabled={doctor.isInVacation}
+            onAddSchedule={onAddSchedule(doctor)}
+            startHour={hoursContainers[index - 1]}
+            endHour={hour}
+            key={`${hoursContainers[index - 1]}-schedule-item-${hour}`}
+            className='day-schedule-item-container'
+          />
+        );
+      }
+    })
+  }, [hoursContainers])
 
   return (
     <div

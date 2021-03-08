@@ -9,12 +9,12 @@ import styles from './DataMigrationModal.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { Modal } from 'react-bootstrap';
 
-import IconClose from '../../assets/icons/iconClose';
-import { env } from '../../utils/constants';
-import { generateReducerActions } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
-import authManager from '../../utils/settings/authManager';
-import sessionManager from '../../utils/settings/sessionManager';
+import IconClose from '../../../components/icons/iconClose';
+import { env } from '../../../utils/constants';
+import { generateReducerActions } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import authManager from '../../../utils/settings/authManager';
+import sessionManager from '../../../utils/settings/sessionManager';
 import AuthenticationStep from './AuthenticationStep';
 import DataMigrationFinalStep from './DataMigrationFinalStep';
 import ImportSelectionStep from './ImportSelectionStep';

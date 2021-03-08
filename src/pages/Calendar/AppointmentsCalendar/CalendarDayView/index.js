@@ -14,14 +14,14 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import AddPauseModal from '../../../../components/AddPauseModal';
-import { clinicActiveDoctorsSelector } from '../../../../redux/selectors/clinicSelector';
+import { clinicActiveDoctorsSelector } from '../../../../../redux/selectors/clinicSelector';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
-} from '../../../../redux/selectors/scheduleSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
-import { generateReducerActions } from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
+} from '../../../../../redux/selectors/scheduleSelector';
+import dataAPI from '../../../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
 import DoctorColumn from './DoctorColumn';
 import DoctorItem from './DoctorItem';
 import styles from './CalendarDayView.module.scss';

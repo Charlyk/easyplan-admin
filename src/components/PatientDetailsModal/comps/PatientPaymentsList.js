@@ -18,11 +18,11 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { Statuses } from '../../../utils/constants';
-import { formattedAmount } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+import { updateInvoiceSelector } from '../../../../redux/selectors/invoicesSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Statuses } from '../../../../utils/constants';
+import { formattedAmount } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 
 const PatientPaymentsList = ({ patient, onViewDebtClick }) => {
   const updateInvoice = useSelector(updateInvoiceSelector);

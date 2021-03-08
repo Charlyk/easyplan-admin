@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
-import authAPI from '../../utils/api/authAPI';
-import dataAPI from '../../utils/api/dataAPI';
-import { uploadFileToAWS } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import IconAvatar from '../../../components/icons/iconAvatar';
+import authAPI from '../../../utils/api/authAPI';
+import dataAPI from '../../../utils/api/dataAPI';
+import { uploadFileToAWS } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 
 import './CreateClinicModal.module.scss';

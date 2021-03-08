@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconSuccess from '../../../assets/icons/iconSuccess';
-import LoadingButton from '../../../components/LoadingButton';
-import { setClinic } from '../../../redux/actions/clinicActions';
-import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { textForKey } from '../../../utils/localization';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import LoadingButton from '../../../../components/LoadingButton';
+import { setClinic } from '../../../../redux/actions/clinicActions';
+import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import styles from './ApplicationSettings.module.scss'
 
 const ApplicationSettings = () => {

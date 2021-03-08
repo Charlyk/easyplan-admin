@@ -16,10 +16,10 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import dataAPI from '../../../utils/api/dataAPI';
-import { Statuses } from '../../../utils/constants';
-import { updateLink } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { Statuses } from '../../../../utils/constants';
+import { updateLink } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import styles from './PatientsList.module.scss';
 
 const PatientsList = ({ schedules, viewDate, filterData }) => {

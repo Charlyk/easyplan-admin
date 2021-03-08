@@ -14,14 +14,14 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconMinus from '../../assets/icons/iconMinus';
-import IconPlus from '../../assets/icons/iconPlus';
+import IconMinus from '../../../components/icons/iconMinus';
+import IconPlus from '../../../components/icons/iconPlus';
 import {
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
-} from '../../redux/selectors/clinicSelector';
-import { getServiceName } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../redux/selectors/clinicSelector';
+import { getServiceName } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import './FinalizeTreatmentModal.module.scss';
 

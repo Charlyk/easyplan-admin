@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { PubNubProvider } from "pubnub-react";
 import { wrapper } from "../store";
-import authManager from "../src/utils/settings/authManager";
+import authManager from "../utils/settings/authManager";
 import AppComponent from '../src/App';
 import PubNub from "pubnub";
-import { login, me } from "../api/user";
-import { CookiesProvider, useCookies } from "react-cookie";
+import NextNprogress from 'nextjs-progressbar';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -13,12 +12,12 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../public/index.scss'
-import { useDispatch } from "react-redux";
-import { setCurrentUser } from "../src/redux/actions/actions";
-import moment from "moment-timezone";
-import { setClinic } from "../src/redux/actions/clinicActions";
-import { fetchClinicDetails } from "../api/clinic";
+import '../styles/index.scss'
+import axios from "axios";
+import { baseAppUrl } from "../eas.config";
+import { handleRequestError } from "../utils/helperFuncs";
+import App from "next/app";
+import { parseCookies } from "../api/utils";
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
@@ -27,46 +26,47 @@ const pubnub = new PubNub({
 });
 
 function NextApp({ Component, pageProps }) {
-  const [cookie, setCookie] = useCookies(['auth_token', 'clinic_id']);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    saveAuthData();
-  }, []);
-
-  const saveAuthData = async () => {
-    const response = await login('eduard.albu@gmail.com', 'CDTjm055!');
-    if (response.isError) {
-      console.error(response);
-      return;
-    }
-
-    const { token, user } = response.data;
-    const selectedClinic = user.clinics.find(item => item.isSelected) || user.clinics[0];
-    const headers = {
-      Authorization: token,
-      'X-EasyPlan-Clinic-Id': selectedClinic.clinicId,
-    }
-    const clinicResponse = await fetchClinicDetails(headers)
-    if (!clinicResponse.isError) {
-      const clinicData = clinicResponse.data;
-      moment.tz.setDefault(clinicData.timeZone);
-      dispatch(setClinic(clinicData));
-    }
-    setCookie('auth_token', token);
-    setCookie('clinic_id', selectedClinic.clinicId);
-    dispatch(setCurrentUser(user));
-  }
-
   return (
     <PubNubProvider client={pubnub}>
-      <CookiesProvider>
-        <AppComponent>
-          <Component {...pageProps} />
-        </AppComponent>
-      </CookiesProvider>
+      <AppComponent>
+        <NextNprogress
+          color="#29D"
+          startPosition={0.3}
+          height="3"
+        />
+        <Component {...pageProps} />
+      </AppComponent>
     </PubNubProvider>
   );
+}
+
+NextApp.getInitialProps = async (appContext) => {
+  const { req, res } = appContext.ctx;
+  const appProps = await App.getInitialProps(appContext);
+  try {
+    const { auth_token } = parseCookies(req)
+    if (auth_token == null) {
+      await handleRequestError({ response: { status: 401, statusText: '' } }, req, res)
+      return appProps;
+    }
+    const { data: currentUser } = await axios.get(`${baseAppUrl}/api/auth/me`, {
+      headers: req.headers
+    });
+    const { data: currentClinic } = await axios.get(`${baseAppUrl}/api/clinic/details`, {
+      headers: req.headers
+    });
+    return {
+      ...appProps,
+      pageProps: {
+        ...appProps.pageProps,
+        currentUser,
+        currentClinic,
+      }
+    };
+  } catch (error) {
+    await handleRequestError(error, req, res);
+    return appProps;
+  }
 }
 
 export default wrapper.withRedux(NextApp)

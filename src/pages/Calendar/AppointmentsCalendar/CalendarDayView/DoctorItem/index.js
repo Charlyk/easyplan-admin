@@ -10,8 +10,8 @@ import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 
-import IconClock from '../../../../../assets/icons/iconClock';
-import { textForKey } from '../../../../../utils/localization';
+import IconClock from '../../../../../../components/icons/iconClock';
+import { textForKey } from '../../../../../../utils/localization';
 import styles from './DoctorItem.module.scss';
 
 const DoctorItem = ({ doctor, onAddPause }) => {

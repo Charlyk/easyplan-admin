@@ -3,10 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
-import IconPlus from '../../../assets/icons/iconPlus';
+import IconPlus from '../../../../components/icons/iconPlus';
 import EasyTab from '../../../components/EasyTab';
-import { Role } from '../../../utils/constants';
-import { textForKey } from '../../../utils/localization';
+import { Role } from '../../../../utils/constants';
+import { textForKey } from '../../../../utils/localization';
 import styles from './UserHeader.module.scss'
 
 const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {

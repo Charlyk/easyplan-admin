@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
-import ResetPassword from './ResetPassword';
-import styles from './Login.module.scss';
+import LoginForm from '../../../components/login/LoginForm';
+import RegisterForm from '../../../components/login/RegisterForm';
+import ResetPassword from '../../../components/login/ResetPassword';
+import styles from '../../../styles/Login.module.scss';
 
 const FormType = {
   login: 'login',

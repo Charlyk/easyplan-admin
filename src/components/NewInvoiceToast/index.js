@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Typography } from '@material-ui/core';
-import { textForKey } from '../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 import styles from './NewInvoiceToast.module.scss'
 
 const NewInvoiceToast = () => {

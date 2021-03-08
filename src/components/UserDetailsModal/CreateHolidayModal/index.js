@@ -6,7 +6,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import { getAppLanguage, textForKey } from '../../../utils/localization';
+import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import EasyPlanModal from '../../EasyPlanModal';
 import styles from './CreateHolidayModal.module.scss';
 

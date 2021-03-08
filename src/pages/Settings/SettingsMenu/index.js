@@ -3,8 +3,8 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconNext from '../../../assets/icons/iconNext';
-import { textForKey } from '../../../utils/localization';
+import IconNext from '../../../../components/icons/iconNext';
+import { textForKey } from '../../../../utils/localization';
 import styles from './SettingsMenu.module.scss';
 
 const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {

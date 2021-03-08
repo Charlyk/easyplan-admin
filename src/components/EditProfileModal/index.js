@@ -6,14 +6,14 @@ import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
-import { setCurrentUser } from '../../redux/actions/actions';
-import { userSelector } from '../../redux/selectors/rootSelector';
-import authAPI from '../../utils/api/authAPI';
-import { EmailRegex, PasswordRegex } from '../../utils/constants';
-import { uploadFileToAWS, urlToLambda } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
-import authManager from '../../utils/settings/authManager';
+import IconAvatar from '../../../components/icons/iconAvatar';
+import { setCurrentUser } from '../../../redux/actions/actions';
+import { userSelector } from '../../../redux/selectors/rootSelector';
+import authAPI from '../../../utils/api/authAPI';
+import { EmailRegex, PasswordRegex } from '../../../utils/constants';
+import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import authManager from '../../../utils/settings/authManager';
 import EasyPlanModal from '../EasyPlanModal';
 import './EditProfileModal.module.scss';
 

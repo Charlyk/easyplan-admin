@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import IconPlus from '../../../../../assets/icons/iconPlus';
+import IconPlus from '../../../../../../components/icons/iconPlus';
 import styles from './ScheduleItemContainer.module.scss';
 
 const ScheduleItemContainer = ({

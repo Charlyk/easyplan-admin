@@ -5,12 +5,12 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconError from '../../../../assets/icons/iconError';
-import IconPending from '../../../../assets/icons/IconPending';
-import IconSuccess from '../../../../assets/icons/iconSuccess';
-import { setSMSMessageStatus } from '../../../../redux/actions/patientActions';
-import { updateSMSMessageStatusSelector } from '../../../../redux/selectors/patientSelector';
-import { textForKey } from '../../../../utils/localization';
+import IconError from '../../../../../components/icons/iconError';
+import IconPending from '../../../../../components/icons/IconPending';
+import IconSuccess from '../../../../../components/icons/iconSuccess';
+import { setSMSMessageStatus } from '../../../../../redux/actions/patientActions';
+import { updateSMSMessageStatusSelector } from '../../../../../redux/selectors/patientSelector';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './PatientMessage.module.scss';
 
 const PatientMessage = ({ message }) => {

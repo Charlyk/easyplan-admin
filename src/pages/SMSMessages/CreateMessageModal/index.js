@@ -10,10 +10,10 @@ import { toast } from 'react-toastify';
 
 import EasyDatePicker from '../../../components/EasyDatePicker';
 import EasyPlanModal from '../../../components/EasyPlanModal';
-import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { generateReducerActions } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+import { clinicDetailsSelector } from '../../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import styles from './CreateMessageModal.module.scss';
 
 const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;

@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import { Statuses } from '../../../utils/constants';
+import { Statuses } from '../../../../utils/constants';
 import styles from './ScheduleItem.module.scss';
 
 const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {

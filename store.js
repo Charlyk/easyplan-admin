@@ -2,7 +2,7 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import timerMiddleware from "redux-timer-middleware";
-import rootReducer from "./src/redux/reducers/rootReducer";
+import rootReducer from "./redux/reducers/rootReducer";
 import { createWrapper } from 'next-redux-wrapper';
 
 const composeEnhancers =

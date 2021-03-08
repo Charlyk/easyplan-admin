@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-export const baseURL = 'https://api.easyplan.pro/api/authentication'
+export const baseURL = 'http://localhost:8080/api/authentication'
 
 export async function login(username, password) {
   try {

@@ -5,16 +5,16 @@ import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../../assets/icons/iconAvatar';
-import IconSuccess from '../../../assets/icons/iconSuccess';
-import LoadingButton from '../../../components/LoadingButton';
-import { setCurrentUser } from '../../../redux/actions/actions';
-import { userSelector } from '../../../redux/selectors/rootSelector';
-import authAPI from '../../../utils/api/authAPI';
-import { EmailRegex } from '../../../utils/constants';
-import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import authManager from '../../../utils/settings/authManager';
+import IconAvatar from '../../../../components/icons/iconAvatar';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import LoadingButton from '../../../../components/LoadingButton';
+import { setCurrentUser } from '../../../../redux/actions/actions';
+import { userSelector } from '../../../../redux/selectors/rootSelector';
+import authAPI from '../../../../utils/api/authAPI';
+import { EmailRegex } from '../../../../utils/constants';
+import { uploadFileToAWS, urlToLambda } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
+import authManager from '../../../../utils/settings/authManager';
 import styles from './AccountSettings.module.scss'
 
 const AccountSettings = () => {

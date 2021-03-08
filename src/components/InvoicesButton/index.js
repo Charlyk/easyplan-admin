@@ -6,15 +6,15 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { setPaymentModal } from '../../redux/actions/actions';
+import { setPaymentModal } from '../../../redux/actions/actions';
 import {
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
-} from '../../redux/selectors/clinicSelector';
-import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { formattedAmount } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../redux/selectors/clinicSelector';
+import { updateInvoicesSelector } from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { formattedAmount } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import NewInvoiceToast from '../NewInvoiceToast';
 
 const InvoicesButton = () => {

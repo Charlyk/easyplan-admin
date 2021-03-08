@@ -9,9 +9,9 @@ import PatientAppointments from '../../../components/PatientDetailsModal/Patient
 import PatientNotes from '../../../components/PatientDetailsModal/PatientNotes';
 import OrthodonticPlan from '../../../components/PatientDetailsModal/OrthodonticPlan';
 import PatientXRay from '../../../components/PatientDetailsModal/PatientXRay';
-import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { textForKey } from '../../../utils/localization';
+import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { textForKey } from '../../../../utils/localization';
 import styles from './PatientDetails.module.scss';
 
 const TabId = {

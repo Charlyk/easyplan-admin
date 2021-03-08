@@ -4,13 +4,13 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconSuccess from '../../../assets/icons/iconSuccess';
-import LoadingButton from '../../../components/LoadingButton';
-import { setCurrentUser } from '../../../redux/actions/actions';
-import { userSelector } from '../../../redux/selectors/rootSelector';
-import authAPI from '../../../utils/api/authAPI';
-import { textForKey } from '../../../utils/localization';
-import authManager from '../../../utils/settings/authManager';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import LoadingButton from '../../../../components/LoadingButton';
+import { setCurrentUser } from '../../../../redux/actions/actions';
+import { userSelector } from '../../../../redux/selectors/rootSelector';
+import authAPI from '../../../../utils/api/authAPI';
+import { textForKey } from '../../../../utils/localization';
+import authManager from '../../../../utils/settings/authManager';
 import styles from './SecuritySettings.module.scss';
 
 const SecuritySettings = () => {

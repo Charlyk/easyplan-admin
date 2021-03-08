@@ -4,20 +4,20 @@ import { ClickAwayListener } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import IconArrowDown from '../../assets/icons/iconArrowDown';
+import IconArrowDown from '../../../components/icons/iconArrowDown';
 import ClinicSelector from '../../components/ClinicSelector';
 import EditProfileModal from '../../components/EditProfileModal';
-import PageHeader from '../../components/PageHeader';
+import PageHeader from '../../../components/common/PageHeader';
 import {
   changeSelectedClinic,
   setCreateClinic,
   triggerUserLogout,
-} from '../../redux/actions/actions';
-import { userSelector } from '../../redux/selectors/rootSelector';
-import { updateLink } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
-import authManager from '../../utils/settings/authManager';
-import sessionManager from '../../utils/settings/sessionManager';
+} from '../../../redux/actions/actions';
+import { userSelector } from '../../../redux/selectors/rootSelector';
+import { updateLink } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import authManager from '../../../utils/settings/authManager';
+import sessionManager from '../../../utils/settings/sessionManager';
 import DoctorPatientDetails from '../DoctorPatientDetails';
 import DoctorPatients from '../DoctorPatients';
 import styles from './DoctorsMain.module.scss';

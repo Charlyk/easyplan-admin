@@ -10,7 +10,7 @@ import AddNote from './components/AddNote';
 import AddPaymentModal from './components/AddPaymentModal';
 import AddXRay from './components/AddXRay';
 import CheckoutModal from './components/CheckoutModal';
-import ConfirmationModal from './components/ConfirmationModal';
+import ConfirmationModal from '../components/ConfirmationModal';
 import CreateClinicModal from './components/CreateClinicModal';
 import ExchangeRates from './components/ExchangeRates';
 import FullScreenImageModal from './components/FullScreenImageModal';
@@ -23,35 +23,35 @@ import {
   setUpdateCurrentUser,
   toggleForceLogoutUser,
   triggerUserLogout,
-} from './redux/actions/actions';
-import { setAddPaymentModal } from './redux/actions/addPaymentModalActions';
-import { setIsExchangeRatesModalOpen } from './redux/actions/exchangeRatesActions';
-import { setImageModal } from './redux/actions/imageModalActions';
-import { addPaymentModalSelector } from './redux/selectors/addPaymentModalSelector';
-import { isExchangeRateModalOpenSelector } from './redux/selectors/exchangeRatesModalSelector';
-import { imageModalSelector } from './redux/selectors/imageModalSelector';
+} from '../redux/actions/actions';
+import { setAddPaymentModal } from '../redux/actions/addPaymentModalActions';
+import { setIsExchangeRatesModalOpen } from '../redux/actions/exchangeRatesActions';
+import { setImageModal } from '../redux/actions/imageModalActions';
+import { addPaymentModalSelector } from '../redux/selectors/addPaymentModalSelector';
+import { isExchangeRateModalOpenSelector } from '../redux/selectors/exchangeRatesModalSelector';
+import { imageModalSelector } from '../redux/selectors/imageModalSelector';
 import {
   createClinicSelector,
   patientNoteModalSelector,
   patientXRayModalSelector,
   paymentModalSelector,
-} from './redux/selectors/modalsSelector';
+} from '../redux/selectors/modalsSelector';
 import {
   forceLogoutSelector,
   logoutSelector,
   newClinicIdSelector,
   updateCurrentUserSelector,
   userSelector,
-} from './redux/selectors/rootSelector';
-import authAPI from './utils/api/authAPI';
-import { fetchClinicData } from './utils/helperFuncs';
-import { getAppLanguage, textForKey } from './utils/localization';
-import { handleRemoteMessage } from './utils/pubnubUtils';
-import authManager from './utils/settings/authManager';
+} from '../redux/selectors/rootSelector';
+import authAPI from '../utils/api/authAPI';
+import { fetchClinicData } from '../utils/helperFuncs';
+import { getAppLanguage, textForKey } from '../utils/localization';
+import { handleRemoteMessage } from '../utils/pubnubUtils';
+import authManager from '../utils/settings/authManager';
 import 'moment/locale/ro';
 import 'moment/locale/en-gb';
 import 'moment/locale/ru';
-import sessionManager from './utils/settings/sessionManager';
+import sessionManager from '../utils/settings/sessionManager';
 import { CircularProgress } from "@material-ui/core";
 
 function App({ children }) {

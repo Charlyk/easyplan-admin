@@ -3,10 +3,10 @@ import React from 'react';
 import { Tooltip, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import IconClock from '../../assets/icons/iconClock';
-import IconDollar from '../../assets/icons/iconDollar';
-import IconEditService from '../../assets/icons/iconEditService';
-import { textForKey } from '../../utils/localization';
+import IconClock from '../../../components/icons/iconClock';
+import IconDollar from '../../../components/icons/iconDollar';
+import IconEditService from '../../../components/icons/iconEditService';
+import { textForKey } from '../../../utils/localization';
 
 const ServiceItem = props => {
   const { service, onEdit } = props;

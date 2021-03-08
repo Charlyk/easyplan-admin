@@ -5,15 +5,15 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconPlus from '../../../assets/icons/iconPlus';
-import { setAppointmentModal } from '../../../redux/actions/actions';
+import IconPlus from '../../../../components/icons/iconPlus';
+import { setAppointmentModal } from '../../../../redux/actions/actions';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
-} from '../../../redux/selectors/scheduleSelector';
-import dataAPI from '../../../utils/api/dataAPI';
-import { generateReducerActions } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+} from '../../../../redux/selectors/scheduleSelector';
+import dataAPI from '../../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import Appointment from './Appointment';
 import styles from './PatientAppointments.module.scss';
 

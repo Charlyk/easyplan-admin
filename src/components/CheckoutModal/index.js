@@ -25,29 +25,29 @@ import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconClose from '../../assets/icons/iconClose';
+import IconClose from '../../../components/icons/iconClose';
 import {
   setPatientDetails,
   toggleAppointmentsUpdate,
   togglePatientPaymentsUpdate,
   toggleUpdateInvoices,
-} from '../../redux/actions/actions';
+} from '../../../redux/actions/actions';
 import {
   clinicActiveDoctorsSelector,
   clinicAllServicesSelector,
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
-} from '../../redux/selectors/clinicSelector';
-import { updateInvoiceSelector } from '../../redux/selectors/invoicesSelector';
-import { updateInvoicesSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
+} from '../../../redux/selectors/clinicSelector';
+import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
+import { updateInvoicesSelector } from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
 import {
   adjustValueToNumber,
   formattedAmount,
   generateReducerActions,
   roundToTwo,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import DetailsRow from './DetailsRow';
 import styles from './CheckoutModal.module.scss';
 import ServicesList from './ServicesList';

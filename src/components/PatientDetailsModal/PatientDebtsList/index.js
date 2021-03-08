@@ -18,12 +18,12 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconPrint from '../../../assets/icons/iconPrint';
-import { setPaymentModal } from '../../../redux/actions/actions';
-import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
-import dataAPI, { baseURL } from '../../../utils/api/dataAPI';
-import { formattedAmount } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+import IconPrint from '../../../../components/icons/iconPrint';
+import { setPaymentModal } from '../../../../redux/actions/actions';
+import { updateInvoiceSelector } from '../../../../redux/selectors/invoicesSelector';
+import dataAPI, { baseURL } from '../../../../utils/api/dataAPI';
+import { formattedAmount } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import styles from './PatientDebtsList.module.scss';
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {

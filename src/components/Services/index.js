@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import './Services.module.scss';
 import { Button } from 'react-bootstrap';
 
-import IconPlus from '../../assets/icons/iconPlus';
-import dataAPI from '../../utils/api/dataAPI';
-import { textForKey } from '../../utils/localization';
-import ServiceDetailsModal from '../ServiceDetailsModal';
+import IconPlus from '../../../components/icons/iconPlus';
+import dataAPI from '../../../utils/api/dataAPI';
+import { textForKey } from '../../../utils/localization';
+import ServiceDetailsModal from '../../../components/ServiceDetailsModal';
 import ServiceItem from './ServiceItem';
 
 const Services = props => {

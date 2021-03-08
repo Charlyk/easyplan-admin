@@ -13,12 +13,12 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
-import { Action } from '../../../../utils/constants';
+import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
+import { Action } from '../../../../../utils/constants';
 import {
   getCurrentWeek,
   logUserAction,
-} from '../../../../utils/helperFuncs';
+} from '../../../../../utils/helperFuncs';
 import CalendarWeekDayView from './CalendarWeekDayView';
 import styles from './CalendarWeekView.module.scss';
 

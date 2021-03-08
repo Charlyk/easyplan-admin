@@ -9,17 +9,17 @@ import PropTypes from 'prop-types';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import IconClose from '../../assets/icons/iconClose';
-import IconSuccess from '../../assets/icons/iconSuccess';
+import IconClose from '../../../components/icons/iconClose';
+import IconSuccess from '../../../components/icons/iconSuccess';
 import {
   clinicDoctorsSelector,
   clinicServicesSelector,
-} from '../../redux/selectors/clinicSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { generateReducerActions } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { generateReducerActions } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import './MapSchedulesDataModal.module.scss';
-import LoadingButton from '../LoadingButton';
+import LoadingButton from '../../../components/LoadingButton';
 
 export const MappingData = {
   none: 'none',

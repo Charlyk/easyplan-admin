@@ -16,17 +16,17 @@ import PhoneInput from 'react-phone-input-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../assets/icons/iconAvatar';
-import { toggleAppointmentsUpdate } from '../../redux/actions/actions';
-import { clinicActiveDoctorsSelector } from '../../redux/selectors/clinicSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { Action, EmailRegex } from '../../utils/constants';
+import IconAvatar from '../../../components/icons/iconAvatar';
+import { toggleAppointmentsUpdate } from '../../../redux/actions/actions';
+import { clinicActiveDoctorsSelector } from '../../../redux/selectors/clinicSelector';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action, EmailRegex } from '../../../utils/constants';
 import {
   generateReducerActions,
   logUserAction,
   urlToLambda,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../EasyDatePicker';
 import EasyPlanModal from '../EasyPlanModal';
 import styles from './AddAppointment.module.scss';

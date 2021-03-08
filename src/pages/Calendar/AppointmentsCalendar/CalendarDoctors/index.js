@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, InputGroup, Spinner } from 'react-bootstrap';
 
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 import styles from './CalendarDoctors.module.scss';
 

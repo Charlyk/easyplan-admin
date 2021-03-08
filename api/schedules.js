@@ -1,14 +1,15 @@
 import moment from "moment-timezone";
 import Axios from "axios";
+import { getHeaders } from "./utils";
 
-export const baseURL = 'https://api.easyplan.pro/api'
+export const baseURL = 'http://localhost:8080/api'
 
-export async function getDaySchedules(date, headers) {
+export async function getDaySchedules(date, req) {
   try {
     const stringDate = moment(date).format('YYYY-MM-DD');
     const response = await Axios.get(
       `${baseURL}/schedules/v2/day?&date=${stringDate}`,
-      { headers }
+      { headers: getHeaders(req) }
     );
     const { data: responseData } = response;
     if (responseData == null) {

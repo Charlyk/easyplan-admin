@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Statistics.module.scss';
+import styles from '../../../styles/Statistics.module.scss';
 import { Route, Switch } from 'react-router-dom';
 
 import ActivityLogs from './components/activityLogs/ActivityLogs';

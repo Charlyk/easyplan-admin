@@ -18,23 +18,23 @@ import { Button, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconArrowDown from '../../assets/icons/iconArrowDown';
-import IconClose from '../../assets/icons/iconClose';
-import IconEdit from '../../assets/icons/iconEdit';
-import IconTrash from '../../assets/icons/iconTrash';
+import IconArrowDown from '../../../components/icons/iconArrowDown';
+import IconClose from '../../../components/icons/iconClose';
+import IconEdit from '../../../components/icons/iconEdit';
+import IconTrash from '../../../components/icons/iconTrash';
 import {
   setPatientDetails,
   toggleAppointmentsUpdate,
-} from '../../redux/actions/actions';
-import { updateInvoiceSelector } from '../../redux/selectors/invoicesSelector';
+} from '../../../redux/actions/actions';
+import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
-} from '../../redux/selectors/scheduleSelector';
-import dataAPI, { baseURL } from '../../utils/api/dataAPI';
-import { ManualStatuses, Statuses } from '../../utils/constants';
-import { formattedAmount } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+} from '../../../redux/selectors/scheduleSelector';
+import dataAPI, { baseURL } from '../../../utils/api/dataAPI';
+import { ManualStatuses, Statuses } from '../../../utils/constants';
+import { formattedAmount } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import SingleInputModal from '../SingleInputModal';
 
 const AppointmentDetails = ({

@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import styles from './Services.module.scss';
+import styles from '../../../styles/Services.module.scss';
 import {
   Typography,
   Tabs,
@@ -14,31 +14,31 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconEdit from '../../assets/icons/iconEdit';
-import IconPlus from '../../assets/icons/iconPlus';
-import ConfirmationModal from '../../components/ConfirmationModal';
-import CreateCategoryModal from '../../components/CreateCategoryModal';
-import LoadingButton from '../../components/LoadingButton';
+import IconEdit from '../../../components/icons/iconEdit';
+import IconPlus from '../../../components/icons/iconPlus';
+import ConfirmationModal from '../../../components/ConfirmationModal';
+import CreateCategoryModal from '../../../components/CreateCategoryModal';
+import LoadingButton from '../../../components/LoadingButton';
 import SetupExcelModal, { UploadMode } from '../../components/SetupExcelModal';
 import ImportDataModal from '../../components/UploadPatientsModal';
-import { toggleImportModal } from '../../redux/actions/actions';
-import { setClinicServices } from '../../redux/actions/clinicActions';
+import { toggleImportModal } from '../../../redux/actions/actions';
+import { setClinicServices } from '../../../redux/actions/clinicActions';
 import {
   closeServiceDetailsModal,
   setServiceDetailsModal,
   setServiceModalCategory,
   setServiceModalService,
-} from '../../redux/actions/serviceDetailsActions';
-import { clinicAllServicesSelector } from '../../redux/selectors/clinicSelector';
-import { updateServicesSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
+} from '../../../redux/actions/serviceDetailsActions';
+import { clinicAllServicesSelector } from '../../../redux/selectors/clinicSelector';
+import { updateServicesSelector } from '../../../redux/selectors/rootSelector';
+import dataAPI from '../../../utils/api/dataAPI';
 import {
   fetchClinicData,
   generateReducerActions,
   uploadFileToAWS,
-} from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
-import ServiceRow from './ServiceRow';
+} from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import ServiceRow from '../../../components/services/ServiceRow';
 import clsx from "clsx";
 
 const categoryModalState = {

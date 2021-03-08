@@ -7,12 +7,12 @@ import { Spinner } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { userSelector } from '../../redux/selectors/rootSelector';
+import { userSelector } from '../../../redux/selectors/rootSelector';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
-} from '../../redux/selectors/scheduleSelector';
-import dataAPI from '../../utils/api/dataAPI';
+} from '../../../redux/selectors/scheduleSelector';
+import dataAPI from '../../../utils/api/dataAPI';
 import PatientsFilter from './PatientsFilter';
 import PatientsList from './PatientsList';
 import styles from './DoctorPatients.module.scss';

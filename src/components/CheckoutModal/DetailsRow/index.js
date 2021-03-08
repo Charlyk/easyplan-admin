@@ -11,7 +11,7 @@ import { Autocomplete } from '@material-ui/lab';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import styles from './DetailsRow.module.scss';
 
 const DetailsRow = ({

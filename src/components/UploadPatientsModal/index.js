@@ -4,7 +4,7 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
-import { textForKey } from '../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import './UploadPatientsModal.module.scss';
 

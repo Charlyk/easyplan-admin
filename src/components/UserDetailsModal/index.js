@@ -7,15 +7,15 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import styles from './UserDetailsModal.module.scss';
-import IconClose from '../../assets/icons/iconClose';
-import IconSuccess from '../../assets/icons/iconSuccess';
-import { triggerUsersUpdate } from '../../redux/actions/actions';
-import dataAPI from '../../utils/api/dataAPI';
-import { Action, Role } from '../../utils/constants';
-import { fetchClinicData, logUserAction } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import IconClose from '../../../components/icons/iconClose';
+import IconSuccess from '../../../components/icons/iconSuccess';
+import { triggerUsersUpdate } from '../../../redux/actions/actions';
+import dataAPI from '../../../utils/api/dataAPI';
+import { Action, Role } from '../../../utils/constants';
+import { fetchClinicData, logUserAction } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
 import LeftSideModal from '../LeftSideModal';
-import LoadingButton from '../LoadingButton';
+import LoadingButton from '../../../components/LoadingButton';
 import CreateHolidayModal from './CreateHolidayModal';
 import DoctorForm from './DoctorForm';
 

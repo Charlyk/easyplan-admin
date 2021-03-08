@@ -6,16 +6,16 @@ import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
 
-import IconAvatar from '../../../assets/icons/iconAvatar';
-import IconDelete from '../../../assets/icons/iconDelete';
-import IconEdit from '../../../assets/icons/iconEdit';
-import IconEmail from '../../../assets/icons/iconEmail';
-import IconPhone from '../../../assets/icons/iconPhone';
-import IconRefresh from '../../../assets/icons/iconRefresh';
-import LoadingButton from '../../../components/LoadingButton';
-import { Role } from '../../../utils/constants';
-import { urlToLambda } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
+import IconAvatar from '../../../../components/icons/iconAvatar';
+import IconDelete from '../../../../components/icons/iconDelete';
+import IconEdit from '../../../../components/icons/iconEdit';
+import IconEmail from '../../../../components/icons/iconEmail';
+import IconPhone from '../../../../components/icons/iconPhone';
+import IconRefresh from '../../../../components/icons/iconRefresh';
+import LoadingButton from '../../../../components/LoadingButton';
+import { Role } from '../../../../utils/constants';
+import { urlToLambda } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 import styles from './UserItem.module.scss';
 
 const UserItem = ({
