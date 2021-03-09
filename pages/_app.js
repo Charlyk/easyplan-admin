@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { PubNubProvider } from "pubnub-react";
 import { wrapper } from "../store";
 import authManager from "../utils/settings/authManager";
 import AppComponent from '../src/App';
 import PubNub from "pubnub";
 import NextNprogress from 'nextjs-progressbar';
+import axios from "axios";
+import { baseAppUrl } from "../eas.config";
+import { handleRequestError } from "../utils/helperFuncs";
+import App from "next/app";
+import { parseCookies } from "../api/utils";
+import Head from 'next/head';
+import paths from "../utils/paths";
+import { useRouter } from "next/router";
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -13,11 +21,6 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/index.scss'
-import axios from "axios";
-import { baseAppUrl } from "../eas.config";
-import { handleRequestError } from "../utils/helperFuncs";
-import App from "next/app";
-import { parseCookies } from "../api/utils";
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
@@ -26,17 +29,33 @@ const pubnub = new PubNub({
 });
 
 function NextApp({ Component, pageProps }) {
+  const router = useRouter();
+  const { currentClinic } = pageProps;
+
+  const getPageTitle = () => {
+    return paths[router.pathname];
+  };
+
+  const clinicName = useMemo(() => {
+    return currentClinic?.clinicName || 'EasyPlan'
+  }, [currentClinic]);
+
   return (
-    <PubNubProvider client={pubnub}>
-      <AppComponent>
-        <NextNprogress
-          color="#29D"
-          startPosition={0.3}
-          height="3"
-        />
-        <Component {...pageProps} />
-      </AppComponent>
-    </PubNubProvider>
+    <>
+      <Head>
+        <title>{`${clinicName} - ${getPageTitle()}`}</title>
+      </Head>
+      <PubNubProvider client={pubnub}>
+        <AppComponent>
+          <NextNprogress
+            color="#29D"
+            startPosition={0.3}
+            height="3"
+          />
+          <Component {...pageProps} />
+        </AppComponent>
+      </PubNubProvider>
+    </>
   );
 }
 

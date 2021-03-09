@@ -17,6 +17,7 @@ import paymentModal from './paymentModal';
 import schedule from './scheduleReducer';
 import serviceDetailsModal from './serviceDetailsReducer';
 import services from './servicesReducer';
+import users from "./usersReducer";
 
 export default combineReducers({
   main,
@@ -34,7 +35,8 @@ export default combineReducers({
   patient,
   schedule,
   invoices,
-  services
+  services,
+  users,
 });
 
 function main(state = initialState, action) {

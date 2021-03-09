@@ -6,17 +6,17 @@ import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
 
-import IconAvatar from '../../../../components/icons/iconAvatar';
-import IconDelete from '../../../../components/icons/iconDelete';
-import IconEdit from '../../../../components/icons/iconEdit';
-import IconEmail from '../../../../components/icons/iconEmail';
-import IconPhone from '../../../../components/icons/iconPhone';
-import IconRefresh from '../../../../components/icons/iconRefresh';
-import LoadingButton from '../../../../components/LoadingButton';
-import { Role } from '../../../../utils/constants';
-import { urlToLambda } from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
-import styles from './UserItem.module.scss';
+import IconAvatar from '../../icons/iconAvatar';
+import IconDelete from '../../icons/iconDelete';
+import IconEdit from '../../icons/iconEdit';
+import IconEmail from '../../icons/iconEmail';
+import IconPhone from '../../icons/iconPhone';
+import IconRefresh from '../../icons/iconRefresh';
+import LoadingButton from '../../LoadingButton';
+import { Role } from '../../../utils/constants';
+import { urlToLambda } from '../../../utils/helperFuncs';
+import { textForKey } from '../../../utils/localization';
+import styles from '../../../styles/UserItem.module.scss';
 
 const UserItem = ({
   user,
@@ -52,7 +52,7 @@ const UserItem = ({
           valign='middle'
           classes={{ root: styles['user-item__name-and-avatar'] }}
         >
-          <Box height='100%' display='flex' alignItems='center'>
+          <div className={styles.flexContainer} style={{ height: '100%' }}>
             <div
               className={clsx(
                 styles['status-indicator'],
@@ -74,19 +74,19 @@ const UserItem = ({
               {upperFirst(user.firstName.toLowerCase())}{' '}
               {upperFirst(user.lastName.toLowerCase())}
             </Typography>
-          </Box>
+          </div>
         </TableCell>
       )}
       {!isInvitation && (
         <TableCell valign='middle' classes={{ root: styles['user-item__contact'] }}>
-          <Box display='flex' alignItems='center'>
+          <div className={styles.flexContainer}>
             <IconPhone />
             <Typography classes={{ root: styles['contact-label'] }}>
               {user.phoneNumber
                 ? user.phoneNumber
                 : textForKey('No phone number')}
             </Typography>
-          </Box>
+          </div>
         </TableCell>
       )}
       <TableCell
@@ -94,12 +94,12 @@ const UserItem = ({
         colSpan={isInvitation ? 3 : 1}
         classes={{ root: styles['user-item__contact'] }}
       >
-        <Box display='flex' alignItems='center'>
+        <div className={styles.flexContainer}>
           <IconEmail />
           <Typography classes={{ root: styles['contact-label'] }}>
             {user.email}
           </Typography>
-        </Box>
+        </div>
       </TableCell>
       <TableCell valign='middle'>
         <div className={styles['user-item__action-buttons']}>

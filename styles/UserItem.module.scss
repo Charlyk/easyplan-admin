@@ -20,6 +20,11 @@
     }
   }
 
+  .flexContainer {
+    display: flex;
+    align-items: center;
+  }
+
   &__name-and-avatar {
     flex-direction: row;
     align-items: center;

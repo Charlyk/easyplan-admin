@@ -4,8 +4,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
-import SwitchButton from '../../SwitchButton';
-import styles from './DoctorServiceItem.module.scss';
+import SwitchButton from '../../../../src/components/SwitchButton';
+import styles from '../../../../styles/DoctorServiceItem.module.scss';
 
 const DoctorServiceItem = props => {
   const { service, selected, onSelected, doctorService } = props;

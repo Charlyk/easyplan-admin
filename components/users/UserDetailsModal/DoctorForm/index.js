@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -7,9 +7,10 @@ import DoctorBracesSettings from '../DoctorBracesSettings';
 import DoctorHolidays from '../DoctorHolidays';
 import DoctorServices from '../DoctorServices';
 import DoctorWorkHours from '../DoctorWorkHours';
-import styles from './DoctorForm.module.scss';
+import styles from '../../../../styles/DoctorForm.module.scss';
+import sortBy from 'lodash/sortBy';
 
-const DoctorForm = ({ data, onChange, onCreateHoliday, onDeleteHoliday }) => {
+const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHoliday }) => {
   const handleServicesChange = services => {
     onChange({ services });
   };
@@ -21,6 +22,15 @@ const DoctorForm = ({ data, onChange, onCreateHoliday, onDeleteHoliday }) => {
   const handleWorkDaysChange = workdays => {
     onChange({ workdays });
   };
+
+  const clinicServices = useMemo(() => {
+    const activeServices = currentClinic.services.filter(item => !item.deleted);
+    return sortBy(activeServices, item => item.name.toLowerCase());
+  }, [currentClinic]);
+
+  const clinicBraces = useMemo(() => {
+    return currentClinic.braces
+  }, []);
 
   return (
     <div className={styles['doctor-form']}>
@@ -53,7 +63,7 @@ const DoctorForm = ({ data, onChange, onCreateHoliday, onDeleteHoliday }) => {
             {textForKey('Braces')}
           </div>
         </div>
-        <DoctorBracesSettings show data={data} onChange={handleBracesChange} />
+        <DoctorBracesSettings show clinicBraces={clinicBraces} data={data} onChange={handleBracesChange} />
       </div>
 
       <div className={styles['doctor-form__group']}>
@@ -62,7 +72,7 @@ const DoctorForm = ({ data, onChange, onCreateHoliday, onDeleteHoliday }) => {
             {textForKey('Provided services')}
           </div>
         </div>
-        <DoctorServices show data={data} onChange={handleServicesChange} />
+        <DoctorServices show data={data} clinicServices={clinicServices} onChange={handleServicesChange} />
       </div>
     </div>
   );

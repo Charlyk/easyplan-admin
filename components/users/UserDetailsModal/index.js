@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import { remove, cloneDeep, isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import styles from './UserDetailsModal.module.scss';
-import IconClose from '../../../components/icons/iconClose';
-import IconSuccess from '../../../components/icons/iconSuccess';
-import { triggerUsersUpdate } from '../../../redux/actions/actions';
-import dataAPI from '../../../utils/api/dataAPI';
-import { Action, Role } from '../../../utils/constants';
-import { fetchClinicData, logUserAction } from '../../../utils/helperFuncs';
+import styles from '../../../styles/UserDetailsModal.module.scss';
+import IconClose from '../../icons/iconClose';
+import IconSuccess from '../../icons/iconSuccess';
+import { Role } from '../../../utils/constants';
+import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import LeftSideModal from '../LeftSideModal';
-import LoadingButton from '../../../components/LoadingButton';
+import LeftSideModal from '../../../src/components/LeftSideModal';
+import LoadingButton from '../../LoadingButton';
 import CreateHolidayModal from './CreateHolidayModal';
 import DoctorForm from './DoctorForm';
+import axios from "axios";
+import { baseAppUrl } from "../../../eas.config";
+import { CircularProgress } from "@material-ui/core";
 
 const initialData = {
   services: [],
@@ -67,30 +67,82 @@ const initialData = {
   ],
   holidays: [],
   braces: [],
+  userType: Role.doctor,
 };
 
-const UserDetailsModal = props => {
-  const { onClose, show, user, role } = props;
-  const dispatch = useDispatch();
-  const [currentTab, setCurrentTab] = useState(role);
-  const [isSaving, setIsSaving] = useState(false);
-  const [userData, setUserData] = useState({
-    ...initialData,
-    userType: currentTab,
-  });
-  const [isCreatingHoliday, setIsCreatingHoliday] = useState({
+const initialState = {
+  currentTab: Role.doctor,
+  isSaving: false,
+  isLoading: false,
+  userData: initialData,
+  isCreatingHoliday: {
     open: false,
     holiday: null,
-  });
+  }
+};
+
+const reducerTypes = {
+  setCurrentTab: 'setCurrentTab',
+  setIsSaving: 'setIsSaving',
+  setIsLoading: 'setIsLoading',
+  setUserData: 'setUserData',
+  setIsCreatingHoliday: 'setIsCreatingHoliday',
+  setUserType: 'setUserType',
+  setUserHolidays: 'setUserHolidays',
+};
+
+const actions = generateReducerActions(reducerTypes);
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case reducerTypes.setCurrentTab:
+      return { ...state, currentTab: action.payload };
+    case reducerTypes.setIsSaving:
+      return { ...state, isSaving: action.payload };
+    case reducerTypes.setIsLoading:
+      return { ...state, isLoading: action.payload };
+    case reducerTypes.setUserData:
+      return { ...state, userData: action.payload };
+    case reducerTypes.setIsCreatingHoliday:
+      return { ...state, isCreatingHoliday: action.payload };
+    case reducerTypes.setUserType:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          userType: action.payload,
+        },
+      };
+    case reducerTypes.setUserHolidays:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          holidays: action.payload,
+        },
+      }
+    default:
+      return state;
+  }
+}
+
+const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
+  const [
+    {
+      isSaving,
+      userData,
+      isCreatingHoliday,
+      isLoading,
+    },
+    localDispatch
+  ] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    setCurrentTab(role);
-    setUserData({ ...userData, userType: role });
+    localDispatch(actions.setUserType(role))
   }, [role]);
 
   useEffect(() => {
     if (user != null) {
-      logUserAction(Action.ViewUser, JSON.stringify(user));
       setTimeout(() => {
         fetchUserDetails();
       }, 300);
@@ -98,22 +150,27 @@ const UserDetailsModal = props => {
   }, [user]);
 
   const fetchUserDetails = async () => {
-    const response = await dataAPI.fetchUserDetails(user.id);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    localDispatch(actions.setIsLoading(true));
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/users/${user.id}`);
       const { data: userDetails } = response;
-      setUserData({
-        ...initialData,
-        services: userDetails.services,
-        holidays: userDetails.holidays,
-        braces: userDetails.braces,
-        workdays:
-          userDetails.workdays?.map(item => ({
-            ...item,
-            selected: !item.isDayOff,
-          })) || [],
-      });
+      localDispatch(
+        actions.setUserData({
+          ...initialData,
+          services: userDetails.services,
+          holidays: userDetails.holidays,
+          braces: userDetails.braces,
+          workdays:
+            userDetails.workdays?.map(item => ({
+              ...item,
+              selected: !item.isDayOff,
+            })) || [],
+        })
+      );
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsLoading(false));
     }
   };
 
@@ -123,18 +180,11 @@ const UserDetailsModal = props => {
   };
 
   const handleTabSelect = newKey => {
-    setCurrentTab(newKey);
-    setUserData({
-      ...initialData,
-      userType: newKey,
-    });
+    localDispatch(actions.setUserType(newKey));
   };
 
   const handleFormChange = newData => {
-    setUserData({
-      ...userData,
-      ...newData,
-    });
+    localDispatch(actions.setUserData({ ...userData, ...newData }));
   };
 
   const saveUser = async () => {
@@ -160,50 +210,38 @@ const UserDetailsModal = props => {
   };
 
   const updateUser = async requestBody => {
-    const response = await dataAPI.updateUser(user.id, requestBody);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      logUserAction(
-        Action.EditUser,
-        JSON.stringify({ before: user, after: requestBody }),
-      );
-      dispatch(triggerUsersUpdate(true));
-      dispatch(fetchClinicData());
+    try {
+      await axios.put(`${baseAppUrl}/api/users/${user.id}`, requestBody);
       handleModalClose();
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
   const handleSaveForm = async () => {
-    setIsSaving(true);
+    localDispatch(actions.setIsSaving(true));
     await saveUser();
-    setIsSaving(false);
+    localDispatch(actions.setIsSaving(false));
   };
 
   const handleCreateHoliday = holiday => {
-    setIsCreatingHoliday({ open: true, holiday: holiday });
+    localDispatch(actions.setIsCreatingHoliday({ open: true, holiday: holiday }));
   };
 
   const handleHolidayDelete = async holiday => {
-    if (history.id == null) {
+    if (holiday.id == null) {
       const newHolidays = cloneDeep(userData.holidays);
       remove(newHolidays, item => isEqual(item, holiday));
-      setUserData({
-        ...userData,
-        holidays: newHolidays,
-      });
+      localDispatch(actions.setUserHolidays(newHolidays));
       return;
     }
-    const response = await dataAPI.deleteUserHoliday(user.id, holiday.id);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      await axios.delete(`${baseAppUrl}/api/users/${user.id}/holidays/${holiday.id}`);
       const newHolidays = cloneDeep(userData.holidays);
       remove(newHolidays, item => item.id === holiday.id);
-      setUserData({
-        ...userData,
-        holidays: newHolidays,
-      });
+      localDispatch(actions.setUserHolidays(newHolidays));
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -236,15 +274,12 @@ const UserDetailsModal = props => {
       });
     }
 
-    setUserData({
-      ...userData,
-      holidays: newHolidays,
-    });
-    setIsCreatingHoliday({ open: false, holiday: null });
+    localDispatch(actions.setUserHolidays(newHolidays));
+    localDispatch(actions.setIsCreatingHoliday({ open: false, holiday: null }))
   };
 
   const handleCloseHolidayModal = () => {
-    setIsCreatingHoliday({ open: false, holiday: null });
+    localDispatch(actions.setIsCreatingHoliday({ open: false, holiday: null }))
   };
 
   const steps = [textForKey('Users')];
@@ -270,27 +305,35 @@ const UserDetailsModal = props => {
       />
       <div className={styles['user-details-root']}>
         <div className={styles['user-details-root__content']}>
-          <DoctorForm
-            onCreateHoliday={handleCreateHoliday}
-            onDeleteHoliday={handleHolidayDelete}
-            onChange={handleFormChange}
-            data={userData}
-            showSteps={user == null}
-          />
+          {!isLoading && (
+            <DoctorForm
+              currentClinic={currentClinic}
+              onCreateHoliday={handleCreateHoliday}
+              onDeleteHoliday={handleHolidayDelete}
+              onChange={handleFormChange}
+              data={userData}
+              showSteps={user == null}
+            />
+          )}
+          {isLoading && (
+            <div className='progress-bar-wrapper'>
+              <CircularProgress classes={{ root: 'circular-progress-bar'}}/>
+            </div>
+          )}
         </div>
         <div className={styles['user-details-root__footer']}>
           <Button className='cancel-button' onClick={handleModalClose}>
             {textForKey('Close')}
-            <IconClose />
+            <IconClose/>
           </Button>
           <LoadingButton
             onClick={handleSaveForm}
             className='positive-button'
-            disabled={isSaving}
+            disabled={isSaving || isLoading}
             isLoading={isSaving}
           >
             {textForKey('Save')}
-            {!isSaving && <IconSuccess />}
+            {!isSaving && <IconSuccess/>}
           </LoadingButton>
         </div>
       </div>

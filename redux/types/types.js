@@ -8,6 +8,7 @@ import patientTypes from './patientTypes';
 import schedule from './schedule';
 import seriveDetailsModalTypes from './seriveDetailsModalTypes';
 import servicesTypes from "./servicesTypes";
+import usersTypes from "./usersTypes";
 
 export default {
   setIsAuthenticated: 'setIsAuthenticated',
@@ -47,4 +48,5 @@ export default {
   ...schedule,
   ...invoiceTypes,
   ...servicesTypes,
+  ...usersTypes,
 };

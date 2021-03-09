@@ -4,8 +4,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import { days } from '../../../../utils/constants';
-import WorkDay from '../../WorkDay';
-import styles from './DoctorWorkHours.module.scss';
+import WorkDay from '../../../../src/components/WorkDay';
+import styles from '../../../../styles/DoctorWorkHours.module.scss';
 
 const DoctorWorkHours = props => {
   const { show, data, onChange } = props;

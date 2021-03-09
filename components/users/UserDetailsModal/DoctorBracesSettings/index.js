@@ -8,10 +8,9 @@ import { useSelector } from 'react-redux';
 
 import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
 import DoctorServiceItem from '../DoctorServiceItem';
-import styles from './DoctorBracesSettings.module.scss';
+import styles from '../../../../styles/DoctorBracesSettings.module.scss';
 
-const DoctorBracesSettings = ({ show, data, onChange }) => {
-  const clinicBraces = useSelector(clinicEnabledBracesSelector);
+const DoctorBracesSettings = ({ show, data, onChange, clinicBraces }) => {
 
   const handleServiceSelected = (service, price, percentage, isSelected) => {
     let newList = cloneDeep(data.braces);

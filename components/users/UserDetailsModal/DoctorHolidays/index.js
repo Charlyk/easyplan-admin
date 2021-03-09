@@ -5,11 +5,11 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
-import IconDelete from '../../../../components/icons/iconDelete';
-import IconEdit from '../../../../components/icons/iconEdit';
-import IconUmbrella from '../../../../components/icons/iconUmbrella';
+import IconDelete from '../../../icons/iconDelete';
+import IconEdit from '../../../icons/iconEdit';
+import IconUmbrella from '../../../icons/iconUmbrella';
 import { textForKey } from '../../../../utils/localization';
-import styles from './DoctorHolidays.module.scss';
+import styles from '../../../../styles/DoctorHolidays.module.scss';
 
 const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
   return (
