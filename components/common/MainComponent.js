@@ -10,7 +10,7 @@ import AddAppointmentModal from '../../src/components/AddAppintmentModal';
 import DataMigrationModal from '../../src/components/DataMigrationModal';
 import MainMenu from './MainMenu';
 import PageHeader from './PageHeader';
-import PatientDetailsModal from '../../src/components/PatientDetailsModal';
+import PatientDetailsModal from '../patients/PatientDetailsModal';
 import ServiceDetailsModal from '../ServiceDetailsModal';
 import {
   changeSelectedClinic,

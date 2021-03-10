@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import EasyTab from '../../../components/EasyTab';
-import AppointmentNotes from '../../../components/PatientDetailsModal/AppointmentNotes';
-import PatientAppointments from '../../../components/PatientDetailsModal/PatientAppointments';
-import PatientNotes from '../../../components/PatientDetailsModal/PatientNotes';
-import OrthodonticPlan from '../../../components/PatientDetailsModal/OrthodonticPlan';
-import PatientXRay from '../../../components/PatientDetailsModal/PatientXRay';
+import AppointmentNotes from '../../../../components/patients/PatientDetailsModal/AppointmentNotes';
+import PatientAppointments from '../../../../components/patients/PatientDetailsModal/PatientAppointments';
+import PatientNotes from '../../../../components/patients/PatientDetailsModal/PatientNotes';
+import OrthodonticPlan from '../../../../components/patients/PatientDetailsModal/OrthodonticPlan';
+import PatientXRay from '../../../../components/patients/PatientDetailsModal/PatientXRay';
 import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';

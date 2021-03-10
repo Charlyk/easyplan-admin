@@ -204,10 +204,10 @@ export function setPatientDetails(payload) {
   };
 }
 
-export function togglePatientsListUpdate() {
+export function togglePatientsListUpdate(update) {
   return {
     type: types.toggleUpdatePatients,
-    payload: '',
+    payload: update,
   };
 }
 

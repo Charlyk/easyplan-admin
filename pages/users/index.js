@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from 'react';
 
 import styles from '../../styles/Users.module.scss';
 import {
-  Box,
   CircularProgress,
   Table,
   TableBody,
@@ -17,7 +16,6 @@ import { toast } from 'react-toastify';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import InviteUserModal from '../../src/components/InviteUserModal';
 import UserDetailsModal from '../../components/users/UserDetailsModal';
-import dataAPI from '../../utils/api/dataAPI';
 import { Role } from '../../utils/constants';
 import { generateReducerActions, handleRequestError } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
@@ -116,7 +114,6 @@ const reducer = (state, action) => {
 }
 
 const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: initialInvitations }) => {
-  const dispatch = useDispatch();
   const [
     {
       selectedFilter,
@@ -179,18 +176,25 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
     openInviteModal(type === Role.invitations ? Role.reception : type);
   };
 
-  const handleInviteUser = async (email, role) => {
-    localDispatch(actions.setIsInvitingExistent(true));
-    const response = await dataAPI.inviteUserToClinic({
+  const sendInvitation = async (email, role) => {
+    return axios.put(`${baseAppUrl}/api/users/send-invitation`, {
       emailAddress: email,
       role,
     });
-    if (response.isError) {
-      localDispatch(actions.setInvitingExistentError(response.message));
-    } else {
+  }
+
+  const handleInviteUser = async (email, role) => {
+    localDispatch(actions.setIsInvitingExistent(true));
+    try {
+      await sendInvitation(email, role);
+      await fetchUsers();
       closeInviteModal();
+    } catch (error) {
+      toast.error(error.message);
+      localDispatch(actions.setInvitingExistentError(error.message));
+    } finally {
+      localDispatch(actions.setIsInvitingExistent(false));
     }
-    localDispatch(actions.setIsInvitingExistent(false));
   };
 
   const openInviteModal = (type = Role.reception) => {
@@ -198,7 +202,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
   };
 
   const closeInviteModal = () => {
-    localDispatch(actions.setShowInviteModal({ open: true, type: Role.reception }));
+    localDispatch(actions.setShowInviteModal({ open: false, type: Role.reception }));
   };
 
   const canShowType = type => {
@@ -285,10 +289,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
 
   const handleResendInvitation = async (event, user) => {
     localDispatch(actions.setIsInviting({ loading: true, userId: user.id }));
-    await dataAPI.inviteUserToClinic({
-      emailAddress: user.email,
-      role: user.roleInClinic,
-    });
+    await sendInvitation(user.email, user.roleInClinic);
     localDispatch(actions.setIsInviting({ loading: false, userId: null }));
     localDispatch(actions.setShowInvitationSent(true));
   };
@@ -322,13 +323,14 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
   const deleteInvitation = async () => {
     if (!invitationToDelete) return;
     localDispatch(actions.setIsDeleting(true))
-    const response = await dataAPI.deleteClinicInvitation(
-      invitationToDelete.id,
-    );
-    if (response.isError) {
-      toast.error(textForKey(response.message));
+    try {
+      await axios.delete(`${baseAppUrl}/api/clinic/invitations?invitationId=${invitationToDelete.id}`);
+      await fetchUsers();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsDeleting(false));
     }
-    localDispatch(actions.setIsDeleting(false));
   };
 
   return (

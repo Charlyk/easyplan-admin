@@ -118,7 +118,7 @@ function main(state = initialState, action) {
     case types.toggleUpdatePatients:
       return {
         ...state,
-        updatePatients: !state.updatePatients,
+        updatePatients: action.payload,
       };
     case types.toggleUpdatePatientPayments:
       return {
