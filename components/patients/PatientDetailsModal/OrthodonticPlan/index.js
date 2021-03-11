@@ -14,7 +14,6 @@ import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
 } from '../../../../redux/selectors/clinicSelector';
-import { userSelector } from '../../../../redux/selectors/rootSelector';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { Action, Role } from '../../../../utils/constants';
 import {
@@ -26,6 +25,8 @@ import sessionManager from '../../../../utils/settings/sessionManager';
 import EasyTab from '../../../../src/components/EasyTab';
 import LoadingButton from '../../../LoadingButton';
 import styles from '../../../../styles/OrthodonticPlan.module.scss';
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
 const diagnosisClass = [1, 2, 3];
 const diagnosisOcclusion = [
@@ -201,10 +202,9 @@ const reducer = (state, action) => {
   }
 };
 
-const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
+const OrthodonticPlan = ({ currentUser, patient, scheduleId, onSave }) => {
   const services = useSelector(clinicBracesServicesSelector);
   const braces = useSelector(clinicEnabledBracesSelector);
-  const currentUser = useSelector(userSelector);
   const currentClinic = currentUser.clinics.find(
     it => it.clinicId === sessionManager.getSelectedClinicId(),
   );
@@ -222,13 +222,19 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
 
   const fetchOrthodonticPlan = async () => {
     localDispatch(actions.setIsLoading(true));
-    const response = await dataAPI.fetchBracesPlan(patient.id, planType);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else if (response.data != null) {
+    try {
+      const query = {
+        patientId: patient.id,
+        planType,
+      }
+      const queryString = new URLSearchParams(query).toString()
+      const response = await axios.get(`${baseAppUrl}/api/treatment-plans/orthodontic?${queryString}`);
       updatePlan(response.data);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsLoading(false));
     }
-    localDispatch(actions.setIsLoading(false));
   };
 
   const updatePlan = (newData, type = planType) => {
@@ -706,6 +712,7 @@ const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
 export default OrthodonticPlan;
 
 OrthodonticPlan.propTypes = {
+  currentUser: PropTypes.object.isRequired,
   scheduleId: PropTypes.number,
   patient: PropTypes.object,
   onSave: PropTypes.func,

@@ -12,6 +12,8 @@ import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../../LoadingButton';
 import PatientMessage from './PatientMessage';
 import styles from '../../../../styles/PatientMessages.module.scss';
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
 const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
 
@@ -69,13 +71,14 @@ const PatientMessages = ({ patient }) => {
   const fetchMessages = async () => {
     if (patient == null) return;
     localDispatch(actions.setIsFetching(true));
-    const response = await dataAPI.fetchPatientMessages(patient.id);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/sms`);
       localDispatch(actions.setMessages(response.data));
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsFetching(false));
     }
-    localDispatch(actions.setIsFetching(false));
   };
 
   const handleNewMessageChange = (event) => {
@@ -96,17 +99,17 @@ const PatientMessages = ({ patient }) => {
       return;
     }
     localDispatch(actions.setIsSendingMessage(true));
-    const response = await dataAPI.sendMessageToPatient(
-      patient.id,
-      state.newMessageText,
-    );
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      await axios.post(`${baseAppUrl}/api/patients/${patient.id}/sms`, {
+        messageText: state.newMessageText,
+      });
       localDispatch(actions.setNewMessageText(''));
       await fetchMessages();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsSendingMessage(false));
     }
-    localDispatch(actions.setIsSendingMessage(false));
   };
 
   return (

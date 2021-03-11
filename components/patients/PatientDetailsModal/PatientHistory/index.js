@@ -8,6 +8,8 @@ import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import HistoryItem from './HistoryItem';
 import styles from '../../../../styles/PatientHistory.module.scss';
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
 const PatientHistory = ({ patient }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,13 +23,14 @@ const PatientHistory = ({ patient }) => {
 
   const fetchHistories = async () => {
     setIsLoading(true);
-    const response = await dataAPI.getPatientHistory(patient.id);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/history`);
       setHistories(response.data);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (

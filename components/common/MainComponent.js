@@ -76,6 +76,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
       {patientDetails.patientId != null && (
         <PatientDetailsModal
           {...patientDetails}
+          currentUser={currentUser}
           onClose={handleClosePatientDetails}
         />
       )}

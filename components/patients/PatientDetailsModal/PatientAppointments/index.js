@@ -11,11 +11,13 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector,
 } from '../../../../redux/selectors/scheduleSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import Appointment from './Appointment';
 import styles from '../../../../styles/PatientAppointments.module.scss';
+import { toast } from "react-toastify";
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
 const initialState = {
   schedules: [],
@@ -69,13 +71,14 @@ const PatientAppointments = ({ patient, isDoctor }) => {
 
   const fetchSchedules = async () => {
     localDispatch(actions.setIsLoading(true));
-    const response = await dataAPI.fetchPatientSchedules(patient.id);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/schedules/patient-schedules/${patient.id}`)
       localDispatch(actions.setSchedules(response.data));
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsLoading(false));
     }
-    localDispatch(actions.setIsLoading(false));
   };
 
   const handleAddAppointment = () => {

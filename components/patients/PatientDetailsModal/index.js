@@ -89,6 +89,7 @@ const reducer = (state, action) => {
 
 const PatientDetailsModal = ({
   show,
+  currentUser,
   patientId,
   menuItem,
   onClose,
@@ -187,9 +188,9 @@ const PatientDetailsModal = ({
           <PatientXRay patient={patient} onAddXRay={handleAddXRayImages} />
         );
       case MenuItem.treatmentPlan:
-        return <AppointmentNotes patient={patient} />;
+        return <AppointmentNotes currentUser={currentUser} patient={patient} />;
       case MenuItem.orthodonticPlan:
-        return <OrthodonticPlan patient={patient} />;
+        return <OrthodonticPlan currentUser={currentUser} patient={patient} />;
       case MenuItem.debts:
         return (
           <PatientDebtsList
@@ -350,6 +351,7 @@ const PatientDetailsModal = ({
 export default PatientDetailsModal;
 
 PatientDetailsModal.propTypes = {
+  currentUser: PropTypes.object.isRequired,
   patientId: PropTypes.number.isRequired,
   show: PropTypes.bool,
   onClose: PropTypes.func,

@@ -7,16 +7,14 @@ import { useSelector } from 'react-redux';
 
 import IconPlus from '../../../icons/iconPlus';
 import { updateNotesSelector } from '../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
-import { Action } from '../../../../utils/constants';
-import {
-  generateReducerActions,
-  logUserAction,
-} from '../../../../utils/helperFuncs';
+import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../../LoadingButton';
 import PatientNote from './PatientNote';
 import styles from '../../../../styles/PatientNotes.module.scss';
+import { toast } from "react-toastify";
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
 const initialState = {
   isFetching: false,
@@ -58,30 +56,31 @@ const PatientNotes = ({ patient }) => {
   const handleAddNote = async () => {
     if (state.newNoteText.length === 0) return;
     localDispatch(actions.setIsAddingNote(true));
-    const requestBody = {
-      note: state.newNoteText,
-      mode: 'notes',
-    };
-    await dataAPI.createPatientNote(patient.id, requestBody);
-    logUserAction(
-      Action.CreatePatientNote,
-      JSON.stringify({ patientId: patient.id, requestBody }),
-    );
-    localDispatch(actions.setNewNoteText(''));
-    localDispatch(actions.setIsAddingNote(false));
-
-    fetchNotes();
+    try {
+      const requestBody = {
+        note: state.newNoteText,
+        mode: 'notes',
+      };
+      await axios.post(`${baseAppUrl}/api/patients/${patient.id}/notes`, requestBody);
+      await fetchNotes();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setNewNoteText(''));
+      localDispatch(actions.setIsAddingNote(false));
+    }
   };
 
   const fetchNotes = async () => {
     localDispatch(actions.setIsFetching(true));
-    const response = await dataAPI.fetchPatientNotes(patient.id);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/notes`);
       localDispatch(actions.setNotes(response.data || []));
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsFetching(false));
     }
-    localDispatch(actions.setIsFetching(false));
   };
 
   const handleInputKeyDown = event => {

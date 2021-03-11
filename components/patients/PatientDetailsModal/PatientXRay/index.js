@@ -8,10 +8,12 @@ import { useSelector } from 'react-redux';
 
 import IconPlus from '../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import XRayPhase from './XRayPhase';
 import styles from '../../../../styles/PatientXRay.module.scss'
+import { toast } from "react-toastify";
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
 const ExpandedPhase = {
   initial: 'Initial',
@@ -21,8 +23,8 @@ const ExpandedPhase = {
 
 const PatientXRay = ({ patient, onAddXRay }) => {
   const updateXRay = useSelector(updateXRaySelector);
+  const [isFetching, setIsFetching] = useState(false);
   const [state, setState] = useState({
-    isFetching: false,
     images: { initial: [], middle: [], final: [] },
   });
 
@@ -38,24 +40,22 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   };
 
   const fetchImages = async () => {
-    setState({
-      isFetching: true,
-      images: { initial: [], middle: [], final: [] },
-    });
-    const response = await dataAPI.fetchPatientXRayImages(patient.id);
-    if (response.isError) {
-      console.error(response.message);
+    setIsFetching(true);
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/x-ray`);
+      const { data } = response;
+
+      const mappedImages = {
+        initial: getItemsOfType(data, ExpandedPhase.initial),
+        middle: getItemsOfType(data, ExpandedPhase.middle),
+        final: getItemsOfType(data, ExpandedPhase.final),
+      };
+      setState({ images: mappedImages });
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsFetching(false);
     }
-
-    const { data } = response;
-
-    const mappedImages = {
-      initial: getItemsOfType(data, ExpandedPhase.initial),
-      middle: getItemsOfType(data, ExpandedPhase.middle),
-      final: getItemsOfType(data, ExpandedPhase.final),
-    };
-
-    setState({ isFetching: false, images: mappedImages });
   };
 
   return (
@@ -64,7 +64,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
         {textForKey('X-Ray')}
       </Typography>
       <div className={styles['images-container']}>
-        {!state.isFetching && (
+        {!isFetching && (
           <XRayPhase
             title={textForKey('Initial phase')}
             isExpanded
@@ -72,7 +72,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             phaseId={ExpandedPhase.initial}
           />
         )}
-        {!state.isFetching && (
+        {!isFetching && (
           <XRayPhase
             title={textForKey('Middle phase')}
             isExpanded
@@ -80,7 +80,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             phaseId={ExpandedPhase.middle}
           />
         )}
-        {!state.isFetching && (
+        {!isFetching && (
           <XRayPhase
             title={textForKey('Final phase')}
             isExpanded
@@ -88,7 +88,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             phaseId={ExpandedPhase.final}
           />
         )}
-        {state.isFetching && (
+        {isFetching && (
           <div className='progress-bar-wrapper'>
             <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
           </div>

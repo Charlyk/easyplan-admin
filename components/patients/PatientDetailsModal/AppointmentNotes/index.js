@@ -7,18 +7,18 @@ import { useSelector } from 'react-redux';
 
 import {
   updateNotesSelector,
-  userSelector,
 } from '../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
 import { textForKey } from '../../../../utils/localization';
 import AppointmentNote from './AppointmentNote';
 import styles from '../../../../styles/AppointmentNotes.module.scss';
+import { toast } from "react-toastify";
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
-const AppointmentNotes = ({ patient, onEditNote }) => {
+const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
   const [isFetching, setIsFetching] = useState(false);
   const [visits, setVisits] = useState([]);
   const updateNotes = useSelector(updateNotesSelector);
-  const currentUser = useSelector(userSelector);
 
   useEffect(() => {
     fetchPatientVisits();
@@ -26,13 +26,14 @@ const AppointmentNotes = ({ patient, onEditNote }) => {
 
   const fetchPatientVisits = async () => {
     setIsFetching(true);
-    const response = await dataAPI.fetchPatientVisits(patient.id);
-    if (response.isError) {
-      console.error(response.message);
-    } else {
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/visits`);
       setVisits(sortBy(response.data, (item) => item.created).reverse() || []);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsFetching(false)
     }
-    setIsFetching(false);
   };
 
   return (

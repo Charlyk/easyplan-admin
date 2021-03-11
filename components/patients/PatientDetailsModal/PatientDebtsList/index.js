@@ -21,10 +21,11 @@ import { toast } from 'react-toastify';
 import IconPrint from '../../../icons/iconPrint';
 import { setPaymentModal } from '../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../redux/selectors/invoicesSelector';
-import dataAPI, { baseURL } from '../../../../utils/api/dataAPI';
 import { formattedAmount } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import styles from '../../../../styles/PatientDebtsList.module.scss';
+import axios from "axios";
+import { baseApiUrl, baseAppUrl } from "../../../../eas.config";
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   const dispatch = useDispatch();
@@ -64,20 +65,20 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
 
   const fetchDebts = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchPatientDebts(patient.id);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/debts`);
       setDebts(
         response.data.map((item) => ({
           ...item,
           isHighlighted: viewInvoice?.id === item.id,
         })),
       );
-
       setTimeout(onDebtShowed, 600);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handlePayDebt = async (debt) => {
@@ -151,7 +152,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
                         justifyContent='flex-end'
                       >
                         <a
-                          href={`${baseURL}/invoices/receipt/${item.id}?mode=invoice`}
+                          href={`${baseApiUrl}/invoices/receipt/${item.id}?mode=invoice`}
                           target='_blank'
                           rel='noreferrer'
                           style={{ marginRight: '.5rem' }}
