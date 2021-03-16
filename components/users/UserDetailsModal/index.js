@@ -12,7 +12,7 @@ import { Role } from '../../../utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import LeftSideModal from '../../../src/components/LeftSideModal';
-import LoadingButton from '../../LoadingButton';
+import LoadingButton from '../../common/LoadingButton';
 import CreateHolidayModal from './CreateHolidayModal';
 import DoctorForm from './DoctorForm';
 import axios from "axios";

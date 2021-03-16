@@ -176,6 +176,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
         </ClickAwayListener>
         <IconArrowDown/>
         <ClinicSelector
+          currentUser={currentUser}
           anchorEl={buttonRef}
           onClose={handleCompanyClose}
           open={isClinicsOpen}

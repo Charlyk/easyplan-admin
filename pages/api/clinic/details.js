@@ -5,10 +5,19 @@ import cookie from 'cookie';
 import { handler } from "../handler";
 
 export default authorized(async function clinicDetails(req, res) {
-    const data = await handler(getClinicDetails, req, res);
-    if (data != null) {
-      res.json(data);
+  switch (req.method) {
+    case 'GET': {
+      const data = await handler(getClinicDetails, req, res);
+      if (data != null) {
+        res.json(data);
+      }
+      break
     }
+    default:
+      res.setHeader('Allow', ['GET']);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
+      break
+  }
 });
 
 function getClinicDetails(req) {

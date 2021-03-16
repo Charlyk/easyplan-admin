@@ -4,8 +4,8 @@ import moment from 'moment-timezone';
 import sortBy from 'lodash/sortBy';
 import { Button, Form } from 'react-bootstrap';
 
-import ActionLogModal from '../../../components/ActionLogModal';
-import EasyDateRangePicker from '../../../components/EasyDateRangePicker';
+import ActionLogModal from '../../../components/analytics/ActionLogModal';
+import EasyDateRangePicker from '../../../components/common/EasyDateRangePicker';
 import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../components/analytics/StatisticFilter';
 import styles from '../../../styles/ActivityLogs.module.scss';

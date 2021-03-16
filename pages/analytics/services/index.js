@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
-import EasyDateRangePicker from '../../../components/EasyDateRangePicker';
+import EasyDateRangePicker from '../../../components/common/EasyDateRangePicker';
 import { setPatientDetails } from '../../../redux/actions/actions';
 import { Role, ScheduleStatuses } from '../../../utils/constants';
 import {

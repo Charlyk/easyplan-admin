@@ -499,6 +499,7 @@ export default {
     'print receipt': 'Print receipt',
     'time zone': 'Time zone',
     'rows per page': 'Rows per page',
+    no_sms_messages: 'No SMS messages yet.'
   },
   ro: {
     analytics: 'Analitică',
@@ -1005,7 +1006,8 @@ export default {
     'Schedule was deleted': 'Programarea a fost ștearsă!',
     'print receipt': 'Printează bon',
     'time zone': 'Fus orar',
-    'rows per page': 'Rânduri pe pagină'
+    'rows per page': 'Rânduri pe pagină',
+    no_sms_messages: 'Încă nu sunt mesaje create'
   },
   ru: {
     analytics: 'Analytics',
@@ -1503,6 +1505,7 @@ export default {
     'Schedule was deleted': 'Schedule was deleted',
     'print receipt': 'Print receipt',
     'time zone': 'Time zone',
-    'rows per page': 'Rows per page'
+    'rows per page': 'Rows per page',
+    no_sms_messages: 'No SMS messages yet.'
   },
 };

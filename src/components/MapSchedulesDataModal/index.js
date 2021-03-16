@@ -19,7 +19,7 @@ import dataAPI from '../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import './MapSchedulesDataModal.module.scss';
-import LoadingButton from '../../../components/LoadingButton';
+import LoadingButton from '../../../components/common/LoadingButton';
 
 export const MappingData = {
   none: 'none',

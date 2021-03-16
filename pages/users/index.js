@@ -13,7 +13,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from '../../components/ConfirmationModal';
+import ConfirmationModal from '../../components/common/ConfirmationModal';
 import InviteUserModal from '../../src/components/InviteUserModal';
 import UserDetailsModal from '../../components/users/UserDetailsModal';
 import { Role } from '../../utils/constants';

@@ -7,7 +7,7 @@ import { ProgressBar } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 
-import ConfirmationModal from '../../../components/ConfirmationModal';
+import ConfirmationModal from '../../../components/common/ConfirmationModal';
 import { MappingData } from '../../components/MapSchedulesDataModal';
 import {
   setAppointmentModal,
@@ -19,7 +19,6 @@ import {
   clinicActiveDoctorsSelector,
   clinicServicesSelector,
 } from '../../../redux/selectors/clinicSelector';
-import { userSelector } from '../../../redux/selectors/rootSelector';
 import types from '../../../redux/types/types';
 import dataAPI from '../../../utils/api/dataAPI';
 import { Action } from '../../../utils/constants';

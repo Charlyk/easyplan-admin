@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { YClientAPIUrl } from '../../../../utils/constants';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import LoadingButton from '../../../../components/LoadingButton';
+import LoadingButton from '../../../../components/common/LoadingButton';
 import styles from './AuthenticationStep.module.scss'
 
 const initialState = {

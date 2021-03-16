@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../components/icons/iconAvatar';
 import FinalizeTreatmentModal from '../../components/FinalizeTreatmentModal';
-import LoadingButton from '../../../components/LoadingButton';
+import LoadingButton from '../../../components/common/LoadingButton';
 import PatientDetails from './PatientDetails';
 import {
   setPatientNoteModal,

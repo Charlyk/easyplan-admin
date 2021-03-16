@@ -20,7 +20,7 @@ import { env } from '../../../utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import CircularProgressWithLabel from '../CircularProgressWithLabel';
-import LoadingButton from '../../../components/LoadingButton';
+import LoadingButton from '../../../components/common/LoadingButton';
 import './SetupExcelModal.module.scss';
 
 export const UploadMode = {

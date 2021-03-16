@@ -11,9 +11,8 @@ import DataMigrationModal from '../../src/components/DataMigrationModal';
 import MainMenu from './MainMenu';
 import PageHeader from './PageHeader';
 import PatientDetailsModal from '../patients/PatientDetailsModal';
-import ServiceDetailsModal from '../ServiceDetailsModal';
+import ServiceDetailsModal from '../services/ServiceDetailsModal';
 import {
-  changeSelectedClinic,
   setAppointmentModal,
   setCreateClinic,
   setPatientDetails,
@@ -26,13 +25,23 @@ import {
   patientDetailsSelector,
 } from '../../redux/selectors/rootSelector';
 import paths from '../../utils/paths';
+import ExchangeRates from "./ExchangeRates";
+import { isExchangeRateModalOpenSelector } from "../../redux/selectors/exchangeRatesModalSelector";
+import { setIsExchangeRatesModalOpen } from "../../redux/actions/exchangeRatesActions";
+import axios from "axios";
+import { baseAppUrl } from "../../eas.config";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { Role } from "../../utils/constants";
 
 const MainComponent = ({ children, currentPath, currentUser, currentClinic }) => {
   const pubnub = usePubNub();
+  const router = useRouter();
   const dispatch = useDispatch();
   const appointmentModal = useSelector(appointmentModalSelector);
   const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
+  const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
 
   useEffect(() => {
     if (currentUser != null) {
@@ -52,8 +61,29 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
     dispatch(setCreateClinic({ open: true, canClose: true }));
   };
 
-  const handleChangeCompany = company => {
-    dispatch(changeSelectedClinic(company.clinicId));
+  const handleChangeCompany = async (company) => {
+    try {
+      const query = { clinicId: company.clinicId };
+      const queryString = new URLSearchParams(query).toString()
+      const { data: selectedClinic } =
+        await axios.get(`${baseAppUrl}/api/clinic/change?${queryString}`);
+      switch (selectedClinic.roleInClinic) {
+        case Role.reception:
+          const isPathRestricted = ['/analytics', '/services', '/users', '/messages']
+            .any(item => router.asPath.startsWith(item));
+          if (isPathRestricted) {
+            await router.replace('/patients');
+          } else {
+            await router.reload();
+          }
+          break;
+        default:
+          await router.reload();
+          break;
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleAppointmentModalClose = () => {
@@ -66,6 +96,10 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
     );
   };
 
+  const handleCloseExchangeRateModal = () => {
+    dispatch(setIsExchangeRatesModalOpen(false));
+  };
+
   const handleCloseImportModal = () => {
     dispatch(toggleImportModal());
   };
@@ -73,9 +107,18 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
   return (
     <div className={styles['main-page']} id='main-page'>
       <ServiceDetailsModal currentClinic={currentClinic} />
+      {isExchangeRatesModalOpen && (
+        <ExchangeRates
+          currentClinic={currentClinic}
+          currentUser={currentUser}
+          open={isExchangeRatesModalOpen}
+          onClose={handleCloseExchangeRateModal}
+        />
+      )}
       {patientDetails.patientId != null && (
         <PatientDetailsModal
           {...patientDetails}
+          currentClinic={currentClinic}
           currentUser={currentUser}
           onClose={handleClosePatientDetails}
         />
@@ -110,12 +153,13 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
       {currentUser != null && (
         <div className={styles['data-container']}>
           <PageHeader
+            currentClinic={currentClinic}
             title={getPageTitle()}
             user={currentUser}
             onLogout={handleStartLogout}
           />
           <div className={styles.data}>
-            {children}
+            {currentClinic != null && children}
           </div>
         </div>
       )}

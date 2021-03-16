@@ -27,7 +27,8 @@ function setCookies(res, authToken) {
     path: '/'
   }
   const tokenCookie = cookie.serialize('auth_token', authToken, cookieOpts);
-  res.setHeader('Set-Cookie', tokenCookie);
+  const clinicIdCookie = cookie.serialize('auth_token', '-1', cookieOpts);
+  res.setHeader('Set-Cookie', [clinicIdCookie, tokenCookie]);
 }
 
 /**

@@ -7,7 +7,7 @@ import IconClose from '../../../components/icons/iconClose';
 import IconSuccess from '../../../components/icons/iconSuccess';
 import { textForKey } from '../../../utils/localization';
 import styles from './EasyPlanModal.module.scss';
-import LoadingButton from '../../../components/LoadingButton';
+import LoadingButton from '../../../components/common/LoadingButton';
 import clsx from "clsx";
 
 const EasyPlanModal = ({

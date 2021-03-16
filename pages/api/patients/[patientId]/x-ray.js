@@ -13,8 +13,15 @@ export default authorized(async (req, res) => {
       }
       break;
     }
+    case 'POST': {
+      const data = await handler(addXRayImage, req, res);
+      if (data != null) {
+        res.json(data);
+      }
+      break;
+    }
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['GET', 'POST']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
@@ -24,6 +31,18 @@ function fetchPatientXRayImages(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
   return axios.get(`${baseApiUrl}/patients/${patientId}/x-ray`, {
+    headers: {
+      Authorization: auth_token,
+      'X-EasyPlan-Clinic-Id': clinic_id,
+    }
+  });
+}
+
+function addXRayImage(req) {
+  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  const { patientId } = req.query;
+  const requestBody = req.body;
+  return axios.post(`${baseApiUrl}/patients/${patientId}/x-ray`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

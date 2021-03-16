@@ -12,7 +12,7 @@ import IconEdit from '../../icons/iconEdit';
 import IconEmail from '../../icons/iconEmail';
 import IconPhone from '../../icons/iconPhone';
 import IconRefresh from '../../icons/iconRefresh';
-import LoadingButton from '../../LoadingButton';
+import LoadingButton from '../../common/LoadingButton';
 import { Role } from '../../../utils/constants';
 import { urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';

@@ -19,9 +19,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IconPlus from '../../components/icons/iconPlus';
 import IconSearch from '../../components/icons/iconSearch';
-import ConfirmationModal from '../../components/ConfirmationModal';
-import CreatePatientModal from '../../src/components/CreatePatientModal';
-import LoadingButton from '../../components/LoadingButton';
+import ConfirmationModal from '../../components/common/ConfirmationModal';
+import CreatePatientModal from '../../components/patients/CreatePatientModal';
+import LoadingButton from '../../components/common/LoadingButton';
 import ImportDataModal from '../../src/components/UploadPatientsModal';
 import {
   setPatientDetails,
@@ -42,6 +42,7 @@ import MainComponent from "../../components/common/MainComponent";
 import axios from "axios";
 import { baseAppUrl } from "../../eas.config";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 const initialState = {
   isLoading: false,
@@ -123,6 +124,7 @@ const reducer = (state, action) => {
 
 const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
     {
@@ -213,16 +215,19 @@ const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery }) 
   const handleDeleteConfirmed = async () => {
     if (patientToDelete == null) return;
     localDispatch(actions.setIsDeleting(true));
-    const response = await dataAPI.deletePatient(patientToDelete.id);
-    if (response.isError) {
-      console.error(response.message);
-      localDispatch(actions.setIsDeleting(false));
-    } else {
+    try {
+      const query = { patientId: patientToDelete.id };
+      const queryString = new URLSearchParams(query).toString()
+      await axios.delete(`${baseAppUrl}/api/patients?${queryString}`);
       localDispatch(actions.setPatientToDelete(null));
-      dispatch(togglePatientsListUpdate());
+      await fetchPatients();
       dispatch(
         setPatientDetails({ show: false, patientId: null, onDelete: null }),
       );
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsDeleting(false));
     }
   };
 

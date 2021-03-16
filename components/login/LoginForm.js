@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
-import LoadingButton from '../LoadingButton';
+import LoadingButton from '../common/LoadingButton';
 import { EmailRegex } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import styles from '../../styles/LoginForm.module.scss';

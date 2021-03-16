@@ -4,7 +4,7 @@ import sum from 'lodash/sum';
 import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
 
-import EasyDateRangePicker from '../../../components/EasyDateRangePicker';
+import EasyDateRangePicker from '../../../components/common/EasyDateRangePicker';
 import {
   generateReducerActions,
   handleRequestError,

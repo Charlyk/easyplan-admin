@@ -9,7 +9,7 @@ import IconPlus from '../../../icons/iconPlus';
 import { updateNotesSelector } from '../../../../redux/selectors/rootSelector';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import LoadingButton from '../../../LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import PatientNote from './PatientNote';
 import styles from '../../../../styles/PatientNotes.module.scss';
 import { toast } from "react-toastify";

@@ -9,7 +9,7 @@ import IconPlus from '../../../icons/iconPlus';
 import dataAPI from '../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import LoadingButton from '../../../LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import PatientMessage from './PatientMessage';
 import styles from '../../../../styles/PatientMessages.module.scss';
 import axios from "axios";

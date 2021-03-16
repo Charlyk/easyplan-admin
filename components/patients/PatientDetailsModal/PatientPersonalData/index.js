@@ -14,7 +14,7 @@ import {
 } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import EasyDatePicker from '../../../../src/components/EasyDatePicker';
-import LoadingButton from '../../../LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import styles from '../../../../styles/PatientPersonalData.module.scss'
 import { toast } from "react-toastify";
 import axios from "axios";

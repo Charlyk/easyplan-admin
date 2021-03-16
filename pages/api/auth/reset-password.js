@@ -1,24 +1,31 @@
+import { handler } from "../handler";
 import axios from "axios";
 import { baseApiUrl } from "../../../eas.config";
 
 export default async function resetPassword(req, res) {
-  const response = await resetUserPassword(req.body.username);
-  if (response.status !== 200) {
-    res.json({ error: true, message: response.statusText });
-  } else {
-    const { isError, message, data } = response.data;
-    if (isError) {
-      res.json({ message, error: true });
-    } else {
-      res.status(200).json(data);
+  switch (req.method) {
+    case 'POST': {
+      const data = await handler(resetUserPassword, req, res);
+      if (data == null) {
+        return;
+      }
+      res.json(data);
+      break;
+    }
+
+    default: {
+      res.setHeader('Allow', ['POST']);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
+      break;
     }
   }
 }
 
-function resetUserPassword(username) {
-  return axios.post(
-    `${baseApiUrl}/authentication/v1/reset-password`,
-    { username },
-    { headers: { 'X-EasyPlan-Clinic-Id': -1 } }
-  );
+function resetUserPassword(req) {
+  const requestBody = req.body;
+  return axios.post(`${baseApiUrl}/authentication/v1/reset-password`, requestBody, {
+    headers: {
+      'X-EasyPlan-Clinic-Id': -1,
+    }
+  });
 }

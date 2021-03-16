@@ -23,7 +23,7 @@ import {
 import { textForKey } from '../../../../utils/localization';
 import sessionManager from '../../../../utils/settings/sessionManager';
 import EasyTab from '../../../../src/components/EasyTab';
-import LoadingButton from '../../../LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import styles from '../../../../styles/OrthodonticPlan.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../../eas.config";
@@ -202,11 +202,11 @@ const reducer = (state, action) => {
   }
 };
 
-const OrthodonticPlan = ({ currentUser, patient, scheduleId, onSave }) => {
+const OrthodonticPlan = ({ currentUser, currentClinic: clinic, patient, scheduleId, onSave }) => {
   const services = useSelector(clinicBracesServicesSelector);
   const braces = useSelector(clinicEnabledBracesSelector);
   const currentClinic = currentUser.clinics.find(
-    it => it.clinicId === sessionManager.getSelectedClinicId(),
+    it => it.clinicId === clinic.id,
   );
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
   const [

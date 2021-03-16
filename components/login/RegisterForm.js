@@ -5,16 +5,11 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PropTypes from 'prop-types';
 import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { Redirect } from 'react-router-dom';
 
 import IconAvatar from '../icons/iconAvatar';
-import LoadingButton from '../LoadingButton';
+import LoadingButton from '../common/LoadingButton';
 import { EmailRegex, PasswordRegex } from '../../utils/constants';
-import {
-  updateLink,
-} from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import authManager from '../../utils/settings/authManager';
 import styles from '../../styles/RegisterForm.module.scss';
 import clsx from "clsx";
 
@@ -76,10 +71,6 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
       data.isPhoneValid
     );
   };
-
-  if (authManager.isLoggedIn()) {
-    return <Redirect to={updateLink('/')} />;
-  }
 
   const avatarSrc =
     data.avatarFile && window.URL.createObjectURL(data.avatarFile);

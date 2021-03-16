@@ -16,7 +16,7 @@ function getCurrentUser(req) {
   return axios.get(`${baseApiUrl}/authentication/v1/me`, {
     headers: {
       Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Clinic-Id': clinic_id || -1,
     }
   });
 }

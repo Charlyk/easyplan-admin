@@ -11,9 +11,7 @@ import { userSelector } from '../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../utils/localization';
 import styles from './ClinicSelector.module.scss';
 
-const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange }) => {
-  const currentUser = useSelector(userSelector);
-
+const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange, currentUser }) => {
   if (!currentUser) return null;
 
   const handleCompanySelected = company => {

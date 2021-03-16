@@ -4,7 +4,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import LoadingButton from '../../../components/LoadingButton';
+import LoadingButton from '../../../components/common/LoadingButton';
 import './ResetPassword.module.scss';
 import authAPI from '../../../utils/api/authAPI';
 import { JwtRegex, PasswordRegex } from '../../../utils/constants';

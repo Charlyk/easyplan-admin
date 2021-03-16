@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 
-import { Box, IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import IconAvatar from '../icons/iconAvatar';
 import IconEdit from '../icons/iconEdit';
@@ -14,11 +14,9 @@ import IconPlus from '../icons/iconPlus';
 import IconTurnOff from '../icons/iconTurnOff';
 import { setPaymentModal } from '../../redux/actions/actions';
 import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
-import { clinicExchangeRatesUpdateRequiredSelector } from '../../redux/selectors/clinicSelector';
-import { userSelector } from '../../redux/selectors/rootSelector';
 import { textForKey } from '../../utils/localization';
-import ActionsSheet from '../../src/components/ActionsSheet';
-import InvoicesButton from '../../src/components/InvoicesButton';
+import ActionsSheet from './ActionsSheet';
+import InvoicesButton from '../invoices/InvoicesButton';
 import styles from '../../styles/PageHeader.module.scss';
 
 const actions = [
@@ -42,13 +40,12 @@ const PageHeader = ({
   isDoctor,
   onLogout,
   onEditProfile,
+  user,
+  currentClinic,
 }) => {
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
-  const user = useSelector(userSelector);
-  const isExchangeUpdateRequired = useSelector(
-    clinicExchangeRatesUpdateRequiredSelector,
-  );
+  const isExchangeUpdateRequired = currentClinic.updateExchangeRates;
   const [isActionsOpen, setIsActionsOpen] = useState(false);
 
   const handleActionsClose = () => setIsActionsOpen(false);
@@ -92,7 +89,7 @@ const PageHeader = ({
       </div>
       {!isDoctor && (
         <div className={styles.invoicesBtnWrapper}>
-          <InvoicesButton />
+          <InvoicesButton currentClinic={currentClinic} />
           <Tooltip title={textForKey('Add payment')}>
             <IconButton
               classes={{ root: styles['add-invoice-btn'] }}

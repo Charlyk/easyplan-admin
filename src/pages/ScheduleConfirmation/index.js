@@ -16,7 +16,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../../components/icons/appLogoBlue';
-import LoadingButton from '../../../components/LoadingButton';
+import LoadingButton from '../../../components/common/LoadingButton';
 import dataAPI from '../../../utils/api/dataAPI';
 import { urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';

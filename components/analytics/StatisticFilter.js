@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import IconRefresh from '../icons/iconRefresh';
-import LoadingButton from '../LoadingButton';
+import LoadingButton from '../common/LoadingButton';
 import { textForKey } from '../../utils/localization';
 import styles from '../../styles/StatisticFilter.module.scss';
 

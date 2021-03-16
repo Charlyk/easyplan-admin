@@ -90,6 +90,7 @@ const reducer = (state, action) => {
 const PatientDetailsModal = ({
   show,
   currentUser,
+  currentClinic,
   patientId,
   menuItem,
   onClose,
@@ -190,7 +191,13 @@ const PatientDetailsModal = ({
       case MenuItem.treatmentPlan:
         return <AppointmentNotes currentUser={currentUser} patient={patient} />;
       case MenuItem.orthodonticPlan:
-        return <OrthodonticPlan currentUser={currentUser} patient={patient} />;
+        return (
+          <OrthodonticPlan
+            currentClinic={currentClinic}
+            currentUser={currentUser}
+            patient={patient}
+          />
+        );
       case MenuItem.debts:
         return (
           <PatientDebtsList

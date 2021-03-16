@@ -20,7 +20,7 @@ import { YClientAPIUrl } from '../../../../utils/constants';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import EasyDatePicker from '../../EasyDatePicker';
-import LoadingButton from '../../../../components/LoadingButton';
+import LoadingButton from '../../../../components/common/LoadingButton';
 import styles from './ImportSelectionStep.module.scss';
 
 const initialState = {

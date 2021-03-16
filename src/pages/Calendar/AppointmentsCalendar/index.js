@@ -24,7 +24,7 @@ import IconAppointmentCalendar from '../../../../components/icons/iconAppointmen
 import IconPlus from '../../../../components/icons/iconPlus';
 import AppointmentDetails from '../../../components/AppointmentDetails';
 import EasyTab from '../../../components/EasyTab';
-import LoadingButton from '../../../../components/LoadingButton';
+import LoadingButton from '../../../../components/common/LoadingButton';
 import { isCalendarLoadingSelector } from '../../../../redux/selectors/calendarSelector';
 import { getCurrentWeek } from '../../../../utils/helperFuncs';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';

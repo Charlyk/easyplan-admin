@@ -11,7 +11,7 @@ import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../components/icons/iconAvatar';
-import LoadingButton from '../../../components/LoadingButton';
+import LoadingButton from '../../../components/common/LoadingButton';
 import dataAPI from '../../../utils/api/dataAPI';
 import { JwtRegex, PasswordRegex } from '../../../utils/constants';
 import {

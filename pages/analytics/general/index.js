@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef } from 'react';
 
 import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 import IconCheckMark from '../../../components/icons/iconCheckMark';
 import IconClock from '../../../components/icons/iconClock';
@@ -10,7 +10,7 @@ import IconCreditCard from '../../../components/icons/iconCreditCard';
 import IconLiabilities from '../../../components/icons/iconLiabilities';
 import IconSuccess from '../../../components/icons/iconSuccess';
 import IconXPerson from '../../../components/icons/iconXPerson';
-import EasyDateRangePicker from '../../../components/EasyDateRangePicker';
+import EasyDateRangePicker from '../../../components/common/EasyDateRangePicker';
 import { Role, Statuses } from '../../../utils/constants';
 import { generateReducerActions, handleRequestError } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
@@ -22,6 +22,7 @@ import MainComponent from "../../../components/common/MainComponent";
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import sortBy from "lodash/sortBy";
+import cookie from "cookie";
 
 const initialState = {
   doctors: [],
@@ -71,7 +72,7 @@ const reducer = (state, action) => {
 const General = ({ currentUser, currentClinic, scheduleStats, financeStats, query: initialQuery }) => {
   const pickerRef = useRef(null);
   const doctors = sortBy(
-    currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
+    currentClinic?.users?.filter(user => user.roleInClinic === Role.doctor) || [],
     user => user.fullName.toLowerCase(),
   );
   const [
@@ -269,6 +270,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.doctorId == null) {
       query.doctorId = -1;
     }
+
     const queryString = new URLSearchParams(query).toString();
     let url = `${baseAppUrl}/api/analytics/general?${queryString}`;
 

@@ -4,13 +4,30 @@ import axios from "axios";
 import { baseApiUrl } from "../../../eas.config";
 import { handler } from "../handler";
 
+const emptyResponse = {
+  scheduleStats: {
+    total: 0,
+    items: [],
+  },
+  financeStats: {
+    expectations: { persons: 0, amount: 0 },
+    confirmed: { persons: 0, amount: 0 },
+    canceled: { persons: 0, amount: 0 },
+    finished: { persons: 0, amount: 0 },
+    debts: { persons: 0, amount: 0 },
+    paid: { persons: 0, amount: 0 },
+  }
+}
+
 export default authorized(async (req, res) => {
   const scheduleStats = await handler(fetchScheduleStats, req, res);
   if (scheduleStats == null) {
+    res.json(emptyResponse);
     return;
   }
   const financeStats = await handler(fetchIncomeStats, req, res);
   if (financeStats == null) {
+    res.json(emptyResponse);
     return;
   }
 

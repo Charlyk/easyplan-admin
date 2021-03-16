@@ -3,7 +3,7 @@ import React, { useReducer } from 'react';
 import LoginForm from '../components/login/LoginForm';
 import RegisterForm from '../components/login/RegisterForm';
 import ResetPassword from '../components/login/ResetPassword';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import styles from '../styles/Login.module.scss';
 import { generateReducerActions, uploadFileToAWS } from "../utils/helperFuncs";
 import axios from "axios";
@@ -53,6 +53,7 @@ const reducer = (state, action) => {
 
 const Login = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [{ currentForm, isLoading, errorMessage }, localDispatch] = useReducer(reducer, initialState);
 
   const handleFormChange = (newForm) => {
@@ -73,56 +74,70 @@ const Login = () => {
 
   const handleSignupSubmit = async (requestBody) => {
     localDispatch(actions.setIsLoading(true));
-    if (requestBody.avatarFile != null) {
-      const uploadResult = await uploadFileToAWS('avatars', requestBody.avatarFile);
-      requestBody.avatar = uploadResult?.location;
-      delete requestBody.avatarFile;
-    }
+    try {
+      if (requestBody.avatarFile != null) {
+        const uploadResult = await uploadFileToAWS('avatars', requestBody.avatarFile);
+        requestBody.avatar = uploadResult?.location;
+        delete requestBody.avatarFile;
+      }
 
-    const { data } = await axios.post(
-      `${baseAppUrl}/api/auth/register`,
-      requestBody,
-    );
-    if (data.error) {
-      localDispatch(actions.setErrorMessage(data.message));
-    } else {
-      localDispatch(actions.setErrorMessage(null));
-      dispatch(setCurrentUser(data));
-      await Router.replace('/analytics/general');
+      const { data } = await axios.post(
+        `${baseAppUrl}/api/auth/register`,
+        requestBody,
+      );
+      if (data.error) {
+        localDispatch(actions.setErrorMessage(data.message));
+      } else {
+        localDispatch(actions.setErrorMessage(null));
+        await router.replace('/analytics/general');
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsLoading(false));
     }
-    localDispatch(actions.setIsLoading(false));
   };
 
   const handleResetPasswordSubmit = async (username) => {
     localDispatch(actions.setIsLoading(true));
-    const { data } = await axios.post(
-      `${baseAppUrl}/api/auth/reset-password`,
-      { username }
-    );
-    if (data.error) {
-      localDispatch(actions.setErrorMessage(data.message));
-    } else {
-      toast.success(textForKey("We've sent an email with further instructions."))
-      localDispatch(actions.setErrorMessage(null));
-      handleFormChange(FormType.login);
+    try {
+      const { data } = await axios.post(
+        `${baseAppUrl}/api/auth/reset-password`,
+        { username }
+      );
+      if (data.error) {
+        localDispatch(actions.setErrorMessage(data.message));
+      } else {
+        toast.success(textForKey("We've sent an email with further instructions."))
+        localDispatch(actions.setErrorMessage(null));
+        handleFormChange(FormType.login);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsLoading(false));
     }
-    localDispatch(actions.setIsLoading(false));
   }
 
   const handleLoginSubmit = async (username, password) => {
     localDispatch(actions.setIsLoading(true));
-    const { data } = await axios.post(
-      `${baseAppUrl}/api/auth/login`,
-      { username, password }
-    );
-    if (data.error) {
-      localDispatch(actions.setErrorMessage(data.message));
-    } else {
-      localDispatch(actions.setErrorMessage(null));
-      dispatch(setCurrentUser(data));
-      await Router.replace('/analytics/general');
+    try {
+      const { data } = await axios.post(
+        `${baseAppUrl}/api/auth/login`,
+        { username, password }
+      );
+      if (data.error) {
+        localDispatch(actions.setErrorMessage(data.message));
+      } else {
+        localDispatch(actions.setErrorMessage(null));
+        dispatch(setCurrentUser(data));
+        await router.replace('/analytics/general');
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsLoading(false));
     }
-    localDispatch(actions.setIsLoading(false));
   }
 
   return (
