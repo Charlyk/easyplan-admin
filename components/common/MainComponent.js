@@ -6,7 +6,7 @@ import styles from '../../styles/MainComponent.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import AddAppointmentModal from '../../src/components/AddAppintmentModal';
+import AddAppointmentModal from '../calendar/AddAppintmentModal';
 import DataMigrationModal from '../../src/components/DataMigrationModal';
 import MainMenu from './MainMenu';
 import PageHeader from './PageHeader';
@@ -33,6 +33,7 @@ import { baseAppUrl } from "../../eas.config";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { Role } from "../../utils/constants";
+import { handleRemoteMessage } from "../../utils/pubnubUtils";
 
 const MainComponent = ({ children, currentPath, currentUser, currentClinic }) => {
   const pubnub = usePubNub();
@@ -44,10 +45,28 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
 
   useEffect(() => {
+    if (currentClinic != null) {
+      pubnub.subscribe({
+        channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+      });
+      pubnub.addListener({ message: handlePubnubMessageReceived });
+      return () => {
+        pubnub.unsubscribe({
+          channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+        });
+      };
+    }
+  }, [currentClinic]);
+
+  useEffect(() => {
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }
   }, [currentUser]);
+
+  const handlePubnubMessageReceived = ({ message }) => {
+    dispatch(handleRemoteMessage(message));
+  };
 
   const getPageTitle = () => {
     return paths[currentPath];
@@ -131,6 +150,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
       )}
       {appointmentModal?.open && (
         <AddAppointmentModal
+          currentClinic={currentClinic}
           onClose={handleAppointmentModalClose}
           schedule={appointmentModal?.schedule}
           open={appointmentModal?.open}

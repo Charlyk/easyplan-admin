@@ -61,11 +61,7 @@ function NextApp({ Component, pageProps }) {
   const imageModal = useSelector(imageModalSelector);
   const createClinic = useSelector(createClinicSelector);
   const logout = useSelector(logoutSelector);
-  const { currentClinic, currentUser } = pageProps;
-
-  useEffect(() => {
-    console.log('pageProps', pageProps);
-  }, []);
+  const { currentClinic } = pageProps;
 
   const getPageTitle = () => {
     return paths[router.pathname] || '';
@@ -189,7 +185,6 @@ NextApp.getInitialProps = async (appContext) => {
     const { data: currentUser } = await axios.get(`${baseAppUrl}/api/auth/me`, {
       headers: req.headers
     });
-    console.log(currentUser);
     const { data: currentClinic } = await axios.get(`${baseAppUrl}/api/clinic/details`, {
       headers: req.headers
     });

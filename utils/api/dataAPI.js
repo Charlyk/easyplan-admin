@@ -203,32 +203,6 @@ export default {
   },
 
   /**
-   * Delete patient
-   * @param {string} patientId
-   * @return {Promise<{isError: boolean, message: string|null}>}
-   */
-  deletePatient: async (patientId) => {
-    try {
-      const response = await Axios.delete(
-        `${baseURL}/patients?patientId=${patientId}`,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
    * Create a note for patient
    * @param {string} patientId
    * @param {Object} requestBody
@@ -312,32 +286,6 @@ export default {
   },
 
   /**
-   * Search patients by phone or name
-   * @param {string} query
-   * @return {Promise<{isError: boolean, message: *}|any>}
-   */
-  searchPatients: async (query) => {
-    try {
-      const response = await Axios.get(
-        `${baseURL}/patients/search?query=${query}`,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
    * Search doctors by phone or name
    * @param {string} query
    * @return {Promise<{isError: boolean, message: *}|any>}
@@ -393,75 +341,6 @@ export default {
   },
 
   /**
-   * Update clinic details
-   * @param {Object} requestBody
-   * @param {string} requestBody.id
-   * @param {string} requestBody.clinicName
-   * @param {string|null} requestBody.email
-   * @param {string|null} requestBody.phoneNumber
-   * @param {string|null} requestBody.telegramNumber
-   * @param {string|null} requestBody.viberNumber
-   * @param {string|null} requestBody.whatsappNumber
-   * @param {string|null} requestBody.website
-   * @param {string} requestBody.currency
-   * @param {string} requestBody.country
-   * @param {string|null} requestBody.description
-   * @param {string|null} requestBody.logoUrl
-   * @param {Array.<{day: number, startHour: string, endHour: string, isDayOff: boolean}>} requestBody.workDays
-   * @return {Promise<{isError: boolean, message: *}|any>}
-   */
-  updateClinic: async (requestBody) => {
-    try {
-      const response = await Axios.put(`${baseURL}/clinics`, requestBody);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Fetch available hours for a doctor
-   * @param {string?} scheduleId
-   * @param {string} doctorId
-   * @param {string} serviceId
-   * @param {Date} date
-   * @return {Promise<{isError: boolean, message: *}|any>}
-   */
-  fetchAvailableTime: async (scheduleId, doctorId, serviceId, date) => {
-    try {
-      const stringDate = moment(date).format('YYYY-MM-DD');
-      let url = `${baseURL}/schedules/available-time?doctorId=${doctorId}&serviceId=${serviceId}&date=${stringDate}`;
-      if (scheduleId?.length > 0) {
-        url += `&scheduleId=${scheduleId}`;
-      }
-      const response = await Axios.get(url);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
    * Accept invitation to a clinic
    * @param {{ firstName: string, lastName: string, password: string, phoneNumber: string, invitationToken: string }} requestBody
    * @return {Promise<{isError: boolean, message: *}|any>}
@@ -489,42 +368,6 @@ export default {
   },
 
   /**
-   * Create new schedule
-   * @param {Object} requestBody
-   * @param {string?} requestBody.patientFirstName
-   * @param {string?} requestBody.patientLastName
-   * @param {string?} requestBody.patientPhoneNumber
-   * @param {string?} requestBody.patientId
-   * @param {string?} requestBody.patientFirstName
-   * @param {string?} requestBody.patientLastName
-   * @param {string?} requestBody.patientPhoneNumber
-   * @param {string} requestBody.doctorId
-   * @param {string} requestBody.serviceId
-   * @param {Date} requestBody.startDate
-   * @param {Date} requestBody.endDate
-   * @param {string?} requestBody.note
-   * @return {Promise<{isError: boolean, message: *}|any>}
-   */
-  createNewSchedule: async (requestBody) => {
-    try {
-      const response = await Axios.post(`${baseURL}/schedules`, requestBody);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
    * Fetch all schedules for a doctor
    * @param {number} doctorId
    * @param {Date} date
@@ -535,28 +378,6 @@ export default {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
         `${baseURL}/schedules?doctorId=${doctorId}&date=${stringDate}`,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  fetchDaySchedulesHours: async (date) => {
-    try {
-      const stringDate = moment(date).format('YYYY-MM-DD');
-      const response = await Axios.get(
-        `${baseURL}/schedules/day-hours?&date=${stringDate}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -606,27 +427,6 @@ export default {
       const stringDate = moment(date).format('YYYY-MM-DD');
       const response = await Axios.get(
         `${baseURL}/schedules/month-schedules?doctorId=${doctorId}&date=${stringDate}`,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  fetchScheduleDetails: async (scheduleId) => {
-    try {
-      const response = await Axios.get(
-        `${baseURL}/schedules/details/${scheduleId}`,
       );
       const { data: responseData } = response;
       if (responseData == null) {
@@ -742,36 +542,6 @@ export default {
         `${baseURL}/invoices/${invoiceId}`,
         requestBody,
       );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Register patient payment
-   * @param {Object} requestBody
-   * @param {number} requestBody.patientId
-   * @param {number} requestBody.doctorId?
-   * @param {number} requestBody.paidAmount
-   * @param {number} requestBody.discount
-   * @param {number} requestBody.totalAmount
-   * @param {Array.<{id: number, serviceId: number, currency: string, count: number, price: number}>} requestBody.services
-   * @return {Promise<{isError: boolean, message: string|null, data: any|null}>}
-   */
-  createNewInvoice: async (requestBody) => {
-    try {
-      const response = await Axios.post(`${baseURL}/invoices`, requestBody);
       const { data: responseData } = response;
       if (responseData == null) {
         return {
@@ -1008,30 +778,6 @@ export default {
     try {
       const url = `${baseURL}/confirmation/schedule`;
       const response = await Axios.post(url, { scheduleId, patientId });
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Delete user selected clinic
-   * @return {Promise<{isError: boolean, message: *}|any>}
-   */
-  deleteClinic: async () => {
-    try {
-      const url = `${baseURL}/clinics`;
-      const response = await Axios.delete(url);
       const { data: responseData } = response;
       if (responseData == null) {
         return {
@@ -1309,31 +1055,6 @@ export default {
   },
 
   /**
-   * Fetch all purchases for a patient
-   * @param {number} patientId
-   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
-   */
-  getPatientPurchases: async (patientId) => {
-    try {
-      const url = `${baseURL}/patients/purchases/${patientId}`;
-      const response = await Axios.get(url);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
    * Update patient treatment plan
    * @param {Object} requestBody
    * @param {number} requestBody.patientId
@@ -1370,132 +1091,6 @@ export default {
     try {
       const url = `${baseURL}/treatment-plans/general`;
       const response = await Axios.post(url, requestBody);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Fetch all messages received by a patient
-   * @param {number} patientId
-   * @return {Promise<{isError: boolean, message: string, data: any|null}>}
-   */
-  fetchPatientMessages: async (patientId) => {
-    try {
-      const url = `${baseURL}/sms/patients/${patientId}`;
-      const response = await Axios.get(url);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Sent SMS message to single patient
-   * @param {number} patientId
-   * @param {string} message
-   * @return {Promise<{isError: boolean, message: string, data: any|null}>}
-   */
-  sendMessageToPatient: async (patientId, message) => {
-    try {
-      const url = `${baseURL}/sms/patients/${patientId}`;
-      const response = await Axios.post(url, { messageText: message });
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Create new sms message
-   * @param {{messageTitle: string, messageText: string, messageType: string, hour: string, messageDate: string?}} requestBody
-   * @param {number} messageId
-   * @return {Promise<{isError: boolean, message: string|null, data: any}>}
-   */
-  editSMSMessage: async (messageId, requestBody) => {
-    try {
-      const url = `${baseURL}/sms/${messageId}`;
-      const response = await Axios.put(url, requestBody);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Delete sms message
-   * @param {number} messageId
-   * @return {Promise<{isError: boolean, message: string}>}
-   */
-  deleteMessage: async (messageId) => {
-    try {
-      const url = `${baseURL}/sms/${messageId}`;
-      const response = await Axios.delete(url);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Fetch a list of available timezones
-   * @return {Promise<{isError: boolean, message: string, data: Array.<string>|null}>}
-   */
-  getAvailableTimeZones: async () => {
-    try {
-      let url = `${baseURL}/clinics/available-timezones`;
-      const response = await Axios.get(url);
       const { data: responseData } = response;
       if (responseData == null) {
         return {
