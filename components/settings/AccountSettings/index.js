@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconAvatar from '../../icons/iconAvatar';
 import IconSuccess from '../../icons/iconSuccess';
 import LoadingButton from '../../common/LoadingButton';
-import { setCurrentUser } from '../../../redux/actions/actions';
 import { EmailRegex } from '../../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
@@ -19,7 +17,6 @@ import { useRouter } from "next/router";
 
 const AccountSettings = ({ currentUser }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({

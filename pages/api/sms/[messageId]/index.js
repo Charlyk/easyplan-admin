@@ -63,7 +63,9 @@ async function updateMessage(req) {
 async function setMessageDisabled(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { status, messageId } = req.query;
-  return axios.put(`${baseApiUrl}/sms/${messageId}/${status}`, {
+  const url = `${baseApiUrl}/sms/${messageId}/${status}`
+  console.log(url);
+  return axios.put(url, {}, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

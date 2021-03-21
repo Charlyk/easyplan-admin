@@ -132,7 +132,7 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <Form.Text className={styles['text-muted']}>
+        <Form.Text className='text-muted'>
           {textForKey('passwordValidationMessage')}
         </Form.Text>
       </Form.Group>

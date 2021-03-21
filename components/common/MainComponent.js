@@ -89,9 +89,9 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
       switch (selectedClinic.roleInClinic) {
         case Role.reception:
           const isPathRestricted = ['/analytics', '/services', '/users', '/messages']
-            .any(item => router.asPath.startsWith(item));
+            .some(item => router.asPath.startsWith(item));
           if (isPathRestricted) {
-            await router.replace('/patients');
+            await router.replace('/calendar/day');
           } else {
             await router.reload();
           }
@@ -101,6 +101,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
           break;
       }
     } catch (error) {
+      console.error(error)
       toast.error(error.message);
     }
   };

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal';
+import EasyPlanModal from '../../../components/common/EasyPlanModal';
 import './UploadPatientsModal.module.scss';
 
 const ImportDataModal = ({ title, open, onClose, onUpload }) => {

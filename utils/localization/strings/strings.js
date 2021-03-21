@@ -499,7 +499,8 @@ export default {
     'print receipt': 'Print receipt',
     'time zone': 'Time zone',
     'rows per page': 'Rows per page',
-    no_sms_messages: 'No SMS messages yet.'
+    no_sms_messages: 'No SMS messages yet.',
+    'click on button below to accept the invitation': 'Click on button below to accept the invitation',
   },
   ro: {
     analytics: 'Analitică',
@@ -1007,7 +1008,8 @@ export default {
     'print receipt': 'Printează bon',
     'time zone': 'Fus orar',
     'rows per page': 'Rânduri pe pagină',
-    no_sms_messages: 'Încă nu sunt mesaje create'
+    no_sms_messages: 'Încă nu sunt mesaje create',
+    'click on button below to accept the invitation': 'Dați click pe butonul de mai jos pentru a accepta invitația'
   },
   ru: {
     analytics: 'Analytics',
@@ -1506,6 +1508,7 @@ export default {
     'print receipt': 'Print receipt',
     'time zone': 'Time zone',
     'rows per page': 'Rows per page',
-    no_sms_messages: 'No SMS messages yet.'
+    no_sms_messages: 'No SMS messages yet.',
+    'click on button below to accept the invitation': 'Click on button below to accept the invitation'
   },
 };

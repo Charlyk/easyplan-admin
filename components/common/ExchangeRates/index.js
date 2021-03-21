@@ -35,7 +35,7 @@ import {
   generateReducerActions,
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../EasyPlanModal';
 import styles from '../../../styles/ExchangeRates.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";

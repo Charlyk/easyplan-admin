@@ -117,7 +117,14 @@ export default SettingsMenu;
 
 SettingsMenu.propTypes = {
   onSelect: PropTypes.func,
-  currentOption: PropTypes.oneOf(['companyDetails', 'workingHours']),
+  currentOption: PropTypes.oneOf([
+    'companyDetails',
+    'workingHours',
+    'appSettings',
+    'securitySettings',
+    'accountSettings',
+    'bracesSettings',
+  ]),
   selectedClinic: PropTypes.shape({
     roleInClinic: PropTypes.string,
   }),

@@ -45,15 +45,42 @@ async function fetchSchedules(req) {
   switch (period) {
     case 'day':
       return fetchDaySchedules(req);
+    case 'week':
+      return fetchDoctorSchedules(req);
+    case 'month':
+      return fetchMonthSchedules(req);
     default:
       return () => null;
   }
+}
+
+async function fetchDoctorSchedules(req) {
+  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  const queryString = new URLSearchParams(req.query).toString()
+  return axios.get(`${baseApiUrl}/schedules?${queryString}`, {
+    headers: {
+      Authorization: auth_token,
+      'X-EasyPlan-Clinic-Id': clinic_id,
+    }
+  });
 }
 
 async function fetchDaySchedules(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query).toString()
   return axios.get(`${baseApiUrl}/schedules/v2/day?${queryString}`, {
+    headers: {
+      Authorization: auth_token,
+      'X-EasyPlan-Clinic-Id': clinic_id,
+    }
+  });
+}
+
+async function fetchMonthSchedules(req) {
+  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  const queryString = new URLSearchParams(req.query).toString();
+  console.log(queryString);
+  return axios.get(`${baseApiUrl}/schedules/month-schedules?${queryString}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

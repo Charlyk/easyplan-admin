@@ -1,33 +1,29 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
-import styles from '../../../styles/Calendar.module.scss';
-import { Box } from '@material-ui/core';
+import styles from '../../styles/Calendar.module.scss';
 import { usePubNub } from 'pubnub-react';
-import { ProgressBar } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 
-import ConfirmationModal from '../../../components/common/ConfirmationModal';
-import { MappingData } from '../../components/MapSchedulesDataModal';
+import ConfirmationModal from '../common/ConfirmationModal';
 import {
   setAppointmentModal,
   setPaymentModal,
   toggleAppointmentsUpdate,
   toggleImportModal,
-} from '../../../redux/actions/actions';
-import {
-  clinicActiveDoctorsSelector,
-  clinicServicesSelector,
-} from '../../../redux/selectors/clinicSelector';
-import types from '../../../redux/types/types';
-import dataAPI from '../../../utils/api/dataAPI';
-import { Action } from '../../../utils/constants';
-import { generateReducerActions, logUserAction } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import AppointmentsCalendar from '../../../components/calendar/AppointmentsCalendar';
-import CalendarDoctors from '../../../components/calendar/AppointmentsCalendar/CalendarDoctors';
+} from '../../redux/actions/actions';
+import types from '../../redux/types/types';
+import { Role } from '../../utils/constants';
+import { generateReducerActions } from '../../utils/helperFuncs';
+import { textForKey } from '../../utils/localization';
+import AppointmentsCalendar from './AppointmentsCalendar';
+import CalendarDoctors from './AppointmentsCalendar/CalendarDoctors';
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
+import MainComponent from "../common/MainComponent";
+import axios from "axios";
+import { baseAppUrl } from "../../eas.config";
+import { toast } from "react-toastify";
 
 const reducerTypes = {
   setFilters: 'setFilters',
@@ -43,7 +39,6 @@ const reducerTypes = {
   setSetupExcelModal: 'setSetupExcelModal',
   setIsUploading: 'setIsUploading',
   setImportData: 'setImportData',
-  setMappingModal: 'setMappingModal',
   setParsedValue: 'setParsedValue',
   setIsParsing: 'setIsParsing',
 };
@@ -85,8 +80,6 @@ const reducer = (state, action) => {
         ...state,
         importData: { ...state.importData, ...action.payload },
       };
-    case reducerTypes.setMappingModal:
-      return { ...state, mappingModal: action.payload };
     case reducerTypes.setParsedValue:
       return { ...state, parsedValue: action.payload };
     case reducerTypes.setIsParsing:
@@ -116,20 +109,17 @@ const initialState = {
     doctors: [],
     services: [],
   },
-  mappingModal: {
-    mode: MappingData.none,
-    data: null,
-  },
   isParsing: false,
   parsedValue: 0,
 };
 
-const Calendar = ({ children, viewDate, currentUser }) => {
+const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
+  const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
-  const router = useRouter();
-  const services = useSelector(clinicServicesSelector);
-  const doctors = useSelector(clinicActiveDoctorsSelector);
+  const services = currentClinic.services?.filter((item) => !item.deleted) || [];
+  const doctors = currentClinic.users.filter((item) => item.roleInClinic === Role.doctor && !item.isHidden);
+  const viewDate = moment(date).toDate();
   const [
     {
       filters,
@@ -139,10 +129,8 @@ const Calendar = ({ children, viewDate, currentUser }) => {
       selectedSchedule,
       deleteSchedule,
       isDeleting,
-      viewMode,
       isUploading,
       isParsing,
-      parsedValue,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -189,7 +177,7 @@ const Calendar = ({ children, viewDate, currentUser }) => {
     if (newDoctors.length > 0) {
       localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
     }
-  }, [doctors, services]);
+  }, [currentClinic]);
 
   const handlePubnubMessageReceived = (remoteMessage) => {
     const { message, channel } = remoteMessage;
@@ -212,74 +200,77 @@ const Calendar = ({ children, viewDate, currentUser }) => {
     }
   };
 
-  const handleAppointmentModalOpen = useCallback(
-    (doctor, startHour, endHour) => {
-      dispatch(
-        setAppointmentModal({
-          open: true,
-          doctor: viewMode === 'day' ? doctor : selectedDoctor,
-          startHour,
-          endHour,
-          date: viewDate,
-        }),
-      );
-    },
-    [viewDate],
-  );
+  const handleAppointmentModalOpen = (doctor, startHour, endHour) => {
+    dispatch(
+      setAppointmentModal({
+        open: true,
+        doctor: viewMode === 'day' ? doctor : selectedDoctor,
+        startHour,
+        endHour,
+        date: viewDate,
+      }),
+    );
+  };
 
   const handleDoctorSelected = (doctor) => {
     localDispatch(reducerActions.setSelectedDoctor(doctor));
   };
 
-  const handleViewDateChange = useCallback((newDate) => {
+  const handleViewDateChange = (newDate, moveToDay) => {
     const stringDate = moment(newDate).format('YYYY-MM-DD');
     router.replace({
-      pathname: '/calendar/day/[date]',
+      pathname: `/calendar/${moveToDay ? 'day' : viewMode}`,
       query: { date: stringDate },
     });
-  }, []);
+  };
 
-  const handleScheduleSelected = useCallback((schedule) => {
+  const handleScheduleSelected = (schedule) => {
     localDispatch(reducerActions.setSelectedSchedule(schedule));
-  }, []);
+  };
 
-  const handleViewModeChange = useCallback((newMode) => {
+  const handleViewModeChange = (newMode) => {
     localDispatch(reducerActions.setViewMode(newMode));
-  }, []);
+    const stringDate = moment(viewDate).format('YYYY-MM-DD');
+    router.replace({
+      pathname: `/calendar/${newMode}`,
+      query: { date: stringDate }
+    })
+  };
 
-  const handlePayDebt = useCallback((debt) => {
+  const handlePayDebt = (debt) => {
     dispatch(setPaymentModal({ open: true, invoice: debt }));
-  }, []);
+  };
 
-  const handleEditSchedule = useCallback((schedule) => {
+  const handleEditSchedule = (schedule) => {
     dispatch(
       setAppointmentModal({
         open: true,
         schedule,
       }),
     );
-  }, []);
+  };
 
-  const handleDeleteSchedule = useCallback((schedule) => {
+  const handleDeleteSchedule = (schedule) => {
     localDispatch(reducerActions.setDeleteSchedule({ open: true, schedule }));
-  }, []);
+  };
 
   const handleConfirmDeleteSchedule = async () => {
     if (deleteSchedule.schedule == null) {
       return;
     }
     localDispatch(reducerActions.setIsDeleting(true));
-    await dataAPI.deleteSchedule(deleteSchedule.schedule.id);
-    logUserAction(
-      Action.DeleteAppointment,
-      JSON.stringify(deleteSchedule.schedule),
-    );
-    localDispatch(
-      reducerActions.setDeleteSchedule({ open: false, schedule: null }),
-    );
-    localDispatch(reducerActions.setIsDeleting(false));
-    if (selectedSchedule.id === deleteSchedule.schedule.id) {
-      localDispatch(reducerActions.setSelectedSchedule(null));
+    try {
+      await axios.delete(`${baseAppUrl}/api/schedules/${deleteSchedule.schedule.id}`);
+      localDispatch(
+        reducerActions.setDeleteSchedule({ open: false, schedule: null }),
+      );
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(reducerActions.setIsDeleting(false));
+      if (selectedSchedule.id === deleteSchedule.schedule.id) {
+        localDispatch(reducerActions.setSelectedSchedule(null));
+      }
     }
   };
 
@@ -289,70 +280,57 @@ const Calendar = ({ children, viewDate, currentUser }) => {
     );
   };
 
-  const handleOpenImportModal = useCallback(() => {
+  const handleOpenImportModal = () => {
     dispatch(toggleImportModal(true));
-  }, []);
-
-  const parsingProgressBar = isParsing && (
-    <Box
-      className='parsing-progress-wrapper'
-      position='absolute'
-      bottom='2.5rem'
-      left='2.5rem'
-      right='2.5rem'
-    >
-      <ProgressBar
-        now={parsedValue}
-        label={`${parsedValue}%`}
-        animated={parsedValue === 100 || parsedValue === 0}
-      />
-    </Box>
-  );
+  };
 
   return (
-    <div className={styles['calendar-root']}>
-      {deleteSchedule.open && (
-        <ConfirmationModal
-          isLoading={isDeleting}
-          show={deleteSchedule.open}
-          title={textForKey('Delete appointment')}
-          message={textForKey('delete appointment message')}
-          onConfirm={handleConfirmDeleteSchedule}
-          onClose={handleCloseDeleteSchedule}
-        />
-      )}
-      {viewMode !== 'day' && (
-        <div className={styles['calendar-root__content__left-container']}>
-          <CalendarDoctors
-            isFetching={isFetching}
-            selectedDoctor={selectedDoctor}
-            selectedService={selectedService}
-            doctors={filters.doctors}
-            onSelect={handleDoctorSelected}
+    <MainComponent currentUser={currentUser} currentClinic={currentClinic} currentPath='/calendar'>
+      <div className={styles['calendar-root']}>
+        {deleteSchedule.open && (
+          <ConfirmationModal
+            isLoading={isDeleting}
+            show={deleteSchedule.open}
+            title={textForKey('Delete appointment')}
+            message={textForKey('delete appointment message')}
+            onConfirm={handleConfirmDeleteSchedule}
+            onClose={handleCloseDeleteSchedule}
           />
+        )}
+        {viewMode !== 'day' && (
+          <div className={styles['calendar-root__content__left-container']}>
+            <CalendarDoctors
+              isFetching={isFetching}
+              selectedDoctor={selectedDoctor}
+              selectedService={selectedService}
+              doctors={filters.doctors}
+              onSelect={handleDoctorSelected}
+            />
+          </div>
+        )}
+        <div className={styles['calendar-root__content__center-container']}>
+          <AppointmentsCalendar
+            canAddAppointment
+            viewMode={viewMode}
+            isUploading={isUploading}
+            doctor={selectedDoctor}
+            doctors={doctors}
+            viewDate={viewDate}
+            selectedSchedule={selectedSchedule}
+            onPayDebt={handlePayDebt}
+            onDeleteSchedule={handleDeleteSchedule}
+            onEditSchedule={handleEditSchedule}
+            onAddAppointment={handleAppointmentModalOpen}
+            onScheduleSelect={handleScheduleSelected}
+            onViewDateChange={handleViewDateChange}
+            onViewModeChange={handleViewModeChange}
+            onImportSchedules={handleOpenImportModal}
+          >
+            {children}
+          </AppointmentsCalendar>
         </div>
-      )}
-      <div className={styles['calendar-root__content__center-container']}>
-        <AppointmentsCalendar
-          isUploading={isUploading}
-          onPayDebt={handlePayDebt}
-          onDeleteSchedule={handleDeleteSchedule}
-          onEditSchedule={handleEditSchedule}
-          canAddAppointment
-          onAddAppointment={handleAppointmentModalOpen}
-          selectedSchedule={selectedSchedule}
-          onScheduleSelect={handleScheduleSelected}
-          onViewDateChange={handleViewDateChange}
-          onViewModeChange={handleViewModeChange}
-          onImportSchedules={handleOpenImportModal}
-          doctor={selectedDoctor}
-          viewDate={viewDate}
-        >
-          {children}
-        </AppointmentsCalendar>
-        {parsingProgressBar}
       </div>
-    </div>
+    </MainComponent>
   );
 };
 

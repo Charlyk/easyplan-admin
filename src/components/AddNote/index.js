@@ -11,7 +11,7 @@ import { Action } from '../../../utils/constants';
 import { logUserAction } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from './AddNote.module.scss';
-import EasyPlanModal from '../EasyPlanModal';
+import EasyPlanModal from '../../../components/common/EasyPlanModal';
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   const dispatch = useDispatch();
@@ -35,7 +35,6 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   const handleSaveNote = async () => {
     setIsLoading(true);
     if (mode === 'visits') {
-      console.log(patientId, scheduleId);
       const visitResponse = await dataAPI.editVisitNote(
         patientId,
         visit.id,

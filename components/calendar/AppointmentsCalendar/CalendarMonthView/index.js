@@ -8,64 +8,57 @@ import { toast } from 'react-toastify';
 
 import { setIsCalendarLoading } from '../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
-import { Action } from '../../../../utils/constants';
-import { getDays, logUserAction } from '../../../../utils/helperFuncs';
+import { getDays } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import ScheduleItem from '../../../../src/pages/Calendar/ScheduleItem';
+import ScheduleItem from '../../ScheduleItem';
 import styles from '../../../../styles/CalendarMonthView.module.scss';
+import axios from "axios";
+import { baseAppUrl } from "../../../../eas.config";
 
-const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
+const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   const dispatch = useDispatch();
   const updateAppointments = useSelector(updateAppointmentsSelector);
-  const [isClosed, setIsClosed] = useState(!opened);
   const [schedules, setSchedules] = useState([]);
   const [monthDays, setMonthDays] = useState([]);
 
   useEffect(() => {
-    if (opened) {
-      logUserAction(
-        Action.ViewAppointments,
-        JSON.stringify({ mode: 'Month', doctorId }),
-      );
-    }
-    if (viewDate != null && doctorId != null && opened) {
+    if (viewDate != null && doctorId != null) {
       setMonthDays(getDays(viewDate));
       setSchedules([]);
       fetchSchedules();
     }
-  }, [viewDate, doctorId, opened, updateAppointments]);
+  }, [viewDate, doctorId, updateAppointments]);
 
   const fetchSchedules = async () => {
+    if (doctorId == null) {
+      return;
+    }
     dispatch(setIsCalendarLoading(true));
-    const response = await dataAPI.fetchMonthSchedules(doctorId, viewDate);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      const query = { doctorId, date: moment(viewDate).format('YYYY-MM-DD'), period: 'month' };
+      const queryString = new URLSearchParams(query).toString()
+      const response = await axios.get(`${baseAppUrl}/api/schedules?${queryString}`);
       const newSchedules = [];
       for (let prop in response.data) {
         const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');
         newSchedules.push({ date, schedules: response.data[prop] });
       }
       setSchedules(newSchedules);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      dispatch(setIsCalendarLoading(false));
     }
-    dispatch(setIsCalendarLoading(false));
   };
 
-  useEffect(() => {
-    setIsClosed(!opened);
-  }, [opened]);
-
-  if (isClosed) return null;
-
   const rowsCount = monthDays.length / 7;
-  const calendarRect = document
+  const calendarRect = typeof document !== 'undefined' ? document
     .getElementById('calendar-content')
-    ?.getBoundingClientRect();
+    ?.getBoundingClientRect() : { height: 1 };
 
   const handleDayClick = (day) => {
     const date = moment(day.fullDate, 'YYYY-DD-MM').toDate();
-    onDateClick(date);
+    onDateClick(date, true);
   };
 
   const getSchedules = (day) => {
@@ -124,7 +117,6 @@ const CalendarMonthView = ({ opened, viewDate, doctorId, onDateClick }) => {
 export default CalendarMonthView;
 
 CalendarMonthView.propTypes = {
-  opened: PropTypes.bool.isRequired,
   viewDate: PropTypes.instanceOf(Date),
   doctorId: PropTypes.number,
   onDateClick: PropTypes.func,

@@ -3,6 +3,7 @@
   height: 100%;
   display: flex;
   position: relative;
+  overflow-y: hidden;
 
   .logo-container {
     background-color: #34344E;
@@ -19,7 +20,9 @@
 
   .form-container {
     width: 60%;
-    height: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    overflow-y: scroll;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,7 +69,7 @@
     color: #ec3276;
   }
 
-  .form-label {
+  :global(.form-label) {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: 600;
@@ -74,7 +77,7 @@
     margin-bottom: 0;
   }
 
-  .form-control {
+  :global(.form-control) {
     background-color: #FAFAFD;
   }
 
@@ -97,7 +100,7 @@
     justify-content: flex-end;
     position: absolute;
 
-    .positive-button {
+    :global(.positive-button) {
       flex: unset;
       min-width: 8rem;
       padding-right: 1rem;
@@ -129,7 +132,7 @@
     }
   }
 
-  .form-group {
+  :global(.form-group) {
     .password-visibility-append {
       height: 33.19px;
 
@@ -151,8 +154,8 @@
     flex-direction: column;
     position: relative;
 
-    .react-tel-input {
-      .form-control {
+    :global(.react-tel-input) {
+      :global(.form-control) {
         width: 100%;
       }
     }

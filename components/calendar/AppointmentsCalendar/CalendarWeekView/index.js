@@ -23,7 +23,6 @@ import CalendarWeekDayView from './CalendarWeekDayView';
 import styles from '../../../../styles/CalendarWeekView.module.scss';
 
 const CalendarWeekView = ({
-  opened,
   doctorId,
   viewDate,
   onDateClick,
@@ -31,28 +30,15 @@ const CalendarWeekView = ({
   onScheduleSelect,
 }) => {
   const updateAppointments = useSelector(updateAppointmentsSelector);
-  const [isClosed, setIsClosed] = useState(!opened);
   const [week, setWeek] = useState(getCurrentWeek(viewDate));
-
-  useEffect(() => {
-    setIsClosed(!opened);
-    if (opened) {
-      logUserAction(
-        Action.ViewAppointments,
-        JSON.stringify({ mode: 'Week', doctorId }),
-      );
-    }
-  }, [opened]);
 
   useEffect(() => {
     setWeek(getCurrentWeek(viewDate));
   }, [viewDate, updateAppointments]);
 
   const handleDayClick = (day) => {
-    onDateClick(day.toDate());
+    onDateClick(day.toDate(), true);
   };
-
-  if (isClosed) return null;
 
   return (
     <div className={styles['week-view']}>

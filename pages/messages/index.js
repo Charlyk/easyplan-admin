@@ -10,11 +10,9 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../components/common/ConfirmationModal';
-import { hasSMSAliasSelector } from '../../redux/selectors/clinicSelector';
 import { generateReducerActions, handleRequestError } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import CreateMessageModal from '../../components/messages/CreateMessageModal';

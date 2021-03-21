@@ -1,27 +1,25 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useDispatch } from 'react-redux';
-import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../../components/icons/iconAvatar';
-import LoadingButton from '../../../components/common/LoadingButton';
-import dataAPI from '../../../utils/api/dataAPI';
-import { JwtRegex, PasswordRegex } from '../../../utils/constants';
+import IconAvatar from '../../components/icons/iconAvatar';
+import LoadingButton from '../../components/common/LoadingButton';
+import { JwtRegex, PasswordRegex, Role } from '../../utils/constants';
 import {
   generateReducerActions,
-  handleUserAuthenticated,
-  updateLink,
   uploadFileToAWS,
-} from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import './AcceptInvitation.module.scss';
+} from '../../utils/helperFuncs';
+import { textForKey } from '../../utils/localization';
+import styles from '../../styles/AcceptInvitation.module.scss';
+import { useRouter } from "next/router";
+import axios from "axios";
+import { baseAppUrl } from "../../eas.config";
 
 const initialState = {
   isLoading: false,
@@ -79,8 +77,9 @@ const reducer = (state, action) => {
 };
 
 const AcceptInvitation = () => {
-  const dispatch = useDispatch();
-  const { isNew, token } = useParams();
+  const router = useRouter();
+  const { isNew, token } = router.query;
+  const isNewUser = isNew === '1';
   const [
     {
       isLoading,
@@ -90,24 +89,14 @@ const AcceptInvitation = () => {
       isPhoneValid,
       password,
       avatarFile,
-      isInvitationAccepted,
       isPasswordVisible,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    if (!isNew && !isLoading && token.match(JwtRegex)) {
-      try {
-        handleAcceptInvitation();
-      } catch (e) {
-        console.log(e.message);
-      }
-    }
-  }, [isNew, token]);
-
   if (!token.match(JwtRegex)) {
-    return <Redirect to={updateLink('/login')} />;
+    router.replace('/login');
+    return null;
   }
 
   const handleFirstNameChange = event => {
@@ -151,71 +140,86 @@ const AcceptInvitation = () => {
     );
   };
 
+  const handleSuccessResponse = async (user) => {
+    const selectedClinic = user.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
+    if (selectedClinic != null) {
+      switch (selectedClinic.roleInClinic) {
+        case Role.reception:
+          await router.replace('/calendar/day');
+          break;
+        case Role.admin:
+        case Role.manager:
+          await router.replace('/analytics/general');
+          break;
+        default:
+          await router.replace('/login');
+          break;
+      }
+    } else {
+      await router.replace('/login');
+    }
+  }
+
   const handleAcceptInvitation = async () => {
-    if (isNew && !isFormValid()) {
+    if (isNewUser && !isFormValid()) {
       return;
     }
     localDispatch(actions.setIsLoading(true));
-    const requestBody = {
-      firstName,
-      lastName,
-      password,
-      phoneNumber,
-      invitationToken: token,
-    };
-    if (avatarFile != null) {
-      const uploadResult = await uploadFileToAWS('avatars', avatarFile);
-      if (uploadResult?.location != null) {
-        requestBody.avatar = uploadResult.location;
+    try {
+      const requestBody = {
+        firstName,
+        lastName,
+        password,
+        phoneNumber,
+        invitationToken: token,
+      };
+      if (avatarFile != null) {
+        const uploadResult = await uploadFileToAWS('avatars', avatarFile);
+        if (uploadResult?.location != null) {
+          requestBody.avatar = uploadResult.location;
+        }
       }
-    }
-    const response = await dataAPI.acceptClinicInvitation(requestBody);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-      console.error(response.message);
-    } else {
-      dispatch(
-        handleUserAuthenticated(response.data, () => {
-          toast.success(textForKey('invitation_accepted_success'));
-          localDispatch(actions.setIsInvitationAccepted(true));
-        }),
+      const { data: user } = await axios.put(
+        `${baseAppUrl}/api/users/accept-invitation`,
+        requestBody
       );
-    }
-    setTimeout(() => {
+      toast.success(textForKey('invitation_accepted_success'));
+      await handleSuccessResponse(user)
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
       localDispatch(actions.setIsLoading(false));
-    }, 500);
+    }
   };
 
-  if (isInvitationAccepted) {
-    return <Redirect to={updateLink('/')} />;
-  }
-
   return (
-    <div className='general-page'>
-      <div className='logo-container'>
+    <div className={styles['general-page']}>
+      <div className={styles['logo-container']}>
         <img
           src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
           alt='EasyPlan'
         />
       </div>
-      <div className='form-container'>
-        {!isNew && (
-          <CircularProgress classes={{ root: 'existent-accept-progress' }} />
-        )}
-        {isNew && (
-          <div className='form-root accept-invitation'>
-            <div className='form-wrapper'>
-              <span className='form-title'>
+      <div className={styles['form-container']}>
+        <div className={clsx(styles['form-root'], styles['accept-invitation'])}>
+          {!isNewUser && isLoading && (
+            <div className='progress-bar-wrapper'>
+              <CircularProgress className='circular-progress-bar'/>
+            </div>
+          )}
+          {isNewUser ? (
+            <div className={styles['form-wrapper']}>
+              <span className={styles['form-title']}>
                 {textForKey('Accept invitation')}
               </span>
-              <span className='welcome-text'>
+              <span className={styles['welcome-text']}>
                 {textForKey('accept invitation message')}
               </span>
               <div className='upload-avatar-container'>
                 {avatarFile ? (
-                  <Image roundedCircle src={avatarFile} />
+                  <Image roundedCircle src={avatarFile}/>
                 ) : (
-                  <IconAvatar />
+                  <IconAvatar/>
                 )}
                 <span style={{ margin: '1rem' }}>
                   {textForKey('JPG or PNG, Max size of 800kb')}
@@ -285,13 +289,13 @@ const AcceptInvitation = () => {
                     onChange={handlePasswordChange}
                     type={isPasswordVisible ? 'text' : 'password'}
                   />
-                  <InputGroup.Append className='password-visibility-append'>
+                  <InputGroup.Append className={styles['password-visibility-append']}>
                     <Button
                       onClick={togglePasswordVisibility}
                       variant='outline-primary'
-                      className='visibility-toggle-btn'
+                      className={styles['visibility-toggle-btn']}
                     >
-                      {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
+                      {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
                     </Button>
                   </InputGroup.Append>
                 </InputGroup>
@@ -300,21 +304,34 @@ const AcceptInvitation = () => {
                 </Form.Text>
               </Form.Group>
             </div>
-            <div className={clsx('footer', !isNew && 'is-new')}>
-              <LoadingButton
-                isLoading={isLoading}
-                disabled={!isFormValid() || isLoading}
-                className='positive-button'
-                onClick={handleAcceptInvitation}
-              >
-                {textForKey('Accept invitation')}
-              </LoadingButton>
+          ) : (
+            <div>
+              <Typography className={styles['form-title']}>{textForKey('Accept invitation')}</Typography>
+              <span className={styles['welcome-text']}>
+                {textForKey('Click on button below to accept the invitation')}
+              </span>
             </div>
+          )}
+          <div className={clsx(styles['footer'], !isNewUser && styles['is-new'])}>
+            <LoadingButton
+              isLoading={isLoading}
+              disabled={isLoading}
+              className='positive-button'
+              onClick={handleAcceptInvitation}
+            >
+              {textForKey('Accept invitation')}
+            </LoadingButton>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
 };
+
+export const getServerSideProps = () => {
+  return {
+    props: {}
+  }
+}
 
 export default AcceptInvitation;

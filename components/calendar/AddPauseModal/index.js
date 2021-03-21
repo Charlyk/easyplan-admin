@@ -9,7 +9,7 @@ import dataAPI from '../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../../../src/components/EasyDatePicker';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddPauseModal.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
@@ -44,6 +44,7 @@ const initialState = {
   availableStartTime: [],
   availableEndTime: [],
   isFetchingHours: false,
+  isDeleting: false,
 };
 
 const reducerTypes = {
@@ -57,6 +58,7 @@ const reducerTypes = {
   setAvailableStartTime: 'setAvailableStartTime',
   setAvailableEndTime: 'setAvailableEndTime',
   setIsFetchingHours: 'setIsFetchingHours',
+  setIsDeleting: 'setIsDeleting',
 };
 
 const actions = generateReducerActions(reducerTypes);
@@ -113,6 +115,8 @@ const reducer = (state, action) => {
       return { ...state, availableEndTime: action.payload };
     case reducerTypes.setIsFetchingHours:
       return { ...state, isFetchingHours: action.payload };
+    case reducerTypes.setIsDeleting:
+      return { ...state, isDeleting: action.payload };
     default:
       return state;
   }
@@ -140,6 +144,7 @@ const AddPauseModal = ({
       startHour,
       endHour,
       comment,
+      isDeleting,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -259,6 +264,18 @@ const AddPauseModal = ({
     }
   };
 
+  const handleDeletePause = async () => {
+    localDispatch(actions.setIsDeleting(true));
+    try {
+      await axios.delete(`${baseAppUrl}/api/pauses/${id}`);
+      onClose();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsDeleting(false));
+    }
+  }
+
   const handleDateFieldClick = () => {
     localDispatch(actions.setShowDatePicker(true));
   };
@@ -308,7 +325,11 @@ const AddPauseModal = ({
       title={`${textForKey('Add pause')}: ${doctor?.firstName} ${
         doctor?.lastName
       }`}
+      onNegativeClick={handleDeletePause}
+      isDestroyableLoading={isDeleting}
+      isDestroyableDisabled={isDeleting || isLoading}
       isPositiveDisabled={!isFormValid() || isLoading}
+      onDestroyClick={id != null && handleDeletePause}
       onPositiveClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >

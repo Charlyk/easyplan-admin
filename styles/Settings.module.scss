@@ -1,6 +1,6 @@
 .settings-root {
   display: flex;
-  padding: 1.5rem;
+  padding: 8px;
   height: 100%;
 
   &__menu {
@@ -11,7 +11,7 @@
   &__form {
     width: 76%;
     max-height: 100%;
-    margin-left: 1rem;
+    margin-left: 8px;
 
     .form-title {
       font-family: Inter, sans-serif;

@@ -65,18 +65,18 @@ const CalendarHeader = (
         if (currentTab === CalendarView.day) {
           onDateChange(currentDate.subtract(1, 'day').toDate());
         } else if (currentTab === CalendarView.week) {
-          onDateChange(currentDate.subtract(1, 'week').toDate());
+          onDateChange(currentDate.set('weekday', 1).subtract(1, 'week').toDate());
         } else if (currentTab === CalendarView.month) {
-          onDateChange(currentDate.subtract(1, 'month').toDate());
+          onDateChange(currentDate.set('day', 1).subtract(1, 'month').toDate());
         }
         break;
       case 'next-date':
         if (currentTab === CalendarView.day) {
           onDateChange(currentDate.add(1, 'day').toDate());
         } else if (currentTab === CalendarView.week) {
-          onDateChange(currentDate.add(1, 'week').toDate());
+          onDateChange(currentDate.set('weekday', 1).add(1, 'week').toDate());
         } else if (currentTab === CalendarView.month) {
-          onDateChange(currentDate.add(1, 'month').toDate());
+          onDateChange(currentDate.set('day', 1).add(1, 'month').toDate());
         }
         break;
     }

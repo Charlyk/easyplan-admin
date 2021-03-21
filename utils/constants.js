@@ -479,3 +479,7 @@ export const Action = {
 export const UploadDestination = {
   patients: 'patients',
 };
+
+export const UnauthorizedPaths = [
+  '/accept-invitation',
+]

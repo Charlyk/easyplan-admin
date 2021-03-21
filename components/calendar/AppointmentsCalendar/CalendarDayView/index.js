@@ -26,6 +26,7 @@ import styles from '../../../../styles/CalendarDayView.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
 import { baseAppUrl } from "../../../../eas.config";
+import { wrapper } from "../../../../store";
 
 const moment = extendMoment(Moment);
 
@@ -190,13 +191,15 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       return;
     }
     const scheduleDate = moment(updateSchedule.startTime);
-    const newSchedulesMap = new Map();
+    const newSchedulesMap = schedulesMap ? cloneDeep(schedulesMap) : new Map();
 
     if (isOutOfBounds(updateSchedule)) {
       await fetchDayHours(scheduleDate.toDate());
     }
 
-    if (schedulesMap.size === 0) {
+    const doctorSchedules = schedulesMap.get(updateSchedule.doctorId);
+
+    if (doctorSchedules == null || doctorSchedules.length === 0) {
       newSchedulesMap.set(updateSchedule.doctorId, [updateSchedule]);
       localDispatch(actions.setSchedules(newSchedulesMap));
       return;
@@ -461,7 +464,7 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
   );
 };
 
-export default CalendarDayView;
+export default wrapper.withRedux(CalendarDayView);
 
 CalendarDayView.propTypes = {
   schedules: PropTypes.any,

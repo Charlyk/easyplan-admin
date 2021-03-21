@@ -1,6 +1,7 @@
 import { baseApiUrl, isDev } from "../../../eas.config";
 import cookie from "cookie";
 import axios from "axios";
+import { setCookies } from "../../../utils/helperFuncs";
 
 export default async function register(req, res) {
   const response = await createNewAccount(req.body);
@@ -16,19 +17,6 @@ export default async function register(req, res) {
       res.status(200).json(user);
     }
   }
-}
-
-function setCookies(res, authToken) {
-  const cookieOpts = {
-    httpOnly: true,
-    secure: !isDev,
-    sameSite: 'strict',
-    maxAge: 3600,
-    path: '/'
-  }
-  const tokenCookie = cookie.serialize('auth_token', authToken, cookieOpts);
-  const clinicIdCookie = cookie.serialize('auth_token', '-1', cookieOpts);
-  res.setHeader('Set-Cookie', [clinicIdCookie, tokenCookie]);
 }
 
 /**

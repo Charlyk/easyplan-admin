@@ -75,7 +75,7 @@ const menuItems = [
     roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('Calendar'),
     icon: <MenuCalendar/>,
-    href: '/calendar',
+    href: '/calendar/day',
   },
   {
     id: 'patients',
@@ -132,7 +132,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
   };
 
   const isActive = (itemHref) => {
-    return currentPath.startsWith(itemHref);
+    return itemHref.startsWith(currentPath);
   };
 
   const handleCompanySelected = (company) => {

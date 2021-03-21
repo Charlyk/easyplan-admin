@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import EasyDatePicker from '../../../src/components/EasyDatePicker';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../../common/EasyPlanModal';
 import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';

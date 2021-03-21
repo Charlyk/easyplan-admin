@@ -11,7 +11,7 @@ import { EmailRegex } from '../../../utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../../../src/components/EasyDatePicker';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/CreatePatientModal.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";

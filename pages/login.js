@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { wrapper } from "../store";
 import { setCurrentUser } from "../redux/actions/actions";
 import { baseAppUrl } from "../eas.config";
+import { Role } from "../utils/constants";
 
 const FormType = {
   login: 'login',
@@ -72,6 +73,26 @@ const Login = () => {
     handleFormChange(FormType.register);
   };
 
+  const handleSuccessResponse = async (user) => {
+    const selectedClinic = user.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
+    if (selectedClinic != null) {
+      switch (selectedClinic.roleInClinic) {
+        case Role.reception:
+          await router.replace('/calendar/day');
+          break;
+        case Role.admin:
+        case Role.manager:
+          await router.replace('/analytics/general');
+          break;
+        default:
+          await router.replace('/login');
+          break;
+      }
+    } else {
+      await router.replace('/login');
+    }
+  }
+
   const handleSignupSubmit = async (requestBody) => {
     localDispatch(actions.setIsLoading(true));
     try {
@@ -89,7 +110,7 @@ const Login = () => {
         localDispatch(actions.setErrorMessage(data.message));
       } else {
         localDispatch(actions.setErrorMessage(null));
-        await router.replace('/analytics/general');
+        await handleSuccessResponse(data);
       }
     } catch (error) {
       toast.error(error.message);
@@ -130,8 +151,7 @@ const Login = () => {
         localDispatch(actions.setErrorMessage(data.message));
       } else {
         localDispatch(actions.setErrorMessage(null));
-        dispatch(setCurrentUser(data));
-        await router.replace('/analytics/general');
+        await handleSuccessResponse(data);
       }
     } catch (error) {
       toast.error(error.message);

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../icons/iconAvatar';
 import { uploadFileToAWS } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../../common/EasyPlanModal';
 
 import styles from '../../../styles/CreateClinicModal.module.scss';
 import axios from "axios";

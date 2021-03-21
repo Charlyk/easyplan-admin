@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
-import EasyPlanModal from '../EasyPlanModal';
+import EasyPlanModal from '../../../components/common/EasyPlanModal';
 import './SingleInputModal.module.scss';
 
 const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {

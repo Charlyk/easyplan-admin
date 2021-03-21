@@ -26,7 +26,7 @@ import {
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../../../src/components/EasyDatePicker';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddAppointment.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";

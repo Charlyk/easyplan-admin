@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { triggerUpdateXRay } from '../../../redux/actions/actions';
 import { uploadFileToAWS } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../../common/EasyPlanModal';
 
 import styles from '../../../styles/AddXRay.module.scss';
 import { toast } from "react-toastify";

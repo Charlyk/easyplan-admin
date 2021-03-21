@@ -45,6 +45,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/index.scss'
 import { ToastContainer } from "react-toastify";
+import { UnauthorizedPaths } from "../utils/constants";
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
@@ -174,8 +175,14 @@ function NextApp({ Component, pageProps }) {
 }
 
 NextApp.getInitialProps = async (appContext) => {
-  const { req, res } = appContext.ctx;
+  const { req, res, pathname } = appContext.ctx;
+
   const appProps = await App.getInitialProps(appContext);
+
+  if (UnauthorizedPaths.includes(pathname)) {
+    return appProps
+  }
+
   try {
     const { auth_token } = parseCookies(req);
     if (auth_token == null) {

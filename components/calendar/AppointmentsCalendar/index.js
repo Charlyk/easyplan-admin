@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { CircularProgress, } from '@material-ui/core';
 import clsx from 'clsx';
@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 import AppointmentDetails from '../AppointmentDetails';
 import { isCalendarLoadingSelector } from '../../../redux/selectors/calendarSelector';
 import { getCurrentWeek } from '../../../utils/helperFuncs';
-import CalendarDayView from './CalendarDayView';
 import styles from '../../../styles/AppointmentsCalendar.module.scss'
 import CalendarHeader from "../CalendarHeader";
 
@@ -22,12 +21,12 @@ const CalendarView = {
 
 const AppointmentsCalendar = (
   {
-    doctors,
     viewDate,
-    schedules,
-    dayHours,
+    viewMode: currentTab,
     selectedSchedule,
     canAddAppointment,
+    children,
+    doctor,
     onPayDebt,
     onViewDateChange,
     onEditSchedule,
@@ -39,10 +38,8 @@ const AppointmentsCalendar = (
   }
 ) => {
   const isLoading = useSelector(isCalendarLoadingSelector);
-  const [currentTab, setCurrentTab] = useState(CalendarView.day);
 
   const handleTabChange = (newTab) => {
-    setCurrentTab(newTab);
     onViewModeChange(newTab);
   };
 
@@ -103,30 +100,16 @@ const AppointmentsCalendar = (
             <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
           </div>
         )}
-        {currentTab === CalendarView.day && (
-          <CalendarDayView
-            doctors={doctors}
-            dayHours={dayHours}
-            schedules={schedules}
-            onScheduleSelect={onScheduleSelect}
-            viewDate={viewDate}
-            onCreateSchedule={onAddAppointment}
-          />
+        {React.cloneElement(
+          children,
+          {
+            ...children.props,
+            onScheduleSelect,
+            onDateClick: onViewDateChange,
+            onCreateSchedule: onAddAppointment,
+            doctorId: doctor?.id
+          }
         )}
-        {/*<CalendarWeekView*/}
-        {/*  selectedSchedule={selectedSchedule}*/}
-        {/*  onScheduleSelect={onScheduleSelect}*/}
-        {/*  viewDate={viewDate}*/}
-        {/*  onDateClick={handleMonthDateClick}*/}
-        {/*  doctorId={doctor?.id}*/}
-        {/*  opened={currentTab === CalendarView.week}*/}
-        {/*/>*/}
-        {/*<CalendarMonthView*/}
-        {/*  onDateClick={handleMonthDateClick}*/}
-        {/*  viewDate={viewDate}*/}
-        {/*  doctorId={doctor?.id}*/}
-        {/*  opened={currentTab === CalendarView.month}*/}
-        {/*/>*/}
       </div>
     </div>
   );

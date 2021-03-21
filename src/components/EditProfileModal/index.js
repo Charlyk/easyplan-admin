@@ -14,7 +14,7 @@ import { EmailRegex, PasswordRegex } from '../../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
-import EasyPlanModal from '../EasyPlanModal';
+import EasyPlanModal from '../../../components/common/EasyPlanModal';
 import './EditProfileModal.module.scss';
 
 const EditProfileModal = ({ open, onClose }) => {

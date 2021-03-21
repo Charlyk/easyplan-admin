@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import sessionManager from '../../utils/settings/sessionManager';
 import AccountSettings from '../../components/settings/AccountSettings';
 import ApplicationSettings from '../../components/settings/ApplicationSettings';
 import BracesSettings from '../../components/settings/BracesSettings';

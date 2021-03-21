@@ -7,9 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import dataAPI from '../../../../../utils/api/dataAPI';
-import ScheduleItem from '../../../../../src/pages/Calendar/ScheduleItem';
+import ScheduleItem from '../../../ScheduleItem';
 import styles from '../../../../../styles/CalendarWeekDayView.module.scss'
+import { toast } from "react-toastify";
+import axios from "axios";
+import { baseAppUrl } from "../../../../../eas.config";
 
 const CalendarWeekDayView = ({
   viewDate,
@@ -28,11 +30,12 @@ const CalendarWeekDayView = ({
   }, [doctorId, updateAppointments, update, viewDate]);
 
   const fetchSchedules = async () => {
+    if (doctorId == null) return;
     dispatch(setIsCalendarLoading(true));
-    const response = await dataAPI.fetchSchedules(doctorId, day.toDate());
-    if (response.isError) {
-      console.log(response.message);
-    } else {
+    try {
+      const query = { doctorId, date: day.format('YYYY-MM-DD'), period: 'week' };
+      const queryString = new URLSearchParams(query).toString();
+      const response = await axios.get(`${baseAppUrl}/api/schedules?${queryString}`);
       const { data } = response;
       const newData = sortBy(data, item => item.startTime);
       setSchedules(newData);
@@ -42,8 +45,11 @@ const CalendarWeekDayView = ({
       ) {
         onScheduleSelect(newData.find(item => item.id === selectedSchedule.id));
       }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      dispatch(setIsCalendarLoading(false));
     }
-    dispatch(setIsCalendarLoading(false));
   };
 
   return (

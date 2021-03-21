@@ -7,7 +7,7 @@ import dataAPI from '../../../utils/api/dataAPI';
 import { Action } from '../../../utils/constants';
 import { logUserAction } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../src/components/EasyPlanModal';
+import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/CreateCategoryModal.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";

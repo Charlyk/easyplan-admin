@@ -3,12 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 
-import IconClose from '../../../components/icons/iconClose';
-import IconSuccess from '../../../components/icons/iconSuccess';
+import IconClose from '../../icons/iconClose';
+import IconSuccess from '../../icons/iconSuccess';
 import { textForKey } from '../../../utils/localization';
-import styles from './EasyPlanModal.module.scss';
-import LoadingButton from '../../../components/common/LoadingButton';
+import styles from '../../../styles/EasyPlanModal.module.scss';
+import LoadingButton from '../LoadingButton';
 import clsx from "clsx";
+import IconTrash from "../../icons/iconTrash";
 
 const EasyPlanModal = ({
   open,
@@ -17,15 +18,20 @@ const EasyPlanModal = ({
   size,
   negativeBtnText,
   positiveBtnText,
+  destroyableBtnText,
   positiveBtnIcon,
+  destroyableBtnIcon,
   isPositiveDisabled,
   isNegativeDisabled,
+  isDestroyableDisabled,
   isPositiveLoading,
   isNegativeLoading,
+  isDestroyableLoading,
   hidePositiveBtn,
   className,
   onPositiveClick,
   onNegativeClick,
+  onDestroyClick,
   onClose,
 }) => {
   return (
@@ -62,6 +68,17 @@ const EasyPlanModal = ({
             {!isNegativeLoading} <IconClose />
           </LoadingButton>
         )}
+        {typeof onDestroyClick === 'function' && (
+          <LoadingButton
+            disabled={isDestroyableDisabled}
+            isLoading={isDestroyableLoading}
+            className='delete-button'
+            onClick={onNegativeClick || onClose}
+          >
+            {destroyableBtnText}
+            {!isNegativeLoading && destroyableBtnIcon}
+          </LoadingButton>
+        )}
         {!hidePositiveBtn && (
           <LoadingButton
             disabled={isPositiveDisabled}
@@ -86,14 +103,19 @@ EasyPlanModal.propTypes = {
   children: PropTypes.any,
   hidePositiveBtn: PropTypes.bool,
   negativeBtnText: PropTypes.string,
+  destroyableBtnText: PropTypes.string,
   positiveBtnText: PropTypes.string,
   positiveBtnIcon: PropTypes.any,
+  destroyableBtnIcon: PropTypes.any,
   isPositiveLoading: PropTypes.bool,
   isNegativeLoading: PropTypes.bool,
+  isDestroyableLoading: PropTypes.bool,
   isPositiveDisabled: PropTypes.bool,
   isNegativeDisabled: PropTypes.bool,
+  isDestroyableDisabled: PropTypes.bool,
   onNegativeClick: PropTypes.func,
   onPositiveClick: PropTypes.func,
+  onDestroyClick: PropTypes.oneOfType([PropTypes.func, PropTypes.any]),
   onClose: PropTypes.func,
   className: PropTypes.string,
   size: PropTypes.oneOf(['sm', 'lg', 'xl']),
@@ -104,7 +126,9 @@ EasyPlanModal.defaultProps = {
   onPositiveClick: () => null,
   negativeBtnText: textForKey('Close'),
   positiveBtnText: textForKey('Save'),
+  destroyableBtnText: textForKey('Delete'),
   positiveBtnIcon: <IconSuccess fill='#fff' />,
+  destroyableBtnIcon: <IconTrash />,
   className: '',
   size: 'lg',
 };

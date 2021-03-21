@@ -9,9 +9,10 @@ import { env, S3Config } from './constants';
 import { textForKey } from './localization';
 import authManager from './settings/authManager';
 import sessionManager from './settings/sessionManager';
-import { baseAppUrl } from "../eas.config";
+import { baseAppUrl, isDev } from "../eas.config";
 import Router from "next/router";
 import { toast } from "react-toastify";
+import cookie from "cookie";
 
 export function createHoursList() {
   return [].concat(
@@ -429,4 +430,17 @@ export const getClinicExchangeRates = (currentClinic) => {
     });
   }
   return currencies;
+}
+
+export function setCookies(res, authToken, clinicId) {
+  const cookieOpts = {
+    httpOnly: true,
+    secure: !isDev,
+    sameSite: 'strict',
+    maxAge: 3600,
+    path: '/'
+  }
+  const tokenCookie = cookie.serialize('auth_token', String(authToken), cookieOpts);
+  const clinicCookie = cookie.serialize('clinic_id', String(clinicId) || '-1', cookieOpts);
+  res.setHeader('Set-Cookie', [tokenCookie, clinicCookie]);
 }
