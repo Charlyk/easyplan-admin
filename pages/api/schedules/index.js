@@ -45,12 +45,10 @@ async function fetchSchedules(req) {
   switch (period) {
     case 'day':
       return fetchDaySchedules(req);
-    case 'week':
-      return fetchDoctorSchedules(req);
     case 'month':
       return fetchMonthSchedules(req);
     default:
-      return () => null;
+      return fetchDoctorSchedules(req);
   }
 }
 

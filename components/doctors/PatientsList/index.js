@@ -14,13 +14,14 @@ import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
-import dataAPI from '../../../../utils/api/dataAPI';
-import { Statuses } from '../../../../utils/constants';
-import { updateLink } from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
-import styles from './PatientsList.module.scss';
+import { Statuses } from '../../../utils/constants';
+import { textForKey } from '../../../utils/localization';
+import Link from "next/link";
+import styles from '../../../styles/PatientsList.module.scss';
+import { toast } from "react-toastify";
+import axios from "axios";
+import { baseAppUrl } from "../../../eas.config";
 
 const PatientsList = ({ schedules, viewDate, filterData }) => {
   const [filteredSchedules, setFilteredSchedules] = useState(schedules);
@@ -41,7 +42,6 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
   }, [schedules]);
 
   const filterPatients = () => {
-    console.log(schedules);
     setFilteredSchedules(
       schedules.filter((schedule) => {
         return (
@@ -65,15 +65,16 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
 
   const fetchWorkingHours = async () => {
     setIsLoading(true);
-    const response = await dataAPI.fetchClinicWorkHoursV2(
-      moment(viewDate).isoWeekday(),
-    );
-    if (response.isError) {
-      console.error(response.message);
-    } else {
+    try {
+      const query = { weekday: moment(viewDate).isoWeekday(), period: 'day' };
+      const queryString = new URLSearchParams(query).toString();
+      const response = await axios.get(`${baseAppUrl}/api/clinic/work-hours?${queryString}`);
       setHours(response.data.filter((it) => it.split(':')[1] === '00'));
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const schedulesForHour = (hour) => {
@@ -130,8 +131,8 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
             {startDate.format('HH:mm')} - {endDate.format('HH:mm')}
           </Typography>
           <div className={styles['details-button']}>
-            <Link to={updateLink(`/${schedule.id}`)}>
-              <span className={styles['button-text']}>{textForKey('Details')}</span>
+            <Link href={`/doctor/${schedule.id}`}>
+              <a className={styles['button-text']}>{textForKey('Details')}</a>
             </Link>
           </div>
         </Box>

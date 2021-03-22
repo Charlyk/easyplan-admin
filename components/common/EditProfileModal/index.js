@@ -3,22 +3,20 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../../components/icons/iconAvatar';
+import IconAvatar from '../../icons/iconAvatar';
 import { setCurrentUser } from '../../../redux/actions/actions';
-import { userSelector } from '../../../redux/selectors/rootSelector';
 import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex, PasswordRegex } from '../../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import authManager from '../../../utils/settings/authManager';
-import EasyPlanModal from '../../../components/common/EasyPlanModal';
-import './EditProfileModal.module.scss';
+import EasyPlanModal from '../EasyPlanModal';
+import '../../../styles/EditProfileModal.module.scss';
 
-const EditProfileModal = ({ open, onClose }) => {
-  const currentUser = useSelector(userSelector);
+const EditProfileModal = ({ open, currentUser, onClose }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);

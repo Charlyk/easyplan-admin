@@ -83,6 +83,9 @@ const Login = () => {
         case Role.manager:
           await router.replace('/analytics/general');
           break;
+        case Role.doctor:
+          await router.replace('/doctor');
+          break;
         default:
           await router.replace('/login');
           break;

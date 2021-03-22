@@ -1,40 +1,28 @@
 import React, { useRef, useState } from 'react';
 
 import { ClickAwayListener } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import IconArrowDown from '../../../components/icons/iconArrowDown';
-import ClinicSelector from '../../components/ClinicSelector';
-import EditProfileModal from '../../components/EditProfileModal';
-import PageHeader from '../../../components/common/PageHeader';
+import IconArrowDown from '../../icons/iconArrowDown';
+import ClinicSelector from '../../../src/components/ClinicSelector';
+import EditProfileModal from '../../common/EditProfileModal';
+import PageHeader from '../../common/PageHeader';
 import {
   changeSelectedClinic,
   setCreateClinic,
   triggerUserLogout,
 } from '../../../redux/actions/actions';
-import { userSelector } from '../../../redux/selectors/rootSelector';
-import { updateLink } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import authManager from '../../../utils/settings/authManager';
-import sessionManager from '../../../utils/settings/sessionManager';
-import DoctorPatientDetails from '../DoctorPatientDetails';
-import DoctorPatients from '../DoctorPatients';
-import styles from './DoctorsMain.module.scss';
+import styles from '../../../styles/DoctorsMain.module.scss';
 
-const DoctorsMain = () => {
+const DoctorsMain = ({ children, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
   const buttonRef = useRef(null);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const currentUser = useSelector(userSelector);
   const selectedClinic = currentUser?.clinics?.find(
-    (item) => item.clinicId === sessionManager.getSelectedClinicId(),
+    (item) => item.clinicId === currentClinic.id,
   );
-
-  if (!authManager.isLoggedIn()) {
-    return <Redirect to={updateLink('/login')} />;
-  }
 
   const handleCompanyClose = () => {
     setIsSelectorOpen(false);
@@ -68,12 +56,15 @@ const DoctorsMain = () => {
     <div className={styles['doctors-main-root']}>
       <EditProfileModal
         open={isEditingProfile}
+        currentUser={currentUser}
         onClose={handleCloseEditProfile}
       />
       <div className={styles['doctor-page-header-root']}>
         <PageHeader
           isDoctor
           showLogo
+          user={currentUser}
+          currentClinic={currentClinic}
           onEditProfile={handleEditProfileClick}
           onLogout={handleStartLogout}
           titleComponent={
@@ -102,10 +93,7 @@ const DoctorsMain = () => {
         />
       </div>
       <div className={styles['doctor-data-container']}>
-        <Switch>
-          <Route path='/' exact component={DoctorPatients} />
-          <Route path='/:scheduleId' exact component={DoctorPatientDetails} />
-        </Switch>
+        {children}
       </div>
     </div>
   );

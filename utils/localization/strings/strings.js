@@ -501,6 +501,7 @@ export default {
     'rows per page': 'Rows per page',
     no_sms_messages: 'No SMS messages yet.',
     'click on button below to accept the invitation': 'Click on button below to accept the invitation',
+    schedules: 'Schedules',
   },
   ro: {
     analytics: 'Analitică',
@@ -1009,7 +1010,8 @@ export default {
     'time zone': 'Fus orar',
     'rows per page': 'Rânduri pe pagină',
     no_sms_messages: 'Încă nu sunt mesaje create',
-    'click on button below to accept the invitation': 'Dați click pe butonul de mai jos pentru a accepta invitația'
+    'click on button below to accept the invitation': 'Dați click pe butonul de mai jos pentru a accepta invitația',
+    schedules: 'Programări',
   },
   ru: {
     analytics: 'Analytics',
@@ -1509,6 +1511,7 @@ export default {
     'time zone': 'Time zone',
     'rows per page': 'Rows per page',
     no_sms_messages: 'No SMS messages yet.',
-    'click on button below to accept the invitation': 'Click on button below to accept the invitation'
+    'click on button below to accept the invitation': 'Click on button below to accept the invitation',
+    schedules: 'Schedules'
   },
 };

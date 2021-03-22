@@ -7,19 +7,20 @@ import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import { useSelector } from 'react-redux';
 
-import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
-import { Statuses } from '../../../../utils/constants';
-import { getAppLanguage, textForKey } from '../../../../utils/localization';
-import styles from './PatientsFilter.module.scss';
+import { clinicServicesSelector } from '../../../redux/selectors/clinicSelector';
+import { Statuses } from '../../../utils/constants';
+import { getAppLanguage, textForKey } from '../../../utils/localization';
+import styles from '../../../styles/PatientsFilter.module.scss';
 
 const PatientsFilter = ({
   selectedDate,
+  currentClinic,
   onNameChange,
   onServiceChange,
   onStatusChange,
   onDateChange,
 }) => {
-  const services = useSelector(clinicServicesSelector);
+  const services = currentClinic.services?.filter((item) => !item.deleted) || [];
 
   const sortedServices = useMemo(() => {
     return sortBy(services, item => item.name.toLowerCase())
