@@ -341,58 +341,6 @@ export default {
   },
 
   /**
-   * Set schedule as confirmed
-   * @param {number} scheduleId
-   * @param {number} patientId
-   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
-   */
-  getScheduleInfo: async (scheduleId, patientId) => {
-    try {
-      const url = `${baseURL}/confirmation/schedule/${scheduleId}/${patientId}`;
-      const response = await Axios.get(url);
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
-   * Set schedule as confirmed
-   * @param {number} scheduleId
-   * @param {number} patientId
-   * @return {Promise<{isError: boolean, message: string}|{isError: boolean, message}|any>}
-   */
-  setScheduleConfirmed: async (scheduleId, patientId) => {
-    try {
-      const url = `${baseURL}/confirmation/schedule`;
-      const response = await Axios.post(url, { scheduleId, patientId });
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
-
-  /**
    * Fetch patient payments
    * @param {number} patientId
    * @return {Promise<{isError: boolean, message: *}|any>}
