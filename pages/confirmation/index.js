@@ -12,19 +12,21 @@ import {
 } from '@material-ui/core';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
-import dataAPI from '../../utils/api/dataAPI';
 import { urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
-import '../../styles/ScheduleConfirmation.module.scss';
+import styles from '../../styles/ScheduleConfirmation.module.scss';
+import axios from "axios";
+import { baseAppUrl } from "../../eas.config";
+import { useRouter } from "next/router";
 
 const ScheduleConfirmation = () => {
-  const { scheduleId, patientId } = useParams();
+  const router = useRouter();
+  const { schedule: scheduleId, patient: patientId } = router.query;
   const [schedule, setSchedule] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirming, setIsConfirming] = useState(false);
@@ -36,25 +38,32 @@ const ScheduleConfirmation = () => {
 
   const getScheduleInfo = async () => {
     setIsLoading(true);
-    const response = await dataAPI.getScheduleInfo(scheduleId, patientId);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      const query = { scheduleId, patientId };
+      const queryString = new URLSearchParams(query).toString();
+      const response = await axios.get(`${baseAppUrl}/api/schedules/confirm?${queryString}`);
+      console.log(response);
       setSchedule(response.data);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const confirmSchedule = async () => {
     setIsConfirming(true);
-    const response = await dataAPI.setScheduleConfirmed(scheduleId, patientId);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-      setIsError(true);
-    } else {
+    try {
+      const requestBody = { scheduleId, patientId };
+      await axios.post(`${baseAppUrl}/api/schedules/confirm`, requestBody);
+      setIsError(false);
       await getScheduleInfo();
+    } catch (error) {
+      toast.error(error.message);
+      setIsError(true);
+    } finally {
+      setIsConfirming(false);
     }
-    setIsConfirming(false);
   };
 
   const logoSrc = schedule?.clinicLogo
@@ -62,47 +71,39 @@ const ScheduleConfirmation = () => {
     : null;
 
   return (
-    <Box
-      width='100%'
-      height='100%'
-      display='flex'
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='center'
-      className='schedule-confirmation-root'
-    >
+    <div className={styles.scheduleConfirmationRoot}>
       {isLoading && (
-        <Box>
-          <CircularProgress style={{ color: '#3A83DC' }} />
-        </Box>
+        <div className='progress-bar-wrapper'>
+          <CircularProgress className='circular-progress-bar' />
+        </div>
       )}
       {!isLoading && schedule == null && (
-        <Typography classes={{ root: 'no-data-label' }}>
+        <Typography className={styles['no-data-label']}>
           {textForKey('Schedule info not found')}
         </Typography>
       )}
       {logoSrc && (
-        <img className='logo-image' src={logoSrc} alt='Clinic logo' />
+        <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo' />
       )}
       {schedule != null && !isLoading && !isError && (
-        <TableContainer classes={{ root: 'table-container' }}>
+        <TableContainer className={styles['table-container']}>
           <Table>
             <TableBody>
               <TableRow>
                 <TableCell colSpan={2} align='center'>
-                  <Typography classes={{ root: 'title-label' }}>
+                  <Typography className={styles['title-label']}>
                     {textForKey('Detalii programare')}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <Typography align='right' classes={{ root: 'data-label' }}>
+                  <Typography align='right' className={styles['data-label']}>
                     {textForKey('Date')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography classes={{ root: 'data-label' }}>
+                  <Typography className={styles['data-label']}>
                     {moment(schedule.startTime)
                       .tz(schedule.timeZone)
                       .format('DD.MM.YYYY')}
@@ -111,12 +112,12 @@ const ScheduleConfirmation = () => {
               </TableRow>
               <TableRow>
                 <TableCell align='right'>
-                  <Typography classes={{ root: 'data-label' }}>
+                  <Typography className={styles['data-label']}>
                     {textForKey('Hour')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography classes={{ root: 'data-label' }}>
+                  <Typography className={styles['data-label']}>
                     {moment(schedule.startTime)
                       .tz(schedule.timeZone)
                       .format('HH:mm')}
@@ -125,24 +126,24 @@ const ScheduleConfirmation = () => {
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <Typography align='right' classes={{ root: 'data-label' }}>
+                  <Typography align='right' className={styles['data-label']}>
                     {textForKey('Doctor')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography classes={{ root: 'data-label' }}>
+                  <Typography className={styles['data-label']}>
                     {schedule.doctorName}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <Typography align='right' classes={{ root: 'data-label' }}>
+                  <Typography align='right' className={styles['data-label']}>
                     {textForKey('Service')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography classes={{ root: 'data-label' }}>
+                  <Typography className={styles['data-label']}>
                     {schedule.service}
                   </Typography>
                 </TableCell>
@@ -154,27 +155,27 @@ const ScheduleConfirmation = () => {
       {schedule != null && !isLoading && (
         <LoadingButton
           isLoading={isConfirming}
-          disabled={isConfirming || schedule.status === 'Confirmed'}
+          disabled={isConfirming || schedule.status !== 'Pending'}
           className={clsx('positive-button', {
-            confirmed: schedule.status === 'Confirmed',
+            [styles['confirmed']]: schedule.status !== 'Pending',
           })}
           onClick={confirmSchedule}
         >
-          {schedule.status === 'Confirmed'
+          {schedule.status !== 'Pending'
             ? textForKey('Confirmed')
             : textForKey('Confirm')}
         </LoadingButton>
       )}
 
-      <div className='footer'>
-        <Typography classes={{ root: 'label' }}>
+      <div className={styles.footer}>
+        <Typography className={styles.label}>
           powered by{' '}
           <a href='https://easyplan.pro' target='_blank' rel='noreferrer'>
             <AppLogoBlue />
           </a>
         </Typography>
       </div>
-    </Box>
+    </div>
   );
 };
 

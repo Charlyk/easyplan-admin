@@ -1,4 +1,10 @@
-.schedule-confirmation-root {
+.scheduleConfirmationRoot {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   svg {
     fill: #00ac00;
@@ -69,7 +75,7 @@
     }
   }
 
-  .positive-button {
+  :global(.positive-button) {
     height: 34px;
     flex: unset;
 
