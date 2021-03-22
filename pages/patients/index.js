@@ -11,7 +11,6 @@ import {
   CircularProgress,
   TablePagination,
   TableContainer,
-  Box,
 } from '@material-ui/core';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import { Button, Form, InputGroup } from 'react-bootstrap';
@@ -22,18 +21,15 @@ import IconSearch from '../../components/icons/iconSearch';
 import ConfirmationModal from '../../components/common/ConfirmationModal';
 import CreatePatientModal from '../../components/patients/CreatePatientModal';
 import LoadingButton from '../../components/common/LoadingButton';
-import ImportDataModal from '../../src/components/UploadPatientsModal';
 import {
   setPatientDetails,
   toggleImportModal,
   togglePatientsListUpdate,
 } from '../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
-import dataAPI from '../../utils/api/dataAPI';
-import { UploadDestination } from '../../utils/constants';
 import {
-  generateReducerActions, handleRequestError,
-  uploadFileToAWS,
+  generateReducerActions,
+  handleRequestError,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import PatientRow from '../../components/patients/PatientRow';
@@ -42,7 +38,6 @@ import MainComponent from "../../components/common/MainComponent";
 import axios from "axios";
 import { baseAppUrl } from "../../eas.config";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
 
 const initialState = {
   isLoading: false,
@@ -124,13 +119,11 @@ const reducer = (state, action) => {
 
 const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery }) => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
     {
       isLoading,
       isUploading,
-      showUploadModal,
       patients,
       rowsPerPage,
       page,
@@ -231,24 +224,8 @@ const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery }) 
     }
   };
 
-  const handleUploadPatients = async (data) => {
-    localDispatch(actions.setIsUploading(true));
-    const fileName = data.file.name;
-    const { location: fileUrl } = await uploadFileToAWS(
-      'clients-uploads',
-      data.file,
-      true,
-    );
-
-    localDispatch(actions.setIsUploading(false));
-  };
-
   const handleStartUploadPatients = () => {
     dispatch(toggleImportModal(true));
-  };
-
-  const closeUploading = () => {
-    localDispatch(actions.setShowUploadModal(false));
   };
 
   const handleCreatePatient = () => {
@@ -283,12 +260,6 @@ const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery }) 
           message={textForKey('delete_patient_message')}
           onConfirm={handleDeleteConfirmed}
           onClose={handleCloseDelete}
-        />
-        <ImportDataModal
-          open={showUploadModal}
-          onClose={closeUploading}
-          onUpload={handleUploadPatients}
-          title={textForKey('Import patients')}
         />
         <CreatePatientModal
           open={showCreateModal}

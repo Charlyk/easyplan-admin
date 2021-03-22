@@ -483,4 +483,5 @@ export const UploadDestination = {
 export const UnauthorizedPaths = [
   '/accept-invitation',
   '/confirmation',
+  '/reset-password',
 ];

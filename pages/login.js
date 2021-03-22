@@ -11,7 +11,6 @@ import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
 import { useDispatch } from "react-redux";
 import { wrapper } from "../store";
-import { setCurrentUser } from "../redux/actions/actions";
 import { baseAppUrl } from "../eas.config";
 import { Role } from "../utils/constants";
 

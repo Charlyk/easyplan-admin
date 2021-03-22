@@ -12,18 +12,33 @@ export default async function resetPassword(req, res) {
       res.json(data);
       break;
     }
-
+    case 'PUT': {
+      try {
+        await handler(updateUserPassword, req, res);
+        res.json({ message: 'success' });
+      } catch (error) {
+        return null;
+      }
+      break;
+    }
     default: {
-      res.setHeader('Allow', ['POST']);
+      res.setHeader('Allow', ['POST', 'PUT']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
     }
   }
 }
 
+async function updateUserPassword(req) {
+  return axios.put(`${baseApiUrl}/authentication/v1/reset-password`, req.body, {
+    headers: {
+      'X-EasyPlan-Clinic-Id': -1,
+    }
+  });
+}
+
 function resetUserPassword(req) {
-  const requestBody = req.body;
-  return axios.post(`${baseApiUrl}/authentication/v1/reset-password`, requestBody, {
+  return axios.post(`${baseApiUrl}/authentication/v1/reset-password`, req.body, {
     headers: {
       'X-EasyPlan-Clinic-Id': -1,
     }

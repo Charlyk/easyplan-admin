@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { PubNubProvider } from "pubnub-react";
 import { wrapper } from "../store";
 import authManager from "../utils/settings/authManager";
@@ -163,9 +163,9 @@ function NextApp({ Component, pageProps }) {
             />
           )}
           <NextNprogress
-            color="#29D"
+            color='#29D'
             startPosition={0.3}
-            height="3"
+            height='2'
           />
           <Component {...pageProps} />
         </>

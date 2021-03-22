@@ -40,33 +40,4 @@ export default {
       };
     }
   },
-
-  /**
-   * Reset user password
-   * @param {Object} requestBody
-   * @param {string} requestBody.newPassword
-   * @param {string} requestBody.resetToken
-   * @return {Promise<void>}
-   */
-  changeUserPassword: async (requestBody) => {
-    try {
-      const response = await Axios.put(
-        `${baseURL}/v1/reset-password`,
-        requestBody,
-      );
-      const { data: responseData } = response;
-      if (responseData == null) {
-        return {
-          isError: true,
-          message: 'something_went_wrong',
-        };
-      }
-      return responseData;
-    } catch (e) {
-      return {
-        isError: true,
-        message: e.message,
-      };
-    }
-  },
 };

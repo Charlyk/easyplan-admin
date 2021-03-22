@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
-import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import LoadingButton from '../../components/common/LoadingButton';
-import '../../styles/ResetPasswordForm.module.scss';
-import authAPI from '../../utils/api/authAPI';
 import { JwtRegex, PasswordRegex } from '../../utils/constants';
-import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import axios from "axios";
+import { baseAppUrl } from "../../eas.config";
+import clsx from "clsx";
+import styles from '../../styles/ResetPasswordForm.module.scss';
+import { wrapper } from "../../store";
 
-const ResetPasswordForm = () => {
-  const { token } = useParams();
+const ResetPasswordForm = ({ token }) => {
   const [state, setState] = useState({
     newPassword: '',
     confirmPassword: '',
@@ -28,22 +28,23 @@ const ResetPasswordForm = () => {
     });
   };
 
-  const handleSavePassword = async () => {
-    setState({ ...state, isLoading: true });
-    const response = await authAPI.changeUserPassword({
-      newPassword: state.newPassword,
-      resetToken: token,
-    });
-
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-      setState({ ...state, errorMessage: response.message });
-    } else {
-      setState({ ...state, redirectUser: true });
+  const handleSavePassword = useCallback(async () => {
+    if (!isFormValid()) {
+      return;
     }
-
-    setState({ ...state, isLoading: false });
-  };
+    setState({ ...state, isLoading: true });
+    try {
+      await axios.put(`${baseAppUrl}/api/auth/reset-password`, {
+        newPassword: state.newPassword,
+        resetToken: token,
+      });
+      toast.success(textForKey('Saved successfully'));
+      window.location = `${baseAppUrl}/login`;
+    } catch (error) {
+      toast.error(error.message);
+      setState({ ...state, errorMessage: error.message, isLoading: false });
+    }
+  }, [token, state]);
 
   const isFormValid = () => {
     return (
@@ -52,25 +53,21 @@ const ResetPasswordForm = () => {
     );
   };
 
-  if (state.redirectUser || !token.match(JwtRegex)) {
-    return <Redirect to={updateLink('/login')} />;
-  }
-
   return (
-    <div className='general-page'>
-      <div className='logo-container'>
+    <div className={styles['general-page']}>
+      <div className={styles['logo-container']}>
         <img
           src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
           alt='EasyPlan'
         />
       </div>
-      <div className='form-container'>
-        <div className='form-root accept-invitation'>
-          <div className='form-wrapper'>
-            <span className='form-title'>
+      <div className={styles['form-container']}>
+        <div className={clsx(styles['form-root'], styles['accept-invitation'])}>
+          <div className={styles['form-wrapper']}>
+            <span className={styles['form-title']}>
               {textForKey('Create new password')}
             </span>
-            <span className='welcome-text'>
+            <span className={styles['welcome-text']}>
               {textForKey('change password message')}
             </span>
             <Form.Group controlId='newPassword'>
@@ -107,7 +104,7 @@ const ResetPasswordForm = () => {
               </InputGroup>
             </Form.Group>
           </div>
-          <div className='footer'>
+          <div className={styles.footer}>
             <LoadingButton
               onClick={handleSavePassword}
               isLoading={state.isLoading}
@@ -123,4 +120,20 @@ const ResetPasswordForm = () => {
   );
 };
 
-export default ResetPasswordForm;
+export const getServerSideProps = async ({ res, query }) => {
+  const { token } = query;
+
+  if (!token.match(JwtRegex)) {
+    res.writeHead(302, { Location: `${baseAppUrl}/login` });
+    res.end();
+    return { props: { token } };
+  }
+
+  return {
+    props: {
+      token
+    }
+  }
+}
+
+export default wrapper.withRedux(ResetPasswordForm);
