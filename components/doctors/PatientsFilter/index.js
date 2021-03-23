@@ -5,7 +5,6 @@ import sortBy from 'lodash/sortBy';
 import { Form, InputGroup } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-import { useSelector } from 'react-redux';
 
 import { clinicServicesSelector } from '../../../redux/selectors/clinicSelector';
 import { Statuses } from '../../../utils/constants';
@@ -20,7 +19,7 @@ const PatientsFilter = ({
   onStatusChange,
   onDateChange,
 }) => {
-  const services = currentClinic.services?.filter((item) => !item.deleted) || [];
+  const services = clinicServicesSelector(currentClinic)
 
   const sortedServices = useMemo(() => {
     return sortBy(services, item => item.name.toLowerCase())

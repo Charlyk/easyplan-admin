@@ -17,7 +17,7 @@ import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import { toast } from "react-toastify";
 import { setUpdatedService } from "../../../redux/actions/servicesActions";
-import { clinicActiveDoctorsSelector, clinicCurrencySelector } from "../../../redux/selectors/clinicSelector";
+import { clinicActiveDoctorsSelector } from "../../../redux/selectors/clinicSelector";
 
 const initialService = {
   name: '',
@@ -31,12 +31,12 @@ const initialService = {
   currency: 'MDL',
 };
 
-const ServiceDetailsModal = () => {
+const ServiceDetailsModal = ({ currentClinic }) => {
   const dispatch = useDispatch();
   const { category, service, open } = useSelector(serviceDetailsModalSelector);
   const modalData = useSelector(serviceDetailsModalSelector);
-  const clinicDoctors = useSelector(clinicActiveDoctorsSelector)
-  const clinicCurrency = useSelector(clinicCurrencySelector);
+  const clinicDoctors = clinicActiveDoctorsSelector(currentClinic)
+  const clinicCurrency = currentClinic.currency;
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -184,6 +184,7 @@ const ServiceDetailsModal = () => {
       <div className={styles['service-details-modal']}>
         <div className={styles['service-details-modal__data']}>
           <ServiceInformation
+            currentClinic={currentClinic}
             clinicCurrency={clinicCurrency}
             onChange={handleInfoChanged}
             data={serviceInfo}

@@ -5,12 +5,10 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import EasyDatePicker from '../../common/EasyDatePicker';
 import EasyPlanModal from '../../common/EasyPlanModal';
-import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/CreateMessageModal.module.scss';
@@ -194,9 +192,9 @@ const CreateMessageModal = ({
   message: messageData,
   onClose,
   onCreateMessage,
+  currentClinic,
 }) => {
   const datePickerAnchor = useRef(null);
-  const currentClinic = useSelector(clinicDetailsSelector);
   const [
     {
       isLoading,

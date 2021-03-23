@@ -17,13 +17,14 @@ import { textForKey } from '../../../../utils/localization';
 import styles from '../../../../styles/ServiceInformation.module.scss';
 
 const ServiceInformation = ({
+  currentClinic,
   isExpanded,
   showStep,
   onToggle,
   data,
   onChange,
 }) => {
-  const currencies = useSelector(availableCurrenciesSelector);
+  const currencies = availableCurrenciesSelector(currentClinic);
   const handleInfoExpand = () => {
     onToggle();
   };

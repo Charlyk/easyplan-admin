@@ -2,79 +2,13 @@ import moment from 'moment-timezone';
 import S3 from 'react-aws-s3';
 import uuid from 'react-uuid';
 
-import { setCurrentUser } from '../redux/actions/actions';
-import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
 import { imageLambdaUrl } from '../eas.config';
 import { env, S3Config } from './constants';
 import { textForKey } from './localization';
-import authManager from './settings/authManager';
-import sessionManager from './settings/sessionManager';
 import { baseAppUrl, isDev } from "../eas.config";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import cookie from "cookie";
-
-export function createHoursList() {
-  return [].concat(
-    ...Array.from(Array(24), (_, hour) => [moment({ hour }).format('HH:mm')]),
-  );
-}
-
-/**
- * Calculate and return appointment position
- * @param {[string]} appointment
- * @param {string} parentId
- * @param {number} minHeight
- * @param {number} minTop
- * @return {{top: number, height: number}}
- */
-export function getAppointmentTop(
-  [startHour, endHour],
-  parentId,
-  minHeight = 32,
-  minTop = 0,
-) {
-  if (!startHour || !endHour) {
-    return {
-      top: minTop,
-      height: minHeight,
-    };
-  }
-
-  const fromHourComponents = startHour.split(':');
-  const toHourComponents = endHour.split(':');
-
-  const parentRect = document.getElementById(parentId).getBoundingClientRect();
-
-  const fromHourRect = document
-    .getElementById(`${fromHourComponents[0]}:00`)
-    .getBoundingClientRect();
-
-  const toHourRect = document
-    .getElementById(`${toHourComponents[0]}:00`)
-    .getBoundingClientRect();
-  // calculate start hour minutes height
-  const fromMinutes = parseInt(fromHourComponents[1]);
-  const fromMinutesPercentage = (fromMinutes / 60) * 100;
-  const fromHeightDiff = (fromMinutesPercentage / 100) * fromHourRect.height;
-
-  // calculate end hour minutes height
-  const toMinutes = parseInt(toHourComponents[1]);
-  const toMinutesPercentage = (toMinutes / 60) * 100;
-  const toHeightDiff = (toMinutesPercentage / 100) * toHourRect.height;
-
-  // calculate top position
-  const distanceFromTop = fromHourRect.top - parentRect.top;
-  const topPosition = distanceFromTop + fromHeightDiff + minTop;
-
-  // calculate item height
-  const height = Math.abs(
-    toHourRect.top + toHeightDiff - (fromHourRect.top + fromHeightDiff),
-  );
-
-  // return new position and height
-  return { top: topPosition, height };
-}
 
 /**
  * Upload a file to AWS
@@ -252,16 +186,6 @@ export function overlap(dateRanges) {
   );
 }
 
-export const fetchClinicData = () => async (dispatch) => {
-  // fetch clinic details
-  // const clinicResponse = await dataAPI.fetchClinicDetails();
-  // if (!clinicResponse.isError) {
-  //   const clinicData = clinicResponse.data;
-  //   moment.tz.setDefault(clinicData.timeZone);
-  //   dispatch(setClinic(clinicData));
-  // }
-};
-
 export const getServiceName = (service) => {
   let name = service.name;
   if (service.toothId != null) {
@@ -271,26 +195,6 @@ export const getServiceName = (service) => {
     name = `${name} (${textForKey(service.destination)})`;
   }
   return name;
-};
-
-export const checkShouldAnimateSchedule = (schedule) => (
-  dispatch,
-  getState,
-) => {
-  if (schedule != null) {
-    const appState = getState();
-    const currentClinic = clinicDetailsSelector(appState);
-    const now = moment();
-    const scheduleTime = moment(schedule.dateAndTime);
-    const duration = moment.duration(scheduleTime.diff(now));
-    const minutes = duration.asMinutes();
-    return (
-      minutes > 0 &&
-      minutes <= currentClinic.notifyUpcomingAppointmentTimer &&
-      schedule.status === 'Pending'
-    );
-  }
-  return false;
 };
 
 /**
@@ -304,52 +208,6 @@ export const updateLink = (link) => {
   } else {
     return link;
   }
-};
-
-export const handleUserAuthenticated = (
-  { user, token },
-  callback = () => null,
-) => (dispatch) => {
-  authManager.setUserToken(token);
-  authManager.setUserId(user.id);
-  const selectedClinic =
-    user.clinics.length > 0
-      ? user.clinics.find((it) => it.isSelected) || user.clinics[0]
-      : { clinicId: -1 };
-  sessionManager.setSelectedClinicId(selectedClinic.clinicId);
-  setTimeout(() => {
-    dispatch(setCurrentUser(user));
-    const selectedClinic = user.clinics.find(
-      (item) => item.clinicId === sessionManager.getSelectedClinicId(),
-    );
-    if (selectedClinic != null) {
-      dispatch(fetchClinicData());
-    }
-    callback();
-  }, 500);
-};
-
-export const colorShade = (col, amt) => {
-  col = col.replace(/^#/, '');
-  if (col.length === 3)
-    col = col[0] + col[0] + col[1] + col[1] + col[2] + col[2];
-
-  let [r, g, b] = col.match(/.{2}/g);
-  [r, g, b] = [
-    parseInt(r, 16) + amt,
-    parseInt(g, 16) + amt,
-    parseInt(b, 16) + amt,
-  ];
-
-  r = Math.max(Math.min(255, r), 0).toString(16);
-  g = Math.max(Math.min(255, g), 0).toString(16);
-  b = Math.max(Math.min(255, b), 0).toString(16);
-
-  const rr = (r.length < 2 ? '0' : '') + r;
-  const gg = (g.length < 2 ? '0' : '') + g;
-  const bb = (b.length < 2 ? '0' : '') + b;
-
-  return `#${rr}${gg}${bb}`;
 };
 
 export function roundToTwo(num) {

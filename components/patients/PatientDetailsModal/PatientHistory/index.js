@@ -10,7 +10,7 @@ import styles from '../../../../styles/PatientHistory.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../../eas.config";
 
-const PatientHistory = ({ patient }) => {
+const PatientHistory = ({ patient, clinic }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [histories, setHistories] = useState([]);
 
@@ -45,7 +45,7 @@ const PatientHistory = ({ patient }) => {
       {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
       <div className={styles['patient-history__history-data']}>
         {histories.map((item) => (
-          <HistoryItem key={item.id} item={item} />
+          <HistoryItem key={item.id} clinic={clinic} item={item} />
         ))}
       </div>
     </div>

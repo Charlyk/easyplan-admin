@@ -21,19 +21,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconClose from '../../icons/iconClose';
-import {
-  allCurrenciesSelector,
-  clinicCurrencySelector,
-} from '../../../redux/selectors/clinicSelector';
-import {
-  selectedClinicSelector,
-  updateExchangeRatesSelector,
-} from '../../../redux/selectors/rootSelector';
+import { updateExchangeRatesSelector } from '../../../redux/selectors/rootSelector';
 import { Role } from '../../../utils/constants';
-import {
-  fetchClinicData,
-  generateReducerActions,
-} from '../../../utils/helperFuncs';
+import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import styles from '../../../styles/ExchangeRates.module.scss';
@@ -178,7 +168,6 @@ const ExchangeRates = ({ open, currentClinic, currentUser, onClose }) => {
       });
       await axios.put(`${baseAppUrl}/api/clinic/exchange-rates`, { rates: requestBody });
       toast.success(textForKey('Saved successfully'));
-      dispatch(fetchClinicData());
       onClose();
     } catch (error) {
       toast.error(error.message);

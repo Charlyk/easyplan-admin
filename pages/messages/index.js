@@ -182,6 +182,7 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
         )}
         {isCreatingMessage && (
           <CreateMessageModal
+            currentClinic={currentClinic}
             message={messageToEdit}
             onClose={handleCloseCreateMessage}
             onCreateMessage={handleMessageCreated}

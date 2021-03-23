@@ -13,12 +13,11 @@ import {
   Typeahead,
 } from 'react-bootstrap-typeahead';
 import PhoneInput from 'react-phone-input-2';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconAvatar from '../../icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../../redux/actions/actions';
-import { clinicActiveDoctorsSelector } from '../../../redux/selectors/clinicSelector';
 import { EmailRegex, Role } from '../../../utils/constants';
 import {
   generateReducerActions,

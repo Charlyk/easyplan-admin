@@ -58,9 +58,9 @@ const reducer = (state, action) => {
   }
 };
 
-const PatientPurchasesList = ({ patient }) => {
+const PatientPurchasesList = ({ patient, currentClinic }) => {
   const updateInvoice = useSelector(updateInvoiceSelector);
-  const clinicCurrency = useSelector(clinicCurrencySelector);
+  const clinicCurrency = clinicCurrencySelector(currentClinic);
   const [{ isLoading, payments }, localDispatch] = useReducer(
     reducer,
     initialState,

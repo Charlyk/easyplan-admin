@@ -1,115 +1,43 @@
 import moment from 'moment-timezone';
-import { createSelector } from 'reselect';
-
 import { Role } from '../../utils/constants';
 
-export const clinicSelector = (state) => state.clinic;
+export const clinicTimeZoneSelector = (clinic) => clinic?.timeZone || moment.tz.guess(true);
 
-export const clinicDetailsSelector = createSelector(
-  clinicSelector,
-  (state) => state.clinic,
-);
+export const hasSMSAliasSelector = (clinic) => clinic.smsAlias != null;
 
-export const clinicTimeZoneSelector = createSelector(
-  clinicSelector,
-  (clinic) => clinic?.timeZone || moment.tz.guess(true),
-);
+export const clinicUsersSelector = (clinic) => clinic.users;
 
-export const hasSMSAliasSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) => clinic.smsAlias != null,
-);
+export const allCurrenciesSelector = (clinic) => clinic.allCurrencies;
 
-export const clinicUsersSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) => clinic.users,
-);
+export const clinicCurrencySelector = (clinic) => clinic.currency;
 
-export const allCurrenciesSelector = createSelector(
-  clinicDetailsSelector,
-  (state) => state.allCurrencies,
-);
+export const availableCurrenciesSelector = (clinic) =>
+  clinic?.availableCurrencies != null
+    ? [
+      ...clinic.availableCurrencies.map((item) => item.currency),
+      clinic.currency,
+    ]
+    : [];
 
-export const clinicCurrencySelector = createSelector(
-  clinicDetailsSelector,
-  (state) => state.currency,
-);
+export const clinicActiveDoctorsSelector = (clinic) => {
+  return clinic.users
+    .filter((item) => item.roleInClinic === Role.doctor && !item.isHidden)
+    .map((item) => ({
+      ...item,
+      fullName: `${item.firstName} ${item.lastName}`,
+    }));
+}
 
-export const availableCurrenciesSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) =>
-    clinic?.availableCurrencies != null
-      ? [
-          ...clinic.availableCurrencies.map((item) => item.currency),
-          clinic.currency,
-        ]
-      : [],
-);
+export const clinicServicesSelector = (clinic) =>
+  clinic.services?.filter((item) => !item.deleted) || [];
 
-export const clinicExchangeRatesSelector = createSelector(
-  clinicDetailsSelector,
-  (state) => {
-    const currencies = state.availableCurrencies || [];
-    const clinicCurrency = state.allCurrencies?.find(
-      (item) => item.id === state.currency,
-    );
-    if (clinicCurrency == null) {
-      return currencies;
-    }
-    if (!currencies.some((it) => it.currency === clinicCurrency.id)) {
-      currencies.unshift({
-        currency: clinicCurrency.id,
-        currencyName: clinicCurrency.name,
-        value: 1,
-      });
-    }
-    return currencies;
-  },
-);
+export const clinicAllServicesSelector = (clinic) =>
+  clinic.services?.filter((item) => item.serviceType !== 'System') || [];
 
-export const clinicExchangeRatesUpdateRequiredSelector = createSelector(
-  clinicDetailsSelector,
-  (state) => state.updateExchangeRates,
-);
+export const clinicBracesServicesSelector = (clinic) =>
+  clinic?.services?.filter((item) => item.serviceType === 'Braces');
 
-export const clinicDoctorsSelector = createSelector(
-  clinicUsersSelector,
-  (users) => users.filter((item) => item.roleInClinic === Role.doctor),
-);
+export const clinicBracesSelector = (clinic) => clinic.braces;
 
-export const clinicActiveDoctorsSelector = createSelector(
-  clinicDoctorsSelector,
-  (doctors) =>
-    doctors
-      .filter((item) => !item.isHidden)
-      .map((item) => ({
-        ...item,
-        fullName: `${item.firstName} ${item.lastName}`,
-      })),
-);
-
-export const clinicServicesSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) => clinic.services?.filter((item) => !item.deleted) || [],
-);
-
-export const clinicAllServicesSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) =>
-    clinic.services?.filter((item) => item.serviceType !== 'System') || [],
-);
-
-export const clinicBracesServicesSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) => clinic?.services?.filter((item) => item.serviceType === 'Braces'),
-);
-
-export const clinicBracesSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) => clinic.braces,
-);
-
-export const clinicEnabledBracesSelector = createSelector(
-  clinicDetailsSelector,
-  (clinic) => clinic?.braces?.filter((item) => item.isEnabled) || [],
-);
+export const clinicEnabledBracesSelector = (clinic) =>
+  clinic?.braces?.filter((item) => item.isEnabled) || [];

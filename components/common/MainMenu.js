@@ -11,7 +11,6 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import styles from '../../styles/MainMenu.module.scss';
 import { Nav } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import Link from 'next/link';
 
 import IconArrowDown from '../icons/iconArrowDown';
@@ -22,8 +21,6 @@ import MenuEllipse from '../icons/menuEllipse';
 import MenuPatients from '../icons/menuPatients';
 import MenuSettings from '../icons/menuSettings';
 import MenuUsers from '../icons/menuUsers';
-import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
-import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ClinicSelector from './ClinicSelector';
 
@@ -105,7 +102,6 @@ const menuItems = [
 
 const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onChangeCompany }) => {
   const buttonRef = useRef(null);
-  const clinic = useSelector(clinicDetailsSelector);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
@@ -235,7 +231,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
           }
         })}
       </Nav>
-      {clinic.isImporting && (
+      {currentClinic.isImporting && (
         <Box
           className={styles['import-data-wrapper']}
           position='absolute'

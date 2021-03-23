@@ -14,7 +14,6 @@ import {
   toggleUpdateSchedule,
 } from '../redux/actions/scheduleActions';
 import { userSelector } from '../redux/selectors/rootSelector';
-import { fetchClinicData } from './helperFuncs';
 
 export const handleRemoteMessage = (message) => (dispatch, getState) => {
   const appState = getState();
@@ -46,7 +45,6 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       break;
     case MessageAction.ClinicDataImportStarted:
     case MessageAction.ClinicDataImported:
-      dispatch(fetchClinicData());
       dispatch(togglePatientsListUpdate());
       break;
     case MessageAction.ExchangeRatesUpdated:

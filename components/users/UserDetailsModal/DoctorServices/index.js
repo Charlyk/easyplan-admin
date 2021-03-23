@@ -4,9 +4,6 @@ import clsx from 'clsx';
 import { remove, cloneDeep } from 'lodash';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-
-import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
 import DoctorServiceItem from '../DoctorServiceItem';
 import styles from '../../../../styles/DoctorServices.module.scss';
 

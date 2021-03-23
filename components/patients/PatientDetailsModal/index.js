@@ -85,14 +85,14 @@ const reducer = (state, action) => {
 };
 
 const PatientDetailsModal = ({
-  show,
-  currentUser,
-  currentClinic,
-  patientId,
-  menuItem,
-  onClose,
-  onDelete,
-}) => {
+                               show,
+                               currentUser,
+                               currentClinic,
+                               patientId,
+                               menuItem,
+                               onClose,
+                               onDelete,
+                             }) => {
   const dispatch = useDispatch();
   const [
     { currentMenu, isFetching, patient, viewInvoice },
@@ -178,15 +178,15 @@ const PatientDetailsModal = ({
           />
         );
       case MenuItem.notes:
-        return <PatientNotes patient={patient} onAddNote={handleAddNote} />;
+        return <PatientNotes patient={patient} onAddNote={handleAddNote}/>;
       case MenuItem.appointments:
-        return <PatientAppointments patient={patient} />;
+        return <PatientAppointments patient={patient}/>;
       case MenuItem.xRay:
         return (
-          <PatientXRay patient={patient} onAddXRay={handleAddXRayImages} />
+          <PatientXRay patient={patient} onAddXRay={handleAddXRayImages}/>
         );
       case MenuItem.treatmentPlan:
-        return <AppointmentNotes currentUser={currentUser} patient={patient} />;
+        return <AppointmentNotes currentUser={currentUser} patient={patient}/>;
       case MenuItem.orthodonticPlan:
         return (
           <OrthodonticPlan
@@ -204,11 +204,11 @@ const PatientDetailsModal = ({
           />
         );
       case MenuItem.purchases:
-        return <PatientPurchasesList patient={patient} />;
+        return <PatientPurchasesList currentClinic={currentClinic} patient={patient}/>;
       case MenuItem.messages:
-        return <PatientMessages patient={patient} />;
+        return <PatientMessages patient={patient}/>;
       case MenuItem.history:
-        return <PatientHistory patient={patient} />;
+        return <PatientHistory clinic={currentClinic} patient={patient}/>;
     }
   };
 
@@ -221,21 +221,21 @@ const PatientDetailsModal = ({
       className={styles['patient-details-modal']}
     >
       <Modal.Body>
-        {isFetching && <CircularProgress />}
+        {isFetching && <CircularProgress/>}
         <div
           role='button'
           tabIndex={0}
           className={styles['close-button']}
           onClick={onClose}
         >
-          <IconClose />
+          <IconClose/>
         </div>
         {patient != null && (
           <Box display='flex' position='relative' height='100%'>
             <div className={styles['patient-menu-container']}>
               <div className={styles['name-and-avatar']}>
                 <div className={styles['avatar-wrapper']}>
-                  <IconAvatar />
+                  <IconAvatar/>
                 </div>
                 <Typography classes={{ root: styles['name-label'] }}>
                   {patient?.fullName}

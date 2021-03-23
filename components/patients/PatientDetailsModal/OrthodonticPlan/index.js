@@ -6,7 +6,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconSuccess from '../../../icons/iconSuccess';
@@ -198,8 +197,8 @@ const reducer = (state, action) => {
 };
 
 const OrthodonticPlan = ({ currentUser, currentClinic: clinic, patient, scheduleId, onSave }) => {
-  const services = useSelector(clinicBracesServicesSelector);
-  const braces = useSelector(clinicEnabledBracesSelector);
+  const services = clinicBracesServicesSelector(clinic);
+  const braces = clinicEnabledBracesSelector(clinic);
   const currentClinic = currentUser.clinics.find(
     it => it.clinicId === clinic.id,
   );

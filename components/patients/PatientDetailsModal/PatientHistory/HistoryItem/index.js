@@ -14,8 +14,8 @@ import { textForKey } from '../../../../../utils/localization';
 import styles from '../../../../../styles/HistoryItem.module.scss'
 import clsx from "clsx";
 
-const Field = ({ field }) => {
-  const timeZone = useSelector(clinicTimeZoneSelector);
+const Field = ({ field, clinic }) => {
+  const timeZone = clinicTimeZoneSelector(clinic);
 
   const isDate = (value) => {
     const regex = /\d{4}-\d{2}-\d{2}(\s|T)\d{2}:\d{2}:\d{2}.\d{3}/;
@@ -61,7 +61,7 @@ const Field = ({ field }) => {
   );
 };
 
-const HistoryItem = ({ item }) => {
+const HistoryItem = ({ item, clinic }) => {
   const itemIcon = () => {
     if (item.action.includes('Create') || item.action.includes('SMS')) {
       return <IconPlus fill='#3A83DC' />;
@@ -85,7 +85,7 @@ const HistoryItem = ({ item }) => {
       <table>
         <tbody>
           {sortBy(item.fields, (it) => it.fieldName).map((field) => (
-            <Field key={field.fieldName} field={field} />
+            <Field key={field.fieldName} clinic={clinic} field={field} />
           ))}
         </tbody>
       </table>
