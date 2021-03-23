@@ -3,21 +3,20 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconAvatar from '../../icons/iconAvatar';
-import { setCurrentUser } from '../../../redux/actions/actions';
-import authAPI from '../../../utils/api/authAPI';
 import { EmailRegex, PasswordRegex } from '../../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import authManager from '../../../utils/settings/authManager';
 import EasyPlanModal from '../EasyPlanModal';
 import '../../../styles/EditProfileModal.module.scss';
+import axios from "axios";
+import { baseAppUrl } from "../../../eas.config";
+import { useRouter } from "next/router";
 
 const EditProfileModal = ({ open, currentUser, onClose }) => {
-  const dispatch = useDispatch();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({
@@ -72,36 +71,31 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
 
   const submitForm = async () => {
     setIsLoading(true);
-    let avatar = data.avatarUrl;
-    if (data.avatarFile != null) {
-      const uploadResult = await uploadFileToAWS('avatars', data.avatarFile);
-      avatar = uploadResult?.location;
-    }
-    const requestBody = {
-      avatar,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      username: data.email,
-      oldPassword: data.oldPassword,
-      phoneNumber: data.phoneNumber,
-      password: data.password,
-      confirmPassword: data.confirmPassword,
-    };
-
-    const response = await authAPI.updateAccount(requestBody);
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
-      authManager.setUserToken(response.data.token);
-      setTimeout(() => {
-        dispatch(setCurrentUser(response.data.user));
-        onClose();
-        toast.success(textForKey('Saved successfully'));
-      }, 500);
-    }
-    setTimeout(() => {
+    try {
+      let avatar = data.avatarUrl;
+      if (data.avatarFile != null) {
+        const uploadResult = await uploadFileToAWS('avatars', data.avatarFile);
+        avatar = uploadResult?.location;
+      }
+      const requestBody = {
+        avatar,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        username: data.email,
+        oldPassword: data.oldPassword,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      };
+      await axios.put(`${baseAppUrl}/api/auth/update-account`, requestBody);
+      toast.success(textForKey('Saved successfully'));
+      onClose();
+      await router.replace(router.asPath);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   const isFormValid = () => {

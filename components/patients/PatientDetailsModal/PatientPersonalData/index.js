@@ -13,7 +13,7 @@ import {
   generateReducerActions,
 } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import EasyDatePicker from '../../../../src/components/EasyDatePicker';
+import EasyDatePicker from '../../../common/EasyDatePicker';
 import LoadingButton from '../../../common/LoadingButton';
 import styles from '../../../../styles/PatientPersonalData.module.scss'
 import { toast } from "react-toastify";

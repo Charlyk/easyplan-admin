@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 
 import IconAppointmentCalendar from '../../../../icons/iconAppointmentCalendar';
 import IconAppointmentClock from '../../../../icons/iconAppointmentClock';
-import { baseURL } from '../../../../../utils/api/dataAPI';
 import { Statuses } from '../../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import styles from '../../../../../styles/Appointment.module.scss';
+import { baseApiUrl } from "../../../../../eas.config";
 
 const Appointment = ({ appointment }) => {
   const scheduleData = moment(appointment.startTime);
@@ -67,7 +67,7 @@ const Appointment = ({ appointment }) => {
         </div>
         {(status?.id === 'CompletedPaid' || status?.id === 'PartialPaid') && (
           <a
-            href={`${baseURL}/invoices/receipt/${appointment.id}?mode=schedule`}
+            href={`${baseApiUrl}/invoices/receipt/${appointment.id}?mode=schedule`}
             target='_blank'
             rel='noreferrer'
           >

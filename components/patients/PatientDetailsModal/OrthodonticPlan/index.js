@@ -14,15 +14,10 @@ import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
 } from '../../../../redux/selectors/clinicSelector';
-import dataAPI from '../../../../utils/api/dataAPI';
-import { Action, Role } from '../../../../utils/constants';
-import {
-  generateReducerActions,
-  logUserAction,
-} from '../../../../utils/helperFuncs';
+import { Role } from '../../../../utils/constants';
+import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import sessionManager from '../../../../utils/settings/sessionManager';
-import EasyTab from '../../../../src/components/EasyTab';
+import EasyTab from '../../../common/EasyTab';
 import LoadingButton from '../../../common/LoadingButton';
 import styles from '../../../../styles/OrthodonticPlan.module.scss';
 import axios from "axios";
@@ -371,32 +366,32 @@ const OrthodonticPlan = ({ currentUser, currentClinic: clinic, patient, schedule
     updatePlan({ note: newNote });
   };
 
+  const saveTreatmentPlan = async (patientId, requestBody) => {
+    return axios.post(`${baseAppUrl}/api/treatment-plans/orthodontic`, {
+      ...requestBody,
+      patientId,
+    });
+  }
+
   const handleSaveTreatmentPlan = async () => {
     localDispatch(actions.setIsSaving(true));
-    const requestPlan = bracketsPlan[planType];
-    const updatedBraces = {
-      ...requestPlan,
-      planType,
-      scheduleId,
-      braces: requestPlan.braces.map(it => it.id),
-      services: requestPlan.services.map(it => it.id),
-    };
-    const response = await dataAPI.saveTreatmentPlan(patient.id, updatedBraces);
-    logUserAction(
-      Action.UpdatedOrthodonticPlan,
-      JSON.stringify({
-        patient: patient.id,
-        before: patient.treatmentPlan,
-        after: updatedBraces,
-      }),
-    );
-    if (response.isError) {
-      toast.error(textForKey(response.message));
-    } else {
+    try {
+      const requestPlan = bracketsPlan[planType];
+      const updatedBraces = {
+        ...requestPlan,
+        planType,
+        scheduleId,
+        braces: requestPlan.braces.map(it => it.id),
+        services: requestPlan.services.map(it => it.id),
+      };
+      await saveTreatmentPlan(patient.id, updatedBraces);
       await fetchOrthodonticPlan();
       onSave(bracketsPlan);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(actions.setIsSaving(false));
     }
-    localDispatch(actions.setIsSaving(false));
   };
 
   const handlePlanTypeChange = newType => {

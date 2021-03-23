@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import IconSuccess from '../../icons/iconSuccess';
 import LoadingButton from '../../common/LoadingButton';
-import SwitchButton from '../../../src/components/SwitchButton';
+import SwitchButton from '../../common/SwitchButton';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/BracesSettings.module.scss';
 import axios from "axios";

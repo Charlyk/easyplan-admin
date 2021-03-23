@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../components/common/ConfirmationModal';
-import InviteUserModal from '../../src/components/InviteUserModal';
+import InviteUserModal from '../../components/common/InviteUserModal';
 import UserDetailsModal from '../../components/users/UserDetailsModal';
 import { Role } from '../../utils/constants';
 import { generateReducerActions, handleRequestError } from '../../utils/helperFuncs';

@@ -14,11 +14,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import { updateAppointmentsSelector } from '../../../../redux/selectors/rootSelector';
-import { Action } from '../../../../utils/constants';
-import {
-  getCurrentWeek,
-  logUserAction,
-} from '../../../../utils/helperFuncs';
+import { getCurrentWeek  } from '../../../../utils/helperFuncs';
 import CalendarWeekDayView from './CalendarWeekDayView';
 import styles from '../../../../styles/CalendarWeekView.module.scss';
 

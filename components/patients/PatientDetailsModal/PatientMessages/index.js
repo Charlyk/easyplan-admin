@@ -6,7 +6,6 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import IconPlus from '../../../icons/iconPlus';
-import dataAPI from '../../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../../common/LoadingButton';

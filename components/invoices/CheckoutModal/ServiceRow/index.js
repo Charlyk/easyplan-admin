@@ -12,20 +12,17 @@ import {
 } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 
 import IconMinus from '../../../icons/iconMinus';
 import IconPlus from '../../../icons/iconPlus';
 import IconTrash from '../../../icons/iconTrash';
-import { clinicExchangeRatesSelector } from '../../../../redux/selectors/clinicSelector';
 import { adjustValueToNumber } from '../../../../utils/helperFuncs';
 import styles from '../../../../styles/InvoiceServiceRow.module.scss';
 
-const ServiceRow = ({ service, canEdit, canDelete, onChange, onDelete }) => {
+const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelete }) => {
   const [currency, setCurrency] = useState(service.currency);
   const [price, setPrice] = useState(service.amount);
   const [count, setCount] = useState(service.count);
-  const currencies = useSelector(clinicExchangeRatesSelector);
 
   const handleCurrencyChange = event => {
     const newCurrency = event.target.value;

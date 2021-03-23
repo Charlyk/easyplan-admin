@@ -8,11 +8,12 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchPatientOrthodonticPlan, req, res);
-      if (data != null) {
-        res.json(data);
-      } else {
-        res.json(null);
-      }
+      res.json(data);
+      break;
+    }
+    case 'POST': {
+      const data = await handler(updateOrthodonticPlan, req, res);
+      res.json(data);
       break;
     }
     default:
@@ -21,6 +22,20 @@ export default authorized(async (req, res) => {
       break;
   }
 });
+
+async function updateOrthodonticPlan(req) {
+  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  return axios.post(
+    `${baseApiUrl}/treatment-plans/orthodontic`,
+    req.body,
+    {
+      headers: {
+        Authorization: auth_token,
+        'X-EasyPlan-Clinic-Id': clinic_id,
+      }
+    }
+  );
+}
 
 function fetchPatientOrthodonticPlan(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);

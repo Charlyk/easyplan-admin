@@ -95,11 +95,11 @@ const PatientNotes = ({ patient }) => {
 
   return (
     <div className={styles['patient-notes-list']}>
-      <Typography classes={{ root: 'title-label' }}>
+      <Typography className={'title-label'}>
         {textForKey('Notes')}
       </Typography>
       {state.notes.length === 0 && !state.isFetching && (
-        <Typography classes={{ root: 'no-data-label' }}>
+        <Typography className={'no-data-label'}>
           {textForKey('No data here yet')} :(
         </Typography>
       )}

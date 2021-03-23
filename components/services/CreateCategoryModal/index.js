@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
-import dataAPI from '../../../utils/api/dataAPI';
-import { Action } from '../../../utils/constants';
-import { logUserAction } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/CreateCategoryModal.module.scss';

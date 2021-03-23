@@ -5,10 +5,9 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import dataAPI from '../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyDatePicker from '../../../src/components/EasyDatePicker';
+import EasyDatePicker from '../../common/EasyDatePicker';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddPauseModal.module.scss';
 import axios from "axios";

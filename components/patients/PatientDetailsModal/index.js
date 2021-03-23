@@ -14,7 +14,6 @@ import {
   togglePatientsListUpdate,
 } from '../../../redux/actions/actions';
 import { setAddPaymentModal } from '../../../redux/actions/addPaymentModalActions';
-import dataAPI from '../../../utils/api/dataAPI';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import AppointmentNotes from './AppointmentNotes';
@@ -23,7 +22,6 @@ import PatientHistory from './PatientHistory';
 import PatientMessages from './PatientMessages';
 import PatientNotes from './PatientNotes';
 import PatientDebtsList from './PatientDebtsList';
-import PatientPaymentsList from './comps/PatientPaymentsList';
 import PatientPersonalData from './PatientPersonalData';
 import PatientPurchasesList from './PatientPurchasesList';
 import OrthodonticPlan from './OrthodonticPlan';
@@ -41,7 +39,6 @@ const MenuItem = {
   orthodonticPlan: 'orthodonticPlan',
   delete: 'delete',
   debts: 'debts',
-  payments: 'payments',
   purchases: 'purchases',
   addPayment: 'addPayment',
   messages: 'messages',
@@ -204,13 +201,6 @@ const PatientDetailsModal = ({
             patient={patient}
             viewInvoice={viewInvoice}
             onDebtShowed={handleDebtViewed}
-          />
-        );
-      case MenuItem.payments:
-        return (
-          <PatientPaymentsList
-            patient={patient}
-            onViewDebtClick={handleViewDebtClick}
           />
         );
       case MenuItem.purchases:

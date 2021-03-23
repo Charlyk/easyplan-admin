@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
-import SwitchButton from '../../../../src/components/SwitchButton';
+import SwitchButton from '../../../common/SwitchButton';
 import styles from '../../../../styles/DoctorServiceItem.module.scss';
 
 const DoctorServiceItem = props => {

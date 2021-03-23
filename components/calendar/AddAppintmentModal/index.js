@@ -25,7 +25,7 @@ import {
   urlToLambda,
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyDatePicker from '../../../src/components/EasyDatePicker';
+import EasyDatePicker from '../../common/EasyDatePicker';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddAppointment.module.scss';
 import axios from "axios";

@@ -8,7 +8,7 @@ import { Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import EasyDatePicker from '../../../src/components/EasyDatePicker';
+import EasyDatePicker from '../../common/EasyDatePicker';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import { clinicDetailsSelector } from '../../../redux/selectors/clinicSelector';
 import { generateReducerActions } from '../../../utils/helperFuncs';

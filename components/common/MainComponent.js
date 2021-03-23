@@ -7,7 +7,7 @@ import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AddAppointmentModal from '../calendar/AddAppintmentModal';
-import DataMigrationModal from '../../src/components/DataMigrationModal';
+import DataMigrationModal from './DataMigrationModal';
 import MainMenu from './MainMenu';
 import PageHeader from './PageHeader';
 import PatientDetailsModal from '../patients/PatientDetailsModal';

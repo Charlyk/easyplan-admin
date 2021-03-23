@@ -24,6 +24,7 @@ const filterOptions = createFilterOptions({
 
 const ServicesList = ({
   isDebt,
+  currencies,
   canAddService,
   services,
   availableServices,
@@ -70,6 +71,7 @@ const ServicesList = ({
           <TableBody classes={{ root: styles.body }}>
             {services.map((service, index) => (
               <ServiceRow
+                currencies={currencies}
                 key={`${service.id}-${index}`}
                 canEdit={!isDebt}
                 service={service}

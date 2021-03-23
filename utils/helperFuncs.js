@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 
 import { setCurrentUser } from '../redux/actions/actions';
 import { clinicDetailsSelector } from '../redux/selectors/clinicSelector';
-import dataAPI, { imageLambdaUrl } from './api/dataAPI';
+import { imageLambdaUrl } from '../eas.config';
 import { env, S3Config } from './constants';
 import { textForKey } from './localization';
 import authManager from './settings/authManager';
@@ -98,15 +98,6 @@ export async function uploadFileToAWS(path, file, tmp = false) {
 export function urlToLambda(imageUrl, width = 50) {
   const url = new URL(imageUrl);
   return `${imageLambdaUrl}${url.pathname}?width=${width}`;
-}
-
-/**
- * Send user action to server
- * @param {string} action
- * @param {string?} details
- */
-export function logUserAction(action, details) {
-  dataAPI.sendAction(action, details);
 }
 
 export const getCurrentWeek = (date) => {
@@ -437,7 +428,7 @@ export function setCookies(res, authToken, clinicId) {
     httpOnly: true,
     secure: !isDev,
     sameSite: 'strict',
-    maxAge: 3600,
+    maxAge: 36000,
     path: '/'
   }
   const tokenCookie = cookie.serialize('auth_token', String(authToken), cookieOpts);

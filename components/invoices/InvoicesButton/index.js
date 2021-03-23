@@ -7,15 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { setPaymentModal } from '../../../redux/actions/actions';
-import {
-  clinicCurrencySelector,
-  clinicExchangeRatesSelector,
-} from '../../../redux/selectors/clinicSelector';
 import { updateInvoicesSelector } from '../../../redux/selectors/rootSelector';
-import dataAPI from '../../../utils/api/dataAPI';
 import { formattedAmount, getClinicExchangeRates } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import NewInvoiceToast from '../../../src/components/NewInvoiceToast';
+import NewInvoiceToast from '../../common/NewInvoiceToast';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 

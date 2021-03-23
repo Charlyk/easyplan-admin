@@ -11,7 +11,7 @@ import IconSuccess from '../../icons/iconSuccess';
 import { Role } from '../../../utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import LeftSideModal from '../../../src/components/LeftSideModal';
+import LeftSideModal from '../../common/LeftSideModal';
 import LoadingButton from '../../common/LoadingButton';
 import CreateHolidayModal from './CreateHolidayModal';
 import DoctorForm from './DoctorForm';

@@ -26,16 +26,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconClose from '../../icons/iconClose';
-import {
-  setPatientDetails,
-  toggleAppointmentsUpdate,
-  togglePatientPaymentsUpdate,
-  toggleUpdateInvoices,
-} from '../../../redux/actions/actions';
-import { clinicActiveDoctorsSelector } from '../../../redux/selectors/clinicSelector';
+import { setPatientDetails } from '../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from '../../../redux/selectors/rootSelector';
-import dataAPI from '../../../utils/api/dataAPI';
 import {
   adjustValueToNumber,
   formattedAmount,
@@ -540,6 +533,7 @@ const CheckoutModal = ({
     >
       <Paper classes={{ root: styles['checkout-modal-root__paper'] }}>
         <ServicesList
+          currencies={exchangeRates}
           canAddService={isNew}
           isDebt={isDebt}
           services={services}

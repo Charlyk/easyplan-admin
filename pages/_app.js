@@ -8,7 +8,7 @@ import axios from "axios";
 import { baseAppUrl } from "../eas.config";
 import { handleRequestError } from "../utils/helperFuncs";
 import App from "next/app";
-import { parseCookies } from "../api/utils";
+import { parseCookies } from "../utils";
 import Head from 'next/head';
 import paths from "../utils/paths";
 import { useRouter } from "next/router";
@@ -28,8 +28,8 @@ import {
   triggerUserLogout
 } from "../redux/actions/actions";
 import CheckoutModal from "../components/invoices/CheckoutModal";
-import AddNote from "../src/components/AddNote";
-import FullScreenImageModal from "../src/components/FullScreenImageModal";
+import AddNote from "../components/patients/AddNote";
+import FullScreenImageModal from "../components/common/FullScreenImageModal";
 import { imageModalSelector } from "../redux/selectors/imageModalSelector";
 import { setImageModal } from "../redux/actions/imageModalActions";
 import CreateClinicModal from "../components/clinic/CreateClinicModal";

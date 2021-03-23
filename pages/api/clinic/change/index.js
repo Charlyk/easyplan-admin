@@ -27,7 +27,7 @@ function setCookies(res, clinicId) {
     httpOnly: true,
     secure: !isDev,
     sameSite: 'strict',
-    maxAge: 3600,
+    maxAge: 36000,
     path: '/'
   }
   const clinicCookie = cookie.serialize('clinic_id', clinicId, cookieOpts);

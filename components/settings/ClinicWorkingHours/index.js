@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import IconSuccess from '../../icons/iconSuccess';
 import LoadingButton from '../../common/LoadingButton';
-import WorkDay from '../../../src/components/WorkDay';
+import WorkDay from '../../common/WorkDay';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/ClinicWorkingHours.module.scss';
 import { toast } from "react-toastify";

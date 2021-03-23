@@ -10,7 +10,7 @@ import { Button } from "react-bootstrap";
 import IconAppointmentCalendar from "../../icons/iconAppointmentCalendar";
 import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { getAppLanguage, textForKey } from "../../../utils/localization";
-import EasyTab from "../../../src/components/EasyTab";
+import EasyTab from "../../common/EasyTab";
 import LoadingButton from "../../common/LoadingButton";
 import UploadIcon from "@material-ui/icons/CloudUpload";
 import IconPlus from "../../icons/iconPlus";

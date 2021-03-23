@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconSuccess from '../../icons/iconSuccess';
 import LoadingButton from '../../common/LoadingButton';
-import { setCurrentUser } from '../../../redux/actions/actions';
-import { userSelector } from '../../../redux/selectors/rootSelector';
-import authAPI from '../../../utils/api/authAPI';
 import { textForKey } from '../../../utils/localization';
-import authManager from '../../../utils/settings/authManager';
 import styles from '../../../styles/SecuritySettings.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";

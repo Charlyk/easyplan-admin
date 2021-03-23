@@ -25,7 +25,7 @@ import MenuUsers from '../icons/menuUsers';
 import { clinicDetailsSelector } from '../../redux/selectors/clinicSelector';
 import { updateLink } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import ClinicSelector from '../../src/components/ClinicSelector';
+import ClinicSelector from './ClinicSelector';
 
 const menuItems = [
   {

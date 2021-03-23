@@ -34,7 +34,7 @@ import {
 import { ManualStatuses, Statuses } from '../../../utils/constants';
 import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import SingleInputModal from '../../../src/components/SingleInputModal';
+import SingleInputModal from '../../common/SingleInputModal';
 import axios from "axios";
 import { baseApiUrl, baseAppUrl } from "../../../eas.config";
 

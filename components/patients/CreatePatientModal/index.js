@@ -10,7 +10,7 @@ import { togglePatientsListUpdate } from '../../../redux/actions/actions';
 import { EmailRegex } from '../../../utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyDatePicker from '../../../src/components/EasyDatePicker';
+import EasyDatePicker from '../../common/EasyDatePicker';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/CreatePatientModal.module.scss';
 import { toast } from "react-toastify";
