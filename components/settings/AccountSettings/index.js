@@ -32,7 +32,7 @@ const AccountSettings = ({ currentUser }) => {
 
   useEffect(() => {
     setData({ ...data, ...currentUser, email: currentUser?.email });
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     const isChanged = data.email !== currentUser.email;

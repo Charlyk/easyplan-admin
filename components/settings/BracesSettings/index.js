@@ -12,10 +12,11 @@ import styles from '../../../styles/BracesSettings.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
+import { clinicBracesSelector } from "../../../redux/selectors/clinicSelector";
 
 const BracesSettings = ({ currentClinic: clinic }) => {
   const router = useRouter();
-  const braces = clinic.braces;
+  const braces = clinicBracesSelector(clinic);
   const [isSaving, setIsSaving] = useState(false);
   const [clinicBraces, setClinicBraces] = useState(braces);
 

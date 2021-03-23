@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import IconSuccess from '../../icons/iconSuccess';
@@ -13,7 +12,6 @@ import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 
 const SecuritySettings = ({ currentUser }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({

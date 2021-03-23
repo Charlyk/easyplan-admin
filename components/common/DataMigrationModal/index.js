@@ -13,8 +13,6 @@ import IconClose from '../../icons/iconClose';
 import { env } from '../../../utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import authManager from '../../../utils/settings/authManager';
-import sessionManager from '../../../utils/settings/sessionManager';
 import AuthenticationStep from './AuthenticationStep';
 import DataMigrationFinalStep from './DataMigrationFinalStep';
 import ImportSelectionStep from './ImportSelectionStep';
@@ -106,7 +104,7 @@ const reducer = (state, action) => {
   }
 };
 
-const DataMigrationModal = ({ show, onClose }) => {
+const DataMigrationModal = ({ show, currentClinic, authToken, onClose }) => {
   const pubnub = usePubNub();
   const [
     {
@@ -151,8 +149,8 @@ const DataMigrationModal = ({ show, onClose }) => {
       user: yClientsUser,
       dataTypes,
       company,
-      clinicId: sessionManager.getSelectedClinicId(),
-      authToken: authManager.getUserToken(),
+      clinicId: currentClinic.id,
+      authToken: authToken,
       startDate,
       endDate,
     };

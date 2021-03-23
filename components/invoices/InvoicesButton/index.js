@@ -13,10 +13,13 @@ import { textForKey } from '../../../utils/localization';
 import NewInvoiceToast from '../../common/NewInvoiceToast';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
+import { totalInvoicesSelector } from "../../../redux/selectors/invoicesSelector";
+import { setTotalInvoices } from "../../../redux/actions/invoiceActions";
 
 const InvoicesButton = ({ currentClinic }) => {
   const dispatch = useDispatch();
   const updateInvoices = useSelector(updateInvoicesSelector);
+  const totalInvoices = useSelector(totalInvoicesSelector);
   const buttonRef = useRef(null);
   const clinicCurrency = currentClinic.currency;
   const exchangeRates = getClinicExchangeRates(currentClinic);
@@ -36,8 +39,9 @@ const InvoicesButton = ({ currentClinic }) => {
     try {
       const response = await axios.get(`${baseAppUrl}/api/invoices?status=PendingPayment`);
       const { data: newInvoices } = response;
-      if (newInvoices?.length > invoices.length) {
+      if (newInvoices?.length > totalInvoices) {
         toast(<NewInvoiceToast />);
+        dispatch(setTotalInvoices(newInvoices.length));
       }
       setInvoices(newInvoices);
     } catch (error) {

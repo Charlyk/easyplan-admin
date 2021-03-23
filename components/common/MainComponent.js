@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 import styles from '../../styles/MainComponent.module.scss';
@@ -35,7 +35,7 @@ import { toast } from "react-toastify";
 import { Role } from "../../utils/constants";
 import { handleRemoteMessage } from "../../utils/pubnubUtils";
 
-const MainComponent = ({ children, currentPath, currentUser, currentClinic }) => {
+const MainComponent = ({ children, currentPath, currentUser, currentClinic, authToken }) => {
   const pubnub = usePubNub();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -45,6 +45,10 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
 
   useEffect(() => {
+    if (currentUser != null) {
+      pubnub.setUUID(currentUser.id);
+    }
+
     if (currentClinic != null) {
       pubnub.subscribe({
         channels: [`${currentClinic.id}-clinic-pubnub-channel`],
@@ -56,21 +60,15 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
         });
       };
     }
-  }, [currentClinic]);
-
-  useEffect(() => {
-    if (currentUser != null) {
-      pubnub.setUUID(currentUser.id);
-    }
-  }, [currentUser]);
+  }, []);
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
   };
 
-  const getPageTitle = () => {
+  const pageTitle = useMemo(() => {
     return paths[currentPath];
-  };
+  }, [currentPath]);
 
   const handleStartLogout = () => {
     dispatch(triggerUserLogout(true));
@@ -145,6 +143,8 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
       )}
       {isImportModalOpen && (
         <DataMigrationModal
+          authToken={authToken}
+          currentClinic={currentClinic}
           show={isImportModalOpen}
           onClose={handleCloseImportModal}
         />
@@ -175,7 +175,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic }) =>
         <div className={styles['data-container']}>
           <PageHeader
             currentClinic={currentClinic}
-            title={getPageTitle()}
+            title={pageTitle}
             user={currentUser}
             onLogout={handleStartLogout}
           />

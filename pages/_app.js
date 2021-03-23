@@ -1,7 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { PubNubProvider } from "pubnub-react";
 import { wrapper } from "../store";
-import authManager from "../utils/settings/authManager";
 import PubNub from "pubnub";
 import NextNprogress from 'nextjs-progressbar';
 import axios from "axios";
@@ -21,7 +20,7 @@ import {
   paymentModalSelector
 } from "../redux/selectors/modalsSelector";
 import {
-  setCreateClinic,
+  setCreateClinic, setCurrentUser,
   setPatientNoteModal,
   setPatientXRayModal,
   setPaymentModal,
@@ -50,7 +49,7 @@ import { UnauthorizedPaths } from "../utils/constants";
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
   subscribeKey: 'sub-c-6cdb4ab0-32f2-11eb-8e02-129fdf4b0d84',
-  uuid: authManager.getUserId() || PubNub.generateUUID(),
+  uuid: PubNub.generateUUID(),
 });
 
 function NextApp({ Component, pageProps }) {
@@ -62,7 +61,13 @@ function NextApp({ Component, pageProps }) {
   const imageModal = useSelector(imageModalSelector);
   const createClinic = useSelector(createClinicSelector);
   const logout = useSelector(logoutSelector);
-  const { currentClinic } = pageProps;
+  const { currentClinic, currentUser } = pageProps;
+
+  useEffect(() => {
+    if (currentUser != null) {
+      dispatch(setCurrentUser(currentUser));
+    }
+  }, [currentUser]);
 
   const getPageTitle = () => {
     return paths[router.pathname] || '';
@@ -199,6 +204,7 @@ NextApp.getInitialProps = async (appContext) => {
       ...appProps,
       pageProps: {
         ...appProps.pageProps,
+        authToken: auth_token,
         currentUser,
         currentClinic,
       }

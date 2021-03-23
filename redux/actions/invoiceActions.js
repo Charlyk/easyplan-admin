@@ -6,3 +6,10 @@ export function toggleUpdateInvoice(payload) {
     payload,
   };
 }
+
+export function setTotalInvoices(total) {
+  return {
+    type: types.setTotalInvoices,
+    payload: total,
+  };
+}

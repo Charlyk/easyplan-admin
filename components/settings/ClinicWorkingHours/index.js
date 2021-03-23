@@ -22,7 +22,7 @@ const ClinicWorkingHours = ({ currentClinic: clinic }) => {
         selected: !it.isDayOff,
       })),
     );
-  }, [clinic]);
+  }, []);
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
     const newDays = workdays.map(workDay => {

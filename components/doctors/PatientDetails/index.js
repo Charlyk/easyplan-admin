@@ -26,6 +26,7 @@ const TabId = {
 
 const PatientDetails = ({
   currentUser,
+  currentClinic,
   onAddNote,
   onAddXRay,
   onEditAppointmentNote,
@@ -36,7 +37,7 @@ const PatientDetails = ({
   scheduleId,
   isDoctor,
 }) => {
-  const braces = useSelector(clinicEnabledBracesSelector);
+  const braces = clinicEnabledBracesSelector(currentClinic);
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   const [hasNotes, setHasNotes] = useState(false);
 
@@ -136,6 +137,7 @@ const PatientDetails = ({
         )}
         {selectedTab === TabId.orthodonticPlan && braces.length > 0 && (
           <OrthodonticPlan
+            currentClinic={currentClinic}
             currentUser={currentUser}
             patient={patient}
             scheduleId={scheduleId}

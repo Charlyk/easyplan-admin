@@ -735,6 +735,7 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
           {patient && (
             <PatientDetails
               isDoctor
+              currentClinic={currentClinic}
               currentUser={currentUser}
               scheduleId={schedule.id}
               onAddXRay={handleAddXRay}
