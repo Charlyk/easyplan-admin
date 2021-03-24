@@ -1,15 +1,16 @@
-import React, { useEffect, useMemo, useReducer } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer } from "react";
 import clsx from "clsx";
 import styles from "../../../styles/RegisterForm.module.scss";
 import { textForKey } from "../../../utils/localization";
 import moment from "moment-timezone";
 import { generateReducerActions } from "../../../utils/helperFuncs";
 import { toast } from "react-toastify";
-import { clinicTimeZones, fetchAvailableCurrencies } from "../../../middleware/api/clinic";
+import { checkDomainAvailability, clinicTimeZones, fetchAvailableCurrencies } from "../../../middleware/api/clinic";
 import { Form, Image, InputGroup } from "react-bootstrap";
 import IconAvatar from "../../icons/iconAvatar";
 import LoadingButton from "../../common/LoadingButton";
 import { WebRegex } from "../../../utils/constants";
+import debounce from "lodash/debounce";
 
 const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/;
 
@@ -23,6 +24,7 @@ const initialState = {
   timeZone: moment.tz.guess(true),
   timeZones: [],
   currencies: [],
+  isDomainAvailable: false,
 }
 
 const reducerTypes = {
@@ -35,6 +37,7 @@ const reducerTypes = {
   setDomainName: 'setDomainName',
   setInitialData: 'setInitialData',
   setDefaultCurrency: 'setDefaultCurrency',
+  setIsDomainAvailable: 'setIsDomainAvailable',
 };
 
 const reducer = (state, action) => {
@@ -69,6 +72,8 @@ const reducer = (state, action) => {
       return { ...state, ...action.payload };
     case reducerTypes.setDefaultCurrency:
       return { ...state, currency: action.payload };
+    case reducerTypes.setIsDomainAvailable:
+      return { ...state, isDomainAvailable: action.payload };
     default:
       return state;
   }
@@ -87,11 +92,18 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
     domainName,
     currencies,
     defaultCurrency,
+    isDomainAvailable,
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetchTimeZones();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (domainName.length > 0) {
+      handleDomainNameUpdated();
+    }
+  }, [domainName]);
 
   const fetchTimeZones = async () => {
     try {
@@ -134,13 +146,25 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
     }
   };
 
+  const checkIsDomainAvailable = async () => {
+    try {
+      const { data: isAvailable } = await checkDomainAvailability(domainName);
+      localDispatch(actions.setIsDomainAvailable(isAvailable));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  const handleDomainNameUpdated = useCallback(debounce(checkIsDomainAvailable, 400), [domainName]);
+
   const isFormValid = useMemo(() => {
     return (
       clinicName.length > 3 &&
       domainName.length > 3 &&
+      isDomainAvailable &&
       (website.length === 0 || website.match(WebRegex))
     )
-  }, [website, clinicName, domainName]);
+  }, [website, clinicName, domainName, isDomainAvailable]);
 
   const handleSubmitForm = () => {
     onSubmit({
@@ -194,6 +218,8 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
         <Form.Label>{textForKey('Domain name')}</Form.Label>
         <InputGroup>
           <Form.Control
+            isInvalid={domainName.length > 0 && !isDomainAvailable}
+            isValid={domainName.length > 0 && isDomainAvailable}
             value={domainName}
             type='text'
             onChange={handleDomainChange}

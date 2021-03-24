@@ -87,3 +87,13 @@ export async function updateClinicBraces(body, headers = null) {
 export async function fetchAvailableCurrencies(headers = null) {
   return get('/api/clinic/available-currencies', headers);
 }
+
+/**
+ * Check if domain is available
+ * @param {string} domain
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function checkDomainAvailability(domain, headers = null) {
+  return get(`/api/clinic/domain?domain=${domain}`, headers)
+}
