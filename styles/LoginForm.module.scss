@@ -1,0 +1,68 @@
+.login-form {
+  position: relative;
+
+  &.disabled {
+    .sign-up-btn, .forgot-button {
+      pointer-events: none;
+      cursor: auto;
+    }
+  }
+
+  :global(.form-title) {
+    margin-bottom: 3rem;
+  }
+
+  .forgot-password-container {
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .1rem;
+
+    .forgot-button {
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      color: #3A83DC;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  :global(.footer) {
+    .footer-sign-up {
+      display: flex;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+
+      .text {
+        color: #34354C;
+      }
+
+      .sign-up-btn {
+        outline: none;
+        margin-left: .2rem;
+        color: #3A83DC !important;
+        cursor: pointer;
+
+        &.disabled {
+          pointer-events: none;
+          cursor: auto;
+        }
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

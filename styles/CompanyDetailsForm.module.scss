@@ -1,0 +1,128 @@
+.company-details-form {
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: scroll;
+
+  .form-title {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #34354C;
+    margin-bottom: 1rem;
+  }
+
+  .messenger-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: .5rem;
+    margin-bottom: .2rem;
+  }
+
+  .data-wrapper {
+    width: 100%;
+    display: flex;
+
+    :global(.upload-avatar-container) {
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      width: 100%;
+
+      img {
+        width: 100px;
+        object-fit: contain;
+      }
+
+      :global(.form-group) {
+        width: max-content !important;
+
+        label {
+          min-width: 9rem;
+        }
+      }
+    }
+
+    .left {
+      width: 49%;
+      margin-right: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      :global(.form-control) {
+        width: 100%;
+      }
+    }
+
+    .right {
+      user-select: none;
+      width: 49%;
+      display: flex;
+      margin-left: 1.2rem;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 58px;
+
+      :global(.custom-select) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: .8rem;
+      }
+
+      .description-text-area {
+        min-height: 9.2rem;
+        max-height: 9.2rem;
+      }
+    }
+
+    :global(.form-group) {
+      width: 100%;
+
+      :global(.form-label) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+        align-items: center;
+        display: flex;
+      }
+
+      :global(.form-text) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: .7rem;
+        color: #7b7ca0;
+        margin-bottom: 0;
+      }
+
+      :global(.form-control) {
+        background-color: #FAFAFD;
+      }
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+
+    :global(.positive-button) {
+      max-width: 11rem;
+      margin-left: .5rem;
+    }
+
+    :global(.delete-button) {
+      max-width: 11rem;
+    }
+  }
+}

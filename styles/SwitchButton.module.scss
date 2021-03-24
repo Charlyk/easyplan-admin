@@ -1,0 +1,39 @@
+.switch-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: .5rem;
+  height: 1rem;
+  width: 2rem;
+  border-radius: .5rem;
+  outline: none;
+
+  &__selection-indicator {
+    position: relative;
+    width: .8rem;
+    height: .8rem;
+    background-color: white;
+    border-radius: .4rem;
+    top: -.03rem;
+
+    &.default {
+      left: .12rem;
+      transition: left .2s ease;
+    }
+
+    &.selected {
+      left: 1.05rem;
+      transition: left .2s ease;
+    }
+  }
+
+  &.selected {
+    background-color: #74A8E5;
+    transition: background-color .2s ease;
+  }
+
+  &.default {
+    background-color: #A1A2C6;
+    transition: background-color .2s ease;
+  }
+}

@@ -1,0 +1,65 @@
+.holiday-modal {
+
+  :global(.modal-header) {
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    :global(.close-btn) {
+      outline: none !important;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+
+  :global(.modal-footer) {
+    border-top: none;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+
+    :global(.rdrMonthsVertical) {
+      align-items: center;
+    }
+
+    &__picker {
+      left: 101%;
+      top: 0;
+      z-index: 999;
+      position: absolute;
+    }
+
+    :global(.form-group) {
+      margin-bottom: 0;
+    }
+
+    :global(.form-label) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .7rem;
+      margin-bottom: 0;
+    }
+
+    :global(.form-control) {
+      cursor: pointer;
+      background-color: #FAFAFD !important;
+    }
+  }
+
+  &__footer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    :global(.cancel-button) {
+      margin-right: .5rem;
+    }
+  }
+}

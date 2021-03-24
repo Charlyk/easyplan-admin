@@ -1,0 +1,65 @@
+.phase {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+  border-radius: .3rem;
+  position: relative;
+
+  &.expanded {
+    .phase-header {
+      .expand-button {
+        svg {
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    .phase-images {
+      padding: 1rem;
+    }
+  }
+
+  .phase-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #34354C;
+
+    .expand-button {
+      outline: none;
+      cursor: pointer;
+
+      svg {
+        transition: transform 200ms ease-in-out;
+        transform: rotate(0deg);
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  .phase-images {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    transition: height 200ms ease-in-out, padding 200ms ease-in-out;
+    position: relative;
+
+    img {
+      border: #ededed 1px solid;
+      border-radius: .3rem;
+      overflow: hidden;
+      cursor: pointer;
+      margin: .2rem;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

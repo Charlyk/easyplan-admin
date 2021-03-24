@@ -1,0 +1,27 @@
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: .5rem 1.5rem;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: .5rem;
+
+  .buttons-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  :global(.positive-button) {
+    margin-left: .5rem;
+    flex: unset;
+    padding: .4rem 1rem;
+  }
+
+  &__tabs {
+    display: flex;
+    flex-direction: row;
+  }
+}

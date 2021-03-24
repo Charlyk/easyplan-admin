@@ -1,0 +1,180 @@
+.add-pause-root {
+  :global(.modal-content) {
+    max-height: 500px;
+    box-shadow: 0 1px 10px 10px #34344E1A;
+  }
+
+  .first-and-last-name {
+    display: flex;
+  }
+
+  :global(.rbt-menu) > :global(.dropdown-item) {
+    padding: .2rem 1rem;
+  }
+
+  .patient-result-item {
+    display: flex;
+    align-items: center;
+
+    .patient-avatar-wrapper {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: .5rem;
+
+      svg, img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .patient-info-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+
+      .patient-name {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 14px;
+        color: #34344E;
+        cursor: pointer;
+      }
+
+      .patient-phone {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 12px;
+        color: #34344E;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .patient-mode-button {
+    margin-top: .2rem;
+    outline: none;
+    display: flex;
+    align-self: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+
+    span {
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: .75rem;
+      margin-bottom: 0;
+      color: #3A83DC;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  :global(.form-control[readonly]) {
+    background-color: #FAFAFD;
+  }
+
+  :global(.form-group) {
+    margin-bottom: 0;
+    margin-top: .5rem;
+
+    :global(.form-check) {
+      display: flex;
+      align-items: center;
+      user-select: none;
+
+      :global(.form-check-label) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: .85rem;
+        margin-bottom: 0;
+        color: #ec3276;
+      }
+
+      input {
+        margin-top: unset;
+        margin-bottom: unset;
+        color: #ec3276;
+      }
+    }
+  }
+
+  :global(.form-label) {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: .7rem;
+    margin-bottom: 0;
+  }
+
+  :global(.form-control) {
+    width: 100%;
+    background-color: #FAFAFD;
+  }
+
+  :global(.input-group) {
+    textarea {
+      height: 7rem !important;
+    }
+  }
+
+  .result-item-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 13px;
+    color: #34344E;
+    cursor: pointer;
+  }
+
+  :global(.rbt-aux) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: .5rem;
+  }
+
+  :global(.custom-select) {
+    height: 2.1rem;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 12px;
+    color: #34344E;
+  }
+
+  .date-and-time-group {
+    width: 100%;
+
+    :global(.form-control[readonly]) {
+      background-color: white;
+    }
+
+    .date-form-group {
+      width: 60%;
+    }
+
+    .date-append {
+      width: 40%;
+    }
+  }
+}
+
+.appointment-date-picker-root {
+  z-index: 2000;
+  .calendar-paper {
+    :global(.rdrMonthAndYearWrapper) {
+      padding-top: 0;
+      height: 30px;
+    }
+
+    :global(.rdrMonths) {
+      :global(.rdrMonth) {
+        padding: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+.serviceRow {
+  .row-label {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    margin-right: .5rem;
+  }
+
+  .delete-button {
+    height: 30px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: .5rem;
+    background: rgba(244, 64, 129, 0.03) !important;
+    border: 1px solid #F44081 !important;
+    color: #F44081 !important;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 12px !important;
+    line-height: 16px !important;
+
+    &.positive {
+      border: 1px solid #00E987 !important;
+      color: #00E987 !important;
+
+      svg {
+        fill: #00E987;
+        margin-left: .5rem;
+      }
+    }
+
+    svg {
+      fill: #F44081;
+      margin-left: .5rem;
+    }
+  }
+
+  .edit-button {
+    height: 30px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: #F4FAFE !important;
+    border: 1px solid #74A8E5 !important;
+    color: #74A8E5 !important;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 12px !important;
+    line-height: 16px !important;
+
+    svg {
+      fill: #74A8E5;
+      margin-left: .5rem;
+    }
+  }
+
+  .description-cell {
+    max-width: 500px;
+    font-family: Inter, sans-serif;
+    font-style: normal !important;
+    font-size: 12px !important;
+    font-weight: normal;
+  }
+
+  td {
+    z-index: 1;
+    padding: .4rem 1rem;
+    border-bottom: #ededed 1px solid;
+    overflow: hidden;
+
+    .description-label {
+      color: #34344E;
+    }
+
+    .price-label {
+      color: #34344E;
+      font-family: Inter, sans-serif;
+      font-style: normal !important;
+      font-size: 12px !important;
+      font-weight: normal;
+    }
+
+    .name-and-color {
+      display: flex;
+      align-items: center;
+
+      .name-label {
+        color: #34344E;
+        font-family: Inter, sans-serif;
+        font-style: normal !important;
+        font-size: 12px !important;
+        font-weight: normal;
+      }
+
+      .color-indicator {
+        margin-right: 1rem;
+        width: .5rem;
+        height: .5rem;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+    }
+
+    .actions-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}

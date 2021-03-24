@@ -1,0 +1,141 @@
+.serviceRow {
+  overflow: hidden;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, .05);
+  border-radius: 5px;
+
+  .cell {
+    background-color: white;
+    border-bottom: none;
+    padding: .5rem;
+
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    &.name {
+      overflow: hidden;
+
+      .service-name {
+        max-width: 195px;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        color: #34344E;
+      }
+    }
+
+    &.count {
+      padding-right: 0;
+      padding-left: 0;
+      width: 80px;
+
+      .counter-label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        color: #34344E;
+      }
+
+      .action-button {
+        outline: none;
+        svg {
+          width: .8rem;
+          height: .8rem;
+        }
+      }
+    }
+
+    &.price {
+      width: 80px;
+      padding-right: .1rem;
+      padding-left: 0;
+
+      .price-input {
+        width: 80px;
+
+        :global(.MuiOutlinedInput-root) {
+          &:global(.Mui-focused) {
+            :global(.MuiOutlinedInput-notchedOutline) {
+              border-color: #3A83DC !important;
+              border-width: 1px;
+            }
+          }
+          input {
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            color: #34344E;
+            padding: .4rem;
+          }
+        }
+      }
+    }
+
+    &.currency {
+      width: 45px;
+      padding-left: .1rem;
+
+      .currency-input {
+
+        :global(.MuiOutlinedInput-root) {
+          :global(.MuiSelect-iconOutlined) {
+            right: .1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+          }
+          :global(.MuiSelect-outlined) {
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            color: #34344E;
+            padding: .3rem 1.1rem .3rem .3rem;
+          }
+          &:global(.Mui-focused) {
+            :global(.MuiOutlinedInput-notchedOutline) {
+              border-color: #3A83DC !important;
+              border-width: 1px;
+            }
+          }
+          input {
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 13px;
+            color: #34344E;
+            padding: .4rem;
+          }
+        }
+      }
+    }
+
+    &.delete {
+      padding: 0;
+      width: 35px;
+
+      .delete-service-button {
+        outline: none;
+        width: 35px;
+        height: 35px;
+        padding: .5rem;
+
+        svg {
+          fill: #ec3276;
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.easy-date-picker {
+  z-index: 1100;
+
+  .calendar-paper {
+    border: #3A83DC 1px solid;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  :global(.rdrCalendarWrapper) {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 11px;
+  }
+}
