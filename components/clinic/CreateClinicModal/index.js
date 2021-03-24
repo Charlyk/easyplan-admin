@@ -10,29 +10,34 @@ import { uploadFileToAWS } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../../common/EasyPlanModal';
 
+import { clinicTimeZones, createNewClinic, fetchAvailableCurrencies } from "../../../middleware/api/clinic";
 import styles from '../../../styles/CreateClinicModal.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
+
+const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/;
 
 const CreateClinicModal = ({ open, onCreate, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [timeZones, setTimeZones] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
   const [data, setData] = useState({
     logoFile: null,
     clinicName: '',
     website: '',
     description: '',
     timeZone: moment.tz.guess(true),
+    defaultCurrency: 'MDL',
+    domainName: ''
   });
 
   useEffect(() => {
     fetchTimeZones();
+    fetchCurrencies();
   }, []);
 
   const fetchTimeZones = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${baseAppUrl}/api/clinic/timezones`);
+      const response = await clinicTimeZones();
       setTimeZones(response.data);
     } catch (error) {
       toast.error(error.message);
@@ -41,10 +46,24 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
     }
   };
 
+  const fetchCurrencies = async () => {
+    try {
+      const response = await fetchAvailableCurrencies();
+      setCurrencies(response.data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
   const handleFormChange = (event) => {
+    const eventId = event.target.id;
+    const eventValue = event.target.value;
     setData({
       ...data,
-      [event.target.id]: event.target.value,
+      [eventId]: eventValue,
+      domainName: eventId === 'clinicName'
+        ? eventValue.replace(charactersRegex, '').replace(' ', '-')
+        : data.domainName
     });
   };
 
@@ -71,10 +90,11 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
         clinicName: data.clinicName,
         website: data.website,
         description: data.description,
-        defaultCurrency: 'MDL',
+        defaultCurrency: data.defaultCurrency,
+        domainName: data.domainName,
         logo,
       };
-      const response = await axios.post(`${baseAppUrl}/api/clinic`, requestBody);
+      const response = await createNewClinic(requestBody);
       onCreate(response.data);
     } catch (error) {
       toast.error(error.message);
@@ -83,7 +103,7 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
     }
   };
 
-  const isFormValid = () => data.clinicName.length > 3;
+  const isFormValid = () => data.clinicName.length > 3 && data.domainName.length > 3;
 
   const logoSrc = data.logoFile && window.URL.createObjectURL(data.logoFile);
 
@@ -124,6 +144,19 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
           />
         </InputGroup>
       </Form.Group>
+      <Form.Group controlId='domainName'>
+        <Form.Label>{textForKey('Domain name')}</Form.Label>
+        <InputGroup>
+          <Form.Control
+            value={data.domainName}
+            type='text'
+            onChange={handleFormChange}
+          />
+          <InputGroup.Append>
+            <InputGroup.Text id='basic-addon1'>.easyplan.pro</InputGroup.Text>
+          </InputGroup.Append>
+        </InputGroup>
+      </Form.Group>
       <Form.Group controlId='website'>
         <Form.Label>{`${textForKey('Website')} (${textForKey(
           'optional',
@@ -135,6 +168,21 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
             onChange={handleFormChange}
           />
         </InputGroup>
+      </Form.Group>
+      <Form.Group controlId='defaultCurrency'>
+        <Form.Label>{textForKey('Currency')}</Form.Label>
+        <Form.Control
+          as='select'
+          onChange={handleFormChange}
+          value={data.defaultCurrency}
+          custom
+        >
+          {currencies.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.id} - {item.name}
+            </option>
+          ))}
+        </Form.Control>
       </Form.Group>
       <Form.Group controlId='timeZone'>
         <Form.Label>{textForKey('Time zone')}</Form.Label>

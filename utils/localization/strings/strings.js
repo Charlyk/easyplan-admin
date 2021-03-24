@@ -502,6 +502,8 @@ export default {
     no_sms_messages: 'No SMS messages yet.',
     'click on button below to accept the invitation': 'Click on button below to accept the invitation',
     schedules: 'Schedules',
+    'domain name': 'Domain name',
+    account_created_success: 'Account created successfully. Please add your clinic details.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1012,6 +1014,8 @@ export default {
     no_sms_messages: 'Încă nu sunt mesaje create',
     'click on button below to accept the invitation': 'Dați click pe butonul de mai jos pentru a accepta invitația',
     schedules: 'Programări',
+    'domain name': 'Numele domenului',
+    account_created_success: 'Contul a fost creat cu succes. Vă rugăm să introduceți detaliile clinicii.',
   },
   ru: {
     analytics: 'Analytics',
@@ -1512,6 +1516,8 @@ export default {
     'rows per page': 'Rows per page',
     no_sms_messages: 'No SMS messages yet.',
     'click on button below to accept the invitation': 'Click on button below to accept the invitation',
-    schedules: 'Schedules'
+    schedules: 'Schedules',
+    'domain name': 'Numele domenului',
+    account_created_success: 'Account created successfully. Please add your clinic details.',
   },
 };

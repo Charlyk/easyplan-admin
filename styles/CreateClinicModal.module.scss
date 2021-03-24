@@ -1,6 +1,26 @@
 .create-clinic-modal-root {
   user-select: none;
 
+  :global(.modal-lg) {
+    max-width: 600px;
+  }
+
+  :global(.input-group-append) {
+
+    :global(.input-group-text) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal !important;
+      font-size: 12px;
+    }
+  }
+
+  :global(.modal-content) > :global(.modal-body) {
+    :global(.form-control) {
+      width: unset;
+    }
+  }
+
   .upload-avatar-container {
     margin-bottom: 1rem;
   }

@@ -1,6 +1,11 @@
 .register-form {
   position: relative;
 
+  textarea {
+    max-height: 3rem;
+    min-height: 3rem;
+  }
+
   :global(.form-group) {
     margin-bottom: 0;
     .password-visibility-append {
@@ -34,7 +39,18 @@
   }
 
   :global(.footer) {
-    margin-top: 3rem;
+    margin-top: 1.5rem;
+  }
+
+  :global(.input-group-append) {
+    height: 2rem;
+
+    :global(.input-group-text) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal !important;
+      font-size: 12px;
+    }
   }
 
   :global(.upload-avatar-container) {

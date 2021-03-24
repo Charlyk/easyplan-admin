@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 
 import LoginForm from '../components/login/LoginForm';
-import RegisterForm from '../components/login/RegisterForm';
+import RegisterForm from '../components/login/registration/RegisterForm';
 import ResetPassword from '../components/login/ResetPassword';
 import { useRouter } from 'next/router';
 import styles from '../styles/Login.module.scss';
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
 import { Role } from "../utils/constants";
 import { loginUser, registerUser, resetUserPassword } from "../middleware/api/auth";
+import RegistrationWrapper from "../components/login/registration";
 
 const FormType = {
   login: 'login',
@@ -176,12 +177,7 @@ const Login = () => {
           />
         )}
         {currentForm === FormType.register && (
-          <RegisterForm
-            isLoading={isLoading}
-            errorMessage={errorMessage}
-            onSubmit={handleSignupSubmit}
-            onGoBack={handleOpenLogin}
-          />
+          <RegistrationWrapper onGoBack={handleOpenLogin} />
         )}
       </div>
     </div>

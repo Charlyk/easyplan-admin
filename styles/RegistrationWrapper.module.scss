@@ -1,0 +1,25 @@
+.registrationWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  :global(.form-root) {
+    padding: 3rem 3rem 0 3rem;
+  }
+
+  .stepperRoot {
+    width: 70%;
+
+    :global(.MuiStepIcon-root.MuiStepIcon-active), :global(.MuiStepIcon-root.MuiStepIcon-completed) {
+      color: #3A83DC;
+    }
+
+    :global(.MuiStepLabel-label) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+    }
+  }
+}

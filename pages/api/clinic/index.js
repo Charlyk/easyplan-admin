@@ -35,13 +35,10 @@ export default authorized(async (req, res) => {
 });
 
 async function createClinic(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  const { auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
   return axios.post(`${baseApiUrl}/clinics`, requestBody, {
-    headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id || -1,
-    }
+    headers: { Authorization: auth_token }
   });
 }
 

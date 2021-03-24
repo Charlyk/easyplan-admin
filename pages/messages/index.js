@@ -19,8 +19,6 @@ import CreateMessageModal from '../../components/messages/CreateMessageModal';
 import SMSMessageItem from '../../components/messages/SMSMessageItem';
 import SMSMessagesHeader from '../../components/messages/SMSMessagesHeader';
 import styles from '../../styles/SMSMessages.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import MainComponent from "../../components/common/MainComponent";
 import { deleteMessage, getMessages, toggleMessageStatus } from "../../middleware/api/messages";
 import { fetchAppData } from "../../middleware/api/initialization";

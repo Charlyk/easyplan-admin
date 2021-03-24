@@ -6,11 +6,11 @@ import PropTypes from 'prop-types';
 import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 
-import IconAvatar from '../icons/iconAvatar';
-import LoadingButton from '../common/LoadingButton';
-import { EmailRegex, PasswordRegex } from '../../utils/constants';
-import { textForKey } from '../../utils/localization';
-import styles from '../../styles/RegisterForm.module.scss';
+import IconAvatar from '../../icons/iconAvatar';
+import LoadingButton from '../../common/LoadingButton';
+import { EmailRegex, PasswordRegex } from '../../../utils/constants';
+import { textForKey } from '../../../utils/localization';
+import styles from '../../../styles/RegisterForm.module.scss';
 import clsx from "clsx";
 
 const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
@@ -81,6 +81,23 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
+      <div className='upload-avatar-container'>
+        {avatarSrc ? <Image roundedCircle src={avatarSrc} /> : <IconAvatar />}
+        <span style={{ margin: '1rem' }}>
+          {textForKey('JPG or PNG, Max size of 800kb')}
+        </span>
+        <Form.Group>
+          <input
+            className='custom-file-button'
+            type='file'
+            name='avatar-file'
+            id='avatar-file'
+            accept='.jpg,.jpeg,.png'
+            onChange={handleAvatarChange}
+          />
+          <label htmlFor='avatar-file'>{textForKey('Upload image')}</label>
+        </Form.Group>
+      </div>
       <Form.Group controlId='lastName'>
         <Form.Label>{textForKey('Last name')}</Form.Label>
         <InputGroup>
@@ -156,23 +173,6 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
           />
         </InputGroup>
       </Form.Group>
-      <div className='upload-avatar-container'>
-        {avatarSrc ? <Image roundedCircle src={avatarSrc} /> : <IconAvatar />}
-        <span style={{ margin: '1rem' }}>
-          {textForKey('JPG or PNG, Max size of 800kb')}
-        </span>
-        <Form.Group>
-          <input
-            className='custom-file-button'
-            type='file'
-            name='avatar-file'
-            id='avatar-file'
-            accept='.jpg,.jpeg,.png'
-            onChange={handleAvatarChange}
-          />
-          <label htmlFor='avatar-file'>{textForKey('Upload image')}</label>
-        </Form.Group>
-      </div>
       <div className='footer'>
         <div
           role='button'
@@ -188,7 +188,7 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
           className='positive-button'
           disabled={!isFormValid()}
         >
-          {textForKey('Create new account')}
+          {textForKey('Next')}
         </LoadingButton>
       </div>
     </div>

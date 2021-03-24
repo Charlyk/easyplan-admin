@@ -1,33 +1,24 @@
-import { baseApiUrl, isDev } from "../../../eas.config";
-import cookie from "cookie";
+import { baseApiUrl } from "../../../eas.config";
 import axios from "axios";
-import { setCookies } from "../../../utils/helperFuncs";
+import { handler } from "../handler";
 
 export default async function register(req, res) {
-  const response = await createNewAccount(req.body);
-  if (response.status !== 200) {
-    res.json({ error: true, message: response.statusText });
-  } else {
-    const { isError, message, data } = response.data;
-    if (isError) {
-      res.json({ message, error: true });
-    } else {
-      const { user, token } = data;
-      setCookies(res, token);
-      res.status(200).json(user);
-    }
+  const data = await handler(createNewAccount, req, res);
+  if (data != null) {
+    const { user } = data;
+    res.status(200).json(user);
   }
 }
 
 /**
  * Authenticate an user with EasyPlan backend
- * @param {{firstName: string, lastName: string, avatar: string, username: string, password: string, phoneNumber: string}} requestBody
+ * @param req
  * @return {Promise<AxiosResponse<any>>}
  */
-function createNewAccount(requestBody) {
+function createNewAccount(req) {
   return axios.post(
     `${baseApiUrl}/authentication/v1/register`,
-    requestBody,
+    req.body,
     { headers: { 'X-EasyPlan-Clinic-Id': -1 } }
   );
 }

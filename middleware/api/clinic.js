@@ -1,4 +1,4 @@
-import { del, get, put } from "./request";
+import { del, get, post, put } from "./request";
 
 /**
  * Delete clinic invitation
@@ -60,6 +60,16 @@ export async function updateClinic(body, headers = null) {
 }
 
 /**
+ * Create new clinic
+ * @param {Object} body
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function createNewClinic(body, headers = null) {
+  return post('/api/clinic', headers, body);
+}
+
+/**
  * Update braces settings
  * @param {Object} body
  * @param {Object|null} headers
@@ -67,4 +77,13 @@ export async function updateClinic(body, headers = null) {
  */
 export async function updateClinicBraces(body, headers = null) {
   return put('/api/clinic/braces-types', headers, body);
+}
+
+/**
+ * Fetch available currencies
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function fetchAvailableCurrencies(headers = null) {
+  return get('/api/clinic/available-currencies', headers);
 }
