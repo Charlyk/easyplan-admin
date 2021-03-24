@@ -498,7 +498,6 @@ const Services = ({ currentUser, currentClinic, categories: clinicCategories, se
 export const getServerSideProps = async ({ req, res, }) => {
   try {
     const appData = await fetchAppData(req.headers);
-    console.log(appData)
     const { data } = await fetchAllServices(req.headers);
     return {
       props: {
