@@ -24,9 +24,8 @@ import DoctorColumn from './DoctorColumn';
 import DoctorItem from './DoctorItem';
 import styles from '../../../../styles/CalendarDayView.module.scss';
 import { toast } from "react-toastify";
-import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 import { wrapper } from "../../../../store";
+import { fetchSchedulesHours } from "../../../../middleware/api/schedules";
 
 const moment = extendMoment(Moment);
 
@@ -202,6 +201,12 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       return;
     }
     const scheduleDate = moment(updateSchedule.startTime);
+    const currentDate = moment(viewDate)
+
+    if (!scheduleDate.isSame(currentDate, 'date')) {
+      return;
+    }
+
     const newSchedulesMap = schedulesMap ? cloneDeep(schedulesMap) : new Map();
 
     if (isOutOfBounds(updateSchedule)) {
@@ -249,8 +254,7 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
   const fetchDayHours = async (date) => {
     try {
       const query = { date: moment(date).format('YYYY-MM-DD') };
-      const queryString = new URLSearchParams(query).toString()
-      const response = await axios.get(`${baseAppUrl}/api/schedules/day-hours?${queryString}`);
+      const response = await fetchSchedulesHours(query);
       localDispatch(actions.setHours(response.data));
     } catch (error) {
       toast.error(error.message);
