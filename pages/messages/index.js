@@ -22,6 +22,8 @@ import styles from '../../styles/SMSMessages.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../eas.config";
 import MainComponent from "../../components/common/MainComponent";
+import { deleteMessage, getMessages, toggleMessageStatus } from "../../middleware/api/messages";
+import { fetchAppData } from "../../middleware/api/initialization";
 
 const initialState = {
   isLoading: false,
@@ -96,7 +98,7 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
   const fetchMessages = async (silent) => {
     localDispatch(actions.setIsLoading(!silent));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/sms`);
+      const response = await getMessages();
       localDispatch(actions.setMessages(response.data));
     } catch (error) {
       toast.error(error.message);
@@ -140,7 +142,7 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
     }
     localDispatch(actions.setIsDeleting(true));
     try {
-      await axios.delete(`${baseAppUrl}/api/sms/${messageToDelete.id}`);
+      await deleteMessage(messageToDelete.id);
       await fetchMessages(true);
     } catch (error) {
       toast.error(error.message);
@@ -154,9 +156,7 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
   const handleDisableMessage = async (message) => {
     try {
       const status = message.disabled ? 'enable' : 'disable';
-      const query = { status };
-      const queryString = new URLSearchParams(query).toString();
-      await axios.put(`${baseAppUrl}/api/sms/${message.id}?${queryString}`);
+      await toggleMessageStatus(message.id, status);
       await fetchMessages(true);
     } catch (error) {
       toast.error(error.message);
@@ -243,11 +243,13 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
 
 export const getServerSideProps = async ({ req, res }) => {
   try {
-    const response = await axios.get(`${baseAppUrl}/api/sms`, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const response = await getMessages(req.headers);
     const { data } = response;
     return {
       props: {
         messages: data,
+        ...appData,
       },
     };
   } catch (error) {

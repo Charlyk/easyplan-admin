@@ -42,7 +42,6 @@ const ScheduleConfirmation = () => {
       const query = { scheduleId, patientId };
       const queryString = new URLSearchParams(query).toString();
       const response = await axios.get(`${baseAppUrl}/api/schedules/confirm?${queryString}`);
-      console.log(response);
       setSchedule(response.data);
     } catch (error) {
       toast.error(error.message);

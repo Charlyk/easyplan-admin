@@ -17,7 +17,6 @@ import {
   changeSelectedClinic,
   setCreateClinic,
 } from '../../../redux/actions/actions';
-import { setClinic } from '../../../redux/actions/clinicActions';
 import { EmailRegex } from '../../../utils/constants';
 import {
   uploadFileToAWS,
@@ -25,9 +24,8 @@ import {
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/CompanyDetailsForm.module.scss'
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
+import { clinicTimeZones, deleteClinic, updateClinic } from "../../../middleware/api/clinic";
 
 const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
   const dispatch = useDispatch();
@@ -75,7 +73,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
   const fetchTimeZones = async () => {
     setIsSaving(true);
     try {
-      const response = await axios.get(`${baseAppUrl}/api/clinic/timezones`);
+      const response = await clinicTimeZones();
       setTimeZones(response.data);
     } catch (error) {
       toast.error(error.message);
@@ -123,7 +121,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     try {
-      await axios.delete(`${baseAppUrl}/api/clinic`);
+      await deleteClinic();
       if (currentUser.clinicIds.length > 0) {
         dispatch(changeSelectedClinic(currentUser.clinicIds[0]));
       } else {
@@ -183,7 +181,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
         logoUrl,
       };
 
-      const response = await axios.put(`${baseAppUrl}/api/clinic`, requestBody);
+      const response = await updateClinic(requestBody);
       router.replace(router.asPath);
       setData({ ...data, ...response.data });
       toast.success(textForKey('Saved successfully'));

@@ -16,6 +16,8 @@ import axios from "axios";
 import MainComponent from "../../../components/common/MainComponent";
 import isEqual from "lodash/isEqual";
 import { useRouter } from "next/router";
+import { getActivityJournal } from "../../../middleware/api/analytics";
+import { fetchAppData } from "../../../middleware/api/initialization";
 
 const initialState = {
   isLoading: false,
@@ -247,13 +249,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.userId == null) {
       query.userId = -1;
     }
-    const queryString = new URLSearchParams(query).toString();
-    let url = `${baseAppUrl}/api/analytics/activity-logs?${queryString}`;
-    const { data: activityLogs } = await axios.get(url, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const { data: activityLogs } = await getActivityJournal(query, req.headers);
     return {
       props: {
         activityLogs,
         query,
+        ...appData,
       },
     };
   } catch (error) {

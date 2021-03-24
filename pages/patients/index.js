@@ -35,9 +35,9 @@ import { textForKey } from '../../utils/localization';
 import PatientRow from '../../components/patients/PatientRow';
 import clsx from "clsx";
 import MainComponent from "../../components/common/MainComponent";
-import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import { toast } from "react-toastify";
+import { deletePatient, getPatients } from "../../middleware/api/patients";
+import { fetchAppData } from "../../middleware/api/initialization";
 
 const initialState = {
   isLoading: false,
@@ -160,8 +160,7 @@ const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery }) 
     try {
       const updatedQuery = searchQuery.replace('+', '');
       const query = { page, rowsPerPage, query: updatedQuery };
-      const queryString = new URLSearchParams(query).toString();
-      const response = await axios.get(`${baseAppUrl}/api/patients?${queryString}`);
+      const response = await getPatients(query);
       localDispatch(actions.setPatients(response.data));
     } catch (error) {
       toast.error(error.message);
@@ -209,9 +208,7 @@ const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery }) 
     if (patientToDelete == null) return;
     localDispatch(actions.setIsDeleting(true));
     try {
-      const query = { patientId: patientToDelete.id };
-      const queryString = new URLSearchParams(query).toString()
-      await axios.delete(`${baseAppUrl}/api/patients?${queryString}`);
+      await deletePatient(patientToDelete.id);
       localDispatch(actions.setPatientToDelete(null));
       await fetchPatients();
       dispatch(
@@ -382,13 +379,14 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.rowsPerPage == null) {
       query.rowsPerPage = 25;
     }
-    const queryString = new URLSearchParams(query).toString()
-    const response = await axios.get(`${baseAppUrl}/api/patients?${queryString}`, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const response = await getPatients(query, req.headers);
     const { data } = response;
     return {
       props: {
         query,
         data,
+        ...appData
       },
     };
   } catch (error) {

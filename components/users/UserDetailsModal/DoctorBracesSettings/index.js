@@ -17,7 +17,6 @@ const DoctorBracesSettings = ({ show, data, onChange, clinicBraces }) => {
     if (!isSelected) {
       remove(newList, item => item.serviceId === service.id);
       onChange(newList);
-      console.log(newList);
       return;
     }
 
@@ -38,7 +37,6 @@ const DoctorBracesSettings = ({ show, data, onChange, clinicBraces }) => {
       });
     }
     onChange(newList);
-    console.log(newList);
   };
 
   const sortedBraces = sortBy(clinicBraces, item => item.name);

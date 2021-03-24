@@ -64,7 +64,6 @@ async function setMessageDisabled(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { status, messageId } = req.query;
   const url = `${baseApiUrl}/sms/${messageId}/${status}`
-  console.log(url);
   return axios.put(url, {}, {
     headers: {
       Authorization: auth_token,

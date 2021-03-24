@@ -19,10 +19,9 @@ import IncomeStatisticItem from '../../../components/analytics/general/IncomeSta
 import StatusItem from '../../../components/analytics/general/StatusItem';
 import styles from '../../../styles/Statistics.module.scss';
 import MainComponent from "../../../components/common/MainComponent";
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import sortBy from "lodash/sortBy";
-import cookie from "cookie";
+import { getGeneralStatistics } from "../../../middleware/api/analytics";
+import { fetchAppData } from "../../../middleware/api/initialization";
 
 const initialState = {
   doctors: [],
@@ -271,14 +270,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
       query.doctorId = -1;
     }
 
-    const queryString = new URLSearchParams(query).toString();
-    let url = `${baseAppUrl}/api/analytics/general?${queryString}`;
-
-    const { data } = await axios.get(url, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const { data } = await getGeneralStatistics(query, req.headers);
     return {
       props: {
         ...data,
         query,
+        ...appData
       },
     };
   } catch (error) {

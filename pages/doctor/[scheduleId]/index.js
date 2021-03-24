@@ -34,6 +34,7 @@ import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 import DoctorsMain from "../../../components/doctors/DoctorsMain";
+import { fetchAppData } from "../../../middleware/api/initialization";
 
 const areSameServices = (first, second) => {
   return (
@@ -761,15 +762,16 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
 
 export const getServerSideProps = async ({ req, res, query }) => {
   try {
+    const appData = await fetchAppData(req.headers);
     const { scheduleId } = query;
     const response = await axios.get(
       `${baseAppUrl}/api/schedules/${scheduleId}/doctor-details`,
       { headers: req.headers },
     );
-    console.log(response.data);
     return {
       props: {
         schedule: response.data,
+        ...appData,
       },
     };
   } catch (error) {

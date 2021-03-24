@@ -26,7 +26,6 @@ const AddXRay = ({ open, patientId, onClose }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    console.log(file)
     setImageFile(file);
   };
 
@@ -52,8 +51,6 @@ const AddXRay = ({ open, patientId, onClose }) => {
   const handlePhaseChange = (event) => {
     setPhase(event.target.value);
   };
-
-  console.log(imageFile?.name);
 
   return (
     <EasyPlanModal

@@ -26,9 +26,8 @@ import PatientPersonalData from './PatientPersonalData';
 import PatientPurchasesList from './PatientPurchasesList';
 import OrthodonticPlan from './OrthodonticPlan';
 import PatientXRay from './PatientXRay';
-import styles from '../../../styles/PatientDetailsModal.module.scss'
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
+import { getPatientDetails } from "../../../middleware/api/patients";
+import styles from '../../../styles/PatientDetailsModal.module.scss';
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -84,15 +83,17 @@ const reducer = (state, action) => {
   }
 };
 
-const PatientDetailsModal = ({
-                               show,
-                               currentUser,
-                               currentClinic,
-                               patientId,
-                               menuItem,
-                               onClose,
-                               onDelete,
-                             }) => {
+const PatientDetailsModal = (
+  {
+    show,
+    currentUser,
+    currentClinic,
+    patientId,
+    menuItem,
+    onClose,
+    onDelete,
+  }
+) => {
   const dispatch = useDispatch();
   const [
     { currentMenu, isFetching, patient, viewInvoice },
@@ -119,7 +120,7 @@ const PatientDetailsModal = ({
     if (patientId == null) return;
     localDispatch(actions.setIsFetching(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patientId}`);
+      const response = await getPatientDetails(patientId);
       localDispatch(actions.setPatient(response.data));
     } catch (error) {
       toast.error(error.message);
@@ -150,10 +151,6 @@ const PatientDetailsModal = ({
     } else {
       localDispatch(actions.setCurrentMenu(targetId));
     }
-  };
-
-  const handleViewDebtClick = (invoice) => {
-    localDispatch(actions.setViewInvoice(invoice));
   };
 
   const handleDebtViewed = () => {

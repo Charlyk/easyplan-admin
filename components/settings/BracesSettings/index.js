@@ -9,10 +9,9 @@ import LoadingButton from '../../common/LoadingButton';
 import SwitchButton from '../../common/SwitchButton';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/BracesSettings.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 import { clinicBracesSelector } from "../../../redux/selectors/clinicSelector";
+import { updateClinicBraces } from "../../../middleware/api/clinic";
 
 const BracesSettings = ({ currentClinic: clinic }) => {
   const router = useRouter();
@@ -62,10 +61,7 @@ const BracesSettings = ({ currentClinic: clinic }) => {
   const handleSaveBracesSettings = async () => {
     setIsSaving(true);
     try {
-      await axios.put(
-        `${baseAppUrl}/api/clinic/braces-types`,
-        { services: clinicBraces }
-      );
+      await updateClinicBraces({ services: clinicBraces });
       router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {

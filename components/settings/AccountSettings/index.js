@@ -11,9 +11,8 @@ import { EmailRegex } from '../../../utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/AccountSettings.module.scss'
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
+import { updateUserAccount } from "../../../middleware/api/auth";
 
 const AccountSettings = ({ currentUser }) => {
   const router = useRouter();
@@ -84,7 +83,7 @@ const AccountSettings = ({ currentUser }) => {
         phoneNumber: data.phoneNumber,
       };
 
-      await axios.put(`${baseAppUrl}/api/auth/update-account`, requestBody);
+      await updateUserAccount(requestBody);
       router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {

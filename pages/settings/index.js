@@ -10,6 +10,7 @@ import SettingsMenu from '../../components/settings/SettingsMenu';
 import styles from '../../styles/Settings.module.scss';
 import MainComponent from "../../components/common/MainComponent";
 import { Role } from "../../utils/constants";
+import { fetchAppData } from "../../middleware/api/initialization";
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -90,8 +91,11 @@ const Settings = ({ currentUser, currentClinic }) => {
 };
 
 export const getServerSideProps = async ({ req, res }) => {
+  const appData = await fetchAppData(req.headers);
   return {
-    props: {}
+    props: {
+      ...appData
+    }
   }
 }
 

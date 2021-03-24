@@ -12,8 +12,7 @@ import EasyPlanModal from '../../common/EasyPlanModal';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/CreateMessageModal.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
+import { createMessage, updateMessage } from "../../../middleware/api/messages";
 
 const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
 
@@ -288,14 +287,6 @@ const CreateMessageModal = ({
     (language) => getRealMessageLength(language) > 0 && !isLengthExceeded,
   );
 
-  const createNewMessage = async (requestBody) => {
-    return axios.post(`${baseAppUrl}/api/sms`, requestBody);
-  }
-
-  const updateMessage = async (messageId, requestBody) => {
-    return axios.post(`${baseAppUrl}/api/sms/${messageId}`, requestBody);
-  }
-
   const handleSubmit = async () => {
     if (!isFormValid) {
       return;
@@ -311,7 +302,7 @@ const CreateMessageModal = ({
       };
       const response =
         messageData == null
-          ? await createNewMessage(requestBody)
+          ? await createMessage(requestBody)
           : await updateMessage(messageData.id, requestBody);
       onCreateMessage(response.data);
     } catch (error) {

@@ -6,13 +6,10 @@ import ResetPassword from '../components/login/ResetPassword';
 import { useRouter } from 'next/router';
 import styles from '../styles/Login.module.scss';
 import { generateReducerActions, uploadFileToAWS } from "../utils/helperFuncs";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
-import { useDispatch } from "react-redux";
-import { wrapper } from "../store";
-import { baseAppUrl } from "../eas.config";
 import { Role } from "../utils/constants";
+import { loginUser, registerUser, resetUserPassword } from "../middleware/api/auth";
 
 const FormType = {
   login: 'login',
@@ -52,7 +49,6 @@ const reducer = (state, action) => {
 }
 
 const Login = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [{ currentForm, isLoading, errorMessage }, localDispatch] = useReducer(reducer, initialState);
 
@@ -104,10 +100,7 @@ const Login = () => {
         delete requestBody.avatarFile;
       }
 
-      const { data } = await axios.post(
-        `${baseAppUrl}/api/auth/register`,
-        requestBody,
-      );
+      const { data } = await registerUser(requestBody);
       if (data.error) {
         localDispatch(actions.setErrorMessage(data.message));
       } else {
@@ -124,10 +117,7 @@ const Login = () => {
   const handleResetPasswordSubmit = async (username) => {
     localDispatch(actions.setIsLoading(true));
     try {
-      const { data } = await axios.post(
-        `${baseAppUrl}/api/auth/reset-password`,
-        { username }
-      );
+      const { data } = await resetUserPassword({ username });
       if (data.error) {
         localDispatch(actions.setErrorMessage(data.message));
       } else {
@@ -145,10 +135,7 @@ const Login = () => {
   const handleLoginSubmit = async (username, password) => {
     localDispatch(actions.setIsLoading(true));
     try {
-      const { data } = await axios.post(
-        `${baseAppUrl}/api/auth/login`,
-        { username, password }
-      );
+      const { data } = await loginUser({ username, password });
       if (data.error) {
         localDispatch(actions.setErrorMessage(data.message));
       } else {
@@ -201,4 +188,4 @@ const Login = () => {
   );
 };
 
-export default wrapper.withRedux(Login);
+export default Login;

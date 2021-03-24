@@ -77,7 +77,6 @@ async function fetchDaySchedules(req) {
 async function fetchMonthSchedules(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query).toString();
-  console.log(queryString);
   return axios.get(`${baseApiUrl}/schedules/month-schedules?${queryString}`, {
     headers: {
       Authorization: auth_token,

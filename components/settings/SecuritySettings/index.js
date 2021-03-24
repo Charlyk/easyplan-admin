@@ -10,6 +10,7 @@ import styles from '../../../styles/SecuritySettings.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
+import { updateUserAccount } from "../../../middleware/api/auth";
 
 const SecuritySettings = ({ currentUser }) => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const SecuritySettings = ({ currentUser }) => {
         ...data,
         avatar: currentUser.avatar,
       };
-      await axios.put(`${baseAppUrl}/api/auth/update-account`, requestBody);
+      await updateUserAccount(requestBody);
       router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {

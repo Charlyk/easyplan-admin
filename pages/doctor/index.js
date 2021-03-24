@@ -18,6 +18,7 @@ import axios from "axios";
 import { baseAppUrl } from "../../eas.config";
 import { handleRequestError } from "../../utils/helperFuncs";
 import { useRouter } from "next/router";
+import { fetchAppData } from "../../middleware/api/initialization";
 
 const initialFilter = {
   patientName: '',
@@ -146,6 +147,7 @@ export const getServerSideProps = async ({ res, req, query }) => {
     query.date = moment().format('YYYY-MM-DD');
   }
   try {
+    const appData = await fetchAppData(req.headers);
     const queryString = new URLSearchParams(query).toString();
     const response = await axios.get(
       `${baseAppUrl}/api/schedules?${queryString}`,
@@ -155,6 +157,7 @@ export const getServerSideProps = async ({ res, req, query }) => {
       props: {
         schedules: response.data,
         date: query.date,
+        ...appData,
       },
     };
   } catch (error) {

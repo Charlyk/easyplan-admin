@@ -14,12 +14,12 @@ import StatisticFilter from '../../../components/analytics/StatisticFilter';
 import { Role } from "../../../utils/constants";
 import MainComponent from "../../../components/common/MainComponent";
 import sortBy from "lodash/sortBy";
-import styles from '../../../styles/ServicesStatistics.module.scss';
-import { baseAppUrl } from "../../../eas.config";
-import axios from "axios";
 import { Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@material-ui/core";
 import { useRouter } from "next/router";
 import isEqual from "lodash/isEqual";
+import { getDoctorsStatistics } from "../../../middleware/api/analytics";
+import styles from '../../../styles/ServicesStatistics.module.scss';
+import { fetchAppData } from "../../../middleware/api/initialization";
 
 const initialState = {
   isLoading: false,
@@ -289,13 +289,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.serviceId == null) {
       query.serviceId = -1;
     }
-    const queryString = new URLSearchParams(query).toString();
-    let url = `${baseAppUrl}/api/analytics/doctors?${queryString}`;
-    const { data: statistics } = await axios.get(url, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const { data: statistics } = await getDoctorsStatistics(query, req.headers);
     return {
       props: {
         statistics,
         query,
+        ...appData,
       },
     };
   } catch (error) {

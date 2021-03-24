@@ -6,6 +6,7 @@ import moment from "moment-timezone";
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import { handleRequestError } from "../../../utils/helperFuncs";
+import { fetchAppData } from "../../../middleware/api/initialization";
 
 const CalendarDay = ({ currentUser, currentClinic, date, schedules, dayHours }) => {
   const viewDate = moment(date).toDate();
@@ -37,6 +38,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
 
   const { date: queryDate } = query;
   try {
+    const appData = await fetchAppData(req.headers);
     const queryString = new URLSearchParams({ date: queryDate, period: 'day' }).toString();
     const response = await axios.get(
       `${baseAppUrl}/api/schedules?${queryString}`,
@@ -48,6 +50,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
         date: queryDate,
         schedules,
         dayHours,
+        ...appData
       }
     }
   } catch (error) {

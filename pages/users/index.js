@@ -10,7 +10,6 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../components/common/ConfirmationModal';
@@ -22,8 +21,9 @@ import { textForKey } from '../../utils/localization';
 import UserItem from '../../components/users/UserItem';
 import UsersHeader from '../../components/users/UserHeader';
 import MainComponent from "../../components/common/MainComponent";
-import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
+import { deleteUser, getUsers, inviteUser, restoreUser } from "../../middleware/api/users";
+import { deleteInvitation } from "../../middleware/api/clinic";
+import { fetchAppData } from "../../middleware/api/initialization";
 
 const initialState = {
   selectedFilter: Role.all,
@@ -139,7 +139,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${baseAppUrl}/api/users`);
+      const response = await getUsers();
       localDispatch(actions.setPageData(response.data));
     } catch (error) {
       toast.error(error.message);
@@ -177,10 +177,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
   };
 
   const sendInvitation = async (email, role) => {
-    return axios.put(`${baseAppUrl}/api/users/send-invitation`, {
-      emailAddress: email,
-      role,
-    });
+    return inviteUser({ emailAddress: email, role })
   }
 
   const handleInviteUser = async (email, role) => {
@@ -300,18 +297,18 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
 
   const handleRestoreUser = async (event, user) => {
     try {
-      await axios.delete(`${baseAppUrl}/api/users/${user.id}/restore`);
+      await restoreUser(user.id);
       await fetchUsers();
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  const deleteUser = async () => {
+  const handleDeleteUserConfirm = async () => {
     if (!userToDelete) return;
     localDispatch(actions.setIsDeleting(true));
     try {
-      await axios.delete(`${baseAppUrl}/api/users/${userToDelete.id}`);
+      await deleteUser(userToDelete.id);
       await fetchUsers();
     } catch (error) {
       toast.error(error.message);
@@ -320,11 +317,11 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
     }
   };
 
-  const deleteInvitation = async () => {
+  const handleDeleteInvitationConfirm = async () => {
     if (!invitationToDelete) return;
     localDispatch(actions.setIsDeleting(true))
     try {
-      await axios.delete(`${baseAppUrl}/api/clinic/invitations?invitationId=${invitationToDelete.id}`);
+      await deleteInvitation(invitationToDelete.id);
       await fetchUsers();
     } catch (error) {
       toast.error(error.message);
@@ -354,7 +351,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
           onClose={closeDeleteUserDialog}
           title={textForKey('Delete user')}
           message={textForKey('Are you sure you want to delete this user?')}
-          onConfirm={deleteUser}
+          onConfirm={handleDeleteUserConfirm}
           isLoading={isDeleting}
         />
 
@@ -363,7 +360,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
           onClose={closeDeleteInvitationDialog}
           title={textForKey('Delete invitation')}
           message={textForKey('Are you sure you want to delete this invitation?')}
-          onConfirm={deleteInvitation}
+          onConfirm={handleDeleteInvitationConfirm}
           isLoading={isDeleting}
         />
 
@@ -507,16 +504,20 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
 
 export const getServerSideProps = async ({ req, res }) => {
   try {
-    const response = await axios.get(`${baseAppUrl}/api/users`, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const response = await getUsers(req.headers);
     return {
-      props: response.data
+      props: {
+        ...response.data,
+        ...appData,
+      }
     }
   } catch (error) {
     await handleRequestError(error, req, res);
     return {
       props: {
         users: [],
-        invitations: []
+        invitations: [],
       }
     }
   }

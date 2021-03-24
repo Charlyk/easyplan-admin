@@ -40,6 +40,8 @@ import axios from "axios";
 import { baseAppUrl } from "../../eas.config";
 import { updatedServiceSelector } from "../../redux/selectors/servicesSelector";
 import { setUpdatedService } from "../../redux/actions/servicesActions";
+import { deleteService, fetchAllServices, restoreService } from "../../middleware/api/services";
+import { fetchAppData } from "../../middleware/api/initialization";
 
 const categoryModalState = {
   closed: 'closed',
@@ -185,14 +187,6 @@ const Services = ({ currentUser, currentClinic, categories: clinicCategories, se
       }),
     );
   };
-
-  const restoreService = async (serviceId) => {
-    return axios.get(`${baseAppUrl}/api/services/${serviceId}`);
-  }
-
-  const deleteService = async (serviceId) => {
-    return axios.delete(`${baseAppUrl}/api/services/${serviceId}`);
-  }
 
   const handleServiceDeleteConfirmed = async () => {
     if (deleteServiceModal.service == null) {
@@ -503,12 +497,14 @@ const Services = ({ currentUser, currentClinic, categories: clinicCategories, se
 
 export const getServerSideProps = async ({ req, res, }) => {
   try {
-    const { data } = await axios.get(`${baseAppUrl}/api/services`, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const { data } = await fetchAllServices(req.headers);
     return {
       props: {
-        ...data
-      }
-    }
+        ...data,
+        ...appData,
+      },
+    };
   } catch (error) {
     await handleRequestError(error, req, res);
     return {

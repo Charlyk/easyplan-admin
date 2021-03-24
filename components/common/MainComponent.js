@@ -28,12 +28,11 @@ import paths from '../../utils/paths';
 import ExchangeRates from "./ExchangeRates";
 import { isExchangeRateModalOpenSelector } from "../../redux/selectors/exchangeRatesModalSelector";
 import { setIsExchangeRatesModalOpen } from "../../redux/actions/exchangeRatesActions";
-import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { Role } from "../../utils/constants";
 import { handleRemoteMessage } from "../../utils/pubnubUtils";
+import { changeCurrentClinic } from "../../middleware/api/clinic";
 
 const MainComponent = ({ children, currentPath, currentUser, currentClinic, authToken }) => {
   const pubnub = usePubNub();
@@ -80,10 +79,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
 
   const handleChangeCompany = async (company) => {
     try {
-      const query = { clinicId: company.clinicId };
-      const queryString = new URLSearchParams(query).toString()
-      const { data: selectedClinic } =
-        await axios.get(`${baseAppUrl}/api/clinic/change?${queryString}`);
+      const { data: selectedClinic } = await changeCurrentClinic(company.clinicId);
       switch (selectedClinic.roleInClinic) {
         case Role.reception:
           const isPathRestricted = ['/analytics', '/services', '/users', '/messages']

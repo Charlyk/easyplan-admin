@@ -15,9 +15,8 @@ import LeftSideModal from '../../common/LeftSideModal';
 import LoadingButton from '../../common/LoadingButton';
 import CreateHolidayModal from './CreateHolidayModal';
 import DoctorForm from './DoctorForm';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { CircularProgress } from "@material-ui/core";
+import { deleteUserHoliday, getUserDetails, updateUserDetails } from "../../../middleware/api/users";
 
 const initialData = {
   services: [],
@@ -152,7 +151,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
   const fetchUserDetails = async () => {
     localDispatch(actions.setIsLoading(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/users/${user.id}`);
+      const response = await getUserDetails(user.id);
       const { data: userDetails } = response;
       localDispatch(
         actions.setUserData({
@@ -211,7 +210,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
 
   const updateUser = async requestBody => {
     try {
-      await axios.put(`${baseAppUrl}/api/users/${user.id}`, requestBody);
+      await updateUserDetails(user.id, requestBody);
       handleModalClose();
     } catch (error) {
       toast.error(error.message);
@@ -236,7 +235,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
       return;
     }
     try {
-      await axios.delete(`${baseAppUrl}/api/users/${user.id}/holidays/${holiday.id}`);
+      await deleteUserHoliday(user.id, holiday.id);
       const newHolidays = cloneDeep(userData.holidays);
       remove(newHolidays, item => item.id === holiday.id);
       localDispatch(actions.setUserHolidays(newHolidays));

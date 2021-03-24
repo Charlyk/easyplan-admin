@@ -167,7 +167,6 @@ const AddPauseModal = ({
   useEffect(() => {
     if (viewDate != null && typeof viewDate === 'object') {
       localDispatch(actions.setPauseDate(viewDate.toDate()));
-      console.log(typeof viewDate === 'string', viewDate.toDate());
     }
   }, [viewDate]);
 

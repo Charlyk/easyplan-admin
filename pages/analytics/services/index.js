@@ -26,8 +26,8 @@ import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../components/analytics/StatisticFilter';
 import styles from '../../../styles/ServicesStatistics.module.scss';
 import MainComponent from "../../../components/common/MainComponent";
-import { baseAppUrl } from "../../../eas.config";
-import axios from "axios";
+import { getServicesStatistics } from "../../../middleware/api/analytics";
+import { fetchAppData } from "../../../middleware/api/initialization";
 
 const reducerTypes = {
   setSelectedDoctor: 'setSelectedDoctor',
@@ -461,14 +461,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.status == null) {
       query.status = 'All'
     }
-
-    const queryString = new URLSearchParams(query).toString();
-    let url = `${baseAppUrl}/api/analytics/services?${queryString}`;
-    const { data: statistics } = await axios.get(url, { headers: req.headers });
+    const appData = await fetchAppData(req.headers);
+    const { data: statistics } = await getServicesStatistics(query, req.headers);
     return {
       props: {
         statistics,
         query,
+        ...appData,
       }
     };
   } catch (error) {

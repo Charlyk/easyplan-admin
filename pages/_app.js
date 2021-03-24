@@ -1,13 +1,8 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { PubNubProvider } from "pubnub-react";
 import { wrapper } from "../store";
 import PubNub from "pubnub";
 import NextNprogress from 'nextjs-progressbar';
-import axios from "axios";
-import { baseAppUrl } from "../eas.config";
-import { handleRequestError } from "../utils/helperFuncs";
-import App from "next/app";
-import { parseCookies } from "../utils";
 import Head from 'next/head';
 import paths from "../utils/paths";
 import { useRouter } from "next/router";
@@ -20,7 +15,7 @@ import {
   paymentModalSelector
 } from "../redux/selectors/modalsSelector";
 import {
-  setCreateClinic, setCurrentUser,
+  setCreateClinic,
   setPatientNoteModal,
   setPatientXRayModal,
   setPaymentModal,
@@ -44,7 +39,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/index.scss'
 import { ToastContainer } from "react-toastify";
-import { UnauthorizedPaths } from "../utils/constants";
+import { signOut } from "../middleware/api/auth";
+import { fetchAppData } from "../middleware/api/initialization";
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
@@ -61,13 +57,16 @@ function NextApp({ Component, pageProps }) {
   const imageModal = useSelector(imageModalSelector);
   const createClinic = useSelector(createClinicSelector);
   const logout = useSelector(logoutSelector);
-  const { currentClinic, currentUser } = pageProps;
+  const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
 
   useEffect(() => {
-    if (currentUser != null) {
-      dispatch(setCurrentUser(currentUser));
-    }
-  }, [currentUser]);
+    fetchInitializationData();
+  }, []);
+
+  const fetchInitializationData = async () => {
+    const appData = await fetchAppData();
+    setState(appData);
+  }
 
   const getPageTitle = () => {
     return paths[router.pathname] || '';
@@ -110,7 +109,7 @@ function NextApp({ Component, pageProps }) {
   };
 
   const handleUserLogout = async () => {
-    await axios.delete(`${baseAppUrl}/api/auth/logout`);
+    await signOut();
     router.reload()
   };
 
@@ -177,42 +176,6 @@ function NextApp({ Component, pageProps }) {
       </PubNubProvider>
     </>
   );
-}
-
-NextApp.getInitialProps = async (appContext) => {
-  const { req, res, pathname } = appContext.ctx;
-
-  const appProps = await App.getInitialProps(appContext);
-
-  if (UnauthorizedPaths.includes(pathname)) {
-    return appProps
-  }
-
-  try {
-    const { auth_token } = parseCookies(req);
-    if (auth_token == null) {
-      await handleRequestError({ response: { status: 401, statusText: '' } }, req, res)
-      return appProps;
-    }
-    const { data: currentUser } = await axios.get(`${baseAppUrl}/api/auth/me`, {
-      headers: req.headers
-    });
-    const { data: currentClinic } = await axios.get(`${baseAppUrl}/api/clinic/details`, {
-      headers: req.headers
-    });
-    return {
-      ...appProps,
-      pageProps: {
-        ...appProps.pageProps,
-        authToken: auth_token,
-        currentUser,
-        currentClinic,
-      }
-    };
-  } catch (error) {
-    await handleRequestError(error, req, res);
-    return appProps;
-  }
 }
 
 export default wrapper.withRedux(NextApp)

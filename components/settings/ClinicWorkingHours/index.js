@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
+import { updateClinic } from "../../../middleware/api/clinic";
 
 const ClinicWorkingHours = ({ currentClinic: clinic }) => {
   const router = useRouter();
@@ -45,7 +46,7 @@ const ClinicWorkingHours = ({ currentClinic: clinic }) => {
     setIsLoading(true);
     try {
       const requestBody = { ...clinic, workdays };
-      const response = await axios.put(`${baseAppUrl}/api/clinic`, requestBody);
+      await updateClinic(requestBody);
       router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {

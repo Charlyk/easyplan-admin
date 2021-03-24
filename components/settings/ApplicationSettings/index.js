@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
+import { updateClinic } from "../../../middleware/api/clinic";
 
 const ApplicationSettings = ({ currentClinic: clinic }) => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const ApplicationSettings = ({ currentClinic: clinic }) => {
         ...clinic,
         timeBeforeOnSite: parseInt(time),
       };
-      await axios.put(`${baseAppUrl}/api/clinic`, requestBody);
+      await updateClinic(requestBody);
       router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
