@@ -52,7 +52,6 @@ function NextApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const patientXRayModal = useSelector(patientXRayModalSelector);
-  const paymentModal = useSelector(paymentModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const imageModal = useSelector(imageModalSelector);
   const createClinic = useSelector(createClinicSelector);
@@ -82,17 +81,6 @@ function NextApp({ Component, pageProps }) {
 
   const handleClosePatientXRayModal = () => {
     dispatch(setPatientXRayModal({ open: false, patientId: null }));
-  };
-
-  const handleClosePaymentModal = () => {
-    dispatch(
-      setPaymentModal({
-        open: false,
-        invoice: null,
-        isNew: false,
-        openPatientDetailsOnClose: false,
-      }),
-    );
   };
 
   const handleClosePatientNoteModal = () => {
@@ -155,13 +143,6 @@ function NextApp({ Component, pageProps }) {
             <AddNote
               {...patientNoteModal}
               onClose={handleClosePatientNoteModal}
-            />
-          )}
-          {paymentModal.open && (
-            <CheckoutModal
-              {...paymentModal}
-              currentClinic={currentClinic}
-              onClose={handleClosePaymentModal}
             />
           )}
           {patientXRayModal.open && (

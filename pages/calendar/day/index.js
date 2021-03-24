@@ -60,6 +60,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
         date: queryDate,
         schedules: [],
         dayHours: [],
+
       }
     }
   }

@@ -15,11 +15,11 @@ import ServiceDetailsModal from '../services/ServiceDetailsModal';
 import {
   setAppointmentModal,
   setCreateClinic,
-  setPatientDetails,
+  setPatientDetails, setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
 } from '../../redux/actions/actions';
-import { appointmentModalSelector } from '../../redux/selectors/modalsSelector';
+import { appointmentModalSelector, paymentModalSelector } from '../../redux/selectors/modalsSelector';
 import {
   isImportModalOpenSelector,
   patientDetailsSelector,
@@ -33,12 +33,14 @@ import { toast } from "react-toastify";
 import { Role } from "../../utils/constants";
 import { handleRemoteMessage } from "../../utils/pubnubUtils";
 import { changeCurrentClinic } from "../../middleware/api/clinic";
+import CheckoutModal from "../invoices/CheckoutModal";
 
 const MainComponent = ({ children, currentPath, currentUser, currentClinic, authToken }) => {
   const pubnub = usePubNub();
   const router = useRouter();
   const dispatch = useDispatch();
   const appointmentModal = useSelector(appointmentModalSelector);
+  const paymentModal = useSelector(paymentModalSelector);
   const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
@@ -118,6 +120,17 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
     dispatch(toggleImportModal());
   };
 
+  const handleClosePaymentModal = () => {
+    dispatch(
+      setPaymentModal({
+        open: false,
+        invoice: null,
+        isNew: false,
+        openPatientDetailsOnClose: false,
+      }),
+    );
+  };
+
   return (
     <div className={styles['main-page']} id='main-page'>
       <ServiceDetailsModal currentClinic={currentClinic} />
@@ -156,6 +169,13 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
           patient={appointmentModal?.patient}
           startHour={appointmentModal?.startHour}
           endHour={appointmentModal?.endHour}
+        />
+      )}
+      {paymentModal.open && (
+        <CheckoutModal
+          {...paymentModal}
+          currentClinic={currentClinic}
+          onClose={handleClosePaymentModal}
         />
       )}
       {currentUser != null && currentClinic != null && (
