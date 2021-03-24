@@ -13,7 +13,7 @@ const MainPage = ({ currentClinic, currentUser }) => {
   }, []);
 
   const redirectUserToPage = async () => {
-    const selectedClinic = currentUser.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
+    const selectedClinic = currentUser?.clinics.find((clinic) => clinic.isSelected) || currentUser?.clinics[0];
     if (selectedClinic != null) {
       switch (selectedClinic.roleInClinic) {
         case Role.reception:
