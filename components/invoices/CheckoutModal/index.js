@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
 
 import {
-  Box,
   Button,
   CircularProgress,
   IconButton,
@@ -542,7 +541,7 @@ const CheckoutModal = ({
           onServiceSelected={handleNewServiceSelected}
           onServiceDeleted={handleServiceRemoved}
         />
-        <Box className={styles['data-container']}>
+        <div className={styles['data-container']}>
           <IconButton
             classes={{ root: styles['close-button'] }}
             onClick={handleCloseModal}
@@ -550,8 +549,8 @@ const CheckoutModal = ({
             <IconClose />
           </IconButton>
           {isFetching && (
-            <div className={styles['loading-wrapper']}>
-              <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+            <div className='progress-bar-wrapper'>
+              <CircularProgress className='circular-progress-bar' />
             </div>
           )}
           <Typography classes={{ root: styles.title }}>
@@ -660,11 +659,9 @@ const CheckoutModal = ({
                         ),
                       }}
                     >
-                      <Box
-                        display='flex'
-                        alignItems='center'
-                        justifyContent='center'
-                        width='100%'
+                      <div
+                        className='flexContainer'
+                        style={{ width: '100%', justifyContent: 'center' }}
                       >
                         <Typography classes={{ root: styles.label }}>
                           {textForKey('Discount')}
@@ -676,7 +673,7 @@ const CheckoutModal = ({
                           suffix='%'
                           placeholder='0%'
                         />
-                      </Box>
+                      </div>
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -684,11 +681,9 @@ const CheckoutModal = ({
             </TableContainer>
           )}
           {!isFetching && invoiceDetails != null && (
-            <Box
-              display='flex'
-              width='100%'
-              alignItems='center'
-              justifyContent='center'
+            <div
+              className='flexContainer'
+              style={{ width: '100%', justifyContent: 'center' }}
             >
               {!isLoading ? (
                 <Button
@@ -705,9 +700,9 @@ const CheckoutModal = ({
                   classes={{ root: styles.paying }}
                 />
               )}
-            </Box>
+            </div>
           )}
-        </Box>
+        </div>
       </Paper>
     </Modal>
   );
