@@ -36,7 +36,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
   const { category, service, open } = useSelector(serviceDetailsModalSelector);
   const modalData = useSelector(serviceDetailsModalSelector);
   const clinicDoctors = clinicActiveDoctorsSelector(currentClinic)
-  const clinicCurrency = currentClinic.currency;
+  const clinicCurrency = currentClinic?.currency;
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);

@@ -64,8 +64,12 @@ function NextApp({ Component, pageProps }) {
   }, []);
 
   const fetchInitializationData = async () => {
-    const appData = await fetchAppData();
-    setState(appData);
+    try {
+      const appData = await fetchAppData();
+      setState(appData);
+    } catch (error) {
+      // ignore this error
+    }
   }
 
   const getPageTitle = () => {

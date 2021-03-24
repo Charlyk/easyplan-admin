@@ -11,10 +11,9 @@ import { updateInvoicesSelector } from '../../../redux/selectors/rootSelector';
 import { formattedAmount, getClinicExchangeRates } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import NewInvoiceToast from '../../common/NewInvoiceToast';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { totalInvoicesSelector } from "../../../redux/selectors/invoicesSelector";
 import { setTotalInvoices } from "../../../redux/actions/invoiceActions";
+import { fetchPendingInvoices } from "../../../middleware/api/invoices";
 
 const InvoicesButton = ({ currentClinic }) => {
   const dispatch = useDispatch();
@@ -37,7 +36,7 @@ const InvoicesButton = ({ currentClinic }) => {
     }
     setIsLoading(true);
     try {
-      const response = await axios.get(`${baseAppUrl}/api/invoices?status=PendingPayment`);
+      const response = await fetchPendingInvoices();
       const { data: newInvoices } = response;
       if (newInvoices?.length > totalInvoices) {
         toast(<NewInvoiceToast />);
@@ -87,7 +86,7 @@ const InvoicesButton = ({ currentClinic }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {invoices.map((invoice) => (
+                  {invoices?.map((invoice) => (
                     <tr key={invoice.id}>
                       <td>{invoice.doctorFullName}</td>
                       <td>{invoice.patientFullName}</td>

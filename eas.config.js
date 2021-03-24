@@ -1,7 +1,18 @@
-// export const isDev = process.env.NODE_ENV !== 'production';
-export const isDev = true;
-// const testUrl = 'https://api.easyplan.pro/dev/api'
-const testUrl = 'http://localhost:8080/api'
-export const baseApiUrl = isDev ? testUrl : 'https://api.easyplan.pro/api'
-export const baseAppUrl = isDev ? 'http://localhost:3000' : 'https://app.easyplan.pro'
+export const environment = process.env.APP_ENV;
+export const isDev = environment === 'local';
+
+export const baseApiUrl =
+  environment === 'local'
+    ? 'http://localhost:8080/api'
+    : environment === 'development'
+      ? 'https://api.easyplan.pro/dev/api'
+      : 'https://api.easyplan.pro/api';
+
+export const baseAppUrl =
+  environment === 'local'
+    ? 'http://localhost:3000'
+    : environment === 'development'
+      ? 'https://develop.easyplan.pro'
+      : 'https://app.easyplan.pro';
+
 export const imageLambdaUrl = 'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';

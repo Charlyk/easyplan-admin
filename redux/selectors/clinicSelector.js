@@ -20,12 +20,12 @@ export const availableCurrenciesSelector = (clinic) =>
     : [];
 
 export const clinicActiveDoctorsSelector = (clinic) => {
-  return clinic.users
-    .filter((item) => item.roleInClinic === Role.doctor && !item.isHidden)
-    .map((item) => ({
+  return clinic?.users
+    ?.filter((item) => item.roleInClinic === Role.doctor && !item.isHidden)
+    ?.map((item) => ({
       ...item,
       fullName: `${item.firstName} ${item.lastName}`,
-    }));
+    })) || [];
 }
 
 export const clinicServicesSelector = (clinic) =>
