@@ -68,8 +68,8 @@ const reducer = (state, action) => {
         clinicName: action.payload,
         domainName: action.payload
           .toLowerCase()
-          .replace(charactersRegex, '')
-          .replace(' ', '-'),
+          .replaceAll(charactersRegex, '')
+          .replaceAll(' ', '-'),
       };
     case reducerTypes.setWebsite:
       return { ...state, website: action.payload };
@@ -83,8 +83,9 @@ const reducer = (state, action) => {
       return {
         ...state,
         domainName: action.payload
-          .replace(charactersRegex, '')
-          .replace(' ', '-')
+          .toLowerCase()
+          .replaceAll(charactersRegex, '')
+          .replaceAll(' ', '-')
       };
   }
 }
