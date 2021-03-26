@@ -16,7 +16,7 @@ import ConfirmationModal from '../../components/common/ConfirmationModal';
 import InviteUserModal from '../../components/common/InviteUserModal';
 import UserDetailsModal from '../../components/users/UserDetailsModal';
 import { Role } from '../../utils/constants';
-import { generateReducerActions, handleRequestError } from '../../utils/helperFuncs';
+import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import UserItem from '../../components/users/UserItem';
 import UsersHeader from '../../components/users/UserHeader';
@@ -24,6 +24,7 @@ import MainComponent from "../../components/common/MainComponent";
 import { deleteUser, getUsers, inviteUser, restoreUser } from "../../middleware/api/users";
 import { deleteInvitation } from "../../middleware/api/clinic";
 import { fetchAppData } from "../../middleware/api/initialization";
+import { baseAppUrl } from "../../eas.config";
 
 const initialState = {
   selectedFilter: Role.all,
@@ -505,6 +506,13 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
 export const getServerSideProps = async ({ req, res }) => {
   try {
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const response = await getUsers(req.headers);
     return {
       props: {

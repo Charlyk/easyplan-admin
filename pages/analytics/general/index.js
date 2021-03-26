@@ -12,7 +12,7 @@ import IconSuccess from '../../../components/icons/iconSuccess';
 import IconXPerson from '../../../components/icons/iconXPerson';
 import EasyDateRangePicker from '../../../components/common/EasyDateRangePicker';
 import { Role, Statuses } from '../../../utils/constants';
-import { generateReducerActions, handleRequestError } from '../../../utils/helperFuncs';
+import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../components/analytics/StatisticFilter';
 import IncomeStatisticItem from '../../../components/analytics/general/IncomeStatisticItem';
@@ -271,6 +271,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
 
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/general');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const { data } = await getGeneralStatistics(query, req.headers);
     return {
       props: {

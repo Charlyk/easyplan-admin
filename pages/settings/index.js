@@ -11,6 +11,7 @@ import styles from '../../styles/Settings.module.scss';
 import MainComponent from "../../components/common/MainComponent";
 import { Role } from "../../utils/constants";
 import { fetchAppData } from "../../middleware/api/initialization";
+import { redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -92,6 +93,13 @@ const Settings = ({ currentUser, currentClinic }) => {
 
 export const getServerSideProps = async ({ req, res }) => {
   const appData = await fetchAppData(req.headers);
+  const { currentUser, currentClinic } = appData;
+  const redirectTo = redirectToUrl(currentUser, currentClinic, '/settings');
+  if (redirectTo != null) {
+    redirectUserTo(redirectTo, res);
+    return { props: { ...appData } };
+  }
+
   return {
     props: {
       ...appData

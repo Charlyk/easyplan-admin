@@ -12,16 +12,13 @@ import {
   createClinicSelector,
   patientNoteModalSelector,
   patientXRayModalSelector,
-  paymentModalSelector
 } from "../redux/selectors/modalsSelector";
 import {
   setCreateClinic,
   setPatientNoteModal,
   setPatientXRayModal,
-  setPaymentModal,
   triggerUserLogout
 } from "../redux/actions/actions";
-import CheckoutModal from "../components/invoices/CheckoutModal";
 import AddNote from "../components/patients/AddNote";
 import FullScreenImageModal from "../components/common/FullScreenImageModal";
 import { imageModalSelector } from "../redux/selectors/imageModalSelector";
@@ -30,6 +27,9 @@ import CreateClinicModal from "../components/clinic/CreateClinicModal";
 import ConfirmationModal from "../components/common/ConfirmationModal";
 import { textForKey } from "../utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
+import { ToastContainer } from "react-toastify";
+import { signOut } from "../middleware/api/auth";
+import { fetchAppData } from "../middleware/api/initialization";
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file
@@ -38,9 +38,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/index.scss'
-import { ToastContainer } from "react-toastify";
-import { signOut } from "../middleware/api/auth";
-import { fetchAppData } from "../middleware/api/initialization";
+import { UnauthorizedPaths } from "../utils/constants";
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
@@ -59,6 +57,9 @@ function NextApp({ Component, pageProps }) {
   const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
 
   useEffect(() => {
+    if (UnauthorizedPaths.includes(router.pathname)) {
+      return;
+    }
     fetchInitializationData();
   }, []);
 
@@ -112,7 +113,13 @@ function NextApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>{currentClinic ? `${clinicName} - ${getPageTitle()}` : 'EasyPlan.pro'}</title>
+        <title>
+          {
+            currentClinic
+            ? `${clinicName} - ${getPageTitle()}`
+            : `EasyPlan.pro - ${getPageTitle()}`
+          }
+        </title>
       </Head>
       <ToastContainer/>
       <PubNubProvider client={pubnub}>

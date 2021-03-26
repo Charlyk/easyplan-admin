@@ -13,7 +13,7 @@ import {
 import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../components/common/ConfirmationModal';
-import { generateReducerActions, handleRequestError } from '../../utils/helperFuncs';
+import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import CreateMessageModal from '../../components/messages/CreateMessageModal';
 import SMSMessageItem from '../../components/messages/SMSMessageItem';
@@ -242,6 +242,13 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
 export const getServerSideProps = async ({ req, res }) => {
   try {
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/messages');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const response = await getMessages(req.headers);
     const { data } = response;
     return {

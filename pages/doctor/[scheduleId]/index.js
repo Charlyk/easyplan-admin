@@ -14,7 +14,7 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../../redux/actions/actions';
-import { generateReducerActions, handleRequestError } from '../../../utils/helperFuncs';
+import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorPatientDetails.module.scss';
 import axios from "axios";
@@ -339,6 +339,13 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
 export const getServerSideProps = async ({ req, res, query }) => {
   try {
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const { scheduleId } = query;
     const response = await fetchDoctorScheduleDetails(scheduleId, null, req.headers);
     return {

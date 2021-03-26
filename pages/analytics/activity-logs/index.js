@@ -10,7 +10,7 @@ import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../components/analytics/StatisticFilter';
 import styles from '../../../styles/ActivityLogs.module.scss';
 import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
-import { generateReducerActions, handleRequestError } from "../../../utils/helperFuncs";
+import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { baseAppUrl } from "../../../eas.config";
 import axios from "axios";
 import MainComponent from "../../../components/common/MainComponent";
@@ -250,6 +250,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
       query.userId = -1;
     }
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/activity-logs');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const { data: activityLogs } = await getActivityJournal(query, req.headers);
     return {
       props: {

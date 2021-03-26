@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
-  Box,
-  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -16,39 +14,20 @@ import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
-import { urlToLambda } from '../../utils/helperFuncs';
+import { handleRequestError, urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 import styles from '../../styles/ScheduleConfirmation.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../eas.config";
 import { useRouter } from "next/router";
+import { fetchScheduleConfirmationInfo } from "../../middleware/api/schedules";
+import Head from "next/head";
 
-const ScheduleConfirmation = () => {
+const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
-  const { schedule: scheduleId, patient: patientId } = router.query;
-  const [schedule, setSchedule] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    getScheduleInfo();
-  }, [scheduleId, patientId]);
-
-  const getScheduleInfo = async () => {
-    setIsLoading(true);
-    try {
-      const query = { scheduleId, patientId };
-      const queryString = new URLSearchParams(query).toString();
-      const response = await axios.get(`${baseAppUrl}/api/schedules/confirm?${queryString}`);
-      setSchedule(response.data);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const confirmSchedule = async () => {
     setIsConfirming(true);
@@ -56,7 +35,7 @@ const ScheduleConfirmation = () => {
       const requestBody = { scheduleId, patientId };
       await axios.post(`${baseAppUrl}/api/schedules/confirm`, requestBody);
       setIsError(false);
-      await getScheduleInfo();
+      await router.replace(router.asPath);
     } catch (error) {
       toast.error(error.message);
       setIsError(true);
@@ -71,12 +50,16 @@ const ScheduleConfirmation = () => {
 
   return (
     <div className={styles.scheduleConfirmationRoot}>
-      {isLoading && (
-        <div className='progress-bar-wrapper'>
-          <CircularProgress className='circular-progress-bar' />
-        </div>
-      )}
-      {!isLoading && schedule == null && (
+      <Head>
+        <title>
+          {
+            schedule.clinicName
+              ? `${schedule.clinicName} - ${textForKey('Confirmation')}`
+              : `EasyPlan.pro - ${textForKey('Confirmation')}`
+          }
+        </title>
+      </Head>
+      {schedule == null && (
         <Typography className={styles['no-data-label']}>
           {textForKey('Schedule info not found')}
         </Typography>
@@ -84,7 +67,7 @@ const ScheduleConfirmation = () => {
       {logoSrc && (
         <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo' />
       )}
-      {schedule != null && !isLoading && !isError && (
+      {schedule != null && !isError && (
         <TableContainer className={styles['table-container']}>
           <Table>
             <TableBody>
@@ -151,7 +134,7 @@ const ScheduleConfirmation = () => {
           </Table>
         </TableContainer>
       )}
-      {schedule != null && !isLoading && (
+      {schedule != null && (
         <LoadingButton
           isLoading={isConfirming}
           disabled={isConfirming || schedule.status !== 'Pending'}
@@ -177,5 +160,20 @@ const ScheduleConfirmation = () => {
     </div>
   );
 };
+
+export const getServerSideProps = async ({ req, res, query }) => {
+  try {
+    const { patient: patientId, schedule: scheduleId } = query;
+    const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId);
+    return {
+      props: { schedule, scheduleId, patientId },
+    }
+  } catch (error) {
+    await handleRequestError(error, req, res);
+    return {
+      props: {}
+    }
+  }
+}
 
 export default ScheduleConfirmation;

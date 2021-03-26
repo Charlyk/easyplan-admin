@@ -3,7 +3,7 @@ import Calendar from "../../../components/calendar";
 import CalendarDayView from "../../../components/calendar/AppointmentsCalendar/CalendarDayView";
 import { Role } from "../../../utils/constants";
 import moment from "moment-timezone";
-import { handleRequestError } from "../../../utils/helperFuncs";
+import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
 
@@ -38,6 +38,13 @@ export const getServerSideProps = async ({ query, req, res }) => {
   const { date: queryDate } = query;
   try {
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/day');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const response = await fetchDaySchedules(query, req.headers);
     const { schedules, dayHours } = response.data;
     return {

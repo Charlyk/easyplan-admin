@@ -3,7 +3,7 @@ import S3 from 'react-aws-s3';
 import uuid from 'react-uuid';
 
 import { imageLambdaUrl } from '../eas.config';
-import { env, S3Config } from './constants';
+import { env, Role, S3Config } from './constants';
 import { textForKey } from './localization';
 import { baseAppUrl, isDev } from "../eas.config";
 import Router from "next/router";
@@ -292,4 +292,65 @@ export function setCookies(res, authToken, clinicId) {
   const tokenCookie = cookie.serialize('auth_token', String(authToken), cookieOpts);
   const clinicCookie = cookie.serialize('clinic_id', String(clinicId) || '-1', cookieOpts);
   res.setHeader('Set-Cookie', [tokenCookie, clinicCookie]);
+}
+
+/**
+ * Check if user should be redirected
+ * @param {{clinics: Array.<{clinicId: number}>}?} user
+ * @param {{id: number}?} clinic
+ * @param {string} path
+ * @return {string|null}
+ */
+export function redirectToUrl(user, clinic, path) {
+  const selectedClinic = user?.clinics.find((item) => item.clinicId === clinic?.id);
+
+  if (selectedClinic == null) {
+    return '/login';
+  }
+
+  const role = selectedClinic.roleInClinic;
+  let shouldRedirect;
+  let redirectPath;
+
+  switch (role) {
+    case Role.reception:
+      shouldRedirect = (
+        path.startsWith('/doctor') ||
+        path.startsWith('/users') ||
+        path.startsWith('/messages') ||
+        path.startsWith('/services') ||
+        path.startsWith('/analytics/general') ||
+        path.startsWith('/analytics/doctors') ||
+        path.startsWith('/analytics/activity-logs')
+      );
+      if (shouldRedirect) redirectPath = '/calendar/day';
+      break;
+    case Role.admin:
+    case Role.manager:
+      shouldRedirect = path.startsWith('/doctor');
+      if (shouldRedirect) redirectPath = '/analytics/general';
+      break
+    case Role.doctor:
+      shouldRedirect = (
+        path.startsWith('/analytics') ||
+        path.startsWith('/services') ||
+        path.startsWith('/users') ||
+        path.startsWith('/calendar') ||
+        path.startsWith('/patients') ||
+        path.startsWith('/messages') ||
+        path.startsWith('/settings')
+      );
+      if (shouldRedirect) redirectPath = '/doctor';
+      break;
+    default:
+      shouldRedirect = true;
+      if (shouldRedirect) redirectPath = '/login';
+      break;
+  }
+  return shouldRedirect ? redirectPath : null
+}
+
+export function redirectUserTo(path, res) {
+  res.writeHead(302, { Location: `${baseAppUrl}${path}` });
+  res.end();
 }

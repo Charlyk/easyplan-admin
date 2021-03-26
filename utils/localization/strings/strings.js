@@ -504,6 +504,7 @@ export default {
     schedules: 'Schedules',
     'domain name': 'Domain name',
     account_created_success: 'Account created successfully. Please add your clinic details.',
+    confirmation: 'Confirmation',
   },
   ro: {
     analytics: 'Analitică',
@@ -1016,6 +1017,7 @@ export default {
     schedules: 'Programări',
     'domain name': 'Numele domenului',
     account_created_success: 'Contul a fost creat cu succes. Vă rugăm să introduceți detaliile clinicii.',
+    confirmation: 'Confirmare',
   },
   ru: {
     analytics: 'Analytics',
@@ -1519,5 +1521,6 @@ export default {
     schedules: 'Schedules',
     'domain name': 'Numele domenului',
     account_created_success: 'Account created successfully. Please add your clinic details.',
+    confirmation: 'Confirmation',
   },
 };

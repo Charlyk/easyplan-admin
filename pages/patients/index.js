@@ -29,7 +29,7 @@ import {
 import { updatePatientsListSelector } from '../../redux/selectors/rootSelector';
 import {
   generateReducerActions,
-  handleRequestError,
+  handleRequestError, redirectToUrl, redirectUserTo,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import PatientRow from '../../components/patients/PatientRow';
@@ -380,6 +380,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
       query.rowsPerPage = 25;
     }
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/patients');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const response = await getPatients(query, req.headers);
     const { data } = response;
     return {

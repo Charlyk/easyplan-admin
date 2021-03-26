@@ -16,7 +16,7 @@ import DoctorsMain from "../../components/doctors/DoctorsMain";
 import { wrapper } from "../../store";
 import axios from "axios";
 import { baseAppUrl } from "../../eas.config";
-import { handleRequestError } from "../../utils/helperFuncs";
+import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { useRouter } from "next/router";
 import { fetchAppData } from "../../middleware/api/initialization";
 
@@ -148,6 +148,13 @@ export const getServerSideProps = async ({ res, req, query }) => {
   }
   try {
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const queryString = new URLSearchParams(query).toString();
     const response = await axios.get(
       `${baseAppUrl}/api/schedules?${queryString}`,

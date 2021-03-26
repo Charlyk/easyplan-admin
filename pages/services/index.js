@@ -30,7 +30,7 @@ import {
 } from '../../redux/actions/serviceDetailsActions';
 import { updateServicesSelector } from '../../redux/selectors/rootSelector';
 import {
-  generateReducerActions, handleRequestError,
+  generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ServiceRow from '../../components/services/ServiceRow';
@@ -498,6 +498,13 @@ const Services = ({ currentUser, currentClinic, categories: clinicCategories, se
 export const getServerSideProps = async ({ req, res, }) => {
   try {
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/services');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const { data } = await fetchAllServices(req.headers);
     return {
       props: {

@@ -7,7 +7,7 @@ import { Form } from 'react-bootstrap';
 import EasyDateRangePicker from '../../../components/common/EasyDateRangePicker';
 import {
   generateReducerActions,
-  handleRequestError,
+  handleRequestError, redirectToUrl, redirectUserTo,
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../components/analytics/StatisticFilter';
@@ -290,6 +290,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
       query.serviceId = -1;
     }
     const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/doctors');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return { props: { ...appData } };
+    }
+
     const { data: statistics } = await getDoctorsStatistics(query, req.headers);
     return {
       props: {
