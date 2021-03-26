@@ -303,6 +303,7 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
           <PatientTreatmentPlan
             currentClinic={currentClinic}
             currentUser={currentUser}
+            scheduleData={initialSchedule}
             scheduleId={scheduleId}
             onFinalize={handleFinalizeTreatment}
           />

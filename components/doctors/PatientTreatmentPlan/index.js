@@ -219,8 +219,7 @@ const reducer = (state, action) => {
 
 const PatientTreatmentPlan = (
   {
-    scheduleId,
-    patientId,
+    scheduleData,
     currentUser,
     currentClinic,
     servicesClasses,
@@ -255,30 +254,25 @@ const PatientTreatmentPlan = (
   );
 
   useEffect(() => {
-    fetchScheduleData();
-  }, [])
+    if (scheduleData == null) return;
+    setupInitialSchedule(scheduleData);
+  }, [scheduleData]);
 
-  const fetchScheduleData = async () => {
-    try {
-      const { data: initialSchedule } = await fetchDoctorScheduleDetails(scheduleId, patientId);
-      // get services provided by current user
-      const userServicesIds = (
-        currentUser.clinics.find(
-          (item) => item.clinicId === currentClinic.id,
-        )?.services || []
-      ).map((it) => it.serviceId);
-      // filter clinic services to get only provided by current user services
-      localDispatch(
-        actions.setInitialData({
-          schedule: initialSchedule,
-          currency: clinicCurrency,
-          services: clinicServices.filter((item) => userServicesIds.includes(item.id))
-        })
-      );
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  const setupInitialSchedule = (initialSchedule) => {
+    const userServicesIds = (
+      currentUser.clinics.find(
+        (item) => item.clinicId === currentClinic.id,
+      )?.services || []
+    ).map((it) => it.serviceId);
+    // filter clinic services to get only provided by current user services
+    localDispatch(
+      actions.setInitialData({
+        schedule: initialSchedule,
+        currency: clinicCurrency,
+        services: clinicServices.filter((item) => userServicesIds.includes(item.id))
+      })
+    );
+  }
 
   /**
    * Handle tooth services list changed
@@ -424,8 +418,6 @@ PatientTreatmentPlan.propTypes = {
   currentUser: PropTypes.object.isRequired,
   currentClinic: PropTypes.object.isRequired,
   servicesClasses: PropTypes.any,
-  scheduleId: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-  patientId: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
   onFinalize: PropTypes.func,
   readOnly: PropTypes.bool
 }
