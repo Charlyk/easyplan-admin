@@ -15,6 +15,7 @@ import styles from '../../../../styles/PatientNotes.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
 import { baseAppUrl } from "../../../../eas.config";
+import { createPatientNote, getPatientNotes } from "../../../../middleware/api/patients";
 
 const initialState = {
   isFetching: false,
@@ -61,7 +62,7 @@ const PatientNotes = ({ patient }) => {
         note: state.newNoteText,
         mode: 'notes',
       };
-      await axios.post(`${baseAppUrl}/api/patients/${patient.id}/notes`, requestBody);
+      await createPatientNote(patient.id, requestBody)
       await fetchNotes();
     } catch (error) {
       toast.error(error.message);
@@ -74,7 +75,7 @@ const PatientNotes = ({ patient }) => {
   const fetchNotes = async () => {
     localDispatch(actions.setIsFetching(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/notes`);
+      const response = await getPatientNotes(patient.id);
       localDispatch(actions.setNotes(response.data || []));
     } catch (error) {
       toast.error(error.message);

@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 import IconMinus from '../../icons/iconMinus';
 import IconPlus from '../../icons/iconPlus';
-import { getClinicExchangeRates, getServiceName } from '../../../utils/helperFuncs';
+import { formattedAmount, getClinicExchangeRates, getServiceName } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/FinalizeTreatmentModal.module.scss';
@@ -260,7 +260,7 @@ const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave
           </div>
         ))}
         <div className={styles['totals-text-wrapper']}>
-          {textForKey('Total')}: {totalPrice} {clinicCurrency}
+          {textForKey('Total')}: {formattedAmount(totalPrice, clinicCurrency)}
         </div>
       </div>
     </EasyPlanModal>

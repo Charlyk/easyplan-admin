@@ -15,8 +15,17 @@ export default authorized(async (req, res) => {
       }
       break;
     }
+    case 'PUT': {
+      const data = await handler(updateGeneralTreatmentPlan, req, res);
+      if (data != null) {
+        res.json(data);
+      } else {
+        res.json(null);
+      }
+      break;
+    }
     default:
-      res.setHeader('Allow', ['POST']);
+      res.setHeader('Allow', ['POST', 'PUT']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
@@ -25,6 +34,20 @@ export default authorized(async (req, res) => {
 function saveGeneralTreatmentPlan(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.post(
+    `${baseApiUrl}/treatment-plans/general`,
+    req.body,
+    {
+      headers: {
+        Authorization: auth_token,
+        'X-EasyPlan-Clinic-Id': clinic_id,
+      }
+    }
+  );
+}
+
+function updateGeneralTreatmentPlan(req) {
+  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  return axios.put(
     `${baseApiUrl}/treatment-plans/general`,
     req.body,
     {

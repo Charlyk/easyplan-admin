@@ -7,6 +7,7 @@ import { Form } from 'react-bootstrap';
 import styles from '../../../styles/ToothView.module.scss';
 
 const ToothView = ({
+  readOnly,
   icon,
   toothId,
   direction,
@@ -57,7 +58,7 @@ const ToothView = ({
   };
 
   const handleOpenServicesPopper = () => {
-    if (services.length === 0) {
+    if (services.length === 0 || readOnly) {
       return;
     }
     setShowServices(true);
@@ -195,6 +196,7 @@ const ToothView = ({
 export default ToothView;
 
 ToothView.propTypes = {
+  readOnly: PropTypes.bool,
   onServicesChange: PropTypes.func,
   services: PropTypes.arrayOf(
     PropTypes.shape({

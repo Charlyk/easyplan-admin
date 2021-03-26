@@ -28,6 +28,8 @@ import OrthodonticPlan from './OrthodonticPlan';
 import PatientXRay from './PatientXRay';
 import { getPatientDetails } from "../../../middleware/api/patients";
 import styles from '../../../styles/PatientDetailsModal.module.scss';
+import PatientTreatmentPlan from "../../doctors/PatientTreatmentPlan";
+import PatientTreatmentPlanContainer from "./PatientTreatmentPlanContainer";
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -36,6 +38,7 @@ const MenuItem = {
   xRay: 'x-ray',
   treatmentPlan: 'treatmentPlan',
   orthodonticPlan: 'orthodonticPlan',
+  generalTreatmentPlan: 'generalTreatmentPlan',
   delete: 'delete',
   debts: 'debts',
   purchases: 'purchases',
@@ -206,6 +209,14 @@ const PatientDetailsModal = (
         return <PatientMessages patient={patient}/>;
       case MenuItem.history:
         return <PatientHistory clinic={currentClinic} patient={patient}/>;
+      case MenuItem.generalTreatmentPlan:
+        return (
+          <PatientTreatmentPlanContainer
+            currentUser={currentUser}
+            currentClinic={currentClinic}
+            patientId={patient.id}
+          />
+        )
     }
   };
 
@@ -303,6 +314,14 @@ const PatientDetailsModal = (
                     className={menuItemClasses(MenuItem.orthodonticPlan)}
                   >
                     {textForKey('Orthodontic plan')}
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    id={MenuItem.generalTreatmentPlan}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.generalTreatmentPlan)}
+                  >
+                    {textForKey('Treatment plan')}
                   </ListGroup.Item>
                   <ListGroup.Item
                     action

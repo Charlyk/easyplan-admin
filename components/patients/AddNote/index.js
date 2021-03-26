@@ -11,6 +11,7 @@ import styles from '../../../styles/AddNote.module.scss';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
+import { createPatientNote, updateVisitNote } from "../../../middleware/api/patients";
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   const dispatch = useDispatch();
@@ -35,11 +36,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
     setIsLoading(true);
     try {
       if (mode === 'visits') {
-        const query = new URLSearchParams({ visitId: visit.id }).toString()
-        await axios.put(
-          `${baseAppUrl}/api/patients/${patientId}/visits?${query}`,
-          { note: noteText }
-        );
+        await updateVisitNote(patientId, visit.id, noteText);
         dispatch(triggerUpdateNotes());
         onClose();
       } else {
@@ -48,7 +45,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
           mode,
           scheduleId,
         };
-        await axios.post(`${baseAppUrl}/api/patients/${patientId}/notes`, requestBody)
+        await createPatientNote(patientId, requestBody);
         dispatch(triggerUpdateNotes());
         onClose();
       }
@@ -63,6 +60,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
     <EasyPlanModal
       onClose={onClose}
       open={open}
+      size='sm'
       className={styles.addNoteRoot}
       title={textForKey('Create note')}
       isPositiveLoading={isLoading}

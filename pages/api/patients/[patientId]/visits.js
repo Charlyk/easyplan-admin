@@ -18,6 +18,7 @@ export default authorized(async (req, res) => {
       if (data != null) {
         res.json(data);
       }
+      break;
     }
     default:
       res.setHeader('Allow', ['GET']);

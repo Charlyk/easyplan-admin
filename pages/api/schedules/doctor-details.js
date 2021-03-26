@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
-import { authorized } from "../../authorized";
+import { baseApiUrl } from "../../../eas.config";
+import { authorized } from "../authorized";
 import cookie from 'cookie';
-import { handler } from "../../handler";
+import { handler } from "../handler";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -23,19 +23,8 @@ export default authorized(async (req, res) => {
 
 async function fetchDoctorScheduleDetails(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { scheduleId } = req.query;
-  return axios.get(`${baseApiUrl}/schedules/${scheduleId}/doctor-details`, {
-    headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-    }
-  });
-}
-
-async function deleteSchedule(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { scheduleId } = req.query;
-  return axios.delete(`${baseApiUrl}/schedules/${scheduleId}/delete`, {
+  const query = new URLSearchParams(req.query).toString()
+  return axios.get(`${baseApiUrl}/schedules/doctor-details?${query}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
