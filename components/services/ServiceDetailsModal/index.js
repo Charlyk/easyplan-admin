@@ -182,26 +182,28 @@ const ServiceDetailsModal = ({ currentClinic }) => {
       }
     >
       <div className={styles['service-details-modal']}>
-        <div className={styles['service-details-modal__data']}>
-          <ServiceInformation
-            currentClinic={currentClinic}
-            clinicCurrency={clinicCurrency}
-            onChange={handleInfoChanged}
-            data={serviceInfo}
-            onToggle={handleInfoToggle}
-            isExpanded={expandedMenu === 'info'}
-            showStep={service == null}
-          />
+        {open && (
+          <div className={styles['service-details-modal__data']}>
+            <ServiceInformation
+              currentClinic={currentClinic}
+              clinicCurrency={clinicCurrency}
+              onChange={handleInfoChanged}
+              data={serviceInfo}
+              onToggle={handleInfoToggle}
+              isExpanded={expandedMenu === 'info'}
+              showStep={service == null}
+            />
 
-          <ServiceDoctors
-            onDoctorChange={handleDoctorChange}
-            serviceId={service?.id}
-            doctors={serviceInfo.doctors}
-            onToggle={handleDoctorsToggle}
-            isExpanded={expandedMenu === 'doctors'}
-            showStep={!service}
-          />
-        </div>
+            <ServiceDoctors
+              onDoctorChange={handleDoctorChange}
+              serviceId={service?.id}
+              doctors={serviceInfo.doctors}
+              onToggle={handleDoctorsToggle}
+              isExpanded={expandedMenu === 'doctors'}
+              showStep={!service}
+            />
+          </div>
+        )}
 
         <div className={styles['service-details-modal__footer']}>
           <Button

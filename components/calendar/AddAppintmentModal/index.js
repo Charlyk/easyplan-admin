@@ -29,6 +29,7 @@ import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddAppointment.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
+import { getAvailableHours, getScheduleDetails } from "../../../middleware/api/schedules";
 
 /**
  * Filter available time based on start time and service duration
@@ -429,7 +430,7 @@ const AddAppointmentModal = ({
       return;
     }
     try {
-      const response = await axios.get(`${baseAppUrl}/api/schedules/${schedule.id}`)
+      const response = await getScheduleDetails(schedule.id);
       const { data: scheduleDetails } = response;
       localDispatch(
         actions.setSchedule({
@@ -456,8 +457,7 @@ const AddAppointmentModal = ({
       if (schedule != null) {
         query.scheduleId = schedule.id;
       }
-      const queryString = new URLSearchParams(query).toString();
-      const response = await axios.get(`${baseAppUrl}/api/schedules/available-time?${queryString}`);
+      const response = await getAvailableHours(query);
       const { data: availableTime } = response;
       localDispatch(actions.setAvailableTime(availableTime));
       updateEndTimeBasedOnService(availableTime);

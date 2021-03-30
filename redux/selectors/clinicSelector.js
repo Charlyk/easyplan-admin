@@ -15,7 +15,7 @@ export const availableCurrenciesSelector = (clinic) =>
   clinic?.availableCurrencies != null
     ? [
       ...clinic.availableCurrencies.map((item) => item.currency),
-      clinic.currency,
+      // clinic.currency,
     ]
     : [];
 

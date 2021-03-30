@@ -8,7 +8,6 @@ import {
   ToggleButton,
   InputGroup,
 } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 
 import IconMinus from '../../../icons/iconMinus';
 import IconPlusBig from '../../../icons/iconPlusBig';
@@ -116,8 +115,8 @@ const ServiceInformation = ({
                 onChange={handleFormChange}
                 value={data.currency}
               >
-                {currencies.map((item) => (
-                  <option key={item} value={item}>
+                {currencies.map((item, index) => (
+                  <option key={`${item}-${index}`} value={item}>
                     {item}
                   </option>
                 ))}

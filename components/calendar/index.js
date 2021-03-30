@@ -218,6 +218,7 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
 
   const handleViewDateChange = (newDate, moveToDay) => {
     const stringDate = moment(newDate).format('YYYY-MM-DD');
+    console.log(stringDate);
     router.replace({
       pathname: `/calendar/${moveToDay ? 'day' : viewMode}`,
       query: { date: stringDate },

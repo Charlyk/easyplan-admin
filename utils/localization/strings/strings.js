@@ -505,6 +505,7 @@ export default {
     'domain name': 'Domain name',
     account_created_success: 'Account created successfully. Please add your clinic details.',
     confirmation: 'Confirmation',
+    rescheduled: 'Rescheduled',
   },
   ro: {
     analytics: 'Analitică',
@@ -1018,6 +1019,7 @@ export default {
     'domain name': 'Numele domenului',
     account_created_success: 'Contul a fost creat cu succes. Vă rugăm să introduceți detaliile clinicii.',
     confirmation: 'Confirmare',
+    rescheduled: 'Reprogramat',
   },
   ru: {
     analytics: 'Analytics',
@@ -1522,5 +1524,6 @@ export default {
     'domain name': 'Numele domenului',
     account_created_success: 'Account created successfully. Please add your clinic details.',
     confirmation: 'Confirmation',
+    rescheduled: 'Rescheduled',
   },
 };

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
 import {
-  Box, CircularProgress,
+  Box,
+  CircularProgress,
   ClickAwayListener,
   Fade,
   Paper,
@@ -35,36 +36,42 @@ import { ManualStatuses, Statuses } from '../../../utils/constants';
 import { formattedAmount } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import SingleInputModal from '../../common/SingleInputModal';
-import axios from "axios";
-import { baseApiUrl, baseAppUrl } from "../../../eas.config";
+import { baseApiUrl } from "../../../eas.config";
+import { getAvailableHours, getScheduleDetails, updateScheduleStatus } from "../../../middleware/api/schedules";
+import { reducer, initialState, actions } from "./AppointmentDetails.reducer";
+import EasyDatePickerModal from "../../common/EasyDatePickerModal";
 
-const AppointmentDetails = ({
-  schedule,
-  onClose,
-  onDelete,
-  onEdit,
-  onPayDebt,
-}) => {
+const AppointmentDetails = (
+  {
+    schedule,
+    onClose,
+    onDelete,
+    onEdit,
+    onPayDebt,
+  }
+) => {
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
+  const [{
+    details,
+    isLoading,
+    showStatuses,
+    isCanceledReasonRequired,
+    scheduleStatus,
+    isNewDateRequired
+  }, localDispatch] = useReducer(reducer, initialState);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const updateInvoice = useSelector(updateInvoiceSelector);
-  const [details, setDetails] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showStatuses, setShowStatuses] = useState(false);
-  const [isCanceledReasonRequired, setIsCanceledReasonRequired] = useState(
-    false,
-  );
-  const [scheduleStatus, setScheduleStatus] = useState(
-    Statuses.find((item) => item.id === schedule.scheduleStatus),
-  );
 
   useEffect(() => {
+    if (schedule == null) {
+      return;
+    }
     fetchAppointmentDetails(schedule);
-    setScheduleStatus(
+    localDispatch(actions.setScheduleStatus(
       Statuses.find((item) => item.id === schedule.scheduleStatus),
-    );
+    ))
   }, [schedule]);
 
   useEffect(() => {
@@ -91,31 +98,43 @@ const AppointmentDetails = ({
       }
       return updateInvoice;
     });
-    setDetails({
+    localDispatch(actions.setDetails({
       ...details,
-      patient: { ...details.patient, debts: newDebts },
-    });
+      patient: {
+        ...details.patient,
+        debts: newDebts
+      },
+    }));
   }, [updateInvoice]);
 
   const fetchAppointmentDetails = async (schedule) => {
     if (schedule == null) {
       return;
     }
-    setIsLoading(true);
+    localDispatch(actions.setIsLoading(true));
     try {
-      const queryString = new URLSearchParams({ scheduleId: schedule.id }).toString();
-      const response = await axios.get(`${baseAppUrl}/api/schedules/details?${queryString}`);
+      const response = await getScheduleDetails(schedule.id);
       const { data: details } = response;
-      setDetails(details);
-      setScheduleStatus(
+      localDispatch(actions.setDetails(details));
+      localDispatch(actions.setScheduleStatus(
         Statuses.find((item) => item.id === details.scheduleStatus),
-      );
+      ))
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setIsLoading(false);
+      localDispatch(actions.setIsLoading(false));
     }
   };
+
+  const fetchHours = async () => {
+    const query = {
+      doctorId: details.doctor.id,
+      serviceId: details.service.id,
+      date: moment(details.startTime).format('YYYY-MM-DD'),
+      scheduleId: schedule.id,
+    }
+    return getAvailableHours(query);
+  }
 
   const handleEditSchedule = () => {
     onEdit(schedule);
@@ -130,27 +149,24 @@ const AppointmentDetails = ({
   };
 
   const openStatusesList = () => {
-    setShowStatuses(true);
+    localDispatch(actions.setShowStatuses(true));
   };
 
   const closeStatusesList = () => {
-    setShowStatuses(false);
+    localDispatch(actions.setShowStatuses(false));
   };
 
-  const changeScheduleStatus = async (status, reason = null) => {
+  const changeScheduleStatus = async (status, canceledReason = null, newDate = null) => {
     try {
-      setScheduleStatus(status);
+      localDispatch(actions.setScheduleStatus(status));
       closeStatusesList();
-      const query = {
-        scheduleId: schedule.id,
-        status: status.id,
-      };
-      const queryString = new URLSearchParams(query).toString();
-      await axios.put(
-        `${baseAppUrl}/api/schedules/status?${queryString}`,
-        { canceledReason: reason }
-        );
-      setIsCanceledReasonRequired(false);
+      await updateScheduleStatus(
+        schedule.id,
+        status.id,
+        { canceledReason, newDate }
+      );
+      localDispatch(actions.setIsCanceledReasonRequired(false));
+      localDispatch(actions.setIsNewDateRequired(false));
       dispatch(toggleAppointmentsUpdate());
     } catch (error) {
       toast.error(error.message);
@@ -159,7 +175,12 @@ const AppointmentDetails = ({
 
   const handleStatusSelected = async (status) => {
     if (status.id === 'Canceled') {
-      setIsCanceledReasonRequired(true);
+      localDispatch(actions.setIsCanceledReasonRequired(true));
+      return;
+    }
+
+    if (status.id === 'Rescheduled') {
+      localDispatch(actions.setIsNewDateRequired(true));
       return;
     }
     await changeScheduleStatus(status);
@@ -170,9 +191,18 @@ const AppointmentDetails = ({
     await changeScheduleStatus(status, canceledReason);
   };
 
+  const handleRescheduleDateSelected = async (newDate) => {
+    const status = Statuses.find((item) => item.id === 'Rescheduled');
+    await changeScheduleStatus(status, null, newDate);
+  }
+
   const handleCloseCanceledReasonModal = () => {
-    setIsCanceledReasonRequired(false);
+    localDispatch(actions.setIsCanceledReasonRequired(false));
   };
+
+  const handleCloseDateModal = () => {
+    localDispatch(actions.setIsNewDateRequired(false));
+  }
 
   const handlePatientClick = () => {
     dispatch(
@@ -188,6 +218,7 @@ const AppointmentDetails = ({
     schedule.scheduleStatus === 'CompletedNotPaid' ||
     schedule.scheduleStatus === 'CompletedPaid' ||
     schedule.scheduleStatus === 'PartialPaid' ||
+    schedule.scheduleStatus === 'Rescheduled' ||
     schedule.scheduleStatus === 'CompletedFree';
 
   const patientName = details?.patient.fullName || schedule.patient.fullName;
@@ -222,7 +253,7 @@ const AppointmentDetails = ({
                     </div>
                     {scheduleStatus.id === status.id && (
                       <div className={styles['checkmark-wrapper']}>
-                        <DoneIcon />
+                        <DoneIcon/>
                       </div>
                     )}
                   </div>
@@ -239,7 +270,7 @@ const AppointmentDetails = ({
     <div
       className={clsx(
         styles['appointment-details-root'],
-        schedule.isUrgent && styles.urgent,
+        { [styles.urgent]: schedule.isUrgent },
       )}
     >
       <SingleInputModal
@@ -249,6 +280,17 @@ const AppointmentDetails = ({
         title={`${textForKey('Why schedule is canceled')}?`}
         label={textForKey('Enter reason below')}
       />
+      {isNewDateRequired && (
+        <EasyDatePickerModal
+          open
+          isHourRequired
+          fetchHours={fetchHours}
+          onClose={handleCloseDateModal}
+          onSelected={handleRescheduleDateSelected}
+          minDate={new Date()}
+          selectedDate={moment(details.startTime).toDate()}
+        />
+      )}
       {statusesList}
       <div className={styles['header-wrapper']}>
         <div
@@ -257,7 +299,7 @@ const AppointmentDetails = ({
           onClick={onClose}
           className={styles['close-button']}
         >
-          <IconClose />
+          <IconClose/>
         </div>
         <span className={styles['schedule-title']}>
           {patientName}:{' '}
@@ -267,7 +309,7 @@ const AppointmentDetails = ({
       <div className={styles['content-wrapper']}>
         {isLoading && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress classes={'circular-progress-bar'}/>
+            <CircularProgress className='circular-progress-bar'/>
           </div>
         )}
         {!isLoading && details != null && (
@@ -285,122 +327,122 @@ const AppointmentDetails = ({
               }}
             >
               {scheduleStatus.name}
-              <IconArrowDown fill={scheduleStatus.color} />
+              <IconArrowDown fill={scheduleStatus.color}/>
             </div>
             <div className={styles['schedule-info-wrapper']}>
               <table>
                 <tbody>
-                  <tr>
-                    <td colSpan={2}>
-                      <div className={styles['group-title']}>{textForKey('Info')}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: '35%',
-                        paddingRight: '1rem',
-                      }}
-                    >
-                      {textForKey('Doctor')}:
-                    </td>
-                    <td>{details.doctor.fullName}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: '1rem' }}>
-                      {textForKey('Date')}:
-                    </td>
-                    <td>
-                      {upperFirst(
-                        moment(details.startTime).format('dddd, DD MMM YYYY'),
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: '1rem' }}>
-                      {textForKey('Hour')}:
-                    </td>
-                    <td>
-                      {moment(details.startTime).format('HH:mm')} -{' '}
-                      {moment(details.endTime).format('HH:mm')}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: '1rem' }}>
-                      {upperFirst(textForKey('Created by'))}:
-                    </td>
-                    <td>{details.createdBy.fullName}</td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: '1rem' }}>
-                      {upperFirst(textForKey('Created at'))}:
-                    </td>
-                    <td>
-                      {moment(details.created).format('DD MMM YYYY, HH:mm')}
-                    </td>
-                  </tr>
-                  {scheduleStatus.id === 'Canceled' &&
-                    details.canceledReason != null && (
-                      <tr>
-                        <td style={{ paddingRight: '1rem' }}>
-                          {upperFirst(textForKey('Canceled reason'))}:
-                        </td>
-                        <td>{details.canceledReason}</td>
-                      </tr>
+                <tr>
+                  <td colSpan={2}>
+                    <div className={styles['group-title']}>{textForKey('Info')}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style={{
+                      width: '35%',
+                      paddingRight: '1rem',
+                    }}
+                  >
+                    {textForKey('Doctor')}:
+                  </td>
+                  <td>{details.doctor.fullName}</td>
+                </tr>
+                <tr>
+                  <td style={{ paddingRight: '1rem' }}>
+                    {textForKey('Date')}:
+                  </td>
+                  <td>
+                    {upperFirst(
+                      moment(details.startTime).format('dddd, DD MMM YYYY'),
                     )}
-                  {details.noteText?.length > 0 && (
-                    <tr>
-                      <td valign='top' style={{ paddingRight: '1rem' }}>
-                        {textForKey('Note')}:
-                      </td>
-                      <td valign='top'>{details.noteText}</td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td colSpan={2}>
-                      <div className={styles['group-title']}>{textForKey('Patient')}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: '1rem' }}>
-                      {textForKey('Name')}:
-                    </td>
-                    <td>
-                      <div
-                        role='button'
-                        tabIndex={0}
-                        onClick={handlePatientClick}
-                        className={styles['patient-name']}
-                      >
-                        {details.patient.fullName}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ paddingRight: '1rem' }}>
-                      {textForKey('Phone')}:
-                    </td>
-                    <td>
-                      <a
-                        href={`tel:${details.patient.phoneNumber.replace(
-                          '+',
-                          '',
-                        )}`}
-                      >
-                        {details.patient.phoneNumber}
-                      </a>
-                    </td>
-                  </tr>
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ paddingRight: '1rem' }}>
+                    {textForKey('Hour')}:
+                  </td>
+                  <td>
+                    {moment(details.startTime).format('HH:mm')} -{' '}
+                    {moment(details.endTime).format('HH:mm')}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ paddingRight: '1rem' }}>
+                    {upperFirst(textForKey('Created by'))}:
+                  </td>
+                  <td>{details.createdBy.fullName}</td>
+                </tr>
+                <tr>
+                  <td style={{ paddingRight: '1rem' }}>
+                    {upperFirst(textForKey('Created at'))}:
+                  </td>
+                  <td>
+                    {moment(details.created).format('DD MMM YYYY, HH:mm')}
+                  </td>
+                </tr>
+                {scheduleStatus.id === 'Canceled' &&
+                details.canceledReason != null && (
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
-                      {textForKey('Email')}:
+                      {upperFirst(textForKey('Canceled reason'))}:
                     </td>
-                    <td>
-                      <a href={`mailto:${details.patient.email}`}>
-                        {details.patient.email}
-                      </a>
-                    </td>
+                    <td>{details.canceledReason}</td>
                   </tr>
+                )}
+                {details.noteText?.length > 0 && (
+                  <tr>
+                    <td valign='top' style={{ paddingRight: '1rem' }}>
+                      {textForKey('Note')}:
+                    </td>
+                    <td valign='top'>{details.noteText}</td>
+                  </tr>
+                )}
+                <tr>
+                  <td colSpan={2}>
+                    <div className={styles['group-title']}>{textForKey('Patient')}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ paddingRight: '1rem' }}>
+                    {textForKey('Name')}:
+                  </td>
+                  <td>
+                    <div
+                      role='button'
+                      tabIndex={0}
+                      onClick={handlePatientClick}
+                      className={styles['patient-name']}
+                    >
+                      {details.patient.fullName}
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ paddingRight: '1rem' }}>
+                    {textForKey('Phone')}:
+                  </td>
+                  <td>
+                    <a
+                      href={`tel:${details.patient.phoneNumber.replace(
+                        '+',
+                        '',
+                      )}`}
+                    >
+                      {details.patient.phoneNumber}
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ paddingRight: '1rem' }}>
+                    {textForKey('Email')}:
+                  </td>
+                  <td>
+                    <a href={`mailto:${details.patient.email}`}>
+                      {details.patient.email}
+                    </a>
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -408,51 +450,51 @@ const AppointmentDetails = ({
               <div className={styles['group-title']}>{textForKey('Debts')}</div>
               <table>
                 <thead>
-                  <tr>
-                    <td align='left'>{textForKey('Service')}</td>
-                    <td align='left'>{textForKey('Clinic')}</td>
-                    <td align='right'>{textForKey('Remained')}</td>
-                    <td align='right'>{textForKey('Actions')}</td>
-                  </tr>
+                <tr>
+                  <td align='left'>{textForKey('Service')}</td>
+                  <td align='left'>{textForKey('Clinic')}</td>
+                  <td align='right'>{textForKey('Remained')}</td>
+                  <td align='right'>{textForKey('Actions')}</td>
+                </tr>
                 </thead>
                 <tbody>
-                  {details.patient.debts.map((item) => (
-                    <tr key={item.id}>
-                      <td align='left' className={styles['services-cell']}>
-                        <Typography noWrap classes={{ root: styles['services-label'] }}>
-                          {item.services.join(', ')}
-                        </Typography>
-                      </td>
-                      <td align='left' className={styles['totals-cell']}>
-                        <Typography
-                          noWrap
-                          classes={{ root: styles['clinic-name-label'] }}
-                        >
-                          {item.clinicName}
-                        </Typography>
-                      </td>
-                      <td align='right' className={styles['remained-cell']}>
-                        {formattedAmount(item.remainedAmount, item.currency)}
-                      </td>
-                      <td align='right' className={styles['actions-cell']}>
-                        <Button
-                          variant='outline-primary'
-                          onClick={() => handlePayDebt(item)}
-                        >
-                          {textForKey('Pay')}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                  {details.patient.debts.length === 0 && (
-                    <tr>
-                      <td colSpan={4} align='center'>
-                        <div className={styles['no-debts-label']}>
-                          {textForKey('No debts found')}
-                        </div>
-                      </td>
-                    </tr>
-                  )}
+                {details.patient.debts.map((item) => (
+                  <tr key={item.id}>
+                    <td align='left' className={styles['services-cell']}>
+                      <Typography noWrap classes={{ root: styles['services-label'] }}>
+                        {item.services.join(', ')}
+                      </Typography>
+                    </td>
+                    <td align='left' className={styles['totals-cell']}>
+                      <Typography
+                        noWrap
+                        classes={{ root: styles['clinic-name-label'] }}
+                      >
+                        {item.clinicName}
+                      </Typography>
+                    </td>
+                    <td align='right' className={styles['remained-cell']}>
+                      {formattedAmount(item.remainedAmount, item.currency)}
+                    </td>
+                    <td align='right' className={styles['actions-cell']}>
+                      <Button
+                        variant='outline-primary'
+                        onClick={() => handlePayDebt(item)}
+                      >
+                        {textForKey('Pay')}
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+                {details.patient.debts.length === 0 && (
+                  <tr>
+                    <td colSpan={4} align='center'>
+                      <div className={styles['no-debts-label']}>
+                        {textForKey('No debts found')}
+                      </div>
+                    </td>
+                  </tr>
+                )}
                 </tbody>
               </table>
             </div>
@@ -463,7 +505,7 @@ const AppointmentDetails = ({
         <Box width='100%' display='flex'>
           <Button className='cancel-button' onClick={onClose}>
             {textForKey('Close')}
-            <IconClose />
+            <IconClose/>
           </Button>
           <Button
             className='delete-button'
@@ -471,11 +513,11 @@ const AppointmentDetails = ({
             onClick={handleDeleteSchedule}
           >
             {textForKey('Delete')}
-            <IconTrash />
+            <IconTrash/>
           </Button>
           <Button className='positive-button' onClick={handleEditSchedule}>
             {textForKey('Edit')}
-            <IconEdit />
+            <IconEdit/>
           </Button>
         </Box>
         {(scheduleStatus.id === 'CompletedPaid' ||

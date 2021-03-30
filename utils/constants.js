@@ -160,7 +160,7 @@ export const Statuses = [
   {
     id: 'Confirmed',
     name: textForKey('Confirmed'),
-    color: '#3A83DC',
+    color: '#3a83dc',
     icon: <IconCheckMark />,
     statusIcon: null,
     manual: true,
@@ -169,7 +169,7 @@ export const Statuses = [
   {
     id: 'PendingPayment',
     name: textForKey('Pending payment'),
-    color: '#ffb902',
+    color: '#ffd180',
     icon: <IconAppointmentCalendar />,
     statusIcon: null,
     manual: false,
@@ -178,7 +178,7 @@ export const Statuses = [
   {
     id: 'WaitingForPatient',
     name: textForKey('Waiting for patient'),
-    color: '#ffb902',
+    color: '#83a8d7',
     icon: <IconClock />,
     statusIcon: <IconClock />,
     manual: false,
@@ -196,7 +196,7 @@ export const Statuses = [
   {
     id: 'Late',
     name: textForKey('Late'),
-    color: '#FDC534',
+    color: '#ff9924',
     icon: <IconClock />,
     statusIcon: null,
     manual: true,
@@ -205,7 +205,7 @@ export const Statuses = [
   {
     id: 'DidNotCome',
     name: textForKey("Didn't show up"),
-    color: '#F44081',
+    color: '#ff0000',
     icon: <IconXPerson />,
     statusIcon: <IconClear />,
     manual: true,
@@ -214,7 +214,7 @@ export const Statuses = [
   {
     id: 'Canceled',
     name: textForKey('Canceled'),
-    color: '#F44081',
+    color: '#ff9191',
     icon: <IconXPerson />,
     statusIcon: <IconClear />,
     manual: true,
@@ -224,7 +224,7 @@ export const Statuses = [
     id: 'CompletedNotPaid',
     name: textForKey('Completed not paid'),
     color: '#7DD7C8',
-    icon: <IconSuccess fill='#3A83DC' />,
+    icon: <IconSuccess fill='#7DD7C8' />,
     statusIcon: <IconMoney />,
     manual: false,
     isSchedule: true,
@@ -232,7 +232,7 @@ export const Statuses = [
   {
     id: 'CompletedPaid',
     name: textForKey('Paid'),
-    color: '#00E987',
+    color: '#13d000',
     icon: <IconCreditCard />,
     statusIcon: <DoneAllIcon />,
     manual: false,
@@ -250,8 +250,8 @@ export const Statuses = [
   {
     id: 'PartialPaid',
     name: textForKey('Partial paid'),
-    color: '#9cfacc',
-    icon: <IconSuccess fill='#3A83DC' />,
+    color: '#91cf8a',
+    icon: <IconSuccess fill='#91cf8a' />,
     statusIcon: <DoneAllIcon />,
     manual: false,
     isSchedule: true,
@@ -259,12 +259,21 @@ export const Statuses = [
   {
     id: 'Paid',
     name: textForKey('Paid'),
-    color: '#00E987',
+    color: '#8ce583',
     icon: <IconCreditCard />,
     statusIcon: null,
     manual: false,
     isSchedule: false,
   },
+  {
+    id: 'Rescheduled',
+    name: textForKey('Rescheduled'),
+    color: '#90a4ff',
+    icon: <IconClock />,
+    statusIcon: null,
+    manual: true,
+    isSchedule: true,
+  }
 ];
 
 export const ScheduleStatuses = Statuses.filter((item) => item.isSchedule);

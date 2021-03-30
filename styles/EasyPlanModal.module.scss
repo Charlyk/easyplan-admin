@@ -2,6 +2,10 @@
   max-height: 100%;
   overflow: hidden;
 
+  :global(.modal-sm) {
+    max-width: 337px;
+  }
+
   :global(.modal-content) {
     :global(.modal-header) {
       padding: 1rem;
@@ -49,6 +53,21 @@
 
     :global(.modal-body) {
       padding: 1rem;
+
+      :global(.form-label) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+      }
+
+      :global(.custom-select) {
+        height: 2.1rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 13px;
+      }
     }
 
     :global(.modal-footer) {
