@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -26,7 +26,7 @@ export default authorized(async (req, res) => {
 async function updateOrthodonticPlan(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.post(
-    `${baseApiUrl}/treatment-plans/orthodontic`,
+    `${updatedServerUrl(req)}/treatment-plans/orthodontic`,
     req.body,
     {
       headers: {
@@ -41,7 +41,7 @@ function fetchPatientOrthodonticPlan(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query).toString()
   return axios.get(
-    `${baseApiUrl}/treatment-plans/orthodontic?${queryString}`,
+    `${updatedServerUrl(req)}/treatment-plans/orthodontic?${queryString}`,
     {
       headers: {
         Authorization: auth_token,

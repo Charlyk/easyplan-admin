@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -24,7 +24,7 @@ export default authorized(async (req, res) => {
 async function fetchAvailableTime(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query).toString()
-  return axios.get(`${baseApiUrl}/schedules/available-time?${queryString}`, {
+  return axios.get(`${updatedServerUrl(req)}/schedules/available-time?${queryString}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

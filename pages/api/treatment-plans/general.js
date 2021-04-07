@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
+import { updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -34,7 +34,7 @@ export default authorized(async (req, res) => {
 function saveGeneralTreatmentPlan(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.post(
-    `${baseApiUrl}/treatment-plans/general`,
+    `${updatedServerUrl(req)}/treatment-plans/general`,
     req.body,
     {
       headers: {
@@ -48,7 +48,7 @@ function saveGeneralTreatmentPlan(req) {
 function updateGeneralTreatmentPlan(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.put(
-    `${baseApiUrl}/treatment-plans/general`,
+    `${updatedServerUrl(req)}/treatment-plans/general`,
     req.body,
     {
       headers: {

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default async (req, res) => {
   switch (req.method) {
@@ -19,5 +19,5 @@ export default async (req, res) => {
 };
 
 function fetchAvailableTimeZones(req) {
-  return axios.get(`${baseApiUrl}/clinics/available-timezones`);
+  return axios.get(`${updatedServerUrl(req)}/clinics/available-timezones`);
 }

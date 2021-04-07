@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
+import { updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -35,7 +35,7 @@ export default authorized(async (req, res) => {
 
 function fetchCategories(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${baseApiUrl}/categories`, {
+  return axios.get(`${updatedServerUrl(req)}/categories`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
@@ -45,7 +45,7 @@ function fetchCategories(req) {
 
 function fetchServices(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${baseApiUrl}/services`, {
+  return axios.get(`${updatedServerUrl(req)}/services`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
@@ -56,7 +56,7 @@ function fetchServices(req) {
 function createService(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
-  return axios.post(`${baseApiUrl}/services/v1/create`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/services/v1/create`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

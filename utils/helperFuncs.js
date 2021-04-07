@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 import S3 from 'react-aws-s3';
 import uuid from 'react-uuid';
 
-import { imageLambdaUrl } from '../eas.config';
+import { baseApiUrl, imageLambdaUrl } from '../eas.config';
 import { env, Role, S3Config } from './constants';
 import { textForKey } from './localization';
 import { baseAppUrl, isDev } from "../eas.config";
@@ -353,4 +353,13 @@ export function redirectToUrl(user, clinic, path) {
 export function redirectUserTo(path, res) {
   res.writeHead(302, { Location: `${baseAppUrl}${path}` });
   res.end();
+}
+
+export function updatedServerUrl(req) {
+  const { host } = req.headers;
+  const [clinicDomain] = host.split('.');
+  if ([null, 'app', 'dev', 'localhost', 'api'].includes(clinicDomain)) {
+    return baseApiUrl.replace('{clinicDomain}', '');
+  }
+  return baseApiUrl.replace('{clinicDomain}', `${clinicDomain}.`);
 }

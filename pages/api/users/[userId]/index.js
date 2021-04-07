@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -38,7 +38,7 @@ export default authorized(async (req, res) => {
 async function deleteUser(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { userId } = req.query;
-  return axios.delete(`${baseApiUrl}/users/${userId}`, {
+  return axios.delete(`${updatedServerUrl(req)}/users/${userId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
@@ -50,7 +50,7 @@ async function updateUser(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { userId } = req.query;
   const requestBody = req.body
-  return axios.put(`${baseApiUrl}/users/${userId}`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/users/${userId}`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
@@ -61,7 +61,7 @@ async function updateUser(req) {
 async function fetchUserDetails(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { userId } = req.query;
-  return axios.get(`${baseApiUrl}/users/details/${userId}`, {
+  return axios.get(`${updatedServerUrl(req)}/users/details/${userId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

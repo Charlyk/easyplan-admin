@@ -1,7 +1,6 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { handler } from "../../handler";
-import { setCookies } from "../../../../utils/helperFuncs";
+import { setCookies, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default async (req, res) => {
   switch (req.method) {
@@ -26,5 +25,5 @@ export default async (req, res) => {
 };
 
 function fetchUsers(req) {
-  return axios.put(`${baseApiUrl}/users/accept-invitation`, req.body);
+  return axios.put(`${updatedServerUrl(req)}/users/accept-invitation`, req.body);
 }

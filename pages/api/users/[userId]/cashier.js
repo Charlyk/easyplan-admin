@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -23,7 +23,7 @@ export default authorized(async (req, res) => {
 function setUserIsCashier(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { userId } = req.query;
-  return axios.put(`${baseApiUrl}/users/${userId}/cashier`, req.body, {
+  return axios.put(`${updatedServerUrl(req)}/users/${userId}/cashier`, req.body, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

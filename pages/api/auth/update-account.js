@@ -1,7 +1,7 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
 import { handler } from "../handler";
 import cookie from "cookie";
+import { updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default async function resetPassword(req, res) {
   switch (req.method) {
@@ -24,7 +24,7 @@ export default async function resetPassword(req, res) {
 function updateUserAccount(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
-  return axios.put(`${baseApiUrl}/authentication/v1/update-account`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/authentication/v1/update-account`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

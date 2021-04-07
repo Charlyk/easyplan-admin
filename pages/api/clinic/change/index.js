@@ -1,8 +1,9 @@
 import axios from "axios";
-import { baseApiUrl, isDev } from "../../../../eas.config";
+import { isDev } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -37,7 +38,7 @@ function setCookies(res, clinicId) {
 function changeSelectedClinic(req) {
   const { auth_token } = cookie.parse(req.headers.cookie);
   const { clinicId } = req.query;
-  return axios.get(`${baseApiUrl}/authentication/v1/change-clinic/${clinicId}`, {
+  return axios.get(`${updatedServerUrl(req)}/authentication/v1/change-clinic/${clinicId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': -1,

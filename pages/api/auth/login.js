@@ -1,6 +1,6 @@
-import { baseApiUrl } from "../../../eas.config";
 import axios from 'axios';
 import { handler } from "../handler";
+import { updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default async function login(req, res) {
   const data = await handler(authenticateWithBackend, req, res);
@@ -17,7 +17,7 @@ export default async function login(req, res) {
  */
 function authenticateWithBackend(req) {
   return axios.post(
-    `${baseApiUrl}/authentication/v1/login`,
+    `${updatedServerUrl(req)}/authentication/v1/login`,
     req.body,
     { headers: { 'X-EasyPlan-Clinic-Id': -1 } }
   );

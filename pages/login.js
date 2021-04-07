@@ -1,15 +1,14 @@
 import React, { useReducer } from 'react';
 
 import LoginForm from '../components/login/LoginForm';
-import RegisterForm from '../components/login/registration/RegisterForm';
 import ResetPassword from '../components/login/ResetPassword';
 import { useRouter } from 'next/router';
 import styles from '../styles/Login.module.scss';
-import { generateReducerActions, uploadFileToAWS } from "../utils/helperFuncs";
+import { generateReducerActions } from "../utils/helperFuncs";
 import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
 import { Role } from "../utils/constants";
-import { loginUser, registerUser, resetUserPassword } from "../middleware/api/auth";
+import { loginUser, resetUserPassword } from "../middleware/api/auth";
 import RegistrationWrapper from "../components/login/registration";
 
 const FormType = {
@@ -92,7 +91,7 @@ const Login = () => {
         console.error(error);
       }
     } else {
-      await router.replace('/login');
+      await Router.replace('/login');
     }
   }
 
@@ -127,6 +126,7 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
+      localDispatch(actions.setIsLoading(false));
     }
   }
 
@@ -163,5 +163,11 @@ const Login = () => {
     </div>
   );
 };
+
+export const getServerSideProps = async () => {
+  return {
+    props: {}
+  }
+}
 
 export default Login;

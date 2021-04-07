@@ -3,6 +3,7 @@ import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -30,7 +31,7 @@ export default authorized(async (req, res) => {
 function fetchPatientMessages(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
-  return axios.get(`${baseApiUrl}/sms/patients/${patientId}`, {
+  return axios.get(`${updatedServerUrl(req)}/sms/patients/${patientId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
@@ -42,7 +43,7 @@ function sendMessageToPatient(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
   const requestBody = req.body;
-  return axios.post(`${baseApiUrl}/sms/patients/${patientId}`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/sms/patients/${patientId}`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

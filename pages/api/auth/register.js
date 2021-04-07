@@ -1,6 +1,6 @@
-import { baseApiUrl } from "../../../eas.config";
 import axios from "axios";
 import { handler } from "../handler";
+import { updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default async function register(req, res) {
   const data = await handler(createNewAccount, req, res);
@@ -17,7 +17,7 @@ export default async function register(req, res) {
  */
 function createNewAccount(req) {
   return axios.post(
-    `${baseApiUrl}/authentication/v1/register`,
+    `${updatedServerUrl(req)}/authentication/v1/register`,
     req.body,
     { headers: { 'X-EasyPlan-Clinic-Id': -1 } }
   );

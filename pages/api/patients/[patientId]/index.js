@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -30,7 +30,7 @@ export default authorized(async (req, res) => {
 function fetchPatientDetails(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
-  return axios.get(`${baseApiUrl}/patients/${patientId}`, {
+  return axios.get(`${updatedServerUrl(req)}/patients/${patientId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
@@ -42,7 +42,7 @@ function updatePatientData(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
   const requestBody = req.body
-  return axios.put(`${baseApiUrl}/patients/${patientId}`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/patients/${patientId}`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

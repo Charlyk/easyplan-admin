@@ -3,14 +3,14 @@ export const isDev = environment === 'local';
 
 export const baseApiUrl =
   environment === 'local'
-    ? 'http://localhost:8081/api'
+    ? 'http://{clinicDomain}api.localhost:8081/api'
     : environment === 'development'
       ? 'https://dev-api.easyplan.pro/api'
       : 'https://api.easyplan.pro/api';
 
 export const baseAppUrl =
   environment === 'local'
-    ? 'http://localhost:3000'
+    ? 'http://my-first-clinic.easyplan.pro'
     : environment === 'development'
       ? 'https://easyplan-dev-uaodf.ondigitalocean.app'
       : 'https://app.easyplan.pro';

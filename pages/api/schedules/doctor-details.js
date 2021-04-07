@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
+import { updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -24,7 +24,7 @@ export default authorized(async (req, res) => {
 async function fetchDoctorScheduleDetails(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const query = new URLSearchParams(req.query).toString()
-  return axios.get(`${baseApiUrl}/schedules/doctor-details?${query}`, {
+  return axios.get(`${updatedServerUrl(req)}/schedules/doctor-details?${query}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
