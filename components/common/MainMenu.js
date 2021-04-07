@@ -23,6 +23,7 @@ import MenuSettings from '../icons/menuSettings';
 import MenuUsers from '../icons/menuUsers';
 import { textForKey } from '../../utils/localization';
 import ClinicSelector from './ClinicSelector';
+import { Role } from "../../utils/constants";
 
 const menuItems = [
   {
@@ -30,23 +31,27 @@ const menuItems = [
     type: 'group',
     text: textForKey('Analytics'),
     icon: <MenuAnalytics/>,
-    roles: ['ADMIN', 'MANAGER'],
+    roles: [Role.admin, Role.manager, Role.reception],
     children: [
       {
         text: textForKey('General'),
         href: '/analytics/general',
+        roles: [Role.admin, Role.manager],
       },
       {
         text: textForKey('Services'),
         href: '/analytics/services',
+        roles: [Role.admin, Role.manager, Role.reception],
       },
       {
         text: textForKey('Doctors'),
         href: '/analytics/doctors',
+        roles: [Role.admin, Role.manager],
       },
       {
         text: textForKey('Activity logs'),
         href: '/analytics/activity-logs',
+        roles: [Role.admin, Role.manager],
       },
     ],
   },
@@ -198,6 +203,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
                 </div>
                 <div className={analyticsChildClass}>
                   {item.children.map((child) => {
+                    if (!child.roles.includes(userClinic?.roleInClinic)) return null;
                     return (
                       <Nav.Item key={child.href}>
                         <Link href={child.href}>
