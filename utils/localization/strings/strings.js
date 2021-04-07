@@ -506,6 +506,7 @@ export default {
     account_created_success: 'Account created successfully. Please add your clinic details.',
     confirmation: 'Confirmation',
     rescheduled: 'Rescheduled',
+    cashier: 'Cashier',
   },
   ro: {
     analytics: 'Analitică',
@@ -1020,6 +1021,7 @@ export default {
     account_created_success: 'Contul a fost creat cu succes. Vă rugăm să introduceți detaliile clinicii.',
     confirmation: 'Confirmare',
     rescheduled: 'Reprogramat',
+    cashier: 'Casier',
   },
   ru: {
     analytics: 'Analytics',
@@ -1525,5 +1527,6 @@ export default {
     account_created_success: 'Account created successfully. Please add your clinic details.',
     confirmation: 'Confirmation',
     rescheduled: 'Rescheduled',
+    cashier: 'Кассир',
   },
 };

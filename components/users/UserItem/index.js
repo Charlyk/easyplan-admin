@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, TableCell, TableRow, Typography } from '@material-ui/core';
+import { TableCell, TableRow, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import { Role } from '../../../utils/constants';
 import { urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/UserItem.module.scss';
+import SwitchButton from "../../common/SwitchButton";
 
 const UserItem = ({
   user,
@@ -26,6 +27,7 @@ const UserItem = ({
   onEdit,
   onResend,
   onRestore,
+  onCashierChange,
 }) => {
   const handleDeleteUser = event => {
     onDelete(event, user, isInvitation);
@@ -42,6 +44,10 @@ const UserItem = ({
   const handleResendInvitation = event => {
     onResend(event, user);
   };
+
+  const handleCashierChange = (enabled) => {
+    onCashierChange(user, enabled);
+  }
 
   const rootClasses = clsx(styles['user-item'], user.isHidden ? styles.fired : styles.active);
 
@@ -118,6 +124,17 @@ const UserItem = ({
               {textForKey('Edit')} <IconEdit />
             </Button>
           )}
+          {user.roleInClinic === Role.reception && !isInvitation && (
+            <div className={styles.cashierSwitchWrapper}>
+              <Typography className={styles.cashierSwitchTitle}>
+                {textForKey('Cashier')}
+              </Typography>
+              <SwitchButton
+                isChecked={user.canRegisterPayments}
+                onChange={handleCashierChange}
+              />
+            </div>
+          )}
           {user.isHidden ? (
             <Button
               className={styles['user-item__restore-button']}
@@ -154,17 +171,18 @@ UserItem.propTypes = {
     roleInClinic: PropTypes.string,
     status: PropTypes.string,
     isHidden: PropTypes.bool,
+    canRegisterPayments: PropTypes.bool,
   }).isRequired,
   onResend: PropTypes.func,
   onDelete: PropTypes.func,
   onRestore: PropTypes.func,
   onEdit: PropTypes.func,
+  onCashierChange: PropTypes.func,
 };
 
 UserItem.defaultProps = {
   onDelete: () => null,
   onEdit: () => null,
-  onResend: () => null,
-  onRestore: () => null,
+  onCashierChange: () => null,
   isInvitation: false,
 };

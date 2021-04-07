@@ -70,3 +70,14 @@ export async function updateUserDetails(userId, body, headers = null) {
 export async function deleteUserHoliday(userId, holidayId, headers = null) {
   return del(`/api/users/${userId}/holidays/${holidayId}`, headers);
 }
+
+/**
+ * Update user cashier status
+ * @param {number} userId
+ * @param {boolean} isCashier
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function updateUserCashierStatus(userId, isCashier, headers = null) {
+  return put(`/api/users/${userId}/cashier`, headers, { isCashier })
+}

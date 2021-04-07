@@ -246,12 +246,15 @@ const CheckoutModal = ({
   isNew,
   openPatientDetailsOnClose,
   onClose,
+  currentUser,
   currentClinic,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const updateInvoice = useSelector(updateInvoiceSelector);
   const exchangeRates = getClinicExchangeRates(currentClinic);
+  const userClinic = currentUser.clinic.find(clinic => clinic.clinicId === currentClinic.id);
+  const { canRegisterPayments } = userClinic;
   const clinicCurrency = currentClinic.currency;
   const clinicServices = currentClinic.services?.filter((item) =>
     item.serviceType !== 'System'
@@ -522,7 +525,7 @@ const CheckoutModal = ({
     : [];
 
   const canPay =
-    !isNew || (invoiceDetails.patient.id !== -1 && services.length > 0);
+    (!isNew || (invoiceDetails.patient.id !== -1 && services.length > 0)) && canRegisterPayments;
 
   return (
     <Modal

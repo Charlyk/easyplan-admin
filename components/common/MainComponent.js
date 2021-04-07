@@ -176,6 +176,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
       {paymentModal.open && (
         <CheckoutModal
           {...paymentModal}
+          currentUser={currentUser}
           currentClinic={currentClinic}
           onClose={handleClosePaymentModal}
         />

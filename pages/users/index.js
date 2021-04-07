@@ -21,10 +21,9 @@ import { textForKey } from '../../utils/localization';
 import UserItem from '../../components/users/UserItem';
 import UsersHeader from '../../components/users/UserHeader';
 import MainComponent from "../../components/common/MainComponent";
-import { deleteUser, getUsers, inviteUser, restoreUser } from "../../middleware/api/users";
+import { deleteUser, getUsers, inviteUser, restoreUser, updateUserCashierStatus } from "../../middleware/api/users";
 import { deleteInvitation } from "../../middleware/api/clinic";
 import { fetchAppData } from "../../middleware/api/initialization";
-import { baseAppUrl } from "../../eas.config";
 
 const initialState = {
   selectedFilter: Role.all,
@@ -206,6 +205,15 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
   const canShowType = type => {
     return selectedFilter === Role.all || selectedFilter === type;
   };
+
+  const handleUserCashierStatusChange = async (user, isCashier) => {
+    try {
+      await updateUserCashierStatus(user.id, isCashier);
+      await fetchUsers();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
 
   const renderNoData = type => {
     let message = '';
@@ -466,6 +474,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
                       onDelete={startUserDelete}
                       onEdit={handleUserModalOpen}
                       onRestore={handleRestoreUser}
+                      onCashierChange={handleUserCashierStatusChange}
                     />
                   ))}
                   {canShowType(Role.reception) && renderNoData(Role.reception)}

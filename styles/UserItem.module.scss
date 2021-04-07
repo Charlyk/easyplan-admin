@@ -147,6 +147,22 @@
     }
   }
 
+  .cashierSwitchWrapper {
+    min-width: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .cashierSwitchTitle {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 11px !important;
+      color: #34344E;
+      margin-right: 5px;
+    }
+  }
+
   &__resend-button {
     margin-right: .5rem;
     background: #FDC5341a !important;
