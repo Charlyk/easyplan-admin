@@ -1,0 +1,90 @@
+.appointment-note {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+
+  .edit-note-btn {
+    outline: none;
+    position: absolute;
+    right: 1rem;
+    cursor: pointer;
+    top: 50%
+  }
+
+  .services-container {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    .visit-service-item {
+      background-color: #ededed;
+      border-radius: .2rem;
+      padding: .5rem;
+      margin-right: .2rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      color: #34354C;
+    }
+  }
+
+  &__data-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+    border-radius: 4px;
+    padding: 1rem;
+  }
+
+  &__creator-info {
+    display: flex;
+    margin-bottom: .5rem;
+
+    &__doctor-title {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      color: #34354C;
+      margin-right: .3rem;
+    }
+
+    &__doctor-name {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      color: #34354C;
+    }
+  }
+
+  &__note-text {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #6F7091;
+  }
+
+  &__note-date {
+    font-family: Inter, sans-serif;
+    margin-bottom: .5rem;
+    margin-left: 1rem;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #A1A2C6;
+  }
+}

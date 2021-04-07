@@ -1,0 +1,71 @@
+.application-settings-form {
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: scroll;
+
+  .form-title {
+    width: 100%;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #34354C;
+    margin-bottom: 1rem;
+  }
+
+  :global(.form-group) {
+    width: 100%;
+
+    :global(.form-label) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .7rem;
+      margin-bottom: 0;
+      align-items: center;
+      display: flex;
+    }
+
+    :global(.form-text) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: .7rem;
+      color: #7b7ca0;
+      margin-bottom: 0;
+    }
+
+    :global(.form-control) {
+      background-color: #FAFAFD;
+    }
+  }
+
+  .data-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+
+    :global(.positive-button) {
+      max-width: 11rem;
+      margin-left: .5rem;
+    }
+
+    :global(.delete-button) {
+      max-width: 11rem;
+    }
+  }
+}

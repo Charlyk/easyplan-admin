@@ -1,0 +1,22 @@
+.create-category-modal {
+  :global(.modal-body) {
+    padding: .5rem 1rem;
+
+    input {
+      border: 1px solid #A1A2C6;
+      font-size: .9rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+    }
+
+    label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: .7rem;
+      line-height: 16px;
+      color: #34354C;
+      margin-bottom: 0;
+    }
+  }
+}

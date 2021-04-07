@@ -1,0 +1,99 @@
+.week-view {
+  max-height: 100% !important;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+
+  .table-container {
+    height: 100%;
+    overflow: scroll;
+
+    :global(.MuiTableCell-body) {
+      border-bottom: none;
+    }
+
+    table {
+      min-height: 100%;
+      flex: 1;
+      overflow: hidden;
+      table-layout: fixed;
+      border: none;
+
+      thead {
+        tr {
+          width: 100%;
+          border-bottom: #DBEEFB 1px solid;
+
+          th {
+            cursor: pointer;
+            width: calc(100% / 7);
+            padding-top: .7rem;
+            padding-bottom: .5rem;
+            border-right: #DBEEFB 1px solid;
+
+            &:hover {
+              .day-title {
+                color: #3A83DC;
+              }
+            }
+          }
+
+          th:last-child {
+            border-right: none;
+          }
+        }
+      }
+
+      tbody > tr > td {
+        padding: .2rem;
+      }
+    }
+  }
+
+  .day-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: right;
+    color: #B8DBF8;
+
+    &.highlighted {
+      color: #3A83DC;
+    }
+
+    &.current-day {
+      color: #6397d7;
+    }
+  }
+
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+  .week-hour-text {
+    height: 32px;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: right;
+    color: #B8DBF8;
+
+    &.highlighted {
+      color: #3A83DC;
+    }
+  }
+}

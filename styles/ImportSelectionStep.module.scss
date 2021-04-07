@@ -1,0 +1,57 @@
+.import-selection-step {
+  .company-button {
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: .5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    width: 100%;
+    padding: .5rem;
+    border: #3A83DC 1px solid;
+    border-radius: 4px;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    color: #34354C;
+  }
+
+  .checkbox-root {
+    padding: 0 !important;
+    color: #3A83DC !important;
+    margin-right: .5rem;
+  }
+
+  .checkbox-label {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 13px !important;
+    color: #34354C !important;
+    user-select: none;
+  }
+
+  .companies-menu-paper {
+    width: 20rem;
+
+    :global(.MuiMenuItem-root) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 13px;
+      color: #34354C;
+    }
+  }
+
+  .form-title {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    color: #34354C;
+  }
+}

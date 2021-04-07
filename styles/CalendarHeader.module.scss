@@ -1,0 +1,137 @@
+.center-header {
+  margin-bottom: 0rem;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .controls-wrapper {
+    margin-bottom: 5px;
+
+    .today-btn {
+      outline: none;
+      color: #3A83DC;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 11px;
+    }
+  }
+
+  .arrow-button {
+    outline: none;
+    width: 30px;
+    height: 30px;
+
+    .button-icon {
+      color: #3A83DC;
+    }
+  }
+
+  .right-btns-wrapper {
+    :global(.positive-button) {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .import-btn {
+      position: absolute;
+      top: calc(50% - 1px);
+      transform: translateY(-50%);
+      width: 35px;
+      height: 30px;
+      right: 12.5rem;
+
+      svg {
+        margin: 0;
+      }
+    }
+
+    .add-appointment-btn {
+      font-size: 11px;
+      top: calc(50% - 1.5px);
+      height: 30px;
+      width: 180px;
+    }
+  }
+
+  :global(.positive-button) {
+    flex: unset;
+    position: absolute;
+    right: 1rem;
+    top: 0;
+    width: 160px;
+
+    &.calendar-btn {
+      height: 30px;
+      position: unset;
+      font-size: 11px;
+    }
+  }
+
+  :global(.loading-button) {
+    width: 2.5rem;
+  }
+
+  .date-wrapper {
+    display: flex;
+    align-items: center;
+    outline: none;
+    cursor: pointer;
+    justify-content: center;
+
+    svg {
+      width: 1.6rem;
+      height: 1.6rem;
+      margin-bottom: .2rem;
+      margin-left: .5rem;
+    }
+
+    &:hover {
+      .center-header__date {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__date {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    color: #3A83DC;
+  }
+
+  &__tabs {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+
+    :global(.easy-tab) {
+      font-size: 11px;
+
+      :global(.tab-indicator) {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.appointments-date-picker-root {
+  z-index: 999;
+  margin-top: .5rem;
+
+  .calendar-paper {
+    border: #3A83DC 1px solid;
+    border-radius: 4px;
+    overflow: hidden;
+
+    :global(.rdrCalendarWrapper) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 11px;
+    }
+  }
+}

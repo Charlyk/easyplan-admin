@@ -1,0 +1,55 @@
+.table-body-row {
+  cursor: pointer;
+  max-height: 2.9rem;
+  height: 2.9rem;
+
+  &:hover {
+    background-color: #fcfcfc;
+  }
+
+  .name-and-photo {
+    svg {
+      margin-right: .8rem !important;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .row-label {
+    display: flex;
+    align-items: center;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 11px !important;
+    margin-bottom: 0;
+
+    &.name {
+      outline: none;
+      color: #34344E;
+      font-weight: 500;
+    }
+
+    &.email, &.phone {
+      color: #3A83DC !important;
+
+      a {
+        color: #3A83DC !important;
+
+        &:hover {
+          color: #3A83DC !important;
+        }
+      }
+    }
+
+    svg {
+      fill: #3A83DC;
+      margin-right: .5rem;
+    }
+  }
+
+  td {
+    padding: .5rem 1rem;
+    border-bottom-color: #ededed;
+  }
+}

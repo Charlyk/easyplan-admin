@@ -1,0 +1,71 @@
+.sms-messages-root {
+  width: 100%;
+  height: 100%;
+
+  &__data-wrapper {
+    flex: 1;
+    height: 100%;
+    position: relative;
+
+    .no-alias-label {
+      text-align: center;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .table-container {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .progress-wrapper {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      .progress {
+        color: #3A83DC;
+        background-color: transparent;
+      }
+    }
+
+    thead > tr > td {
+      padding-left: .8rem;
+    }
+
+    thead > tr > th {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 10px;
+      line-height: 24px;
+      padding: .2rem 1rem;
+      border-bottom: none;
+      color: #A1A2C6;
+    }
+
+    tbody > tr {
+
+    }
+
+    tfoot > tr > td {
+      padding-left: .8rem;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 20px;
+      color: #34354C;
+    }
+  }
+}

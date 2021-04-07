@@ -1,0 +1,25 @@
+.confirmation-modal {
+  :global(.modal-content) {
+    box-shadow: 0 1px 10px 10px #34344E1A;
+  }
+
+  :global(.modal-body) {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    color: #34354C;
+  }
+
+  :global(.modal-footer) {
+    :global(.cancel-button) {
+      width: 50%;
+    }
+
+    :global(.positive-button) {
+      width: 50%;
+    }
+  }
+}

@@ -1,0 +1,41 @@
+.week-day:last-child {
+  border-right: none;
+}
+
+.week-day {
+  padding-top: .5rem;
+  padding-left: .2rem;
+  padding-right: .2rem;
+  width: calc(100% / 7);
+  align-items: flex-start;
+  position: relative;
+  border-right: #DBEEFB 1px solid;
+  vertical-align: top !important;
+
+  :global(.schedule-item) {
+    margin-bottom: .4rem;
+  }
+
+  .week-hour {
+    width: 100%;
+    height: 32px;
+    display: flex;
+    align-items: center;
+
+    &.highlighted {
+      .hour-text {
+        color: #3A83DC;
+      }
+
+      .hour-line {
+        background-color: #3A83DC;
+      }
+    }
+
+    .hour-line {
+      width: 100%;
+      height: 1px;
+      background-color: #DBEEFB;
+    }
+  }
+}
