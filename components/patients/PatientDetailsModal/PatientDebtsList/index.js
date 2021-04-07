@@ -24,8 +24,8 @@ import { updateInvoiceSelector } from '../../../../redux/selectors/invoicesSelec
 import { formattedAmount } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import styles from '../../../../styles/PatientDebtsList.module.scss';
-import axios from "axios";
-import { baseApiUrl, baseAppUrl } from "../../../../eas.config";
+import { baseApiUrl } from "../../../../eas.config";
+import { getPatientDebts } from "../../../../middleware/api/patients";
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   const dispatch = useDispatch();
@@ -66,7 +66,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   const fetchDebts = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/debts`);
+      const response = await getPatientDebts(patient.id);
       setDebts(
         response.data.map((item) => ({
           ...item,

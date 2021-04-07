@@ -1,5 +1,4 @@
 import { del, get, post, put } from "./request";
-import { baseAppUrl } from "../../eas.config";
 
 /**
  * Delete patient
@@ -64,4 +63,14 @@ export async function createPatientNote(patientId, body, headers = null) {
  */
 export async function getPatientNotes(patientId, headers = null) {
   return get(`/api/patients/${patientId}/notes`, headers);
+}
+
+/**
+ * Fetch all patient debts
+ * @param {number} patientId
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function getPatientDebts(patientId, headers = null) {
+  return get(`/api/patients/${patientId}/debts`, headers);
 }

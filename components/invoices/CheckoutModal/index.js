@@ -253,7 +253,7 @@ const CheckoutModal = ({
   const router = useRouter();
   const updateInvoice = useSelector(updateInvoiceSelector);
   const exchangeRates = getClinicExchangeRates(currentClinic);
-  const userClinic = currentUser.clinic.find(clinic => clinic.clinicId === currentClinic.id);
+  const userClinic = currentUser.clinics.find(clinic => clinic.clinicId === currentClinic.id);
   const { canRegisterPayments } = userClinic;
   const clinicCurrency = currentClinic.currency;
   const clinicServices = currentClinic.services?.filter((item) =>

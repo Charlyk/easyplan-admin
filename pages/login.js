@@ -72,48 +72,29 @@ const Login = () => {
   const handleSuccessResponse = async (user) => {
     const selectedClinic = user.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
     if (selectedClinic != null) {
-      switch (selectedClinic.roleInClinic) {
-        case Role.reception:
-          await router.replace('/calendar/day');
-          break;
-        case Role.admin:
-        case Role.manager:
-          await router.replace('/analytics/general');
-          break;
-        case Role.doctor:
-          await router.replace('/doctor');
-          break;
-        default:
-          await router.replace('/login');
-          break;
+      try {
+        switch (selectedClinic.roleInClinic) {
+          case Role.reception:
+            await router.replace('/calendar/day');
+            break;
+          case Role.admin:
+          case Role.manager:
+            await router.replace('/analytics/general');
+            break;
+          case Role.doctor:
+            await router.replace('/doctor');
+            break;
+          default:
+            await router.replace('/login');
+            break;
+        }
+      } catch (error) {
+        console.error(error);
       }
     } else {
       await router.replace('/login');
     }
   }
-
-  const handleSignupSubmit = async (requestBody) => {
-    localDispatch(actions.setIsLoading(true));
-    try {
-      if (requestBody.avatarFile != null) {
-        const uploadResult = await uploadFileToAWS('avatars', requestBody.avatarFile);
-        requestBody.avatar = uploadResult?.location;
-        delete requestBody.avatarFile;
-      }
-
-      const { data } = await registerUser(requestBody);
-      if (data.error) {
-        localDispatch(actions.setErrorMessage(data.message));
-      } else {
-        localDispatch(actions.setErrorMessage(null));
-        await handleSuccessResponse(data);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(actions.setIsLoading(false));
-    }
-  };
 
   const handleResetPasswordSubmit = async (username) => {
     localDispatch(actions.setIsLoading(true));
@@ -139,14 +120,13 @@ const Login = () => {
       const { data } = await loginUser({ username, password });
       if (data.error) {
         localDispatch(actions.setErrorMessage(data.message));
+        localDispatch(actions.setIsLoading(false));
       } else {
         localDispatch(actions.setErrorMessage(null));
         await handleSuccessResponse(data);
       }
     } catch (error) {
       toast.error(error.message);
-    } finally {
-      localDispatch(actions.setIsLoading(false));
     }
   }
 

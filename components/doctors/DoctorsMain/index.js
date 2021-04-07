@@ -19,9 +19,12 @@ import { Role } from "../../../utils/constants";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { setClinic } from "../../../redux/actions/clinicActions";
+import { usePubNub } from "pubnub-react";
+import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 
 const DoctorsMain = ({ children, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
+  const pubnub = usePubNub();
   const router = useRouter();
   const buttonRef = useRef(null);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
@@ -31,8 +34,27 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
   );
 
   useEffect(() => {
-    dispatch(setClinic(currentClinic));
-  }, [])
+    if (currentUser != null) {
+      pubnub.setUUID(currentUser.id);
+    }
+
+    if (currentClinic != null) {
+      dispatch(setClinic(currentClinic));
+      pubnub.subscribe({
+        channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+      });
+      pubnub.addListener({ message: handlePubnubMessageReceived });
+      return () => {
+        pubnub.unsubscribe({
+          channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+        });
+      };
+    }
+  }, []);
+
+  const handlePubnubMessageReceived = ({ message }) => {
+    dispatch(handleRemoteMessage(message));
+  };
 
   const handleCompanyClose = () => {
     setIsSelectorOpen(false);
