@@ -12,7 +12,7 @@ import LoadingButton from "../../common/LoadingButton";
 import { WebRegex } from "../../../utils/constants";
 import debounce from "lodash/debounce";
 
-const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/;
+const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/ig;
 
 const initialState = {
   logoFile: null,

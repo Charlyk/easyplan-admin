@@ -20,7 +20,7 @@ import {
 import styles from '../../../styles/CreateClinicModal.module.scss';
 import { WebRegex } from "../../../utils/constants";
 
-const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/;
+const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/ig;
 
 const initialState = {
   isLoading: false,

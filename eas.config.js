@@ -3,9 +3,9 @@ export const isDev = environment === 'local';
 
 export const baseApiUrl =
   environment === 'local'
-    ? 'http://localhost:8080/api'
+    ? 'http://localhost:8081/api'
     : environment === 'development'
-      ? 'https://api.easyplan.pro/dev/api'
+      ? 'https://dev-api.easyplan.pro/api'
       : 'https://api.easyplan.pro/api';
 
 export const baseAppUrl =

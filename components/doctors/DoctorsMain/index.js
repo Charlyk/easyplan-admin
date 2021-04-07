@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { ClickAwayListener } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
@@ -18,6 +18,7 @@ import { baseAppUrl } from "../../../eas.config";
 import { Role } from "../../../utils/constants";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { setClinic } from "../../../redux/actions/clinicActions";
 
 const DoctorsMain = ({ children, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
@@ -28,6 +29,10 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
   const selectedClinic = currentUser?.clinics?.find(
     (item) => item.clinicId === currentClinic.id,
   );
+
+  useEffect(() => {
+    dispatch(setClinic(currentClinic));
+  }, [])
 
   const handleCompanyClose = () => {
     setIsSelectorOpen(false);

@@ -4,7 +4,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IconAvatar from '../icons/iconAvatar';
 import IconEdit from '../icons/iconEdit';
@@ -18,35 +18,41 @@ import { textForKey } from '../../utils/localization';
 import ActionsSheet from './ActionsSheet';
 import InvoicesButton from '../invoices/InvoicesButton';
 import styles from '../../styles/PageHeader.module.scss';
+import { isExchangeRatesUpdateRequiredSelector } from "../../redux/selectors/clinicSelector";
+import { Role } from "../../utils/constants";
 
 const actions = [
   {
     name: textForKey('Edit profile'),
     key: 'edit-profile',
-    icon: <IconEdit />,
+    icon: <IconEdit/>,
     type: 'default',
   },
   {
     name: textForKey('Logout'),
     key: 'log-out',
-    icon: <IconTurnOff />,
+    icon: <IconTurnOff/>,
     type: 'destructive',
   },
 ];
 
-const PageHeader = ({
-  title,
-  titleComponent,
-  isDoctor,
-  onLogout,
-  onEditProfile,
-  user,
-  currentClinic,
-}) => {
+const PageHeader = (
+  {
+    title,
+    titleComponent,
+    isDoctor,
+    onLogout,
+    onEditProfile,
+    user,
+    currentClinic,
+  }
+) => {
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
-  const isExchangeUpdateRequired = currentClinic.updateExchangeRates;
+  const isExchangeUpdateRequired = useSelector(isExchangeRatesUpdateRequiredSelector);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
+  const userClinic = user.clinics.find(item => item.clinicId === currentClinic.id);
+  const { canRegisterPayments } = userClinic;
 
   const handleActionsClose = () => setIsActionsOpen(false);
 
@@ -87,21 +93,24 @@ const PageHeader = ({
       >
         {titleComponent || title}
       </div>
-      {!isDoctor && (
+      {!isDoctor && canRegisterPayments && (
         <div className={styles.invoicesBtnWrapper}>
-          <InvoicesButton currentClinic={currentClinic} />
+          <InvoicesButton
+            currentUser={user}
+            currentClinic={currentClinic}
+          />
           <Tooltip title={textForKey('Add payment')}>
             <IconButton
               classes={{ root: styles['add-invoice-btn'] }}
               onClick={handleOpenPaymentModal}
             >
-              <IconPlus fill='#3A83DC' />
+              <IconPlus fill='#3A83DC'/>
             </IconButton>
           </Tooltip>
         </div>
       )}
       <div className={styles['page-header__actions']}>
-        {!isDoctor && (
+        {!isDoctor && canRegisterPayments && (
           <Button
             onClick={handleOpenExchangeRatesModal}
             className={clsx(styles['exchange-rate-btn'], {
@@ -113,13 +122,13 @@ const PageHeader = ({
           </Button>
         )}
         <div className={styles['page-header__notifications']}>
-          <IconNotifications />
+          <IconNotifications/>
         </div>
         <div className={styles['avatar-container']}>
           {user?.avatar ? (
-            <Image roundedCircle className={styles['avatar-image']} src={user.avatar} />
+            <Image roundedCircle className={styles['avatar-image']} src={user.avatar}/>
           ) : (
-            <IconAvatar />
+            <IconAvatar/>
           )}
         </div>
         <div
@@ -129,7 +138,7 @@ const PageHeader = ({
           className={styles['page-header__notifications']}
           ref={actionsAnchor}
         >
-          <IconMore />
+          <IconMore/>
         </div>
       </div>
     </div>
@@ -149,6 +158,16 @@ PageHeader.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     username: PropTypes.string,
+    clinics: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        clinicName: PropTypes.string,
+        clinicId: PropTypes.number,
+        roleInClinic: PropTypes.oneOf([Role.doctor, Role.manager, Role.reception, Role.admin]),
+        canRegisterPayments: PropTypes.bool,
+        services: PropTypes.arrayOf(PropTypes.object)
+      })
+    )
   }),
   onSearch: PropTypes.func,
   onLogout: PropTypes.func,
@@ -156,6 +175,5 @@ PageHeader.propTypes = {
 };
 
 PageHeader.defaultProps = {
-  onLogout: () => null,
   onEditProfile: () => null,
 };

@@ -29,6 +29,7 @@ import EasyPlanModal from '../EasyPlanModal';
 import styles from '../../../styles/ExchangeRates.module.scss';
 import axios from "axios";
 import { baseAppUrl } from "../../../eas.config";
+import { setIsExchangeRatesModalOpen } from "../../../redux/actions/exchangeRatesActions";
 
 const initialState = {
   isLoading: true,
@@ -168,6 +169,7 @@ const ExchangeRates = ({ open, currentClinic, currentUser, onClose }) => {
       });
       await axios.put(`${baseAppUrl}/api/clinic/exchange-rates`, { rates: requestBody });
       toast.success(textForKey('Saved successfully'));
+      dispatch(setIsExchangeRatesModalOpen(false));
       onClose();
     } catch (error) {
       toast.error(error.message);

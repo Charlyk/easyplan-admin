@@ -15,19 +15,22 @@ import { totalInvoicesSelector } from "../../../redux/selectors/invoicesSelector
 import { setTotalInvoices } from "../../../redux/actions/invoiceActions";
 import { fetchPendingInvoices } from "../../../middleware/api/invoices";
 
-const InvoicesButton = ({ currentClinic }) => {
+const InvoicesButton = ({ currentUser, currentClinic }) => {
   const dispatch = useDispatch();
   const updateInvoices = useSelector(updateInvoicesSelector);
   const totalInvoices = useSelector(totalInvoicesSelector);
   const buttonRef = useRef(null);
   const clinicCurrency = currentClinic.currency;
+  const userClinic = currentUser.clinics.find(clinic => clinic.clinicId === currentClinic.id);
   const exchangeRates = getClinicExchangeRates(currentClinic);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [showInvoices, setShowInvoices] = useState(false);
 
   useEffect(() => {
-    fetchInvoices();
+    if (userClinic?.canRegisterPayments) {
+      fetchInvoices();
+    }
   }, [updateInvoices, exchangeRates]);
 
   const fetchInvoices = async () => {

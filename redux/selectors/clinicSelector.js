@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import { Role } from '../../utils/constants';
+import { createSelector } from "reselect";
 
 export const clinicTimeZoneSelector = (clinic) => clinic?.timeZone || moment.tz.guess(true);
 
@@ -41,3 +42,5 @@ export const clinicBracesSelector = (clinic) => clinic.braces;
 
 export const clinicEnabledBracesSelector = (clinic) =>
   clinic?.braces?.filter((item) => item.isEnabled) || [];
+
+export const isExchangeRatesUpdateRequiredSelector = (state) => state.clinic.updateExchangeRates
