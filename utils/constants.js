@@ -151,7 +151,7 @@ export const Statuses = [
   {
     id: 'Pending',
     name: textForKey('Pending'),
-    color: '#adadd6',
+    color: '#ffb653',
     icon: <IconAppointmentCalendar />,
     statusIcon: null,
     manual: false,
@@ -187,7 +187,7 @@ export const Statuses = [
   {
     id: 'OnSite',
     name: textForKey('On site'),
-    color: '#ffb653',
+    color: '#adadd6',
     icon: <IconCheckMark />,
     statusIcon: <DoneIcon />,
     manual: true,
@@ -268,7 +268,7 @@ export const Statuses = [
   {
     id: 'Rescheduled',
     name: textForKey('Rescheduled'),
-    color: '#979aaa',
+    color: '#A71F8B',
     icon: <IconClock />,
     statusIcon: null,
     manual: true,
