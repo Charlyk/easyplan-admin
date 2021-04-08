@@ -268,7 +268,7 @@ export const Statuses = [
   {
     id: 'Rescheduled',
     name: textForKey('Rescheduled'),
-    color: '#90a4ff',
+    color: '#A71F8B',
     icon: <IconClock />,
     statusIcon: null,
     manual: true,
