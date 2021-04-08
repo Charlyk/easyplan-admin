@@ -121,7 +121,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
   };
 
   const isAnalyticsEnabled = () => {
-    return currentPath.startsWith('/analytics');
+    return currentPath !== '/' && currentPath.startsWith('/analytics');
   };
 
   const handleCompanyClick = () => {
@@ -133,7 +133,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
   };
 
   const isActive = (itemHref) => {
-    return itemHref.startsWith(currentPath);
+    return currentPath !== '/' && itemHref.startsWith(currentPath);
   };
 
   const handleCompanySelected = (company) => {
