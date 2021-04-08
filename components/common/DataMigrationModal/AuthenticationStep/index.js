@@ -11,19 +11,19 @@ import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../LoadingButton';
 import styles from '../../../../styles/AuthenticationStep.module.scss'
 
-const initialState = {
-  username: 'dentino.dentus@gmail.com',
-  password: 'tezpd4',
-  partnerToken: 'u8xzkdpkgfc73uektn64',
-  isLoading: false,
-};
-
 // const initialState = {
-//   username: '',
-//   password: '',
-//   partnerToken: '',
+//   username: 'dentino.dentus@gmail.com',
+//   password: 'tezpd4',
+//   partnerToken: 'u8xzkdpkgfc73uektn64',
 //   isLoading: false,
 // };
+
+const initialState = {
+  username: '',
+  password: '',
+  partnerToken: '',
+  isLoading: false,
+};
 
 const reducerTypes = {
   setUsername: 'setUsername',
