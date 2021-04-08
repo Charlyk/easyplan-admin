@@ -1,7 +1,4 @@
 import React, { useRef, useState } from "react";
-
-import styles from "../../../styles/CalendarHeader.module.scss";
-
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 import { Button as MaterialButton, ClickAwayListener, Fade, IconButton, Paper } from "@material-ui/core";
@@ -18,6 +15,9 @@ import Popper from "@material-ui/core/Popper";
 import { Calendar } from "react-date-range";
 import * as locales from "react-date-range/dist/locale";
 import moment from "moment-timezone";
+import CalendarLegend from "../CalendarLegend";
+import IconInfo from "../../icons/iconInfo";
+import styles from "../../../styles/CalendarHeader.module.scss";
 
 const CalendarView = {
   day: 'day',
@@ -39,7 +39,9 @@ const CalendarHeader = (
   }
 ) => {
   const calendarAnchor = useRef(null);
+  const legendAnchor = useRef(null);
   const [calendarVisible, setCalendarVisible] = useState(false);
+  const [legendVisible, setLegendVisible] = useState(false);
 
   const handleOpenCalendar = () => setCalendarVisible(true);
 
@@ -57,6 +59,14 @@ const CalendarHeader = (
   const handleAddAppointment = () => {
     onAddAppointment();
   };
+
+  const handleShowLegend = () => {
+    setLegendVisible(true);
+  }
+
+  const handleCloseLegend = () => {
+    setLegendVisible(false);
+  }
 
   const handleDateNavigation = (navId) => () => {
     const currentDate = moment(viewDate);
@@ -137,6 +147,7 @@ const CalendarHeader = (
         </MaterialButton>
       </div>
       {calendarPopper}
+      <CalendarLegend open={legendVisible} anchorEl={legendAnchor}/>
       <div className={styles['center-header__tabs']}>
         <EasyTab
           title={textForKey('Day')}
@@ -162,6 +173,15 @@ const CalendarHeader = (
         >
           <UploadIcon/>
         </LoadingButton>
+        <ClickAwayListener onClickAway={handleCloseLegend}>
+          <IconButton
+            ref={legendAnchor}
+            className={styles.legendBtn}
+            onClick={handleShowLegend}
+          >
+            <IconInfo fill='#3A83DC'/>
+          </IconButton>
+        </ClickAwayListener>
         <Button
           className={clsx('positive-button', styles['add-appointment-btn'])}
           disabled={!canAddAppointment}

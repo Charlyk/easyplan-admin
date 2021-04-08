@@ -33,6 +33,21 @@
       transform: translateY(-50%);
     }
 
+    .legendBtn {
+      position: absolute;
+      top: calc(50% - 1px);
+      transform: translateY(-50%);
+      width: 45px;
+      height: 45px;
+      right: 15rem;
+
+      svg {
+        width: 45px;
+        height: 45px;
+        margin: 0;
+      }
+    }
+
     .import-btn {
       position: absolute;
       top: calc(50% - 1px);
