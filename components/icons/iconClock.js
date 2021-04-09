@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function IconClock() {
   return (
@@ -18,3 +19,11 @@ function IconClock() {
 }
 
 export default React.memo(IconClock);
+
+IconClock.propTypes = {
+  fill: PropTypes.string
+}
+
+IconClock.defaultProps = {
+  fill: '#fff'
+}
