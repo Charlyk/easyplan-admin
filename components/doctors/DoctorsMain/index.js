@@ -14,7 +14,7 @@ import {
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorsMain.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
+import { baseAppUrl, environment } from "../../../eas.config";
 import { Role } from "../../../utils/constants";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -41,12 +41,12 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
     if (currentClinic != null) {
       dispatch(setClinic(currentClinic));
       pubnub.subscribe({
-        channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+        channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
       });
       pubnub.addListener({ message: handlePubnubMessageReceived });
       return () => {
         pubnub.unsubscribe({
-          channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+          channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
         });
       };
     }
@@ -137,7 +137,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
                   {selectedClinic?.clinicName || textForKey('Create clinic')}
                 </span>
               </ClickAwayListener>
-              <IconArrowDown fill='#34344E' />
+              <IconArrowDown fill='#34344E'/>
               <ClinicSelector
                 open={isSelectorOpen}
                 anchorEl={buttonRef}
