@@ -187,7 +187,7 @@ export const Statuses = [
   {
     id: 'OnSite',
     name: textForKey('On site'),
-    color: '#adadd6',
+    color: '#4bba01',
     icon: <IconCheckMark />,
     statusIcon: <DoneIcon />,
     manual: true,
@@ -259,7 +259,7 @@ export const Statuses = [
   {
     id: 'Paid',
     name: textForKey('Paid'),
-    color: '#8ce583',
+    color: '#1df914',
     icon: <IconCreditCard />,
     statusIcon: null,
     manual: false,
