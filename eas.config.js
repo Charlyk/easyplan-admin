@@ -12,7 +12,7 @@ export const baseAppUrl =
   environment === 'local'
     ? 'http://my-first-clinic.easyplan.pro'
     : environment === 'development'
-      ? 'https://easyplan-dev-uaodf.ondigitalocean.app'
+      ? 'https://dev-app.easyplan.pro'
       : 'https://app.easyplan.pro';
 
 export const imageLambdaUrl = 'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';

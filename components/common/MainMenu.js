@@ -121,7 +121,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
   };
 
   const isAnalyticsEnabled = () => {
-    return currentPath.startsWith('/analytics');
+    return currentPath !== '/' && currentPath.startsWith('/analytics');
   };
 
   const handleCompanyClick = () => {
@@ -133,7 +133,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
   };
 
   const isActive = (itemHref) => {
-    return itemHref.startsWith(currentPath);
+    return currentPath !== '/' && itemHref.startsWith(currentPath);
   };
 
   const handleCompanySelected = (company) => {
@@ -227,7 +227,12 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
               <Nav.Item key={item.id}>
                 <Link href={item.href}>
                   <a
-                    className={clsx(styles['navigation__item'], styles['link-item'], isActive(item.href) && styles.active)}>
+                    className={
+                      clsx(styles['navigation__item'], styles['link-item'], {
+                        [styles.active]: isActive(item.href)
+                      })
+                    }
+                  >
                     {item.icon}
                     {item.text}
                   </a>
@@ -236,30 +241,30 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
             );
           }
         })}
-      </Nav>
-      {currentClinic.isImporting && (
-        <Box
+          </Nav>
+        {currentClinic.isImporting && (
+          <Box
           className={styles['import-data-wrapper']}
           position='absolute'
           bottom='4rem'
           left='1rem'
           display='flex'
           alignItems='center'
-        >
-          <CircularProgress classes={{ root: styles['import-progress-bar'] }}/>
-          <Typography classes={{ root: styles['import-data-label'] }}>
-            {textForKey('Importing data in progress')}
+          >
+          <CircularProgress classes={{root: styles['import-progress-bar']}}/>
+          <Typography classes={{root: styles['import-data-label']}}>
+        {textForKey('Importing data in progress')}
           </Typography>
-        </Box>
-      )}
-      <img
-        className={styles['trust-seal-image']}
-        src='/positivessl_trust_seal.png'
-        alt='SSL Trust Seal'
-      />
-    </div>
-  );
-};
+          </Box>
+          )}
+          <img
+          className={styles['trust-seal-image']}
+          src='/positivessl_trust_seal.png'
+          alt='SSL Trust Seal'
+          />
+          </div>
+          );
+        };
 
 export default MainMenu;
 

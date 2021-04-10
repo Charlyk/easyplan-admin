@@ -12,16 +12,16 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
 
-import AppLogoBlue from '../../components/icons/appLogoBlue';
-import LoadingButton from '../../components/common/LoadingButton';
-import { handleRequestError, urlToLambda } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
+import AppLogoBlue from '../../../../components/icons/appLogoBlue';
+import LoadingButton from '../../../../components/common/LoadingButton';
+import { handleRequestError, urlToLambda } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
 
-import styles from '../../styles/ScheduleConfirmation.module.scss';
+import styles from '../../../../styles/ScheduleConfirmation.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
+import { baseAppUrl } from "../../../../eas.config";
 import { useRouter } from "next/router";
-import { fetchScheduleConfirmationInfo } from "../../middleware/api/schedules";
+import { fetchScheduleConfirmationInfo } from "../../../../middleware/api/schedules";
 import Head from "next/head";
 
 const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {

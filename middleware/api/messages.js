@@ -61,5 +61,5 @@ export async function createMessage(body, headers = null) {
  * @return {Promise<void>}
  */
 export async function updateMessage(messageId, body, headers = null) {
-  return put(`/api/sms/${messageId}`, headers, body)
+  return post(`/api/sms/${messageId}`, headers, body)
 }

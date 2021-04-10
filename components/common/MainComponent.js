@@ -35,6 +35,7 @@ import { handleRemoteMessage } from "../../utils/pubnubUtils";
 import { changeCurrentClinic } from "../../middleware/api/clinic";
 import CheckoutModal from "../invoices/CheckoutModal";
 import { setClinic } from "../../redux/actions/clinicActions";
+import { environment } from "../../eas.config";
 
 const MainComponent = ({ children, currentPath, currentUser, currentClinic, authToken }) => {
   const pubnub = usePubNub();
@@ -54,12 +55,12 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
     if (currentClinic != null) {
       dispatch(setClinic(currentClinic));
       pubnub.subscribe({
-        channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+        channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
       });
       pubnub.addListener({ message: handlePubnubMessageReceived });
       return () => {
         pubnub.unsubscribe({
-          channels: [`${currentClinic.id}-clinic-pubnub-channel`],
+          channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
         });
       };
     }

@@ -507,6 +507,7 @@ export default {
     confirmation: 'Confirmation',
     rescheduled: 'Rescheduled',
     cashier: 'Cashier',
+    'calendar legend': 'Calendar legend',
   },
   ro: {
     analytics: 'Analitică',
@@ -1022,6 +1023,7 @@ export default {
     confirmation: 'Confirmare',
     rescheduled: 'Reprogramat',
     cashier: 'Casier',
+    'calendar legend': 'Legenda statuturilor',
   },
   ru: {
     analytics: 'Analytics',
@@ -1528,5 +1530,6 @@ export default {
     confirmation: 'Confirmation',
     rescheduled: 'Rescheduled',
     cashier: 'Кассир',
+    'calendar legend': 'Calendar legend',
   },
 };
