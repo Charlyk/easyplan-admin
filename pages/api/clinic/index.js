@@ -2,7 +2,7 @@ import axios from "axios";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -38,7 +38,10 @@ async function createClinic(req) {
   const { auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
   return axios.post(`${updatedServerUrl(req)}/clinics`, requestBody, {
-    headers: { Authorization: auth_token }
+    headers: {
+      Authorization: auth_token,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
   });
 }
 
@@ -49,6 +52,7 @@ async function updateClinicInfo(req) {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
@@ -59,6 +63,7 @@ async function deleteClinic(req) {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

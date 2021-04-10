@@ -1,6 +1,6 @@
 import axios from "axios";
 import { handler } from "../handler";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default async function register(req, res) {
   const data = await handler(createNewAccount, req, res);
@@ -19,6 +19,11 @@ function createNewAccount(req) {
   return axios.post(
     `${updatedServerUrl(req)}/authentication/v1/register`,
     req.body,
-    { headers: { 'X-EasyPlan-Clinic-Id': -1 } }
+    {
+      headers: {
+        'X-EasyPlan-Clinic-Id': -1,
+        'X-EasyPlan-Subdomain': getSubdomain(req),
+      }
+    }
   );
 }

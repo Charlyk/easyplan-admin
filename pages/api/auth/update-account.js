@@ -1,7 +1,7 @@
 import axios from "axios";
 import { handler } from "../handler";
 import cookie from "cookie";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default async function resetPassword(req, res) {
   switch (req.method) {
@@ -28,6 +28,7 @@ function updateUserAccount(req) {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

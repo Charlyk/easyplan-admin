@@ -1,6 +1,6 @@
 import axios from "axios";
 import { handler } from "../../handler";
-import { updatedServerUrl } from "../../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default async (req, res) => {
   switch (req.method) {
@@ -20,5 +20,9 @@ export default async (req, res) => {
 
 function checkDomainExists(req) {
   const query = new URLSearchParams(req.query).toString();
-  return axios.get(`${updatedServerUrl(req)}/clinics/domain-check?${query}`);
+  return axios.get(`${updatedServerUrl(req)}/clinics/domain-check?${query}`, {
+    headers: {
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
+  });
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async function clinicDetails(req, res) {
   switch (req.method) {
@@ -26,6 +26,7 @@ function getClinicDetails(req) {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

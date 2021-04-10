@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { handler } from "../handler";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default async function login(req, res) {
   const data = await handler(authenticateWithBackend, req, res);
@@ -18,5 +18,10 @@ function authenticateWithBackend(req) {
   return axios.post(
     `${updatedServerUrl(req)}/authentication/v1/login`,
     req.body,
+    {
+      headers: {
+        'X-EasyPlan-Subdomain': getSubdomain(req),
+      }
+    }
   );
 }

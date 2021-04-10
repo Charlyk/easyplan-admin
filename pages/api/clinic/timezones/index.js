@@ -1,6 +1,6 @@
 import axios from "axios";
 import { handler } from "../../handler";
-import { updatedServerUrl } from "../../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default async (req, res) => {
   switch (req.method) {
@@ -19,5 +19,9 @@ export default async (req, res) => {
 };
 
 function fetchAvailableTimeZones(req) {
-  return axios.get(`${updatedServerUrl(req)}/clinics/available-timezones`);
+  return axios.get(`${updatedServerUrl(req)}/clinics/available-timezones`, {
+    headers: {
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
+  });
 }

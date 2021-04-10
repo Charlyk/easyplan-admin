@@ -354,13 +354,14 @@ export function redirectUserTo(path, res) {
   res.end();
 }
 
-export function updatedServerUrl(req) {
+export function getSubdomain(req) {
   const { host } = req.headers;
   const [clinicDomain] = host.split('.');
-  if ([null, 'app', 'dev', 'localhost', 'api'].includes(clinicDomain)) {
-    return baseApiUrl.replace('{clinicDomain}', '');
-  }
-  return baseApiUrl.replace('{clinicDomain}', `${clinicDomain}.`);
+  return clinicDomain
+}
+
+export function updatedServerUrl() {
+  return baseApiUrl;
 }
 
 export const getRedirectUrlForUser = (user) => {

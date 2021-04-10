@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authorized } from "../authorized";
 import { handler } from "../handler";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 import { parseCookies } from "../../../utils";
 
 export default authorized(async (req, res) => {
@@ -16,6 +16,7 @@ function getCurrentUser(req) {
   return axios.get(`${updatedServerUrl(req)}/authentication/v1/me`, {
     headers: {
       Authorization: auth_token,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

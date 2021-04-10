@@ -2,7 +2,7 @@ import { authorized } from "../authorized";
 import cookie from "cookie";
 import axios from "axios";
 import { handler } from "../handler";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   const data = await handler(fetchServicesStatistics, req, res);
@@ -21,6 +21,7 @@ const fetchServicesStatistics = async (req) => {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

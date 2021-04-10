@@ -3,7 +3,7 @@ import { environment } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
-import { updatedServerUrl } from "../../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -42,6 +42,7 @@ function changeSelectedClinic(req) {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': -1,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
