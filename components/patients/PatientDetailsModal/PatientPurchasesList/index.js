@@ -27,7 +27,7 @@ import {
 import { textForKey } from '../../../../utils/localization';
 import styles from '../../../../styles/PatientPurchasesList.module.scss'
 import axios from "axios";
-import { baseApiUrl, baseAppUrl } from "../../../../eas.config";
+import { baseApiUrl } from "../../../../eas.config";
 import clsx from "clsx";
 
 const initialState = {
@@ -82,7 +82,7 @@ const PatientPurchasesList = ({ patient, currentClinic }) => {
   const fetchPurchases = async () => {
     localDispatch(actions.setIsLoading(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/purchases`);
+      const response = await axios.get(`/api/patients/${patient.id}/purchases`);
       localDispatch(actions.setPayments(response.data));
     } catch (error) {
       toast.error(error.message);

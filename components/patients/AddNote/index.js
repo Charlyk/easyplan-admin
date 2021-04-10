@@ -9,8 +9,6 @@ import { triggerUpdateNotes } from '../../../redux/actions/actions';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/AddNote.module.scss';
 import EasyPlanModal from '../../common/EasyPlanModal';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { createPatientNote, updateVisitNote } from "../../../middleware/api/patients";
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {

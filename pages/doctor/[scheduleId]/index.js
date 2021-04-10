@@ -18,7 +18,6 @@ import { generateReducerActions, handleRequestError, redirectToUrl, redirectUser
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorPatientDetails.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 import DoctorsMain from "../../../components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
@@ -199,7 +198,7 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
   };
 
   const saveTreatmentPlan = async (requestBody, update) => {
-    const url = `${baseAppUrl}/api/treatment-plans/general`
+    const url = `/api/treatment-plans/general`
     return update ? axios.put(url, requestBody) : axios.post(url, requestBody)
   }
 

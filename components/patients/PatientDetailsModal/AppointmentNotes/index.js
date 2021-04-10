@@ -13,7 +13,6 @@ import AppointmentNote from './AppointmentNote';
 import styles from '../../../../styles/AppointmentNotes.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 
 const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
   const [isFetching, setIsFetching] = useState(false);
@@ -27,7 +26,7 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
   const fetchPatientVisits = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/visits`);
+      const response = await axios.get(`/api/patients/${patient.id}/visits`);
       setVisits(sortBy(response.data, (item) => item.created).reverse() || []);
     } catch (error) {
       toast.error(error.message);

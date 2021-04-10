@@ -13,7 +13,6 @@ import XRayPhase from './XRayPhase';
 import styles from '../../../../styles/PatientXRay.module.scss'
 import { toast } from "react-toastify";
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 
 const ExpandedPhase = {
   initial: 'Initial',
@@ -42,7 +41,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   const fetchImages = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/x-ray`);
+      const response = await axios.get(`/api/patients/${patient.id}/x-ray`);
       const { data } = response;
 
       const mappedImages = {

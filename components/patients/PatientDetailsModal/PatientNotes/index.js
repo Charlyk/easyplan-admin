@@ -13,8 +13,6 @@ import LoadingButton from '../../../common/LoadingButton';
 import PatientNote from './PatientNote';
 import styles from '../../../../styles/PatientNotes.module.scss';
 import { toast } from "react-toastify";
-import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 import { createPatientNote, getPatientNotes } from "../../../../middleware/api/patients";
 
 const initialState = {

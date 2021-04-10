@@ -19,7 +19,6 @@ import { textForKey } from '../../../../utils/localization';
 
 import styles from '../../../../styles/ScheduleConfirmation.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 import { useRouter } from "next/router";
 import { fetchScheduleConfirmationInfo } from "../../../../middleware/api/schedules";
 import Head from "next/head";
@@ -33,7 +32,7 @@ const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
     setIsConfirming(true);
     try {
       const requestBody = { scheduleId, patientId };
-      await axios.post(`${baseAppUrl}/api/schedules/confirm`, requestBody);
+      await axios.post(`/api/schedules/confirm`, requestBody);
       setIsError(false);
       await router.replace(router.asPath);
     } catch (error) {

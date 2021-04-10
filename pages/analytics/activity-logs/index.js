@@ -11,8 +11,6 @@ import StatisticFilter from '../../../components/analytics/StatisticFilter';
 import styles from '../../../styles/ActivityLogs.module.scss';
 import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
-import { baseAppUrl } from "../../../eas.config";
-import axios from "axios";
 import MainComponent from "../../../components/common/MainComponent";
 import isEqual from "lodash/isEqual";
 import { useRouter } from "next/router";

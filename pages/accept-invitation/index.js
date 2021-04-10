@@ -19,7 +19,6 @@ import { textForKey } from '../../utils/localization';
 import styles from '../../styles/AcceptInvitation.module.scss';
 import { useRouter } from "next/router";
 import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 
 const initialState = {
   isLoading: false,
@@ -180,7 +179,7 @@ const AcceptInvitation = () => {
         }
       }
       const { data: user } = await axios.put(
-        `${baseAppUrl}/api/users/accept-invitation`,
+        `/api/users/accept-invitation`,
         requestBody
       );
       toast.success(textForKey('invitation_accepted_success'));

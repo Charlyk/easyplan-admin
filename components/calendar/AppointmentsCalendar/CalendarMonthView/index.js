@@ -12,8 +12,7 @@ import { getDays } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import ScheduleItem from '../../ScheduleItem';
 import styles from '../../../../styles/CalendarMonthView.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
+import { getPeriodSchedules } from "../../../../middleware/api/schedules";
 
 const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   const dispatch = useDispatch();
@@ -35,9 +34,8 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
     }
     dispatch(setIsCalendarLoading(true));
     try {
-      const query = { doctorId, date: moment(viewDate).format('YYYY-MM-DD'), period: 'month' };
-      const queryString = new URLSearchParams(query).toString()
-      const response = await axios.get(`${baseAppUrl}/api/schedules?${queryString}`);
+      const date = moment(viewDate).format('YYYY-MM-DD')
+      const response = await getPeriodSchedules(doctorId, date, 'month')
       const newSchedules = [];
       for (let prop in response.data) {
         const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');

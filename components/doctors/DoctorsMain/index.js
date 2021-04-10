@@ -14,7 +14,7 @@ import {
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorsMain.module.scss';
 import axios from "axios";
-import { baseAppUrl, environment } from "../../../eas.config";
+import { environment } from "../../../eas.config";
 import { Role } from "../../../utils/constants";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -69,7 +69,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
       const query = { clinicId: company.clinicId };
       const queryString = new URLSearchParams(query).toString()
       const { data: selectedClinic } =
-        await axios.get(`${baseAppUrl}/api/clinic/change?${queryString}`);
+        await axios.get(`/api/clinic/change?${queryString}`);
       switch (selectedClinic.roleInClinic) {
         case Role.reception:
           const isPathRestricted = ['/analytics', '/services', '/users', '/messages']

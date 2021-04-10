@@ -13,11 +13,10 @@ import LoadingButton from '../../common/LoadingButton';
 import ServiceDoctors from './ServiceDoctors';
 import ServiceInformation from './ServiceInformation';
 import styles from '../../../styles/ServiceDetailsModal.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { toast } from "react-toastify";
 import { setUpdatedService } from "../../../redux/actions/servicesActions";
 import { clinicActiveDoctorsSelector } from "../../../redux/selectors/clinicSelector";
+import { createService, updateService } from "../../../middleware/api/services";
 
 const initialService = {
   name: '',
@@ -100,27 +99,27 @@ const ServiceDetailsModal = ({ currentClinic }) => {
     });
     let responseData;
     if (service != null) {
-      responseData = await editService(serviceInfo);
+      responseData = await handleEditService(serviceInfo);
     } else {
-      responseData = await createService(serviceInfo);
+      responseData = await handleCreateService(serviceInfo);
     }
     dispatch(setUpdatedService(responseData));
     setIsLoading(false);
     handleCloseModal();
   };
 
-  const createService = async (serviceInfo) => {
+  const handleCreateService = async (serviceInfo) => {
     try {
-      const response = await axios.post(`${baseAppUrl}/api/services`, serviceInfo);
+      const response = await createService(serviceInfo);
       return response.data;
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  const editService = async (serviceInfo) => {
+  const handleEditService = async (serviceInfo) => {
     try {
-      const response = await axios.put(`${baseAppUrl}/api/services/${service.id}`, serviceInfo);
+      const response = await updateService(service.id, serviceInfo);
       return response.data;
     } catch (error) {
       toast.error(error.message);

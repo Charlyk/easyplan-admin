@@ -10,8 +10,7 @@ import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootS
 import ScheduleItem from '../../../ScheduleItem';
 import styles from '../../../../../styles/CalendarWeekDayView.module.scss'
 import { toast } from "react-toastify";
-import axios from "axios";
-import { baseAppUrl } from "../../../../../eas.config";
+import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
 
 const CalendarWeekDayView = ({
   viewDate,
@@ -33,9 +32,8 @@ const CalendarWeekDayView = ({
     if (doctorId == null) return;
     dispatch(setIsCalendarLoading(true));
     try {
-      const query = { doctorId, date: day.format('YYYY-MM-DD'), period: 'week' };
-      const queryString = new URLSearchParams(query).toString();
-      const response = await axios.get(`${baseAppUrl}/api/schedules?${queryString}`);
+      const date = day.format('YYYY-MM-DD')
+      const response = await getPeriodSchedules(doctorId, date, 'week');
       const { data } = response;
       const newData = sortBy(data, item => item.startTime);
       setSchedules(newData);

@@ -15,7 +15,6 @@ import styles from '../../styles/DoctorPatients.module.scss';
 import DoctorsMain from "../../components/doctors/DoctorsMain";
 import { wrapper } from "../../store";
 import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { useRouter } from "next/router";
 import { fetchAppData } from "../../middleware/api/initialization";
@@ -157,7 +156,7 @@ export const getServerSideProps = async ({ res, req, query }) => {
 
     const queryString = new URLSearchParams(query).toString();
     const response = await axios.get(
-      `${baseAppUrl}/api/schedules?${queryString}`,
+      `/api/schedules?${queryString}`,
       { headers: req.headers }
     );
     return {

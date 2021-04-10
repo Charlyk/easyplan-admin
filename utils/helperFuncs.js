@@ -5,7 +5,7 @@ import uuid from 'react-uuid';
 import { baseApiUrl, imageLambdaUrl } from '../eas.config';
 import { env, Role, S3Config } from './constants';
 import { textForKey } from './localization';
-import { baseAppUrl, isDev } from "../eas.config";
+import { isDev } from "../eas.config";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import cookie from "cookie";
@@ -253,7 +253,7 @@ export const handleRequestError = async (error, req, res) => {
   const statusText = error?.response?.statusText || textForKey('something_went_wrong');
   if (status === 401) {
     if (req && req.url !== '/login') {
-      res.writeHead(302, { Location: `${baseAppUrl}/login` });
+      res.writeHead(302, { Location: `/login` });
       res.end();
     } else if (!req && Router?.asPath !== '/login') {
       await Router?.replace('/login');
@@ -351,7 +351,7 @@ export function redirectToUrl(user, clinic, path) {
 }
 
 export function redirectUserTo(path, res) {
-  res.writeHead(302, { Location: `${baseAppUrl}${path}` });
+  res.writeHead(302, { Location: `${path}` });
   res.end();
 }
 

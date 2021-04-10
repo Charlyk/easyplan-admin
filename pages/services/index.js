@@ -34,10 +34,7 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ServiceRow from '../../components/services/ServiceRow';
-import { useRouter } from "next/router";
 import MainComponent from "../../components/common/MainComponent";
-import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import { updatedServiceSelector } from "../../redux/selectors/servicesSelector";
 import { setUpdatedService } from "../../redux/actions/servicesActions";
 import { deleteService, fetchAllServices, restoreService } from "../../middleware/api/services";

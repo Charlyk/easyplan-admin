@@ -18,7 +18,6 @@ import LoadingButton from '../../../common/LoadingButton';
 import styles from '../../../../styles/PatientPersonalData.module.scss'
 import { toast } from "react-toastify";
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 
 const initialState = {
   isSaving: false,
@@ -179,7 +178,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
     };
 
     try {
-      await axios.put(`${baseAppUrl}/api/patients/${patient.id}`, requestBody);
+      await axios.put(`/api/patients/${patient.id}`, requestBody);
       await onPatientUpdated(true);
     } catch (error) {
       toast.error(error.message);

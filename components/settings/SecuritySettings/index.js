@@ -7,8 +7,6 @@ import IconSuccess from '../../icons/iconSuccess';
 import LoadingButton from '../../common/LoadingButton';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/SecuritySettings.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 import { updateUserAccount } from "../../../middleware/api/auth";
 

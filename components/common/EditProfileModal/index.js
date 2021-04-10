@@ -12,7 +12,6 @@ import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import '../../../styles/EditProfileModal.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 
 const EditProfileModal = ({ open, currentUser, onClose }) => {
@@ -87,7 +86,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
         password: data.password,
         confirmPassword: data.confirmPassword,
       };
-      await axios.put(`${baseAppUrl}/api/auth/update-account`, requestBody);
+      await axios.put(`/api/auth/update-account`, requestBody);
       toast.success(textForKey('Saved successfully'));
       onClose();
       await router.replace(router.asPath);

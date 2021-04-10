@@ -7,7 +7,6 @@ import LoadingButton from '../../components/common/LoadingButton';
 import { JwtRegex, PasswordRegex } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import clsx from "clsx";
 import styles from '../../styles/ResetPasswordForm.module.scss';
 import { wrapper } from "../../store";
@@ -34,12 +33,12 @@ const ResetPasswordForm = ({ token }) => {
     }
     setState({ ...state, isLoading: true });
     try {
-      await axios.put(`${baseAppUrl}/api/auth/reset-password`, {
+      await axios.put(`/api/auth/reset-password`, {
         newPassword: state.newPassword,
         resetToken: token,
       });
       toast.success(textForKey('Saved successfully'));
-      window.location = `${baseAppUrl}/login`;
+      window.location = `/login`;
     } catch (error) {
       toast.error(error.message);
       setState({ ...state, errorMessage: error.message, isLoading: false });
@@ -124,7 +123,7 @@ export const getServerSideProps = async ({ res, query }) => {
   const { token } = query;
 
   if (!token.match(JwtRegex)) {
-    res.writeHead(302, { Location: `${baseAppUrl}/login` });
+    res.writeHead(302, { Location: `/login` });
     res.end();
     return { props: { token } };
   }

@@ -13,7 +13,6 @@ import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSele
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/PatientDetails.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -53,7 +52,7 @@ const PatientDetails = ({
     }
 
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/notes`);
+      const response = await axios.get(`/api/patients/${patient.id}/notes`);
       setHasNotes(response.data.length > 0);
     } catch (error) {
       console.error(error);

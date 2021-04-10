@@ -27,9 +27,8 @@ import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../../common/EasyDatePicker';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddAppointment.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
-import { getAvailableHours, getScheduleDetails } from "../../../middleware/api/schedules";
+import { getAvailableHours, getScheduleDetails, postSchedule } from "../../../middleware/api/schedules";
+import { searchPatients } from "../../../middleware/api/patients";
 
 /**
  * Filter available time based on start time and service duration
@@ -532,8 +531,7 @@ const AddAppointmentModal = ({
       localDispatch(actions.setPatientsLoading(true));
       try {
         const updatedQuery = query.replace('+', '');
-        const queryString = new URLSearchParams({ query: updatedQuery }).toString();
-        const response = await axios.get(`${baseAppUrl}/api/patients/search?${queryString}`);
+        const response = await searchPatients(updatedQuery);
         const patients = response.data.map((item) => ({
           ...item,
           fullName: getLabelKey(item),
@@ -668,7 +666,7 @@ const AddAppointmentModal = ({
         scheduleId: scheduleId,
       };
 
-      await axios.post(`${baseAppUrl}/api/schedules`, requestBody);
+      await postSchedule(requestBody);
       onClose();
       dispatch(toggleAppointmentsUpdate());
     } catch (error) {

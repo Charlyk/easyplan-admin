@@ -7,7 +7,6 @@ import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/CreateCategoryModal.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { toast } from "react-toastify";
 
 const CreateCategoryModal = props => {
@@ -38,7 +37,7 @@ const CreateCategoryModal = props => {
 
   const editCategoryName = async () => {
     try {
-      const response = await axios.put(`${baseAppUrl}/api/categories/${category.id}`, { categoryName });
+      const response = await axios.put(`/api/categories/${category.id}`, { categoryName });
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {
@@ -50,7 +49,7 @@ const CreateCategoryModal = props => {
 
   const createNewCategory = async () => {
     try {
-      const response = await axios.post(`${baseAppUrl}/api/categories`, { categoryName });
+      const response = await axios.post(`/api/categories`, { categoryName });
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {

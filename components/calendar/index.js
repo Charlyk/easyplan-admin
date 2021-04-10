@@ -22,7 +22,6 @@ import moment from "moment-timezone";
 import { useRouter } from "next/router";
 import MainComponent from "../common/MainComponent";
 import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import { toast } from "react-toastify";
 
 const reducerTypes = {
@@ -261,7 +260,7 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
     }
     localDispatch(reducerActions.setIsDeleting(true));
     try {
-      await axios.delete(`${baseAppUrl}/api/schedules/${deleteSchedule.schedule.id}`);
+      await axios.delete(`/api/schedules/${deleteSchedule.schedule.id}`);
       localDispatch(
         reducerActions.setDeleteSchedule({ open: false, schedule: null }),
       );
