@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ClickAwayListener } from '@material-ui/core';
+import { ClickAwayListener, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import IconArrowDown from '../../icons/iconArrowDown';
@@ -14,7 +14,7 @@ import {
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorsMain.module.scss';
 import axios from "axios";
-import { environment } from "../../../eas.config";
+import { environment, isDev } from "../../../eas.config";
 import { Role } from "../../../utils/constants";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -111,6 +111,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
 
   return (
     <div className={styles['doctors-main-root']}>
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <EditProfileModal
         open={isEditingProfile}
         currentUser={currentUser}

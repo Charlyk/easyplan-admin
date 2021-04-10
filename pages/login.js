@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
 import { Role } from "../utils/constants";
 import { loginUser, resetUserPassword } from "../middleware/api/auth";
+import { isDev } from "../eas.config";
+import { Typography } from "@material-ui/core";
 
 const FormType = {
   login: 'login',
@@ -137,6 +139,7 @@ const Login = () => {
 
   return (
     <div className={styles['login-form-root']}>
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <div className={styles['logo-container']}>
         <img
           src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'

@@ -31,7 +31,8 @@ import { useRouter } from "next/router";
 import { handleRemoteMessage } from "../../utils/pubnubUtils";
 import CheckoutModal from "../invoices/CheckoutModal";
 import { setClinic } from "../../redux/actions/clinicActions";
-import { environment } from "../../eas.config";
+import { environment, isDev } from "../../eas.config";
+import { Typography } from "@material-ui/core";
 
 const MainComponent = ({ children, currentPath, currentUser, currentClinic, authToken }) => {
   const pubnub = usePubNub();
@@ -109,6 +110,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
 
   return (
     <div className={styles['main-page']} id='main-page'>
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <ServiceDetailsModal currentClinic={currentClinic} />
       {isExchangeRatesModalOpen && (
         <ExchangeRates
