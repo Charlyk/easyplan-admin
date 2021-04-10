@@ -8,7 +8,7 @@
 export const handler = async (apiCall, req, res) => {
   try {
     const response = await apiCall(req);
-    if (response.headers['set-cookie']) {
+    if (response.headers['set-cookie'] != null) {
       res.setHeader('set-cookie', response.headers['set-cookie']);
     }
     const { data: responseData } = response;
