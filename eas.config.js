@@ -1,5 +1,5 @@
 export const environment = process.env.APP_ENV;
-export const isDev = environment === 'local' || environment === 'development';
+export const isDev = environment === 'local' || environment === 'testing';
 
 export const baseApiUrl =
   environment === 'local'
