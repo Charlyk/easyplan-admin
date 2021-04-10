@@ -50,14 +50,15 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
     }
 
     if (currentClinic != null) {
+      const { id, domainName } = currentClinic;
       dispatch(setClinic(currentClinic));
       pubnub.subscribe({
-        channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
+        channels: [`${id}-${domainName}-clinic-pubnub-channel`],
       });
       pubnub.addListener({ message: handlePubnubMessageReceived });
       return () => {
         pubnub.unsubscribe({
-          channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
+          channels: [`${id}-${domainName}-clinic-pubnub-channel`],
         });
       };
     }

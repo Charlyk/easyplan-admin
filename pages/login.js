@@ -7,7 +7,6 @@ import styles from '../styles/auth/Login.module.scss';
 import { generateReducerActions, getRedirectUrlForUser } from "../utils/helperFuncs";
 import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
-import { Role } from "../utils/constants";
 import { loginUser, resetUserPassword } from "../middleware/api/auth";
 import { isDev } from "../eas.config";
 import { Typography } from "@material-ui/core";
