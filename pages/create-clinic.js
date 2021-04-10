@@ -7,6 +7,8 @@ import CreateClinicForm from "../components/login/registration/CreateClinicForm"
 import { createNewClinic } from "../middleware/api/clinic";
 import styles from '../styles/auth/CreateClinic.module.scss';
 import { parseCookies } from "../utils";
+import { isDev } from "../eas.config";
+import { Typography } from "@material-ui/core";
 
 const initialState = {
   isLoading: false,
@@ -73,6 +75,7 @@ const Register = ({ token, redirect }) => {
 
   return (
     <div className={styles.createClinicRoot}>
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <div className={styles.logoContainer}>
         <img
           src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'

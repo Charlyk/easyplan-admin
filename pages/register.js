@@ -7,6 +7,8 @@ import { registerUser } from "../middleware/api/auth";
 import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
 import styles from '../styles/auth/Register.module.scss';
+import { isDev } from "../eas.config";
+import { Typography } from "@material-ui/core";
 
 const initialState = {
   errorMessage: null,
@@ -59,6 +61,7 @@ const Register = () => {
 
   return (
     <div className={styles.registerFormRoot}>
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <div className={styles.logoContainer}>
         <img
           src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'

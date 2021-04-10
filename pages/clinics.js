@@ -7,6 +7,7 @@ import { textForKey } from "../utils/localization";
 import { useRouter } from "next/router";
 import styles from '../styles/auth/ClnicsList.module.scss';
 import { parseCookies } from "../utils";
+import { isDev } from "../eas.config";
 
 const Clinics = ({ user, authToken }) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Clinics = ({ user, authToken }) => {
 
   return (
     <div className={styles.clinicsListRoot}>
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <div className={styles.logoContainer}>
         <img
           src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
