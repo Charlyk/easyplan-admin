@@ -1,5 +1,5 @@
 import axios from "axios";
-import { isDev } from "../../../../eas.config";
+import { environment } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
@@ -26,7 +26,7 @@ export default authorized(async (req, res) => {
 function setCookies(res, clinicId) {
   const cookieOpts = {
     httpOnly: true,
-    secure: !isDev,
+    secure: environment !== 'local',
     sameSite: 'strict',
     maxAge: 36000,
     path: '/'

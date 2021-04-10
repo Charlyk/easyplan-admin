@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from "react";
 import clsx from "clsx";
-import styles from "../../../styles/RegisterForm.module.scss";
+import styles from "../../../styles/auth/RegisterForm.module.scss";
 import { textForKey } from "../../../utils/localization";
 import moment from "moment-timezone";
 import { generateReducerActions } from "../../../utils/helperFuncs";
@@ -11,6 +11,7 @@ import IconAvatar from "../../icons/iconAvatar";
 import LoadingButton from "../../common/LoadingButton";
 import { WebRegex } from "../../../utils/constants";
 import debounce from "lodash/debounce";
+import { isDev } from "../../../eas.config";
 
 const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/ig;
 
@@ -61,14 +62,16 @@ const reducer = (state, action) => {
       return { ...state, timeZone: action.payload };
     case reducerTypes.setTimeZones:
       return { ...state, timeZones: action.payload };
-    case reducerTypes.setDomainName:
+    case reducerTypes.setDomainName: {
+      const updatedDomain = action.payload
+        .toLowerCase()
+        .replaceAll(charactersRegex, '')
+        .replaceAll(' ', '-');
       return {
         ...state,
-        domainName: action.payload
-          .toLowerCase()
-          .replaceAll(charactersRegex, '')
-          .replaceAll(' ', '-')
+        domainName: updatedDomain
       };
+    }
     case reducerTypes.setInitialData:
       return { ...state, ...action.payload };
     case reducerTypes.setDefaultCurrency:
@@ -82,7 +85,7 @@ const reducer = (state, action) => {
 
 const actions = generateReducerActions(reducerTypes);
 
-const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
+const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
   const [{
     logoFile,
     clinicName,
@@ -121,7 +124,8 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
   }
 
   const handleDomainChange = (event) => {
-    localDispatch(actions.setDomainName(event.target.value.toLowerCase()));
+    const newDomain = event.target.value.toLowerCase()
+    localDispatch(actions.setDomainName(newDomain));
   }
 
   const handleWebsiteChange = (event) => {
@@ -149,7 +153,11 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
 
   const checkIsDomainAvailable = async () => {
     try {
-      const { data: isAvailable } = await checkDomainAvailability(domainName);
+      let domainToCheck = domainName;
+      if (isDev) {
+        domainToCheck = `${domainToCheck}-dev`
+      }
+      const { data: isAvailable } = await checkDomainAvailability(domainToCheck);
       localDispatch(actions.setIsDomainAvailable(isAvailable));
     } catch (error) {
       toast.error(error.message);
@@ -174,7 +182,7 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
       website,
       timeZone,
       description,
-      domainName,
+      domainName: isDev ? `${domainName}-dev` : domainName,
       defaultCurrency,
     });
   }
@@ -226,7 +234,7 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
             onChange={handleDomainChange}
           />
           <InputGroup.Append>
-            <InputGroup.Text id='basic-addon1'>.easyplan.pro</InputGroup.Text>
+            <InputGroup.Text id='basic-addon1'>{isDev ? '-dev' : ''}.easyplan.pro</InputGroup.Text>
           </InputGroup.Append>
         </InputGroup>
       </Form.Group>
@@ -292,7 +300,10 @@ const CreateClinicForm = ({ isLoading, onGoBack, onSubmit }) => {
           className='back-button'
           onClick={handleGoBack}
         >
-          {textForKey('Already have an account')}?
+          {redirect
+            ? `${textForKey('Already have an account')}?`
+            : textForKey('go back')
+          }
         </div>
         <LoadingButton
           onClick={handleSubmitForm}

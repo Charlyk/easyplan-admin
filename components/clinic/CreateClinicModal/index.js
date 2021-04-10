@@ -124,7 +124,7 @@ const CreateClinicModal = ({ open, onCreate, onClose }) => {
       const response = await clinicTimeZones();
       localDispatch(actions.setTimeZones(response.data))
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(error.message);
     } finally {
       localDispatch(actions.setIsLoading(false))

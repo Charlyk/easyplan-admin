@@ -8,7 +8,7 @@ import { JwtRegex, PasswordRegex } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
 import axios from "axios";
 import clsx from "clsx";
-import styles from '../../styles/ResetPasswordForm.module.scss';
+import styles from '../../styles/auth/ResetPasswordForm.module.scss';
 import { wrapper } from "../../store";
 
 const ResetPasswordForm = ({ token }) => {

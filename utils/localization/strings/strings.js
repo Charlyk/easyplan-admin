@@ -508,6 +508,7 @@ export default {
     rescheduled: 'Rescheduled',
     cashier: 'Cashier',
     'calendar legend': 'Calendar legend',
+    'select a clinic': 'Select a clinic',
   },
   ro: {
     analytics: 'Analitică',
@@ -1024,6 +1025,7 @@ export default {
     rescheduled: 'Reprogramat',
     cashier: 'Casier',
     'calendar legend': 'Legenda statuturilor',
+    'select a clinic': 'Alegeți o clinică',
   },
   ru: {
     analytics: 'Analytics',
@@ -1531,5 +1533,6 @@ export default {
     rescheduled: 'Rescheduled',
     cashier: 'Кассир',
     'calendar legend': 'Calendar legend',
+    'select a clinic': 'Выберите клинику',
   },
 };

@@ -3,7 +3,7 @@ import RegisterForm from "./RegisterForm";
 import { generateReducerActions, uploadFileToAWS } from "../../../utils/helperFuncs";
 import { StepLabel, Stepper, Step } from "@material-ui/core";
 import { textForKey } from "../../../utils/localization";
-import styles from '../../../styles/RegistrationWrapper.module.scss';
+import styles from '../../../styles/auth/RegistrationWrapper.module.scss';
 import CreateClinicForm from "./CreateClinicForm";
 import { toast } from "react-toastify";
 import { registerUser } from "../../../middleware/api/auth";

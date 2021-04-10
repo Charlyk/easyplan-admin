@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import MainComponent from "../components/common/MainComponent";
 import { useRouter } from "next/router";
 import { fetchAppData } from "../middleware/api/initialization";
-import { handleRequestError } from "../utils/helperFuncs";
-import { Role } from "../utils/constants";
+import { getRedirectUrlForUser, handleRequestError } from "../utils/helperFuncs";
 
 const MainPage = ({ currentClinic, currentUser }) => {
   const router = useRouter();
@@ -13,26 +12,8 @@ const MainPage = ({ currentClinic, currentUser }) => {
   }, []);
 
   const redirectUserToPage = async () => {
-    const selectedClinic = currentUser?.clinics.find((clinic) => clinic.isSelected) || currentUser?.clinics[0];
-    if (selectedClinic != null) {
-      switch (selectedClinic.roleInClinic) {
-        case Role.reception:
-          await router.replace('/calendar/day');
-          break;
-        case Role.admin:
-        case Role.manager:
-          await router.replace('/analytics/general');
-          break;
-        case Role.doctor:
-          await router.replace('/doctor');
-          break;
-        default:
-          await router.replace('/login');
-          break;
-      }
-    } else {
-      await router.replace('/login');
-    }
+    const redirectPath = getRedirectUrlForUser(currentUser);
+    await router.replace(redirectPath);
   }
 
   return (

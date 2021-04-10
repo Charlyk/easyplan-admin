@@ -6,7 +6,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import LoadingButton from '../common/LoadingButton';
 import { EmailRegex } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
-import styles from '../../styles/ResetPassword.module.scss';
+import styles from '../../styles/auth/ResetPassword.module.scss';
 import clsx from "clsx";
 
 const ResetPassword = ({ isLoading, errorMessage, onSubmit, onGoBack }) => {

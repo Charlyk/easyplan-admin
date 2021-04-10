@@ -1,4 +1,4 @@
-import { isDev } from "../../../eas.config";
+import { environment } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 
@@ -10,7 +10,7 @@ export default authorized(async (req, res) => {
 function clearCookies(res, authToken, clinicId) {
   const cookieOpts = {
     httpOnly: true,
-    secure: !isDev,
+    secure: environment !== 'local',
     sameSite: 'strict',
     maxAge: -1,
     path: '/'

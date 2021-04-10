@@ -14,7 +14,6 @@ import PatientDetailsModal from '../patients/PatientDetailsModal';
 import ServiceDetailsModal from '../services/ServiceDetailsModal';
 import {
   setAppointmentModal,
-  setCreateClinic,
   setPatientDetails, setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
@@ -29,10 +28,7 @@ import ExchangeRates from "./ExchangeRates";
 import { isExchangeRateModalOpenSelector } from "../../redux/selectors/exchangeRatesModalSelector";
 import { setIsExchangeRatesModalOpen } from "../../redux/actions/exchangeRatesActions";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import { Role } from "../../utils/constants";
 import { handleRemoteMessage } from "../../utils/pubnubUtils";
-import { changeCurrentClinic } from "../../middleware/api/clinic";
 import CheckoutModal from "../invoices/CheckoutModal";
 import { setClinic } from "../../redux/actions/clinicActions";
 import { environment } from "../../eas.config";
@@ -78,31 +74,8 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
     dispatch(triggerUserLogout(true));
   };
 
-  const handleCreateClinic = () => {
-    dispatch(setCreateClinic({ open: true, canClose: true }));
-  };
-
-  const handleChangeCompany = async (company) => {
-    try {
-      const { data: selectedClinic } = await changeCurrentClinic(company.clinicId);
-      switch (selectedClinic.roleInClinic) {
-        case Role.reception:
-          const isPathRestricted = ['/analytics', '/services', '/users', '/messages']
-            .some(item => router.asPath.startsWith(item));
-          if (isPathRestricted) {
-            await router.replace('/calendar/day');
-          } else {
-            await router.reload();
-          }
-          break;
-        default:
-          await router.reload();
-          break;
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error(error.message);
-    }
+  const handleCreateClinic = async () => {
+    await router.push('/create-clinic?redirect=0')
   };
 
   const handleAppointmentModalClose = () => {
@@ -188,7 +161,6 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
           currentUser={currentUser}
           currentPath={currentPath}
           onCreateClinic={handleCreateClinic}
-          onChangeCompany={handleChangeCompany}
         />
       )}
       {currentUser != null && (
