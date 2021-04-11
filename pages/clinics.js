@@ -1,6 +1,6 @@
 import React from 'react';
 import { getCurrentUser } from "../middleware/api/auth";
-import { handleRequestError } from "../utils/helperFuncs";
+import { getClinicUrl, handleRequestError } from "../utils/helperFuncs";
 import ClinicItem from "../components/login/ClinicItem";
 import { Typography } from "@material-ui/core";
 import { textForKey } from "../utils/localization";
@@ -13,13 +13,8 @@ const Clinics = ({ user, authToken }) => {
   const router = useRouter();
 
   const handleClinicSelected = async (clinic) => {
-    const { host, protocol } = window.location;
-    const [_, domain, location] = host.split('.');
-    const queryString = new URLSearchParams({
-      token: authToken,
-      clinicId: clinic.clinicId
-    });
-    await router.replace(`${protocol}//${clinic.clinicDomain}.${domain}.${location}/redirect?${queryString}`);
+    const clinicUrl = getClinicUrl(clinic, authToken);
+    await router.replace(clinicUrl);
   }
 
   return (

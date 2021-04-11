@@ -387,3 +387,33 @@ export const getRedirectUrlForUser = (user) => {
     return '/login';
   }
 }
+
+export const getClinicUrl = (clinic, authToken) => {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+  const { host, protocol } = window.location;
+  const [_, domain, location] = host.split('.');
+  const queryString = new URLSearchParams({
+    token: authToken,
+    clinicId: clinic.clinicId
+  });
+  return `${protocol}//${clinic.clinicDomain}.${domain}.${location}/redirect?${queryString}`;
+}
+
+export const redirectIfOnGeneralHost = async (currentUser, authToken, router) => {
+  const [subdomain] = window.location.host.split('.');
+  if (['app', 'app-dev'].includes(subdomain)) {
+    if (currentUser == null) {
+      return;
+    }
+    if (currentUser.clinics.length > 1) {
+      await router.replace('/clinics');
+    } else if (currentUser.clinics.length === 1) {
+      const clinicUrl = getClinicUrl(currentUser.clinics[0], authToken);
+      await router.replace(clinicUrl);
+    } else {
+      await router.replace('/create-clinic');
+    }
+  }
+}

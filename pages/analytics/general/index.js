@@ -22,6 +22,7 @@ import MainComponent from "../../../components/common/MainComponent";
 import sortBy from "lodash/sortBy";
 import { getGeneralStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
+import { parseCookies } from "../../../utils";
 
 const initialState = {
   doctors: [],
@@ -68,7 +69,16 @@ const reducer = (state, action) => {
   }
 }
 
-const General = ({ currentUser, currentClinic, scheduleStats, financeStats, query: initialQuery }) => {
+const General = (
+  {
+    currentUser,
+    currentClinic,
+    scheduleStats,
+    financeStats,
+    query: initialQuery,
+    authToken,
+  }
+) => {
   const pickerRef = useRef(null);
   const doctors = sortBy(
     currentClinic?.users?.filter(user => user.roleInClinic === Role.doctor) || [],
@@ -149,6 +159,7 @@ const General = ({ currentUser, currentClinic, scheduleStats, financeStats, quer
       currentPath='/analytics/general'
       currentUser={currentUser}
       currentClinic={currentClinic}
+      authToken={authToken}
     >
       <div className={styles['general-statistics']} id='general-statistics'>
         <div className={styles['main-data-container']}>
@@ -270,6 +281,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
       query.doctorId = -1;
     }
 
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/general');
@@ -282,6 +294,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     return {
       props: {
         ...data,
+        authToken,
         query,
         ...appData
       },

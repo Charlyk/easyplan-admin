@@ -16,6 +16,7 @@ import isEqual from "lodash/isEqual";
 import { useRouter } from "next/router";
 import { getActivityJournal } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
+import { parseCookies } from "../../../utils";
 
 const initialState = {
   isLoading: false,
@@ -66,7 +67,7 @@ const reducer = (state, action) => {
   }
 }
 
-const ActivityLogs = ({ currentUser, currentClinic, activityLogs, query: initialQuery }) => {
+const ActivityLogs = ({ currentUser, currentClinic, activityLogs, query: initialQuery, authToken }) => {
   const pickerRef = useRef(null);
   const router = useRouter();
   const users = sortBy(currentClinic.users, user => user.fullName.toLowerCase());
@@ -140,6 +141,7 @@ const ActivityLogs = ({ currentUser, currentClinic, activityLogs, query: initial
       currentUser={currentUser}
       currentClinic={currentClinic}
       currentPath='/analytics/activity-logs'
+      authToken={authToken}
     >
       <div className={styles['activity-logs']}>
         <ActionLogModal
@@ -247,6 +249,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.userId == null) {
       query.userId = -1;
     }
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/activity-logs');
@@ -258,6 +261,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const { data: activityLogs } = await getActivityJournal(query, req.headers);
     return {
       props: {
+        authToken,
         activityLogs,
         query,
         ...appData,

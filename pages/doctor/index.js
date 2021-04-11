@@ -18,6 +18,7 @@ import axios from "axios";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { useRouter } from "next/router";
 import { fetchAppData } from "../../middleware/api/initialization";
+import { parseCookies } from "../../utils";
 
 const initialFilter = {
   patientName: '',
@@ -25,7 +26,15 @@ const initialFilter = {
   appointmentStatus: 'all',
 }
 
-const DoctorPatients = ({ currentUser, currentClinic, schedules: initialSchedules, date }) => {
+const DoctorPatients = (
+  {
+    currentUser,
+    currentClinic,
+    schedules: initialSchedules,
+    date,
+    authToken,
+  }
+) => {
   const router = useRouter();
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
@@ -117,7 +126,11 @@ const DoctorPatients = ({ currentUser, currentClinic, schedules: initialSchedule
   };
 
   return (
-    <DoctorsMain currentClinic={currentClinic} currentUser={currentUser}>
+    <DoctorsMain
+      currentClinic={currentClinic}
+      currentUser={currentUser}
+      authToken={authToken}
+    >
       <div className={styles['doctor-patients-root']}>
         <div className={styles['filter-wrapper']}>
           <PatientsFilter
@@ -146,6 +159,7 @@ export const getServerSideProps = async ({ res, req, query }) => {
     query.date = moment().format('YYYY-MM-DD');
   }
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
@@ -161,6 +175,7 @@ export const getServerSideProps = async ({ res, req, query }) => {
     );
     return {
       props: {
+        authToken,
         schedules: response.data,
         date: query.date,
         ...appData,

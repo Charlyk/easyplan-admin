@@ -33,8 +33,17 @@ import CheckoutModal from "../invoices/CheckoutModal";
 import { setClinic } from "../../redux/actions/clinicActions";
 import { environment, isDev } from "../../eas.config";
 import { Typography } from "@material-ui/core";
+import { redirectIfOnGeneralHost } from "../../utils/helperFuncs";
 
-const MainComponent = ({ children, currentPath, currentUser, currentClinic, authToken }) => {
+const MainComponent = (
+  {
+    children,
+    currentPath,
+    currentUser,
+    currentClinic,
+    authToken
+  }
+) => {
   const pubnub = usePubNub();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -45,7 +54,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
 
   useEffect(() => {
-    redirectIfOnGeneralHost();
+    redirectIfOnGeneralHost(currentUser, authToken, router);
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }
@@ -68,13 +77,6 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
       }
     }
   }, []);
-
-  const redirectIfOnGeneralHost = async () => {
-    const [subdomain] = window.location.host.split('.');
-    if (['app', 'app-dev'].includes(subdomain)) {
-      await router.replace('/clinics');
-    }
-  }
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
@@ -124,7 +126,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
   return (
     <div className={styles['main-page']} id='main-page'>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      <ServiceDetailsModal currentClinic={currentClinic} />
+      <ServiceDetailsModal currentClinic={currentClinic}/>
       {isExchangeRatesModalOpen && (
         <ExchangeRates
           currentClinic={currentClinic}

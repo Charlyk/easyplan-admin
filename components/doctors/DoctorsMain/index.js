@@ -21,8 +21,9 @@ import { useRouter } from "next/router";
 import { setClinic } from "../../../redux/actions/clinicActions";
 import { usePubNub } from "pubnub-react";
 import { handleRemoteMessage } from "../../../utils/pubnubUtils";
+import { getClinicUrl, redirectIfOnGeneralHost } from "../../../utils/helperFuncs";
 
-const DoctorsMain = ({ children, currentUser, currentClinic }) => {
+const DoctorsMain = ({ children, currentUser, currentClinic, authToken }) => {
   const dispatch = useDispatch();
   const pubnub = usePubNub();
   const router = useRouter();
@@ -34,6 +35,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
   );
 
   useEffect(() => {
+    redirectIfOnGeneralHost(currentUser, authToken, router)
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }

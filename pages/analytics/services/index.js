@@ -28,6 +28,7 @@ import styles from '../../../styles/ServicesStatistics.module.scss';
 import MainComponent from "../../../components/common/MainComponent";
 import { getServicesStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
+import { parseCookies } from "../../../utils";
 
 const reducerTypes = {
   setSelectedDoctor: 'setSelectedDoctor',
@@ -135,6 +136,7 @@ const Services = (
     currentClinic,
     statistics: { data: statistics, total: totalItems },
     query: initialQuery,
+    authToken,
   }
 ) => {
   const router = useRouter()
@@ -286,6 +288,7 @@ const Services = (
       currentUser={currentUser}
       currentClinic={currentClinic}
       currentPath='/analytics/services'
+      authToken={authToken}
     >
       <div className={styles['statistics-services']}>
         <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
@@ -461,6 +464,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.status == null) {
       query.status = 'All'
     }
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/services');
@@ -472,6 +476,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const { data: statistics } = await getServicesStatistics(query, req.headers);
     return {
       props: {
+        authToken,
         statistics,
         query,
         ...appData,

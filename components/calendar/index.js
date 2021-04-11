@@ -23,6 +23,7 @@ import { useRouter } from "next/router";
 import MainComponent from "../common/MainComponent";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { parseCookies } from "../../utils";
 
 const reducerTypes = {
   setFilters: 'setFilters',
@@ -112,7 +113,7 @@ const initialState = {
   parsedValue: 0,
 };
 
-const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
+const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authToken }) => {
   const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
@@ -284,7 +285,12 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
   };
 
   return (
-    <MainComponent currentUser={currentUser} currentClinic={currentClinic} currentPath='/calendar'>
+    <MainComponent
+      currentUser={currentUser}
+      currentClinic={currentClinic}
+      currentPath='/calendar'
+      authToken={authToken}
+    >
       <div className={styles['calendar-root']}>
         {deleteSchedule.open && (
           <ConfirmationModal
@@ -332,5 +338,14 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
     </MainComponent>
   );
 };
+
+export const getServerSideProps = async ({ req }) => {
+  const { auth_token: authToken } = parseCookies(req);
+  return {
+    props: {
+      authToken,
+    }
+  }
+}
 
 export default Calendar;

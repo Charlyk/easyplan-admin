@@ -3,8 +3,9 @@ import MainComponent from "../components/common/MainComponent";
 import { useRouter } from "next/router";
 import { fetchAppData } from "../middleware/api/initialization";
 import { getRedirectUrlForUser, handleRequestError } from "../utils/helperFuncs";
+import { parseCookies } from "../utils";
 
-const MainPage = ({ currentClinic, currentUser }) => {
+const MainPage = ({ currentClinic, currentUser, authToken }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const MainPage = ({ currentClinic, currentUser }) => {
     <MainComponent
       currentClinic={currentClinic}
       currentUser={currentUser}
+      authToken={authToken}
       currentPath='/'
     />
   )
@@ -27,9 +29,13 @@ const MainPage = ({ currentClinic, currentUser }) => {
 
 export const getServerSideProps = async ({ req, res }) => {
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     return {
-      props: appData
+      props: {
+        ...appData,
+        authToken,
+      }
     }
   } catch (error) {
     await handleRequestError(error, req, res);

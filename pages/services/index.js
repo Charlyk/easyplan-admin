@@ -39,6 +39,7 @@ import { updatedServiceSelector } from "../../redux/selectors/servicesSelector";
 import { setUpdatedService } from "../../redux/actions/servicesActions";
 import { deleteService, fetchAllServices, restoreService } from "../../middleware/api/services";
 import { fetchAppData } from "../../middleware/api/initialization";
+import { parseCookies } from "../../utils";
 
 const categoryModalState = {
   closed: 'closed',
@@ -97,7 +98,7 @@ const reducer = (state, action) => {
   }
 };
 
-const Services = ({ currentUser, currentClinic, categories: clinicCategories, services }) => {
+const Services = ({ currentUser, currentClinic, categories: clinicCategories, services, authToken }) => {
   const dispatch = useDispatch();
   const updatedService = useSelector(updatedServiceSelector);
   const [
@@ -318,6 +319,7 @@ const Services = ({ currentUser, currentClinic, categories: clinicCategories, se
       currentUser={currentUser}
       currentClinic={currentClinic}
       currentPath='/services'
+      authToken={authToken}
     >
       <div className={styles['services-root']}>
         <ConfirmationModal
@@ -494,6 +496,7 @@ const Services = ({ currentUser, currentClinic, categories: clinicCategories, se
 
 export const getServerSideProps = async ({ req, res, }) => {
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/services');
@@ -507,6 +510,7 @@ export const getServerSideProps = async ({ req, res, }) => {
       props: {
         ...data,
         ...appData,
+        authToken,
       },
     };
   } catch (error) {
