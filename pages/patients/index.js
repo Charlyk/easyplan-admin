@@ -157,6 +157,9 @@ const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery, au
   }, [page, rowsPerPage]);
 
   const fetchPatients = async () => {
+    if (currentClinic == null) {
+      return;
+    }
     localDispatch(actions.setIsLoading(true));
     try {
       const updatedQuery = searchQuery.replace('+', '');
@@ -299,7 +302,7 @@ const NewPatients = ({ currentUser, currentClinic, data, query: initialQuery, au
               </TableHead>
               {!isLoading && (
                 <TableBody>
-                  {patients.data.map((patient) => (
+                  {patients?.data?.map((patient) => (
                     <PatientRow
                       key={patient.id}
                       patient={patient}

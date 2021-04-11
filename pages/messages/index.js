@@ -76,7 +76,7 @@ const reducer = (state, action) => {
 };
 
 const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages, authToken }) => {
-  const hasSMSAlias = currentClinic.smsAlias != null;
+  const hasSMSAlias = currentClinic?.smsAlias != null;
   const [
     {
       isCreatingMessage,

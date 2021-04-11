@@ -54,7 +54,7 @@ const MainComponent = (
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
 
   useEffect(() => {
-    redirectIfOnGeneralHost(currentUser, authToken, router);
+    redirectIfOnGeneralHost(currentUser, router);
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }

@@ -3,7 +3,6 @@ import React, { useEffect, useReducer } from 'react';
 import styles from '../../styles/Calendar.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch } from 'react-redux';
-import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 
 import ConfirmationModal from '../common/ConfirmationModal';
 import {
@@ -12,9 +11,8 @@ import {
   toggleAppointmentsUpdate,
   toggleImportModal,
 } from '../../redux/actions/actions';
-import types from '../../redux/types/types';
 import { Role } from '../../utils/constants';
-import { generateReducerActions } from '../../utils/helperFuncs';
+import { generateReducerActions, redirectIfOnGeneralHost } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './AppointmentsCalendar';
 import CalendarDoctors from './AppointmentsCalendar/CalendarDoctors';
@@ -117,8 +115,8 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authTo
   const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
-  const services = currentClinic.services?.filter((item) => !item.deleted) || [];
-  const doctors = currentClinic.users.filter((item) => item.roleInClinic === Role.doctor && !item.isHidden);
+  const services = currentClinic?.services?.filter((item) => !item.deleted) || [];
+  const doctors = currentClinic?.users.filter((item) => item.roleInClinic === Role.doctor && !item.isHidden) || [];
   const viewDate = moment(date).toDate();
   const [
     {
@@ -136,27 +134,15 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authTo
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    if (currentUser == null) {
+      return
+    }
+    redirectIfOnGeneralHost(currentUser, router);
     pubnub.subscribe({
       channels: [`${currentUser.id}-import_schedules_channel`],
     });
     pubnub.addListener({ message: handlePubnubMessageReceived });
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.checkAppointments,
-        timerName: 'appointmentsTimer',
-        timerInterval: 10 * 1000,
-      },
-    });
     return () => {
-      dispatch({
-        type: STOP_TIMER,
-        payload: {
-          actionName: types.checkAppointments,
-          timerName: 'appointmentsTimer',
-          timerInterval: 10 * 1000,
-        },
-      });
       pubnub.unsubscribe({
         channels: [`${currentUser.id}-import_schedules_channel`],
       });

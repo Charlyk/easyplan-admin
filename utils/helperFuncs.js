@@ -401,19 +401,9 @@ export const getClinicUrl = (clinic, authToken) => {
   return `${protocol}//${clinic.clinicDomain}.${domain}.${location}/redirect?${queryString}`;
 }
 
-export const redirectIfOnGeneralHost = async (currentUser, authToken, router) => {
+export const redirectIfOnGeneralHost = async (currentUser, router) => {
   const [subdomain] = window.location.host.split('.');
   if (['app', 'app-dev'].includes(subdomain)) {
-    if (currentUser == null) {
-      return;
-    }
-    if (currentUser.clinics.length > 1) {
-      await router.replace('/clinics');
-    } else if (currentUser.clinics.length === 1) {
-      const clinicUrl = getClinicUrl(currentUser.clinics[0], authToken);
-      await router.replace(clinicUrl);
-    } else {
-      await router.replace('/create-clinic');
-    }
+    await router.replace('/clinics');
   }
 }
