@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { getCurrentUser } from "../middleware/api/auth";
 import { getClinicUrl, handleRequestError } from "../utils/helperFuncs";
 import ClinicItem from "../components/login/ClinicItem";
@@ -11,6 +11,14 @@ import { isDev } from "../eas.config";
 
 const Clinics = ({ user, authToken }) => {
   const router = useRouter();
+
+  useEffect(() => {
+    if (user.clinics.length === 1) {
+      handleClinicSelected(user.clinics[0]);
+    } else if (user.clinics.length === 0) {
+      router.replace('/create-clinic');
+    }
+  }, [])
 
   const handleClinicSelected = async (clinic) => {
     const clinicUrl = getClinicUrl(clinic, authToken);
