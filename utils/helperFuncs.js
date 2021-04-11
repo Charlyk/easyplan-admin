@@ -365,6 +365,9 @@ export function updatedServerUrl() {
 }
 
 export const getRedirectUrlForUser = (user) => {
+  if (user == null) {
+    return '/login';
+  }
   const { userClinic } = user;
   if (userClinic != null) {
     try {

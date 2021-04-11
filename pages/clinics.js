@@ -2,15 +2,19 @@ import React, { useEffect } from 'react';
 import { getCurrentUser } from "../middleware/api/auth";
 import { getClinicUrl, handleRequestError } from "../utils/helperFuncs";
 import ClinicItem from "../components/login/ClinicItem";
-import { Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { textForKey } from "../utils/localization";
 import { useRouter } from "next/router";
 import styles from '../styles/auth/ClnicsList.module.scss';
 import { parseCookies } from "../utils";
 import { isDev } from "../eas.config";
+import { Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { triggerUserLogout } from "../redux/actions/actions";
 
 const Clinics = ({ user, authToken }) => {
   const router = useRouter();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (user.clinics.length === 1) {
@@ -23,6 +27,10 @@ const Clinics = ({ user, authToken }) => {
   const handleClinicSelected = async (clinic) => {
     const clinicUrl = getClinicUrl(clinic, authToken);
     await router.replace(clinicUrl);
+  }
+
+  const handleLogout = () => {
+    dispatch(triggerUserLogout(true));
   }
 
   return (
@@ -46,6 +54,11 @@ const Clinics = ({ user, authToken }) => {
               onSelected={handleClinicSelected}
             />
           ))}
+          <Box display='flex' width='100%' alignItems='center' mt='1rem'>
+            <Button className='positive-button' onClick={handleLogout}>
+              {textForKey('Logout')}
+            </Button>
+          </Box>
         </div>
       </div>
     </div>
