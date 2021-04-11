@@ -45,6 +45,7 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
 
   useEffect(() => {
+    redirectIfOnGeneralHost();
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }
@@ -61,8 +62,19 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
           channels: [`${id}-${environment}-clinic-pubnub-channel`],
         });
       };
+    } else {
+      return () => {
+        pubnub.unsubscribeAll();
+      }
     }
   }, []);
+
+  const redirectIfOnGeneralHost = async () => {
+    const [subdomain] = window.location.host.split('.');
+    if (['app', 'app-dev'].includes(subdomain)) {
+      await router.replace('/clinics');
+    }
+  }
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
