@@ -30,4 +30,5 @@ export default Object.freeze({
       updateMessageStatus: null,
     },
   },
+  updateHourIndicatorTop: false,
 });
