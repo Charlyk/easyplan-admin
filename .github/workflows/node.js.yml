@@ -28,7 +28,6 @@ jobs:
       - run: yarn install
       - run: yarn build
       - if: github.ref == 'refs/heads/master'
-        run: pm2 delete easyplan-prod
+        run: pm2 reload easyplan-prod
       - if: github.ref == 'refs/heads/develop'
-        run: pm2 delete easyplan-dev
-      - run: pm2 start ecosystem.config.js
+        run: pm2 reload easyplan-dev
