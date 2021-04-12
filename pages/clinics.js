@@ -17,6 +17,10 @@ const Clinics = ({ user, authToken }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    if (typeof user === 'undefined') {
+      router.replace('/login');
+      return;
+    }
     if (user.clinics.length === 1) {
       handleClinicSelected(user.clinics[0]);
     } else if (user.clinics.length === 0) {
