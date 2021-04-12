@@ -14,7 +14,7 @@ import IconClock from '../../../../icons/iconClock';
 import { textForKey } from '../../../../../utils/localization';
 import styles from '../../../../../styles/DoctorItem.module.scss';
 
-const DoctorItem = ({ doctor, onAddPause }) => {
+const DoctorItem = ({ doctor, id, isInVacation, name, onAddPause }) => {
   const doctorAnchor = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,6 +28,9 @@ const DoctorItem = ({ doctor, onAddPause }) => {
   };
 
   const handleAddPause = () => {
+    if (typeof onAddPause !== 'function') {
+      return;
+    }
     onAddPause(doctor);
     handleCloseMenu();
   };
@@ -42,7 +45,7 @@ const DoctorItem = ({ doctor, onAddPause }) => {
       onClose={handleCloseMenu}
     >
       <MenuItem onClick={handleAddPause} classes={{ root: styles['menu-option'] }}>
-        <IconClock />
+        <IconClock/>
         <Typography classes={{ root: styles['option-label'] }}>
           {textForKey('Add pause')}
         </Typography>
@@ -56,17 +59,17 @@ const DoctorItem = ({ doctor, onAddPause }) => {
       role='button'
       tabIndex={0}
       onClick={handleOpenMenu}
-      className={clsx(
-        styles.doctorItem,
-        doctor.isInVacation && styles.disabled,
-      )}
-      id={doctor.id}
+      className={
+        clsx(styles.doctorItem, {
+          [isInVacation]: styles.disabled
+        })
+      }
+      id={id}
     >
-      {optionsMenu}
+      {typeof onAddPause === 'function' && optionsMenu}
       <ClickAwayListener onClickAway={handleCloseMenu}>
         <Typography noWrap classes={{ root: styles['doctor-name'] }}>
-          {upperFirst(doctor.firstName.toLowerCase())}{' '}
-          {upperFirst(doctor.lastName.toLowerCase())}
+          {upperFirst(name.toLowerCase())}
         </Typography>
       </ClickAwayListener>
     </div>
@@ -76,6 +79,9 @@ const DoctorItem = ({ doctor, onAddPause }) => {
 export default DoctorItem;
 
 DoctorItem.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isInVacation: PropTypes.bool,
+  name: PropTypes.string,
   doctor: PropTypes.shape({
     id: PropTypes.number,
     firstName: PropTypes.string,
@@ -88,8 +94,4 @@ DoctorItem.propTypes = {
     ),
   }),
   onAddPause: PropTypes.func,
-};
-
-DoctorItem.defaultProps = {
-  onAddPause: () => null,
 };

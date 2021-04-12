@@ -30,6 +30,7 @@ import { logoutSelector } from "../redux/selectors/rootSelector";
 import { ToastContainer } from "react-toastify";
 import { signOut } from "../middleware/api/auth";
 import { fetchAppData } from "../middleware/api/initialization";
+import 'moment/locale/ro';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file

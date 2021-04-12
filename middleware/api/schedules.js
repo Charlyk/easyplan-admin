@@ -142,13 +142,15 @@ export async function getPeriodSchedules(doctorId, date, period, headers = null)
  * Fetch schedules for a given interval of time
  * @param {Date} startDate
  * @param {Date} endDate
+ * @param {number|string} doctorId
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function getSchedulesForInterval(startDate, endDate, headers = null) {
+export async function getSchedulesForInterval(startDate, endDate, doctorId, headers = null) {
   const queryString = new URLSearchParams({
     start: moment(startDate).format('YYYY-MM-DD'),
     end: moment(endDate).format('YYYY-MM-DD'),
+    doctorId,
   }).toString();
   return get(`/api/schedules/interval?${queryString}`, headers);
 }

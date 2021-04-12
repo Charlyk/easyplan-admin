@@ -19,6 +19,7 @@ import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/h
 import { useRouter } from "next/router";
 import { fetchAppData } from "../../middleware/api/initialization";
 import { parseCookies } from "../../utils";
+import CalendarWeek from "../../components/calendar/CalendarWeek";
 
 const initialFilter = {
   patientName: '',
@@ -150,6 +151,7 @@ const DoctorPatients = (
           />
         </div>
       </div>
+      <CalendarWeek doctorId={currentUser.id}/>
     </DoctorsMain>
   );
 };
