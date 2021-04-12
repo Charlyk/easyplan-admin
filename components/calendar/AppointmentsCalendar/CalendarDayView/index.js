@@ -215,6 +215,9 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
 
   const firstHourDate = useMemo(() => {
     const firstHour = hours[0];
+    if (firstHour == null) {
+      return moment();
+    }
     const [minHour, minMinute] = firstHour.split(':');
     return  moment(viewDate)
       .set('hour', parseInt(minHour))
@@ -223,6 +226,9 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
 
   const lastHourDate = useMemo(() => {
     const lastHour = hours[hours.length - 1];
+    if (lastHour == null) {
+      return moment();
+    }
     const [maxHour, maxMinute] = lastHour.split(':');
     return  moment(viewDate)
       .set('hour', parseInt(maxHour))
