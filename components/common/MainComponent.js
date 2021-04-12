@@ -72,6 +72,7 @@ const MainComponent = (
         });
       };
     } else {
+      router.replace(router.asPath);
       return () => {
         pubnub.unsubscribeAll();
       }
