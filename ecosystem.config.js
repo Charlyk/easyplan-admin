@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'easyplan-dev',
+      name: 'easyplan-prod',
       mode: 'cluster',
       script: 'node_modules/next/dist/bin/next',
       args: 'start -p 3000',
