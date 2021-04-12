@@ -1,4 +1,5 @@
 import { get, post, put } from "./request";
+import moment from "moment-timezone";
 
 /**
  * Fetch calendar day schedules
@@ -135,4 +136,19 @@ export async function postSchedule(body, headers = null) {
 export async function getPeriodSchedules(doctorId, date, period, headers = null) {
   const queryString = new URLSearchParams({ doctorId, date, period }).toString();
   return get(`/api/schedules?${queryString}`, headers);
+}
+
+/**
+ * Fetch schedules for a given interval of time
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function getSchedulesForInterval(startDate, endDate, headers = null) {
+  const queryString = new URLSearchParams({
+    start: moment(startDate).format('YYYY-MM-DD'),
+    end: moment(endDate).format('YYYY-MM-DD'),
+  }).toString();
+  return get(`/api/schedules/interval?${queryString}`, headers);
 }
