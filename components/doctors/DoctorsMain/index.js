@@ -68,36 +68,15 @@ const DoctorsMain = ({ children, currentUser, currentClinic, authToken }) => {
   };
 
   const handleCompanyChange = async (company) => {
-    try {
-      const query = { clinicId: company.clinicId };
-      const queryString = new URLSearchParams(query).toString()
-      const { data: selectedClinic } =
-        await axios.get(`/api/clinic/change?${queryString}`);
-      switch (selectedClinic.roleInClinic) {
-        case Role.reception:
-          const isPathRestricted = ['/analytics', '/services', '/users', '/messages']
-            .some(item => router.asPath.startsWith(item));
-          if (isPathRestricted) {
-            await router.replace('/calendar/day');
-          } else {
-            await router.reload();
-          }
-          break;
-        case Role.doctor:
-          await router.replace('/doctor');
-          break;
-        default:
-          await router.reload();
-          break;
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error(error.message);
-    }
+    const [_, domain, location] = window.location.host.split('.');
+    const { protocol } = window.location;
+    const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}`;
+    window.open(clinicUrl, '_blank')
+    handleCompanyClose();
   };
 
-  const handleCreateClinic = () => {
-    dispatch(setCreateClinic({ open: true, canClose: true }));
+  const handleCreateClinic = async () => {
+    await router.push('/create-clinic?redirect=0');
   };
 
   const handleStartLogout = () => {
