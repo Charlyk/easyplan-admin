@@ -17,13 +17,9 @@ const Clinics = ({ user, authToken }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (user?.clinics == null) {
-      router.replace('/login');
-      return;
-    }
-    if (user.clinics.length === 1) {
+    if (user?.clinics?.length === 1) {
       handleClinicSelected(user.clinics[0]);
-    } else if (user.clinics.length === 0) {
+    } else if (user?.clinics?.length === 0) {
       router.replace('/create-clinic');
     } else {
       router.replace('/login');
