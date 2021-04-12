@@ -8,7 +8,6 @@ import { textForKey } from '../../../../utils/localization';
 import HistoryItem from './HistoryItem';
 import styles from '../../../../styles/PatientHistory.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 
 const PatientHistory = ({ patient, clinic }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +22,7 @@ const PatientHistory = ({ patient, clinic }) => {
   const fetchHistories = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/history`);
+      const response = await axios.get(`/api/patients/${patient.id}/history`);
       setHistories(response.data);
     } catch (error) {
       toast.error(error.message);

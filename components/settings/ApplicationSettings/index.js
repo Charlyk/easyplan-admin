@@ -7,8 +7,6 @@ import LoadingButton from '../../common/LoadingButton';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/ApplicationSettings.module.scss'
 import { toast } from "react-toastify";
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 import { updateClinic } from "../../../middleware/api/clinic";
 

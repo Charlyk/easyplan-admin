@@ -53,3 +53,8 @@ export const updateExchangeRatesSelector = createSelector(
   mainSelector,
   state => state.updateExchangeRates,
 );
+
+export const updateHourIndicatorPositionSelector = createSelector(
+  mainSelector,
+  state => state.updateHourIndicatorTop
+)

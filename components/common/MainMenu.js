@@ -105,7 +105,7 @@ const menuItems = [
   },
 ];
 
-const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onChangeCompany }) => {
+const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) => {
   const buttonRef = useRef(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
@@ -136,8 +136,11 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
     return currentPath !== '/' && itemHref.startsWith(currentPath);
   };
 
-  const handleCompanySelected = (company) => {
-    onChangeCompany(company);
+  const handleCompanySelected = async (company) => {
+    const [_, domain, location] = window.location.host.split('.');
+    const { protocol } = window.location;
+    const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}`;
+    window.open(clinicUrl, '_blank')
     handleCompanyClose();
   };
 
@@ -241,30 +244,30 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic, onC
             );
           }
         })}
-          </Nav>
-        {currentClinic.isImporting && (
-          <Box
+      </Nav>
+      {currentClinic.isImporting && (
+        <Box
           className={styles['import-data-wrapper']}
           position='absolute'
           bottom='4rem'
           left='1rem'
           display='flex'
           alignItems='center'
-          >
-          <CircularProgress classes={{root: styles['import-progress-bar']}}/>
-          <Typography classes={{root: styles['import-data-label']}}>
-        {textForKey('Importing data in progress')}
+        >
+          <CircularProgress classes={{ root: styles['import-progress-bar'] }}/>
+          <Typography classes={{ root: styles['import-data-label'] }}>
+            {textForKey('Importing data in progress')}
           </Typography>
-          </Box>
-          )}
-          <img
-          className={styles['trust-seal-image']}
-          src='/positivessl_trust_seal.png'
-          alt='SSL Trust Seal'
-          />
-          </div>
-          );
-        };
+        </Box>
+      )}
+      <img
+        className={styles['trust-seal-image']}
+        src='/positivessl_trust_seal.png'
+        alt='SSL Trust Seal'
+      />
+    </div>
+  );
+};
 
 export default MainMenu;
 

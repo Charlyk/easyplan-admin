@@ -1,6 +1,6 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default async (req, res) => {
   switch (req.method) {
@@ -26,10 +26,18 @@ export default async (req, res) => {
 };
 
 async function confirmSchedule(req) {
-  return axios.post(`${baseApiUrl}/confirmation/schedule`, req.body);
+  return axios.post(`${updatedServerUrl(req)}/confirmation/schedule`, req.body, {
+    headers: {
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
+  });
 }
 
 function fetchScheduleInfo(req) {
   const { scheduleId, patientId } = req.query;
-  return axios.get(`${baseApiUrl}/confirmation/schedule/${scheduleId}/${patientId}`);
+  return axios.get(`${updatedServerUrl(req)}/confirmation/schedule/${scheduleId}/${patientId}`, {
+    headers: {
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
+  });
 }

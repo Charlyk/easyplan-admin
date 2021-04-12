@@ -2,10 +2,9 @@ import moment from 'moment-timezone';
 import S3 from 'react-aws-s3';
 import uuid from 'react-uuid';
 
-import { imageLambdaUrl } from '../eas.config';
+import { baseApiUrl, environment, imageLambdaUrl } from '../eas.config';
 import { env, Role, S3Config } from './constants';
 import { textForKey } from './localization';
-import { baseAppUrl, isDev } from "../eas.config";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import cookie from "cookie";
@@ -253,7 +252,7 @@ export const handleRequestError = async (error, req, res) => {
   const statusText = error?.response?.statusText || textForKey('something_went_wrong');
   if (status === 401) {
     if (req && req.url !== '/login') {
-      res.writeHead(302, { Location: `${baseAppUrl}/login` });
+      res.writeHead(302, { Location: `/login` });
       res.end();
     } else if (!req && Router?.asPath !== '/login') {
       await Router?.replace('/login');
@@ -284,20 +283,20 @@ export const getClinicExchangeRates = (currentClinic) => {
 export function setCookies(res, authToken, clinicId) {
   const cookieOpts = {
     httpOnly: true,
-    secure: !isDev,
+    secure: environment !== 'local',
     sameSite: 'strict',
     maxAge: 36000,
     path: '/'
   }
   const tokenCookie = cookie.serialize('auth_token', String(authToken), cookieOpts);
   const clinicCookie = cookie.serialize('clinic_id', String(clinicId) || '-1', cookieOpts);
-  res.setHeader('Set-Cookie', [tokenCookie, clinicCookie]);
+  res.setHeader('set-cookie', [tokenCookie, clinicCookie]);
 }
 
 /**
  * Check if user should be redirected
  * @param {{clinics: Array.<{clinicId: number}>}?} user
- * @param {{id: number}?} clinic
+ * @param {{id: number|string}?} clinic
  * @param {string} path
  * @return {string|null}
  */
@@ -351,6 +350,63 @@ export function redirectToUrl(user, clinic, path) {
 }
 
 export function redirectUserTo(path, res) {
-  res.writeHead(302, { Location: `${baseAppUrl}${path}` });
+  res.writeHead(302, { Location: `${path}` });
   res.end();
+}
+
+export function getSubdomain(req) {
+  const { host } = req.headers;
+  const [clinicDomain] = host.split('.');
+  return clinicDomain
+}
+
+export function updatedServerUrl() {
+  return baseApiUrl;
+}
+
+export const getRedirectUrlForUser = (user) => {
+  if (user == null) {
+    return '/login';
+  }
+  const { userClinic } = user;
+  if (userClinic != null) {
+    try {
+      switch (userClinic.roleInClinic) {
+        case Role.reception:
+          return '/calendar/day';
+        case Role.admin:
+        case Role.manager:
+          return '/analytics/general';
+        case Role.doctor:
+          return '/doctor';
+        default:
+          return '/login';
+      }
+    } catch (error) {
+      console.error(error);
+      return '/login'
+    }
+  } else {
+    return '/login';
+  }
+}
+
+export const getClinicUrl = (clinic, authToken) => {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+  const { host, protocol } = window.location;
+  const [_, domain, location] = host.split('.');
+  const queryString = new URLSearchParams({
+    token: authToken,
+    clinicId: clinic.clinicId
+  });
+  return `${protocol}//${clinic.clinicDomain}.${domain}.${location}/redirect?${queryString}`;
+}
+
+export const redirectIfOnGeneralHost = async (currentUser, router) => {
+  const [subdomain] = window.location.host.split('.');
+  if (['app', 'app-dev'].includes(subdomain)) {
+    await router.replace('/clinics');
+  }
 }

@@ -10,8 +10,7 @@ import { textForKey } from '../../../utils/localization';
 import EasyDatePicker from '../../common/EasyDatePicker';
 import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddPauseModal.module.scss';
-import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
+import { createPauseRecord, deletePauseRecord, fetchPausesAvailableTime } from "../../../middleware/api/pauses";
 
 const filterAvailableTime = (availableTime, startTime) => {
   return availableTime.filter((item) => {
@@ -177,12 +176,8 @@ const AddPauseModal = ({
   const fetchPauseAvailableTime = async () => {
     localDispatch(actions.setIsFetchingHours(true));
     try {
-      const query = {
-        date: moment(pauseDate | viewDate).format('YYYY-MM-DD'),
-        doctorId: doctor.id,
-      };
-      const queryString = new URLSearchParams(query).toString();
-      const response = await axios.get(`${baseAppUrl}/api/pauses/available-time?${queryString}`);
+      const date = moment(pauseDate | viewDate).format('YYYY-MM-DD')
+      const response = await fetchPausesAvailableTime(date, doctor.id);
       const { data: availableTime } = response;
       localDispatch(actions.setAvailableAllTime(availableTime));
       updateEndTimeBasedOnService(availableTime);
@@ -253,7 +248,7 @@ const AddPauseModal = ({
         comment,
       };
 
-      await axios.post(`${baseAppUrl}/api/pauses`, requestBody);
+      await createPauseRecord(requestBody);
       onClose()
     } catch (error) {
       toast.error(error.message);
@@ -265,7 +260,7 @@ const AddPauseModal = ({
   const handleDeletePause = async () => {
     localDispatch(actions.setIsDeleting(true));
     try {
-      await axios.delete(`${baseAppUrl}/api/pauses/${id}`);
+      await deletePauseRecord(id);
       onClose();
     } catch (error) {
       toast.error(error.message);

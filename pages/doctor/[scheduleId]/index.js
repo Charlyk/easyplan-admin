@@ -18,12 +18,12 @@ import { generateReducerActions, handleRequestError, redirectToUrl, redirectUser
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorPatientDetails.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { useRouter } from "next/router";
 import DoctorsMain from "../../../components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
 import PatientTreatmentPlan from "../../../components/doctors/PatientTreatmentPlan";
+import { parseCookies } from "../../../utils";
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -83,7 +83,15 @@ const reducer = (state, action) => {
   }
 };
 
-const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSchedule, scheduleId }) => {
+const DoctorPatientDetails = (
+  {
+    currentUser,
+    currentClinic,
+    schedule: initialSchedule,
+    scheduleId,
+    authToken,
+  }
+) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const clinicCurrency = currentClinic.currency;
@@ -199,7 +207,7 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
   };
 
   const saveTreatmentPlan = async (requestBody, update) => {
-    const url = `${baseAppUrl}/api/treatment-plans/general`
+    const url = `/api/treatment-plans/general`
     return update ? axios.put(url, requestBody) : axios.post(url, requestBody)
   }
 
@@ -258,7 +266,7 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
   };
 
   return (
-    <DoctorsMain currentUser={currentUser} currentClinic={currentClinic}>
+    <DoctorsMain currentUser={currentUser} currentClinic={currentClinic} authToken={authToken}>
       <div className={styles['doctor-patient-root']}>
         <FinalizeTreatmentModal
           currentClinic={currentClinic}
@@ -338,6 +346,7 @@ const DoctorPatientDetails = ({ currentUser, currentClinic, schedule: initialSch
 
 export const getServerSideProps = async ({ req, res, query }) => {
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
@@ -351,6 +360,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     return {
       props: {
         scheduleId,
+        authToken,
         schedule: response.data,
         ...appData,
       },

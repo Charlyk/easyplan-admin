@@ -38,6 +38,7 @@ export default {
   toggleImportModal: 'toggleImportModal',
   toggleExchangeRateUpdate: 'toggleExchangeRateUpdate',
   updateDoctorAppointment: 'updateDoctorAppointment',
+  setUpdateHourIndicatorPosition: 'setUpdateHourIndicatorPosition',
   ...clinicTypes,
   ...calendar,
   ...imageModalTypes,

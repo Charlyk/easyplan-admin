@@ -140,6 +140,11 @@ function main(state = initialState, action) {
         ...state,
         updateDoctorAppointments: !state.updateDoctorAppointments,
       };
+    case types.setUpdateHourIndicatorPosition:
+      return {
+        ...state,
+        updateHourIndicatorTop: !state.updateHourIndicatorTop,
+      }
     default:
       return state;
   }

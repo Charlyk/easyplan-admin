@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -23,10 +23,11 @@ export default authorized(async (req, res) => {
 
 async function fetchPauseAvailableTime(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.put(`${baseApiUrl}/pauses/available-time`, req.query, {
+  return axios.put(`${updatedServerUrl(req)}/pauses/available-time`, req.query, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

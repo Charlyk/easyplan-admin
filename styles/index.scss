@@ -492,3 +492,18 @@ body {
   font-size: 10px !important;
   color: #3A83DC !important;
 }
+
+.develop-indicator {
+  z-index: 10000;
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  background-color: #ec3276;
+  padding: .5rem;
+  border-radius: 5px;
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: bold !important;
+  font-size: 11px !important;
+  color: #fff;
+}

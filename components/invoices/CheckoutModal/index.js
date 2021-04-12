@@ -39,7 +39,6 @@ import DetailsRow from './DetailsRow';
 import styles from '../../../styles/CheckoutModal.module.scss';
 import ServicesList from './ServicesList';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { Role } from "../../../utils/constants";
 import { useRouter } from "next/router";
 
@@ -319,7 +318,7 @@ const CheckoutModal = ({
     }
     localDispatch(actions.setIsFetching(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/invoices/${invoice.id}`);
+      const response = await axios.get(`/api/invoices/${invoice.id}`);
       const { data: invoiceDetails } = response;
       localDispatch(
         actions.setupInvoiceData({ invoiceDetails, exchangeRates }),
@@ -344,7 +343,7 @@ const CheckoutModal = ({
         query: updatedQuery,
       };
       const queryString = new URLSearchParams(queryParams).toString()
-      const response = await axios.get(`${baseAppUrl}/api/patients/search?${queryString}`);
+      const response = await axios.get(`/api/patients/search?${queryString}`);
       const { data } = response;
       localDispatch(
         actions.setSearchResults(
@@ -471,8 +470,8 @@ const CheckoutModal = ({
       const requestBody = getRequestBody();
       localDispatch(actions.setIsLoading(true));
       isNew
-        ? await axios.post(`${baseAppUrl}/api/invoices`, requestBody)
-        : await axios.put(`${baseAppUrl}/api/invoices/${invoiceDetails.id}`, requestBody);
+        ? await axios.post(`/api/invoices`, requestBody)
+        : await axios.put(`/api/invoices/${invoiceDetails.id}`, requestBody);
       await router.replace(router.asPath);
       if (openPatientDetailsOnClose) {
         handlePatientClick();

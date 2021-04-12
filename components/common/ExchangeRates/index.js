@@ -28,7 +28,6 @@ import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 import styles from '../../../styles/ExchangeRates.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 import { setIsExchangeRatesModalOpen } from "../../../redux/actions/exchangeRatesActions";
 
 const initialState = {
@@ -88,7 +87,7 @@ const ExchangeRates = ({ open, currentClinic, currentUser, onClose }) => {
     }
     localDispatch(actions.setIsLoading(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/clinic/exchange-rates`);
+      const response = await axios.get(`/api/clinic/exchange-rates`);
       const sortedItems = sortBy(response.data, (item) => item.created);
       localDispatch(actions.setRates(sortedItems));
       localDispatch(actions.setInitialRates(sortedItems));
@@ -167,7 +166,7 @@ const ExchangeRates = ({ open, currentClinic, currentUser, onClose }) => {
         }
         return { ...item, value: 1 };
       });
-      await axios.put(`${baseAppUrl}/api/clinic/exchange-rates`, { rates: requestBody });
+      await axios.put(`/api/clinic/exchange-rates`, { rates: requestBody });
       toast.success(textForKey('Saved successfully'));
       dispatch(setIsExchangeRatesModalOpen(false));
       onClose();

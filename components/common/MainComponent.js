@@ -14,7 +14,6 @@ import PatientDetailsModal from '../patients/PatientDetailsModal';
 import ServiceDetailsModal from '../services/ServiceDetailsModal';
 import {
   setAppointmentModal,
-  setCreateClinic,
   setPatientDetails, setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
@@ -29,15 +28,22 @@ import ExchangeRates from "./ExchangeRates";
 import { isExchangeRateModalOpenSelector } from "../../redux/selectors/exchangeRatesModalSelector";
 import { setIsExchangeRatesModalOpen } from "../../redux/actions/exchangeRatesActions";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import { Role } from "../../utils/constants";
 import { handleRemoteMessage } from "../../utils/pubnubUtils";
-import { changeCurrentClinic } from "../../middleware/api/clinic";
 import CheckoutModal from "../invoices/CheckoutModal";
 import { setClinic } from "../../redux/actions/clinicActions";
-import { environment } from "../../eas.config";
+import { environment, isDev } from "../../eas.config";
+import { Typography } from "@material-ui/core";
+import { redirectIfOnGeneralHost } from "../../utils/helperFuncs";
 
-const MainComponent = ({ children, currentPath, currentUser, currentClinic, authToken }) => {
+const MainComponent = (
+  {
+    children,
+    currentPath,
+    currentUser,
+    currentClinic,
+    authToken
+  }
+) => {
   const pubnub = usePubNub();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -48,21 +54,27 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
 
   useEffect(() => {
+    redirectIfOnGeneralHost(currentUser, router);
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }
 
     if (currentClinic != null) {
+      const { id } = currentClinic;
       dispatch(setClinic(currentClinic));
       pubnub.subscribe({
-        channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
+        channels: [`${id}-${environment}-clinic-pubnub-channel`],
       });
       pubnub.addListener({ message: handlePubnubMessageReceived });
       return () => {
         pubnub.unsubscribe({
-          channels: [`${currentClinic.id}-${environment}-clinic-pubnub-channel`],
+          channels: [`${id}-${environment}-clinic-pubnub-channel`],
         });
       };
+    } else {
+      return () => {
+        pubnub.unsubscribeAll();
+      }
     }
   }, []);
 
@@ -78,31 +90,8 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
     dispatch(triggerUserLogout(true));
   };
 
-  const handleCreateClinic = () => {
-    dispatch(setCreateClinic({ open: true, canClose: true }));
-  };
-
-  const handleChangeCompany = async (company) => {
-    try {
-      const { data: selectedClinic } = await changeCurrentClinic(company.clinicId);
-      switch (selectedClinic.roleInClinic) {
-        case Role.reception:
-          const isPathRestricted = ['/analytics', '/services', '/users', '/messages']
-            .some(item => router.asPath.startsWith(item));
-          if (isPathRestricted) {
-            await router.replace('/calendar/day');
-          } else {
-            await router.reload();
-          }
-          break;
-        default:
-          await router.reload();
-          break;
-      }
-    } catch (error) {
-      console.error(error)
-      toast.error(error.message);
-    }
+  const handleCreateClinic = async () => {
+    await router.push('/create-clinic?redirect=0')
   };
 
   const handleAppointmentModalClose = () => {
@@ -136,7 +125,8 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
 
   return (
     <div className={styles['main-page']} id='main-page'>
-      <ServiceDetailsModal currentClinic={currentClinic} />
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
+      <ServiceDetailsModal currentClinic={currentClinic}/>
       {isExchangeRatesModalOpen && (
         <ExchangeRates
           currentClinic={currentClinic}
@@ -188,7 +178,6 @@ const MainComponent = ({ children, currentPath, currentUser, currentClinic, auth
           currentUser={currentUser}
           currentPath={currentPath}
           onCreateClinic={handleCreateClinic}
-          onChangeCompany={handleChangeCompany}
         />
       )}
       {currentUser != null && (

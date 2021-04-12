@@ -10,7 +10,7 @@ import IconAvatar from '../../icons/iconAvatar';
 import LoadingButton from '../../common/LoadingButton';
 import { EmailRegex, PasswordRegex } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/RegisterForm.module.scss';
+import styles from '../../../styles/auth/RegisterForm.module.scss';
 import clsx from "clsx";
 
 const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {

@@ -12,7 +12,6 @@ import LoadingButton from '../../../common/LoadingButton';
 import PatientMessage from './PatientMessage';
 import styles from '../../../../styles/PatientMessages.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 
 const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
 
@@ -71,7 +70,7 @@ const PatientMessages = ({ patient }) => {
     if (patient == null) return;
     localDispatch(actions.setIsFetching(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/patients/${patient.id}/sms`);
+      const response = await axios.get(`/api/patients/${patient.id}/sms`);
       localDispatch(actions.setMessages(response.data));
     } catch (error) {
       toast.error(error.message);
@@ -99,7 +98,7 @@ const PatientMessages = ({ patient }) => {
     }
     localDispatch(actions.setIsSendingMessage(true));
     try {
-      await axios.post(`${baseAppUrl}/api/patients/${patient.id}/sms`, {
+      await axios.post(`/api/patients/${patient.id}/sms`, {
         messageText: state.newMessageText,
       });
       localDispatch(actions.setNewMessageText(''));

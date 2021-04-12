@@ -1,5 +1,4 @@
-import { get, put } from "./request";
-import { baseAppUrl } from "../../eas.config";
+import { get, post, put } from "./request";
 
 /**
  * Fetch calendar day schedules
@@ -99,4 +98,41 @@ export async function getScheduleDetails(scheduleId, headers = null) {
 export async function getAvailableHours(query, headers = null) {
   const queryString = new URLSearchParams(query).toString();
   return get(`/api/schedules/available-time?${queryString}`, headers);
+}
+
+/**
+ * Create or update schedule
+ * @param {{
+ *   patientFirstName: string|null,
+ *   patientLastName: string|null,
+ *   patientPhoneNumber: string|null,
+ *   patientBirthday: string|null,
+ *   patientEmail: string|null,
+ *   patientId: number|null,
+ *   doctorId: number,
+ *   serviceId: number,
+ *   startDate: Date,
+ *   endDate: Date,
+ *   note: string|null,
+ *   status: string,
+ *   scheduleId: number|null
+ * }} body
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function postSchedule(body, headers = null) {
+  return post(`/api/schedules`, headers, body)
+}
+
+/**
+ * Fetch schedules for a month for specified doctor
+ * @param {string|number} doctorId
+ * @param {string} date
+ * @param {'week'|'month'} period
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function getPeriodSchedules(doctorId, date, period, headers = null) {
+  const queryString = new URLSearchParams({ doctorId, date, period }).toString();
+  return get(`/api/schedules?${queryString}`, headers);
 }

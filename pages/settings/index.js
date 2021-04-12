@@ -11,7 +11,8 @@ import styles from '../../styles/Settings.module.scss';
 import MainComponent from "../../components/common/MainComponent";
 import { Role } from "../../utils/constants";
 import { fetchAppData } from "../../middleware/api/initialization";
-import { redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
+import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
+import { parseCookies } from "../../utils";
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -22,7 +23,7 @@ const SettingsForm = {
   bracesSettings: 'bracesSettings',
 };
 
-const Settings = ({ currentUser, currentClinic }) => {
+const Settings = ({ currentUser, currentClinic, authToken }) => {
   const selectedClinic = currentUser?.clinics.find(
     item => item.clinicId === currentClinic.id,
   );
@@ -39,6 +40,7 @@ const Settings = ({ currentUser, currentClinic }) => {
       currentUser={currentUser}
       currentClinic={currentClinic}
       currentPath='/settings'
+      authToken={authToken}
     >
       <div className={styles['settings-root']}>
         <div className={styles['settings-root__menu']}>
@@ -92,17 +94,31 @@ const Settings = ({ currentUser, currentClinic }) => {
 };
 
 export const getServerSideProps = async ({ req, res }) => {
-  const appData = await fetchAppData(req.headers);
-  const { currentUser, currentClinic } = appData;
-  const redirectTo = redirectToUrl(currentUser, currentClinic, '/settings');
-  if (redirectTo != null) {
-    redirectUserTo(redirectTo, res);
-    return { props: { ...appData } };
-  }
+  try {
+    const { auth_token: authToken } = parseCookies(req);
+    const appData = await fetchAppData(req.headers);
+    const { currentUser, currentClinic } = appData;
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/settings');
+    if (redirectTo != null) {
+      redirectUserTo(redirectTo, res);
+      return {
+        props: {
+          ...appData,
+          authToken,
+        }
+      };
+    }
 
-  return {
-    props: {
-      ...appData
+    return {
+      props: {
+        ...appData,
+        authToken,
+      }
+    }
+  } catch (error) {
+    await handleRequestError(error, req, res);
+    return {
+      props: {}
     }
   }
 }

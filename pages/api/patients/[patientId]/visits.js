@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -30,10 +30,11 @@ export default authorized(async (req, res) => {
 async function updateVisit(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId, visitId } = req.query;
-  return axios.put(`${baseApiUrl}/patients/${patientId}/edit-visit/${visitId}`, req.body, {
+  return axios.put(`${updatedServerUrl(req)}/patients/${patientId}/edit-visit/${visitId}`, req.body, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
@@ -41,10 +42,11 @@ async function updateVisit(req) {
 function fetchPatientVisits(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
-  return axios.get(`${baseApiUrl}/patients/${patientId}/visits`, {
+  return axios.get(`${updatedServerUrl(req)}/patients/${patientId}/visits`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

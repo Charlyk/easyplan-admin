@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async function clinicDetails(req, res) {
   switch (req.method) {
@@ -29,10 +29,11 @@ export default authorized(async function clinicDetails(req, res) {
 
 async function getClinicExchangeRates(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${baseApiUrl}/clinics/exchange-rates`, {
+  return axios.get(`${updatedServerUrl(req)}/clinics/exchange-rates`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
@@ -40,10 +41,11 @@ async function getClinicExchangeRates(req) {
 async function saveExchangeRates(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
-  return axios.put(`${baseApiUrl}/clinics/exchange-rates`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/clinics/exchange-rates`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

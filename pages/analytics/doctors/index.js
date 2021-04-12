@@ -20,6 +20,7 @@ import isEqual from "lodash/isEqual";
 import { getDoctorsStatistics } from "../../../middleware/api/analytics";
 import styles from '../../../styles/ServicesStatistics.module.scss';
 import { fetchAppData } from "../../../middleware/api/initialization";
+import { parseCookies } from "../../../utils";
 
 const initialState = {
   isLoading: false,
@@ -83,7 +84,7 @@ const reducer = (state, action) => {
   }
 };
 
-const DoctorsStatistics = ({ currentUser, currentClinic, statistics, query: initialQuery }) => {
+const DoctorsStatistics = ({ currentUser, currentClinic, statistics, query: initialQuery, authToken }) => {
   const pickerRef = useRef(null);
   const router = useRouter();
   const doctors = sortBy(
@@ -171,6 +172,7 @@ const DoctorsStatistics = ({ currentUser, currentClinic, statistics, query: init
       currentUser={currentUser}
       currentClinic={currentClinic}
       currentPath='/analytics/doctors'
+      authToken={authToken}
     >
       <div className={styles['statistics-doctors']}>
         <StatisticFilter isLoading={isLoading} onUpdate={handleFilterSubmit}>
@@ -289,6 +291,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     if (query.serviceId == null) {
       query.serviceId = -1;
     }
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/doctors');
@@ -300,6 +303,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const { data: statistics } = await getDoctorsStatistics(query, req.headers);
     return {
       props: {
+        authToken,
         statistics,
         query,
         ...appData,

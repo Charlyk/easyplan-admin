@@ -20,7 +20,6 @@ import EasyTab from '../../../common/EasyTab';
 import LoadingButton from '../../../common/LoadingButton';
 import styles from '../../../../styles/OrthodonticPlan.module.scss';
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 
 const diagnosisClass = [1, 2, 3];
 const diagnosisOcclusion = [
@@ -222,7 +221,7 @@ const OrthodonticPlan = ({ currentUser, currentClinic: clinic, patient, schedule
         planType,
       }
       const queryString = new URLSearchParams(query).toString()
-      const response = await axios.get(`${baseAppUrl}/api/treatment-plans/orthodontic?${queryString}`);
+      const response = await axios.get(`/api/treatment-plans/orthodontic?${queryString}`);
       updatePlan(response.data);
     } catch (error) {
       toast.error(error.message);
@@ -366,7 +365,7 @@ const OrthodonticPlan = ({ currentUser, currentClinic: clinic, patient, schedule
   };
 
   const saveTreatmentPlan = async (patientId, requestBody) => {
-    return axios.post(`${baseAppUrl}/api/treatment-plans/orthodontic`, {
+    return axios.post(`/api/treatment-plans/orthodontic`, {
       ...requestBody,
       patientId,
     });

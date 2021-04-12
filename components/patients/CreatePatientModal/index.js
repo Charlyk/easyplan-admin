@@ -15,7 +15,6 @@ import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/CreatePatientModal.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 
 const initialState = {
   firstName: '',
@@ -107,7 +106,7 @@ const CreatePatientModal = ({ open, onClose }) => {
         phoneNumber,
         birthday,
       };
-      await axios.post(`${baseAppUrl}/api/patients`, requestBody);
+      await axios.post(`/api/patients`, requestBody);
       dispatch(togglePatientsListUpdate(true));
       onClose();
     } catch (error) {

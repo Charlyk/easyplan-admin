@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -23,10 +23,11 @@ export default authorized(async (req, res) => {
 function fetchClinicWorkHours(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query).toString();
-  return axios.get(`${baseApiUrl}/schedules/v2/clinic-workhours?${queryString}`, {
+  return axios.get(`${updatedServerUrl(req)}/schedules/v2/clinic-workhours?${queryString}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

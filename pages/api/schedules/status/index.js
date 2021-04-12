@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -25,12 +25,13 @@ function updateScheduleStatus(req) {
   const queryString = new URLSearchParams(req.query).toString();
   const requestBody = req.body;
   return axios.put(
-    `${baseApiUrl}/schedules/schedule-status?${queryString}`,
+    `${updatedServerUrl(req)}/schedules/schedule-status?${queryString}`,
     requestBody,
     {
       headers: {
         Authorization: auth_token,
         'X-EasyPlan-Clinic-Id': clinic_id,
+        'X-EasyPlan-Subdomain': getSubdomain(req),
       }
     }
   );

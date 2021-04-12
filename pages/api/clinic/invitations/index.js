@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -23,10 +23,11 @@ export default authorized(async (req, res) => {
 function deleteInvitation(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { invitationId } = req.query;
-  return axios.delete(`${baseApiUrl}/clinics/invitations/delete?invitationId=${invitationId}`, {
+  return axios.delete(`${updatedServerUrl(req)}/clinics/invitations/delete?invitationId=${invitationId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

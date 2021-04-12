@@ -22,6 +22,7 @@ import styles from '../../styles/SMSMessages.module.scss';
 import MainComponent from "../../components/common/MainComponent";
 import { deleteMessage, getMessages, toggleMessageStatus } from "../../middleware/api/messages";
 import { fetchAppData } from "../../middleware/api/initialization";
+import { parseCookies } from "../../utils";
 
 const initialState = {
   isLoading: false,
@@ -74,8 +75,8 @@ const reducer = (state, action) => {
   }
 };
 
-const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) => {
-  const hasSMSAlias = currentClinic.smsAlias != null;
+const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages, authToken }) => {
+  const hasSMSAlias = currentClinic?.smsAlias != null;
   const [
     {
       isCreatingMessage,
@@ -166,7 +167,12 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
   };
 
   return (
-    <MainComponent currentClinic={currentClinic} currentUser={currentUser} currentPath='/messages'>
+    <MainComponent
+      currentClinic={currentClinic}
+      currentUser={currentUser}
+      currentPath='/messages'
+      authToken={authToken}
+    >
       <div className={styles['sms-messages-root']}>
         {needsDeleteConfirmation && (
           <ConfirmationModal
@@ -241,6 +247,7 @@ const SMSMessages = ({ currentUser, currentClinic, messages: initialMessages }) 
 
 export const getServerSideProps = async ({ req, res }) => {
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/messages');
@@ -253,6 +260,7 @@ export const getServerSideProps = async ({ req, res }) => {
     const { data } = response;
     return {
       props: {
+        authToken,
         messages: data,
         ...appData,
       },

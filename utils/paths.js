@@ -16,5 +16,8 @@ export default {
   '/messages': textForKey('Messages'),
   '/doctor': textForKey('Schedules'),
   '/confirmation': textForKey('Confirmation'),
-  '/login': textForKey('Authentication')
+  '/login': textForKey('Authentication'),
+  '/clinics': textForKey('Select a clinic'),
+  '/create-clinic': textForKey('Create clinic'),
+  '/register': textForKey('Create new account')
 };

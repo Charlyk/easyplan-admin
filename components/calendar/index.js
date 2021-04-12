@@ -3,7 +3,6 @@ import React, { useEffect, useReducer } from 'react';
 import styles from '../../styles/Calendar.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch } from 'react-redux';
-import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 
 import ConfirmationModal from '../common/ConfirmationModal';
 import {
@@ -12,9 +11,8 @@ import {
   toggleAppointmentsUpdate,
   toggleImportModal,
 } from '../../redux/actions/actions';
-import types from '../../redux/types/types';
 import { Role } from '../../utils/constants';
-import { generateReducerActions } from '../../utils/helperFuncs';
+import { generateReducerActions, redirectIfOnGeneralHost } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import AppointmentsCalendar from './AppointmentsCalendar';
 import CalendarDoctors from './AppointmentsCalendar/CalendarDoctors';
@@ -22,8 +20,8 @@ import moment from "moment-timezone";
 import { useRouter } from "next/router";
 import MainComponent from "../common/MainComponent";
 import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 import { toast } from "react-toastify";
+import { parseCookies } from "../../utils";
 
 const reducerTypes = {
   setFilters: 'setFilters',
@@ -113,12 +111,12 @@ const initialState = {
   parsedValue: 0,
 };
 
-const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
+const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authToken }) => {
   const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
-  const services = currentClinic.services?.filter((item) => !item.deleted) || [];
-  const doctors = currentClinic.users.filter((item) => item.roleInClinic === Role.doctor && !item.isHidden);
+  const services = currentClinic?.services?.filter((item) => !item.deleted) || [];
+  const doctors = currentClinic?.users.filter((item) => item.roleInClinic === Role.doctor && !item.isHidden) || [];
   const viewDate = moment(date).toDate();
   const [
     {
@@ -136,27 +134,15 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    if (currentUser == null) {
+      return
+    }
+    redirectIfOnGeneralHost(currentUser, router);
     pubnub.subscribe({
       channels: [`${currentUser.id}-import_schedules_channel`],
     });
     pubnub.addListener({ message: handlePubnubMessageReceived });
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.checkAppointments,
-        timerName: 'appointmentsTimer',
-        timerInterval: 10 * 1000,
-      },
-    });
     return () => {
-      dispatch({
-        type: STOP_TIMER,
-        payload: {
-          actionName: types.checkAppointments,
-          timerName: 'appointmentsTimer',
-          timerInterval: 10 * 1000,
-        },
-      });
       pubnub.unsubscribe({
         channels: [`${currentUser.id}-import_schedules_channel`],
       });
@@ -218,7 +204,6 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
 
   const handleViewDateChange = (newDate, moveToDay) => {
     const stringDate = moment(newDate).format('YYYY-MM-DD');
-    console.log(stringDate);
     router.replace({
       pathname: `/calendar/${moveToDay ? 'day' : viewMode}`,
       query: { date: stringDate },
@@ -261,7 +246,7 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
     }
     localDispatch(reducerActions.setIsDeleting(true));
     try {
-      await axios.delete(`${baseAppUrl}/api/schedules/${deleteSchedule.schedule.id}`);
+      await axios.delete(`/api/schedules/${deleteSchedule.schedule.id}`);
       localDispatch(
         reducerActions.setDeleteSchedule({ open: false, schedule: null }),
       );
@@ -286,7 +271,12 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
   };
 
   return (
-    <MainComponent currentUser={currentUser} currentClinic={currentClinic} currentPath='/calendar'>
+    <MainComponent
+      currentUser={currentUser}
+      currentClinic={currentClinic}
+      currentPath='/calendar'
+      authToken={authToken}
+    >
       <div className={styles['calendar-root']}>
         {deleteSchedule.open && (
           <ConfirmationModal
@@ -334,5 +324,14 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children }) => {
     </MainComponent>
   );
 };
+
+export const getServerSideProps = async ({ req }) => {
+  const { auth_token: authToken } = parseCookies(req);
+  return {
+    props: {
+      authToken,
+    }
+  }
+}
 
 export default Calendar;

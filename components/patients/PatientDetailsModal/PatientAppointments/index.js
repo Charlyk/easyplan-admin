@@ -17,7 +17,6 @@ import Appointment from './Appointment';
 import styles from '../../../../styles/PatientAppointments.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
-import { baseAppUrl } from "../../../../eas.config";
 
 const initialState = {
   schedules: [],
@@ -72,7 +71,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
   const fetchSchedules = async () => {
     localDispatch(actions.setIsLoading(true));
     try {
-      const response = await axios.get(`${baseAppUrl}/api/schedules/patient-schedules/${patient.id}`)
+      const response = await axios.get(`/api/schedules/patient-schedules/${patient.id}`)
       localDispatch(actions.setSchedules(response.data));
     } catch (error) {
       toast.error(error.message);

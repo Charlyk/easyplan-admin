@@ -1,8 +1,9 @@
 import axios from "axios";
-import { baseApiUrl, isDev } from "../../../../eas.config";
+import { environment } from "../../../../eas.config";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -25,7 +26,7 @@ export default authorized(async (req, res) => {
 function setCookies(res, clinicId) {
   const cookieOpts = {
     httpOnly: true,
-    secure: !isDev,
+    secure: environment !== 'local',
     sameSite: 'strict',
     maxAge: 36000,
     path: '/'
@@ -37,10 +38,11 @@ function setCookies(res, clinicId) {
 function changeSelectedClinic(req) {
   const { auth_token } = cookie.parse(req.headers.cookie);
   const { clinicId } = req.query;
-  return axios.get(`${baseApiUrl}/authentication/v1/change-clinic/${clinicId}`, {
+  return axios.get(`${updatedServerUrl(req)}/authentication/v1/change-clinic/${clinicId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': -1,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

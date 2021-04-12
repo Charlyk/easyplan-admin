@@ -1,6 +1,6 @@
 import { handler } from "../handler";
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default async function resetPassword(req, res) {
   switch (req.method) {
@@ -30,17 +30,19 @@ export default async function resetPassword(req, res) {
 }
 
 async function updateUserPassword(req) {
-  return axios.put(`${baseApiUrl}/authentication/v1/reset-password`, req.body, {
+  return axios.put(`${updatedServerUrl(req)}/authentication/v1/reset-password`, req.body, {
     headers: {
       'X-EasyPlan-Clinic-Id': -1,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
 
 function resetUserPassword(req) {
-  return axios.post(`${baseApiUrl}/authentication/v1/reset-password`, req.body, {
+  return axios.post(`${updatedServerUrl(req)}/authentication/v1/reset-password`, req.body, {
     headers: {
       'X-EasyPlan-Clinic-Id': -1,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

@@ -24,6 +24,7 @@ import MainComponent from "../../components/common/MainComponent";
 import { deleteUser, getUsers, inviteUser, restoreUser, updateUserCashierStatus } from "../../middleware/api/users";
 import { deleteInvitation } from "../../middleware/api/clinic";
 import { fetchAppData } from "../../middleware/api/initialization";
+import { parseCookies } from "../../utils";
 
 const initialState = {
   selectedFilter: Role.all,
@@ -86,7 +87,7 @@ const reducer = (state, action) => {
         invitingExistentError: action.payload ? null : state.invitingExistentError
       };
     case reducerTypes.setInvitingExistentError:
-      return { ...state, invitingExistentError: action.payload};
+      return { ...state, invitingExistentError: action.payload };
     case reducerTypes.setUserToDelete:
       return { ...state, userToDelete: action.payload };
     case reducerTypes.setInvitationToDelete:
@@ -113,7 +114,15 @@ const reducer = (state, action) => {
   }
 }
 
-const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: initialInvitations }) => {
+const Users = (
+  {
+    currentUser,
+    currentClinic,
+    users: initialUsers,
+    invitations: initialInvitations,
+    authToken,
+  }
+) => {
   const [
     {
       selectedFilter,
@@ -344,6 +353,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
       currentUser={currentUser}
       currentClinic={currentClinic}
       currentPath='/users'
+      authToken={authToken}
     >
       <div className={styles['users-root']}>
         <InviteUserModal
@@ -396,7 +406,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
 
         {isLoading && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
           </div>
         )}
 
@@ -514,6 +524,7 @@ const Users = ({ currentUser, currentClinic, users: initialUsers, invitations: i
 
 export const getServerSideProps = async ({ req, res }) => {
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
@@ -527,6 +538,7 @@ export const getServerSideProps = async ({ req, res }) => {
       props: {
         ...response.data,
         ...appData,
+        authToken,
       }
     }
   } catch (error) {

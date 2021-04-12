@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -37,28 +37,33 @@ export default authorized(async (req, res) => {
 async function createClinic(req) {
   const { auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
-  return axios.post(`${baseApiUrl}/clinics`, requestBody, {
-    headers: { Authorization: auth_token }
+  return axios.post(`${updatedServerUrl(req)}/clinics`, requestBody, {
+    headers: {
+      Authorization: auth_token,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
   });
 }
 
 async function updateClinicInfo(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
-  return axios.put(`${baseApiUrl}/clinics`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/clinics`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
 
 async function deleteClinic(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.delete(`${baseApiUrl}/clinics`, {
+  return axios.delete(`${updatedServerUrl(req)}/clinics`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

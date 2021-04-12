@@ -11,7 +11,8 @@ import remove from 'lodash/remove';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { animated, interpolate, useSpring } from "react-spring";
 
 import AddPauseModal from '../../AddPauseModal';
 import {
@@ -26,6 +27,9 @@ import styles from '../../../../styles/CalendarDayView.module.scss';
 import { toast } from "react-toastify";
 import { wrapper } from "../../../../store";
 import { fetchSchedulesHours } from "../../../../middleware/api/schedules";
+import { updateHourIndicatorPositionSelector } from "../../../../redux/selectors/rootSelector";
+import types from "../../../../redux/types/types";
+import { START_TIMER } from 'redux-timer-middleware';
 
 const moment = extendMoment(Moment);
 
@@ -133,14 +137,37 @@ const reducer = (state, action) => {
 };
 
 const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSelect, onCreateSchedule }) => {
+  const dispatch = useDispatch();
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const schedulesRef = useRef(null);
   const dataRef = useRef(null);
+  const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
   const [
     { isLoading, parentTop, hours, pauseModal, hoursContainers, schedulesMap },
     localDispatch,
   ] = useReducer(reducer, initialState);
+
+  const initialHourIndicatorTop = getHourIndicatorTop();
+
+  const [{ hourTop }, set] = useSpring(() => ({
+    hourTop: initialHourIndicatorTop || 0,
+  }));
+
+  useEffect(() => {
+    dispatch({
+      type: START_TIMER,
+      payload: {
+        actionName: types.setUpdateHourIndicatorPosition,
+        timerName: 'infiniteTimer',
+        timerInterval: 60000
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    updateHourIndicatorTop();
+  }, [updateHourIndicator])
 
   useEffect(() => {
     handleScheduleUpdate();
@@ -162,6 +189,9 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       newSchedulesMap.set(doctorId, newSchedules);
     }
     localDispatch(actions.setSchedules(newSchedulesMap));
+    setTimeout(() => {
+      updateHourIndicatorTop();
+    }, 500);
   }, [deleteSchedule]);
 
   useEffect(() => {
@@ -183,6 +213,11 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
     localDispatch(actions.setHours(dayHours));
   }, [dayHours]);
 
+  const updateHourIndicatorTop = () => {
+    const newTop = getHourIndicatorTop();
+    set({ hourTop: newTop });
+  }
+
   const isOutOfBounds = (schedule) => {
     if (hours.length === 0) {
       return true;
@@ -194,6 +229,12 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       .set('hour', parseInt(hour))
       .set('minute', parseInt(minute));
     return scheduleTime.isAfter(maxTime);
+  }
+
+  const isToday = () => {
+    const today = moment();
+    const currentDate = moment(viewDate)
+    return today.isSame(currentDate, 'date')
   }
 
   const handleScheduleUpdate = async () => {
@@ -249,6 +290,9 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       newSchedulesMap.set(doctorId, newSchedules);
     }
     localDispatch(actions.setSchedules(newSchedulesMap));
+    setTimeout(() => {
+      updateHourIndicatorTop();
+    }, 500);
   };
 
   const fetchDayHours = async (date) => {
@@ -404,9 +448,35 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
     return schedulesWithOffset.get(doctorId) || [];
   };
 
+  function getHourIndicatorTop() {
+    if (dayHours.length === 0) {
+      return 0
+    }
+    const firstHour = dayHours[0];
+    if (firstHour == null) {
+      return 0
+    }
+    const startTime = moment();
+    const [hours, minutes] = firstHour.split(':');
+    const clinicStartTime = moment(viewDate).set({
+      hour: parseInt(hours),
+      minute: parseInt(minutes),
+      second: 0,
+    });
+    const scheduleDayDuration = moment
+      .duration(startTime.diff(clinicStartTime))
+      .asMinutes();
+    const newTop = scheduleDayDuration * 2 + 30;
+    return Math.abs(newTop);
+  }
+
   const halfHours = hours.filter(
     (item) => item.split(':')[1] === '00' || item.split(':')[1] === '30',
   );
+
+  const hourTopInterpolator = (newTop) => {
+    return `${newTop}px`;
+  }
 
   return (
     <div className={styles['calendar-day-view']} id='calendar-day-view'>
@@ -458,6 +528,16 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
           className={styles['day-schedules-container']}
           id='day-schedules-container'
         >
+          {isToday() && (
+            <animated.div
+              className={styles.currentHourIndicator}
+              style={{
+                top: interpolate([hourTop], hourTopInterpolator)
+              }}
+            >
+              <div className={styles.bubble} />
+            </animated.div>
+          )}
           {doctors?.map((doctor, index) => (
             <DoctorColumn
               doctorsCount={doctors?.length || 0}

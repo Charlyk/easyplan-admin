@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -40,10 +40,11 @@ export default authorized(async (req, res) => {
 function deleteService(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { serviceId } = req.query;
-  return axios.delete(`${baseApiUrl}/services/v1/${serviceId}`, {
+  return axios.delete(`${updatedServerUrl(req)}/services/v1/${serviceId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
@@ -51,10 +52,11 @@ function deleteService(req) {
 function restoreService(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { serviceId } = req.query;
-  return axios.get(`${baseApiUrl}/services/v1/${serviceId}/restore`, {
+  return axios.get(`${updatedServerUrl(req)}/services/v1/${serviceId}/restore`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
@@ -63,10 +65,11 @@ function editService(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { serviceId } = req.query;
   const requestBody = req.body;
-  return axios.put(`${baseApiUrl}/services/v1/${serviceId}`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/services/v1/${serviceId}`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

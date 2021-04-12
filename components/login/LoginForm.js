@@ -7,7 +7,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import LoadingButton from '../common/LoadingButton';
 import { EmailRegex } from '../../utils/constants';
 import { textForKey } from '../../utils/localization';
-import styles from '../../styles/LoginForm.module.scss';
+import styles from '../../styles/auth/LoginForm.module.scss';
 
 const LoginForm = ({ isLoggingIn, errorMessage, onResetPassword, onSignUp, onLogin }) => {
   const [data, setData] = useState({ email: '', password: '' });

@@ -21,7 +21,6 @@ import Link from "next/link";
 import styles from '../../../styles/PatientsList.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 
 const PatientsList = ({ schedules, viewDate, filterData }) => {
   const [filteredSchedules, setFilteredSchedules] = useState(schedules);
@@ -68,7 +67,7 @@ const PatientsList = ({ schedules, viewDate, filterData }) => {
     try {
       const query = { weekday: moment(viewDate).isoWeekday(), period: 'day' };
       const queryString = new URLSearchParams(query).toString();
-      const response = await axios.get(`${baseAppUrl}/api/clinic/work-hours?${queryString}`);
+      const response = await axios.get(`/api/clinic/work-hours?${queryString}`);
       setHours(response.data.filter((it) => it.split(':')[1] === '00'));
     } catch (error) {
       toast.error(error.message);

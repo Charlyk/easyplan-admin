@@ -1,6 +1,6 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../../eas.config";
 import { handler } from "../../handler";
+import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default async function clinicDetails(req, res) {
   switch (req.method) {
@@ -18,6 +18,10 @@ export default async function clinicDetails(req, res) {
   }
 };
 
-async function fetchAvailableCurrencies() {
-  return axios.get(`${baseApiUrl}/clinics/available-currencies`);
+async function fetchAvailableCurrencies(req) {
+  return axios.get(`${updatedServerUrl(req)}/clinics/available-currencies`, {
+    headers: {
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
+  });
 }

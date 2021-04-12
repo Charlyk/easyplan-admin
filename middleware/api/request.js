@@ -1,5 +1,4 @@
 import axios from "axios";
-import { baseAppUrl } from "../../eas.config";
 
 /**
  * perform an axios request to the server
@@ -13,20 +12,20 @@ export async function request(path, method, headers = null, body = null) {
   switch (method) {
     case "get":
       return headers
-        ? axios.get(`${baseAppUrl}${path}`, { headers })
-        : axios.get(`${baseAppUrl}${path}`);
+        ? axios.get(path, { headers })
+        : axios.get(path);
     case 'post':
       return headers
-        ? axios.post(`${baseAppUrl}${path}`, body, { headers })
-        : axios.post(`${baseAppUrl}${path}`, body);
+        ? axios.post(path, body, { headers })
+        : axios.post(path, body);
     case 'put':
       return headers
-        ? axios.put(`${baseAppUrl}${path}`, body, { headers })
-        : axios.put(`${baseAppUrl}${path}`, body);
+        ? axios.put(path, body, { headers })
+        : axios.put(path, body);
     case 'delete':
       return headers
-        ? axios.delete(`${baseAppUrl}${path}`, { headers })
-        : axios.delete(`${baseAppUrl}${path}`);
+        ? axios.delete(path, { headers })
+        : axios.delete(path);
     default:
       throw Error('Method not allowed');
   }

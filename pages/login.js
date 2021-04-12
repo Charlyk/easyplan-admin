@@ -1,21 +1,19 @@
 import React, { useReducer } from 'react';
 
 import LoginForm from '../components/login/LoginForm';
-import RegisterForm from '../components/login/registration/RegisterForm';
 import ResetPassword from '../components/login/ResetPassword';
 import { useRouter } from 'next/router';
-import styles from '../styles/Login.module.scss';
-import { generateReducerActions, uploadFileToAWS } from "../utils/helperFuncs";
+import styles from '../styles/auth/Login.module.scss';
+import { generateReducerActions, getRedirectUrlForUser } from "../utils/helperFuncs";
 import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
-import { Role } from "../utils/constants";
-import { loginUser, registerUser, resetUserPassword } from "../middleware/api/auth";
-import RegistrationWrapper from "../components/login/registration";
+import { loginUser, resetUserPassword } from "../middleware/api/auth";
+import { isDev } from "../eas.config";
+import { Typography } from "@material-ui/core";
 
 const FormType = {
   login: 'login',
   resetPassword: 'resetPassword',
-  register: 'register',
 };
 
 const initialState = {
@@ -65,35 +63,13 @@ const Login = () => {
     handleFormChange(FormType.resetPassword);
   };
 
-  const handleGoToSignUp = () => {
-    handleFormChange(FormType.register);
+  const handleGoToSignUp = async () => {
+    await router.push('/register');
   };
 
   const handleSuccessResponse = async (user) => {
-    const selectedClinic = user.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
-    if (selectedClinic != null) {
-      try {
-        switch (selectedClinic.roleInClinic) {
-          case Role.reception:
-            await router.replace('/calendar/day');
-            break;
-          case Role.admin:
-          case Role.manager:
-            await router.replace('/analytics/general');
-            break;
-          case Role.doctor:
-            await router.replace('/doctor');
-            break;
-          default:
-            await router.replace('/login');
-            break;
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      await router.replace('/login');
-    }
+    const redirectUrl = getRedirectUrlForUser(user);
+    await router.replace(redirectUrl);
   }
 
   const handleResetPasswordSubmit = async (username) => {
@@ -108,7 +84,14 @@ const Login = () => {
         handleFormChange(FormType.login);
       }
     } catch (error) {
-      toast.error(error.message);
+      const { response, message } = error;
+      if (response != null) {
+        toast.error(response.data.message ?? message);
+        localDispatch(actions.setErrorMessage(response.data.message ?? message));
+      } else {
+        toast.error(message);
+        localDispatch(actions.setErrorMessage(message))
+      }
     } finally {
       localDispatch(actions.setIsLoading(false));
     }
@@ -118,20 +101,44 @@ const Login = () => {
     localDispatch(actions.setIsLoading(true));
     try {
       const { data } = await loginUser({ username, password });
-      if (data.error) {
+      const { error, action, user } = data;
+      if (error) {
         localDispatch(actions.setErrorMessage(data.message));
         localDispatch(actions.setIsLoading(false));
       } else {
-        localDispatch(actions.setErrorMessage(null));
-        await handleSuccessResponse(data);
+        if (action == null) {
+          localDispatch(actions.setErrorMessage(null));
+          await handleSuccessResponse(user);
+        } else {
+          switch (action) {
+            case 'CreateClinic':
+              await router.push('/create-clinic?redirect=1');
+              break;
+            case 'SelectClinic':
+              await router.push('/clinics');
+              break;
+            default:
+              localDispatch(actions.setIsLoading(false));
+              break;
+          }
+        }
       }
     } catch (error) {
-      toast.error(error.message);
+      const { response, message } = error
+      if (response != null) {
+        toast.error(textForKey(response.data.message));
+        localDispatch(actions.setErrorMessage(response.data.message));
+      } else {
+        toast.error(message);
+        localDispatch(actions.setErrorMessage(message));
+      }
+      localDispatch(actions.setIsLoading(false));
     }
   }
 
   return (
     <div className={styles['login-form-root']}>
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <div className={styles['logo-container']}>
         <img
           src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
@@ -156,12 +163,15 @@ const Login = () => {
             onGoBack={handleOpenLogin}
           />
         )}
-        {currentForm === FormType.register && (
-          <RegistrationWrapper onGoBack={handleOpenLogin} />
-        )}
       </div>
     </div>
   );
 };
+
+export const getServerSideProps = async ({ req }) => {
+  return {
+    props: {}
+  }
+}
 
 export default Login;

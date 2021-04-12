@@ -1,8 +1,8 @@
 import axios from "axios";
-import { baseApiUrl } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -30,10 +30,11 @@ export default authorized(async (req, res) => {
 async function fetchInvoices(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query).toString()
-  return axios.get(`${baseApiUrl}/invoices?${queryString}`, {
+  return axios.get(`${updatedServerUrl(req)}/invoices?${queryString}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }
@@ -41,10 +42,11 @@ async function fetchInvoices(req) {
 async function createNewInvoice(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const requestBody = req.body;
-  return axios.post(`${baseApiUrl}/invoices`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/invoices`, requestBody, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
     }
   });
 }

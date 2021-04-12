@@ -12,7 +12,6 @@ import EasyPlanModal from '../../common/EasyPlanModal';
 import styles from '../../../styles/AddXRay.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
-import { baseAppUrl } from "../../../eas.config";
 
 const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
@@ -38,7 +37,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
         imageUrl: uploadResult.location,
         type: phase,
       };
-      await axios.post(`${baseAppUrl}/api/patients/${patientId}/x-ray`, requestBody)
+      await axios.post(`/api/patients/${patientId}/x-ray`, requestBody)
       dispatch(triggerUpdateXRay());
       onClose();
     } catch (error) {
