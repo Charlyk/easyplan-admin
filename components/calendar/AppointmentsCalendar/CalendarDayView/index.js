@@ -160,14 +160,13 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       payload: {
         actionName: types.setUpdateHourIndicatorPosition,
         timerName: 'infiniteTimer',
-        timerPeriod: 60
+        timerInterval: 60000
       }
     });
   }, []);
 
   useEffect(() => {
-    const newTop = getHourIndicatorTop();
-    set({ hourTop: newTop });
+    updateHourIndicatorTop();
   }, [updateHourIndicator])
 
   useEffect(() => {
@@ -190,6 +189,9 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       newSchedulesMap.set(doctorId, newSchedules);
     }
     localDispatch(actions.setSchedules(newSchedulesMap));
+    setTimeout(() => {
+      updateHourIndicatorTop();
+    }, 500);
   }, [deleteSchedule]);
 
   useEffect(() => {
@@ -210,6 +212,11 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
   useEffect(() => {
     localDispatch(actions.setHours(dayHours));
   }, [dayHours]);
+
+  const updateHourIndicatorTop = () => {
+    const newTop = getHourIndicatorTop();
+    set({ hourTop: newTop });
+  }
 
   const isOutOfBounds = (schedule) => {
     if (hours.length === 0) {
@@ -283,6 +290,9 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
       newSchedulesMap.set(doctorId, newSchedules);
     }
     localDispatch(actions.setSchedules(newSchedulesMap));
+    setTimeout(() => {
+      updateHourIndicatorTop();
+    }, 500);
   };
 
   const fetchDayHours = async (date) => {
