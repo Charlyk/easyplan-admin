@@ -177,7 +177,6 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
     if (deleteSchedule == null) {
       return;
     }
-    // test
     const newSchedulesMap = new Map();
     for (const [doctorId, items] of schedulesMap.entries()) {
       if (deleteSchedule.doctorId !== doctorId) {

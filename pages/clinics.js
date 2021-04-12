@@ -69,6 +69,7 @@ export const getServerSideProps = async ({ req, res }) => {
   try {
     const { auth_token } = parseCookies(req);
     const response = await getCurrentUser(req.headers);
+    console.log(response);
     return {
       props: {
         user: response.data,
