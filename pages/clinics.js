@@ -17,7 +17,7 @@ const Clinics = ({ user, authToken }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (user == null) {
+    if (user?.clinics == null) {
       router.replace('/login');
       return;
     }
