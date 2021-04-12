@@ -107,7 +107,6 @@ const RegistrationWrapper = ({ onGoBack }) => {
       localDispatch(actions.setAccountCompleted());
       toast.success(textForKey('account_created_success'))
     } catch (error) {
-      console.error(error);
       toast.error(error.message);
     } finally {
       localDispatch(actions.setIsLoading(false));
@@ -125,7 +124,6 @@ const RegistrationWrapper = ({ onGoBack }) => {
       await createNewClinic(clinicData);
       await router.replace('/analytics/general');
     } catch (error) {
-      console.error(error);
       toast.error(error.message);
     } finally {
       localDispatch(actions.setIsLoading(false));

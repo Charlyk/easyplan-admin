@@ -366,7 +366,7 @@ export function updatedServerUrl() {
 
 export const getRedirectUrlForUser = (user) => {
   if (user == null) {
-    return '/login';
+    return null;
   }
   const { userClinic } = user;
   if (userClinic != null) {
@@ -383,7 +383,6 @@ export const getRedirectUrlForUser = (user) => {
           return '/login';
       }
     } catch (error) {
-      console.error(error);
       return '/login'
     }
   } else {

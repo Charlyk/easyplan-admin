@@ -17,7 +17,6 @@ const Clinics = ({ user, authToken }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log(user);
     if (user.clinics.length === 1) {
       handleClinicSelected(user.clinics[0]);
     } else if (user.clinics.length === 0) {
@@ -70,7 +69,6 @@ export const getServerSideProps = async ({ req, res }) => {
   try {
     const { auth_token } = parseCookies(req);
     const response = await getCurrentUser(req.headers);
-    console.log(response);
     return {
       props: {
         user: response.data,
@@ -78,9 +76,6 @@ export const getServerSideProps = async ({ req, res }) => {
       },
     };
   } catch (error) {
-    if (error.response != null) {
-      console.log('error.response', JSON.stringify(error.response));
-    }
     await handleRequestError(error, req, res);
     return {
       props: {}

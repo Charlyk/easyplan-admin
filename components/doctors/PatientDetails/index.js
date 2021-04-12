@@ -13,6 +13,7 @@ import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSele
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/PatientDetails.module.scss';
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -55,7 +56,7 @@ const PatientDetails = ({
       const response = await axios.get(`/api/patients/${patient.id}/notes`);
       setHasNotes(response.data.length > 0);
     } catch (error) {
-      console.error(error);
+      toast.error(error.message);
     }
   };
 

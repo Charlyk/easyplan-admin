@@ -66,7 +66,6 @@ const Register = ({ token, redirect }) => {
         router.back();
       }
     } catch (error) {
-      console.error(error);
       toast.error(error.message);
     } finally {
       dispatch(actions.setIsLoading(false));
