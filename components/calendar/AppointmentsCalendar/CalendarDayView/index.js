@@ -213,28 +213,42 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
     localDispatch(actions.setHours(dayHours));
   }, [dayHours]);
 
+  const firstHourDate = useMemo(() => {
+    const firstHour = hours[0];
+    const [minHour, minMinute] = firstHour.split(':');
+    return  moment(viewDate)
+      .set('hour', parseInt(minHour))
+      .set('minute', parseInt(minMinute));
+  }, [hours]);
+
+  const lastHourDate = useMemo(() => {
+    const lastHour = hours[hours.length - 1];
+    const [maxHour, maxMinute] = lastHour.split(':');
+    return  moment(viewDate)
+      .set('hour', parseInt(maxHour))
+      .set('minute', parseInt(maxMinute));
+  }, [hours]);
+
   const updateHourIndicatorTop = () => {
     const newTop = getHourIndicatorTop();
     set({ hourTop: newTop });
   }
 
-  const isOutOfBounds = (schedule) => {
+  const isOutOfBounds = (time) => {
     if (hours.length === 0) {
       return true;
     }
-    const scheduleTime = moment(schedule.endTime);
-    const lastHour = hours[hours.length - 1];
-    const [hour, minute] = lastHour.split(':');
-    const maxTime = moment(viewDate)
-      .set('hour', parseInt(hour))
-      .set('minute', parseInt(minute));
-    return scheduleTime.isAfter(maxTime);
+    const scheduleTime = moment(time);
+    return scheduleTime.isAfter(lastHourDate);
   }
 
   const isToday = () => {
     const today = moment();
-    const currentDate = moment(viewDate)
-    return today.isSame(currentDate, 'date')
+    const currentDate = moment(viewDate);
+    return (
+      today.isSame(currentDate, 'date')
+      && today.isBetween(firstHourDate, lastHourDate)
+    )
   }
 
   const handleScheduleUpdate = async () => {
@@ -250,7 +264,7 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
 
     const newSchedulesMap = schedulesMap ? cloneDeep(schedulesMap) : new Map();
 
-    if (isOutOfBounds(updateSchedule)) {
+    if (isOutOfBounds(updateSchedule.endTime)) {
       await fetchDayHours(scheduleDate.toDate());
     }
 
