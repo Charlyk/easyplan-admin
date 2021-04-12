@@ -17,6 +17,7 @@ const Clinics = ({ user, authToken }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    console.log(user);
     if (user.clinics.length === 1) {
       handleClinicSelected(user.clinics[0]);
     } else if (user.clinics.length === 0) {
@@ -47,7 +48,7 @@ const Clinics = ({ user, authToken }) => {
           <Typography className={styles.formTitle}>
             {textForKey('Select a clinic')}
           </Typography>
-          {user.clinics.map(clinic => (
+          {user?.clinics?.map(clinic => (
             <ClinicItem
               key={clinic.id}
               clinic={clinic}
@@ -77,6 +78,9 @@ export const getServerSideProps = async ({ req, res }) => {
       },
     };
   } catch (error) {
+    if (error.response != null) {
+      console.log('error.response', JSON.stringify(error.response));
+    }
     await handleRequestError(error, req, res);
     return {
       props: {}
