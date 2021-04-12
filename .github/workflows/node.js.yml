@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
-      - run: yarn build --if-present
+      - run: yarn build
       - if: ${{github.branch == 'master'}}
         run: pm2 reload easyplan-prod
       - if: ${{github.branch == 'develop'}}  
