@@ -179,10 +179,10 @@ const Login = ({ currentUser }) => {
 
 export const getServerSideProps = async ({ req }) => {
   try {
-    const resposnse = await getCurrentUser(req.headers);
+    const response = await getCurrentUser(req.headers);
     return {
       props: {
-        currentUser: resposnse.data,
+        currentUser: response.data,
       },
     };
   } catch (error) {
