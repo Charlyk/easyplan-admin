@@ -9,9 +9,9 @@ import { fetchDaySchedules } from "../../../middleware/api/schedules";
 
 const CalendarDay = ({ currentUser, currentClinic, date, schedules, dayHours }) => {
   const viewDate = moment(date).toDate();
-  const doctors = currentClinic.users.filter((item) =>
+  const doctors = currentClinic?.users?.filter((item) =>
     item.roleInClinic === Role.doctor && !item.isHidden
-  );
+  ) || [];
 
   return (
     <Calendar
