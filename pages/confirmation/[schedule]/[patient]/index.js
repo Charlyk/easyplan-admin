@@ -52,7 +52,7 @@ const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
       <Head>
         <title>
           {
-            schedule.clinicName
+            schedule?.clinicName != null
               ? `${schedule.clinicName} - ${textForKey('Confirmation')}`
               : `EasyPlan.pro - ${textForKey('Confirmation')}`
           }
