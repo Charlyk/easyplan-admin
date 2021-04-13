@@ -29,7 +29,7 @@ export default ({ schedule, scheduleId, patientId, query }) => {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    console.log(query);
+    console.log(query, scheduleId, patientId);
   }, [])
 
   const confirmSchedule = async () => {
