@@ -166,13 +166,6 @@ export default ({ schedule, scheduleId, patientId, query }) => {
 
 export const getServerSideProps = async ({ req, res, query }) => {
   try {
-    if (query.patient == null) {
-      return {
-        props: {
-          query
-        }
-      };
-    }
     const [scheduleId, patientId] = query.patient;
     const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId);
     return {
