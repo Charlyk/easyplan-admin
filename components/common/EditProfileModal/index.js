@@ -19,12 +19,12 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({
-    avatarUrl: currentUser.avatar,
+    avatarUrl: currentUser?.avatar,
     avatarFile: null,
-    firstName: currentUser.firstName,
-    lastName: currentUser.lastName,
-    email: currentUser.email,
-    phoneNumber: currentUser.phoneNumber,
+    firstName: currentUser?.firstName || '',
+    lastName: currentUser?.lastName || '',
+    email: currentUser?.email || '',
+    phoneNumber: currentUser?.phoneNumber || '',
     oldPassword: '',
     isPhoneValid: true,
     password: '',
@@ -36,7 +36,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
   }, [currentUser]);
 
   useEffect(() => {
-    const isChanged = data.email !== currentUser.email;
+    const isChanged = data.email !== currentUser?.email;
     if (!isChanged) {
       setData({ ...data, oldPassword: '' });
     }

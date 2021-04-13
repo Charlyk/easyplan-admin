@@ -48,8 +48,7 @@ export async function fetchDoctorScheduleDetails(scheduleId, patientId, headers 
  * @return {Promise<void>}
  */
 export async function fetchScheduleConfirmationInfo(scheduleId, patientId, headers = null) {
-  const queryString = new URLSearchParams({ scheduleId, patientId }).toString();
-  return get(`/api/schedules/confirm?${queryString}`, headers)
+  return get(`/api/schedules/confirm/${scheduleId}/${patientId}`, headers)
 }
 
 /**
