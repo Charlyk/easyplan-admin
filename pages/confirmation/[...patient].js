@@ -178,9 +178,6 @@ export const getServerSideProps = async ({ req, res, query }) => {
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: { query },
-    };
+    throw error;
   }
 }
