@@ -164,6 +164,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
   try {
     const { patient: patientId, schedule: scheduleId } = query;
     const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId);
+    console.error(schedule);
     return {
       props: { schedule, scheduleId, patientId },
     }
