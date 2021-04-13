@@ -12,19 +12,19 @@ export async function request(path, method, headers = null, body = null) {
   switch (method) {
     case "get":
       return headers
-        ? axios.get(path, { headers })
+        ? axios.get(`http://localhost:3000${path}`, { headers })
         : axios.get(path);
     case 'post':
       return headers
-        ? axios.post(path, body, { headers })
+        ? axios.post(`http://localhost:3000${path}`, body, { headers })
         : axios.post(path, body);
     case 'put':
       return headers
-        ? axios.put(path, body, { headers })
+        ? axios.put(`http://localhost:3000${path}`, body, { headers })
         : axios.put(path, body);
     case 'delete':
       return headers
-        ? axios.delete(path, { headers })
+        ? axios.delete(`http://localhost:3000${path}`, { headers })
         : axios.delete(path);
     default:
       throw Error('Method not allowed');

@@ -168,7 +168,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
   try {
     const { patient } = query
     const [scheduleId, patientId] = patient;
-    const { data: schedule } = await axios.get(`http://localhost:3000/api/schedules/confirm/${scheduleId}/${patientId}`);
+    const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId, req.headers);
     return {
       props: {
         patient,
