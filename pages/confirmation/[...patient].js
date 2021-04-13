@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Table,
@@ -27,6 +27,10 @@ export default ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
   const [isConfirming, setIsConfirming] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    console.log(scheduleId, patientId);
+  }, [])
 
   const confirmSchedule = async () => {
     setIsConfirming(true);
@@ -168,12 +172,16 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const [scheduleId, patientId] = query.patient;
     const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId);
     return {
-      props: { schedule, scheduleId, patientId },
-    }
+      props: {
+        schedule,
+        scheduleId,
+        patientId
+      },
+    };
   } catch (error) {
     await handleRequestError(error, req, res);
     return {
-      props: {}
-    }
+      props: {},
+    };
   }
 }

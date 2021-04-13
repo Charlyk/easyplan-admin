@@ -12,9 +12,9 @@ import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { triggerUserLogout } from "../redux/actions/actions";
 
-const Clinics = ({ user, authToken }) => {
+export default ({ user, authToken }) => {
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (user.clinics.length === 1) {
@@ -47,7 +47,7 @@ const Clinics = ({ user, authToken }) => {
           <Typography className={styles.formTitle}>
             {textForKey('Select a clinic')}
           </Typography>
-          {user.clinics.map(clinic => (
+          {user?.clinics?.map(clinic => (
             <ClinicItem
               key={clinic.id}
               clinic={clinic}
@@ -82,5 +82,3 @@ export const getServerSideProps = async ({ req, res }) => {
     }
   }
 }
-
-export default Clinics;
