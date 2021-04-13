@@ -23,13 +23,13 @@ import { useRouter } from "next/router";
 import { fetchScheduleConfirmationInfo } from "../../middleware/api/schedules";
 import Head from "next/head";
 
-export default ({ schedule, scheduleId, patientId }) => {
+export default ({ schedule, scheduleId, patientId, query }) => {
   const router = useRouter();
   const [isConfirming, setIsConfirming] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    console.log(scheduleId, patientId);
+    console.log(query);
   }, [])
 
   const confirmSchedule = async () => {
@@ -173,6 +173,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId);
     return {
       props: {
+        query,
         schedule,
         scheduleId,
         patientId
