@@ -14,7 +14,7 @@ import {
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import Appointment from './Appointment';
-import styles from '../../../../styles/PatientAppointments.module.scss';
+import styles from '../../../../styles/patient/PatientAppointments.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
 

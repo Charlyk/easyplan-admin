@@ -9,7 +9,7 @@ import * as locales from 'react-date-range/dist/locale';
 import { clinicServicesSelector } from '../../../redux/selectors/clinicSelector';
 import { Statuses } from '../../../utils/constants';
 import { getAppLanguage, textForKey } from '../../../utils/localization';
-import styles from '../../../styles/PatientsFilter.module.scss';
+import styles from '../../../styles/patient/PatientsFilter.module.scss';
 
 const PatientsFilter = ({
   selectedDate,

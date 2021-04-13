@@ -15,7 +15,7 @@ import {
 import { textForKey } from '../../../../utils/localization';
 import EasyDatePicker from '../../../common/EasyDatePicker';
 import LoadingButton from '../../../common/LoadingButton';
-import styles from '../../../../styles/PatientPersonalData.module.scss'
+import styles from '../../../../styles/patient/PatientPersonalData.module.scss'
 import { toast } from "react-toastify";
 import axios from "axios";
 

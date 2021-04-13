@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import { Statuses } from '../../../utils/constants';
 import { textForKey } from '../../../utils/localization';
 import Link from "next/link";
-import styles from '../../../styles/PatientsList.module.scss';
+import styles from '../../../styles/patient/PatientsList.module.scss';
 import { toast } from "react-toastify";
 import axios from "axios";
 

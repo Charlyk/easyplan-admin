@@ -10,7 +10,7 @@ import IconPlus from '../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../utils/localization';
 import XRayPhase from './XRayPhase';
-import styles from '../../../../styles/PatientXRay.module.scss'
+import styles from '../../../../styles/patient/PatientXRay.module.scss'
 import { toast } from "react-toastify";
 import axios from "axios";
 

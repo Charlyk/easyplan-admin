@@ -11,7 +11,7 @@ import OrthodonticPlan from '../../patients/PatientDetailsModal/OrthodonticPlan'
 import PatientXRay from '../../patients/PatientDetailsModal/PatientXRay';
 import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/PatientDetails.module.scss';
+import styles from '../../../styles/patient/PatientDetails.module.scss';
 import axios from "axios";
 import { toast } from "react-toastify";
 

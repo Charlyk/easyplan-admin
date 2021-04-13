@@ -1,4 +1,8 @@
 import axios from "axios";
+import { environment, isDev } from "../../eas.config";
+
+const host = environment === 'local' ? 'http://app.easyplan.loc' : 'http://localhost';
+const port = environment === 'local' ? 80 : isDev ? 3001 : 3000
 
 /**
  * perform an axios request to the server
@@ -12,19 +16,19 @@ export async function request(path, method, headers = null, body = null) {
   switch (method) {
     case "get":
       return headers
-        ? axios.get(`http://localhost:3000${path}`, { headers })
+        ? axios.get(`${host}:${port}${path}`, { headers })
         : axios.get(path);
     case 'post':
       return headers
-        ? axios.post(`http://localhost:3000${path}`, body, { headers })
+        ? axios.post(`${host}:${port}${path}`, body, { headers })
         : axios.post(path, body);
     case 'put':
       return headers
-        ? axios.put(`http://localhost:3000${path}`, body, { headers })
+        ? axios.put(`${host}:${port}${path}`, body, { headers })
         : axios.put(path, body);
     case 'delete':
       return headers
-        ? axios.delete(`http://localhost:3000${path}`, { headers })
+        ? axios.delete(`${host}:${port}${path}`, { headers })
         : axios.delete(path);
     default:
       throw Error('Method not allowed');
