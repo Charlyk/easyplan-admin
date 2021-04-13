@@ -68,7 +68,7 @@ export default ({ schedule, scheduleId, patientId, query }) => {
         </Typography>
       )}
       {logoSrc && (
-        <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo' />
+        <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo'/>
       )}
       {schedule != null && !isError && (
         <TableContainer className={styles['table-container']}>
@@ -156,7 +156,7 @@ export default ({ schedule, scheduleId, patientId, query }) => {
         <Typography className={styles.label}>
           powered by{' '}
           <a href='https://easyplan.pro' target='_blank' rel='noreferrer'>
-            <AppLogoBlue />
+            <AppLogoBlue/>
           </a>
         </Typography>
       </div>
@@ -167,7 +167,11 @@ export default ({ schedule, scheduleId, patientId, query }) => {
 export const getServerSideProps = async ({ req, res, query }) => {
   try {
     if (query.patient == null) {
-      return { props: {} };
+      return {
+        props: {
+          query
+        }
+      };
     }
     const [scheduleId, patientId] = query.patient;
     const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId);
@@ -182,7 +186,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
   } catch (error) {
     await handleRequestError(error, req, res);
     return {
-      props: {},
+      props: { query },
     };
   }
 }
