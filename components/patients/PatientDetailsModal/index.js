@@ -27,9 +27,9 @@ import PatientPurchasesList from './PatientPurchasesList';
 import OrthodonticPlan from './OrthodonticPlan';
 import PatientXRay from './PatientXRay';
 import { getPatientDetails } from "../../../middleware/api/patients";
-import styles from '../../../styles/PatientDetailsModal.module.scss';
-import PatientTreatmentPlan from "../../doctors/PatientTreatmentPlan";
+import styles from '../../../styles/patient/PatientDetailsModal.module.scss';
 import PatientTreatmentPlanContainer from "./PatientTreatmentPlanContainer";
+import PatientPhoneRecords from "./PatientPhoneRecords";
 
 const MenuItem = {
   personalInfo: 'personal-info',
@@ -45,6 +45,7 @@ const MenuItem = {
   addPayment: 'addPayment',
   messages: 'messages',
   history: 'history',
+  phoneRecords: 'phoneRecords',
 };
 
 const initialState = {
@@ -124,7 +125,8 @@ const PatientDetailsModal = (
     localDispatch(actions.setIsFetching(true));
     try {
       const response = await getPatientDetails(patientId);
-      localDispatch(actions.setPatient(response.data));
+      const { data: patient } = response;
+      localDispatch(actions.setPatient(patient));
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -217,6 +219,8 @@ const PatientDetailsModal = (
             patientId={patient.id}
           />
         )
+      case MenuItem.phoneRecords:
+        return <PatientPhoneRecords patient={patient} />
     }
   };
 
@@ -330,6 +334,14 @@ const PatientDetailsModal = (
                     className={menuItemClasses(MenuItem.messages)}
                   >
                     {textForKey('Messages')}
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    action
+                    id={MenuItem.phoneRecords}
+                    onClick={handleMenuClick}
+                    className={menuItemClasses(MenuItem.phoneRecords)}
+                  >
+                    {textForKey('Phone records')}
                   </ListGroup.Item>
                   <ListGroup.Item
                     action

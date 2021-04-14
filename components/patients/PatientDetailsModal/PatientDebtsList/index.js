@@ -23,7 +23,7 @@ import { setPaymentModal } from '../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../redux/selectors/invoicesSelector';
 import { formattedAmount } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import styles from '../../../../styles/PatientDebtsList.module.scss';
+import styles from '../../../../styles/patient/PatientDebtsList.module.scss';
 import { baseApiUrl } from "../../../../eas.config";
 import { getPatientDebts } from "../../../../middleware/api/patients";
 

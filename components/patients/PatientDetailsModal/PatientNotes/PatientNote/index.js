@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
 import { textForKey } from '../../../../../utils/localization';
-import styles from '../../../../../styles/PatientNote.module.scss';
+import styles from '../../../../../styles/patient/PatientNote.module.scss';
 
 const PatientNote = ({ note }) => {
   return (

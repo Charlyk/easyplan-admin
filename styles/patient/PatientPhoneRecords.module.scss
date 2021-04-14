@@ -1,0 +1,60 @@
+.phoneRecordsRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .recordsWrapper {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+
+    .recordItem {
+      display: flex;
+      padding: .5rem 1rem;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: #ededed 1px solid;
+
+      .dateLabel {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        color: #3A83DC;
+        margin-right: .3rem;
+      }
+
+      .operatorLabel {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13px;
+        color: #34354C;
+        margin-right: .3rem;
+      }
+
+      .downloadButton {
+        svg {
+          fill: #3A83DC;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  .footer {
+    border-top: #ededed 1px solid;
+    width: 100%;
+    height: 55px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

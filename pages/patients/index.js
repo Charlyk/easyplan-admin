@@ -404,7 +404,6 @@ export const getServerSideProps = async ({ req, res, query }) => {
       },
     };
   } catch (error) {
-    console.error(error.message)
     await handleRequestError(error, req, res);
     return {
       props: {

@@ -25,7 +25,7 @@ import {
   generateReducerActions,
 } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import styles from '../../../../styles/PatientPurchasesList.module.scss'
+import styles from '../../../../styles/patient/PatientPurchasesList.module.scss'
 import axios from "axios";
 import { baseApiUrl } from "../../../../eas.config";
 import clsx from "clsx";

@@ -47,128 +47,128 @@ const pubnub = new PubNub({
   uuid: PubNub.generateUUID(),
 });
 
-function NextApp({ Component, pageProps }) {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const patientXRayModal = useSelector(patientXRayModalSelector);
-  const patientNoteModal = useSelector(patientNoteModalSelector);
-  const imageModal = useSelector(imageModalSelector);
-  const createClinic = useSelector(createClinicSelector);
-  const logout = useSelector(logoutSelector);
-  const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
+export default wrapper.withRedux(
+  ({ Component, pageProps }) => {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const patientXRayModal = useSelector(patientXRayModalSelector);
+    const patientNoteModal = useSelector(patientNoteModalSelector);
+    const imageModal = useSelector(imageModalSelector);
+    const createClinic = useSelector(createClinicSelector);
+    const logout = useSelector(logoutSelector);
+    const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
 
-  useEffect(() => {
-    if (UnauthorizedPaths.includes(router.pathname)) {
-      return;
-    }
-    fetchInitializationData();
-  }, []);
+    useEffect(() => {
+      if (UnauthorizedPaths.includes(router.pathname)) {
+        return;
+      }
+      fetchInitializationData();
+    }, []);
 
-  const fetchInitializationData = async () => {
-    try {
-      const appData = await fetchAppData();
-      setState(appData);
-    } catch (error) {
-      // ignore this error
+    const fetchInitializationData = async () => {
+      try {
+        const appData = await fetchAppData();
+        setState(appData);
+      } catch (error) {
+        // ignore this error
+      }
     }
+
+    const getPageTitle = () => {
+      return paths[router.pathname] || '';
+    };
+
+    const clinicName = useMemo(() => {
+      return currentClinic?.clinicName || 'EasyPlan'
+    }, [currentClinic]);
+
+    const handleClosePatientXRayModal = () => {
+      dispatch(setPatientXRayModal({ open: false, patientId: null }));
+    };
+
+    const handleClosePatientNoteModal = () => {
+      dispatch(setPatientNoteModal({ open: false }));
+    };
+
+    const handleCloseImageModal = () => {
+      dispatch(setImageModal({ open: false }));
+    };
+
+    const handleCloseCreateClinic = () => {
+      dispatch(setCreateClinic({ open: false, canClose: false }));
+    };
+
+    const handleClinicCreated = async () => {
+      await router.replace(router.asPath);
+      handleCloseCreateClinic();
+    };
+
+    const handleUserLogout = async () => {
+      await signOut();
+      router.reload()
+    };
+
+    const handleCancelLogout = () => {
+      dispatch(triggerUserLogout(false));
+    };
+
+    return (
+      <>
+        <Head>
+          <title>
+            {
+              currentClinic
+                ? `${clinicName} - ${getPageTitle()}`
+                : `EasyPlan.pro - ${getPageTitle()}`
+            }
+          </title>
+        </Head>
+        <ToastContainer/>
+        <PubNubProvider client={pubnub}>
+          <>
+            {logout && (
+              <ConfirmationModal
+                title={textForKey('Logout')}
+                message={textForKey('logout message')}
+                onConfirm={handleUserLogout}
+                onClose={handleCancelLogout}
+                show={logout}
+              />
+            )}
+            {createClinic?.open && (
+              <CreateClinicModal
+                onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
+                open={createClinic?.open}
+                onCreate={handleClinicCreated}
+              />
+            )}
+            {imageModal.open && (
+              <FullScreenImageModal
+                {...imageModal}
+                onClose={handleCloseImageModal}
+              />
+            )}
+            {patientNoteModal.open && (
+              <AddNote
+                {...patientNoteModal}
+                onClose={handleClosePatientNoteModal}
+              />
+            )}
+            {patientXRayModal.open && (
+              <AddXRay
+                {...patientXRayModal}
+                onClose={handleClosePatientXRayModal}
+              />
+            )}
+            <NextNprogress
+              color='#29D'
+              startPosition={0.3}
+              height='2'
+            />
+            <Component {...pageProps} />
+          </>
+        </PubNubProvider>
+      </>
+    );
   }
-
-  const getPageTitle = () => {
-    return paths[router.pathname] || '';
-  };
-
-  const clinicName = useMemo(() => {
-    return currentClinic?.clinicName || 'EasyPlan'
-  }, [currentClinic]);
-
-  const handleClosePatientXRayModal = () => {
-    dispatch(setPatientXRayModal({ open: false, patientId: null }));
-  };
-
-  const handleClosePatientNoteModal = () => {
-    dispatch(setPatientNoteModal({ open: false }));
-  };
-
-  const handleCloseImageModal = () => {
-    dispatch(setImageModal({ open: false }));
-  };
-
-  const handleCloseCreateClinic = () => {
-    dispatch(setCreateClinic({ open: false, canClose: false }));
-  };
-
-  const handleClinicCreated = async () => {
-    await router.replace(router.asPath);
-    handleCloseCreateClinic();
-  };
-
-  const handleUserLogout = async () => {
-    await signOut();
-    router.reload()
-  };
-
-  const handleCancelLogout = () => {
-    dispatch(triggerUserLogout(false));
-  };
-
-  return (
-    <>
-      <Head>
-        <title>
-          {
-            currentClinic
-            ? `${clinicName} - ${getPageTitle()}`
-            : `EasyPlan.pro - ${getPageTitle()}`
-          }
-        </title>
-      </Head>
-      <ToastContainer/>
-      <PubNubProvider client={pubnub}>
-        <>
-          {logout && (
-            <ConfirmationModal
-              title={textForKey('Logout')}
-              message={textForKey('logout message')}
-              onConfirm={handleUserLogout}
-              onClose={handleCancelLogout}
-              show={logout}
-            />
-          )}
-          {createClinic?.open && (
-            <CreateClinicModal
-              onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
-              open={createClinic?.open}
-              onCreate={handleClinicCreated}
-            />
-          )}
-          {imageModal.open && (
-            <FullScreenImageModal
-              {...imageModal}
-              onClose={handleCloseImageModal}
-            />
-          )}
-          {patientNoteModal.open && (
-            <AddNote
-              {...patientNoteModal}
-              onClose={handleClosePatientNoteModal}
-            />
-          )}
-          {patientXRayModal.open && (
-            <AddXRay
-              {...patientXRayModal}
-              onClose={handleClosePatientXRayModal}
-            />
-          )}
-          <NextNprogress
-            color='#29D'
-            startPosition={0.3}
-            height='2'
-          />
-          <Component {...pageProps} />
-        </>
-      </PubNubProvider>
-    </>
-  );
-}
-
-export default wrapper.withRedux(NextApp)
+)

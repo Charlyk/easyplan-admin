@@ -197,7 +197,6 @@ const Services = ({ currentUser, currentClinic, categories: clinicCategories, se
       ? await restoreService(deleteServiceModal.service.id)
       : await deleteService(deleteServiceModal.service.id);
     if (response.isError) {
-      console.error(response.message);
       localDispatch(
         actions.setDeleteServiceModal({
           ...deleteServiceModal,

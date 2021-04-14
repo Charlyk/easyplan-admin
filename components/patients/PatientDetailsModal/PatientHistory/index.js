@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import { textForKey } from '../../../../utils/localization';
 import HistoryItem from './HistoryItem';
-import styles from '../../../../styles/PatientHistory.module.scss';
+import styles from '../../../../styles/patient/PatientHistory.module.scss';
 import axios from "axios";
 
 const PatientHistory = ({ patient, clinic }) => {

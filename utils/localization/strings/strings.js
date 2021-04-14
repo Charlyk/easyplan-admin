@@ -509,6 +509,9 @@ export default {
     cashier: 'Cashier',
     'calendar legend': 'Calendar legend',
     'select a clinic': 'Select a clinic',
+    'phone records': 'Phone records',
+    next: 'Next',
+    previous: 'Previous',
   },
   ro: {
     analytics: 'Analitică',
@@ -1026,6 +1029,9 @@ export default {
     cashier: 'Casier',
     'calendar legend': 'Legenda statuturilor',
     'select a clinic': 'Alegeți o clinică',
+    'phone records': 'Înregistrări telefonice',
+    next: 'Următorul',
+    previous: 'Înapoi',
   },
   ru: {
     analytics: 'Analytics',
@@ -1534,5 +1540,8 @@ export default {
     cashier: 'Кассир',
     'calendar legend': 'Calendar legend',
     'select a clinic': 'Выберите клинику',
+    'phone records': 'Phone records',
+    next: 'Next',
+    previous: 'Previous',
   },
 };

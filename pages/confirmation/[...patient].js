@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Table,
@@ -12,21 +12,25 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
 
-import AppLogoBlue from '../../../../components/icons/appLogoBlue';
-import LoadingButton from '../../../../components/common/LoadingButton';
-import { handleRequestError, urlToLambda } from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
+import AppLogoBlue from '../../components/icons/appLogoBlue';
+import LoadingButton from '../../components/common/LoadingButton';
+import { handleRequestError, urlToLambda } from '../../utils/helperFuncs';
+import { textForKey } from '../../utils/localization';
 
-import styles from '../../../../styles/ScheduleConfirmation.module.scss';
+import styles from '../../styles/ScheduleConfirmation.module.scss';
 import axios from "axios";
 import { useRouter } from "next/router";
-import { fetchScheduleConfirmationInfo } from "../../../../middleware/api/schedules";
+import { fetchScheduleConfirmationInfo } from "../../middleware/api/schedules";
 import Head from "next/head";
 
-const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
+export default ({ schedule, scheduleId, patientId, patient }) => {
   const router = useRouter();
   const [isConfirming, setIsConfirming] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    console.log(patient, scheduleId, patientId);
+  }, [])
 
   const confirmSchedule = async () => {
     setIsConfirming(true);
@@ -52,7 +56,7 @@ const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
       <Head>
         <title>
           {
-            schedule.clinicName
+            schedule?.clinicName != null
               ? `${schedule.clinicName} - ${textForKey('Confirmation')}`
               : `EasyPlan.pro - ${textForKey('Confirmation')}`
           }
@@ -64,7 +68,7 @@ const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
         </Typography>
       )}
       {logoSrc && (
-        <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo' />
+        <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo'/>
       )}
       {schedule != null && !isError && (
         <TableContainer className={styles['table-container']}>
@@ -152,7 +156,7 @@ const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
         <Typography className={styles.label}>
           powered by{' '}
           <a href='https://easyplan.pro' target='_blank' rel='noreferrer'>
-            <AppLogoBlue />
+            <AppLogoBlue/>
           </a>
         </Typography>
       </div>
@@ -162,17 +166,18 @@ const ScheduleConfirmation = ({ schedule, scheduleId, patientId }) => {
 
 export const getServerSideProps = async ({ req, res, query }) => {
   try {
-    const { patient: patientId, schedule: scheduleId } = query;
-    const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId);
+    const { patient } = query
+    const [scheduleId, patientId] = patient;
+    const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId, req.headers);
     return {
-      props: { schedule, scheduleId, patientId },
-    }
+      props: {
+        patient,
+        schedule,
+        scheduleId,
+        patientId
+      },
+    };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {}
-    }
+    throw error;
   }
 }
-
-export default ScheduleConfirmation;

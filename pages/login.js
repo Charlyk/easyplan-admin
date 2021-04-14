@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import LoginForm from '../components/login/LoginForm';
 import ResetPassword from '../components/login/ResetPassword';
@@ -7,7 +7,7 @@ import styles from '../styles/auth/Login.module.scss';
 import { generateReducerActions, getRedirectUrlForUser } from "../utils/helperFuncs";
 import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
-import { loginUser, resetUserPassword } from "../middleware/api/auth";
+import { getCurrentUser, loginUser, resetUserPassword } from "../middleware/api/auth";
 import { isDev } from "../eas.config";
 import { Typography } from "@material-ui/core";
 
@@ -47,9 +47,15 @@ const reducer = (state, action) => {
   }
 }
 
-const Login = () => {
+const Login = ({ currentUser }) => {
   const router = useRouter();
   const [{ currentForm, isLoading, errorMessage }, localDispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (currentUser != null) {
+      router.replace('/clinics');
+    }
+  }, [currentUser])
 
   const handleFormChange = (newForm) => {
     localDispatch(actions.setCurrentForm(newForm));
@@ -69,6 +75,9 @@ const Login = () => {
 
   const handleSuccessResponse = async (user) => {
     const redirectUrl = getRedirectUrlForUser(user);
+    if (redirectUrl == null || router.asPath === redirectUrl) {
+      return;
+    }
     await router.replace(redirectUrl);
   }
 
@@ -169,8 +178,17 @@ const Login = () => {
 };
 
 export const getServerSideProps = async ({ req }) => {
-  return {
-    props: {}
+  try {
+    const response = await getCurrentUser(req.headers);
+    return {
+      props: {
+        currentUser: response.data,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {}
+    }
   }
 }
 

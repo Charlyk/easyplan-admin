@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import IconAvatar from '../../icons/iconAvatar';
 import IconEmail from '../../icons/iconEmail';
 import IconPhone from '../../icons/iconPhone';
-import styles from '../../../styles/PatientRow.module.scss';
+import styles from '../../../styles/patient/PatientRow.module.scss';
 import clsx from "clsx";
 
 const PatientRow = ({ patient, onSelect }) => {

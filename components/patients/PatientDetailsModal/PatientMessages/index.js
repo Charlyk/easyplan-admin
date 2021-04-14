@@ -10,7 +10,7 @@ import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../../common/LoadingButton';
 import PatientMessage from './PatientMessage';
-import styles from '../../../../styles/PatientMessages.module.scss';
+import styles from '../../../../styles/patient/PatientMessages.module.scss';
 import axios from "axios";
 
 const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;

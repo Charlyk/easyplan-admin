@@ -383,7 +383,6 @@ export const getRedirectUrlForUser = (user) => {
           return '/login';
       }
     } catch (error) {
-      console.error(error);
       return '/login'
     }
   } else {

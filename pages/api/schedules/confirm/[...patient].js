@@ -4,8 +4,8 @@ import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
 
 export default async (req, res) => {
   switch (req.method) {
-    case 'POST': {
-      const data = await handler(confirmSchedule, req, res);
+    case 'GET': {
+      const data = await handler(fetchScheduleInfo, req, res);
       if (data != null) {
         res.json(data);
       }
@@ -18,8 +18,10 @@ export default async (req, res) => {
   }
 };
 
-async function confirmSchedule(req) {
-  return axios.post(`${updatedServerUrl(req)}/confirmation/schedule`, req.body, {
+function fetchScheduleInfo(req) {
+  const { patient } = req.query;
+  const [scheduleId, patientId] = patient;
+  return axios.get(`${updatedServerUrl(req)}/confirmation/schedule/${scheduleId}/${patientId}`, {
     headers: {
       'X-EasyPlan-Subdomain': getSubdomain(req),
     }

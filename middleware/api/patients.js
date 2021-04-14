@@ -85,3 +85,15 @@ export async function searchPatients(searchQuery, headers = null) {
   const queryString = new URLSearchParams({ query: searchQuery }).toString();
   return get(`/api/patients/search?${queryString}`, headers)
 }
+
+/**
+ * Fetch patient phone records
+ * @param {string|number} patientId
+ * @param {string|number} page
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function getPatientPhoneRecords(patientId, page, headers = null) {
+  const queryString = new URLSearchParams({ patientId, page }).toString();
+  return get(`/api/patients/phone-records?${queryString}`, headers)
+}

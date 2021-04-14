@@ -11,7 +11,7 @@ import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../../common/LoadingButton';
 import PatientNote from './PatientNote';
-import styles from '../../../../styles/PatientNotes.module.scss';
+import styles from '../../../../styles/patient/PatientNotes.module.scss';
 import { toast } from "react-toastify";
 import { createPatientNote, getPatientNotes } from "../../../../middleware/api/patients";
 

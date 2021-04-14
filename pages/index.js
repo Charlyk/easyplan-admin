@@ -14,6 +14,9 @@ const MainPage = ({ currentClinic, currentUser, authToken }) => {
 
   const redirectUserToPage = async () => {
     const redirectPath = getRedirectUrlForUser(currentUser);
+    if (redirectPath == null || router.asPath === redirectPath) {
+      return;
+    }
     await router.replace(redirectPath);
   }
 

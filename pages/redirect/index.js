@@ -17,6 +17,9 @@ const Redirect = () => {
     try {
       const response = await getCurrentUser();
       const redirectUrl = getRedirectUrlForUser(response.data);
+      if (redirectUrl == null || router.asPath === redirectUrl) {
+        return;
+      }
       await router.replace(redirectUrl);
     } catch (error) {
       await router.replace('/login');
@@ -32,7 +35,6 @@ export const getServerSideProps = async ({ req, res, query }) => {
     setCookies(res, token, clinicId);
     return { props: {} }
   } catch (error) {
-    console.error(error);
     return { props: {} }
   }
 }

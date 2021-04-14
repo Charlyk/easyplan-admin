@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PatientTreatmentPlan from "../../../doctors/PatientTreatmentPlan";
 import { textForKey } from "../../../../utils/localization";
 import { CircularProgress, Typography } from "@material-ui/core";
-import styles from '../../../../styles/PatientTreatmentPlanContainer.module.scss';
+import styles from '../../../../styles/patient/PatientTreatmentPlanContainer.module.scss';
 import { fetchDoctorScheduleDetails } from "../../../../middleware/api/schedules";
 import { toast } from "react-toastify";
 

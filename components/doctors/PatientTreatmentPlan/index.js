@@ -5,7 +5,7 @@ import TeethContainer from "../TeethContainer";
 import ServicesWrapper from "../ServicesWrapper";
 import { toast } from "react-toastify";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
-import styles from '../../../styles/PatientTreatmentPlan.module.scss';
+import styles from '../../../styles/patient/PatientTreatmentPlan.module.scss';
 import { generateReducerActions } from "../../../utils/helperFuncs";
 import cloneDeep from "lodash/cloneDeep";
 import remove from "lodash/remove";

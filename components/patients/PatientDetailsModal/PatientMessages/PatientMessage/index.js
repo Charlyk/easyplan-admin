@@ -11,7 +11,7 @@ import IconSuccess from '../../../../icons/iconSuccess';
 import { setSMSMessageStatus } from '../../../../../redux/actions/patientActions';
 import { updateSMSMessageStatusSelector } from '../../../../../redux/selectors/patientSelector';
 import { textForKey } from '../../../../../utils/localization';
-import styles from '../../../../../styles/PatientMessage.module.scss';
+import styles from '../../../../../styles/patient/PatientMessage.module.scss';
 
 const PatientMessage = ({ message }) => {
   const dispatch = useDispatch();
