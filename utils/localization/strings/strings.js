@@ -512,6 +512,7 @@ export default {
     'phone records': 'Phone records',
     next: 'Next',
     previous: 'Previous',
+    'redirecting to clinic': 'Redirecting to clinic',
   },
   ro: {
     analytics: 'Analitică',
@@ -1032,6 +1033,7 @@ export default {
     'phone records': 'Înregistrări telefonice',
     next: 'Următorul',
     previous: 'Înapoi',
+    'redirecting to clinic': 'Vă redirecționăm la clinică',
   },
   ru: {
     analytics: 'Analytics',
@@ -1543,5 +1545,6 @@ export default {
     'phone records': 'Phone records',
     next: 'Next',
     previous: 'Previous',
+    'redirecting to clinic': 'Redirecting to clinic',
   },
 };
