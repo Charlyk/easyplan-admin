@@ -14,7 +14,7 @@ import IconClock from '../../../../icons/iconClock';
 import { textForKey } from '../../../../../utils/localization';
 import styles from '../../../../../styles/DoctorItem.module.scss';
 
-const DoctorItem = ({ doctor, id, isInVacation, name, onAddPause }) => {
+const DoctorItem = ({ doctor, itemId, isInVacation, name, onAddPause }) => {
   const doctorAnchor = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -64,7 +64,7 @@ const DoctorItem = ({ doctor, id, isInVacation, name, onAddPause }) => {
           [isInVacation]: styles.disabled
         })
       }
-      id={id}
+      id={itemId}
     >
       {typeof onAddPause === 'function' && optionsMenu}
       <ClickAwayListener onClickAway={handleCloseMenu}>
@@ -79,7 +79,7 @@ const DoctorItem = ({ doctor, id, isInVacation, name, onAddPause }) => {
 export default DoctorItem;
 
 DoctorItem.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  itemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isInVacation: PropTypes.bool,
   name: PropTypes.string,
   doctor: PropTypes.shape({

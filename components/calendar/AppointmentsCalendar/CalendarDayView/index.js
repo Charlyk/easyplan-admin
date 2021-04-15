@@ -499,44 +499,47 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
   }
 
   return (
-    <div className={styles['calendar-day-view']} id='calendar-day-view'>
+    <div className={styles.calendarDayView} id='calendar-day-view'>
       <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
       {hours.length !== 0 && (
-        <div className={styles['day-doctors-container']}>
+        <div className={styles.dayDoctorsContainer}>
           {doctors.map((doctor) => (
             <DoctorItem
-              doctor={doctor}
               key={doctor.id}
+              itemId={doctor.id}
+              isInVacation={doctor.isInVacation}
+              name={`${doctor.firstName} ${doctor.lastName}`}
+              doctor={doctor}
               onAddPause={handleCreatePause}
             />
           ))}
         </div>
       )}
-      <div className={styles['day-data-container']} ref={dataRef}>
+      <div className={styles.dayDataContainer} ref={dataRef}>
         {isLoading && (
-          <div className={styles['loading-progress-wrapper']}>
+          <div className='progress-bar-wrapper'>
             <CircularProgress
               classes={{ root: 'circular-progress-bar' }}
             />
           </div>
         )}
         {!isLoading && hours.length === 0 && (
-          <div className={styles['no-data-wrapper']}>
+          <div className={styles.noDataWrapper}>
             <img
-              className={styles['no-data-image']}
+              className={styles.noDataImage}
               src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/rsz_4584.png'
               alt='No schedules'
             />
-            <Typography classes={{ root: styles['no-data-label'] }}>
+            <Typography classes={{ root: styles.noDataLabel }}>
               {textForKey('No schedules for this day')}.
             </Typography>
           </div>
         )}
-        <div className={styles['day-hours-container']} id='day-hours-container'>
+        <div className={styles.dayHoursContainer} id='day-hours-container'>
           {halfHours.map((hour) => (
             <Typography
               id={hour}
-              classes={{ root: styles['day-hour-item'] }}
+              classes={{ root: styles.dayHourItem }}
               key={hour}
             >
               {hour}
@@ -545,7 +548,7 @@ const CalendarDayView = ({ schedules, doctors, viewDate, dayHours, onScheduleSel
         </div>
         <div
           ref={schedulesRef}
-          className={styles['day-schedules-container']}
+          className={styles.daySchedulesContainer}
           id='day-schedules-container'
         >
           {isToday() && (
