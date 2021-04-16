@@ -18,19 +18,6 @@ const HourIndicator = ({ dayHours, viewDate }) => {
   }));
 
   useEffect(() => {
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.setUpdateHourIndicatorPosition,
-        timerName: 'hourIndicatorTimer',
-        timerInterval: 1000
-      }
-    });
-    setHideIndicator(false);
-    updateHourIndicatorTop();
-  }, []);
-
-  useEffect(() => {
     if (isOutOfBounds(new Date())) {
       dispatch({
         type: STOP_TIMER,
@@ -39,6 +26,17 @@ const HourIndicator = ({ dayHours, viewDate }) => {
         }
       });
       setHideIndicator(true);
+    } else {
+      dispatch({
+        type: START_TIMER,
+        payload: {
+          actionName: types.setUpdateHourIndicatorPosition,
+          timerName: 'hourIndicatorTimer',
+          timerInterval: 1000
+        }
+      });
+      setHideIndicator(false);
+      updateHourIndicatorTop();
     }
   }, [dayHours, viewDate])
 

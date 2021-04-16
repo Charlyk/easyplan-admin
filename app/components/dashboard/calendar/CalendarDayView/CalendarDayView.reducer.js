@@ -1,5 +1,5 @@
-import { generateReducerActions } from "../../../../../utils/helperFuncs";
 import orderBy from 'lodash/orderBy';
+import { generateReducerActions } from "../../../../../utils/helperFuncs";
 import createContainerHours from "../../../../utils/createContainerHours";
 
 export const initialState = {
@@ -42,8 +42,7 @@ export const actions = generateReducerActions(reducerTypes);
 export const reducer = (state, action) => {
   switch (action.type) {
     case reducerTypes.setHours: {
-      const updateHours = createContainerHours(action.payload);
-      return { ...state, hours: action.payload, hoursContainers: updateHours };
+      return { ...state, hours: action.payload };
     }
     case reducerTypes.setParentTop:
       return { ...state, parentTop: action.payload };
@@ -79,13 +78,14 @@ export const reducer = (state, action) => {
     }
     case reducerTypes.addSchedule: {
       const newSchedule = action.payload;
-      const hasSchedules = state.schedules.filter(item => item.doctorId === newSchedule.doctorId);
+      const hasSchedules = state.schedules.some(item => item.doctorId === newSchedule.doctorId);
       if (!hasSchedules) {
         return {
           ...state,
           schedules: [
             ...state.schedules,
             {
+              id: newSchedule.doctorId,
               doctorId: newSchedule.doctorId,
               schedules: [newSchedule]
             },

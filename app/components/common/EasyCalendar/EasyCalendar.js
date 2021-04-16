@@ -12,7 +12,7 @@ const EasyCalendar = (
     columns,
     schedules,
     viewDate,
-    showHourIndicator,
+    hourIndicator,
     onAddSchedule,
     onScheduleSelected,
     onHeaderItemClick,
@@ -22,7 +22,7 @@ const EasyCalendar = (
     <div className={styles.calendarRoot}>
       <Header items={columns} onItemClick={onHeaderItemClick}/>
       <div className={styles.calendarContainer}>
-        {showHourIndicator && (
+        {hourIndicator && (
           <HourIndicator
             dayHours={dayHours}
             viewDate={viewDate}
@@ -45,7 +45,7 @@ const EasyCalendar = (
 export default EasyCalendar;
 
 EasyCalendar.propTypes = {
-  showHourIndicator: PropTypes.bool,
+  hourIndicator: PropTypes.bool,
   dayHours: PropTypes.arrayOf(PropTypes.string).isRequired,
   viewDate: PropTypes.instanceOf(Date).isRequired,
   schedules: PropTypes.arrayOf(
@@ -87,7 +87,7 @@ EasyCalendar.propTypes = {
 }
 
 EasyCalendar.defaultProps = {
-  showHourIndicator: true,
+  hourIndicator: true,
   onAddSchedule: () => null,
   onScheduleSelected: () => null,
   onHeaderItemClick: () => null,

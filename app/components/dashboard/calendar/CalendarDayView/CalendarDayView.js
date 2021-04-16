@@ -230,7 +230,7 @@ const CalendarDayView = (
       <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
       <EasyCalendar
         viewDate={viewDate}
-        dayHours={dayHours}
+        dayHours={hours}
         columns={mappedDoctors}
         schedules={schedules}
         onAddSchedule={handleAddSchedule}
