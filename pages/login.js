@@ -3,13 +3,14 @@ import React, { useEffect, useReducer } from 'react';
 import LoginForm from '../components/login/LoginForm';
 import ResetPassword from '../components/login/ResetPassword';
 import { useRouter } from 'next/router';
-import styles from '../styles/auth/Login.module.scss';
-import { generateReducerActions, getRedirectUrlForUser } from "../utils/helperFuncs";
+import { generateReducerActions, getClinicUrl, getRedirectUrlForUser } from "../utils/helperFuncs";
 import { toast } from "react-toastify";
 import { textForKey } from "../utils/localization";
 import { getCurrentUser, loginUser, resetUserPassword } from "../middleware/api/auth";
 import { isDev } from "../eas.config";
 import { Typography } from "@material-ui/core";
+import { RestrictedSubdomains } from "../utils/constants";
+import styles from '../styles/auth/Login.module.scss';
 
 const FormType = {
   login: 'login',
@@ -45,9 +46,9 @@ const reducer = (state, action) => {
     default:
       return state;
   }
-}
+};
 
-const Login = ({ currentUser }) => {
+export default ({ currentUser }) => {
   const router = useRouter();
   const [{ currentForm, isLoading, errorMessage }, localDispatch] = useReducer(reducer, initialState);
 
@@ -81,6 +82,11 @@ const Login = ({ currentUser }) => {
     await router.replace(redirectUrl);
   }
 
+  /**
+   * Request password reset for user
+   * @param {string} username
+   * @return {Promise<void>}
+   */
   const handleResetPasswordSubmit = async (username) => {
     localDispatch(actions.setIsLoading(true));
     try {
@@ -93,55 +99,89 @@ const Login = ({ currentUser }) => {
         handleFormChange(FormType.login);
       }
     } catch (error) {
-      const { response, message } = error;
-      if (response != null) {
-        toast.error(response.data.message ?? message);
-        localDispatch(actions.setErrorMessage(response.data.message ?? message));
-      } else {
-        toast.error(message);
-        localDispatch(actions.setErrorMessage(message))
-      }
+      handleLoginError(error);
     } finally {
       localDispatch(actions.setIsLoading(false));
     }
   }
 
+  /**
+   * Called when user is authenticated successfully
+   * @param {{ clinics: any[] }} user
+   * @param {string} token
+   * @return {Promise<void>}
+   */
+  const handleUserAuthenticated = async (user, token) => {
+    localDispatch(actions.setErrorMessage(null));
+    const [subdomain] = window.location.host.split('.');
+    if (RestrictedSubdomains.includes(subdomain)) {
+      const clinic = user.clinics[0];
+      const clinicUrl = getClinicUrl(clinic, token);
+      await router.replace(clinicUrl);
+    } else {
+      await handleSuccessResponse(user);
+    }
+  }
+
+  /**
+   * Called when an action is received from server. Used to redirect user to create a clinic or to select one
+   * @param {'CreateClinic'|'SelectClinic'} action
+   * @return {Promise<void>}
+   */
+  const handleLoginActionReceived = async (action) => {
+    switch (action) {
+      case 'CreateClinic':
+        await router.push('/create-clinic?redirect=1');
+        break;
+      case 'SelectClinic':
+        await router.push('/clinics');
+        break;
+      default:
+        localDispatch(actions.setIsLoading(false));
+        break;
+    }
+  }
+
+  /**
+   * Called when login crash is caught
+   * @param {any} error
+   */
+  const handleLoginError = (error) => {
+    const { response, message } = error
+    if (response != null) {
+      toast.error(textForKey(response.data.message ?? message));
+      localDispatch(actions.setErrorMessage(response.data.message));
+    } else {
+      toast.error(message);
+      localDispatch(actions.setErrorMessage(message));
+    }
+    localDispatch(actions.setIsLoading(false));
+  }
+
+  /**
+   * Authenticate user
+   * @param {string} username
+   * @param {string} password
+   * @return {Promise<void>}
+   */
   const handleLoginSubmit = async (username, password) => {
     localDispatch(actions.setIsLoading(true));
     try {
       const { data } = await loginUser({ username, password });
-      const { error, action, user } = data;
+      const { error, action, user, token } = data;
       if (error) {
         localDispatch(actions.setErrorMessage(data.message));
         localDispatch(actions.setIsLoading(false));
       } else {
         if (action == null) {
           localDispatch(actions.setErrorMessage(null));
-          await handleSuccessResponse(user);
+          await handleUserAuthenticated(user, token);
         } else {
-          switch (action) {
-            case 'CreateClinic':
-              await router.push('/create-clinic?redirect=1');
-              break;
-            case 'SelectClinic':
-              await router.push('/clinics');
-              break;
-            default:
-              localDispatch(actions.setIsLoading(false));
-              break;
-          }
+          await handleLoginActionReceived(action);
         }
       }
     } catch (error) {
-      const { response, message } = error
-      if (response != null) {
-        toast.error(textForKey(response.data.message));
-        localDispatch(actions.setErrorMessage(response.data.message));
-      } else {
-        toast.error(message);
-        localDispatch(actions.setErrorMessage(message));
-      }
-      localDispatch(actions.setIsLoading(false));
+      handleLoginError(error);
     }
   }
 
@@ -191,5 +231,3 @@ export const getServerSideProps = async ({ req }) => {
     }
   }
 }
-
-export default Login;

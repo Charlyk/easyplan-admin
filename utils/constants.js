@@ -495,3 +495,5 @@ export const UnauthorizedPaths = [
   '/confirmation',
   '/reset-password',
 ];
+
+export const RestrictedSubdomains = ['app', 'app-dev', 'api', 'dev-api', ''];

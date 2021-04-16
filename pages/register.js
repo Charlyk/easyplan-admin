@@ -33,7 +33,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Register = () => {
+export default () => {
   const router = useRouter();
   const [{ errorMessage, isLoading }, dispatch] = useReducer(reducer, initialState);
 
@@ -85,5 +85,3 @@ export const getServerSideProps = async () => {
     props: {}
   }
 }
-
-export default Register;

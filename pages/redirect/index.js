@@ -5,8 +5,10 @@ import {
 } from "../../utils/helperFuncs";
 import { useRouter } from "next/router";
 import { getCurrentUser } from "../../middleware/api/auth";
+import { Box, CircularProgress, Typography } from "@material-ui/core";
+import { textForKey } from "../../utils/localization";
 
-const Redirect = () => {
+export default () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -26,10 +28,24 @@ const Redirect = () => {
     }
   }
 
-  return <div />
+  return (
+    <Box
+      width='100%'
+      height='100%'
+      display='flex'
+      flexDirection='column'
+      alignItems='center'
+      justifyContent='center'
+    >
+      <CircularProgress className='circular-progress-bar'/>
+      <Typography className='typography' style={{ marginTop: '1rem' }}>
+        {textForKey('Redirecting to clinic')}...
+      </Typography>
+    </Box>
+  )
 }
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
     setCookies(res, token, clinicId);
@@ -38,5 +54,3 @@ export const getServerSideProps = async ({ req, res, query }) => {
     return { props: {} }
   }
 }
-
-export default Redirect;

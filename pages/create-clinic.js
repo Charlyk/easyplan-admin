@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 
 import { useRouter } from "next/router";
-import { generateReducerActions, uploadFileToAWS } from "../utils/helperFuncs";
+import { generateReducerActions, getClinicUrl, uploadFileToAWS } from "../utils/helperFuncs";
 import { toast } from "react-toastify";
 import CreateClinicForm from "../components/login/registration/CreateClinicForm";
 import { createNewClinic } from "../middleware/api/clinic";
@@ -29,7 +29,7 @@ const reducer = (state, action) => {
   }
 }
 
-const Register = ({ token, redirect }) => {
+export default ({ token, redirect }) => {
   const router = useRouter();
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
@@ -42,13 +42,8 @@ const Register = ({ token, redirect }) => {
   };
 
   const redirectToDashboard = async (clinic) => {
-    const { host, protocol } = window.location;
-    const [_, domain, location] = host.split('.');
-    const queryString = new URLSearchParams({
-      token,
-      clinicId: clinic.id
-    });
-    await router.replace(`${protocol}//${clinic.domainName}.${domain}.${location}/redirect?${queryString}`);
+    const clinicUrl = getClinicUrl(clinic, token);
+    await router.replace(clinicUrl);
   }
 
   const handleCreateClinic = async (clinicData) => {
@@ -102,6 +97,4 @@ export const getServerSideProps = async ({ req, query }) => {
       redirect: redirect === '1',
     },
   }
-}
-
-export default Register;
+};
