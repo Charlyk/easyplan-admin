@@ -48,7 +48,7 @@ const reducer = (state, action) => {
   }
 };
 
-export default ({ currentUser }) => {
+export default function Login({ currentUser }) {
   const router = useRouter();
   const [{ currentForm, isLoading, errorMessage }, localDispatch] = useReducer(reducer, initialState);
 

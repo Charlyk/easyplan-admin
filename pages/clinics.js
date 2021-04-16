@@ -12,7 +12,7 @@ import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { triggerUserLogout } from "../redux/actions/actions";
 
-export default ({ user, authToken }) => {
+export default function Clinics({ user, authToken }) {
   const router = useRouter();
   const dispatch = useDispatch();
 

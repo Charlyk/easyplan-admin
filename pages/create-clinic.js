@@ -29,7 +29,7 @@ const reducer = (state, action) => {
   }
 }
 
-export default ({ token, redirect }) => {
+export default function CreateClinic({ token, redirect }) {
   const router = useRouter();
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 

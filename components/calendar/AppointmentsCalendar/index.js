@@ -6,11 +6,11 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import AppointmentDetails from '../AppointmentDetails';
+import AppointmentDetails from '../../../app/components/dashboard/calendar/AppointmentDetails';
 import { isCalendarLoadingSelector } from '../../../redux/selectors/calendarSelector';
 import { getCurrentWeek } from '../../../utils/helperFuncs';
 import styles from '../../../styles/AppointmentsCalendar.module.scss'
-import CalendarHeader from "../CalendarHeader";
+import CalendarHeader from "../../../app/components/dashboard/calendar/CalendarHeader";
 
 const CalendarView = {
   day: 'day',

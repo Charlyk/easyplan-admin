@@ -9,7 +9,7 @@ export default {
   '/calendar/week': textForKey('Calendar'),
   '/calendar/month': textForKey('Calendar'),
   '/settings': textForKey('Settings'),
-  '/analytics/services': textForKey('Services statistics'),
+  '/analytics/services': textForKey('ServicesAnalytics statistics'),
   '/analytics/general': textForKey('General statistics'),
   '/analytics/doctors': textForKey('Doctors statistics'),
   '/analytics/activity-logs': textForKey('Activity logs'),

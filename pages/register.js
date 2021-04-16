@@ -33,7 +33,7 @@ const reducer = (state, action) => {
   }
 }
 
-export default () => {
+export default function Register() {
   const router = useRouter();
   const [{ errorMessage, isLoading }, dispatch] = useReducer(reducer, initialState);
 

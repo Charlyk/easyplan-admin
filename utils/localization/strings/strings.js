@@ -114,7 +114,7 @@ export default {
     'all doctors': 'All doctors',
     'all statuses': 'All statuses',
     'apply filters': 'Apply filters',
-    'services statistics': 'Services statistics',
+    'services statistics': 'ServicesAnalytics statistics',
     'doctors statistics': 'Doctors statistics',
     'activity logs': 'Activity logs',
     general: 'General',

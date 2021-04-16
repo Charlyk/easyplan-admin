@@ -1,0 +1,22 @@
+.calendarRoot {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+
+  .calendarContainer {
+    width: 100%;
+    height: calc(100% - 1.8rem);
+    display: flex;
+    overflow-y: scroll;
+    position: relative;
+  }
+
+  .columnsWrapper {
+    width: calc(100% - 2.8rem);
+    height: fit-content;
+    display: flex;
+  }
+}

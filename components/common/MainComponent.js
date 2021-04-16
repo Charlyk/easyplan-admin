@@ -6,7 +6,7 @@ import styles from '../../styles/MainComponent.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import AddAppointmentModal from '../calendar/AddAppintmentModal';
+import AddAppointmentModal from '../../app/components/dashboard/calendar/modals/AddAppointmentModal';
 import DataMigrationModal from './DataMigrationModal';
 import MainMenu from './MainMenu';
 import PageHeader from './PageHeader';

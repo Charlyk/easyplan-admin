@@ -38,7 +38,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/index.scss'
+import '../app/styles/base/base.scss'
 import { UnauthorizedPaths } from "../utils/constants";
 
 const pubnub = new PubNub({

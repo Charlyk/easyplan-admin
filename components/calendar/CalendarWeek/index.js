@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer } from "react";
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
-import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import moment from "moment-timezone";
+import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { generateReducerActions } from "../../../utils/helperFuncs";
 
 const initialState = {

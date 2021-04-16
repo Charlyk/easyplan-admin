@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Calendar from "../../../components/calendar";
-import CalendarDayView from "../../../components/calendar/AppointmentsCalendar/CalendarDayView";
+import CalendarDayView from "../../../app/components/dashboard/calendar/CalendarDayView";
 import { Role } from "../../../utils/constants";
 import moment from "moment-timezone";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
 
-const CalendarDay = ({ currentUser, currentClinic, date, schedules, dayHours }) => {
+export default function Day({ currentUser, currentClinic, date, schedules, dayHours }) {
   const viewDate = moment(date).toDate();
-  const doctors = currentClinic?.users?.filter((item) =>
-    item.roleInClinic === Role.doctor && !item.isHidden
-  ) || [];
+
+  const doctors = useMemo(() => {
+    return currentClinic?.users?.filter((item) =>
+      item.roleInClinic === Role.doctor && !item.isHidden
+    ) || [];
+  }, [currentClinic]);
+
+  const updatedSchedules = useMemo(() => {
+    return schedules.map((schedule) => ({
+      ...schedule,
+      id: schedule.doctorId,
+    }));
+  }, [schedules]);
 
   return (
     <Calendar
@@ -21,7 +31,7 @@ const CalendarDay = ({ currentUser, currentClinic, date, schedules, dayHours }) 
       date={viewDate}
     >
       <CalendarDayView
-        schedules={schedules}
+        schedules={updatedSchedules}
         dayHours={dayHours}
         viewDate={viewDate}
         doctors={doctors}
@@ -66,6 +76,4 @@ export const getServerSideProps = async ({ query, req, res }) => {
       }
     }
   }
-}
-
-export default CalendarDay
+};

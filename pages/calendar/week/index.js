@@ -5,7 +5,7 @@ import moment from "moment-timezone";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 
-const CalendarWeek = ({ currentUser, currentClinic, date }) => {
+export default function Week({ currentUser, currentClinic, date }) {
   const viewDate = moment(date).toDate();
   return (
     <Calendar
@@ -49,5 +49,3 @@ export const getServerSideProps = async ({ req, res, query }) => {
     };
   }
 };
-
-export default CalendarWeek;

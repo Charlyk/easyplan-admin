@@ -10,7 +10,7 @@ import {
   handleRequestError, redirectToUrl, redirectUserTo,
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import StatisticFilter from '../../../components/analytics/StatisticFilter';
+import StatisticFilter from '../../../app/components/dashboard/analytics/StatisticFilter';
 import { Role } from "../../../utils/constants";
 import MainComponent from "../../../components/common/MainComponent";
 import sortBy from "lodash/sortBy";
@@ -18,7 +18,7 @@ import { Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, Ta
 import { useRouter } from "next/router";
 import isEqual from "lodash/isEqual";
 import { getDoctorsStatistics } from "../../../middleware/api/analytics";
-import styles from '../../../styles/ServicesStatistics.module.scss';
+import styles from '../../../app/components/dashboard/analytics/ServicesAnalytics/ServicesAnalytics.module.scss';
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { parseCookies } from "../../../utils";
 

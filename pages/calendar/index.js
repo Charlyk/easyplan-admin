@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-const CalendarRoot = () => {
+export default function Calendar(){
   const router = useRouter();
 
   useEffect(() => {
@@ -12,5 +12,3 @@ const CalendarRoot = () => {
     <div />
   );
 }
-
-export default CalendarRoot;

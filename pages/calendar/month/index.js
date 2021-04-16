@@ -5,7 +5,7 @@ import CalendarMonthView from "../../../components/calendar/AppointmentsCalendar
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 
-const CalendarWeek = ({ currentUser, currentClinic, date }) => {
+export default function Month({ currentUser, currentClinic, date }) {
   const viewDate = moment(date).toDate();
   return (
     <Calendar
@@ -48,5 +48,3 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
   }
 };
-
-export default CalendarWeek;
