@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import { getCurrentWeek } from '../../../../../utils/helperFuncs';
-import CalendarWeekDayView from './CalendarWeekDayView';
 import styles from './CalendarWeekView.module.scss';
 import EasyCalendar from "../../../common/EasyCalendar";
 
@@ -24,15 +23,7 @@ const CalendarWeekView = (
     onCreateSchedule,
   }
 ) => {
-  const updateAppointments = useSelector(updateAppointmentsSelector);
-  const [week, setWeek] = useState(getCurrentWeek(viewDate));
-  useEffect(() => {
-    console.log(schedules);
-  }, [])
-
-  useEffect(() => {
-    setWeek(getCurrentWeek(viewDate));
-  }, [viewDate, updateAppointments]);
+  const week = getCurrentWeek(viewDate)
 
   const handleDayClick = (day) => {
     const date = moment(day.id).toDate();
@@ -94,6 +85,6 @@ CalendarWeekView.propTypes = {
   }),
 };
 
-CalendarWeekDayView.defaulProps = {
+CalendarWeekView.defaulProps = {
   onScheduleSelect: () => null,
 };

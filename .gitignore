@@ -23,4 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 .idea/*
 ecosystem.config.js
+.next
 next.config.js

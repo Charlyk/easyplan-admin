@@ -72,7 +72,7 @@ const CalendarDayView = (
       return moment();
     }
     const [maxHour, maxMinute] = lastHour.split(':');
-    return  moment(viewDate)
+    return moment(viewDate)
       .set('hour', parseInt(maxHour))
       .set('minute', parseInt(maxMinute));
   }, [hours, viewDate]);
@@ -201,7 +201,7 @@ const CalendarDayView = (
 
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>
-      <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
+      <AddPauseModal {...pauseModal} onClose={handleClosePauseModal}/>
       <EasyCalendar
         viewDate={viewDate}
         dayHours={hours}

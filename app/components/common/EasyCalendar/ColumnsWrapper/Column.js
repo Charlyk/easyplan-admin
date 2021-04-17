@@ -32,12 +32,6 @@ const Column = (
   const [schedules, setSchedules] = useState(initialSchedules);
 
   useEffect(() => {
-    if (!isEqual(initialSchedules, schedules)) {
-      setSchedules(initialSchedules);
-    }
-  }, [initialSchedules]);
-
-  useEffect(() => {
     if (updateSchedule == null) {
       return;
     }
