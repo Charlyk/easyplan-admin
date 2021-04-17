@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
-import Moment from "moment-timezone";
+import Moment from "moment";
 import { extendMoment } from "moment-range";
 import { useSelector } from "react-redux";
 import {
@@ -81,7 +81,7 @@ const Column = (
     onAddSchedule(startHour, endHour, column.doctorId, column.date);
   }
 
-  const schedulesWithOffset = useMemo(() => {
+  const schedulesWithOffset = () => {
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
     for (let schedule of schedules) {
@@ -105,7 +105,7 @@ const Column = (
       newSchedules.push(schedule);
     }
     return newSchedules;
-  }, [schedules, hours]);
+  };
 
   const renderHoursContainers = useMemo(() => {
     return hoursContainers.map((hour, index) => {
@@ -149,7 +149,7 @@ const Column = (
   return (
     <div className={styles.columnRoot}>
       {renderHoursContainers}
-      {schedulesWithOffset.map((schedule, index) => (
+      {schedulesWithOffset().map((schedule, index) => (
         <Schedule
           key={schedule.id}
           schedule={schedule}
