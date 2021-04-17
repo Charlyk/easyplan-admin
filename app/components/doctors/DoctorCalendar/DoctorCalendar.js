@@ -100,10 +100,15 @@ const DoctorCalendar = (
     });
   };
 
-  const handleDateChange = async (newDate) => {
+  const handleDateChange = async (newDate, mode = viewMode) => {
     const stringDate = moment(newDate).format('YYYY-MM-DD')
-    await router.replace(`/doctor?date=${stringDate}&viewMode=${viewMode}`);
+    await router.replace(`/doctor?date=${stringDate}&viewMode=${mode}`);
   };
+
+  const handleDateClick = async (column) => {
+    const date = moment(column.id).toDate();
+    await handleDateChange(date, 'day');
+  }
 
   const mappedWeek = viewMode === 'week' ? (
     week.map((date) => {
@@ -148,6 +153,7 @@ const DoctorCalendar = (
           viewDate={viewDate}
           animatedStatuses={['OnSite']}
           onScheduleSelected={handleScheduleSelected}
+          onHeaderItemClick={handleDateClick}
         />
       </div>
     </div>
