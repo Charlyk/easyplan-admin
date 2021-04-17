@@ -32,6 +32,10 @@ const Column = (
   const [schedules, setSchedules] = useState(initialSchedules);
 
   useEffect(() => {
+    setSchedules(initialSchedules);
+  }, [])
+
+  useEffect(() => {
     if (updateSchedule == null) {
       return;
     }
