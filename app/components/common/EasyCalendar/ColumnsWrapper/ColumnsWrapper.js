@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Column from "./Column";
 import styles from './ColumnsWrapper.module.scss';
 
-const ColumnsWrapper = (
+export default function ColumnsWrapper(
   {
     schedules,
     hours,
@@ -13,8 +13,8 @@ const ColumnsWrapper = (
     onAddSchedule,
     onScheduleSelected
   }
-) => {
-  const getSchedulesForColumn = (column) => {
+) {
+  function getSchedulesForColumn(column) {
     return schedules.find((item) => item.id === column.id)?.schedules ?? [];
   }
 
@@ -35,8 +35,6 @@ const ColumnsWrapper = (
     </div>
   )
 }
-
-export default ColumnsWrapper;
 
 ColumnsWrapper.propTypes = {
   hours: PropTypes.arrayOf(PropTypes.string),

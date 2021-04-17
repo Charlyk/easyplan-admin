@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import { getCurrentWeek } from '../../../../../utils/helperFuncs';
 import styles from './CalendarWeekView.module.scss';
 import EasyCalendar from "../../../common/EasyCalendar";
@@ -23,7 +20,7 @@ const CalendarWeekView = (
     onCreateSchedule,
   }
 ) => {
-  const week = getCurrentWeek(viewDate)
+  const week = getCurrentWeek(viewDate);
 
   const handleDayClick = (day) => {
     const date = moment(day.id).toDate();
@@ -42,7 +39,7 @@ const CalendarWeekView = (
       doctorId,
       name: moment(date).format('DD dddd'),
       disabled: false,
-      date: date,
+      date: date.toDate(),
     };
   });
 

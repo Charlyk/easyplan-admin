@@ -1,4 +1,4 @@
-const createContainerHours = (hours) => {
+export default function createContainerHours(hours) {
   const updateHours = [];
   for (let hour of hours) {
     const hourParts = hour.split(':');
@@ -12,5 +12,3 @@ const createContainerHours = (hours) => {
   }
   return updateHours;
 };
-
-export default createContainerHours;

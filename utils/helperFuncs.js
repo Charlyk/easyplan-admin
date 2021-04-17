@@ -36,7 +36,7 @@ export function urlToLambda(imageUrl, width = 50) {
 /**
  * Get current week days
  * @param {Date} date
- * @return {Date[]}
+ * @return {Moment[]}
  */
 export const getCurrentWeek = (date) => {
   const currentDate = moment(date);

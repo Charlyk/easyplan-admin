@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
@@ -30,10 +30,15 @@ const Column = (
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const [schedules, setSchedules] = useState(initialSchedules);
+  const hoursContainers = createContainerHours(hours);
 
   useEffect(() => {
+    if (isEqual(initialSchedules, schedules)) {
+      return;
+    }
+
     setSchedules(initialSchedules);
-  }, [])
+  }, [initialSchedules]);
 
   useEffect(() => {
     if (updateSchedule == null) {
@@ -71,18 +76,14 @@ const Column = (
     setSchedules(newSchedules);
   }, [deleteSchedule]);
 
-  const hoursContainers = useMemo(() => {
-    return createContainerHours(hours);
-  }, [hours]);
-
-  const handleAddSchedule = (startHour, endHour) => {
+  function handleAddSchedule(startHour, endHour) {
     onAddSchedule(startHour, endHour, column.doctorId, column.date);
   }
 
-  const schedulesWithOffset = useMemo(() => {
+  function schedulesWithOffset() {
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
-    for (let schedule of schedules) {
+    for (let schedule of (schedules || initialSchedules)) {
       const scheduleRange = moment.range(
         moment(schedule.startTime),
         moment(schedule.endTime),
@@ -103,9 +104,9 @@ const Column = (
       newSchedules.push(schedule);
     }
     return newSchedules;
-  }, [schedules, hours]);
+  }
 
-  const renderHoursContainers = useMemo(() => {
+  function renderHoursContainers() {
     return hoursContainers.map((hour, index) => {
       if (index === 0) {
         return (
@@ -142,12 +143,12 @@ const Column = (
         );
       }
     })
-  }, [hoursContainers, hideCreateIndicator, column]);
+  }
 
   return (
     <div className={styles.columnRoot}>
-      {renderHoursContainers}
-      {schedulesWithOffset.map((schedule, index) => (
+      {renderHoursContainers()}
+      {schedulesWithOffset().map((schedule, index) => (
         <Schedule
           key={schedule.id}
           schedule={schedule}
