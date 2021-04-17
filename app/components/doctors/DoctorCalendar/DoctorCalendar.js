@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import PropTypes from 'prop-types';
-import PatientsFilter from "../../../../components/doctors/PatientsFilter";
 import { useRouter } from "next/router";
 import moment from "moment-timezone";
 import isEqual from "lodash/isEqual";
-import EasyCalendar from "../../common/EasyCalendar";
+import PatientsFilter from "../../../../components/doctors/PatientsFilter";
 import { getCurrentWeek } from "../../../../utils/helperFuncs";
-import styles from './DoctorCalendar.module.scss'
-
-const initialFilter = {
-  patientName: '',
-  serviceId: 'all',
-  appointmentStatus: 'all',
-}
+import EasyCalendar from "../../common/EasyCalendar";
+import { reducer, initialState, actions } from './DoctorCalendar.reducer';
+import styles from './DoctorCalendar.module.scss';
+import { useSelector } from "react-redux";
+import { deleteScheduleSelector, updateScheduleSelector } from "../../../../redux/selectors/scheduleSelector";
 
 const DoctorCalendar = (
   {
@@ -26,26 +23,20 @@ const DoctorCalendar = (
     date,
   }
 ) => {
+  const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const viewDate = moment(date).toDate();
   const router = useRouter();
-  const [filterData, setFilterData] = useState(initialFilter);
-  const [week, setWeek] = useState(getCurrentWeek(viewDate));
-  const [schedules, setSchedules] = useState(initialSchedules);
+  const week= getCurrentWeek(viewDate);
+  const [{ schedules, filterData }, localDispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    setSchedules(initialSchedules);
+    localDispatch(actions.setSchedules(initialSchedules));
   }, [initialSchedules]);
 
   useEffect(() => {
-    const newWeek = getCurrentWeek(viewDate);
-    if (!isEqual(newWeek, week)) {
-      setWeek(getCurrentWeek(viewDate));
-    }
-  }, [viewDate]);
-
-  useEffect(() => {
-    if (isEqual(filterData, initialFilter)) {
-      setSchedules(initialSchedules);
+    if (isEqual(filterData, initialState.filterData)) {
+      localDispatch(actions.setSchedules(initialSchedules));
       return;
     }
 
@@ -65,24 +56,66 @@ const DoctorCalendar = (
         schedules: itemSchedules
       }
     });
-    setSchedules(filteredSchedules);
+    localDispatch(actions.setSchedules(filteredSchedules));
   }, [filterData]);
 
+  useEffect(() => {
+    handleScheduleUpdate();
+  }, [updateSchedule]);
+
+  useEffect(() => {
+    handleScheduleDelete();
+  }, [deleteSchedule])
+
+  function handleScheduleDelete() {
+    if (deleteSchedule == null) {
+      return;
+    }
+
+    localDispatch(actions.deleteSchedule(deleteSchedule))
+  }
+
+  async function handleScheduleUpdate() {
+    if (updateSchedule == null) {
+      return;
+    }
+    const scheduleDate = moment(updateSchedule.startTime);
+
+    if (updateSchedule.doctorId !== currentUser.id) {
+      return;
+    }
+
+    const formattedDate = scheduleDate.format('YYYY-MM-DD');
+    const scheduleExists = schedules.some((item) =>
+      item.id === formattedDate &&
+      item.schedules.some((schedule) => schedule.id === updateSchedule.id)
+    );
+
+    if (scheduleExists) {
+      localDispatch(actions.updateSchedule(updateSchedule));
+    } else {
+      localDispatch(actions.addSchedule(updateSchedule));
+    }
+  }
+
   const handlePatientNameChange = (event) => {
-    setFilterData({
+    localDispatch(actions.setFilterData({
       ...filterData,
       patientName: event.target.value,
-    });
+    }));
   };
 
   const handleServiceChange = (event) => {
-    setFilterData({
+    localDispatch(actions.setFilterData({
       ...filterData,
       serviceId: event.target.value,
-    });
+    }));
   };
 
   const handleScheduleSelected = async (schedule) => {
+    if (schedule.type !== 'Schedule') {
+      return;
+    }
     await router.push(`/doctor/${schedule.id}`);
   }
 
@@ -94,10 +127,10 @@ const DoctorCalendar = (
   }
 
   const handleAppointmentStatusChange = (event) => {
-    setFilterData({
+    localDispatch(actions.setFilterData({
       ...filterData,
       appointmentStatus: event.target.value,
-    });
+    }));
   };
 
   const handleDateChange = async (newDate, mode = viewMode) => {
