@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
-import Moment from "moment";
+import Moment from "moment-timezone";
 import { extendMoment } from "moment-range";
 import { useSelector } from "react-redux";
 import {
