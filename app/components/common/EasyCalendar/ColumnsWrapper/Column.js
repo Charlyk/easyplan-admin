@@ -1,18 +1,84 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
+import orderBy from 'lodash/orderBy';
 import ColumnCell from "./ColumnCell";
-import moment from "moment-timezone";
+import Moment from "moment-timezone";
 import Schedule from "../Schedule/Schedule";
 import createContainerHours from "../../../../utils/createContainerHours";
+import { extendMoment } from "moment-range";
+import { useSelector } from "react-redux";
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector
+} from "../../../../../redux/selectors/scheduleSelector";
 import styles from './ColumnsWrapper.module.scss';
 
-const Column = ({ schedules, hours, column, viewDate, onAddSchedule, onScheduleSelected }) => {
+const moment = extendMoment(Moment);
+
+const Column = (
+  {
+    schedules: initialSchedules,
+    hours,
+    column,
+    animatedStatuses,
+    hideCreateIndicator,
+    onAddSchedule,
+    onScheduleSelected
+  }
+) => {
+  const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
+  const [schedules, setSchedules] = useState(initialSchedules);
+
+  useEffect(() => {
+    if (!isEqual(initialSchedules, schedules)) {
+      setSchedules(initialSchedules);
+    }
+  }, [initialSchedules]);
+
+  useEffect(() => {
+    if (updateSchedule == null) {
+      return;
+    }
+
+    const scheduleExists = schedules.some(item => item.id === updateSchedule.id);
+    if (scheduleExists) {
+      // schedule exists so we need to update it
+      const newSchedules = schedules.map((item) => {
+        if (item.id !== updateSchedule.id) {
+          return item;
+        }
+        return { ...item, ...updateSchedule }
+      });
+      setSchedules(newSchedules);
+    } else {
+      // schedule does not exist in this column so we need to add it
+      const scheduleDate = moment(updateSchedule.startTime);
+      const currentDate = moment(column.date);
+      if (!scheduleDate.isSame(currentDate, 'date')) {
+        // schedule date is not the same as column date
+        return;
+      }
+      const newSchedules = [...schedules, updateSchedule];
+      setSchedules(orderBy(newSchedules, ['startTime', 'asc']));
+    }
+  }, [updateSchedule]);
+
+  useEffect(() => {
+    if (deleteSchedule == null) {
+      return;
+    }
+    const newSchedules = schedules.filter((item) => item.id !== deleteSchedule.id);
+    setSchedules(newSchedules);
+  }, [deleteSchedule]);
+
   const hoursContainers = useMemo(() => {
     return createContainerHours(hours);
   }, [hours]);
 
   const handleAddSchedule = (startHour, endHour) => {
-    onAddSchedule(startHour, endHour, column.id)
+    onAddSchedule(startHour, endHour, column.doctorId, column.date);
   }
 
   const schedulesWithOffset = useMemo(() => {
@@ -47,6 +113,7 @@ const Column = ({ schedules, hours, column, viewDate, onAddSchedule, onScheduleS
         return (
           <ColumnCell
             key={`schedule-item-${hour}`}
+            hideCreateIndicator={hideCreateIndicator}
             startHour={null}
             endHour={hour}
             disabled={column.disabled}
@@ -57,6 +124,7 @@ const Column = ({ schedules, hours, column, viewDate, onAddSchedule, onScheduleS
         return (
           <ColumnCell
             key={`${hoursContainers[index]}-schedule-item`}
+            hideCreateIndicator={hideCreateIndicator}
             startHour={hoursContainers[index]}
             endHour={null}
             disabled={column.disabled}
@@ -67,6 +135,7 @@ const Column = ({ schedules, hours, column, viewDate, onAddSchedule, onScheduleS
         return (
           <ColumnCell
             key={`${hoursContainers[index - 1]}-schedule-item-${hour}`}
+            hideCreateIndicator={hideCreateIndicator}
             startHour={hoursContainers[index - 1]}
             endHour={hour}
             disabled={column.disabled}
@@ -84,9 +153,9 @@ const Column = ({ schedules, hours, column, viewDate, onAddSchedule, onScheduleS
         <Schedule
           key={schedule.id}
           schedule={schedule}
+          animatedStatuses={animatedStatuses}
           index={index}
           firstHour={hours[0]}
-          viewDate={viewDate}
           onScheduleSelect={onScheduleSelected}
         />
       ))}
@@ -98,12 +167,14 @@ export default Column
 
 Column.propTypes = {
   disabled: PropTypes.bool,
-  viewDate: PropTypes.instanceOf(Date),
+  hideCreateIndicator: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),
   column: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    doctorId: PropTypes.number,
     name: PropTypes.string,
     disabled: PropTypes.bool,
+    date: PropTypes.instanceOf(Date),
   }),
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
@@ -125,6 +196,22 @@ Column.propTypes = {
       servicePrice: PropTypes.number,
       type: PropTypes.string,
     })
+  ),
+  animatedStatuses: PropTypes.arrayOf(
+    PropTypes.oneOf([
+      'Pending',
+      'OnSite',
+      'Confirmed',
+      'WaitingForPatient',
+      'Late',
+      'DidNotCome',
+      'Canceled',
+      'CompletedNotPaid',
+      'CompletedPaid',
+      'PartialPaid',
+      'Paid',
+      'Rescheduled',
+    ])
   ),
   onAddSchedule: PropTypes.func,
   onScheduleSelected: PropTypes.func,

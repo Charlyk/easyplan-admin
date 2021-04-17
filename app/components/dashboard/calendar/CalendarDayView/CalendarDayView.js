@@ -4,21 +4,16 @@ import React, {
   useReducer,
   useRef,
 } from 'react';
-
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-
-import AddPauseModal from '../modals/AddPauseModal';
-import {
-  deleteScheduleSelector,
-  updateScheduleSelector,
-} from '../../../../../redux/selectors/scheduleSelector';
 import { toast } from "react-toastify";
+import { updateScheduleSelector } from '../../../../../redux/selectors/scheduleSelector';
 import { wrapper } from "../../../../../store";
 import { fetchSchedulesHours } from "../../../../../middleware/api/schedules";
 import EasyCalendar from "../../../common/EasyCalendar";
+import AddPauseModal from '../modals/AddPauseModal';
 import { actions, reducer, initialState } from './CalendarDayView.reducer'
 import styles from './CalendarDayView.module.scss';
 
@@ -34,7 +29,6 @@ const CalendarDayView = (
     onCreateSchedule
   }) => {
   const updateSchedule = useSelector(updateScheduleSelector);
-  const deleteSchedule = useSelector(deleteScheduleSelector);
   const schedulesRef = useRef(null);
   const [
     { hours, pauseModal, schedules },
@@ -42,15 +36,20 @@ const CalendarDayView = (
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    handleScheduleUpdate();
-  }, [updateSchedule]);
-
-  useEffect(() => {
-    if (deleteSchedule == null) {
+    if (updateSchedule == null) {
       return;
     }
-    localDispatch(actions.deleteSchedule(deleteSchedule));
-  }, [deleteSchedule]);
+    const scheduleDate = moment(updateSchedule.startTime);
+    const currentDate = moment(viewDate)
+
+    if (!scheduleDate.isSame(currentDate, 'date')) {
+      return;
+    }
+
+    if (isOutOfBounds(updateSchedule.endTime)) {
+      fetchDayHours(scheduleDate.toDate());
+    }
+  }, [updateSchedule]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {
@@ -85,33 +84,6 @@ const CalendarDayView = (
     const scheduleTime = moment(time);
     return scheduleTime.isAfter(lastHourDate);
   }
-
-  const handleScheduleUpdate = async () => {
-    if (updateSchedule == null) {
-      return;
-    }
-    const scheduleDate = moment(updateSchedule.startTime);
-    const currentDate = moment(viewDate)
-
-    if (!scheduleDate.isSame(currentDate, 'date')) {
-      return;
-    }
-
-    if (isOutOfBounds(updateSchedule.endTime)) {
-      await fetchDayHours(scheduleDate.toDate());
-    }
-
-    const scheduleExists = schedules.some((item) =>
-      item.doctorId === updateSchedule.doctorId &&
-      item.schedules.some((schedule) => schedule.id === updateSchedule.id)
-    );
-
-    if (scheduleExists) {
-      localDispatch(actions.updateSchedule(updateSchedule));
-    } else {
-      localDispatch(actions.addSchedule(updateSchedule));
-    }
-  };
 
   const fetchDayHours = async (date) => {
     try {
@@ -157,12 +129,12 @@ const CalendarDayView = (
    * @param {number} doctorId
    * @param {string} startHour
    * @param {string} endHour
+   * @param {Date} selectedDate
    * @return {function(*=, *=): void}
    */
-  const handleAddSchedule = (startHour, endHour, doctorId) => {
+  const handleAddSchedule = (startHour, endHour, doctorId, selectedDate) => {
     const doctor = doctors.find(item => item.id === doctorId);
-    console.log(doctor);
-    onCreateSchedule(doctor, startHour, endHour);
+    onCreateSchedule(doctor, startHour, endHour, selectedDate);
   };
 
   /**
@@ -220,8 +192,10 @@ const CalendarDayView = (
   const mappedDoctors = useMemo(() => {
     return doctors.map((doctor) => ({
       id: doctor.id,
+      doctorId: doctor.id,
       name: `${doctor.firstName} ${doctor.lastName}`,
-      disabled: doctor.isInVacation
+      disabled: doctor.isInVacation,
+      date: viewDate,
     }));
   }, [doctors]);
 
@@ -233,6 +207,7 @@ const CalendarDayView = (
         dayHours={hours}
         columns={mappedDoctors}
         schedules={schedules}
+        animatedStatuses={['WaitingForPatient']}
         onAddSchedule={handleAddSchedule}
         onScheduleSelected={handleScheduleClick}
         onHeaderItemClick={handleHeaderItemClick}

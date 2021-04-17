@@ -3,7 +3,17 @@ import PropTypes from 'prop-types';
 import Column from "./Column";
 import styles from './ColumnsWrapper.module.scss';
 
-const ColumnsWrapper = ({ schedules, hours, columns, viewDate, onAddSchedule, onScheduleSelected }) => {
+const ColumnsWrapper = (
+  {
+    schedules,
+    hours,
+    columns,
+    hideCreateIndicator,
+    animatedStatuses,
+    onAddSchedule,
+    onScheduleSelected
+  }
+) => {
   const getSchedulesForColumn = (column) => {
     return schedules.find((item) => item.id === column.id)?.schedules ?? [];
   }
@@ -13,10 +23,11 @@ const ColumnsWrapper = ({ schedules, hours, columns, viewDate, onAddSchedule, on
       {columns.map((column) => (
         <Column
           key={column.id}
-          viewDate={viewDate}
+          animatedStatuses={animatedStatuses}
           schedules={getSchedulesForColumn(column)}
           hours={hours}
           column={column}
+          hideCreateIndicator={hideCreateIndicator}
           onAddSchedule={onAddSchedule}
           onScheduleSelected={onScheduleSelected}
         />
@@ -29,11 +40,13 @@ export default ColumnsWrapper;
 
 ColumnsWrapper.propTypes = {
   hours: PropTypes.arrayOf(PropTypes.string),
-  viewDate: PropTypes.instanceOf(Date),
+  hideCreateIndicator: PropTypes.bool,
   columns: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    doctorId: PropTypes.number,
     name: PropTypes.string,
     disabled: PropTypes.bool,
+    date: PropTypes.instanceOf(Date),
   })),
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
@@ -60,6 +73,22 @@ ColumnsWrapper.propTypes = {
         }),
       ),
     }),
+  ),
+  animatedStatuses: PropTypes.arrayOf(
+    PropTypes.oneOf([
+      'Pending',
+      'OnSite',
+      'Confirmed',
+      'WaitingForPatient',
+      'Late',
+      'DidNotCome',
+      'Canceled',
+      'CompletedNotPaid',
+      'CompletedPaid',
+      'PartialPaid',
+      'Paid',
+      'Rescheduled',
+    ])
   ),
   onAddSchedule: PropTypes.func,
   onScheduleSelected: PropTypes.func,

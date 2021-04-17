@@ -5,12 +5,12 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import ScheduleItem from '../../../ScheduleItem';
-import styles from '../../../../../styles/CalendarWeekDayView.module.scss'
+import { setIsCalendarLoading } from '../../../../../../redux/actions/calendar';
+import { updateAppointmentsSelector } from '../../../../../../redux/selectors/rootSelector';
+import ScheduleItem from '../../../../../../components/calendar/ScheduleItem';
+import styles from '../../../../../../styles/CalendarWeekDayView.module.scss'
 import { toast } from "react-toastify";
-import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
+import { getPeriodSchedules } from "../../../../../../middleware/api/schedules";
 
 const CalendarWeekDayView = ({
   viewDate,

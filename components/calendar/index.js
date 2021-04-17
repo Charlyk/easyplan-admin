@@ -21,7 +21,6 @@ import { useRouter } from "next/router";
 import MainComponent from "../common/MainComponent";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { parseCookies } from "../../utils";
 
 const reducerTypes = {
   setFilters: 'setFilters',
@@ -111,7 +110,17 @@ const initialState = {
   parsedValue: 0,
 };
 
-const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authToken }) => {
+const Calendar = (
+  {
+    date,
+    doctorId,
+    viewMode,
+    currentUser,
+    currentClinic,
+    children,
+    authToken
+  }
+) => {
   const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
@@ -138,6 +147,7 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authTo
       return
     }
     redirectIfOnGeneralHost(currentUser, router);
+
     pubnub.subscribe({
       channels: [`${currentUser.id}-import_schedules_channel`],
     });
@@ -160,10 +170,16 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authTo
       };
     });
     localDispatch(reducerActions.setFilters({ doctors: newDoctors, services }));
-    if (newDoctors.length > 0) {
+    if (newDoctors.length > 0 && doctorId == null) {
       localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
     }
-  }, [currentClinic]);
+
+    // set selected doctor
+    if (doctorId != null) {
+      const doctor = newDoctors.find((item) => item.id === parseInt(doctorId));
+      localDispatch(reducerActions.setSelectedDoctor(doctor));
+    }
+  }, [currentClinic, doctorId]);
 
   const handlePubnubMessageReceived = (remoteMessage) => {
     const { message, channel } = remoteMessage;
@@ -186,27 +202,40 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authTo
     }
   };
 
-  const handleAppointmentModalOpen = (doctor, startHour, endHour) => {
+  const handleAppointmentModalOpen = (doctor, startHour, endHour, selectedDate = null) => {
     dispatch(
       setAppointmentModal({
         open: true,
-        doctor: viewMode === 'day' ? doctor : selectedDoctor,
+        doctor: doctor ?? selectedDoctor,
         startHour,
         endHour,
-        date: viewDate,
+        date: selectedDate ?? viewDate,
       }),
     );
   };
 
-  const handleDoctorSelected = (doctor) => {
-    localDispatch(reducerActions.setSelectedDoctor(doctor));
+  const handleDoctorSelected = async (doctor) => {
+    const dateString = moment(viewDate).format('YYYY-MM-DD')
+    await router.replace({
+      pathname: `/calendar/${viewMode}`,
+      query: {
+        doctorId: doctor.id ?? doctorId,
+        date: dateString
+      }
+    });
   };
 
-  const handleViewDateChange = (newDate, moveToDay) => {
+  const handleViewDateChange = async (newDate, moveToDay) => {
     const stringDate = moment(newDate).format('YYYY-MM-DD');
-    router.replace({
+    const query = {
+      date: stringDate,
+    }
+    if (doctorId != null) {
+      query.doctorId = doctorId;
+    }
+    await router.replace({
       pathname: `/calendar/${moveToDay ? 'day' : viewMode}`,
-      query: { date: stringDate },
+      query,
     });
   };
 
@@ -214,12 +243,16 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authTo
     localDispatch(reducerActions.setSelectedSchedule(schedule));
   };
 
-  const handleViewModeChange = (newMode) => {
+  const handleViewModeChange = async (newMode) => {
     localDispatch(reducerActions.setViewMode(newMode));
     const stringDate = moment(viewDate).format('YYYY-MM-DD');
-    router.replace({
+    const query = { date: stringDate };
+    if (newMode !== 'day' && doctorId != null) {
+      query.doctorId = doctorId;
+    }
+    await router.replace({
       pathname: `/calendar/${newMode}`,
-      query: { date: stringDate }
+      query: query
     })
   };
 
@@ -324,14 +357,5 @@ const Calendar = ({ date, viewMode, currentUser, currentClinic, children, authTo
     </MainComponent>
   );
 };
-
-export const getServerSideProps = async ({ req }) => {
-  const { auth_token: authToken } = parseCookies(req);
-  return {
-    props: {
-      authToken,
-    }
-  }
-}
 
 export default Calendar;

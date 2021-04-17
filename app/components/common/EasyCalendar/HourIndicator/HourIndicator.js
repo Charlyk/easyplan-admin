@@ -8,9 +8,9 @@ import types from "../../../../../redux/types/types";
 import { updateHourIndicatorPositionSelector } from "../../../../../redux/selectors/rootSelector";
 import styles from './HourIndicator.module.scss'
 
-const HourIndicator = ({ dayHours, viewDate }) => {
+const HourIndicator = ({ dayHours, viewDate, disabled }) => {
   const dispatch = useDispatch()
-  const [hideIndicator, setHideIndicator] = useState(false);
+  const [hideIndicator, setHideIndicator] = useState(disabled);
   const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
   const initialHourIndicatorTop = getHourIndicatorTop();
   const [{ hourTop }, set] = useSpring(() => ({
@@ -18,6 +18,9 @@ const HourIndicator = ({ dayHours, viewDate }) => {
   }));
 
   useEffect(() => {
+    if (disabled) {
+      return;
+    }
     if (isOutOfBounds(new Date())) {
       dispatch({
         type: STOP_TIMER,
@@ -25,7 +28,9 @@ const HourIndicator = ({ dayHours, viewDate }) => {
           timerName: 'hourIndicatorTimer'
         }
       });
-      setHideIndicator(true);
+      if (!hideIndicator) {
+        setHideIndicator(true);
+      }
     } else {
       dispatch({
         type: START_TIMER,
@@ -35,14 +40,19 @@ const HourIndicator = ({ dayHours, viewDate }) => {
           timerInterval: 1000
         }
       });
-      setHideIndicator(false);
+      if (hideIndicator) {
+        setHideIndicator(false);
+      }
       updateHourIndicatorTop();
     }
-  }, [dayHours, viewDate])
+  }, [dayHours, viewDate, disabled])
 
   useEffect(() => {
+    if (disabled) {
+      return;
+    }
     updateHourIndicatorTop();
-  }, [updateHourIndicator]);
+  }, [updateHourIndicator, disabled]);
 
   const lastHourDate = useMemo(() => {
     const lastHour = dayHours[dayHours.length - 1];
@@ -105,7 +115,7 @@ const HourIndicator = ({ dayHours, viewDate }) => {
     return `${newTop}px`;
   };
 
-  if (hideIndicator) {
+  if (hideIndicator || disabled) {
     return null;
   }
 
@@ -127,11 +137,13 @@ const HourIndicator = ({ dayHours, viewDate }) => {
 export default HourIndicator;
 
 HourIndicator.propTypes = {
+  disabled: PropTypes.bool,
   dayHours: PropTypes.arrayOf(PropTypes.string).isRequired,
   viewDate: PropTypes.instanceOf(Date).isRequired,
 }
 
 HourIndicator.defaultProps = {
+  disabled: false,
   dayHours: [],
   viewDate: new Date(),
 }

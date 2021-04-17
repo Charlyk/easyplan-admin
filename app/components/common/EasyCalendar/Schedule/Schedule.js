@@ -17,8 +17,8 @@ const Schedule = (
   {
     schedule,
     index,
-    viewDate,
     firstHour,
+    animatedStatuses,
     onScheduleSelect,
   }
 ) => {
@@ -32,7 +32,7 @@ const Schedule = (
   const scheduleStatus = Statuses.find(
     (item) => item.id === schedule.scheduleStatus,
   );
-  const shouldAnimate = scheduleStatus?.id === 'WaitingForPatient';
+  const shouldAnimate = animatedStatuses.includes(scheduleStatus?.id);
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -53,7 +53,7 @@ const Schedule = (
     }
     const startTime = moment(schedule.startTime);
     const [hours, minutes] = firstHour.split(':');
-    const clinicStartTime = moment(viewDate).set({
+    const clinicStartTime = moment(schedule.startTime).set({
       hour: parseInt(hours),
       minute: parseInt(minutes),
       second: 0,
@@ -206,13 +206,28 @@ Schedule.propTypes = {
       fullName: PropTypes.string,
     }),
   }).isRequired,
+  animatedStatuses: PropTypes.arrayOf(
+    PropTypes.oneOf([
+      'Pending',
+      'OnSite',
+      'Confirmed',
+      'WaitingForPatient',
+      'Late',
+      'DidNotCome',
+      'Canceled',
+      'CompletedNotPaid',
+      'CompletedPaid',
+      'PartialPaid',
+      'Paid',
+      'Rescheduled',
+    ])
+  ),
   startHour: PropTypes.string,
   endHour: PropTypes.string,
   parentTop: PropTypes.number,
   index: PropTypes.number,
   onScheduleSelect: PropTypes.func,
   firstHour: PropTypes.string,
-  viewDate: PropTypes.instanceOf(Date),
 };
 
 Schedule.defaultProps = {

@@ -33,6 +33,11 @@ export function urlToLambda(imageUrl, width = 50) {
   return `${imageLambdaUrl}${url.pathname}?width=${width}`;
 }
 
+/**
+ * Get current week days
+ * @param {Date} date
+ * @return {Date[]}
+ */
 export const getCurrentWeek = (date) => {
   const currentDate = moment(date);
   const weekStart = currentDate.clone().startOf('isoWeek');

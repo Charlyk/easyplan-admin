@@ -3,7 +3,15 @@ import PropTypes from 'prop-types';
 import CreateScheduleView from "./CreateScheduleView";
 import styles from './ColumnsWrapper.module.scss';
 
-const ColumnCell = ({ startHour, endHour, disabled, onAddSchedule }) => {
+const ColumnCell = (
+  {
+    startHour,
+    endHour,
+    disabled,
+    hideCreateIndicator,
+    onAddSchedule
+  }
+) => {
   const [showCreateView, setShowCreateView] = useState(false);
 
   if (disabled) {
@@ -32,7 +40,12 @@ const ColumnCell = ({ startHour, endHour, disabled, onAddSchedule }) => {
   };
 
   const content = useMemo(() => {
-    if (showCreateView && startHour != null && endHour != null) {
+    if (
+      !hideCreateIndicator &&
+      showCreateView &&
+      startHour != null &&
+      endHour != null
+    ) {
       return (
         <CreateScheduleView
           startHour={startHour}
@@ -40,8 +53,10 @@ const ColumnCell = ({ startHour, endHour, disabled, onAddSchedule }) => {
           onAddSchedule={onAddSchedule}
         />
       )
+    } else {
+      return null
     }
-  }, [startHour, endHour, showCreateView]);
+  }, [startHour, endHour, showCreateView, hideCreateIndicator]);
 
   return (
     <div
@@ -62,5 +77,6 @@ ColumnCell.propTypes = {
   disabled: PropTypes.bool,
   startHour: PropTypes.string,
   endHour: PropTypes.string,
+  hideCreateIndicator: PropTypes.bool,
   onAddSchedule: PropTypes.func,
 }

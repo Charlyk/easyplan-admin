@@ -7,23 +7,17 @@ import IconArrowDown from '../../icons/iconArrowDown';
 import ClinicSelector from '../../common/ClinicSelector';
 import EditProfileModal from '../../common/EditProfileModal';
 import PageHeader from '../../common/PageHeader';
-import {
-  setCreateClinic,
-  triggerUserLogout,
-} from '../../../redux/actions/actions';
+import { triggerUserLogout } from '../../../redux/actions/actions';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorsMain.module.scss';
-import axios from "axios";
 import { environment, isDev } from "../../../eas.config";
-import { Role } from "../../../utils/constants";
-import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { setClinic } from "../../../redux/actions/clinicActions";
 import { usePubNub } from "pubnub-react";
 import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 import { redirectIfOnGeneralHost } from "../../../utils/helperFuncs";
 
-const DoctorsMain = ({ children, currentUser, currentClinic, authToken }) => {
+const DoctorsMain = ({ children, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
   const pubnub = usePubNub();
   const router = useRouter();

@@ -4,17 +4,20 @@ import moment from "moment-timezone";
 import CalendarMonthView from "../../../components/calendar/AppointmentsCalendar/CalendarMonthView";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
+import { Role } from "../../../utils/constants";
 
-export default function Month({ currentUser, currentClinic, date }) {
+export default function Month({ currentUser, currentClinic, doctorId, date }) {
   const viewDate = moment(date).toDate();
   return (
     <Calendar
+      doctorId={doctorId}
       currentClinic={currentClinic}
       currentUser={currentUser}
       date={viewDate}
       viewMode='month'
     >
       <CalendarMonthView
+        doctorId={doctorId}
         viewDate={viewDate}
       />
     </Calendar>
@@ -33,8 +36,20 @@ export const getServerSideProps = async ({ req, res, query }) => {
       redirectUserTo(redirectTo, res);
       return { props: { ...appData } };
     }
+    // filter clinic doctors
+    const doctors = currentClinic?.users?.filter((item) =>
+      item.roleInClinic === Role.doctor && !item.isHidden
+    ) || [];
+
+    // check if doctor id is present in query
+    let doctorId = query.doctorId;
+    if (doctorId == null) {
+      doctorId = doctors[0].id ?? 0;
+    }
+
     return {
       props: {
+        doctorId: parseInt(doctorId),
         date: query.date,
         ...appData,
       }

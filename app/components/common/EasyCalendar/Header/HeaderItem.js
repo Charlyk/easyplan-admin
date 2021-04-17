@@ -29,6 +29,8 @@ export default HeaderItem;
 HeaderItem.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    doctorId: PropTypes.number,
+    date: PropTypes.instanceOf(Date),
     name: PropTypes.string,
     disabled: PropTypes.bool,
   }).isRequired,

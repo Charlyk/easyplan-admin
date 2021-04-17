@@ -26,7 +26,6 @@ const AppointmentsCalendar = (
     selectedSchedule,
     canAddAppointment,
     children,
-    doctor,
     onPayDebt,
     onViewDateChange,
     onEditSchedule,
@@ -107,7 +106,6 @@ const AppointmentsCalendar = (
             onScheduleSelect,
             onDateClick: onViewDateChange,
             onCreateSchedule: onAddAppointment,
-            doctorId: doctor?.id
           }
         )}
       </div>
