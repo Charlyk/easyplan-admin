@@ -45,7 +45,10 @@ const Column = (
       return;
     }
 
-    const scheduleExists = schedules.some(item => item.id === updateSchedule.id);
+    const scheduleExists = schedules.some(item =>
+      item.id === updateSchedule.id &&
+      item.doctorId === column.doctorId
+    );
     if (scheduleExists) {
       // schedule exists so we need to update it
       const newSchedules = schedules.map((item) => {
