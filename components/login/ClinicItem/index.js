@@ -4,11 +4,23 @@ import { Role } from "../../../utils/constants";
 import { Typography } from "@material-ui/core";
 import styles from '../../../styles/auth/ClinicItem.module.scss'
 import IconNext from "../../icons/iconNext";
+import { environment } from "../../../eas.config";
 
 const ClinicItem = ({ clinic, onSelected }) => {
 
   const handleItemClick = () => {
     onSelected(clinic);
+  }
+
+  const getRedirectUrl = () => {
+    switch (environment) {
+      case 'local':
+        return '.easyplan.loc';
+      case 'testing':
+        return '.dev.easyplan.pro';
+      default:
+        return '.easyplan.pro';
+    }
   }
 
   return (
@@ -18,7 +30,7 @@ const ClinicItem = ({ clinic, onSelected }) => {
           {clinic.clinicName}
         </Typography>
         <Typography className={styles.clinicUrl}>
-          {clinic.clinicDomain}.easyplan.pro
+          {clinic.clinicDomain}{getRedirectUrl()}
         </Typography>
       </div>
       <IconNext circleColor='transparent' />

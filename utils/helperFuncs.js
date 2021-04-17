@@ -400,12 +400,19 @@ export const getClinicUrl = (clinic, authToken) => {
     return '';
   }
   const { host, protocol } = window.location;
-  const [_, domain, location] = host.split('.');
+  const [_, domain, location, location2] = host.split('.');
   const queryString = new URLSearchParams({
     token: authToken,
     clinicId: clinic.clinicId
   });
-  return `${protocol}//${clinic.clinicDomain}.${domain}.${location}/redirect?${queryString}`;
+  switch (environment) {
+    case 'production':
+    case 'local':
+      return `${protocol}//${clinic.clinicDomain}.${domain}.${location}/redirect?${queryString}`;
+    default:
+      return `${protocol}//${clinic.clinicDomain}.${domain}.${location}.${location2}/redirect?${queryString}`;
+  }
+
 }
 
 export const redirectIfOnGeneralHost = async (currentUser, router) => {
