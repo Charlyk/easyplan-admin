@@ -15,6 +15,7 @@ const DoctorPatients = (
     schedules,
     date,
     authToken,
+    viewMode,
   }
 ) => {
   return (
@@ -24,6 +25,7 @@ const DoctorPatients = (
       authToken={authToken}
     >
       <DoctorCalendar
+        viewMode={viewMode}
         schedules={schedules}
         currentClinic={currentClinic}
         currentUser={currentUser}
@@ -47,15 +49,17 @@ export const getServerSideProps = async ({ res, req, query }) => {
       redirectUserTo(redirectTo, res);
       return { props: { ...appData } };
     }
+    const viewMode = query.viewMode ?? 'week';
 
     // fetch schedules for a week
     const week = getCurrentWeek(date);
-    const firstDay = week[0];
-    const lastDay = week[week.length - 1];
+    const firstDay = viewMode === 'week' ? week[0] : date;
+    const lastDay = viewMode === 'week' ? week[week.length - 1] : date;
     const response = await getSchedulesForInterval(firstDay, lastDay, currentUser.id, req.headers);
     return {
       props: {
         authToken,
+        viewMode,
         schedules: response.data,
         date: moment(date).format('YYYY-MM-DD'),
         ...appData,

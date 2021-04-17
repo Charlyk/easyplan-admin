@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
@@ -11,14 +11,18 @@ import { Statuses } from '../../../utils/constants';
 import { getAppLanguage, textForKey } from '../../../utils/localization';
 import styles from '../../../styles/patient/PatientsFilter.module.scss';
 
-const PatientsFilter = ({
-  selectedDate,
-  currentClinic,
-  onNameChange,
-  onServiceChange,
-  onStatusChange,
-  onDateChange,
-}) => {
+const PatientsFilter = (
+  {
+    selectedDate,
+    currentClinic,
+    viewMode,
+    onNameChange,
+    onServiceChange,
+    onStatusChange,
+    onDateChange,
+    onViewModeChange,
+  }
+) => {
   const services = clinicServicesSelector(currentClinic)
 
   const sortedServices = useMemo(() => {
@@ -27,10 +31,17 @@ const PatientsFilter = ({
 
   return (
     <div className={styles['patients-filter']}>
+      <Button
+        variant='outline-primary'
+        style={{ width: '100%', marginTop: '1.3rem' }}
+        onClick={onViewModeChange}
+      >
+        {viewMode === 'day' ? textForKey('Week schedules') : textForKey('Day schedules')}
+      </Button>
       <Form.Group controlId='patientName'>
         <Form.Label>{textForKey('Patient')}</Form.Label>
         <InputGroup>
-          <Form.Control onChange={onNameChange} type='text' />
+          <Form.Control onChange={onNameChange} type='text'/>
         </InputGroup>
       </Form.Group>
       <Form.Group
@@ -84,15 +95,18 @@ export default PatientsFilter;
 
 PatientsFilter.propTypes = {
   selectedDate: PropTypes.instanceOf(Date),
+  viewMode: PropTypes.oneOf(['day', 'week']),
   onNameChange: PropTypes.func,
   onDateChange: PropTypes.func,
   onServiceChange: PropTypes.func,
   onStatusChange: PropTypes.func,
+  onViewModeChange: PropTypes.func,
 };
 
 PatientsFilter.defaultProps = {
   onDateChange: () => null,
   onNameChange: () => null,
+  onViewModeChange: () => null,
   onServiceChange: () => null,
   onStatusChange: () => null,
   selectedDate: new Date(),

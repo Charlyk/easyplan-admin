@@ -2,16 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
-import ColumnCell from "./ColumnCell";
 import Moment from "moment-timezone";
-import Schedule from "../Schedule/Schedule";
-import createContainerHours from "../../../../utils/createContainerHours";
 import { extendMoment } from "moment-range";
 import { useSelector } from "react-redux";
 import {
   deleteScheduleSelector,
   updateScheduleSelector
 } from "../../../../../redux/selectors/scheduleSelector";
+import createContainerHours from "../../../../utils/createContainerHours";
+import Schedule from "../Schedule/Schedule";
+import ColumnCell from "./ColumnCell";
 import styles from './ColumnsWrapper.module.scss';
 
 const moment = extendMoment(Moment);

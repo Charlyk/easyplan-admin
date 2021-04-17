@@ -513,6 +513,8 @@ export default {
     next: 'Next',
     previous: 'Previous',
     'redirecting to clinic': 'Redirecting to clinic',
+    'day schedules': 'Day schedules',
+    'week schedules': 'Week schedules',
   },
   ro: {
     analytics: 'Analitică',
@@ -1034,6 +1036,8 @@ export default {
     next: 'Următorul',
     previous: 'Înapoi',
     'redirecting to clinic': 'Vă redirecționăm la clinică',
+    'day schedules': 'Programările pentru o zi',
+    'week schedules': 'Programările pentru o săptămână',
   },
   ru: {
     analytics: 'Analytics',
@@ -1546,5 +1550,7 @@ export default {
     next: 'Next',
     previous: 'Previous',
     'redirecting to clinic': 'Redirecting to clinic',
+    'day schedules': 'Day schedules',
+    'week schedules': 'Week schedules',
   },
 };

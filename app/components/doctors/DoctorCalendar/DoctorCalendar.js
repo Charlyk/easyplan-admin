@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import PropTypes from 'prop-types';
 import PatientsFilter from "../../../../components/doctors/PatientsFilter";
 import { useRouter } from "next/router";
 import moment from "moment-timezone";
@@ -13,6 +14,17 @@ const initialFilter = {
   appointmentStatus: 'all',
 }
 
+const getMappedSchedules = (schedules) => {
+  const newSchedules = [];
+  for (const key of Object.keys(schedules)) {
+    newSchedules.push({
+      id: key,
+      schedules: schedules[key],
+    });
+  }
+  return newSchedules;
+}
+
 const DoctorCalendar = (
   {
     currentUser,
@@ -21,6 +33,7 @@ const DoctorCalendar = (
       hours: dayHours,
       schedules: initialSchedules
     },
+    viewMode,
     date,
   }
 ) => {
@@ -28,17 +41,12 @@ const DoctorCalendar = (
   const router = useRouter();
   const [filterData, setFilterData] = useState(initialFilter);
   const [week, setWeek] = useState(getCurrentWeek(viewDate));
-  const mappedSchedules = useMemo(() => {
-    const newSchedules = [];
-    for (const key of Object.keys(initialSchedules)) {
-      newSchedules.push({
-        id: key,
-        schedules: initialSchedules[key],
-      });
-    }
-    return newSchedules;
-  }, [initialSchedules]);
+  const mappedSchedules = getMappedSchedules(initialSchedules);
   const [schedules, setSchedules] = useState(mappedSchedules);
+
+  useEffect(() => {
+    setSchedules(getMappedSchedules(initialSchedules));
+  }, [initialSchedules]);
 
   useEffect(() => {
     const newWeek = getCurrentWeek(viewDate);
@@ -90,6 +98,13 @@ const DoctorCalendar = (
     await router.push(`/doctor/${schedule.id}`);
   }
 
+  const handleViewModeChange = async () => {
+    const stringDate = moment(viewDate).format('YYYY-MM-DD');
+    const newMode = viewMode === 'week' ? 'day' : 'week';
+    const url = `/doctor?date=${stringDate}&viewMode=${newMode}`;
+    await router.replace(url)
+  }
+
   const handleAppointmentStatusChange = (event) => {
     setFilterData({
       ...filterData,
@@ -99,25 +114,37 @@ const DoctorCalendar = (
 
   const handleDateChange = async (newDate) => {
     const stringDate = moment(newDate).format('YYYY-MM-DD')
-    await router.replace(`/doctor?date=${stringDate}`);
+    await router.replace(`/doctor?date=${stringDate}&viewMode=${viewMode}`);
   };
 
-  const mappedWeek = week.map((date) => {
-    return {
-      id: moment(date).format('YYYY-MM-DD'),
+  const mappedWeek = viewMode === 'week' ? (
+    week.map((date) => {
+      return {
+        id: moment(date).format('YYYY-MM-DD'),
+        doctorId: currentUser.id,
+        name: moment(date).format('DD dddd'),
+        disabled: false,
+        date: date,
+      };
+    })
+  ) : (
+    [{
+      id: moment(viewDate).format('YYYY-MM-DD'),
       doctorId: currentUser.id,
-      name: moment(date).format('DD dddd'),
+      name: moment(viewDate).format('DD MMMM YYYY'),
       disabled: false,
-      date: date,
-    };
-  });
+      date: viewDate,
+    }]
+  )
 
   return (
     <div className={styles.doctorCalendarRoot}>
       <div className={styles.filterWrapper}>
         <PatientsFilter
+          viewMode={viewMode}
           currentClinic={currentClinic}
           selectedDate={viewDate}
+          onViewModeChange={handleViewModeChange}
           onDateChange={handleDateChange}
           onNameChange={handlePatientNameChange}
           onServiceChange={handleServiceChange}
@@ -140,3 +167,14 @@ const DoctorCalendar = (
 }
 
 export default DoctorCalendar;
+
+DoctorCalendar.propTypes = {
+  currentUser: PropTypes.any,
+  currentClinic: PropTypes.any,
+  schedules: PropTypes.shape({
+    hours: PropTypes.arrayOf(PropTypes.string),
+    schedules: PropTypes.any
+  }),
+  viewMode: PropTypes.oneOf(['day', 'week']),
+  date: PropTypes.string,
+}
