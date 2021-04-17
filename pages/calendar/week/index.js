@@ -20,6 +20,7 @@ export default function Week(
   const viewDate = moment(date).toDate();
   return (
     <Calendar
+      doctors={doctors}
       doctorId={doctorId}
       currentClinic={currentClinic}
       currentUser={currentUser}

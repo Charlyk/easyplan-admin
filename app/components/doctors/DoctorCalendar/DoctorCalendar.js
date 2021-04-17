@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import PatientsFilter from "../../../../components/doctors/PatientsFilter";
 import { useRouter } from "next/router";
@@ -12,17 +12,6 @@ const initialFilter = {
   patientName: '',
   serviceId: 'all',
   appointmentStatus: 'all',
-}
-
-const getMappedSchedules = (schedules) => {
-  const newSchedules = [];
-  for (const key of Object.keys(schedules)) {
-    newSchedules.push({
-      id: key,
-      schedules: schedules[key],
-    });
-  }
-  return newSchedules;
 }
 
 const DoctorCalendar = (
@@ -41,11 +30,10 @@ const DoctorCalendar = (
   const router = useRouter();
   const [filterData, setFilterData] = useState(initialFilter);
   const [week, setWeek] = useState(getCurrentWeek(viewDate));
-  const mappedSchedules = getMappedSchedules(initialSchedules);
-  const [schedules, setSchedules] = useState(mappedSchedules);
+  const [schedules, setSchedules] = useState(initialSchedules);
 
   useEffect(() => {
-    setSchedules(getMappedSchedules(initialSchedules));
+    setSchedules(initialSchedules);
   }, [initialSchedules]);
 
   useEffect(() => {
@@ -57,11 +45,11 @@ const DoctorCalendar = (
 
   useEffect(() => {
     if (isEqual(filterData, initialFilter)) {
-      setSchedules(mappedSchedules);
+      setSchedules(initialSchedules);
       return;
     }
 
-    const filteredSchedules = mappedSchedules.map((item) => {
+    const filteredSchedules = initialSchedules.map((item) => {
       const itemSchedules = item.schedules.filter((schedule) => {
         return (
           (filterData.patientName.length === 0 ||

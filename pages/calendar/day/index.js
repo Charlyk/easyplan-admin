@@ -7,14 +7,8 @@ import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../util
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
 
-export default function Day({ currentUser, currentClinic, date, schedules, dayHours }) {
+export default function Day({ currentUser, currentClinic, date, schedules, dayHours, doctors }) {
   const viewDate = moment(date).toDate();
-
-  const doctors = useMemo(() => {
-    return currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && !item.isHidden
-    ) || [];
-  }, [currentClinic]);
 
   const updatedSchedules = useMemo(() => {
     return schedules.map((schedule) => ({
@@ -25,6 +19,7 @@ export default function Day({ currentUser, currentClinic, date, schedules, dayHo
 
   return (
     <Calendar
+      doctors={doctors}
       currentUser={currentUser}
       currentClinic={currentClinic}
       viewMode='day'
@@ -55,11 +50,17 @@ export const getServerSideProps = async ({ query, req, res }) => {
       return { props: { ...appData } };
     }
 
+    // filter clinic doctors
+    const doctors = currentClinic?.users?.filter((item) =>
+      item.roleInClinic === Role.doctor && !item.isHidden
+    ) || [];
+
     const response = await fetchDaySchedules(query, req.headers);
     const { schedules, dayHours } = response.data;
     return {
       props: {
         date: queryDate,
+        doctors,
         schedules,
         dayHours,
         ...appData
@@ -69,6 +70,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
     await handleRequestError(error, req, res);
     return {
       props: {
+        doctors: [],
         date: queryDate,
         schedules: [],
         dayHours: [],

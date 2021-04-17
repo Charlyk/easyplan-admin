@@ -81,7 +81,7 @@ const Column = (
     onAddSchedule(startHour, endHour, column.doctorId, column.date);
   }
 
-  const schedulesWithOffset = () => {
+  const schedulesWithOffset = useMemo(() => {
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
     for (let schedule of schedules) {
@@ -105,7 +105,7 @@ const Column = (
       newSchedules.push(schedule);
     }
     return newSchedules;
-  };
+  }, [schedules, hours]);
 
   const renderHoursContainers = useMemo(() => {
     return hoursContainers.map((hour, index) => {
@@ -144,12 +144,12 @@ const Column = (
         );
       }
     })
-  }, [hoursContainers]);
+  }, [hoursContainers, hideCreateIndicator, column]);
 
   return (
     <div className={styles.columnRoot}>
       {renderHoursContainers}
-      {schedulesWithOffset().map((schedule, index) => (
+      {schedulesWithOffset.map((schedule, index) => (
         <Schedule
           key={schedule.id}
           schedule={schedule}

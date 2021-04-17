@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -26,21 +26,13 @@ const CalendarWeekView = (
 ) => {
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const [week, setWeek] = useState(getCurrentWeek(viewDate));
+  useEffect(() => {
+    console.log(schedules);
+  }, [])
 
   useEffect(() => {
     setWeek(getCurrentWeek(viewDate));
   }, [viewDate, updateAppointments]);
-
-  const mappedSchedules = useMemo(() => {
-    const newSchedules = [];
-    for (const key of Object.keys(schedules)) {
-      newSchedules.push({
-        id: key,
-        schedules: schedules[key],
-      });
-    }
-    return newSchedules;
-  }, [schedules]);
 
   const handleDayClick = (day) => {
     const date = moment(day.id).toDate();
@@ -68,7 +60,7 @@ const CalendarWeekView = (
       <EasyCalendar
         viewDate={viewDate}
         dayHours={hours}
-        schedules={mappedSchedules}
+        schedules={schedules}
         columns={mappedWeek}
         animatedStatuses={['WaitingForPatient']}
         onScheduleSelected={onScheduleSelect}

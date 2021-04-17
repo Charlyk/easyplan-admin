@@ -25,7 +25,7 @@ const EasyCalendar = (
       <Header items={columns} onItemClick={onHeaderItemClick}/>
       <div className={styles.calendarContainer}>
         <HourIndicator
-          disabled={!hourIndicator}
+          disabled={!hourIndicator || dayHours.length === 0}
           dayHours={dayHours}
           viewDate={viewDate}
         />

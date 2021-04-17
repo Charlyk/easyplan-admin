@@ -114,6 +114,7 @@ const Calendar = (
   {
     date,
     doctorId,
+    doctors,
     viewMode,
     currentUser,
     currentClinic,
@@ -125,7 +126,6 @@ const Calendar = (
   const pubnub = usePubNub();
   const dispatch = useDispatch();
   const services = currentClinic?.services?.filter((item) => !item.deleted) || [];
-  const doctors = currentClinic?.users.filter((item) => item.roleInClinic === Role.doctor && !item.isHidden) || [];
   const viewDate = moment(date).toDate();
   const [
     {
@@ -140,7 +140,13 @@ const Calendar = (
       isParsing,
     },
     localDispatch,
-  ] = useReducer(reducer, initialState);
+  ] = useReducer(reducer, {
+    ...initialState,
+    filters: {
+      ...initialState.filters,
+      doctors,
+    }
+  });
 
   useEffect(() => {
     if (currentUser == null) {

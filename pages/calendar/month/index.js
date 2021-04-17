@@ -6,10 +6,11 @@ import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { Role } from "../../../utils/constants";
 
-export default function Month({ currentUser, currentClinic, doctorId, date }) {
+export default function Month({ currentUser, currentClinic, doctorId, date, doctors }) {
   const viewDate = moment(date).toDate();
   return (
     <Calendar
+      doctors={doctors}
       doctorId={doctorId}
       currentClinic={currentClinic}
       currentUser={currentUser}
@@ -49,6 +50,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
 
     return {
       props: {
+        doctors,
         doctorId: parseInt(doctorId),
         date: query.date,
         ...appData,
