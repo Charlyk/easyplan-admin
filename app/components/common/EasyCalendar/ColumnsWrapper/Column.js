@@ -1,14 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
-import orderBy from 'lodash/orderBy';
 import Moment from "moment-timezone";
 import { extendMoment } from "moment-range";
-import { useSelector } from "react-redux";
-import {
-  deleteScheduleSelector,
-  updateScheduleSelector
-} from "../../../../../redux/selectors/scheduleSelector";
 import createContainerHours from "../../../../utils/createContainerHours";
 import Schedule from "../Schedule/Schedule";
 import ColumnCell from "./ColumnCell";
@@ -18,7 +11,7 @@ const moment = extendMoment(Moment);
 
 const Column = (
   {
-    schedules: initialSchedules,
+    schedules,
     hours,
     column,
     animatedStatuses,
@@ -27,57 +20,7 @@ const Column = (
     onScheduleSelected
   }
 ) => {
-  const updateSchedule = useSelector(updateScheduleSelector);
-  const deleteSchedule = useSelector(deleteScheduleSelector);
-  const [schedules, setSchedules] = useState(initialSchedules);
   const hoursContainers = createContainerHours(hours);
-
-  useEffect(() => {
-    if (isEqual(initialSchedules, schedules)) {
-      return;
-    }
-
-    setSchedules(initialSchedules);
-  }, [initialSchedules]);
-
-  useEffect(() => {
-    if (updateSchedule == null) {
-      return;
-    }
-
-    const scheduleExists = schedules.some(item =>
-      item.id === updateSchedule.id &&
-      item.doctorId === column.doctorId
-    );
-    if (scheduleExists) {
-      // schedule exists so we need to update it
-      const newSchedules = schedules.map((item) => {
-        if (item.id !== updateSchedule.id) {
-          return item;
-        }
-        return { ...item, ...updateSchedule }
-      });
-      setSchedules(newSchedules);
-    } else {
-      // schedule does not exist in this column so we need to add it
-      const scheduleDate = moment(updateSchedule.startTime);
-      const currentDate = moment(column.date);
-      if (!scheduleDate.isSame(currentDate, 'date')) {
-        // schedule date is not the same as column date
-        return;
-      }
-      const newSchedules = [...schedules, updateSchedule];
-      setSchedules(orderBy(newSchedules, ['startTime', 'asc']));
-    }
-  }, [updateSchedule]);
-
-  useEffect(() => {
-    if (deleteSchedule == null) {
-      return;
-    }
-    const newSchedules = schedules.filter((item) => item.id !== deleteSchedule.id);
-    setSchedules(newSchedules);
-  }, [deleteSchedule]);
 
   function handleAddSchedule(startHour, endHour) {
     onAddSchedule(startHour, endHour, column.doctorId, column.date);

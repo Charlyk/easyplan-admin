@@ -9,7 +9,7 @@ import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from "react-toastify";
-import { updateScheduleSelector } from '../../../../../redux/selectors/scheduleSelector';
+import { deleteScheduleSelector, updateScheduleSelector } from '../../../../../redux/selectors/scheduleSelector';
 import { wrapper } from "../../../../../store";
 import { fetchSchedulesHours } from "../../../../../middleware/api/schedules";
 import EasyCalendar from "../../../common/EasyCalendar";
@@ -29,6 +29,7 @@ const CalendarDayView = (
     onCreateSchedule
   }) => {
   const updateSchedule = useSelector(updateScheduleSelector);
+  const deleteSchedule = useSelector(deleteScheduleSelector);
   const schedulesRef = useRef(null);
   const [
     { hours, pauseModal, schedules },
@@ -36,20 +37,12 @@ const CalendarDayView = (
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (updateSchedule == null) {
-      return;
-    }
-    const scheduleDate = moment(updateSchedule.startTime);
-    const currentDate = moment(viewDate)
-
-    if (!scheduleDate.isSame(currentDate, 'date')) {
-      return;
-    }
-
-    if (isOutOfBounds(updateSchedule.endTime)) {
-      fetchDayHours(scheduleDate.toDate());
-    }
+    handleScheduleUpdate();
   }, [updateSchedule]);
+
+  useEffect(() => {
+    handleScheduleDelete();
+  }, [deleteSchedule])
 
   useEffect(() => {
     if (schedulesRef.current != null) {
@@ -76,6 +69,41 @@ const CalendarDayView = (
       .set('hour', parseInt(maxHour))
       .set('minute', parseInt(maxMinute));
   }, [hours, viewDate]);
+
+  async function handleScheduleUpdate() {
+    if (updateSchedule == null) {
+      return;
+    }
+    const scheduleDate = moment(updateSchedule.startTime);
+    const currentDate = moment(viewDate)
+
+    if (!scheduleDate.isSame(currentDate, 'date')) {
+      return;
+    }
+
+    if (isOutOfBounds(updateSchedule.endTime)) {
+      await fetchDayHours(scheduleDate.toDate());
+    }
+
+    const scheduleExists = schedules.some((item) =>
+      item.id === updateSchedule.doctorId &&
+      item.schedules.some((schedule) => schedule.id === updateSchedule.id)
+    );
+
+    if (scheduleExists) {
+      localDispatch(actions.updateSchedule(updateSchedule));
+    } else {
+      localDispatch(actions.addSchedule(updateSchedule));
+    }
+  }
+
+  function handleScheduleDelete() {
+    if (deleteSchedule == null) {
+      return
+    }
+
+    localDispatch(actions.deleteSchedule(deleteSchedule))
+  }
 
   const isOutOfBounds = (time) => {
     if (hours.length === 0) {
