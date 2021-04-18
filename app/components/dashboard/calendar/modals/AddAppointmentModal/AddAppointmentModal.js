@@ -26,7 +26,7 @@ import {
   getScheduleDetails,
   postSchedule
 } from "../../../../../../middleware/api/schedules";
-import { searchPatients } from "../../../../../../middleware/api/patients";
+import { getPatients } from "../../../../../../middleware/api/patients";
 import { reducer, initialState, actions } from "./AddAppointmentModal.reducer";
 import styles from './AddAppointment.module.scss';
 
@@ -235,7 +235,8 @@ const AddAppointmentModal = (
       localDispatch(actions.setPatientsLoading(true));
       try {
         const updatedQuery = query.replace('+', '');
-        const response = await searchPatients(updatedQuery);
+        const requestQuery = { query: updatedQuery, page: '0', rowsPerPage: '10' };
+        const { data: response } = await getPatients(requestQuery);
         const patients = response.data.map((item) => ({
           ...item,
           fullName: getLabelKey(item),
