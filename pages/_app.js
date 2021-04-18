@@ -24,7 +24,7 @@ import FullScreenImageModal from "../components/common/FullScreenImageModal";
 import { imageModalSelector } from "../redux/selectors/imageModalSelector";
 import { setImageModal } from "../redux/actions/imageModalActions";
 import CreateClinicModal from "../components/clinic/CreateClinicModal";
-import ConfirmationModal from "../components/common/ConfirmationModal";
+import ConfirmationModal from "../app/components/common/ConfirmationModal";
 import { textForKey } from "../utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
 import { ToastContainer } from "react-toastify";

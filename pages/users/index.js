@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from '../../components/common/ConfirmationModal';
+import ConfirmationModal from '../../app/components/common/ConfirmationModal';
 import InviteUserModal from '../../components/common/InviteUserModal';
 import UserDetailsModal from '../../components/users/UserDetailsModal';
 import { Role } from '../../utils/constants';

@@ -10,7 +10,7 @@ import AddAppointmentModal from '../../app/components/dashboard/calendar/modals/
 import DataMigrationModal from './DataMigrationModal';
 import MainMenu from './MainMenu';
 import PageHeader from './PageHeader';
-import PatientDetailsModal from '../patients/PatientDetailsModal';
+import PatientDetailsModal from '../../app/components/dashboard/patients/PatientDetailsModal';
 import ServiceDetailsModal from '../services/ServiceDetailsModal';
 import {
   setAppointmentModal,

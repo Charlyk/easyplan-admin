@@ -1,5 +1,5 @@
 import React from "react";
-import Calendar from "../../../components/calendar";
+import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
 import moment from "moment-timezone";
 import { fetchAppData } from "../../../middleware/api/initialization";
@@ -19,7 +19,7 @@ export default function Week(
 ) {
   const viewDate = moment(date).toDate();
   return (
-    <Calendar
+    <CalendarContainer
       doctors={doctors}
       doctorId={doctorId}
       currentClinic={currentClinic}
@@ -33,7 +33,7 @@ export default function Week(
         schedules={schedules}
         doctorId={doctorId}
       />
-    </Calendar>
+    </CalendarContainer>
   )
 };
 

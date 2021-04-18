@@ -1,7 +1,7 @@
 import React from "react";
-import Calendar from "../../../components/calendar";
+import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import moment from "moment-timezone";
-import CalendarMonthView from "../../../components/calendar/AppointmentsCalendar/CalendarMonthView";
+import CalendarMonthView from "../../../app/components/dashboard/calendar/CalendarMonthView";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { Role } from "../../../utils/constants";
@@ -9,7 +9,7 @@ import { Role } from "../../../utils/constants";
 export default function Month({ currentUser, currentClinic, doctorId, date, doctors }) {
   const viewDate = moment(date).toDate();
   return (
-    <Calendar
+    <CalendarContainer
       doctors={doctors}
       doctorId={doctorId}
       currentClinic={currentClinic}
@@ -21,7 +21,7 @@ export default function Month({ currentUser, currentClinic, doctorId, date, doct
         doctorId={doctorId}
         viewDate={viewDate}
       />
-    </Calendar>
+    </CalendarContainer>
   )
 };
 

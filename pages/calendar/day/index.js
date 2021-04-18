@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import Calendar from "../../../components/calendar";
+import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarDayView from "../../../app/components/dashboard/calendar/CalendarDayView";
 import { Role } from "../../../utils/constants";
 import moment from "moment-timezone";
@@ -18,7 +18,7 @@ export default function Day({ currentUser, currentClinic, date, schedules, dayHo
   }, [schedules]);
 
   return (
-    <Calendar
+    <CalendarContainer
       doctors={doctors}
       currentUser={currentUser}
       currentClinic={currentClinic}
@@ -31,7 +31,7 @@ export default function Day({ currentUser, currentClinic, date, schedules, dayHo
         viewDate={viewDate}
         doctors={doctors}
       />
-    </Calendar>
+    </CalendarContainer>
   )
 };
 

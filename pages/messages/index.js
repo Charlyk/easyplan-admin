@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from '../../components/common/ConfirmationModal';
+import ConfirmationModal from '../../app/components/common/ConfirmationModal';
 import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import CreateMessageModal from '../../components/messages/CreateMessageModal';

@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import EasyTab from '../../common/EasyTab';
-import AppointmentNotes from '../../patients/PatientDetailsModal/AppointmentNotes';
-import PatientAppointments from '../../patients/PatientDetailsModal/PatientAppointments';
-import PatientNotes from '../../patients/PatientDetailsModal/PatientNotes';
-import OrthodonticPlan from '../../patients/PatientDetailsModal/OrthodonticPlan';
-import PatientXRay from '../../patients/PatientDetailsModal/PatientXRay';
+import AppointmentNotes from '../../../app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes';
+import PatientAppointments from '../../../app/components/dashboard/patients/PatientDetailsModal/PatientAppointments';
+import PatientNotes from '../../../app/components/dashboard/patients/PatientDetailsModal/PatientNotes';
+import OrthodonticPlan from '../../../app/components/dashboard/patients/PatientDetailsModal/OrthodonticPlan';
+import PatientXRay from '../../../app/components/dashboard/patients/PatientDetailsModal/PatientXRay';
 import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/patient/PatientDetails.module.scss';

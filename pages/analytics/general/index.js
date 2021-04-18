@@ -10,7 +10,7 @@ import MainComponent from "../../../components/common/MainComponent";
 import { getGeneralStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { parseCookies } from "../../../utils";
-import GeneralAnalytics from "../../../app/components/dashboard/analytics/general";
+import GeneralAnalytics from "../../../app/components/dashboard/analytics/GeneralAnalytics";
 
 export default function General(
   {
