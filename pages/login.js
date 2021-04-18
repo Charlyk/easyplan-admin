@@ -9,7 +9,7 @@ import { textForKey } from "../utils/localization";
 import { getCurrentUser, loginUser, resetUserPassword } from "../middleware/api/auth";
 import { isDev } from "../eas.config";
 import { Typography } from "@material-ui/core";
-import { RestrictedSubdomains } from "../utils/constants";
+import { RestrictedSubdomains } from "../app/utils/constants";
 import styles from '../styles/auth/Login.module.scss';
 
 const FormType = {

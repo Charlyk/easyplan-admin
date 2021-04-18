@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 import IconSuccess from '../../../../../../components/icons/iconSuccess';
-import { EmailRegex } from '../../../../../../utils/constants';
+import { EmailRegex } from '../../../../../utils/constants';
 import { adjustValueToNumber } from '../../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';

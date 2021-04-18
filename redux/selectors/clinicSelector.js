@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { Role } from '../../utils/constants';
+import { Role } from '../../app/utils/constants';
 import { createSelector } from "reselect";
 
 export const clinicTimeZoneSelector = (clinic) => clinic?.timeZone || moment.tz.guess(true);

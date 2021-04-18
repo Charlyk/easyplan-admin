@@ -31,7 +31,7 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector,
 } from '../../../../../redux/selectors/scheduleSelector';
-import { ManualStatuses, Statuses } from '../../../../../utils/constants';
+import { ManualStatuses, Statuses } from '../../../../utils/constants';
 import { formattedAmount } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 import SingleInputModal from '../../../../../components/common/SingleInputModal';

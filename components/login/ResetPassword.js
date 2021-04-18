@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
 import LoadingButton from '../common/LoadingButton';
-import { EmailRegex } from '../../utils/constants';
+import { EmailRegex } from '../../app/utils/constants';
 import { textForKey } from '../../utils/localization';
 import styles from '../../styles/auth/ResetPassword.module.scss';
 import clsx from "clsx";

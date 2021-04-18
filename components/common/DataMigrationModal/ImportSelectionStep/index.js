@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../../icons/iconArrowDown';
-import { YClientAPIUrl } from '../../../../utils/constants';
+import { YClientAPIUrl } from '../../../../app/utils/constants';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import EasyDatePicker from '../../EasyDatePicker';

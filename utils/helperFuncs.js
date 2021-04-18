@@ -3,7 +3,7 @@ import S3 from 'react-aws-s3';
 import uuid from 'react-uuid';
 
 import { baseApiUrl, environment, imageLambdaUrl } from '../eas.config';
-import { env, Role, S3Config } from './constants';
+import { env, Role, S3Config } from '../app/utils/constants';
 import { textForKey } from './localization';
 import Router from "next/router";
 import { toast } from "react-toastify";

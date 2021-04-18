@@ -5,7 +5,7 @@ import moment from "moment-timezone";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { getCurrentWeek, handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
-import { Role } from "../../../utils/constants";
+import { Role } from "../../../app/utils/constants";
 
 export default function Week(
   {

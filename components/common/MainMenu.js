@@ -23,7 +23,7 @@ import MenuSettings from '../icons/menuSettings';
 import MenuUsers from '../icons/menuUsers';
 import { textForKey } from '../../utils/localization';
 import ClinicSelector from './ClinicSelector';
-import { Role } from "../../utils/constants";
+import { Role } from "../../app/utils/constants";
 
 const menuItems = [
   {

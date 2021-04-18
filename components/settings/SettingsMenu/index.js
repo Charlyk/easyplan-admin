@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import IconNext from '../../icons/iconNext';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/SettingsMenu.module.scss';
-import { Role } from "../../../utils/constants";
+import { Role } from "../../../app/utils/constants";
 
 const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
   const isSelected = type => {

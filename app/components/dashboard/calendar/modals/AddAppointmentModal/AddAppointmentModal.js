@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../../components/icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
-import { EmailRegex, Role } from '../../../../../../utils/constants';
+import { EmailRegex, Role } from '../../../../../utils/constants';
 import {
   generateReducerActions,
   urlToLambda,

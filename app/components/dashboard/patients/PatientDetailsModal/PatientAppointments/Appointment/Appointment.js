@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import IconAppointmentCalendar from '../../../../../../../components/icons/iconAppointmentCalendar';
 import IconAppointmentClock from '../../../../../../../components/icons/iconAppointmentClock';
-import { Statuses } from '../../../../../../../utils/constants';
+import { Statuses } from '../../../../../../utils/constants';
 import { textForKey } from '../../../../../../../utils/localization';
 import { baseApiUrl } from "../../../../../../../eas.config";
 import styles from './Appointment.module.scss';

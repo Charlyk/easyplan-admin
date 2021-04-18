@@ -9,7 +9,7 @@ import { checkDomainAvailability, clinicTimeZones, fetchAvailableCurrencies } fr
 import { Form, Image, InputGroup } from "react-bootstrap";
 import IconAvatar from "../../icons/iconAvatar";
 import LoadingButton from "../../common/LoadingButton";
-import { WebRegex } from "../../../utils/constants";
+import { WebRegex } from "../../../app/utils/constants";
 import debounce from "lodash/debounce";
 import { isDev } from "../../../eas.config";
 

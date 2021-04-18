@@ -9,7 +9,7 @@ import SecuritySettings from '../../components/settings/SecuritySettings';
 import SettingsMenu from '../../components/settings/SettingsMenu';
 import styles from '../../styles/Settings.module.scss';
 import MainComponent from "../../components/common/MainComponent";
-import { Role } from "../../utils/constants";
+import { Role } from "../../app/utils/constants";
 import { fetchAppData } from "../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { parseCookies } from "../../utils";

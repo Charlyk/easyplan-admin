@@ -39,7 +39,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../app/styles/base/base.scss'
-import { UnauthorizedPaths } from "../utils/constants";
+import { UnauthorizedPaths } from "../app/utils/constants";
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../icons/iconAvatar';
 import IconSuccess from '../../icons/iconSuccess';
 import LoadingButton from '../../common/LoadingButton';
-import { EmailRegex } from '../../../utils/constants';
+import { EmailRegex } from '../../../app/utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/AccountSettings.module.scss'

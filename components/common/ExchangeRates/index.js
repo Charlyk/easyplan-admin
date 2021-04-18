@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 
 import IconClose from '../../icons/iconClose';
 import { updateExchangeRatesSelector } from '../../../redux/selectors/rootSelector';
-import { Role } from '../../../utils/constants';
+import { Role } from '../../../app/utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';

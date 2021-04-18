@@ -18,7 +18,7 @@ import {
   fetchAvailableCurrencies
 } from "../../../middleware/api/clinic";
 import styles from '../../../styles/CreateClinicModal.module.scss';
-import { WebRegex } from "../../../utils/constants";
+import { WebRegex } from "../../../app/utils/constants";
 
 const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/ig;
 

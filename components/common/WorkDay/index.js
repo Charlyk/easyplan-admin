@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
-import { createHoursList, days } from '../../../utils/constants';
+import { createHoursList, days } from '../../../app/utils/constants';
 import { textForKey } from '../../../utils/localization';
 import SwitchButton from '../SwitchButton';
 

@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../components/icons/iconAvatar';
 import LoadingButton from '../../components/common/LoadingButton';
-import { JwtRegex, PasswordRegex, Role } from '../../utils/constants';
+import { JwtRegex, PasswordRegex, Role } from '../../app/utils/constants';
 import {
   generateReducerActions,
   uploadFileToAWS,

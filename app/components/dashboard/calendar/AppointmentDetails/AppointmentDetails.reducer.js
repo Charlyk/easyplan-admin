@@ -1,5 +1,5 @@
 import { generateReducerActions } from "../../../../../utils/helperFuncs";
-import { Statuses } from "../../../../../utils/constants";
+import { Statuses } from "../../../../utils/constants";
 
 export const initialState = {
   details: null,

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { Role } from "../../../utils/constants";
+import { Role } from "../../../app/utils/constants";
 import { Typography } from "@material-ui/core";
 import styles from '../../../styles/auth/ClinicItem.module.scss'
 import IconNext from "../../icons/iconNext";

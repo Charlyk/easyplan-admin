@@ -10,7 +10,7 @@ import { generateReducerActions } from "../../../utils/helperFuncs";
 import cloneDeep from "lodash/cloneDeep";
 import remove from "lodash/remove";
 import { textForKey } from "../../../utils/localization";
-import { Statuses } from "../../../utils/constants";
+import { Statuses } from "../../../app/utils/constants";
 import orderBy from "lodash/orderBy";
 import sortBy from "lodash/sortBy";
 

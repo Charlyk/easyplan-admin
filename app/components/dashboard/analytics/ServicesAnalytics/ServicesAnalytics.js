@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 
 import EasyDateRangePicker from '../../../../../components/common/EasyDateRangePicker';
 import { setPatientDetails } from '../../../../../redux/actions/actions';
-import { Role, ScheduleStatuses } from '../../../../../utils/constants';
+import { Role, ScheduleStatuses } from '../../../../utils/constants';
 import {
   handleRequestError,
   redirectToUrl,

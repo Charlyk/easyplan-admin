@@ -39,7 +39,7 @@ import DetailsRow from './DetailsRow';
 import styles from '../../../styles/CheckoutModal.module.scss';
 import ServicesList from './ServicesList';
 import axios from "axios";
-import { Role } from "../../../utils/constants";
+import { Role } from "../../../app/utils/constants";
 import { useRouter } from "next/router";
 
 const computeServicePrice = (services, exchangeRates) => {

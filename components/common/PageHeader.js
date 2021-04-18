@@ -19,7 +19,7 @@ import ActionsSheet from './ActionsSheet';
 import InvoicesButton from '../invoices/InvoicesButton';
 import styles from '../../styles/PageHeader.module.scss';
 import { isExchangeRatesUpdateRequiredSelector } from "../../redux/selectors/clinicSelector";
-import { Role } from "../../utils/constants";
+import { Role } from "../../app/utils/constants";
 
 const actions = [
   {

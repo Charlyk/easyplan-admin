@@ -11,7 +11,7 @@ import IconLiabilities from '../../../../../components/icons/iconLiabilities';
 import IconSuccess from '../../../../../components/icons/iconSuccess';
 import IconXPerson from '../../../../../components/icons/iconXPerson';
 import EasyDateRangePicker from '../../../../../components/common/EasyDateRangePicker';
-import { Role, Statuses } from '../../../../../utils/constants';
+import { Role, Statuses } from '../../../../utils/constants';
 import {
   generateReducerActions,
   handleRequestError,

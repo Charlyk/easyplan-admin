@@ -17,7 +17,7 @@ import {
   changeSelectedClinic,
   setCreateClinic,
 } from '../../../redux/actions/actions';
-import { EmailRegex } from '../../../utils/constants';
+import { EmailRegex } from '../../../app/utils/constants';
 import {
   uploadFileToAWS,
   urlToLambda,

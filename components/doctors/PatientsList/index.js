@@ -15,7 +15,7 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import { Statuses } from '../../../utils/constants';
+import { Statuses } from '../../../app/utils/constants';
 import { textForKey } from '../../../utils/localization';
 import Link from "next/link";
 import styles from '../../../styles/patient/PatientsList.module.scss';

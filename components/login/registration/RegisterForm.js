@@ -8,7 +8,7 @@ import PhoneInput from 'react-phone-input-2';
 
 import IconAvatar from '../../icons/iconAvatar';
 import LoadingButton from '../../common/LoadingButton';
-import { EmailRegex, PasswordRegex } from '../../../utils/constants';
+import { EmailRegex, PasswordRegex } from '../../../app/utils/constants';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/auth/RegisterForm.module.scss';
 import clsx from "clsx";

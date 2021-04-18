@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import styles from '../../../styles/UserDetailsModal.module.scss';
 import IconClose from '../../icons/iconClose';
 import IconSuccess from '../../icons/iconSuccess';
-import { Role } from '../../../utils/constants';
+import { Role } from '../../../app/utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import LeftSideModal from '../../common/LeftSideModal';

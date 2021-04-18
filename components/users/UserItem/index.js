@@ -13,7 +13,7 @@ import IconEmail from '../../icons/iconEmail';
 import IconPhone from '../../icons/iconPhone';
 import IconRefresh from '../../icons/iconRefresh';
 import LoadingButton from '../../common/LoadingButton';
-import { Role } from '../../../utils/constants';
+import { Role } from '../../../app/utils/constants';
 import { urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/UserItem.module.scss';

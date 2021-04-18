@@ -4,7 +4,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import LoadingButton from '../../components/common/LoadingButton';
-import { JwtRegex, PasswordRegex } from '../../utils/constants';
+import { JwtRegex, PasswordRegex } from '../../app/utils/constants';
 import { textForKey } from '../../utils/localization';
 import axios from "axios";
 import clsx from "clsx";

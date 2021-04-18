@@ -14,7 +14,7 @@ import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
 } from '../../../../../../redux/selectors/clinicSelector';
-import { Role } from '../../../../../../utils/constants';
+import { Role } from '../../../../../utils/constants';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyTab from '../../../../../../components/common/EasyTab';
 import LoadingButton from '../../../../../../components/common/LoadingButton';

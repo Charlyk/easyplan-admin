@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import ConfirmationModal from '../../app/components/common/ConfirmationModal';
 import InviteUserModal from '../../components/common/InviteUserModal';
 import UserDetailsModal from '../../components/users/UserDetailsModal';
-import { Role } from '../../utils/constants';
+import { Role } from '../../app/utils/constants';
 import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import UserItem from '../../components/users/UserItem';

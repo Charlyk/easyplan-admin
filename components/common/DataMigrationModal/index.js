@@ -10,7 +10,7 @@ import { usePubNub } from 'pubnub-react';
 import { Modal } from 'react-bootstrap';
 
 import IconClose from '../../icons/iconClose';
-import { env } from '../../../utils/constants';
+import { env } from '../../../app/utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import AuthenticationStep from './AuthenticationStep';

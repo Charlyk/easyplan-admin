@@ -4,7 +4,7 @@ import moment from "moment-timezone";
 import CalendarMonthView from "../../../app/components/dashboard/calendar/CalendarMonthView";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
-import { Role } from "../../../utils/constants";
+import { Role } from "../../../app/utils/constants";
 
 export default function Month({ currentUser, currentClinic, doctorId, date, doctors }) {
   const viewDate = moment(date).toDate();
