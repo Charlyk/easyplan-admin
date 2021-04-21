@@ -222,6 +222,7 @@ export const reducer = (state, action) => {
         startTime: scheduleStartDate.format('HH:mm'),
         endTime: scheduleEndDate.format('HH:mm'),
         appointmentStatus: schedule.scheduleStatus,
+        isUrgent: schedule.isUrgent,
         isPatientValid: true,
         isDoctorValid: true,
         isServiceValid: true,

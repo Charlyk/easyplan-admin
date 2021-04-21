@@ -28,10 +28,6 @@ export default ({ schedule, scheduleId, patientId, patient }) => {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    console.log(patient, scheduleId, patientId);
-  }, [])
-
   const confirmSchedule = async () => {
     setIsConfirming(true);
     try {
