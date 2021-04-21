@@ -13,11 +13,11 @@ import {
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconMinus from '../../../icons/iconMinus';
-import IconPlus from '../../../icons/iconPlus';
-import IconTrash from '../../../icons/iconTrash';
-import { adjustValueToNumber } from '../../../../utils/helperFuncs';
-import styles from '../../../../styles/InvoiceServiceRow.module.scss';
+import IconMinus from '../../../../../components/icons/iconMinus';
+import IconPlus from '../../../../../components/icons/iconPlus';
+import IconTrash from '../../../../../components/icons/iconTrash';
+import { adjustValueToNumber } from '../../../../../utils/helperFuncs';
+import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelete }) => {
   const [currency, setCurrency] = useState(service.currency);

@@ -12,9 +12,9 @@ import sortBy from 'lodash/sortBy';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import ServiceRow from '../ServiceRow';
-import styles from '../../../../styles/InvoiceServicesList.module.scss'
+import styles from './ServicesList.module.scss'
 
 const filterOptions = createFilterOptions({
   matchFrom: 'any',
@@ -22,20 +22,22 @@ const filterOptions = createFilterOptions({
   ignoreCase: true,
 });
 
-const ServicesList = ({
-  isDebt,
-  currencies,
-  canAddService,
-  services,
-  availableServices,
-  onServiceChanged,
-  onServiceSelected,
-  onServiceDeleted,
-}) => {
+const ServicesList = (
+  {
+    isDebt,
+    currencies,
+    canAddService,
+    services,
+    availableServices,
+    onServiceChanged,
+    onServiceSelected,
+    onServiceDeleted,
+  }
+) => {
   const [autocompleteClearKey, setAutocompleteClearKey] = useState(false);
   const autocompleteInput = params => {
     return (
-      <TextField {...params} placeholder={textForKey('Select services')} />
+      <TextField {...params} placeholder={textForKey('Select services')}/>
     );
   };
 

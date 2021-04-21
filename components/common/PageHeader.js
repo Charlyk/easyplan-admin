@@ -16,7 +16,7 @@ import { setPaymentModal } from '../../redux/actions/actions';
 import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
 import { textForKey } from '../../utils/localization';
 import ActionsSheet from './ActionsSheet';
-import InvoicesButton from '../invoices/InvoicesButton';
+import InvoicesButton from '../../app/components/dashboard/InvoicesButton';
 import styles from '../../styles/PageHeader.module.scss';
 import { isExchangeRatesUpdateRequiredSelector } from "../../redux/selectors/clinicSelector";
 import { Role } from "../../app/utils/constants";
