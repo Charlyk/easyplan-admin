@@ -29,7 +29,7 @@ import { isExchangeRateModalOpenSelector } from "../../redux/selectors/exchangeR
 import { setIsExchangeRatesModalOpen } from "../../redux/actions/exchangeRatesActions";
 import { useRouter } from "next/router";
 import { handleRemoteMessage } from "../../utils/pubnubUtils";
-import CheckoutModal from "../invoices/CheckoutModal";
+import CheckoutModal from "../../app/components/dashboard/CheckoutModal";
 import { setClinic } from "../../redux/actions/clinicActions";
 import { environment, isDev } from "../../eas.config";
 import { Typography } from "@material-ui/core";

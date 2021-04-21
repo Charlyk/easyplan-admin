@@ -232,15 +232,20 @@ export const formattedAmount = (amount, currency) => {
 };
 
 export const adjustValueToNumber = (newValue, maxAmount) => {
-  if (newValue.length === 0) {
-    newValue = '0';
+  if (newValue == null) {
+    newValue = 0
   }
+  if (typeof newValue === 'string') {
+    if (newValue.length === 0) {
+      newValue = '0';
+    }
 
-  if (newValue.length > 1 && newValue[0] === '0') {
-    newValue = newValue.replace(/^./, '');
+    if (newValue.length > 1 && newValue[0] === '0') {
+      newValue = newValue.replace(/^./, '');
+    }
+
+    newValue = parseFloat(newValue);
   }
-
-  newValue = parseFloat(newValue);
 
   if (newValue < 0) {
     newValue = 0;

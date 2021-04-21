@@ -11,22 +11,24 @@ import { Autocomplete } from '@material-ui/lab';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../../utils/localization';
-import styles from '../../../../styles/DetailsRow.module.scss';
+import { textForKey } from '../../../../../utils/localization';
+import styles from './DetailsRow.module.scss';
 
-const DetailsRow = ({
-  title,
-  value,
-  isValueInput,
-  options,
-  valuePlaceholder,
-  clickableValue,
-  isLoading,
-  searchable,
-  onValueClick,
-  onSearch,
-  onValueSelected,
-}) => {
+const DetailsRow = (
+  {
+    title,
+    value,
+    isValueInput,
+    options,
+    valuePlaceholder,
+    clickableValue,
+    isLoading,
+    searchable,
+    onValueClick,
+    onSearch,
+    onValueSelected,
+  }
+) => {
   const handleValueClick = () => {
     if (!clickableValue) {
       return;

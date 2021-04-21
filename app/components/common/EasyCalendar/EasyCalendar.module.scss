@@ -10,6 +10,7 @@
     width: 100%;
     height: calc(100% - 1.8rem);
     display: flex;
+    overflow-x: hidden;
     overflow-y: scroll;
     position: relative;
   }
