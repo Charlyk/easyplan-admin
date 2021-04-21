@@ -86,6 +86,12 @@ const CalendarWeekView = (
     onCreateSchedule(doctor, startHour, endHour, dayDate);
   }
 
+  const handleScheduleClick = (schedule) => {
+    if (schedule.type === 'Schedule') {
+      onScheduleSelect(schedule);
+    }
+  };
+
   const mappedWeek = week.map((date) => {
     return {
       id: moment(date).format('YYYY-MM-DD'),
@@ -104,7 +110,7 @@ const CalendarWeekView = (
         schedules={schedules}
         columns={mappedWeek}
         animatedStatuses={['WaitingForPatient']}
-        onScheduleSelected={onScheduleSelect}
+        onScheduleSelected={handleScheduleClick}
         onAddSchedule={handleCreateSchedule}
         onHeaderItemClick={handleDayClick}
       />
