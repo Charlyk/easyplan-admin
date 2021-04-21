@@ -714,6 +714,7 @@ AddAppointmentModal.propTypes = {
     serviceColor: PropTypes.string,
     serviceDuration: PropTypes.string,
     dateAndTime: PropTypes.string,
+    isUrgent: PropTypes.string,
     status: PropTypes.string,
     note: PropTypes.string,
   }),

@@ -59,7 +59,6 @@ const PatientPhoneRecords = ({ patient }) => {
       const response = await getPatientPhoneRecords(patient.id, page);
       const { data } = response;
       setRecords(data)
-      console.log(data)
     } catch (error) {
       toast.error(error.message);
     } finally {

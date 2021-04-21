@@ -270,7 +270,9 @@ const AppointmentDetails = (
     <div
       className={clsx(
         styles['appointment-details-root'],
-        { [styles.urgent]: schedule.isUrgent },
+        {
+          [styles.urgent]: details?.isUrgent || details?.urgent
+        },
       )}
     >
       <SingleInputModal
@@ -555,6 +557,7 @@ AppointmentDetails.propTypes = {
     scheduleStatus: PropTypes.string,
     canceledReason: PropTypes.string,
     isUrgent: PropTypes.bool,
+    urgent: PropTypes.bool,
   }),
 };
 

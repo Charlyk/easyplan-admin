@@ -93,7 +93,7 @@ const Schedule = (
         styles.dayViewSchedule,
         {
           [styles.upcoming]: shouldAnimate,
-          [styles.urgent]: schedule.isUrgent,
+          [styles.urgent]: schedule.isUrgent || schedule.urgent,
         },
       )}
       onClick={handleScheduleClick}
@@ -198,6 +198,7 @@ Schedule.propTypes = {
     serviceColor: PropTypes.string,
     serviceName: PropTypes.string,
     isUrgent: PropTypes.bool,
+    urgent: PropTypes.bool,
     offset: PropTypes.number,
     type: PropTypes.oneOf(['Schedule', 'Pause']),
     comment: PropTypes.string,

@@ -62,6 +62,7 @@ EasyCalendar.propTypes = {
           startTime: PropTypes.string,
           endTime: PropTypes.string,
           isUrgent: PropTypes.bool,
+          urgent: PropTypes.bool,
           patient: PropTypes.shape({
             id: PropTypes.number,
             fullName: PropTypes.string,
