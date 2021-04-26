@@ -14,6 +14,8 @@ export default function ColumnsWrapper(
     onScheduleSelected
   }
 ) {
+  const isSingleMode = columns.length === 1;
+
   function getSchedulesForColumn(column) {
     return schedules.find((item) => item.id === column.id)?.schedules ?? [];
   }
@@ -23,6 +25,7 @@ export default function ColumnsWrapper(
       {columns.map((column) => (
         <Column
           key={column.id}
+          isSingleMode={isSingleMode}
           animatedStatuses={animatedStatuses}
           schedules={getSchedulesForColumn(column)}
           hours={hours}

@@ -15,6 +15,7 @@ const Column = (
     hours,
     column,
     animatedStatuses,
+    isSingleMode,
     hideCreateIndicator,
     onAddSchedule,
     onScheduleSelected
@@ -114,6 +115,7 @@ Column.propTypes = {
   disabled: PropTypes.bool,
   hideCreateIndicator: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),
+  isSingleMode: PropTypes.bool,
   column: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     doctorId: PropTypes.number,
