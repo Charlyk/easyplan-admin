@@ -157,6 +157,10 @@
   position: relative;
   overflow-y: scroll;
 
+  .fullWidth {
+    width: 100% !important;
+  }
+
   .main-data-container {
     display: flex;
     flex-direction: column;
@@ -165,10 +169,6 @@
     position: relative;
     height: fit-content;
     padding-bottom: 1rem;
-
-    .fullWidth {
-      width: 100% !important;
-    }
 
     .block-title {
       margin: 8px 16px .5rem;
