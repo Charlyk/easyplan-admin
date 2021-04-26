@@ -111,9 +111,7 @@ const General = (
     <div className={styles['general-statistics']} id='general-statistics'>
       <div
         className={
-          clsx(styles['main-data-container'], {
-            [styles.fullWidth]: !isAdmin
-          })
+          clsx(styles['main-data-container'], !isAdmin && styles.fullWidth)
         }
       >
         <StatisticFilter onUpdate={handleFilterSubmit}>
