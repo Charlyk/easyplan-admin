@@ -109,7 +109,13 @@ const General = (
 
   return (
     <div className={styles['general-statistics']} id='general-statistics'>
-      <div className={styles['main-data-container']}>
+      <div
+        className={
+          clsx(styles['main-data-container'], {
+            [styles.fullWidth]: !isAdmin
+          })
+        }
+      >
         <StatisticFilter onUpdate={handleFilterSubmit}>
           <Form.Group>
             <Form.Label>{textForKey('Doctor')}</Form.Label>
