@@ -298,6 +298,10 @@
     border-radius: 4px;
     flex: 1;
 
+    .hidden {
+      visibility: hidden;
+    }
+
     .items-wrapper {
       display: flex;
       flex-direction: column;

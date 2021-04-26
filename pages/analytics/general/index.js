@@ -31,6 +31,7 @@ export default function General(
     >
       <GeneralAnalytics
         query={query}
+        currentUser={currentUser}
         currentClinic={currentClinic}
         financeStats={financeStats}
         scheduleStats={scheduleStats}
