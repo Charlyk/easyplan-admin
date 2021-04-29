@@ -16,6 +16,9 @@ const ScheduleItem = ({ schedule, onSelected }) => {
   }, [schedule.scheduleStatus]);
 
   const handleScheduleSelected = () => {
+    if (isPause) {
+      return;
+    }
     onSelected(schedule);
   }
 
