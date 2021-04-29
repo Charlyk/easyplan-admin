@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 
 import { CircularProgress } from '@material-ui/core';
 import sum from 'lodash/sum';
@@ -265,6 +265,15 @@ const DoctorPatientDetails = (
     }
   };
 
+  const formattedTime = useMemo(() => {
+    if (schedule == null) {
+      return '';
+    }
+    const startTime = moment(schedule.startTime).format('DD.MM.YYYY HH:mm');
+    const endTime = moment(schedule.endTime).format('HH:mm')
+    return `${startTime} - ${endTime}`;
+  }, [schedule]);
+
   return (
     <DoctorsMain currentUser={currentUser} currentClinic={currentClinic} authToken={authToken}>
       <div className={styles['doctor-patient-root']}>
@@ -295,9 +304,7 @@ const DoctorPatientDetails = (
               <div className={styles['patient-info-row']}>
                 <span className={styles['patient-info-title']}>{textForKey('Date')}:</span>
                 <span className={styles['patient-info-value']}>
-                {schedule
-                  ? moment(schedule.startTime).format('DD MMM YYYY HH:mm')
-                  : ''}
+                {formattedTime}
               </span>
               </div>
               <div className={styles['patient-info-row']}>
