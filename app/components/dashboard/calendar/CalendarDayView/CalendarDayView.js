@@ -9,9 +9,13 @@ import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from "react-toastify";
-import { deleteScheduleSelector, updateScheduleSelector } from '../../../../../redux/selectors/scheduleSelector';
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector
+} from '../../../../../redux/selectors/scheduleSelector';
 import { wrapper } from "../../../../../store";
 import { fetchSchedulesHours } from "../../../../../middleware/api/schedules";
+import isOutOfBounds from "../../../../utils/isOutOfBounds";
 import EasyCalendar from "../../../common/EasyCalendar";
 import AddPauseModal from '../modals/AddPauseModal';
 import { actions, reducer, initialState } from './CalendarDayView.reducer'
@@ -59,17 +63,6 @@ const CalendarDayView = (
     localDispatch(actions.setHours(dayHours));
   }, [dayHours]);
 
-  const lastHourDate = useMemo(() => {
-    const lastHour = hours[hours.length - 1];
-    if (lastHour == null) {
-      return moment();
-    }
-    const [maxHour, maxMinute] = lastHour.split(':');
-    return moment(viewDate)
-      .set('hour', parseInt(maxHour))
-      .set('minute', parseInt(maxMinute));
-  }, [hours, viewDate]);
-
   async function handleScheduleUpdate() {
     if (updateSchedule == null) {
       return;
@@ -81,7 +74,7 @@ const CalendarDayView = (
       return;
     }
 
-    if (isOutOfBounds(updateSchedule.endTime)) {
+    if (isOutOfBounds(updateSchedule.endTime, hours, viewDate)) {
       await fetchDayHours(scheduleDate.toDate());
     }
 
@@ -103,14 +96,6 @@ const CalendarDayView = (
     }
 
     localDispatch(actions.deleteSchedule(deleteSchedule))
-  }
-
-  const isOutOfBounds = (time) => {
-    if (hours.length === 0) {
-      return true;
-    }
-    const scheduleTime = moment(time);
-    return scheduleTime.isAfter(lastHourDate);
   }
 
   const fetchDayHours = async (date) => {
