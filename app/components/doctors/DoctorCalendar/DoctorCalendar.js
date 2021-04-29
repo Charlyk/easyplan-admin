@@ -1,15 +1,20 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer } from "react";
 import PropTypes from 'prop-types';
 import { useRouter } from "next/router";
 import moment from "moment-timezone";
 import isEqual from "lodash/isEqual";
+import { useSelector } from "react-redux";
+
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector
+} from "../../../../redux/selectors/scheduleSelector";
 import PatientsFilter from "../../../../components/doctors/PatientsFilter";
 import { getCurrentWeek } from "../../../../utils/helperFuncs";
 import EasyCalendar from "../../common/EasyCalendar";
+import DoctorsCalendarDay from "../DoctorsCalendarDay";
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 import styles from './DoctorCalendar.module.scss';
-import { useSelector } from "react-redux";
-import { deleteScheduleSelector, updateScheduleSelector } from "../../../../redux/selectors/scheduleSelector";
 
 const DoctorCalendar = (
   {
@@ -143,8 +148,8 @@ const DoctorCalendar = (
     await handleDateChange(date, 'day');
   }
 
-  const mappedWeek = viewMode === 'week' ? (
-    week.map((date) => {
+  const mappedWeek = useMemo(() => {
+    return week.map((date) => {
       return {
         id: moment(date).format('YYYY-MM-DD'),
         doctorId: currentUser.id,
@@ -152,16 +157,8 @@ const DoctorCalendar = (
         disabled: false,
         date: date,
       };
-    })
-  ) : (
-    [{
-      id: moment(viewDate).format('YYYY-MM-DD'),
-      doctorId: currentUser.id,
-      name: moment(viewDate).format('DD MMMM YYYY'),
-      disabled: false,
-      date: viewDate,
-    }]
-  )
+    });
+  }, [viewMode]);
 
   return (
     <div className={styles.doctorCalendarRoot}>
@@ -178,16 +175,25 @@ const DoctorCalendar = (
         />
       </div>
       <div className={styles.dataWrapper}>
-        <EasyCalendar
-          hideCreateIndicator
-          dayHours={dayHours}
-          columns={mappedWeek}
-          schedules={schedules}
-          viewDate={viewDate}
-          animatedStatuses={['OnSite']}
-          onScheduleSelected={handleScheduleSelected}
-          onHeaderItemClick={handleDateClick}
-        />
+        {viewMode === 'week' ? (
+          <EasyCalendar
+            hideCreateIndicator
+            dayHours={dayHours}
+            columns={mappedWeek}
+            schedules={schedules}
+            viewDate={viewDate}
+            animatedStatuses={['OnSite']}
+            onScheduleSelected={handleScheduleSelected}
+            onHeaderItemClick={handleDateClick}
+          />
+        ) : (
+          <DoctorsCalendarDay
+            currentUser={currentUser}
+            viewDate={viewDate}
+            schedules={{ hours: dayHours, schedules }}
+            onScheduleSelected={handleScheduleSelected}
+          />
+        )}
       </div>
     </div>
   )

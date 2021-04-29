@@ -157,6 +157,10 @@
   position: relative;
   overflow-y: scroll;
 
+  .fullWidth {
+    width: 100% !important;
+  }
+
   .main-data-container {
     display: flex;
     flex-direction: column;
@@ -306,6 +310,10 @@
       box-shadow: 0 21px 60px -10px rgba(239, 242, 251, 0.8);
       width: 100%;
       align-items: center;
+
+      .hidden {
+        visibility: hidden;
+      }
     }
 
     .income-statistic-item {

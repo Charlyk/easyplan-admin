@@ -46,7 +46,7 @@ const menuItems = [
       {
         text: textForKey('Doctors'),
         href: '/analytics/doctors',
-        roles: [Role.admin, Role.manager],
+        roles: [Role.admin],
       },
       {
         text: textForKey('Activity logs'),
