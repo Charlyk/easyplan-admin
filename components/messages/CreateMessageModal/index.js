@@ -80,8 +80,8 @@ const tags = [
     id: '{{confirmationLink}}',
     label: textForKey('Confirmation link'),
     availableFor: ['ScheduleNotification'],
-    length: 23,
-    placeholder: '#######################',
+    length: 25,
+    placeholder: '#########################',
   },
   {
     id: '{{clinicName}}',
