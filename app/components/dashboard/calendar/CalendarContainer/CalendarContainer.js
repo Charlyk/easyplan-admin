@@ -124,7 +124,11 @@ const CalendarContainer = (
     dispatch(
       setAppointmentModal({
         open: true,
-        doctor: doctor ?? selectedDoctor,
+        doctor: viewMode === 'day'
+          ? doctor
+          : viewMode !== 'day'
+            ? selectedDoctor
+            : null,
         startHour,
         endHour,
         date: selectedDate ?? viewDate,
