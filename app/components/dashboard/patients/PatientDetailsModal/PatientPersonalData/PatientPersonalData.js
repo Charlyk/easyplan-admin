@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from "react-toastify";
-import axios from "axios";
 
 import IconSuccess from '../../../../../../components/icons/iconSuccess';
 import { EmailRegex } from '../../../../../utils/constants';

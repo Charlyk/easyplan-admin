@@ -8,7 +8,7 @@ import { getCurrentUser } from "../../middleware/api/auth";
 import { Box, CircularProgress, Typography } from "@material-ui/core";
 import { textForKey } from "../../utils/localization";
 
-export default () => {
+const Redirect = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -54,3 +54,5 @@ export const getServerSideProps = async ({ res, query }) => {
     return { props: {} }
   }
 }
+
+export default Redirect;
