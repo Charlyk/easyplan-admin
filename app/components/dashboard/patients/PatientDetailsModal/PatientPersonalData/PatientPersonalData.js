@@ -94,7 +94,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       lastName,
       email,
       phoneNumber,
-      birthday,
+      birthday: moment(birthday).format('YYYY-MM-DD'),
       euroDebt,
       discount: discount ? parseInt(discount) : 0,
     };
