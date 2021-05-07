@@ -7,15 +7,15 @@ import { Form } from 'react-bootstrap';
 import styles from '../../../styles/ToothView.module.scss';
 
 const ToothView = ({
-  readOnly,
-  icon,
-  toothId,
-  direction,
-  services,
-  selectedServices,
-  completedServices,
-  onServicesChange,
-}) => {
+                     readOnly,
+                     icon,
+                     toothId,
+                     direction,
+                     services,
+                     selectedServices,
+                     completedServices,
+                     onServicesChange,
+                   }) => {
   const anchorEl = useRef(null);
   const infoAnchor = useRef(null);
   const [showInfo, setShowInfo] = useState(false);
@@ -113,9 +113,16 @@ const ToothView = ({
     </Popper>
   );
 
+  const pendingServices = readOnly
+    ? selectedServices.filter((item) =>
+      item.toothId === toothId && !item.completed
+    )
+    : []
+
   const infoServices = [
     ...toothServices.filter((item) => item.selected),
     ...completedServices.filter((item) => item.toothId === toothId),
+    ...pendingServices,
   ];
 
   const infoPopper =
