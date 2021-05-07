@@ -101,7 +101,7 @@ const ServicesAnalytics = (
   }
 
   const handleFilterSubmit = () => {
-    handleFilterUpdated();
+    handleFilterUpdated(0);
   };
 
   const handleDatePickerOpen = () => {
