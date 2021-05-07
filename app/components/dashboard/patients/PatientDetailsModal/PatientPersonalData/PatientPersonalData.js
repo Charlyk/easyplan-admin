@@ -99,8 +99,6 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       discount: discount ? parseInt(discount) : 0,
     };
 
-    console.log(requestBody);
-
     try {
       await updatePatient(patient.id, requestBody);
       await onPatientUpdated(true);
