@@ -521,6 +521,7 @@ export default {
     'redirecting to clinic': 'Redirecting to clinic',
     'day schedules': 'Day schedules',
     'week schedules': 'Week schedules',
+    fired: 'Fired',
   },
   ro: {
     analytics: 'Analitică',
@@ -1050,6 +1051,7 @@ export default {
     'redirecting to clinic': 'Vă redirecționăm la clinică',
     'day schedules': 'Programările pentru o zi',
     'week schedules': 'Programările pentru o săptămână',
+    fired: 'Concediat',
   },
   ru: {
     analytics: 'Analytics',
@@ -1570,5 +1572,6 @@ export default {
     'redirecting to clinic': 'Redirecting to clinic',
     'day schedules': 'Day schedules',
     'week schedules': 'Week schedules',
+    fired: 'Fired',
   },
 };

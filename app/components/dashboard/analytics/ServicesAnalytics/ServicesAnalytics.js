@@ -221,7 +221,9 @@ const ServicesAnalytics = (
               <option
                 key={doctor.id}
                 value={doctor.id}
-              >{`${doctor.firstName} ${doctor.lastName}`}</option>
+              >
+                {`${doctor.firstName} ${doctor.lastName}`} {doctor.isHidden ? `(${textForKey('Fired')})` : ''}
+              </option>
             ))}
           </Form.Control>
         </Form.Group>

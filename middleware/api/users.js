@@ -26,7 +26,7 @@ export async function inviteUser(body, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function restoreUser(userId, headers = null) {
-  return del(`/api/users/${userId}/restore`, headers);
+  return put(`/api/users/${userId}/restore`, headers, {});
 }
 
 /**
