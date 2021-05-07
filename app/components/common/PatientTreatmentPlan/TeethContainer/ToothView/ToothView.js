@@ -4,18 +4,20 @@ import { Fade, Paper, Popper, ClickAwayListener } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
-import styles from '../../../styles/ToothView.module.scss';
+import styles from './ToothView.module.scss';
 
-const ToothView = ({
-                     readOnly,
-                     icon,
-                     toothId,
-                     direction,
-                     services,
-                     selectedServices,
-                     completedServices,
-                     onServicesChange,
-                   }) => {
+const ToothView = (
+  {
+    readOnly,
+    icon,
+    toothId,
+    direction,
+    services,
+    selectedServices,
+    completedServices,
+    onServicesChange,
+  }
+) => {
   const anchorEl = useRef(null);
   const infoAnchor = useRef(null);
   const [showInfo, setShowInfo] = useState(false);

@@ -1,9 +1,9 @@
 import React from "react";
 
 import PropTypes from 'prop-types';
-import { teeth } from "../../../../app/utils/constants";
-import ToothView from "../../ToothView";
-import styles from "../../../../styles/TeethBlock.module.scss";
+import { teeth } from "../../../../../utils/constants";
+import ToothView from "../ToothView";
+import styles from "./TeethBlock.module.scss";
 
 const TeethBlock = (
   {

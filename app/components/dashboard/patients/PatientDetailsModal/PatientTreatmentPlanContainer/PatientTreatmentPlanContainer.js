@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import PatientTreatmentPlan from "../../../../../../components/doctors/PatientTreatmentPlan";
+import PatientTreatmentPlan from "../../../../common/PatientTreatmentPlan";
 import { textForKey } from "../../../../../../utils/localization";
 import { CircularProgress, Typography } from "@material-ui/core";
 import { fetchDoctorScheduleDetails } from "../../../../../../middleware/api/schedules";

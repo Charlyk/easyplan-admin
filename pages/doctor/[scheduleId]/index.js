@@ -22,7 +22,7 @@ import { useRouter } from "next/router";
 import DoctorsMain from "../../../components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
-import PatientTreatmentPlan from "../../../components/doctors/PatientTreatmentPlan";
+import PatientTreatmentPlan from "../../../app/components/common/PatientTreatmentPlan";
 import { parseCookies } from "../../../utils";
 
 const TabId = {

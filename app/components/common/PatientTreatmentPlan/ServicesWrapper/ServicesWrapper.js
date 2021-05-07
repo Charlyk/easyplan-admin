@@ -3,13 +3,14 @@ import React, { useRef } from "react";
 import PropTypes from 'prop-types';
 import { Form } from "react-bootstrap";
 import { Menu, MenuItem, Typeahead } from "react-bootstrap-typeahead";
-import { textForKey } from "../../../utils/localization";
-import { getServiceName } from "../../../utils/helperFuncs";
-import FinalServiceItem from "../FinalServiceItem";
-import LoadingButton from "../../common/LoadingButton";
-import styles from '../../../styles/ServicesWrapper.module.scss';
 import { Paper } from "@material-ui/core";
 import clsx from "clsx";
+
+import { textForKey } from "../../../../../utils/localization";
+import { getServiceName } from "../../../../../utils/helperFuncs";
+import FinalServiceItem from "../../../../../components/doctors/FinalServiceItem";
+import LoadingButton from "../../../../../components/common/LoadingButton";
+import styles from './ServicesWrapper.module.scss';
 
 const ServicesWrapper = (
   {
