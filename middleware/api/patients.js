@@ -97,3 +97,22 @@ export async function getPatientPhoneRecords(patientId, page, headers = null) {
   const queryString = new URLSearchParams({ patientId, page }).toString();
   return get(`/api/patients/phone-records?${queryString}`, headers)
 }
+
+/**
+ * Update patient personal data
+ * @param {string|number} patientId
+ * @param {{
+ *   firstName: string,
+ *   lastName: string,
+ *   email: string|null,
+ *   phoneNumber: string,
+ *   birthday: string|null,
+ *   euroDebt: number,
+ *   discount: number,
+ * }} requestBody
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function updatePatient(patientId, requestBody, headers = null) {
+  return put(`/api/patients/${patientId}`, headers, requestBody)
+}

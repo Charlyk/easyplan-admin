@@ -16,6 +16,7 @@ import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
 import LoadingButton from '../../../../../../components/common/LoadingButton';
 import { reducer, initialState, actions } from './PatientPersonalData.reducer';
 import styles from './PatientPersonalData.module.scss'
+import { updatePatient } from "../../../../../../middleware/api/patients";
 
 const PatientPersonalData = ({ patient, onPatientUpdated }) => {
   const datePickerRef = useRef();
@@ -99,9 +100,12 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       discount: discount ? parseInt(discount) : 0,
     };
 
+    console.log(requestBody);
+
     try {
-      await axios.put(`/api/patients/${patient.id}`, requestBody);
+      await updatePatient(patient.id, requestBody);
       await onPatientUpdated(true);
+      toast.success(textForKey('Saved successfully'))
     } catch (error) {
       toast.error(error.message);
     } finally {
