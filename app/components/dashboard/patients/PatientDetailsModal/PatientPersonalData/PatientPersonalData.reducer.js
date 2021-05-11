@@ -11,6 +11,12 @@ export const initialState = {
   phoneNumber: '',
   discount: 0,
   euroDebt: 0,
+  country: {
+    countryCode: 'md',
+    dialCode: '373',
+    format: '+... ... ... ... ... ..',
+    name: 'Moldova'
+  }
 };
 
 const reducerTypes = {
@@ -41,8 +47,8 @@ export const reducer = (state, action) => {
     case reducerTypes.setEmail:
       return { ...state, email: action.payload };
     case reducerTypes.setPhoneNumber: {
-      const { isPhoneValid, newNumber } = action.payload;
-      return { ...state, phoneNumber: newNumber, isPhoneValid };
+      const { isPhoneValid, newNumber, country } = action.payload;
+      return { ...state, phoneNumber: newNumber, isPhoneValid, country };
     }
     case reducerTypes.setDiscount:
       return { ...state, discount: action.payload };

@@ -3,6 +3,7 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import startsWith from 'lodash/startsWith';
 import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from "react-toastify";
@@ -13,9 +14,9 @@ import { adjustValueToNumber } from '../../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
 import LoadingButton from '../../../../../../components/common/LoadingButton';
-import { reducer, initialState, actions } from './PatientPersonalData.reducer';
-import styles from './PatientPersonalData.module.scss'
+import { actions, initialState, reducer } from './PatientPersonalData.reducer';
 import { updatePatient } from "../../../../../../middleware/api/patients";
+import styles from './PatientPersonalData.module.scss'
 
 const PatientPersonalData = ({ patient, onPatientUpdated }) => {
   const datePickerRef = useRef();
@@ -31,6 +32,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       isPhoneValid,
       discount,
       euroDebt,
+      country,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -65,12 +67,12 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
     }
   };
 
-  const handlePhoneChange = (value, data, event) => {
+  const handlePhoneChange = (value, country, event) => {
     const newNumber = `+${value}`;
     const isPhoneValid = !event.target?.classList.value.includes(
       'invalid-number',
     );
-    localDispatch(actions.setPhoneNumber({ newNumber, isPhoneValid }));
+    localDispatch(actions.setPhoneNumber({ newNumber, isPhoneValid, country }));
   };
 
   const handleBirthdayChange = (newDate) => {
@@ -206,14 +208,15 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
               value={phoneNumber}
               alwaysDefaultMask
               countryCodeEditable={false}
-              country='md'
-              placeholder='079123456'
+              country={country.countryCode}
+              placeholder={country.format}
               isValid={(inputNumber, country) => {
-                const phoneNumber = inputNumber.replace(
-                  `${country.dialCode}`,
-                  '',
+                const phone = inputNumber.replace(country.dialCode, '');
+                return (
+                  (startsWith(country.dialCode, inputNumber) ||
+                    startsWith(inputNumber, country.dialCode)) &&
+                  phone.length > 3
                 );
-                return phoneNumber.length === 0 || phoneNumber.length === 8;
               }}
             />
           </InputGroup>
