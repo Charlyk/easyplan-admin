@@ -94,10 +94,13 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       lastName,
       email,
       phoneNumber,
-      birthday: moment(birthday).format('YYYY-MM-DD'),
       euroDebt,
       discount: discount ? parseInt(discount) : 0,
     };
+
+    if (birthday) {
+      requestBody.birthday = moment(birthday).format('YYYY-MM-DD');
+    }
 
     try {
       await updatePatient(patient.id, requestBody);
