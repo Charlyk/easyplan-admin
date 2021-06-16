@@ -1,4 +1,4 @@
-import { generateReducerActions } from "../../../../utils/helperFuncs";
+import generateReducerActions from "../../../utils/generateReducerActions";
 
 export const initialState = {
   schedules: [],

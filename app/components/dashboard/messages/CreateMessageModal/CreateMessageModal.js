@@ -7,192 +7,28 @@ import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import EasyDatePicker from '../../common/EasyDatePicker';
-import EasyPlanModal from '../../common/EasyPlanModal';
-import { generateReducerActions } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/CreateMessageModal.module.scss';
-import { createMessage, updateMessage } from "../../../middleware/api/messages";
-
-const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
-
-const messageTypeEnum = {
-  ScheduleNotification: 'ScheduleNotification',
-  BirthdayCongrats: 'BirthdayCongrats',
-  HolidayCongrats: 'HolidayCongrats',
-  PromotionalMessage: 'PromotionalMessage',
-  OnetimeMessage: 'OnetimeMessage',
-};
-
-const availableHours = [
-  '10:00',
-  '11:00',
-  '12:00',
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-  '18:00',
-];
-
-const tags = [
-  {
-    id: '{{patientFullName}}',
-    label: textForKey('Patient full name'),
-    availableFor: [
-      'ScheduleNotification',
-      'BirthdayCongrats',
-      'HolidayCongrats',
-      'PromotionalMessage',
-      'OnetimeMessage',
-    ],
-    length: 19,
-    placeholder: '###################',
-  },
-  {
-    id: '{{patientFirstName}}',
-    label: textForKey('Patient first name'),
-    availableFor: [
-      'ScheduleNotification',
-      'BirthdayCongrats',
-      'HolidayCongrats',
-      'PromotionalMessage',
-      'OnetimeMessage',
-    ],
-    length: 20,
-    placeholder: '####################',
-  },
-  {
-    id: '{{patientLastName}}',
-    label: textForKey('Patient last name'),
-    availableFor: [
-      'ScheduleNotification',
-      'BirthdayCongrats',
-      'HolidayCongrats',
-      'PromotionalMessage',
-      'OnetimeMessage',
-    ],
-    length: 19,
-    placeholder: '###################',
-  },
-  {
-    id: '{{confirmationLink}}',
-    label: textForKey('Confirmation link'),
-    availableFor: ['ScheduleNotification'],
-    length: 25,
-    placeholder: '#########################',
-  },
-  {
-    id: '{{clinicName}}',
-    label: textForKey('Clinic name'),
-    availableFor: ['ScheduleNotification'],
-    length: 14,
-    placeholder: '##############',
-  },
-  {
-    id: '{{scheduleHour}}',
-    label: textForKey('Schedule hour'),
-    availableFor: ['ScheduleNotification'],
-    length: 5,
-    placeholder: '#####',
-  },
-  {
-    id: '{{scheduleDate}}',
-    label: textForKey('Schedule date'),
-    availableFor: ['ScheduleNotification'],
-    length: 10,
-    placeholder: '##########',
-  },
-];
-
-const messageTypeDescription = {
-  ScheduleNotification: textForKey('schedulenotificationdesc'),
-  BirthdayCongrats: textForKey('birthdaycongratsdesc'),
-  HolidayCongrats: textForKey('holidaycongratsdesc'),
-  PromotionalMessage: textForKey('promotionalmessagedesc'),
-  OnetimeMessage: textForKey('onetimemessagedesc'),
-};
-
-const availableLanguages = ['ro', 'ru', 'en'];
-
-const initialState = {
-  isLoading: false,
-  language: 'ro',
-  message: { ro: '', en: '', ru: '' },
-  messageTitle: '',
-  messageType: messageTypeEnum.ScheduleNotification,
-  hourToSend: availableHours[0],
-  showDatePicker: false,
-  messageDate: new Date(),
-  maxLength: 160,
-};
-
-const reducerTypes = {
-  setIsLoading: 'setIsLoading',
-  setMessage: 'setMessage',
-  setMessageTitle: 'setMessageTitle',
-  setLanguage: 'setLanguage',
-  setMessageType: 'setMessageType',
-  setShowDatePicker: 'setShowDatePicker',
-  setMessageDate: 'setMessageDate',
-  setHourToSend: 'setHourToSend',
-  setMaxLength: 'setMaxLength',
-  setMessageData: 'setMessageData',
-  resetState: 'resetState',
-};
-
-const actions = generateReducerActions(reducerTypes);
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setIsLoading:
-      return { ...state, isLoading: action.payload };
-    case reducerTypes.setLanguage:
-      return { ...state, language: action.payload };
-    case reducerTypes.setMessage: {
-      return {
-        ...state,
-        message: { ...state.message, ...action.payload },
-      };
-    }
-    case reducerTypes.setMessageTitle:
-      return { ...state, messageTitle: action.payload };
-    case reducerTypes.setMessageType:
-      return { ...state, messageType: action.payload };
-    case reducerTypes.setShowDatePicker:
-      return { ...state, showDatePicker: action.payload };
-    case reducerTypes.setMessageDate:
-      return { ...state, messageDate: action.payload, showDatePicker: false };
-    case reducerTypes.setHourToSend:
-      return { ...state, hourToSend: action.payload };
-    case reducerTypes.setMaxLength:
-      return { ...state, maxLength: action.payload };
-    case reducerTypes.setMessageData: {
-      const message = action.payload;
-      return {
-        ...state,
-        messageTitle: message.title,
-        message: JSON.parse(message.message),
-        messageType: message.type,
-        hourToSend: message.hour,
-        messageDate: moment(message.sendDate).toDate(),
-      };
-    }
-    case reducerTypes.resetState:
-      return initialState;
-    default:
-      return state;
-  }
-};
+import EasyDatePicker from '../../../../../components/common/EasyDatePicker';
+import EasyPlanModal from '../../../../../components/common/EasyPlanModal';
+import { textForKey } from '../../../../../utils/localization';
+import { createMessage, updateMessage } from "../../../../../middleware/api/messages";
+import {
+  charactersRegex,
+  tags,
+  messageTypeDescription,
+  availableLanguages,
+  availableHours,
+  messageTypeEnum
+} from './CreateMessageModal.constants'
+import { initialState, actions, reducer } from './CreateMessageModal.reducer'
+import styles from './CreateMessageModal.module.scss';
 
 const CreateMessageModal = ({
-  open,
-  message: messageData,
-  onClose,
-  onCreateMessage,
-  currentClinic,
-}) => {
+                              open,
+                              message: messageData,
+                              onClose,
+                              onCreateMessage,
+                              currentClinic,
+                            }) => {
   const datePickerAnchor = useRef(null);
   const [
     {
