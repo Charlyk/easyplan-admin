@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
 
 import { CircularProgress } from '@material-ui/core';
 import sum from 'lodash/sum';
 import moment from 'moment-timezone';
-import { Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -24,6 +24,7 @@ import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
 import PatientTreatmentPlan from "../../../app/components/common/PatientTreatmentPlan";
 import { parseCookies } from "../../../utils";
+import getTreatmentPlanURL from "../../../app/utils/getTreatmentPlanURL";
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -106,6 +107,7 @@ const DoctorPatientDetails = (
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
+  const [guideName, setGuideName] = useState(`${currentUser.firstName} ${currentUser.lastName}`);
 
   const canFinalize =
     schedule?.scheduleStatus === 'OnSite' ||
@@ -265,6 +267,15 @@ const DoctorPatientDetails = (
     }
   };
 
+  const handleGuideNameChange = (event) => {
+    setGuideName(event.target.value);
+  }
+
+  const handlePrintTreatmentPlan = () => {
+    const planUrl = getTreatmentPlanURL(currentClinic, authToken, patient.id, guideName);
+    window.open(planUrl, '_blank');
+  }
+
   const formattedTime = useMemo(() => {
     if (schedule == null) {
       return '';
@@ -313,6 +324,19 @@ const DoctorPatientDetails = (
               </span>
                 <span className={styles['patient-info-value']}>{currentUser.fullName}</span>
               </div>
+            </div>
+            <div className={styles.printableWrapper}>
+              <Form.Group className={styles.guideNameField}>
+                <Form.Label>{textForKey('Enter guide name')}</Form.Label>
+                <Form.Control
+                  onChange={handleGuideNameChange}
+                  value={guideName}
+                  aria-label={textForKey('Enter guide name')}
+                />
+              </Form.Group>
+              <Button className='positive-button' onPointerUp={handlePrintTreatmentPlan}>
+                {textForKey('Print plan')}
+              </Button>
             </div>
           </div>
           <PatientTreatmentPlan

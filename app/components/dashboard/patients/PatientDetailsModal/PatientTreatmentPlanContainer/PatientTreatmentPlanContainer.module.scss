@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100%;
   overflow-y: hidden;
+  position: relative;
 
   .planWrapper {
     padding-left: 1rem;
@@ -19,6 +20,26 @@
     :global(.servicesWrapper) {
       max-height: unset;
       height: unset;
+    }
+  }
+
+  .footer {
+    width: 100%;
+    border-top: #ededed 1px solid;
+    padding: .5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    :global(.positive-button) {
+      margin-bottom: .1rem;
+    }
+
+    .guideNameField {
+      width: 15rem;
+      margin-right: .5rem;
+      margin-bottom: 0 !important;
+      padding: 0;
     }
   }
 }

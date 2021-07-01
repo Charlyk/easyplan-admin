@@ -522,6 +522,8 @@ export default {
     'day schedules': 'Day schedules',
     'week schedules': 'Week schedules',
     fired: 'Fired',
+    'enter guide name': 'Enter guide name',
+    'print plan': 'Print plan',
   },
   ro: {
     analytics: 'Analitică',
@@ -1052,6 +1054,8 @@ export default {
     'day schedules': 'Programările pentru o zi',
     'week schedules': 'Programările pentru o săptămână',
     fired: 'Concediat',
+    'enter guide name': 'Introduceți numele ghidului',
+    'print plan': 'Printează planul',
   },
   ru: {
     analytics: 'Analytics',
@@ -1573,5 +1577,7 @@ export default {
     'day schedules': 'Day schedules',
     'week schedules': 'Week schedules',
     fired: 'Fired',
+    'enter guide name': 'Enter guide name',
+    'print plan': 'Print plan',
   },
 };

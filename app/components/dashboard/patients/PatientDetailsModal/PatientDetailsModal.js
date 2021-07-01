@@ -43,6 +43,7 @@ const PatientDetailsModal = (
     currentClinic,
     patientId,
     menuItem,
+    authToken,
     onClose,
     onDelete,
   }
@@ -163,6 +164,7 @@ const PatientDetailsModal = (
       case MenuItem.generalTreatmentPlan:
         return (
           <PatientTreatmentPlanContainer
+            authToken={authToken}
             currentUser={currentUser}
             currentClinic={currentClinic}
             patientId={patient.id}

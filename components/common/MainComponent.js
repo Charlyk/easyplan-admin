@@ -140,6 +140,7 @@ const MainComponent = (
           {...patientDetails}
           currentClinic={currentClinic}
           currentUser={currentUser}
+          authToken={authToken}
           onClose={handleClosePatientDetails}
         />
       )}
