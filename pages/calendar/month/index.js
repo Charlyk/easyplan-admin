@@ -5,8 +5,9 @@ import CalendarMonthView from "../../../app/components/dashboard/calendar/Calend
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { Role } from "../../../app/utils/constants";
+import { parseCookies } from "../../../utils";
 
-export default function Month({ currentUser, currentClinic, doctorId, date, doctors }) {
+export default function Month({ currentUser, currentClinic, doctorId, date, doctors, authToken }) {
   const viewDate = moment(date).toDate();
   return (
     <CalendarContainer
@@ -16,6 +17,7 @@ export default function Month({ currentUser, currentClinic, doctorId, date, doct
       currentUser={currentUser}
       date={viewDate}
       viewMode='month'
+      authToken={authToken}
     >
       <CalendarMonthView
         doctorId={doctorId}
@@ -30,6 +32,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     query.date = moment().format('YYYY-MM-DD');
   }
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/month');
@@ -53,6 +56,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
         doctors,
         doctorId: parseInt(doctorId),
         date: query.date,
+        authToken,
         ...appData,
       }
     }

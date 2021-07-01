@@ -6,8 +6,9 @@ import moment from "moment-timezone";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
+import { parseCookies } from "../../../utils";
 
-export default function Day({ currentUser, currentClinic, date, schedules, dayHours, doctors }) {
+export default function Day({ currentUser, currentClinic, date, schedules, dayHours, doctors, authToken }) {
   const viewDate = moment(date).toDate();
 
   const updatedSchedules = useMemo(() => {
@@ -22,6 +23,7 @@ export default function Day({ currentUser, currentClinic, date, schedules, dayHo
       doctors={doctors}
       currentUser={currentUser}
       currentClinic={currentClinic}
+      authToken={authToken}
       viewMode='day'
       date={viewDate}
     >
@@ -42,6 +44,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
 
   const { date: queryDate } = query;
   try {
+    const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/day');
@@ -63,6 +66,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
         doctors,
         schedules,
         dayHours,
+        authToken,
         ...appData
       }
     }
