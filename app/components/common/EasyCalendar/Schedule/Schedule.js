@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
@@ -33,6 +34,10 @@ const Schedule = (
     (item) => item.id === schedule.scheduleStatus,
   );
   const shouldAnimate = animatedStatuses.includes(scheduleStatus?.id);
+
+  if (isPause) {
+    console.log(schedule);
+  }
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -179,6 +184,9 @@ const Schedule = (
               <Typography className={styles.commentLabel}>
                 {schedule.comment}
               </Typography>
+              <Typography className={styles.commentLabel}>
+                {upperFirst(textForKey('Created by'))}: {schedule.createdByName}
+              </Typography>
             </div>
           )}
         </div>
@@ -197,6 +205,7 @@ Schedule.propTypes = {
     scheduleStatus: PropTypes.string,
     serviceColor: PropTypes.string,
     serviceName: PropTypes.string,
+    createdByName: PropTypes.string,
     isUrgent: PropTypes.bool,
     urgent: PropTypes.bool,
     offset: PropTypes.number,
