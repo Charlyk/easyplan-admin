@@ -30,7 +30,7 @@ const Column = (
   function schedulesWithOffset() {
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
-    for (let schedule of (schedules || initialSchedules)) {
+    for (let schedule of schedules) {
       const scheduleRange = moment.range(
         moment(schedule.startTime),
         moment(schedule.endTime),
