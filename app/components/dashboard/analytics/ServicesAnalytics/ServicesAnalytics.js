@@ -7,7 +7,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TablePagination, CircularProgress,
+  TablePagination, CircularProgress, FormControl, Select, MenuItem, InputLabel,
 } from '@material-ui/core';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
@@ -30,7 +30,19 @@ import { getServicesStatistics } from "../../../../../middleware/api/analytics";
 import { fetchAppData } from "../../../../../middleware/api/initialization";
 import { parseCookies } from "../../../../../utils";
 import styles from './ServicesAnalytics.module.scss';
-import { reducer, initialState, actions } from "./ServicesAnalytics.reducer";
+import reducer, {
+  initialState,
+  setSelectedDoctors,
+  setSelectedServices,
+  setSelectedStatuses,
+  setDateRange,
+  setDoctors,
+  setInitialQuery,
+  setPage,
+  setRowsPerPage,
+  setServices,
+  setShowRangePicker,
+} from "./ServicesAnalytics.reducer";
 
 const ServicesAnalytics = (
   {
@@ -55,6 +67,9 @@ const ServicesAnalytics = (
       selectedService,
       selectedStatus,
       showRangePicker,
+      selectedDoctors,
+      selectedServices,
+      selectedStatuses,
       dateRange: [startDate, endDate],
       page,
       rowsPerPage,
@@ -63,7 +78,7 @@ const ServicesAnalytics = (
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localDispatch(actions.setInitialQuery(initialQuery));
+    localDispatch(setInitialQuery(initialQuery));
   }, []);
 
   useEffect(() => {
@@ -71,8 +86,8 @@ const ServicesAnalytics = (
       return;
     }
     const doctors = currentClinic.users.filter(user => user.roleInClinic === Role.doctor);
-    localDispatch(actions.setDoctors(doctors));
-    localDispatch(actions.setServices(currentClinic.services));
+    localDispatch(setDoctors(doctors));
+    localDispatch(setServices(currentClinic.services));
   }, [currentClinic]);
 
   const handleFilterUpdated = (p = page, rp = rowsPerPage) => {
@@ -81,15 +96,15 @@ const ServicesAnalytics = (
       rowsPerPage: rp,
       fromDate: moment(startDate).format('YYYY-MM-DD'),
       toDate: moment(endDate).format('YYYY-MM-DD'),
-      status: selectedStatus.id,
+      statuses: selectedStatuses.map(status => status.id),
     }
 
-    if (selectedDoctor.id !== -1) {
-      query.doctorId = selectedDoctor.id;
+    if (!selectedDoctors.some(doctor => doctor.id === -1)) {
+      query.doctorsId = selectedDoctors.map(doctor => doctor.id);
     }
 
-    if (selectedService.id !== -1) {
-      query.serviceId = selectedService.id;
+    if (!selectedServices.some(services => services.id === -1)) {
+      query.servicesId = selectedServices.map(service => service.id);
     }
 
     if (isEqual(query, initialQuery)) {
@@ -105,17 +120,17 @@ const ServicesAnalytics = (
   };
 
   const handleDatePickerOpen = () => {
-    localDispatch(actions.setShowRangePicker(true));
+    localDispatch(setShowRangePicker(true));
   };
 
   const handleDatePickerClose = () => {
-    localDispatch(actions.setShowRangePicker(false));
+    localDispatch(setShowRangePicker(false));
   };
 
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(
-      actions.setDateRange([
+      setDateRange([
         startDate,
         moment(endDate).endOf('day').toDate(),
       ]),
@@ -123,33 +138,42 @@ const ServicesAnalytics = (
   };
 
   const handleDoctorChange = (event) => {
-    const newValue = parseInt(event.target.value);
-    if (newValue === -1) {
-      localDispatch(actions.setSelectedDoctor({ id: -1 }));
+    const newValue = event.target.value;
+    const lastSelected = newValue[newValue.length - 1]
+    if (newValue.length === 0 || lastSelected === -1) {
+      localDispatch(setSelectedDoctors([{ id: -1 }]));
       return;
     }
-    const doctor = doctors.find((it) => it.id === newValue);
-    localDispatch(actions.setSelectedDoctor(doctor));
+    const newDoctors = doctors.filter((doctor) =>
+      newValue.some(item => item === doctor.id)
+    );
+    localDispatch(setSelectedDoctors(newDoctors.filter(doctor => doctor.id !== -1)));
   };
 
   const handleServiceChange = (event) => {
-    const newValue = parseInt(event.target.value);
-    if (newValue === -1) {
-      localDispatch(actions.setSelectedService({ id: -1 }));
+    const newValue = event.target.value;
+    const lastSelected = newValue[newValue.length - 1]
+    if (newValue.length === 0 || lastSelected === -1) {
+      localDispatch(setSelectedServices([{ id: -1 }]));
       return;
     }
-    const service = services.find((it) => it.id === newValue);
-    localDispatch(actions.setSelectedService(service));
+    const newServices = services.filter((service) =>
+      newValue.some(item => item === service.id)
+    );
+    localDispatch(setSelectedServices(newServices.filter(service => service.id !== -1)));
   };
 
   const handleStatusChange = (event) => {
     const newValue = event.target.value;
-    if (newValue === 'All') {
-      localDispatch(actions.setSelectedStatus({ id: 'All' }));
+    const lastSelected = newValue[newValue.length - 1]
+    if (newValue.length === 0 || lastSelected === 'All') {
+      localDispatch(setSelectedStatuses([{ id: 'All' }]));
       return;
     }
-    const status = ScheduleStatuses.find((it) => it.id === newValue);
-    localDispatch(actions.setSelectedStatus(status));
+    const newStatuses = ScheduleStatuses.filter((status) =>
+      newValue.some(item => item === status.id)
+    );
+    localDispatch(setSelectedStatuses(newStatuses.filter(status => status.id !== 'All')));
   };
 
   const titleForStatus = (status) => {
@@ -163,13 +187,13 @@ const ServicesAnalytics = (
   };
 
   const handleChangePage = (event, newPage) => {
-    localDispatch(actions.setPage(newPage));
+    localDispatch(setPage(newPage));
     handleFilterUpdated(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
     const rows = parseInt(event.target.value);
-    localDispatch(actions.setRowsPerPage(rows));
+    localDispatch(setRowsPerPage(rows));
     handleFilterUpdated(page, rows);
   };
 
@@ -183,50 +207,68 @@ const ServicesAnalytics = (
     );
   };
 
+  const getDoctorFullName = (doctor) => {
+    if (doctor.isHidden) {
+      return `${doctor.fullName} ${textForKey('Fired')}`
+    }
+    return doctor.fullName;
+  }
+
   return (
     <div className={styles['statistics-services']}>
       <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
-        <Form.Group style={{ flexDirection: 'column' }}>
-          <Form.Label>{textForKey('Service')}</Form.Label>
-          <Form.Control
+        <FormControl classes={{ root: styles.selectControlRoot }}>
+          <InputLabel id="services-select-label">{textForKey('Services')}</InputLabel>
+          <Select
+            multiple
+            disableUnderline
+            labelId='services-select-label'
+            value={selectedServices.map(item => item.id)}
             onChange={handleServiceChange}
-            disabled={isLoading}
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            value={selectedService.id}
-            custom
           >
-            <option value={-1}>{textForKey('All services')}</option>
+            <MenuItem
+              value={-1}
+              className={styles.analyticsMenuItemRoot}
+            >
+              {textForKey('All services')}
+            </MenuItem>
             {services.map((service) => (
-              <option key={service.id} value={service.id}>
+              <MenuItem
+                key={service.id}
+                value={service.id}
+                className={styles.analyticsMenuItemRoot}
+              >
                 {service.name}
-              </option>
+              </MenuItem>
             ))}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group style={{ flexDirection: 'column' }}>
-          <Form.Label>{textForKey('Doctor')}</Form.Label>
-          <Form.Control
+          </Select>
+        </FormControl>
+        <FormControl classes={{ root: styles.selectControlRoot }}>
+          <InputLabel id="doctors-select-label">{textForKey('Doctors')}</InputLabel>
+          <Select
+            multiple
+            disableUnderline
+            labelId='doctors-select-label'
+            value={selectedDoctors.map(item => item.id)}
             onChange={handleDoctorChange}
-            disabled={isLoading}
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            value={selectedDoctor.id}
-            custom
           >
-            <option value={-1}>{textForKey('All doctors')}</option>
+            <MenuItem
+              value={-1}
+              className={styles.analyticsMenuItemRoot}
+            >
+              {textForKey('All doctors')}
+            </MenuItem>
             {doctors.map((doctor) => (
-              <option
+              <MenuItem
                 key={doctor.id}
                 value={doctor.id}
+                className={styles.analyticsMenuItemRoot}
               >
-                {`${doctor.firstName} ${doctor.lastName}`} {doctor.isHidden ? `(${textForKey('Fired')})` : ''}
-              </option>
+                {getDoctorFullName(doctor)}
+              </MenuItem>
             ))}
-          </Form.Control>
-        </Form.Group>
+          </Select>
+        </FormControl>
         <Form.Group ref={pickerRef}>
           <Form.Label>{textForKey('Period')}</Form.Label>
           <Form.Control
@@ -238,25 +280,32 @@ const ServicesAnalytics = (
             onClick={handleDatePickerOpen}
           />
         </Form.Group>
-        <Form.Group style={{ flexDirection: 'column' }}>
-          <Form.Label>{textForKey('Status')}</Form.Label>
-          <Form.Control
+        <FormControl classes={{ root: styles.selectControlRoot }}>
+          <InputLabel id="statuses-select-label">{textForKey('Statuses')}</InputLabel>
+          <Select
+            multiple
+            disableUnderline
+            labelId='statuses-select-label'
+            value={selectedStatuses.map(item => item.id)}
             onChange={handleStatusChange}
-            disabled={isLoading}
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            value={selectedStatus.id}
-            custom
           >
-            <option value='All'>{textForKey('All statuses')}</option>
+            <MenuItem
+              value='All'
+              className={styles.analyticsMenuItemRoot}
+            >
+              {textForKey('All statuses')}
+            </MenuItem>
             {ScheduleStatuses.map((status) => (
-              <option key={status.id} value={status.id}>
+              <MenuItem
+                key={status.id}
+                value={status.id}
+                className={styles.analyticsMenuItemRoot}
+              >
                 {status.name}
-              </option>
+              </MenuItem>
             ))}
-          </Form.Control>
-        </Form.Group>
+          </Select>
+        </FormControl>
       </StatisticFilter>
       <div className={styles['data-container']}>
         {isLoading && statistics.length === 0 && (

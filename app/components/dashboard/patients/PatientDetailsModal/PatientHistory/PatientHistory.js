@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgress, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import axios from "axios";
 
 import { textForKey } from '../../../../../../utils/localization';
 import HistoryItem from './HistoryItem';

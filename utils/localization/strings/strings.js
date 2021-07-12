@@ -114,7 +114,7 @@ export default {
     'all doctors': 'All doctors',
     'all statuses': 'All statuses',
     'apply filters': 'Apply filters',
-    'services statistics': 'ServicesAnalytics statistics',
+    'services statistics': 'Services statistics',
     'doctors statistics': 'Doctors statistics',
     'activity logs': 'Activity logs',
     general: 'General',
@@ -526,6 +526,7 @@ export default {
     fired: 'Fired',
     'enter guide name': 'Enter guide name',
     'print plan': 'Print plan',
+    statuses: 'Statuses',
   },
   ro: {
     analytics: 'Analitică',
@@ -1060,6 +1061,7 @@ export default {
     fired: 'Concediat',
     'enter guide name': 'Introduceți numele ghidului',
     'print plan': 'Printează planul',
+    statuses: 'Statuturi',
   },
   ru: {
     analytics: 'Analytics',
@@ -1585,5 +1587,6 @@ export default {
     fired: 'Fired',
     'enter guide name': 'Enter guide name',
     'print plan': 'Print plan',
+    statuses: 'Statuses',
   },
 };

@@ -150,4 +150,45 @@
       }
     }
   }
+
+  .selectControlRoot {
+    flex: 1;
+    margin-right: 10px;
+
+    :global(.MuiSelect-root) {
+      border: #ced4da 1px solid;
+      border-radius: 4px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    :global(.MuiInput-underline:after) {
+      border-bottom-color: #3A83DC;
+    }
+
+    :global(.MuiFormLabel-root.Mui-focused) {
+      color: #3A83DC;
+    }
+
+    :global(.MuiFormLabel-root) {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+    }
+
+    :global(.MuiSelect-select.MuiSelect-select) {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+    }
+  }
+}
+
+.analyticsMenuItemRoot {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
 }
