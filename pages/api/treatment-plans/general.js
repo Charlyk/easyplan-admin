@@ -10,8 +10,6 @@ export default authorized(async (req, res) => {
       const data = await handler(saveGeneralTreatmentPlan, req, res);
       if (data != null) {
         res.json(data);
-      } else {
-        res.json(null);
       }
       break;
     }
@@ -19,8 +17,6 @@ export default authorized(async (req, res) => {
       const data = await handler(updateGeneralTreatmentPlan, req, res);
       if (data != null) {
         res.json(data);
-      } else {
-        res.json(null);
       }
       break;
     }

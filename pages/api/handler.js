@@ -14,7 +14,7 @@ export const handler = async (apiCall, req, res) => {
     const { data: responseData } = response;
     if (response.status !== 200) {
       res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
-      res.status(response.status).json({ error: true, message: response.statusText });
+      res.status(response.status).json({ error: true, message: responseData?.message ?? response.statusText });
       return null;
     } else {
       const { isError, message, data } = responseData;
@@ -29,8 +29,8 @@ export const handler = async (apiCall, req, res) => {
   } catch (error) {
     res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
     if (error?.response != null) {
-      const { status, statusText } = error.response;
-      res.status(status).json({ error: true, message: statusText });
+      const { status, statusText, data } = error.response;
+      res.status(status).json({ error: true, message: data?.message || statusText });
     } else {
       res.status(400).json({ error: true, message: error.message });
     }

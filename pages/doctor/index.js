@@ -7,6 +7,7 @@ import { fetchAppData } from "../../middleware/api/initialization";
 import { parseCookies } from "../../utils";
 import DoctorCalendar from "../../app/components/doctors/DoctorCalendar";
 import { getSchedulesForInterval } from "../../middleware/api/schedules";
+import { textForKey } from "../../utils/localization";
 
 const DoctorPatients = (
   {
@@ -23,6 +24,7 @@ const DoctorPatients = (
       currentClinic={currentClinic}
       currentUser={currentUser}
       authToken={authToken}
+      pageTitle={textForKey('Schedules')}
     >
       <DoctorCalendar
         viewMode={viewMode}

@@ -36,10 +36,6 @@ const DoctorCalendar = (
   const [{ schedules, filterData }, localDispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    localDispatch(actions.setSchedules(initialSchedules));
-  }, [initialSchedules]);
-
-  useEffect(() => {
     if (isEqual(filterData, initialState.filterData)) {
       localDispatch(actions.setSchedules(initialSchedules));
       return;
@@ -155,7 +151,7 @@ const DoctorCalendar = (
         doctorId: currentUser.id,
         name: moment(date).format('DD dddd'),
         disabled: false,
-        date: date,
+        date: date.toDate(),
       };
     });
   }, [viewMode]);

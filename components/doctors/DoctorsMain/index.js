@@ -16,8 +16,9 @@ import { setClinic } from "../../../redux/actions/clinicActions";
 import { usePubNub } from "pubnub-react";
 import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 import { redirectIfOnGeneralHost } from "../../../utils/helperFuncs";
+import Head from "next/head";
 
-const DoctorsMain = ({ children, currentUser, currentClinic }) => {
+const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
   const dispatch = useDispatch();
   const pubnub = usePubNub();
   const router = useRouter();
@@ -87,6 +88,11 @@ const DoctorsMain = ({ children, currentUser, currentClinic }) => {
 
   return (
     <div className={styles['doctors-main-root']}>
+      <Head>
+        <title>
+          {currentClinic?.clinicName || 'EasyPlan.pro'} - {pageTitle || ''}
+        </title>
+      </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <EditProfileModal
         open={isEditingProfile}

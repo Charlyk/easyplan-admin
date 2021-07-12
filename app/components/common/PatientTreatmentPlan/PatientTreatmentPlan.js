@@ -10,6 +10,7 @@ import { Statuses } from "../../../utils/constants";
 import ServicesWrapper from "./ServicesWrapper";
 import { reducer, actions, initialState } from "./PatientTreatmentPlan.reducer";
 import styles from './PatientTreatmentPlan.module.scss';
+import { deletePatientPlanService } from "../../../../middleware/api/patients";
 
 const PatientTreatmentPlan = (
   {
@@ -153,7 +154,8 @@ const PatientTreatmentPlan = (
    * Handle remove service from services list
    * @param {Object} service
    */
-  const handleRemoveSelectedService = (service) => {
+  const handleRemoveSelectedService = async (service) => {
+    console.log(service)
     let newServices = cloneDeep(selectedServices);
     remove(
       newServices,
@@ -162,6 +164,10 @@ const PatientTreatmentPlan = (
         item.toothId === service.toothId &&
         item.destination === service.destination,
     );
+    if (service.isExistent && service.planServiceId != null) {
+      // delete service from server
+      await deletePatientPlanService(scheduleData.patient.id, service.planServiceId);
+    }
     localDispatch(actions.setSelectedServices({ services: newServices }));
   };
 

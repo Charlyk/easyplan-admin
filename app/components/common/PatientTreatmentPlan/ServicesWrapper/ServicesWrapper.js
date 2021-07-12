@@ -76,7 +76,7 @@ const ServicesWrapper = (
           <tbody>
           {selectedServices.map((service, index) => (
             <FinalServiceItem
-              canRemove={service.canRemove}
+              canRemove={!service.completed}
               onRemove={onItemRemove}
               key={`${keyForService(service)}#${index}`}
               service={service}

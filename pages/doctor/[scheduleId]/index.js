@@ -17,7 +17,6 @@ import {
 import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorPatientDetails.module.scss';
-import axios from "axios";
 import { useRouter } from "next/router";
 import DoctorsMain from "../../../components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
@@ -25,6 +24,9 @@ import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
 import PatientTreatmentPlan from "../../../app/components/common/PatientTreatmentPlan";
 import { parseCookies } from "../../../utils";
 import getTreatmentPlanURL from "../../../app/utils/getTreatmentPlanURL";
+import { savePatientGeneralTreatmentPlan, updatePatientGeneralTreatmentPlan } from "../../../middleware/api/patients";
+import getErrorMessage from "../../../app/utils/getErrorMessage";
+import Head from "next/head";
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -209,8 +211,9 @@ const DoctorPatientDetails = (
   };
 
   const saveTreatmentPlan = async (requestBody, update) => {
-    const url = `/api/treatment-plans/general`
-    return update ? axios.put(url, requestBody) : axios.post(url, requestBody)
+    return update
+      ? updatePatientGeneralTreatmentPlan(requestBody)
+      : savePatientGeneralTreatmentPlan(requestBody)
   }
 
   const updatePatientTreatmentPlan = async (requestBody) => {
@@ -261,7 +264,7 @@ const DoctorPatientDetails = (
       }
       router.back()
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getErrorMessage(error));
     } finally {
       localDispatch(actions.setIsFinalizing(false))
     }
@@ -286,7 +289,12 @@ const DoctorPatientDetails = (
   }, [schedule]);
 
   return (
-    <DoctorsMain currentUser={currentUser} currentClinic={currentClinic} authToken={authToken}>
+    <DoctorsMain
+      currentUser={currentUser}
+      currentClinic={currentClinic}
+      authToken={authToken}
+      pageTitle={schedule?.patient.fullName}
+    >
       <div className={styles['doctor-patient-root']}>
         <FinalizeTreatmentModal
           currentClinic={currentClinic}

@@ -126,6 +126,66 @@ export async function updatePatient(patientId, requestBody, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function getPatientHistory(patientId, page, itemsPerPage, headers = null) {
-  const queryString = new URLSearchParams({ page: `${page}`, itemsPerPage: `${itemsPerPage}`}).toString();
+  const queryString = new URLSearchParams({ page: `${page}`, itemsPerPage: `${itemsPerPage}` }).toString();
   return get(`/api/patients/${patientId}/history?${queryString}`, headers)
+}
+
+/**
+ * Remove a service from patient general treatment plan
+ * @param {number} patientId
+ * @param {number} serviceId
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function deletePatientPlanService(patientId, serviceId, headers = null) {
+  const queryString = new URLSearchParams({ serviceId: `${serviceId}` }).toString();
+  return del(`/api/patients/${patientId}/treatment/general/service?${queryString}`, headers)
+}
+
+/**
+ * Save services to patient's treatment plan
+ * @param {{
+ *   scheduleId: number,
+ *   patientId: number,
+ *   services: [{
+ *     id: number,
+ *     serviceId: number,
+ *     toothId: string | number,
+ *     completed: boolean,
+ *     destination: string,
+ *     isBraces: boolean,
+ *     count: number,
+ *     price: number,
+ *     currency: string
+ *   }]
+ * }} requestBody
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function savePatientGeneralTreatmentPlan(requestBody, headers = null) {
+  return post(`/api/treatment-plans/general`, headers, requestBody)
+}
+
+/**
+ * Update patient's treatment plan
+ * @param {{
+ *   scheduleId: number,
+ *   patientId: number,
+ *   services: [{
+ *     id: number,
+ *     serviceId: number,
+ *     toothId: string | number,
+ *     completed: boolean,
+ *     destination: string,
+ *     isBraces: boolean,
+ *     count: number,
+ *     price: number,
+ *     currency: string
+ *   }]
+ * }} requestBody
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function updatePatientGeneralTreatmentPlan(requestBody, headers = null) {
+  return put(`/api/treatment-plans/general`, headers, requestBody)
 }
