@@ -22,8 +22,9 @@ export default authorized(async (req, res) => {
 
 function fetchPatientHistory(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { patientId } = req.query;
-  return axios.get(`${updatedServerUrl(req)}/history/patient/${patientId}`, {
+  const { patientId, page, itemsPerPage } = req.query;
+  const queryString = new URLSearchParams({ page, itemsPerPage }).toString()
+  return axios.get(`${updatedServerUrl(req)}/history/patient/${patientId}?${queryString}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

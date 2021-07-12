@@ -8,23 +8,25 @@ import axios from "axios";
 import { textForKey } from '../../../../../../utils/localization';
 import HistoryItem from './HistoryItem';
 import styles from './PatientHistory.module.scss';
+import { getPatientHistory } from "../../../../../../middleware/api/patients";
+import { Pagination } from "@material-ui/lab";
 
 const PatientHistory = ({ patient, clinic }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [histories, setHistories] = useState([]);
+  const [pageData, setPageData] = useState({ page: 1, itemsPerPage: 25 });
+  const [historyData, setHistoryData] = useState({ data: [], total: 0 });
 
   useEffect(() => {
     if (patient != null) {
       fetchHistories();
     }
-  }, [patient]);
+  }, [patient, pageData]);
 
   const fetchHistories = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`/api/patients/${patient.id}/history`);
-      console.log(response.data);
-      setHistories(response.data);
+      const response = await getPatientHistory(patient.id, pageData.page, pageData.itemsPerPage);
+      setHistoryData(response.data);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -32,22 +34,35 @@ const PatientHistory = ({ patient, clinic }) => {
     }
   };
 
+  const handlePageChange = (event, page) => {
+    setPageData({ ...pageData, page });
+  }
+
   return (
     <div className={styles['patient-history']}>
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('History of changes')}
       </Typography>
-      {histories.length === 0 && !isLoading && (
+      {historyData.data.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
           {textForKey('No data here yet')} :(
         </Typography>
       )}
       {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
       <div className={styles['patient-history__history-data']}>
-        {histories.map((item) => (
+        {historyData.data.map((item) => (
           <HistoryItem key={item.id} clinic={clinic} item={item} />
         ))}
       </div>
+      {historyData.total > 0 && (
+        <div className={styles.footer}>
+          <Pagination
+            count={Math.round(historyData.total / 25)}
+            page={pageData.page}
+            onChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 };

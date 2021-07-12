@@ -116,3 +116,16 @@ export async function getPatientPhoneRecords(patientId, page, headers = null) {
 export async function updatePatient(patientId, requestBody, headers = null) {
   return put(`/api/patients/${patientId}`, headers, requestBody)
 }
+
+/**
+ * Fetch patient history
+ * @param {number} patientId
+ * @param {number} page
+ * @param {number} itemsPerPage
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function getPatientHistory(patientId, page, itemsPerPage, headers = null) {
+  const queryString = new URLSearchParams({ page: `${page}`, itemsPerPage: `${itemsPerPage}`}).toString();
+  return get(`/api/patients/${patientId}/history?${queryString}`, headers)
+}
