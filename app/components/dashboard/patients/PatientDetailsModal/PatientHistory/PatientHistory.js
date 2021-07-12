@@ -23,6 +23,7 @@ const PatientHistory = ({ patient, clinic }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(`/api/patients/${patient.id}/history`);
+      console.log(response.data);
       setHistories(response.data);
     } catch (error) {
       toast.error(error.message);

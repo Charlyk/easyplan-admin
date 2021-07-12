@@ -12,6 +12,7 @@ import IconPlus from '../../../../../../../components/icons/iconPlus';
 import { clinicTimeZoneSelector } from '../../../../../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../../../../../utils/localization';
 import styles from './HistoryItem.module.scss'
+import IconDelete from "../../../../../../../components/icons/iconDelete";
 
 const Field = ({ field, clinic }) => {
   const timeZone = clinicTimeZoneSelector(clinic);
@@ -66,6 +67,8 @@ const HistoryItem = ({ item, clinic }) => {
       return <IconPlus fill='#3A83DC' />;
     } else if (item.action.includes('Update')) {
       return <IconEdit />;
+    } else if (item.action.includes('Delete')) {
+      return <IconDelete />;
     }
   };
 
