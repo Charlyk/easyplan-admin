@@ -65,9 +65,6 @@ const ServicesAnalytics = (
   const [
     {
       isLoading,
-      selectedDoctor,
-      selectedService,
-      selectedStatus,
       showRangePicker,
       selectedDoctors,
       selectedServices,
