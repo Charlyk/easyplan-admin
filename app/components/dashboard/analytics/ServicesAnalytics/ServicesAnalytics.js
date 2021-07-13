@@ -58,7 +58,7 @@ const ServicesAnalytics = (
   const doctors = orderBy(
     currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
     ['isHidden', 'fullName'],
-    ['desc', 'asc']
+    ['asc', 'asc']
   )
   const services = sortBy(currentClinic.services, service => service.name.toLowerCase());
 
