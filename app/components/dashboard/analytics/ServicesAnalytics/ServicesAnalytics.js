@@ -209,7 +209,7 @@ const ServicesAnalytics = (
 
   const getDoctorFullName = (doctor) => {
     if (doctor.isHidden) {
-      return `${doctor.fullName} ${textForKey('Fired')}`
+      return `${doctor.fullName} (${textForKey('Fired')})`
     }
     return doctor.fullName;
   }
