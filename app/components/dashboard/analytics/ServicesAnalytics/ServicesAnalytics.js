@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
+import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
@@ -54,10 +55,11 @@ const ServicesAnalytics = (
   const router = useRouter()
   const dispatch = useDispatch();
   const pickerRef = useRef(null);
-  const doctors = sortBy(
+  const doctors = orderBy(
     currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
-    user => user.fullName.toLowerCase(),
-  );
+    ['isHidden', 'fullName'],
+    ['desc', 'asc']
+  )
   const services = sortBy(currentClinic.services, service => service.name.toLowerCase());
 
   const [
