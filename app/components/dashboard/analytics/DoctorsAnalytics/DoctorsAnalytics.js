@@ -22,6 +22,7 @@ import StatisticFilter from '../StatisticFilter';
 import { Role } from "../../../../utils/constants";
 import { reducer, actions, initialState } from "./DoctorsAnalytics.reducer";
 import styles from './DoctorsAnalytics.module.scss';
+import { formattedAmount } from "../../../../../utils/helperFuncs";
 
 const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) => {
   const pickerRef = useRef(null);
@@ -179,9 +180,9 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
                 {statistics.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell>{item.doctor.fullName}</TableCell>
-                    <TableCell>{Math.round(item.totalAmount)} MDL</TableCell>
-                    <TableCell>{Math.round(item.doctorAmount)} MDL</TableCell>
-                    <TableCell>{Math.round(item.clinicAmount)} MDL</TableCell>
+                    <TableCell>{formattedAmount(item.totalAmount, currentClinic.currency)}</TableCell>
+                    <TableCell>{formattedAmount(item.doctorAmount, currentClinic.currency)}</TableCell>
+                    <TableCell>{formattedAmount(item.clinicAmount, currentClinic.currency)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -192,7 +193,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
                   <TableCell/>
                   <TableCell align='left'>
                     {textForKey('Total')}:{' '}
-                    {Math.round(sum(statistics.map((it) => it.clinicAmount)))} MDL
+                    {formattedAmount(sum(statistics.map((it) => it.clinicAmount)), currentClinic.currency)}
                   </TableCell>
                 </TableRow>
               </TableFooter>
