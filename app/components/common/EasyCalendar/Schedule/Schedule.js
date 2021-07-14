@@ -35,10 +35,6 @@ const Schedule = (
   );
   const shouldAnimate = animatedStatuses.includes(scheduleStatus?.id);
 
-  if (isPause) {
-    console.log(schedule);
-  }
-
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
     const endTime = moment(schedule.endTime);

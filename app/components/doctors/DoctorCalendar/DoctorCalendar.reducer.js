@@ -19,6 +19,7 @@ const reducerTypes = {
   addSchedule: 'addSchedule',
   deleteSchedule: 'deleteSchedule',
   updateSchedule: 'updateSchedule',
+  setData: 'setData',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -30,6 +31,8 @@ export const reducer = (state, action) => {
     }
     case reducerTypes.setSchedules:
       return { ...state, schedules: action.payload };
+    case reducerTypes.setData:
+      return { ...state, ...action.payload };
     case reducerTypes.addSchedule: {
       const newSchedule = action.payload;
       const scheduleDate = moment(newSchedule.startTime).format('YYYY-MM-DD');

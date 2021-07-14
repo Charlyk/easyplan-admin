@@ -9,7 +9,7 @@ import DoctorCalendar from "../../app/components/doctors/DoctorCalendar";
 import { getSchedulesForInterval } from "../../middleware/api/schedules";
 import { textForKey } from "../../utils/localization";
 
-const DoctorPatients = (
+const Doctor = (
   {
     currentUser,
     currentClinic,
@@ -78,4 +78,4 @@ export const getServerSideProps = async ({ res, req, query }) => {
   }
 }
 
-export default wrapper.withRedux(DoctorPatients);
+export default wrapper.withRedux(Doctor);

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import moment from "moment-timezone";
 import isEqual from "lodash/isEqual";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import {
   deleteScheduleSelector,
@@ -11,6 +12,8 @@ import {
 } from "../../../../redux/selectors/scheduleSelector";
 import PatientsFilter from "../../../../components/doctors/PatientsFilter";
 import { getCurrentWeek } from "../../../../utils/helperFuncs";
+import { getSchedulesForInterval } from "../../../../middleware/api/schedules";
+import usePrevious from "../../../utils/usePrevious";
 import EasyCalendar from "../../common/EasyCalendar";
 import DoctorsCalendarDay from "../DoctorsCalendarDay";
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
@@ -32,8 +35,15 @@ const DoctorCalendar = (
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const viewDate = moment(date).toDate();
   const router = useRouter();
-  const week= getCurrentWeek(viewDate);
-  const [{ schedules, filterData }, localDispatch] = useReducer(reducer, initialState)
+  const week = getCurrentWeek(viewDate);
+  const previousDate = usePrevious(date);
+  const [{ schedules, filterData }, localDispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (previousDate !== date) {
+      handleFetchSchedules();
+    }
+  }, [date, previousDate]);
 
   useEffect(() => {
     if (isEqual(filterData, initialState.filterData)) {
@@ -66,7 +76,23 @@ const DoctorCalendar = (
 
   useEffect(() => {
     handleScheduleDelete();
-  }, [deleteSchedule])
+  }, [deleteSchedule]);
+
+  const handleFetchSchedules = async () => {
+    try {
+      const firstDay = week[0].toDate();
+      const lastDay = week[week.length - 1].toDate();
+      const response = await getSchedulesForInterval(firstDay, lastDay, currentUser.id);
+      localDispatch(actions.setData(response.data));
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data.message);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  }
 
   function handleScheduleDelete() {
     if (deleteSchedule == null) {
@@ -154,7 +180,7 @@ const DoctorCalendar = (
         date: date.toDate(),
       };
     });
-  }, [viewMode]);
+  }, [viewMode, week]);
 
   return (
     <div className={styles.doctorCalendarRoot}>
