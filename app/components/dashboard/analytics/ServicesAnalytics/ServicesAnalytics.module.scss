@@ -152,7 +152,7 @@
   }
 
   .selectControlRoot {
-    flex: 1;
+    width: 24%;
     margin-right: 10px;
 
     :global(.MuiSelect-root) {
@@ -186,7 +186,23 @@
   }
 }
 
+.analyticsMenuItemCheckbox {
+  padding: 0 !important;
+  margin-right: 5px !important;
+}
+
+.analyticsMenuItemCheckboxChecked {
+  color: #3A83DC !important;
+}
+
 .analyticsMenuItemRoot {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
+}
+
+.analyticsMenuItemText {
   font-family: Inter, sans-serif !important;
   font-style: normal !important;
   font-weight: normal !important;

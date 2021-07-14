@@ -7,7 +7,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TablePagination, CircularProgress, FormControl, Select, MenuItem, InputLabel,
+  TablePagination, CircularProgress, FormControl, Select, MenuItem, InputLabel, ListItemText, Checkbox,
 } from '@material-ui/core';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
@@ -44,6 +44,7 @@ import reducer, {
   setServices,
   setShowRangePicker,
 } from "./ServicesAnalytics.reducer";
+import IconCheckMark from "../../../../../components/icons/iconCheckMark";
 
 const ServicesAnalytics = (
   {
@@ -213,6 +214,27 @@ const ServicesAnalytics = (
     return doctor.fullName;
   }
 
+  const renderSelectedServices = (selected) => {
+    const services = selectedServices.filter(service =>
+      selected.includes(service.id),
+    )
+    return services.map(service => service.name ?? textForKey('All services')).join(', ')
+  }
+
+  const renderSelectedDoctors = (selected) => {
+    const doctors = selectedDoctors.filter(doctor =>
+      selected.includes(doctor.id),
+    )
+    return doctors.map(service => service.fullName ?? textForKey('All doctors')).join(', ')
+  }
+
+  const renderSelectedStatuses = (selected) => {
+    const statuses = selectedStatuses.filter(status =>
+      selected.includes(status.id),
+    )
+    return statuses.map(service => service.fullName ?? textForKey('All statuses')).join(', ')
+  }
+
   return (
     <div className={styles['statistics-services']}>
       <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
@@ -223,13 +245,24 @@ const ServicesAnalytics = (
             disableUnderline
             labelId='services-select-label'
             value={selectedServices.map(item => item.id)}
+            renderValue={renderSelectedServices}
             onChange={handleServiceChange}
           >
             <MenuItem
               value={-1}
               className={styles.analyticsMenuItemRoot}
             >
-              {textForKey('All services')}
+              <Checkbox
+                classes={{
+                  root: styles.analyticsMenuItemCheckbox,
+                  checked: styles.analyticsMenuItemCheckboxChecked
+                }}
+                checked={selectedServices.some(item => item.id === -1)}
+              />
+              <ListItemText
+                classes={{ primary: styles.analyticsMenuItemText }}
+                primary={textForKey('All services')}
+              />
             </MenuItem>
             {services.map((service) => (
               <MenuItem
@@ -237,7 +270,17 @@ const ServicesAnalytics = (
                 value={service.id}
                 className={styles.analyticsMenuItemRoot}
               >
-                {service.name}
+                <Checkbox
+                  classes={{
+                    root: styles.analyticsMenuItemCheckbox,
+                    checked: styles.analyticsMenuItemCheckboxChecked
+                  }}
+                  checked={selectedServices.some(item => item.id === service.id)}
+                />
+                <ListItemText
+                  classes={{ primary: styles.analyticsMenuItemText }}
+                  primary={service.name}
+                />
               </MenuItem>
             ))}
           </Select>
@@ -249,13 +292,24 @@ const ServicesAnalytics = (
             disableUnderline
             labelId='doctors-select-label'
             value={selectedDoctors.map(item => item.id)}
+            renderValue={renderSelectedDoctors}
             onChange={handleDoctorChange}
           >
             <MenuItem
               value={-1}
               className={styles.analyticsMenuItemRoot}
             >
-              {textForKey('All doctors')}
+              <Checkbox
+                classes={{
+                  root: styles.analyticsMenuItemCheckbox,
+                  checked: styles.analyticsMenuItemCheckboxChecked
+                }}
+                checked={selectedDoctors.some(item => item.id === -1)}
+              />
+              <ListItemText
+                classes={{ primary: styles.analyticsMenuItemText }}
+                primary={textForKey('All doctors')}
+              />
             </MenuItem>
             {doctors.map((doctor) => (
               <MenuItem
@@ -263,7 +317,17 @@ const ServicesAnalytics = (
                 value={doctor.id}
                 className={styles.analyticsMenuItemRoot}
               >
-                {getDoctorFullName(doctor)}
+                <Checkbox
+                  classes={{
+                    root: styles.analyticsMenuItemCheckbox,
+                    checked: styles.analyticsMenuItemCheckboxChecked
+                  }}
+                  checked={selectedDoctors.some(item => item.id === doctor.id)}
+                />
+                <ListItemText
+                  classes={{ primary: styles.analyticsMenuItemText }}
+                  primary={getDoctorFullName(doctor)}
+                />
               </MenuItem>
             ))}
           </Select>
@@ -286,13 +350,24 @@ const ServicesAnalytics = (
             disableUnderline
             labelId='statuses-select-label'
             value={selectedStatuses.map(item => item.id)}
+            renderValue={renderSelectedStatuses}
             onChange={handleStatusChange}
           >
             <MenuItem
               value='All'
               className={styles.analyticsMenuItemRoot}
             >
-              {textForKey('All statuses')}
+              <Checkbox
+                classes={{
+                  root: styles.analyticsMenuItemCheckbox,
+                  checked: styles.analyticsMenuItemCheckboxChecked
+                }}
+                checked={selectedStatuses.some(item => item.id === 'All')}
+              />
+              <ListItemText
+                classes={{ primary: styles.analyticsMenuItemText }}
+                primary={textForKey('All statuses')}
+              />
             </MenuItem>
             {ScheduleStatuses.map((status) => (
               <MenuItem
@@ -300,7 +375,17 @@ const ServicesAnalytics = (
                 value={status.id}
                 className={styles.analyticsMenuItemRoot}
               >
-                {status.name}
+                <Checkbox
+                  classes={{
+                    root: styles.analyticsMenuItemCheckbox,
+                    checked: styles.analyticsMenuItemCheckboxChecked
+                  }}
+                  checked={selectedStatuses.some(item => item.id === status.id)}
+                />
+                <ListItemText
+                  classes={{ primary: styles.analyticsMenuItemText }}
+                  primary={status.name}
+                />
               </MenuItem>
             ))}
           </Select>
