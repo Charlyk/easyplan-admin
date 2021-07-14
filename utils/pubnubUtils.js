@@ -35,7 +35,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
     case MessageAction.PauseRecordUpdatedOrCreated:
     case MessageAction.ScheduleUpdatedOrCreated:
       dispatch(toggleUpdateSchedule(payload));
-      setTimeout(() => dispatch(toggleUpdateSchedule(null)), 400);
+      setTimeout(() => dispatch(toggleUpdateSchedule(null)), 600);
       break;
     case MessageAction.UserRestoredInClinic:
     case MessageAction.UserRemovedFromClinic:

@@ -95,7 +95,7 @@ const CalendarDayView = (
       return
     }
 
-    localDispatch(actions.deleteSchedule(deleteSchedule))
+    localDispatch(actions.deleteSchedule(deleteSchedule));
   }
 
   const fetchDayHours = async (date) => {
