@@ -7,6 +7,8 @@ import { Button } from "react-bootstrap";
 import { getPatientPhoneRecords } from "../../../../../../middleware/api/patients";
 import { Box, CircularProgress, IconButton, Typography } from "@material-ui/core";
 import { textForKey } from "../../../../../../utils/localization";
+import IncomingIcon from '../../../../../../public/icon-incoming-call.png';
+import OutgoingIcon from '../../../../../../public/icon-outgoing-call.png';
 import styles from './PatientPhoneRecords.module.scss';
 
 const RecordItem = ({ record, onDownload }) => {
@@ -16,6 +18,11 @@ const RecordItem = ({ record, onDownload }) => {
 
   return (
     <div className={styles.recordItem}>
+      <img
+        src={record.type === 'Incoming' ? IncomingIcon : OutgoingIcon}
+        style={styles.dstIcon}
+        alt="Dst"
+      />
       <Box>
         <Typography classes={{ root: styles.dateLabel }}>
           {record.date}
@@ -140,7 +147,8 @@ RecordItem.propTypes = {
     duration: PropTypes.number,
     phone: PropTypes.string,
     recordingFile: PropTypes.string,
-    status: PropTypes.string
+    status: PropTypes.string,
+    type: PropTypes.oneOf(['Incoming', 'Outgoing']),
   }),
   onDownload: PropTypes.func,
 }
