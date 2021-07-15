@@ -5,6 +5,7 @@ import moment from "moment-timezone";
 export const initialState = {
   hours: [],
   schedules: [],
+  isLoading: false,
   filterData: {
     patientName: '',
     serviceId: 'all',
@@ -20,6 +21,7 @@ const reducerTypes = {
   deleteSchedule: 'deleteSchedule',
   updateSchedule: 'updateSchedule',
   setData: 'setData',
+  setIsLoading: 'setIsLoading',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -65,6 +67,9 @@ export const reducer = (state, action) => {
         ...state,
         schedules: updatedSchedules,
       };
+    }
+    case reducerTypes.setIsLoading: {
+      return { ...state, isLoading: action.payload };
     }
     case reducerTypes.deleteSchedule: {
       const scheduleToDelete = action.payload;

@@ -18,15 +18,13 @@ import EasyCalendar from "../../common/EasyCalendar";
 import DoctorsCalendarDay from "../DoctorsCalendarDay";
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 import styles from './DoctorCalendar.module.scss';
+import { CircularProgress } from "@material-ui/core";
 
 const DoctorCalendar = (
   {
     currentUser,
     currentClinic,
-    schedules: {
-      hours: dayHours,
-      schedules: initialSchedules
-    },
+    schedules: initialData,
     viewMode,
     date,
   }
@@ -37,7 +35,7 @@ const DoctorCalendar = (
   const router = useRouter();
   const week = getCurrentWeek(viewDate);
   const previousDate = usePrevious(date);
-  const [{ schedules, hours, filterData }, localDispatch] = useReducer(reducer, initialState);
+  const [{ schedules, hours, filterData, isLoading }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (previousDate !== date) {
@@ -47,10 +45,11 @@ const DoctorCalendar = (
 
   useEffect(() => {
     if (isEqual(filterData, initialState.filterData)) {
-      localDispatch(actions.setSchedules(initialSchedules));
+      localDispatch(actions.setData(initialData));
       return;
     }
 
+    const { schedules: initialSchedules } = initialData;
     const filteredSchedules = initialSchedules.map((item) => {
       const itemSchedules = item.schedules.filter((schedule) => {
         return (
@@ -79,6 +78,7 @@ const DoctorCalendar = (
   }, [deleteSchedule]);
 
   const handleFetchSchedules = async () => {
+    localDispatch(actions.setIsLoading(true));
     try {
       const firstDay = viewMode === 'week' ? week[0].toDate() : viewDate;
       const lastDay = viewMode === 'week' ? week[week.length - 1].toDate() : viewDate;
@@ -91,6 +91,8 @@ const DoctorCalendar = (
       } else {
         toast.error(error.message);
       }
+    } finally {
+      localDispatch(actions.setIsLoading(false));
     }
   }
 
@@ -197,6 +199,11 @@ const DoctorCalendar = (
         />
       </div>
       <div className={styles.dataWrapper}>
+        {isLoading && (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress className='circular-progress-bar'/>
+          </div>
+        )}
         {viewMode === 'week' ? (
           <EasyCalendar
             hideCreateIndicator
