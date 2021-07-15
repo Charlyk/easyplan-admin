@@ -37,7 +37,7 @@ const DoctorCalendar = (
   const router = useRouter();
   const week = getCurrentWeek(viewDate);
   const previousDate = usePrevious(date);
-  const [{ schedules, filterData }, localDispatch] = useReducer(reducer, initialState);
+  const [{ schedules, hours, filterData }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (previousDate !== date) {
@@ -200,7 +200,7 @@ const DoctorCalendar = (
         {viewMode === 'week' ? (
           <EasyCalendar
             hideCreateIndicator
-            dayHours={dayHours}
+            dayHours={hours}
             columns={mappedWeek}
             schedules={schedules}
             viewDate={viewDate}
@@ -212,7 +212,7 @@ const DoctorCalendar = (
           <DoctorsCalendarDay
             currentUser={currentUser}
             viewDate={viewDate}
-            schedules={{ hours: dayHours, schedules }}
+            schedules={{ hours, schedules }}
             onScheduleSelected={handleScheduleSelected}
           />
         )}
