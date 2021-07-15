@@ -20,7 +20,7 @@ const RecordItem = ({ record, onDownload }) => {
   return (
     <div className={styles.recordItem}>
       <Box display='flex' alignItems="center">
-        {record.type === 'Incoming' ? (
+        {record.type === 'Income' ? (
           <IconIncomeCall />
         ) : (
           <IconOutCall />
