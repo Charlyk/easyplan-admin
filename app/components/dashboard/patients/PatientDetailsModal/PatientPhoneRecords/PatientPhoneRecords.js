@@ -19,25 +19,27 @@ const RecordItem = ({ record, onDownload }) => {
 
   return (
     <div className={styles.recordItem}>
-      {record.type === 'Incoming' ? (
-        <IconIncomeCall />
-      ) : (
-        <IconOutCall />
-      )}
-      <Box>
-        <Typography classes={{ root: styles.dateLabel }}>
-          {record.date}
-        </Typography>
-        <Box flex='1' display='flex'>
-          <Typography classes={{ root: styles.operatorLabel }}>
-            {textForKey('Operator')}: {record.destination};
+      <Box display='flex' alignItems="center">
+        {record.type === 'Incoming' ? (
+          <IconIncomeCall />
+        ) : (
+          <IconOutCall />
+        )}
+        <Box>
+          <Typography classes={{ root: styles.dateLabel }}>
+            {record.date}
           </Typography>
-          <Typography classes={{ root: styles.operatorLabel }}>
-            {textForKey('Status')}: {textForKey(record.status)};
-          </Typography>
-          <Typography classes={{ root: styles.operatorLabel }}>
-            {textForKey('Duration')}: {record.duration}s;
-          </Typography>
+          <Box flex='1' display='flex'>
+            <Typography classes={{ root: styles.operatorLabel }}>
+              {textForKey('Operator')}: {record.destination};
+            </Typography>
+            <Typography classes={{ root: styles.operatorLabel }}>
+              {textForKey('Status')}: {textForKey(record.status)};
+            </Typography>
+            <Typography classes={{ root: styles.operatorLabel }}>
+              {textForKey('Duration')}: {record.duration}s;
+            </Typography>
+          </Box>
         </Box>
       </Box>
       <IconButton classes={{ root: styles.downloadButton }} onClick={handleRecordDownload}>
