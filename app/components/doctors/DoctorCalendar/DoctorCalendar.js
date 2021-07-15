@@ -80,8 +80,8 @@ const DoctorCalendar = (
 
   const handleFetchSchedules = async () => {
     try {
-      const firstDay = week[0].toDate();
-      const lastDay = week[week.length - 1].toDate();
+      const firstDay = viewMode === 'week' ? week[0].toDate() : viewDate;
+      const lastDay = viewMode === 'week' ? week[week.length - 1].toDate() : viewDate;
       const response = await getSchedulesForInterval(firstDay, lastDay, currentUser.id);
       localDispatch(actions.setData(response.data));
     } catch (error) {

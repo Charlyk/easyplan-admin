@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useMemo, useReducer } from "react";
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { extendMoment } from "moment-range";
 import Moment from "moment-timezone";
 
