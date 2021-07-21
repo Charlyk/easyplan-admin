@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
-import EasyPlanModal from "../EasyPlanModal";
+import EasyPlanModal from "../../../app/components/common/EasyPlanModal";
 import { getAppLanguage, textForKey } from "../../../utils/localization";
 import * as locales from "react-date-range/dist/locale";
 import { Calendar } from "react-date-range";

@@ -189,3 +189,39 @@ export async function savePatientGeneralTreatmentPlan(requestBody, headers = nul
 export async function updatePatientGeneralTreatmentPlan(requestBody, headers = null) {
   return put(`/api/treatment-plans/general`, headers, requestBody)
 }
+
+/**
+ * Add an image to patient x-ray files
+ * @param {number} patientId
+ * @param {{
+ *   imageUrl: string,
+     type: string,
+ * }} requestBody
+ * @param {Object | null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function addPatientXRayImage(patientId, requestBody, headers = null) {
+  return post(`/api/patients/${patientId}/x-ray`, headers, requestBody);
+}
+
+/**
+ * Fetch all x-ray images for a patient
+ * @param {number} patientId
+ * @param {Object | null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function getPatientXRayImages(patientId, headers = null) {
+  return get(`/api/patients/${patientId}/x-ray`, headers);
+}
+
+/**
+ * Remove a x-ray image for a patient
+ * @param {number} patientId
+ * @param {number} imageId
+ * @param {Object | null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function deletePatientXRayImage(patientId, imageId, headers = null) {
+  const queryString = new URLSearchParams({ imageId: `${imageId}` }).toString();
+  return del(`/api/patients/${patientId}/x-ray?${queryString}`, headers);
+}

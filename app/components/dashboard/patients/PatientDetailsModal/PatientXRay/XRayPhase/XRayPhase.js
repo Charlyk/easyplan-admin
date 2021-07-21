@@ -1,20 +1,23 @@
 import React from 'react';
-
 import { Grid } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
 import { setImageModal } from '../../../../../../../redux/actions/imageModalActions';
-import { urlToLambda } from '../../../../../../../utils/helperFuncs';
+import XRayImage from "../XRayImage";
 import styles from './XRayPhase.module.scss';
 
-const XRayPhase = ({ title, images, isExpanded }) => {
+const XRayPhase = ({ title, images, isExpanded, onDeleteImage }) => {
   const dispatch = useDispatch();
 
   const handleImageClick = image => {
     dispatch(setImageModal({ open: true, imageUrl: image.imageUrl }));
   };
+
+  const handleDeleteImage = (image) => {
+    onDeleteImage?.(image);
+  }
 
   return (
     <div className={clsx(styles.phase, isExpanded && styles.expanded)}>
@@ -22,29 +25,12 @@ const XRayPhase = ({ title, images, isExpanded }) => {
       <div className={styles['phase-images']}>
         <Grid container>
           {images.map(image => (
-            <Grid
+            <XRayImage
               key={image.id}
-              item
-              xs={4}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: '.2rem',
-              }}
-            >
-              <div
-                style={{ outline: 'none' }}
-                role='button'
-                tabIndex={0}
-                onClick={() => handleImageClick(image)}
-              >
-                <img
-                  key={image.id}
-                  src={urlToLambda(image.imageUrl, 150)}
-                  alt='X-Ray'
-                />
-              </div>
-            </Grid>
+              image={image}
+              onImageClick={handleImageClick}
+              onImageDelete={handleDeleteImage}
+            />
           ))}
         </Grid>
       </div>

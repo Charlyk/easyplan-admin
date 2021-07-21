@@ -44,6 +44,24 @@
     }
   }
 
+  .trashButton {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    padding: 0;
+    top: 10px;
+    right: 5px;
+    background-color: #ec3276;
+
+    &:hover {
+      background-color: #ec3276;
+    }
+
+    svg {
+      fill: #FFF;
+    }
+  }
+
   .phase-images {
     overflow: hidden;
     width: 100%;

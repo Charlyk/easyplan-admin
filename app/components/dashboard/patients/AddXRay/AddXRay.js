@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-
-import { triggerUpdateXRay } from '../../../redux/actions/actions';
-import { uploadFileToAWS } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../common/EasyPlanModal';
-
-import styles from '../../../styles/AddXRay.module.scss';
 import { toast } from "react-toastify";
-import axios from "axios";
+
+import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
+import { uploadFileToAWS } from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
+import EasyPlanModal from '../../../common/EasyPlanModal';
+import { addPatientXRayImage } from "../../../../../middleware/api/patients";
+import styles from './AddXRay.module.scss';
 
 const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
@@ -37,7 +35,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
         imageUrl: uploadResult.location,
         type: phase,
       };
-      await axios.post(`/api/patients/${patientId}/x-ray`, requestBody)
+      await addPatientXRayImage(patientId, requestBody);
       dispatch(triggerUpdateXRay());
       onClose();
     } catch (error) {

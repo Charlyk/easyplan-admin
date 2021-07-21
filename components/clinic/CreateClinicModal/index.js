@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../icons/iconAvatar';
 import { generateReducerActions, uploadFileToAWS } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../common/EasyPlanModal';
+import EasyPlanModal from '../../../app/components/common/EasyPlanModal';
 
 import {
   checkDomainAvailability,

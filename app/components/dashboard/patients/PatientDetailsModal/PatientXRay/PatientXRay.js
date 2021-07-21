@@ -5,12 +5,13 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useSelector } from 'react-redux';
 
 import IconPlus from '../../../../../../components/icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
+import { deletePatientXRayImage, getPatientXRayImages } from "../../../../../../middleware/api/patients";
+import ConfirmationModal from "../../../../common/ConfirmationModal";
 import XRayPhase from './XRayPhase';
 import styles from './PatientXRay.module.scss'
 
@@ -22,6 +23,8 @@ const ExpandedPhase = {
 
 const PatientXRay = ({ patient, onAddXRay }) => {
   const updateXRay = useSelector(updateXRaySelector);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({ show: false, image: null });
   const [isFetching, setIsFetching] = useState(false);
   const [state, setState] = useState({
     images: { initial: [], middle: [], final: [] },
@@ -41,7 +44,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   const fetchImages = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`/api/patients/${patient.id}/x-ray`);
+      const response = await getPatientXRayImages(patient.id);
       const { data } = response;
 
       const mappedImages = {
@@ -57,8 +60,46 @@ const PatientXRay = ({ patient, onAddXRay }) => {
     }
   };
 
+  const handleDeleteXRayImage = (image) => {
+    setDeleteModal({ show: true, image });
+  }
+
+  const closeConfirmation = () => {
+    setDeleteModal({ show: false, image: null });
+  }
+
+  const deleteXRayImage = async () => {
+    if (deleteModal.image == null) {
+      return;
+    }
+    try {
+      setIsDeleting(true);
+      await deletePatientXRayImage(patient.id, deleteModal.image.id);
+      await fetchImages();
+      setIsDeleting(false);
+      closeConfirmation();
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data?.message ?? error.message);
+      } else {
+        toast.error(error.message);
+      }
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
   return (
     <div className={styles['patient-x-ray']}>
+      <ConfirmationModal
+        show={deleteModal.show}
+        isLoading={isDeleting}
+        title={textForKey('Delete image')}
+        message={textForKey('deleteImageConfirmation')}
+        onConfirm={deleteXRayImage}
+        onClose={closeConfirmation}
+      />
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('X-Ray')}
       </Typography>
@@ -69,6 +110,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             isExpanded
             images={state.images.initial}
             phaseId={ExpandedPhase.initial}
+            onDeleteImage={handleDeleteXRayImage}
           />
         )}
         {!isFetching && (
@@ -77,6 +119,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             isExpanded
             images={state.images.middle}
             phaseId={ExpandedPhase.middle}
+            onDeleteImage={handleDeleteXRayImage}
           />
         )}
         {!isFetching && (
@@ -85,6 +128,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             isExpanded
             images={state.images.final}
             phaseId={ExpandedPhase.final}
+            onDeleteImage={handleDeleteXRayImage}
           />
         )}
         {isFetching && (

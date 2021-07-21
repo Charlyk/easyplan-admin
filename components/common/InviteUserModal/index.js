@@ -5,7 +5,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 
 import { EmailRegex, Role } from '../../../app/utils/constants';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal';
+import EasyPlanModal from '../../../app/components/common/EasyPlanModal';
 
 import styles from '../../../styles/InviteUserModal.module.scss';
 

@@ -8,7 +8,7 @@ import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 import EasyDatePicker from '../../../../../components/common/EasyDatePicker';
-import EasyPlanModal from '../../../../../components/common/EasyPlanModal';
+import EasyPlanModal from '../../../common/EasyPlanModal';
 import { textForKey } from '../../../../../utils/localization';
 import { createMessage, updateMessage } from "../../../../../middleware/api/messages";
 import {

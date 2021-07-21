@@ -1,8 +1,8 @@
 import axios from "axios";
-import { authorized } from "../../authorized";
 import cookie from 'cookie';
-import { handler } from "../../handler";
 import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { authorized } from "../../authorized";
+import { handler } from "../../handler";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -15,6 +15,13 @@ export default authorized(async (req, res) => {
     }
     case 'POST': {
       const data = await handler(addXRayImage, req, res);
+      if (data != null) {
+        res.json(data);
+      }
+      break;
+    }
+    case 'DELETE': {
+      const data = await handler(deleteXRayImage, req, res);
       if (data != null) {
         res.json(data);
       }
@@ -44,6 +51,18 @@ function addXRayImage(req) {
   const { patientId } = req.query;
   const requestBody = req.body;
   return axios.post(`${updatedServerUrl(req)}/patients/${patientId}/x-ray`, requestBody, {
+    headers: {
+      Authorization: auth_token,
+      'X-EasyPlan-Clinic-Id': clinic_id,
+      'X-EasyPlan-Subdomain': getSubdomain(req),
+    }
+  });
+}
+
+function deleteXRayImage(req) {
+  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  const { patientId, imageId } = req.query;
+  return axios.delete(`${updatedServerUrl(req)}/patients/${patientId}/x-ray/${imageId}`, {
     headers: {
       Authorization: auth_token,
       'X-EasyPlan-Clinic-Id': clinic_id,

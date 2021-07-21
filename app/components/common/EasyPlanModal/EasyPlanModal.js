@@ -1,39 +1,40 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
-
-import IconClose from '../../icons/iconClose';
-import IconSuccess from '../../icons/iconSuccess';
-import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/EasyPlanModal.module.scss';
-import LoadingButton from '../LoadingButton';
 import clsx from "clsx";
-import IconTrash from "../../icons/iconTrash";
 
-const EasyPlanModal = ({
-  open,
-  title,
-  children,
-  size,
-  negativeBtnText,
-  positiveBtnText,
-  destroyableBtnText,
-  positiveBtnIcon,
-  destroyableBtnIcon,
-  isPositiveDisabled,
-  isNegativeDisabled,
-  isDestroyableDisabled,
-  isPositiveLoading,
-  isNegativeLoading,
-  isDestroyableLoading,
-  hidePositiveBtn,
-  className,
-  onPositiveClick,
-  onNegativeClick,
-  onDestroyClick,
-  onClose,
-}) => {
+import IconClose from '../../../../components/icons/iconClose';
+import IconSuccess from '../../../../components/icons/iconSuccess';
+import { textForKey } from '../../../../utils/localization';
+import LoadingButton from '../../../../components/common/LoadingButton';
+import IconTrash from "../../../../components/icons/iconTrash";
+import styles from './EasyPlanModal.module.scss';
+
+const EasyPlanModal = (
+  {
+    open,
+    title,
+    children,
+    size,
+    negativeBtnText,
+    positiveBtnText,
+    destroyableBtnText,
+    positiveBtnIcon,
+    destroyableBtnIcon,
+    isPositiveDisabled,
+    isNegativeDisabled,
+    isDestroyableDisabled,
+    isPositiveLoading,
+    isNegativeLoading,
+    isDestroyableLoading,
+    hidePositiveBtn,
+    className,
+    onPositiveClick,
+    onNegativeClick,
+    onDestroyClick,
+    onClose,
+  }
+) => {
   return (
     <Modal
       centered
@@ -51,7 +52,7 @@ const EasyPlanModal = ({
             className={styles['close-btn']}
             onClick={onClose}
           >
-            <IconClose />
+            <IconClose/>
           </div>
         )}
       </Modal.Header>
@@ -65,7 +66,7 @@ const EasyPlanModal = ({
             onClick={onNegativeClick || onClose}
           >
             {negativeBtnText}
-            {!isNegativeLoading} <IconClose />
+            {!isNegativeLoading} <IconClose/>
           </LoadingButton>
         )}
         {typeof onDestroyClick === 'function' && (
@@ -127,8 +128,8 @@ EasyPlanModal.defaultProps = {
   negativeBtnText: textForKey('Close'),
   positiveBtnText: textForKey('Save'),
   destroyableBtnText: textForKey('Delete'),
-  positiveBtnIcon: <IconSuccess fill='#fff' />,
-  destroyableBtnIcon: <IconTrash />,
+  positiveBtnIcon: <IconSuccess fill='#fff'/>,
+  destroyableBtnIcon: <IconTrash/>,
   className: '',
   size: 'lg',
 };

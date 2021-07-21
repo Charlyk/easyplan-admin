@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { triggerUpdateNotes } from '../../../redux/actions/actions';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/AddNote.module.scss';
-import EasyPlanModal from '../../common/EasyPlanModal';
+import EasyPlanModal from '../../../app/components/common/EasyPlanModal';
 import { createPatientNote, updateVisitNote } from "../../../middleware/api/patients";
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {

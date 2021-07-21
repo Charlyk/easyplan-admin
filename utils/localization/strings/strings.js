@@ -527,6 +527,8 @@ export default {
     'enter guide name': 'Enter guide name',
     'print plan': 'Print plan',
     statuses: 'Statuses',
+    deleteimageconfirmation: 'Please confirm that you want to delete this image.',
+    'delete image': 'Delete image',
   },
   ro: {
     analytics: 'Analitică',
@@ -1062,6 +1064,8 @@ export default {
     'enter guide name': 'Introduceți numele ghidului',
     'print plan': 'Printează planul',
     statuses: 'Statuturi',
+    deleteimageconfirmation: 'Vă rugăm să confirmați că doriți să ștergeți această imagine.',
+    'delete image': 'Șterge imagine',
   },
   ru: {
     analytics: 'Analytics',
@@ -1588,5 +1592,7 @@ export default {
     'enter guide name': 'Enter guide name',
     'print plan': 'Print plan',
     statuses: 'Statuses',
+    deleteimageconfirmation: 'Please confirm that you want to delete this image.',
+    'delete image': 'Delete image',
   },
 };

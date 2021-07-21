@@ -7,7 +7,7 @@ import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
-import EasyPlanModal from '../../../common/EasyPlanModal';
+import EasyPlanModal from '../../../../app/components/common/EasyPlanModal';
 import styles from '../../../../styles/CreateHolidayModal.module.scss';
 
 const initialRange = {

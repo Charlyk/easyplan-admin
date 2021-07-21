@@ -6,7 +6,7 @@ import NextNprogress from 'nextjs-progressbar';
 import Head from 'next/head';
 import paths from "../utils/paths";
 import { useRouter } from "next/router";
-import AddXRay from "../components/patients/AddXRay";
+import AddXRay from "../app/components/dashboard/patients/AddXRay";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createClinicSelector,
