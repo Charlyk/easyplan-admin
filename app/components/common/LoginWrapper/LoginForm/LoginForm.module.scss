@@ -12,6 +12,23 @@
     margin-bottom: 3rem;
   }
 
+  :global(.form-group) {
+    .password-visibility-append {
+      height: 33.19px;
+
+      .visibility-toggle-btn {
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+        svg {
+          height: 100%;
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
   .forgot-password-container {
     user-select: none;
     display: flex;

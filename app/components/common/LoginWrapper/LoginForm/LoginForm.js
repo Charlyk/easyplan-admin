@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import VisibilityOn from "@material-ui/icons/Visibility";
 
-import LoadingButton from '../common/LoadingButton';
-import { EmailRegex } from '../../app/utils/constants';
-import { textForKey } from '../../utils/localization';
-import styles from '../../styles/auth/LoginForm.module.scss';
+import LoadingButton from '../../../../../components/common/LoadingButton';
+import { EmailRegex } from '../../../../utils/constants';
+import { textForKey } from '../../../../../utils/localization';
+import styles from './LoginForm.module.scss';
 
 const LoginForm = ({ isLoggingIn, errorMessage, onResetPassword, onSignUp, onLogin }) => {
   const [data, setData] = useState({ email: '', password: '' });
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const handleFormChange = (event) => {
     setData({
@@ -28,6 +30,10 @@ const LoginForm = ({ isLoggingIn, errorMessage, onResetPassword, onSignUp, onLog
       return;
     }
     onLogin(data.email, data.password)
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
   return (
@@ -62,9 +68,18 @@ const LoginForm = ({ isLoggingIn, errorMessage, onResetPassword, onSignUp, onLog
         <InputGroup>
           <Form.Control
             value={data.password}
-            type='password'
+            type={isPasswordVisible ? 'text' : 'password'}
             onChange={handleFormChange}
           />
+          <InputGroup.Append className={styles['password-visibility-append']}>
+            <Button
+              onClick={togglePasswordVisibility}
+              variant='outline-primary'
+              className={styles['visibility-toggle-btn']}
+            >
+              {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
+            </Button>
+          </InputGroup.Append>
         </InputGroup>
       </Form.Group>
       <div className='footer'>

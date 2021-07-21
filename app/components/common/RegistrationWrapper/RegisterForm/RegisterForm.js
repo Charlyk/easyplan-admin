@@ -6,11 +6,11 @@ import PropTypes from 'prop-types';
 import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 
-import IconAvatar from '../../icons/iconAvatar';
-import LoadingButton from '../../common/LoadingButton';
-import { EmailRegex, PasswordRegex } from '../../../app/utils/constants';
-import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/auth/RegisterForm.module.scss';
+import IconAvatar from '../../../../../components/icons/iconAvatar';
+import LoadingButton from '../../../../../components/common/LoadingButton';
+import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
+import { textForKey } from '../../../../../utils/localization';
+import styles from './RegisterForm.module.scss';
 import clsx from "clsx";
 
 const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {

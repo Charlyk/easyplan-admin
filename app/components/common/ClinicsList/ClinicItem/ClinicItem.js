@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { Role } from "../../../app/utils/constants";
 import { Typography } from "@material-ui/core";
-import styles from '../../../styles/auth/ClinicItem.module.scss'
-import IconNext from "../../icons/iconNext";
-import { environment } from "../../../eas.config";
+
+import { Role } from "../../../../utils/constants";
+import IconNext from "../../../../../components/icons/iconNext";
+import { environment } from "../../../../../eas.config";
+import styles from './ClinicItem.module.scss'
 
 const ClinicItem = ({ clinic, onSelected }) => {
 

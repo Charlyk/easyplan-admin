@@ -1,89 +1,29 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from "react";
-import clsx from "clsx";
-import styles from "../../../styles/auth/RegisterForm.module.scss";
-import { textForKey } from "../../../utils/localization";
-import moment from "moment-timezone";
-import { generateReducerActions } from "../../../utils/helperFuncs";
-import { toast } from "react-toastify";
-import { checkDomainAvailability, clinicTimeZones, fetchAvailableCurrencies } from "../../../middleware/api/clinic";
 import { Form, Image, InputGroup } from "react-bootstrap";
-import IconAvatar from "../../icons/iconAvatar";
-import LoadingButton from "../../common/LoadingButton";
-import { WebRegex } from "../../../app/utils/constants";
+import clsx from "clsx";
 import debounce from "lodash/debounce";
-import { isDev } from "../../../eas.config";
+import { toast } from "react-toastify";
 
-const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/ig;
+import { isDev } from "../../../../eas.config";
+import { textForKey } from "../../../../utils/localization";
+import { WebRegex } from "../../../utils/constants";
+import { checkDomainAvailability, clinicTimeZones, fetchAvailableCurrencies } from "../../../../middleware/api/clinic";
+import IconAvatar from "../../../../components/icons/iconAvatar";
+import LoadingButton from "../../../../components/common/LoadingButton";
 
-const initialState = {
-  logoFile: null,
-  clinicName: '',
-  domainName: '',
-  website: '',
-  description: '',
-  defaultCurrency: 'MDL',
-  timeZone: moment.tz.guess(true),
-  timeZones: [],
-  currencies: [],
-  isDomainAvailable: false,
-}
-
-const reducerTypes = {
-  setLogoFile: 'setLogoFile',
-  setClinicName: 'setClinicName',
-  setWebsite: 'setWebsite',
-  setDescription: 'setDescription',
-  setTimeZone: 'setTimeZone',
-  setTimeZones: 'setTimeZones',
-  setDomainName: 'setDomainName',
-  setInitialData: 'setInitialData',
-  setDefaultCurrency: 'setDefaultCurrency',
-  setIsDomainAvailable: 'setIsDomainAvailable',
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setClinicName:
-      return {
-        ...state,
-        clinicName: action.payload,
-        domainName: action.payload
-          .toLowerCase()
-          .replaceAll(charactersRegex, '')
-          .replaceAll(' ', '-')
-      };
-    case reducerTypes.setLogoFile:
-      return { ...state, logoFile: action.payload };
-    case reducerTypes.setWebsite:
-      return { ...state, website: action.payload };
-    case reducerTypes.setDescription:
-      return { ...state, description: action.payload };
-    case reducerTypes.setTimeZone:
-      return { ...state, timeZone: action.payload };
-    case reducerTypes.setTimeZones:
-      return { ...state, timeZones: action.payload };
-    case reducerTypes.setDomainName: {
-      const updatedDomain = action.payload
-        .toLowerCase()
-        .replaceAll(charactersRegex, '')
-        .replaceAll(' ', '-');
-      return {
-        ...state,
-        domainName: updatedDomain
-      };
-    }
-    case reducerTypes.setInitialData:
-      return { ...state, ...action.payload };
-    case reducerTypes.setDefaultCurrency:
-      return { ...state, currency: action.payload };
-    case reducerTypes.setIsDomainAvailable:
-      return { ...state, isDomainAvailable: action.payload };
-    default:
-      return state;
-  }
-}
-
-const actions = generateReducerActions(reducerTypes);
+import reducer, {
+  initialState,
+  setLogoFile,
+  setClinicName,
+  setWebsite,
+  setDescription,
+  setTimeZone,
+  setDomainName,
+  setInitialData,
+  setDefaultCurrency,
+  setIsDomainAvailable,
+} from './createClinicSlice'
+import styles from "./CreateClinicForm.module.scss";
 
 const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
   const [{
@@ -113,41 +53,41 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
     try {
       const { data: timeZones } = await clinicTimeZones();
       const { data: currencies } = await fetchAvailableCurrencies();
-      localDispatch(actions.setInitialData({ timeZones, currencies }));
+      localDispatch(setInitialData({ timeZones, currencies }));
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   const handleNameChange = (event) => {
-    localDispatch(actions.setClinicName(event.target.value));
+    localDispatch(setClinicName(event.target.value));
   }
 
   const handleDomainChange = (event) => {
     const newDomain = event.target.value.toLowerCase()
-    localDispatch(actions.setDomainName(newDomain));
+    localDispatch(setDomainName(newDomain));
   }
 
   const handleWebsiteChange = (event) => {
-    localDispatch(actions.setWebsite(event.target.value));
+    localDispatch(setWebsite(event.target.value));
   }
 
   const handleTimeZoneChange = (event) => {
-    localDispatch(actions.setTimeZone(event.target.value));
+    localDispatch(setTimeZone(event.target.value));
   }
 
   const handleDescriptionChange = (event) => {
-    localDispatch(actions.setDescription(event.target.value));
+    localDispatch(setDescription(event.target.value));
   }
 
   const handleCurrencyChange = (event) => {
-    localDispatch(actions.setDefaultCurrency(event.target.value));
+    localDispatch(setDefaultCurrency(event.target.value));
   }
 
   const handleLogoChange = (event) => {
     const files = event.target.files;
     if (files != null) {
-      localDispatch(actions.setLogoFile(files[0]));
+      localDispatch(setLogoFile(files[0]));
     }
   };
 
@@ -158,7 +98,7 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
         domainToCheck = `${domainToCheck}-dev`
       }
       const { data: isAvailable } = await checkDomainAvailability(domainToCheck);
-      localDispatch(actions.setIsDomainAvailable(isAvailable));
+      localDispatch(setIsDomainAvailable(isAvailable));
     } catch (error) {
       toast.error(error.message);
     }
