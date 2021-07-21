@@ -3,10 +3,10 @@ import React from 'react';
 import { TableCell, TableRow, Typography, Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import IconAvatar from '../../icons/iconAvatar';
-import IconEmail from '../../icons/iconEmail';
-import IconPhone from '../../icons/iconPhone';
-import styles from '../../../styles/patient/PatientRow.module.scss';
+import IconAvatar from '../../../../../../components/icons/iconAvatar';
+import IconEmail from '../../../../../../components/icons/iconEmail';
+import IconPhone from '../../../../../../components/icons/iconPhone';
+import styles from './PatientRow.module.scss';
 import clsx from "clsx";
 
 const PatientRow = ({ patient, onSelect }) => {

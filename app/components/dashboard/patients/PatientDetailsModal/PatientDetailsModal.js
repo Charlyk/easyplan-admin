@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../components/icons/iconAvatar';
 import IconClose from '../../../../../components/icons/iconClose';
+import IconPhone from "../../../../../components/icons/iconPhone";
 import {
   setPatientNoteModal,
   setPatientXRayModal,
@@ -35,6 +36,7 @@ import {
   MenuItem
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
+import clsx from "clsx";
 
 const PatientDetailsModal = (
   {
@@ -120,6 +122,10 @@ const PatientDetailsModal = (
     dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
 
+  const stopPropagation = event => {
+    event.stopPropagation();
+  };
+
   const menuContent = () => {
     switch (currentMenu) {
       case MenuItem.personalInfo:
@@ -202,6 +208,14 @@ const PatientDetailsModal = (
                 </div>
                 <Typography classes={{ root: styles['name-label'] }}>
                   {patient?.fullName}
+                </Typography>
+                <Typography classes={{ root: clsx(styles['phone-label'], styles.phone) }}>
+                  <a
+                    href={`tel:${patient.phoneNumber.replace('+', '')}`}
+                    onClick={stopPropagation}
+                  >
+                    {patient.phoneNumber}
+                  </a>
                 </Typography>
               </div>
               <Box mt='1rem' mb='1rem' className={styles['menu-wrapper']}>

@@ -30,7 +30,7 @@ import {
 } from '../../../../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../utils/localization';
-import PatientRow from '../../../../../components/patients/PatientRow';
+import PatientRow from './PatientRow';
 import { deletePatient, getPatients } from "../../../../../middleware/api/patients";
 import { reducer, initialState, actions } from './PatientsList.reducer'
 import styles from './PatientsList.module.scss';

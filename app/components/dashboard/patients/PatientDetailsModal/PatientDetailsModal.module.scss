@@ -73,6 +73,33 @@
             display: flex;
             flex-direction: column;
 
+            .phone-label {
+              display: flex;
+              align-items: center;
+              font-family: Inter, sans-serif;
+              font-style: normal;
+              font-weight: normal;
+              font-size: 14px !important;
+              margin-bottom: 0;
+
+              svg {
+                fill: #3A83DC;
+                margin-right: .5rem;
+              }
+
+              &.phone {
+                color: #3A83DC !important;
+
+                a {
+                  color: #3A83DC !important;
+
+                  &:hover {
+                    color: #3A83DC !important;
+                  }
+                }
+              }
+            }
+
             .avatar-wrapper {
               width: 90px;
               height: 90px;
