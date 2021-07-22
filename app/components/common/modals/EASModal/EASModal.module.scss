@@ -1,0 +1,76 @@
+.modalRoot {
+  .modalPaper {
+    outline: none;
+    position: absolute;
+    min-width: 20rem;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    border-radius: 10px !important;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+
+    .modalHeader {
+      padding: 8px 16px;
+      width: 100%;
+      background-color: #F4FAFE;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .titleLabel {
+        font-family: Inter, sans-serif;
+        font-style: normal !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+        line-height: 24px !important;
+        color: #34354C !important;
+      }
+
+      .closeButton {
+        padding: 0;
+
+        svg {
+          width: 1.3rem;
+          height: 1.3rem;
+        }
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+      }
+    }
+
+    .modalBody {
+      width: 100%;
+    }
+
+    .modalFooter {
+      padding: 4px 8px;
+      align-items: center;
+      justify-content: flex-end;
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      border-top: #ededed 1px solid;
+
+      .primaryButton {
+        outline: none;
+        color: #3A83DC;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 13px;
+      }
+
+      .secondaryButton {
+        outline: none;
+        color: #6F7091;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 13px;
+      }
+    }
+  }
+}

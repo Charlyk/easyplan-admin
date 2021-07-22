@@ -17,11 +17,19 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import IconArrowDown from '../../../../../components/icons/iconArrowDown';
 
+import { baseApiUrl } from "../../../../../eas.config";
+import {
+  getAvailableHours,
+  getScheduleDetails,
+  updateScheduleStatus
+} from "../../../../../middleware/api/schedules";
+import IconArrowDown from '../../../../../components/icons/iconArrowDown';
 import IconClose from '../../../../../components/icons/iconClose';
 import IconEdit from '../../../../../components/icons/iconEdit';
 import IconTrash from '../../../../../components/icons/iconTrash';
+import SingleInputModal from '../../../common/modals/SingleInputModal';
+import EasyDatePickerModal from "../../../common/modals/EasyDatePickerModal";
 import {
   setPatientDetails,
   toggleAppointmentsUpdate,
@@ -34,12 +42,19 @@ import {
 import { ManualStatuses, Statuses } from '../../../../utils/constants';
 import { formattedAmount } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
-import SingleInputModal from '../../../../../components/common/SingleInputModal';
-import { baseApiUrl } from "../../../../../eas.config";
-import { getAvailableHours, getScheduleDetails, updateScheduleStatus } from "../../../../../middleware/api/schedules";
-import { reducer, initialState, actions } from "./AppointmentDetails.reducer";
-import EasyDatePickerModal from "../../../../../components/common/EasyDatePickerModal";
+import reducer, {
+  initialState,
+  setIsLoading,
+  setDetails,
+  setIsCanceledReasonRequired,
+  setIsNewDateRequired,
+  setIsDelayTimeRequired,
+  setScheduleStatus,
+  setShowStatuses,
+} from "./AppointmentDetails.reducer";
 import styles from './AppointmentDetails.module.scss';
+import EASModal from "../../../common/modals/EASModal";
+import DelayTimeModal from "../../../common/modals/DelayTimeModal";
 
 const AppointmentDetails = (
   {
@@ -58,7 +73,8 @@ const AppointmentDetails = (
     showStatuses,
     isCanceledReasonRequired,
     scheduleStatus,
-    isNewDateRequired
+    isNewDateRequired,
+    isDelayTimeRequired,
   }, localDispatch] = useReducer(reducer, initialState);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
@@ -69,7 +85,7 @@ const AppointmentDetails = (
       return;
     }
     fetchAppointmentDetails(schedule);
-    localDispatch(actions.setScheduleStatus(
+    localDispatch(setScheduleStatus(
       Statuses.find((item) => item.id === schedule.scheduleStatus),
     ))
   }, [schedule]);
@@ -98,7 +114,7 @@ const AppointmentDetails = (
       }
       return updateInvoice;
     });
-    localDispatch(actions.setDetails({
+    localDispatch(setDetails({
       ...details,
       patient: {
         ...details.patient,
@@ -111,18 +127,18 @@ const AppointmentDetails = (
     if (schedule == null) {
       return;
     }
-    localDispatch(actions.setIsLoading(true));
+    localDispatch(setIsLoading(true));
     try {
       const response = await getScheduleDetails(schedule.id);
       const { data: details } = response;
-      localDispatch(actions.setDetails(details));
-      localDispatch(actions.setScheduleStatus(
+      localDispatch(setDetails(details));
+      localDispatch(setScheduleStatus(
         Statuses.find((item) => item.id === details.scheduleStatus),
       ))
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsLoading(false));
+      localDispatch(setIsLoading(false));
     }
   };
 
@@ -149,24 +165,25 @@ const AppointmentDetails = (
   };
 
   const openStatusesList = () => {
-    localDispatch(actions.setShowStatuses(true));
+    localDispatch(setShowStatuses(true));
   };
 
   const closeStatusesList = () => {
-    localDispatch(actions.setShowStatuses(false));
+    localDispatch(setShowStatuses(false));
   };
 
-  const changeScheduleStatus = async (status, canceledReason = null, newDate = null) => {
+  const changeScheduleStatus = async (status, canceledReason = null, newDate = null, delayTime = null) => {
     try {
-      localDispatch(actions.setScheduleStatus(status));
+      localDispatch(setScheduleStatus(status));
       closeStatusesList();
       await updateScheduleStatus(
         schedule.id,
         status.id,
-        { canceledReason, newDate }
+        { canceledReason, newDate, delayTime }
       );
-      localDispatch(actions.setIsCanceledReasonRequired(false));
-      localDispatch(actions.setIsNewDateRequired(false));
+      localDispatch(setIsCanceledReasonRequired(false));
+      localDispatch(setIsNewDateRequired(false));
+      localDispatch(setIsDelayTimeRequired(false));
       dispatch(toggleAppointmentsUpdate());
     } catch (error) {
       toast.error(error.message);
@@ -174,17 +191,32 @@ const AppointmentDetails = (
   };
 
   const handleStatusSelected = async (status) => {
+    if (status.id === scheduleStatus?.id) {
+      localDispatch(setShowStatuses(false));
+      return;
+    }
+
     if (status.id === 'Canceled') {
-      localDispatch(actions.setIsCanceledReasonRequired(true));
+      localDispatch(setIsCanceledReasonRequired(true));
+      return;
+    }
+
+    if (status.id === 'Late') {
+      localDispatch(setIsDelayTimeRequired(true));
       return;
     }
 
     if (status.id === 'Rescheduled') {
-      localDispatch(actions.setIsNewDateRequired(true));
+      localDispatch(setIsNewDateRequired(true));
       return;
     }
     await changeScheduleStatus(status);
   };
+
+  const handleDelayTimeSubmitted = async (delayTime) => {
+    const status = Statuses.find((item) => item.id === 'Late');
+    await changeScheduleStatus(status, null, null, delayTime);
+  }
 
   const handleCanceledReasonSubmitted = async (canceledReason) => {
     const status = Statuses.find((item) => item.id === 'Canceled');
@@ -197,11 +229,15 @@ const AppointmentDetails = (
   }
 
   const handleCloseCanceledReasonModal = () => {
-    localDispatch(actions.setIsCanceledReasonRequired(false));
+    localDispatch(setIsCanceledReasonRequired(false));
   };
 
   const handleCloseDateModal = () => {
-    localDispatch(actions.setIsNewDateRequired(false));
+    localDispatch(setIsNewDateRequired(false));
+  }
+
+  const handleCloseDelayModal = () => {
+    localDispatch(setIsDelayTimeRequired(false));
   }
 
   const handlePatientClick = () => {
@@ -275,6 +311,11 @@ const AppointmentDetails = (
         },
       )}
     >
+      <DelayTimeModal
+        open={isDelayTimeRequired}
+        onSave={handleDelayTimeSubmitted}
+        onClose={handleCloseDelayModal}
+      />
       <SingleInputModal
         onSubmit={handleCanceledReasonSubmitted}
         onClose={handleCloseCanceledReasonModal}
@@ -383,13 +424,20 @@ const AppointmentDetails = (
                     {moment(details.created).format('DD MMM YYYY, HH:mm')}
                   </td>
                 </tr>
-                {scheduleStatus.id === 'Canceled' &&
-                details.canceledReason != null && (
+                {scheduleStatus.id === 'Canceled' && details.canceledReason != null && (
                   <tr>
                     <td style={{ paddingRight: '1rem' }}>
                       {upperFirst(textForKey('Canceled reason'))}:
                     </td>
                     <td>{details.canceledReason}</td>
+                  </tr>
+                )}
+                {scheduleStatus.id === 'Late' && details.delayTime > 0 && (
+                  <tr>
+                    <td style={{ paddingRight: '1rem' }}>
+                      {upperFirst(textForKey('delaytime'))}:
+                    </td>
+                    <td>{details.delayTime} min</td>
                   </tr>
                 )}
                 {details.noteText?.length > 0 && (
@@ -558,6 +606,7 @@ AppointmentDetails.propTypes = {
     canceledReason: PropTypes.string,
     isUrgent: PropTypes.bool,
     urgent: PropTypes.bool,
+    delayTime: PropTypes.number,
   }),
 };
 

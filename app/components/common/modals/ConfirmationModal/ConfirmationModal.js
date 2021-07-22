@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './ConfirmationModal.module.scss';
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import EasyPlanModal from '../EasyPlanModal';
 
 const ConfirmationModal = ({ show, title, message, onConfirm, onClose, isLoading }) => {

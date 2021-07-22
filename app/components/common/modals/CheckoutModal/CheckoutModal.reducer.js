@@ -1,5 +1,5 @@
 import moment from "moment-timezone";
-import { generateReducerActions, roundToTwo } from "../../../../utils/helperFuncs";
+import { generateReducerActions, roundToTwo } from "../../../../../utils/helperFuncs";
 import sumBy from "lodash/sumBy";
 
 export const computeServicePrice = (services, exchangeRates) => {

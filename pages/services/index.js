@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IconEdit from '../../components/icons/iconEdit';
 import IconPlus from '../../components/icons/iconPlus';
-import ConfirmationModal from '../../app/components/common/ConfirmationModal';
+import ConfirmationModal from '../../app/components/common/modals/ConfirmationModal';
 import CreateCategoryModal from '../../components/services/CreateCategoryModal';
 import LoadingButton from '../../components/common/LoadingButton';
 import { toggleImportModal, triggerServicesUpdate } from '../../redux/actions/actions';

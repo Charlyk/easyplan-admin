@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import IconLogoPlaceholder from '../../icons/iconLogoPlaceholder';
 import IconSuccess from '../../icons/iconSuccess';
 import IconTrash from '../../icons/iconTrash';
-import ConfirmationModal from '../../../app/components/common/ConfirmationModal';
+import ConfirmationModal from '../../../app/components/common/modals/ConfirmationModal';
 import LoadingButton from '../../common/LoadingButton';
 import {
   changeSelectedClinic,

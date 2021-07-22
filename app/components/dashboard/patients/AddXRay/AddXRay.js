@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
 import { uploadFileToAWS } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
-import EasyPlanModal from '../../../common/EasyPlanModal';
+import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { addPatientXRayImage } from "../../../../../middleware/api/patients";
 import styles from './AddXRay.module.scss';
 

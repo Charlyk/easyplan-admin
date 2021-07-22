@@ -25,17 +25,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from "axios";
 import { toast } from 'react-toastify';
 
-import IconClose from '../../../../components/icons/iconClose';
-import { setPatientDetails } from '../../../../redux/actions/actions';
-import { updateInvoiceSelector } from '../../../../redux/selectors/invoicesSelector';
-import { updateInvoicesSelector } from '../../../../redux/selectors/rootSelector';
+import IconClose from '../../../../../components/icons/iconClose';
+import { setPatientDetails } from '../../../../../redux/actions/actions';
+import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
+import { updateInvoicesSelector } from '../../../../../redux/selectors/rootSelector';
 import {
   adjustValueToNumber,
   formattedAmount,
   getClinicExchangeRates,
-} from '../../../../utils/helperFuncs';
-import { textForKey } from '../../../../utils/localization';
-import { Role } from "../../../utils/constants";
+} from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
+import { Role } from "../../../../utils/constants";
 import DetailsRow from './DetailsRow';
 import ServicesList from './ServicesList';
 import { reducer, initialState, actions } from './CheckoutModal.reducer';

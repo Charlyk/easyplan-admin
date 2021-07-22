@@ -9,7 +9,7 @@ import IconAvatar from '../../icons/iconAvatar';
 import { EmailRegex, PasswordRegex } from '../../../app/utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../app/components/common/EasyPlanModal';
+import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
 import '../../../styles/EditProfileModal.module.scss';
 import axios from "axios";
 import { useRouter } from "next/router";

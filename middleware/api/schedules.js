@@ -69,7 +69,7 @@ export async function fetchScheduleConfirmationInfo(scheduleId, patientId, heade
  *  'Rescheduled' |
  *  'CompletedFree'
  * } status
- * @param {{canceledReason: string|null, newDate: Date|null}} body
+ * @param {{canceledReason: string|null, newDate: Date|null, delayTime: number|null}} body
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */

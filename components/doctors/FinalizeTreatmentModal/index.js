@@ -17,7 +17,7 @@ import IconMinus from '../../icons/iconMinus';
 import IconPlus from '../../icons/iconPlus';
 import { formattedAmount, getClinicExchangeRates, getServiceName } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../app/components/common/EasyPlanModal';
+import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
 import styles from '../../../styles/FinalizeTreatmentModal.module.scss';
 
 const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave }) => {

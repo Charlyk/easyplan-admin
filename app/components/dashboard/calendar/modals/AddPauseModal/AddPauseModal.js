@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { generateReducerActions } from '../../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
-import EasyPlanModal from '../../../../common/EasyPlanModal';
+import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
 import { createPauseRecord, deletePauseRecord, fetchPausesAvailableTime } from "../../../../../../middleware/api/pauses";
 import styles from './AddPauseModal.module.scss';
 

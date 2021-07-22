@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 
 import IconPlus from '../../../../../components/icons/iconPlus';
 import IconSearch from '../../../../../components/icons/iconSearch';
-import ConfirmationModal from '../../../common/ConfirmationModal';
+import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import CreatePatientModal from '../CreatePatientModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import {

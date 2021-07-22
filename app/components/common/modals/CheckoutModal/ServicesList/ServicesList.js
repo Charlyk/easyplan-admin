@@ -12,7 +12,7 @@ import sortBy from 'lodash/sortBy';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../../../utils/localization';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesList.module.scss'
 

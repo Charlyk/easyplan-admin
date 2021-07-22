@@ -25,7 +25,7 @@ import { updateExchangeRatesSelector } from '../../../redux/selectors/rootSelect
 import { Role } from '../../../app/utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../app/components/common/EasyPlanModal';
+import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
 import styles from '../../../styles/ExchangeRates.module.scss';
 import axios from "axios";
 import { setIsExchangeRatesModalOpen } from "../../../redux/actions/exchangeRatesActions";

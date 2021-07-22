@@ -11,7 +11,7 @@ import IconPlus from '../../../../../../components/icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
 import { deletePatientXRayImage, getPatientXRayImages } from "../../../../../../middleware/api/patients";
-import ConfirmationModal from "../../../../common/ConfirmationModal";
+import ConfirmationModal from "../../../../common/modals/ConfirmationModal";
 import XRayPhase from './XRayPhase';
 import styles from './PatientXRay.module.scss'
 

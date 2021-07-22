@@ -20,7 +20,7 @@ import { EmailRegex, Role } from '../../../../../utils/constants';
 import { urlToLambda } from '../../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
-import EasyPlanModal from '../../../../common/EasyPlanModal';
+import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
 import {
   getAvailableHours,
   getScheduleDetails,

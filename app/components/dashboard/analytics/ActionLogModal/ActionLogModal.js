@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ReactJson from 'react-json-view';
 
 import { textForKey } from '../../../../../utils/localization';
-import EasyPlanModal from '../../../common/EasyPlanModal';
+import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 
 const ActionLogModal = ({ open, activityLog, onClose }) => {
   return (

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
 import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../app/components/common/EasyPlanModal';
+import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
 import styles from '../../../styles/CreateCategoryModal.module.scss';
 import axios from "axios";
 import { toast } from "react-toastify";

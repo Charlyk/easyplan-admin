@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { togglePatientsListUpdate } from '../../../../../redux/actions/actions';
 import { textForKey } from '../../../../../utils/localization';
 import EasyDatePicker from '../../../../../components/common/EasyDatePicker';
-import EasyPlanModal from '../../../common/EasyPlanModal';
+import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
 

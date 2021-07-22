@@ -501,6 +501,7 @@ export default {
     pendingpayment: 'Pending payment',
     waitingforpatient: 'Waiting for patient',
     exchangeratevalueatpaymenttime: 'Cursul valutar',
+    delaytime: 'Delay time',
     sentby: 'Sent by',
     comment: 'Comment',
     'Schedule was deleted': 'Schedule was deleted',
@@ -529,6 +530,7 @@ export default {
     statuses: 'Statuses',
     deleteimageconfirmation: 'Please confirm that you want to delete this image.',
     'delete image': 'Delete image',
+    'how long the patient was late': 'How long the patient was late',
   },
   ro: {
     analytics: 'Analitică',
@@ -1038,6 +1040,7 @@ export default {
     pendingpayment: 'În așteptare',
     waitingforpatient: 'În așteptare pacient',
     exchangeratevalueatpaymenttime: 'Cursul valutar',
+    delaytime: 'Timpul întârzierii',
     sentby: 'Trimis de',
     comment: 'Comentariu',
     'Schedule was deleted': 'Programarea a fost ștearsă!',
@@ -1066,6 +1069,7 @@ export default {
     statuses: 'Statuturi',
     deleteimageconfirmation: 'Vă rugăm să confirmați că doriți să ștergeți această imagine.',
     'delete image': 'Șterge imagine',
+    'how long the patient was late': 'Cu cât timp va întârzia pacientul',
   },
   ru: {
     analytics: 'Analytics',
@@ -1566,6 +1570,7 @@ export default {
     pendingpayment: 'Pending payment',
     waitingforpatient: 'Waiting for patient',
     exchangeratevalueatpaymenttime: 'Cursul valutar',
+    delaytime: 'Delay time',
     sentby: 'Sent by',
     comment: 'Comment',
     'Schedule was deleted': 'Schedule was deleted',
@@ -1594,5 +1599,6 @@ export default {
     statuses: 'Statuses',
     deleteimageconfirmation: 'Please confirm that you want to delete this image.',
     'delete image': 'Delete image',
+    'how long the patient was late': 'How long the patient was late',
   },
 };

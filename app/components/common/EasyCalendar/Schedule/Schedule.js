@@ -130,6 +130,15 @@ const Schedule = (
             >
               {startHour} - {endHour}
             </Typography>
+            {scheduleStatus?.id === 'Late' && schedule.delayTime > 0 && (
+              <Typography
+                noWrap
+                style={{ marginLeft: 3 }}
+                classes={{ root: clsx(styles.hourLabel, isPause && styles.pause) }}
+              >
+                (+{schedule.delayTime} min)
+              </Typography>
+            )}
             {scheduleStatus?.statusIcon != null && (
               <span
                 className={clsx(
@@ -207,6 +216,7 @@ Schedule.propTypes = {
     offset: PropTypes.number,
     type: PropTypes.oneOf(['Schedule', 'Pause']),
     comment: PropTypes.string,
+    delayTime: PropTypes.number,
     patient: PropTypes.shape({
       id: PropTypes.number,
       fullName: PropTypes.string,

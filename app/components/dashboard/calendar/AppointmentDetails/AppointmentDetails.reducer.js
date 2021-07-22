@@ -1,41 +1,61 @@
-import { generateReducerActions } from "../../../../../utils/helperFuncs";
 import { Statuses } from "../../../../utils/constants";
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   details: null,
   isLoading: false,
   showStatuses: false,
   isCanceledReasonRequired: false,
+  isDelayTimeRequired: false,
   scheduleStatus: Statuses[0],
   isNewDateRequired: false
 };
 
-const reducerTypes = {
-  setDetails: 'setDetails',
-  setIsLoading: 'setIsLoading',
-  setShowStatuses: 'setShowStatuses',
-  setIsCanceledReasonRequired: 'setIsCanceledReasonRequired',
-  setIsNewDateRequired: 'setIsNewDateRequired',
-  setScheduleStatus: 'setScheduleStatus',
-};
+const appointmentDetailsSlice = createSlice({
+  name: 'appointmentDetails',
+  initialState,
+  reducers: {
+    setDetails(state, action) {
+      state.details = action.payload;
+    },
+    setIsLoading(state, action) {
+      state.isLoading = action.payload;
+    },
+    setShowStatuses(state, action) {
+      state.showStatuses = action.payload;
+    },
+    setIsCanceledReasonRequired(state, action) {
+      state.isCanceledReasonRequired = action.payload;
+      if (action.payload) {
+        state.showStatuses = false;
+      }
+    },
+    setIsNewDateRequired(state, action) {
+      state.isNewDateRequired = action.payload;
+      if (action.payload) {
+        state.showStatuses = false;
+      }
+    },
+    setScheduleStatus(state, action) {
+      state.scheduleStatus = action.payload
+    },
+    setIsDelayTimeRequired(state, action) {
+      state.isDelayTimeRequired = action.payload;
+      if (action.payload) {
+        state.showStatuses = false;
+      }
+    },
+  },
+});
 
-export const actions = generateReducerActions(reducerTypes);
+export const {
+  setDetails,
+  setIsLoading,
+  setShowStatuses,
+  setIsCanceledReasonRequired,
+  setIsNewDateRequired,
+  setScheduleStatus,
+  setIsDelayTimeRequired,
+} = appointmentDetailsSlice.actions;
 
-export const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case reducerTypes.setDetails:
-      return { ...state, details: action.payload };
-    case reducerTypes.setIsLoading:
-      return { ...state, isLoading: action.payload };
-    case reducerTypes.setShowStatuses:
-      return { ...state, showStatuses: action.payload };
-    case reducerTypes.setIsCanceledReasonRequired:
-      return { ...state, isCanceledReasonRequired: action.payload };
-    case reducerTypes.setScheduleStatus:
-      return { ...state, scheduleStatus: action.payload };
-    case reducerTypes.setIsNewDateRequired:
-      return { ...state, isNewDateRequired: action.payload };
-    default:
-      return state;
-  }
-}
+export default appointmentDetailsSlice.reducer;

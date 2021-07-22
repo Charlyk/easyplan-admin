@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import clsx from "clsx";
 
-import IconClose from '../../../../components/icons/iconClose';
-import IconSuccess from '../../../../components/icons/iconSuccess';
-import { textForKey } from '../../../../utils/localization';
-import LoadingButton from '../../../../components/common/LoadingButton';
-import IconTrash from "../../../../components/icons/iconTrash";
+import IconClose from '../../../../../components/icons/iconClose';
+import IconSuccess from '../../../../../components/icons/iconSuccess';
+import { textForKey } from '../../../../../utils/localization';
+import LoadingButton from '../../../../../components/common/LoadingButton';
+import IconTrash from "../../../../../components/icons/iconTrash";
 import styles from './EasyPlanModal.module.scss';
 
 const EasyPlanModal = (
