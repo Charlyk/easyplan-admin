@@ -34,6 +34,10 @@ export const initialState = {
   services: [],
   showConfirmationMenu: false,
   isSearchingPatient: false,
+  teethModal: {
+    open: false,
+    service: null,
+  },
   invoiceStatus: 'PendingPayment',
   searchResults: [],
   invoiceDetails: {
@@ -69,6 +73,8 @@ const reducerTypes = {
   setPatient: 'setPatient',
   setIsSearchingPatient: 'setIsSearchingPatient',
   setSearchResults: 'setSearchResults',
+  setScheduleDetails: 'setScheduleDetails',
+  setTeethModal: 'setTeethModal',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -194,6 +200,23 @@ export const reducer = (state, action) => {
         ...state,
         searchResults: action.payload,
       };
+    case reducerTypes.setScheduleDetails: {
+      const { doctor, patient } = action.payload;
+      return {
+        ...state,
+        invoiceDetails: {
+          ...state.invoiceDetails,
+          doctor,
+          schedule: action.payload,
+          patient: {
+            ...patient,
+            name: patient.fullName,
+          },
+        }
+      }
+    }
+    case reducerTypes.setTeethModal:
+      return { ...state, teethModal: action.payload };
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 
 import {
   Button,
@@ -29,23 +29,31 @@ import IconClose from '../../../../../components/icons/iconClose';
 import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from '../../../../../redux/selectors/rootSelector';
-import {
-  adjustValueToNumber,
-  formattedAmount,
-  getClinicExchangeRates,
-} from '../../../../../utils/helperFuncs';
+import { adjustValueToNumber, formattedAmount, getClinicExchangeRates, } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 import { Role } from "../../../../utils/constants";
 import DetailsRow from './DetailsRow';
 import ServicesList from './ServicesList';
-import { reducer, initialState, actions } from './CheckoutModal.reducer';
+import { actions, initialState, reducer } from './CheckoutModal.reducer';
 import styles from './CheckoutModal.module.scss';
+import TeethModal from "../TeethModal";
+import {
+  createNewInvoice,
+  fetchDetailsForInvoice,
+  registerInvoicePayment
+} from "../../../../../middleware/api/invoices";
+import { savePatientGeneralTreatmentPlan } from "../../../../../middleware/api/patients";
 
+const getDateHour = (date) => {
+  if (date == null) return '';
+  return moment(date).format('HH:mm');
+};
 
 const CheckoutModal = (
   {
     open,
     invoice,
+    schedule,
     isNew,
     openPatientDetailsOnClose,
     onClose,
@@ -66,24 +74,53 @@ const CheckoutModal = (
       isDebt,
       isSearchingPatient,
       searchResults,
+      teethModal,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
   const updateInvoice = useSelector(updateInvoiceSelector);
+  const updateInvoices = useSelector(updateInvoicesSelector);
   const exchangeRates = getClinicExchangeRates(currentClinic);
-  const userClinic = currentUser.clinics.find(clinic => clinic.clinicId === currentClinic.id);
+  const userClinic = useMemo(() => {
+    return currentUser.clinics.find(clinic => clinic.clinicId === currentClinic.id);
+  }, [currentClinic]);
   const { canRegisterPayments } = userClinic;
   const clinicCurrency = currentClinic.currency;
-  const clinicServices = currentClinic.services?.filter((item) =>
-    item.serviceType !== 'System'
-  ) || [];
-  const doctors = currentClinic.users.filter((item) =>
-    item.roleInClinic === Role.doctor && !item.isHidden
-  ).map((item) => ({
-    ...item,
-    fullName: `${item.firstName} ${item.lastName}`,
-  }));
-  const updateInvoices = useSelector(updateInvoicesSelector);
+  const clinicBraces = currentClinic.braces ?? [];
+
+  const scheduleTime = useMemo(() => {
+    const startDate = moment(invoiceDetails?.schedule?.startTime).format(
+      'DD MMM YYYY',
+    );
+    const startHour = getDateHour(invoiceDetails?.schedule?.startTime);
+    const endHour = getDateHour(invoiceDetails?.schedule?.endTime);
+    return `${startDate} ${startHour} - ${endHour}`;
+  }, [invoiceDetails])
+
+  const canPay = useMemo(() => {
+    return (!isNew || (invoiceDetails.patient.id !== -1 && services.length > 0)) && canRegisterPayments;
+  }, [isNew, invoiceDetails, services, canRegisterPayments]);
+
+  const clinicServices = useMemo(() => {
+    return currentClinic.services?.filter((service) =>
+      service.serviceType !== 'System' &&
+      (invoiceDetails.doctor.id === -1 ||
+        invoiceDetails.doctor.services?.some(
+          (item) => item.serviceId === service.id,
+        )
+      )
+    ) || [];
+  }, [currentClinic.services, invoiceDetails]);
+
+  const doctors = useMemo(() => {
+    return currentClinic.users.filter((item) =>
+      item.roleInClinic === Role.doctor && !item.isHidden
+    ).map((item) => ({
+      ...item,
+      name: `${item.firstName} ${item.lastName}`,
+      fullName: `${item.firstName} ${item.lastName}`,
+    }));
+  }, [currentClinic.users]);
 
   useEffect(() => {
     if (!open) {
@@ -116,19 +153,33 @@ const CheckoutModal = (
     fetchInvoiceDetails();
   }, [updateInvoice]);
 
+  useEffect(() => {
+    if (schedule == null || !isNew) {
+      return;
+    }
+    const scheduleClone = cloneDeep(schedule)
+    scheduleClone.doctor = doctors.find(item => item.id === schedule.doctorId)
+    localDispatch(actions.setScheduleDetails(scheduleClone));
+  }, [schedule, isNew]);
+
   const fetchInvoiceDetails = async () => {
     if (invoice == null || exchangeRates.length === 0) {
       return;
     }
     localDispatch(actions.setIsFetching(true));
     try {
-      const response = await axios.get(`/api/invoices/${invoice.id}`);
+      const response = await fetchDetailsForInvoice(invoice.id);
       const { data: invoiceDetails } = response;
       localDispatch(
         actions.setupInvoiceData({ invoiceDetails, exchangeRates }),
       );
     } catch (error) {
-      toast.error(error.message);
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data.message || error.message);
+      } else {
+        toast.error(error.message);
+      }
     } finally {
       localDispatch(actions.setIsFetching(false));
     }
@@ -203,17 +254,48 @@ const CheckoutModal = (
     );
   };
 
+  const handleCloseTeethModal = () => {
+    localDispatch(actions.setTeethModal({ open: false, service: null }));
+  }
+
+  const handleTeethSelected = (service, teeth) => {
+    const newServices = cloneDeep(services);
+    for (const tooth of teeth) {
+      service.toothId = tooth;
+      const serviceExists = newServices.some(
+        (item) => item.serviceId === service.id && item.toothId === service.toothId,
+      );
+      if (serviceExists) {
+        continue;
+      }
+      newServices.unshift({
+        ...service,
+        serviceId: service.id,
+        currency: clinicCurrency,
+        amount: service.price,
+        count: 1,
+        totalPrice: service.price,
+      });
+    }
+    localDispatch(
+      actions.setServices({ services: newServices, exchangeRates }),
+    );
+  }
+
   const handleNewServiceSelected = (service) => {
+    if (service.serviceType === 'Single') {
+      localDispatch(actions.setTeethModal({ open: true, service }));
+      return;
+    }
     const serviceExists = services.some(
-      (item) => item.serviceId === service.id,
+      (item) => item.serviceId === service.id && item.destination === service.destination,
     );
     if (serviceExists) {
       return;
     }
     const newServices = cloneDeep(services);
     newServices.unshift({
-      id: service.id,
-      name: service.name,
+      ...service,
       serviceId: service.id,
       currency: clinicCurrency,
       amount: service.price,
@@ -227,10 +309,31 @@ const CheckoutModal = (
 
   const handleServiceRemoved = (service) => {
     const newServices = cloneDeep(services);
-    remove(newServices, (item) => item.serviceId === service.serviceId);
+    remove(newServices, (item) =>
+      item.serviceId === service.serviceId &&
+      item.toothId === service.toothId &&
+      item.destination === service.destination
+    );
     localDispatch(
       actions.setServices({ services: newServices, exchangeRates }),
     );
+  };
+
+  const getPlanRequestBody = () => {
+    return {
+      patientId: invoiceDetails.patient.id,
+      scheduleId: schedule.id,
+      services: services.map(service => ({
+        serviceId: service.id,
+        toothId: service.toothId ?? null,
+        destination: service.destination ?? null,
+        completed: true,
+        price: service.amount,
+        currency: service.currency,
+        count: service.count,
+        isBraces: service.serviceType == null,
+      })),
+    };
   };
 
   const getRequestBody = () => {
@@ -247,6 +350,8 @@ const CheckoutModal = (
         price: item.amount,
         count: item.count,
         currency: item.currency,
+        toothId: item.toothId ?? null,
+        destination: item.destination ?? null,
       })),
     };
 
@@ -273,9 +378,14 @@ const CheckoutModal = (
     try {
       const requestBody = getRequestBody();
       localDispatch(actions.setIsLoading(true));
-      isNew
-        ? await axios.post(`/api/invoices`, requestBody)
-        : await axios.put(`/api/invoices/${invoiceDetails.id}`, requestBody);
+      schedule != null
+        ? await savePatientGeneralTreatmentPlan({
+          ...getPlanRequestBody(),
+          paymentRequest: requestBody
+        })
+        : isNew
+        ? await createNewInvoice(requestBody)
+        : await registerInvoicePayment(invoiceDetails.id, requestBody);
       // await router.replace(router.asPath);
       if (openPatientDetailsOnClose) {
         handlePatientClick();
@@ -283,7 +393,12 @@ const CheckoutModal = (
         onClose();
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response != null) {
+        const { data } = error.response;
+        toast.error(data.message || error.message);
+      } else {
+        toast.error(error.message);
+      }
     } finally {
       localDispatch(actions.setIsLoading(false));
     }
@@ -304,32 +419,6 @@ const CheckoutModal = (
     );
   };
 
-  const getDateHour = (date) => {
-    if (date == null) return '';
-    return moment(date).format('HH:mm');
-  };
-
-  const startDate = moment(invoiceDetails?.schedule?.startTime).format(
-    'DD MMM YYYY',
-  );
-  const startHour = getDateHour(invoiceDetails?.schedule?.startTime);
-  const endHour = getDateHour(invoiceDetails?.schedule?.endTime);
-  const scheduleTime = `${startDate} ${startHour} - ${endHour}`;
-
-  const filteredServices = isNew
-    ? clinicServices.filter((clinicService) => {
-      return (
-        invoiceDetails.doctor.id === -1 ||
-        invoiceDetails.doctor.services.some(
-          (item) => item.serviceId === clinicService.id,
-        )
-      );
-    })
-    : [];
-
-  const canPay =
-    (!isNew || (invoiceDetails.patient.id !== -1 && services.length > 0)) && canRegisterPayments;
-
   return (
     <Modal
       open={open}
@@ -337,12 +426,19 @@ const CheckoutModal = (
       className={styles['checkout-modal-root']}
     >
       <Paper classes={{ root: styles['checkout-modal-root__paper'] }}>
+        <TeethModal
+          open={teethModal.open}
+          service={teethModal.service}
+          onClose={handleCloseTeethModal}
+          onSave={handleTeethSelected}
+        />
         <ServicesList
           currencies={exchangeRates}
           canAddService={isNew}
           isDebt={isDebt}
           services={services}
-          availableServices={filteredServices}
+          availableBraces={clinicBraces}
+          availableServices={clinicServices}
           onServiceChanged={handleServiceChanged}
           onServiceSelected={handleNewServiceSelected}
           onServiceDeleted={handleServiceRemoved}
@@ -368,7 +464,7 @@ const CheckoutModal = (
                 <TableBody>
                   {invoiceDetails.doctor != null && (
                     <DetailsRow
-                      isValueInput={isNew}
+                      isValueInput={isNew && schedule == null}
                       onValueSelected={handleDoctorSelected}
                       valuePlaceholder={`${textForKey(
                         'Select doctor',
@@ -386,15 +482,15 @@ const CheckoutModal = (
                     isLoading={isSearchingPatient}
                     onSearch={handlePatientFieldChange}
                     onValueSelected={handlePatientSelected}
-                    clickableValue={!isNew}
-                    isValueInput={isNew}
+                    clickableValue={!isNew || schedule != null}
+                    isValueInput={isNew && schedule == null}
                     options={searchResults}
                     valuePlaceholder={textForKey('Select patient')}
                     title={textForKey('Patient')}
                     value={invoiceDetails.patient}
                     onValueClick={handlePatientClick}
                   />
-                  {!isNew && invoiceDetails.schedule != null && (
+                  {(!isNew || schedule != null) && invoiceDetails.schedule != null && (
                     <DetailsRow
                       title={textForKey('Date')}
                       value={{ name: scheduleTime }}
@@ -529,6 +625,22 @@ CheckoutModal.propTypes = {
     doctorFullName: PropTypes.string,
     patientFullName: PropTypes.string,
     services: PropTypes.arrayOf(PropTypes.object),
+  }),
+  schedule: PropTypes.shape({
+    id: PropTypes.number,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      fullName: PropTypes.string,
+    }),
+    serviceName: PropTypes.string,
+    serviceColor: PropTypes.string,
+    start: PropTypes.object,
+    end: PropTypes.object,
+    scheduleStatus: PropTypes.string,
+    canceledReason: PropTypes.string,
+    isUrgent: PropTypes.bool,
+    urgent: PropTypes.bool,
+    delayTime: PropTypes.number,
   }),
   isNew: PropTypes.bool,
   onClose: PropTypes.func,

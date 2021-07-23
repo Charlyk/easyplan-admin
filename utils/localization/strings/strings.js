@@ -531,6 +531,9 @@ export default {
     deleteimageconfirmation: 'Please confirm that you want to delete this image.',
     'delete image': 'Delete image',
     'how long the patient was late': 'How long the patient was late',
+    'select teeth for': 'Select teeth for',
+    checkout_no_services: 'There are no selected services yet.',
+    checkout_select_below: 'Select some by typing their name in the field below.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1070,6 +1073,9 @@ export default {
     deleteimageconfirmation: 'Vă rugăm să confirmați că doriți să ștergeți această imagine.',
     'delete image': 'Șterge imagine',
     'how long the patient was late': 'Cu cât timp va întârzia pacientul',
+    'select teeth for': 'Alegeți dinții pentru',
+    checkout_no_services: 'Încă nu ați selectat nici un serviciu.',
+    checkout_select_below: 'Selectați serviciile introducând numele lor în câmpul de mai jos.'
   },
   ru: {
     analytics: 'Analytics',
@@ -1600,5 +1606,8 @@ export default {
     deleteimageconfirmation: 'Please confirm that you want to delete this image.',
     'delete image': 'Delete image',
     'how long the patient was late': 'How long the patient was late',
+    'select teeth for': 'Select teeth for',
+    checkout_no_services: 'There are no selected services yet.',
+    checkout_select_below: 'Select some by typing their name in the field below.',
   },
 };

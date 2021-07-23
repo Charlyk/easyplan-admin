@@ -1,4 +1,6 @@
 .checkout-modal-root {
+  user-select: none;
+
   &__paper {
     width: 80%;
     min-width: 800px;
@@ -53,6 +55,10 @@
         font-style: normal;
         font-weight: bold;
         font-size: 16px;
+
+        &:disabled {
+          background-color: #A1A2C6;
+        }
 
         &:hover {
           background-color: #5c93d6;

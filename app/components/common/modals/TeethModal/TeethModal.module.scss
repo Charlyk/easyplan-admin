@@ -1,0 +1,60 @@
+.teethModalRoot {
+  .teethModalBody {
+    padding: 16px;
+
+    .teethRow {
+      display: flex;
+      align-items: center;
+      border-bottom: #DBEEFB 1px solid;
+      justify-content: center;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .toothWrapper {
+        margin: 10px 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+
+        .checkMark {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background-color: #3A83DC;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-items: center;
+
+          svg {
+            height: 15px;
+            fill: white;
+          }
+        }
+
+        &:hover {
+          opacity: 0.8;
+        }
+
+        .toothLabel {
+          color: #3A83DC !important;
+          font-family: Inter, sans-serif !important;
+          font-style: normal !important;
+          font-size: 10px !important;
+          margin-top: 5px;
+        }
+
+        svg {
+          height: 40px;
+        }
+      }
+    }
+  }
+}

@@ -280,7 +280,7 @@ export const ScheduleStatuses = Statuses.filter((item) => item.isSchedule);
 
 export const ManualStatuses = Statuses.filter((item) => item.manual);
 
-export const teeth = [
+export const Teeth = [
   {
     type: 'top-left',
     toothId: '18',

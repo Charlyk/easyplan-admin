@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import {
   Box,
   IconButton,
@@ -17,6 +16,7 @@ import IconMinus from '../../../../../../components/icons/iconMinus';
 import IconPlus from '../../../../../../components/icons/iconPlus';
 import IconTrash from '../../../../../../components/icons/iconTrash';
 import { adjustValueToNumber } from '../../../../../../utils/helperFuncs';
+import { textForKey } from "../../../../../../utils/localization";
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelete }) => {
@@ -66,7 +66,7 @@ const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelet
       name = `${name} ${service.toothId}`;
     }
     if (service.destination != null) {
-      name = `${name} (${service.destination})`;
+      name = `${name} (${textForKey(service.destination)})`;
     }
     return name;
   };

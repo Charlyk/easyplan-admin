@@ -1,7 +1,7 @@
 import React from "react";
 
 import PropTypes from 'prop-types';
-import { teeth } from "../../../../../utils/constants";
+import { Teeth } from "../../../../../utils/constants";
 import ToothView from "../ToothView";
 import styles from "./TeethBlock.module.scss";
 
@@ -17,7 +17,7 @@ const TeethBlock = (
 ) => {
   return (
     <div className={styles[position]}>
-      {teeth
+      {Teeth
         .filter((it) => it.type === position)
         .map((item) => (
           <ToothView

@@ -5,6 +5,24 @@
   width: 50%;
   background-color: #F4FAFE;
   border-right: #ededed 1px solid;
+  position: relative;
+
+  .noDataWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .noDataLabel {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #34344E !important;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+  }
 
   .autocomplete-root {
     border-top: #ededed 1px solid;

@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-
 import {
   Box,
   Table,
@@ -16,9 +15,17 @@ import { textForKey } from '../../../../../../utils/localization';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesList.module.scss'
 
+const getOptionLabel = option => {
+  let name = option.name;
+  if (option.destination != null) {
+    name = `${name} (${textForKey(option.destination)})`;
+  }
+  return name;
+};
+
 const filterOptions = createFilterOptions({
   matchFrom: 'any',
-  stringify: option => option.name,
+  stringify: getOptionLabel,
   ignoreCase: true,
 });
 
@@ -47,7 +54,7 @@ const ServicesList = (
         id={option.id}
         classes={{ root: 'autocomplete-root-option-label' }}
       >
-        {option.name}
+        {getOptionLabel(option)}
       </Typography>
     );
   };
@@ -58,10 +65,23 @@ const ServicesList = (
   };
 
   const sortedServices = useMemo(() => {
-    return sortBy(availableServices, item => item.name.toLowerCase())
+    const updatedServices = [];
+    for (const service of availableServices) {
+      if (service.serviceType === 'Braces') {
+        updatedServices.push({
+          ...service,
+          destination: 'Mandible',
+        });
+        updatedServices.push({
+          ...service,
+          destination: 'Maxillary',
+        });
+      } else {
+        updatedServices.push(service);
+      }
+    }
+    return sortBy(updatedServices, item => item.name.toLowerCase())
   }, [availableServices])
-
-  const getOptionLabel = option => option.name;
 
   return (
     <Box className={styles['services-list']}>
@@ -85,6 +105,16 @@ const ServicesList = (
           </TableBody>
         </Table>
       </TableContainer>
+      {services.length === 0 && (
+        <div className={styles.noDataWrapper}>
+          <Typography className={styles.noDataLabel}>
+            {textForKey('checkout_no_services')}
+          </Typography>
+          <Typography className={styles.noDataLabel}>
+            {textForKey('checkout_select_below')}
+          </Typography>
+        </div>
+      )}
       {canAddService && (
         <Autocomplete
           key={autocompleteClearKey}

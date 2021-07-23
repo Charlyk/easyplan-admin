@@ -165,7 +165,7 @@ export function setPatientXRayModal(payload) {
 
 /**
  * Toggle payment modal
- * @param {{open: boolean, invoice: Object}} payload
+ * @param {{open: boolean, invoice: Object?, isNew: boolean?, schedule: Object?}} payload
  * @return {{payload: *, type: string}}
  */
 export function setPaymentModal(payload) {

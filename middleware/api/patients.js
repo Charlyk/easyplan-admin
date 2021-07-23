@@ -158,6 +158,18 @@ export async function deletePatientPlanService(patientId, serviceId, headers = n
  *     price: number,
  *     currency: string
  *   }]
+ *   paymentRequest: {
+ *     paidAmount: number,
+ *     discount: number,
+ *     totalAmount: string,
+ *     services: [{
+ *       id: number,
+ *       serviceId: number,
+ *       count: number,
+ *       price: number,
+ *       currency: string,
+ *     }]
+ *   }?
  * }} requestBody
  * @param headers
  * @return {Promise<AxiosResponse<*>>}

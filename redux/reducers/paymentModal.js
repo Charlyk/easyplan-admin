@@ -3,6 +3,7 @@ import types from '../types/types';
 const initialState = Object.freeze({
   open: false,
   invoice: null,
+  schedule: null,
   isNew: false,
   openPatientDetailsOnClose: false,
 });

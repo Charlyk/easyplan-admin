@@ -77,8 +77,19 @@
     padding: .5rem;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-top: -.2rem;
     border-bottom: #ededed 1px solid;
+
+    .editButton {
+      padding: 5px;
+      margin-right: 5px;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
 
     .close-button {
       outline: none;
@@ -295,7 +306,10 @@
 
     :global(.delete-button) {
       margin-left: .5rem;
-      margin-right: .5rem;
+    }
+
+    :global(.positive-button) {
+      margin-left: .5rem;
     }
   }
 }

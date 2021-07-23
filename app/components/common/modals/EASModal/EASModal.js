@@ -32,7 +32,7 @@ const EASModal = ({ open, title, primaryBtnText, secondaryBtnText, bodyStyle, ch
     >
       <Paper className={styles.modalPaper}>
         <div className={styles.modalHeader}>
-          <Typography className={styles.titleLabel}>
+          <Typography className={styles.titleLabel} noWrap>
             {title}
           </Typography>
           <IconButton className={styles.closeButton} onPointerUp={onClose}>

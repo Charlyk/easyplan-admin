@@ -1,12 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function IconEdit() {
+function IconEdit({ fill }) {
   return (
     <svg
       width='16'
       height='16'
       viewBox='0 0 16 16'
       xmlns='http://www.w3.org/2000/svg'
+      fill={fill}
     >
       <path
         fillRule='evenodd'
@@ -18,3 +20,11 @@ function IconEdit() {
 }
 
 export default React.memo(IconEdit);
+
+IconEdit.propTypes = {
+  fill: PropTypes.string,
+}
+
+IconEdit.defaultProps = {
+  fill: '#000'
+}

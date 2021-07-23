@@ -264,7 +264,7 @@ export const adjustValueToNumber = (newValue, maxAmount) => {
     }
 
     if (newValue.length > 1 && newValue[0] === '0') {
-      newValue = newValue.replace(/^./, '');
+      newValue = newValue.replace(/^0+/, '');
     }
 
     newValue = parseFloat(newValue);

@@ -4,7 +4,7 @@ import {
   Box,
   CircularProgress,
   ClickAwayListener,
-  Fade,
+  Fade, IconButton,
   Paper,
   Popper,
   Typography,
@@ -30,8 +30,9 @@ import IconEdit from '../../../../../components/icons/iconEdit';
 import IconTrash from '../../../../../components/icons/iconTrash';
 import SingleInputModal from '../../../common/modals/SingleInputModal';
 import EasyDatePickerModal from "../../../common/modals/EasyDatePickerModal";
+import DelayTimeModal from "../../../common/modals/DelayTimeModal";
 import {
-  setPatientDetails,
+  setPatientDetails, setPaymentModal,
   toggleAppointmentsUpdate,
 } from '../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
@@ -53,8 +54,6 @@ import reducer, {
   setShowStatuses,
 } from "./AppointmentDetails.reducer";
 import styles from './AppointmentDetails.module.scss';
-import EASModal from "../../../common/modals/EASModal";
-import DelayTimeModal from "../../../common/modals/DelayTimeModal";
 
 const AppointmentDetails = (
   {
@@ -155,6 +154,13 @@ const AppointmentDetails = (
   const handleEditSchedule = () => {
     onEdit(schedule);
   };
+
+  const handleFinalizeSchedule = () => {
+    if (isLoading || scheduleStatus.id !== 'OnSite') {
+      return;
+    }
+    dispatch(setPaymentModal({ open: true, isNew: true, invoice: null, schedule }));
+  }
 
   const handleDeleteSchedule = () => {
     onDelete(schedule);
@@ -336,18 +342,26 @@ const AppointmentDetails = (
       )}
       {statusesList}
       <div className={styles['header-wrapper']}>
-        <div
-          role='button'
-          tabIndex={0}
-          onClick={onClose}
-          className={styles['close-button']}
+        <Box display="flex" alignItems="center">
+          <div
+            role='button'
+            tabIndex={0}
+            onClick={onClose}
+            className={styles['close-button']}
+          >
+            <IconClose/>
+          </div>
+          <span className={styles['schedule-title']}>
+            {patientName}:{' '}
+            <span style={{ color: serviceColor }}>{serviceName}</span>
+          </span>
+        </Box>
+        <IconButton
+          className={styles.editButton}
+          onPointerUp={handleEditSchedule}
         >
-          <IconClose/>
-        </div>
-        <span className={styles['schedule-title']}>
-          {patientName}:{' '}
-          <span style={{ color: serviceColor }}>{serviceName}</span>
-        </span>
+          <IconEdit fill="#3A83DC" />
+        </IconButton>
       </div>
       <div className={styles['content-wrapper']}>
         {isLoading && (
@@ -553,21 +567,27 @@ const AppointmentDetails = (
       </div>
       <div className={styles['footer-wrapper']}>
         <Box width='100%' display='flex'>
-          <Button className='cancel-button' onClick={onClose}>
+          <Button
+            className='cancel-button'
+            onPointerUp={onClose}
+          >
             {textForKey('Close')}
             <IconClose/>
           </Button>
           <Button
+            className='positive-button'
+            disabled={isLoading || scheduleStatus.id !== 'OnSite'}
+            onPointerUp={handleFinalizeSchedule}
+          >
+            {textForKey('Finalize')}
+          </Button>
+          <Button
             className='delete-button'
-            disabled={isFinished}
-            onClick={handleDeleteSchedule}
+            disabled={isFinished || isLoading}
+            onPointerUp={handleDeleteSchedule}
           >
             {textForKey('Delete')}
             <IconTrash/>
-          </Button>
-          <Button className='positive-button' onClick={handleEditSchedule}>
-            {textForKey('Edit')}
-            <IconEdit/>
           </Button>
         </Box>
         {(scheduleStatus.id === 'CompletedPaid' ||
