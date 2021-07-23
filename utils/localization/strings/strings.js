@@ -534,6 +534,7 @@ export default {
     'select teeth for': 'Select teeth for',
     checkout_no_services: 'There are no selected services yet.',
     checkout_select_below: 'Select some by typing their name in the field below.',
+    'add new color': 'Add new color',
   },
   ro: {
     analytics: 'Analitică',
@@ -1075,7 +1076,8 @@ export default {
     'how long the patient was late': 'Cu cât timp va întârzia pacientul',
     'select teeth for': 'Alegeți dinții pentru',
     checkout_no_services: 'Încă nu ați selectat nici un serviciu.',
-    checkout_select_below: 'Selectați serviciile introducând numele lor în câmpul de mai jos.'
+    checkout_select_below: 'Selectați serviciile introducând numele lor în câmpul de mai jos.',
+    'add new color': 'Adăugați culoare nouă',
   },
   ru: {
     analytics: 'Analytics',
@@ -1609,5 +1611,6 @@ export default {
     'select teeth for': 'Select teeth for',
     checkout_no_services: 'There are no selected services yet.',
     checkout_select_below: 'Select some by typing their name in the field below.',
+    'add new color': 'Add new color',
   },
 };
