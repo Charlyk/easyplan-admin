@@ -5,8 +5,9 @@ import { Button, IconButton, Modal, Paper, Typography } from "@material-ui/core"
 import IconClose from "../../../../../components/icons/iconClose";
 import { textForKey } from "../../../../../utils/localization";
 import styles from './EASModal.module.scss';
+import clsx from "clsx";
 
-const EASModal = ({ open, title, primaryBtnText, secondaryBtnText, bodyStyle, children, onClose, onPrimaryClick, onSecondaryClick }) => {
+const EASModal = ({ open, title, primaryBtnText, secondaryBtnText, bodyStyle, children, className, onClose, onPrimaryClick, onSecondaryClick }) => {
   const handlePrimaryClick = () => {
     if (typeof onPrimaryClick === 'function') {
       onPrimaryClick();
@@ -26,7 +27,7 @@ const EASModal = ({ open, title, primaryBtnText, secondaryBtnText, bodyStyle, ch
   return (
     <Modal
       open={open}
-      className={styles.modalRoot}
+      className={clsx(styles.modalRoot, className)}
       onBackdropClick={onClose}
     >
       <Paper className={styles.modalPaper}>
@@ -69,6 +70,7 @@ EASModal.propTypes = {
   title: PropTypes.string,
   primaryBtnText: PropTypes.string,
   secondaryBtnText: PropTypes.string,
+  className: PropTypes.any,
   bodyStyle: PropTypes.any,
   children: PropTypes.any,
   onClose: PropTypes.func.isRequired,

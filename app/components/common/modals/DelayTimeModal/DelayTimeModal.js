@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, InputAdornment, OutlinedInput, Typography } from "@material-ui/core";
+import { Chip, FormControl, InputAdornment, OutlinedInput, Typography } from "@material-ui/core";
 
 import { textForKey } from "../../../../../utils/localization";
 import { valueToNumber } from "../../../../../utils/helperFuncs";
 import EASModal from "../EASModal";
 import styles from './DelayTimeModal.module.scss';
+
+const suggestions = [
+  '5', '10', '15', '20', '25', '30'
+];
 
 const DelayTimeModal = ({ open, initialTime, onSave, onClose}) => {
   const [value, setValue] = useState(initialTime);
@@ -30,9 +34,14 @@ const DelayTimeModal = ({ open, initialTime, onSave, onClose}) => {
     onClose();
   }
 
+  const handleSuggestionClick = (suggestion) => {
+    setValue(suggestion);
+  }
+
   return (
     <EASModal
       open={open}
+      className={styles.modalRoot}
       bodyStyle={{ padding: 16 }}
       title={textForKey('delaytime')}
       onPrimaryClick={handleSave}
@@ -66,6 +75,21 @@ const DelayTimeModal = ({ open, initialTime, onSave, onClose}) => {
           labelWidth={0}
         />
       </FormControl>
+      <div className={styles.suggestionsContainer}>
+        {suggestions.map(item => (
+          <Chip
+            key={item}
+            clickable
+            size="small"
+            label={`${item} min`}
+            onPointerUp={() => handleSuggestionClick(item)}
+            classes={{
+              root: styles.chipRoot,
+              label: styles.chipLabel,
+            }}
+          />
+        ))}
+      </div>
     </EASModal>
   )
 };
