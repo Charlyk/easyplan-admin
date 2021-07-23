@@ -1,22 +1,23 @@
 import React from 'react';
-
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconMinus from '../../../icons/iconMinus';
-import IconPlusBig from '../../../icons/iconPlusBig';
-import { textForKey } from '../../../../utils/localization';
+import IconMinus from '../../../../../../components/icons/iconMinus';
+import IconPlusBig from '../../../../../../components/icons/iconPlusBig';
+import { textForKey } from '../../../../../../utils/localization';
 import ServiceDoctor from '../ServiceDoctor';
-import styles from '../../../../styles/ServiceDoctors.module.scss';
+import styles from './ServiceDoctors.module.scss';
 
-const ServiceDoctors = ({
-  isExpanded,
-  showStep,
-  onToggle,
-  doctors,
-  serviceId,
-  onDoctorChange,
-}) => {
+const ServiceDoctors = (
+  {
+    isExpanded,
+    showStep,
+    onToggle,
+    doctors,
+    serviceId,
+    onDoctorChange,
+  }
+) => {
   const handleInfoExpand = () => {
     onToggle();
   };
@@ -43,7 +44,7 @@ const ServiceDoctors = ({
           className={styles['service-doctors__header__button']}
           onClick={handleInfoExpand}
         >
-          {isExpanded ? <IconMinus /> : <IconPlusBig />}
+          {isExpanded ? <IconMinus/> : <IconPlusBig/>}
         </div>
       </div>
       <div className={contentClasses}>

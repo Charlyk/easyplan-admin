@@ -52,15 +52,30 @@
     padding-left: .2rem;
     padding-right: .2rem;
 
+    .colorsWrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .popper {
+      z-index: 1000;
+
+      :global(.positive-button) {
+        width: 100%;
+      }
+    }
+
     &.expanded {
       padding-top: .5rem;
-      height: 30.5rem;
+      height: auto;
+      min-height: 33rem;
       transition: height .2s ease-out, padding-top .2s ease-out;
     }
 
     &.collapsed {
       padding-top: 0;
-      height: 0;
+      min-height: 0;
       transition: height .2s ease-out, padding-top .2s ease-out;
     }
 
@@ -108,11 +123,38 @@
       }
     }
 
-    &__colors {
-      margin-left: .2rem;
+    .paletteWrapper {
       margin-top: .5rem;
-      display: flex !important;
+      display: flex;
       align-items: center;
+      cursor: pointer;
+
+      &:hover {
+        .paletteLabel {
+          text-decoration: underline;
+        }
+      }
+
+      .paletteLabel {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 14px;
+        margin-left: 5px;
+        color: #3A83DC;
+      }
+
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    &__colors {
+      display: flex !important;
+      margin-top: 1rem;
+      align-items: center;
+      max-width: 100%;
+      flex-wrap: wrap;
       justify-content: flex-start;
 
       &__color-container {
@@ -123,7 +165,6 @@
       :global(.btn-primary) {
         width: 2rem;
         height: 2rem;
-        margin-right: .3rem;
         flex: unset !important;
         align-items: center;
         justify-content: center;
@@ -131,6 +172,8 @@
         border-color: white;
         background-color: white;
         border-radius: 1rem !important;
+        margin-right: .3rem;
+        margin-bottom: .5rem;
 
         &:hover {
           background-color: white !important;

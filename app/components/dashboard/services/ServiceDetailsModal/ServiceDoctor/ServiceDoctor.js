@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 
-import SwitchButton from '../../../common/SwitchButton';
-import styles from '../../../../styles/ServiceDoctor.module.scss';
+import SwitchButton from '../../../../../../components/common/SwitchButton';
+import styles from './ServiceDoctor.module.scss';
 
 const ServiceDoctor = ({ serviceData, onChange }) => {
   const [doctorService, setDoctorService] = useState({

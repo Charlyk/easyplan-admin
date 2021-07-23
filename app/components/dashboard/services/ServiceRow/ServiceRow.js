@@ -1,16 +1,15 @@
 import React from 'react';
-
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
-import IconDelete from '../../icons/iconDelete';
-import IconEdit from '../../icons/iconEdit';
-import IconRefresh from '../../icons/iconRefresh';
-import { formattedAmount } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/ServiceRow.module.scss';
+import IconDelete from '../../../../../components/icons/iconDelete';
+import IconEdit from '../../../../../components/icons/iconEdit';
+import IconRefresh from '../../../../../components/icons/iconRefresh';
+import { formattedAmount } from '../../../../../utils/helperFuncs';
+import { textForKey } from '../../../../../utils/localization';
+import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, onEditService, onDeleteService }) => {
   const handleEditService = () => {

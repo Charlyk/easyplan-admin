@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import IconEdit from '../../components/icons/iconEdit';
 import IconPlus from '../../components/icons/iconPlus';
 import ConfirmationModal from '../../app/components/common/modals/ConfirmationModal';
-import CreateCategoryModal from '../../components/services/CreateCategoryModal';
+import CreateCategoryModal from '../../app/components/dashboard/services/CreateCategoryModal';
 import LoadingButton from '../../components/common/LoadingButton';
 import { toggleImportModal, triggerServicesUpdate } from '../../redux/actions/actions';
 import { setClinicServices } from '../../redux/actions/clinicActions';
@@ -33,7 +33,7 @@ import {
   generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import ServiceRow from '../../components/services/ServiceRow';
+import ServiceRow from '../../app/components/dashboard/services/ServiceRow';
 import MainComponent from "../../components/common/MainComponent";
 import { updatedServiceSelector } from "../../redux/selectors/servicesSelector";
 import { setUpdatedService } from "../../redux/actions/servicesActions";

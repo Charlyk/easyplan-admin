@@ -11,7 +11,7 @@ import DataMigrationModal from './DataMigrationModal';
 import MainMenu from './MainMenu';
 import PageHeader from './PageHeader';
 import PatientDetailsModal from '../../app/components/dashboard/patients/PatientDetailsModal';
-import ServiceDetailsModal from '../services/ServiceDetailsModal';
+import ServiceDetailsModal from '../../app/components/dashboard/services/ServiceDetailsModal';
 import {
   setAppointmentModal,
   setPatientDetails, setPaymentModal,

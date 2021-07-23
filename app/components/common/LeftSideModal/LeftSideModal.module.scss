@@ -1,0 +1,16 @@
+.drawerRoot {
+  .drawerContent {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #FAFAFD;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawerPaper {
+    width: 500px;
+    height: 100%;
+  }
+}

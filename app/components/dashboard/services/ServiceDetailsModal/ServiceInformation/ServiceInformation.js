@@ -1,29 +1,51 @@
-import React from 'react';
-
+import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
   Form,
   ToggleButtonGroup,
   ToggleButton,
-  InputGroup,
+  InputGroup, Button,
 } from 'react-bootstrap';
+import { ClickAwayListener, Fade, Paper, Popper, Typography } from "@material-ui/core";
+import { ColorPicker, useColor } from "react-color-palette";
 
-import IconMinus from '../../../icons/iconMinus';
-import IconPlusBig from '../../../icons/iconPlusBig';
-import { availableCurrenciesSelector } from '../../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../../utils/localization';
-import styles from '../../../../styles/ServiceInformation.module.scss';
+import IconMinus from '../../../../../../components/icons/iconMinus';
+import IconPlusBig from '../../../../../../components/icons/iconPlusBig';
+import { availableCurrenciesSelector } from '../../../../../../redux/selectors/clinicSelector';
+import { textForKey } from '../../../../../../utils/localization';
+import IconPalette from "../../../../../../components/icons/iconPalette";
+import styles from './ServiceInformation.module.scss';
 
-const ServiceInformation = ({
-  currentClinic,
-  isExpanded,
-  showStep,
-  onToggle,
-  data,
-  onChange,
-}) => {
+const availableColors = [
+  '#FF453A',
+  '#FF9F0A',
+  '#FDC434',
+  '#00E987',
+  '#7DD7C8',
+  '#64D2FF',
+  '#0A84FF',
+  '#3A83DC',
+  '#BF5AF2',
+  '#F44081'
+]
+
+const ServiceInformation = (
+  {
+    currentClinic,
+    isExpanded,
+    showStep,
+    onToggle,
+    data,
+    onChange,
+  }
+) => {
   const currencies = availableCurrenciesSelector(currentClinic);
+  const paletteRef = useRef(null);
+  const [colors, setColors] = useState(availableColors);
+  const [showPicker, setShowPicker] = useState(false);
+  const [color, setColor] = useColor('hex', '#3A83DC');
+
   const handleInfoExpand = () => {
     onToggle();
   };
@@ -43,13 +65,61 @@ const ServiceInformation = ({
     }
   };
 
+  const handleSaveColor = (event) => {
+    event.stopPropagation();
+    setColors([...colors, color.hex]);
+    handleHidePicker();
+    handleFormChange(color.hex);
+  }
+
+  const handleShowPicker = (event) => {
+    event.stopPropagation();
+    setShowPicker(true);
+  }
+
+  const handleHidePicker = () => {
+    setShowPicker(false);
+  }
+
   const contentClasses = clsx(
     styles['service-information__content'],
     isExpanded ? styles.expanded : styles.collapsed,
   );
 
+  const colorPickerPopper = (
+    <Popper
+      disablePortal
+      id="color-picker"
+      open={showPicker}
+      placement="top-start"
+      anchorEl={paletteRef.current}
+      transition
+      className={styles.popper}
+    >
+      {({ TransitionProps }) => (
+        <Fade {...TransitionProps}>
+          <ClickAwayListener onClickAway={handleHidePicker}>
+            <Paper elevation={10}>
+              <ColorPicker
+                hideHSV
+                hideRGB
+                width={300}
+                height={200}
+                color={color}
+                onChange={setColor}
+              />
+              <Button className="positive-button" onPointerUp={handleSaveColor}>
+                {textForKey('Save')}
+              </Button>
+            </Paper>
+          </ClickAwayListener>
+        </Fade>
+      )}
+    </Popper>
+  )
+
   return (
-    <div className={styles['service-information']}>
+    <div className={styles['service-information']} onPointerUp={handleHidePicker}>
       <div className={styles['service-information__header']}>
         <div className={styles['service-information__header__title']}>
           {showStep && (
@@ -65,7 +135,7 @@ const ServiceInformation = ({
           className={styles['service-information__header__button']}
           onClick={handleInfoExpand}
         >
-          {isExpanded ? <IconMinus /> : <IconPlusBig />}
+          {isExpanded ? <IconMinus/> : <IconPlusBig/>}
         </div>
       </div>
 
@@ -160,74 +230,31 @@ const ServiceInformation = ({
         </Form>
 
         <Form.Label>{textForKey('Select color')}</Form.Label>
-        <ToggleButtonGroup
-          onChange={handleFormChange}
-          className={styles['service-information__content__colors']}
-          type='radio'
-          value={data.color}
-          name='serviceColors'
-        >
-          <ToggleButton value='#FF453A'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#FF453A' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#FF9F0A'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#FF9F0A' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#FDC434'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#FDC434' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#00E987'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#00E987' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#7DD7C8'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#7DD7C8' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#64D2FF'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#64D2FF' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#0A84FF'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#0A84FF' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#3A83DC'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#3A83DC' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#BF5AF2'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#BF5AF2' }}
-            />
-          </ToggleButton>
-          <ToggleButton value='#F44081'>
-            <div
-              className={styles['service-information__content__colors__color-container']}
-              style={{ backgroundColor: '#F44081' }}
-            />
-          </ToggleButton>
-        </ToggleButtonGroup>
+        <div className={styles.colorsWrapper}>
+          <ToggleButtonGroup
+            onChange={handleFormChange}
+            className={styles['service-information__content__colors']}
+            type='radio'
+            value={data.color}
+            name='serviceColors'
+          >
+            {colors.map(color => (
+              <ToggleButton key={color} value={color}>
+                <div
+                  className={styles['service-information__content__colors__color-container']}
+                  style={{ backgroundColor: color }}
+                />
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+          <div className={styles.paletteWrapper} ref={paletteRef} onPointerUp={handleShowPicker}>
+            {colorPickerPopper}
+            <IconPalette fill="#3A83DC"/>
+            <Typography className={styles.paletteLabel}>
+              {textForKey('Add new color')}
+            </Typography>
+          </div>
+        </div>
       </div>
     </div>
   );

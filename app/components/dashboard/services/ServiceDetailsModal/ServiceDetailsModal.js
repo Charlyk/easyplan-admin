@@ -1,22 +1,21 @@
 import React, { useEffect, useMemo, useState } from 'react';
-
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from "react-toastify";
 
-import IconClose from '../../icons/iconClose';
-import IconSuccess from '../../icons/iconSuccess';
-import { closeServiceDetailsModal } from '../../../redux/actions/serviceDetailsActions';
-import { serviceDetailsModalSelector } from '../../../redux/selectors/serviceDetailsSelector';
-import { textForKey } from '../../../utils/localization';
-import LeftSideModal from '../../common/LeftSideModal';
-import LoadingButton from '../../common/LoadingButton';
+import { textForKey } from '../../../../../utils/localization';
+import LeftSideModal from '../../../common/LeftSideModal';
+import { createService, updateService } from "../../../../../middleware/api/services";
+import IconClose from '../../../../../components/icons/iconClose';
+import IconSuccess from '../../../../../components/icons/iconSuccess';
+import LoadingButton from '../../../../../components/common/LoadingButton';
+import { closeServiceDetailsModal } from '../../../../../redux/actions/serviceDetailsActions';
+import { serviceDetailsModalSelector } from '../../../../../redux/selectors/serviceDetailsSelector';
+import { setUpdatedService } from "../../../../../redux/actions/servicesActions";
+import { clinicActiveDoctorsSelector } from "../../../../../redux/selectors/clinicSelector";
 import ServiceDoctors from './ServiceDoctors';
 import ServiceInformation from './ServiceInformation';
-import styles from '../../../styles/ServiceDetailsModal.module.scss';
-import { toast } from "react-toastify";
-import { setUpdatedService } from "../../../redux/actions/servicesActions";
-import { clinicActiveDoctorsSelector } from "../../../redux/selectors/clinicSelector";
-import { createService, updateService } from "../../../middleware/api/services";
+import styles from './ServiceDetailsModal.module.scss';
 
 const initialService = {
   name: '',
@@ -68,8 +67,8 @@ const ServiceDetailsModal = ({ currentClinic }) => {
   useEffect(() => {
     setIsFormValid(
       serviceInfo.name.length > 0 &&
-        serviceInfo.color.length > 0 &&
-        parseInt(serviceInfo.duration) > 0,
+      serviceInfo.color.length > 0 &&
+      parseInt(serviceInfo.duration) > 0,
     );
   }, [serviceInfo]);
 
