@@ -14,7 +14,8 @@ import PatientDetailsModal from '../../app/components/dashboard/patients/Patient
 import ServiceDetailsModal from '../../app/components/dashboard/services/ServiceDetailsModal';
 import {
   setAppointmentModal,
-  setPatientDetails, setPaymentModal,
+  setPatientDetails,
+  setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
 } from '../../redux/actions/actions';
@@ -118,6 +119,7 @@ const MainComponent = (
         open: false,
         invoice: null,
         isNew: false,
+        schedule: null,
         openPatientDetailsOnClose: false,
       }),
     );

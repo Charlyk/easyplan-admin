@@ -87,6 +87,7 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
         open: true,
         invoice: debt,
         openPatientDetailsOnClose: true,
+        schedule: null,
         isNew: false,
       }),
     );

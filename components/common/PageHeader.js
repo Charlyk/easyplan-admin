@@ -59,7 +59,7 @@ const PageHeader = (
   const handleActionsOpen = () => setIsActionsOpen(true);
 
   const handleOpenPaymentModal = () =>
-    dispatch(setPaymentModal({ open: true, isNew: true, invoice: null }));
+    dispatch(setPaymentModal({ open: true, isNew: true, invoice: null, schedule: null }));
 
   const handleActionSelected = (action) => {
     switch (action.key) {

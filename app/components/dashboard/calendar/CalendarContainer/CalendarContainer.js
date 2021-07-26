@@ -179,7 +179,7 @@ const CalendarContainer = (
   };
 
   const handlePayDebt = (debt) => {
-    dispatch(setPaymentModal({ open: true, invoice: debt }));
+    dispatch(setPaymentModal({ open: true, invoice: debt, schedule: null }));
   };
 
   const handleEditSchedule = (schedule) => {

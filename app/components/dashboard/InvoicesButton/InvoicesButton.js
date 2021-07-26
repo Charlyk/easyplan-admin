@@ -64,7 +64,7 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
   };
 
   const handlePayInvoice = (invoice) => {
-    dispatch(setPaymentModal({ open: true, invoice }));
+    dispatch(setPaymentModal({ open: true, invoice, schedule: null }));
   };
 
   const invoicesPaper = (
