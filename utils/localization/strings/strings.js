@@ -535,6 +535,7 @@ export default {
     checkout_no_services: 'There are no selected services yet.',
     checkout_select_below: 'Select some by typing their name in the field below.',
     'add new color': 'Add new color',
+    'completed services': 'Completed services',
   },
   ro: {
     analytics: 'Analitică',
@@ -1078,6 +1079,7 @@ export default {
     checkout_no_services: 'Încă nu ați selectat nici un serviciu.',
     checkout_select_below: 'Selectați serviciile introducând numele lor în câmpul de mai jos.',
     'add new color': 'Adăugați culoare nouă',
+    'completed services': 'Serviciile efectuate',
   },
   ru: {
     analytics: 'Analytics',
@@ -1612,5 +1614,6 @@ export default {
     checkout_no_services: 'There are no selected services yet.',
     checkout_select_below: 'Select some by typing their name in the field below.',
     'add new color': 'Add new color',
+    'completed services': 'Completed services',
   },
 };
