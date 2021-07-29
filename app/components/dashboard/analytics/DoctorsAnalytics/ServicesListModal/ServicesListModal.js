@@ -1,23 +1,52 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+import sumBy from 'lodash/sumBy';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TableRow
+} from "@material-ui/core";
 
 import LeftSideModal from "../../../../common/LeftSideModal";
 import { textForKey } from "../../../../../../utils/localization";
 import { formattedAmount, getServiceName } from "../../../../../../utils/helperFuncs";
 import styles from './ServicesListModal.module.scss';
 
-const ServicesListModal = ({ open, onClose, statistic }) => {
+const ServicesListModal = ({ open, currency, onClose, statistic }) => {
   const doctor = statistic?.doctor;
-  console.log(statistic);
 
-  const renderServiceRow = (service, index) => {
+  const getDoctorAmount = useCallback((service) => {
     let doctorAmount = 0;
     if (service.doctorPrice != null) {
       doctorAmount = service.doctorPrice;
     } else if (service.doctorPercentage != null) {
       doctorAmount = service.price * service.doctorPercentage / 100;
     }
+    return doctorAmount;
+  }, [])
+
+  const totalPrice = useMemo(() => {
+    if (statistic == null) {
+      return 0
+    }
+
+    return sumBy(statistic.services, item => item.price);
+  }, [statistic]);
+
+  const doctorAmount = useMemo(() => {
+    if (statistic == null) {
+      return 0
+    }
+
+    return sumBy(statistic.services, getDoctorAmount);
+  }, [statistic, getDoctorAmount]);
+
+  const renderServiceRow = (service, index) => {
+    let doctorAmount = getDoctorAmount(service);
     return (
       <TableRow key={`${service.id}-${index}`}>
         <TableCell>{getServiceName(service)}</TableCell>
@@ -57,6 +86,16 @@ const ServicesListModal = ({ open, onClose, statistic }) => {
           <TableBody>
             {statistic?.services.map(renderServiceRow)}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={2} align="right">
+                {formattedAmount(totalPrice, currency)}
+              </TableCell>
+              <TableCell align="right">
+                {formattedAmount(doctorAmount, currency)}
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </LeftSideModal>
@@ -67,6 +106,7 @@ export default ServicesListModal;
 
 ServicesListModal.propTypes = {
   open: PropTypes.bool,
+  currency: PropTypes.string,
   statistic: PropTypes.shape({
     clinicAmount: PropTypes.number,
     doctor: {

@@ -37,6 +37,7 @@ import ServicesListModal from "./ServicesListModal";
 const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) => {
   const pickerRef = useRef(null);
   const router = useRouter();
+  const currency = currentClinic.currency;
   const [
     {
       isLoading,
@@ -141,6 +142,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
     <div className={styles['statistics-doctors']}>
       <ServicesListModal
         {...servicesModal}
+        currency={currency}
         onClose={handleCloseServicesModal}
       />
       <StatisticFilter isLoading={isLoading} onUpdate={handleFilterSubmit}>
