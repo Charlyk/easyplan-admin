@@ -36,6 +36,10 @@
     padding: unset;
     position: relative;
 
+    .servicesButton {
+      padding: 0;
+    }
+
     .no-data-label {
       padding: 3rem;
       font-family: Inter, sans-serif;

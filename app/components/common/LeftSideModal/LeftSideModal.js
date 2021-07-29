@@ -8,11 +8,11 @@ import styles from './LeftSideModal.module.scss';
 import { Drawer, Paper } from "@material-ui/core";
 
 const LeftSideModal = (props) => {
-  const { show, onClose, children, title, steps } = props;
+  const { show, onClose, children, title, steps, className } = props;
 
   return (
     <Drawer anchor="right" open={show} onClose={onClose} className={styles.drawerRoot}>
-      <Paper className={styles.drawerPaper}>
+      <Paper className={clsx(styles.drawerPaper, className)}>
         <div className={styles.drawerContent}>
           <ModalHeader title={title} steps={steps} onClose={onClose} />
           {children}
@@ -26,6 +26,7 @@ export default LeftSideModal;
 
 LeftSideModal.propTypes = {
   title: PropTypes.string,
+  className: PropTypes.string,
   steps: PropTypes.arrayOf(PropTypes.string),
   children: PropTypes.any,
   show: PropTypes.bool,

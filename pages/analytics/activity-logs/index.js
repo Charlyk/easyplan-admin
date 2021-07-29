@@ -5,7 +5,7 @@ import sortBy from 'lodash/sortBy';
 import { Button, Form } from 'react-bootstrap';
 
 import ActionLogModal from '../../../app/components/dashboard/analytics/ActionLogModal';
-import EasyDateRangePicker from '../../../components/common/EasyDateRangePicker';
+import EasyDateRangePicker from '../../../app/components/common/EasyDateRangePicker';
 import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../app/components/dashboard/analytics/StatisticFilter';
 import styles from '../../../styles/ActivityLogs.module.scss';

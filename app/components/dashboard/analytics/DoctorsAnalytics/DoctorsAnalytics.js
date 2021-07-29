@@ -1,6 +1,6 @@
-import React, { useEffect, useReducer, useRef } from 'react';
-
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import {
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -16,69 +16,86 @@ import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
 import { useRouter } from "next/router";
 
-import EasyDateRangePicker from '../../../../../components/common/EasyDateRangePicker';
+import IconList from "../../../../../components/icons/iconList";
+import EasyDateRangePicker from '../../../common/EasyDateRangePicker';
 import { textForKey } from '../../../../../utils/localization';
-import StatisticFilter from '../StatisticFilter';
-import { Role } from "../../../../utils/constants";
-import { reducer, actions, initialState } from "./DoctorsAnalytics.reducer";
-import styles from './DoctorsAnalytics.module.scss';
 import { formattedAmount } from "../../../../../utils/helperFuncs";
+import { Role } from "../../../../utils/constants";
+import StatisticFilter from '../StatisticFilter';
+import reducer, {
+  initialState,
+  setSelectedDoctor,
+  setSelectedService,
+  setDateRange,
+  setShowRangePicker,
+  setInitialQuery,
+  setServicesModal,
+} from "./DoctorsAnalytics.reducer";
+import styles from './DoctorsAnalytics.module.scss';
+import ServicesListModal from "./ServicesListModal";
 
 const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) => {
   const pickerRef = useRef(null);
   const router = useRouter();
-  const doctors = sortBy(
-    currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
-    user => user.fullName.toLowerCase(),
-  );
-  const services = sortBy(currentClinic.services, service => service.name.toLowerCase());
   const [
     {
       isLoading,
       selectedDoctor,
       selectedService,
       showRangePicker,
+      servicesModal,
       dateRange: [startDate, endDate],
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
+  const doctors = useMemo(() => {
+    return sortBy(
+      currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
+      user => user.fullName.toLowerCase(),
+    )
+  }, [currentClinic]);
+
+  const services = useMemo(() => {
+    return sortBy(currentClinic.services, service => service.name.toLowerCase())
+  }, [currentClinic]);
+
   useEffect(() => {
-    localDispatch(actions.setInitialQuery(initialQuery));
+    localDispatch(setInitialQuery(initialQuery));
   }, []);
 
   const handleServiceChange = (event) => {
     const newValue = parseInt(event.target.value);
     if (newValue === -1) {
-      localDispatch(actions.setSelectedService({ id: newValue }));
+      localDispatch(setSelectedService({ id: newValue }));
       return;
     }
     const service = services.find((item) => item.id === newValue);
-    localDispatch(actions.setSelectedService(service));
+    localDispatch(setSelectedService(service));
   };
 
   const handleDoctorChange = (event) => {
     const newValue = parseInt(event.target.value);
     if (newValue === -1) {
-      localDispatch(actions.setSelectedDoctor({ id: newValue }));
+      localDispatch(setSelectedDoctor({ id: newValue }));
       return;
     }
     const doctor = doctors.find((item) => item.id === newValue);
-    localDispatch(actions.setSelectedDoctor(doctor));
+    localDispatch(setSelectedDoctor(doctor));
   };
 
   const handleDatePickerOpen = () => {
-    localDispatch(actions.setShowRangePicker(true));
+    localDispatch(setShowRangePicker(true));
   };
 
   const handleDatePickerClose = () => {
-    localDispatch(actions.setShowRangePicker(false));
+    localDispatch(setShowRangePicker(false));
   };
 
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(
-      actions.setDateRange([
+      setDateRange([
         startDate,
         moment(endDate).endOf('day').toDate(),
       ]),
@@ -105,10 +122,27 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
 
     const queryString = new URLSearchParams(query).toString();
     router.replace(`/analytics/doctors?${queryString}`);
-  }
+  };
+
+  const handleShowServices = (statistic) => {
+    localDispatch(
+      setServicesModal({
+        open: true,
+        statistic: statistic,
+      })
+    );
+  };
+
+  const handleCloseServicesModal = () => {
+    localDispatch(setServicesModal({ open: false }));
+  };
 
   return (
     <div className={styles['statistics-doctors']}>
+      <ServicesListModal
+        {...servicesModal}
+        onClose={handleCloseServicesModal}
+      />
       <StatisticFilter isLoading={isLoading} onUpdate={handleFilterSubmit}>
         <Form.Group style={{ flexDirection: 'column' }}>
           <Form.Label>{textForKey('Services')}</Form.Label>
@@ -171,18 +205,33 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
               <TableHead>
                 <TableRow>
                   <TableCell>{textForKey('Doctor')}</TableCell>
-                  <TableCell>{textForKey('Total income')}</TableCell>
-                  <TableCell>{textForKey('Doctor part')}</TableCell>
-                  <TableCell>{textForKey('Clinic profit')}</TableCell>
+                  <TableCell align="right">{textForKey('Total income')}</TableCell>
+                  <TableCell align="right">{textForKey('Doctor part')}</TableCell>
+                  <TableCell align="right">{textForKey('Clinic profit')}</TableCell>
+                  <TableCell align="right" size="small">{textForKey('Services')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {statistics.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell>{item.doctor.fullName}</TableCell>
-                    <TableCell>{formattedAmount(item.totalAmount, currentClinic.currency)}</TableCell>
-                    <TableCell>{formattedAmount(item.doctorAmount, currentClinic.currency)}</TableCell>
-                    <TableCell>{formattedAmount(item.clinicAmount, currentClinic.currency)}</TableCell>
+                    <TableCell align="right">
+                      {formattedAmount(item.totalAmount, currentClinic.currency)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {formattedAmount(item.doctorAmount, currentClinic.currency)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {formattedAmount(item.clinicAmount, currentClinic.currency)}
+                    </TableCell>
+                    <TableCell align="right" size="small">
+                      <IconButton
+                        className={styles.servicesButton}
+                        onPointerUp={() => handleShowServices(item)}
+                      >
+                        <IconList fill="#3A83DC"/>
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -191,7 +240,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
                   <TableCell/>
                   <TableCell/>
                   <TableCell/>
-                  <TableCell align='left'>
+                  <TableCell align='right'>
                     {textForKey('Total')}:{' '}
                     {formattedAmount(sum(statistics.map((it) => it.clinicAmount)), currentClinic.currency)}
                   </TableCell>

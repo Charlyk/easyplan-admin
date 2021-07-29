@@ -35,13 +35,21 @@ import IconClose from '../../../../../components/icons/iconClose';
 import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from '../../../../../redux/selectors/rootSelector';
-import { adjustValueToNumber, formattedAmount, getClinicExchangeRates, } from '../../../../../utils/helperFuncs';
+import {
+  adjustValueToNumber,
+  formattedAmount,
+  getClinicExchangeRates
+} from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 import { Role } from "../../../../utils/constants";
 import TeethModal from "../TeethModal";
 import DetailsRow from './DetailsRow';
 import ServicesList from './ServicesList';
-import { actions, initialState, reducer } from './CheckoutModal.reducer';
+import {
+  actions,
+  initialState,
+  reducer
+} from './CheckoutModal.reducer';
 import styles from './CheckoutModal.module.scss';
 
 const getDateHour = (date) => {

@@ -10,7 +10,7 @@ import IconCreditCard from '../../../../../components/icons/iconCreditCard';
 import IconLiabilities from '../../../../../components/icons/iconLiabilities';
 import IconSuccess from '../../../../../components/icons/iconSuccess';
 import IconXPerson from '../../../../../components/icons/iconXPerson';
-import EasyDateRangePicker from '../../../../../components/common/EasyDateRangePicker';
+import EasyDateRangePicker from '../../../common/EasyDateRangePicker';
 import { Role, Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import StatisticFilter from '../StatisticFilter';

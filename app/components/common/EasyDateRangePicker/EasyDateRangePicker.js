@@ -1,22 +1,23 @@
 import React from 'react';
-
 import { ClickAwayListener, Fade, Paper } from '@material-ui/core';
 import Popper from '@material-ui/core/Popper';
 import PropTypes from 'prop-types';
 import { DateRangePicker } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import { getAppLanguage } from '../../../utils/localization';
-import styles from '../../../styles/EasyDateRangePicker.module.scss';
+import { getAppLanguage } from '../../../../utils/localization';
 import { localizedInputRanges, localizedStaticRanges } from './ranges';
+import styles from './EasyDateRangePicker.module.scss';
 
-const EasyDateRangePicker = ({
-  pickerAnchor,
-  open,
-  dateRange,
-  onClose,
-  onChange,
-}) => {
+const EasyDateRangePicker = (
+  {
+    pickerAnchor,
+    open,
+    dateRange,
+    onClose,
+    onChange,
+  }
+) => {
   return (
     <Popper
       className={styles['easy-date-range-picker']}
