@@ -77,7 +77,7 @@ const MainComponent = (
         pubnub.unsubscribeAll();
       }
     }
-  }, []);
+  }, [currentUser, currentClinic]);
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));

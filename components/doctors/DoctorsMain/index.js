@@ -48,7 +48,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
         });
       };
     }
-  }, []);
+  }, [currentUser, currentClinic]);
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
