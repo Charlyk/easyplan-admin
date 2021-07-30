@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { getClinicUrl, getRedirectUrlForUser } from "../../../../utils/helperFuncs";
 import { textForKey } from "../../../../utils/localization";
-import { loginUser, resetUserPassword } from "../../../../middleware/api/auth";
+import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
 import { isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";
 import ResetPassword from './ResetPassword';
@@ -91,6 +91,7 @@ export default function LoginWrapper({ currentUser }) {
     const [subdomain] = window.location.host.split('.');
     if (RestrictedSubdomains.includes(subdomain)) {
       const clinic = user.clinics[0];
+      await signOut();
       const clinicUrl = getClinicUrl(clinic, token);
       await router.replace(clinicUrl);
     } else {

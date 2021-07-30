@@ -6,9 +6,10 @@ import { useDispatch } from "react-redux";
 
 import { getClinicUrl } from "../../../../utils/helperFuncs";
 import { textForKey } from "../../../../utils/localization";
-import ClinicItem from "./ClinicItem";
 import { isDev } from "../../../../eas.config";
 import { triggerUserLogout } from "../../../../redux/actions/actions";
+import { signOut } from "../../../../middleware/api/auth";
+import ClinicItem from "./ClinicItem";
 import styles from './ClnicsList.module.scss';
 
 export default function ClinicsList({ user, authToken }) {
@@ -21,9 +22,10 @@ export default function ClinicsList({ user, authToken }) {
     } else if (user?.clinics.length === 0) {
       router.replace('/create-clinic');
     }
-  }, [user])
+  }, [user]);
 
   const handleClinicSelected = async (clinic) => {
+    await signOut()
     const clinicUrl = getClinicUrl(clinic, authToken);
     await router.replace(clinicUrl);
   }
