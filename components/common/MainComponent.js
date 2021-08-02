@@ -125,6 +125,8 @@ const MainComponent = (
     );
   };
 
+  console.log(currentUser, currentClinic);
+
   return (
     <div className={styles['main-page']} id='main-page'>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}

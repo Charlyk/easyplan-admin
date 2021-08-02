@@ -68,7 +68,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     // check if doctor id is present in query
     let doctorId = query.doctorId;
     if (doctorId == null) {
-      doctorId = doctors[0].id ?? 0;
+      doctorId = doctors[0]?.id ?? 0;
     }
 
     // fetch schedules for specified period of time

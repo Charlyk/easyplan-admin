@@ -78,7 +78,7 @@ const CalendarContainer = (
   }, []);
 
   useEffect(() => {
-    const newDoctors = doctors.map((item) => {
+    const newDoctors = doctors?.map((item) => {
       const servicesIds = item.services.map((service) => service.seviceId);
       return {
         ...item,
@@ -86,7 +86,7 @@ const CalendarContainer = (
           servicesIds.includes(service.serviceId),
         ),
       };
-    });
+    }) ?? [];
     localDispatch(reducerActions.setFilters({ doctors: newDoctors, services }));
     if (newDoctors.length > 0 && doctorId == null) {
       localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
@@ -232,7 +232,7 @@ const CalendarContainer = (
       currentPath='/calendar'
       authToken={authToken}
     >
-      <div className={styles['calendar-root']}>
+      <div className={styles.calendarRoot}>
         {deleteSchedule.open && (
           <ConfirmationModal
             isLoading={isDeleting}
@@ -244,7 +244,7 @@ const CalendarContainer = (
           />
         )}
         {viewMode !== 'day' && (
-          <div className={styles['calendar-root__content__left-container']}>
+          <div className={styles.leftContainer}>
             <CalendarDoctors
               isFetching={isFetching}
               selectedDoctor={selectedDoctor}
@@ -254,7 +254,7 @@ const CalendarContainer = (
             />
           </div>
         )}
-        <div className={styles['calendar-root__content__center-container']}>
+        <div className={styles.centerContainer}>
           <AppointmentsCalendar
             canAddAppointment
             viewMode={viewMode}

@@ -283,6 +283,7 @@ export const adjustValueToNumber = (newValue, maxAmount) => {
 export const handleRequestError = async (error, req, res) => {
   const status = error?.response?.status;
   const statusText = error?.response?.statusText || textForKey('something_went_wrong');
+  console.log(error?.response)
   if (status === 401) {
     if (req && req.url !== '/login') {
       res.writeHead(302, { Location: `/login` });

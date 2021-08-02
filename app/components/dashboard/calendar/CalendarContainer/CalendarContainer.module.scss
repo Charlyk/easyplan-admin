@@ -1,4 +1,4 @@
-.calendar-root {
+.calendarRoot {
   outline: none;
   padding: 0 8px 8px;
   display: flex;
@@ -6,39 +6,39 @@
   overflow-y: scroll;
   position: relative;
 
-  &__content {
+  .content {
     height: 100%;
     display: flex;
     justify-content: space-between;
+  }
 
-    &__left-container {
-      width: 15%;
-      height: 100%;
+  .leftContainer {
+    width: 15%;
+    height: 100%;
+  }
+
+  .rightContainer {
+    width: 18%;
+    height: 100%;
+  }
+
+  .centerContainer {
+    height: 100%;
+    width: 100%;
+
+    .parsingProgressWrapper {
+      box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.1);
+      background-color: transparent;
     }
+  }
 
-    &__right-container {
-      width: 18%;
-      height: 100%;
-    }
+  .account {
+    width: 29%;
+    max-height: 100%;
+  }
 
-    &__center-container {
-      height: 100%;
-      width: 100%;
-
-      .parsing-progress-wrapper {
-        box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.1);
-        background-color: transparent;
-      }
-    }
-
-    &__account {
-      width: 29%;
-      max-height: 100%;
-    }
-
-    &__details {
-      width: 46%;
-      max-height: 100%;
-    }
+  .details {
+    width: 46%;
+    max-height: 100%;
   }
 }
