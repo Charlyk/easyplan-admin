@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import MainComponent from "../components/common/MainComponent";
+import MainComponent from "../app/components/common/MainComponent/MainComponent";
 import { useRouter } from "next/router";
 import { fetchAppData } from "../middleware/api/initialization";
 import { getRedirectUrlForUser, handleRequestError } from "../utils/helperFuncs";

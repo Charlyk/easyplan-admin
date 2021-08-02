@@ -11,7 +11,7 @@ import StatisticFilter from '../../../app/components/dashboard/analytics/Statist
 import styles from '../../../styles/ActivityLogs.module.scss';
 import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
-import MainComponent from "../../../components/common/MainComponent";
+import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import isEqual from "lodash/isEqual";
 import { useRouter } from "next/router";
 import { getActivityJournal } from "../../../middleware/api/analytics";

@@ -18,7 +18,7 @@ import { redirectIfOnGeneralHost } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
 import AppointmentsCalendar from '../AppointmentsCalendar';
 import CalendarDoctors from '../CalendarDoctors';
-import MainComponent from "../../../../../components/common/MainComponent";
+import MainComponent from "../../../common/MainComponent/MainComponent";
 import { reducer, initialState, reducerActions } from './CalendarContainer.reducer';
 import styles from './CalendarContainer.module.scss';
 

@@ -34,7 +34,7 @@ import {
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 import ServiceRow from '../../app/components/dashboard/services/ServiceRow';
-import MainComponent from "../../components/common/MainComponent";
+import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { updatedServiceSelector } from "../../redux/selectors/servicesSelector";
 import { setUpdatedService } from "../../redux/actions/servicesActions";
 import { deleteService, fetchAllServices, restoreService } from "../../middleware/api/services";

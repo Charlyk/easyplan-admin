@@ -1,6 +1,6 @@
 import React from 'react';
 import { handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
-import MainComponent from "../../components/common/MainComponent";
+import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getMessages } from "../../middleware/api/messages";
 import { fetchAppData } from "../../middleware/api/initialization";
 import { parseCookies } from "../../utils";

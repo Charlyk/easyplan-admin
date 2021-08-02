@@ -1,40 +1,38 @@
 import React, { useEffect, useMemo } from 'react';
-
 import PropTypes from 'prop-types';
-import styles from '../../styles/MainComponent.module.scss';
-
+import { Typography } from "@material-ui/core";
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from "next/router";
 
-import AddAppointmentModal from '../../app/components/dashboard/calendar/modals/AddAppointmentModal';
-import DataMigrationModal from './DataMigrationModal';
-import MainMenu from './MainMenu';
-import PageHeader from './PageHeader';
-import PatientDetailsModal from '../../app/components/dashboard/patients/PatientDetailsModal';
-import ServiceDetailsModal from '../../app/components/dashboard/services/ServiceDetailsModal';
+import AddAppointmentModal from '../../dashboard/calendar/modals/AddAppointmentModal';
+import PatientDetailsModal from '../../dashboard/patients/PatientDetailsModal';
+import ServiceDetailsModal from '../../dashboard/services/ServiceDetailsModal';
 import {
   setAppointmentModal,
   setPatientDetails,
   setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
-} from '../../redux/actions/actions';
-import { appointmentModalSelector, paymentModalSelector } from '../../redux/selectors/modalsSelector';
+} from '../../../../redux/actions/actions';
+import { appointmentModalSelector, paymentModalSelector } from '../../../../redux/selectors/modalsSelector';
 import {
   isImportModalOpenSelector,
   patientDetailsSelector,
-} from '../../redux/selectors/rootSelector';
-import paths from '../../utils/paths';
-import ExchangeRates from "./ExchangeRates";
-import { isExchangeRateModalOpenSelector } from "../../redux/selectors/exchangeRatesModalSelector";
-import { setIsExchangeRatesModalOpen } from "../../redux/actions/exchangeRatesActions";
-import { useRouter } from "next/router";
-import { handleRemoteMessage } from "../../utils/pubnubUtils";
-import CheckoutModal from "../../app/components/common/modals/CheckoutModal";
-import { setClinic } from "../../redux/actions/clinicActions";
-import { environment, isDev } from "../../eas.config";
-import { Typography } from "@material-ui/core";
-import { redirectIfOnGeneralHost } from "../../utils/helperFuncs";
+} from '../../../../redux/selectors/rootSelector';
+import paths from '../../../../utils/paths';
+import { isExchangeRateModalOpenSelector } from "../../../../redux/selectors/exchangeRatesModalSelector";
+import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";
+import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
+import { setClinic } from "../../../../redux/actions/clinicActions";
+import { environment, isDev } from "../../../../eas.config";
+import { redirectIfOnGeneralHost } from "../../../../utils/helperFuncs";
+import DataMigrationModal from '../../../../components/common/DataMigrationModal';
+import ExchangeRates from "../../../../components/common/ExchangeRates";
+import CheckoutModal from "../modals/CheckoutModal";
+import MainMenu from './MainMenu/MainMenu';
+import PageHeader from './PageHeader/PageHeader';
+import styles from './MainComponent.module.scss';
 
 const MainComponent = (
   {

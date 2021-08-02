@@ -1,25 +1,24 @@
 import React, { useRef, useState } from 'react';
-
 import { IconButton, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Button, Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconAvatar from '../icons/iconAvatar';
-import IconEdit from '../icons/iconEdit';
-import IconMore from '../icons/iconMore';
-import IconNotifications from '../icons/iconNotifications';
-import IconPlus from '../icons/iconPlus';
-import IconTurnOff from '../icons/iconTurnOff';
-import { setPaymentModal } from '../../redux/actions/actions';
-import { setIsExchangeRatesModalOpen } from '../../redux/actions/exchangeRatesActions';
-import { textForKey } from '../../utils/localization';
-import ActionsSheet from './ActionsSheet';
-import InvoicesButton from '../../app/components/dashboard/InvoicesButton';
-import styles from '../../styles/PageHeader.module.scss';
-import { isExchangeRatesUpdateRequiredSelector } from "../../redux/selectors/clinicSelector";
-import { Role } from "../../app/utils/constants";
+import IconAvatar from '../../../../../components/icons/iconAvatar';
+import IconEdit from '../../../../../components/icons/iconEdit';
+import IconMore from '../../../../../components/icons/iconMore';
+import IconNotifications from '../../../../../components/icons/iconNotifications';
+import IconPlus from '../../../../../components/icons/iconPlus';
+import IconTurnOff from '../../../../../components/icons/iconTurnOff';
+import { setPaymentModal } from '../../../../../redux/actions/actions';
+import { setIsExchangeRatesModalOpen } from '../../../../../redux/actions/exchangeRatesActions';
+import { textForKey } from '../../../../../utils/localization';
+import ActionsSheet from '../../../../../components/common/ActionsSheet';
+import InvoicesButton from '../../../dashboard/InvoicesButton';
+import { isExchangeRatesUpdateRequiredSelector } from "../../../../../redux/selectors/clinicSelector";
+import { Role } from "../../../../utils/constants";
+import styles from './PageHeader.module.scss';
 
 const actions = [
   {

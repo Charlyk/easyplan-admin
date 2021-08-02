@@ -20,7 +20,7 @@ import { generateReducerActions, handleRequestError, redirectToUrl, redirectUser
 import { textForKey } from '../../utils/localization';
 import UserItem from '../../components/users/UserItem';
 import UsersHeader from '../../components/users/UserHeader';
-import MainComponent from "../../components/common/MainComponent";
+import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { deleteUser, getUsers, inviteUser, restoreUser, updateUserCashierStatus } from "../../middleware/api/users";
 import { deleteInvitation } from "../../middleware/api/clinic";
 import { fetchAppData } from "../../middleware/api/initialization";

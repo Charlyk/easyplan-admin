@@ -12,7 +12,7 @@ import {
 import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../app/components/dashboard/analytics/StatisticFilter';
 import { Role } from "../../../app/utils/constants";
-import MainComponent from "../../../components/common/MainComponent";
+import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import sortBy from "lodash/sortBy";
 import { Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@material-ui/core";
 import { useRouter } from "next/router";

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import IconArrowDown from '../../icons/iconArrowDown';
 import ClinicSelector from '../../common/ClinicSelector';
 import EditProfileModal from '../../common/EditProfileModal';
-import PageHeader from '../../common/PageHeader';
+import PageHeader from '../../../app/components/common/MainComponent/PageHeader/PageHeader';
 import { triggerUserLogout } from '../../../redux/actions/actions';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/DoctorsMain.module.scss';
