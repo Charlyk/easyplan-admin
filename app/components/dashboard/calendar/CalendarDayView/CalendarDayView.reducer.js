@@ -56,7 +56,15 @@ export const reducer = (state, action) => {
       return { ...state, createIndicator: action.payload };
     }
     case reducerTypes.setSchedules:
-      return { ...state, schedules: action.payload };
+      return {
+        ...state,
+        schedules: action.payload.map(item => {
+          return {
+            ...item,
+            schedules: orderBy(item.schedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
+          };
+        }),
+      };
     case reducerTypes.setCreateIndicatorPosition:
       return {
         ...state,
@@ -101,7 +109,7 @@ export const reducer = (state, action) => {
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['startTime'], ['asc']),
+          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
         }
       });
       return {
@@ -147,7 +155,7 @@ export const reducer = (state, action) => {
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['startTime'], ['asc']),
+          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
         }
       })
       return {

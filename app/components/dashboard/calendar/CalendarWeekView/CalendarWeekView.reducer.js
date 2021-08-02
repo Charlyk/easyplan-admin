@@ -1,6 +1,6 @@
-import { generateReducerActions } from "../../../../../utils/helperFuncs";
 import orderBy from "lodash/orderBy";
 import moment from "moment-timezone";
+import { generateReducerActions } from "../../../../../utils/helperFuncs";
 
 export const initialState = {
   hours: [],
@@ -33,7 +33,15 @@ export const reducer = (state, action) => {
       return { ...state, hours: action.payload };
     }
     case reducerTypes.setSchedules:
-      return { ...state, schedules: action.payload };
+      return {
+        ...state,
+        schedules: action.payload.map(item => {
+          return {
+            ...item,
+            schedules: orderBy(item.schedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
+          };
+        }),
+      };
     case reducerTypes.setPauseModal:
       return { ...state, pauseModal: action.payload };
     case reducerTypes.addSchedule: {
@@ -61,7 +69,7 @@ export const reducer = (state, action) => {
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['startTime'], ['asc']),
+          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
         }
       });
       return {
@@ -110,7 +118,7 @@ export const reducer = (state, action) => {
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['startTime'], ['asc']),
+          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
         }
       })
       return {
