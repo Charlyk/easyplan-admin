@@ -13,12 +13,12 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import IconMinus from '../../icons/iconMinus';
-import IconPlus from '../../icons/iconPlus';
-import { formattedAmount, getClinicExchangeRates, getServiceName } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
-import styles from '../../../styles/FinalizeTreatmentModal.module.scss';
+import IconMinus from '../../../../components/icons/iconMinus';
+import IconPlus from '../../../../components/icons/iconPlus';
+import { formattedAmount, getClinicExchangeRates, getServiceName } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
+import EasyPlanModal from '../../common/modals/EasyPlanModal';
+import styles from './FinalizeTreatmentModal.module.scss';
 
 const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave }) => {
   const menuRef = useRef(null);

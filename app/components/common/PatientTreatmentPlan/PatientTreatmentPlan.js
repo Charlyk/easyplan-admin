@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer } from "react";
 
 import PropTypes from 'prop-types';
 import cloneDeep from "lodash/cloneDeep";
@@ -8,7 +8,7 @@ import TeethContainer from "./TeethContainer";
 import { textForKey } from "../../../../utils/localization";
 import { Statuses } from "../../../utils/constants";
 import ServicesWrapper from "./ServicesWrapper";
-import { reducer, actions, initialState } from "./PatientTreatmentPlan.reducer";
+import { actions, initialState, reducer } from "./PatientTreatmentPlan.reducer";
 import styles from './PatientTreatmentPlan.module.scss';
 import { deletePatientPlanService } from "../../../../middleware/api/patients";
 
@@ -53,7 +53,30 @@ const PatientTreatmentPlan = (
     setupInitialSchedule(scheduleData);
   }, [scheduleData]);
 
+  /**
+   * Get final services list (services that are not complete or are completed but are related to this schedule
+   * @return {Array.<Object>}
+   */
+  const finalServicesList = useMemo(() => {
+    return selectedServices.filter((service) => {
+      return !service.completed || service.scheduleId === schedule.id;
+    })
+  }, [selectedServices, schedule]);
+
+  /**
+   * Check if submit button is disabled
+   * @return {boolean}
+   */
+  const isButtonDisabled = useMemo(() => {
+    const newServices = selectedServices.filter((item) => !item.isExistent);
+    return (
+      (!canFinalize && newServices.length === 0) ||
+      finalServicesList.length === 0
+    );
+  }, [selectedServices, finalServicesList]);
+
   const setupInitialSchedule = (initialSchedule) => {
+    console.log(initialSchedule)
     const userServicesIds = (
       currentUser.clinics.find(
         (item) => item.clinicId === currentClinic.id,
@@ -94,18 +117,21 @@ const PatientTreatmentPlan = (
    */
   const handleSelectedItemsChange = (selectedItems) => {
     if (selectedItems.length === 0) return;
+    const newService = selectedItems[0];
     const newServices = cloneDeep(selectedServices);
     const serviceExists = newServices.some(
       (item) =>
-        item.id === selectedItems[0].id &&
-        (item.toothId == null || item.toothId === selectedItems[0].toothId) &&
+        item.id === newService.id &&
+        !item.completed &&
+        (item.toothId == null || item.toothId === newService.toothId) &&
         (item.destination == null ||
-          item.destination === selectedItems[0].destination) &&
-        (!item.completed || item.scheduleId === schedule.id),
+          item.destination === newService.destination)
     );
     if (!serviceExists) {
+      console.log(newService)
       newServices.unshift({
-        ...selectedItems[0],
+        ...newService,
+        scheduleId: schedule.id,
         canRemove: true,
         count: 1,
         isExistent: false,
@@ -115,39 +141,15 @@ const PatientTreatmentPlan = (
   };
 
   /**
-   * Get final services list (services that are not complete or are completed but are related to this schedule
-   * @return {Array.<Object>}
-   */
-  const finalServicesList = () => {
-    return selectedServices.filter((service) => {
-      const isCompletedInAnotherSchedule =
-        service.completed && service.scheduleId !== schedule.id;
-      return !isCompletedInAnotherSchedule;
-    });
-  };
-
-  /**
-   * Check if submit button is disabled
-   * @return {boolean}
-   */
-  const isButtonDisabled = () => {
-    const newServices = selectedServices.filter((item) => !item.isExistent);
-    return (
-      (!canFinalize && newServices.length === 0) ||
-      finalServicesList().length === 0
-    );
-  };
-
-  /**
    * Initiate treatment finalization
    */
   const handleFinalizeTreatment = () => {
-    if (isButtonDisabled()) {
+    if (isButtonDisabled) {
       // can't finalize or save this plan
       return;
     }
 
-    onFinalize?.(finalServicesList(), selectedServices);
+    onFinalize?.(finalServicesList, selectedServices);
   };
 
   /**
@@ -202,7 +204,7 @@ const PatientTreatmentPlan = (
         allServices={allServices}
         selectedServices={selectedServices}
         isLoading={isFinalizing}
-        isButtonDisabled={isButtonDisabled()}
+        isButtonDisabled={isButtonDisabled}
         buttonText={buttonText()}
         onItemSelected={handleSelectedItemsChange}
         onItemRemove={handleRemoveSelectedService}
