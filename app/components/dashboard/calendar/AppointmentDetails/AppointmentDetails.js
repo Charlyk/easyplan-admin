@@ -152,6 +152,9 @@ const AppointmentDetails = (
   }
 
   const handleEditSchedule = () => {
+    if (isFinished || isLoading) {
+      return;
+    }
     onEdit(schedule);
   };
 
@@ -163,6 +166,9 @@ const AppointmentDetails = (
   }
 
   const handleDeleteSchedule = () => {
+    if (isFinished || isLoading) {
+      return;
+    }
     onDelete(schedule);
   };
 
@@ -356,12 +362,15 @@ const AppointmentDetails = (
             <span style={{ color: serviceColor }}>{serviceName}</span>
           </span>
         </Box>
-        <IconButton
-          className={styles.editButton}
-          onPointerUp={handleEditSchedule}
-        >
-          <IconEdit fill="#3A83DC" />
-        </IconButton>
+        {!isFinished && (
+          <IconButton
+            className={styles.editButton}
+            disabled={isFinished || isLoading}
+            onPointerUp={handleEditSchedule}
+          >
+            <IconEdit fill="#3A83DC" />
+          </IconButton>
+        )}
       </div>
       <div className={styles['content-wrapper']}>
         {isLoading && (
