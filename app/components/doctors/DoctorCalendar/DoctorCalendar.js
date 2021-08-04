@@ -128,6 +128,7 @@ const DoctorCalendar = (
   }
 
   const handlePatientNameChange = (event) => {
+    console.log(event.target.value);
     localDispatch(actions.setFilterData({
       ...filterData,
       patientName: event.target.value,

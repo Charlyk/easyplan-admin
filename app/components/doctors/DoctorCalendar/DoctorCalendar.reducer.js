@@ -28,13 +28,33 @@ export const actions = generateReducerActions(reducerTypes);
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case reducerTypes.setFilterData:
+      return { ...state, filterData: action.payload }
     case reducerTypes.setHours: {
       return { ...state, hours: action.payload };
     }
     case reducerTypes.setSchedules:
-      return { ...state, schedules: action.payload };
+      return {
+        ...state,
+        schedules: action.payload.map(item => {
+          return {
+            ...item,
+            schedules: orderBy(item.schedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
+          };
+        }),
+      };
     case reducerTypes.setData:
-      return { ...state, ...action.payload };
+      const { hours, schedules } = action.payload;
+      return {
+        ...state,
+        hours,
+        schedules: schedules.map(item => {
+          return {
+            ...item,
+            schedules: orderBy(item.schedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
+          };
+        }),
+      };
     case reducerTypes.addSchedule: {
       const newSchedule = action.payload;
       const scheduleDate = moment(newSchedule.startTime).format('YYYY-MM-DD');
@@ -60,7 +80,7 @@ export const reducer = (state, action) => {
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['startTime'], ['asc']),
+          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
         }
       });
       return {
@@ -112,7 +132,7 @@ export const reducer = (state, action) => {
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['startTime'], ['asc']),
+          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
         }
       })
       return {
