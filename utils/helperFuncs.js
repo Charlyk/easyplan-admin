@@ -77,7 +77,7 @@ export const getDays = (viewDate) => {
       month: previousMonthIndex,
       day: daysInPreviousMonth - i,
     });
-    const isSameDay = date.isSame(moment(), 'day');
+    const isSameDay = date.isSame(moment(), 'date');
     startDays.unshift({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
@@ -95,7 +95,7 @@ export const getDays = (viewDate) => {
       month: currentMonthIndex,
       day: i + 1,
     });
-    const isSameDay = date.isSame(moment(), 'day');
+    const isSameDay = date.isSame(moment(), 'date');
     daysInMonth.push({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
@@ -113,7 +113,7 @@ export const getDays = (viewDate) => {
       month: nextMonthIndex,
       day: i + 1,
     });
-    const isSameDay = date.isSame(moment(), 'day');
+    const isSameDay = date.isSame(moment(), 'date');
     endDays.push({
       date: date.format('DD'),
       fullDate: date.format('YYYY-DD-MM'),
