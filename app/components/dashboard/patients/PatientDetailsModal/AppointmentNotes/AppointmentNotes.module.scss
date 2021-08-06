@@ -18,7 +18,7 @@
     flex-direction: column;
     padding: 1rem 1.5rem;
     min-height: 10rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
 
     :global(.circular-progress-bar) {
