@@ -131,9 +131,6 @@ const AppointmentDetails = (
       const response = await getScheduleDetails(schedule.id);
       const { data: details } = response;
       localDispatch(setDetails(details));
-      localDispatch(setScheduleStatus(
-        Statuses.find((item) => item.id === details.scheduleStatus),
-      ))
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -263,11 +260,11 @@ const AppointmentDetails = (
   };
 
   const isFinished =
-    schedule.scheduleStatus === 'CompletedNotPaid' ||
-    schedule.scheduleStatus === 'CompletedPaid' ||
-    schedule.scheduleStatus === 'PartialPaid' ||
-    schedule.scheduleStatus === 'Rescheduled' ||
-    schedule.scheduleStatus === 'CompletedFree';
+    scheduleStatus.id === 'CompletedNotPaid' ||
+    scheduleStatus.id === 'CompletedPaid' ||
+    scheduleStatus.id === 'PartialPaid' ||
+    scheduleStatus.id === 'Rescheduled' ||
+    scheduleStatus.id === 'CompletedFree';
 
   const patientName = details?.patient.fullName || schedule.patient.fullName;
   const serviceName = details?.service.name || schedule.serviceName;

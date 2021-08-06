@@ -17,6 +17,7 @@ const appointmentDetailsSlice = createSlice({
   reducers: {
     setDetails(state, action) {
       state.details = action.payload;
+      state.scheduleStatus = Statuses.find((item) => item.id === action.payload.scheduleStatus);
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
