@@ -20,7 +20,7 @@ import IconPlus from '../../components/icons/iconPlus';
 import ConfirmationModal from '../../app/components/common/modals/ConfirmationModal';
 import CreateCategoryModal from '../../app/components/dashboard/services/CreateCategoryModal';
 import LoadingButton from '../../components/common/LoadingButton';
-import { toggleImportModal, triggerServicesUpdate } from '../../redux/actions/actions';
+import { toggleImportModal } from '../../redux/actions/actions';
 import { setClinicServices } from '../../redux/actions/clinicActions';
 import {
   closeServiceDetailsModal,
@@ -28,7 +28,6 @@ import {
   setServiceModalCategory,
   setServiceModalService,
 } from '../../redux/actions/serviceDetailsActions';
-import { updateServicesSelector } from '../../redux/selectors/rootSelector';
 import {
   generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo,
 } from '../../utils/helperFuncs';

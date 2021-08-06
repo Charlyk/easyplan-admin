@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import ModalHeader from './ModalHeader';
 import styles from './LeftSideModal.module.scss';
-import { Drawer, Paper } from "@material-ui/core";
+import { Drawer } from "@material-ui/core";
 
 const LeftSideModal = (props) => {
   const { show, onClose, children, title, steps, className } = props;
 
   return (
-    <Drawer anchor="right" open={show} onClose={onClose} className={styles.drawerRoot}>
-      <Paper className={clsx(styles.drawerPaper, className)}>
-        <div className={styles.drawerContent}>
-          <ModalHeader title={title} steps={steps} onClose={onClose} />
-          {children}
-        </div>
-      </Paper>
+    <Drawer
+      anchor="right"
+      open={show}
+      onClose={onClose}
+      classes={{
+        root: styles.drawerRoot,
+        paper: clsx(styles.drawerPaperRoot, className),
+      }}
+    >
+      <div className={styles.drawerContent}>
+        <ModalHeader title={title} steps={steps} onClose={onClose}/>
+        {children}
+      </div>
     </Drawer>
   );
 };

@@ -1,4 +1,11 @@
 .drawerRoot {
+
+  .drawerPaperRoot {
+    width: 500px;
+    height: 100%;
+    overflow: hidden;
+  }
+
   .drawerContent {
     position: absolute;
     top: 0;

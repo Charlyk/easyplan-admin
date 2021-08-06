@@ -9,7 +9,7 @@
   .recordsWrapper {
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     .recordItem {
       display: flex;

@@ -1,24 +1,11 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React from 'react';
 
-import sum from 'lodash/sum';
 import moment from 'moment-timezone';
-import { Form } from 'react-bootstrap';
-
-import EasyDateRangePicker from '../../../app/components/common/EasyDateRangePicker';
 import {
-  generateReducerActions,
   handleRequestError, redirectToUrl, redirectUserTo,
 } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import StatisticFilter from '../../../app/components/dashboard/analytics/StatisticFilter';
-import { Role } from "../../../app/utils/constants";
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
-import sortBy from "lodash/sortBy";
-import { Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from "@material-ui/core";
-import { useRouter } from "next/router";
-import isEqual from "lodash/isEqual";
 import { getDoctorsStatistics } from "../../../middleware/api/analytics";
-import styles from '../../../app/components/dashboard/analytics/ServicesAnalytics/ServicesAnalytics.module.scss';
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { parseCookies } from "../../../utils";
 import DoctorsAnalytics from "../../../app/components/dashboard/analytics/DoctorsAnalytics";

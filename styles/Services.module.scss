@@ -3,7 +3,7 @@
   display: flex;
   flex: 1;
   max-height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   position: relative;
 
   .MuiCircularProgress-colorPrimary {
@@ -157,7 +157,7 @@
     flex: 1;
     border-radius: 4px;
     max-height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: #FFFFFF;
     position: relative;
     padding-bottom: 64px;

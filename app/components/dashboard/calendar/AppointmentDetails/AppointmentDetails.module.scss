@@ -27,7 +27,7 @@
       border: #3A83DC 1px solid;
       border-radius: 4px;
       max-height: 25rem;
-      overflow-y: scroll;
+      overflow-y: auto;
       box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
     }
 
@@ -112,7 +112,7 @@
     padding-right: 1rem;
     flex: 1;
     position: relative;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     .spinner {
       color: #3A83DC;
