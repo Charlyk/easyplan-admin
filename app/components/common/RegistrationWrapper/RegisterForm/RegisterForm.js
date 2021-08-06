@@ -123,8 +123,9 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
         <InputGroup>
           <Form.Control
             isValid={data?.username?.match(EmailRegex)}
+            isInvalid={data?.username?.length > 0 && !data?.username?.match(EmailRegex)}
             autoComplete='new-email'
-            value={data.username}
+            value={data?.username}
             type='email'
             onChange={handleFormChange}
           />
@@ -135,7 +136,9 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
         <InputGroup>
           <Form.Control
             autoComplete='new-password'
-            value={data.password}
+            value={data?.password}
+            isValid={data?.password?.match(PasswordRegex)}
+            isInvalid={data?.password?.length > 0 && !data?.password?.match(PasswordRegex)}
             type={isPasswordVisible ? 'text' : 'password'}
             onChange={handleFormChange}
           />
