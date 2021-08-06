@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment-timezone";
 
-export const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@]/ig;
+export const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@а-яА-Я]/ig;
 
 export const initialState = {
   logoFile: null,
@@ -28,7 +28,12 @@ const createClinicSlice = createSlice({
       state.domainName = action.payload
         .toLowerCase()
         .replaceAll(charactersRegex, '')
-        .replaceAll(' ', '-');
+        .replaceAll(' ', '-')
+        .replaceAll('ă', 'a')
+        .replaceAll('ș', 's')
+        .replaceAll('ț', 't')
+        .replaceAll('î', 'i')
+        .replaceAll('â', 'a')
     },
     setWebsite(state, action) {
       state.domainName = action.payload;
@@ -46,7 +51,12 @@ const createClinicSlice = createSlice({
       state.domainName = action.payload
         .toLowerCase()
         .replaceAll(charactersRegex, '')
-        .replaceAll(' ', '-');
+        .replaceAll(' ', '-')
+        .replaceAll('ă', 'a')
+        .replaceAll('ș', 's')
+        .replaceAll('ț', 't')
+        .replaceAll('î', 'i')
+        .replaceAll('â', 'a');
     },
     setInitialData(state, action) {
       return {

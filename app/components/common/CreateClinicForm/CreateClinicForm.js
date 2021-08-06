@@ -116,6 +116,9 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
   }, [website, clinicName, domainName, isDomainAvailable]);
 
   const handleSubmitForm = () => {
+    if (!isFormValid) {
+      return;
+    }
     onSubmit({
       logoFile,
       clinicName,
