@@ -73,9 +73,9 @@ const CalendarHeader = (
     switch (navId) {
       case 'previous-date':
         if (currentTab === CalendarView.day) {
-          onDateChange(currentDate.subtract(1, 'day').toDate());
+          onDateChange(currentDate.add(-1, 'day').toDate());
         } else if (currentTab === CalendarView.week) {
-          onDateChange(currentDate.set('weekday', 1).subtract(1, 'week').toDate());
+          onDateChange(currentDate.add(-1, 'week').toDate());
         } else if (currentTab === CalendarView.month) {
           onDateChange(currentDate.set('day', 1).subtract(1, 'month').toDate());
         }
@@ -84,7 +84,7 @@ const CalendarHeader = (
         if (currentTab === CalendarView.day) {
           onDateChange(currentDate.add(1, 'day').toDate());
         } else if (currentTab === CalendarView.week) {
-          onDateChange(currentDate.set('weekday', 1).add(1, 'week').toDate());
+          onDateChange(currentDate.add(1, 'week').toDate());
         } else if (currentTab === CalendarView.month) {
           onDateChange(currentDate.set('day', 1).add(1, 'month').toDate());
         }

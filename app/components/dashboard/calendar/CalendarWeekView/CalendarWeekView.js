@@ -13,6 +13,7 @@ const CalendarWeekView = (
   {
     doctorId,
     doctors,
+    showHourIndicator,
     schedules: {
       hours: dayHours,
       schedules: initialSchedules
@@ -25,7 +26,7 @@ const CalendarWeekView = (
 ) => {
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
-  const [{ schedules, hours, pauseModal }, localDispatch] = useReducer(reducer, initialState);
+  const [{ schedules, hours }, localDispatch] = useReducer(reducer, initialState);
   const week = getCurrentWeek(viewDate);
 
   useEffect(() => {
@@ -109,6 +110,7 @@ const CalendarWeekView = (
         dayHours={hours}
         schedules={schedules}
         columns={mappedWeek}
+        showHourIndicator={showHourIndicator}
         animatedStatuses={['WaitingForPatient']}
         onScheduleSelected={handleScheduleClick}
         onAddSchedule={handleCreateSchedule}
@@ -123,6 +125,7 @@ export default CalendarWeekView;
 CalendarWeekView.propTypes = {
   onScheduleSelect: PropTypes.func,
   opened: PropTypes.bool,
+  showHourIndicator: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),
   doctorId: PropTypes.number,
   onDateClick: PropTypes.func,

@@ -26,6 +26,7 @@ const moment = extendMoment(Moment);
 const CalendarDayView = (
   {
     schedules: initialSchedules,
+    showHourIndicator,
     doctors,
     viewDate,
     dayHours,
@@ -220,6 +221,7 @@ const CalendarDayView = (
         dayHours={hours}
         columns={mappedDoctors}
         schedules={schedules}
+        showHourIndicator={showHourIndicator}
         animatedStatuses={['WaitingForPatient']}
         onAddSchedule={handleAddSchedule}
         onScheduleSelected={handleScheduleClick}
@@ -234,6 +236,7 @@ export default wrapper.withRedux(CalendarDayView);
 CalendarDayView.propTypes = {
   schedules: PropTypes.any,
   dayHours: PropTypes.arrayOf(PropTypes.string),
+  showHourIndicator: PropTypes.bool,
   onScheduleSelect: PropTypes.func,
   onCreateSchedule: PropTypes.func,
 };

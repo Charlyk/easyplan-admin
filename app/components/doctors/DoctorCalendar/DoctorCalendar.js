@@ -207,6 +207,7 @@ const DoctorCalendar = (
         )}
         {viewMode === 'week' ? (
           <EasyCalendar
+            showHourIndicator
             hideCreateIndicator
             dayHours={hours}
             columns={mappedWeek}

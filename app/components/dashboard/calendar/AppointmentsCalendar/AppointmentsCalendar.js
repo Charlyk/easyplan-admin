@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { CircularProgress, } from '@material-ui/core';
 import clsx from 'clsx';
@@ -37,6 +37,17 @@ const AppointmentsCalendar = (
   }
 ) => {
   const isLoading = useSelector(isCalendarLoadingSelector);
+
+  const showHourIndicator = useMemo(() => {
+    const now = moment();
+    switch (currentTab) {
+      case CalendarView.day:
+        return moment(viewDate).isSame(now, 'date');
+      case CalendarView.week:
+        const week = getCurrentWeek(viewDate);
+        return week.some(day => now.isSame(day, 'date'));
+    }
+  }, [viewDate, currentTab])
 
   const handleTabChange = (newTab) => {
     onViewModeChange(newTab);
@@ -104,6 +115,7 @@ const AppointmentsCalendar = (
           {
             ...children.props,
             onScheduleSelect,
+            showHourIndicator,
             onDateClick: onViewDateChange,
             onCreateSchedule: onAddAppointment,
           }

@@ -13,6 +13,7 @@ const EasyCalendar = (
     schedules,
     viewDate,
     hourIndicator,
+    showHourIndicator,
     animatedStatuses,
     hideCreateIndicator,
     onAddSchedule,
@@ -25,7 +26,7 @@ const EasyCalendar = (
       <Header items={columns} onItemClick={onHeaderItemClick}/>
       <div className={styles.calendarContainer}>
         <HourIndicator
-          disabled={!hourIndicator || dayHours.length === 0}
+          disabled={!hourIndicator || dayHours.length === 0 || !showHourIndicator}
           dayHours={dayHours}
           viewDate={viewDate}
         />
@@ -50,6 +51,7 @@ EasyCalendar.propTypes = {
   hourIndicator: PropTypes.bool,
   dayHours: PropTypes.arrayOf(PropTypes.string).isRequired,
   viewDate: PropTypes.instanceOf(Date).isRequired,
+  showHourIndicator: PropTypes.bool,
   hideCreateIndicator: PropTypes.bool,
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
@@ -113,6 +115,7 @@ EasyCalendar.defaultProps = {
   viewDate: new Date(),
   animatedStatuses: [],
   hideCreateIndicator: false,
+  showHourIndicator: false,
   onAddSchedule: () => null,
   onScheduleSelected: () => null,
   onHeaderItemClick: () => null,
