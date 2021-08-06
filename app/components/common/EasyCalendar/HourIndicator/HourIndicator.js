@@ -81,7 +81,6 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
       return true;
     }
     const scheduleTime = moment(time);
-    console.log(scheduleTime, firstHourDate, lastHourDate)
     return !scheduleTime.isBetween(firstHourDate, lastHourDate);
   }
 
@@ -115,8 +114,6 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
   const hourTopInterpolator = (newTop) => {
     return `${newTop}px`;
   };
-
-  console.log(hideIndicator, disabled);
 
   if (hideIndicator || disabled) {
     return null;
