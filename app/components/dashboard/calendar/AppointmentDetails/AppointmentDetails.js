@@ -263,7 +263,6 @@ const AppointmentDetails = (
     scheduleStatus.id === 'CompletedNotPaid' ||
     scheduleStatus.id === 'CompletedPaid' ||
     scheduleStatus.id === 'PartialPaid' ||
-    scheduleStatus.id === 'Rescheduled' ||
     scheduleStatus.id === 'CompletedFree';
 
   const patientName = details?.patient.fullName || schedule.patient.fullName;
