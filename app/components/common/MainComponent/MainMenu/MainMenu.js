@@ -48,11 +48,11 @@ const menuItems = [
         href: '/analytics/doctors',
         roles: [Role.admin],
       },
-      {
-        text: textForKey('Activity logs'),
-        href: '/analytics/activity-logs',
-        roles: [Role.admin, Role.manager],
-      },
+      // {
+      //   text: textForKey('Activity logs'),
+      //   href: '/analytics/activity-logs',
+      //   roles: [Role.admin, Role.manager],
+      // },
     ],
   },
   {
