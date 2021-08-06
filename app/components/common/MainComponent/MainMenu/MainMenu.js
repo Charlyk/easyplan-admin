@@ -166,28 +166,28 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
 
   return (
     <div className={styles['main-menu']}>
-      <div
-        role='button'
-        tabIndex={0}
-        ref={buttonRef}
-        className={styles['main-menu__logo-container']}
-        onClick={handleCompanyClick}
-      >
-        <ClickAwayListener onClickAway={handleCompanyClose}>
+      <ClickAwayListener onClickAway={handleCompanyClose}>
+        <div
+          role='button'
+          tabIndex={0}
+          ref={buttonRef}
+          className={styles['main-menu__logo-container']}
+          onClick={handleCompanyClick}
+        >
           <span className={styles['clinic-name']}>
             {userClinic?.clinicName || textForKey('Create clinic')}
           </span>
-        </ClickAwayListener>
-        <IconArrowDown/>
-        <ClinicSelector
-          currentUser={currentUser}
-          anchorEl={buttonRef}
-          onClose={handleCompanyClose}
-          open={isClinicsOpen}
-          onChange={handleCompanySelected}
-          onCreate={handleCreateClinic}
-        />
-      </div>
+          <IconArrowDown/>
+          <ClinicSelector
+            currentUser={currentUser}
+            anchorEl={buttonRef}
+            onClose={handleCompanyClose}
+            open={isClinicsOpen}
+            onChange={handleCompanySelected}
+            onCreate={handleCreateClinic}
+          />
+        </div>
+      </ClickAwayListener>
 
       <Nav defaultActiveKey={currentPath} className={clsx(styles.navigation, 'flex-column')}>
         {menuItems.map((item) => {

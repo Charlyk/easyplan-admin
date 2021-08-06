@@ -108,28 +108,28 @@ const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
           onEditProfile={handleEditProfileClick}
           onLogout={handleStartLogout}
           titleComponent={
-            <div
-              role='button'
-              tabIndex={0}
-              className={styles['company-selector-container']}
-              ref={buttonRef}
-              onClick={handleCompanyOpen}
-            >
-              <ClickAwayListener onClickAway={handleCompanyClose}>
+            <ClickAwayListener onClickAway={handleCompanyClose}>
+              <div
+                role='button'
+                tabIndex={0}
+                className={styles['company-selector-container']}
+                ref={buttonRef}
+                onClick={handleCompanyOpen}
+              >
                 <span className={styles['clinic-name']}>
                   {selectedClinic?.clinicName || textForKey('Create clinic')}
                 </span>
-              </ClickAwayListener>
-              <IconArrowDown fill='#34344E'/>
-              <ClinicSelector
-                open={isSelectorOpen}
-                anchorEl={buttonRef}
-                currentUser={currentUser}
-                onCreate={handleCreateClinic}
-                onClose={handleCompanyClose}
-                onChange={handleCompanyChange}
-              />
-            </div>
+                <IconArrowDown fill='#34344E'/>
+                <ClinicSelector
+                  open={isSelectorOpen}
+                  anchorEl={buttonRef}
+                  currentUser={currentUser}
+                  onCreate={handleCreateClinic}
+                  onClose={handleCompanyClose}
+                  onChange={handleCompanyChange}
+                />
+              </div>
+            </ClickAwayListener>
           }
         />
       </div>
