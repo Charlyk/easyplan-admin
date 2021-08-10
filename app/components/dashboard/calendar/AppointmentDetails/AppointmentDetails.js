@@ -107,12 +107,14 @@ const AppointmentDetails = (
       return;
     }
 
-    const newDebts = details.patient.debts.map((item) => {
-      if (item.id !== updateInvoice.id) {
-        return item;
-      }
-      return updateInvoice;
-    });
+    const newDebts = updateInvoice.remainedAmount > 0
+      ? details.patient.debts.map((item) => {
+        if (item.id !== updateInvoice.id) {
+          return item;
+        }
+        return updateInvoice;
+      })
+      : details.patient.debts.filter((item) => item.id !== updateInvoice.id);
     localDispatch(setDetails({
       ...details,
       patient: {
@@ -364,7 +366,7 @@ const AppointmentDetails = (
             disabled={isFinished || isLoading}
             onPointerUp={handleEditSchedule}
           >
-            <IconEdit fill="#3A83DC" />
+            <IconEdit fill="#3A83DC"/>
           </IconButton>
         )}
       </div>
