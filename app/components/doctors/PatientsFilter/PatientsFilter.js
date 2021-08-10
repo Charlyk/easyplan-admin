@@ -1,15 +1,14 @@
 import React, { useMemo } from 'react';
-
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import { clinicServicesSelector } from '../../../redux/selectors/clinicSelector';
-import { Statuses } from '../../../app/utils/constants';
-import { getAppLanguage, textForKey } from '../../../utils/localization';
-import styles from '../../../styles/patient/PatientsFilter.module.scss';
+import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
+import { Statuses } from '../../../utils/constants';
+import { getAppLanguage, textForKey } from '../../../../utils/localization';
+import styles from './PatientsFilter.module.scss';
 
 const PatientsFilter = (
   {

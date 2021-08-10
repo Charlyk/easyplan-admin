@@ -156,8 +156,8 @@ export async function deletePatientPlanService(patientId, serviceId, headers = n
  *     isBraces: boolean,
  *     count: number,
  *     price: number,
- *     currency: string
- *   }]
+ *     currency: string,
+ *   }],
  *   paymentRequest: {
  *     paidAmount: number,
  *     discount: number,
@@ -169,7 +169,7 @@ export async function deletePatientPlanService(patientId, serviceId, headers = n
  *       price: number,
  *       currency: string,
  *     }]
- *   }?
+ *   }?,
  * }} requestBody
  * @param headers
  * @return {Promise<AxiosResponse<*>>}
@@ -236,4 +236,24 @@ export async function getPatientXRayImages(patientId, headers = null) {
 export async function deletePatientXRayImage(patientId, imageId, headers = null) {
   const queryString = new URLSearchParams({ imageId: `${imageId}` }).toString();
   return del(`/api/patients/${patientId}/x-ray?${queryString}`, headers);
+}
+
+/**
+ * Get all visits for a patient
+ * @param {number} patientId
+ * @param {Object | null} headers
+ * @return {Promise<AxiosResponse>}
+ */
+export async function getPatientVisits(patientId, headers = null) {
+  return get(`/api/patients/${patientId}/visits`, headers);
+}
+
+/**
+ * Fetch all schedules for a patient
+ * @param {number} patientId
+ * @param {Object | null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function getPatientSchedules(patientId, headers = null) {
+  return get(`/api/schedules/patient-schedules/${patientId}`, headers);
 }

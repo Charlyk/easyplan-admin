@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import DoctorsMain from "../../components/doctors/DoctorsMain";
+import DoctorsMain from "../../app/components/doctors/DoctorsMain";
 import { wrapper } from "../../store";
 import { getCurrentWeek, handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { fetchAppData } from "../../middleware/api/initialization";

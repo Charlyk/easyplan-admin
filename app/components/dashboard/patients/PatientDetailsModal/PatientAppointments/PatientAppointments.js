@@ -1,11 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
-
 import { CircularProgress, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "react-toastify";
-import axios from "axios";
 
 import IconPlus from '../../../../../../components/icons/iconPlus';
 import { setAppointmentModal } from '../../../../../../redux/actions/actions';
@@ -14,6 +12,7 @@ import {
   updateScheduleSelector,
 } from '../../../../../../redux/selectors/scheduleSelector';
 import { textForKey } from '../../../../../../utils/localization';
+import { getPatientSchedules } from "../../../../../../middleware/api/patients";
 import Appointment from './Appointment';
 import { reducer, initialState, actions } from './PatientAppointments.reducer'
 import styles from './PatientAppointments.module.scss';
@@ -48,7 +47,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
   const fetchSchedules = async () => {
     localDispatch(actions.setIsLoading(true));
     try {
-      const response = await axios.get(`/api/schedules/patient-schedules/${patient.id}`)
+      const response = await getPatientSchedules(patient.id);
       localDispatch(actions.setSchedules(response.data));
     } catch (error) {
       toast.error(error.message);

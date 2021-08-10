@@ -8,7 +8,7 @@ import clsx from "clsx";
 
 import { textForKey } from "../../../../../utils/localization";
 import { getServiceName } from "../../../../../utils/helperFuncs";
-import FinalServiceItem from "../../../../../components/doctors/FinalServiceItem";
+import FinalServiceItem from "../../../doctors/FinalServiceItem";
 import LoadingButton from "../../../../../components/common/LoadingButton";
 import styles from './ServicesWrapper.module.scss';
 

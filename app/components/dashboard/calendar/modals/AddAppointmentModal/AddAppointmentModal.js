@@ -14,6 +14,7 @@ import {
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+
 import IconAvatar from '../../../../../../components/icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
 import { EmailRegex, Role } from '../../../../../utils/constants';
@@ -235,7 +236,7 @@ const AddAppointmentModal = (
       localDispatch(actions.setPatientsLoading(true));
       try {
         const updatedQuery = query.replace('+', '');
-        const requestQuery = { query: updatedQuery, page: '0', rowsPerPage: '10' };
+        const requestQuery = { query: updatedQuery, page: '0', rowsPerPage: '10', short: '1' };
         const { data: response } = await getPatients(requestQuery);
         const patients = response.data.map((item) => ({
           ...item,

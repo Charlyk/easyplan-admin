@@ -10,7 +10,7 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector
 } from "../../../../redux/selectors/scheduleSelector";
-import PatientsFilter from "../../../../components/doctors/PatientsFilter";
+import PatientsFilter from "../PatientsFilter";
 import { getCurrentWeek } from "../../../../utils/helperFuncs";
 import { getSchedulesForInterval } from "../../../../middleware/api/schedules";
 import usePrevious from "../../../utils/usePrevious";

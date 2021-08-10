@@ -1,6 +1,6 @@
 import React from 'react';
 import { handleRequestError, redirectToUrl, redirectUserTo } from '../../../utils/helperFuncs';
-import DoctorsMain from "../../../components/doctors/DoctorsMain";
+import DoctorsMain from "../../../app/components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
 import { parseCookies } from "../../../utils";

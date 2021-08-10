@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../components/icons/iconAvatar';
 import FinalizeTreatmentModal from '../../../../app/components/doctors/FinalizeTreatmentModal';
-import PatientDetails from '../../../../components/doctors/PatientDetails';
+import PatientDetails from '../PatientDetails';
 import {
   setPatientNoteModal,
   setPatientXRayModal,

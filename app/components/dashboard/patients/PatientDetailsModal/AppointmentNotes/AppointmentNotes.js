@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-
 import { CircularProgress, Typography } from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from "react-toastify";
-import axios from "axios";
 
 import {
   updateNotesSelector,
 } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
+import { getPatientVisits } from "../../../../../../middleware/api/patients";
 import AppointmentNote from './AppointmentNote';
 import styles from './AppointmentNotes.module.scss';
 
@@ -26,7 +25,7 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
   const fetchPatientVisits = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`/api/patients/${patient.id}/visits`);
+      const response = await getPatientVisits(patient.id);
       setVisits(sortBy(response.data, (item) => item.created).reverse() || []);
     } catch (error) {
       toast.error(error.message);

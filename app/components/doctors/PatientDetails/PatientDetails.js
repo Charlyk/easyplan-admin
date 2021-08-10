@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-
-import EasyTab from '../../common/EasyTab';
-import AppointmentNotes from '../../../app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes';
-import PatientAppointments from '../../../app/components/dashboard/patients/PatientDetailsModal/PatientAppointments';
-import PatientNotes from '../../../app/components/dashboard/patients/PatientDetailsModal/PatientNotes';
-import OrthodonticPlan from '../../../app/components/dashboard/patients/PatientDetailsModal/OrthodonticPlan';
-import PatientXRay from '../../../app/components/dashboard/patients/PatientDetailsModal/PatientXRay';
-import { clinicEnabledBracesSelector } from '../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/patient/PatientDetails.module.scss';
 import axios from "axios";
 import { toast } from "react-toastify";
+
+import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
+import { textForKey } from '../../../../utils/localization';
+import EasyTab from '../../../../components/common/EasyTab';
+import AppointmentNotes from '../../dashboard/patients/PatientDetailsModal/AppointmentNotes';
+import PatientAppointments from '../../dashboard/patients/PatientDetailsModal/PatientAppointments';
+import PatientNotes from '../../dashboard/patients/PatientDetailsModal/PatientNotes';
+import OrthodonticPlan from '../../dashboard/patients/PatientDetailsModal/OrthodonticPlan';
+import PatientXRay from '../../dashboard/patients/PatientDetailsModal/PatientXRay';
+import styles from './PatientDetails.module.scss';
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -24,19 +22,21 @@ const TabId = {
   orthodonticPlan: 'OrthodonticPlan',
 };
 
-const PatientDetails = ({
-  currentUser,
-  currentClinic,
-  onAddNote,
-  onAddXRay,
-  onEditAppointmentNote,
-  onSaveOrthodonticPlan,
-  showTabs,
-  defaultTab,
-  patient,
-  scheduleId,
-  isDoctor,
-}) => {
+const PatientDetails = (
+  {
+    currentUser,
+    currentClinic,
+    onAddNote,
+    onAddXRay,
+    onEditAppointmentNote,
+    onSaveOrthodonticPlan,
+    showTabs,
+    defaultTab,
+    patient,
+    scheduleId,
+    isDoctor,
+  }
+) => {
   const braces = clinicEnabledBracesSelector(currentClinic);
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   const [hasNotes, setHasNotes] = useState(false);
@@ -127,13 +127,13 @@ const PatientDetails = ({
           />
         )}
         {selectedTab === TabId.appointments && (
-          <PatientAppointments patient={patient} isDoctor={isDoctor} />
+          <PatientAppointments patient={patient} isDoctor={isDoctor}/>
         )}
         {selectedTab === TabId.notes && (
-          <PatientNotes patient={patient} onAddNote={onAddNote} />
+          <PatientNotes patient={patient} onAddNote={onAddNote}/>
         )}
         {selectedTab === TabId.xRay && (
-          <PatientXRay onAddXRay={onAddXRay} patient={patient} />
+          <PatientXRay onAddXRay={onAddXRay} patient={patient}/>
         )}
         {selectedTab === TabId.orthodonticPlan && braces.length > 0 && (
           <OrthodonticPlan

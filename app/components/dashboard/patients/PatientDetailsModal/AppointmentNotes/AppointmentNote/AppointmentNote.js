@@ -5,9 +5,16 @@ import PropTypes from 'prop-types';
 
 import IconEditService from '../../../../../../../components/icons/iconEditService';
 import { textForKey } from '../../../../../../../utils/localization';
+import { getServiceName } from "../../../../../../../utils/helperFuncs";
 import styles from './AppointmentNote.module.scss';
 
 const AppointmentNote = ({ visit, canEdit, onEdit }) => {
+  const { doctor } = visit;
+
+  const serviceName = (planService) => {
+    return getServiceName({ ...planService, name: planService.service.name })
+  }
+
   return (
     <div className={styles['appointment-note']}>
       <div className={styles['appointment-note__note-date']}>
@@ -19,16 +26,16 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
             {textForKey('Doctor')}:
           </span>
           <span className={styles['appointment-note__creator-info__doctor-name']}>
-            {visit.doctorName}
+            {doctor.fullName}
           </span>
         </div>
         <div className={styles['appointment-note__note-text']}>
           {visit.note.length === 0 ? textForKey('No notes') : visit.note}
         </div>
         <div className={styles['services-container']}>
-          {visit.services.map((service, index) => (
-            <div key={`${service.id}-${index}`} className={styles['visit-service-item']}>
-              {service.name} {service.toothId}
+          {visit?.planServices?.map((planService, index) => (
+            <div key={`${planService.id}-${index}`} className={styles['visit-service-item']}>
+              {serviceName(planService)}
             </div>
           ))}
         </div>
@@ -55,9 +62,23 @@ AppointmentNote.propTypes = {
   visit: PropTypes.shape({
     id: PropTypes.number,
     note: PropTypes.string,
-    doctorName: PropTypes.string,
-    doctorId: PropTypes.number,
+    doctor: PropTypes.shape({
+      id: PropTypes.number,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+    }),
     created: PropTypes.string,
-    services: PropTypes.arrayOf(PropTypes.object),
+    planServices: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      toothId: PropTypes.string,
+      destination: PropTypes.string,
+      service: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        color: PropTypes.string,
+        price: PropTypes.number,
+        currency: PropTypes.string,
+      })
+    })),
   }).isRequired,
 };

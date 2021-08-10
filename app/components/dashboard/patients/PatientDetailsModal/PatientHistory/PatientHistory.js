@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-
 import { CircularProgress, Typography } from '@material-ui/core';
+import { Pagination } from "@material-ui/lab";
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
 import { textForKey } from '../../../../../../utils/localization';
+import { getPatientHistory } from "../../../../../../middleware/api/patients";
 import HistoryItem from './HistoryItem';
 import styles from './PatientHistory.module.scss';
-import { getPatientHistory } from "../../../../../../middleware/api/patients";
-import { Pagination } from "@material-ui/lab";
 
 const PatientHistory = ({ patient, clinic }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [pageData, setPageData] = useState({ page: 1, itemsPerPage: 25 });
+  const [pageData, setPageData] = useState({ page: 1, itemsPerPage: 10 });
   const [historyData, setHistoryData] = useState({ data: [], total: 0 });
 
   useEffect(() => {
@@ -56,7 +55,7 @@ const PatientHistory = ({ patient, clinic }) => {
       {historyData.total > 0 && (
         <div className={styles.footer}>
           <Pagination
-            count={Math.round(historyData.total / 25)}
+            count={Math.round(historyData.total / 10)}
             page={pageData.page}
             onChange={handlePageChange}
           />

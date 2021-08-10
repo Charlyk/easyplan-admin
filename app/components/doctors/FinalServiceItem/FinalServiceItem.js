@@ -1,14 +1,13 @@
 import React from 'react';
-
 import { IconButton, Typography } from '@material-ui/core';
 import IconRemove from '@material-ui/icons/Clear';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconCheckMark from '../../icons/iconCheckMark';
-import { getServiceName } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/FinalServiceItem.module.scss';
+import IconCheckMark from '../../../../components/icons/iconCheckMark';
+import { getServiceName } from '../../../../utils/helperFuncs';
+import { textForKey } from '../../../../utils/localization';
+import styles from './FinalServiceItem.module.scss';
 
 const FinalServiceItem = ({ service, canRemove, onRemove }) => {
   return (

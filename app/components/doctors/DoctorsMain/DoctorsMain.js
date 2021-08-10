@@ -1,22 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import { ClickAwayListener, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-
-import IconArrowDown from '../../icons/iconArrowDown';
-import ClinicSelector from '../../common/ClinicSelector';
-import EditProfileModal from '../../common/EditProfileModal';
-import PageHeader from '../../../app/components/common/MainComponent/PageHeader/PageHeader';
-import { triggerUserLogout } from '../../../redux/actions/actions';
-import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/DoctorsMain.module.scss';
-import { environment, isDev } from "../../../eas.config";
 import { useRouter } from "next/router";
-import { setClinic } from "../../../redux/actions/clinicActions";
 import { usePubNub } from "pubnub-react";
-import { handleRemoteMessage } from "../../../utils/pubnubUtils";
-import { redirectIfOnGeneralHost } from "../../../utils/helperFuncs";
 import Head from "next/head";
+
+import IconArrowDown from '../../../../components/icons/iconArrowDown';
+import ClinicSelector from '../../../../components/common/ClinicSelector';
+import EditProfileModal from '../../../../components/common/EditProfileModal';
+import { triggerUserLogout } from '../../../../redux/actions/actions';
+import { setClinic } from "../../../../redux/actions/clinicActions";
+import { textForKey } from '../../../../utils/localization';
+import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
+import { redirectIfOnGeneralHost } from "../../../../utils/helperFuncs";
+import { environment, isDev } from "../../../../eas.config";
+import PageHeader from '../../common/MainComponent/PageHeader/PageHeader';
+import styles from './DoctorsMain.module.scss';
 
 const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
   const dispatch = useDispatch();
