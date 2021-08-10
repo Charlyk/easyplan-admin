@@ -64,6 +64,7 @@
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
     "cross-env": "^7.0.3",
+    "url-loader": "^4.1.1",
     "eslint-config-prettier": "^7.2.0",
     "eslint-config-react": "^1.1.7",
     "eslint-config-react-app": "^6.0.0",

@@ -27,6 +27,12 @@
         font-style: normal;
         font-weight: normal;
         font-size: 13px;
+
+        :global(.dropdown-item) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
       }
     }
   }

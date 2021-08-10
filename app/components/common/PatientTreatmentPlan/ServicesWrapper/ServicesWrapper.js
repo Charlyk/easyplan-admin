@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 
 import PropTypes from 'prop-types';
 import { Form } from "react-bootstrap";
+import Image from 'next/image';
 import { Menu, MenuItem, Typeahead } from "react-bootstrap-typeahead";
 import { Paper } from "@material-ui/core";
 import clsx from "clsx";
@@ -10,6 +11,8 @@ import { textForKey } from "../../../../../utils/localization";
 import { getServiceName } from "../../../../../utils/helperFuncs";
 import FinalServiceItem from "../../../doctors/FinalServiceItem";
 import LoadingButton from "../../../../../components/common/LoadingButton";
+import ToothIcon from '../../../../../public/icon-tooth.png';
+import BracesIcon from '../../../../../public/icon-dental-braces.png';
 import styles from './ServicesWrapper.module.scss';
 
 const ServicesWrapper = (
@@ -61,6 +64,15 @@ const ServicesWrapper = (
                         position={index}
                       >
                         {getServiceName(result)}
+
+                        {result.serviceType !== 'All' && (
+                          <Image
+                            src={result.serviceType === 'Single' ? ToothIcon : BracesIcon}
+                            alt={textForKey(result.serviceType)}
+                            width={20}
+                            height={20}
+                          />
+                        )}
                       </MenuItem>
                     ))}
                   </Menu>

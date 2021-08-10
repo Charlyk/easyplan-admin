@@ -1,5 +1,5 @@
-import { generateReducerActions } from "../../../../utils/helperFuncs";
 import { getServicesData, getScheduleDetails } from "./PatientTreatmentPlan.utils";
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   isLoading: false,
@@ -14,77 +14,107 @@ export const initialState = {
   treatmentPlan: null,
   showFinalizeTreatment: false,
   isFinalizing: false,
+  teethModal: { open: false, service: null },
 };
 
-const reducerTypes = {
-  setIsLoading: 'setIsLoading',
-  setPatient: 'setPatient',
-  setToothServices: 'setToothServices',
-  setAllServices: 'setAllServices',
-  setSelectedServices: 'setSelectedServices',
-  setSchedule: 'setSchedule',
-  setShouldFillTreatmentPlan: 'setShouldFillTreatmentPlan',
-  setTreatmentPlan: 'setTreatmentPlan',
-  setShowFinalizeTreatment: 'setShowFinalizeTreatment',
-  setIsFinalizing: 'setIsFinalizing',
-  setServices: 'setServices',
-  setScheduleDetails: 'setScheduleDetails',
-  setInitialData: 'setInitialData',
-};
-
-export const actions = generateReducerActions(reducerTypes);
-
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setIsLoading:
-      return { ...state, isLoading: action.payload };
-    case reducerTypes.setPatient:
-      return { ...state, patient: action.payload };
-    case reducerTypes.setToothServices: {
-      return { ...state, toothServices: action.payload };
-    }
-    case reducerTypes.setAllServices:
-      return { ...state, allServices: action.payload };
-    case reducerTypes.setSelectedServices: {
+const treatmentPlanSlice = createSlice({
+  name: 'patientTreatmentPlan',
+  initialState,
+  reducers: {
+    setIsLoading(state, action) {
+      state.isLoading = action.payload;
+    },
+    setPatient(state, action) {
+      state.patient = action.payload;
+    },
+    setToothServices(state, action) {
+      state.toothServices = action.payload;
+    },
+    setAllServices(state, action) {
+      state.allServices = action.payload;
+    },
+    setSelectedServices(state, action) {
       const { services } = action.payload;
-      return {
-        ...state,
-        selectedServices: services.map((item) => ({
-          ...item,
-        })),
-        servicesFieldValue: '',
-      };
-    }
-    case reducerTypes.setSchedule:
-      return { ...state, schedule: action.payload };
-    case reducerTypes.setShouldFillTreatmentPlan:
-      return { ...state, shouldFillTreatmentPlan: action.payload };
-    case reducerTypes.setShowFinalizeTreatment:
-      return { ...state, showFinalizeTreatment: action.payload };
-    case reducerTypes.setIsFinalizing:
-      return { ...state, isFinalizing: action.payload };
-    case reducerTypes.setServices: {
-      return {
-        ...state,
-        ...getServicesData(action.payload),
-      };
-    }
-    case reducerTypes.setScheduleDetails: {
+      state.selectedServices = services.map((item) => ({
+        ...item,
+      }));
+      state.servicesFieldValue = ''
+    },
+    setSchedule(state, action) {
+      state.schedule = action.payload;
+    },
+    setShouldFillTreatmentPlan(state, action) {
+      state.shouldFillTreatmentPlan = action.payload;
+    },
+    setShowFinalizeTreatment(state, action) {
+      state.showFinalizeTreatment = action.paylod;
+    },
+    setIsFinalizing(state, action) {
+      state.isFinalizing = action.payload;
+    },
+    setServices(state, action) {
+      const { allServices, toothServices, bracesServices } = getServicesData(action.payload);
+      state.allServices = allServices;
+      state.toothServices = toothServices;
+      state.bracesServices = bracesServices;
+    },
+    setScheduleDetails(state, action) {
       const { data, clinicCurrency } = action.payload;
-      return {
-        ...state,
-        ...getScheduleDetails(data, clinicCurrency, state),
+      const {
+        patient,
+        schedule,
+        selectedServices,
+        completedServices
+      } = getScheduleDetails(data, clinicCurrency, state);
+
+      state.patient = patient;
+      state.schedule = schedule;
+      state.selectedServices = selectedServices;
+      state.completedServices = completedServices;
+    },
+    setInitialData(state, action) {
+      const { schedule: schedulePayload, currency, services } = action.payload;
+      const {
+        patient,
+        schedule,
+        selectedServices,
+        completedServices
+      } = getScheduleDetails(schedulePayload, currency, state);
+      const { allServices, toothServices, bracesServices } = getServicesData(services);
+
+      state.patient = patient;
+      state.schedule = schedule;
+      state.selectedServices = selectedServices;
+      state.completedServices = completedServices;
+      state.allServices = allServices;
+      state.toothServices = toothServices;
+      state.bracesServices = bracesServices;
+    },
+    setTeethModal(state, action) {
+      const { open } = action.payload;
+      if (!open) {
+        state.teethModal = { open: false, service: null };
+      } else {
+        state.teethModal = action.payload;
       }
-    }
-    case reducerTypes.setInitialData: {
-      const { schedule, currency, services } = action.payload;
-      return {
-        ...state,
-        ...getScheduleDetails(schedule, currency, state),
-        ...getServicesData(services),
-      };
-    }
-    default:
-      return state;
+    },
   }
-};
+});
+
+export const {
+  setAllServices,
+  setServices,
+  setPatient,
+  setSchedule,
+  setShouldFillTreatmentPlan,
+  setShowFinalizeTreatment,
+  setIsLoading,
+  setInitialData,
+  setSelectedServices,
+  setToothServices,
+  setIsFinalizing,
+  setScheduleDetails,
+  setTeethModal,
+} = treatmentPlanSlice.actions;
+
+export default treatmentPlanSlice.reducer;

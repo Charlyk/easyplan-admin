@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useReducer } from "react";
-
 import PropTypes from 'prop-types';
 import cloneDeep from "lodash/cloneDeep";
 import remove from "lodash/remove";
@@ -8,9 +7,15 @@ import TeethContainer from "./TeethContainer";
 import { textForKey } from "../../../../utils/localization";
 import { Statuses } from "../../../utils/constants";
 import ServicesWrapper from "./ServicesWrapper";
-import { actions, initialState, reducer } from "./PatientTreatmentPlan.reducer";
-import styles from './PatientTreatmentPlan.module.scss';
 import { deletePatientPlanService } from "../../../../middleware/api/patients";
+import TeethModal from "../modals/TeethModal";
+import reducer, {
+  initialState,
+  setInitialData,
+  setSelectedServices,
+  setTeethModal,
+} from "./PatientTreatmentPlan.reducer";
+import styles from './PatientTreatmentPlan.module.scss';
 
 const PatientTreatmentPlan = (
   {
@@ -30,6 +35,7 @@ const PatientTreatmentPlan = (
       isFinalizing,
       completedServices,
       schedule,
+      teethModal,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -75,8 +81,29 @@ const PatientTreatmentPlan = (
     );
   }, [selectedServices, finalServicesList]);
 
+  const doesServiceExists = (service) => {
+    return selectedServices.some(
+      (item) =>
+        item.id === service.id &&
+        !item.completed &&
+        (item.toothId == null || item.toothId === service.toothId) &&
+        (item.destination == null ||
+          item.destination === service.destination)
+    );
+  }
+
+  const mappedService = (service, toothId = null) => {
+    return {
+      ...service,
+      toothId: toothId ?? service.toothId ?? null,
+      scheduleId: schedule.id,
+      canRemove: true,
+      count: 1,
+      isExistent: false,
+    }
+  }
+
   const setupInitialSchedule = (initialSchedule) => {
-    console.log(initialSchedule)
     const userServicesIds = (
       currentUser.clinics.find(
         (item) => item.clinicId === currentClinic.id,
@@ -84,7 +111,7 @@ const PatientTreatmentPlan = (
     ).map((it) => it.serviceId);
     // filter clinic services to get only provided by current user services
     localDispatch(
-      actions.setInitialData({
+      setInitialData({
         schedule: initialSchedule,
         currency: clinicCurrency,
         services: clinicServices.filter((item) => userServicesIds.includes(item.id))
@@ -100,15 +127,9 @@ const PatientTreatmentPlan = (
   const handleToothServicesChange = ({ toothId, services }) => {
     const newServices = selectedServices.filter((item) => item.toothId !== toothId || item.completed)
     for (let service of services) {
-      newServices.unshift({
-        ...service,
-        toothId,
-        canRemove: true,
-        count: 1,
-        isExistent: false,
-      });
+      newServices.unshift(mappedService(service, toothId));
     }
-    localDispatch(actions.setSelectedServices({ services: newServices }));
+    localDispatch(setSelectedServices({ services: newServices }));
   };
 
   /**
@@ -118,26 +139,46 @@ const PatientTreatmentPlan = (
   const handleSelectedItemsChange = (selectedItems) => {
     if (selectedItems.length === 0) return;
     const newService = selectedItems[0];
-    const newServices = cloneDeep(selectedServices);
-    const serviceExists = newServices.some(
-      (item) =>
-        item.id === newService.id &&
-        !item.completed &&
-        (item.toothId == null || item.toothId === newService.toothId) &&
-        (item.destination == null ||
-          item.destination === newService.destination)
-    );
-    if (!serviceExists) {
-      console.log(newService)
-      newServices.unshift({
-        ...newService,
-        scheduleId: schedule.id,
-        canRemove: true,
-        count: 1,
-        isExistent: false,
-      });
-      localDispatch(actions.setSelectedServices({ services: newServices }));
+
+    if (newService.serviceType === 'Single' && newService.toothId == null) {
+      localDispatch(setTeethModal({ open: true, service: newService }));
+      return;
     }
+
+    const newServices = cloneDeep(selectedServices);
+    const serviceExists = doesServiceExists(newService)
+    if (!serviceExists) {
+      newServices.unshift(mappedService(newService));
+      localDispatch(setSelectedServices({ services: newServices }));
+    }
+  };
+
+  /**
+   * Called when user click on save in teeth modal
+   * @param {any} service
+   * @param {string[]} teeth
+   */
+  const handleSaveTeethService = (service, teeth) => {
+    const updatedServices = []
+    for (const toothId of teeth) {
+      updatedServices.push({
+        ...service,
+        toothId,
+      });
+    }
+
+    const newServices = cloneDeep(selectedServices);
+    for (const newService of updatedServices) {
+      if (doesServiceExists(newService)) {
+        continue;
+      }
+      newServices.unshift(mappedService(newService))
+    }
+    localDispatch(setSelectedServices({ services: newServices }));
+  }
+
+  const handleCloseTeethModal = () => {
+    localDispatch(setTeethModal({ open: false }));
   };
 
   /**
@@ -170,7 +211,7 @@ const PatientTreatmentPlan = (
       // delete service from server
       await deletePatientPlanService(scheduleData.patient.id, service.planServiceId);
     }
-    localDispatch(actions.setSelectedServices({ services: newServices }));
+    localDispatch(setSelectedServices({ services: newServices }));
   };
 
   /**
@@ -191,6 +232,12 @@ const PatientTreatmentPlan = (
 
   return (
     <div className={styles.patientTreatmentPlan}>
+      <TeethModal
+        open={teethModal.open}
+        service={teethModal.service}
+        onSave={handleSaveTeethService}
+        onClose={handleCloseTeethModal}
+      />
       <TeethContainer
         readOnly={readOnly}
         toothServices={toothServices}

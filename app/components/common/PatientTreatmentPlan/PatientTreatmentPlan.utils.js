@@ -106,6 +106,7 @@ export const getServicesData = (clinicServices) => {
   // create an array with all services
   const allServices = [
     ...allTeethServices,
+    ...toothServices,
     ...mandibleBracesServices,
     ...maxillaryBracesServices,
   ];
