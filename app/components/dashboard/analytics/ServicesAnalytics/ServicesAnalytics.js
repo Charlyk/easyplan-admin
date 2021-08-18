@@ -237,7 +237,7 @@ const ServicesAnalytics = (
     const statuses = selectedStatuses.filter(status =>
       selected.includes(status.id),
     )
-    return statuses.map(service => service.fullName ?? textForKey('All statuses')).join(', ')
+    return statuses.map(service => service.name ?? textForKey('All statuses')).join(', ')
   }
 
   return (
