@@ -1,0 +1,30 @@
+.dialogDrawer {
+  width: 280px;
+}
+
+.drawerPaper {
+  width: 280px;
+  background-color: white;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 280px;
+  padding: 16px;
+}
+
+.drawerContainer {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .listItemSelected {
+    color: #3A83DC !important;
+  }
+
+  .listItemText {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+  }
+}

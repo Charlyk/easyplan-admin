@@ -1,15 +1,13 @@
 import React, { useRef, useState } from 'react';
 
-import {
-  Box,
-  ClickAwayListener,
-  IconButton,
-  Menu,
-  MenuItem,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -23,18 +21,18 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const messageText = () => {
-    const textObject = JSON.parse(message.message);
+    const textObject = JSON.parse(message.messageText);
     return textObject[getAppLanguage()] || '';
   };
 
   const messageTime = () => {
-    switch (message.type) {
+    switch (message.messageType) {
       case 'ScheduleNotification':
       case 'BirthdayCongrats':
-        return message.hour;
+        return message.hourToSendAt;
       case 'HolidayCongrats':
       case 'PromotionalMessage':
-        return `${moment(message.sendDate).format('DD MMMM')} ${message.hour}`;
+        return `${moment(message.dateToSend).format('DD MMMM')} ${message.hourToSendAt}`;
       default:
         return '-';
     }
@@ -89,7 +87,7 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
       {moreMenu}
       <TableCell classes={{ root: styles['message-title'] }}>
         <Typography noWrap classes={{ root: styles['message-title'] }}>
-          {message.title}
+          {message.messageTitle}
         </Typography>
       </TableCell>
       <TableCell classes={{ root: styles['message-text'] }}>
@@ -97,7 +95,7 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
           {messageText()}
         </Typography>
       </TableCell>
-      <TableCell>{textForKey(message.type)}</TableCell>
+      <TableCell>{textForKey(message.messageType)}</TableCell>
       <TableCell>{messageTime()}</TableCell>
       <TableCell classes={{ root: styles.actions }}>
         <Box
@@ -127,17 +125,17 @@ export default SMSMessageItem;
 SMSMessageItem.propTypes = {
   message: PropTypes.shape({
     id: PropTypes.number,
-    title: PropTypes.string,
-    message: PropTypes.string,
-    type: PropTypes.oneOf([
+    messageTitle: PropTypes.string,
+    messageText: PropTypes.string,
+    messageType: PropTypes.oneOf([
       'ScheduleNotification',
       'BirthdayCongrats',
       'HolidayCongrats',
       'PromotionalMessage',
       'OnetimeMessage',
     ]),
-    hour: PropTypes.string,
-    sendDate: PropTypes.string,
+    hourToSendAt: PropTypes.string,
+    dateToSend: PropTypes.string,
     disabled: PropTypes.bool,
   }),
   onEdit: PropTypes.func,

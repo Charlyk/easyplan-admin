@@ -2,7 +2,7 @@ import generateReducerActions from "../../../../utils/generateReducerActions";
 import {
   availableHours,
   messageTypeEnum
-} from './CreateMessageModal.constants'
+} from '../CreateMessageDialog/CreateMessageDialog.constants'
 import moment from "moment-timezone";
 
 export const initialState = {

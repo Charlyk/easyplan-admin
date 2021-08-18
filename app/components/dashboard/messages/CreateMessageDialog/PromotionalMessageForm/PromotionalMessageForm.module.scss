@@ -1,0 +1,151 @@
+.promotionalMessageRoot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+
+  .descriptionContainer {
+    padding: 16px;
+    width: 200px;
+
+    .description {
+      user-select: none !important;
+      color: #3A83DC !important;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+    }
+  }
+
+  .formContainer {
+    width: 500px;
+    overflow-y: auto;
+
+    .formTitle {
+      user-select: none !important;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: bold !important;
+      font-size: 18px !important;
+      margin-bottom: 16px;
+    }
+
+    .messageGroup {
+      margin-bottom: .5rem !important;
+    }
+
+    textarea {
+      min-height: 100px;
+      max-height: 100px;
+    }
+
+    .dateField {
+      margin-bottom: 16px !important;
+    }
+
+    :global(.form-group) {
+      margin-bottom: 0;
+
+      :global(.form-control) {
+        background-color: transparent;
+        outline: none;
+      }
+    }
+
+    .tags-wrapper {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      .tag-label {
+        outline: none;
+        user-select: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        color: #3A83DC;
+        margin-right: .5rem;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    :global(.form-label) {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 9.7px !important;
+      color: rgba(0, 0, 0, 0.54);
+      margin-bottom: 0;
+    }
+
+    .languagesSelect {
+      margin-bottom: .3rem;
+      font-family: Inter, sans-serif;
+      font-size: 14px;
+    }
+
+    :global(.form-text) {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 10px;
+      color: #34344E;
+      margin-top: 0;
+
+      &.message-length {
+        color: #3A83DC;
+        text-align: right;
+
+        &.exceeded {
+          color: #ec3276;
+        }
+      }
+
+      &.message-title {
+        color: #CDCEEA;
+        margin-bottom: .5rem;
+      }
+    }
+
+    .languageDesc {
+      color: #CDCEEA;
+    }
+
+    .messageTypeDesc {
+      color: #CDCEEA;
+      margin-bottom: .5rem;
+    }
+
+    :global(.input-group) {
+      margin-top: .5rem;
+      display: block;
+
+      :global(.input-group-fields) {
+        display: flex;
+      }
+
+      :global(.input-group-append) {
+        :global(.custom-select) {
+          width: unset;
+          margin-top: 0;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+
+      :global(.form-control) {
+        flex: 1;
+        width: unset !important;
+        margin-bottom: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  }
+}

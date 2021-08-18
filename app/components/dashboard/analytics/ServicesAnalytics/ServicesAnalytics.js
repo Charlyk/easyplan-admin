@@ -1,14 +1,19 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TablePagination, CircularProgress, FormControl, Select, MenuItem, InputLabel, ListItemText, Checkbox,
-} from '@material-ui/core';
+import TableContainer from '@material-ui/core/TableContainer';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TablePagination from '@material-ui/core/TablePagination';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import InputLabel from '@material-ui/core/InputLabel'
+import ListItemText from '@material-ui/core/ListItemText'
+import Checkbox from '@material-ui/core/Checkbox';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import orderBy from 'lodash/orderBy';
@@ -44,7 +49,7 @@ import reducer, {
   setServices,
   setShowRangePicker,
 } from "./ServicesAnalytics.reducer";
-import IconCheckMark from "../../../../../components/icons/iconCheckMark";
+import CheckableMenuItem from "../../../common/CheckableMenuItem";
 
 const ServicesAnalytics = (
   {
@@ -248,40 +253,18 @@ const ServicesAnalytics = (
             renderValue={renderSelectedServices}
             onChange={handleServiceChange}
           >
-            <MenuItem
+            <CheckableMenuItem
               value={-1}
-              className={styles.analyticsMenuItemRoot}
-            >
-              <Checkbox
-                classes={{
-                  root: styles.analyticsMenuItemCheckbox,
-                  checked: styles.analyticsMenuItemCheckboxChecked
-                }}
-                checked={selectedServices.some(item => item.id === -1)}
-              />
-              <ListItemText
-                classes={{ primary: styles.analyticsMenuItemText }}
-                primary={textForKey('All services')}
-              />
-            </MenuItem>
+              checked={selectedServices.some(item => item.id === -1)}
+              title={textForKey('All services')}
+            />
             {services.map((service) => (
-              <MenuItem
+              <CheckableMenuItem
                 key={service.id}
                 value={service.id}
-                className={styles.analyticsMenuItemRoot}
-              >
-                <Checkbox
-                  classes={{
-                    root: styles.analyticsMenuItemCheckbox,
-                    checked: styles.analyticsMenuItemCheckboxChecked
-                  }}
-                  checked={selectedServices.some(item => item.id === service.id)}
-                />
-                <ListItemText
-                  classes={{ primary: styles.analyticsMenuItemText }}
-                  primary={service.name}
-                />
-              </MenuItem>
+                checked={selectedServices.some(item => item.id === service.id)}
+                title={service.name}
+              />
             ))}
           </Select>
         </FormControl>
@@ -295,40 +278,18 @@ const ServicesAnalytics = (
             renderValue={renderSelectedDoctors}
             onChange={handleDoctorChange}
           >
-            <MenuItem
+            <CheckableMenuItem
               value={-1}
-              className={styles.analyticsMenuItemRoot}
-            >
-              <Checkbox
-                classes={{
-                  root: styles.analyticsMenuItemCheckbox,
-                  checked: styles.analyticsMenuItemCheckboxChecked
-                }}
-                checked={selectedDoctors.some(item => item.id === -1)}
-              />
-              <ListItemText
-                classes={{ primary: styles.analyticsMenuItemText }}
-                primary={textForKey('All doctors')}
-              />
-            </MenuItem>
+              checked={selectedDoctors.some(item => item.id === -1)}
+              title={textForKey('All doctors')}
+            />
             {doctors.map((doctor) => (
-              <MenuItem
+              <CheckableMenuItem
                 key={doctor.id}
                 value={doctor.id}
-                className={styles.analyticsMenuItemRoot}
-              >
-                <Checkbox
-                  classes={{
-                    root: styles.analyticsMenuItemCheckbox,
-                    checked: styles.analyticsMenuItemCheckboxChecked
-                  }}
-                  checked={selectedDoctors.some(item => item.id === doctor.id)}
-                />
-                <ListItemText
-                  classes={{ primary: styles.analyticsMenuItemText }}
-                  primary={getDoctorFullName(doctor)}
-                />
-              </MenuItem>
+                checked={selectedDoctors.some(item => item.id === doctor.id)}
+                title={getDoctorFullName(doctor)}
+              />
             ))}
           </Select>
         </FormControl>
@@ -353,40 +314,18 @@ const ServicesAnalytics = (
             renderValue={renderSelectedStatuses}
             onChange={handleStatusChange}
           >
-            <MenuItem
-              value='All'
-              className={styles.analyticsMenuItemRoot}
-            >
-              <Checkbox
-                classes={{
-                  root: styles.analyticsMenuItemCheckbox,
-                  checked: styles.analyticsMenuItemCheckboxChecked
-                }}
-                checked={selectedStatuses.some(item => item.id === 'All')}
-              />
-              <ListItemText
-                classes={{ primary: styles.analyticsMenuItemText }}
-                primary={textForKey('All statuses')}
-              />
-            </MenuItem>
+            <CheckableMenuItem
+              value="All"
+              checked={selectedStatuses.some(item => item.id === 'All')}
+              title={textForKey('All statuses')}
+            />
             {ScheduleStatuses.map((status) => (
-              <MenuItem
+              <CheckableMenuItem
                 key={status.id}
                 value={status.id}
-                className={styles.analyticsMenuItemRoot}
-              >
-                <Checkbox
-                  classes={{
-                    root: styles.analyticsMenuItemCheckbox,
-                    checked: styles.analyticsMenuItemCheckboxChecked
-                  }}
-                  checked={selectedStatuses.some(item => item.id === status.id)}
-                />
-                <ListItemText
-                  classes={{ primary: styles.analyticsMenuItemText }}
-                  primary={status.name}
-                />
-              </MenuItem>
+                checked={selectedStatuses.some(item => item.id === status.id)}
+                title={status.name}
+              />
             ))}
           </Select>
         </FormControl>

@@ -1,20 +1,18 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-
-import {
-  Box,
-  CircularProgress,
-  ClickAwayListener,
-  Fade, IconButton,
-  Paper,
-  Popper,
-  Typography,
-} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Fade from '@material-ui/core/Fade';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
 import DoneIcon from '@material-ui/icons/Done';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 

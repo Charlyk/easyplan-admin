@@ -1,25 +1,26 @@
 import React, { useEffect, useReducer } from 'react';
-
-import {
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import { textForKey } from '../../../../../utils/localization';
-import { deleteMessage, getMessages, toggleMessageStatus } from "../../../../../middleware/api/messages";
-import CreateMessageModal from '../CreateMessageModal';
+import {
+  deleteMessage,
+  getMessages,
+  toggleMessageStatus
+} from "../../../../../middleware/api/messages";
 import SMSMessageItem from './SMSMessageItem';
 import SMSMessagesHeader from './SMSMessagesHeader';
 import { initialState, actions, reducer } from './SMSMessages.reducer'
 import styles from './SMSMessages.module.scss';
+import CreateMessageDialog from "../CreateMessageDialog";
 
 const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
   const hasSMSAlias = currentClinic?.smsAlias != null;
@@ -114,6 +115,13 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
 
   return (
     <div className={styles['sms-messages-root']}>
+      <CreateMessageDialog
+        open={isCreatingMessage}
+        initialMessage={messageToEdit}
+        currentClinic={currentClinic}
+        onClose={handleCloseCreateMessage}
+        onCreateMessage={handleMessageCreated}
+      />
       {needsDeleteConfirmation && (
         <ConfirmationModal
           title={textForKey('Delete message')}
@@ -124,15 +132,15 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
           isLoading={isDeleting}
         />
       )}
-      {isCreatingMessage && (
-        <CreateMessageModal
-          currentClinic={currentClinic}
-          message={messageToEdit}
-          onClose={handleCloseCreateMessage}
-          onCreateMessage={handleMessageCreated}
-          open={isCreatingMessage}
-        />
-      )}
+      {/*{isCreatingMessage && (*/}
+      {/*  <CreateMessageModal*/}
+      {/*    currentClinic={currentClinic}*/}
+      {/*    message={messageToEdit}*/}
+      {/*    onClose={handleCloseCreateMessage}*/}
+      {/*    onCreateMessage={handleMessageCreated}*/}
+      {/*    open={isCreatingMessage}*/}
+      {/*  />*/}
+      {/*)}*/}
       <SMSMessagesHeader
         canCreate={hasSMSAlias}
         onCreate={handleStartCreateMessage}

@@ -1,0 +1,21 @@
+.dialogRoot {
+  .appBar {
+    background-color: #34344E;
+    position: relative;
+    z-index: 2000;
+  }
+
+  .title {
+    margin-left: 16px;
+    flex: 1;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .progressBar {
+    color: white;
+    width: 30px !important;
+    height: 30px !important;
+  }
+}

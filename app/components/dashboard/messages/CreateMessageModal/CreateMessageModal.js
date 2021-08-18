@@ -18,7 +18,7 @@ import {
   availableLanguages,
   availableHours,
   messageTypeEnum
-} from './CreateMessageModal.constants'
+} from '../CreateMessageDialog/CreateMessageDialog.constants'
 import { initialState, actions, reducer } from './CreateMessageModal.reducer'
 import styles from './CreateMessageModal.module.scss';
 
