@@ -27,7 +27,6 @@
       font-style: normal !important;
       font-weight: bold !important;
       font-size: 18px !important;
-      margin-bottom: 16px;
     }
 
     .messageGroup {
@@ -167,6 +166,19 @@
     }
 
     :global(.MuiSelect-select.MuiSelect-select) {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+    }
+  }
+
+  .recipientsCount {
+    display: flex;
+    margin-bottom: 16px;
+
+    .recipientsLabel {
+      color: #3A83DC !important;
       font-family: Inter, sans-serif !important;
       font-style: normal !important;
       font-weight: normal !important;

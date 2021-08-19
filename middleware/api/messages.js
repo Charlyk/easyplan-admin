@@ -61,5 +61,21 @@ export async function createMessage(body, headers = null) {
  * @return {Promise<void>}
  */
 export async function updateMessage(messageId, body, headers = null) {
-  return post(`/api/sms/${messageId}`, headers, body)
+  return post(`/api/sms/${messageId}`, headers, body);
+}
+
+/**
+ * Count how many patients will receive a message based on filter values
+ * @param {{
+ *   statuses: string[],
+ *   categories: number[],
+ *   services: number[],
+ *   startDate: string,
+ *   endDate: string,
+ * }} body
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function countMessageRecipients(body, headers = null) {
+  return post('/api/sms/count', headers, body);
 }

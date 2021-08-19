@@ -163,9 +163,9 @@ const CreateMessageDialog = (
         messageDate: moment(message.messageDate).format('YYYY-MM-DD'),
         hour: message.hour,
         filter: {
-          statuses: filter.statuses.map(item => item.id),
-          categories: filter.categories.map(item => item.id),
-          services: filter.services.map(item => item.id),
+          statuses: filter.statuses.filter(item => item.id !== 'All').map(item => item.id),
+          categories: filter.categories.filter(item => item.id !== -1).map(item => item.id),
+          services: filter.services.filter(item => item.id !== -1).map(item => item.id),
           startDate: filter.range.length === 0
             ? null
             : moment(filter.range[0]).format('YYYY-MM-DD'),

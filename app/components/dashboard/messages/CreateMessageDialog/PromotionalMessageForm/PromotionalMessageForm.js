@@ -1,10 +1,13 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useCallback, useEffect, useReducer, useRef } from "react";
+import debounce from 'lodash/debounce';
 import Form from "react-bootstrap/Form";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
+import { toast } from "react-toastify";
 import moment from "moment-timezone";
 
+import { countMessageRecipients } from "../../../../../../middleware/api/messages";
 import { textForKey } from "../../../../../../utils/localization";
 import EasyDatePicker from "../../../../../../components/common/EasyDatePicker";
 import {
@@ -25,6 +28,7 @@ import reducer, {
   setMessageDate,
   setShowDatePicker,
   setFilterData,
+  setRecipientsCount,
 } from './promotionalMessageSlice';
 import styles from './PromotionalMessageForm.module.scss';
 
@@ -50,7 +54,35 @@ const PromotionalMessageForm = (
     showDatePicker,
     messageDate,
     filterData,
+    recipientsCount,
   }, localDispatch] = useReducer(reducer, initialState);
+
+  const updateRecipientsCount = useCallback(debounce(async () => {
+    try {
+      const [startDate, endDate] = filterData.range;
+      const requestBody = {
+        statuses: filterData.statuses.filter(it => it.id !== 'All').map(it => it.id),
+        categories: filterData.categories.filter(it => it.id !== -1).map(it => it.id),
+        services: filterData.services.filter(it => it.id !== -1).map(it => it.id),
+        startDate: startDate,
+        endDate: endDate,
+      };
+      const response = await countMessageRecipients(requestBody);
+      const { data } = response;
+      if (data.isError) {
+        toast.error(data.message);
+        return;
+      }
+      localDispatch(setRecipientsCount(data));
+    } catch (error) {
+      if (error.response != null) {
+        const { data } = error.response;
+        toast.error(data.message || textForKey("something_went_wrong"));
+      } else {
+        toast.error(error.message || textForKey("something_went_wrong"));
+      }
+    }
+  }, 500), [filterData])
 
   useEffect(() => {
     if (initialMessage == null) {
@@ -83,6 +115,10 @@ const PromotionalMessageForm = (
     };
     onMessageChange?.(requestBody);
   }, [message, messageTitle, hourToSend, filterData]);
+
+  useEffect(() => {
+    updateRecipientsCount();
+  }, [filterData]);
 
   const handleMessageChange = (event) => {
     const newMessage = event.target.value;
@@ -131,9 +167,9 @@ const PromotionalMessageForm = (
     return messageValue.length;
   };
 
-  const handleFilterChange = (filterData) => {
+  const handleFilterChange = useCallback((filterData) => {
     localDispatch(setFilterData(filterData));
-  }
+  }, [localDispatch]);
 
   const isLengthExceeded = getRealMessageLength(language) > maxLength;
 
@@ -237,6 +273,7 @@ const PromotionalMessageForm = (
         </Form.Group>
         <ReceiversFilter
           currentClinic={currentClinic}
+          recipientsCount={recipientsCount}
           initialData={initialMessage?.filter}
           isLoading={isLoading}
           onChange={handleFilterChange}

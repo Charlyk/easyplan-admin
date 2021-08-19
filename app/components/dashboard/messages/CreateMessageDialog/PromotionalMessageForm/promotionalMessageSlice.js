@@ -11,6 +11,7 @@ export const initialState = {
   showDatePicker: false,
   hourToSend: availableHours[0],
   maxLength: 160,
+  recipientsCount: -1,
   filterData: {
     statuses: [],
     categories: [],
@@ -57,7 +58,10 @@ const promotionalMessageSlice = createSlice({
       state.message = JSON.parse(message.messageText);
       state.hourToSend = message.hourToSendAt;
       state.messageDate = moment(message.dateToSend).toDate();
-    }
+    },
+    setRecipientsCount(state, action) {
+      state.recipientsCount = action.payload;
+    },
   },
 });
 
@@ -72,6 +76,7 @@ export const {
   setMessageDate,
   setShowDatePicker,
   setFilterData,
+  setRecipientsCount,
 } = promotionalMessageSlice.actions;
 
 export default promotionalMessageSlice.reducer;

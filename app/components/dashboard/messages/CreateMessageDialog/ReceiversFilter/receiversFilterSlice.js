@@ -68,8 +68,6 @@ const receiversFilterSlice = createSlice({
         clinicData
       } = action.payload;
 
-      console.log(initialServices, clinicData)
-
       if (initialStatuses.length > 0) {
         state.selectedStatuses = ScheduleStatuses.filter(it => initialStatuses.includes(it.id))
       }

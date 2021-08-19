@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import { toast } from "react-toastify";
 import Typography from "@material-ui/core/Typography";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -6,6 +6,7 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
 import moment from "moment-timezone";
+import debounce from 'lodash/debounce';
 
 import { fetchAllServices } from "../../../../../../middleware/api/services";
 import { ScheduleStatuses } from "../../../../../utils/constants";
@@ -29,7 +30,7 @@ const defaultRange = {
   endDate: moment().add(7, 'days').toDate(),
 };
 
-const ReceiversFilter = ({ currentClinic, isLoading, initialData, onChange }) => {
+const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCount, onChange }) => {
   const pickerRef = useRef(null);
   const [{
     selectedStatuses,
@@ -65,6 +66,10 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, onChange }) =>
     ).format('DD MMM YYYY')}`
   }, [rangeObj]);
 
+  const handleFilterChange = useCallback(debounce((filterData) => {
+    onChange?.(filterData)
+  }, 400), [selectedStatuses, selectedCategories, selectedServices, dateRange]);
+
   useEffect(() => {
     if (initialData == null) {
       return;
@@ -80,13 +85,13 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, onChange }) =>
   }, [currentClinic]);
 
   useEffect(() => {
-    onChange?.({
+    handleFilterChange({
       services: selectedServices,
       statuses: selectedStatuses,
       categories: selectedCategories,
       range: dateRange,
     });
-  }, [selectedStatuses, selectedCategories, selectedServices, dateRange]);
+  }, [selectedStatuses, selectedCategories, selectedServices, dateRange, handleFilterChange]);
 
   const fetchFilterData = async () => {
     try {
@@ -194,6 +199,13 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, onChange }) =>
         <Typography className={styles.formTitle}>
           {textForKey('Receivers filter')}
         </Typography>
+        <div className={styles.recipientsCount}>
+          {recipientsCount > -1 && (
+            <Typography className={styles.recipientsLabel}>
+              {textForKey('Receivers')}: ~ {recipientsCount} {textForKey('patients').toLowerCase()}
+            </Typography>
+          )}
+        </div>
         {/* Statuses */}
         <FormControl classes={{ root: styles.selectControlRoot }}>
           <InputLabel id="statuses-select-label">

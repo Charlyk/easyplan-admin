@@ -540,6 +540,7 @@ export default {
     'receivers filter': 'Receivers filter',
     'all categories': 'All categories',
     'all time': 'All time',
+    receivers: 'Receivers',
   },
   ro: {
     analytics: 'Analitică',
@@ -1088,6 +1089,7 @@ export default {
     'receivers filter': 'Filtru recipienți',
     'all categories': 'Toate categoriile',
     'all time': 'Tot timpul',
+    receivers: 'Recipienți',
   },
   ru: {
     analytics: 'Analytics',
@@ -1627,5 +1629,6 @@ export default {
     'receivers filter': 'Receivers filter',
     'all categories': 'All categories',
     'all time': 'All time',
+    receivers: 'Receivers',
   },
 };
