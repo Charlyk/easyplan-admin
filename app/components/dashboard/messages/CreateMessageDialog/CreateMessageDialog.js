@@ -162,7 +162,7 @@ const CreateMessageDialog = (
         messageType: selectedMenu,
         messageDate: moment(message.messageDate).format('YYYY-MM-DD'),
         hour: message.hour,
-        filter: {
+        filter: selectedMenu === messageTypeEnum.PromotionalMessage ? {
           statuses: filter.statuses.filter(item => item.id !== 'All').map(item => item.id),
           categories: filter.categories.filter(item => item.id !== -1).map(item => item.id),
           services: filter.services.filter(item => item.id !== -1).map(item => item.id),
@@ -172,7 +172,7 @@ const CreateMessageDialog = (
           endDate: filter.range.length === 0
             ? null
             : moment(filter.range[1]).format('YYYY-MM-DD'),
-        }
+        } : null
       };
       const response =
         initialMessage == null
