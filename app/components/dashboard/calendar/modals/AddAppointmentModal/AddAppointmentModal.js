@@ -227,7 +227,7 @@ const AddAppointmentModal = (
 
   const getLabelKey = (option) => {
     return option.firstName || option.lastName
-      ? `${option.firstName} ${option.lastName}`
+      ? `${option.lastName} ${option.firstName}`
       : option.phoneNumber;
   };
 
