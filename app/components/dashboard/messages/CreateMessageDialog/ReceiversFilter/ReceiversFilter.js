@@ -30,6 +30,14 @@ const defaultRange = {
   endDate: moment().add(7, 'days').toDate(),
 };
 
+const selectMenuProps = {
+  anchorOrigin: {
+    vertical: "bottom",
+    horizontal: "left"
+  },
+  getContentAnchorEl: null
+}
+
 const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCount, onChange }) => {
   const pickerRef = useRef(null);
   const [{
@@ -216,6 +224,7 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
             disableUnderline
             labelId='statuses-select-label'
             value={selectedStatuses.map(item => item.id)}
+            MenuProps={selectMenuProps}
             renderValue={renderSelectedStatuses}
             onChange={handleStatusChange}
           >
@@ -244,6 +253,7 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
             disableUnderline
             labelId='categories-select-label'
             value={selectedCategories.map(item => item.id)}
+            MenuProps={selectMenuProps}
             renderValue={renderSelectedCategories}
             onChange={handleCategoriesChange}
           >
@@ -272,6 +282,7 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
             disableUnderline
             labelId='services-select-label'
             value={selectedServices.map(item => item.id)}
+            MenuProps={selectMenuProps}
             renderValue={renderSelectedServices}
             onChange={handleServicesChange}
           >
