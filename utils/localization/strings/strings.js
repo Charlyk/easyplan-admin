@@ -541,6 +541,9 @@ export default {
     'all categories': 'All categories',
     'all time': 'All time',
     receivers: 'Receivers',
+    patients_import_note: 'Note: Patients without phone number will not be imported',
+    'choose match': 'Chose match',
+    'import_n_patients': 'Import # patients',
   },
   ro: {
     analytics: 'Analitică',
@@ -1090,6 +1093,9 @@ export default {
     'all categories': 'Toate categoriile',
     'all time': 'Tot timpul',
     receivers: 'Recipienți',
+    patients_import_note: 'Notă: Pacienții fără număr de telefon nu vor fi importați.',
+    'choose match': 'Alegeți câmpul',
+    'import_n_patients': 'Importați # pacienți',
   },
   ru: {
     analytics: 'Analytics',
@@ -1630,5 +1636,8 @@ export default {
     'all categories': 'All categories',
     'all time': 'All time',
     receivers: 'Receivers',
+    patients_import_note: 'Note: Patients without phone number will not be imported',
+    'choose match': 'Chose match',
+    'import_n_patients': 'Import # patients',
   },
 };

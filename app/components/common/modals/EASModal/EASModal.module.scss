@@ -57,6 +57,15 @@
       width: 100%;
       border-top: #ededed 1px solid;
 
+      .noteLabel {
+        flex: 1;
+        color: #34354C !important;
+        text-align: center !important;
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-size: 14px !important;
+      }
+
       .primaryButton {
         outline: none;
         color: #3A83DC;

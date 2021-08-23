@@ -10,10 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
 import InputLabel from '@material-ui/core/InputLabel'
-import ListItemText from '@material-ui/core/ListItemText'
-import Checkbox from '@material-ui/core/Checkbox';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import orderBy from 'lodash/orderBy';

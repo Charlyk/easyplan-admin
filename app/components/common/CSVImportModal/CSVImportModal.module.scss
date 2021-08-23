@@ -1,0 +1,129 @@
+.importModal {
+  .modalPaper {
+    max-width: 70%;
+  }
+
+  .modalBody {
+    width: 100%;
+
+    .tableContainer {
+      overflow: auto;
+      min-height: 450px;
+
+      .table {
+        table-layout: fixed;
+
+        .tableBody, .tableHead {
+          .tableRow {
+            .tableCell {
+              padding: 8px 10px;
+              width: 140px;
+              font-family: Inter, sans-serif;
+              font-style: normal !important;
+              font-size: 13px !important;
+              border-right: 1px solid rgba(224, 224, 224, 1);
+
+              :last-child {
+                border-right: none;
+              }
+
+              .label {
+                margin-left: 8px;
+                font-family: Inter, sans-serif !important;
+                font-style: normal !important;
+                color: #34354C;
+                font-size: 13px !important;
+              }
+            }
+          }
+        }
+
+        .tableHead {
+          .tableRow {
+            .tableCell {
+              padding: 8px 10px;
+              width: 150px;
+              background-color: #F4FAFE;
+              border-right: 1px solid rgba(224, 224, 224, 1);
+
+              :last-child {
+                border-right: none;
+              }
+
+              .dataContainer {
+                display: flex;
+                width: 100%;
+
+                img {
+                  width: 7px !important;
+                  height: auto !important;
+                  min-height: unset !important;
+                }
+
+                .label {
+                  margin-left: 8px;
+                  font-family: Inter, sans-serif !important;
+                  font-style: normal !important;
+                  color: #3A83DC !important;
+                  font-weight: bold !important;
+                  font-size: 13px !important;
+                }
+              }
+            }
+
+            .selectCell {
+              padding: 8px 10px;
+              width: 150px;
+              background-color: #F4FAFE;
+              border-right: 1px solid rgba(224, 224, 224, 1);
+
+              :last-child {
+                border-right: none;
+              }
+
+              .dataContainer {
+                display: flex;
+                width: 100%;
+
+                :global(.MuiInput-root) {
+                  width: 100%;
+                }
+
+                :global(.MuiSelect-root) {
+                  width: 100%;
+                  border: #ced4da 1px solid;
+                  border-radius: 4px;
+                  padding-left: 10px;
+                  padding-right: 10px;
+                  background-color: white;
+                }
+
+                :global(.MuiSelect-select.MuiSelect-select) {
+                  font-family: Inter, sans-serif !important;
+                  font-style: normal !important;
+                  font-weight: normal !important;
+                  font-size: 12px !important;
+                  color: #6F7091;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.menuItemRoot {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
+}
+
+.menuItemText {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
+}

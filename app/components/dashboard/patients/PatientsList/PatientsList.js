@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
 import {
   Table,
@@ -25,15 +25,50 @@ import CreatePatientModal from '../CreatePatientModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import {
   setPatientDetails,
-  toggleImportModal,
   togglePatientsListUpdate,
 } from '../../../../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../utils/localization';
-import PatientRow from './PatientRow';
 import { deletePatient, getPatients } from "../../../../../middleware/api/patients";
-import { reducer, initialState, actions } from './PatientsList.reducer'
+import CSVImportModal from "../../../common/CSVImportModal";
+import PatientRow from './PatientRow';
+import reducer, {
+  initialState,
+  setPage,
+  setInitialQuery,
+  setIsDeleting,
+  setPatients,
+  setPatientToDelete,
+  setRowsPerPage,
+  setSearchQuery,
+  setShowCreateModal,
+  setShowImportModal,
+  setIsLoading,
+} from './PatientsList.reducer'
 import styles from './PatientsList.module.scss';
+
+const importFields = [
+  {
+    id: 'firstName',
+    name: textForKey('First name'),
+    required: false,
+  },
+  {
+    id: 'lastName',
+    name: textForKey('Last name'),
+    required: false,
+  },
+  {
+    id: 'phoneNumber',
+    name: textForKey('Phone number'),
+    required: true,
+  },
+  {
+    id: 'email',
+    name: textForKey('Email'),
+    required: false,
+  },
+]
 
 const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
   const dispatch = useDispatch();
@@ -50,13 +85,14 @@ const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
       showDeleteDialog,
       patientToDelete,
       isDeleting,
+      showImportModal,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localDispatch(actions.setPatients(data));
-    localDispatch(actions.setInitialQuery(initialQuery));
+    localDispatch(setPatients(data));
+    localDispatch(setInitialQuery(initialQuery));
   }, []);
 
   useEffect(() => {
@@ -77,31 +113,35 @@ const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
     if (currentClinic == null) {
       return;
     }
-    localDispatch(actions.setIsLoading(true));
+    localDispatch(setIsLoading(true));
     try {
       const updatedQuery = searchQuery.replace('+', '');
       const query = { page, rowsPerPage, query: updatedQuery };
       const response = await getPatients(query);
-      localDispatch(actions.setPatients(response.data));
+      localDispatch(setPatients(response.data));
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsLoading(false));
+      localDispatch(setIsLoading(false));
     }
   };
 
   const handleSearchQueryChange = (event) => {
     const newQuery = event.target.value;
-    localDispatch(actions.setSearchQuery(newQuery));
+    localDispatch(setSearchQuery(newQuery));
   };
 
   const handleSearchClick = () => {
     if (page !== 0) {
-      localDispatch(actions.setPage(0));
+      localDispatch(setPage(0));
     } else {
       fetchPatients();
     }
   };
+
+  const handleCloseImportModal = () => {
+    localDispatch(setShowImportModal(false));
+  }
 
   const handleSearchFieldKeyDown = (event) => {
     if (event.keyCode === 13) {
@@ -110,27 +150,27 @@ const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
   };
 
   const handleChangePage = (event, newPage) => {
-    localDispatch(actions.setPage(newPage));
+    localDispatch(setPage(newPage));
   };
 
   const handleChangeRowsPerPage = (event) => {
-    localDispatch(actions.setRowsPerPage(parseInt(event.target.value, 10)));
+    localDispatch(setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
   const handleDeletePatient = (patient) => {
-    localDispatch(actions.setPatientToDelete(patient));
+    localDispatch(setPatientToDelete(patient));
   };
 
   const handleCloseDelete = () => {
-    localDispatch(actions.setPatientToDelete(null));
+    localDispatch(setPatientToDelete(null));
   };
 
   const handleDeleteConfirmed = async () => {
     if (patientToDelete == null) return;
-    localDispatch(actions.setIsDeleting(true));
+    localDispatch(setIsDeleting(true));
     try {
       await deletePatient(patientToDelete.id);
-      localDispatch(actions.setPatientToDelete(null));
+      localDispatch(setPatientToDelete(null));
       await fetchPatients();
       dispatch(
         setPatientDetails({ show: false, patientId: null, onDelete: null }),
@@ -138,20 +178,20 @@ const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsDeleting(false));
+      localDispatch(setIsDeleting(false));
     }
   };
 
   const handleStartUploadPatients = () => {
-    dispatch(toggleImportModal(true));
+    localDispatch(setShowImportModal(true));
   };
 
   const handleCreatePatient = () => {
-    localDispatch(actions.setShowCreateModal(true));
+    localDispatch(setShowCreateModal(true));
   };
 
   const handleCloseCreatePatient = () => {
-    localDispatch(actions.setShowCreateModal(false));
+    localDispatch(setShowCreateModal(false));
   };
 
   const handlePatientSelected = (patient) => {
@@ -164,125 +204,136 @@ const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
     );
   };
 
+  const handleImportPatients = (file, fields) => {
+    console.log(file, fields);
+    handleCloseImportModal();
+  };
+
   return (
     <div className={styles.newPatientsRoot}>
-        <ConfirmationModal
-          isLoading={isDeleting}
-          show={showDeleteDialog}
-          title={textForKey('Delete patient')}
-          message={textForKey('delete_patient_message')}
-          onConfirm={handleDeleteConfirmed}
-          onClose={handleCloseDelete}
-        />
-        <CreatePatientModal
-          open={showCreateModal}
-          onClose={handleCloseCreatePatient}
-        />
-        <div className={styles.content}>
-          {isLoading && (
-            <div className='progress-bar-wrapper'>
-              <CircularProgress classes={{ root: 'circular-progress-bar' }} />
-            </div>
-          )}
+      <CSVImportModal
+        open={showImportModal}
+        fields={importFields}
+        onImport={handleImportPatients}
+        onClose={handleCloseImportModal}
+      />
+      <ConfirmationModal
+        isLoading={isDeleting}
+        show={showDeleteDialog}
+        title={textForKey('Delete patient')}
+        message={textForKey('delete_patient_message')}
+        onConfirm={handleDeleteConfirmed}
+        onClose={handleCloseDelete}
+      />
+      <CreatePatientModal
+        open={showCreateModal}
+        onClose={handleCloseCreatePatient}
+      />
+      <div className={styles.content}>
+        {isLoading && (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+          </div>
+        )}
 
-          <TableContainer classes={{ root: styles.tableContainer }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow classes={{ root: styles.tableHeadRow }}>
-                  <TableCell>
-                    <Typography classes={{ root: styles.headerLabel }}>
-                      {textForKey('Name')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: styles.headerLabel }}>
-                      {textForKey('Phone number')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: styles.headerLabel }}>
-                      {textForKey('Email')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography classes={{ root: styles.headerLabel }}>
-                      {textForKey('Discount')}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              {!isLoading && (
-                <TableBody>
-                  {patients?.data?.map((patient) => (
-                    <PatientRow
-                      key={patient.id}
-                      patient={patient}
-                      onSelect={handlePatientSelected}
-                    />
-                  ))}
-                </TableBody>
-              )}
-            </Table>
-          </TableContainer>
-
-          <TablePagination
-            rowsPerPageOptions={[25, 50, 100]}
-            colSpan={4}
-            count={patients.total}
-            rowsPerPage={rowsPerPage}
-            labelRowsPerPage={textForKey('Patients per page')}
-            page={page}
-            component='div'
-            SelectProps={{
-              inputProps: { 'aria-label': 'rows per page' },
-              native: true,
-            }}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-          <div className={styles.actionsContainer}>
-            <LoadingButton
-              variant='outline-primary'
-              className={clsx('btn-outline-primary', styles.importBtn)}
-              isLoading={isUploading}
-              onClick={handleStartUploadPatients}
-            >
-              {textForKey('Import patients')}
-              <UploadIcon />
-            </LoadingButton>
-            <Button
-              variant='outline-primary'
-              className={styles.createBtn}
-              onClick={handleCreatePatient}
-            >
-              {textForKey('Add patient')}
-              <IconPlus fill='#00E987' />
-            </Button>
-            <div className='flexContainer'>
-              <Form.Group controlId='email'>
-                <InputGroup>
-                  <Form.Control
-                    onKeyDown={handleSearchFieldKeyDown}
-                    value={searchQuery}
-                    onChange={handleSearchQueryChange}
-                    type='text'
-                    placeholder={`${textForKey('Search patient')}...`}
+        <TableContainer classes={{ root: styles.tableContainer }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow classes={{ root: styles.tableHeadRow }}>
+                <TableCell>
+                  <Typography classes={{ root: styles.headerLabel }}>
+                    {textForKey('Name')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: styles.headerLabel }}>
+                    {textForKey('Phone number')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: styles.headerLabel }}>
+                    {textForKey('Email')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: styles.headerLabel }}>
+                    {textForKey('Discount')}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            {!isLoading && (
+              <TableBody>
+                {patients?.data?.map((patient) => (
+                  <PatientRow
+                    key={patient.id}
+                    patient={patient}
+                    onSelect={handlePatientSelected}
                   />
-                </InputGroup>
-              </Form.Group>
-              <LoadingButton
-                disabled={isLoading}
-                isLoading={isLoading}
-                className='positive-button'
-                onClick={handleSearchClick}
-              >
-                {textForKey('Search')}
-                <IconSearch />
-              </LoadingButton>
-            </div>
+                ))}
+              </TableBody>
+            )}
+          </Table>
+        </TableContainer>
+
+        <TablePagination
+          rowsPerPageOptions={[25, 50, 100]}
+          colSpan={4}
+          count={patients.total}
+          rowsPerPage={rowsPerPage}
+          labelRowsPerPage={textForKey('Patients per page')}
+          page={page}
+          component='div'
+          SelectProps={{
+            inputProps: { 'aria-label': 'rows per page' },
+            native: true,
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+        <div className={styles.actionsContainer}>
+          <LoadingButton
+            variant='outline-primary'
+            className={clsx('btn-outline-primary', styles.importBtn)}
+            isLoading={isUploading}
+            onClick={handleStartUploadPatients}
+          >
+            {textForKey('Import patients')}
+            <UploadIcon/>
+          </LoadingButton>
+          <Button
+            variant='outline-primary'
+            className={styles.createBtn}
+            onClick={handleCreatePatient}
+          >
+            {textForKey('Add patient')}
+            <IconPlus fill='#00E987'/>
+          </Button>
+          <div className='flexContainer'>
+            <Form.Group controlId='email'>
+              <InputGroup>
+                <Form.Control
+                  onKeyDown={handleSearchFieldKeyDown}
+                  value={searchQuery}
+                  onChange={handleSearchQueryChange}
+                  type='text'
+                  placeholder={`${textForKey('Search patient')}...`}
+                />
+              </InputGroup>
+            </Form.Group>
+            <LoadingButton
+              disabled={isLoading}
+              isLoading={isLoading}
+              className='positive-button'
+              onClick={handleSearchClick}
+            >
+              {textForKey('Search')}
+              <IconSearch/>
+            </LoadingButton>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 

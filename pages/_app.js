@@ -39,7 +39,8 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-color-palette/lib/css/styles.css";
-import '../app/styles/base/base.scss'
+import '../app/utils/extensions';
+import '../app/styles/base/base.scss';
 import { UnauthorizedPaths } from "../app/utils/constants";
 
 const pubnub = new PubNub({

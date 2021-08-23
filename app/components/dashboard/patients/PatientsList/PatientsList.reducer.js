@@ -1,8 +1,9 @@
-import { generateReducerActions } from "../../../../../utils/helperFuncs";
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   isLoading: false,
   isUploading: false,
+  showImportModal: false,
   showUploadModal: false,
   showDeleteDialog: false,
   patients: { data: [], total: 0 },
@@ -14,66 +15,71 @@ export const initialState = {
   isDeleting: false,
 };
 
-const reducerTypes = {
-  setIsLoading: 'setIsLoading',
-  setIsUploading: 'setIsUploading',
-  setPatients: 'setPatients',
-  setRowsPerPage: 'setRowsPerPage',
-  setPage: 'setPage',
-  setShowUploadModal: 'setShowUploadModal',
-  setShowCreateModal: 'setShowCreateModal',
-  setSearchQuery: 'setSearchQuery',
-  setShowDeleteDialog: 'setShowDeleteDialog',
-  setPatientToDelete: 'setPatientToDelete',
-  setIsDeleting: 'setIsDeleting',
-  setInitialQuery: 'setInitialQuery',
-};
-
-export const actions = generateReducerActions(reducerTypes);
-
-/**
- * Patients list reducer
- * @param {Object} state
- * @param {{ type: string, payload: any }} action
- */
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setIsLoading:
-      return { ...state, isLoading: action.payload };
-    case reducerTypes.setIsUploading:
-      return { ...state, isUploading: action.payload };
-    case reducerTypes.setShowUploadModal:
-      return { ...state, showUploadModal: action.payload };
-    case reducerTypes.setPatients:
-      return { ...state, patients: action.payload };
-    case reducerTypes.setPage:
-      return { ...state, page: action.payload };
-    case reducerTypes.setRowsPerPage:
-      return { ...state, rowsPerPage: action.payload, page: 0 };
-    case reducerTypes.setShowCreateModal:
-      return { ...state, showCreateModal: action.payload };
-    case reducerTypes.setSearchQuery:
-      return { ...state, searchQuery: action.payload };
-    case reducerTypes.setShowDeleteDialog:
-      return { ...state, showDeleteDialog: action.payload };
-    case reducerTypes.setPatientToDelete:
-      return {
-        ...state,
-        patientToDelete: action.payload,
-        showDeleteDialog: Boolean(action.payload),
-        isDeleting: false,
-      };
-    case reducerTypes.setIsDeleting:
-      return { ...state, isDeleting: action.payload };
-    case reducerTypes.setInitialQuery: {
+const patientsListSlice = createSlice({
+  name: 'patientsList',
+  initialState,
+  reducers: {
+    setIsLoading(state, action) {
+      state.isLoading = action.payload;
+    },
+    setIsUploading(state, action) {
+      state.isUploading = action.payload;
+    },
+    setPatients(state, action) {
+      state.patients = action.payload;
+    },
+    setRowsPerPage(state, action) {
+      state.rowsPerPage = action.payload;
+      state.page = 0;
+    },
+    setPage(state, action) {
+      state.page = action.payload;
+    },
+    setShowUploadModal(state, action) {
+      state.showUploadModal = action.payload;
+    },
+    setShowCreateModal(state, action) {
+      state.showCreateModal = action.payload;
+    },
+    setSearchQuery(state, action) {
+      state.searchQuery = action.payload;
+    },
+    setShowDeleteDialog(state, action) {
+      state.showDeleteDialog = action.payload;
+    },
+    setPatientToDelete(state, action) {
+      state.patientToDelete = action.payload;
+      state.showDeleteDialog = Boolean(action.payload);
+      state.isDeleting = false;
+    },
+    setIsDeleting(state, action) {
+      state.isDeleting = action.payload;
+    },
+    setInitialQuery(state, action) {
       const { page, rowsPerPage } = action.payload;
-      return {
-        ...state,
-        page,
-        rowsPerPage,
-      }
-    }
-    default:
-      return state;
-  }
-};
+      state.page = page;
+      state.rowsPerPage = rowsPerPage;
+    },
+    setShowImportModal(state, action) {
+      state.showImportModal = action.payload;
+      state.csvFile = null;
+    },
+  },
+});
+
+export const {
+  setPatientToDelete,
+  setIsLoading,
+  setInitialQuery,
+  setPatients,
+  setIsDeleting,
+  setPage,
+  setRowsPerPage,
+  setSearchQuery,
+  setShowImportModal,
+  setIsUploading,
+  setShowUploadModal,
+  setShowCreateModal,
+} = patientsListSlice.actions;
+
+export default patientsListSlice.reducer;

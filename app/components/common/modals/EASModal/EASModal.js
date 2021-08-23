@@ -1,26 +1,54 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, IconButton, Modal, Paper, Typography } from "@material-ui/core";
+import clsx from "clsx";
+import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 import IconClose from "../../../../../components/icons/iconClose";
 import { textForKey } from "../../../../../utils/localization";
 import styles from './EASModal.module.scss';
-import clsx from "clsx";
 
-const EASModal = ({ open, title, primaryBtnText, secondaryBtnText, bodyStyle, children, className, onClose, onPrimaryClick, onSecondaryClick }) => {
+const EASModal = (
+  {
+    open,
+    title,
+    primaryBtnText,
+    secondaryBtnText,
+    bodyStyle,
+    note,
+    children,
+    className,
+    paperClass,
+    onClose,
+    onPrimaryClick,
+    onSecondaryClick,
+    onBackdropClick
+  }
+) => {
   const handlePrimaryClick = () => {
     if (typeof onPrimaryClick === 'function') {
       onPrimaryClick();
     } else {
-      onClose();
+      onClose?.()
     }
-  }
+  };
 
   const handleSecondaryClick = () => {
     if (typeof onSecondaryClick === 'function') {
       onSecondaryClick();
     } else {
-      onClose();
+      onClose?.()
+    }
+  };
+
+  const handleBackdropClick = () => {
+    if (typeof onBackdropClick !== 'function') {
+      onClose?.()
+    } else {
+      onBackdropClick?.();
     }
   }
 
@@ -28,9 +56,9 @@ const EASModal = ({ open, title, primaryBtnText, secondaryBtnText, bodyStyle, ch
     <Modal
       open={open}
       className={clsx(styles.modalRoot, className)}
-      onBackdropClick={onClose}
+      onBackdropClick={handleBackdropClick}
     >
-      <Paper className={styles.modalPaper}>
+      <Paper className={clsx(styles.modalPaper, paperClass)}>
         <div className={styles.modalHeader}>
           <Typography className={styles.titleLabel} noWrap>
             {title}
@@ -43,6 +71,11 @@ const EASModal = ({ open, title, primaryBtnText, secondaryBtnText, bodyStyle, ch
           {children}
         </div>
         <div className={styles.modalFooter}>
+          {note && (
+            <Typography className={styles.noteLabel}>
+              {note}
+            </Typography>
+          )}
           <Button
             className={styles.secondaryButton}
             onPointerUp={handleSecondaryClick}
@@ -73,9 +106,11 @@ EASModal.propTypes = {
   className: PropTypes.any,
   bodyStyle: PropTypes.any,
   children: PropTypes.any,
+  note: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onPrimaryClick: PropTypes.func,
   onSecondaryClick: PropTypes.func,
+  onBackdropClick: PropTypes.func,
 }
 
 EASModal.defaultProps = {
