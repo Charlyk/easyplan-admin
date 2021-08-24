@@ -55,6 +55,7 @@ export const initialState = {
   patientPhoneNumber: '',
   patientBirthday: null,
   patientEmail: '',
+  phoneCountry: { iso: 'md' },
   isFetchingHours: false,
   isCreatingSchedule: false,
   isPatientValid: false,
@@ -250,6 +251,7 @@ export const reducer = (state, action) => {
         ...state,
         patientPhoneNumber: action.payload.phoneNumber,
         isPhoneValid: action.payload.isPhoneValid,
+        phoneCountry: action.payload.country,
       };
     case reducerTypes.setPatientBirthday:
       return {

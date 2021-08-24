@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
+import { useRouter } from "next/router";
 
 import IconAvatar from '../../icons/iconAvatar';
 import IconSuccess from '../../icons/iconSuccess';
@@ -10,9 +10,10 @@ import LoadingButton from '../../common/LoadingButton';
 import { EmailRegex } from '../../../app/utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/AccountSettings.module.scss'
-import { useRouter } from "next/router";
 import { updateUserAccount } from "../../../middleware/api/auth";
+import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
+import styles from '../../../styles/AccountSettings.module.scss'
+import isPhoneNumberValid from "../../../app/utils/isPhoneNumberValid";
 
 const AccountSettings = ({ currentUser }) => {
   const router = useRouter();
@@ -57,12 +58,12 @@ const AccountSettings = ({ currentUser }) => {
     });
   };
 
-  const handlePhoneChange = (value, _, event) => {
+  const handlePhoneChange = (value, country, event) => {
     if (isLoading) return;
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
+      isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
     });
   };
 
@@ -182,13 +183,7 @@ const AccountSettings = ({ currentUser }) => {
             alwaysDefaultMask
             countryCodeEditable={false}
             country='md'
-            isValid={(inputNumber, country) => {
-              const phoneNumber = inputNumber.replace(
-                `${country.dialCode}`,
-                '',
-              );
-              return phoneNumber.length === 0 || phoneNumber.length === 8;
-            }}
+            isValid={isPhoneInputValid}
           />
         </InputGroup>
       </Form.Group>

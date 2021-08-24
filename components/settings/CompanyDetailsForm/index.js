@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
@@ -7,6 +6,7 @@ import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useRouter } from "next/router";
 
 import IconLogoPlaceholder from '../../icons/iconLogoPlaceholder';
 import IconSuccess from '../../icons/iconSuccess';
@@ -23,9 +23,10 @@ import {
   urlToLambda,
 } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
-import styles from '../../../styles/CompanyDetailsForm.module.scss'
-import { useRouter } from "next/router";
 import { clinicTimeZones, deleteClinic, updateClinic } from "../../../middleware/api/clinic";
+import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
+import styles from '../../../styles/CompanyDetailsForm.module.scss'
+import isPhoneNumberValid from "../../../app/utils/isPhoneNumberValid";
 
 const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
   const dispatch = useDispatch();
@@ -98,13 +99,13 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
     });
   };
 
-  const handlePhoneChange = (phoneType) => (value, _, event) => {
+  const handlePhoneChange = (phoneType) => (value, country, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
     if (isSaving) return;
     setData({
       ...data,
       [phoneType]: `+${value}`,
-      [validationFieldName]: !event.target?.classList.value.includes(
+      [validationFieldName]: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
         'invalid-number',
       ),
     });
@@ -252,13 +253,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
               alwaysDefaultMask
               countryCodeEditable={false}
               country='md'
-              isValid={(inputNumber, country) => {
-                const phoneNumber = inputNumber.replace(
-                  `${country.dialCode}`,
-                  '',
-                );
-                return phoneNumber.length === 0 || phoneNumber.length === 8;
-              }}
+              isValid={isPhoneInputValid}
             />
           </Form.Group>
           <Form.Group controlId='telegramNumber'>
@@ -278,13 +273,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
               alwaysDefaultMask
               countryCodeEditable={false}
               country='md'
-              isValid={(inputNumber, country) => {
-                const phoneNumber = inputNumber.replace(
-                  `${country.dialCode}`,
-                  '',
-                );
-                return phoneNumber.length === 0 || phoneNumber.length === 8;
-              }}
+              isValid={isPhoneInputValid}
             />
           </Form.Group>
           <Form.Group controlId='viberNumber'>
@@ -300,13 +289,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
               alwaysDefaultMask
               countryCodeEditable={false}
               country='md'
-              isValid={(inputNumber, country) => {
-                const phoneNumber = inputNumber.replace(
-                  `${country.dialCode}`,
-                  '',
-                );
-                return phoneNumber.length === 0 || phoneNumber.length === 8;
-              }}
+              isValid={isPhoneInputValid}
             />
           </Form.Group>
           <Form.Group controlId='whatsappNumber'>
@@ -326,13 +309,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
               alwaysDefaultMask
               countryCodeEditable={false}
               country='md'
-              isValid={(inputNumber, country) => {
-                const phoneNumber = inputNumber.replace(
-                  `${country.dialCode}`,
-                  '',
-                );
-                return phoneNumber.length === 0 || phoneNumber.length === 8;
-              }}
+              isValid={isPhoneInputValid}
             />
           </Form.Group>
         </div>

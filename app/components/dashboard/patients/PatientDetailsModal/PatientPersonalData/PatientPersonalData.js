@@ -3,7 +3,6 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import startsWith from 'lodash/startsWith';
 import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from "react-toastify";
@@ -16,7 +15,9 @@ import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
 import LoadingButton from '../../../../../../components/common/LoadingButton';
 import { actions, initialState, reducer } from './PatientPersonalData.reducer';
 import { updatePatient } from "../../../../../../middleware/api/patients";
+import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import styles from './PatientPersonalData.module.scss'
+import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
 
 const PatientPersonalData = ({ patient, onPatientUpdated }) => {
   const datePickerRef = useRef();
@@ -69,7 +70,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
 
   const handlePhoneChange = (value, country, event) => {
     const newNumber = `+${value}`;
-    const isPhoneValid = !event.target?.classList.value.includes(
+    const isPhoneValid = isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
       'invalid-number',
     );
     localDispatch(actions.setPhoneNumber({ newNumber, isPhoneValid, country }));
@@ -210,14 +211,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
               countryCodeEditable={false}
               country={country.countryCode}
               placeholder={country.format}
-              isValid={(inputNumber, country) => {
-                const phone = inputNumber.replace(country.dialCode, '');
-                return (
-                  (startsWith(country.dialCode, inputNumber) ||
-                    startsWith(inputNumber, country.dialCode)) &&
-                  phone.length > 3
-                );
-              }}
+              isValid={isPhoneInputValid}
             />
           </InputGroup>
         </Form.Group>
