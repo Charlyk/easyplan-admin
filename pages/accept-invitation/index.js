@@ -1,12 +1,17 @@
 import React, { useReducer } from 'react';
-
-import { CircularProgress, Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress'
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
-import { Button, Form, Image, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image';
+import InputGroup from 'react-bootstrap/InputGroup'
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
+import { useRouter } from "next/router";
+import axios from "axios";
 
 import IconAvatar from '../../components/icons/iconAvatar';
 import LoadingButton from '../../components/common/LoadingButton';
@@ -16,9 +21,8 @@ import {
   uploadFileToAWS,
 } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
+import isPhoneInputValid from "../../app/utils/isPhoneInputValid";
 import styles from '../../styles/AcceptInvitation.module.scss';
-import { useRouter } from "next/router";
-import axios from "axios";
 
 const initialState = {
   isLoading: false,
@@ -267,15 +271,7 @@ const AcceptInvitation = () => {
                     countryCodeEditable={false}
                     country='md'
                     placeholder='079123456'
-                    isValid={(inputNumber, country) => {
-                      const phoneNumber = inputNumber.replace(
-                        `${country.dialCode}`,
-                        '',
-                      );
-                      return (
-                        phoneNumber.length === 0 || phoneNumber.length === 8
-                      );
-                    }}
+                    isValid={isPhoneInputValid}
                   />
                 </InputGroup>
               </Form.Group>

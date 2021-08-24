@@ -28,6 +28,7 @@ import {
   postSchedule
 } from "../../../../../../middleware/api/schedules";
 import { getPatients } from "../../../../../../middleware/api/patients";
+import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import { reducer, initialState, actions } from "./AddAppointmentModal.reducer";
 import styles from './AddAppointment.module.scss';
 
@@ -467,13 +468,7 @@ const AddAppointmentModal = (
               countryCodeEditable={false}
               country='md'
               placeholder='079123456'
-              isValid={(inputNumber, country) => {
-                const phoneNumber = inputNumber.replace(
-                  `${country.dialCode}`,
-                  '',
-                );
-                return phoneNumber.length === 0 || phoneNumber.length === 8;
-              }}
+              isValid={isPhoneInputValid}
             />
           </InputGroup>
         </Form.Group>

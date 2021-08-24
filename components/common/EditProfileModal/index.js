@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import PropTypes from 'prop-types';
 import { Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
+import axios from "axios";
 
 import IconAvatar from '../../icons/iconAvatar';
 import { EmailRegex, PasswordRegex } from '../../../app/utils/constants';
@@ -11,7 +11,7 @@ import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
 import '../../../styles/EditProfileModal.module.scss';
-import axios from "axios";
+import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
 import { useRouter } from "next/router";
 
 const EditProfileModal = ({ open, currentUser, onClose }) => {
@@ -188,13 +188,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
               alwaysDefaultMask
               countryCodeEditable={false}
               country='md'
-              isValid={(inputNumber, country) => {
-                const phoneNumber = inputNumber.replace(
-                  `${country.dialCode}`,
-                  '',
-                );
-                return phoneNumber.length === 0 || phoneNumber.length === 8;
-              }}
+              isValid={isPhoneInputValid}
             />
           </InputGroup>
         </Form.Group>

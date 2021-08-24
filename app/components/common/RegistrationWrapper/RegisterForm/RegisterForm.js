@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PropTypes from 'prop-types';
 import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
+import clsx from "clsx";
 
 import IconAvatar from '../../../../../components/icons/iconAvatar';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
+import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import styles from './RegisterForm.module.scss';
-import clsx from "clsx";
 
 const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -166,13 +166,7 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
             countryCodeEditable={false}
             country='md'
             placeholder='079123456'
-            isValid={(inputNumber, country) => {
-              const phoneNumber = inputNumber.replace(
-                `${country.dialCode}`,
-                '',
-              );
-              return phoneNumber.length === 0 || phoneNumber.length === 8;
-            }}
+            isValid={isPhoneInputValid}
           />
         </InputGroup>
       </Form.Group>

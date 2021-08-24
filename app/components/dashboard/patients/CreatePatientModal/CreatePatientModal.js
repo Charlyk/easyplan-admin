@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { togglePatientsListUpdate } from '../../../../../redux/actions/actions';
 import { textForKey } from '../../../../../utils/localization';
 import EasyDatePicker from '../../../../../components/common/EasyDatePicker';
+import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
@@ -148,13 +149,7 @@ const CreatePatientModal = ({ open, onClose }) => {
             countryCodeEditable={false}
             country='md'
             placeholder='079123456'
-            isValid={(inputNumber, country) => {
-              const phoneNumber = inputNumber.replace(
-                `${country.dialCode}`,
-                '',
-              );
-              return phoneNumber.length === 0 || phoneNumber.length === 8;
-            }}
+            isValid={isPhoneInputValid}
           />
         </InputGroup>
       </Form.Group>
