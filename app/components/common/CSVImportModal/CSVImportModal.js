@@ -29,9 +29,13 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
   const [{ data, file, mappedFields }, localDispatch] = useReducer(reducer, initialState);
 
   const btnTitle = useMemo(() => {
+    if (file === null) {
+      return 'OK';
+    }
+
     return textForKey('import_n_patients')
       .replace('#', `${data.length - 1}`)
-  }, [data]);
+  }, [data, file]);
 
   const isFormValid = useMemo(() => {
     const requiredFields = fields.filter(item => item.required).map(item => item.id);

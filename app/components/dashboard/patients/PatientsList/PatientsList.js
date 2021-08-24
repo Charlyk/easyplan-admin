@@ -29,7 +29,7 @@ import {
 } from '../../../../../redux/actions/actions';
 import { updatePatientsListSelector } from '../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../utils/localization';
-import { deletePatient, getPatients } from "../../../../../middleware/api/patients";
+import { deletePatient, getPatients, importPatientsFromFile } from "../../../../../middleware/api/patients";
 import CSVImportModal from "../../../common/CSVImportModal";
 import PatientRow from './PatientRow';
 import reducer, {
@@ -70,7 +70,7 @@ const importFields = [
   },
 ]
 
-const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
+const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) => {
   const dispatch = useDispatch();
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
@@ -204,9 +204,17 @@ const PatientsList = ({ currentClinic, data, query: initialQuery }) => {
     );
   };
 
-  const handleImportPatients = (file, fields) => {
-    console.log(file, fields);
-    handleCloseImportModal();
+  const handleImportPatients = async (file, fields) => {
+    try {
+      const mappedFields = fields.map(item => ({ fieldId: item.id, index: item.index }));
+      await importPatientsFromFile(file, mappedFields, {
+        'X-EasyPlan-Clinic-Id': currentClinic.id,
+        Authorization: authToken
+      });
+      handleCloseImportModal();
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (

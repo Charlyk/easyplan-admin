@@ -257,3 +257,20 @@ export async function getPatientVisits(patientId, headers = null) {
 export async function getPatientSchedules(patientId, headers = null) {
   return get(`/api/schedules/patient-schedules/${patientId}`, headers);
 }
+
+/**
+ * Import patients from a csv file
+ * @param {File} file
+ * @param {{ fieldId: string, index: number }[]} fields
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function importPatientsFromFile(file, fields, headers = null) {
+  const requestBody = new FormData();
+  requestBody.append('fields', JSON.stringify(fields));
+  requestBody.append('file', file, file.name);
+  return post('/api/patients/import', {
+    ...headers,
+    'Content-Type': `multipart/form-data; boundary=${requestBody._boundary}`,
+  }, requestBody);
+}

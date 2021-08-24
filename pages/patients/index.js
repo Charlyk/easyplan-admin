@@ -27,6 +27,7 @@ const NewPatients = (
       authToken={authToken}
     >
       <PatientsList
+        authToken={authToken}
         query={initialQuery}
         currentClinic={currentClinic}
         data={data}

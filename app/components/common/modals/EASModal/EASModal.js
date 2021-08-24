@@ -106,7 +106,7 @@ EASModal.propTypes = {
   className: PropTypes.any,
   bodyStyle: PropTypes.any,
   children: PropTypes.any,
-  note: PropTypes.string,
+  note: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onClose: PropTypes.func.isRequired,
   onPrimaryClick: PropTypes.func,
   onSecondaryClick: PropTypes.func,
