@@ -149,7 +149,7 @@ const CreatePatientModal = ({ open, onClose }) => {
             value={phoneNumber}
             alwaysDefaultMask
             countryCodeEditable={false}
-            country={phoneCountry.iso}
+            country={phoneCountry?.iso || 'md'}
             placeholder='079123456'
             isValid={isPhoneInputValid}
           />
