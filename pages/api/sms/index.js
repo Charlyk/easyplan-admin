@@ -3,6 +3,7 @@ import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -34,9 +35,9 @@ async function createNewMessage(req) {
   const requestBody = req.body;
   return axios.post(`${updatedServerUrl(req)}/sms`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -45,9 +46,9 @@ async function fetchMessages(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.get(`${updatedServerUrl(req)}/sms`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

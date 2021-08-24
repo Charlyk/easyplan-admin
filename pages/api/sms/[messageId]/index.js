@@ -3,6 +3,7 @@ import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
 import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -42,9 +43,9 @@ function deleteMessage(req) {
   const { messageId } = req.query;
   return axios.delete(`${updatedServerUrl(req)}/sms/${messageId}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -55,9 +56,9 @@ async function updateMessage(req) {
   const requestBody = req.body;
   return axios.put(`${updatedServerUrl(req)}/sms/${messageId}`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -68,9 +69,9 @@ async function setMessageDisabled(req) {
   const url = `${updatedServerUrl(req)}/sms/${messageId}/${status}`
   return axios.put(url, {}, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

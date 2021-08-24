@@ -1,8 +1,11 @@
 import axios from "axios";
-import { authorized } from "../authorized";
 import cookie from 'cookie';
+import { IncomingForm } from "formidable";
+
 import { handler } from "../handler";
+import { authorized } from "../authorized";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -20,14 +23,24 @@ export default authorized(async (req, res) => {
   }
 });
 
-function importPatients(req) {
+async function importPatients(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
+  const data = await new Promise((resolve, reject) => {
+    const form = new IncomingForm();
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve({ fields, files });
+    });
+  });
+  console.log(data);
   return axios.post(`${updatedServerUrl(req)}/patients/import`, req.body, {
     headers: {
       ...req.headers,
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

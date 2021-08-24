@@ -3,6 +3,7 @@ import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -34,9 +35,9 @@ async function createNewSchedule(req) {
   const requestBody = req.body;
   return axios.post(`${updatedServerUrl(req)}/schedules`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -58,9 +59,9 @@ async function fetchDoctorSchedules(req) {
   const queryString = new URLSearchParams(req.query).toString()
   return axios.get(`${updatedServerUrl(req)}/schedules?${queryString}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -70,9 +71,9 @@ async function fetchDaySchedules(req) {
   const queryString = new URLSearchParams(req.query).toString()
   return axios.get(`${updatedServerUrl(req)}/schedules/v2/day?${queryString}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -82,9 +83,9 @@ async function fetchMonthSchedules(req) {
   const queryString = new URLSearchParams(req.query).toString();
   return axios.get(`${updatedServerUrl(req)}/schedules/month-schedules?${queryString}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

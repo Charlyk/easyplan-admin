@@ -3,6 +3,7 @@ import cookie from "cookie";
 import axios from "axios";
 import { handler } from "../handler";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 const emptyResponse = {
   scheduleStats: {
@@ -43,9 +44,9 @@ const fetchScheduleStats = async (req) => {
   const url = `${updatedServerUrl(req)}/analytics/general?${queryString}`;
   return axios.get(url, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -56,9 +57,9 @@ const fetchIncomeStats = (req) => {
   const url = `${updatedServerUrl(req)}/analytics/finance?${queryString}`;
   return axios.get(url, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

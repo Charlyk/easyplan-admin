@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handler } from "../handler";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default async function register(req, res) {
   const data = await handler(createNewAccount, req, res);
@@ -21,8 +22,8 @@ function createNewAccount(req) {
     req.body,
     {
       headers: {
-        'X-EasyPlan-Clinic-Id': -1,
-        'X-EasyPlan-Subdomain': getSubdomain(req),
+        [HeaderKeys.clinicId]: -1,
+        [HeaderKeys.subdomain]: getSubdomain(req),
       }
     }
   );

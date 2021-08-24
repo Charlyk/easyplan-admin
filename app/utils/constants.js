@@ -497,3 +497,9 @@ export const UnauthorizedPaths = [
 ];
 
 export const RestrictedSubdomains = ['app', 'app-dev', 'api', 'dev-api', ''];
+
+export const HeaderKeys = {
+  authorization: 'Authorization',
+  clinicId: 'X-EasyPlan-Clinic-Id',
+  subdomain: 'X-EasyPlan-Subdomain',
+};

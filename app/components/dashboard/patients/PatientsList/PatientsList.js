@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import {
   Table,
@@ -27,6 +27,7 @@ import {
   setPatientDetails,
   togglePatientsListUpdate,
 } from '../../../../../redux/actions/actions';
+import { HeaderKeys } from "../../../../utils/constants";
 import { updatePatientsListSelector } from '../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../utils/localization';
 import { deletePatient, getPatients, importPatientsFromFile } from "../../../../../middleware/api/patients";
@@ -64,8 +65,18 @@ const importFields = [
     required: true,
   },
   {
+    id: 'countryCode',
+    name: textForKey('Country code'),
+    required: false,
+  },
+  {
     id: 'email',
     name: textForKey('Email'),
+    required: false,
+  },
+  {
+    id: 'gender',
+    name: textForKey('Gender'),
     required: false,
   },
 ]
@@ -208,10 +219,12 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
     try {
       const mappedFields = fields.map(item => ({ fieldId: item.id, index: item.index }));
       await importPatientsFromFile(file, mappedFields, {
-        'X-EasyPlan-Clinic-Id': currentClinic.id,
-        Authorization: authToken
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
       });
       handleCloseImportModal();
+      await fetchPatients();
     } catch (error) {
       toast.error(error.message);
     }

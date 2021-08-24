@@ -3,6 +3,7 @@ import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
 import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -25,9 +26,9 @@ function restoreUser(req) {
   const { userId } = req.query;
   return axios.put(`${updatedServerUrl(req)}/users/${userId}/restore`, {}, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

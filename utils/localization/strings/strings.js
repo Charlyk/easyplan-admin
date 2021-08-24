@@ -544,6 +544,7 @@ export default {
     patients_import_note: 'Note: Patients without phone number will not be imported',
     'choose match': 'Chose match',
     'import_n_patients': 'Import # patients',
+    'country code': 'Country code',
   },
   ro: {
     analytics: 'Analitică',
@@ -1096,6 +1097,7 @@ export default {
     patients_import_note: 'Notă: Pacienții fără număr de telefon nu vor fi importați.',
     'choose match': 'Alegeți câmpul',
     'import_n_patients': 'Importați # pacienți',
+    'country code': 'Codul țării',
   },
   ru: {
     analytics: 'Analytics',
@@ -1639,5 +1641,6 @@ export default {
     patients_import_note: 'Note: Patients without phone number will not be imported',
     'choose match': 'Chose match',
     'import_n_patients': 'Import # patients',
+    'country code': 'Country code',
   },
 };

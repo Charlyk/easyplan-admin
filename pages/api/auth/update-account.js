@@ -2,6 +2,7 @@ import axios from "axios";
 import { handler } from "../handler";
 import cookie from "cookie";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default async function resetPassword(req, res) {
   switch (req.method) {
@@ -26,9 +27,9 @@ function updateUserAccount(req) {
   const requestBody = req.body;
   return axios.put(`${updatedServerUrl(req)}/authentication/v1/update-account`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

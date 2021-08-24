@@ -3,6 +3,7 @@ import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
 import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -32,9 +33,9 @@ function fetchInvoiceDetails(req) {
   const { invoiceId } = req.query;
   return axios.get(`${updatedServerUrl(req)}/invoices/${invoiceId}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -45,9 +46,9 @@ function registerPayment(req) {
   const requestBody = req.body
   return axios.put(`${updatedServerUrl(req)}/invoices/${invoiceId}`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

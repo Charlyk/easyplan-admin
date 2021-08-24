@@ -1,4 +1,7 @@
 import { del, get, post, put } from "./request";
+import axios from "axios";
+import { getSubdomain, updatedServerUrl } from "../../utils/helperFuncs";
+import { baseApiUrl } from "../../eas.config";
 
 /**
  * Delete patient
@@ -269,8 +272,5 @@ export async function importPatientsFromFile(file, fields, headers = null) {
   const requestBody = new FormData();
   requestBody.append('fields', JSON.stringify(fields));
   requestBody.append('file', file, file.name);
-  return post('/api/patients/import', {
-    ...headers,
-    'Content-Type': `multipart/form-data; boundary=${requestBody._boundary}`,
-  }, requestBody);
+  return axios.post(`${baseApiUrl}/patients/import`, requestBody, { headers })
 }

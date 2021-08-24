@@ -3,6 +3,7 @@ import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -37,9 +38,9 @@ async function deletePatient(req) {
   const queryString = new URLSearchParams(req.query).toString();
   return axios.delete(`${updatedServerUrl(req)}/patients?${queryString}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -49,9 +50,9 @@ function createPatient(req) {
   const requestBody = req.body;
   return axios.post(`${updatedServerUrl(req)}/patients`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -61,9 +62,9 @@ function fetchPatients(req) {
   const queryString = new URLSearchParams(req.query).toString()
   return axios.get(`${updatedServerUrl(req)}/patients?${queryString}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

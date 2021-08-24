@@ -4,6 +4,7 @@ import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
 import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -40,9 +41,9 @@ function changeSelectedClinic(req) {
   const { clinicId } = req.query;
   return axios.get(`${updatedServerUrl(req)}/authentication/v1/change-clinic/${clinicId}`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': -1,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: -1,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

@@ -2,7 +2,8 @@ import axios from "axios";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 import { handler } from "../handler";
-import { updatedServerUrl } from "../../../utils/helperFuncs";
+import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -37,8 +38,9 @@ function fetchCategories(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.get(`${updatedServerUrl(req)}/categories`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -47,8 +49,9 @@ function fetchServices(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.get(`${updatedServerUrl(req)}/services`, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
@@ -58,8 +61,9 @@ function createService(req) {
   const requestBody = req.body;
   return axios.post(`${updatedServerUrl(req)}/services/v1/create`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Clinic-Id': clinic_id,
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.clinicId]: clinic_id,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
