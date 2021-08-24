@@ -112,9 +112,9 @@ const CheckoutModal = (
   const clinicServices = useMemo(() => {
     return currentClinic.services?.filter((service) =>
       service.serviceType !== 'System' &&
-      (invoiceDetails.doctor.id === -1 ||
-        invoiceDetails.doctor.services?.some(
-          (item) => item.serviceId === service.id,
+      (invoiceDetails.doctor?.id === -1 ||
+        invoiceDetails.doctor?.services?.some(
+          (item) => item.serviceId === service?.id,
         )
       )
     ) || [];
