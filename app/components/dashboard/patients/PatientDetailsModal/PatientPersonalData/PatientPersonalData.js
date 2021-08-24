@@ -17,6 +17,7 @@ import { actions, initialState, reducer } from './PatientPersonalData.reducer';
 import { updatePatient } from "../../../../../../middleware/api/patients";
 import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import styles from './PatientPersonalData.module.scss'
+import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
 
 const PatientPersonalData = ({ patient, onPatientUpdated }) => {
   const datePickerRef = useRef();
@@ -69,7 +70,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
 
   const handlePhoneChange = (value, country, event) => {
     const newNumber = `+${value}`;
-    const isPhoneValid = !event.target?.classList.value.includes(
+    const isPhoneValid = isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
       'invalid-number',
     );
     localDispatch(actions.setPhoneNumber({ newNumber, isPhoneValid, country }));

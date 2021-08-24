@@ -12,6 +12,7 @@ import { togglePatientsListUpdate } from '../../../../../redux/actions/actions';
 import { textForKey } from '../../../../../utils/localization';
 import EasyDatePicker from '../../../../../components/common/EasyDatePicker';
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
+import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
@@ -25,6 +26,7 @@ const CreatePatientModal = ({ open, onClose }) => {
       lastName,
       phoneNumber,
       isPhoneValid,
+      phoneCountry,
       email,
       isEmailValid,
       birthday,
@@ -86,7 +88,7 @@ const CreatePatientModal = ({ open, onClose }) => {
     localDispatch(
       actions.setPhoneNumber({
         phoneNumber: `+${value}`,
-        isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
+        isPhoneValid: isPhoneNumberValid(value, data) && !event.target?.classList.value.includes('invalid-number'),
       }),
     );
   };
@@ -147,7 +149,7 @@ const CreatePatientModal = ({ open, onClose }) => {
             value={phoneNumber}
             alwaysDefaultMask
             countryCodeEditable={false}
-            country='md'
+            country={phoneCountry.iso}
             placeholder='079123456'
             isValid={isPhoneInputValid}
           />

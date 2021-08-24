@@ -26,6 +26,7 @@ import { textForKey } from '../../../utils/localization';
 import { clinicTimeZones, deleteClinic, updateClinic } from "../../../middleware/api/clinic";
 import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
 import styles from '../../../styles/CompanyDetailsForm.module.scss'
+import isPhoneNumberValid from "../../../app/utils/isPhoneNumberValid";
 
 const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
   const dispatch = useDispatch();
@@ -98,13 +99,13 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
     });
   };
 
-  const handlePhoneChange = (phoneType) => (value, _, event) => {
+  const handlePhoneChange = (phoneType) => (value, country, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
     if (isSaving) return;
     setData({
       ...data,
       [phoneType]: `+${value}`,
-      [validationFieldName]: !event.target?.classList.value.includes(
+      [validationFieldName]: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
         'invalid-number',
       ),
     });

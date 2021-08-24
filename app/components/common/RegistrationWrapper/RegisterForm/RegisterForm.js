@@ -12,6 +12,7 @@ import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import styles from './RegisterForm.module.scss';
+import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 
 const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -47,11 +48,11 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  const handlePhoneChange = (value, _, event) => {
+  const handlePhoneChange = (value, country, event) => {
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: !event.target.classList.value.includes('invalid-number'),
+      isPhoneValid: isPhoneNumberValid(value, country) && !event.target.classList.value.includes('invalid-number'),
     });
   };
 

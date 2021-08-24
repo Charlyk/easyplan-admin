@@ -23,6 +23,7 @@ import {
 import { textForKey } from '../../utils/localization';
 import isPhoneInputValid from "../../app/utils/isPhoneInputValid";
 import styles from '../../styles/AcceptInvitation.module.scss';
+import isPhoneNumberValid from "../../app/utils/isPhoneNumberValid";
 
 const initialState = {
   isLoading: false,
@@ -117,11 +118,11 @@ const AcceptInvitation = () => {
     }
   };
 
-  const handlePhoneNumberChange = (value, _, event) => {
+  const handlePhoneNumberChange = (value, country, event) => {
     localDispatch(
       actions.setPhoneNumber({
         number: `+${value}`,
-        isValid: !event.target?.classList.value.includes('invalid-number'),
+        isValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
       }),
     );
   };

@@ -31,6 +31,7 @@ import { getPatients } from "../../../../../../middleware/api/patients";
 import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import { reducer, initialState, actions } from "./AddAppointmentModal.reducer";
 import styles from './AddAppointment.module.scss';
+import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
 
 const AddAppointmentModal = (
   {
@@ -62,6 +63,7 @@ const AddAppointmentModal = (
       patientPhoneNumber,
       patientBirthday,
       patientEmail,
+      phoneCountry,
       isPhoneValid,
       isNewPatient,
       appointmentDate,
@@ -387,7 +389,8 @@ const AddAppointmentModal = (
     localDispatch(
       actions.setPatientPhoneNumber({
         phoneNumber: `+${value}`,
-        isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
+        isPhoneValid: isPhoneNumberValid(value, data) && !event.target?.classList.value.includes('invalid-number'),
+        country: data,
       }),
     );
   };
@@ -466,7 +469,7 @@ const AddAppointmentModal = (
               value={patientPhoneNumber}
               alwaysDefaultMask
               countryCodeEditable={false}
-              country='md'
+              country={phoneCountry.iso}
               placeholder='079123456'
               isValid={isPhoneInputValid}
             />

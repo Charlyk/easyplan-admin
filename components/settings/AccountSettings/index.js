@@ -13,6 +13,7 @@ import { textForKey } from '../../../utils/localization';
 import { updateUserAccount } from "../../../middleware/api/auth";
 import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
 import styles from '../../../styles/AccountSettings.module.scss'
+import isPhoneNumberValid from "../../../app/utils/isPhoneNumberValid";
 
 const AccountSettings = ({ currentUser }) => {
   const router = useRouter();
@@ -57,12 +58,12 @@ const AccountSettings = ({ currentUser }) => {
     });
   };
 
-  const handlePhoneChange = (value, _, event) => {
+  const handlePhoneChange = (value, country, event) => {
     if (isLoading) return;
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
+      isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
     });
   };
 

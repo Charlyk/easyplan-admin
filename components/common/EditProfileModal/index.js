@@ -13,6 +13,7 @@ import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
 import '../../../styles/EditProfileModal.module.scss';
 import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
 import { useRouter } from "next/router";
+import isPhoneNumberValid from "../../../app/utils/isPhoneNumberValid";
 
 const EditProfileModal = ({ open, currentUser, onClose }) => {
   const router = useRouter();
@@ -59,12 +60,12 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
     });
   };
 
-  const handlePhoneChange = (value, _, event) => {
+  const handlePhoneChange = (value, country, event) => {
     if (isLoading) return;
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: !event.target?.classList.value.includes('invalid-number'),
+      isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
     });
   };
 

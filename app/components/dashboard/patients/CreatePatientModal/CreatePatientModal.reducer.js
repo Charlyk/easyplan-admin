@@ -6,6 +6,7 @@ export const initialState = {
   lastName: '',
   phoneNumber: '',
   isPhoneValid: false,
+  phoneCountry: { iso: 'md' },
   email: '',
   isEmailValid: false,
   birthday: null,
@@ -33,8 +34,8 @@ export const reducer = (state, action) => {
     case reducerTypes.setLastName:
       return { ...state, lastName: action.payload };
     case reducerTypes.setPhoneNumber: {
-      const { phoneNumber, isPhoneValid } = action.payload;
-      return { ...state, phoneNumber, isPhoneValid };
+      const { phoneNumber, isPhoneValid, country } = action.payload;
+      return { ...state, phoneNumber, isPhoneValid, phoneCountry: country };
     }
     case reducerTypes.setBirthday:
       return { ...state, birthday: action.payload, showBirthdayPicker: false };
