@@ -1,4 +1,6 @@
 import { del, get, post, put } from "./request";
+import axios from "axios";
+import { baseApiUrl } from "../../eas.config";
 
 /**
  * Delete a service from clinic
@@ -78,4 +80,20 @@ export async function createService(body, headers = null) {
  */
 export async function updateService(serviceId, body, headers = null) {
   return put(`/api/services/${serviceId}`, headers, body);
+}
+
+/**
+ * Import patients from a csv file
+ * @param {File} file
+ * @param {{ fieldId: string, index: number }[]} fields
+ * @param {number} categoryId
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function importServicesFromFile(file, fields, categoryId, headers = null) {
+  const requestBody = new FormData();
+  requestBody.append('fields', JSON.stringify(fields));
+  requestBody.append('file', file, file.name);
+  requestBody.append('categoryId', `${categoryId}`);
+  return axios.post(`${baseApiUrl}/services/import`, requestBody, { headers })
 }

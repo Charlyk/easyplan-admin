@@ -234,6 +234,9 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
     <div className={styles.newPatientsRoot}>
       <CSVImportModal
         open={showImportModal}
+        title={textForKey('Import patients')}
+        importBtnTitle={textForKey('import_n_patients')}
+        note={textForKey('patients_import_note')}
         fields={importFields}
         onImport={handleImportPatients}
         onClose={handleCloseImportModal}

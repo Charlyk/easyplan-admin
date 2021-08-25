@@ -29,7 +29,7 @@ import reducer, {
 } from './csvImportSlice';
 import styles from './CSVImportModal.module.scss';
 
-const CSVImportModal = ({ open, fields, onImport, onClose }) => {
+const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, onClose }) => {
   const [{ data, file, mappedFields, snackbar }, localDispatch] = useReducer(reducer, initialState);
 
   const btnTitle = useMemo(() => {
@@ -37,9 +37,9 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
       return 'OK';
     }
 
-    return textForKey('import_n_patients')
+    return importBtnTitle
       .replace('#', `${data.length - 1}`)
-  }, [data, file]);
+  }, [data, file, importBtnTitle]);
 
   const isFormValid = useMemo(() => {
     const requiredFields = fields.filter(item => item.required).map(item => item.id).sort();
@@ -82,6 +82,11 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
   const handleFieldSelected = (fieldId, index) => {
     const field = fields.find(item => item.id === fieldId);
     const selectedField = mappedFields.find(item => item.id === fieldId);
+
+    if (fieldId === 'none') {
+      localDispatch(setMappedFields(mappedFields.filter(item => item.index !== index)));
+      return;
+    }
 
     if (selectedField != null && selectedField.index !== index) {
       localDispatch(setMappedFields(mappedFields
@@ -132,8 +137,8 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
       onBackdropClick={() => null}
       primaryBtnText={btnTitle}
       onPrimaryClick={handleUploadFile}
-      note={data.length > 0 && textForKey('patients_import_note')}
-      title={textForKey('Import patients')}
+      note={data.length > 0 && (note || '')}
+      title={title}
     >
       <div className={styles.modalBody}>
         {data.length === 0 ? (
@@ -238,6 +243,9 @@ export default CSVImportModal;
 
 CSVImportModal.propTypes = {
   open: PropTypes.bool,
+  title: PropTypes.string,
+  importBtnTitle: PropTypes.string,
+  note: PropTypes.string,
   csvFile: PropTypes.any,
   onClose: PropTypes.func,
   onImport: PropTypes.func,

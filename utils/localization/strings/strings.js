@@ -546,6 +546,8 @@ export default {
     'import_n_patients': 'Import # patients',
     'country code': 'Country code',
     map_all_fields: 'Please map: #',
+    import_n_services: 'Import # services',
+    import_services_note: 'Note: Services without a valid name will not be imported',
   },
   ro: {
     analytics: 'Analitică',
@@ -1100,6 +1102,8 @@ export default {
     'import_n_patients': 'Importați # pacienți',
     'country code': 'Codul țării',
     map_all_fields: 'Nu ați indicat: #',
+    import_n_services: 'Importați # servicii',
+    import_services_note: 'Notă: Serviciile fara un nume valid nu vor fi importate.',
   },
   ru: {
     analytics: 'Analytics',
@@ -1645,5 +1649,7 @@ export default {
     'import_n_patients': 'Import # patients',
     'country code': 'Country code',
     map_all_fields: 'Please map: #',
+    import_n_services: 'Import # services',
+    import_services_note: 'Note: Services without a valid name will not be imported',
   },
 };
