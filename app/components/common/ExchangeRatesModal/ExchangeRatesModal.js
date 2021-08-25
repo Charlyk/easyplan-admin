@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
-
 import {
   Button,
   IconButton,
@@ -16,57 +15,27 @@ import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
+import axios from "axios";
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconClose from '../../icons/iconClose';
-import { updateExchangeRatesSelector } from '../../../redux/selectors/rootSelector';
-import { Role } from '../../../app/utils/constants';
-import { generateReducerActions } from '../../../utils/helperFuncs';
-import { textForKey } from '../../../utils/localization';
-import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
-import styles from '../../../styles/ExchangeRates.module.scss';
-import axios from "axios";
-import { setIsExchangeRatesModalOpen } from "../../../redux/actions/exchangeRatesActions";
+import IconClose from '../../../../components/icons/iconClose';
+import { updateExchangeRatesSelector } from '../../../../redux/selectors/rootSelector';
+import { textForKey } from '../../../../utils/localization';
+import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";
+import { Role } from '../../../utils/constants';
+import { fetchClinicExchangeRates } from "../../../../middleware/api/clinic";
+import EasyPlanModal from '../modals/EasyPlanModal';
+import { reducer, initialState, actions } from './ExchangeRatesModal.reducer';
+import styles from './ExchangeRates.module.scss';
 
-const initialState = {
-  isLoading: true,
-  isSaving: false,
-  rates: [{ currency: 'EUR', value: 19.57 }],
-  initialRates: [],
-};
-
-const reducerTypes = {
-  setIsLoading: 'setIsLoading',
-  setRates: 'setRates',
-  setInitialRates: 'setInitialRates',
-  setIsSaving: 'setIsSaving',
-};
-
-const actions = generateReducerActions(reducerTypes);
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setIsLoading:
-      return { ...state, isLoading: action.payload };
-    case reducerTypes.setRates:
-      return { ...state, rates: action.payload };
-    case reducerTypes.setInitialRates:
-      return { ...state, initialRates: action.payload };
-    case reducerTypes.setIsSaving:
-      return { ...state, isSaving: action.payload };
-    default:
-      return state;
-  }
-};
-
-const ExchangeRates = ({ open, currentClinic, currentUser, onClose }) => {
+const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
   const dispatch = useDispatch();
   const updateRates = useSelector(updateExchangeRatesSelector);
   const allCurrencies = currentClinic.allCurrencies;
   const clinicCurrency = currentClinic.currency;
-  const selectedClinic = currentUser.clinics.find((item) => item.isSelected);
+  const selectedClinic = currentUser.clinics.find((item) => item.clinicId === currentClinic.id);
   const [{ isLoading, rates, isSaving }, localDispatch] = useReducer(
     reducer,
     initialState,
@@ -87,7 +56,7 @@ const ExchangeRates = ({ open, currentClinic, currentUser, onClose }) => {
     }
     localDispatch(actions.setIsLoading(true));
     try {
-      const response = await axios.get(`/api/clinic/exchange-rates`);
+      const response = await fetchClinicExchangeRates();
       const sortedItems = sortBy(response.data, (item) => item.created);
       localDispatch(actions.setRates(sortedItems));
       localDispatch(actions.setInitialRates(sortedItems));
@@ -265,14 +234,14 @@ const ExchangeRates = ({ open, currentClinic, currentUser, onClose }) => {
   );
 };
 
-export default ExchangeRates;
+export default ExchangeRatesModal;
 
-ExchangeRates.propTypes = {
+ExchangeRatesModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
 };
 
-ExchangeRates.defaultProps = {
+ExchangeRatesModal.defaultProps = {
   open: true,
   onClose: () => null,
 };

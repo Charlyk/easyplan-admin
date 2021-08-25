@@ -28,7 +28,7 @@ import { setClinic } from "../../../../redux/actions/clinicActions";
 import { environment, isDev } from "../../../../eas.config";
 import { redirectIfOnGeneralHost } from "../../../../utils/helperFuncs";
 import DataMigrationModal from '../../../../components/common/DataMigrationModal';
-import ExchangeRates from "../../../../components/common/ExchangeRates";
+import ExchangeRatesModal from "../ExchangeRatesModal";
 import CheckoutModal from "../modals/CheckoutModal";
 import MainMenu from './MainMenu/MainMenu';
 import PageHeader from './PageHeader/PageHeader';
@@ -128,7 +128,7 @@ const MainComponent = (
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <ServiceDetailsModal currentClinic={currentClinic}/>
       {isExchangeRatesModalOpen && (
-        <ExchangeRates
+        <ExchangeRatesModal
           currentClinic={currentClinic}
           currentUser={currentUser}
           open={isExchangeRatesModalOpen}

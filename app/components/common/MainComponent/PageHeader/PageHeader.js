@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { IconButton, Tooltip } from '@material-ui/core';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Button, Image } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import IconAvatar from '../../../../../components/icons/iconAvatar';
@@ -48,7 +47,6 @@ const PageHeader = (
 ) => {
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
-  const isExchangeUpdateRequired = useSelector(isExchangeRatesUpdateRequiredSelector);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const userClinic = user.clinics.find(item => item.clinicId === currentClinic.id);
   const { canRegisterPayments } = userClinic;
@@ -70,10 +68,6 @@ const PageHeader = (
         break;
     }
     setIsActionsOpen(false);
-  };
-
-  const handleOpenExchangeRatesModal = () => {
-    dispatch(setIsExchangeRatesModalOpen(true));
   };
 
   return (
@@ -109,17 +103,6 @@ const PageHeader = (
         </div>
       )}
       <div className={styles['page-header__actions']}>
-        {!isDoctor && canRegisterPayments && (
-          <Button
-            onClick={handleOpenExchangeRatesModal}
-            className={clsx(styles['exchange-rate-btn'], {
-              [styles.upcoming]: isExchangeUpdateRequired,
-            })}
-            variant='outline-primary'
-          >
-            {textForKey('Exchange rate')}
-          </Button>
-        )}
         <div className={styles['page-header__notifications']}>
           <IconNotifications/>
         </div>

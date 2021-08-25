@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import {
   Box,
   CircularProgress,
@@ -23,6 +22,7 @@ import MenuUsers from '../../../../../components/icons/menuUsers';
 import { textForKey } from '../../../../../utils/localization';
 import ClinicSelector from '../../../../../components/common/ClinicSelector';
 import { Role } from "../../../../utils/constants";
+import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';
 
 const menuItems = [
@@ -107,6 +107,8 @@ const menuItems = [
 
 const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) => {
   const buttonRef = useRef(null);
+  const selectedClinic = currentUser?.clinics?.find((item) => item.clinicId === currentClinic.id);
+  const canRegisterPayments = selectedClinic?.canRegisterPayments;
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
@@ -260,11 +262,12 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
           </Typography>
         </Box>
       )}
-      <img
-        className={styles['trust-seal-image']}
-        src='/positivessl_trust_seal.png'
-        alt='SSL Trust Seal'
-      />
+      {canRegisterPayments && (
+        <ExchangeRates
+          currentUser={currentUser}
+          currentClinic={currentClinic}
+        />
+      )}
     </div>
   );
 };

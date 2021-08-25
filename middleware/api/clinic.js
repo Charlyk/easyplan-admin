@@ -97,3 +97,12 @@ export async function fetchAvailableCurrencies(headers = null) {
 export async function checkDomainAvailability(domain, headers = null) {
   return get(`/api/clinic/domain?domain=${domain}`, headers)
 }
+
+/**
+ * Fetch exchange rates for clinic
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function fetchClinicExchangeRates(headers = null) {
+  return get('/api/clinic/exchange-rates', headers);
+}
