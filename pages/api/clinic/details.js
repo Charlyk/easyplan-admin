@@ -1,9 +1,9 @@
 import axios from "axios";
-import { authorized } from "../authorized";
 import cookie from 'cookie';
-import { handler } from "../handler";
 import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
 import { HeaderKeys } from "../../../app/utils/constants";
+import { authorized } from "../authorized";
+import { handler } from "../handler";
 
 export default authorized(async function clinicDetails(req, res) {
   switch (req.method) {
