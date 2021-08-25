@@ -18,7 +18,6 @@ import IconPlus from '../../../../../components/icons/iconPlus';
 import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import CreateCategoryModal from '../CreateCategoryModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';
-import { toggleImportModal } from '../../../../../redux/actions/actions';
 import {
   closeServiceDetailsModal,
   setServiceDetailsModal,
@@ -45,7 +44,6 @@ import reducer, {
 } from './servicesContainerSlice';
 import styles from './ServicesContainer.module.scss';
 import CSVImportModal from "../../../common/CSVImportModal";
-import { importPatientsFromFile } from "../../../../../middleware/api/patients";
 import { HeaderKeys } from "../../../../utils/constants";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
