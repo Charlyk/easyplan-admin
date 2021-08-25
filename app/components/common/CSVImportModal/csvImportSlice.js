@@ -4,6 +4,7 @@ export const initialState = {
   data: [],
   file: null,
   mappedFields: [],
+  snackbar: { show: false, message: '' },
 }
 
 const csvImportSlice = createSlice({
@@ -21,9 +22,13 @@ const csvImportSlice = createSlice({
       state.mappedFields = action.payload
     },
     resetState(state) {
-      state.data = [];
-      state.mappedFields = [];
-      state.file = null;
+      state.data = initialState.data;
+      state.mappedFields = initialState.mappedFields;
+      state.file = initialState.file;
+      state.snackbar = initialState.snackbar
+    },
+    setSnackbar(state, action) {
+      state.snackbar = action.payload
     }
   },
 });
@@ -32,6 +37,7 @@ export const {
   setData,
   resetState,
   setMappedFields,
+  setSnackbar,
 } = csvImportSlice.actions;
 
 export default csvImportSlice.reducer;

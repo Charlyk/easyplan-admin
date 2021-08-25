@@ -13,6 +13,8 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Box from '@material-ui/core/Box';
 import Typography from "@material-ui/core/Typography";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 import IconsUploadCSV from "../../../../components/icons/iconsUploadCSV";
 import BendArrow from "../../../../public/bend-arrow.png";
@@ -23,11 +25,12 @@ import reducer, {
   setData,
   setMappedFields,
   resetState,
+  setSnackbar,
 } from './csvImportSlice';
 import styles from './CSVImportModal.module.scss';
 
 const CSVImportModal = ({ open, fields, onImport, onClose }) => {
-  const [{ data, file, mappedFields }, localDispatch] = useReducer(reducer, initialState);
+  const [{ data, file, mappedFields, snackbar }, localDispatch] = useReducer(reducer, initialState);
 
   const btnTitle = useMemo(() => {
     if (file === null) {
@@ -42,7 +45,15 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
     const requiredFields = fields.filter(item => item.required).map(item => item.id).sort();
     const selectedRequired = mappedFields.filter(item => item.required).map(item => item.id).sort();
     return isEqual(requiredFields, selectedRequired);
-  }, [mappedFields]);
+  }, [mappedFields, fields]);
+
+  const pendingFields = useMemo(() => {
+    const requiredFields = fields.filter(item => item.required).map(item => item.id).sort();
+    const selectedRequired = mappedFields.filter(item => item.required).map(item => item.id).sort();
+    const difference = requiredFields.filter(item => !selectedRequired.includes(item));
+    const pendingFields = fields.filter(item => difference.includes(item.id));
+    return pendingFields.map(item => item.name);
+  }, [mappedFields, fields])
 
   useEffect(() => {
     if (!open) {
@@ -56,6 +67,12 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
 
   const handleUploadFile = () => {
     if (!isFormValid) {
+      localDispatch(
+        setSnackbar({
+          show: true,
+          message: textForKey('map_all_fields').replace('#', pendingFields.join(', '))
+        })
+      );
       return;
     }
 
@@ -100,6 +117,10 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
   const renderSelectedFields = (fieldId) => {
     const field = mappedFields.find(item => item.id === fieldId);
     return field?.name ?? `${textForKey('Choose match')}...`;
+  }
+
+  const handleSnackbarClose = () => {
+    localDispatch(setSnackbar({ show: false, message: '' }));
   }
 
   return (
@@ -203,6 +224,11 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
             </Table>
           </TableContainer>
         )}
+        <Snackbar open={snackbar.show} autoHideDuration={4000} onClose={handleSnackbarClose}>
+          <Alert onClose={handleSnackbarClose} severity="error">
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </div>
     </EASModal>
   );

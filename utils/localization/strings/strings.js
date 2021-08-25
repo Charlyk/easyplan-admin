@@ -545,6 +545,7 @@ export default {
     'choose match': 'Chose match',
     'import_n_patients': 'Import # patients',
     'country code': 'Country code',
+    map_all_fields: 'Please map: #',
   },
   ro: {
     analytics: 'Analitică',
@@ -1098,6 +1099,7 @@ export default {
     'choose match': 'Alegeți câmpul',
     'import_n_patients': 'Importați # pacienți',
     'country code': 'Codul țării',
+    map_all_fields: 'Nu ați indicat: #',
   },
   ru: {
     analytics: 'Analytics',
@@ -1642,5 +1644,6 @@ export default {
     'choose match': 'Chose match',
     'import_n_patients': 'Import # patients',
     'country code': 'Country code',
+    map_all_fields: 'Please map: #',
   },
 };
