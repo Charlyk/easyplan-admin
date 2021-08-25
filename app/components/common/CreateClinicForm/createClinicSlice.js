@@ -9,6 +9,7 @@ export const initialState = {
   domainName: '',
   website: '',
   description: '',
+  countryIso: 'md',
   defaultCurrency: 'MDL',
   timeZone: moment.tz.guess(true),
   timeZones: [],
@@ -36,7 +37,7 @@ const createClinicSlice = createSlice({
         .replaceAll('â', 'a')
     },
     setWebsite(state, action) {
-      state.domainName = action.payload;
+      state.website = action.payload;
     },
     setDescription(state, action) {
       state.description = action.payload;
@@ -70,6 +71,9 @@ const createClinicSlice = createSlice({
     setIsDomainAvailable(state, action) {
       state.isDomainAvailable = action.payload;
     },
+    setCountryIso(state, action) {
+      state.countryIso = action.payload;
+    },
   },
 });
 
@@ -84,6 +88,7 @@ export const {
   setInitialData,
   setDefaultCurrency,
   setIsDomainAvailable,
+  setCountryIso,
 } = createClinicSlice.actions;
 
 export default createClinicSlice.reducer;

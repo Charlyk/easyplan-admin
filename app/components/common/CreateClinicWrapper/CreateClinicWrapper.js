@@ -13,7 +13,7 @@ import reducer, {
 } from './createClinicWrapperSlice';
 import styles from './CreateClinic.module.scss';
 
-export default function CreateClinicWrapper({ token, redirect }) {
+export default function CreateClinicWrapper({ token, redirect, countries }) {
   const router = useRouter();
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
@@ -62,6 +62,7 @@ export default function CreateClinicWrapper({ token, redirect }) {
       </div>
       <div className={styles.formContainer}>
         <CreateClinicForm
+          countries={countries}
           redirect={redirect}
           onSubmit={handleCreateClinic}
           onGoBack={handleGoBack}

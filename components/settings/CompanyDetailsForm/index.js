@@ -28,7 +28,7 @@ import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
 import styles from '../../../styles/CompanyDetailsForm.module.scss'
 import isPhoneNumberValid from "../../../app/utils/isPhoneNumberValid";
 
-const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
+const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
@@ -347,8 +347,11 @@ const CompanyDetailsForm = ({ currentUser, currentClinic }) => {
               onChange={handleFormChange}
               value={data.country}
             >
-              <option value='md'>{textForKey('Republic of Moldova')}</option>
-              <option value='ro'>{textForKey('Romania')}</option>
+              {countries?.map(country => (
+                <option key={country.iso} value={country.iso}>
+                  {textForKey(country.name)}
+                </option>
+              ))}
             </Form.Control>
           </Form.Group>
           <Form.Group style={{ flexDirection: 'column' }} controlId='timeZone'>

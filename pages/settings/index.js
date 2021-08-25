@@ -13,6 +13,7 @@ import { Role } from "../../app/utils/constants";
 import { fetchAppData } from "../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { parseCookies } from "../../utils";
+import { fetchAllCountries } from "../../middleware/api/countries";
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -23,7 +24,7 @@ const SettingsForm = {
   bracesSettings: 'bracesSettings',
 };
 
-const Settings = ({ currentUser, currentClinic, authToken }) => {
+const Settings = ({ currentUser, currentClinic, countries, authToken }) => {
   const selectedClinic = currentUser?.clinics.find(
     item => item.clinicId === currentClinic.id,
   );
@@ -53,6 +54,7 @@ const Settings = ({ currentUser, currentClinic, authToken }) => {
         <div className={styles['settings-root__form']}>
           {currentForm === SettingsForm.companyDetails && (
             <CompanyDetailsForm
+              countries={countries}
               currentUser={currentUser}
               currentClinic={currentClinic}
             />
@@ -97,6 +99,7 @@ export const getServerSideProps = async ({ req, res }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
+    const { data: countries } = await fetchAllCountries(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/settings');
     if (redirectTo != null) {
@@ -104,6 +107,7 @@ export const getServerSideProps = async ({ req, res }) => {
       return {
         props: {
           ...appData,
+          countries,
           authToken,
         }
       };
@@ -112,6 +116,7 @@ export const getServerSideProps = async ({ req, res }) => {
     return {
       props: {
         ...appData,
+        countries,
         authToken,
       }
     }

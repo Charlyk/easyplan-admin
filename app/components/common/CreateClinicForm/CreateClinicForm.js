@@ -22,10 +22,11 @@ import reducer, {
   setInitialData,
   setDefaultCurrency,
   setIsDomainAvailable,
+  setCountryIso,
 } from './createClinicSlice'
 import styles from "./CreateClinicForm.module.scss";
 
-const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
+const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }) => {
   const [{
     logoFile,
     clinicName,
@@ -37,6 +38,7 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
     currencies,
     defaultCurrency,
     isDomainAvailable,
+    countryIso
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -84,6 +86,10 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
     localDispatch(setDefaultCurrency(event.target.value));
   }
 
+  const handleCountryChange = (event) => {
+    localDispatch(setCountryIso(event.target.value));
+  }
+
   const handleLogoChange = (event) => {
     const files = event.target.files;
     if (files != null) {
@@ -125,6 +131,7 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
       website,
       timeZone,
       description,
+      countryIso,
       domainName: isDev ? `${domainName}-dev` : domainName,
       defaultCurrency,
     });
@@ -193,6 +200,22 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
           />
         </InputGroup>
       </Form.Group>
+      <Form.Group style={{ flexDirection: 'column' }} controlId='country'>
+        <Form.Label>{textForKey('Country')}</Form.Label>
+        <Form.Control
+          as='select'
+          className='mr-sm-2'
+          custom
+          onChange={handleCountryChange}
+          value={countryIso}
+        >
+          {countries?.map(country => (
+            <option key={country.iso} value={country.iso}>
+              {textForKey(country.name)}
+            </option>
+          ))}
+        </Form.Control>
+      </Form.Group>
       <Form.Group controlId='defaultCurrency'>
         <Form.Label>{textForKey('Currency')}</Form.Label>
         <Form.Control
@@ -254,7 +277,10 @@ const CreateClinicForm = ({ isLoading, redirect, onGoBack, onSubmit }) => {
           className='positive-button'
           disabled={!isFormValid}
         >
-          {textForKey('Create new account')}
+          {redirect
+            ? textForKey('Create new account')
+            : textForKey('Create clinic')
+          }
         </LoadingButton>
       </div>
     </div>
