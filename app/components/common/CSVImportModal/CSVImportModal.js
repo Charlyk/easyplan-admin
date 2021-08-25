@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useReducer } from "react";
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-import sortBy from 'lodash/sortBy'
 import { CSVReader } from "react-papaparse";
 import Image from "next/image";
 import Select from "@material-ui/core/Select";
@@ -119,10 +118,13 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
         {data.length === 0 ? (
           <Box padding="16px">
             <CSVReader
-              onDrop={handleOnDrop}
+              noDrag
+              accept="text/csv, .csv"
               style={{ margin: '16px !important' }}
-              addRemoveButton
-              removeButtonColor='#659cef'
+              onDrop={handleOnDrop}
+              config={{
+                preview: 10
+              }}
             >
               <IconsUploadCSV/>
             </CSVReader>
