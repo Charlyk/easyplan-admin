@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from "react";
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
+import sortBy from 'lodash/sortBy'
 import { CSVReader } from "react-papaparse";
 import Image from "next/image";
 import Select from "@material-ui/core/Select";
@@ -38,9 +40,9 @@ const CSVImportModal = ({ open, fields, onImport, onClose }) => {
   }, [data, file]);
 
   const isFormValid = useMemo(() => {
-    const requiredFields = fields.filter(item => item.required).map(item => item.id);
-    const selectedRequired = mappedFields.filter(item => item.required).map(item => item.id);
-    return selectedRequired.equals(requiredFields);
+    const requiredFields = fields.filter(item => item.required).map(item => item.id).sort();
+    const selectedRequired = mappedFields.filter(item => item.required).map(item => item.id).sort();
+    return isEqual(requiredFields, selectedRequired);
   }, [mappedFields]);
 
   useEffect(() => {
