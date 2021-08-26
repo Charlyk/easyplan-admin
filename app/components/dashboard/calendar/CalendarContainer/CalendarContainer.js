@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import {
   setAppointmentModal,
   setPaymentModal,
@@ -16,11 +15,67 @@ import {
 } from '../../../../../redux/actions/actions';
 import { redirectIfOnGeneralHost } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
+import ConfirmationModal from '../../../common/modals/ConfirmationModal';
+import MainComponent from "../../../common/MainComponent/MainComponent";
 import AppointmentsCalendar from '../AppointmentsCalendar';
 import CalendarDoctors from '../CalendarDoctors';
-import MainComponent from "../../../common/MainComponent/MainComponent";
-import { reducer, initialState, reducerActions } from './CalendarContainer.reducer';
+import reducer, {
+  initialState,
+  setParsedValue,
+  setIsDeleting,
+  setSelectedDoctor,
+  setDeleteSchedule,
+  setFilters,
+  setIsParsing,
+  setSelectedSchedule,
+  setViewMode,
+  setShowImportModal,
+} from './CalendarContainer.reducer';
 import styles from './CalendarContainer.module.scss';
+import CSVImportModal from "../../../common/CSVImportModal";
+
+const importFields = [
+  {
+    id: 'date',
+    name: textForKey('Date'),
+    required: true,
+  },
+  {
+    id: 'time',
+    name: textForKey('Time'),
+    required: true,
+  },
+  {
+    id: 'doctor',
+    name: textForKey('Doctor'),
+    required: true,
+  },
+  {
+    id: 'serviceName',
+    name: textForKey('Service'),
+    required: false,
+  },
+  {
+    id: 'patientName',
+    name: textForKey('Patient name'),
+    required: true,
+  },
+  {
+    id: 'patientPhone',
+    name: textForKey('Patient phone'),
+    required: false,
+  },
+  {
+    id: 'phoneCode',
+    name: textForKey('Country code'),
+    required: false,
+  },
+  {
+    id: 'status',
+    name: textForKey('Status'),
+    required: false,
+  },
+];
 
 const CalendarContainer = (
   {
@@ -47,6 +102,7 @@ const CalendarContainer = (
       isFetching,
       selectedSchedule,
       deleteSchedule,
+      showImportModal,
       isDeleting,
       isUploading,
       isParsing,
@@ -87,15 +143,15 @@ const CalendarContainer = (
         ),
       };
     }) ?? [];
-    localDispatch(reducerActions.setFilters({ doctors: newDoctors, services }));
+    localDispatch(setFilters({ doctors: newDoctors, services }));
     if (newDoctors.length > 0 && doctorId == null) {
-      localDispatch(reducerActions.setSelectedDoctor(newDoctors[0]));
+      localDispatch(setSelectedDoctor(newDoctors[0]));
     }
 
     // set selected doctor
     if (doctorId != null) {
       const doctor = newDoctors.find((item) => item.id === parseInt(doctorId));
-      localDispatch(reducerActions.setSelectedDoctor(doctor));
+      localDispatch(setSelectedDoctor(doctor));
     }
   }, [currentClinic, doctorId]);
 
@@ -106,17 +162,17 @@ const CalendarContainer = (
     }
     const { count, total, done } = message;
     if (done) {
-      localDispatch(reducerActions.setParsedValue(100));
+      localDispatch(setParsedValue(100));
       setTimeout(() => {
-        localDispatch(reducerActions.setIsParsing(false));
+        localDispatch(setIsParsing(false));
         dispatch(toggleAppointmentsUpdate());
       }, 3500);
     } else {
       if (!isParsing) {
-        localDispatch(reducerActions.setIsParsing(true));
+        localDispatch(setIsParsing(true));
       }
       const percentage = (count / total) * 100;
-      localDispatch(reducerActions.setParsedValue(Math.round(percentage)));
+      localDispatch(setParsedValue(Math.round(percentage)));
     }
   };
 
@@ -161,12 +217,20 @@ const CalendarContainer = (
     });
   };
 
+  const handleCloseImportModal = () => {
+    localDispatch(setShowImportModal(false));
+  }
+
+  const handleImportSchedules = (file, fields) => {
+
+  }
+
   const handleScheduleSelected = (schedule) => {
-    localDispatch(reducerActions.setSelectedSchedule(schedule));
+    localDispatch(setSelectedSchedule(schedule));
   };
 
   const handleViewModeChange = async (newMode) => {
-    localDispatch(reducerActions.setViewMode(newMode));
+    localDispatch(setViewMode(newMode));
     const stringDate = moment(viewDate).format('YYYY-MM-DD');
     const query = { date: stringDate };
     if (newMode !== 'day' && doctorId != null) {
@@ -192,37 +256,37 @@ const CalendarContainer = (
   };
 
   const handleDeleteSchedule = (schedule) => {
-    localDispatch(reducerActions.setDeleteSchedule({ open: true, schedule }));
+    localDispatch(setDeleteSchedule({ open: true, schedule }));
   };
 
   const handleConfirmDeleteSchedule = async () => {
     if (deleteSchedule.schedule == null) {
       return;
     }
-    localDispatch(reducerActions.setIsDeleting(true));
+    localDispatch(setIsDeleting(true));
     try {
       await axios.delete(`/api/schedules/${deleteSchedule.schedule.id}`);
       localDispatch(
-        reducerActions.setDeleteSchedule({ open: false, schedule: null }),
+        setDeleteSchedule({ open: false, schedule: null }),
       );
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(reducerActions.setIsDeleting(false));
+      localDispatch(setIsDeleting(false));
       if (selectedSchedule.id === deleteSchedule.schedule.id) {
-        localDispatch(reducerActions.setSelectedSchedule(null));
+        localDispatch(setSelectedSchedule(null));
       }
     }
   };
 
   const handleCloseDeleteSchedule = () => {
     localDispatch(
-      reducerActions.setDeleteSchedule({ open: false, schedule: null }),
+      setDeleteSchedule({ open: false, schedule: null }),
     );
   };
 
   const handleOpenImportModal = () => {
-    dispatch(toggleImportModal(true));
+    localDispatch(setShowImportModal(true));
   };
 
   return (
@@ -233,6 +297,14 @@ const CalendarContainer = (
       authToken={authToken}
     >
       <div className={styles.calendarRoot}>
+        <CSVImportModal
+          open={showImportModal}
+          fields={importFields}
+          title={textForKey('Import schedules')}
+          importBtnTitle={textForKey('import_n_schedules')}
+          onClose={handleCloseImportModal}
+          onImport={handleImportSchedules}
+        />
         {deleteSchedule.open && (
           <ConfirmationModal
             isLoading={isDeleting}

@@ -51,22 +51,22 @@ import { useRouter } from "next/router";
 const importServicesFields = [
   {
     id: 'serviceName',
-    name: `${textForKey('Service name')}*`,
+    name: textForKey('Service name'),
     required: true,
   },
   {
     id: 'duration',
-    name: `${textForKey('Duration')}`,
+    name: textForKey('Duration'),
     required: false,
   },
   {
     id: 'price',
-    name: `${textForKey('Price')}`,
+    name: textForKey('Price'),
     required: false,
   },
   {
     id: 'currency',
-    name: `${textForKey('Currency')}`,
+    name: textForKey('Currency'),
     required: false,
   },
 ]

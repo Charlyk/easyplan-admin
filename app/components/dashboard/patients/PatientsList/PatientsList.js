@@ -51,17 +51,17 @@ import styles from './PatientsList.module.scss';
 const importFields = [
   {
     id: 'firstName',
-    name: `${textForKey('First name')}*`,
+    name: textForKey('First name'),
     required: true,
   },
   {
     id: 'lastName',
-    name: `${textForKey('Last name')}*`,
+    name: textForKey('Last name'),
     required: true,
   },
   {
     id: 'phoneNumber',
-    name: `${textForKey('Phone number')}*`,
+    name: textForKey('Phone number'),
     required: true,
   },
   {

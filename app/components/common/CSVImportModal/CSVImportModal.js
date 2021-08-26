@@ -28,9 +28,12 @@ import reducer, {
   setSnackbar,
 } from './csvImportSlice';
 import styles from './CSVImportModal.module.scss';
+import getCSVRowsCount from "../../../utils/getCSVRowsCount";
+
+const maxAllowedRows = 3000;
 
 const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, onClose }) => {
-  const [{ data, file, mappedFields, snackbar }, localDispatch] = useReducer(reducer, initialState);
+  const [{ data, file, mappedFields, snackbar, rowsCount }, localDispatch] = useReducer(reducer, initialState);
 
   const btnTitle = useMemo(() => {
     if (file === null) {
@@ -38,7 +41,7 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, o
     }
 
     return importBtnTitle
-      .replace('#', `${data.length - 1}`)
+      .replace('#', `${rowsCount - 1}`) // subtract one row for the title row
   }, [data, file, importBtnTitle]);
 
   const isFormValid = useMemo(() => {
@@ -61,8 +64,13 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, o
     }
   }, [open])
 
-  const handleOnDrop = (data, file) => {
-    localDispatch(setData({ data, file }));
+  const handleOnDrop = async (data, file) => {
+    const rowsCount = await getCSVRowsCount(file);
+    if ((rowsCount - 1) > maxAllowedRows) {
+      localDispatch(setSnackbar({ show: true, message: textForKey('csv_max_rows_exceeded')}));
+      return;
+    }
+    localDispatch(setData({ data, file, rowsCount }));
   };
 
   const handleUploadFile = () => {
@@ -77,7 +85,7 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, o
     }
 
     onImport?.(file, mappedFields);
-  }
+  };
 
   const handleFieldSelected = (fieldId, index) => {
     const field = fields.find(item => item.id === fieldId);
@@ -117,16 +125,16 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, o
 
   const fieldForIndex = (index) => {
     return mappedFields.find(item => item.index === index);
-  }
+  };
 
   const renderSelectedFields = (fieldId) => {
     const field = mappedFields.find(item => item.id === fieldId);
     return field?.name ?? `${textForKey('Choose match')}...`;
-  }
+  };
 
   const handleSnackbarClose = () => {
     localDispatch(setSnackbar({ show: false, message: '' }));
-  }
+  };
 
   return (
     <EASModal
@@ -142,9 +150,10 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, o
     >
       <div className={styles.modalBody}>
         {data.length === 0 ? (
-          <Box padding="16px">
+          <Box padding="16px" width="25%" height="250px" alignSelf="center">
             <CSVReader
               noDrag
+              addRemoveButton
               accept="text/csv, .csv"
               style={{ margin: '16px !important' }}
               onDrop={handleOnDrop}
@@ -201,7 +210,7 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, o
                                 className={styles.menuItemRoot}
                               >
                                 <Typography className={styles.menuItemText}>
-                                  {field.name}
+                                  {field.name}{field.required ? '*' : ''}
                                 </Typography>
                               </MenuItem>
                             ))}

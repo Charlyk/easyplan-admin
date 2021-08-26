@@ -548,6 +548,8 @@ export default {
     map_all_fields: 'Please map: #',
     import_n_services: 'Import # services',
     import_services_note: 'Note: Services without a valid name will not be imported',
+    import_n_schedules: 'Import # schedules',
+    csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.'
   },
   ro: {
     analytics: 'Analitică',
@@ -1104,6 +1106,8 @@ export default {
     map_all_fields: 'Nu ați indicat: #',
     import_n_services: 'Importați # servicii',
     import_services_note: 'Notă: Serviciile fara un nume valid nu vor fi importate.',
+    import_n_schedules: 'Importați # programări',
+    csv_max_rows_exceeded: 'Fișierul încărcat conține mai multe rânduri decât numărul maximal permis.'
   },
   ru: {
     analytics: 'Analytics',
@@ -1651,5 +1655,7 @@ export default {
     map_all_fields: 'Please map: #',
     import_n_services: 'Import # services',
     import_services_note: 'Note: Services without a valid name will not be imported',
+    import_n_schedules: 'Import # schedules',
+    csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.'
   },
 };

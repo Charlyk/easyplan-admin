@@ -166,6 +166,13 @@ const CalendarHeader = (
         />
       </div>
       <div className={clsx(styles['right-btns-wrapper'], 'flexContainer')}>
+        <LoadingButton
+          variant='outline-primary'
+          className={clsx('btn-outline-primary', styles['import-btn'])}
+          onClick={onImportSchedules}
+        >
+          <UploadIcon/>
+        </LoadingButton>
         <ClickAwayListener onClickAway={handleCloseLegend}>
           <IconButton
             ref={legendAnchor}

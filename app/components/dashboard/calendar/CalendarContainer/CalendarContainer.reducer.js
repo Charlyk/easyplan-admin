@@ -1,68 +1,4 @@
-import { generateReducerActions } from "../../../../../utils/helperFuncs";
-
-const reducerTypes = {
-  setFilters: 'setFilters',
-  setSelectedService: 'setSelectedService',
-  setSelectedDoctor: 'setSelectedDoctor',
-  setViewDate: 'setViewDate',
-  setIsFetching: 'setIsFetching',
-  setSelectedSchedule: 'setSelectedSchedule',
-  setDeleteSchedule: 'setDeleteSchedule',
-  setIsDeleting: 'setIsDeleting',
-  setViewMode: 'setViewMode',
-  setShowImportModal: 'setShowImportModal',
-  setSetupExcelModal: 'setSetupExcelModal',
-  setIsUploading: 'setIsUploading',
-  setImportData: 'setImportData',
-  setParsedValue: 'setParsedValue',
-  setIsParsing: 'setIsParsing',
-};
-
-export const reducerActions = generateReducerActions(reducerTypes);
-
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setFilters:
-      return { ...state, filters: action.payload };
-    case reducerTypes.setSelectedService:
-      return { ...state, selectedService: action.payload };
-    case reducerTypes.setSelectedDoctor:
-      return {
-        ...state,
-        selectedDoctor: action.payload,
-        selectedSchedule: null,
-      };
-    case reducerTypes.setIsFetching:
-      return { ...state, isFetching: action.payload };
-    case reducerTypes.setViewDate:
-      return { ...state, viewDate: action.payload, selectedSchedule: null };
-    case reducerTypes.setSelectedSchedule:
-      return { ...state, selectedSchedule: action.payload };
-    case reducerTypes.setDeleteSchedule:
-      return { ...state, deleteSchedule: action.payload };
-    case reducerTypes.setIsDeleting:
-      return { ...state, isDeleting: action.payload };
-    case reducerTypes.setViewMode:
-      return { ...state, viewMode: action.payload, selectedSchedule: null };
-    case reducerTypes.setShowImportModal:
-      return { ...state, showImportModal: action.payload };
-    case reducerTypes.setSetupExcelModal:
-      return { ...state, setupExcelModal: action.payload };
-    case reducerTypes.setIsUploading:
-      return { ...state, isUploading: action.payload };
-    case reducerTypes.setImportData:
-      return {
-        ...state,
-        importData: { ...state.importData, ...action.payload },
-      };
-    case reducerTypes.setParsedValue:
-      return { ...state, parsedValue: action.payload };
-    case reducerTypes.setIsParsing:
-      return { ...state, isParsing: action.payload };
-    default:
-      return state;
-  }
-};
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   filters: { doctors: [], services: [] },
@@ -87,3 +23,78 @@ export const initialState = {
   isParsing: false,
   parsedValue: 0,
 };
+
+const calendarContainerSlice = createSlice({
+  name: 'calendarContainer',
+  initialState,
+  reducers: {
+    setFilters(state, action) {
+      state.filters = action.payload;
+    },
+    setSelectedService(state, action) {
+      state.selectedService = action.payload;
+    },
+    setSelectedDoctor(state, action) {
+      state.selectedDoctor = action.payload;
+      state.selectedSchedule = null;
+    },
+    setViewDate(state, action) {
+      state.viewDate = action.payload;
+      state.selectedSchedule = null;
+    },
+    setIsFetching(state, action) {
+      state.isFetching = action.payload;
+    },
+    setSelectedSchedule(state, action) {
+      state.selectedSchedule = action.payload;
+    },
+    setDeleteSchedule(state, action) {
+      state.deleteSchedule = action.payload;
+    },
+    setIsDeleting(state, action) {
+      state.isDeleting = action.payload;
+    },
+    setViewMode(state, action) {
+      state.viewMode = action.payload;
+      state.selectedSchedule = null;
+    },
+    setShowImportModal(state, action) {
+      state.showImportModal = action.payload;
+    },
+    setSetupExcelModal(state, action) {
+      state.setupExcelModal = action.payload;
+    },
+    setIsUploading(state, action) {
+      state.isUploading = action.payload;
+    },
+    setImportData(state, action) {
+      state.importData = { ...state.importData, ...action.payload };
+    },
+    setParsedValue(state, action) {
+      state.parsedValue = action.payload;
+    },
+    setIsParsing(state, action) {
+      state.isParsing = action.payload;
+    },
+  },
+});
+
+export const {
+  setIsUploading,
+  setImportData,
+  setParsedValue,
+  setShowImportModal,
+  setSetupExcelModal,
+  setFilters,
+  setSelectedDoctor,
+  setIsDeleting,
+  setIsFetching,
+  setIsParsing,
+  setSelectedSchedule,
+  setViewDate,
+  setViewMode,
+  setSelectedService,
+  setDeleteSchedule,
+} = calendarContainerSlice.actions;
+
+export default calendarContainerSlice.reducer;

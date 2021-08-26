@@ -4,6 +4,7 @@ export const initialState = {
   data: [],
   file: null,
   mappedFields: [],
+  rowsCount: 0,
   snackbar: { show: false, message: '' },
 }
 
@@ -14,6 +15,7 @@ const csvImportSlice = createSlice({
     setData(state, action) {
       state.data = action.payload.data;
       state.file = action.payload.file;
+      state.rowsCount = action.payload.rowsCount;
     },
     setFile(state, action) {
       state.file = action.payload;
