@@ -549,7 +549,8 @@ export default {
     import_n_services: 'Import # services',
     import_services_note: 'Note: Services without a valid name will not be imported',
     import_n_schedules: 'Import # schedules',
-    csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.'
+    csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.',
+    'patient phone': 'Patient phone',
   },
   ro: {
     analytics: 'Analitică',
@@ -1107,7 +1108,8 @@ export default {
     import_n_services: 'Importați # servicii',
     import_services_note: 'Notă: Serviciile fara un nume valid nu vor fi importate.',
     import_n_schedules: 'Importați # programări',
-    csv_max_rows_exceeded: 'Fișierul încărcat conține mai multe rânduri decât numărul maximal permis.'
+    csv_max_rows_exceeded: 'Fișierul încărcat conține mai multe rânduri decât numărul maximal permis.',
+    'patient phone': 'Telefon pacient',
   },
   ru: {
     analytics: 'Analytics',
@@ -1656,6 +1658,7 @@ export default {
     import_n_services: 'Import # services',
     import_services_note: 'Note: Services without a valid name will not be imported',
     import_n_schedules: 'Import # schedules',
-    csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.'
+    csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.',
+    'patient phone': 'Patient phone',
   },
 };

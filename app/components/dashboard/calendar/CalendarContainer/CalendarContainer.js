@@ -77,6 +77,11 @@ const importFields = [
     name: textForKey('Status'),
     required: false,
   },
+  {
+    id: 'importedId',
+    name: textForKey('ID'),
+    required: false,
+  },
 ];
 
 const CalendarContainer = (
