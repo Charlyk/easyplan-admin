@@ -35,7 +35,7 @@ const Column = (
         moment(schedule.startTime),
         moment(schedule.endTime),
       );
-      schedule.offset = 0;
+      let offset = 0;
       // update new schedule offset based on already added schedules
       for (let item of newSchedules) {
         const itemRange = moment.range(
@@ -44,11 +44,11 @@ const Column = (
         );
         const hasIntersection = scheduleRange.intersect(itemRange) != null;
         if (hasIntersection) {
-          schedule.offset = (item.offset || 0) + 1;
+          offset = (item.offset || 0) + 1;
         }
       }
       // add the new schedules to array to check the next one against it
-      newSchedules.push(schedule);
+      newSchedules.push({ ...schedule, offset });
     }
     return newSchedules;
   }

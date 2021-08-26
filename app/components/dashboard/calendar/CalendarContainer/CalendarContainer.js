@@ -11,7 +11,6 @@ import {
   setAppointmentModal,
   setPaymentModal,
   toggleAppointmentsUpdate,
-  toggleImportModal,
 } from '../../../../../redux/actions/actions';
 import { redirectIfOnGeneralHost } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
@@ -25,6 +24,7 @@ import reducer, {
   setIsDeleting,
   setSelectedDoctor,
   setDeleteSchedule,
+  setIsUploading,
   setFilters,
   setIsParsing,
   setSelectedSchedule,
@@ -33,6 +33,8 @@ import reducer, {
 } from './CalendarContainer.reducer';
 import styles from './CalendarContainer.module.scss';
 import CSVImportModal from "../../../common/CSVImportModal";
+import { importSchedulesFromFile } from "../../../../../middleware/api/schedules";
+import { HeaderKeys } from "../../../../utils/constants";
 
 const importFields = [
   {
@@ -61,12 +63,12 @@ const importFields = [
     required: true,
   },
   {
-    id: 'patientPhone',
+    id: 'phoneNumber',
     name: textForKey('Patient phone'),
     required: false,
   },
   {
-    id: 'phoneCode',
+    id: 'countryCode',
     name: textForKey('Country code'),
     required: false,
   },
@@ -221,8 +223,22 @@ const CalendarContainer = (
     localDispatch(setShowImportModal(false));
   }
 
-  const handleImportSchedules = (file, fields) => {
-
+  const handleImportSchedules = async (file, fields) => {
+    try {
+      localDispatch(setIsUploading(true));
+      const mappedFields = fields.map(item => ({ fieldId: item.id, index: item.index }));
+      await importSchedulesFromFile(file, mappedFields, 'MMM dd yyyy',{
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
+      handleCloseImportModal();
+      router.reload();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(setIsUploading(false));
+    }
   }
 
   const handleScheduleSelected = (schedule) => {
@@ -299,6 +315,7 @@ const CalendarContainer = (
       <div className={styles.calendarRoot}>
         <CSVImportModal
           open={showImportModal}
+          isLoading={isUploading}
           fields={importFields}
           title={textForKey('Import schedules')}
           importBtnTitle={textForKey('import_n_schedules')}

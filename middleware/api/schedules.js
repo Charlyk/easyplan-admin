@@ -1,5 +1,7 @@
 import { get, post, put } from "./request";
 import moment from "moment-timezone";
+import axios from "axios";
+import { baseApiUrl } from "../../eas.config";
 
 /**
  * Fetch calendar day schedules
@@ -152,4 +154,20 @@ export async function getSchedulesForInterval(startDate, endDate, doctorId, head
     doctorId,
   }).toString();
   return get(`/api/schedules/interval?${queryString}`, headers);
+}
+
+/**
+ * Import schedules from a csv file
+ * @param {File} file
+ * @param {{ fieldId: string, index: number }[]} fields
+ * @param {string} dateFormat
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function importSchedulesFromFile(file, fields, dateFormat, headers = null) {
+  const requestBody = new FormData();
+  requestBody.append('fields', JSON.stringify(fields));
+  requestBody.append('file', file, file.name);
+  requestBody.append('dateFormat', dateFormat);
+  return axios.post(`${baseApiUrl}/schedules/import`, requestBody, { headers })
 }

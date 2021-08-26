@@ -15,10 +15,12 @@ import Box from '@material-ui/core/Box';
 import Typography from "@material-ui/core/Typography";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import IconsUploadCSV from "../../../../components/icons/iconsUploadCSV";
 import BendArrow from "../../../../public/bend-arrow.png";
 import { textForKey } from "../../../../utils/localization";
+import getCSVRowsCount from "../../../utils/getCSVRowsCount";
 import EASModal from "../modals/EASModal";
 import reducer, {
   initialState,
@@ -28,11 +30,10 @@ import reducer, {
   setSnackbar,
 } from './csvImportSlice';
 import styles from './CSVImportModal.module.scss';
-import getCSVRowsCount from "../../../utils/getCSVRowsCount";
 
 const maxAllowedRows = 3000;
 
-const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, onClose }) => {
+const CSVImportModal = ({ open, title, importBtnTitle, note, fields, isLoading, onImport, onClose }) => {
   const [{ data, file, mappedFields, snackbar, rowsCount }, localDispatch] = useReducer(reducer, initialState);
 
   const btnTitle = useMemo(() => {
@@ -238,6 +239,11 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, onImport, o
             </Table>
           </TableContainer>
         )}
+        {isLoading && (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress className='circular-progress-bar' />
+          </div>
+        )}
         <Snackbar open={snackbar.show} autoHideDuration={4000} onClose={handleSnackbarClose}>
           <Alert onClose={handleSnackbarClose} severity="error">
             {snackbar.message}
@@ -255,7 +261,7 @@ CSVImportModal.propTypes = {
   title: PropTypes.string,
   importBtnTitle: PropTypes.string,
   note: PropTypes.string,
-  csvFile: PropTypes.any,
+  isLoading: PropTypes.bool,
   onClose: PropTypes.func,
   onImport: PropTypes.func,
   fields: PropTypes.arrayOf(PropTypes.shape({

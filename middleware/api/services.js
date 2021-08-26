@@ -83,7 +83,7 @@ export async function updateService(serviceId, body, headers = null) {
 }
 
 /**
- * Import patients from a csv file
+ * Import services from a csv file
  * @param {File} file
  * @param {{ fieldId: string, index: number }[]} fields
  * @param {number} categoryId
