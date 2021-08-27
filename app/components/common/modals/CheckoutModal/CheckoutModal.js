@@ -269,20 +269,20 @@ const CheckoutModal = (
   const handleTeethSelected = (service, teeth) => {
     const newServices = cloneDeep(services);
     for (const tooth of teeth) {
-      service.toothId = tooth;
+      const serviceClone = { ...service, toothId: tooth };
       const serviceExists = newServices.some(
-        (item) => item.serviceId === service.id && item.toothId === service.toothId,
+        (item) => item.serviceId === serviceClone.id && item.toothId === serviceClone.toothId,
       );
       if (serviceExists) {
         continue;
       }
       newServices.unshift({
-        ...service,
-        serviceId: service.id,
+        ...serviceClone,
+        serviceId: serviceClone.id,
         currency: clinicCurrency,
-        amount: service.price,
+        amount: serviceClone.price,
         count: 1,
-        totalPrice: service.price,
+        totalPrice: serviceClone.price,
       });
     }
     localDispatch(
