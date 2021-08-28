@@ -1,13 +1,12 @@
 import React from 'react';
-
 import { TableCell, TableRow, Typography, Box } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import clsx from "clsx";
 
 import IconAvatar from '../../../../../../components/icons/iconAvatar';
 import IconEmail from '../../../../../../components/icons/iconEmail';
 import IconPhone from '../../../../../../components/icons/iconPhone';
 import styles from './PatientRow.module.scss';
-import clsx from "clsx";
 
 const PatientRow = ({ patient, onSelect }) => {
   const handlePatientNameClick = () => {
@@ -17,6 +16,8 @@ const PatientRow = ({ patient, onSelect }) => {
   const stopPropagation = event => {
     event.stopPropagation();
   };
+
+  console.log(patient)
 
   return (
     <TableRow
@@ -39,10 +40,10 @@ const PatientRow = ({ patient, onSelect }) => {
         <Typography classes={{ root: clsx(styles['row-label'], styles.phone) }}>
           <IconPhone />
           <a
-            href={`tel:${patient.phoneNumber.replace('+', '')}`}
+            href={`tel:${patient.countryCode}${patient.phoneNumber}`}
             onClick={stopPropagation}
           >
-            {patient.phoneNumber}
+            {`+${patient.countryCode}${patient.phoneNumber}`}
           </a>
         </Typography>
       </TableCell>
@@ -81,6 +82,7 @@ PatientRow.propTypes = {
     lastName: PropTypes.string,
     fullName: PropTypes.string,
     phoneNumber: PropTypes.string,
+    countryCode: PropTypes.string,
     email: PropTypes.string,
     discount: PropTypes.number,
   }),

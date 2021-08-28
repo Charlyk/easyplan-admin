@@ -6,7 +6,7 @@ export const initialState = {
   lastName: '',
   phoneNumber: '',
   isPhoneValid: false,
-  phoneCountry: { iso: 'md' },
+  phoneCountry: { countryCode: 'md', dialCode: '373' },
   email: '',
   isEmailValid: false,
   birthday: null,

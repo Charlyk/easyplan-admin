@@ -55,7 +55,7 @@ export const initialState = {
   patientPhoneNumber: '',
   patientBirthday: null,
   patientEmail: '',
-  phoneCountry: { iso: 'md' },
+  phoneCountry: { countryCode: 'md', dialCode: '373' },
   isFetchingHours: false,
   isCreatingSchedule: false,
   isPatientValid: false,

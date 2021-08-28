@@ -493,12 +493,9 @@ const AppointmentDetails = (
                   </td>
                   <td>
                     <a
-                      href={`tel:${details.patient.phoneNumber.replace(
-                        '+',
-                        '',
-                      )}`}
+                      href={`tel:${details.patient.countryCode}${details.patient.phoneNumber}`}
                     >
-                      {details.patient.phoneNumber}
+                      {`+${details.patient.countryCode}${details.patient.phoneNumber}`}
                     </a>
                   </td>
                 </tr>

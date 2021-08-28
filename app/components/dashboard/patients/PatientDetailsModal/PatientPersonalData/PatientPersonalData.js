@@ -69,7 +69,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
   };
 
   const handlePhoneChange = (value, country, event) => {
-    const newNumber = `+${value}`;
+    const newNumber = value.replace(country.dialCode, '');
     const isPhoneValid = isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
       'invalid-number',
     );
@@ -98,6 +98,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       email,
       phoneNumber,
       euroDebt,
+      countryCode: country.dialCode,
       discount: discount ? parseInt(discount) : 0,
     };
 
@@ -205,13 +206,13 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
           <Form.Label>{textForKey('Phone number')}</Form.Label>
           <InputGroup>
             <PhoneInput
-              onChange={handlePhoneChange}
-              value={phoneNumber}
               alwaysDefaultMask
+              value={`+${country.dialCode}${phoneNumber}`}
               countryCodeEditable={false}
               country={country.countryCode}
               placeholder={country.format}
               isValid={isPhoneInputValid}
+              onChange={handlePhoneChange}
             />
           </InputGroup>
         </Form.Group>

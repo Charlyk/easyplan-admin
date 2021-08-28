@@ -48,11 +48,12 @@ const CreatePatientModal = ({ open, onClose }) => {
     localDispatch(actions.setIsLoading(true));
     try {
       const requestBody = {
+        birthday,
+        phoneNumber,
         firstName: firstName.length > 0 ? firstName : null,
         lastName: lastName.length > 0 ? lastName : null,
         email: email.length > 0 ? email : null,
-        phoneNumber,
-        birthday,
+        countryCode: phoneCountry.dialCode,
       };
       await axios.post(`/api/patients`, requestBody);
       dispatch(togglePatientsListUpdate(true));
@@ -84,11 +85,12 @@ const CreatePatientModal = ({ open, onClose }) => {
     localDispatch(actions.setBirthday(newDate));
   };
 
-  const handlePhoneChange = (value, data, event) => {
+  const handlePhoneChange = (value, country, event) => {
     localDispatch(
       actions.setPhoneNumber({
-        phoneNumber: `+${value}`,
-        isPhoneValid: isPhoneNumberValid(value, data) && !event.target?.classList.value.includes('invalid-number'),
+        phoneNumber: value.replace(country.dialCode, ''),
+        isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+        country,
       }),
     );
   };
@@ -145,13 +147,13 @@ const CreatePatientModal = ({ open, onClose }) => {
         <Form.Label>{textForKey('Phone number')}</Form.Label>
         <InputGroup>
           <PhoneInput
-            onChange={handlePhoneChange}
-            value={phoneNumber}
             alwaysDefaultMask
+            value={`+${phoneCountry?.dialCode}${phoneNumber}`}
             countryCodeEditable={false}
-            country={phoneCountry?.iso || 'md'}
-            placeholder='079123456'
+            country={phoneCountry.countryCode || 'md'}
+            placeholder='79123456'
             isValid={isPhoneInputValid}
+            onChange={handlePhoneChange}
           />
         </InputGroup>
       </Form.Group>

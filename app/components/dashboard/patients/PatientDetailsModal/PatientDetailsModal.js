@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 
 import IconAvatar from '../../../../../components/icons/iconAvatar';
 import IconClose from '../../../../../components/icons/iconClose';
-import IconPhone from "../../../../../components/icons/iconPhone";
 import {
   setPatientNoteModal,
   setPatientXRayModal,
@@ -211,10 +210,10 @@ const PatientDetailsModal = (
                 </Typography>
                 <Typography classes={{ root: clsx(styles['phone-label'], styles.phone) }}>
                   <a
-                    href={`tel:${patient.phoneNumber.replace('+', '')}`}
+                    href={`tel:${patient.countryCode}${patient.phoneNumber}`}
                     onClick={stopPropagation}
                   >
-                    {patient.phoneNumber}
+                    {`+${patient.countryCode}${patient.phoneNumber}`}
                   </a>
                 </Typography>
               </div>

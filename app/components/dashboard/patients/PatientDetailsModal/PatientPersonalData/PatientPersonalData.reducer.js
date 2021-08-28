@@ -61,6 +61,7 @@ export const reducer = (state, action) => {
         birthday,
         email,
         phoneNumber,
+        countryCode,
         discount,
         euroDebt,
       } = action.payload;
@@ -71,6 +72,7 @@ export const reducer = (state, action) => {
         birthday: birthday ? moment(birthday).toDate() : null,
         email,
         phoneNumber,
+        country: { dialCode: countryCode, countryCode: 'md' },
         euroDebt,
         discount: String(discount || '0'),
         isPhoneValid: true,

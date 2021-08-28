@@ -60,17 +60,17 @@ const importFields = [
   {
     id: 'patientName',
     name: textForKey('Patient name'),
-    required: true,
+    required: false,
   },
   {
     id: 'phoneNumber',
     name: textForKey('Patient phone'),
-    required: false,
+    required: true,
   },
   {
     id: 'countryCode',
     name: textForKey('Country code'),
-    required: false,
+    required: true,
   },
   {
     id: 'status',

@@ -365,6 +365,7 @@ const AddAppointmentModal = (
         patientBirthday,
         patientEmail,
         isUrgent,
+        patientCountryCode: phoneCountry.dialCode,
         patientId: patient?.id,
         doctorId: doctor.id,
         serviceId: service.serviceId || service.id,
@@ -385,12 +386,12 @@ const AddAppointmentModal = (
     }
   };
 
-  const handlePhoneChange = (value, data, event) => {
+  const handlePhoneChange = (value, country, event) => {
     localDispatch(
       actions.setPatientPhoneNumber({
-        phoneNumber: `+${value}`,
-        isPhoneValid: isPhoneNumberValid(value, data) && !event.target?.classList.value.includes('invalid-number'),
-        country: data,
+        phoneNumber: value.replace(country.dialCode, ''),
+        isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+        country,
       }),
     );
   };
@@ -465,13 +466,13 @@ const AddAppointmentModal = (
           <Form.Label>{textForKey('Phone number')}</Form.Label>
           <InputGroup>
             <PhoneInput
-              onChange={handlePhoneChange}
-              value={patientPhoneNumber}
+              value={`${phoneCountry.dialCode}${patientPhoneNumber}`}
               alwaysDefaultMask
               countryCodeEditable={false}
-              country={phoneCountry?.iso || 'md'}
-              placeholder='079123456'
+              country={phoneCountry.countryCode || 'md'}
+              placeholder='79123456'
               isValid={isPhoneInputValid}
+              onChange={handlePhoneChange}
             />
           </InputGroup>
         </Form.Group>

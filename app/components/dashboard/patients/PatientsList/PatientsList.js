@@ -67,7 +67,7 @@ const importFields = [
   {
     id: 'countryCode',
     name: textForKey('Country code'),
-    required: false,
+    required: true,
   },
   {
     id: 'email',
