@@ -30,6 +30,7 @@ const CalendarWeekView = (
   const week = getCurrentWeek(viewDate);
 
   useEffect(() => {
+    console.log(initialSchedules);
     localDispatch(actions.setSchedules(initialSchedules));
   }, [initialSchedules]);
 
@@ -94,11 +95,13 @@ const CalendarWeekView = (
   };
 
   const mappedWeek = week.map((date) => {
+    const dayId = moment(date).format('YYYY-MM-DD')
+    const day = schedules.find(item => item.id === dayId)
     return {
-      id: moment(date).format('YYYY-MM-DD'),
+      id: dayId,
       doctorId,
       name: moment(date).format('DD dddd'),
-      disabled: false,
+      disabled: day?.holiday,
       date: date.toDate(),
     };
   });
@@ -123,6 +126,35 @@ const CalendarWeekView = (
 export default CalendarWeekView;
 
 CalendarWeekView.propTypes = {
+  schedules: PropTypes.shape({
+    hours: PropTypes.arrayOf(PropTypes.string),
+    schedules: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      holiday: PropTypes.bool,
+      schedules: PropTypes.arrayOf(PropTypes.shape({
+        comment: PropTypes.string,
+        createdByName: PropTypes.string,
+        delayTime: PropTypes.number,
+        doctorId: PropTypes.number,
+        endTime: PropTypes.string,
+        id: PropTypes.number,
+        isUrgent: PropTypes.bool,
+        patient: PropTypes.shape({
+          id: PropTypes.number,
+          fullName: PropTypes.string,
+        }),
+        rescheduled: PropTypes.bool,
+        scheduleStatus: PropTypes.string,
+        serviceColor: PropTypes.string,
+        serviceCurrency: PropTypes.string,
+        serviceId: PropTypes.number,
+        serviceName: PropTypes.string,
+        servicePrice: PropTypes.number,
+        startTime: PropTypes.string,
+        type: PropTypes.string,
+      })),
+    }))
+  }),
   onScheduleSelect: PropTypes.func,
   opened: PropTypes.bool,
   showHourIndicator: PropTypes.bool,

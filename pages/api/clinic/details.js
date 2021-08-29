@@ -23,7 +23,8 @@ export default authorized(async function clinicDetails(req, res) {
 
 function getClinicDetails(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${updatedServerUrl(req)}/clinics/details`, {
+  const queryString = new URLSearchParams(req.query).toString();
+  return axios.get(`${updatedServerUrl(req)}/clinics/details?${queryString}`, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,

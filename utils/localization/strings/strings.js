@@ -551,6 +551,7 @@ export default {
     import_n_schedules: 'Import # schedules',
     csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.',
     'patient phone': 'Patient phone',
+    doctor_vacation_message: 'Doctor is in vacation for this day.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1110,6 +1111,7 @@ export default {
     import_n_schedules: 'Importați # programări',
     csv_max_rows_exceeded: 'Fișierul încărcat conține mai multe rânduri decât numărul maximal permis.',
     'patient phone': 'Telefon pacient',
+    doctor_vacation_message: 'Doctorul este in vacanță pentru ziua dată',
   },
   ru: {
     analytics: 'Analytics',
@@ -1660,5 +1662,6 @@ export default {
     import_n_schedules: 'Import # schedules',
     csv_max_rows_exceeded: 'Uploaded file has more than maximum allowed rows.',
     'patient phone': 'Patient phone',
+    doctor_vacation_message: 'Doctor is in vacation for this day.',
   },
 };

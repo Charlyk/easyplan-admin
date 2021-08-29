@@ -34,7 +34,6 @@ async function importPatients(req) {
       resolve({ fields, files });
     });
   });
-  console.log(data);
   return axios.post(`${updatedServerUrl(req)}/patients/import`, req.body, {
     headers: {
       ...req.headers,

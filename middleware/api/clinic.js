@@ -1,4 +1,5 @@
 import { del, get, post, put } from "./request";
+import moment from "moment-timezone";
 
 /**
  * Delete clinic invitation
@@ -14,10 +15,14 @@ export async function deleteInvitation(invitationId, headers = null) {
 /**
  * Get current clinic details
  * @param {Object|null} headers
+ * @param {string|null} date
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function getClinicDetails(headers = null) {
-  return get('/api/clinic/details', headers)
+export async function getClinicDetails(date, headers = null) {
+  if (date == null) {
+    return get(`/api/clinic/details`, headers)
+  }
+  return get(`/api/clinic/details?date=${date}`, headers)
 }
 
 /**

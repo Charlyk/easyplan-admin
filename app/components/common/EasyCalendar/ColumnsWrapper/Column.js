@@ -6,6 +6,11 @@ import createContainerHours from "../../../../utils/createContainerHours";
 import Schedule from "../Schedule/Schedule";
 import ColumnCell from "./ColumnCell";
 import styles from './ColumnsWrapper.module.scss';
+import clsx from "clsx";
+import { Typography } from "@material-ui/core";
+import { textForKey } from "../../../../../utils/localization";
+import IconUmbrella from "../../../icons/iconUmbrella";
+import Box from "@material-ui/core/Box";
 
 const moment = extendMoment(Moment);
 
@@ -28,6 +33,9 @@ const Column = (
   }
 
   function schedulesWithOffset() {
+    if (column.disabled) {
+      return [];
+    }
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
     for (let schedule of schedules) {
@@ -93,7 +101,17 @@ const Column = (
   }
 
   return (
-    <div className={styles.columnRoot}>
+    <div className={clsx(styles.columnRoot, {
+      [styles.disabled]: column.disabled,
+    })}>
+      {column.disabled && (
+        <div className={styles.disabledWrapper}>
+          <IconUmbrella/>
+          <Typography className={styles.disabledLabel}>
+            {textForKey('doctor_vacation_message')}
+          </Typography>
+        </div>
+      )}
       {renderHoursContainers()}
       {schedulesWithOffset().map((schedule, index) => (
         <Schedule

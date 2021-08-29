@@ -22,13 +22,24 @@
     color: #34344E;
 
     &.disabled {
-      background-color: #f5f5f5;
+      background-color: #EDFDF4;
       cursor: not-allowed;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
 
       .doctor-name {
         color: #6F7091;
         pointer-events: none;
         font-size: 12px;
+      }
+
+      .itemName {
+        color: #7DD7C8 !important;
+        font-weight: bold;
+        margin-left: 10px;
       }
     }
 

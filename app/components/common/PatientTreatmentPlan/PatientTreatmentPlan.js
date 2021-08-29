@@ -198,7 +198,6 @@ const PatientTreatmentPlan = (
    * @param {Object} service
    */
   const handleRemoveSelectedService = async (service) => {
-    console.log(service)
     let newServices = cloneDeep(selectedServices);
     remove(
       newServices,

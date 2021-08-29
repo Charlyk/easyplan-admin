@@ -42,8 +42,13 @@ export default function Week(
 
 export const getServerSideProps = async ({ req, res, query }) => {
   try {
+    if (query.date == null) {
+      query.date = moment().format('YYYY-MM-DD');
+    }
+    const { date: queryDate } = query;
+
     const { auth_token: authToken } = parseCookies(req);
-    const appData = await fetchAppData(req.headers);
+    const appData = await fetchAppData(req.headers, queryDate);
     const { currentUser, currentClinic } = appData;
 
     // check if user is on the allowed page
@@ -54,11 +59,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
 
     // fetch schedules for current week
-    let currentDate = moment()
-    // check if query has all required parameters
-    if (query.date != null) {
-      currentDate = moment(query.date);
-    }
+    let currentDate = moment(queryDate)
 
     // filter clinic doctors
     const doctors = currentClinic?.users?.filter((item) =>
@@ -72,7 +73,8 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
 
     // fetch schedules for specified period of time
-    const week = getCurrentWeek(currentDate.toDate());
+    const week = getCurrentWeek(currentDate.toDate())
+      .map(item => item.toDate());
     const firstDay = week[0];
     const lastDay = week[week.length - 1];
     const response = await getSchedulesForInterval(firstDay, lastDay, doctorId, req.headers)

@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 import styles from './Header.module.scss';
 import { Typography } from "@material-ui/core";
 import clsx from "clsx";
+import IconUmbrella from "../../../icons/iconUmbrella";
 
 const HeaderItem = ({ item, onItemClick }) => {
   const handleItemClick = () => {
+    if (item.disabled) {
+      return;
+    }
     onItemClick(item);
   }
   return (
@@ -19,7 +23,10 @@ const HeaderItem = ({ item, onItemClick }) => {
       }
       onClick={handleItemClick}
     >
-      <Typography className={styles.itemName}>{item.name}</Typography>
+      {item.disabled && <IconUmbrella/>}
+      <Typography className={styles.itemName}>
+        {item.name}
+      </Typography>
     </div>
   )
 }

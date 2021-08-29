@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import CreateScheduleView from "./CreateScheduleView";
 import styles from './ColumnsWrapper.module.scss';
+import clsx from "clsx";
 
 const ColumnCell = (
   {
@@ -13,31 +14,6 @@ const ColumnCell = (
   }
 ) => {
   const [showCreateView, setShowCreateView] = useState(false);
-
-  if (disabled) {
-    return null;
-  }
-
-  const handlePointerEnter = () => {
-    setShowCreateView(true);
-  };
-
-  const handlePointerLeave = () => {
-    setShowCreateView(false);
-  };
-
-  const getBorderTop = () => {
-    if (startHour == null) {
-      return 'none';
-    }
-
-    const minute = startHour.split(':')[1];
-    if ((minute === '15' || minute === '45') && endHour != null) {
-      return 'none';
-    } else {
-      return '#DBEEFB 1px solid';
-    }
-  };
 
   const content = useMemo(() => {
     if (
@@ -58,10 +34,33 @@ const ColumnCell = (
     }
   }, [startHour, endHour, showCreateView, hideCreateIndicator]);
 
+  const handlePointerEnter = () => {
+    setShowCreateView(true);
+  };
+
+  const handlePointerLeave = () => {
+    setShowCreateView(false);
+  };
+
+  const getBorderTop = () => {
+    if (startHour == null || disabled) {
+      return 'none';
+    }
+
+    const minute = startHour.split(':')[1];
+    if ((minute === '15' || minute === '45') && endHour != null) {
+      return 'none';
+    } else {
+      return '#DBEEFB 1px solid';
+    }
+  };
+
   return (
     <div
       id={`container-${startHour}`}
-      className={styles.columnCell}
+      className={clsx(styles.columnCell, {
+        [styles.disabled]: disabled,
+      })}
       style={{ borderTop: getBorderTop() }}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}

@@ -17,8 +17,6 @@ const PatientRow = ({ patient, onSelect }) => {
     event.stopPropagation();
   };
 
-  console.log(patient)
-
   return (
     <TableRow
       key={`patient-${patient.id}`}

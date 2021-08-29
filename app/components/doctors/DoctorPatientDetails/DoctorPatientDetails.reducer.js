@@ -27,7 +27,6 @@ const reducer = (state, action) => {
       return { ...state, schedule: action.payload };
     case reducerTypes.setShowFinalizeTreatment: {
       const { open, finalServices, selectedServices } = action.payload;
-      console.log(finalServices)
       return {
         ...state,
         showFinalizeTreatment: open,

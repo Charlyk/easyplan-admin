@@ -10,6 +10,40 @@
     border-right: #DBEEFB 1px solid;
     position: relative;
 
+    .disabledWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute !important;
+      z-index: 1000;
+      top: 100px;
+      left: 50%;
+      max-width: 90%;
+      transform: translateX(-50%);
+
+      svg {
+        width: 60px;
+        height: 60px;
+      }
+
+      .disabledLabel {
+        margin-top: 10px;
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+        color: #7DD7C8 !important;
+        text-align: center !important;
+        font-size: 13px !important;
+      }
+    }
+
+    &.disabled {
+      background-color: #EDFDF4;
+      pointer-events: none;
+      cursor: not-allowed;
+      height: inherit;
+    }
+
     &:last-child {
       border-right: none;
     }
@@ -18,6 +52,12 @@
       width: 100%;
       height: 1.875rem;
       position: relative;
+
+      &.disabled {
+        background-color: #EDFDF4;
+        pointer-events: none;
+        cursor: not-allowed;
+      }
 
       .createScheduleView {
         outline: none;
@@ -32,10 +72,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-
-        &.disabled {
-          background-color: #ced4da;
-        }
 
         .hourText {
           color: white;
