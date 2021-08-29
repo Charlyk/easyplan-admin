@@ -14,12 +14,12 @@ import { toast } from 'react-toastify';
 
 import ConfirmationModal from '../../app/components/common/modals/ConfirmationModal';
 import InviteUserModal from '../../components/common/InviteUserModal';
-import UserDetailsModal from '../../components/users/UserDetailsModal';
+import UserDetailsModal from '../../app/components/dashboard/users/UserDetailsModal';
 import { Role } from '../../app/utils/constants';
 import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
-import UserItem from '../../components/users/UserItem';
-import UsersHeader from '../../components/users/UserHeader';
+import UserItem from '../../app/components/dashboard/users/UserItem';
+import UsersHeader from '../../app/components/dashboard/users/UserHeader';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { deleteUser, getUsers, inviteUser, restoreUser, updateUserCashierStatus } from "../../middleware/api/users";
 import { deleteInvitation } from "../../middleware/api/clinic";

@@ -14,16 +14,14 @@ import {
   patientXRayModalSelector,
 } from "../redux/selectors/modalsSelector";
 import {
-  setCreateClinic,
   setPatientNoteModal,
   setPatientXRayModal,
   triggerUserLogout
 } from "../redux/actions/actions";
-import AddNote from "../components/patients/AddNote";
+import AddNote from "../app/components/common/modals/AddNote";
 import FullScreenImageModal from "../components/common/FullScreenImageModal";
 import { imageModalSelector } from "../redux/selectors/imageModalSelector";
 import { setImageModal } from "../redux/actions/imageModalActions";
-import CreateClinicModal from "../components/clinic/CreateClinicModal";
 import ConfirmationModal from "../app/components/common/modals/ConfirmationModal";
 import { textForKey } from "../utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
@@ -96,13 +94,8 @@ export default wrapper.withRedux(
       dispatch(setImageModal({ open: false }));
     };
 
-    const handleCloseCreateClinic = () => {
-      dispatch(setCreateClinic({ open: false, canClose: false }));
-    };
-
     const handleClinicCreated = async () => {
       await router.replace(router.asPath);
-      handleCloseCreateClinic();
     };
 
     const handleUserLogout = async () => {
@@ -135,13 +128,6 @@ export default wrapper.withRedux(
                 onConfirm={handleUserLogout}
                 onClose={handleCancelLogout}
                 show={logout}
-              />
-            )}
-            {createClinic?.open && (
-              <CreateClinicModal
-                onClose={createClinic?.canClose ? handleCloseCreateClinic : null}
-                open={createClinic?.open}
-                onCreate={handleClinicCreated}
               />
             )}
             {imageModal.open && (

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { usePubNub } from "pubnub-react";
 import Head from "next/head";
 
-import IconArrowDown from '../../../../components/icons/iconArrowDown';
+import IconArrowDown from '../../icons/iconArrowDown';
 import ClinicSelector from '../../../../components/common/ClinicSelector';
 import EditProfileModal from '../../../../components/common/EditProfileModal';
 import { triggerUserLogout } from '../../../../redux/actions/actions';

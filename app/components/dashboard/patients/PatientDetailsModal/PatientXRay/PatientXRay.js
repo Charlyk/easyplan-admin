@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 import { toast } from "react-toastify";
 import { useSelector } from 'react-redux';
 
-import IconPlus from '../../../../../../components/icons/iconPlus';
+import IconPlus from '../../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
 import { deletePatientXRayImage, getPatientXRayImages } from "../../../../../../middleware/api/patients";

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Typography } from "@material-ui/core";
-import IconPlus from "../../../../../components/icons/iconPlus";
+import IconPlus from "../../../icons/iconPlus";
 import styles from './ColumnsWrapper.module.scss';
 
 const CreateScheduleView = ({ startHour, endHour, onAddSchedule }) => {

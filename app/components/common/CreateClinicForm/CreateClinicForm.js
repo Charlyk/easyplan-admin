@@ -8,7 +8,7 @@ import { isDev } from "../../../../eas.config";
 import { textForKey } from "../../../../utils/localization";
 import { WebRegex } from "../../../utils/constants";
 import { checkDomainAvailability, clinicTimeZones, fetchAvailableCurrencies } from "../../../../middleware/api/clinic";
-import IconAvatar from "../../../../components/icons/iconAvatar";
+import IconAvatar from "../../icons/iconAvatar";
 import LoadingButton from "../../../../components/common/LoadingButton";
 
 import reducer, {

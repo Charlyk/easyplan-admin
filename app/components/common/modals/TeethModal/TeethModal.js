@@ -6,7 +6,7 @@ import EASModal from "../EASModal";
 import styles from './TeethModal.module.scss';
 import { Teeth } from "../../../../utils/constants";
 import { Typography } from "@material-ui/core";
-import IconCheckMark from "../../../../../components/icons/iconCheckMark";
+import IconCheckMark from "../../../icons/iconCheckMark";
 
 const topLeft = Teeth.filter(item => item.type === 'top-left');
 const topRight = Teeth.filter(item => item.type === 'top-right');

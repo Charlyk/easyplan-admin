@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconAvatar from '../../../../../components/icons/iconAvatar';
-import IconEdit from '../../../../../components/icons/iconEdit';
-import IconMore from '../../../../../components/icons/iconMore';
-import IconNotifications from '../../../../../components/icons/iconNotifications';
-import IconPlus from '../../../../../components/icons/iconPlus';
-import IconTurnOff from '../../../../../components/icons/iconTurnOff';
+import IconAvatar from '../../../icons/iconAvatar';
+import IconEdit from '../../../icons/iconEdit';
+import IconMore from '../../../icons/iconMore';
+import IconNotifications from '../../../icons/iconNotifications';
+import IconPlus from '../../../icons/iconPlus';
+import IconTurnOff from '../../../icons/iconTurnOff';
 import { setPaymentModal } from '../../../../../redux/actions/actions';
 import { setIsExchangeRatesModalOpen } from '../../../../../redux/actions/exchangeRatesActions';
 import { textForKey } from '../../../../../utils/localization';

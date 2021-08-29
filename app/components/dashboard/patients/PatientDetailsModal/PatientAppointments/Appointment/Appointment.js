@@ -4,8 +4,8 @@ import { Box, Typography } from '@material-ui/core';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import IconAppointmentCalendar from '../../../../../../../components/icons/iconAppointmentCalendar';
-import IconAppointmentClock from '../../../../../../../components/icons/iconAppointmentClock';
+import IconAppointmentCalendar from '../../../../../icons/iconAppointmentCalendar';
+import IconAppointmentClock from '../../../../../icons/iconAppointmentClock';
 import { Statuses } from '../../../../../../utils/constants';
 import { textForKey } from '../../../../../../../utils/localization';
 import { baseApiUrl } from "../../../../../../../eas.config";

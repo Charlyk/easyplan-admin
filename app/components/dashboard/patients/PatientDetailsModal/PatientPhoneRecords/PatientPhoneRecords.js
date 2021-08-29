@@ -8,8 +8,8 @@ import { Button } from "react-bootstrap";
 
 import { getPatientPhoneRecords } from "../../../../../../middleware/api/patients";
 import { textForKey } from "../../../../../../utils/localization";
-import IconIncomeCall from "../../../../../../components/icons/iconIncomeCall";
-import IconOutCall from "../../../../../../components/icons/IconOutCall";
+import IconIncomeCall from "../../../../icons/iconIncomeCall";
+import IconOutCall from "../../../../icons/IconOutCall";
 import styles from './PatientPhoneRecords.module.scss';
 
 const RecordItem = ({ record, onDownload }) => {

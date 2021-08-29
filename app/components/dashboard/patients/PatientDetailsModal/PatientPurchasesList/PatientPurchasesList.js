@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import axios from "axios";
 import clsx from "clsx";
 
-import IconPrint from '../../../../../../components/icons/iconPrint';
+import IconPrint from '../../../../icons/iconPrint';
 import { clinicCurrencySelector } from '../../../../../../redux/selectors/clinicSelector';
 import { updateInvoiceSelector } from '../../../../../../redux/selectors/invoicesSelector';
 import { formattedAmount } from '../../../../../../utils/helperFuncs';

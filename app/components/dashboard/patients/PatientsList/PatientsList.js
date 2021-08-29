@@ -18,8 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import clsx from "clsx";
 import { toast } from "react-toastify";
 
-import IconPlus from '../../../../../components/icons/iconPlus';
-import IconSearch from '../../../../../components/icons/iconSearch';
+import IconPlus from '../../../icons/iconPlus';
+import IconSearch from '../../../icons/iconSearch';
 import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import CreatePatientModal from '../CreatePatientModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';

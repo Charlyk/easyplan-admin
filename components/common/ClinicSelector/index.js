@@ -4,8 +4,8 @@ import { Fade, Paper, Popper } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconPlus from '../../icons/iconPlus';
-import IconSuccess from '../../icons/iconSuccess';
+import IconPlus from '../../../app/components/icons/iconPlus';
+import IconSuccess from '../../../app/components/icons/iconSuccess';
 import { textForKey } from '../../../utils/localization';
 import styles from '../../../styles/ClinicSelector.module.scss';
 

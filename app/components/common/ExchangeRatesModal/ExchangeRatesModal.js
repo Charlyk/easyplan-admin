@@ -20,7 +20,7 @@ import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconClose from '../../../../components/icons/iconClose';
+import IconClose from '../../icons/iconClose';
 import { updateExchangeRatesSelector } from '../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../utils/localization';
 import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";

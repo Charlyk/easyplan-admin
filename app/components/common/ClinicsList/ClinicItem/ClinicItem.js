@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Typography } from "@material-ui/core";
 
 import { Role } from "../../../../utils/constants";
-import IconNext from "../../../../../components/icons/iconNext";
+import IconNext from "../../../icons/iconNext";
 import { environment } from "../../../../../eas.config";
 import styles from './ClinicItem.module.scss'
 

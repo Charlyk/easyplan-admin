@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 import axios from "axios";
 
-import IconAvatar from '../../components/icons/iconAvatar';
+import IconAvatar from '../../app/components/icons/iconAvatar';
 import LoadingButton from '../../components/common/LoadingButton';
 import { JwtRegex, PasswordRegex, Role } from '../../app/utils/constants';
 import {

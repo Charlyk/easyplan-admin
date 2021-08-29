@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, IconButton } from "@material-ui/core";
 
 import { urlToLambda } from "../../../../../../../utils/helperFuncs";
-import IconTrash from "../../../../../../../components/icons/iconTrash";
+import IconTrash from "../../../../../icons/iconTrash";
 import styles from "./XRayImage.module.scss";
 
 const XRayImage = ({ image, onImageClick, onImageDelete }) => {

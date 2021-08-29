@@ -22,10 +22,10 @@ import {
   getScheduleDetails,
   updateScheduleStatus
 } from "../../../../../middleware/api/schedules";
-import IconArrowDown from '../../../../../components/icons/iconArrowDown';
-import IconClose from '../../../../../components/icons/iconClose';
-import IconEdit from '../../../../../components/icons/iconEdit';
-import IconTrash from '../../../../../components/icons/iconTrash';
+import IconArrowDown from '../../../icons/iconArrowDown';
+import IconClose from '../../../icons/iconClose';
+import IconEdit from '../../../icons/iconEdit';
+import IconTrash from '../../../icons/iconTrash';
 import SingleInputModal from '../../../common/modals/SingleInputModal';
 import EasyDatePickerModal from "../../../common/modals/EasyDatePickerModal";
 import DelayTimeModal from "../../../common/modals/DelayTimeModal";

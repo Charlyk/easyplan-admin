@@ -5,7 +5,7 @@ import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import axios from "axios";
 
-import IconAvatar from '../../icons/iconAvatar';
+import IconAvatar from '../../../app/components/icons/iconAvatar';
 import { EmailRegex, PasswordRegex } from '../../../app/utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';

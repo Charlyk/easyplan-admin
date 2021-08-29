@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconRefresh from '../../../../../components/icons/iconRefresh';
+import IconRefresh from '../../../icons/iconRefresh';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { textForKey } from '../../../../../utils/localization';
 import styles from './StatisticFilter.module.scss';

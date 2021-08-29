@@ -6,7 +6,7 @@ import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import clsx from "clsx";
 
-import IconAvatar from '../../../../../components/icons/iconAvatar';
+import IconAvatar from '../../../icons/iconAvatar';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';

@@ -4,19 +4,19 @@ import clsx from "clsx";
 import { Button as MaterialButton, ClickAwayListener, Fade, IconButton, Paper } from "@material-ui/core";
 import ArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import { Button } from "react-bootstrap";
-import IconAppointmentCalendar from "../../../../../components/icons/iconAppointmentCalendar";
+import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
 import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { getAppLanguage, textForKey } from "../../../../../utils/localization";
 import EasyTab from "../../../../../components/common/EasyTab";
 import LoadingButton from "../../../../../components/common/LoadingButton";
 import UploadIcon from "@material-ui/icons/CloudUpload";
-import IconPlus from "../../../../../components/icons/iconPlus";
+import IconPlus from "../../../icons/iconPlus";
 import Popper from "@material-ui/core/Popper";
 import { Calendar } from "react-date-range";
 import * as locales from "react-date-range/dist/locale";
 import moment from "moment-timezone";
 import CalendarLegend from "../CalendarLegend";
-import IconInfo from "../../../../../components/icons/iconInfo";
+import IconInfo from "../../../icons/iconInfo";
 import styles from "./CalendarHeader.module.scss";
 
 const CalendarView = {

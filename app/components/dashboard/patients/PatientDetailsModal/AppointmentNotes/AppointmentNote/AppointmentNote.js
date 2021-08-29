@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import IconEditService from '../../../../../../../components/icons/iconEditService';
+import IconEditService from '../../../../../icons/iconEditService';
 import { textForKey } from '../../../../../../../utils/localization';
 import { getServiceName } from "../../../../../../../utils/helperFuncs";
 import styles from './AppointmentNote.module.scss';

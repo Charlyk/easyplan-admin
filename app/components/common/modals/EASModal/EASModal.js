@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import IconClose from "../../../../../components/icons/iconClose";
+import IconClose from "../../../icons/iconClose";
 import { textForKey } from "../../../../../utils/localization";
 import styles from './EASModal.module.scss';
 

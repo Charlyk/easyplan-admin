@@ -6,8 +6,8 @@ import { Modal, ListGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../../../../components/icons/iconAvatar';
-import IconClose from '../../../../../components/icons/iconClose';
+import IconAvatar from '../../../icons/iconAvatar';
+import IconClose from '../../../icons/iconClose';
 import {
   setPatientNoteModal,
   setPatientXRayModal,

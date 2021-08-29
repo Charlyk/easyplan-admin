@@ -2,8 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconArrowNext from '../../../../../components/icons/iconArrowNext';
-import IconClose from '../../../../../components/icons/iconClose';
+import IconArrowNext from '../../../icons/iconArrowNext';
+import IconClose from '../../../icons/iconClose';
 import styles from './ModalHeader.module.scss';
 
 const ModalHeader = props => {

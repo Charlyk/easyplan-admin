@@ -12,7 +12,7 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import { toast } from 'react-toastify';
 
-import AppLogoBlue from '../../components/icons/appLogoBlue';
+import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
 import { handleRequestError, urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';

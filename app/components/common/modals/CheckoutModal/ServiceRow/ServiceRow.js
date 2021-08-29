@@ -12,9 +12,9 @@ import {
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconMinus from '../../../../../../components/icons/iconMinus';
-import IconPlus from '../../../../../../components/icons/iconPlus';
-import IconTrash from '../../../../../../components/icons/iconTrash';
+import IconMinus from '../../../../icons/iconMinus';
+import IconPlus from '../../../../icons/iconPlus';
+import IconTrash from '../../../../icons/iconTrash';
 import { adjustValueToNumber } from '../../../../../../utils/helperFuncs';
 import { textForKey } from "../../../../../../utils/localization";
 import styles from './ServiceRow.module.scss';

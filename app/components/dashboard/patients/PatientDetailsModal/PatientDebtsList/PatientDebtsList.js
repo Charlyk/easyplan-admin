@@ -18,7 +18,7 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconPrint from '../../../../../../components/icons/iconPrint';
+import IconPrint from '../../../../icons/iconPrint';
 import { setPaymentModal } from '../../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../../redux/selectors/invoicesSelector';
 import { formattedAmount } from '../../../../../../utils/helperFuncs';

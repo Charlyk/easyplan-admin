@@ -13,8 +13,8 @@ import indexOf from 'lodash/indexOf';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconEdit from '../../../../../components/icons/iconEdit';
-import IconPlus from '../../../../../components/icons/iconPlus';
+import IconEdit from '../../../icons/iconEdit';
+import IconPlus from '../../../icons/iconPlus';
 import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import CreateCategoryModal from '../CreateCategoryModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';

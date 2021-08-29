@@ -31,7 +31,7 @@ import {
   registerInvoicePayment
 } from "../../../../../middleware/api/invoices";
 import { savePatientGeneralTreatmentPlan } from "../../../../../middleware/api/patients";
-import IconClose from '../../../../../components/icons/iconClose';
+import IconClose from '../../../icons/iconClose';
 import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from '../../../../../redux/selectors/rootSelector';

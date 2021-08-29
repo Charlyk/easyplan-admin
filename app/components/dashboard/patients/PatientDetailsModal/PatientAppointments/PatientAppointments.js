@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 
-import IconPlus from '../../../../../../components/icons/iconPlus';
+import IconPlus from '../../../../icons/iconPlus';
 import { setAppointmentModal } from '../../../../../../redux/actions/actions';
 import {
   deleteScheduleSelector,

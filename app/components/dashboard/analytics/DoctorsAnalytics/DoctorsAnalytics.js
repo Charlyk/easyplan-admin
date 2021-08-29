@@ -16,7 +16,7 @@ import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
 import { useRouter } from "next/router";
 
-import IconList from "../../../../../components/icons/iconList";
+import IconList from "../../../icons/iconList";
 import EasyDateRangePicker from '../../../common/EasyDateRangePicker';
 import { textForKey } from '../../../../../utils/localization';
 import { formattedAmount } from "../../../../../utils/helperFuncs";

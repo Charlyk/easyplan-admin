@@ -6,13 +6,13 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 
-import IconArrowNext from '../../../../../../../components/icons/iconArrowNext';
-import IconEdit from '../../../../../../../components/icons/iconEdit';
-import IconPlus from '../../../../../../../components/icons/iconPlus';
+import IconArrowNext from '../../../../../icons/iconArrowNext';
+import IconEdit from '../../../../../icons/iconEdit';
+import IconPlus from '../../../../../icons/iconPlus';
 import { clinicTimeZoneSelector } from '../../../../../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../../../../../utils/localization';
 import styles from './HistoryItem.module.scss'
-import IconDelete from "../../../../../../../components/icons/iconDelete";
+import IconDelete from "../../../../../icons/iconDelete";
 
 const Field = ({ field, clinic }) => {
   const timeZone = clinicTimeZoneSelector(clinic);

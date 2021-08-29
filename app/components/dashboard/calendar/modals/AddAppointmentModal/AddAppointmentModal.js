@@ -15,7 +15,7 @@ import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../../../../../components/icons/iconAvatar';
+import IconAvatar from '../../../../icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
 import { EmailRegex, Role } from '../../../../../utils/constants';
 import { urlToLambda } from '../../../../../../utils/helperFuncs';

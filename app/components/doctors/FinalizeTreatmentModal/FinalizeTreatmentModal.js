@@ -13,8 +13,8 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import IconMinus from '../../../../components/icons/iconMinus';
-import IconPlus from '../../../../components/icons/iconPlus';
+import IconMinus from '../../icons/iconMinus';
+import IconPlus from '../../icons/iconPlus';
 import { formattedAmount, getClinicExchangeRates, getServiceName } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import EasyPlanModal from '../../common/modals/EasyPlanModal';

@@ -6,7 +6,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 
-import IconPlus from '../../../../../../components/icons/iconPlus';
+import IconPlus from '../../../../icons/iconPlus';
 import { updateNotesSelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../../../../components/common/LoadingButton';

@@ -6,7 +6,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from "axios";
 
-import IconPlus from '../../../../../../components/icons/iconPlus';
+import IconPlus from '../../../../icons/iconPlus';
 import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../../../../components/common/LoadingButton';
 import PatientMessage from './PatientMessage';

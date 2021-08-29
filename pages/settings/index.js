@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-import AccountSettings from '../../components/settings/AccountSettings';
-import ApplicationSettings from '../../components/settings/ApplicationSettings';
-import BracesSettings from '../../components/settings/BracesSettings';
-import ClinicWorkingHours from '../../components/settings/ClinicWorkingHours';
-import CompanyDetailsForm from '../../components/settings/CompanyDetailsForm';
-import SecuritySettings from '../../components/settings/SecuritySettings';
-import SettingsMenu from '../../components/settings/SettingsMenu';
+import AccountSettings from '../../app/components/dashboard/settings/AccountSettings';
+import ApplicationSettings from '../../app/components/dashboard/settings/ApplicationSettings';
+import BracesSettings from '../../app/components/dashboard/settings/BracesSettings';
+import ClinicWorkingHours from '../../app/components/dashboard/settings/ClinicWorkingHours';
+import CompanyDetailsForm from '../../app/components/dashboard/settings/CompanyDetailsForm';
+import SecuritySettings from '../../app/components/dashboard/settings/SecuritySettings';
+import SettingsMenu from '../../app/components/dashboard/settings/SettingsMenu';
 import styles from '../../styles/Settings.module.scss';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { Role } from "../../app/utils/constants";

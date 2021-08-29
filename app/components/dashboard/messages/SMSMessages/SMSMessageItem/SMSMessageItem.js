@@ -12,7 +12,7 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 
-import IconMore from '../../../../../../components/icons/iconMore';
+import IconMore from '../../../../icons/iconMore';
 import { getAppLanguage, textForKey } from '../../../../../../utils/localization';
 import styles from './SMSMessageItem.module.scss';
 

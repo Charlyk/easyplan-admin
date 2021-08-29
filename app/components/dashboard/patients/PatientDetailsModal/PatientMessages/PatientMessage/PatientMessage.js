@@ -5,9 +5,9 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import IconError from '../../../../../../../components/icons/iconError';
-import IconPending from '../../../../../../../components/icons/IconPending';
-import IconSuccess from '../../../../../../../components/icons/iconSuccess';
+import IconError from '../../../../../icons/iconError';
+import IconPending from '../../../../../icons/IconPending';
+import IconSuccess from '../../../../../icons/iconSuccess';
 import { setSMSMessageStatus } from '../../../../../../../redux/actions/patientActions';
 import { updateSMSMessageStatusSelector } from '../../../../../../../redux/selectors/patientSelector';
 import { textForKey } from '../../../../../../../utils/localization';

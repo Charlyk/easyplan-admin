@@ -20,7 +20,6 @@ export default {
   setUpdateCurrentUser: 'setUpdateCurrentUser',
   setUser: 'setUser',
   changeCurrentClinic: 'changeCurrentClinic',
-  setCreateClinic: 'setCreateClinic',
   triggerUserLogOut: 'triggerUserLogOut',
   setAppointmentModal: 'setAppointmentModal',
   updateAppointmentsList: 'updateAppointmentsList',

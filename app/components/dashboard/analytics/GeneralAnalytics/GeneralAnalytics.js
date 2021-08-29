@@ -4,12 +4,12 @@ import moment from 'moment-timezone';
 import { Form } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 
-import IconCheckMark from '../../../../../components/icons/iconCheckMark';
-import IconClock from '../../../../../components/icons/iconClock';
-import IconCreditCard from '../../../../../components/icons/iconCreditCard';
-import IconLiabilities from '../../../../../components/icons/iconLiabilities';
-import IconSuccess from '../../../../../components/icons/iconSuccess';
-import IconXPerson from '../../../../../components/icons/iconXPerson';
+import IconCheckMark from '../../../icons/iconCheckMark';
+import IconClock from '../../../icons/iconClock';
+import IconCreditCard from '../../../icons/iconCreditCard';
+import IconLiabilities from '../../../icons/iconLiabilities';
+import IconSuccess from '../../../icons/iconSuccess';
+import IconXPerson from '../../../icons/iconXPerson';
 import EasyDateRangePicker from '../../../common/EasyDateRangePicker';
 import { Role, Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';

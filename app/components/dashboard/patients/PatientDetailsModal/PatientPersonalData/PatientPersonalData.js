@@ -7,7 +7,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from "react-toastify";
 
-import IconSuccess from '../../../../../../components/icons/iconSuccess';
+import IconSuccess from '../../../../icons/iconSuccess';
 import { EmailRegex } from '../../../../../utils/constants';
 import { adjustValueToNumber } from '../../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../../utils/localization';

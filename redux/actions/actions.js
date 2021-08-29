@@ -77,18 +77,6 @@ export function changeSelectedClinic(clinicId) {
 }
 
 /**
- * Toggle create clinic modal
- * @param {{ open: boolean, canClose: boolean }} data
- * @return {{payload: *, type: string}}
- */
-export function setCreateClinic(data) {
-  return {
-    type: types.setCreateClinic,
-    payload: data,
-  };
-}
-
-/**
  * Trigger user logout modal
  * @param {boolean} logout
  * @return {{payload: *, type: string}}

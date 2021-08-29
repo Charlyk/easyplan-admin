@@ -6,7 +6,6 @@ import addPaymentModal from './addPaymentModal';
 import appointmentModal from './appointmentModal';
 import calendar from './calendar';
 import clinic from './clinic';
-import createClinicModal from './createClinicModal';
 import exchangeRatesModal from './exchangeRatesModal';
 import imageModal from './imageModal';
 import invoices from './invoiceReducer';
@@ -26,7 +25,6 @@ export default combineReducers({
   patientXRayModal,
   appointmentModal,
   paymentModal,
-  createClinicModal,
   calendar,
   imageModal,
   serviceDetailsModal,

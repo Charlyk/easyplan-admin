@@ -4,7 +4,7 @@ import IconRemove from '@material-ui/icons/Clear';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconCheckMark from '../../../../components/icons/iconCheckMark';
+import IconCheckMark from '../../icons/iconCheckMark';
 import { getServiceName } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
 import styles from './FinalServiceItem.module.scss';

@@ -7,7 +7,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import IconAvatar from '../../../../components/icons/iconAvatar';
+import IconAvatar from '../../icons/iconAvatar';
 import FinalizeTreatmentModal from '../../../../app/components/doctors/FinalizeTreatmentModal';
 import PatientDetails from '../PatientDetails';
 import {

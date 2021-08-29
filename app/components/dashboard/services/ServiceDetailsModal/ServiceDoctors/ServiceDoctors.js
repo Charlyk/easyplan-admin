@@ -2,8 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import IconMinus from '../../../../../../components/icons/iconMinus';
-import IconPlusBig from '../../../../../../components/icons/iconPlusBig';
+import IconMinus from '../../../../icons/iconMinus';
+import IconPlusBig from '../../../../icons/iconPlusBig';
 import { textForKey } from '../../../../../../utils/localization';
 import ServiceDoctor from '../ServiceDoctor';
 import styles from './ServiceDoctors.module.scss';

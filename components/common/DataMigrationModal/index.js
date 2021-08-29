@@ -9,7 +9,7 @@ import styles from '../../../styles/DataMigrationModal.module.scss';
 import { usePubNub } from 'pubnub-react';
 import { Modal } from 'react-bootstrap';
 
-import IconClose from '../../icons/iconClose';
+import IconClose from '../../../app/components/icons/iconClose';
 import { env } from '../../../app/utils/constants';
 import { generateReducerActions } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';

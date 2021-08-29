@@ -17,7 +17,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import IconsUploadCSV from "../../../../components/icons/iconsUploadCSV";
+import IconsUploadCSV from "../../icons/iconsUploadCSV";
 import BendArrow from "../../../../public/bend-arrow.png";
 import { textForKey } from "../../../../utils/localization";
 import getCSVRowsCount from "../../../utils/getCSVRowsCount";

@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import IconArrowDown from '../../../icons/iconArrowDown';
+import IconArrowDown from '../../../../app/components/icons/iconArrowDown';
 import { YClientAPIUrl } from '../../../../app/utils/constants';
 import { generateReducerActions } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';

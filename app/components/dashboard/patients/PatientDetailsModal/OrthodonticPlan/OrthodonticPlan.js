@@ -9,7 +9,7 @@ import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from "axios";
 
-import IconSuccess from '../../../../../../components/icons/iconSuccess';
+import IconSuccess from '../../../../icons/iconSuccess';
 import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,

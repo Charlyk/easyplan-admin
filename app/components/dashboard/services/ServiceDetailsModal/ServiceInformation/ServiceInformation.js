@@ -10,11 +10,11 @@ import {
 import { ClickAwayListener, Fade, Paper, Popper, Typography } from "@material-ui/core";
 import { ColorPicker, useColor } from "react-color-palette";
 
-import IconMinus from '../../../../../../components/icons/iconMinus';
-import IconPlusBig from '../../../../../../components/icons/iconPlusBig';
+import IconMinus from '../../../../icons/iconMinus';
+import IconPlusBig from '../../../../icons/iconPlusBig';
 import { availableCurrenciesSelector } from '../../../../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../../../../utils/localization';
-import IconPalette from "../../../../../../components/icons/iconPalette";
+import IconPalette from "../../../../icons/iconPalette";
 import styles from './ServiceInformation.module.scss';
 
 const availableColors = [

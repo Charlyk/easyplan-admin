@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import IconAvatar from '../../../../../../components/icons/iconAvatar';
+import IconAvatar from '../../../../icons/iconAvatar';
 import styles from './CalendarDoctor.module.scss';
 
 const CalendarDoctor = ({ doctor, isSelected, onSelect }) => {
