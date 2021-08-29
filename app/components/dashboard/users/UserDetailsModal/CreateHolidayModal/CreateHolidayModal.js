@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { getAppLanguage, textForKey } from '../../../../../../utils/localization';
-import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
 import styles from './CreateHolidayModal.module.scss';
+import EASModal from "../../../../common/modals/EASModal";
 
 const initialRange = {
   startDate: moment().toDate(),
@@ -67,11 +68,11 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
   };
 
   return (
-    <EasyPlanModal
-      onClose={handleCloseModal}
+    <EASModal
       open={show}
       title={textForKey('Add holiday')}
-      onPositiveClick={handleSaveHoliday}
+      onPrimaryClick={handleSaveHoliday}
+      onClose={handleCloseModal}
     >
       <div className={styles['holiday-modal__body']}>
         <DateRange
@@ -95,7 +96,7 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
           </InputGroup>
         </Form.Group>
       </div>
-    </EasyPlanModal>
+    </EASModal>
   );
 };
 

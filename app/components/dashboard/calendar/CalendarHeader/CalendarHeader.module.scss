@@ -27,6 +27,13 @@
     }
   }
 
+  .dateBtnLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 11px !important;
+  }
+
   .right-btns-wrapper {
     :global(.positive-button) {
       top: 50%;
@@ -74,7 +81,7 @@
     position: absolute;
     right: 1rem;
     top: 0;
-    width: 160px;
+    width: 170px;
 
     &.calendar-btn {
       height: 30px;

@@ -1,20 +1,26 @@
 import React, { useRef, useState } from "react";
 import PropTypes from 'prop-types';
 import clsx from "clsx";
-import { Button as MaterialButton, ClickAwayListener, Fade, IconButton, Paper } from "@material-ui/core";
+import MaterialButton from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Fade from '@material-ui/core/Fade';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import ArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import { Button } from "react-bootstrap";
-import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
-import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import { getAppLanguage, textForKey } from "../../../../../utils/localization";
-import EasyTab from "../../../../../components/common/EasyTab";
-import LoadingButton from "../../../../../components/common/LoadingButton";
-import UploadIcon from "@material-ui/icons/CloudUpload";
-import IconPlus from "../../../icons/iconPlus";
 import Popper from "@material-ui/core/Popper";
+import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import UploadIcon from "@material-ui/icons/CloudUpload";
+import Button from "react-bootstrap/Button";
 import { Calendar } from "react-date-range";
 import * as locales from "react-date-range/dist/locale";
 import moment from "moment-timezone";
+
+import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
+import { getAppLanguage, textForKey } from "../../../../../utils/localization";
+import EasyTab from "../../../../../components/common/EasyTab";
+import LoadingButton from "../../../../../components/common/LoadingButton";
+import IconPlus from "../../../icons/iconPlus";
 import CalendarLegend from "../CalendarLegend";
 import IconInfo from "../../../icons/iconInfo";
 import styles from "./CalendarHeader.module.scss";
@@ -130,7 +136,9 @@ const CalendarHeader = (
           className={clsx('positive-button', styles['calendar-btn'])}
           onClick={handleOpenCalendar}
         >
-          {dateBtnText}
+          <Typography noWrap className={styles.dateBtnLabel}>
+            {dateBtnText}
+          </Typography>
           <IconAppointmentCalendar fill='#fff'/>
         </Button>
         <IconButton
