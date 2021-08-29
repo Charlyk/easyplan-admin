@@ -5,6 +5,7 @@ import moment from "moment-timezone";
 import isEqual from "lodash/isEqual";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
   deleteScheduleSelector,
@@ -18,7 +19,6 @@ import EasyCalendar from "../../common/EasyCalendar";
 import DoctorsCalendarDay from "../DoctorsCalendarDay";
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 import styles from './DoctorCalendar.module.scss';
-import { CircularProgress } from "@material-ui/core";
 
 const DoctorCalendar = (
   {
@@ -172,17 +172,17 @@ const DoctorCalendar = (
     await handleDateChange(date, 'day');
   }
 
-  const mappedWeek = useMemo(() => {
-    return week.map((date) => {
-      return {
-        id: moment(date).format('YYYY-MM-DD'),
-        doctorId: currentUser.id,
-        name: moment(date).format('DD dddd'),
-        disabled: false,
-        date: date.toDate(),
-      };
-    });
-  }, [viewMode, week]);
+  const mappedWeek = week.map((date) => {
+    const dayId = moment(date).format('YYYY-MM-DD')
+    const day = schedules.find(item => item.id === dayId)
+    return {
+      id: dayId,
+      doctorId: currentUser.id,
+      name: moment(date).format('DD dddd'),
+      disabled: day?.holiday,
+      date: date.toDate(),
+    };
+  });
 
   return (
     <div className={styles.doctorCalendarRoot}>
