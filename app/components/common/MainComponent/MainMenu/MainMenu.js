@@ -6,6 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import IconMessages from '@material-ui/icons/Message';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Nav } from 'react-bootstrap';
@@ -70,6 +71,14 @@ const menuItems = [
     text: textForKey('Users'),
     icon: <MenuUsers/>,
     href: '/users',
+  },
+  {
+    id: 'crm',
+    type: 'link',
+    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+    text: textForKey('CRM Board'),
+    icon: <AssessmentIcon />,
+    href: '/crm'
   },
   {
     id: 'calendar',

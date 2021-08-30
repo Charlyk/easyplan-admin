@@ -22,7 +22,7 @@ const ActionsSheet = props => {
                     role='button'
                     tabIndex={0}
                     onClick={() => handleActionClick(action)}
-                    className={clsx(styles['actions-sheet__item'], action.type)}
+                    className={clsx(styles['actions-sheet__item'], styles[action.type])}
                     key={action.key}
                   >
                     {action.icon}

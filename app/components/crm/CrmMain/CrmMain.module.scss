@@ -1,0 +1,13 @@
+.crmMain {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  .columnsContainer {
+    padding: 8px;
+    display: flex;
+    flex: 1;
+    overflow: auto;
+  }
+}

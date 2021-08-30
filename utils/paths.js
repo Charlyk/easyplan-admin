@@ -8,6 +8,7 @@ export default {
   '/calendar/day': textForKey('Calendar'),
   '/calendar/week': textForKey('Calendar'),
   '/calendar/month': textForKey('Calendar'),
+  '/crm': textForKey('CRM Board'),
   '/settings': textForKey('Settings'),
   '/analytics/services': textForKey('Services statistics'),
   '/analytics/general': textForKey('General statistics'),

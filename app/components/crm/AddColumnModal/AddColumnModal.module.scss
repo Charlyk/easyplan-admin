@@ -1,0 +1,16 @@
+.addColumnModal {
+
+  .textField {
+    width: 100%;
+  }
+
+  .fieldLabelFocus {
+    color: #3A83DC !important;
+  }
+
+  .fieldInput {
+    &::after {
+      border-bottom: #3A83DC 2px solid;
+    }
+  }
+}

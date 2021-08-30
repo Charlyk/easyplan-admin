@@ -5,10 +5,10 @@ import {
   Form,
   ToggleButtonGroup,
   ToggleButton,
-  InputGroup, Button,
+  InputGroup,
 } from 'react-bootstrap';
-import { ClickAwayListener, Fade, Paper, Popper, Typography } from "@material-ui/core";
-import { ColorPicker, useColor } from "react-color-palette";
+import Typography from "@material-ui/core/Typography";
+import { useColor } from "react-color-palette";
 
 import IconMinus from '../../../../icons/iconMinus';
 import IconPlusBig from '../../../../icons/iconPlusBig';
@@ -16,6 +16,7 @@ import { availableCurrenciesSelector } from '../../../../../../redux/selectors/c
 import { textForKey } from '../../../../../../utils/localization';
 import IconPalette from "../../../../icons/iconPalette";
 import styles from './ServiceInformation.module.scss';
+import EASColorPicker from "../../../../common/EASColorPicker/EASColorPicker";
 
 const availableColors = [
   '#FF453A',
@@ -87,35 +88,14 @@ const ServiceInformation = (
   );
 
   const colorPickerPopper = (
-    <Popper
-      disablePortal
-      id="color-picker"
+    <EASColorPicker
       open={showPicker}
-      placement="top-start"
+      color={color}
       anchorEl={paletteRef.current}
-      transition
-      className={styles.popper}
-    >
-      {({ TransitionProps }) => (
-        <Fade {...TransitionProps}>
-          <ClickAwayListener onClickAway={handleHidePicker}>
-            <Paper elevation={10}>
-              <ColorPicker
-                hideHSV
-                hideRGB
-                width={300}
-                height={200}
-                color={color}
-                onChange={setColor}
-              />
-              <Button className="positive-button" onPointerUp={handleSaveColor}>
-                {textForKey('Save')}
-              </Button>
-            </Paper>
-          </ClickAwayListener>
-        </Fade>
-      )}
-    </Popper>
+      setColor={setColor}
+      onClose={handleHidePicker}
+      onSave={handleSaveColor}
+    />
   )
 
   return (
