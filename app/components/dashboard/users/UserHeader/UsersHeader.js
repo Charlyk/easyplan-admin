@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 import IconPlus from '../../../icons/iconPlus';
 import EasyTab from '../../../../../components/common/EasyTab';

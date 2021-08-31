@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handler } from "../../handler";
 import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default async function clinicDetails(req, res) {
   switch (req.method) {
@@ -21,7 +22,7 @@ export default async function clinicDetails(req, res) {
 async function fetchAvailableCurrencies(req) {
   return axios.get(`${updatedServerUrl(req)}/clinics/available-currencies`, {
     headers: {
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handler } from "../../handler";
 import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default async (req, res) => {
   switch (req.method) {
@@ -23,7 +24,7 @@ function fetchScheduleInfo(req) {
   const [scheduleId, patientId] = patient;
   return axios.get(`${updatedServerUrl(req)}/confirmation/schedule/${scheduleId}/${patientId}`, {
     headers: {
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

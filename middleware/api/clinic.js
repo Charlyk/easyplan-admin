@@ -111,3 +111,18 @@ export async function checkDomainAvailability(domain, headers = null) {
 export async function fetchClinicExchangeRates(headers = null) {
   return get('/api/clinic/exchange-rates', headers);
 }
+
+/**
+ * Save facebook page for current clinic
+ * @param {{
+ *   accessToken: string,
+ *   category?: string,
+ *   name: string,
+ *   pageId: string,
+ * }} pageData
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function saveClinicFacebookPage(pageData, headers = null) {
+  return put('/api/clinic/integrations/facebook', headers, pageData);
+}

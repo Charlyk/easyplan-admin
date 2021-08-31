@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handler } from "../../handler";
 import { getSubdomain, setCookies, updatedServerUrl } from "../../../../utils/helperFuncs";
+import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default async (req, res) => {
   switch (req.method) {
@@ -27,7 +28,7 @@ export default async (req, res) => {
 function fetchUsers(req) {
   return axios.put(`${updatedServerUrl(req)}/users/accept-invitation`, req.body, {
     headers: {
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }

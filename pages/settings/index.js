@@ -1,41 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
-import AccountSettings from '../../app/components/dashboard/settings/AccountSettings';
-import ApplicationSettings from '../../app/components/dashboard/settings/ApplicationSettings';
-import BracesSettings from '../../app/components/dashboard/settings/BracesSettings';
-import ClinicWorkingHours from '../../app/components/dashboard/settings/ClinicWorkingHours';
-import CompanyDetailsForm from '../../app/components/dashboard/settings/CompanyDetailsForm';
-import SecuritySettings from '../../app/components/dashboard/settings/SecuritySettings';
-import SettingsMenu from '../../app/components/dashboard/settings/SettingsMenu';
-import styles from '../../styles/Settings.module.scss';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
-import { Role } from "../../app/utils/constants";
 import { fetchAppData } from "../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { parseCookies } from "../../utils";
 import { fetchAllCountries } from "../../middleware/api/countries";
-
-const SettingsForm = {
-  companyDetails: 'companyDetails',
-  workingHours: 'workingHours',
-  accountSettings: 'accountSettings',
-  securitySettings: 'securitySettings',
-  appSettings: 'appSettings',
-  bracesSettings: 'bracesSettings',
-};
+import SettingsWrapper from "../../app/components/dashboard/settings/SettingsWrapper";
 
 const Settings = ({ currentUser, currentClinic, countries, authToken }) => {
-  const selectedClinic = currentUser?.clinics.find(
-    item => item.clinicId === currentClinic.id,
-  );
-  const [currentForm, setCurrentForm] = useState(
-    [Role.admin, Role.manager].includes(selectedClinic?.roleInClinic)
-      ? SettingsForm.companyDetails
-      : SettingsForm.accountSettings,
-  );
-
-  const handleFormChange = newForm => setCurrentForm(newForm);
-
+  useEffect(() => {
+    console.log(currentUser, currentClinic);
+  }, [currentUser, currentClinic]);
   return (
     <MainComponent
       currentUser={currentUser}
@@ -43,54 +18,11 @@ const Settings = ({ currentUser, currentClinic, countries, authToken }) => {
       currentPath='/settings'
       authToken={authToken}
     >
-      <div className={styles['settings-root']}>
-        <div className={styles['settings-root__menu']}>
-          <SettingsMenu
-            currentOption={currentForm}
-            onSelect={handleFormChange}
-            selectedClinic={selectedClinic}
-          />
-        </div>
-        <div className={styles['settings-root__form']}>
-          {currentForm === SettingsForm.companyDetails && (
-            <CompanyDetailsForm
-              countries={countries}
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.workingHours && (
-            <ClinicWorkingHours
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.accountSettings && (
-            <AccountSettings
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.securitySettings && (
-            <SecuritySettings
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.appSettings && (
-            <ApplicationSettings
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.bracesSettings && (
-            <BracesSettings
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-        </div>
-      </div>
+      <SettingsWrapper
+        currentClinic={currentClinic}
+        currentUser={currentUser}
+        countries={countries}
+      />
     </MainComponent>
   );
 };
@@ -99,6 +31,7 @@ export const getServerSideProps = async ({ req, res }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
+    console.log(appData);
     const { data: countries } = await fetchAllCountries(req.headers);
     const { currentUser, currentClinic } = appData;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/settings');
@@ -121,6 +54,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (error) {
+    console.log(error);
     await handleRequestError(error, req, res);
     return {
       props: {}

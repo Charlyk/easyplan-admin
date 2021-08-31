@@ -68,6 +68,8 @@ export const PasswordRegex = /(?=^.{6,}$)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[
 export const JwtRegex = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
 export const WebRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
 
+export const FacebookAppId = '367664371555800';
+
 export const YClientAPIUrl = 'https://api.yclients.com/api';
 
 export const S3Config = (dirname) => ({

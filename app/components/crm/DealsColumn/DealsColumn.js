@@ -7,10 +7,12 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import DoneIcon from '@material-ui/icons/Done';
 import { useColor } from "react-color-palette";
+import { toast } from "react-toastify";
 
 import { createNewDealState, deleteDealState, updateDealState } from "../../../../middleware/api/crm";
 import ActionsSheet from "../../../../components/common/ActionsSheet";
 import EASColorPicker from "../../common/EASColorPicker";
+import AddColumnModal from "../AddColumnModal";
 import reducer, {
   sheetActions,
   initialState,
@@ -23,8 +25,6 @@ import reducer, {
   setShowCreateColumn,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
-import AddColumnModal from "../AddColumnModal";
-import { toast } from "react-toastify";
 
 const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
   const actionsBtnRef = useRef(null);

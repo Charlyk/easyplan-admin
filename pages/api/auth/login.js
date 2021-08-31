@@ -2,6 +2,7 @@ import axios from 'axios';
 import { handler } from "../handler";
 import { getSubdomain } from "../../../utils/helperFuncs";
 import { baseApiUrl } from "../../../eas.config";
+import { HeaderKeys } from "../../../app/utils/constants";
 
 export default async function login(req, res) {
   const data = await handler(authenticateWithBackend, req, res);
@@ -21,7 +22,7 @@ function authenticateWithBackend(req) {
     req.body,
     {
       headers: {
-        'X-EasyPlan-Subdomain': getSubdomain(req),
+        [HeaderKeys.subdomain]: getSubdomain(req),
       }
     }
   );

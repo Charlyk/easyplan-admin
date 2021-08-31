@@ -388,6 +388,9 @@ export function redirectUserTo(path, res) {
 }
 
 export function getSubdomain(req) {
+  if (environment === 'local') {
+    return 'dentula-dev';
+  }
   const { host } = req.headers;
   const [clinicDomain] = host.split('.');
   return clinicDomain

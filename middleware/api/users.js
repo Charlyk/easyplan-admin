@@ -81,3 +81,13 @@ export async function deleteUserHoliday(userId, holidayId, headers = null) {
 export async function updateUserCashierStatus(userId, isCashier, headers = null) {
   return put(`/api/users/${userId}/cashier`, headers, { isCashier })
 }
+
+/**
+ * Save user facebook auth token to server
+ * @param {string} token
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function saveFacebookToken(token, headers = null) {
+  return put('/api/users/integrations/facebook', headers, { token });
+}

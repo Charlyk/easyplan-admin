@@ -40,8 +40,8 @@ async function createClinic(req) {
   const requestBody = req.body;
   return axios.post(`${updatedServerUrl(req)}/clinics`, requestBody, {
     headers: {
-      Authorization: auth_token,
-      'X-EasyPlan-Subdomain': getSubdomain(req),
+      [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.subdomain]: getSubdomain(req),
     }
   });
 }
