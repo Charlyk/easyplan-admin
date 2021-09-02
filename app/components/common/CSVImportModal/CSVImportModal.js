@@ -67,10 +67,10 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, isLoading, 
 
   const handleOnDrop = async (data, file) => {
     const rowsCount = await getCSVRowsCount(file);
-    // if ((rowsCount - 1) > maxAllowedRows) {
-    //   localDispatch(setSnackbar({ show: true, message: textForKey('csv_max_rows_exceeded')}));
-    //   return;
-    // }
+    if ((rowsCount - 1) > maxAllowedRows) {
+      localDispatch(setSnackbar({ show: true, message: textForKey('csv_max_rows_exceeded')}));
+      return;
+    }
     localDispatch(setData({ data, file, rowsCount }));
   };
 

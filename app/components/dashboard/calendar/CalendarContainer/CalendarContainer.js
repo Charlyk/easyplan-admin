@@ -78,6 +78,11 @@ const importFields = [
     required: false,
   },
   {
+    id: 'comment',
+    name: textForKey('Comment'),
+    required: false,
+  },
+  {
     id: 'importedId',
     name: textForKey('ID'),
     required: false,
