@@ -31,7 +31,7 @@ import reducer, {
 } from './csvImportSlice';
 import styles from './CSVImportModal.module.scss';
 
-const maxAllowedRows = 3000;
+const maxAllowedRows = 10000;
 
 const CSVImportModal = ({ open, title, importBtnTitle, note, fields, isLoading, onImport, onClose }) => {
   const [{ data, file, mappedFields, snackbar, rowsCount }, localDispatch] = useReducer(reducer, initialState);
