@@ -1,9 +1,9 @@
 import React from "react";
-import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import moment from "moment-timezone";
+import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarMonthView from "../../../app/components/dashboard/calendar/CalendarMonthView";
-import { fetchAppData } from "../../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
+import { fetchAppData } from "../../../middleware/api/initialization";
 import { Role } from "../../../app/utils/constants";
 import { parseCookies } from "../../../utils";
 

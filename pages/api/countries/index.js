@@ -22,11 +22,10 @@ export default async function countries(req, res) {
 
 async function fetchCountries(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${updatedServerUrl(req)}/countries`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
+  let headers = {
+    [HeaderKeys.subdomain]: getSubdomain(req),
+  };
+  if (clinic_id) headers[HeaderKeys.clinicId] = clinic_id;
+  if (auth_token) headers[HeaderKeys.authorization] = auth_token;
+  return axios.get(`${updatedServerUrl(req)}/countries`, { headers });
 }

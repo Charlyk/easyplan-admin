@@ -9,15 +9,27 @@ const CreateClinic = ({ token, redirect, countries }) => {
 };
 
 export const getServerSideProps = async ({ req, query }) => {
-  const { auth_token } = parseCookies(req);
-  const { data: countries } = await fetchAllCountries(req.headers);
-  const { redirect } = query;
-  return {
-    props: {
-      token: auth_token,
-      redirect: redirect === '1',
-      countries,
-    },
+  try {
+    const { auth_token } = parseCookies(req);
+    const { data: countries } = await fetchAllCountries(req.headers);
+    const { redirect } = query;
+    return {
+      props: {
+        token: auth_token,
+        redirect: redirect === '1',
+        countries,
+      },
+    }
+  } catch (e) {
+    if (e.response) {
+      const { data } = e.response;
+      console.error(data?.message);
+    } else {
+      console.error(e.message);
+    }
+    return {
+      props: {}
+    }
   }
 };
 
