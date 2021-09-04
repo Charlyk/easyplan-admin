@@ -30,7 +30,6 @@ const CalendarWeekView = (
   const week = getCurrentWeek(viewDate);
 
   useEffect(() => {
-    console.log(initialSchedules);
     localDispatch(actions.setSchedules(initialSchedules));
   }, [initialSchedules]);
 
