@@ -242,6 +242,8 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
         title={textForKey('Import patients')}
         importBtnTitle={textForKey('import_n_patients')}
         note={textForKey('patients_import_note')}
+        iconTitle={textForKey('upload csv file')}
+        iconSubtitle={textForKey('n_contacts_only')}
         fields={importFields}
         onImport={handleImportPatients}
         onClose={handleCloseImportModal}
