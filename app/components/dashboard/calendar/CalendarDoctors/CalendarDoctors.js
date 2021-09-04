@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, InputGroup, Spinner } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Spinner from 'react-bootstrap/Spinner';
 import { textForKey } from '../../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 import styles from './CalendarDoctors.module.scss';

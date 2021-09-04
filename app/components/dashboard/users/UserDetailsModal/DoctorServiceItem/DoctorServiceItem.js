@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 import SwitchButton from '../../../../../../components/common/SwitchButton';
 import styles from './DoctorServiceItem.module.scss';

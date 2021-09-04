@@ -1,10 +1,9 @@
 import React from 'react';
-
-import { CircularProgress } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
-import styles from '../../../styles/LoadingButton.module.scss';
 import clsx from "clsx";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
+import styles from '../../../styles/LoadingButton.module.scss';
 
 const LoadingButton = ({
   children,

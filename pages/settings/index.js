@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import AccountSettings from '../../app/components/dashboard/settings/AccountSettings';
 import ApplicationSettings from '../../app/components/dashboard/settings/ApplicationSettings';
 import BracesSettings from '../../app/components/dashboard/settings/BracesSettings';
@@ -7,13 +6,13 @@ import ClinicWorkingHours from '../../app/components/dashboard/settings/ClinicWo
 import CompanyDetailsForm from '../../app/components/dashboard/settings/CompanyDetailsForm';
 import SecuritySettings from '../../app/components/dashboard/settings/SecuritySettings';
 import SettingsMenu from '../../app/components/dashboard/settings/SettingsMenu';
-import styles from '../../styles/Settings.module.scss';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { Role } from "../../app/utils/constants";
 import { fetchAppData } from "../../middleware/api/initialization";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../utils/helperFuncs";
 import { parseCookies } from "../../utils";
 import { fetchAllCountries } from "../../middleware/api/countries";
+import styles from '../../styles/Settings.module.scss';
 
 const SettingsForm = {
   companyDetails: 'companyDetails',

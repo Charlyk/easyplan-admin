@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-
 import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import IconButton from '@material-ui/core/IconButton';

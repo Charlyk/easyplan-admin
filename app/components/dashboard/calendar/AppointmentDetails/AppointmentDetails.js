@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -26,9 +27,6 @@ import IconArrowDown from '../../../icons/iconArrowDown';
 import IconClose from '../../../icons/iconClose';
 import IconEdit from '../../../icons/iconEdit';
 import IconTrash from '../../../icons/iconTrash';
-import SingleInputModal from '../../../common/modals/SingleInputModal';
-import EasyDatePickerModal from "../../../common/modals/EasyDatePickerModal";
-import DelayTimeModal from "../../../common/modals/DelayTimeModal";
 import {
   setPatientDetails, setPaymentModal,
   toggleAppointmentsUpdate,
@@ -52,6 +50,10 @@ import reducer, {
   setShowStatuses,
 } from "./AppointmentDetails.reducer";
 import styles from './AppointmentDetails.module.scss';
+
+const SingleInputModal = dynamic(() => import('../../../common/modals/SingleInputModal'));
+const EasyDatePickerModal = dynamic(() => import("../../../common/modals/EasyDatePickerModal"));
+const DelayTimeModal = dynamic(() => import("../../../common/modals/DelayTimeModal"));
 
 const AppointmentDetails = (
   {

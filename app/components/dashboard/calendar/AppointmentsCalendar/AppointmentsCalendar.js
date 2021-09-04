@@ -1,16 +1,17 @@
 import React, { useMemo } from 'react';
-
-import { CircularProgress, } from '@material-ui/core';
+import dynamic from 'next/dynamic';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { isCalendarLoadingSelector } from '../../../../../redux/selectors/calendarSelector';
 import { getCurrentWeek } from '../../../../../utils/helperFuncs';
-import AppointmentDetails from '../AppointmentDetails';
 import CalendarHeader from "../CalendarHeader";
-import styles from './AppointmentsCalendar.module.scss'
+import styles from './AppointmentsCalendar.module.scss';
+
+const AppointmentDetails = dynamic(() => import('../AppointmentDetails'));
 
 const CalendarView = {
   day: 'day',

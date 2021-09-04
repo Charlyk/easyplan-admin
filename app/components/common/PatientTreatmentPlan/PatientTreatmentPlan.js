@@ -1,14 +1,12 @@
 import React, { useEffect, useMemo, useReducer } from "react";
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import cloneDeep from "lodash/cloneDeep";
 import remove from "lodash/remove";
 
-import TeethContainer from "./TeethContainer";
 import { textForKey } from "../../../../utils/localization";
 import { Statuses } from "../../../utils/constants";
-import ServicesWrapper from "./ServicesWrapper";
 import { deletePatientPlanService } from "../../../../middleware/api/patients";
-import TeethModal from "../modals/TeethModal";
 import reducer, {
   initialState,
   setInitialData,
@@ -16,6 +14,10 @@ import reducer, {
   setTeethModal,
 } from "./PatientTreatmentPlan.reducer";
 import styles from './PatientTreatmentPlan.module.scss';
+
+const TeethContainer = dynamic(() => import('./TeethContainer'));
+const TeethModal = dynamic(() => import("../modals/TeethModal"));
+const ServicesWrapper = dynamic(() => import("./ServicesWrapper"));
 
 const PatientTreatmentPlan = (
   {

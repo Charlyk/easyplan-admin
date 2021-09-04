@@ -1,7 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
-import { CircularProgress, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 

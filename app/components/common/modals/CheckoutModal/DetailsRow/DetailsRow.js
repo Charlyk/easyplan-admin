@@ -1,15 +1,12 @@
 import React from 'react';
-
-import {
-  CircularProgress,
-  TableCell,
-  TableRow,
-  TextField,
-  Typography,
-} from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { textForKey } from '../../../../../../utils/localization';
 import styles from './DetailsRow.module.scss';

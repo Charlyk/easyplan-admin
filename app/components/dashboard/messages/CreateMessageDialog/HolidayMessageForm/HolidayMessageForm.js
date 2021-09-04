@@ -1,10 +1,11 @@
 import React, { useEffect, useReducer, useRef } from "react";
+import dynamic from 'next/dynamic';
 import moment from "moment-timezone";
 import Form from "react-bootstrap/Form";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
 
-import EasyDatePicker from "../../../../../../components/common/EasyDatePicker";
 import { textForKey } from "../../../../../../utils/localization";
 import {
   availableHours,
@@ -22,7 +23,8 @@ import reducer, {
   setShowDatePicker,
 } from "./holidayMessageSlice";
 import styles from './HolidayMessageForm.module.scss';
-import Typography from "@material-ui/core/Typography";
+
+const EasyDatePicker = dynamic(() => import("../../../../../../components/common/EasyDatePicker"));
 
 const HolidayMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
   const datePickerAnchor = useRef(null);

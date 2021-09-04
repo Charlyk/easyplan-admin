@@ -1,28 +1,7 @@
-import React, { useEffect, useReducer } from 'react';
-
-import styles from '../../app/components/dashboard/users/UsersList/UsersList.module.scss';
-import {
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
-import { toast } from 'react-toastify';
-
-import ConfirmationModal from '../../app/components/common/modals/ConfirmationModal';
-import InviteUserModal from '../../components/common/InviteUserModal';
-import UserDetailsModal from '../../app/components/dashboard/users/UserDetailsModal';
-import { Role } from '../../app/utils/constants';
-import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
-import { textForKey } from '../../utils/localization';
-import UserItem from '../../app/components/dashboard/users/UserItem';
-import UsersHeader from '../../app/components/dashboard/users/UserHeader';
+import React from 'react';
+import { handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
-import { deleteUser, getUsers, inviteUser, restoreUser, updateUserCashierStatus } from "../../middleware/api/users";
-import { deleteInvitation } from "../../middleware/api/clinic";
+import { getUsers } from "../../middleware/api/users";
 import { fetchAppData } from "../../middleware/api/initialization";
 import { parseCookies } from "../../utils";
 import UsersList from "../../app/components/dashboard/users/UsersList";

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from '../../../styles/FullScreenImageModal.module.scss';
-import { CircularProgress } from "@material-ui/core";
 
 const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
   const [isLoading, setIsLoading] = useState(true);

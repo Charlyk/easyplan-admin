@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
+import dynamic from 'next/dynamic';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody';
@@ -9,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import { textForKey } from '../../../../../utils/localization';
 import {
   deleteMessage,
@@ -20,7 +20,9 @@ import SMSMessageItem from './SMSMessageItem';
 import SMSMessagesHeader from './SMSMessagesHeader';
 import { initialState, actions, reducer } from './SMSMessages.reducer'
 import styles from './SMSMessages.module.scss';
-import CreateMessageDialog from "../CreateMessageDialog";
+
+const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const CreateMessageDialog = dynamic(() => import("../CreateMessageDialog"));
 
 const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
   const hasSMSAlias = currentClinic?.smsAlias != null;

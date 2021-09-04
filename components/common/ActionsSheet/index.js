@@ -1,9 +1,11 @@
 import React from 'react';
-
-import { Popper, Paper, Fade, ClickAwayListener } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import styles from '../../../styles/ActionsSheet.module.scss';
 import clsx from "clsx";
+import PropTypes from 'prop-types';
+import Popper from '@material-ui/core/Popper';
+import Paper from '@material-ui/core/Paper';
+import Fade from '@material-ui/core/Fade';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import styles from '../../../styles/ActionsSheet.module.scss';
 
 const ActionsSheet = props => {
   const { actions, onSelect, onClose, placement } = props;

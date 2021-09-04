@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  IconButton,
-  MenuItem,
-  TableCell,
-  TableRow,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 
 import IconMinus from '../../../../icons/iconMinus';
 import IconPlus from '../../../../icons/iconPlus';

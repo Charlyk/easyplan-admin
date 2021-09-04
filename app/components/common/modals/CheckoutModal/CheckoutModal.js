@@ -1,18 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
-
-import {
-  Button,
-  CircularProgress,
-  IconButton,
-  Modal,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
+import Modal from '@material-ui/core/Modal';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';

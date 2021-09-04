@@ -1,9 +1,12 @@
 import React from 'react';
-import { TableCell, TableRow, Typography } from '@material-ui/core';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
-import { Button, Image } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image'
 
 import IconAvatar from '../../../icons/iconAvatar';
 import IconDelete from '../../../icons/iconDelete';

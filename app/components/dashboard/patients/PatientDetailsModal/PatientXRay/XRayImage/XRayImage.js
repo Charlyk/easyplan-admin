@@ -1,5 +1,6 @@
 import React from "react";
-import { Grid, IconButton } from "@material-ui/core";
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 
 import { urlToLambda } from "../../../../../../../utils/helperFuncs";
 import IconTrash from "../../../../../icons/iconTrash";

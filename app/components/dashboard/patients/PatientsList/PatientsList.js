@@ -1,27 +1,25 @@
 import React, { useEffect, useReducer } from 'react';
-
-import {
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Typography,
-  CircularProgress,
-  TablePagination,
-  TableContainer,
-} from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TableBody from '@material-ui/core/TableBody';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableContainer from '@material-ui/core/TableContainer';
 import PropTypes from 'prop-types';
 import UploadIcon from '@material-ui/icons/CloudUpload';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from "clsx";
 import { toast } from "react-toastify";
 
 import IconPlus from '../../../icons/iconPlus';
 import IconSearch from '../../../icons/iconSearch';
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
-import CreatePatientModal from '../CreatePatientModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import {
   setPatientDetails,
@@ -30,8 +28,11 @@ import {
 import { HeaderKeys } from "../../../../utils/constants";
 import { updatePatientsListSelector } from '../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../utils/localization';
-import { deletePatient, getPatients, importPatientsFromFile } from "../../../../../middleware/api/patients";
-import CSVImportModal from "../../../common/CSVImportModal";
+import {
+  deletePatient,
+  getPatients,
+  importPatientsFromFile
+} from "../../../../../middleware/api/patients";
 import PatientRow from './PatientRow';
 import reducer, {
   initialState,
@@ -47,6 +48,10 @@ import reducer, {
   setIsLoading,
 } from './PatientsList.reducer'
 import styles from './PatientsList.module.scss';
+
+const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
+const CreatePatientModal = dynamic(() => import('../CreatePatientModal'));
 
 const importFields = [
   {

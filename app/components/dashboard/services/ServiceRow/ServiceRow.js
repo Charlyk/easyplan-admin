@@ -1,8 +1,8 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 import IconDelete from '../../../icons/iconDelete';
 import IconEdit from '../../../icons/iconEdit';

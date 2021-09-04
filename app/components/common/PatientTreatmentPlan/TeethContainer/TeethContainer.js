@@ -1,6 +1,6 @@
 import React from "react";
-
 import PropTypes from 'prop-types';
+
 import TeethBlock from "./TeethBlock";
 import styles from "./TeethContainer.module.scss";
 

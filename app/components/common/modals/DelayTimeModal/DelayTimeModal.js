@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Chip, FormControl, InputAdornment, OutlinedInput, Typography } from "@material-ui/core";
+import Chip from '@material-ui/core/Chip';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Typography from '@material-ui/core/Typography';
 
 import { textForKey } from "../../../../../utils/localization";
 import { valueToNumber } from "../../../../../utils/helperFuncs";

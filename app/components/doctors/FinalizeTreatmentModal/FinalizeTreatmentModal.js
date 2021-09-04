@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-
-import {
-  Box,
-  Checkbox,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
-import { Form, InputGroup, Button } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 
 import IconMinus from '../../icons/iconMinus';

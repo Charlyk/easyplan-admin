@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
-import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Typography from '@material-ui/core/Typography';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import {
   AsyncTypeahead,
   Menu,

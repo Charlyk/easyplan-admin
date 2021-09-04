@@ -1,9 +1,14 @@
 import React from "react";
+import moment from "moment-timezone";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
-import moment from "moment-timezone";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import { getCurrentWeek, handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
+import {
+  getCurrentWeek,
+  handleRequestError,
+  redirectToUrl,
+  redirectUserTo
+} from "../../../utils/helperFuncs";
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { Role } from "../../../app/utils/constants";
 import { parseCookies } from "../../../utils";

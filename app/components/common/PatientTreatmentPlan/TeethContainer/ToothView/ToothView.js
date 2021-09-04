@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-
-import { Fade, Paper, Popper, ClickAwayListener } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 import styles from './ToothView.module.scss';
 
 const ToothView = (

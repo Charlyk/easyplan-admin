@@ -4,6 +4,7 @@ import React, {
   useReducer,
   useRef,
 } from 'react';
+import dynamic from 'next/dynamic';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -17,9 +18,10 @@ import { wrapper } from "../../../../../store";
 import { fetchSchedulesHours } from "../../../../../middleware/api/schedules";
 import isOutOfBounds from "../../../../utils/isOutOfBounds";
 import EasyCalendar from "../../../common/EasyCalendar";
-import AddPauseModal from '../modals/AddPauseModal';
 import { actions, reducer, initialState } from './CalendarDayView.reducer'
 import styles from './CalendarDayView.module.scss';
+
+const AddPauseModal = dynamic(() => import('../modals/AddPauseModal'));
 
 const moment = extendMoment(Moment);
 

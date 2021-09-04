@@ -4,12 +4,13 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import { getDays } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
-import ScheduleItem from './ScheduleItem';
 import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
+import ScheduleItem from './ScheduleItem';
 import styles from './CalendarMonthView.module.scss';
 
 const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {

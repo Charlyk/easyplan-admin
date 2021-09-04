@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import moment from "moment-timezone";
 import Form from "react-bootstrap/Form";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
 
 import { textForKey } from "../../../../../../utils/localization";
@@ -18,7 +19,6 @@ import reducer, {
   setMessageData, setMessageTitle
 } from "./birthdayMessageSlice";
 import styles from './BirthdayMessageForm.module.scss';
-import Typography from "@material-ui/core/Typography";
 
 const BirthdayMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
   const availableTags = tags.filter((item) =>

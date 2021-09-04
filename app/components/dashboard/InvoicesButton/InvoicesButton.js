@@ -1,19 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
-
-import { ClickAwayListener, Fade, Paper, Popper } from '@material-ui/core';
-import { Button } from 'react-bootstrap';
+import dynamic from 'next/dynamic';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Fade from '@material-ui/core/Fade';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setPaymentModal } from '../../../../redux/actions/actions';
 
+import { setPaymentModal } from '../../../../redux/actions/actions';
 import { updateInvoicesSelector } from '../../../../redux/selectors/rootSelector';
+import {
+  totalInvoicesSelector,
+  updateInvoiceSelector
+} from "../../../../redux/selectors/invoicesSelector";
 import { formattedAmount, getClinicExchangeRates } from '../../../../utils/helperFuncs';
 import { textForKey } from '../../../../utils/localization';
-import NewInvoiceToast from '../../../../components/common/NewInvoiceToast';
-import { totalInvoicesSelector, updateInvoiceSelector } from "../../../../redux/selectors/invoicesSelector";
 import { setTotalInvoices } from "../../../../redux/actions/invoiceActions";
 import { fetchPendingInvoices } from "../../../../middleware/api/invoices";
 import styles from './InvoicesButton.module.scss';
+
+const NewInvoiceToast = dynamic(() => import('../../../../components/common/NewInvoiceToast'));
 
 const InvoicesButton = ({ currentUser, currentClinic }) => {
   const dispatch = useDispatch();

@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
+import moment from "moment-timezone";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarDayView from "../../../app/components/dashboard/calendar/CalendarDayView";
 import { Role } from "../../../app/utils/constants";
-import moment from "moment-timezone";
 import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";

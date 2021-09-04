@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-
+import dynamic from 'next/dynamic';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch } from 'react-redux';
 import moment from "moment-timezone";
@@ -14,10 +14,8 @@ import {
 } from '../../../../../redux/actions/actions';
 import { redirectIfOnGeneralHost } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import MainComponent from "../../../common/MainComponent/MainComponent";
 import AppointmentsCalendar from '../AppointmentsCalendar';
-import CalendarDoctors from '../CalendarDoctors';
 import reducer, {
   initialState,
   setParsedValue,
@@ -32,9 +30,12 @@ import reducer, {
   setShowImportModal,
 } from './CalendarContainer.reducer';
 import styles from './CalendarContainer.module.scss';
-import CSVImportModal from "../../../common/CSVImportModal";
 import { importSchedulesFromFile } from "../../../../../middleware/api/schedules";
 import { HeaderKeys } from "../../../../utils/constants";
+
+const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
+const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const CalendarDoctors = dynamic(() => import('../CalendarDoctors'));
 
 const importFields = [
   {

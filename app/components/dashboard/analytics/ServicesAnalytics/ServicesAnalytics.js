@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-
+import dynamic from 'next/dynamic';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -19,7 +19,6 @@ import { Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
-import EasyDateRangePicker from '../../../common/EasyDateRangePicker';
 import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { Role, ScheduleStatuses } from '../../../../utils/constants';
 import {
@@ -28,11 +27,11 @@ import {
   redirectUserTo,
 } from '../../../../../utils/helperFuncs';
 import { textForKey } from '../../../../../utils/localization';
-import StatisticFilter from '../StatisticFilter';
 import { getServicesStatistics } from "../../../../../middleware/api/analytics";
 import { fetchAppData } from "../../../../../middleware/api/initialization";
 import { parseCookies } from "../../../../../utils";
-import styles from './ServicesAnalytics.module.scss';
+import CheckableMenuItem from "../../../common/CheckableMenuItem";
+import StatisticFilter from '../StatisticFilter';
 import reducer, {
   initialState,
   setSelectedDoctors,
@@ -46,7 +45,9 @@ import reducer, {
   setServices,
   setShowRangePicker,
 } from "./ServicesAnalytics.reducer";
-import CheckableMenuItem from "../../../common/CheckableMenuItem";
+import styles from './ServicesAnalytics.module.scss';
+
+const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
 
 const ServicesAnalytics = (
   {

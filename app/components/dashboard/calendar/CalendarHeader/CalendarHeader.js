@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
-import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
 import clsx from "clsx";
+import PropTypes from 'prop-types';
 import MaterialButton from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
@@ -21,9 +22,10 @@ import { getAppLanguage, textForKey } from "../../../../../utils/localization";
 import EasyTab from "../../../../../components/common/EasyTab";
 import LoadingButton from "../../../../../components/common/LoadingButton";
 import IconPlus from "../../../icons/iconPlus";
-import CalendarLegend from "../CalendarLegend";
 import IconInfo from "../../../icons/iconInfo";
 import styles from "./CalendarHeader.module.scss";
+
+const CalendarLegend = dynamic(() => import("../CalendarLegend"));
 
 const CalendarView = {
   day: 'day',

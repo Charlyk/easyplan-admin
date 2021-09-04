@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Box,
-  CircularProgress,
-  ClickAwayListener,
-  Typography,
-} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Typography from '@material-ui/core/Typography';
 import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';

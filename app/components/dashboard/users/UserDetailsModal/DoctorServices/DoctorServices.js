@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
-import { remove, cloneDeep } from 'lodash';
+import remove from 'lodash/remove';
+import cloneDeep from 'lodash/cloneDeep';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 

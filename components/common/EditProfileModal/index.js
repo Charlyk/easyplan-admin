@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Image, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image';
+import InputGroup from 'react-bootstrap/InputGroup';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import axios from "axios";
@@ -10,7 +12,7 @@ import { EmailRegex, PasswordRegex } from '../../../app/utils/constants';
 import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
-import '../../../styles/EditProfileModal.module.scss';
+import styles from '../../../styles/EditProfileModal.module.scss';
 import isPhoneInputValid from "../../../app/utils/isPhoneInputValid";
 import { useRouter } from "next/router";
 import isPhoneNumberValid from "../../../app/utils/isPhoneNumberValid";
@@ -125,21 +127,21 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
     <EasyPlanModal
       title={textForKey('Account settings')}
       open={open}
-      className='edit-profile-modal'
+      className={styles['edit-profile-modal']}
       onClose={onClose}
       isPositiveDisabled={!isFormValid()}
       onPositiveClick={submitForm}
       isPositiveLoading={isLoading}
     >
-      <div className='modal-account-settings'>
-        <div className='upload-avatar-container'>
+      <div className={styles['modal-account-settings']}>
+        <div className={styles['upload-avatar-container']}>
           {avatarSrc ? <Image roundedCircle src={avatarSrc} /> : <IconAvatar />}
-          <span style={{ margin: '1rem' }} className='info-text'>
+          <span style={{ margin: '1rem' }} className={styles['info-text']}>
             {textForKey('JPG or PNG, Max size of 800kb')}
           </span>
           <Form.Group>
             <input
-              className='custom-file-button'
+              className={styles['custom-file-button']}
               type='file'
               name='avatar-file'
               id='avatar-file'
@@ -203,7 +205,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
               onChange={handleFormChange}
             />
             {isEmailChanged && (
-              <Form.Text className='text-muted'>
+              <Form.Text className={styles['text-muted']}>
                 {textForKey('Current password is required')}
               </Form.Text>
             )}

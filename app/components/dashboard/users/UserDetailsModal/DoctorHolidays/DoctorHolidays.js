@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 import IconDelete from '../../../../icons/iconDelete';
 import IconEdit from '../../../../icons/iconEdit';

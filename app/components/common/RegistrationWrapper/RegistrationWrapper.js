@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import { useRouter } from "next/router";
-import { Typography } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import { toast } from "react-toastify";
 
 import RegisterForm from "../../../../app/components/common/RegistrationWrapper/RegisterForm/RegisterForm";

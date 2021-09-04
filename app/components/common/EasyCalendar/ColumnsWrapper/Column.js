@@ -1,16 +1,16 @@
 import React from "react";
+import clsx from "clsx";
 import PropTypes from 'prop-types';
 import Moment from "moment-timezone";
 import { extendMoment } from "moment-range";
+import Typography from "@material-ui/core/Typography";
+
 import createContainerHours from "../../../../utils/createContainerHours";
+import { textForKey } from "../../../../../utils/localization";
+import IconUmbrella from "../../../icons/iconUmbrella";
 import Schedule from "../Schedule/Schedule";
 import ColumnCell from "./ColumnCell";
 import styles from './ColumnsWrapper.module.scss';
-import clsx from "clsx";
-import { Typography } from "@material-ui/core";
-import { textForKey } from "../../../../../utils/localization";
-import IconUmbrella from "../../../icons/iconUmbrella";
-import Box from "@material-ui/core/Box";
 
 const moment = extendMoment(Moment);
 

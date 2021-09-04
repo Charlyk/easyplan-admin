@@ -1,22 +1,30 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-
+import dynamic from 'next/dynamic';
+import isEqual from "lodash/isEqual";
+import { useRouter } from "next/router";
 import moment from 'moment-timezone';
 import sortBy from 'lodash/sortBy';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
-import ActionLogModal from '../../../app/components/dashboard/analytics/ActionLogModal';
-import EasyDateRangePicker from '../../../app/components/common/EasyDateRangePicker';
 import { textForKey } from '../../../utils/localization';
 import StatisticFilter from '../../../app/components/dashboard/analytics/StatisticFilter';
 import styles from '../../../styles/ActivityLogs.module.scss';
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import { generateReducerActions, handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
-import isEqual from "lodash/isEqual";
-import { useRouter } from "next/router";
 import { getActivityJournal } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { parseCookies } from "../../../utils";
+
+const ActionLogModal = dynamic(() => import('../../../app/components/dashboard/analytics/ActionLogModal'));
+const EasyDateRangePicker = dynamic(() => import('../../../app/components/common/EasyDateRangePicker'));
 
 const initialState = {
   isLoading: false,

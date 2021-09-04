@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from "react";
+import moment from "moment-timezone";
 import Form from "react-bootstrap/Form";
 import Box from "@material-ui/core/Box";
 import Typography from '@material-ui/core/Typography';
@@ -21,7 +22,6 @@ import reducer, {
   setMessageData,
 } from './scheduleMessageSlice';
 import styles from './ScheduleMessageForm.module.scss';
-import moment from "moment-timezone";
 
 const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
   const availableTags = tags.filter((item) =>

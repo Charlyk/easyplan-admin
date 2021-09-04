@@ -1,13 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
-
-import { CircularProgress, Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import axios from "axios";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography'
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
-import { Form, FormControl, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup'
 import { toast } from 'react-toastify';
-import axios from "axios";
 
 import IconSuccess from '../../../../icons/iconSuccess';
 import {

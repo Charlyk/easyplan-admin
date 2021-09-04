@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Image, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image';
+import InputGroup from 'react-bootstrap/InputGroup';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";

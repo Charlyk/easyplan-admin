@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
@@ -11,7 +12,6 @@ import { useRouter } from "next/router";
 import IconLogoPlaceholder from '../../../icons/iconLogoPlaceholder';
 import IconSuccess from '../../../icons/iconSuccess';
 import IconTrash from '../../../icons/iconTrash';
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { changeSelectedClinic } from '../../../../../redux/actions/actions';
 import { EmailRegex } from '../../../../utils/constants';
@@ -23,7 +23,9 @@ import { textForKey } from '../../../../../utils/localization';
 import { clinicTimeZones, deleteClinic, updateClinic } from "../../../../../middleware/api/clinic";
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import styles from './CompanyDetailsForm.module.scss'
+import styles from './CompanyDetailsForm.module.scss';
+
+const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 
 const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
   const dispatch = useDispatch();

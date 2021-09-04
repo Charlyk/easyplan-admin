@@ -1,13 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
-
-import { Stepper, Step, StepLabel, Typography } from '@material-ui/core';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Typography from '@material-ui/core/Typography';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import styles from '../../../styles/DataMigrationModal.module.scss';
 import { usePubNub } from 'pubnub-react';
-import { Modal } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 
 import IconClose from '../../../app/components/icons/iconClose';
 import { env } from '../../../app/utils/constants';

@@ -1,8 +1,8 @@
 import React, { useReducer } from 'react';
-
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 
 import { YClientAPIUrl } from '../../../../app/utils/constants';

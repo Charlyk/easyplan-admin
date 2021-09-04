@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
-import { CloudDownload } from "@material-ui/icons";
-import { Box, CircularProgress, IconButton, Typography } from "@material-ui/core";
+import CloudDownload from "@material-ui/icons/CloudDownload";
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import moment from "moment-timezone";
-import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
 import { getPatientPhoneRecords } from "../../../../../../middleware/api/patients";
 import { textForKey } from "../../../../../../utils/localization";

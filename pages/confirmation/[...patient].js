@@ -1,27 +1,24 @@
-import React, { useEffect, useState } from 'react';
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import React, { useState } from 'react';
+import axios from "axios";
 import clsx from 'clsx';
 import moment from 'moment-timezone';
+import { useRouter } from "next/router";
+import Head from "next/head";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
-import { handleRequestError, urlToLambda } from '../../utils/helperFuncs';
+import { urlToLambda } from '../../utils/helperFuncs';
 import { textForKey } from '../../utils/localization';
 
 import styles from '../../styles/ScheduleConfirmation.module.scss';
-import axios from "axios";
-import { useRouter } from "next/router";
 import { fetchScheduleConfirmationInfo } from "../../middleware/api/schedules";
-import Head from "next/head";
 
 export default ({ schedule, scheduleId, patientId, patient }) => {
   const router = useRouter();

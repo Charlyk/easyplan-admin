@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import dynamic from 'next/dynamic';
 import { toast } from "react-toastify";
 import Typography from "@material-ui/core/Typography";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -12,7 +13,6 @@ import { fetchAllServices } from "../../../../../../middleware/api/services";
 import { ScheduleStatuses } from "../../../../../utils/constants";
 import { textForKey } from "../../../../../../utils/localization";
 import CheckableMenuItem from "../../../../common/CheckableMenuItem";
-import EasyDateRangePicker from "../../../../common/EasyDateRangePicker";
 import reducer, {
   initialState,
   setSelectedStatuses,
@@ -24,6 +24,8 @@ import reducer, {
   setFilterData,
 } from './receiversFilterSlice';
 import styles from './ReceiversFilter.module.scss';
+
+const EasyDateRangePicker = dynamic(() => import("../../../../common/EasyDateRangePicker"));
 
 const defaultRange = {
   startDate: moment().toDate(),
