@@ -1,9 +1,7 @@
 import React from 'react';
-import {
-  handleRequestError,
-  redirectToUrl,
-  redirectUserTo,
-} from '../../utils/helperFuncs';
+import handleRequestError from '../../utils/handleRequestError';
+import redirectToUrl from '../../utils/redirectToUrl';
+import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getPatients } from "../../middleware/api/patients";
 import { fetchAppData } from "../../middleware/api/initialization";

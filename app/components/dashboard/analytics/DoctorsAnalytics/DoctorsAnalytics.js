@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 
 import IconList from "../../../icons/iconList";
 import { textForKey } from '../../../../../utils/localization';
-import { formattedAmount } from "../../../../../utils/helperFuncs";
+import formattedAmount from "../../../../../utils/formattedAmount";
 import { Role } from "../../../../utils/constants";
 import StatisticFilter from '../StatisticFilter';
 import reducer, {

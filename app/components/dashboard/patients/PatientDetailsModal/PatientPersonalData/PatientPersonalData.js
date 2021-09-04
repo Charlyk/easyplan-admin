@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 
 import IconSuccess from '../../../../icons/iconSuccess';
 import { EmailRegex } from '../../../../../utils/constants';
-import { adjustValueToNumber } from '../../../../../../utils/helperFuncs';
+import adjustValueToNumber from '../../../../../../utils/adjustValueToNumber';
 import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../../../../components/common/LoadingButton';
 import { actions, initialState, reducer } from './PatientPersonalData.reducer';

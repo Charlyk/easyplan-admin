@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import { getDays } from '../../../../../utils/helperFuncs';
+import getDays from '../../../../../utils/getDays';
 import { textForKey } from '../../../../../utils/localization';
 import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
 import ScheduleItem from './ScheduleItem';

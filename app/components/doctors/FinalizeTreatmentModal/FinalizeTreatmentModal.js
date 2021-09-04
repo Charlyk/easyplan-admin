@@ -14,7 +14,9 @@ import { toast } from 'react-toastify';
 
 import IconMinus from '../../icons/iconMinus';
 import IconPlus from '../../icons/iconPlus';
-import { formattedAmount, getClinicExchangeRates, getServiceName } from '../../../../utils/helperFuncs';
+import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
+import getServiceName from '../../../../utils/getServiceName';
+import formattedAmount from '../../../../utils/formattedAmount';
 import { textForKey } from '../../../../utils/localization';
 import EasyPlanModal from '../../common/modals/EasyPlanModal';
 import styles from './FinalizeTreatmentModal.module.scss';

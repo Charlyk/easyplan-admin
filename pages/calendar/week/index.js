@@ -3,12 +3,10 @@ import moment from "moment-timezone";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import {
-  getCurrentWeek,
-  handleRequestError,
-  redirectToUrl,
-  redirectUserTo
-} from "../../../utils/helperFuncs";
+import getCurrentWeek from "../../../utils/getCurrentWeek";
+import handleRequestError from '../../../utils/handleRequestError';
+import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectUserTo from '../../../utils/redirectUserTo';
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { Role } from "../../../app/utils/constants";
 import { parseCookies } from "../../../utils";

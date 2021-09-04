@@ -7,7 +7,7 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector
 } from "../../../../../redux/selectors/scheduleSelector";
-import { getCurrentWeek } from '../../../../../utils/helperFuncs';
+import getCurrentWeek from '../../../../../utils/getCurrentWeek';
 import EasyCalendar from "../../../common/EasyCalendar";
 import { reducer, initialState, actions } from './CalendarWeekView.reducer'
 import styles from './CalendarWeekView.module.scss';

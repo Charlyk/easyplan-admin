@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
-import { urlToLambda } from '../../utils/helperFuncs';
+import urlToLambda from '../../utils/urlToLambda';
 import { textForKey } from '../../utils/localization';
 
 import styles from '../../styles/ScheduleConfirmation.module.scss';

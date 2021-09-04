@@ -12,7 +12,7 @@ import {
   setPaymentModal,
   toggleAppointmentsUpdate,
 } from '../../../../../redux/actions/actions';
-import { redirectIfOnGeneralHost } from '../../../../../utils/helperFuncs';
+import redirectIfOnGeneralHost from '../../../../../utils/redirectIfOnGeneralHost';
 import { textForKey } from '../../../../../utils/localization';
 import MainComponent from "../../../common/MainComponent/MainComponent";
 import AppointmentsCalendar from '../AppointmentsCalendar';

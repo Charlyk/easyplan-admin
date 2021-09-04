@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 
 import { YClientAPIUrl } from '../../../../app/utils/constants';
-import { generateReducerActions } from '../../../../utils/helperFuncs';
+import generateReducerActions from '../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../LoadingButton';
 import styles from '../../../../styles/AuthenticationStep.module.scss'

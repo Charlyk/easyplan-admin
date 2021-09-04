@@ -1,5 +1,5 @@
 import moment from "moment-timezone";
-import { generateReducerActions } from "../../../../../../utils/helperFuncs";
+import generateReducerActions from "../../../../../../utils/generateReducerActions";
 
 /**
  * Filter available time based on start time and service duration

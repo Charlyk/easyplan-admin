@@ -24,7 +24,7 @@ import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeR
 import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
 import { setClinic } from "../../../../redux/actions/clinicActions";
 import { environment, isDev } from "../../../../eas.config";
-import { redirectIfOnGeneralHost } from "../../../../utils/helperFuncs";
+import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
 import MainMenu from './MainMenu/MainMenu';
 import PageHeader from './PageHeader/PageHeader';
 import styles from './MainComponent.module.scss';

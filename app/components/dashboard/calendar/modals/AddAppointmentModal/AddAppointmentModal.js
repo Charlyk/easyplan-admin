@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../../../icons/iconAvatar';
 import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
 import { EmailRegex, Role } from '../../../../../utils/constants';
-import { urlToLambda } from '../../../../../../utils/helperFuncs';
+import urlToLambda from '../../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
 import EasyPlanModal from '../../../../common/modals/EasyPlanModal';

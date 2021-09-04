@@ -1,5 +1,7 @@
 import React from 'react';
-import { handleRequestError, redirectToUrl, redirectUserTo } from '../../utils/helperFuncs';
+import handleRequestError from '../../utils/handleRequestError';
+import redirectToUrl from '../../utils/redirectToUrl';
+import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getMessages } from "../../middleware/api/messages";
 import { fetchAppData } from "../../middleware/api/initialization";

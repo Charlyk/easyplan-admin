@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { handler } from "../handler";
-import { getSubdomain } from "../../../utils/helperFuncs";
+import getSubdomain from "../../../utils/getSubdomain";
 import { baseApiUrl } from "../../../eas.config";
 
 export default async function login(req, res) {

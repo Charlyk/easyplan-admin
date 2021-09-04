@@ -6,6 +6,8 @@ import NextNprogress from 'nextjs-progressbar';
 import Head from 'next/head';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+
 import {
   patientNoteModalSelector,
   patientXRayModalSelector,
@@ -19,7 +21,6 @@ import { imageModalSelector } from "../redux/selectors/imageModalSelector";
 import { setImageModal } from "../redux/actions/imageModalActions";
 import { textForKey } from "../utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
-import { ToastContainer } from "react-toastify";
 import { signOut } from "../middleware/api/auth";
 import { fetchAppData } from "../middleware/api/initialization";
 import { UnauthorizedPaths } from "../app/utils/constants";
@@ -31,7 +32,6 @@ import 'react-phone-input-2/lib/style.css';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-color-palette/lib/css/styles.css";
 import '../app/utils/extensions';

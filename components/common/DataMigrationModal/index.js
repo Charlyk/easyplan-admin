@@ -13,7 +13,7 @@ import Modal from 'react-bootstrap/Modal';
 
 import IconClose from '../../../app/components/icons/iconClose';
 import { env } from '../../../app/utils/constants';
-import { generateReducerActions } from '../../../utils/helperFuncs';
+import generateReducerActions from '../../../utils/generateReducerActions';
 import { textForKey } from '../../../utils/localization';
 import AuthenticationStep from './AuthenticationStep';
 import DataMigrationFinalStep from './DataMigrationFinalStep';

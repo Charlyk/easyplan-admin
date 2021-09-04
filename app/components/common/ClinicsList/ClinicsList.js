@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
-import { getClinicUrl } from "../../../../utils/helperFuncs";
+import getClinicUrl from "../../../../utils/getClinicUrl";
 import { textForKey } from "../../../../utils/localization";
 import { isDev } from "../../../../eas.config";
 import { triggerUserLogout } from "../../../../redux/actions/actions";

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { handler } from "../../handler";
-import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import getSubdomain from "../../../../utils/getSubdomain";
+import updatedServerUrl from "../../../../utils/updateServerUrl";
 
 export default async (req, res) => {
   switch (req.method) {

@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../../../app/components/icons/iconArrowDown';
 import { YClientAPIUrl } from '../../../../app/utils/constants';
-import { generateReducerActions } from '../../../../utils/helperFuncs';
+import generateReducerActions from '../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../LoadingButton';
 import styles from '../../../../styles/ImportSelectionStep.module.scss';

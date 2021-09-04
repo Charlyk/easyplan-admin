@@ -12,7 +12,7 @@ import { triggerUserLogout } from '../../../../redux/actions/actions';
 import { setClinic } from "../../../../redux/actions/clinicActions";
 import { textForKey } from '../../../../utils/localization';
 import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
-import { redirectIfOnGeneralHost } from "../../../../utils/helperFuncs";
+import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
 import { environment, isDev } from "../../../../eas.config";
 import PageHeader from '../../common/MainComponent/PageHeader/PageHeader';
 import styles from './DoctorsMain.module.scss';

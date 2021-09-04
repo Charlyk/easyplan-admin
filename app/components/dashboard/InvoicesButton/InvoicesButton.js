@@ -14,7 +14,8 @@ import {
   totalInvoicesSelector,
   updateInvoiceSelector
 } from "../../../../redux/selectors/invoicesSelector";
-import { formattedAmount, getClinicExchangeRates } from '../../../../utils/helperFuncs';
+import formattedAmount from '../../../../utils/formattedAmount';
+import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
 import { textForKey } from '../../../../utils/localization';
 import { setTotalInvoices } from "../../../../redux/actions/invoiceActions";
 import { fetchPendingInvoices } from "../../../../middleware/api/invoices";

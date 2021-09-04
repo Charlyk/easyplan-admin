@@ -16,7 +16,7 @@ import IconPhone from '../../../icons/iconPhone';
 import IconRefresh from '../../../icons/iconRefresh';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { Role } from '../../../../utils/constants';
-import { urlToLambda } from '../../../../../utils/helperFuncs';
+import urlToLambda from '../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../utils/localization';
 import SwitchButton from "../../../../../components/common/SwitchButton";
 import styles from './UserItem.module.scss';

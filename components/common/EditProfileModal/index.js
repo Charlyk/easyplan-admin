@@ -9,7 +9,8 @@ import axios from "axios";
 
 import IconAvatar from '../../../app/components/icons/iconAvatar';
 import { EmailRegex, PasswordRegex } from '../../../app/utils/constants';
-import { uploadFileToAWS, urlToLambda } from '../../../utils/helperFuncs';
+import uploadFileToAWS from '../../../utils/uploadFileToAWS';
+import urlToLambda from '../../../utils/urlToLambda';
 import { textForKey } from '../../../utils/localization';
 import EasyPlanModal from '../../../app/components/common/modals/EasyPlanModal';
 import styles from '../../../styles/EditProfileModal.module.scss';

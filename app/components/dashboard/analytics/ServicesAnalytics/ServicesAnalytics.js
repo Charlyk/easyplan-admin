@@ -21,11 +21,9 @@ import { useRouter } from 'next/router';
 
 import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { Role, ScheduleStatuses } from '../../../../utils/constants';
-import {
-  handleRequestError,
-  redirectToUrl,
-  redirectUserTo,
-} from '../../../../../utils/helperFuncs';
+import handleRequestError from '../../../../../utils/handleRequestError';
+import redirectToUrl from '../../../../../utils/redirectToUrl';
+import redirectUserTo from '../../../../../utils/redirectUserTo';
 import { textForKey } from '../../../../../utils/localization';
 import { getServicesStatistics } from "../../../../../middleware/api/analytics";
 import { fetchAppData } from "../../../../../middleware/api/initialization";

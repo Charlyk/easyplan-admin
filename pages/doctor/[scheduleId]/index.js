@@ -1,5 +1,7 @@
 import React from 'react';
-import { handleRequestError, redirectToUrl, redirectUserTo } from '../../../utils/helperFuncs';
+import handleRequestError from '../../../utils/handleRequestError';
+import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectUserTo from '../../../utils/redirectUserTo';
 import DoctorsMain from "../../../app/components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";

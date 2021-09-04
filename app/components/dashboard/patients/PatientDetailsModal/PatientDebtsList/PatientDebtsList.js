@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import IconPrint from '../../../../icons/iconPrint';
 import { setPaymentModal } from '../../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../../redux/selectors/invoicesSelector';
-import { formattedAmount } from '../../../../../../utils/helperFuncs';
+import formattedAmount from '../../../../../../utils/formattedAmount';
 import { textForKey } from '../../../../../../utils/localization';
 import { baseApiUrl } from "../../../../../../eas.config";
 import { getPatientDebts } from "../../../../../../middleware/api/patients";

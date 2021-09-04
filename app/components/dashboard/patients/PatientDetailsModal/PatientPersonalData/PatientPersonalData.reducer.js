@@ -1,4 +1,4 @@
-import { generateReducerActions } from "../../../../../../utils/helperFuncs";
+import generateReducerActions from "../../../../../../utils/generateReducerActions";
 import moment from "moment-timezone";
 
 export const initialState = {

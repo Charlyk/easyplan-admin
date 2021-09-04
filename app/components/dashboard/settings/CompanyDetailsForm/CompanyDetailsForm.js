@@ -15,10 +15,8 @@ import IconTrash from '../../../icons/iconTrash';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { changeSelectedClinic } from '../../../../../redux/actions/actions';
 import { EmailRegex } from '../../../../utils/constants';
-import {
-  uploadFileToAWS,
-  urlToLambda,
-} from '../../../../../utils/helperFuncs';
+import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
+import urlToLambda from '../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../utils/localization';
 import { clinicTimeZones, deleteClinic, updateClinic } from "../../../../../middleware/api/clinic";
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";

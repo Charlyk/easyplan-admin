@@ -7,7 +7,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 
 import { textForKey } from "../../../../../utils/localization";
-import { valueToNumber } from "../../../../../utils/helperFuncs";
+import valueToNumber from "../../../../../utils/valueToNumber";
 import EASModal from "../EASModal";
 import styles from './DelayTimeModal.module.scss';
 

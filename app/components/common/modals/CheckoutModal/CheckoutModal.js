@@ -32,11 +32,9 @@ import IconClose from '../../../icons/iconClose';
 import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from '../../../../../redux/selectors/rootSelector';
-import {
-  adjustValueToNumber,
-  formattedAmount,
-  getClinicExchangeRates
-} from '../../../../../utils/helperFuncs';
+import adjustValueToNumber from '../../../../../utils/adjustValueToNumber';
+import formattedAmount from '../../../../../utils/formattedAmount';
+import getClinicExchangeRates from '../../../../../utils/getClinicExchangeRates';
 import { textForKey } from '../../../../../utils/localization';
 import { Role } from "../../../../utils/constants";
 import TeethModal from "../TeethModal";

@@ -7,7 +7,7 @@ import { Menu, MenuItem, Typeahead } from "react-bootstrap-typeahead";
 import clsx from "clsx";
 
 import { textForKey } from "../../../../../utils/localization";
-import { getServiceName } from "../../../../../utils/helperFuncs";
+import getServiceName from "../../../../../utils/getServiceName";
 import FinalServiceItem from "../../../doctors/FinalServiceItem";
 import LoadingButton from "../../../../../components/common/LoadingButton";
 import ToothIcon from '../../../../../public/icon-tooth.png';

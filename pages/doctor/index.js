@@ -2,12 +2,10 @@ import React from 'react';
 import moment from 'moment-timezone';
 import DoctorsMain from "../../app/components/doctors/DoctorsMain";
 import { wrapper } from "../../store";
-import {
-  getCurrentWeek,
-  handleRequestError,
-  redirectToUrl,
-  redirectUserTo
-} from "../../utils/helperFuncs";
+import getCurrentWeek from "../../utils/getCurrentWeek";
+import handleRequestError from '../../utils/handleRequestError';
+import redirectToUrl from '../../utils/redirectToUrl';
+import redirectUserTo from '../../utils/redirectUserTo';
 import { fetchAppData } from "../../middleware/api/initialization";
 import { parseCookies } from "../../utils";
 import DoctorCalendar from "../../app/components/doctors/DoctorCalendar";

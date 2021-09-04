@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup'
 import { toast } from 'react-toastify';
 
-import { generateReducerActions } from '../../../../../../utils/helperFuncs';
+import generateReducerActions from '../../../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
 import EasyPlanModal from '../../../../common/modals/EasyPlanModal';

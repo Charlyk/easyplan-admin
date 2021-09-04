@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
 
 import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
-import { uploadFileToAWS } from '../../../../../utils/helperFuncs';
+import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../../utils/localization';
 import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { addPatientXRayImage } from "../../../../../middleware/api/patients";

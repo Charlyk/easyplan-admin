@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import { toast } from "react-toastify";
 
 import RegisterForm from "../../../../app/components/common/RegistrationWrapper/RegisterForm/RegisterForm";
-import { uploadFileToAWS } from "../../../../utils/helperFuncs";
+import uploadFileToAWS from "../../../../utils/uploadFileToAWS";
 import { registerUser } from "../../../../middleware/api/auth";
 import { textForKey } from "../../../../utils/localization";
 import { isDev } from "../../../../eas.config";

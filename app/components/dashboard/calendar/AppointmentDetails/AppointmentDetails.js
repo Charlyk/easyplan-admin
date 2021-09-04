@@ -37,7 +37,7 @@ import {
   updateScheduleSelector,
 } from '../../../../../redux/selectors/scheduleSelector';
 import { ManualStatuses, Statuses } from '../../../../utils/constants';
-import { formattedAmount } from '../../../../../utils/helperFuncs';
+import formattedAmount from '../../../../../utils/formattedAmount';
 import { textForKey } from '../../../../../utils/localization';
 import reducer, {
   initialState,

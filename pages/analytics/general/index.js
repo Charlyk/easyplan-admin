@@ -1,11 +1,8 @@
 import React from 'react';
 import moment from 'moment-timezone';
-
-import {
-  handleRequestError,
-  redirectToUrl,
-  redirectUserTo
-} from '../../../utils/helperFuncs';
+import handleRequestError from '../../../utils/handleRequestError';
+import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectUserTo from '../../../utils/redirectUserTo';
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import { getGeneralStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
