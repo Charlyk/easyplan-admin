@@ -260,12 +260,11 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
           </Typography>
         </Box>
       )}
-      {canRegisterPayments && (
-        <ExchangeRates
-          currentUser={currentUser}
-          currentClinic={currentClinic}
-        />
-      )}
+      <ExchangeRates
+        currentUser={currentUser}
+        currentClinic={currentClinic}
+        canEdit={canRegisterPayments}
+      />
     </div>
   );
 };

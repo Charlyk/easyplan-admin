@@ -12,15 +12,15 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Role } from "../../../../utils/constants";
 import { fetchClinicExchangeRates } from "../../../../../middleware/api/clinic";
-import formattedAmount from "../../../../../utils/formattedAmount";
+import { Role } from "../../../../utils/constants";
 import { textForKey } from "../../../../../utils/localization";
+import formattedAmount from "../../../../../utils/formattedAmount";
 import { setIsExchangeRatesModalOpen } from "../../../../../redux/actions/exchangeRatesActions";
 import { updateExchangeRatesSelector } from "../../../../../redux/selectors/rootSelector";
 import styles from './ExchangeRates.module.scss';
 
-const ExchangeRates = ({ currentClinic, currentUser }) => {
+const ExchangeRates = ({ currentClinic, currentUser, canEdit }) => {
   const dispatch = useDispatch();
   const selectedClinic = currentUser.clinics.find((item) => item.clinicId === currentClinic.id);
   const clinicCurrency = currentClinic.currency;
@@ -88,7 +88,7 @@ const ExchangeRates = ({ currentClinic, currentUser }) => {
           <CircularProgress className='circular-progress-bar'/>
         </div>
       )}
-      {!isLoading && (
+      {!isLoading && canEdit && (
         <Button className={styles.editButton} onPointerUp={handleOpenExchangeRatesModal}>
           {textForKey('Edit')}
         </Button>
