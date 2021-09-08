@@ -16,9 +16,8 @@ import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
 import urlToLambda from '../../utils/urlToLambda';
 import { textForKey } from '../../utils/localization';
-
-import styles from '../../styles/ScheduleConfirmation.module.scss';
 import { fetchScheduleConfirmationInfo } from "../../middleware/api/schedules";
+import styles from '../../styles/ScheduleConfirmation.module.scss';
 
 export default ({ schedule, scheduleId, patientId, patient }) => {
   const router = useRouter();
@@ -75,6 +74,22 @@ export default ({ schedule, scheduleId, patientId, patient }) => {
                 </TableCell>
               </TableRow>
               <TableRow>
+                {schedule.clinicPhone && (
+                  <TableCell>
+                    <Typography align='right' className={styles['data-label']}>
+                      {textForKey('Phone number')}
+                    </Typography>
+                  </TableCell>
+                )}
+                {schedule.clinicPhone && (
+                  <TableCell>
+                    <Typography className={styles['data-label']}>
+                      <a href={`tel:${schedule.clinicPhone.replace('+', '')}`}>
+                        {schedule.clinicPhone}
+                      </a>
+                    </Typography>
+                  </TableCell>
+                )}
                 <TableCell>
                   <Typography align='right' className={styles['data-label']}>
                     {textForKey('Date')}
