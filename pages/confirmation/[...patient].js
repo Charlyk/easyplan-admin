@@ -73,22 +73,6 @@ export default ({ schedule, scheduleId, patientId, patient }) => {
                   </Typography>
                 </TableCell>
               </TableRow>
-              {schedule.clinicPhone && (
-                <TableRow>
-                  <TableCell>
-                    <Typography align='right' className={styles['data-label']}>
-                      {textForKey('Phone number')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography className={styles['data-label']}>
-                      <a href={`tel:${schedule.clinicPhone.replace('+', '')}`}>
-                        {schedule.clinicPhone}
-                      </a>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              )}
               <TableRow>
                 <TableCell>
                   <Typography align='right' className={styles['data-label']}>
@@ -141,6 +125,22 @@ export default ({ schedule, scheduleId, patientId, patient }) => {
                   </Typography>
                 </TableCell>
               </TableRow>
+              {schedule.clinicPhone && (
+                <TableRow>
+                  <TableCell>
+                    <Typography align='right' className={styles['data-label']}>
+                      {textForKey('Phone number')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography className={styles['data-label']}>
+                      <a href={`tel:${schedule.clinicPhone.replace('+', '')}`}>
+                        {schedule.clinicPhone}
+                      </a>
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
