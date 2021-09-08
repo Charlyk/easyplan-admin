@@ -73,15 +73,13 @@ export default ({ schedule, scheduleId, patientId, patient }) => {
                   </Typography>
                 </TableCell>
               </TableRow>
-              <TableRow>
-                {schedule.clinicPhone && (
+              {schedule.clinicPhone && (
+                <TableRow>
                   <TableCell>
                     <Typography align='right' className={styles['data-label']}>
                       {textForKey('Phone number')}
                     </Typography>
                   </TableCell>
-                )}
-                {schedule.clinicPhone && (
                   <TableCell>
                     <Typography className={styles['data-label']}>
                       <a href={`tel:${schedule.clinicPhone.replace('+', '')}`}>
@@ -89,7 +87,9 @@ export default ({ schedule, scheduleId, patientId, patient }) => {
                       </a>
                     </Typography>
                   </TableCell>
-                )}
+                </TableRow>
+              )}
+              <TableRow>
                 <TableCell>
                   <Typography align='right' className={styles['data-label']}>
                     {textForKey('Date')}
