@@ -24,7 +24,7 @@ import redirectUserTo from '../../../utils/redirectUserTo';
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import { getActivityJournal } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 
 const ActionLogModal = dynamic(() => import('../../../app/components/dashboard/analytics/ActionLogModal'));
 const EasyDateRangePicker = dynamic(() => import('../../../app/components/common/EasyDateRangePicker'));

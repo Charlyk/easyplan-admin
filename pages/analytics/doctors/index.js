@@ -6,7 +6,7 @@ import redirectUserTo from '../../../utils/redirectUserTo';
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import { getDoctorsStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 import DoctorsAnalytics from "../../../app/components/dashboard/analytics/DoctorsAnalytics";
 
 const Doctors = ({ currentUser, currentClinic, statistics, query: initialQuery, authToken }) => {

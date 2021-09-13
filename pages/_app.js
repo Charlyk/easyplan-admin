@@ -36,6 +36,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-color-palette/lib/css/styles.css";
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
+import '../utils'
 
 const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
 const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
@@ -92,10 +93,6 @@ export default wrapper.withRedux(
 
     const handleCloseImageModal = () => {
       dispatch(setImageModal({ open: false }));
-    };
-
-    const handleClinicCreated = async () => {
-      await router.replace(router.asPath);
     };
 
     const handleUserLogout = async () => {

@@ -27,7 +27,7 @@ import redirectUserTo from '../../../../../utils/redirectUserTo';
 import { textForKey } from '../../../../../utils/localization';
 import { getServicesStatistics } from "../../../../../middleware/api/analytics";
 import { fetchAppData } from "../../../../../middleware/api/initialization";
-import { parseCookies } from "../../../../../utils";
+import parseCookies from "../../../../../utils/parseCookies";
 import CheckableMenuItem from "../../../common/CheckableMenuItem";
 import StatisticFilter from '../StatisticFilter';
 import reducer, {
