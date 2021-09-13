@@ -429,7 +429,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/services');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);

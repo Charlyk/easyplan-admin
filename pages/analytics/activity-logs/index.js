@@ -262,11 +262,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/activity-logs');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
 
     const { data: activityLogs } = await getActivityJournal(query, req.headers);
@@ -275,7 +275,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
         authToken,
         activityLogs,
         query,
-        ...appData,
+        ...appData.data,
       },
     };
   } catch (error) {

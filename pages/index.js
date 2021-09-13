@@ -37,7 +37,7 @@ export const getServerSideProps = async ({ req, res }) => {
     const appData = await fetchAppData(req.headers);
     return {
       props: {
-        ...appData,
+        ...appData.data,
         authToken,
       }
     }

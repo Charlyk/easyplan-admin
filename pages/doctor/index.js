@@ -48,11 +48,11 @@ export const getServerSideProps = async ({ res, req, query }) => {
     }
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
     const viewMode = query.viewMode ?? 'week';
 
@@ -67,7 +67,7 @@ export const getServerSideProps = async ({ res, req, query }) => {
         viewMode,
         schedules: response.data,
         date: moment(date).format('YYYY-MM-DD'),
-        ...appData,
+        ...appData.data,
       },
     };
   } catch (error) {

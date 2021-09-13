@@ -101,13 +101,13 @@ export const getServerSideProps = async ({ req, res }) => {
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
     const { data: countries } = await fetchAllCountries(req.headers);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/settings');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
       return {
         props: {
-          ...appData,
+          ...appData.data,
           countries,
           authToken,
         }
@@ -116,7 +116,7 @@ export const getServerSideProps = async ({ req, res }) => {
 
     return {
       props: {
-        ...appData,
+        ...appData.data,
         countries,
         authToken,
       }

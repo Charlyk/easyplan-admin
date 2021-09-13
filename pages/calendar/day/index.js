@@ -48,11 +48,11 @@ export const getServerSideProps = async ({ query, req, res }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers, queryDate);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/day');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
 
     // filter clinic doctors
@@ -69,7 +69,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
         schedules,
         dayHours,
         authToken,
-        ...appData
+        ...appData.data
       }
     }
   } catch (error) {

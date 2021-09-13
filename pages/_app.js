@@ -69,7 +69,7 @@ export default wrapper.withRedux(
     const fetchInitializationData = async () => {
       try {
         const appData = await fetchAppData();
-        setState(appData);
+        setState(appData.data);
       } catch (error) {
         // ignore this error
       }

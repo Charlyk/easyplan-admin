@@ -51,11 +51,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
 
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/general');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
 
     const { data } = await getGeneralStatistics(query, req.headers);
@@ -64,7 +64,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
         ...data,
         authToken,
         query,
-        ...appData
+        ...appData.data
       },
     };
   } catch (error) {
