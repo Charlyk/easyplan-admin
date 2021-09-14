@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -16,7 +15,10 @@ import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
 import urlToLambda from '../../utils/urlToLambda';
 import { textForKey } from '../../utils/localization';
-import { fetchScheduleConfirmationInfo, requestConfirmSchedule } from "../../middleware/api/schedules";
+import {
+  fetchScheduleConfirmationInfo,
+  requestConfirmSchedule
+} from "../../middleware/api/schedules";
 import styles from '../../styles/ScheduleConfirmation.module.scss';
 import Box from "@material-ui/core/Box";
 
