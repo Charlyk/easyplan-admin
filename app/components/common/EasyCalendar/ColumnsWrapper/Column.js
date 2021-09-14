@@ -13,6 +13,7 @@ import ColumnCell from "./ColumnCell";
 import styles from './ColumnsWrapper.module.scss';
 
 const moment = extendMoment(Moment);
+const maxOffset = 6;
 
 const Column = (
   {
@@ -53,6 +54,9 @@ const Column = (
         const hasIntersection = scheduleRange.intersect(itemRange) != null;
         if (hasIntersection) {
           offset = (item.offset || 0) + 1;
+        }
+        if (offset > maxOffset) {
+          offset = 0;
         }
       }
       // add the new schedules to array to check the next one against it
