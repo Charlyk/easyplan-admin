@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
+import ConfirmationModal from "../../app/components/common/modals/ConfirmationModal";
 import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
 import urlToLambda from '../../utils/urlToLambda';
@@ -19,8 +20,6 @@ import { textForKey } from '../../utils/localization';
 import { fetchScheduleConfirmationInfo, requestConfirmSchedule } from "../../middleware/api/schedules";
 import styles from '../../styles/ScheduleConfirmation.module.scss';
 import Box from "@material-ui/core/Box";
-
-const ConfirmationModal = dynamic(() => import('../../app/components/common/modals/ConfirmationModal'));
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
