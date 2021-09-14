@@ -4,7 +4,6 @@ import { usePubNub } from 'pubnub-react';
 import { useDispatch } from 'react-redux';
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { toast } from "react-toastify";
 
 import {
@@ -12,6 +11,11 @@ import {
   setPaymentModal,
   toggleAppointmentsUpdate,
 } from '../../../../../redux/actions/actions';
+import {
+  importSchedulesFromFile,
+  requestDeleteSchedule
+} from "../../../../../middleware/api/schedules";
+import { HeaderKeys } from "../../../../utils/constants";
 import redirectIfOnGeneralHost from '../../../../../utils/redirectIfOnGeneralHost';
 import { textForKey } from '../../../../../utils/localization';
 import MainComponent from "../../../common/MainComponent/MainComponent";
@@ -30,8 +34,6 @@ import reducer, {
   setShowImportModal,
 } from './CalendarContainer.reducer';
 import styles from './CalendarContainer.module.scss';
-import { importSchedulesFromFile } from "../../../../../middleware/api/schedules";
-import { HeaderKeys } from "../../../../utils/constants";
 
 const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
@@ -292,7 +294,7 @@ const CalendarContainer = (
     }
     localDispatch(setIsDeleting(true));
     try {
-      await axios.delete(`/api/schedules/${deleteSchedule.schedule.id}`);
+      await requestDeleteSchedule(deleteSchedule.schedule.id)
       localDispatch(
         setDeleteSchedule({ open: false, schedule: null }),
       );

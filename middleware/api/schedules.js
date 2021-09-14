@@ -1,4 +1,4 @@
-import { get, post, put } from "./request";
+import { del, get, post, put } from "./request";
 import moment from "moment-timezone";
 import axios from "axios";
 import { baseApiUrl } from "../../eas.config";
@@ -170,4 +170,14 @@ export async function importSchedulesFromFile(file, fields, dateFormat, headers 
   requestBody.append('file', file, file.name);
   requestBody.append('dateFormat', dateFormat);
   return axios.post(`${baseApiUrl}/schedules/import`, requestBody, { headers })
+}
+
+/**
+ * Delete a schedule
+ * @param {number} scheduleId
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestDeleteSchedule(scheduleId, headers = null) {
+  return del(`/api/schedules/${scheduleId}`, headers);
 }

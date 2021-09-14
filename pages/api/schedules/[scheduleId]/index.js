@@ -25,7 +25,7 @@ export default authorized(async (req, res) => {
       break;
     }
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['GET', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
