@@ -12,7 +12,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from "../../app/components/common/modals/ConfirmationModal";
 import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../components/common/LoadingButton';
 import urlToLambda from '../../utils/urlToLambda';
@@ -25,7 +24,6 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
   const [isConfirming, setIsConfirming] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
   const [isError, setIsError] = useState(false);
 
   const confirmSchedule = async () => {
@@ -46,7 +44,6 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   };
 
   const cancelSchedule = async () => {
-    handleCloseConfirmation();
     setIsCanceling(true);
     try {
       await requestConfirmSchedule(scheduleId, patientId, 'Canceled', textForKey('canceled_by_patient'));
@@ -64,12 +61,11 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
     if (schedule.status === 'Canceled') {
       return;
     }
-    setShowConfirmation(true);
+    const result = confirm(textForKey('cancel_schedule_message'));
+    if (result) {
+      cancelSchedule();
+    }
   };
-
-  const handleCloseConfirmation = () => {
-    setShowConfirmation(false);
-  }
 
   const logoSrc = schedule?.clinicLogo
     ? urlToLambda(schedule.clinicLogo, 130)
@@ -86,14 +82,6 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
           }
         </title>
       </Head>
-      <ConfirmationModal
-        show={showConfirmation}
-        title={textForKey('cancel_schedule_title')}
-        message={textForKey('cancel_schedule_message')}
-        primaryBtnText={textForKey('Yes')}
-        onConfirm={cancelSchedule}
-        onClose={handleCloseConfirmation}
-      />
       {schedule == null && (
         <Typography className={styles['no-data-label']}>
           {textForKey('Schedule info not found')}
