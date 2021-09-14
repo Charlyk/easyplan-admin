@@ -16,7 +16,7 @@ const LoadingButton = ({
   return (
     <Button
       className={clsx(styles['loading-button'], className)}
-      onClick={onClick}
+      onPointerUp={onClick}
       disabled={disabled}
       variant={variant}
     >

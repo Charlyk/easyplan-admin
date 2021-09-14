@@ -181,3 +181,16 @@ export async function importSchedulesFromFile(file, fields, dateFormat, headers 
 export async function requestDeleteSchedule(scheduleId, headers = null) {
   return del(`/api/schedules/${scheduleId}`, headers);
 }
+
+/**
+ * Confirm a schedule
+ * @param {number} scheduleId
+ * @param {number} patientId
+ * @param {string} status
+ * @param {string|null} reason
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestConfirmSchedule(scheduleId, patientId, status = 'Confirmed', reason = null, headers = null) {
+  return post(`/api/schedules/confirm`, headers, { scheduleId, patientId, status, reason });
+}

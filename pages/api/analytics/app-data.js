@@ -10,7 +10,6 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchAppData, req, res);
-      console.log(data);
       if (data != null) {
         res.json(data);
       }
