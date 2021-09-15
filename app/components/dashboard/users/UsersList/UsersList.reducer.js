@@ -93,6 +93,7 @@ export const {
   setIsDeleting,
   setIsUserModalOpen,
   setUserToDelete,
+  setIsInvitingExistentError
 } = usersListSlice.actions;
 
 export default usersListSlice.reducer;

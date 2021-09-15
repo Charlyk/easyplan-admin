@@ -81,3 +81,20 @@ export async function deleteUserHoliday(userId, holidayId, headers = null) {
 export async function updateUserCashierStatus(userId, isCashier, headers = null) {
   return put(`/api/users/${userId}/cashier`, headers, { isCashier })
 }
+
+/**
+ * Accept clinic invitation
+ * @param {{
+ *   firstName: any,
+ *   lastName: any,
+ *   password: any,
+ *   phoneNumber: any,
+ *   invitationToken: any,
+ *   avatar: any
+ * }} body
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestAcceptInvitation(body, headers = null) {
+  return put('/api/users/accept-invitation', headers, body);
+}

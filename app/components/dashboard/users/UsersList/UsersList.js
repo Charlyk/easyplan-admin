@@ -33,6 +33,7 @@ import reducer, {
   setIsInviting,
   setShowInviteModal,
   setIsDeleting,
+  setIsInvitingExistentError,
 } from './UsersList.reducer';
 import styles from './UsersList.module.scss';
 
@@ -120,8 +121,14 @@ const UsersList = (
       await fetchUsers();
       closeInviteModal();
     } catch (error) {
-      toast.error(error.message);
-      localDispatch(setInvitingExistentError(error.message));
+      if (error.response != null) {
+        const { data } = error.response;
+        toast.error(data.message);
+        localDispatch(setIsInvitingExistentError(data.message));
+      } else {
+        toast.error(error.message);
+        localDispatch(setIsInvitingExistentError(error.message));
+      }
     } finally {
       localDispatch(setIsInvitingExistent(false));
     }
