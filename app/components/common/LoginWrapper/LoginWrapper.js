@@ -7,7 +7,7 @@ import getRedirectUrlForUser from "../../../../utils/getRedirectUrlForUser";
 import getClinicUrl from '../../../../utils/getClinicUrl'
 import { textForKey } from "../../../../utils/localization";
 import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
-import { isDev } from "../../../../eas.config";
+import { appBaseUrl, isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";
 import ResetPassword from './ResetPassword';
 import LoginForm from './LoginForm';
@@ -47,7 +47,7 @@ export default function LoginWrapper({ currentUser }) {
   };
 
   const handleGoToSignUp = async () => {
-    await router.push('/register');
+    window.location = `${appBaseUrl}/register`;
   };
 
   const handleSuccessResponse = async (user) => {

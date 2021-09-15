@@ -4,19 +4,27 @@ import CreateClinicWrapper from "../app/components/common/CreateClinicWrapper";
 import { wrapper } from "../store";
 import { fetchAllCountries } from "../middleware/api/countries";
 
-const CreateClinic = ({ token, redirect, countries }) => {
-  return <CreateClinicWrapper redirect={redirect} token={token} countries={countries} />;
+const CreateClinic = ({ token, redirect, countries, login }) => {
+  return (
+    <CreateClinicWrapper
+      redirect={redirect}
+      token={token}
+      countries={countries}
+      shouldLogin={login}
+    />
+  );
 };
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
     const { auth_token } = parseCookies(req);
     const { data: countries } = await fetchAllCountries(req.headers);
-    const { redirect } = query;
+    const { redirect, login } = query;
     return {
       props: {
         token: auth_token,
         redirect: redirect === '1',
+        shouldLogin: login === '1',
         countries,
       },
     }

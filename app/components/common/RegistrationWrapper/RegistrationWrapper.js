@@ -32,7 +32,7 @@ export default function RegistrationWrapper() {
       }
       await registerUser(accountData);
       toast.success(textForKey('account_created_success'));
-      await router.replace('/create-clinic');
+      await router.replace('/create-clinic?login=1');
     } catch (error) {
       if (error.response != null) {
         const { data } = error.response;

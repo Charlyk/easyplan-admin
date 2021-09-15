@@ -14,7 +14,7 @@ import reducer, {
 } from './createClinicWrapperSlice';
 import styles from './CreateClinic.module.scss';
 
-export default function CreateClinicWrapper({ token, redirect, countries }) {
+export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin }) {
   const router = useRouter();
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
@@ -40,7 +40,9 @@ export default function CreateClinicWrapper({ token, redirect, countries }) {
         delete clinicData.logoFile;
       }
       const response = await createNewClinic(clinicData);
-      if (redirect) {
+      if (shouldLogin) {
+        await router.replace('/login')
+      } else if (redirect) {
         await redirectToDashboard(response.data);
       } else {
         router.back();
