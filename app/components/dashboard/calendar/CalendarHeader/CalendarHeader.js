@@ -24,6 +24,7 @@ import LoadingButton from "../../../../../components/common/LoadingButton";
 import IconPlus from "../../../icons/iconPlus";
 import IconInfo from "../../../icons/iconInfo";
 import styles from "./CalendarHeader.module.scss";
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const CalendarLegend = dynamic(() => import("../CalendarLegend"));
 
@@ -216,4 +217,4 @@ CalendarHeader.propTypes = {
   onDateChange: PropTypes.func,
 }
 
-export default CalendarHeader;
+export default React.memo(CalendarHeader, areComponentPropsEqual);

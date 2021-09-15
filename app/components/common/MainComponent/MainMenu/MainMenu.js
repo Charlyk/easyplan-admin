@@ -22,6 +22,7 @@ import ClinicSelector from '../../../../../components/common/ClinicSelector';
 import { Role } from "../../../../utils/constants";
 import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const menuItems = [
   {
@@ -269,7 +270,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   );
 };
 
-export default MainMenu;
+export default React.memo(MainMenu, areComponentPropsEqual);
 
 MainMenu.propTypes = {
   currentPath: PropTypes.string.isRequired,

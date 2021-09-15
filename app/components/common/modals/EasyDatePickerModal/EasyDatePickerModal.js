@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import Form from "react-bootstrap/Form";
+import Box from "@material-ui/core/Box";
 import * as locales from "react-date-range/dist/locale";
 import { Calendar } from "react-date-range";
 import { toast } from "react-toastify";
 import moment from "moment-timezone";
 
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { getAppLanguage, textForKey } from "../../../../../utils/localization";
-import EasyPlanModal from "../EasyPlanModal";
+import EASModal from "../EASModal";
 
 const EasyDatePickerModal = (
   {
@@ -65,15 +67,17 @@ const EasyDatePickerModal = (
   }
 
   return (
-    <EasyPlanModal
+    <EASModal
       open={open}
       onClose={onClose}
       size='sm'
-      onPositiveClick={handleConfirmed}
+      onPrimaryClick={handleConfirmed}
+      primaryBtnText={textForKey('Save')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={isLoading}
       title={textForKey('Select new date')}
     >
+      <Box padding='16px' display='flex' flexDirection='column'>
       <Calendar
         minDate={minDate}
         locale={locales[getAppLanguage()]}
@@ -101,11 +105,12 @@ const EasyDatePickerModal = (
           </Form.Control>
         </Form.Group>
       )}
-    </EasyPlanModal>
+      </Box>
+    </EASModal>
   )
 }
 
-export default EasyDatePickerModal;
+export default React.memo(EasyDatePickerModal, areComponentPropsEqual);
 
 EasyDatePickerModal.propTypes = {
   open: PropTypes.bool,

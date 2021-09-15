@@ -7,6 +7,7 @@ import { START_TIMER, STOP_TIMER } from "redux-timer-middleware";
 import types from "../../../../../redux/types/types";
 import { updateHourIndicatorPositionSelector } from "../../../../../redux/selectors/rootSelector";
 import styles from './HourIndicator.module.scss'
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const HourIndicator = ({ dayHours, viewDate, disabled }) => {
   const dispatch = useDispatch()
@@ -134,7 +135,7 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
   )
 }
 
-export default HourIndicator;
+export default React.memo(HourIndicator, areComponentPropsEqual);
 
 HourIndicator.propTypes = {
   disabled: PropTypes.bool,

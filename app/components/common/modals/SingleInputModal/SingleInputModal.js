@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Box from "@material-ui/core/Box";
 import Form from 'react-bootstrap/Form';
-
-import EasyPlanModal from '../EasyPlanModal';
+import EASModal from "../EASModal";
 import styles from './SingleInputModal.module.scss';
 
 const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
@@ -23,24 +23,26 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
   };
 
   return (
-    <EasyPlanModal
-      title={title}
-      open={open}
-      onClose={onClose}
+    <EASModal
       size='sm'
+      open={open}
+      title={title}
+      onClose={onClose}
       className={styles['single-input-modal']}
-      onPositiveClick={handleSubmit}
+      onPrimaryClick={handleSubmit}
     >
-      <Form.Group>
-        <Form.Label>{label}</Form.Label>
-        <Form.Control
-          onChange={handleFieldChange}
-          value={value}
-          as='textarea'
-          aria-label={label}
-        />
-      </Form.Group>
-    </EasyPlanModal>
+      <Box padding='16px'>
+        <Form.Group>
+          <Form.Label>{label}</Form.Label>
+          <Form.Control
+            onChange={handleFieldChange}
+            value={value}
+            as='textarea'
+            aria-label={label}
+          />
+        </Form.Group>
+      </Box>
+    </EASModal>
   );
 };
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CreateScheduleView from "./CreateScheduleView";
 import styles from './ColumnsWrapper.module.scss';
 import clsx from "clsx";
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const ColumnCell = (
   {
@@ -70,7 +71,7 @@ const ColumnCell = (
   )
 };
 
-export default ColumnCell;
+export default React.memo(ColumnCell, areComponentPropsEqual);
 
 ColumnCell.propTypes = {
   disabled: PropTypes.bool,

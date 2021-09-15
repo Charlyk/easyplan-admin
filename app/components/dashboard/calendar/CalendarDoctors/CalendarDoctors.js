@@ -6,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { textForKey } from '../../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 import styles from './CalendarDoctors.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const CalendarDoctors = (
   {
@@ -68,7 +69,7 @@ const CalendarDoctors = (
   );
 };
 
-export default CalendarDoctors;
+export default React.memo(CalendarDoctors, areComponentPropsEqual);
 
 CalendarDoctors.propTypes = {
   selectedService: PropTypes.object,

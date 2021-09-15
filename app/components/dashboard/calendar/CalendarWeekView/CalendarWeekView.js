@@ -8,6 +8,7 @@ import {
   updateScheduleSelector
 } from "../../../../../redux/selectors/scheduleSelector";
 import getCurrentWeek from '../../../../../utils/getCurrentWeek';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import EasyCalendar from "../../../common/EasyCalendar";
 import { reducer, initialState, actions } from './CalendarWeekView.reducer'
 import styles from './CalendarWeekView.module.scss';
@@ -125,7 +126,7 @@ const CalendarWeekView = (
   );
 };
 
-export default CalendarWeekView;
+export default React.memo(CalendarWeekView, areComponentPropsEqual);
 
 CalendarWeekView.propTypes = {
   schedules: PropTypes.shape({

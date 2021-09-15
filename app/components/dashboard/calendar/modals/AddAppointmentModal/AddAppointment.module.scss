@@ -1,4 +1,20 @@
 .add-appointment-root {
+  .modalPaper {
+    width: 500px;
+
+    .inputGroup {
+      width: 100%;
+      display: flex;
+
+      .formGroup {
+        flex: 1;
+
+        &:first-child {
+          margin-right: 5px !important;
+        }
+      }
+    }
+  }
 
   :global(.modal-content) {
     box-shadow: 0 1px 10px 10px #34344E1A;
@@ -6,6 +22,12 @@
 
   .first-and-last-name {
     display: flex;
+
+    input {
+      &:first-child {
+        margin-right: 5px;
+      }
+    }
   }
 
   :global(.rbt-menu) > :global(.dropdown-item) {

@@ -36,6 +36,7 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector,
 } from '../../../../../redux/selectors/scheduleSelector';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { ManualStatuses, Statuses } from '../../../../utils/constants';
 import formattedAmount from '../../../../../utils/formattedAmount';
 import { textForKey } from '../../../../../utils/localization';
@@ -609,7 +610,7 @@ const AppointmentDetails = (
   );
 };
 
-export default AppointmentDetails;
+export default React.memo(AppointmentDetails, areComponentPropsEqual);
 
 AppointmentDetails.propTypes = {
   onClose: PropTypes.func,

@@ -4,6 +4,7 @@ import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Box from "@material-ui/core/Box";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import {
@@ -22,7 +23,6 @@ import { EmailRegex, Role } from '../../../../../utils/constants';
 import urlToLambda from '../../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
-import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
 import {
   getAvailableHours,
   getScheduleDetails,
@@ -31,8 +31,10 @@ import {
 import { getPatients } from "../../../../../../middleware/api/patients";
 import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import { reducer, initialState, actions } from "./AddAppointmentModal.reducer";
-import styles from './AddAppointment.module.scss';
 import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
+import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
+import EASModal from "../../../../common/modals/EASModal";
+import styles from './AddAppointment.module.scss';
 
 const AddAppointmentModal = (
   {
@@ -430,270 +432,279 @@ const AddAppointmentModal = (
     appointmentStatus === 'CompletedFree';
 
   return (
-    <EasyPlanModal
+    <EASModal
       onClose={onClose}
       open={open}
       className={styles['add-appointment-root']}
+      paperClass={styles.modalPaper}
       title={
         schedule == null
           ? textForKey('Add appointment')
           : textForKey('Edit appointment')
       }
       isPositiveDisabled={!isFormValid() || isLoading}
-      onPositiveClick={handleCreateSchedule}
+      onPrimaryClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >
-      {isNewPatient && (
-        <Form.Group>
-          <Form.Label>{textForKey('Patient name')}</Form.Label>
-          <div className={styles['first-and-last-name']}>
+      <Box padding='16px' display='flex' flexDirection='column'>
+        {isNewPatient && (
+          <Form.Group>
+            <Form.Label>{textForKey('Patient name')}</Form.Label>
+            <div className={styles['first-and-last-name']}>
+              <Form.Control
+                id='patientLastName'
+                value={patientLastName}
+                onChange={handlePatientNameChange}
+                placeholder={textForKey('Last name')}
+              />
+              <Form.Control
+                id='patientFirstName'
+                value={patientFirstName}
+                onChange={handlePatientNameChange}
+                placeholder={textForKey('First name')}
+              />
+            </div>
+          </Form.Group>
+        )}
+        {isNewPatient && (
+          <Form.Group controlId='phoneNumber'>
+            <Form.Label>{textForKey('Phone number')}</Form.Label>
+            <InputGroup>
+              <PhoneInput
+                value={`${phoneCountry.dialCode}${patientPhoneNumber}`}
+                alwaysDefaultMask
+                countryCodeEditable={false}
+                country={phoneCountry.countryCode || 'md'}
+                placeholder='79123456'
+                isValid={isPhoneInputValid}
+                onChange={handlePhoneChange}
+              />
+            </InputGroup>
+          </Form.Group>
+        )}
+        {isNewPatient && (
+          <Form.Group controlId='email'>
+            <Form.Label>{textForKey('Email')}</Form.Label>
+            <InputGroup>
+              <Form.Control
+                value={patientEmail}
+                isInvalid={
+                  patientEmail.length > 0 && !patientEmail.match(EmailRegex)
+                }
+                type='email'
+                onChange={handleEmailChange}
+              />
+            </InputGroup>
+          </Form.Group>
+        )}
+        {isNewPatient && (
+          <Form.Group ref={birthdayPickerAnchor}>
+            <Form.Label>{textForKey('Birthday')}</Form.Label>
             <Form.Control
-              id='patientLastName'
-              value={patientLastName}
-              onChange={handlePatientNameChange}
-              placeholder={textForKey('Last name')}
-            />
-            <Form.Control
-              id='patientFirstName'
-              value={patientFirstName}
-              onChange={handlePatientNameChange}
-              placeholder={textForKey('First name')}
-            />
-          </div>
-        </Form.Group>
-      )}
-      {isNewPatient && (
-        <Form.Group controlId='phoneNumber'>
-          <Form.Label>{textForKey('Phone number')}</Form.Label>
-          <InputGroup>
-            <PhoneInput
-              value={`${phoneCountry.dialCode}${patientPhoneNumber}`}
-              alwaysDefaultMask
-              countryCodeEditable={false}
-              country={phoneCountry.countryCode || 'md'}
-              placeholder='79123456'
-              isValid={isPhoneInputValid}
-              onChange={handlePhoneChange}
-            />
-          </InputGroup>
-        </Form.Group>
-      )}
-      {isNewPatient && (
-        <Form.Group controlId='email'>
-          <Form.Label>{textForKey('Email')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={patientEmail}
-              isInvalid={
-                patientEmail.length > 0 && !patientEmail.match(EmailRegex)
+              value={
+                patientBirthday
+                  ? moment(patientBirthday).format('DD MMM YYYY')
+                  : ''
               }
-              type='email'
-              onChange={handleEmailChange}
+              readOnly
+              onClick={handleOpenBirthdayPicker}
+            />
+          </Form.Group>
+        )}
+        {!isNewPatient && (
+          <Form.Group controlId='patient'>
+            <Form.Label>{textForKey('Patient')}</Form.Label>
+            <AsyncTypeahead
+              disabled={isFinished}
+              isValid={isPatientValid}
+              placeholder={textForKey('Enter patient name or phone')}
+              id='patients'
+              emptyLabel={`${textForKey('No results')}...`}
+              searchText={`${textForKey('Searching')}...`}
+              isLoading={loading.patients}
+              filterBy={filterByCallback}
+              minLength={2}
+              labelKey='fullName'
+              onSearch={handleSearchQueryChange}
+              options={patients}
+              selected={patient ? [patient] : []}
+              onChange={handlePatientChange}
+              renderMenuItemChildren={(option) => (
+                <div className={styles['patient-result-item']} id={option.id}>
+                  <div className={styles['patient-avatar-wrapper']}>
+                    {option.photo == null ? (
+                      <IconAvatar/>
+                    ) : (
+                      <img
+                        src={urlToLambda(option.photo, 40)}
+                        alt={option.fullName}
+                      />
+                    )}
+                  </div>
+                  <div className={styles['patient-info-wrapper']}>
+                    <Typography classes={{ root: styles['patient-name'] }}>
+                      {option.fullName}
+                    </Typography>
+                    <Typography classes={{ root: styles['patient-phone'] }}>
+                      {option.phoneNumber}
+                    </Typography>
+                  </div>
+                </div>
+              )}
+            />
+          </Form.Group>
+        )}
+        <div
+          className={clsx(styles['patient-mode-button'], { [styles.disabled]: isFinished })}
+          role='button'
+          tabIndex={0}
+          onPointerUp={changePatientMode}
+        >
+          <span>
+            {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
+          </span>
+        </div>
+        <Form.Group controlId='doctor'>
+          <Form.Label>{textForKey('Doctor')}</Form.Label>
+          <Typeahead
+            disabled={isFinished}
+            isValid={isDoctorValid}
+            placeholder={textForKey('Enter doctor name or phone')}
+            id='doctors'
+            emptyLabel={textForKey('No results...')}
+            searchText={textForKey('Searching...')}
+            filterBy={['firstName', 'lastName']}
+            labelKey='fullName'
+            options={doctors.filter((item) => !item.isInVacation)}
+            selected={doctor ? [doctor] : []}
+            onChange={handleDoctorChange}
+            renderMenu={(results, menuProps) => {
+              return (
+                <Menu {...menuProps}>
+                  {results.map((result, index) => (
+                    <MenuItem key={result.id} option={result} position={index}>
+                      <Typography classes={{ root: styles['result-item-text'] }}>
+                        {result.fullName}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              );
+            }}
+          />
+        </Form.Group>
+        <Form.Group controlId='service'>
+          <Form.Label>{textForKey('Service')}</Form.Label>
+          <Typeahead
+            disabled={isFinished}
+            isValid={isServiceValid}
+            placeholder={textForKey('Enter service name')}
+            id='doctors'
+            emptyLabel={`${textForKey('No results')}`}
+            searchText={`${textForKey('Searching')}...`}
+            filterBy={['name']}
+            labelKey='name'
+            options={doctor?.services || []}
+            selected={service ? [service] : []}
+            onChange={handleServiceChange}
+            renderMenu={(results, menuProps) => {
+              return (
+                <Menu {...menuProps}>
+                  {results.map((result, index) => (
+                    <MenuItem key={result.id} option={result} position={index}>
+                      <Typography classes={{ root: styles['result-item-text'] }}>
+                        {result.name}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              );
+            }}
+          />
+        </Form.Group>
+        <Form.Group className={styles['date-form-group']}>
+          <Form.Label>{textForKey('Date')}</Form.Label>
+          <Form.Control
+            disabled={isFinished}
+            value={moment(appointmentDate).format('DD MMMM YYYY')}
+            ref={datePickerAnchor}
+            readOnly
+            onClick={handleDateFieldClick}
+          />
+        </Form.Group>
+        <InputGroup className={styles.inputGroup}>
+          <Form.Group
+            className={styles.formGroup}
+            controlId='startTime'
+          >
+            <Form.Label>{textForKey('Start time')}</Form.Label>
+            <Form.Control
+              as='select'
+              onChange={handleHourChange}
+              value={startTime}
+              disabled={isFetchingHours || availableStartTime.length === 0}
+              custom
+            >
+              {availableStartTime.map((item) => (
+                <option key={`start-${item}`} value={item}>
+                  {item}
+                </option>
+              ))}
+              {availableStartTime.length === 0 && (
+                <option value={-1}>{textForKey('No available time')}</option>
+              )}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group
+            className={styles.formGroup}
+            controlId='endTime'
+          >
+            <Form.Label>{textForKey('End time')}</Form.Label>
+            <Form.Control
+              as='select'
+              onChange={handleHourChange}
+              value={endTime}
+              disabled={isFetchingHours || availableEndTime.length === 0}
+              custom
+            >
+              {availableEndTime.map((item) => (
+                <option key={`end-${item}`} value={item}>
+                  {item}
+                </option>
+              ))}
+              {availableEndTime.length === 0 && (
+                <option value={-1}>{textForKey('No available time')}</option>
+              )}
+            </Form.Control>
+          </Form.Group>
+        </InputGroup>
+        <Form.Group controlId='isUrgent'>
+          <Form.Check
+            onChange={handleIsUrgentChange}
+            type='checkbox'
+            checked={isUrgent}
+            label={textForKey('Is urgent')}
+          />
+        </Form.Group>
+        <Form.Group controlId='description'>
+          <Form.Label>{textForKey('Notes')}</Form.Label>
+          <InputGroup>
+            <Form.Control
+              as='textarea'
+              value={appointmentNote}
+              onChange={handleNoteChange}
+              aria-label='With textarea'
             />
           </InputGroup>
         </Form.Group>
-      )}
-      {isNewPatient && (
-        <Form.Group ref={birthdayPickerAnchor}>
-          <Form.Label>{textForKey('Birthday')}</Form.Label>
-          <Form.Control
-            value={
-              patientBirthday
-                ? moment(patientBirthday).format('DD MMM YYYY')
-                : ''
-            }
-            readOnly
-            onClick={handleOpenBirthdayPicker}
-          />
-        </Form.Group>
-      )}
-      {!isNewPatient && (
-        <Form.Group controlId='patient'>
-          <Form.Label>{textForKey('Patient')}</Form.Label>
-          <AsyncTypeahead
-            disabled={isFinished}
-            isValid={isPatientValid}
-            placeholder={textForKey('Enter patient name or phone')}
-            id='patients'
-            emptyLabel={`${textForKey('No results')}...`}
-            searchText={`${textForKey('Searching')}...`}
-            isLoading={loading.patients}
-            filterBy={filterByCallback}
-            minLength={2}
-            labelKey='fullName'
-            onSearch={handleSearchQueryChange}
-            options={patients}
-            selected={patient ? [patient] : []}
-            onChange={handlePatientChange}
-            renderMenuItemChildren={(option) => (
-              <div className={styles['patient-result-item']} id={option.id}>
-                <div className={styles['patient-avatar-wrapper']}>
-                  {option.photo == null ? (
-                    <IconAvatar/>
-                  ) : (
-                    <img
-                      src={urlToLambda(option.photo, 40)}
-                      alt={option.fullName}
-                    />
-                  )}
-                </div>
-                <div className={styles['patient-info-wrapper']}>
-                  <Typography classes={{ root: styles['patient-name'] }}>
-                    {option.fullName}
-                  </Typography>
-                  <Typography classes={{ root: styles['patient-phone'] }}>
-                    {option.phoneNumber}
-                  </Typography>
-                </div>
-              </div>
-            )}
-          />
-        </Form.Group>
-      )}
-      <div
-        className={clsx(styles['patient-mode-button'], { [styles.disabled]: isFinished })}
-        role='button'
-        tabIndex={0}
-        onClick={changePatientMode}
-      >
-        <span>
-          {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
-        </span>
-      </div>
-      <Form.Group controlId='doctor'>
-        <Form.Label>{textForKey('Doctor')}</Form.Label>
-        <Typeahead
-          disabled={isFinished}
-          isValid={isDoctorValid}
-          placeholder={textForKey('Enter doctor name or phone')}
-          id='doctors'
-          emptyLabel={textForKey('No results...')}
-          searchText={textForKey('Searching...')}
-          filterBy={['firstName', 'lastName']}
-          labelKey='fullName'
-          options={doctors.filter((item) => !item.isInVacation)}
-          selected={doctor ? [doctor] : []}
-          onChange={handleDoctorChange}
-          renderMenu={(results, menuProps) => {
-            return (
-              <Menu {...menuProps}>
-                {results.map((result, index) => (
-                  <MenuItem key={result.id} option={result} position={index}>
-                    <Typography classes={{ root: styles['result-item-text'] }}>
-                      {result.fullName}
-                    </Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            );
-          }}
-        />
-      </Form.Group>
-      <Form.Group controlId='service'>
-        <Form.Label>{textForKey('Service')}</Form.Label>
-        <Typeahead
-          disabled={isFinished}
-          isValid={isServiceValid}
-          placeholder={textForKey('Enter service name')}
-          id='doctors'
-          emptyLabel={`${textForKey('No results')}`}
-          searchText={`${textForKey('Searching')}...`}
-          filterBy={['name']}
-          labelKey='name'
-          options={doctor?.services || []}
-          selected={service ? [service] : []}
-          onChange={handleServiceChange}
-          renderMenu={(results, menuProps) => {
-            return (
-              <Menu {...menuProps}>
-                {results.map((result, index) => (
-                  <MenuItem key={result.id} option={result} position={index}>
-                    <Typography classes={{ root: styles['result-item-text'] }}>
-                      {result.name}
-                    </Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            );
-          }}
-        />
-      </Form.Group>
-      <Form.Group className={styles['date-form-group']}>
-        <Form.Label>{textForKey('Date')}</Form.Label>
-        <Form.Control
-          disabled={isFinished}
-          value={moment(appointmentDate).format('DD MMMM YYYY')}
-          ref={datePickerAnchor}
-          readOnly
-          onClick={handleDateFieldClick}
-        />
-      </Form.Group>
-      <InputGroup>
-        <Form.Group style={{ width: '50%' }} controlId='startTime'>
-          <Form.Label>{textForKey('Start time')}</Form.Label>
-          <Form.Control
-            as='select'
-            onChange={handleHourChange}
-            value={startTime}
-            disabled={isFetchingHours || availableStartTime.length === 0}
-            custom
-          >
-            {availableStartTime.map((item) => (
-              <option key={`start-${item}`} value={item}>
-                {item}
-              </option>
-            ))}
-            {availableStartTime.length === 0 && (
-              <option value={-1}>{textForKey('No available time')}</option>
-            )}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group style={{ width: '50%' }} controlId='endTime'>
-          <Form.Label>{textForKey('End time')}</Form.Label>
-          <Form.Control
-            as='select'
-            onChange={handleHourChange}
-            value={endTime}
-            disabled={isFetchingHours || availableEndTime.length === 0}
-            custom
-          >
-            {availableEndTime.map((item) => (
-              <option key={`end-${item}`} value={item}>
-                {item}
-              </option>
-            ))}
-            {availableEndTime.length === 0 && (
-              <option value={-1}>{textForKey('No available time')}</option>
-            )}
-          </Form.Control>
-        </Form.Group>
-      </InputGroup>
-      <Form.Group controlId='isUrgent'>
-        <Form.Check
-          onChange={handleIsUrgentChange}
-          type='checkbox'
-          checked={isUrgent}
-          label={textForKey('Is urgent')}
-        />
-      </Form.Group>
-      <Form.Group controlId='description'>
-        <Form.Label>{textForKey('Notes')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            as='textarea'
-            value={appointmentNote}
-            onChange={handleNoteChange}
-            aria-label='With textarea'
-          />
-        </InputGroup>
-      </Form.Group>
-      {datePicker}
-      {birthdayPicker}
-    </EasyPlanModal>
+        {datePicker}
+        {birthdayPicker}
+      </Box>
+    </EASModal>
   );
 };
 
-export default AddAppointmentModal;
+export default React.memo(AddAppointmentModal, areComponentPropsEqual);
 
 AddAppointmentModal.propTypes = {
   open: PropTypes.bool,

@@ -28,6 +28,7 @@ import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
 import MainMenu from './MainMenu/MainMenu';
 import PageHeader from './PageHeader/PageHeader';
 import styles from './MainComponent.module.scss';
+import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 
 const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
 const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
@@ -200,7 +201,7 @@ const MainComponent = (
   );
 };
 
-export default MainComponent;
+export default React.memo(MainComponent, areComponentPropsEqual);
 
 MainComponent.propTypes = {
   currentPath: PropTypes.string,

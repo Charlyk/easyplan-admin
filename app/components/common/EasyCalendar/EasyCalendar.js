@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import Header from "./Header";
 import Hours from "./Hours";
 import ColumnsWrapper from "./ColumnsWrapper";
@@ -45,7 +46,7 @@ const EasyCalendar = (
   )
 };
 
-export default EasyCalendar;
+export default React.memo(EasyCalendar, areComponentPropsEqual);
 
 EasyCalendar.propTypes = {
   hourIndicator: PropTypes.bool,

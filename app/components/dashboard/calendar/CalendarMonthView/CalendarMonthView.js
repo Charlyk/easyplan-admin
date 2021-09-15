@@ -12,6 +12,7 @@ import { textForKey } from '../../../../../utils/localization';
 import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
 import ScheduleItem from './ScheduleItem';
 import styles from './CalendarMonthView.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   const dispatch = useDispatch();
@@ -111,7 +112,7 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   return <div className={styles['month-view']}>{monthDays.map(renderDayItem)}</div>;
 };
 
-export default CalendarMonthView;
+export default React.memo(CalendarMonthView, areComponentPropsEqual);
 
 CalendarMonthView.propTypes = {
   viewDate: PropTypes.instanceOf(Date),

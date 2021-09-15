@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup'
 import { toast } from 'react-toastify';
 
-import generateReducerActions from '../../../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
 import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
@@ -14,115 +13,22 @@ import {
   deletePauseRecord,
   fetchPausesAvailableTime
 } from "../../../../../../middleware/api/pauses";
+import reducer, {
+  initialState,
+  setShowDatePicker,
+  setAvailableAllTime,
+  setComment,
+  setEndHour,
+  setIsFetchingHours,
+  setPauseDate,
+  setStartHour,
+  setIsDeleting,
+  setIsLoading,
+} from './AddPauseModal.reducer';
 import styles from './AddPauseModal.module.scss';
-
-const filterAvailableTime = (availableTime, startTime) => {
-  return availableTime.filter((item) => {
-    const [startH, startM] = startTime.split(':');
-    const [h, m] = item.split(':');
-    const startDate = moment().set({
-      hour: parseInt(startH),
-      minute: parseInt(startM),
-      second: 0,
-    });
-    const endDate = moment().set({
-      hour: parseInt(h),
-      minute: parseInt(m),
-      second: 0,
-    });
-    const diff = Math.ceil(endDate.diff(startDate) / 1000 / 60);
-    return diff >= 15;
-  });
-};
-
-const initialState = {
-  showDatePicker: false,
-  pauseDate: new Date(),
-  startHour: '',
-  endHour: '',
-  comment: '',
-  isLoading: false,
-  availableAllTime: [],
-  availableStartTime: [],
-  availableEndTime: [],
-  isFetchingHours: false,
-  isDeleting: false,
-};
-
-const reducerTypes = {
-  setShowDatePicker: 'setShowDatePicker',
-  setPauseDate: 'setPauseDate',
-  setStartHour: 'setStartHour',
-  setEndHour: 'setEndHour',
-  setComment: 'setComment',
-  setIsLoading: 'setIsLoading',
-  setAvailableAllTime: 'setAvailableAllTime',
-  setAvailableStartTime: 'setAvailableStartTime',
-  setAvailableEndTime: 'setAvailableEndTime',
-  setIsFetchingHours: 'setIsFetchingHours',
-  setIsDeleting: 'setIsDeleting',
-};
-
-const actions = generateReducerActions(reducerTypes);
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setShowDatePicker:
-      return { ...state, showDatePicker: action.payload };
-    case reducerTypes.setPauseDate:
-      return { ...state, pauseDate: action.payload, showDatePicker: false };
-    case reducerTypes.setStartHour: {
-      const startHour = action.payload;
-      const endHour = state.endHour;
-      const availableEndTime = filterAvailableTime(
-        state.availableAllTime,
-        startHour,
-      );
-      return {
-        ...state,
-        startHour,
-        availableEndTime,
-        endHour: availableEndTime.includes(endHour)
-          ? endHour
-          : availableEndTime.length > 0
-            ? availableEndTime[0]
-            : '',
-      };
-    }
-    case reducerTypes.setEndHour:
-      return { ...state, endHour: action.payload };
-    case reducerTypes.setComment:
-      return { ...state, comment: action.payload };
-    case reducerTypes.setIsLoading:
-      return { ...state, isLoading: action.payload };
-    case reducerTypes.setAvailableAllTime: {
-      const availableAllTime = action.payload;
-      const startHour =
-        availableAllTime?.length > 0 && state.startHour.length === 0
-          ? availableAllTime[0]
-          : state.startHour;
-      const availableStartTime = availableAllTime;
-      const availableEndTime = filterAvailableTime(availableAllTime, startHour);
-      return {
-        ...state,
-        availableAllTime,
-        availableStartTime,
-        availableEndTime,
-        startHour,
-      };
-    }
-    case reducerTypes.setAvailableStartTime:
-      return { ...state, availableStartTime: action.payload };
-    case reducerTypes.setAvailableEndTime:
-      return { ...state, availableEndTime: action.payload };
-    case reducerTypes.setIsFetchingHours:
-      return { ...state, isFetchingHours: action.payload };
-    case reducerTypes.setIsDeleting:
-      return { ...state, isDeleting: action.payload };
-    default:
-      return state;
-  }
-};
+import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
+import Box from "@material-ui/core/Box";
+import EASModal from "../../../../common/modals/EASModal";
 
 const AddPauseModal = (
   {
@@ -165,32 +71,32 @@ const AddPauseModal = (
     }
     const startHour = moment(startTime).format('HH:mm');
     const endHour = moment(endTime).format('HH:mm');
-    localDispatch(actions.setStartHour(startHour));
-    localDispatch(actions.setEndHour(endHour));
+    localDispatch(setStartHour(startHour));
+    localDispatch(setEndHour(endHour));
   }, [startTime, endTime]);
 
   useEffect(() => {
     if (viewDate != null && typeof viewDate === 'object') {
-      localDispatch(actions.setPauseDate(viewDate.toDate()));
+      localDispatch(setPauseDate(viewDate.toDate()));
     }
   }, [viewDate]);
 
   useEffect(() => {
-    localDispatch(actions.setComment(defaultComment));
+    localDispatch(setComment(defaultComment));
   }, [defaultComment]);
 
   const fetchPauseAvailableTime = async () => {
-    localDispatch(actions.setIsFetchingHours(true));
+    localDispatch(setIsFetchingHours(true));
     try {
       const date = moment(pauseDate | viewDate).format('YYYY-MM-DD')
       const response = await fetchPausesAvailableTime(date, doctor.id);
       const { data: availableTime } = response;
-      localDispatch(actions.setAvailableAllTime(availableTime));
+      localDispatch(setAvailableAllTime(availableTime));
       updateEndTimeBasedOnService(availableTime);
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsFetchingHours(false));
+      localDispatch(setIsFetchingHours(false));
     }
   };
 
@@ -212,16 +118,16 @@ const AddPauseModal = (
         })
         .add(15, 'minutes')
         .format('HH:mm');
-      localDispatch(actions.setEndHour(end));
+      localDispatch(setEndHour(end));
     }, 300);
   };
 
   const handleDateChange = (newDate) => {
-    localDispatch(actions.setPauseDate(newDate));
+    localDispatch(setPauseDate(newDate));
   };
 
   const handleCloseDatePicker = () => {
-    localDispatch(actions.setShowDatePicker(false));
+    localDispatch(setShowDatePicker(false));
   };
 
   const handleCreateSchedule = async () => {
@@ -229,7 +135,7 @@ const AddPauseModal = (
       return;
     }
     // toggle loading spinner
-    localDispatch(actions.setIsLoading(true));
+    localDispatch(setIsLoading(true));
     try {
       // build request body
       const startHourParts = startHour.split(':');
@@ -259,38 +165,38 @@ const AddPauseModal = (
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsLoading(false));
+      localDispatch(setIsLoading(false));
     }
   };
 
   const handleDeletePause = async () => {
-    localDispatch(actions.setIsDeleting(true));
+    localDispatch(setIsDeleting(true));
     try {
       await deletePauseRecord(id);
       onClose();
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsDeleting(false));
+      localDispatch(setIsDeleting(false));
     }
   }
 
   const handleDateFieldClick = () => {
-    localDispatch(actions.setShowDatePicker(true));
+    localDispatch(setShowDatePicker(true));
   };
 
   const handleCommentChange = (event) => {
-    localDispatch(actions.setComment(event.target.value));
+    localDispatch(setComment(event.target.value));
   };
 
   const handleHourChange = (event) => {
     const targetId = event.target.id;
     switch (targetId) {
       case 'startTime':
-        localDispatch(actions.setStartHour(event.target.value));
+        localDispatch(setStartHour(event.target.value));
         break;
       case 'endTime':
-        localDispatch(actions.setEndHour(event.target.value));
+        localDispatch(setEndHour(event.target.value));
         break;
     }
   };
@@ -317,87 +223,88 @@ const AddPauseModal = (
   };
 
   return (
-    <EasyPlanModal
+    <EASModal
       onClose={onClose}
       open={open}
+      paperClass={styles.modalPaper}
       className={styles['add-pause-root']}
       title={`${textForKey('Add pause')}: ${doctor?.firstName} ${
         doctor?.lastName
       }`}
       onNegativeClick={handleDeletePause}
-      isDestroyableLoading={isDeleting}
-      isDestroyableDisabled={isDeleting || isLoading}
-      isPositiveDisabled={!isFormValid() || isLoading}
+      isPositiveDisabled={!isFormValid() || isLoading || isDeleting}
       onDestroyClick={id != null && handleDeletePause}
-      onPositiveClick={handleCreateSchedule}
-      isPositiveLoading={isLoading}
+      onPrimaryClick={handleCreateSchedule}
+      isPositiveLoading={isLoading || isDeleting}
     >
-      <Form.Group className={styles['date-form-group']}>
-        <Form.Label>{textForKey('Date')}</Form.Label>
-        <Form.Control
-          value={moment(pauseDate).format('DD MMMM YYYY')}
-          ref={datePickerAnchor}
-          readOnly
-          onClick={handleDateFieldClick}
-        />
-      </Form.Group>
-      <InputGroup>
-        <Form.Group style={{ width: '50%' }} controlId='startTime'>
-          <Form.Label>{textForKey('Start time')}</Form.Label>
+      <Box display='flex' flexDirection='column' padding='16px'>
+        <Form.Group className={styles['date-form-group']}>
+          <Form.Label>{textForKey('Date')}</Form.Label>
           <Form.Control
-            as='select'
-            onChange={handleHourChange}
-            value={startHour}
-            disabled={isFetchingHours || availableStartTime.length === 0}
-            custom
-          >
-            {availableStartTime.map((item) => (
-              <option key={`start-${item}`} value={item}>
-                {item}
-              </option>
-            ))}
-            {availableStartTime.length === 0 && (
-              <option value={-1}>{textForKey('No available time')}</option>
-            )}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group style={{ width: '50%' }} controlId='endTime'>
-          <Form.Label>{textForKey('End time')}</Form.Label>
-          <Form.Control
-            as='select'
-            onChange={handleHourChange}
-            value={endHour}
-            disabled={isFetchingHours || availableEndTime.length === 0}
-            custom
-          >
-            {availableEndTime.map((item) => (
-              <option key={`end-${item}`} value={item}>
-                {item}
-              </option>
-            ))}
-            {availableEndTime.length === 0 && (
-              <option value={-1}>{textForKey('No available time')}</option>
-            )}
-          </Form.Control>
-        </Form.Group>
-      </InputGroup>
-      <Form.Group controlId='description'>
-        <Form.Label>{textForKey('Notes')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            as='textarea'
-            value={comment || ''}
-            onChange={handleCommentChange}
-            aria-label='With textarea'
+            value={moment(pauseDate).format('DD MMMM YYYY')}
+            ref={datePickerAnchor}
+            readOnly
+            onClick={handleDateFieldClick}
           />
+        </Form.Group>
+        <InputGroup className={styles.inputGroup}>
+          <Form.Group controlId='startTime' className={styles.formGroup}>
+            <Form.Label>{textForKey('Start time')}</Form.Label>
+            <Form.Control
+              as='select'
+              onChange={handleHourChange}
+              value={startHour}
+              disabled={isFetchingHours || availableStartTime.length === 0}
+              custom
+            >
+              {availableStartTime.map((item) => (
+                <option key={`start-${item}`} value={item}>
+                  {item}
+                </option>
+              ))}
+              {availableStartTime.length === 0 && (
+                <option value={-1}>{textForKey('No available time')}</option>
+              )}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId='endTime' className={styles.formGroup}>
+            <Form.Label>{textForKey('End time')}</Form.Label>
+            <Form.Control
+              as='select'
+              onChange={handleHourChange}
+              value={endHour}
+              disabled={isFetchingHours || availableEndTime.length === 0}
+              custom
+            >
+              {availableEndTime.map((item) => (
+                <option key={`end-${item}`} value={item}>
+                  {item}
+                </option>
+              ))}
+              {availableEndTime.length === 0 && (
+                <option value={-1}>{textForKey('No available time')}</option>
+              )}
+            </Form.Control>
+          </Form.Group>
         </InputGroup>
-      </Form.Group>
-      {datePicker}
-    </EasyPlanModal>
+        <Form.Group controlId='description'>
+          <Form.Label>{textForKey('Notes')}</Form.Label>
+          <InputGroup>
+            <Form.Control
+              as='textarea'
+              value={comment || ''}
+              onChange={handleCommentChange}
+              aria-label='With textarea'
+            />
+          </InputGroup>
+        </Form.Group>
+        {datePicker}
+      </Box>
+    </EASModal>
   );
 };
 
-export default AddPauseModal;
+export default React.memo(AddPauseModal, areComponentPropsEqual);
 
 AddPauseModal.propTypes = {
   open: PropTypes.bool,

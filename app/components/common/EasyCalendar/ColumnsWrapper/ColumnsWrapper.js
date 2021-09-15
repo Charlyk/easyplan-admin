@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 import Column from "./Column";
 import styles from './ColumnsWrapper.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
-export default function ColumnsWrapper(
+const ColumnsWrapper = (
   {
     schedules,
     hours,
@@ -13,7 +14,7 @@ export default function ColumnsWrapper(
     onAddSchedule,
     onScheduleSelected
   }
-) {
+) => {
   const isSingleMode = columns.length === 1;
 
   function getSchedulesForColumn(column) {
@@ -38,6 +39,8 @@ export default function ColumnsWrapper(
     </div>
   )
 }
+
+export default React.memo(ColumnsWrapper, areComponentPropsEqual);
 
 ColumnsWrapper.propTypes = {
   hours: PropTypes.arrayOf(PropTypes.string),

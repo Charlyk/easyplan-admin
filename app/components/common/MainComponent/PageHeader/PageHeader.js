@@ -17,6 +17,7 @@ import { textForKey } from '../../../../../utils/localization';
 import InvoicesButton from '../../../dashboard/InvoicesButton';
 import { Role } from "../../../../utils/constants";
 import styles from './PageHeader.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const ActionsSheet = dynamic(() => import('../../../../../components/common/ActionsSheet'));
 
@@ -128,7 +129,7 @@ const PageHeader = (
   );
 };
 
-export default PageHeader;
+export default React.memo(PageHeader, areComponentPropsEqual);
 
 PageHeader.propTypes = {
   title: PropTypes.string,

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Typography from "@material-ui/core/Typography";
 import IconUmbrella from "../../../icons/iconUmbrella";
 import styles from './Header.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const HeaderItem = ({ item, onItemClick }) => {
   const handleItemClick = () => {
@@ -31,7 +32,7 @@ const HeaderItem = ({ item, onItemClick }) => {
   )
 }
 
-export default HeaderItem;
+export default React.memo(HeaderItem, areComponentPropsEqual);
 
 HeaderItem.propTypes = {
   item: PropTypes.shape({
