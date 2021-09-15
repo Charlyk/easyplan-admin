@@ -4,7 +4,6 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from "@material-ui/core/MenuItem";
 import EASModal from "../../../../../common/modals/EASModal";
 import { textForKey } from "../../../../../../../utils/localization";
-import styles from './PagesListModal.module.scss'
 
 const PagesListModal = ({ open, pages, onClose, onSelect }) => {
   return (
