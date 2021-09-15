@@ -1,14 +1,13 @@
 import React, { useRef } from "react";
-
 import PropTypes from 'prop-types';
-import { Form } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 import Image from 'next/image';
+import Paper from "@material-ui/core/Paper";
 import { Menu, MenuItem, Typeahead } from "react-bootstrap-typeahead";
-import { Paper } from "@material-ui/core";
 import clsx from "clsx";
 
 import { textForKey } from "../../../../../utils/localization";
-import { getServiceName } from "../../../../../utils/helperFuncs";
+import getServiceName from "../../../../../utils/getServiceName";
 import FinalServiceItem from "../../../doctors/FinalServiceItem";
 import LoadingButton from "../../../../../components/common/LoadingButton";
 import ToothIcon from '../../../../../public/icon-tooth.png';

@@ -1,15 +1,19 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup'
 import { toast } from 'react-toastify';
 
-import { generateReducerActions } from '../../../../../../utils/helperFuncs';
+import generateReducerActions from '../../../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
 import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
-import { createPauseRecord, deletePauseRecord, fetchPausesAvailableTime } from "../../../../../../middleware/api/pauses";
+import {
+  createPauseRecord,
+  deletePauseRecord,
+  fetchPausesAvailableTime
+} from "../../../../../../middleware/api/pauses";
 import styles from './AddPauseModal.module.scss';
 
 const filterAvailableTime = (availableTime, startTime) => {

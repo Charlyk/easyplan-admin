@@ -1,8 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
-
-import { Box, CircularProgress, Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 import axios from "axios";
 

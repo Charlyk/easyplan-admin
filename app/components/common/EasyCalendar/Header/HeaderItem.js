@@ -1,9 +1,9 @@
 import React from "react";
-import PropTypes from 'prop-types';
-import styles from './Header.module.scss';
-import { Typography } from "@material-ui/core";
 import clsx from "clsx";
+import PropTypes from 'prop-types';
+import Typography from "@material-ui/core/Typography";
 import IconUmbrella from "../../../icons/iconUmbrella";
+import styles from './Header.module.scss';
 
 const HeaderItem = ({ item, onItemClick }) => {
   const handleItemClick = () => {

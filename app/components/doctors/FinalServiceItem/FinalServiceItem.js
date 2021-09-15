@@ -1,11 +1,12 @@
 import React from 'react';
-import { IconButton, Typography } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import IconRemove from '@material-ui/icons/Clear';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import IconCheckMark from '../../icons/iconCheckMark';
-import { getServiceName } from '../../../../utils/helperFuncs';
+import getServiceName from '../../../../utils/getServiceName';
 import { textForKey } from '../../../../utils/localization';
 import styles from './FinalServiceItem.module.scss';
 

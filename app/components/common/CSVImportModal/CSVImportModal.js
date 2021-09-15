@@ -33,7 +33,7 @@ import styles from './CSVImportModal.module.scss';
 
 const maxAllowedRows = 10000;
 
-const CSVImportModal = ({ open, title, importBtnTitle, note, fields, isLoading, onImport, onClose }) => {
+const CSVImportModal = ({ open, title, iconTitle, iconSubtitle, importBtnTitle, note, fields, isLoading, onImport, onClose }) => {
   const [{ data, file, mappedFields, snackbar, rowsCount }, localDispatch] = useReducer(reducer, initialState);
 
   const btnTitle = useMemo(() => {
@@ -162,7 +162,10 @@ const CSVImportModal = ({ open, title, importBtnTitle, note, fields, isLoading, 
                 preview: 10
               }}
             >
-              <IconsUploadCSV/>
+              <IconsUploadCSV
+                title={iconTitle}
+                subtitle={iconSubtitle?.replace('#', `${maxAllowedRows}`)}
+              />
             </CSVReader>
           </Box>
         ) : (
@@ -261,6 +264,8 @@ CSVImportModal.propTypes = {
   title: PropTypes.string,
   importBtnTitle: PropTypes.string,
   note: PropTypes.string,
+  iconTitle: PropTypes.string,
+  iconSubtitle: PropTypes.string,
   isLoading: PropTypes.bool,
   onClose: PropTypes.func,
   onImport: PropTypes.func,

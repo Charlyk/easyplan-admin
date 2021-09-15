@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import isEqual from 'lodash/isEqual';
 import { useRouter } from "next/router";
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 
 import IconSuccess from '../../../icons/iconSuccess';

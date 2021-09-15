@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, Typography } from '@material-ui/core';
-import { Pagination } from "@material-ui/lab";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
+import Pagination from "@material-ui/lab/Pagination";
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 

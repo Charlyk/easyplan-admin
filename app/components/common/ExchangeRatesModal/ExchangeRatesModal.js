@@ -1,20 +1,18 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
-import {
-  Button,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 import axios from "axios";
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';

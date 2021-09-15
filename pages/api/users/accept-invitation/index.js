@@ -1,6 +1,8 @@
 import axios from "axios";
 import { handler } from "../../handler";
-import { getSubdomain, setCookies, updatedServerUrl } from "../../../../utils/helperFuncs";
+import getSubdomain from "../../../../utils/getSubdomain";
+import updatedServerUrl from "../../../../utils/updateServerUrl";
+import setCookies from '../../../../utils/setCookies';
 import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default async (req, res) => {

@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PropTypes from 'prop-types';
-import { Button, Form, Image, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image';
+import InputGroup from 'react-bootstrap/InputGroup'
 import PhoneInput from 'react-phone-input-2';
 import clsx from "clsx";
 
@@ -11,8 +14,8 @@ import LoadingButton from '../../../../../components/common/LoadingButton';
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
-import styles from './RegisterForm.module.scss';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
+import styles from './RegisterForm.module.scss';
 
 const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);

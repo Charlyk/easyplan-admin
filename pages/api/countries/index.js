@@ -1,7 +1,8 @@
 import axios from "axios";
 import cookie from 'cookie';
 import { handler } from "../handler";
-import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import getSubdomain from "../../../utils/getSubdomain";
+import updatedServerUrl from "../../../utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
 export default async function countries(req, res) {
@@ -22,11 +23,10 @@ export default async function countries(req, res) {
 
 async function fetchCountries(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${updatedServerUrl(req)}/countries`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
+  let headers = {
+    [HeaderKeys.subdomain]: getSubdomain(req),
+  };
+  if (clinic_id) headers[HeaderKeys.clinicId] = clinic_id;
+  if (auth_token) headers[HeaderKeys.authorization] = auth_token;
+  return axios.get(`${updatedServerUrl(req)}/countries`, { headers });
 }

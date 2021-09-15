@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 import { EmailRegex, Role } from '../../../app/utils/constants';
 import { textForKey } from '../../../utils/localization';

@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { IconButton, Tooltip } from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
-import { Image } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import Image from 'react-bootstrap/Image';
+import { useDispatch } from 'react-redux';
 
 import IconAvatar from '../../../icons/iconAvatar';
 import IconEdit from '../../../icons/iconEdit';
@@ -11,13 +13,12 @@ import IconNotifications from '../../../icons/iconNotifications';
 import IconPlus from '../../../icons/iconPlus';
 import IconTurnOff from '../../../icons/iconTurnOff';
 import { setPaymentModal } from '../../../../../redux/actions/actions';
-import { setIsExchangeRatesModalOpen } from '../../../../../redux/actions/exchangeRatesActions';
 import { textForKey } from '../../../../../utils/localization';
-import ActionsSheet from '../../../../../components/common/ActionsSheet';
 import InvoicesButton from '../../../dashboard/InvoicesButton';
-import { isExchangeRatesUpdateRequiredSelector } from "../../../../../redux/selectors/clinicSelector";
 import { Role } from "../../../../utils/constants";
 import styles from './PageHeader.module.scss';
+
+const ActionsSheet = dynamic(() => import('../../../../../components/common/ActionsSheet'));
 
 const actions = [
   {

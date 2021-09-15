@@ -1,17 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
-import {
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
-import InviteUserModal from '../../../../../components/common/InviteUserModal';
 import { Role } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import {
@@ -22,7 +19,6 @@ import {
   updateUserCashierStatus
 } from "../../../../../middleware/api/users";
 import { deleteInvitation } from "../../../../../middleware/api/clinic";
-import UserDetailsModal from '../UserDetailsModal';
 import UserItem from '../UserItem';
 import UsersHeader from '../UserHeader';
 import reducer, {
@@ -39,6 +35,10 @@ import reducer, {
   setIsDeleting,
 } from './UsersList.reducer';
 import styles from './UsersList.module.scss';
+
+const UserDetailsModal = dynamic(() => import('../UserDetailsModal'));
+const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const InviteUserModal = dynamic(() => import('../../../../../components/common/InviteUserModal'));
 
 const UsersList = (
   {

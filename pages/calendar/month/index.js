@@ -1,9 +1,11 @@
 import React from "react";
-import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import moment from "moment-timezone";
+import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarMonthView from "../../../app/components/dashboard/calendar/CalendarMonthView";
+import handleRequestError from '../../../utils/handleRequestError';
+import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectUserTo from '../../../utils/redirectUserTo';
 import { fetchAppData } from "../../../middleware/api/initialization";
-import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
 import { Role } from "../../../app/utils/constants";
 import { parseCookies } from "../../../utils";
 
@@ -34,11 +36,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/month');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
     // filter clinic doctors
     const doctors = currentClinic?.users?.filter((item) =>
@@ -57,7 +59,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
         doctorId: parseInt(doctorId),
         date: query.date,
         authToken,
-        ...appData,
+        ...appData.data,
       }
     }
   } catch (error) {

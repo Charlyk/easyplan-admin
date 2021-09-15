@@ -1,12 +1,12 @@
 import React, { useReducer } from 'react';
-
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 
 import { YClientAPIUrl } from '../../../../app/utils/constants';
-import { generateReducerActions } from '../../../../utils/helperFuncs';
+import generateReducerActions from '../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../LoadingButton';
 import styles from '../../../../styles/AuthenticationStep.module.scss'

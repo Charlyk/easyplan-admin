@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { getCurrentUser } from "../middleware/api/auth";
 import LoginWrapper from "../app/components/common/LoginWrapper";
 import { wrapper } from "../store";

@@ -2,7 +2,8 @@ import { authorized } from "../authorized";
 import cookie from "cookie";
 import axios from "axios";
 import { handler } from "../handler";
-import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import getSubdomain from "../../../utils/getSubdomain";
+import updatedServerUrl from "../../../utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
 const emptyResponse = {

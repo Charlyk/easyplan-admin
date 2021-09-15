@@ -1,9 +1,12 @@
 import React from "react";
+import moment from "moment-timezone";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
-import moment from "moment-timezone";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import { getCurrentWeek, handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
+import getCurrentWeek from "../../../utils/getCurrentWeek";
+import handleRequestError from '../../../utils/handleRequestError';
+import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectUserTo from '../../../utils/redirectUserTo';
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { Role } from "../../../app/utils/constants";
 import { parseCookies } from "../../../utils";
@@ -49,13 +52,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
 
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers, queryDate);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
 
     // check if user is on the allowed page
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/week');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
 
     // fetch schedules for current week
@@ -86,7 +89,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
         date: query.date,
         schedules: response.data,
         authToken,
-        ...appData,
+        ...appData.data,
       },
     };
   } catch (error) {

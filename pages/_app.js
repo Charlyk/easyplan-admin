@@ -1,15 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { PubNubProvider } from "pubnub-react";
-import { wrapper } from "../store";
+import dynamic from 'next/dynamic';
 import PubNub from "pubnub";
 import NextNprogress from 'nextjs-progressbar';
 import Head from 'next/head';
-import paths from "../utils/paths";
 import { useRouter } from "next/router";
-import AddXRay from "../app/components/dashboard/patients/AddXRay";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+
 import {
-  createClinicSelector,
   patientNoteModalSelector,
   patientXRayModalSelector,
 } from "../redux/selectors/modalsSelector";
@@ -18,16 +17,15 @@ import {
   setPatientXRayModal,
   triggerUserLogout
 } from "../redux/actions/actions";
-import AddNote from "../app/components/common/modals/AddNote";
-import FullScreenImageModal from "../components/common/FullScreenImageModal";
 import { imageModalSelector } from "../redux/selectors/imageModalSelector";
 import { setImageModal } from "../redux/actions/imageModalActions";
-import ConfirmationModal from "../app/components/common/modals/ConfirmationModal";
 import { textForKey } from "../utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
-import { ToastContainer } from "react-toastify";
 import { signOut } from "../middleware/api/auth";
 import { fetchAppData } from "../middleware/api/initialization";
+import { UnauthorizedPaths } from "../app/utils/constants";
+import { wrapper } from "../store";
+import paths from "../utils/paths";
 import 'moment/locale/ro';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-input-2/lib/style.css';
@@ -35,11 +33,15 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-color-palette/lib/css/styles.css";
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
-import { UnauthorizedPaths } from "../app/utils/constants";
+import '../utils'
+
+const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
+const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
+const FullScreenImageModal = dynamic(() => import("../components/common/FullScreenImageModal"));
+const ConfirmationModal = dynamic(() => import("../app/components/common/modals/ConfirmationModal"));
 
 const pubnub = new PubNub({
   publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
@@ -54,7 +56,6 @@ export default wrapper.withRedux(
     const patientXRayModal = useSelector(patientXRayModalSelector);
     const patientNoteModal = useSelector(patientNoteModalSelector);
     const imageModal = useSelector(imageModalSelector);
-    const createClinic = useSelector(createClinicSelector);
     const logout = useSelector(logoutSelector);
     const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
 
@@ -68,7 +69,7 @@ export default wrapper.withRedux(
     const fetchInitializationData = async () => {
       try {
         const appData = await fetchAppData();
-        setState(appData);
+        setState(appData.data);
       } catch (error) {
         // ignore this error
       }
@@ -92,10 +93,6 @@ export default wrapper.withRedux(
 
     const handleCloseImageModal = () => {
       dispatch(setImageModal({ open: false }));
-    };
-
-    const handleClinicCreated = async () => {
-      await router.replace(router.asPath);
     };
 
     const handleUserLogout = async () => {

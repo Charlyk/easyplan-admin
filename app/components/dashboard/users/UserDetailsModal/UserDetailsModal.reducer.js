@@ -1,5 +1,4 @@
 import { Role } from "../../../../utils/constants";
-import { generateReducerActions } from "../../../../../utils/helperFuncs";
 import { createSlice } from "@reduxjs/toolkit";
 
 export const initialData = {

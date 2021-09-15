@@ -1,27 +1,26 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-
-import {
-  Box,
-  FormControlLabel,
-  Checkbox,
-  Typography,
-  Menu,
-  MenuItem,
-} from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import Box from '@material-ui/core/Box';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Typography from '@material-ui/core/Typography';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../../../app/components/icons/iconArrowDown';
 import { YClientAPIUrl } from '../../../../app/utils/constants';
-import { generateReducerActions } from '../../../../utils/helperFuncs';
+import generateReducerActions from '../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../utils/localization';
-import EasyDatePicker from '../../EasyDatePicker';
 import LoadingButton from '../../LoadingButton';
 import styles from '../../../../styles/ImportSelectionStep.module.scss';
+
+const EasyDatePicker = dynamic(() => import('../../EasyDatePicker'));
 
 const initialState = {
   isLoading: false,

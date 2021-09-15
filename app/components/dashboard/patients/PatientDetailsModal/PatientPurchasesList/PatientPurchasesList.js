@@ -1,27 +1,24 @@
 import React, { useEffect, useReducer } from 'react';
-
-import {
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import clsx from "clsx";
+import axios from "axios";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import axios from "axios";
-import clsx from "clsx";
 
 import IconPrint from '../../../../icons/iconPrint';
 import { clinicCurrencySelector } from '../../../../../../redux/selectors/clinicSelector';
 import { updateInvoiceSelector } from '../../../../../../redux/selectors/invoicesSelector';
-import { formattedAmount } from '../../../../../../utils/helperFuncs';
+import formattedAmount from '../../../../../../utils/formattedAmount';
 import { textForKey } from '../../../../../../utils/localization';
 import { baseApiUrl } from "../../../../../../eas.config";
 import { reducer, initialState, actions } from './PatientPurchasesList.reducer';

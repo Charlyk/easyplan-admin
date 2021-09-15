@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import {
-  getRedirectUrlForUser,
-  setCookies
-} from "../../utils/helperFuncs";
+import Box from "@material-ui/core/Box";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography'
 import { useRouter } from "next/router";
+import getRedirectUrlForUser from '../../utils/getRedirectUrlForUser';
+import setCookies from '../../utils/setCookies';
 import { getCurrentUser } from "../../middleware/api/auth";
-import { Box, CircularProgress, Typography } from "@material-ui/core";
 import { textForKey } from "../../utils/localization";
 
 const Redirect = () => {

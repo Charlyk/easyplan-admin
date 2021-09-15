@@ -12,7 +12,7 @@ import {
   updateScheduleSelector
 } from "../../../../redux/selectors/scheduleSelector";
 import PatientsFilter from "../PatientsFilter";
-import { getCurrentWeek } from "../../../../utils/helperFuncs";
+import getCurrentWeek from "../../../../utils/getCurrentWeek";
 import { getSchedulesForInterval } from "../../../../middleware/api/schedules";
 import usePrevious from "../../../utils/usePrevious";
 import EasyCalendar from "../../common/EasyCalendar";

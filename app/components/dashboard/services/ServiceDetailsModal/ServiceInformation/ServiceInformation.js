@@ -1,13 +1,16 @@
 import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import {
-  Form,
-  ToggleButtonGroup,
-  ToggleButton,
-  InputGroup,
-} from 'react-bootstrap';
-import Typography from "@material-ui/core/Typography";
+import Form from 'react-bootstrap/Form';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Fade from '@material-ui/core/Fade';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
 import { useColor } from "react-color-palette";
 
 import IconMinus from '../../../../icons/iconMinus';

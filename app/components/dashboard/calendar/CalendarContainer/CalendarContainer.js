@@ -1,10 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
-
+import dynamic from 'next/dynamic';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch } from 'react-redux';
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { toast } from "react-toastify";
 
 import {
@@ -12,12 +11,15 @@ import {
   setPaymentModal,
   toggleAppointmentsUpdate,
 } from '../../../../../redux/actions/actions';
-import { redirectIfOnGeneralHost } from '../../../../../utils/helperFuncs';
+import {
+  importSchedulesFromFile,
+  requestDeleteSchedule
+} from "../../../../../middleware/api/schedules";
+import { HeaderKeys } from "../../../../utils/constants";
+import redirectIfOnGeneralHost from '../../../../../utils/redirectIfOnGeneralHost';
 import { textForKey } from '../../../../../utils/localization';
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
 import MainComponent from "../../../common/MainComponent/MainComponent";
 import AppointmentsCalendar from '../AppointmentsCalendar';
-import CalendarDoctors from '../CalendarDoctors';
 import reducer, {
   initialState,
   setParsedValue,
@@ -32,9 +34,10 @@ import reducer, {
   setShowImportModal,
 } from './CalendarContainer.reducer';
 import styles from './CalendarContainer.module.scss';
-import CSVImportModal from "../../../common/CSVImportModal";
-import { importSchedulesFromFile } from "../../../../../middleware/api/schedules";
-import { HeaderKeys } from "../../../../utils/constants";
+
+const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
+const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const CalendarDoctors = dynamic(() => import('../CalendarDoctors'));
 
 const importFields = [
   {
@@ -291,7 +294,7 @@ const CalendarContainer = (
     }
     localDispatch(setIsDeleting(true));
     try {
-      await axios.delete(`/api/schedules/${deleteSchedule.schedule.id}`);
+      await requestDeleteSchedule(deleteSchedule.schedule.id)
       localDispatch(
         setDeleteSchedule({ open: false, schedule: null }),
       );
@@ -328,6 +331,8 @@ const CalendarContainer = (
           isLoading={isUploading}
           fields={importFields}
           title={textForKey('Import schedules')}
+          iconTitle={textForKey('upload csv file')}
+          iconSubtitle={textForKey('n_schedules_only')}
           importBtnTitle={textForKey('import_n_schedules')}
           onClose={handleCloseImportModal}
           onImport={handleImportSchedules}

@@ -1,9 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
+import dynamic from 'next/dynamic';
 import { remove, cloneDeep, isEqual } from 'lodash';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
-import { CircularProgress } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import IconClose from '../../../icons/iconClose';
 import IconSuccess from '../../../icons/iconSuccess';
@@ -11,8 +12,11 @@ import { Role } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import LeftSideModal from '../../../common/LeftSideModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';
-import { deleteUserHoliday, getUserDetails, updateUserDetails } from "../../../../../middleware/api/users";
-import CreateHolidayModal from './CreateHolidayModal';
+import {
+  deleteUserHoliday,
+  getUserDetails,
+  updateUserDetails
+} from "../../../../../middleware/api/users";
 import DoctorForm from './DoctorForm';
 import reducer, {
   initialData,
@@ -25,6 +29,8 @@ import reducer, {
   setIsLoading,
 } from './UserDetailsModal.reducer';
 import styles from './UserDetailsModal.module.scss';
+
+const CreateHolidayModal = dynamic(() => import('./CreateHolidayModal'));
 
 const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
   const [

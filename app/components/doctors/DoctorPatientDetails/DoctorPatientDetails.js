@@ -1,27 +1,36 @@
 import React, { useEffect, useMemo, useReducer, useState } from 'react';
-
-import { CircularProgress } from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import sum from 'lodash/sum';
 import moment from 'moment-timezone';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useRouter } from "next/router";
 
 import IconAvatar from '../../icons/iconAvatar';
-import FinalizeTreatmentModal from '../../../../app/components/doctors/FinalizeTreatmentModal';
 import PatientDetails from '../PatientDetails';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../../../redux/actions/actions';
 import { textForKey } from '../../../../utils/localization';
-import { useRouter } from "next/router";
 import PatientTreatmentPlan from "../../../../app/components/common/PatientTreatmentPlan";
 import getTreatmentPlanURL from "../../../../app/utils/getTreatmentPlanURL";
-import { savePatientGeneralTreatmentPlan, updatePatientGeneralTreatmentPlan } from "../../../../middleware/api/patients";
+import {
+  savePatientGeneralTreatmentPlan,
+  updatePatientGeneralTreatmentPlan
+} from "../../../../middleware/api/patients";
 import getErrorMessage from "../../../../app/utils/getErrorMessage";
-import reducer, { initialState, actions } from './DoctorPatientDetails.reducer';
+import reducer, {
+  initialState,
+  actions
+} from './DoctorPatientDetails.reducer';
 import styles from './DoctorPatientDetails.module.scss';
+
+const FinalizeTreatmentModal = dynamic(() => import('../../../../app/components/doctors/FinalizeTreatmentModal'));
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',

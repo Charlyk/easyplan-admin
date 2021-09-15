@@ -1,22 +1,21 @@
 import React, { useEffect, useReducer } from 'react';
+import dynamic from 'next/dynamic';
 import clsx from "clsx";
-import {
-  Typography,
-  Tabs,
-  Tab,
-  Tooltip,
-  CircularProgress,
-} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import sortBy from 'lodash/sortBy';
 import indexOf from 'lodash/indexOf';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux';
 
 import IconEdit from '../../../icons/iconEdit';
 import IconPlus from '../../../icons/iconPlus';
-import ConfirmationModal from '../../../common/modals/ConfirmationModal';
-import CreateCategoryModal from '../CreateCategoryModal';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import {
   closeServiceDetailsModal,
@@ -25,10 +24,12 @@ import {
   setServiceModalService,
 } from '../../../../../redux/actions/serviceDetailsActions';
 import { textForKey } from '../../../../../utils/localization';
+import { HeaderKeys } from "../../../../utils/constants";
 import { updatedServiceSelector } from "../../../../../redux/selectors/servicesSelector";
 import { setUpdatedService } from "../../../../../redux/actions/servicesActions";
 import {
-  deleteService, importServicesFromFile,
+  deleteService,
+  importServicesFromFile,
   restoreService
 } from "../../../../../middleware/api/services";
 import ServiceRow from '../ServiceRow';
@@ -43,10 +44,10 @@ import reducer, {
   setShowImportModal,
 } from './servicesContainerSlice';
 import styles from './ServicesContainer.module.scss';
-import CSVImportModal from "../../../common/CSVImportModal";
-import { HeaderKeys } from "../../../../utils/constants";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+
+const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
+const CreateCategoryModal = dynamic(() => import('../CreateCategoryModal'));
 
 const importServicesFields = [
   {
@@ -314,6 +315,8 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
         title={textForKey('Import services')}
         importBtnTitle={textForKey('import_n_services')}
         note={textForKey('import_services_note')}
+        iconTitle={textForKey('upload csv file')}
+        iconSubtitle={textForKey('n_services_only')}
         fields={importServicesFields}
         onImport={handleImportServices}
         onClose={handleCloseUpload}

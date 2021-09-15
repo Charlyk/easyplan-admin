@@ -16,10 +16,8 @@ import axios from "axios";
 import IconAvatar from '../../app/components/icons/iconAvatar';
 import LoadingButton from '../../components/common/LoadingButton';
 import { JwtRegex, PasswordRegex, Role } from '../../app/utils/constants';
-import {
-  generateReducerActions,
-  uploadFileToAWS,
-} from '../../utils/helperFuncs';
+import generateReducerActions from '../../utils/handleRequestError';
+import uploadFileToAWS from '../../utils/uploadFileToAWS';
 import { textForKey } from '../../utils/localization';
 import isPhoneInputValid from "../../app/utils/isPhoneInputValid";
 import styles from '../../styles/AcceptInvitation.module.scss';

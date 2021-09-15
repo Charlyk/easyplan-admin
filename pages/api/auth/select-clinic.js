@@ -1,4 +1,4 @@
-import { setCookies } from "../../../utils/helperFuncs";
+import setCookies from "../../../utils/setCookies";
 
 export default async (req, res) => {
   if (req.method !== 'GET') {

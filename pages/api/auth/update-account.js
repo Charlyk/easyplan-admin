@@ -1,7 +1,8 @@
 import axios from "axios";
 import { handler } from "../handler";
 import cookie from "cookie";
-import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import getSubdomain from "../../../utils/getSubdomain";
+import updatedServerUrl from "../../../utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
 export default async function resetPassword(req, res) {

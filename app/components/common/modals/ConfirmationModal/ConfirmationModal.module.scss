@@ -3,6 +3,16 @@
     box-shadow: 0 1px 10px 10px #34344E1A;
   }
 
+  .messageLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 16px !important;
+    line-height: 16px !important;
+    letter-spacing: 0.01em !important;
+    color: #34354C !important;
+  }
+
   :global(.modal-body) {
     font-family: Inter, sans-serif;
     font-style: normal;

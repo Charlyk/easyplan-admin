@@ -1,6 +1,5 @@
 import { del, get, post, put } from "./request";
 import axios from "axios";
-import { getSubdomain, updatedServerUrl } from "../../utils/helperFuncs";
 import { baseApiUrl } from "../../eas.config";
 
 /**

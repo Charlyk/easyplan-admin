@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import PropTypes from 'prop-types';
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 
 import EasyPlanModal from '../EasyPlanModal';
-import './SingleInputModal.module.scss';
+import styles from './SingleInputModal.module.scss';
 
 const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
   const [value, setValue] = useState('');
@@ -29,7 +28,7 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
       open={open}
       onClose={onClose}
       size='sm'
-      className='single-input-modal'
+      className={styles['single-input-modal']}
       onPositiveClick={handleSubmit}
     >
       <Form.Group>

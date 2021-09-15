@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Typography } from "@material-ui/core";
+import dynamic from 'next/dynamic';
+import Typography from "@material-ui/core/Typography";
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/router";
 
-import AddAppointmentModal from '../../dashboard/calendar/modals/AddAppointmentModal';
-import PatientDetailsModal from '../../dashboard/patients/PatientDetailsModal';
-import ServiceDetailsModal from '../../dashboard/services/ServiceDetailsModal';
 import {
   setAppointmentModal,
   setPatientDetails,
@@ -26,13 +24,17 @@ import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeR
 import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
 import { setClinic } from "../../../../redux/actions/clinicActions";
 import { environment, isDev } from "../../../../eas.config";
-import { redirectIfOnGeneralHost } from "../../../../utils/helperFuncs";
-import DataMigrationModal from '../../../../components/common/DataMigrationModal';
-import ExchangeRatesModal from "../ExchangeRatesModal";
-import CheckoutModal from "../modals/CheckoutModal";
+import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
 import MainMenu from './MainMenu/MainMenu';
 import PageHeader from './PageHeader/PageHeader';
 import styles from './MainComponent.module.scss';
+
+const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
+const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
+const ServiceDetailsModal = dynamic(() => import('../../dashboard/services/ServiceDetailsModal'));
+const DataMigrationModal = dynamic(() => import('../../../../components/common/DataMigrationModal'));
+const ExchangeRatesModal = dynamic(() => import('../ExchangeRatesModal'));
+const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 
 const MainComponent = (
   {

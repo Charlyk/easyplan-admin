@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Image, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image';
+import InputGroup from 'react-bootstrap/InputGroup';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
@@ -8,7 +10,8 @@ import IconAvatar from '../../../icons/iconAvatar';
 import IconSuccess from '../../../icons/iconSuccess';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
-import { uploadFileToAWS, urlToLambda } from '../../../../../utils/helperFuncs';
+import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
+import urlToLambda from '../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";

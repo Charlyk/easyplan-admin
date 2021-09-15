@@ -1,9 +1,11 @@
 import React, { useMemo } from "react";
+import moment from "moment-timezone";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarDayView from "../../../app/components/dashboard/calendar/CalendarDayView";
 import { Role } from "../../../app/utils/constants";
-import moment from "moment-timezone";
-import { handleRequestError, redirectToUrl, redirectUserTo } from "../../../utils/helperFuncs";
+import redirectUserTo from "../../../utils/redirectUserTo";
+import handleRequestError from "../../../utils/handleRequestError";
+import redirectToUrl from '../../../utils/redirectToUrl'
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
 import { parseCookies } from "../../../utils";
@@ -46,11 +48,11 @@ export const getServerSideProps = async ({ query, req, res }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers, queryDate);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/day');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
 
     // filter clinic doctors
@@ -67,7 +69,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
         schedules,
         dayHours,
         authToken,
-        ...appData
+        ...appData.data
       }
     }
   } catch (error) {

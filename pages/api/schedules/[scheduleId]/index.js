@@ -1,9 +1,10 @@
 import axios from "axios";
-import { authorized } from "../../authorized";
 import cookie from 'cookie';
-import { handler } from "../../handler";
-import { getSubdomain, updatedServerUrl } from "../../../../utils/helperFuncs";
+import getSubdomain from "../../../../utils/getSubdomain";
+import updatedServerUrl from "../../../../utils/updateServerUrl";
 import { HeaderKeys } from "../../../../app/utils/constants";
+import { authorized } from "../../authorized";
+import { handler } from "../../handler";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -24,7 +25,7 @@ export default authorized(async (req, res) => {
       break;
     }
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['GET', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }

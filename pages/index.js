@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import MainComponent from "../app/components/common/MainComponent/MainComponent";
 import { useRouter } from "next/router";
 import { fetchAppData } from "../middleware/api/initialization";
-import { getRedirectUrlForUser, handleRequestError } from "../utils/helperFuncs";
+import handleRequestError from '../utils/handleRequestError';
+import getRedirectUrlForUser from '../utils/redirectToUrl';
 import { parseCookies } from "../utils";
 
 const MainPage = ({ currentClinic, currentUser, authToken }) => {
@@ -36,7 +37,7 @@ export const getServerSideProps = async ({ req, res }) => {
     const appData = await fetchAppData(req.headers);
     return {
       props: {
-        ...appData,
+        ...appData.data,
         authToken,
       }
     }

@@ -1,10 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
-
-import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
-import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 
 import { Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';

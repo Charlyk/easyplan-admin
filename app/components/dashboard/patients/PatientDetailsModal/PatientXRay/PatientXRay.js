@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
-import { CircularProgress, Typography } from '@material-ui/core';
+import dynamic from 'next/dynamic';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { toast } from "react-toastify";
 import { useSelector } from 'react-redux';
 
@@ -11,9 +12,10 @@ import IconPlus from '../../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
 import { deletePatientXRayImage, getPatientXRayImages } from "../../../../../../middleware/api/patients";
-import ConfirmationModal from "../../../../common/modals/ConfirmationModal";
 import XRayPhase from './XRayPhase';
 import styles from './PatientXRay.module.scss'
+
+const ConfirmationModal = dynamic(() => import("../../../../common/modals/ConfirmationModal"));
 
 const ExpandedPhase = {
   initial: 'Initial',

@@ -1,13 +1,16 @@
 import React, { useEffect, useReducer } from 'react';
-
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { getCurrentWeek } from '../../../../../utils/helperFuncs';
-import styles from './CalendarWeekView.module.scss';
+import { useSelector } from "react-redux";
+
+import {
+  deleteScheduleSelector,
+  updateScheduleSelector
+} from "../../../../../redux/selectors/scheduleSelector";
+import getCurrentWeek from '../../../../../utils/getCurrentWeek';
 import EasyCalendar from "../../../common/EasyCalendar";
 import { reducer, initialState, actions } from './CalendarWeekView.reducer'
-import { useSelector } from "react-redux";
-import { deleteScheduleSelector, updateScheduleSelector } from "../../../../../redux/selectors/scheduleSelector";
+import styles from './CalendarWeekView.module.scss';
 
 const CalendarWeekView = (
   {
@@ -30,7 +33,6 @@ const CalendarWeekView = (
   const week = getCurrentWeek(viewDate);
 
   useEffect(() => {
-    console.log(initialSchedules);
     localDispatch(actions.setSchedules(initialSchedules));
   }, [initialSchedules]);
 

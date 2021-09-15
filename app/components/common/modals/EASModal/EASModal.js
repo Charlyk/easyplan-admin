@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import IconClose from "../../../icons/iconClose";
 import { textForKey } from "../../../../../utils/localization";
 import styles from './EASModal.module.scss';
+import { CircularProgress } from "@material-ui/core";
 
 const EASModal = (
   {
@@ -17,6 +18,8 @@ const EASModal = (
     title,
     primaryBtnText,
     secondaryBtnText,
+    hidePositiveBtn,
+    isPositiveLoading,
     bodyStyle,
     note,
     children,
@@ -28,6 +31,14 @@ const EASModal = (
     onBackdropClick
   }
 ) => {
+  const handleCloseModal = () => {
+    if (isPositiveLoading) {
+      return;
+    }
+
+    onClose?.();
+  }
+
   const handlePrimaryClick = () => {
     if (typeof onPrimaryClick === 'function') {
       onPrimaryClick();
@@ -63,7 +74,7 @@ const EASModal = (
           <Typography className={styles.titleLabel} noWrap>
             {title}
           </Typography>
-          <IconButton className={styles.closeButton} onPointerUp={onClose}>
+          <IconButton className={styles.closeButton} onPointerUp={handleCloseModal}>
             <IconClose/>
           </IconButton>
         </div>
@@ -76,20 +87,26 @@ const EASModal = (
               {note}
             </Typography>
           )}
-          <Button
-            className={styles.secondaryButton}
-            onPointerUp={handleSecondaryClick}
-            variant='text'
-          >
-            {secondaryBtnText}
-          </Button>
-          <Button
-            className={styles.primaryButton}
-            onPointerUp={handlePrimaryClick}
-            variant='text'
-          >
-            {primaryBtnText}
-          </Button>
+          {!isPositiveLoading && (
+            <Button
+              className={styles.secondaryButton}
+              onPointerUp={handleSecondaryClick}
+              variant='text'
+            >
+              {secondaryBtnText}
+            </Button>
+          )}
+          {!hidePositiveBtn && (
+            <Button
+              className={styles.primaryButton}
+              onPointerUp={handlePrimaryClick}
+              variant='text'
+            >
+              {isPositiveLoading ? (
+                <CircularProgress className='circular-progress-bar'/>
+              ) : (primaryBtnText)}
+            </Button>
+          )}
         </div>
       </Paper>
     </Modal>
@@ -103,6 +120,8 @@ EASModal.propTypes = {
   title: PropTypes.string,
   primaryBtnText: PropTypes.string,
   secondaryBtnText: PropTypes.string,
+  hidePositiveBtn: PropTypes.bool,
+  isPositiveLoading: PropTypes.bool,
   className: PropTypes.any,
   bodyStyle: PropTypes.any,
   children: PropTypes.any,

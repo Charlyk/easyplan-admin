@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { Fade, Popper, Typography } from "@material-ui/core";
+import Fade from '@material-ui/core/Fade';
+import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
+
 import { Statuses } from "../../../../utils/constants";
 import { textForKey } from "../../../../../utils/localization";
 import styles from './CalendarLegend.module.scss'

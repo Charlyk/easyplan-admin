@@ -4,7 +4,8 @@ import { IncomingForm } from "formidable";
 
 import { handler } from "../handler";
 import { authorized } from "../authorized";
-import { getSubdomain, updatedServerUrl } from "../../../utils/helperFuncs";
+import getSubdomain from "../../../utils/getSubdomain";
+import updatedServerUrl from "../../../utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
 export default authorized(async (req, res) => {

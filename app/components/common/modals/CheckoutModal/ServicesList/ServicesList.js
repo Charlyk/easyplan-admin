@@ -1,15 +1,14 @@
 import React, { useMemo, useState } from 'react';
-import {
-  Box,
-  Table,
-  TableBody,
-  TableContainer,
-  TextField,
-  Typography,
-} from '@material-ui/core';
 import sortBy from 'lodash/sortBy';
-import { Autocomplete, createFilterOptions } from '@material-ui/lab';
+import { createFilterOptions } from '@material-ui/lab';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer from '@material-ui/core/TableContainer';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import { textForKey } from '../../../../../../utils/localization';
 import ServiceRow from '../ServiceRow';

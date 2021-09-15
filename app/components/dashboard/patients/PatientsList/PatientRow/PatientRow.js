@@ -1,7 +1,10 @@
 import React from 'react';
-import { TableCell, TableRow, Typography, Box } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import clsx from "clsx";
+import PropTypes from 'prop-types';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 import IconAvatar from '../../../../icons/iconAvatar';
 import IconEmail from '../../../../icons/iconEmail';

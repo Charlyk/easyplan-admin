@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
+import Form from "react-bootstrap/Form";
 import * as locales from "react-date-range/dist/locale";
 import { Calendar } from "react-date-range";
 import { toast } from "react-toastify";
-import { Form } from "react-bootstrap";
 import moment from "moment-timezone";
 
 import { getAppLanguage, textForKey } from "../../../../../utils/localization";

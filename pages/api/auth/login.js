@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { handler } from "../handler";
-import { getSubdomain } from "../../../utils/helperFuncs";
+import getSubdomain from "../../../utils/getSubdomain";
 import { baseApiUrl } from "../../../eas.config";
 import { HeaderKeys } from "../../../app/utils/constants";
 

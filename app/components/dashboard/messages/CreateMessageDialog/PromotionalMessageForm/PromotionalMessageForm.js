@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useReducer, useRef } from "react";
+import dynamic from 'next/dynamic';
 import debounce from 'lodash/debounce';
 import Form from "react-bootstrap/Form";
 import Box from "@material-ui/core/Box";
@@ -9,7 +10,6 @@ import moment from "moment-timezone";
 
 import { countMessageRecipients } from "../../../../../../middleware/api/messages";
 import { textForKey } from "../../../../../../utils/localization";
-import EasyDatePicker from "../../../../../../components/common/EasyDatePicker";
 import {
   availableHours,
   charactersRegex,
@@ -31,6 +31,8 @@ import reducer, {
   setRecipientsCount,
 } from './promotionalMessageSlice';
 import styles from './PromotionalMessageForm.module.scss';
+
+const EasyDatePicker = dynamic(() => import("../../../../../../components/common/EasyDatePicker"));
 
 const PromotionalMessageForm = (
   {

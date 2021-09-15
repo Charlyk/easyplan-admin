@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 

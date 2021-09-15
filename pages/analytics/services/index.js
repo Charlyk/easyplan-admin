@@ -1,10 +1,8 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import {
-  handleRequestError,
-  redirectToUrl,
-  redirectUserTo,
-} from '../../../utils/helperFuncs';
+import handleRequestError from '../../../utils/handleRequestError';
+import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectUserTo from '../../../utils/redirectUserTo';
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import { getServicesStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
@@ -59,11 +57,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData;
+    const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/services');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData } };
+      return { props: { ...appData.data } };
     }
 
     const { data: statistics } = await getServicesStatistics(query, req.headers);
@@ -72,7 +70,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
         authToken,
         statistics,
         query,
-        ...appData,
+        ...appData.data,
       }
     };
   } catch (error) {

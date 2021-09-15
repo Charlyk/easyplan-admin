@@ -3,7 +3,8 @@ import { Typography } from "@material-ui/core";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 
-import { getClinicUrl, getRedirectUrlForUser } from "../../../../utils/helperFuncs";
+import getRedirectUrlForUser from "../../../../utils/getRedirectUrlForUser";
+import getClinicUrl from '../../../../utils/getClinicUrl'
 import { textForKey } from "../../../../utils/localization";
 import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
 import { isDev } from "../../../../eas.config";

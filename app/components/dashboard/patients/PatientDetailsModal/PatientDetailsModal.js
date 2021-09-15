@@ -1,8 +1,11 @@
 import React, { useEffect, useReducer } from 'react';
-
-import { Box, Typography, CircularProgress } from '@material-ui/core';
+import clsx from "clsx";
 import PropTypes from 'prop-types';
-import { Modal, ListGroup } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import ListGroup from 'react-bootstrap/ListGroup'
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -35,7 +38,6 @@ import {
   MenuItem
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
-import clsx from "clsx";
 
 const PatientDetailsModal = (
   {

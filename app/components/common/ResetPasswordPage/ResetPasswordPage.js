@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 import axios from "axios";
 import clsx from "clsx";

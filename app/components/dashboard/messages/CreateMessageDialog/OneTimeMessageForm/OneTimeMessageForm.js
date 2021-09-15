@@ -1,8 +1,9 @@
 import React, { useEffect, useReducer } from "react";
+import clsx from "clsx";
 import moment from "moment-timezone";
 import Form from "react-bootstrap/Form";
 import Box from "@material-ui/core/Box";
-import clsx from "clsx";
+import Typography from "@material-ui/core/Typography";
 
 import { textForKey } from "../../../../../../utils/localization";
 import {
@@ -19,7 +20,6 @@ import reducer, {
   setMessageTitle
 } from "./oneTimeMessageSlice";
 import styles from "./OneTimeMessageForm.module.scss";
-import Typography from "@material-ui/core/Typography";
 
 const OneTimeMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
   const availableTags = tags.filter((item) =>

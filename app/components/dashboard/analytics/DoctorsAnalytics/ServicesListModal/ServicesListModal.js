@@ -13,7 +13,8 @@ import {
 
 import LeftSideModal from "../../../../common/LeftSideModal";
 import { textForKey } from "../../../../../../utils/localization";
-import { formattedAmount, getServiceName } from "../../../../../../utils/helperFuncs";
+import formattedAmount from "../../../../../../utils/formattedAmount";
+import getServiceName from "../../../../../../utils/getServiceName";
 import styles from './ServicesListModal.module.scss';
 
 const ServicesListModal = ({ open, currency, onClose, statistic }) => {

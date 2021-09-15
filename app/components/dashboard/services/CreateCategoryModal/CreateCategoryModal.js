@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 
 import { textForKey } from '../../../../../utils/localization';
 import EasyPlanModal from '../../../common/modals/EasyPlanModal';

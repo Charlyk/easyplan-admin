@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 

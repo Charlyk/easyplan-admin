@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Button, Form } from "react-bootstrap";
-import { CircularProgress, Typography } from "@material-ui/core";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 import { textForKey } from "../../../../../../utils/localization";
 import { fetchDoctorScheduleDetails } from "../../../../../../middleware/api/schedules";
 import getTreatmentPlanURL from "../../../../../utils/getTreatmentPlanURL";

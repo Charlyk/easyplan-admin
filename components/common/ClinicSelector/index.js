@@ -1,6 +1,7 @@
 import React from 'react';
-
-import { Fade, Paper, Popper } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
