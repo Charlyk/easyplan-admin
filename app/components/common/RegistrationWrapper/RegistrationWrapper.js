@@ -34,7 +34,12 @@ export default function RegistrationWrapper() {
       toast.success(textForKey('account_created_success'));
       await router.replace('/create-clinic');
     } catch (error) {
-      toast.error(error.message);
+      if (error.response != null) {
+        const { data } = error.response;
+        toast.error(data.message);
+      } else {
+        toast.error(error.message);
+      }
     } finally {
       dispatch(setIsLoading(false));
     }
