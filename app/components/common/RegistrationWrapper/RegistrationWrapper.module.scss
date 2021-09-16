@@ -3,7 +3,6 @@
   height: 100%;
   display: flex;
   position: relative;
-  min-width: 1265px;
 
   .logoContainer {
     background-color: #34344E;
@@ -22,11 +21,18 @@
     width: 60%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow-y: auto;
+    overflow: hidden;
+    max-height: 100%;
     background-color: #E5E5E5;
     padding-bottom: 1rem;
+
+    img {
+      width: 40%;
+      margin-bottom: 2rem;
+    }
   }
 
   :global(.form-title) {

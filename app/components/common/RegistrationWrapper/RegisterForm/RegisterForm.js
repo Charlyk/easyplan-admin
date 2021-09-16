@@ -17,7 +17,7 @@ import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import styles from './RegisterForm.module.scss';
 
-const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
+const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [data, setData] = useState({
     firstName: '',
@@ -80,7 +80,13 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
     data.avatarFile && window.URL.createObjectURL(data.avatarFile);
 
   return (
-    <div className={clsx('form-root', styles['register-form'])}>
+    <div
+      className={clsx('form-root', styles['register-form'])}
+      style={{
+        padding: isMobile ? '2rem' : '3rem',
+        width: isMobile ? '90%' : '70%',
+      }}
+    >
       <span className='form-title'>{textForKey('Create new account')}</span>
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
@@ -188,6 +194,10 @@ const RegisterForm = ({ errorMessage, isLoading, onSubmit, onGoBack }) => {
           isLoading={isLoading}
           className='positive-button'
           disabled={!isFormValid()}
+          style={{
+            width: isMobile ? '6.5rem' : 'unset',
+            minWidth: isMobile ? 'unset' : '8rem'
+          }}
         >
           {textForKey('Next')}
         </LoadingButton>
