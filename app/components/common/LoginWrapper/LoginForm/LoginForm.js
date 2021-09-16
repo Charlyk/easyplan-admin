@@ -10,7 +10,7 @@ import { EmailRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import styles from './LoginForm.module.scss';
 
-const LoginForm = ({ isLoggingIn, errorMessage, onResetPassword, onSignUp, onLogin }) => {
+const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSignUp, onLogin }) => {
   const [data, setData] = useState({ email: '', password: '' });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -37,9 +37,23 @@ const LoginForm = ({ isLoggingIn, errorMessage, onResetPassword, onSignUp, onLog
   };
 
   return (
-    <div className={clsx('form-root', styles['login-form'], isLoggingIn && styles.disabled)}>
+    <div
+      className={clsx(
+        'form-root',
+        styles['login-form'],
+        {
+          [styles.disabled]: isLoggingIn,
+        }
+      )}
+      style={{
+        padding: isMobile ? '2rem' : '3rem',
+        width: isMobile ? '90%' : '70%',
+      }}
+    >
       <span className='welcome-text'>{textForKey('Welcome to EasyPlan')}</span>
-      <span className='form-title'>{textForKey('Log in to your account')}</span>
+      <span className='form-title' style={{ marginBottom: isMobile ? '1rem' : '3rem' }}>
+        {textForKey('Log in to your account')}
+      </span>
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
@@ -99,6 +113,10 @@ const LoginForm = ({ isLoggingIn, errorMessage, onResetPassword, onSignUp, onLog
           className='positive-button'
           disabled={!isFormValid() || isLoggingIn}
           isLoading={isLoggingIn}
+          style={{
+            width: isMobile ? '6rem' : 'unset',
+            minWidth: isMobile ? 'unset' : '8rem'
+          }}
         >
           {textForKey('Login')}
         </LoadingButton>

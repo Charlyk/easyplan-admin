@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from "clsx";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import styles from '../../../styles/LoadingButton.module.scss';
 
 const LoadingButton = ({
@@ -12,10 +12,12 @@ const LoadingButton = ({
   disabled,
   isLoading,
   variant,
+  style,
 }) => {
   return (
     <Button
-      className={clsx(styles['loading-button'], className)}
+      style={style}
+      className={clsx(styles.loadingButton, className)}
       onPointerUp={onClick}
       disabled={disabled}
       variant={variant}

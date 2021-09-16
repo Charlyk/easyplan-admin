@@ -19,9 +19,11 @@ import reducer, {
   FormType
 } from './loginWrapperSlice'
 import styles from './LoginWrapper.module.scss';
+import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 
 export default function LoginWrapper({ currentUser }) {
   const router = useRouter();
+  const isMobileDevice = useIsMobileDevice();
   const [{
     currentForm,
     isLoading,
@@ -163,17 +165,32 @@ export default function LoginWrapper({ currentUser }) {
   }
 
   return (
-    <div className={styles['login-form-root']}>
+    <div className={styles.loginFormRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      <div className={styles['logo-container']}>
-        <img
-          src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
-          alt='EasyPlan'
-        />
-      </div>
-      <div className={styles['form-container']}>
+      {!isMobileDevice && (
+        <div className={styles.logoContainer}>
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        </div>
+      )}
+      <div
+        className={styles.formContainer}
+        style={{
+          width: isMobileDevice ? '100%' : '60%',
+          backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
+        }}
+      >
+        {isMobileDevice && (
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        )}
         {currentForm === FormType.login && (
           <LoginForm
+            isMobile={isMobileDevice}
             errorMessage={errorMessage}
             isLoggingIn={isLoading}
             onLogin={handleLoginSubmit}
@@ -183,6 +200,7 @@ export default function LoginWrapper({ currentUser }) {
         )}
         {currentForm === FormType.resetPassword && (
           <ResetPassword
+            isMobile={isMobileDevice}
             isLoading={isLoading}
             errorMessage={errorMessage}
             onSubmit={handleResetPasswordSubmit}
