@@ -48,7 +48,12 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
         router.back();
       }
     } catch (error) {
-      toast.error(error.message);
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data.message);
+      } else {
+        toast.error(error.message);
+      }
     } finally {
       dispatch(setIsLoading(false));
     }
