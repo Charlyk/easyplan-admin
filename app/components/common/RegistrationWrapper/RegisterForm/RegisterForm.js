@@ -16,6 +16,7 @@ import { textForKey } from '../../../../../utils/localization';
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import styles from './RegisterForm.module.scss';
+import UploadAvatar from "../../UploadAvatar";
 
 const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -40,10 +41,9 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     });
   };
 
-  const handleAvatarChange = event => {
-    const files = event.target.files;
-    if (files != null) {
-      setData({ ...data, avatarFile: files[0] });
+  const handleAvatarChange = file => {
+    if (file != null) {
+      setData({ ...data, avatarFile: file });
     }
   };
 
@@ -91,23 +91,10 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
-      <div className='upload-avatar-container'>
-        {avatarSrc ? <Image roundedCircle src={avatarSrc} /> : <IconAvatar />}
-        <span style={{ margin: '1rem' }}>
-          {textForKey('JPG or PNG, Max size of 800kb')}
-        </span>
-        <Form.Group>
-          <input
-            className='custom-file-button'
-            type='file'
-            name='avatar-file'
-            id='avatar-file'
-            accept='.jpg,.jpeg,.png'
-            onChange={handleAvatarChange}
-          />
-          <label htmlFor='avatar-file'>{textForKey('Upload image')}</label>
-        </Form.Group>
-      </div>
+      <UploadAvatar
+        currentAvatar={data.avatarFile}
+        onChange={handleAvatarChange}
+      />
       <Form.Group controlId='lastName'>
         <Form.Label>{textForKey('Last name')}</Form.Label>
         <InputGroup>
