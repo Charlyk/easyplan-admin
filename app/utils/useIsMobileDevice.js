@@ -9,7 +9,7 @@ const useIsMobileDevice = () => {
   }, [windowWidth]);
 
   const updateMobileDevice = useCallback(() => {
-    setIsMobile(windowWidth < 1023);
+    setIsMobile(windowWidth !==0 && windowWidth < 1023);
   }, [windowWidth]);
 
   return isMobile;

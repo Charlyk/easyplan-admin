@@ -20,7 +20,6 @@ const LoadingButton = ({
       className={clsx(styles.loadingButton, className)}
       onPointerUp={onClick}
       disabled={disabled}
-      variant={variant}
     >
       {!isLoading && children}
       {isLoading && (
