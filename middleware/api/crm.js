@@ -47,3 +47,20 @@ export async function updateDealState(body, dealId, headers = null) {
 export async function deleteDealState(dealId, headers = null) {
   return del(`/api/crm/deal-state?dealId=${dealId}`, headers);
 }
+
+/**
+ * Fetch deals for a state paginated
+ * @param {number} stateId
+ * @param {number} page
+ * @param {number} itemsPerPage
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchDeals(stateId, page, itemsPerPage, headers = null) {
+  const queryString = new URLSearchParams({
+    stateId: `${stateId}`,
+    page: `${page}`,
+    itemsPerPage: `${itemsPerPage}`
+  }).toString()
+  return get(`/api/crm/deals?${queryString}`, headers)
+}

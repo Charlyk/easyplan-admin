@@ -41,12 +41,15 @@ export const sheetActions = [
 ]
 
 export const initialState = {
+  isFetching: false,
   showActions: false,
   isEditingName: false,
   showColorPicker: false,
   showCreateColumn: false,
   columnName: '',
   columnColor: '',
+  totalElements: 0,
+  items: [],
 };
 
 const dealsColumnSlice = createSlice({
@@ -79,6 +82,14 @@ const dealsColumnSlice = createSlice({
       state.showActions = false;
       state.isEditingName = false;
       state.showColorPicker = false;
+    },
+    setData(state, action) {
+      state.totalElements = action.payload.total;
+      state.items = action.payload.data;
+      state.isFetching = false;
+    },
+    setIsFetching(state, action) {
+      state.isFetching = action.payload;
     }
   },
 });
@@ -91,6 +102,8 @@ export const {
   setColumnColor,
   setColumnData,
   setShowCreateColumn,
+  setData,
+  setIsFetching,
 } = dealsColumnSlice.actions;
 
 export default dealsColumnSlice.reducer;

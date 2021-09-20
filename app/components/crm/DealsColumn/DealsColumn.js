@@ -9,7 +9,12 @@ import DoneIcon from '@material-ui/icons/Done';
 import { useColor } from "react-color-palette";
 import { toast } from "react-toastify";
 
-import { createNewDealState, deleteDealState, updateDealState } from "../../../../middleware/api/crm";
+import {
+  createNewDealState,
+  deleteDealState,
+  requestFetchDeals,
+  updateDealState
+} from "../../../../middleware/api/crm";
 import ActionsSheet from "../../../../components/common/ActionsSheet";
 import EASColorPicker from "../../common/EASColorPicker";
 import AddColumnModal from "../AddColumnModal";
@@ -23,8 +28,11 @@ import reducer, {
   setColumnData,
   setColumnColor,
   setShowCreateColumn,
+  setData,
+  setIsFetching
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
+import DealItem from "./DealItem";
 
 const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
   const actionsBtnRef = useRef(null);
@@ -36,7 +44,9 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
     columnName,
     columnColor,
     showColorPicker,
-    showCreateColumn
+    showCreateColumn,
+    totalElements,
+    items,
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -44,6 +54,7 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
       return;
     }
     localDispatch(setColumnData(dealState));
+    fetchDealsForState();
   }, [dealState]);
 
   const filteredActions = useMemo(() => {
@@ -55,6 +66,23 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
       )
     })
   }, [dealState, isFirst, isLast]);
+
+  const fetchDealsForState = async () => {
+    try {
+      localDispatch(setIsFetching(true));
+      const response = await requestFetchDeals(dealState.id, 0, 25);
+      localDispatch(setData(response.data));
+      console.log(response.data);
+    } catch (error) {
+      if (error.response != null) {
+        const { data } = error.response;
+        toast.error(data.message ?? error.message);
+      } else {
+        toast.error(error.message);
+      }
+      localDispatch(setIsFetching(false));
+    }
+  }
 
   const handleNameChange = (event) => {
     const newName = event.target.value;
@@ -188,7 +216,7 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
               {columnName}
             </Typography>
             <Typography className={styles.countLabel}>
-              30
+              {totalElements}
             </Typography>
           </Box>
         )}
@@ -202,6 +230,11 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
             <MoreHorizIcon />
           </IconButton>
         </div>
+      </div>
+      <div className={styles.dataContainer}>
+        {items.map(deal => (
+          <DealItem key={deal.id} dealItem={deal}/>
+        ))}
       </div>
     </div>
   )
