@@ -16,6 +16,7 @@ import {
 } from "../../../../redux/selectors/invoicesSelector";
 import formattedAmount from '../../../../utils/formattedAmount';
 import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
+import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import { textForKey } from '../../../../utils/localization';
 import { setTotalInvoices } from "../../../../redux/actions/invoiceActions";
 import { fetchPendingInvoices } from "../../../../middleware/api/invoices";
@@ -140,4 +141,4 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
   );
 };
 
-export default InvoicesButton;
+export default React.memo(InvoicesButton, areComponentPropsEqual);

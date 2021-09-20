@@ -1,5 +1,9 @@
-.loading-button {
+.loadingButton {
   width: 10rem;
+
+  &:disabled {
+    color: white !important;
+  }
 
   .spinner-wrapper {
     flex: 1;

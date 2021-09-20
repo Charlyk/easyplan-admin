@@ -3,6 +3,7 @@
     outline: none;
     position: absolute;
     min-width: 20rem;
+    max-height: 90%;
     display: flex;
     flex-direction: column;
     top: 50%;
@@ -46,6 +47,70 @@
 
     .modalBody {
       width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      :global(.form-label) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+      }
+
+      :global(.custom-select) {
+        height: 2.1rem;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 13px;
+      }
+
+      :global(.form-group) {
+        margin-bottom: 0;
+        margin-top: .5rem;
+      }
+
+      :global(.form-label) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+      }
+
+      :global(.form-control) {
+        width: 100%;
+        background-color: #FAFAFD;
+      }
+
+      :global(.input-group) {
+        textarea {
+          height: 5rem !important;
+        }
+      }
+
+      :global(.rbt-aux) {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: .5rem;
+      }
+
+      :global(.custom-select) {
+        height: 2.1rem;
+        font-size: .8rem;
+      }
+
+      :global(.rdrCalendarWrapper) {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 11px;
+
+        :global(.rdrMonths) {
+          justify-content: center;
+        }
+      }
     }
 
     .modalFooter {
@@ -72,6 +137,24 @@
         font-family: Inter, sans-serif;
         font-style: normal;
         font-size: 13px;
+
+        .progressBar {
+          width: 20px !important;
+          height: 20px !important;
+        }
+      }
+
+      .destroyButton {
+        outline: none;
+        color: #ec3276;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 13px;
+
+        .progressBar {
+          width: 20px !important;
+          height: 20px !important;
+        }
       }
 
       .secondaryButton {

@@ -1,11 +1,17 @@
-.general-page {
+.generalPage {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   position: relative;
-  overflow-y: hidden;
+  overflow: hidden;
+  padding: 0;
 
-  .logo-container {
+  &.mobileDevice {
+    padding: 1rem;
+    background-color: #34344E;
+  }
+
+  .logoContainer {
     background-color: #34344E;
     width: 40%;
     height: 100%;
@@ -18,16 +24,32 @@
     }
   }
 
-  .form-container {
+  .formContainer {
+    height: 100%;
     width: 60%;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    overflow-y: scroll;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #E5E5E5;
     position: relative;
+    background-color: #E5E5E5;
+
+    .uploadAvatar {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    &.mobileDevice {
+      width: 100%;
+      background-color: #34344E;
+
+      img {
+        width: 130px;
+        margin-bottom: 2rem;
+      }
+    }
 
     .existent-accept-progress {
       position: absolute;
@@ -37,7 +59,7 @@
     }
   }
 
-  .form-title {
+  .formTitle {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: bold;
@@ -46,7 +68,7 @@
     color: #34354C;
   }
 
-  .welcome-text {
+  .welcomeText {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -81,13 +103,10 @@
     background-color: #FAFAFD;
   }
 
-  .form-root {
-    padding: 3rem;
+  .formRoot {
     display: flex;
     flex-direction: column;
-    width: 70%;
     background: #FFFFFF;
-    box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
     border-radius: 4px;
   }
 
@@ -102,33 +121,49 @@
 
     :global(.positive-button) {
       flex: unset;
-      min-width: 8rem;
+      min-width: 12rem;
       padding-right: 1rem;
       padding-left: 1rem;
     }
   }
 }
 
-.accept-invitation {
-  padding: 3rem;
+.acceptInvitation {
   display: flex;
   min-height: 20rem;
   flex-direction: column;
-  width: 70%;
   background: #FFFFFF;
-  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
   position: relative;
+  overflow-y: auto;
+  width: 70%;
+  padding: 3rem;
+
+  &.mobileDevice {
+    width: 100%;
+    padding: 1rem;
+  }
 
   .footer {
     position: relative;
 
-    &.is-new {
-      position: absolute !important;
+    &.isNew {
+      position: absolute;
       bottom: 1rem;
       align-items: center;
       justify-content: center;
       left: 0;
+    }
+
+    &.mobileDevice {
+      position: relative;
+      align-items: flex-end;
+      justify-content: flex-end;
+
+      :global(.positive-button) {
+        width: 12rem !important;
+        max-width: unset !important;
+      }
     }
   }
 
@@ -149,8 +184,9 @@
     }
   }
 
-  .form-wrapper {
+  .formWrapper {
     display: flex;
+    height: 100%;
     flex-direction: column;
     position: relative;
 

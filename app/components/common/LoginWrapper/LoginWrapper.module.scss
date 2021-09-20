@@ -1,11 +1,10 @@
-.login-form-root {
+.loginFormRoot {
   width: 100%;
   height: 100%;
   display: flex;
   position: relative;
-  min-width: 1265px;
 
-  .logo-container {
+  .logoContainer {
     background-color: #34344E;
     width: 40%;
     height: 100%;
@@ -18,15 +17,21 @@
     }
   }
 
-  .form-container {
+  .formContainer {
     width: 60%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow-y: auto;
     background-color: #E5E5E5;
     padding-bottom: 1rem;
+
+    img {
+      width: 40%;
+      margin-bottom: 2rem;
+    }
   }
 
   :global(.form-title) {
@@ -93,7 +98,6 @@
   }
 
   :global(.form-root) {
-    padding: 3rem;
     display: flex;
     flex-direction: column;
     width: 70%;

@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Image from 'react-bootstrap/Image';
 import InputGroup from 'react-bootstrap/InputGroup';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 
-import IconAvatar from '../../../icons/iconAvatar';
 import IconSuccess from '../../../icons/iconSuccess';
 import LoadingButton from '../../../../../components/common/LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
 import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
-import urlToLambda from '../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
+import UploadAvatar from "../../../common/UploadAvatar";
 import styles from './AccountSettings.module.scss'
 
 const AccountSettings = ({ currentUser }) => {
@@ -45,11 +43,10 @@ const AccountSettings = ({ currentUser }) => {
     setIsEmailChanged(isChanged);
   }, [data.email]);
 
-  const handleLogoChange = (event) => {
+  const handleLogoChange = (file) => {
     if (isLoading) return;
-    const files = event.target.files;
-    if (files != null) {
-      setData({ ...data, avatarFile: files[0] });
+    if (file != null) {
+      setData({ ...data, avatarFile: file });
     }
   };
 
@@ -109,30 +106,13 @@ const AccountSettings = ({ currentUser }) => {
     );
   };
 
-  const avatarSrc =
-    (data.avatarFile && window.URL.createObjectURL(data.avatarFile)) ||
-    (data.avatarUrl ? urlToLambda(data.avatarUrl, 64) : null);
-
   return (
     <div className={styles['account-settings']}>
       <span className={styles['form-title']}>{textForKey('Account settings')}</span>
-      <div className={'upload-avatar-container'}>
-        {avatarSrc ? <Image roundedCircle src={avatarSrc} /> : <IconAvatar />}
-        <span style={{ margin: '1rem' }} className={styles['info-text']}>
-          {textForKey('JPG or PNG, Max size of 800kb')}
-        </span>
-        <Form.Group>
-          <input
-            className='custom-file-button'
-            type='file'
-            name='avatar-file'
-            id='avatar-file'
-            accept='.jpg,.jpeg,.png'
-            onChange={handleLogoChange}
-          />
-          <label htmlFor='avatar-file'>{textForKey('Upload image')}</label>
-        </Form.Group>
-      </div>
+      <UploadAvatar
+        currentAvatar={data.avatarFile || data.avatarUrl}
+        onChange={handleLogoChange}
+      />
       <Form.Group controlId='lastName'>
         <Form.Label>{textForKey('Last name')}</Form.Label>
         <InputGroup>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function IconAvatar() {
+function IconAvatar({ onClick }) {
   return (
     <svg
       width='64'
@@ -8,6 +8,7 @@ function IconAvatar() {
       viewBox='0 0 64 64'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
+      onPointerUp={onClick}
     >
       <path
         fillRule='evenodd'

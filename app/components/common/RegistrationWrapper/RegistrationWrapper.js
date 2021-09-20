@@ -13,9 +13,11 @@ import reducer, {
   setIsLoading
 } from './registrationWrapperSlice'
 import styles from './RegistrationWrapper.module.scss';
+import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 
 export default function RegistrationWrapper() {
   const router = useRouter();
+  const isMobileDevice = useIsMobileDevice();
   const [{ errorMessage, isLoading }, dispatch] = useReducer(reducer, initialState);
 
   const handleOpenLogin = () => {
@@ -32,9 +34,14 @@ export default function RegistrationWrapper() {
       }
       await registerUser(accountData);
       toast.success(textForKey('account_created_success'));
-      await router.replace('/create-clinic');
+      await router.replace('/create-clinic?login=1');
     } catch (error) {
-      toast.error(error.message);
+      if (error.response != null) {
+        const { data } = error.response;
+        toast.error(data.message);
+      } else {
+        toast.error(error.message);
+      }
     } finally {
       dispatch(setIsLoading(false));
     }
@@ -43,14 +50,29 @@ export default function RegistrationWrapper() {
   return (
     <div className={styles.registerFormRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      <div className={styles.logoContainer}>
-        <img
-          src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
-          alt='EasyPlan'
-        />
-      </div>
-      <div className={styles.formContainer}>
+      {!isMobileDevice && (
+        <div className={styles.logoContainer}>
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        </div>
+      )}
+      <div
+        className={styles.formContainer}
+        style={{
+          width: isMobileDevice ? '100%' : '60%',
+          backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
+        }}
+      >
+        {isMobileDevice && (
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        )}
         <RegisterForm
+          isMobile={isMobileDevice}
           onSubmit={handleCreateAccount}
           isLoading={isLoading}
           errorMessage={errorMessage}

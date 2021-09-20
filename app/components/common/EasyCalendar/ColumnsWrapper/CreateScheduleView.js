@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from "@material-ui/core/Typography";
 import IconPlus from "../../../icons/iconPlus";
 import styles from './ColumnsWrapper.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const CreateScheduleView = ({ startHour, endHour, onAddSchedule }) => {
   const handleAddScheduleClink = () => {
@@ -26,7 +27,7 @@ const CreateScheduleView = ({ startHour, endHour, onAddSchedule }) => {
   )
 }
 
-export default CreateScheduleView;
+export default React.memo(CreateScheduleView, areComponentPropsEqual);
 
 CreateScheduleView.propTypes = {
   startHour: PropTypes.string,

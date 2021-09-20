@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import styles from './Schedule.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const offsetDistance = 20;
 const minScheduleHeight = 32;
@@ -199,7 +200,7 @@ const Schedule = (
   );
 };
 
-export default Schedule
+export default React.memo(Schedule, areComponentPropsEqual);
 
 Schedule.propTypes = {
   schedule: PropTypes.shape({

@@ -11,6 +11,7 @@ import IconUmbrella from "../../../icons/iconUmbrella";
 import Schedule from "../Schedule/Schedule";
 import ColumnCell from "./ColumnCell";
 import styles from './ColumnsWrapper.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const moment = extendMoment(Moment);
 const maxOffset = 6;
@@ -131,7 +132,7 @@ const Column = (
   )
 };
 
-export default Column
+export default React.memo(Column, areComponentPropsEqual);
 
 Column.propTypes = {
   disabled: PropTypes.bool,

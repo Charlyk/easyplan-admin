@@ -19,6 +19,7 @@ import formattedAmount from "../../../../../utils/formattedAmount";
 import { setIsExchangeRatesModalOpen } from "../../../../../redux/actions/exchangeRatesActions";
 import { updateExchangeRatesSelector } from "../../../../../redux/selectors/rootSelector";
 import styles from './ExchangeRates.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const ExchangeRates = ({ currentClinic, currentUser, canEdit }) => {
   const dispatch = useDispatch();
@@ -97,4 +98,4 @@ const ExchangeRates = ({ currentClinic, currentUser, canEdit }) => {
   );
 };
 
-export default ExchangeRates;
+export default React.memo(ExchangeRates, areComponentPropsEqual);

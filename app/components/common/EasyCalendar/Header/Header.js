@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import HeaderItem from "./HeaderItem";
 import styles from './Header.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const Header = ({ items, onItemClick }) => {
   return (
@@ -17,7 +18,7 @@ const Header = ({ items, onItemClick }) => {
   )
 }
 
-export default Header;
+export default React.memo(Header, areComponentPropsEqual);
 
 Header.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({

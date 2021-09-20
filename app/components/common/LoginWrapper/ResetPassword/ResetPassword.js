@@ -8,7 +8,7 @@ import { EmailRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import styles from './ResetPassword.module.scss';
 
-const ResetPassword = ({ isLoading, errorMessage, onSubmit, onGoBack }) => {
+const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }) => {
   const [email, setEmail] = useState('');
 
   const handleFormChange = event => {
@@ -26,7 +26,13 @@ const ResetPassword = ({ isLoading, errorMessage, onSubmit, onGoBack }) => {
   };
 
   return (
-    <div className={clsx('form-root', styles['reset-password-form'])}>
+    <div
+      className={clsx('form-root', styles['reset-password-form'])}
+      style={{
+        padding: isMobile ? '2rem' : '3rem',
+        width: isMobile ? '90%' : '70%',
+      }}
+    >
       <span className='form-title'>{textForKey('Reset Password')}</span>
       <span className='welcome-text'>
         {textForKey('reset_password_message')}

@@ -83,6 +83,23 @@ export async function updateUserCashierStatus(userId, isCashier, headers = null)
 }
 
 /**
+ * Accept clinic invitation
+ * @param {{
+ *   firstName: any,
+ *   lastName: any,
+ *   password: any,
+ *   phoneNumber: any,
+ *   invitationToken: any,
+ *   avatar: any
+ * }} body
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestAcceptInvitation(body, headers = null) {
+  return put('/api/users/accept-invitation', headers, body);
+}
+
+/**
  * Save user facebook auth token to server
  * @param {string} token
  * @param {Object|null} headers

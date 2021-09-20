@@ -20,6 +20,7 @@ import isOutOfBounds from "../../../../utils/isOutOfBounds";
 import EasyCalendar from "../../../common/EasyCalendar";
 import { actions, reducer, initialState } from './CalendarDayView.reducer'
 import styles from './CalendarDayView.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const AddPauseModal = dynamic(() => import('../modals/AddPauseModal'));
 
@@ -233,7 +234,7 @@ const CalendarDayView = (
   );
 };
 
-export default wrapper.withRedux(CalendarDayView);
+export default React.memo(CalendarDayView, areComponentPropsEqual);
 
 CalendarDayView.propTypes = {
   schedules: PropTypes.any,

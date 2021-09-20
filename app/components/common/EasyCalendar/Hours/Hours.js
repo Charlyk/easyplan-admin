@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import styles from './Hours.module.scss';
 import HourItem from "./HourItem";
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const Hours = ({ hours }) => {
   return (
@@ -13,7 +14,7 @@ const Hours = ({ hours }) => {
   )
 }
 
-export default Hours;
+export default React.memo(Hours, areComponentPropsEqual);
 
 Hours.propTypes = {
   hours: PropTypes.arrayOf(PropTypes.string).isRequired
