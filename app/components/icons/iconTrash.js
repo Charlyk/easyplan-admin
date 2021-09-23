@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function IconTrash() {
+function IconTrash({ fill }) {
   return (
     <svg
       width='16'
       height='16'
       viewBox='0 0 16 16'
+      fill={fill}
       xmlns='http://www.w3.org/2000/svg'
     >
       <path
@@ -18,3 +20,11 @@ function IconTrash() {
 }
 
 export default React.memo(IconTrash);
+
+IconTrash.propTypes = {
+  fill: PropTypes.string,
+};
+
+IconTrash.defaultProps = {
+  fill: '#000000'
+}

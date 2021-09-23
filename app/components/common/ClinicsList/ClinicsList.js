@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Box, Typography } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Box from '@material-ui/core/Box';
 import { useRouter } from "next/router";
 import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";

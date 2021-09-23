@@ -34,7 +34,7 @@ import reducer, {
 import styles from './DealsColumn.module.scss';
 import DealItem from "./DealItem";
 
-const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
+const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate, onLinkPatient, onDeleteDeal }) => {
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
   const [color, setColor] = useColor('hex', dealState.color);
@@ -233,7 +233,12 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate }) => {
       </div>
       <div className={styles.dataContainer}>
         {items.map(deal => (
-          <DealItem key={deal.id} dealItem={deal}/>
+          <DealItem
+            key={deal.id}
+            dealItem={deal}
+            onLinkPatient={onLinkPatient}
+            onDeleteDeal={onDeleteDeal}
+          />
         ))}
       </div>
     </div>
@@ -253,4 +258,7 @@ DealsColumn.propTypes = {
     deleteable: PropTypes.bool,
   }),
   onMove: PropTypes.func,
+  onUpdate: PropTypes.func,
+  onLinkPatient: PropTypes.func,
+  onDeleteDeal: PropTypes.func,
 };

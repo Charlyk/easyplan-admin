@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Typography } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import PropTypes from 'prop-types';
 import moment from "moment-timezone";
 import clsx from "clsx";

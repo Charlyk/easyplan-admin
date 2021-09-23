@@ -83,7 +83,7 @@ export async function getPatientDebts(patientId, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function searchPatients(searchQuery, headers = null) {
+export async function requestSearchPatients(searchQuery, headers = null) {
   const queryString = new URLSearchParams({ query: searchQuery }).toString();
   return get(`/api/patients/search?${queryString}`, headers)
 }

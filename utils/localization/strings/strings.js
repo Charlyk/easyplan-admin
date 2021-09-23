@@ -577,6 +577,10 @@ export default {
     cancel_schedule_title: 'Cancel schedule',
     cancel_schedule_message: 'Are you sure you want to cancel this schedule?',
     yes: 'Yes',
+    delete_deal_title: 'Delete deal',
+    delete_deal_message: 'Are you sure you want to delete this deal?',
+    link_patient: 'Link patient',
+    complete_deal: 'Complete',
   },
   ro: {
     analytics: 'Analitică',
@@ -1162,6 +1166,10 @@ export default {
     cancel_schedule_title: 'Anulare programare',
     cancel_schedule_message: 'Sunteți sigur(ă) că doriți să anulați vizita la medic?',
     yes: 'Da',
+    delete_deal_title: 'Șterge lead-ul',
+    delete_deal_message: 'Sunteți sigur(ă) că doriți să ștergeți acest lead?',
+    link_patient: 'Atribuire pacient',
+    complete_deal: 'Confirmă',
   },
   ru: {
     analytics: 'Analytics',
@@ -1738,5 +1746,9 @@ export default {
     cancel_schedule_title: 'Cancel schedule',
     cancel_schedule_message: 'Are you sure you want to cancel this schedule?',
     yes: 'Yes',
+    delete_deal_title: 'Delete deal',
+    delete_deal_message: 'Are you sure you want to delete this deal?',
+    link_patient: 'Link patient',
+    complete_deal: 'Complete',
   },
 };

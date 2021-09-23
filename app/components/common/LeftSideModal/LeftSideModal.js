@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import ModalHeader from './ModalHeader';
 import styles from './LeftSideModal.module.scss';
-import { Drawer } from "@material-ui/core";
+import Drawer from "@material-ui/core/Drawer";
 
 const LeftSideModal = (props) => {
   const { show, onClose, children, title, steps, className } = props;

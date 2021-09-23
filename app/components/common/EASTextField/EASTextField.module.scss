@@ -1,0 +1,28 @@
+.root {
+  .searchField {
+    width: 100%;
+  }
+
+  :global(.Mui-focused) {
+    .focusedInput {
+      border-color: #3A83DC !important;
+    }
+  }
+
+  .formLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #6F7091 !important;
+  }
+
+  .searchInput {
+    padding: 10px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    color: #34354C !important;
+  }
+}

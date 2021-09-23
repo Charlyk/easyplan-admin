@@ -1,0 +1,65 @@
+.newPatientForm {
+  padding: 16px;
+  height: 100%;
+
+  .searchField {
+    width: 100%;
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :global(.Mui-focused) {
+    .focusedInput {
+      border-color: #3A83DC !important;
+    }
+  }
+
+  .formLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #6F7091 !important;
+  }
+
+  .progressContainer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .progressBar {
+      color: #3A83DC !important;
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
+
+  .phoneInput {
+    box-shadow: none;
+    transition: none;
+
+    &:focus {
+      border-color: #3A83DC !important;
+      border-width: 2px;
+    }
+  }
+
+  :global(.react-tel-input) {
+    :global(.country-list) {
+      position: fixed;
+    }
+  }
+
+  .searchInput {
+    padding: 10px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    color: #34354C !important;
+  }
+}

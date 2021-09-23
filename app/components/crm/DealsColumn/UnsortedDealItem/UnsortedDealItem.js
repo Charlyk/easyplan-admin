@@ -1,18 +1,32 @@
 import React, { useMemo } from "react";
+import clsx from "clsx";
 import PropTypes from 'prop-types';
-import styles from './UnsortedDealItem.module.scss';
-import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../../utils/localization";
 import moment from "moment-timezone";
-import IconAvatar from "../../../icons/iconAvatar";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import { textForKey } from "../../../../../utils/localization";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
+import IconAvatar from "../../../icons/iconAvatar";
+import IconLink from "../../../icons/iconLink";
+import styles from './UnsortedDealItem.module.scss';
+import IconTrash from "../../../icons/iconTrash";
+import IconCheckMark from "../../../icons/iconCheckMark";
 
-const UnsortedDealItem = ({ deal }) => {
+const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
   const sourceIcon = useMemo(() => {
     return (
       <IconFacebookSm/>
     )
   }, [deal]);
+
+  const handleLinkPatient = () => {
+    onLinkPatient?.(deal.contact);
+  }
+
+  const handleDeleteDeal = () => {
+    onDeleteDeal?.(deal);
+  }
 
   return (
     <div className={styles.unsortedDealItem}>
@@ -34,6 +48,28 @@ const UnsortedDealItem = ({ deal }) => {
             {deal.messageSnippet}
           </Typography>
         </div>
+        <Box display="flex" alignItems="center" mt="6px">
+          {deal.patient == null && (
+            <Button className={styles.iconButton} onPointerUp={handleLinkPatient}>
+              <IconLink fill="#3A83DC"/>
+              <Typography className={styles.buttonText}>
+                {textForKey('link_patient')}
+              </Typography>
+            </Button>
+          )}
+          <Button className={styles.iconButton} onPointerUp={handleDeleteDeal}>
+            <IconTrash fill="#ec3276" />
+            <Typography className={clsx(styles.buttonText, styles.delete)}>
+              {textForKey('Delete')}
+            </Typography>
+          </Button>
+          <Button className={styles.iconButton}>
+            <IconCheckMark fill="#00ac00" />
+            <Typography className={clsx(styles.buttonText, styles.done)}>
+              {textForKey('complete_deal')}
+            </Typography>
+          </Button>
+        </Box>
       </div>
       <Typography className={styles.dateLabel}>
         {moment(deal.created).format('DD MMM YYYY HH:mm')}
@@ -57,6 +93,9 @@ UnsortedDealItem.propTypes = {
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
       photoUrl: PropTypes.string
-    })
-  })
+    }),
+    patient: PropTypes.any,
+  }),
+  onLinkPatient: PropTypes.func,
+  onDeleteDeal: PropTypes.func,
 };

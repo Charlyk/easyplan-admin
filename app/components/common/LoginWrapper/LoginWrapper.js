@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { Typography } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 
