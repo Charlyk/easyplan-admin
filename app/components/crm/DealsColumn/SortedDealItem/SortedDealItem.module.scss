@@ -1,4 +1,4 @@
-.unsortedDealItem {
+.sortedDealItem {
   width: 100%;
   display: flex;
   position: relative;
@@ -36,7 +36,7 @@
   }
 
   .content {
-    width: 87%;
+    width: 100%;
     display: flex;
     flex-direction: column;
 
@@ -88,6 +88,14 @@
       color: #3A83DC !important;
     }
 
+    .assigneeName {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #6F7091 !important;
+    }
+
     .lastMessageContainer {
       margin-top: 5px;
       max-width: 100%;
@@ -95,48 +103,37 @@
       display: flex;
       position: relative;
       align-items: center;
-      background-color: #e5eeff;
-      border-radius: 10px;
       height: 20px;
-      padding-left: 10px;
-      padding-right: 10px;
       overflow: hidden;
 
       .snippetLabel {
+        padding-left: 10px;
+        padding-right: 10px;
+        border: #A1A2C6 1px solid;
+        background-color: white;
+        border-radius: 4px;
         font-family: Inter, sans-serif !important;
         font-style: normal !important;
         font-weight: normal !important;
         font-size: 10px !important;
         color: #34354C !important;
+        margin-right: 2px;
+
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
   }
 
-  .actionsContainer {
+  .dateLabel {
     position: absolute;
     top: 0;
     right: 0;
-    display: flex;
-    align-items: center;
-
-    .moreBtn {
-      padding: 0;
-      height: 10px;
-      margin-left: 5px;
-
-      svg {
-        fill: #3A83DC;
-        width: 20px;
-        height: 20px;
-      }
-    }
-
-    .dateLabel {
-      font-family: Inter, sans-serif !important;
-      font-style: normal !important;
-      font-weight: normal !important;
-      font-size: 10px !important;
-      color: #A1A2C6 !important;
-    }
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 10px !important;
+    color: #A1A2C6 !important;
   }
 }

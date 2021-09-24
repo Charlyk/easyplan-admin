@@ -1,21 +1,42 @@
-import React, { useMemo } from "react";
-import clsx from "clsx";
+import React, { useMemo, useRef, useState } from "react";
 import PropTypes from 'prop-types';
 import moment from "moment-timezone";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 
+import ActionsSheet from "../../../../../components/common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from "../../../../../utils/localization";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
-import IconCheckMark from "../../../icons/iconCheckMark";
 import IconAvatar from "../../../icons/iconAvatar";
-import IconTrash from "../../../icons/iconTrash";
-import IconLink from "../../../icons/iconLink";
 import styles from './UnsortedDealItem.module.scss';
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import IconButton from "@material-ui/core/IconButton";
+
+const actions = [
+  {
+    name: textForKey('link_patient'),
+    key: 'linkPatient',
+    icon: null,
+    type: 'default'
+  },
+  {
+    name: textForKey('complete_deal'),
+    key: 'confirmContact',
+    icon: null,
+    type: 'default'
+  },
+  {
+    name: textForKey('delete'),
+    key: 'deleteDeal',
+    icon: null,
+    type: 'destructive'
+  },
+]
 
 const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstContact }) => {
+  const moreBtnRef = useRef(null);
+  const [showActions, setShowActions] = useState(false);
+
   const sourceIcon = useMemo(() => {
     return (
       <IconFacebookSm/>
@@ -38,6 +59,37 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstCon
     }
   }, [deal]);
 
+  const filteredActions = useMemo(() => {
+    return actions.filter(action => {
+      return (
+        deal?.patient == null || action.key !== 'linkPatient'
+      )
+    })
+  }, [deal]);
+
+  const handleActionsSelected = (action) => {
+    switch (action.key) {
+      case 'linkPatient':
+        handleLinkPatient();
+        break;
+      case 'confirmContact':
+        handleConfirmFirstContact();
+        break;
+      case 'deleteDeal':
+        handleDeleteDeal()
+        break;
+    }
+    handleCloseActions();
+  };
+
+  const handleMoreClick = () => {
+    setShowActions(true);
+  }
+
+  const handleCloseActions = () => {
+    setShowActions(false);
+  }
+
   const handleLinkPatient = () => {
     onLinkPatient?.(deal);
   }
@@ -52,6 +104,13 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstCon
 
   return (
     <div className={styles.unsortedDealItem}>
+      <ActionsSheet
+        open={showActions}
+        anchorEl={moreBtnRef.current}
+        actions={filteredActions}
+        onSelect={handleActionsSelected}
+        onClose={handleCloseActions}
+      />
       <div className={styles.avatarContainer}>
         <IconAvatar/>
         <div className={styles.sourceIconContainer}>
@@ -70,32 +129,19 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstCon
             {deal.messageSnippet}
           </Typography>
         </div>
-        <Box display="flex" alignItems="center" mt="6px">
-          {deal.patient == null && (
-            <Button className={styles.iconButton} onPointerUp={handleLinkPatient}>
-              <IconLink fill="#3A83DC"/>
-              <Typography className={styles.buttonText}>
-                {textForKey('link_patient')}
-              </Typography>
-            </Button>
-          )}
-          <Button className={styles.iconButton} onPointerUp={handleDeleteDeal}>
-            <IconTrash fill="#ec3276" />
-            <Typography className={clsx(styles.buttonText, styles.delete)}>
-              {textForKey('Delete')}
-            </Typography>
-          </Button>
-          <Button className={styles.iconButton} onPointerUp={handleConfirmFirstContact}>
-            <IconCheckMark fill="#00ac00" />
-            <Typography className={clsx(styles.buttonText, styles.done)}>
-              {textForKey('complete_deal')}
-            </Typography>
-          </Button>
-        </Box>
       </div>
-      <Typography className={styles.dateLabel}>
-        {moment(deal.created).format('DD MMM YYYY HH:mm')}
-      </Typography>
+      <div className={styles.actionsContainer}>
+        <Typography className={styles.dateLabel}>
+          {moment(deal.lastUpdated).format('DD MMM YYYY HH:mm')}
+        </Typography>
+        <IconButton
+          ref={moreBtnRef}
+          className={styles.moreBtn}
+          onPointerUp={handleMoreClick}
+        >
+          <MoreHorizIcon/>
+        </IconButton>
+      </div>
     </div>
   )
 };
@@ -109,6 +155,7 @@ UnsortedDealItem.propTypes = {
     lastUpdated: PropTypes.string,
     messageSnippet: PropTypes.string,
     source: PropTypes.string,
+    sourceDescription: PropTypes.string,
     contact: PropTypes.shape({
       id: PropTypes.number,
       email: PropTypes.string,
@@ -129,6 +176,11 @@ UnsortedDealItem.propTypes = {
       orderId: PropTypes.number,
       deleteable: PropTypes.bool,
       type: PropTypes.string,
+    }),
+    assignedTo: PropTypes.shape({
+      id: PropTypes.number,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
     }),
   }),
   onLinkPatient: PropTypes.func,
