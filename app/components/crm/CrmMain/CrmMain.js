@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import upperFirst from 'lodash/upperFirst';
 import { toast } from "react-toastify";
 
-import { fetchAllDealStates, updateDealState } from "../../../../middleware/api/crm";
+import { fetchAllDealStates, requestConfirmFirstContact, updateDealState } from "../../../../middleware/api/crm";
 import { textForKey } from "../../../../utils/localization";
 import DealsColumn from "../DealsColumn";
 import reducer, {
@@ -17,6 +17,7 @@ import reducer, {
   setUpdatedDeal,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
+import onRequestError from "../../../utils/onRequestError";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -46,8 +47,8 @@ const CrmMain = ({ states }) => {
     localDispatch(closeLinkModal());
   };
 
-  const handleLinkPatient = (deal) => {
-    localDispatch(openLinkModal(deal));
+  const handleLinkPatient = (deal, confirm = false) => {
+    localDispatch(openLinkModal({ deal, confirm }));
   };
 
   const handleDeleteDeal = (deal) => {
@@ -71,15 +72,31 @@ const CrmMain = ({ states }) => {
     }
   }
 
-  const handlePatientLinked = (updatedDeal) => {
+  const handlePatientLinked = async (updatedDeal, confirmContact) => {
     localDispatch(setUpdatedDeal(updatedDeal));
-    console.log(updatedDeal);
+    if (confirmContact) {
+      await handleConfirmFirstContact(updatedDeal);
+    }
+  }
+
+  const handleConfirmFirstContact = async (deal) => {
+    try {
+      if (deal.patient == null) {
+        handleLinkPatient(deal, true);
+        return;
+      }
+      const response = await requestConfirmFirstContact(deal.id);
+      localDispatch(setUpdatedDeal(response.data));
+    } catch (error) {
+      onRequestError(error);
+    }
   }
 
   return (
     <div className={styles.crmMain}>
       <LinkPatientModal
         open={linkModal.open}
+        confirm={linkModal.confirmContact}
         deal={linkModal.deal}
         onClose={handleCloseLinkModal}
         onLinked={handlePatientLinked}
@@ -103,6 +120,7 @@ const CrmMain = ({ states }) => {
             onMove={handleColumnMoved}
             onLinkPatient={handleLinkPatient}
             onDeleteDeal={handleDeleteDeal}
+            onConfirmFirstContact={handleConfirmFirstContact}
           />
         ))}
       </div>

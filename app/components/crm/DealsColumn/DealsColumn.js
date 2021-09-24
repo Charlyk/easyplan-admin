@@ -43,7 +43,8 @@ const DealsColumn = (
     onMove,
     onUpdate,
     onLinkPatient,
-    onDeleteDeal
+    onDeleteDeal,
+    onConfirmFirstContact,
   }
 ) => {
   const actionsBtnRef = useRef(null);
@@ -91,7 +92,6 @@ const DealsColumn = (
       localDispatch(setIsFetching(true));
       const response = await requestFetchDeals(dealState.id, 0, 25);
       localDispatch(setData(response.data));
-      console.log(response.data);
     } catch (error) {
       if (error.response != null) {
         const { data } = error.response;
@@ -257,6 +257,7 @@ const DealsColumn = (
             dealItem={deal}
             onLinkPatient={onLinkPatient}
             onDeleteDeal={onDeleteDeal}
+            onConfirmFirstContact={onConfirmFirstContact}
           />
         ))}
       </div>
@@ -282,4 +283,5 @@ DealsColumn.propTypes = {
   onUpdate: PropTypes.func,
   onLinkPatient: PropTypes.func,
   onDeleteDeal: PropTypes.func,
+  onConfirmFirstContact: PropTypes.func,
 };

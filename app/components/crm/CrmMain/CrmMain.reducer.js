@@ -24,10 +24,11 @@ const crmMainSlice = createSlice({
       state.deleteModal = { open: false, deal: null };
     },
     openLinkModal(state, action) {
-      state.linkModal = { open: true, deal: action.payload };
+      const { deal, confirm } = action.payload;
+      state.linkModal = { open: true, deal: deal, confirmContact: confirm };
     },
     closeLinkModal(state) {
-      state.linkModal = { open: false, deal: null };
+      state.linkModal = { open: false, deal: null, confirmContact: false };
     },
     setUpdatedDeal(state, action) {
       state.updatedDeal = action.payload;

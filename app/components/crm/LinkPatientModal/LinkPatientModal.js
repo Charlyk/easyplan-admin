@@ -21,7 +21,7 @@ import reducer, {
 } from './LinkPatientModal.reducer';
 import styles from './LinkPatientModal.module.scss';
 
-const LinkPatientModal = ({ open, deal, onClose, onLinked }) => {
+const LinkPatientModal = ({ open, deal, confirm, onClose, onLinked }) => {
   const [{
     currentTab,
     patientData,
@@ -46,7 +46,7 @@ const LinkPatientModal = ({ open, deal, onClose, onLinked }) => {
     try {
       localDispatch(setIsLoading(true));
       const response = await requestLinkPatient(deal.id, patientData);
-      onLinked?.(response.data);
+      onLinked?.(response.data, confirm);
       onClose?.();
     } catch (error) {
       onRequestError(error);
@@ -103,6 +103,7 @@ export default LinkPatientModal;
 
 LinkPatientModal.propTypes = {
   open: PropTypes.bool,
+  confirm: PropTypes.bool,
   deal: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,

@@ -15,7 +15,7 @@ import IconTrash from "../../../icons/iconTrash";
 import IconLink from "../../../icons/iconLink";
 import styles from './UnsortedDealItem.module.scss';
 
-const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
+const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstContact }) => {
   const sourceIcon = useMemo(() => {
     return (
       <IconFacebookSm/>
@@ -44,6 +44,10 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
 
   const handleDeleteDeal = () => {
     onDeleteDeal?.(deal);
+  }
+
+  const handleConfirmFirstContact = () => {
+    onConfirmFirstContact?.(deal);
   }
 
   return (
@@ -81,7 +85,7 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
               {textForKey('Delete')}
             </Typography>
           </Button>
-          <Button className={styles.iconButton}>
+          <Button className={styles.iconButton} onPointerUp={handleConfirmFirstContact}>
             <IconCheckMark fill="#00ac00" />
             <Typography className={clsx(styles.buttonText, styles.done)}>
               {textForKey('complete_deal')}
@@ -129,4 +133,5 @@ UnsortedDealItem.propTypes = {
   }),
   onLinkPatient: PropTypes.func,
   onDeleteDeal: PropTypes.func,
+  onConfirmFirstContact: PropTypes.func,
 };
