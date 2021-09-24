@@ -71,14 +71,14 @@ const menuItems = [
     icon: <MenuUsers/>,
     href: '/users',
   },
-  {
-    id: 'crm',
-    type: 'link',
-    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
-    text: textForKey('CRM Board'),
-    icon: <AssessmentIcon />,
-    href: '/crm'
-  },
+  // {
+  //   id: 'crm',
+  //   type: 'link',
+  //   roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+  //   text: textForKey('CRM Board'),
+  //   icon: <AssessmentIcon />,
+  //   href: '/crm'
+  // },
   {
     id: 'calendar',
     type: 'link',
