@@ -67,7 +67,7 @@ const PatientPurchasesList = ({ patient, currentClinic }) => {
   );
 
   return (
-    <div className={styles['patient-purchases-list']}>
+    <div className={styles.patientPurchasesList}>
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Payments')}
       </Typography>
@@ -77,66 +77,64 @@ const PatientPurchasesList = ({ patient, currentClinic }) => {
           {textForKey('No data here yet')} :(
         </Typography>
       )}
-      <div className='patient-payments-list__data-container'>
-        {!isLoading && payments.length > 0 && (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>{textForKey('Received by')}</TableCell>
-                  <TableCell>{textForKey('Date')}</TableCell>
-                  <TableCell>{textForKey('Paid for')}</TableCell>
-                  <TableCell align='right'>{textForKey('Amount')}</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {payments.map((payment) => (
-                  <TableRow key={payment.id}>
-                    <TableCell>{payment.userName}</TableCell>
-                    <TableCell>
-                      {moment(payment.created).format('DD.MM.YYYY HH:mm')}
-                    </TableCell>
-                    <TableCell>
-                      {payment.comment || textForKey('Appointment')}
-                    </TableCell>
-                    <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                      <div className='flexContainer' style={{ justifyContent: 'flex-end' }}>
-                        {getAmount(payment)}
-                        <a
-                          href={`${baseApiUrl}/invoices/receipt/${payment.invoiceId}?mode=invoice`}
-                          target='_blank'
-                          rel='noreferrer'
-                          style={{ marginLeft: '.5rem' }}
-                        >
-                          <IconPrint fill='#3A83DC' />
-                        </a>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow>
-                  <TableCell
-                    align='right'
-                    colSpan={4}
-                    style={{ borderBottom: 'none' }}
-                  >
-                    <div className='flexContainer' style={{ width: '100%', justifyContent: 'flex-end' }}>
-                      <Typography classes={{ root: 'totals-text' }}>
-                        {textForKey('Total')}:
-                      </Typography>
-                      <Typography
-                        classes={{ root: clsx('totals-text', styles['totals-amount']) }}
+      {!isLoading && payments.length > 0 && (
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>{textForKey('Received by')}</TableCell>
+                <TableCell>{textForKey('Date')}</TableCell>
+                <TableCell>{textForKey('Paid for')}</TableCell>
+                <TableCell align='right'>{textForKey('Amount')}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {payments.map((payment) => (
+                <TableRow key={payment.id}>
+                  <TableCell>{payment.userName}</TableCell>
+                  <TableCell>
+                    {moment(payment.created).format('DD.MM.YYYY HH:mm')}
+                  </TableCell>
+                  <TableCell>
+                    {payment.comment || textForKey('Appointment')}
+                  </TableCell>
+                  <TableCell align='right' classes={{ root: 'amount-cell' }}>
+                    <div className='flexContainer' style={{ justifyContent: 'flex-end' }}>
+                      {getAmount(payment)}
+                      <a
+                        href={`${baseApiUrl}/invoices/receipt/${payment.invoiceId}?mode=invoice`}
+                        target='_blank'
+                        rel='noreferrer'
+                        style={{ marginLeft: '.5rem' }}
                       >
-                        {totalAmount}
-                      </Typography>
+                        <IconPrint fill='#3A83DC' />
+                      </a>
                     </div>
                   </TableCell>
                 </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </div>
+              ))}
+              <TableRow>
+                <TableCell
+                  align='right'
+                  colSpan={4}
+                  style={{ borderBottom: 'none' }}
+                >
+                  <div className='flexContainer' style={{ width: '100%', justifyContent: 'flex-end' }}>
+                    <Typography classes={{ root: 'totals-text' }}>
+                      {textForKey('Total')}:
+                    </Typography>
+                    <Typography
+                      classes={{ root: clsx('totals-text', styles.totalsAmount) }}
+                    >
+                      {totalAmount}
+                    </Typography>
+                  </div>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </div>
   );
 };

@@ -1,8 +1,11 @@
 .patient-personal-data {
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   .patient-form-wrapper {
     padding: 1rem 1.5rem;
+    overflow-y: auto;
+    max-height: 100%;
   }
 }

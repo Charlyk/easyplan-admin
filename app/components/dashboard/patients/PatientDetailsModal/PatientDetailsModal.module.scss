@@ -319,12 +319,10 @@
   position: relative;
 
   &__data-container {
-    flex: 1;
     display: flex;
     flex-direction: column;
     padding: 1rem 1.5rem;
     min-height: 10rem;
-    overflow-y: scroll;
     position: relative;
 
     .MuiTableCell-head {

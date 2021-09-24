@@ -1,4 +1,4 @@
-.patient-purchases-list {
+.patientPurchasesList {
   width: 100%;
   max-height: 100%;
   flex: 1;
@@ -6,7 +6,7 @@
   flex-direction: column;
   position: relative;
 
-  .totals-amount {
+  .totalsAmount {
     color: #3A83DC !important;
     margin-left: .5rem;
   }
