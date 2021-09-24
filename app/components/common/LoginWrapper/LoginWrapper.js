@@ -21,7 +21,7 @@ import reducer, {
 import styles from './LoginWrapper.module.scss';
 import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 
-export default function LoginWrapper({ currentUser }) {
+export default function LoginWrapper({ currentUser, currentClinic, authToken }) {
   const router = useRouter();
   const isMobileDevice = useIsMobileDevice();
   const [{
@@ -31,10 +31,18 @@ export default function LoginWrapper({ currentUser }) {
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (currentUser != null) {
+    if (currentClinic != null && authToken) {
+      handleClinicExists(currentClinic, authToken);
+    } else if (currentUser != null) {
       router.replace('/clinics');
     }
-  }, [currentUser])
+  }, [currentUser, currentClinic, authToken]);
+
+  const handleClinicExists = async (clinic, token) => {
+    await signOut();
+    const clinicUrl = getClinicUrl(clinic, token);
+    await router.replace(clinicUrl);
+  }
 
   const handleFormChange = (newForm) => {
     localDispatch(setCurrentForm(newForm));
@@ -52,8 +60,8 @@ export default function LoginWrapper({ currentUser }) {
     window.location = `${appBaseUrl}/register`;
   };
 
-  const handleSuccessResponse = async (user) => {
-    const redirectUrl = getRedirectUrlForUser(user);
+  const handleSuccessResponse = async (user, subdomain) => {
+    const redirectUrl = getRedirectUrlForUser(user, subdomain);
     if (redirectUrl == null || router.asPath === redirectUrl) {
       return;
     }
@@ -93,12 +101,19 @@ export default function LoginWrapper({ currentUser }) {
     localDispatch(setErrorMessage(null));
     const [subdomain] = window.location.host.split('.');
     if (RestrictedSubdomains.includes(subdomain)) {
+      if (user.clinics.length > 1) {
+        // user has more than one clinic so we need to allow to select a clinic
+        await router.replace('/clinics');
+        return;
+      }
+      // user has only one clinic so we can select automatically it and redirect user to clinic page
       const clinic = user.clinics[0];
       await signOut();
       const clinicUrl = getClinicUrl(clinic, token);
       await router.replace(clinicUrl);
     } else {
-      await handleSuccessResponse(user);
+      // user is on clinic page so we need to open selected clinic
+      await handleSuccessResponse(user, subdomain);
     }
   }
 

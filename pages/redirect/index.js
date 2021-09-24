@@ -18,13 +18,16 @@ const Redirect = () => {
   const fetchUserData = async () => {
     try {
       const response = await getCurrentUser();
-      const redirectUrl = getRedirectUrlForUser(response.data);
+      const [subdomain] = window.location.host.split('.');
+      const redirectUrl = getRedirectUrlForUser(response.data, subdomain);
+      console.log(redirectUrl)
       if (redirectUrl == null || router.asPath === redirectUrl) {
         return;
       }
       await router.replace(redirectUrl);
     } catch (error) {
-      await router.replace('/login');
+      console.error(error)
+      // await router.replace('/login');
     }
   }
 

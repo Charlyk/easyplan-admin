@@ -1,10 +1,14 @@
 import { Role } from "../app/utils/constants";
 
-const getRedirectUrlForUser = (user) => {
+const getRedirectUrlForUser = (user, subdomain) => {
   if (user == null) {
     return '/login';
   }
-  const { userClinic } = user;
+  const { clinics } = user;
+  console.log(user);
+  const userClinic = clinics.find((item) =>
+    item.clinicDomain.toLowerCase() === subdomain?.toLowerCase()
+  );
   if (userClinic != null) {
     try {
       switch (userClinic.roleInClinic) {

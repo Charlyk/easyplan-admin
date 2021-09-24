@@ -1,17 +1,20 @@
 import React, { useCallback, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 import axios from "axios";
-import clsx from "clsx";
+import Typography from "@material-ui/core/Typography";
 
 import LoadingButton from '../../../../components/common/LoadingButton';
-import { JwtRegex, PasswordRegex } from '../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
+import { isDev } from "../../../../eas.config";
 import { wrapper } from "../../../../store";
+import { JwtRegex, PasswordRegex } from '../../../utils/constants';
+import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+import EASTextField from "../EASTextField";
 import styles from './ResetPasswordForm.module.scss';
+import { requestResetUserPassword } from "../../../../middleware/api/auth";
 
 const ResetPasswordForm = ({ token }) => {
+  const isMobileDevice = useIsMobileDevice();
   const [state, setState] = useState({
     newPassword: '',
     confirmPassword: '',
@@ -20,12 +23,13 @@ const ResetPasswordForm = ({ token }) => {
     redirectUser: false,
   });
 
-  const handleFormChange = event => {
-    setState({
-      ...state,
-      [event.target.id]: event.target.value,
-    });
-  };
+  const handleNewPasswordChange = (newValue) => {
+    setState({ ...state, newPassword: newValue });
+  }
+
+  const handleConfirmPasswordChange = (newValue) => {
+    setState({ ...state, confirmPassword: newValue });
+  }
 
   const handleSavePassword = useCallback(async () => {
     if (!isFormValid()) {
@@ -33,10 +37,10 @@ const ResetPasswordForm = ({ token }) => {
     }
     setState({ ...state, isLoading: true });
     try {
-      await axios.put(`/api/auth/reset-password`, {
+      await requestResetUserPassword({
         newPassword: state.newPassword,
         resetToken: token,
-      });
+      })
       toast.success(textForKey('Saved successfully'));
       window.location = `/login`;
     } catch (error) {
@@ -53,55 +57,70 @@ const ResetPasswordForm = ({ token }) => {
   };
 
   return (
-    <div className={styles['general-page']}>
-      <div className={styles['logo-container']}>
-        <img
-          src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
-          alt='EasyPlan'
-        />
-      </div>
-      <div className={styles['form-container']}>
-        <div className={clsx(styles['form-root'], styles['accept-invitation'])}>
-          <div className={styles['form-wrapper']}>
-            <span className={styles['form-title']}>
+    <div
+      className={styles.generalPage}
+    >
+      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
+      {!isMobileDevice && (
+        <div className={styles.logoContainer}>
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        </div>
+      )}
+      <div
+        className={styles.formContainer}
+        style={{
+          width: isMobileDevice ? '100%' : '60%',
+          backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
+        }}
+      >
+        {isMobileDevice && (
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        )}
+        <div
+          className={styles.formRoot}
+          style={{
+            width: isMobileDevice ? '90%' : '70%',
+            padding: isMobileDevice ? '2rem' : '3rem',
+          }}
+        >
+          <div className={styles.formWrapper}>
+            <Typography className={styles.formTitle}>
               {textForKey('Create new password')}
-            </span>
-            <span className={styles['welcome-text']}>
+            </Typography>
+            <Typography className={styles.welcomeText}>
               {textForKey('change password message')}
-            </span>
-            <Form.Group controlId='newPassword'>
-              <Form.Label>{textForKey('Enter a new password')}</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  isInvalid={
-                    state.newPassword.length > 0 &&
-                    !state.newPassword.match(PasswordRegex)
-                  }
-                  autoComplete='new-password'
-                  value={state.newPassword}
-                  onChange={handleFormChange}
-                  type='password'
-                />
-                <Form.Text className='text-muted'>
-                  {textForKey('passwordValidationMessage')}
-                </Form.Text>
-              </InputGroup>
-            </Form.Group>
-            <Form.Group controlId='confirmPassword'>
-              <Form.Label>{textForKey('Confirm password')}</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  autoComplete='new-password'
-                  isInvalid={
-                    state.confirmPassword.length > 0 &&
-                    state.confirmPassword !== state.newPassword
-                  }
-                  value={state.confirmPassword}
-                  onChange={handleFormChange}
-                  type='password'
-                />
-              </InputGroup>
-            </Form.Group>
+            </Typography>
+            <form autoComplete="off">
+              <EASTextField
+                type="password"
+                containerClass={styles.passwordField}
+                value={state.newPassword}
+                onChange={handleNewPasswordChange}
+                fieldLabel={textForKey('Enter a new password')}
+                helperText={textForKey('passwordValidationMessage')}
+                error={
+                  state.newPassword.length > 0 &&
+                  !state.newPassword.match(PasswordRegex)
+                }
+              />
+              <EASTextField
+                type="password"
+                containerClass={styles.passwordField}
+                fieldLabel={textForKey('Confirm password')}
+                onChange={handleConfirmPasswordChange}
+                value={state.confirmPassword}
+                error={
+                  state.confirmPassword.length > 0 &&
+                  state.confirmPassword !== state.newPassword
+                }
+              />
+            </form>
           </div>
           <div className={styles.footer}>
             <LoadingButton

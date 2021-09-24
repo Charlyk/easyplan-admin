@@ -38,6 +38,16 @@ export async function resetUserPassword(body, headers = null) {
 }
 
 /**
+ * Request password reset
+ * @param {{newPassword: string, resetToken: string}} body
+ * @param {Object|null} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestResetUserPassword(body, headers = null) {
+  return put('/api/auth/reset-password', headers, body)
+}
+
+/**
  * Sign out from current user account
  * @return {Promise<AxiosResponse<*>>}
  */

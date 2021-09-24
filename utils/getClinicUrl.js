@@ -4,6 +4,7 @@ const getClinicUrl = (clinic, authToken) => {
   if (typeof window === 'undefined') {
     return '';
   }
+  console.log(clinic)
   const { host, protocol } = window.location;
   const [_, domain, location, location2] = host.split('.');
   const queryString = new URLSearchParams({

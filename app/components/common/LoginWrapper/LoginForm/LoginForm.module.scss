@@ -1,4 +1,4 @@
-.login-form {
+.loginForm {
   position: relative;
 
   &.disabled {
@@ -13,10 +13,10 @@
   }
 
   :global(.form-group) {
-    .password-visibility-append {
+    .passwordVisibilityAppend {
       height: 33.19px;
 
-      .visibility-toggle-btn {
+      .visibilityToggleBtn {
         height: 100%;
         display: flex;
         align-items: center;
@@ -29,13 +29,13 @@
     }
   }
 
-  .forgot-password-container {
+  .forgotPasswordContainer {
     user-select: none;
     display: flex;
     justify-content: space-between;
     margin-bottom: .1rem;
 
-    .forgot-button {
+    .forgotButton {
       outline: none;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -53,7 +53,7 @@
   }
 
   :global(.footer) {
-    .footer-sign-up {
+    .footerSignUp {
       display: flex;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -65,7 +65,7 @@
         color: #34354C;
       }
 
-      .sign-up-btn {
+      .signUpBtn {
         outline: none;
         margin-left: .2rem;
         color: #3A83DC !important;

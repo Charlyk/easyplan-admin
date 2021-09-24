@@ -40,7 +40,7 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
     <div
       className={clsx(
         'form-root',
-        styles['login-form'],
+        styles.loginForm,
         {
           [styles.disabled]: isLoggingIn,
         }
@@ -68,12 +68,12 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
         </InputGroup>
       </Form.Group>
       <Form.Group controlId='password'>
-        <div className={styles['forgot-password-container']}>
+        <div className={styles.forgotPasswordContainer}>
           <Form.Label>{textForKey('Password')}</Form.Label>
           <div
             role='button'
             tabIndex={0}
-            className={styles['forgot-button']}
+            className={styles.forgotButton}
             onClick={onResetPassword}
           >
             {textForKey('Forgot your password')}?
@@ -85,11 +85,11 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
             type={isPasswordVisible ? 'text' : 'password'}
             onChange={handleFormChange}
           />
-          <InputGroup.Append className={styles['password-visibility-append']}>
+          <InputGroup.Append className={styles.passwordVisibilityAppend}>
             <Button
               onClick={togglePasswordVisibility}
               variant='outline-primary'
-              className={styles['visibility-toggle-btn']}
+              className={styles.visibilityToggleBtn}
             >
               {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
             </Button>
@@ -97,12 +97,12 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
         </InputGroup>
       </Form.Group>
       <div className='footer'>
-        <div className={styles['footer-sign-up']}>
+        <div className={styles.footerSignUp}>
           <span className='text'>{textForKey("Don't have an account")}?</span>
           <div
             role='button'
             tabIndex={0}
-            className={styles['sign-up-btn']}
+            className={styles.signUpBtn}
             onClick={onSignUp}
           >
             {textForKey('Sign Up')}
