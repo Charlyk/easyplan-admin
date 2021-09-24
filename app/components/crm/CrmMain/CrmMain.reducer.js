@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   columns: [],
-  linkModal: { open: false, contact: null },
+  linkModal: { open: false, deal: null },
   deleteModal: { open: false, deal: null },
+  updatedDeal: null,
 };
 
 const crmMainSlice = createSlice({
@@ -23,10 +24,13 @@ const crmMainSlice = createSlice({
       state.deleteModal = { open: false, deal: null };
     },
     openLinkModal(state, action) {
-      state.linkModal = { open: true, contact: action.payload };
+      state.linkModal = { open: true, deal: action.payload };
     },
     closeLinkModal(state) {
-      state.linkModal = { open: false, contact: null };
+      state.linkModal = { open: false, deal: null };
+    },
+    setUpdatedDeal(state, action) {
+      state.updatedDeal = action.payload;
     },
   },
 });
@@ -38,6 +42,7 @@ export const {
   closeDeleteModal,
   openLinkModal,
   closeLinkModal,
+  setUpdatedDeal,
 } = crmMainSlice.actions;
 
 export default crmMainSlice.reducer;

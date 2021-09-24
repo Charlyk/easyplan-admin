@@ -4,6 +4,7 @@ export const initialState = {
   isSearching: false,
   patients: [],
   searchQuery: '',
+  selectedPatient: null,
 };
 
 const existentPatientFormSlice = createSlice({
@@ -22,9 +23,13 @@ const existentPatientFormSlice = createSlice({
     },
     setSearchQuery(state, action) {
       state.searchQuery = action.payload;
-      if (action.payload.length === 0) {
+      state.selectedPatient = null;
+      if (action.payload.length < 3) {
         state.patients = [];
       }
+    },
+    setSelectedPatient(state, action) {
+      state.selectedPatient = action.payload;
     },
   },
 });
@@ -33,6 +38,7 @@ export const {
   setPatients,
   setIsSearching,
   setSearchQuery,
+  setSelectedPatient,
 } = existentPatientFormSlice.actions;
 
 export default existentPatientFormSlice.reducer;

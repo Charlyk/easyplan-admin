@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import { textForKey } from "../../../../../utils/localization";
+import { EmailRegex } from "../../../../utils/constants";
 import EASTextField from "../../../common/EASTextField";
 import reducer, {
   initialState,
@@ -13,31 +14,42 @@ import reducer, {
   setBirthday,
   setLastName,
   setPhoneNumber,
+  setContact,
 } from './NewPatientForm.reducer';
 import styles from './NewPatientForm.module.scss';
-import { EmailRegex } from "../../../../utils/constants";
-import DatePicker from "@material-ui/pickers/DatePicker";
 
-const NewPatientForm = ({ onChange }) => {
+const NewPatientForm = ({ contact, onChange }) => {
   const [{
     firstName,
     lastName,
     phoneNumber,
     phoneCountry,
     email,
-    birthday
+    birthday,
+    isPhoneValid
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    if (phoneNumber.length === 0 || !isPhoneValid) {
+      onChange?.(null);
+      return;
+    }
     onChange?.({
       firstName,
       lastName,
       phoneNumber,
-      email,
-      birthday: moment(birthday).format('YYYY-MM-DD'),
-      countryCode: phoneCountry.dialCode
+      countryCode: phoneCountry.dialCode,
+      emailAddress: email,
+      birthday: birthday != null ? moment(birthday).format('YYYY-MM-DD') : null
     });
-  }, [firstName, lastName, phoneNumber, email, birthday]);
+  }, [firstName, lastName, phoneNumber, email, birthday, isPhoneValid]);
+
+  useEffect(() => {
+    if (contact == null) {
+      return;
+    }
+    localDispatch(setContact(contact));
+  }, [contact]);
 
   const handleFirstNameChange = (newValue) => {
     localDispatch(setFirstName(newValue));
@@ -51,6 +63,10 @@ const NewPatientForm = ({ onChange }) => {
     localDispatch(setEmail(newValue));
   };
 
+  const handleBirthdayChange = (newValue) => {
+    localDispatch(setBirthday(moment(newValue).toDate()));
+  }
+
   const handlePhoneChange = (value, country, event) => {
     localDispatch(setPhoneNumber({
       phoneNumber: value.replace(country.dialCode, ''),
@@ -63,6 +79,8 @@ const NewPatientForm = ({ onChange }) => {
   return (
     <div className={styles.newPatientForm}>
       <EASTextField
+        id="firstName"
+        type="text"
         value={lastName}
         fieldLabel={textForKey('Last name')}
         placeholder={textForKey('Last name')}
@@ -71,6 +89,8 @@ const NewPatientForm = ({ onChange }) => {
       />
 
       <EASTextField
+        id="lastName"
+        type="text"
         value={firstName}
         fieldLabel={textForKey('First name')}
         placeholder={textForKey('First name')}
@@ -80,6 +100,7 @@ const NewPatientForm = ({ onChange }) => {
 
       <Typography className={styles.formLabel}>
         {textForKey('Phone number')}
+        <span style={{ color: 'red', marginLeft: '2px' }}>*</span>
       </Typography>
       <PhoneInput
         alwaysDefaultMask
@@ -94,12 +115,24 @@ const NewPatientForm = ({ onChange }) => {
       />
 
       <EASTextField
+        id="email"
+        type="email"
         value={email}
         error={email.length > 0 && !email.match(EmailRegex)}
         fieldLabel={textForKey('Email')}
         placeholder={textForKey('Email')}
         containerClass={styles.searchField}
         onChange={handleEmailChange}
+      />
+
+      <EASTextField
+        id="birthday"
+        type="date"
+        value={birthday != null ? moment(birthday).format('YYYY-MM-DD') : ''}
+        fieldLabel={textForKey('Birthday')}
+        placeholder={textForKey('Birthday')}
+        containerClass={styles.searchField}
+        onChange={handleBirthdayChange}
       />
     </div>
   );

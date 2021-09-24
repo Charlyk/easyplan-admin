@@ -5,13 +5,15 @@ import moment from "moment-timezone";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from "../../../../../utils/localization";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
+import IconCheckMark from "../../../icons/iconCheckMark";
 import IconAvatar from "../../../icons/iconAvatar";
+import IconTrash from "../../../icons/iconTrash";
 import IconLink from "../../../icons/iconLink";
 import styles from './UnsortedDealItem.module.scss';
-import IconTrash from "../../../icons/iconTrash";
-import IconCheckMark from "../../../icons/iconCheckMark";
 
 const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
   const sourceIcon = useMemo(() => {
@@ -20,8 +22,24 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
     )
   }, [deal]);
 
+  const personName = useMemo(() => {
+    if (deal.patient == null) {
+      return deal.contact.name;
+    }
+    const { patient } = deal;
+    if (patient.firstName && patient.lastName) {
+      return `${patient.firstName} ${patient.lastName}`;
+    } else if (patient.firstName && !patient.lastName) {
+      return patient.firstName
+    } else if (!patient.firstName && patient.lastName) {
+      return patient.lastName;
+    } else {
+      return patient.phoneWithCode;
+    }
+  }, [deal]);
+
   const handleLinkPatient = () => {
-    onLinkPatient?.(deal.contact);
+    onLinkPatient?.(deal);
   }
 
   const handleDeleteDeal = () => {
@@ -41,7 +59,7 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
           {textForKey('from')}: {deal.source}
         </Typography>
         <Typography className={styles.contactName}>
-          {deal.contact.name}
+          {personName}
         </Typography>
         <div className={styles.lastMessageContainer}>
           <Typography noWrap className={styles.snippetLabel}>
@@ -78,7 +96,7 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal }) => {
   )
 };
 
-export default UnsortedDealItem;
+export default React.memo(UnsortedDealItem, areComponentPropsEqual);
 
 UnsortedDealItem.propTypes = {
   deal: PropTypes.shape({
@@ -94,7 +112,20 @@ UnsortedDealItem.propTypes = {
       phoneNumber: PropTypes.string,
       photoUrl: PropTypes.string
     }),
-    patient: PropTypes.any,
+    patient: PropTypes.shape({
+      id: PropTypes.number,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      phoneWithCode: PropTypes.string,
+    }),
+    state: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      color: PropTypes.string,
+      orderId: PropTypes.number,
+      deleteable: PropTypes.bool,
+      type: PropTypes.string,
+    }),
   }),
   onLinkPatient: PropTypes.func,
   onDeleteDeal: PropTypes.func,

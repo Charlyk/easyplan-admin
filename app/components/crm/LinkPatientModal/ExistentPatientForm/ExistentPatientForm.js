@@ -17,12 +17,18 @@ import reducer, {
   setIsSearching,
   setPatients,
   setSearchQuery,
+  setSelectedPatient,
 } from './ExistentPatientForm.reducer';
 import styles from './ExistentPatientForm.module.scss';
 import EASTextField from "../../../common/EASTextField";
 
-const ExistentPatientForm = () => {
-  const [{ isSearching, patients, searchQuery }, localDispatch] = useReducer(reducer, initialState);
+const ExistentPatientForm = ({ onChange }) => {
+  const [{
+    isSearching,
+    patients,
+    searchQuery,
+    selectedPatient,
+  }, localDispatch] = useReducer(reducer, initialState);
 
   const searchPatients = useCallback(debounce(async (query) => {
     try {
@@ -45,14 +51,21 @@ const ExistentPatientForm = () => {
       return;
     }
     searchPatients(searchQuery);
-  }, [searchQuery])
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (selectedPatient == null) {
+      return;
+    }
+    onChange?.({ patientId: selectedPatient.id });
+  }, [selectedPatient]);
 
   const handleQueryChange = (newQuery) => {
     localDispatch(setSearchQuery(newQuery));
   }
 
   const handlePatientClick = (patient) => {
-    console.log(patient);
+    localDispatch(setSelectedPatient(patient));
   }
 
   return (
@@ -72,10 +85,11 @@ const ExistentPatientForm = () => {
       <div className={styles.dataContainer}>
         <List style={{ width: '100%' }}>
           {patients.map((patient) => (
-            <>
+            <React.Fragment key={patient.id}>
               <ListItem
                 dense
                 key={patient.id}
+                selected={selectedPatient?.id === patient.id}
                 alignItems="flex-start"
                 className={styles.listItem}
                 onClick={() => handlePatientClick(patient)}
@@ -89,7 +103,7 @@ const ExistentPatientForm = () => {
                 />
               </ListItem>
               <Divider variant="inset" component="li"/>
-            </>
+            </React.Fragment>
           ))}
         </List>
         {patients.length === 0 && (

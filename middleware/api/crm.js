@@ -64,3 +64,34 @@ export async function requestFetchDeals(stateId, page, itemsPerPage, headers = n
   }).toString()
   return get(`/api/crm/deals?${queryString}`, headers)
 }
+
+/**
+ * Link a patient to a deal
+ * @param {number} dealId
+ * @param {{
+ *   patientId?: number;
+ *   firstName?: string;
+ *   lastName?: string;
+ *   phoneNumber?: string;
+ *   countryCode?: string;
+ *   emailAddress?: string;
+ *   birthday?: string;
+ * }} requestBody
+ * @param {any} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestLinkPatient(dealId, requestBody, headers = null) {
+  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
+  return put(`/api/crm/link-patient?${queryString}`, headers, requestBody);
+}
+
+/**
+ * Link a patient to a deal
+ * @param {number} dealId
+ * @param {any} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestConfirmFirstContact(dealId, headers = null) {
+  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
+  return get(`/api/crm/first-contact?${queryString}`, headers);
+}

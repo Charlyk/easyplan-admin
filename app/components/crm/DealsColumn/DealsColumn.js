@@ -29,12 +29,23 @@ import reducer, {
   setColumnColor,
   setShowCreateColumn,
   setData,
-  setIsFetching
+  setIsFetching, setUpdatedDeal
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
 import DealItem from "./DealItem";
 
-const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate, onLinkPatient, onDeleteDeal }) => {
+const DealsColumn = (
+  {
+    dealState,
+    isFirst,
+    isLast,
+    updatedDeal,
+    onMove,
+    onUpdate,
+    onLinkPatient,
+    onDeleteDeal
+  }
+) => {
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
   const [color, setColor] = useColor('hex', dealState.color);
@@ -56,6 +67,14 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate, onLinkPatie
     localDispatch(setColumnData(dealState));
     fetchDealsForState();
   }, [dealState]);
+
+  useEffect(() => {
+    if (updatedDeal == null) {
+      return;
+    }
+
+    localDispatch(setUpdatedDeal(updatedDeal));
+  }, [updatedDeal]);
 
   const filteredActions = useMemo(() => {
     return sheetActions.filter(action => {
@@ -207,7 +226,7 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate, onLinkPatie
               className={styles.saveButton}
               onPointerUp={handleSaveColumnName}
             >
-              <DoneIcon />
+              <DoneIcon/>
             </IconButton>
           </Box>
         ) : (
@@ -227,7 +246,7 @@ const DealsColumn = ({ dealState, isFirst, isLast, onMove, onUpdate, onLinkPatie
         />
         <div className={styles.editBtnContainer} ref={actionsBtnRef}>
           <IconButton onPointerUp={handleEditColumn}>
-            <MoreHorizIcon />
+            <MoreHorizIcon/>
           </IconButton>
         </div>
       </div>
@@ -256,7 +275,9 @@ DealsColumn.propTypes = {
     color: PropTypes.string,
     orderId: PropTypes.number,
     deleteable: PropTypes.bool,
+    type: PropTypes.string,
   }),
+  updatedDeal: PropTypes.any,
   onMove: PropTypes.func,
   onUpdate: PropTypes.func,
   onLinkPatient: PropTypes.func,

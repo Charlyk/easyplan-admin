@@ -58,6 +58,14 @@
     .listItem {
       cursor: pointer;
 
+      &:global(.Mui-selected) {
+        background-color: #DBEEFB;
+
+        &:hover {
+          background-color: #DBEEFB;
+        }
+      }
+
       &:hover {
         background-color: #f8f7f7;
       }

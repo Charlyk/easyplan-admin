@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import orderBy from 'lodash/orderBy';
 import { textForKey } from "../../../../utils/localization";
 
 export const sheetActions = [
@@ -50,6 +51,7 @@ export const initialState = {
   columnColor: '',
   totalElements: 0,
   items: [],
+  dealState: null,
 };
 
 const dealsColumnSlice = createSlice({
@@ -59,6 +61,7 @@ const dealsColumnSlice = createSlice({
     setColumnData(state, action) {
       state.columnName = action.payload.name;
       state.columnColor = action.payload.color;
+      state.dealState = action.payload;
     },
     setColumnName(state, action) {
       state.columnName = action.payload.toUpperCase();
@@ -90,6 +93,27 @@ const dealsColumnSlice = createSlice({
     },
     setIsFetching(state, action) {
       state.isFetching = action.payload;
+    },
+    setUpdatedDeal(state, action) {
+      const newDeal = action.payload;
+      const { state: itemState } = newDeal;
+      const { dealState: columnState } = state;
+      if (itemState.id !== columnState.id) {
+        state.items = state.items.filter((item) => item.id !== newDeal.id);
+      } else {
+        const itemExists = state.items.some((item) => item.id === newDeal.id);
+        if (itemExists) {
+          state.items = state.items.map((item) => {
+            if (item.id !== newDeal.id) {
+              return item;
+            }
+
+            return newDeal;
+          });
+        } else {
+          state.items = orderBy([...state.items, newDeal], ['created'], ['desc']);
+        }
+      }
     }
   },
 });
@@ -104,6 +128,7 @@ export const {
   setShowCreateColumn,
   setData,
   setIsFetching,
+  setUpdatedDeal,
 } = dealsColumnSlice.actions;
 
 export default dealsColumnSlice.reducer;

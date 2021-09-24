@@ -32,6 +32,13 @@ const newPatientFormSlice = createSlice({
     setBirthday(state, action) {
       state.birthday = action.payload;
     },
+    setContact(state, action) {
+      state.email = action.payload.email ?? ''
+      state.phoneNumber = action.payload.phoneNumber ?? ''
+      const [firstName, lastName] = action.payload.name.split(' ');
+      state.firstName = firstName;
+      state.lastName = lastName;
+    },
   },
 });
 
@@ -41,6 +48,7 @@ export const {
   setBirthday,
   setPhoneNumber,
   setLastName,
+  setContact,
 } = newPatientFormSlice.actions;
 
 export default newPatientFormSlice.reducer;
