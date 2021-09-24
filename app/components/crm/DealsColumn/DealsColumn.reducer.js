@@ -114,6 +114,7 @@ const dealsColumnSlice = createSlice({
           state.items = orderBy([...state.items, newDeal], ['created'], ['desc']);
         }
       }
+      state.totalElements = state.items.length;
     }
   },
 });
