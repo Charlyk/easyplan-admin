@@ -18,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const BottomSheetDialog = ({ open, title, children, isLoading, onClose, onSave }) => {
+const BottomSheetDialog = ({ open, title, children, canSave, isLoading, onClose, onSave }) => {
   const handleClose = () => {
     onClose?.();
   };
@@ -36,7 +36,7 @@ const BottomSheetDialog = ({ open, title, children, isLoading, onClose, onSave }
       TransitionComponent={Transition}
     >
       <AppBar className={styles.appBar}>
-        <Toolbar>
+        <Toolbar className={styles.toolbar}>
           <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
           </IconButton>
@@ -51,11 +51,11 @@ const BottomSheetDialog = ({ open, title, children, isLoading, onClose, onSave }
           >
             {isLoading ? (
               <CircularProgress className={styles.progressBar} />
-            ) : (
+            ) : canSave ? (
               <Button autoFocus color="inherit" onClick={handleSave}>
                 {textForKey('Save')}
               </Button>
-            )}
+            ) : null}
           </Box>
         </Toolbar>
       </AppBar>
@@ -70,6 +70,7 @@ export default BottomSheetDialog;
 
 BottomSheetDialog.propTypes = {
   open: PropTypes.bool.isRequired,
+  canSave: PropTypes.bool,
   isLoading: PropTypes.bool,
   title: PropTypes.string,
   children: PropTypes.any,
@@ -78,4 +79,5 @@ BottomSheetDialog.propTypes = {
 
 BottomSheetDialog.defaultProps = {
   isLoading: false,
+  canSave: true,
 };

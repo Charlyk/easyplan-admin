@@ -4,19 +4,32 @@ import UnsortedDealItem from "../UnsortedDealItem";
 import SortedDealItem from "../SortedDealItem";
 import styles from './DealItem.module.scss';
 
-const DealItem = ({ dealItem, color, onLinkPatient, onDeleteDeal, onConfirmFirstContact }) => {
+const DealItem = (
+  {
+    dealItem,
+    color,
+    onLinkPatient,
+    onDeleteDeal,
+    onConfirmFirstContact,
+    onDealClick,
+  }
+) => {
   const isUnsorted = dealItem.state.type === 'Unsorted';
   return (
     <div className={styles.dealItem} style={{ backgroundColor: isUnsorted ? 'white' : `${color}0D`}}>
       {dealItem.state.type === 'Unsorted' ? (
         <UnsortedDealItem
           deal={dealItem}
+          onDealClick={onDealClick}
           onLinkPatient={onLinkPatient}
           onDeleteDeal={onDeleteDeal}
           onConfirmFirstContact={onConfirmFirstContact}
         />
       ) : (
-        <SortedDealItem deal={dealItem}/>
+        <SortedDealItem
+          deal={dealItem}
+          onDealClick={onDealClick}
+        />
       )}
     </div>
   );

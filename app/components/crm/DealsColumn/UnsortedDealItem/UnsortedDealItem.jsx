@@ -8,10 +8,11 @@ import IconButton from "@material-ui/core/IconButton";
 import ActionsSheet from "../../../../../components/common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from "../../../../../utils/localization";
+import getPatientName from "../../../../utils/getPatientName";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
 import IconAvatar from "../../../icons/iconAvatar";
-import styles from './UnsortedDealItem.module.scss';
 import IconLink from "../../../icons/iconLink";
+import styles from './UnsortedDealItem.module.scss';
 
 const actions = [
   {
@@ -34,7 +35,15 @@ const actions = [
   },
 ]
 
-const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstContact }) => {
+const UnsortedDealItem = (
+  {
+    deal,
+    onLinkPatient,
+    onDeleteDeal,
+    onConfirmFirstContact,
+    onDealClick,
+  }
+) => {
   const moreBtnRef = useRef(null);
   const [showActions, setShowActions] = useState(false);
 
@@ -49,15 +58,7 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstCon
       return deal.contact.name;
     }
     const { patient } = deal;
-    if (patient.firstName && patient.lastName) {
-      return `${patient.firstName} ${patient.lastName}`;
-    } else if (patient.firstName && !patient.lastName) {
-      return patient.firstName
-    } else if (!patient.firstName && patient.lastName) {
-      return patient.lastName;
-    } else {
-      return patient.phoneWithCode;
-    }
+    return getPatientName(patient);
   }, [deal]);
 
   const filteredActions = useMemo(() => {
@@ -83,28 +84,33 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstCon
     handleCloseActions();
   };
 
-  const handleMoreClick = () => {
+  const handleMoreClick = (event) => {
+    event.stopPropagation();
     setShowActions(true);
-  }
+  };
 
   const handleCloseActions = () => {
     setShowActions(false);
-  }
+  };
 
   const handleLinkPatient = () => {
     onLinkPatient?.(deal);
-  }
+  };
 
   const handleDeleteDeal = () => {
     onDeleteDeal?.(deal);
-  }
+  };
 
   const handleConfirmFirstContact = () => {
     onConfirmFirstContact?.(deal);
-  }
+  };
+
+  const handleDealClick = () => {
+    onDealClick?.(deal);
+  };
 
   return (
-    <div className={styles.unsortedDealItem}>
+    <div className={styles.unsortedDealItem} onPointerUp={handleDealClick}>
       <ActionsSheet
         open={showActions}
         anchorEl={moreBtnRef.current}
@@ -205,4 +211,5 @@ UnsortedDealItem.propTypes = {
   onLinkPatient: PropTypes.func,
   onDeleteDeal: PropTypes.func,
   onConfirmFirstContact: PropTypes.func,
+  onDealClick: PropTypes.func,
 };

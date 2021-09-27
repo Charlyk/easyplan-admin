@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Typography from "@material-ui/core/Typography";
 import { toast } from "react-toastify";
 
-import RegisterForm from "../../../../app/components/common/RegistrationWrapper/RegisterForm/RegisterForm";
+import RegisterForm from "./RegisterForm/RegisterForm";
 import uploadFileToAWS from "../../../../utils/uploadFileToAWS";
 import { registerUser } from "../../../../middleware/api/auth";
 import { textForKey } from "../../../../utils/localization";

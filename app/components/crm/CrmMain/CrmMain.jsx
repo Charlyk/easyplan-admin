@@ -15,19 +15,23 @@ import reducer, {
   openDeleteModal,
   closeDeleteModal,
   setUpdatedDeal,
+  openDetailsModal,
+  closeDealDetails,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
 import onRequestError from "../../../utils/onRequestError";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
+const DealDetails = dynamic(() => import('../DealDetails'));
 
 const CrmMain = ({ states }) => {
   const [{
     columns,
     linkModal,
     deleteModal,
-    updatedDeal
+    updatedDeal,
+    detailsModal,
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -58,6 +62,14 @@ const CrmMain = ({ states }) => {
   const handleCloseDeleteModal = () => {
     localDispatch(closeDeleteModal());
   };
+
+  const handleDealClick = (deal) => {
+    localDispatch(openDetailsModal(deal));
+  }
+
+  const handleCloseDetails = () => {
+    localDispatch(closeDealDetails());
+  }
 
   const handleDeleteConfirmed = () => {
     handleCloseDeleteModal();
@@ -108,6 +120,12 @@ const CrmMain = ({ states }) => {
         onClose={handleCloseDeleteModal}
         onConfirm={handleDeleteConfirmed}
       />
+      <DealDetails
+        open={detailsModal.open}
+        deal={detailsModal.deal}
+        states={states}
+        onClose={handleCloseDetails}
+      />
       <div className={styles.columnsContainer}>
         {columns.map((dealState, index) => (
           <DealsColumn
@@ -118,6 +136,7 @@ const CrmMain = ({ states }) => {
             dealState={dealState}
             onUpdate={updateColumns}
             onMove={handleColumnMoved}
+            onDealClick={handleDealClick}
             onLinkPatient={handleLinkPatient}
             onDeleteDeal={handleDeleteDeal}
             onConfirmFirstContact={handleConfirmFirstContact}

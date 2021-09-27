@@ -4,6 +4,7 @@ export const initialState = {
   columns: [],
   linkModal: { open: false, deal: null },
   deleteModal: { open: false, deal: null },
+  detailsModal: { open: false, deal: null },
   updatedDeal: null,
 };
 
@@ -33,6 +34,12 @@ const crmMainSlice = createSlice({
     setUpdatedDeal(state, action) {
       state.updatedDeal = action.payload;
     },
+    openDetailsModal(state, action) {
+      state.detailsModal = { open: true, deal: action.payload };
+    },
+    closeDealDetails(state) {
+      state.detailsModal = { open: false, deal: null };
+    }
   },
 });
 
@@ -44,6 +51,8 @@ export const {
   openLinkModal,
   closeLinkModal,
   setUpdatedDeal,
+  openDetailsModal,
+  closeDealDetails,
 } = crmMainSlice.actions;
 
 export default crmMainSlice.reducer;

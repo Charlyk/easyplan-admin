@@ -4,23 +4,16 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment-timezone";
 
 import { textForKey } from "../../../../../utils/localization";
+import getPatientName from "../../../../utils/getPatientName";
 import styles from "./SortedDealItem.module.scss";
 
-const SortedDealItem = ({ deal }) => {
+const SortedDealItem = ({ deal, onDealClick }) => {
   const personName = useMemo(() => {
     if (deal.patient == null) {
       return deal.contact.name;
     }
     const { patient } = deal;
-    if (patient.firstName && patient.lastName) {
-      return `${patient.firstName} ${patient.lastName}`;
-    } else if (patient.firstName && !patient.lastName) {
-      return patient.firstName
-    } else if (!patient.firstName && patient.lastName) {
-      return patient.lastName;
-    } else {
-      return patient.phoneWithCode;
-    }
+    return getPatientName(patient);
   }, [deal]);
 
   const itemTitle = useMemo(() => {
@@ -63,13 +56,18 @@ const SortedDealItem = ({ deal }) => {
     return moment(deal.schedule.dateAndTime).format('DD MMM YYYY HH:mm');
   }, [deal.schedule]);
 
+  const handleDealClick = () => {
+    onDealClick?.(deal);
+  }
+
   return (
-    <div className={styles.sortedDealItem}>
+    <div className={styles.sortedDealItem} onPointerUp={handleDealClick}>
       <div className={styles.content}>
         <Typography className={styles.sourceLabel}>
           {personName},
           <a
             href={`tel:${deal.patient.phoneWithCode.replace('+', '')}`}
+            onPointerUp={(e) => e.stopPropagation()}
             style={{ marginLeft: '3px' }}
           >
             {deal.patient.phoneWithCode}
@@ -169,4 +167,5 @@ SortedDealItem.propTypes = {
       }),
     }),
   }),
+  onDealClick: PropTypes.func,
 }

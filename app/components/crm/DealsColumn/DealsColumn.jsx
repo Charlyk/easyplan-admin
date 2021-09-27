@@ -45,6 +45,7 @@ const DealsColumn = (
     onLinkPatient,
     onDeleteDeal,
     onConfirmFirstContact,
+    onDealClick,
   }
 ) => {
   const actionsBtnRef = useRef(null);
@@ -254,6 +255,7 @@ const DealsColumn = (
         {items.map(deal => (
           <DealItem
             key={deal.id}
+            onDealClick={onDealClick}
             color={dealState.color}
             dealItem={deal}
             onLinkPatient={onLinkPatient}
@@ -285,4 +287,5 @@ DealsColumn.propTypes = {
   onLinkPatient: PropTypes.func,
   onDeleteDeal: PropTypes.func,
   onConfirmFirstContact: PropTypes.func,
+  onDealClick: PropTypes.func,
 };
