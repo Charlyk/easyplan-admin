@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment-timezone";
 
@@ -23,12 +23,45 @@ const SortedDealItem = ({ deal }) => {
     }
   }, [deal]);
 
+  const itemTitle = useMemo(() => {
+    switch (deal.state.type) {
+      case 'FirstContact':
+        return deal.messageSnippet;
+      case 'Failed':
+      case 'Completed':
+      case 'Rescheduled':
+      case 'Scheduled':
+        return deal.service.name;
+      case 'Custom':
+        if (deal.service != null) {
+          return deal.service.name;
+        } else {
+          return deal.messageSnippet;
+        }
+    }
+  }, [deal]);
+
   const assigneeName = useMemo(() => {
-    if (deal.assignedTo == null) {
+    if (deal?.assignedTo == null) {
       return textForKey('Not assigned');
     }
     return `${deal.assignedTo.firstName} ${deal.assignedTo.lastName}`
   }, [deal.assignedTo]);
+
+  const itemResponsible = useMemo(() => {
+    if (deal?.schedule != null) {
+      const { doctor } = deal.schedule;
+      return `${doctor?.firstName} ${doctor?.lastName}`;
+    }
+    return assigneeName;
+  }, [deal, assigneeName]);
+
+  const scheduleTime = useMemo(() => {
+    if (deal.schedule == null) {
+      return null;
+    }
+    return moment(deal.schedule.dateAndTime).format('DD MMM YYYY HH:mm');
+  }, [deal.schedule]);
 
   return (
     <div className={styles.sortedDealItem}>
@@ -43,10 +76,20 @@ const SortedDealItem = ({ deal }) => {
           </a>
         </Typography>
         <Typography noWrap className={styles.contactName}>
-          {deal.messageSnippet}
+          {itemTitle}
         </Typography>
+        {scheduleTime != null && (
+          <Typography noWrap className={styles.scheduleTime}>
+            {scheduleTime}
+          </Typography>
+        )}
+        {deal?.schedule?.canceledReason != null && (
+          <Typography noWrap className={styles.scheduleTime}>
+            {deal.schedule.canceledReason}
+          </Typography>
+        )}
         <Typography noWrap className={styles.assigneeName}>
-          {assigneeName}
+          {itemResponsible}
         </Typography>
         <div className={styles.lastMessageContainer}>
           <Typography noWrap className={styles.snippetLabel}>
@@ -55,6 +98,11 @@ const SortedDealItem = ({ deal }) => {
           {deal.sourceDescription && (
             <Typography noWrap className={styles.snippetLabel}>
               {deal.sourceDescription}
+            </Typography>
+          )}
+          {deal?.schedule != null && (
+            <Typography noWrap className={styles.snippetLabel}>
+              {assigneeName}
             </Typography>
           )}
         </div>
@@ -101,6 +149,24 @@ SortedDealItem.propTypes = {
       id: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
+    }),
+    service: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      price: PropTypes.number,
+      currency: PropTypes.string,
+    }),
+    schedule: PropTypes.shape({
+      id: PropTypes.number,
+      created: PropTypes.string,
+      dateAndTime: PropTypes.string,
+      endTime: PropTypes.string,
+      canceledReason: PropTypes.string,
+      doctor: PropTypes.shape({
+        id: PropTypes.number,
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+      }),
     }),
   }),
 }

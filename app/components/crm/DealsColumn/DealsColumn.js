@@ -254,6 +254,7 @@ const DealsColumn = (
         {items.map(deal => (
           <DealItem
             key={deal.id}
+            color={dealState.color}
             dealItem={deal}
             onLinkPatient={onLinkPatient}
             onDeleteDeal={onDeleteDeal}

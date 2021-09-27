@@ -2,6 +2,8 @@ import React, { useMemo, useRef, useState } from "react";
 import PropTypes from 'prop-types';
 import moment from "moment-timezone";
 import Typography from "@material-ui/core/Typography";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import IconButton from "@material-ui/core/IconButton";
 
 import ActionsSheet from "../../../../../components/common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
@@ -9,8 +11,7 @@ import { textForKey } from "../../../../../utils/localization";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
 import IconAvatar from "../../../icons/iconAvatar";
 import styles from './UnsortedDealItem.module.scss';
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import IconButton from "@material-ui/core/IconButton";
+import IconLink from "../../../icons/iconLink";
 
 const actions = [
   {
@@ -122,7 +123,7 @@ const UnsortedDealItem = ({ deal, onLinkPatient, onDeleteDeal, onConfirmFirstCon
           {textForKey('from')}: {deal.source}
         </Typography>
         <Typography className={styles.contactName}>
-          {personName}
+          {deal.contact.name} {deal?.patient != null && <><IconLink fill="#3A83DC" /> {personName}</>}
         </Typography>
         <div className={styles.lastMessageContainer}>
           <Typography noWrap className={styles.snippetLabel}>
@@ -181,6 +182,24 @@ UnsortedDealItem.propTypes = {
       id: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
+    }),
+    service: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      price: PropTypes.number,
+      currency: PropTypes.string,
+    }),
+    schedule: PropTypes.shape({
+      id: PropTypes.number,
+      created: PropTypes.string,
+      dateAndTime: PropTypes.string,
+      endTime: PropTypes.string,
+      canceledReason: PropTypes.string,
+      doctor: PropTypes.shape({
+        id: PropTypes.number,
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+      }),
     }),
   }),
   onLinkPatient: PropTypes.func,

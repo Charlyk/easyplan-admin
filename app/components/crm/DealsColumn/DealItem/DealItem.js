@@ -1,12 +1,13 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import UnsortedDealItem from "../UnsortedDealItem";
 import SortedDealItem from "../SortedDealItem";
 import styles from './DealItem.module.scss';
 
-const DealItem = ({ dealItem, onLinkPatient, onDeleteDeal, onConfirmFirstContact }) => {
+const DealItem = ({ dealItem, color, onLinkPatient, onDeleteDeal, onConfirmFirstContact }) => {
+  const isUnsorted = dealItem.state.type === 'Unsorted';
   return (
-    <div className={styles.dealItem}>
+    <div className={styles.dealItem} style={{ backgroundColor: isUnsorted ? 'white' : `${color}0D`}}>
       {dealItem.state.type === 'Unsorted' ? (
         <UnsortedDealItem
           deal={dealItem}
@@ -24,6 +25,10 @@ const DealItem = ({ dealItem, onLinkPatient, onDeleteDeal, onConfirmFirstContact
 export default DealItem;
 
 DealItem.propTypes = {
+  color: PropTypes.string,
+  onLinkPatient: PropTypes.func,
+  onDeleteDeal: PropTypes.func,
+  onConfirmFirstContact: PropTypes.func,
   dealItem: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
@@ -56,6 +61,24 @@ DealItem.propTypes = {
       id: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
+    }),
+    service: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      price: PropTypes.number,
+      currency: PropTypes.string,
+    }),
+    schedule: PropTypes.shape({
+      id: PropTypes.number,
+      created: PropTypes.string,
+      dateAndTime: PropTypes.string,
+      endTime: PropTypes.string,
+      canceledReason: PropTypes.string,
+      doctor: PropTypes.shape({
+        id: PropTypes.number,
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+      }),
     }),
   }),
 }
