@@ -11,7 +11,7 @@ import IconSuccess from '../../../icons/iconSuccess';
 import { Role } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import LeftSideModal from '../../../common/LeftSideModal';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import {
   deleteUserHoliday,
   getUserDetails,

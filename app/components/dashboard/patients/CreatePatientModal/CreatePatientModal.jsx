@@ -17,7 +17,7 @@ import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
 
-const EasyDatePicker = dynamic(() => import('../../../../../components/common/EasyDatePicker'));
+const EasyDatePicker = dynamic(() => import('../../../common/EasyDatePicker'));
 
 const CreatePatientModal = ({ open, onClose }) => {
   const dispatch = useDispatch();

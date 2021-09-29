@@ -17,8 +17,8 @@ import { environment, isDev } from "../../../../eas.config";
 import PageHeader from '../../common/MainComponent/PageHeader/PageHeader';
 import styles from './DoctorsMain.module.scss';
 
-const ClinicSelector = dynamic(() => import('../../../../components/common/ClinicSelector'));
-const EditProfileModal = dynamic(() => import('../../../../components/common/EditProfileModal'));
+const ClinicSelector = dynamic(() => import('../../common/ClinicSelector'));
+const EditProfileModal = dynamic(() => import('../../common/modals/EditProfileModal'));
 
 const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
   const dispatch = useDispatch();

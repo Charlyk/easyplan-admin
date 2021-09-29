@@ -33,8 +33,8 @@ import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
 const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
 const ServiceDetailsModal = dynamic(() => import('../../dashboard/services/ServiceDetailsModal'));
-const DataMigrationModal = dynamic(() => import('../../../../components/common/DataMigrationModal'));
-const ExchangeRatesModal = dynamic(() => import('../ExchangeRatesModal'));
+const DataMigrationModal = dynamic(() => import('../modals/DataMigrationModal'));
+const ExchangeRatesModal = dynamic(() => import('../modals/ExchangeRatesModal'));
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 
 const MainComponent = (

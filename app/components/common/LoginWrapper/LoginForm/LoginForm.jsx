@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Button, Form, InputGroup } from 'react-bootstrap';
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import VisibilityOn from "@material-ui/icons/Visibility";
 
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import styles from './LoginForm.module.scss';
+import EASTextField from "../../EASTextField";
+import IconButton from "@material-ui/core/IconButton";
+import Box from "@material-ui/core/Box";
 
 const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSignUp, onLogin }) => {
   const [data, setData] = useState({ email: '', password: '' });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const handleFormChange = (event) => {
-    setData({
-      ...data,
-      [event.target.id]: event.target.value,
-    });
-  };
+  const handleEmailChange = (newValue) => {
+    setData({ ...data, email: newValue });
+  }
+
+  const handlePasswordChange = (newValue) => {
+    setData({ ...data, password: newValue });
+  }
 
   const isFormValid = () => {
     return data.email.match(EmailRegex) && data.password.length > 4;
@@ -51,51 +54,47 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
       }}
     >
       <span className='welcome-text'>{textForKey('Welcome to EasyPlan')}</span>
-      <span className='form-title' style={{ marginBottom: isMobile ? '1rem' : '3rem' }}>
+      <span className='form-title' style={{ marginBottom: '1rem' }}>
         {textForKey('Log in to your account')}
       </span>
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
-      <Form.Group controlId='email'>
-        <Form.Label>{textForKey('Email')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={data.email}
-            type='email'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='password'>
-        <div className={styles.forgotPasswordContainer}>
-          <Form.Label>{textForKey('Password')}</Form.Label>
-          <div
-            role='button'
-            tabIndex={0}
-            className={styles.forgotButton}
-            onClick={onResetPassword}
-          >
-            {textForKey('Forgot your password')}?
-          </div>
-        </div>
-        <InputGroup>
-          <Form.Control
-            value={data.password}
-            type={isPasswordVisible ? 'text' : 'password'}
-            onChange={handleFormChange}
-          />
-          <InputGroup.Append className={styles.passwordVisibilityAppend}>
-            <Button
+
+      <EASTextField
+        value={data.email}
+        type="email"
+        containerClass={styles.fieldContainer}
+        fieldLabel={textForKey('Email')}
+        onChange={handleEmailChange}
+      />
+
+      <Box display="flex" flexDirection="column" alignItems="flex-end">
+        <EASTextField
+          value={data.password}
+          containerClass={clsx(styles.fieldContainer, styles.password)}
+          type={isPasswordVisible ? 'text' : 'password'}
+          fieldLabel={textForKey('Password')}
+          onChange={handlePasswordChange}
+          endAdornment={
+            <IconButton
               onClick={togglePasswordVisibility}
-              variant='outline-primary'
               className={styles.visibilityToggleBtn}
             >
-              {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-      </Form.Group>
+              {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
+            </IconButton>
+          }
+        />
+        <div
+          role='button'
+          tabIndex={0}
+          className={styles.forgotButton}
+          onClick={onResetPassword}
+        >
+          {textForKey('Forgot your password')}?
+        </div>
+      </Box>
+
       <div className='footer'>
         <div className={styles.footerSignUp}>
           <span className='text'>{textForKey("Don't have an account")}?</span>

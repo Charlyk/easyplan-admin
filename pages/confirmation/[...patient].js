@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../app/components/icons/appLogoBlue';
-import LoadingButton from '../../components/common/LoadingButton';
+import LoadingButton from '../../app/components/common/LoadingButton';
 import urlToLambda from '../../utils/urlToLambda';
 import { textForKey } from '../../utils/localization';
 import {

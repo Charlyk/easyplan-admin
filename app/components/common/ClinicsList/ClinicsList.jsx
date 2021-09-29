@@ -7,12 +7,12 @@ import { useDispatch } from "react-redux";
 
 import getClinicUrl from "../../../../utils/getClinicUrl";
 import { textForKey } from "../../../../utils/localization";
-import { isDev } from "../../../../eas.config";
+import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 import { triggerUserLogout } from "../../../../redux/actions/actions";
 import { signOut } from "../../../../middleware/api/auth";
+import { isDev } from "../../../../eas.config";
 import ClinicItem from "./ClinicItem";
 import styles from './ClnicsList.module.scss';
-import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 
 export default function ClinicsList({ user, authToken }) {
   const router = useRouter();
@@ -65,7 +65,6 @@ export default function ClinicsList({ user, authToken }) {
         <div
           className={styles.clinicsWrapper}
           style={{
-            padding: isMobileDevice ? '2rem' : '3rem',
             width: isMobileDevice ? '90%' : '70%',
           }}
         >

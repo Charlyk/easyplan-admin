@@ -9,7 +9,7 @@ import redirectToUrl from '../../../utils/redirectToUrl';
 import redirectUserTo from '../../../utils/redirectUserTo';
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { Role } from "../../../app/utils/constants";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 
 export default function Week(
   {

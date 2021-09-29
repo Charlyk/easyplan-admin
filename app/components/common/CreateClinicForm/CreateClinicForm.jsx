@@ -9,7 +9,7 @@ import { textForKey } from "../../../../utils/localization";
 import { WebRegex } from "../../../utils/constants";
 import { checkDomainAvailability, clinicTimeZones, fetchAvailableCurrencies } from "../../../../middleware/api/clinic";
 import IconAvatar from "../../icons/iconAvatar";
-import LoadingButton from "../../../../components/common/LoadingButton";
+import LoadingButton from "../LoadingButton";
 
 import reducer, {
   initialState,

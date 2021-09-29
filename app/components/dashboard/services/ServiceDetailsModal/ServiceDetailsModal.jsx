@@ -8,7 +8,7 @@ import LeftSideModal from '../../../common/LeftSideModal';
 import { createService, updateService } from "../../../../../middleware/api/services";
 import IconClose from '../../../icons/iconClose';
 import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import { closeServiceDetailsModal } from '../../../../../redux/actions/serviceDetailsActions';
 import { serviceDetailsModalSelector } from '../../../../../redux/selectors/serviceDetailsSelector';
 import { setUpdatedService } from "../../../../../redux/actions/servicesActions";

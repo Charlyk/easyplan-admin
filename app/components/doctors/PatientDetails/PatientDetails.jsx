@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
 import { textForKey } from '../../../../utils/localization';
-import EasyTab from '../../../../components/common/EasyTab';
+import EasyTab from '../../common/EasyTab';
 import AppointmentNotes from '../../dashboard/patients/PatientDetailsModal/AppointmentNotes';
 import PatientAppointments from '../../dashboard/patients/PatientDetailsModal/PatientAppointments';
 import PatientNotes from '../../dashboard/patients/PatientDetailsModal/PatientNotes';

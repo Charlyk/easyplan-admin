@@ -3,7 +3,7 @@ import { authorized } from "../authorized";
 import { handler } from "../handler";
 import getSubdomain from "../../../utils/getSubdomain";
 import updatedServerUrl from "../../../utils/updateServerUrl";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 import { HeaderKeys } from "../../../app/utils/constants";
 
 export default authorized(async (req, res) => {

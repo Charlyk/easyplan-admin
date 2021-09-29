@@ -128,6 +128,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         doctor: action.payload,
+        service: null,
         isDoctorValid: action.payload != null,
       };
     case reducerTypes.setPatients:

@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 
 import IconPlus from '../../../icons/iconPlus';
 import IconSearch from '../../../icons/iconSearch';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import {
   setPatientDetails,
   togglePatientsListUpdate,

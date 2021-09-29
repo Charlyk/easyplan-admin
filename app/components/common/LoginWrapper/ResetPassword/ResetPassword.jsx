@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import clsx from "clsx";
 
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import styles from './ResetPassword.module.scss';
+import EASTextField from "../../EASTextField";
 
 const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }) => {
   const [email, setEmail] = useState('');
 
-  const handleFormChange = event => {
-    setEmail(event.target.value);
+  const handleFormChange = (newValue) => {
+    setEmail(newValue);
   };
 
   const isFormValid = email.match(EmailRegex);
@@ -37,17 +38,12 @@ const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }
       <span className='welcome-text'>
         {textForKey('reset_password_message')}
       </span>
-      <Form.Group controlId='email'>
-        <Form.Label>{textForKey('Email')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            isInvalid={email.length > 0 && !isFormValid}
-            value={email}
-            type='email'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
+      <EASTextField
+        type="email"
+        fieldLabel={textForKey('Email')}
+        value={email}
+        onChange={handleFormChange}
+      />
       <div className='footer'>
         <div
           role='button'

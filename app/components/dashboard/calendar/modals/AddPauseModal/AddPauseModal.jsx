@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import { toast } from 'react-toastify';
 
 import { textForKey } from '../../../../../../utils/localization';
-import EasyDatePicker from '../../../../../../components/common/EasyDatePicker';
+import EasyDatePicker from '../../../../common/EasyDatePicker';
 import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
 import {
   createPauseRecord,

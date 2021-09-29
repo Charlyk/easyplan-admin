@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import IconEdit from '../../../icons/iconEdit';
 import IconPlus from '../../../icons/iconPlus';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import {
   closeServiceDetailsModal,
   setServiceDetailsModal,

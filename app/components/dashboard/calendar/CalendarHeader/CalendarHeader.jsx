@@ -19,8 +19,8 @@ import moment from "moment-timezone";
 
 import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
 import { getAppLanguage, textForKey } from "../../../../../utils/localization";
-import EasyTab from "../../../../../components/common/EasyTab";
-import LoadingButton from "../../../../../components/common/LoadingButton";
+import EasyTab from "../../../common/EasyTab";
+import LoadingButton from "../../../common/LoadingButton";
 import IconPlus from "../../../icons/iconPlus";
 import IconInfo from "../../../icons/iconInfo";
 import styles from "./CalendarHeader.module.scss";
@@ -103,7 +103,7 @@ const CalendarHeader = (
 
   const calendarPopper = (
     <Popper
-      className={styles['appointments-date-picker-root']}
+      className={styles.appointmentsDatePickerRoot}
       anchorEl={calendarAnchor.current}
       open={calendarVisible}
       placement='bottom'
@@ -111,7 +111,7 @@ const CalendarHeader = (
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className={styles['calendar-paper']}>
+          <Paper className={styles.calendarPaper}>
             <ClickAwayListener onClickAway={handleCloseCalendar}>
               <Calendar
                 locale={locales[getAppLanguage()]}
@@ -126,17 +126,17 @@ const CalendarHeader = (
   );
 
   return (
-    <div className={styles['center-header']}>
-      <div className={clsx(styles['controls-wrapper'], 'flexContainer')}>
+    <div className={styles.centerHeader}>
+      <div className={clsx(styles.controlsWrapper, 'flexContainer')}>
         <IconButton
           onClick={handleDateNavigation('previous-date')}
-          classes={{ root: styles['arrow-button'], label: styles['button-icon'] }}
+          classes={{ root: styles.arrowButton, label: styles.buttonIcon }}
         >
           <ArrowLeft/>
         </IconButton>
         <Button
           ref={calendarAnchor}
-          className={clsx('positive-button', styles['calendar-btn'])}
+          className={clsx('positive-button', styles.calendarBtn)}
           onClick={handleOpenCalendar}
         >
           <Typography noWrap className={styles.dateBtnLabel}>
@@ -146,20 +146,20 @@ const CalendarHeader = (
         </Button>
         <IconButton
           onClick={handleDateNavigation('next-date')}
-          classes={{ root: styles['arrow-button'], label: styles['button-icon'] }}
+          classes={{ root: styles.arrowButton, label: styles.buttonIcon }}
         >
           <ArrowRight/>
         </IconButton>
         <MaterialButton
           onClick={handleTodayClick}
-          classes={{ root: styles['today-btn'] }}
+          classes={{ root: styles.todayBtn }}
         >
           {textForKey('Today')}
         </MaterialButton>
       </div>
       {calendarPopper}
       <CalendarLegend open={legendVisible} anchorEl={legendAnchor}/>
-      <div className={styles['center-header__tabs']}>
+      <div className={styles.tabs}>
         <EasyTab
           title={textForKey('Day')}
           selected={currentTab === CalendarView.day}
@@ -176,10 +176,10 @@ const CalendarHeader = (
           onClick={() => onTabChange(CalendarView.month)}
         />
       </div>
-      <div className={clsx(styles['right-btns-wrapper'], 'flexContainer')}>
+      <div className={clsx(styles.rightBtnsWrapper, 'flexContainer')}>
         <LoadingButton
           variant='outline-primary'
-          className={clsx('btn-outline-primary', styles['import-btn'])}
+          className={clsx('btn-outline-primary', styles.importBtn)}
           onClick={onImportSchedules}
         >
           <UploadIcon/>
@@ -194,7 +194,7 @@ const CalendarHeader = (
           </IconButton>
         </ClickAwayListener>
         <Button
-          className={clsx('positive-button', styles['add-appointment-btn'])}
+          className={clsx('positive-button', styles.addAppointmentBtn)}
           disabled={!canAddAppointment}
           onClick={handleAddAppointment}
         >

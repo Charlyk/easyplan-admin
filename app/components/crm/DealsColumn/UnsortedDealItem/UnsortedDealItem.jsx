@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 
-import ActionsSheet from "../../../../../components/common/ActionsSheet";
+import ActionsSheet from "../../../common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from "../../../../../utils/localization";
 import getPatientName from "../../../../utils/getPatientName";

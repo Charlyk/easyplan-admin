@@ -6,6 +6,11 @@
 
   .avatarWrapper {
     cursor: pointer;
+    width: 90px;
+    height: 90px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 50%;
 
     .iconContainer {
       pointer-events: none;
@@ -20,8 +25,8 @@
       background-color: rgba(0, 0, 0, 0.40);
 
       svg {
-        width: 35px !important;
-        height: 35px !important;
+        width: 30px !important;
+        height: 30px !important;
       }
     }
   }

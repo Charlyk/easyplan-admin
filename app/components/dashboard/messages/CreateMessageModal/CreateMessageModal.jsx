@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import EasyDatePicker from '../../../../../components/common/EasyDatePicker';
+import EasyDatePicker from '../../../common/EasyDatePicker';
 import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { textForKey } from '../../../../../utils/localization';
 import { createMessage, updateMessage } from "../../../../../middleware/api/messages";

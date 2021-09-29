@@ -13,14 +13,14 @@ import IconSuccess from '../../../../icons/iconSuccess';
 import { EmailRegex } from '../../../../../utils/constants';
 import adjustValueToNumber from '../../../../../../utils/adjustValueToNumber';
 import { textForKey } from '../../../../../../utils/localization';
-import LoadingButton from '../../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../../common/LoadingButton';
 import { actions, initialState, reducer } from './PatientPersonalData.reducer';
 import { updatePatient } from "../../../../../../middleware/api/patients";
 import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
 import styles from './PatientPersonalData.module.scss';
 
-const EasyDatePicker = dynamic(() => import('../../../../../../components/common/EasyDatePicker'));
+const EasyDatePicker = dynamic(() => import('../../../../common/EasyDatePicker'));
 
 const PatientPersonalData = ({ patient, onPatientUpdated }) => {
   const datePickerRef = useRef();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { getCurrentUser } from "../middleware/api/auth";
 import handleRequestError from '../utils/handleRequestError';
-import { parseCookies } from "../utils";
+import parseCookies from "../utils/parseCookies";
 import ClinicsList from "../app/components/common/ClinicsList";
 import { wrapper } from "../store";
 

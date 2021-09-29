@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -28,7 +28,7 @@ import { textForKey } from '../../../../../utils/localization';
 import { getServicesStatistics } from "../../../../../middleware/api/analytics";
 import { fetchAppData } from "../../../../../middleware/api/initialization";
 import parseCookies from "../../../../../utils/parseCookies";
-import CheckableMenuItem from "../../../common/CheckableMenuItem";
+import EASSelect from "../../../common/EASSelect";
 import StatisticFilter from '../StatisticFilter';
 import reducer, {
   initialState,
@@ -44,6 +44,7 @@ import reducer, {
   setShowRangePicker,
 } from "./ServicesAnalytics.reducer";
 import styles from './ServicesAnalytics.module.scss';
+import EASTextField from "../../../common/EASTextField";
 
 const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
 
@@ -57,11 +58,16 @@ const ServicesAnalytics = (
   const router = useRouter()
   const dispatch = useDispatch();
   const pickerRef = useRef(null);
-  const doctors = orderBy(
-    currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
-    ['isHidden', 'fullName'],
-    ['asc', 'asc']
-  )
+  const doctors = useMemo(() => {
+    return orderBy(
+      currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
+      ['isHidden', 'fullName'],
+      ['asc', 'asc']
+    ).map(({ id, fullName, isHidden }) => ({
+      id,
+      name: `${fullName} ${isHidden ? `(${textForKey('Fired')})` : ''}`
+    }));
+  }, [currentClinic])
   const services = sortBy(currentClinic.services, service => service.name.toLowerCase());
 
   const [
@@ -208,123 +214,61 @@ const ServicesAnalytics = (
     );
   };
 
-  const getDoctorFullName = (doctor) => {
-    if (doctor.isHidden) {
-      return `${doctor.fullName} (${textForKey('Fired')})`
-    }
-    return doctor.fullName;
-  }
-
-  const renderSelectedServices = (selected) => {
-    const services = selectedServices.filter(service =>
-      selected.includes(service.id),
-    )
-    return services.map(service => service.name ?? textForKey('All services')).join(', ')
-  }
-
-  const renderSelectedDoctors = (selected) => {
-    const doctors = selectedDoctors.filter(doctor =>
-      selected.includes(doctor.id),
-    )
-    return doctors.map(service => service.fullName ?? textForKey('All doctors')).join(', ')
-  }
-
-  const renderSelectedStatuses = (selected) => {
-    const statuses = selectedStatuses.filter(status =>
-      selected.includes(status.id),
-    )
-    return statuses.map(service => service.name ?? textForKey('All statuses')).join(', ')
-  }
-
   return (
     <div className={styles['statistics-services']}>
       <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
-        <FormControl classes={{ root: styles.selectControlRoot }}>
-          <InputLabel id="services-select-label">{textForKey('Services')}</InputLabel>
-          <Select
-            multiple
-            disableUnderline
-            labelId='services-select-label'
-            value={selectedServices.map(item => item.id)}
-            renderValue={renderSelectedServices}
-            onChange={handleServiceChange}
-          >
-            <CheckableMenuItem
-              value={-1}
-              checked={selectedServices.some(item => item.id === -1)}
-              title={textForKey('All services')}
-            />
-            {services.map((service) => (
-              <CheckableMenuItem
-                key={service.id}
-                value={service.id}
-                checked={selectedServices.some(item => item.id === service.id)}
-                title={service.name}
-              />
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl classes={{ root: styles.selectControlRoot }}>
-          <InputLabel id="doctors-select-label">{textForKey('Doctors')}</InputLabel>
-          <Select
-            multiple
-            disableUnderline
-            labelId='doctors-select-label'
-            value={selectedDoctors.map(item => item.id)}
-            renderValue={renderSelectedDoctors}
-            onChange={handleDoctorChange}
-          >
-            <CheckableMenuItem
-              value={-1}
-              checked={selectedDoctors.some(item => item.id === -1)}
-              title={textForKey('All doctors')}
-            />
-            {doctors.map((doctor) => (
-              <CheckableMenuItem
-                key={doctor.id}
-                value={doctor.id}
-                checked={selectedDoctors.some(item => item.id === doctor.id)}
-                title={getDoctorFullName(doctor)}
-              />
-            ))}
-          </Select>
-        </FormControl>
-        <Form.Group ref={pickerRef}>
-          <Form.Label>{textForKey('Period')}</Form.Label>
-          <Form.Control
-            disabled={isLoading}
-            value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
-              endDate,
-            ).format('DD MMM YYYY')}`}
-            readOnly
-            onClick={handleDatePickerOpen}
-          />
-        </Form.Group>
-        <FormControl classes={{ root: styles.selectControlRoot }}>
-          <InputLabel id="statuses-select-label">{textForKey('Statuses')}</InputLabel>
-          <Select
-            multiple
-            disableUnderline
-            labelId='statuses-select-label'
-            value={selectedStatuses.map(item => item.id)}
-            renderValue={renderSelectedStatuses}
-            onChange={handleStatusChange}
-          >
-            <CheckableMenuItem
-              value="All"
-              checked={selectedStatuses.some(item => item.id === 'All')}
-              title={textForKey('All statuses')}
-            />
-            {ScheduleStatuses.map((status) => (
-              <CheckableMenuItem
-                key={status.id}
-                value={status.id}
-                checked={selectedStatuses.some(item => item.id === status.id)}
-                title={status.name}
-              />
-            ))}
-          </Select>
-        </FormControl>
+        <EASSelect
+          multiple
+          checkable
+          rootClass={styles.selectControlRoot}
+          label={textForKey('Services')}
+          labelId="services-select-label"
+          options={services}
+          value={selectedServices.map(item => item.id)}
+          defaultOption={{
+            id: -1,
+            name: textForKey('All services')
+          }}
+          onChange={handleServiceChange}
+        />
+        <EASSelect
+          multiple
+          checkable
+          rootClass={styles.selectControlRoot}
+          label={textForKey('Doctors')}
+          labelId="doctors-select-label"
+          options={doctors}
+          value={selectedDoctors.map(item => item.id)}
+          defaultOption={{
+            id: -1,
+            name: textForKey('All doctors')
+          }}
+          onChange={handleDoctorChange}
+        />
+        <EASTextField
+          ref={pickerRef}
+          containerClass={styles.selectControlRoot}
+          fieldLabel={textForKey('Period')}
+          readOnly
+          onPointerUp={handleDatePickerOpen}
+          value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
+            endDate,
+          ).format('DD MMM YYYY')}`}
+        />
+        <EASSelect
+          multiple
+          checkable
+          rootClass={styles.selectControlRoot}
+          label={textForKey('Statuses')}
+          labelId="statuses-select-label"
+          options={ScheduleStatuses}
+          value={selectedStatuses.map(item => item.id)}
+          defaultOption={{
+            id: 'All',
+            name: textForKey('All statuses'),
+          }}
+          onChange={handleStatusChange}
+        />
       </StatisticFilter>
       <div className={styles['data-container']}>
         {isLoading && statistics.length === 0 && (

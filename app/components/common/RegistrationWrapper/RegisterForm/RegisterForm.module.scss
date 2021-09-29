@@ -2,39 +2,6 @@
   position: relative;
   overflow-y: auto;
 
-  textarea {
-    max-height: 3rem;
-    min-height: 3rem;
-  }
-
-  :global(.form-group) {
-    margin-bottom: 0;
-    .password-visibility-append {
-      height: 33.19px;
-
-      .visibility-toggle-btn {
-        height: 100%;
-        display: flex;
-        align-items: center;
-
-        svg {
-          height: 100%;
-          margin-left: 0;
-        }
-      }
-    }
-
-    :global(.react-tel-input) {
-      :global(.form-control) {
-        width: 100% !important;
-      }
-    }
-  }
-
-  :global(.form-control) {
-
-  }
-
   :global(.form-title) {
     margin-bottom: 1rem;
   }
@@ -43,52 +10,20 @@
     margin-top: 1.5rem;
   }
 
-  :global(.input-group-append) {
-    height: 2rem;
-
-    :global(.input-group-text) {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal !important;
-      font-size: 12px;
-    }
+  .textField {
+    margin-bottom: 5px;
   }
 
-  :global(.upload-avatar-container) {
-    user-select: none;
-    margin-top: 1rem;
+  .visibilityToggleBtn {
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: 0.01em;
-    color: #A1A2C6;
 
-    svg, img {
-      width: 4rem;
-      min-height: 4rem;
-    }
-
-    img {
-      object-fit: cover;
-    }
-
-    :global(.btn-outline-primary) {
-      text-transform: uppercase;
-    }
-
-    :global(.form-group) {
-      margin-bottom: 0;
-
-      .custom-file-button + label {
-        margin-bottom: 0;
-        color: #3A83DC;
-        text-transform: uppercase;
-      }
+    svg {
+      height: 20px;
+      width: 20px;
+      margin-left: 0;
+      fill: #3A83DC;
     }
   }
 }

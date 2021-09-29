@@ -10,7 +10,7 @@ import axios from "axios";
 
 import IconPlus from '../../../../icons/iconPlus';
 import { textForKey } from '../../../../../../utils/localization';
-import LoadingButton from '../../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../../common/LoadingButton';
 import PatientMessage from './PatientMessage';
 import {
   reducer,

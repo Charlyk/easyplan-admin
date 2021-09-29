@@ -26,8 +26,7 @@ const Redirect = () => {
       }
       await router.replace(redirectUrl);
     } catch (error) {
-      console.error(error)
-      // await router.replace('/login');
+      await router.replace('/login');
     }
   }
 

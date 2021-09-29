@@ -16,16 +16,27 @@
     }
   }
 
+  .simpleField {
+    margin-top: 10px;
+  }
+
+  .phoneInput {
+    margin-top: 10px;
+  }
+
   :global(.modal-content) {
     box-shadow: 0 1px 10px 10px #34344E1A;
   }
 
-  .first-and-last-name {
+  .patientNameContainer {
     display: flex;
 
-    input {
-      &:first-child {
-        margin-right: 5px;
+    .nameField {
+      width: 50%;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
@@ -75,30 +86,36 @@
     }
   }
 
-  .patient-mode-button {
-    user-select: none;
-    margin-top: .2rem;
-    outline: none;
-    display: flex;
-    align-self: flex-end;
-    justify-content: flex-end;
+  .modeWrapper {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
-    &.disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    span {
+    .patientModeButton {
+      user-select: none;
+      margin-top: .2rem;
       outline: none;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-size: .75rem;
-      margin-bottom: 0;
-      color: #3A83DC;
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
+      display: flex;
+      align-self: flex-end;
+      justify-content: flex-end;
+
+      &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      span {
+        outline: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: .75rem;
+        margin-bottom: 0;
+        color: #3A83DC;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

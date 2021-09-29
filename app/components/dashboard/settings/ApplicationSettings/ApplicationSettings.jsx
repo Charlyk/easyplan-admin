@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import { textForKey } from '../../../../../utils/localization';
 import { updateClinic } from "../../../../../middleware/api/clinic";
 import styles from './ApplicationSettings.module.scss'

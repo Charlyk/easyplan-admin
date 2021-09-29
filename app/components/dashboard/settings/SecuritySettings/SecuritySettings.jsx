@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 
 import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import { textForKey } from '../../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import styles from './SecuritySettings.module.scss';

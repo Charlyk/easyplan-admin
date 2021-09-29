@@ -19,7 +19,7 @@ import MenuPatients from '../../../icons/menuPatients';
 import MenuSettings from '../../../icons/menuSettings';
 import MenuUsers from '../../../icons/menuUsers';
 import { textForKey } from '../../../../../utils/localization';
-import ClinicSelector from '../../../../../components/common/ClinicSelector';
+import ClinicSelector from '../../ClinicSelector';
 import { Role } from "../../../../utils/constants";
 import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';

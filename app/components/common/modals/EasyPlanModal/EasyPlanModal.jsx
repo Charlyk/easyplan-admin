@@ -6,7 +6,7 @@ import clsx from "clsx";
 import IconClose from '../../../icons/iconClose';
 import IconSuccess from '../../../icons/iconSuccess';
 import { textForKey } from '../../../../../utils/localization';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../LoadingButton';
 import IconTrash from "../../../icons/iconTrash";
 import styles from './EasyPlanModal.module.scss';
 
@@ -116,7 +116,7 @@ EasyPlanModal.propTypes = {
   isDestroyableDisabled: PropTypes.bool,
   onNegativeClick: PropTypes.func,
   onPositiveClick: PropTypes.func,
-  onDestroyClick: PropTypes.oneOfType([PropTypes.func, PropTypes.any]),
+  onDestroyClick: PropTypes.any,
   onClose: PropTypes.func,
   className: PropTypes.string,
   size: PropTypes.oneOf(['sm', 'lg', 'xl']),

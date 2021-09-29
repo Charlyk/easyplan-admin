@@ -6,7 +6,7 @@ import redirectUserTo from '../../../utils/redirectUserTo';
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import { getGeneralStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 import GeneralAnalytics from "../../../app/components/dashboard/analytics/GeneralAnalytics";
 
 export default function General(

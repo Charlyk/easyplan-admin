@@ -5,7 +5,7 @@ import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getMessages } from "../../middleware/api/messages";
 import { fetchAppData } from "../../middleware/api/initialization";
-import { parseCookies } from "../../utils";
+import parseCookies from "../../utils/parseCookies";
 import SMSMessages from "../../app/components/dashboard/messages/SMSMessages";
 
 const Messages = ({ currentUser, currentClinic, messages: initialMessages, authToken }) => {

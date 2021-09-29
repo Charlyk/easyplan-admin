@@ -5,7 +5,7 @@ import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getPatients } from "../../middleware/api/patients";
 import { fetchAppData } from "../../middleware/api/initialization";
-import { parseCookies } from "../../utils";
+import parseCookies from "../../utils/parseCookies";
 import PatientsList from "../../app/components/dashboard/patients/PatientsList";
 
 const NewPatients = (

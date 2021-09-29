@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from "axios";
 import { toast } from "react-toastify";
-import Form from 'react-bootstrap/Form';
-
+import {
+  requestCreateCategory,
+  requestEditCategory
+} from "../../../../../middleware/api/categories";
 import { textForKey } from '../../../../../utils/localization';
-import EasyPlanModal from '../../../common/modals/EasyPlanModal';
+import EASModal from "../../../common/modals/EASModal";
+import EASTextField from "../../../common/EASTextField";
 import styles from './CreateCategoryModal.module.scss';
 
 const CreateCategoryModal = props => {
@@ -36,7 +38,7 @@ const CreateCategoryModal = props => {
 
   const editCategoryName = async () => {
     try {
-      const response = await axios.put(`/api/categories/${category.id}`, { categoryName });
+      const response = await requestEditCategory(categoryName, category.id);
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {
@@ -48,7 +50,7 @@ const CreateCategoryModal = props => {
 
   const createNewCategory = async () => {
     try {
-      const response = await axios.post(`/api/categories`, { categoryName });
+      const response = await requestCreateCategory(categoryName)
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {
@@ -58,8 +60,8 @@ const CreateCategoryModal = props => {
     }
   };
 
-  const handleCategoryNameChange = event => {
-    setCategoryName(event.target.value);
+  const handleCategoryNameChange = (newValue) => {
+    setCategoryName(newValue);
   };
 
   const getTitle = () => {
@@ -74,27 +76,23 @@ const CreateCategoryModal = props => {
   };
 
   return (
-    <EasyPlanModal
+    <EASModal
       onClose={handleModalClose}
       open={show}
       title={getTitle()}
       className={styles['create-category-modal']}
-      onPositiveClick={handleCategorySave}
+      onPrimaryClick={handleCategorySave}
       isPositiveLoading={isLoading}
       isPositiveDisabled={isLoading}
-      size='sm'
     >
-      <Form.Group>
-        <Form.Label htmlFor='basic-url'>
-          {textForKey('Enter category name')}
-        </Form.Label>
-        <Form.Control
+      <div style={{ padding: '16px' }}>
+        <EASTextField
+          fieldLabel={textForKey('Enter category name')}
           value={categoryName}
           onChange={handleCategoryNameChange}
-          aria-label={textForKey('Enter category name')}
         />
-      </Form.Group>
-    </EasyPlanModal>
+      </div>
+    </EASModal>
   );
 };
 

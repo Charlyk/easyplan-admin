@@ -1,11 +1,10 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import Image from "react-bootstrap/Image";
-import IconAvatar from "../../icons/iconAvatar";
-import styles from './UploadAvatar.module.scss';
 import clsx from "clsx";
 import Box from "@material-ui/core/Box";
+import IconAvatar from "../../icons/iconAvatar";
 import IconEdit from "../../icons/iconEdit";
 import IconPlus from "../../icons/iconPlus";
+import styles from './UploadAvatar.module.scss';
 
 const UploadAvatar = ({ currentAvatar, className, onChange }) => {
   const inputRef = useRef(null);
@@ -42,20 +41,12 @@ const UploadAvatar = ({ currentAvatar, className, onChange }) => {
 
   return (
     <div className={clsx(styles.uploadAvatar, className)}>
-      <Box
+      <div
         className={styles.avatarWrapper}
-        borderRadius='50%'
-        width='90px'
-        height='90px'
-        overflow='hidden'
-        position='relative'
         onPointerUp={handleIconClick}
       >
         {currentAvatar ? (
-          <Image
-            roundedCircle
-            ref={imageRef}
-          />
+          <img ref={imageRef} alt="Avatar image"/>
         ) : (
           <IconAvatar />
         )}
@@ -66,7 +57,7 @@ const UploadAvatar = ({ currentAvatar, className, onChange }) => {
             <IconPlus fill='#fff' />
           )}
         </div>
-      </Box>
+      </div>
       <input
         ref={inputRef}
         className='custom-file-button'

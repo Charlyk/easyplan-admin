@@ -32,7 +32,7 @@ import reducer, {
 } from './promotionalMessageSlice';
 import styles from './PromotionalMessageForm.module.scss';
 
-const EasyDatePicker = dynamic(() => import("../../../../../../components/common/EasyDatePicker"));
+const EasyDatePicker = dynamic(() => import("../../../../common/EasyDatePicker"));
 
 const PromotionalMessageForm = (
   {

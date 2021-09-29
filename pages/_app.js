@@ -27,20 +27,13 @@ import { UnauthorizedPaths } from "../app/utils/constants";
 import { wrapper } from "../store";
 import paths from "../utils/paths";
 import 'moment/locale/ro';
-import 'react-toastify/dist/ReactToastify.css';
-import 'react-phone-input-2/lib/style.css';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "react-color-palette/lib/css/styles.css";
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../utils'
 
 const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
 const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
-const FullScreenImageModal = dynamic(() => import("../components/common/FullScreenImageModal"));
+const FullScreenImageModal = dynamic(() => import("../app/components/common/modals/FullScreenImageModal"));
 const ConfirmationModal = dynamic(() => import("../app/components/common/modals/ConfirmationModal"));
 
 const pubnub = new PubNub({

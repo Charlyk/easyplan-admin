@@ -5,7 +5,7 @@ import redirectUserTo from '../../../utils/redirectUserTo';
 import DoctorsMain from "../../../app/components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 import DoctorPatientDetails from "../../../app/components/doctors/DoctorPatientDetails";
 
 const DoctorScheduleDetails = (

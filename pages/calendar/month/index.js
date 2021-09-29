@@ -7,7 +7,7 @@ import redirectToUrl from '../../../utils/redirectToUrl';
 import redirectUserTo from '../../../utils/redirectUserTo';
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { Role } from "../../../app/utils/constants";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 
 export default function Month({ currentUser, currentClinic, doctorId, date, doctors, authToken }) {
   const viewDate = moment(date).toDate();

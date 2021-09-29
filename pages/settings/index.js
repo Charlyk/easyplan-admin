@@ -5,7 +5,7 @@ import { fetchAppData } from "../../middleware/api/initialization";
 import handleRequestError from '../../utils/handleRequestError';
 import redirectToUrl from '../../utils/redirectToUrl';
 import redirectUserTo from '../../utils/redirectUserTo';
-import { parseCookies } from "../../utils";
+import parseCookies from "../../utils/parseCookies";
 import { fetchAllCountries } from "../../middleware/api/countries";
 import SettingsWrapper from "../../app/components/dashboard/settings/SettingsWrapper";
 

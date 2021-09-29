@@ -1,0 +1,39 @@
+.inputRoot {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .formLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #6F7091 !important;
+  }
+
+  .reactTelInput {
+    position: relative;
+
+    .easPhoneInput {
+      outline: none;
+      width: 100%;
+      border: rgba(0, 0, 0, 0.23) 1px solid;
+      border-radius: 3px;
+      height: 35px;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #34354C !important;
+      background-color: transparent !important;
+
+      &:hover {
+        border-color: #3A83DC;
+      }
+
+      &:focus {
+        border-color: #3A83DC;
+      }
+    }
+  }
+}

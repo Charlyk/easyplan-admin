@@ -22,7 +22,7 @@ import { setTotalInvoices } from "../../../../redux/actions/invoiceActions";
 import { fetchPendingInvoices } from "../../../../middleware/api/invoices";
 import styles from './InvoicesButton.module.scss';
 
-const NewInvoiceToast = dynamic(() => import('../../../../components/common/NewInvoiceToast'));
+const NewInvoiceToast = dynamic(() => import('../../common/NewInvoiceToast'));
 
 const InvoicesButton = ({ currentUser, currentClinic }) => {
   const dispatch = useDispatch();

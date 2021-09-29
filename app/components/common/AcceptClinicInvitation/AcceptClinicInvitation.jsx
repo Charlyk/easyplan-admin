@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 
 import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 import { requestAcceptInvitation } from "../../../../middleware/api/users";
-import LoadingButton from '../../../../components/common/LoadingButton';
+import LoadingButton from '../LoadingButton';
 import { JwtRegex, PasswordRegex, Role } from '../../../utils/constants';
 import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../utils/localization';

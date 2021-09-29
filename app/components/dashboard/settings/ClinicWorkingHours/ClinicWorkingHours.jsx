@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../../../components/common/LoadingButton';
-import WorkDay from '../../../../../components/common/WorkDay';
+import LoadingButton from '../../../common/LoadingButton';
+import WorkDay from '../../../common/WorkDay';
 import { textForKey } from '../../../../../utils/localization';
 import { updateClinic } from "../../../../../middleware/api/clinic";
 import styles from './ClinicWorkingHours.module.scss';

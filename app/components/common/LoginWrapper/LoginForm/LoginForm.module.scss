@@ -8,24 +8,49 @@
     }
   }
 
-  :global(.form-title) {
-    margin-bottom: 3rem;
+  .visibilityToggleBtn {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    svg {
+      height: 20px;
+      width: 20px;
+      margin-left: 0;
+      fill: #3A83DC;
+    }
   }
 
-  :global(.form-group) {
+  .fieldContainer {
+    width: 100%;
+    margin-bottom: 10px;
+
+    &.password {
+      margin-bottom: 0;
+    }
+  }
+
+  .formGroup {
     .passwordVisibilityAppend {
       height: 33.19px;
 
-      .visibilityToggleBtn {
-        height: 100%;
-        display: flex;
-        align-items: center;
+    }
+  }
 
-        svg {
-          height: 100%;
-          margin-left: 0;
-        }
-      }
+  .forgotButton {
+    outline: none;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    color: #3A83DC;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 
@@ -34,22 +59,6 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: .1rem;
-
-    .forgotButton {
-      outline: none;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 12px;
-      line-height: 16px;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-      color: #3A83DC;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
   }
 
   :global(.footer) {

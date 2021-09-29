@@ -1,5 +1,5 @@
 import React from 'react';
-import { parseCookies } from "../utils";
+import parseCookies from "../utils/parseCookies";
 import CreateClinicWrapper from "../app/components/common/CreateClinicWrapper";
 import { wrapper } from "../store";
 import { fetchAllCountries } from "../middleware/api/countries";

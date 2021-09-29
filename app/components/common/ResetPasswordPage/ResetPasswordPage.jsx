@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import axios from "axios";
 import Typography from "@material-ui/core/Typography";
 
-import LoadingButton from '../../../../components/common/LoadingButton';
+import LoadingButton from '../LoadingButton';
 import { textForKey } from '../../../../utils/localization';
 import { isDev } from "../../../../eas.config";
 import { wrapper } from "../../../../store";

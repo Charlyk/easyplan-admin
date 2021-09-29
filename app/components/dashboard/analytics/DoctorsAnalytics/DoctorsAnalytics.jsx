@@ -31,6 +31,9 @@ import reducer, {
 } from "./DoctorsAnalytics.reducer";
 import styles from './DoctorsAnalytics.module.scss';
 import ServicesListModal from "./ServicesListModal";
+import ListItemText from "@material-ui/core/ListItemText";
+import EASSelect from "../../../common/EASSelect";
+import EASTextField from "../../../common/EASTextField";
 
 const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
 
@@ -54,7 +57,10 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
     return sortBy(
       currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
       user => user.fullName.toLowerCase(),
-    )
+    ).map(doctor => ({
+      id: doctor.id,
+      name: `${doctor.firstName} ${doctor.lastName} ${doctor.isHidden ? `(${textForKey('Fired')})` : ''}`
+    }))
   }, [currentClinic]);
 
   const services = useMemo(() => {
@@ -146,56 +152,42 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
         onClose={handleCloseServicesModal}
       />
       <StatisticFilter isLoading={isLoading} onUpdate={handleFilterSubmit}>
-        <Form.Group style={{ flexDirection: 'column' }}>
-          <Form.Label>{textForKey('Services')}</Form.Label>
-          <Form.Control
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            onChange={handleServiceChange}
-            value={selectedService.id}
-            custom
-          >
-            <option value={-1}>{textForKey('All services')}</option>
-            {services.map((service) => (
-              <option key={service.id} value={service.id}>
-                {service.name}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group style={{ flexDirection: 'column' }}>
-          <Form.Label>{textForKey('Doctors')}</Form.Label>
-          <Form.Control
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            onChange={handleDoctorChange}
-            value={selectedDoctor.id}
-            custom
-          >
-            <option value={-1}>{textForKey('All doctors')}</option>
-            {doctors.map((doctor) => (
-              <option
-                key={doctor.id}
-                value={doctor.id}
-              >
-                {`${doctor.firstName} ${doctor.lastName}`} {doctor.isHidden ? `(${textForKey('Fired')})` : ''}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group ref={pickerRef}>
-          <Form.Label>{textForKey('Period')}</Form.Label>
-          <Form.Control
-            disabled={isLoading}
-            value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
-              endDate,
-            ).format('DD MMM YYYY')}`}
-            readOnly
-            onClick={handleDatePickerOpen}
-          />
-        </Form.Group>
+        <EASSelect
+          rootClass={styles.selectRoot}
+          label={textForKey('Services')}
+          options={services}
+          value={selectedService?.id ?? -1}
+          labelId='services-select-label'
+          defaultOption={{
+            id: -1,
+            name: textForKey('All services')
+          }}
+          onChange={handleServiceChange}
+        />
+
+        <EASSelect
+          rootClass={styles.selectRoot}
+          label={textForKey('Doctors')}
+          options={doctors}
+          value={selectedDoctor?.id ?? -1}
+          labelId='doctors-select-label'
+          defaultOption={{
+            id: -1,
+            name: textForKey('All doctors')
+          }}
+          onChange={handleDoctorChange}
+        />
+
+        <EASTextField
+          ref={pickerRef}
+          containerClass={styles.selectRoot}
+          fieldLabel={textForKey('Period')}
+          readOnly
+          onPointerUp={handleDatePickerOpen}
+          value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
+            endDate,
+          ).format('DD MMM YYYY')}`}
+        />
       </StatisticFilter>
       <div className={styles['data-container']}>
         {!isLoading && statistics?.length === 0 && (

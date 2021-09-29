@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import sortBy from "lodash/sortBy";
 import clsx from "clsx";
 import dynamic from 'next/dynamic';
@@ -19,6 +19,8 @@ import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
 import { reducer, actions, initialState } from "./GeneralAnalytics.reducer";
 import styles from './GeneralAnalytics.module.scss';
+import EASSelect from "../../../common/EASSelect";
+import EASTextField from "../../../common/EASTextField";
 
 const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
 
@@ -34,10 +36,15 @@ const General = (
   const pickerRef = useRef(null);
   const userClinic = currentUser.clinics.find((item) => item.clinicId === currentClinic.id);
   const isAdmin = userClinic.roleInClinic === Role.admin;
-  const doctors = sortBy(
-    currentClinic?.users?.filter(user => user.roleInClinic === Role.doctor) || [],
-    user => user.fullName.toLowerCase(),
-  );
+  const doctors = useMemo(() => {
+    return sortBy(
+      currentClinic?.users?.filter(user => user.roleInClinic === Role.doctor) || [],
+      user => user.fullName.toLowerCase(),
+    ).map(({ id, fullName, isHidden }) => ({
+      id,
+      name: `${fullName} ${isHidden ? `(${textForKey('Fired')})` : ''}`
+    }))
+  }, [currentClinic]);
   const [
     {
       selectedDoctor,
@@ -116,35 +123,29 @@ const General = (
         }
       >
         <StatisticFilter onUpdate={handleFilterSubmit}>
-          <Form.Group>
-            <Form.Label>{textForKey('Doctor')}</Form.Label>
-            <Form.Control
-              onChange={handleDoctorChange}
-              as='select'
-              className='mr-sm-2'
-              id='inlineFormCustomSelect'
-              value={selectedDoctor.id}
-              custom
-            >
-              <option value={-1}>{textForKey('All doctors')}</option>
-              {doctors.map((item) => (
-                <option
-                  key={item.id}
-                  value={item.id}
-                >{`${item.firstName} ${item.lastName}`}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group ref={pickerRef}>
-            <Form.Label>{textForKey('Period')}</Form.Label>
-            <Form.Control
-              value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
-                endDate,
-              ).format('DD MMM YYYY')}`}
-              readOnly
-              onClick={handleDatePickerOpen}
-            />
-          </Form.Group>
+          <EASSelect
+            rootClass={styles.filterField}
+            label={textForKey('Doctor')}
+            value={selectedDoctor?.id || -1}
+            options={doctors}
+            labelId="doctor-select-label"
+            defaultOption={{
+              id: -1,
+              name: textForKey('All doctors')
+            }}
+            onChange={handleDoctorChange}
+          />
+
+          <EASTextField
+            ref={pickerRef}
+            containerClass={styles.filterField}
+            fieldLabel={textForKey('Period')}
+            readOnly
+            onPointerUp={handleDatePickerOpen}
+            value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
+              endDate,
+            ).format('DD MMM YYYY')}`}
+          />
         </StatisticFilter>
         <span className={styles['block-title']}>
           {textForKey('Schedules statistics')}

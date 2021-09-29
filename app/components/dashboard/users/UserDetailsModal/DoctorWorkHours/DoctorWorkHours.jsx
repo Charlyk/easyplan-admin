@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import { days } from '../../../../../utils/constants';
-import WorkDay from '../../../../../../components/common/WorkDay';
+import WorkDay from '../../../../common/WorkDay';
 import styles from './DoctorWorkHours.module.scss';
 
 const DoctorWorkHours = props => {

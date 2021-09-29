@@ -7,7 +7,7 @@ import handleRequestError from '../../utils/handleRequestError';
 import redirectToUrl from '../../utils/redirectToUrl';
 import redirectUserTo from '../../utils/redirectUserTo';
 import { fetchAppData } from "../../middleware/api/initialization";
-import { parseCookies } from "../../utils";
+import parseCookies from "../../utils/parseCookies";
 import DoctorCalendar from "../../app/components/doctors/DoctorCalendar";
 import { getSchedulesForInterval } from "../../middleware/api/schedules";
 import { textForKey } from "../../utils/localization";

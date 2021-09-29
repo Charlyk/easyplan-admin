@@ -5,7 +5,7 @@ import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { fetchAllServices } from "../../middleware/api/services";
 import { fetchAppData } from "../../middleware/api/initialization";
-import { parseCookies } from "../../utils";
+import parseCookies from "../../utils/parseCookies";
 import ServicesContainer from "../../app/components/dashboard/services/ServicesContainer";
 
 const Services = ({ currentUser, currentClinic, categories: clinicCategories, services, authToken }) => {

@@ -8,7 +8,7 @@ import handleRequestError from "../../../utils/handleRequestError";
 import redirectToUrl from '../../../utils/redirectToUrl'
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
-import { parseCookies } from "../../../utils";
+import parseCookies from "../../../utils/parseCookies";
 
 export default function Day({ currentUser, currentClinic, date, schedules, dayHours, doctors, authToken }) {
   const viewDate = moment(date).toDate();

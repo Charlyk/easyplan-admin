@@ -24,7 +24,7 @@ import reducer, {
 } from "./holidayMessageSlice";
 import styles from './HolidayMessageForm.module.scss';
 
-const EasyDatePicker = dynamic(() => import("../../../../../../components/common/EasyDatePicker"));
+const EasyDatePicker = dynamic(() => import("../../../../common/EasyDatePicker"));
 
 const HolidayMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
   const datePickerAnchor = useRef(null);

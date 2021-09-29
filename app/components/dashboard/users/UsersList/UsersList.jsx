@@ -39,7 +39,7 @@ import styles from './UsersList.module.scss';
 
 const UserDetailsModal = dynamic(() => import('../UserDetailsModal'));
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
-const InviteUserModal = dynamic(() => import('../../../../../components/common/InviteUserModal'));
+const InviteUserModal = dynamic(() => import('../../../common/modals/InviteUserModal'));
 
 const UsersList = (
   {

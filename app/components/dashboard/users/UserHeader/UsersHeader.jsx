@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 
 import IconPlus from '../../../icons/iconPlus';
-import EasyTab from '../../../../../components/common/EasyTab';
+import EasyTab from '../../../common/EasyTab';
 import { Role } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import styles from './UserHeader.module.scss'

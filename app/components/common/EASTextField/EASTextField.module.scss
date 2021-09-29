@@ -2,12 +2,22 @@
   .searchField {
     width: 100%;
     height: 35px;
+
+    &:hover {
+      .focusedInput {
+        border-color: #3A83DC !important;
+      }
+    }
   }
 
-  :global(.Mui-focused) {
+  .focusedField {
     .focusedInput {
       border-color: #3A83DC !important;
     }
+  }
+
+  .inputAdornedEnd {
+    padding-right: 0;
   }
 
   .formLabel {
@@ -16,6 +26,12 @@
     font-weight: bold !important;
     font-size: 10px !important;
     color: #6F7091 !important;
+  }
+
+  &.readOnly {
+    .searchInput {
+      cursor: pointer !important;
+    }
   }
 
   .searchInput {

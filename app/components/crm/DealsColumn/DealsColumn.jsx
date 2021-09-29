@@ -15,7 +15,7 @@ import {
   requestFetchDeals,
   updateDealState
 } from "../../../../middleware/api/crm";
-import ActionsSheet from "../../../../components/common/ActionsSheet";
+import ActionsSheet from "../../common/ActionsSheet";
 import EASColorPicker from "../../common/EASColorPicker";
 import AddColumnModal from "../AddColumnModal";
 import reducer, {

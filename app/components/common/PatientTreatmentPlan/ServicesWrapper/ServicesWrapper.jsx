@@ -9,7 +9,7 @@ import clsx from "clsx";
 import { textForKey } from "../../../../../utils/localization";
 import getServiceName from "../../../../../utils/getServiceName";
 import FinalServiceItem from "../../../doctors/FinalServiceItem";
-import LoadingButton from "../../../../../components/common/LoadingButton";
+import LoadingButton from "../../LoadingButton";
 import ToothIcon from '../../../../../public/icon-tooth.png';
 import BracesIcon from '../../../../../public/icon-dental-braces.png';
 import styles from './ServicesWrapper.module.scss';

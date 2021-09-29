@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 
 import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../common/LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
 import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../../utils/localization';

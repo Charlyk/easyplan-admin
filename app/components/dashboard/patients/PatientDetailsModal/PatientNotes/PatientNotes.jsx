@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import IconPlus from '../../../../icons/iconPlus';
 import { updateNotesSelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
-import LoadingButton from '../../../../../../components/common/LoadingButton';
+import LoadingButton from '../../../../common/LoadingButton';
 import { createPatientNote, getPatientNotes } from "../../../../../../middleware/api/patients";
 import PatientNote from './PatientNote';
 import { reducer, initialState, actions } from './PatientNotes.reducer';

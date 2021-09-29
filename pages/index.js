@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { fetchAppData } from "../middleware/api/initialization";
 import handleRequestError from '../utils/handleRequestError';
 import getRedirectUrlForUser from '../utils/redirectToUrl';
-import { parseCookies } from "../utils";
+import parseCookies from "../utils/parseCookies";
 
 const MainPage = ({ currentClinic, currentUser, authToken }) => {
   const router = useRouter();

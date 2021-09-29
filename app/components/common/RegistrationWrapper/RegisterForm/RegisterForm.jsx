@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import VisibilityOn from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Image from 'react-bootstrap/Image';
-import InputGroup from 'react-bootstrap/InputGroup'
-import PhoneInput from 'react-phone-input-2';
 import clsx from "clsx";
 
-import IconAvatar from '../../../icons/iconAvatar';
-import LoadingButton from '../../../../../components/common/LoadingButton';
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
-import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import styles from './RegisterForm.module.scss';
+import LoadingButton from '../../LoadingButton';
 import UploadAvatar from "../../UploadAvatar";
+import EASTextField from "../../EASTextField";
+import EASPhoneInput from "../../EASPhoneInput";
+import styles from './RegisterForm.module.scss';
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import VisibilityOn from "@material-ui/icons/Visibility";
+import IconButton from "@material-ui/core/IconButton";
 
 const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -30,15 +26,20 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     isPhoneValid: false,
   });
 
-  const handleFormChange = event => {
-    let controlId = event.target.id;
-    if (controlId === 'newPassword') {
-      controlId = 'password';
-    }
-    setData({
-      ...data,
-      [controlId]: event.target.value,
-    });
+  const handleLastNameChange = (newValue) => {
+    setData({ ...data, lastName: newValue });
+  };
+
+  const handleFirstNameChange = (newValue) => {
+    setData({ ...data, firstName: newValue });
+  };
+
+  const handleEmailChange = (newValue) => {
+    setData({ ...data, username: newValue });
+  };
+
+  const handlePasswordChange = (newValue) => {
+    setData({ ...data, password: newValue });
   };
 
   const handleAvatarChange = file => {
@@ -76,9 +77,6 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     );
   };
 
-  const avatarSrc =
-    data.avatarFile && window.URL.createObjectURL(data.avatarFile);
-
   return (
     <div
       className={clsx('form-root', styles['register-form'])}
@@ -91,104 +89,83 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
-      <UploadAvatar
-        currentAvatar={data.avatarFile}
-        onChange={handleAvatarChange}
-      />
-      <Form.Group controlId='lastName'>
-        <Form.Label>{textForKey('Last name')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={data.lastName}
-            type='text'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='firstName'>
-        <Form.Label>{textForKey('First name')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={data.firstName}
-            type='text'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='username'>
-        <Form.Label>{textForKey('Email')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            isValid={data?.username?.match(EmailRegex)}
-            isInvalid={data?.username?.length > 0 && !data?.username?.match(EmailRegex)}
-            autoComplete='new-email'
-            value={data?.username}
-            type='email'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='newPassword'>
-        <Form.Label>{textForKey('Password')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            autoComplete='new-password'
-            value={data?.password}
-            isValid={data?.password?.match(PasswordRegex)}
-            isInvalid={data?.password?.length > 0 && !data?.password?.match(PasswordRegex)}
-            type={isPasswordVisible ? 'text' : 'password'}
-            onChange={handleFormChange}
-          />
-          <InputGroup.Append className={styles['password-visibility-append']}>
-            <Button
+      <form>
+        <UploadAvatar
+          currentAvatar={data.avatarFile}
+          onChange={handleAvatarChange}
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.textField}
+          value={data.lastName}
+          onChange={handleLastNameChange}
+          fieldLabel={textForKey('Last name')}
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.textField}
+          value={data.firstName}
+          onChange={handleFirstNameChange}
+          fieldLabel={textForKey('First name')}
+        />
+
+        <EASTextField
+          type="email"
+          containerClass={styles.textField}
+          value={data.username}
+          onChange={handleEmailChange}
+          fieldLabel={textForKey('Email')}
+        />
+
+        <EASTextField
+          type={isPasswordVisible ? 'text' : 'password'}
+          containerClass={styles.textField}
+          value={data.password}
+          onChange={handlePasswordChange}
+          fieldLabel={textForKey('Password')}
+          endAdornment={
+            <IconButton
               onClick={togglePasswordVisibility}
-              variant='outline-primary'
-              className={styles['visibility-toggle-btn']}
+              className={styles.visibilityToggleBtn}
             >
-              {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-        <Form.Text className='text-muted'>
-          {textForKey('passwordValidationMessage')}
-        </Form.Text>
-      </Form.Group>
-      <Form.Group controlId='phoneNumber'>
-        <Form.Label>{textForKey('Phone number')}</Form.Label>
-        <InputGroup>
-          <PhoneInput
-            onChange={handlePhoneChange}
-            value={data.phoneNumber}
-            alwaysDefaultMask
-            countryCodeEditable={false}
-            country='md'
-            placeholder='079123456'
-            isValid={isPhoneInputValid}
-          />
-        </InputGroup>
-      </Form.Group>
-      <div className='footer'>
-        <div
-          role='button'
-          tabIndex={0}
-          className='back-button'
-          onClick={onGoBack}
-        >
-          {textForKey('Already have an account')}?
+              {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
+            </IconButton>
+          }
+        />
+
+        <EASPhoneInput
+          fieldLabel={textForKey('Phone number')}
+          rootClass={styles.textField}
+          value={data.phoneNumber}
+          onChange={handlePhoneChange}
+        />
+
+        <div className='footer'>
+          <div
+            role='button'
+            tabIndex={0}
+            className='back-button'
+            onClick={onGoBack}
+          >
+            {textForKey('Already have an account')}?
+          </div>
+          <LoadingButton
+            type="submit"
+            isLoading={isLoading}
+            className='positive-button'
+            disabled={!isFormValid()}
+            style={{
+              width: isMobile ? '6.5rem' : 'unset',
+              minWidth: isMobile ? 'unset' : '8rem'
+            }}
+            onClick={submitForm}
+          >
+            {textForKey('Next')}
+          </LoadingButton>
         </div>
-        <LoadingButton
-          onClick={submitForm}
-          isLoading={isLoading}
-          className='positive-button'
-          disabled={!isFormValid()}
-          style={{
-            width: isMobile ? '6.5rem' : 'unset',
-            minWidth: isMobile ? 'unset' : '8rem'
-          }}
-        >
-          {textForKey('Next')}
-        </LoadingButton>
-      </div>
+      </form>
     </div>
   );
 };

@@ -19,7 +19,7 @@ import { Role } from "../../../../utils/constants";
 import styles from './PageHeader.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
-const ActionsSheet = dynamic(() => import('../../../../../components/common/ActionsSheet'));
+const ActionsSheet = dynamic(() => import('../../ActionsSheet'));
 
 const actions = [
   {
