@@ -565,6 +565,7 @@ const AddAppointmentModal = (
 
         <div className={styles.timeContainer}>
           <EASSelect
+            disabled={availableStartTime.length === 0}
             rootClass={styles.timeSelect}
             value={startTime || ''}
             label={textForKey('Start time')}
@@ -573,6 +574,7 @@ const AddAppointmentModal = (
             onChange={handleStartHourChange}
           />
           <EASSelect
+            disabled={availableEndTime.length === 0}
             rootClass={styles.timeSelect}
             value={endTime || ''}
             label={textForKey('End time')}

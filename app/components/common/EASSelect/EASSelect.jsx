@@ -5,16 +5,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-import { textForKey } from "../../../../utils/localization";
 import CheckableMenuItem from "../CheckableMenuItem";
 import styles from './EASSelect.module.scss';
-import InputLabel from "@material-ui/core/InputLabel";
 import clsx from "clsx";
 import Typography from "@material-ui/core/Typography";
 
 const EASSelect = (
   {
     rootClass,
+    disabled,
     checkable,
     label,
     labelId,
@@ -81,6 +80,7 @@ const EASSelect = (
         </Typography>
       )}
       <Select
+        disabled={disabled}
         multiple={multiple}
         disableUnderline
         labelId={labelId}
