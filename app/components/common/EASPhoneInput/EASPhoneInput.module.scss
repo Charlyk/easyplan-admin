@@ -9,17 +9,22 @@
     font-weight: bold !important;
     font-size: 10px !important;
     color: #6F7091 !important;
+
+    &.focused {
+      color: #3A83DC !important;
+    }
   }
 
   .reactTelInput {
     position: relative;
+    height: 35px;
 
     .easPhoneInput {
       outline: none;
       width: 100%;
       border: rgba(0, 0, 0, 0.23) 1px solid;
-      border-radius: 3px;
-      height: 35px;
+      border-radius: 4px;
+      padding: 0 14px 0 58px;
       font-family: Inter, sans-serif !important;
       font-style: normal !important;
       font-weight: normal !important;

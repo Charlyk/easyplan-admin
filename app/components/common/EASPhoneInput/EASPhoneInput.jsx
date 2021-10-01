@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import PhoneInput from "react-phone-input-2";
 import Typography from "@material-ui/core/Typography";
@@ -15,14 +15,22 @@ const EASPhoneInput = (
     onChange
   }
 ) => {
+  const [focused, setFocused] = useState(false);
+
+  const handleFocusChange = (isFocused) => {
+    setFocused(isFocused);
+  };
+
   return (
     <div className={clsx(styles.inputRoot, rootClass)}>
       {fieldLabel && (
-        <Typography className={styles.formLabel}>
+        <Typography className={clsx(styles.formLabel, { [styles.focused]: focused })}>
           {fieldLabel}
         </Typography>
       )}
       <PhoneInput
+        onFocus={() => handleFocusChange(true)}
+        onBlur={() => handleFocusChange(false)}
         onChange={onChange}
         value={value}
         containerClass={styles.reactTelInput}

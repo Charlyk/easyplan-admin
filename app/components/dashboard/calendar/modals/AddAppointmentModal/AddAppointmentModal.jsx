@@ -27,6 +27,7 @@ import styles from './AddAppointment.module.scss';
 import EASPhoneInput from "../../../../common/EASPhoneInput";
 import EASTextField from "../../../../common/EASTextField";
 import EASAutocomplete from "../../../../common/EASAutocomplete";
+import EASSelect from "../../../../common/EASSelect";
 
 const AddAppointmentModal = (
   {
@@ -150,6 +151,14 @@ const AddAppointmentModal = (
     }
   }, [selectedStartTime, selectedEndTime]);
 
+  const mappedTime = (timeList) => {
+    return timeList.map(item => ({
+      id: item,
+      label: item,
+      name: item,
+    }));
+  }
+
   const fetchScheduleDetails = async () => {
     if (schedule == null) {
       return;
@@ -185,6 +194,9 @@ const AddAppointmentModal = (
       const response = await getAvailableHours(query);
       const { data: availableTime } = response;
       localDispatch(actions.setAvailableTime(availableTime));
+      if (startTime.length === 0) {
+        localDispatch(actions.setStartTime(availableTime[0]));
+      }
       updateEndTimeBasedOnService(availableTime);
     } catch (error) {
       toast.error(error.message);
@@ -296,17 +308,13 @@ const AddAppointmentModal = (
     localDispatch(actions.setShowBirthdayPicker(true));
   };
 
-  const handleHourChange = (event) => {
-    const targetId = event.target.id;
-    switch (targetId) {
-      case 'startTime':
-        localDispatch(actions.setStartTime(event.target.value));
-        break;
-      case 'endTime':
-        localDispatch(actions.setEndTime(event.target.value));
-        break;
-    }
+  const handleStartHourChange = (event) => {
+    localDispatch(actions.setStartTime(event.target.value));
   };
+
+  const handleEndHourChange = (event) => {
+    localDispatch(actions.setEndTime(event.target.value));
+  }
 
   const handleNoteChange = (event) => {
     localDispatch(actions.setAppointmentNote(event.target.value));
@@ -399,8 +407,6 @@ const AddAppointmentModal = (
     );
   };
 
-  const filterByCallback = () => true;
-
   const datePicker = (
     <EasyDatePicker
       minDate={new Date()}
@@ -461,7 +467,7 @@ const AddAppointmentModal = (
               value={patientFirstName}
               containerClass={styles.nameField}
               fieldLabel={textForKey('First name')}
-              onChange={handlePatientFirstNameChange}
+              onChange={handlePatientLastNameChange}
             />
           </div>
         )}
@@ -539,6 +545,7 @@ const AddAppointmentModal = (
         />
 
         <EASAutocomplete
+          disabled={doctor == null}
           containerClass={styles.simpleField}
           options={doctor?.services || []}
           value={service}
@@ -556,52 +563,25 @@ const AddAppointmentModal = (
           onPointerUp={handleDateFieldClick}
         />
 
-        <InputGroup className={styles.inputGroup}>
-          <Form.Group
-            className={styles.formGroup}
-            controlId='startTime'
-          >
-            <Form.Label>{textForKey('Start time')}</Form.Label>
-            <Form.Control
-              as='select'
-              onChange={handleHourChange}
-              value={startTime}
-              disabled={isFetchingHours || availableStartTime.length === 0}
-              custom
-            >
-              {availableStartTime.map((item) => (
-                <option key={`start-${item}`} value={item}>
-                  {item}
-                </option>
-              ))}
-              {availableStartTime.length === 0 && (
-                <option value={-1}>{textForKey('No available time')}</option>
-              )}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group
-            className={styles.formGroup}
-            controlId='endTime'
-          >
-            <Form.Label>{textForKey('End time')}</Form.Label>
-            <Form.Control
-              as='select'
-              onChange={handleHourChange}
-              value={endTime}
-              disabled={isFetchingHours || availableEndTime.length === 0}
-              custom
-            >
-              {availableEndTime.map((item) => (
-                <option key={`end-${item}`} value={item}>
-                  {item}
-                </option>
-              ))}
-              {availableEndTime.length === 0 && (
-                <option value={-1}>{textForKey('No available time')}</option>
-              )}
-            </Form.Control>
-          </Form.Group>
-        </InputGroup>
+        <div className={styles.timeContainer}>
+          <EASSelect
+            rootClass={styles.timeSelect}
+            value={startTime || ''}
+            label={textForKey('Start time')}
+            labelId="start-time-select"
+            options={mappedTime(availableStartTime)}
+            onChange={handleStartHourChange}
+          />
+          <EASSelect
+            rootClass={styles.timeSelect}
+            value={endTime || ''}
+            label={textForKey('End time')}
+            labelId="start-time-select"
+            options={mappedTime(availableEndTime)}
+            onChange={handleEndHourChange}
+          />
+        </div>
+
         <Form.Group controlId='isUrgent'>
           <Form.Check
             onChange={handleIsUrgentChange}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Typography from "@material-ui/core/Typography";
@@ -17,8 +17,14 @@ const EASTextField = React.forwardRef(
     },
     ref
   ) => {
+    const [focused, setFocused] = useState(false);
+
     const handleFieldChange = (event) => {
       onChange?.(event.target.value);
+    };
+
+    const handleFocusChange = (isFocused) => {
+      setFocused(isFocused);
     };
 
     return (
@@ -35,13 +41,15 @@ const EASTextField = React.forwardRef(
         ref={ref}
       >
         {fieldLabel && (
-          <Typography className={styles.formLabel}>
+          <Typography className={clsx(styles.formLabel, { [styles.focused]: focused })}>
             {fieldLabel}
           </Typography>
         )}
         <OutlinedInput
           {...rest}
           error={error}
+          onFocus={() => handleFocusChange(true)}
+          onBlur={() => handleFocusChange(false)}
           disabled={readOnly}
           onChange={handleFieldChange}
           endAdornment={endAdornment}

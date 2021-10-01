@@ -13,6 +13,7 @@ const EASAutocomplete = (
   {
     options,
     loading,
+    disabled,
     placeholder,
     value,
     fieldLabel,
@@ -22,11 +23,19 @@ const EASAutocomplete = (
   }
 ) => {
   const [open, setOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
+
+  const handleFocusChange = (isFocused) => {
+    setFocused(isFocused);
+  };
 
   const renderInput = (params) => {
     return (
       <TextField
         {...params}
+        onFocus={() => handleFocusChange(true)}
+        onBlur={() => handleFocusChange(false)}
+        disabled={disabled}
         placeholder={placeholder}
         variant="outlined"
         onChange={onTextChange}
@@ -58,11 +67,12 @@ const EASAutocomplete = (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <div className={clsx(styles.autocompleteWrapper, containerClass)}>
         {fieldLabel && (
-          <Typography className={styles.autocompleteFormLabel}>
+          <Typography className={clsx(styles.autocompleteFormLabel, { [styles.focused]: focused })}>
             {fieldLabel}
           </Typography>
         )}
         <Autocomplete
+          disabled={disabled}
           open={open}
           value={value}
           options={options}
@@ -95,6 +105,7 @@ export default EASAutocomplete;
 EASAutocomplete.propTypes = {
   loading: PropTypes.bool,
   value: PropTypes.any,
+  disabled: PropTypes.bool,
   placeholder: PropTypes.string,
   fieldLabel: PropTypes.string,
   containerClass: PropTypes.any,

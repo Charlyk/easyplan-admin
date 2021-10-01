@@ -210,6 +210,21 @@
       width: 40%;
     }
   }
+
+  .timeContainer {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+
+    .timeSelect {
+      width: 50%;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .appointment-date-picker-root {

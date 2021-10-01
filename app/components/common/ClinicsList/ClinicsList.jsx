@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Typography from "@material-ui/core/Typography";
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import { useRouter } from "next/router";
-import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
 import getClinicUrl from "../../../../utils/getClinicUrl";
@@ -79,7 +79,7 @@ export default function ClinicsList({ user, authToken }) {
             />
           ))}
           <Box display='flex' width='100%' alignItems='center' mt='1rem'>
-            <Button className='positive-button' onClick={handleLogout}>
+            <Button className='positive-button' onPointerUp={handleLogout}>
               {textForKey('Logout')}
             </Button>
           </Box>

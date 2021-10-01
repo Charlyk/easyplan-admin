@@ -47,6 +47,10 @@
   font-weight: bold !important;
   font-size: 10px !important;
   color: #6F7091 !important;
+
+  &.focused {
+    color: #3A83DC !important;
+  }
 }
 
 .autocompleteResultPaper {
