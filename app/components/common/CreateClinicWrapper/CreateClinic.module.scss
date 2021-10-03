@@ -1,9 +1,9 @@
 .createClinicRoot {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   position: relative;
-  min-width: 1265px;
+  overflow: hidden;
 
   .logoContainer {
     background-color: #34344E;
@@ -19,14 +19,19 @@
   }
 
   .formContainer {
-    width: 60%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow-y: auto;
     background-color: #E5E5E5;
     padding-bottom: 1rem;
+
+    img {
+      width: 40%;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
   }
 
   :global(.form-title) {

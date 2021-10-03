@@ -581,6 +581,7 @@ export default {
     delete_deal_message: 'Are you sure you want to delete this deal?',
     link_patient: 'Link patient',
     complete_deal: 'Complete',
+    passwords_not_equal: 'Passwords do not match',
   },
   ro: {
     analytics: 'Analitică',
@@ -1170,6 +1171,7 @@ export default {
     delete_deal_message: 'Sunteți sigur(ă) că doriți să ștergeți acest lead?',
     link_patient: 'Atribuire pacient',
     complete_deal: 'Confirmă',
+    passwords_not_equal: 'Parolele nu coincid',
   },
   ru: {
     analytics: 'Analytics',
@@ -1750,5 +1752,6 @@ export default {
     delete_deal_message: 'Are you sure you want to delete this deal?',
     link_patient: 'Link patient',
     complete_deal: 'Complete',
+    passwords_not_equal: 'Passwords do not match',
   },
 };

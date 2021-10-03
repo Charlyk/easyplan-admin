@@ -60,7 +60,8 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     });
   };
 
-  const submitForm = async () => {
+  const submitForm = async (event) => {
+    event.preventDefault();
     if (!isFormValid() || isLoading) {
       return;
     }
@@ -89,7 +90,7 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
       {errorMessage && (
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
-      <form>
+      <form onSubmit={submitForm}>
         <UploadAvatar
           currentAvatar={data.avatarFile}
           onChange={handleAvatarChange}

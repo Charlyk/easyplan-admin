@@ -13,9 +13,11 @@ import reducer, {
   initialState
 } from './createClinicWrapperSlice';
 import styles from './CreateClinic.module.scss';
+import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 
 export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin }) {
   const router = useRouter();
+  const isMobileDevice = useIsMobileDevice();
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
   const handleGoBack = async () => {
@@ -59,17 +61,34 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
     }
   }
 
+  console.log(isMobileDevice)
+
   return (
     <div className={styles.createClinicRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      <div className={styles.logoContainer}>
-        <img
-          src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
-          alt='EasyPlan'
-        />
-      </div>
-      <div className={styles.formContainer}>
+      {!isMobileDevice && (
+        <div className={styles.logoContainer}>
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        </div>
+      )}
+      <div
+        className={styles.formContainer}
+        style={{
+          width: isMobileDevice ? '100%' : '60%',
+          backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
+        }}
+      >
+        {isMobileDevice && (
+          <img
+            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            alt='EasyPlan'
+          />
+        )}
         <CreateClinicForm
+          isMobile={isMobileDevice}
           countries={countries}
           redirect={redirect}
           onSubmit={handleCreateClinic}

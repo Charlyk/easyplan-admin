@@ -3,14 +3,14 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import VisibilityOn from "@material-ui/icons/Visibility";
-
-import LoadingButton from '../../LoadingButton';
-import { EmailRegex } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
-import styles from './LoginForm.module.scss';
-import EASTextField from "../../EASTextField";
 import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
+
+import { EmailRegex } from '../../../../utils/constants';
+import { textForKey } from '../../../../../utils/localization';
+import LoadingButton from '../../LoadingButton';
+import EASTextField from "../../EASTextField";
+import styles from './LoginForm.module.scss';
 
 const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSignUp, onLogin }) => {
   const [data, setData] = useState({ email: '', password: '' });
@@ -28,7 +28,8 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
     return data.email.match(EmailRegex) && data.password.length > 4;
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
     if (isLoggingIn || !isFormValid()) {
       return;
     }
@@ -61,65 +62,68 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
         <span className='error-text'>{textForKey(errorMessage)}</span>
       )}
 
-      <EASTextField
-        value={data.email}
-        type="email"
-        containerClass={styles.fieldContainer}
-        fieldLabel={textForKey('Email')}
-        onChange={handleEmailChange}
-      />
-
-      <Box display="flex" flexDirection="column" alignItems="flex-end">
+      <form onSubmit={handleLogin}>
         <EASTextField
-          value={data.password}
-          containerClass={clsx(styles.fieldContainer, styles.password)}
-          type={isPasswordVisible ? 'text' : 'password'}
-          fieldLabel={textForKey('Password')}
-          onChange={handlePasswordChange}
-          endAdornment={
-            <IconButton
-              onClick={togglePasswordVisibility}
-              className={styles.visibilityToggleBtn}
-            >
-              {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
-            </IconButton>
-          }
+          value={data.email}
+          type="email"
+          containerClass={styles.fieldContainer}
+          fieldLabel={textForKey('Email')}
+          onChange={handleEmailChange}
         />
-        <div
-          role='button'
-          tabIndex={0}
-          className={styles.forgotButton}
-          onClick={onResetPassword}
-        >
-          {textForKey('Forgot your password')}?
-        </div>
-      </Box>
 
-      <div className='footer'>
-        <div className={styles.footerSignUp}>
-          <span className='text'>{textForKey("Don't have an account")}?</span>
+        <div className={styles.passwordContainer}>
+          <EASTextField
+            value={data.password}
+            containerClass={clsx(styles.fieldContainer, styles.password)}
+            type={isPasswordVisible ? 'text' : 'password'}
+            fieldLabel={textForKey('Password')}
+            onChange={handlePasswordChange}
+            endAdornment={
+              <IconButton
+                onClick={togglePasswordVisibility}
+                className={styles.visibilityToggleBtn}
+              >
+                {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
+              </IconButton>
+            }
+          />
           <div
             role='button'
             tabIndex={0}
-            className={styles.signUpBtn}
-            onClick={onSignUp}
+            className={styles.forgotButton}
+            onClick={onResetPassword}
           >
-            {textForKey('Sign Up')}
+            {textForKey('Forgot your password')}?
           </div>
         </div>
-        <LoadingButton
-          onClick={handleLogin}
-          className='positive-button'
-          disabled={!isFormValid() || isLoggingIn}
-          isLoading={isLoggingIn}
-          style={{
-            width: isMobile ? '6rem' : 'unset',
-            minWidth: isMobile ? 'unset' : '8rem'
-          }}
-        >
-          {textForKey('Login')}
-        </LoadingButton>
-      </div>
+
+        <div className='footer'>
+          <div className={styles.footerSignUp}>
+            <span className='text'>{textForKey("Don't have an account")}?</span>
+            <div
+              role='button'
+              tabIndex={0}
+              className={styles.signUpBtn}
+              onClick={onSignUp}
+            >
+              {textForKey('Sign Up')}
+            </div>
+          </div>
+          <LoadingButton
+            type="submit"
+            onClick={handleLogin}
+            className='positive-button'
+            disabled={!isFormValid() || isLoggingIn}
+            isLoading={isLoggingIn}
+            style={{
+              width: isMobile ? '6rem' : 'unset',
+              minWidth: isMobile ? 'unset' : '8rem'
+            }}
+          >
+            {textForKey('Login')}
+          </LoadingButton>
+        </div>
+      </form>
     </div>
   );
 };

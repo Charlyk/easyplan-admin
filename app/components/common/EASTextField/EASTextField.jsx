@@ -3,6 +3,7 @@ import clsx from "clsx";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Typography from "@material-ui/core/Typography";
 import styles from './EASTextField.module.scss'
+import { TextField } from "@material-ui/core";
 
 const EASTextField = React.forwardRef(
   (
@@ -10,9 +11,11 @@ const EASTextField = React.forwardRef(
       fieldLabel,
       readOnly,
       containerClass,
+      fieldClass,
       error,
       endAdornment,
       onChange,
+      helperText,
       ...rest
     },
     ref
@@ -45,20 +48,33 @@ const EASTextField = React.forwardRef(
             {fieldLabel}
           </Typography>
         )}
-        <OutlinedInput
+        <TextField
           {...rest}
+          variant="outlined"
           error={error}
+          helperText={helperText}
           onFocus={() => handleFocusChange(true)}
           onBlur={() => handleFocusChange(false)}
           disabled={readOnly}
           onChange={handleFieldChange}
-          endAdornment={endAdornment}
+          FormHelperTextProps={{
+            classes: {
+              root: styles.helperText,
+              error: clsx(styles.helperText, styles.error),
+            }
+          }}
           classes={{
-            root: styles.searchField,
-            input: styles.searchInput,
-            notchedOutline: styles.focusedInput,
-            focused: styles.focusedField,
-            adornedEnd: styles.inputAdornedEnd
+            root: clsx(styles.searchField, fieldClass),
+          }}
+          InputProps={{
+            endAdornment: endAdornment,
+            classes: {
+              root: clsx(styles.searchField, fieldClass),
+              input: styles.searchInput,
+              notchedOutline: styles.focusedInput,
+              focused: styles.focusedField,
+              adornedEnd: styles.inputAdornedEnd,
+            }
           }}
         />
       </div>

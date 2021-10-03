@@ -18,7 +18,8 @@ const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }
 
   const isFormValid = email.match(EmailRegex);
 
-  const handleResetPassword = async () => {
+  const handleResetPassword = async (event) => {
+    event.preventDefault();
     if (!isFormValid || isLoading) {
       return;
     }
@@ -38,30 +39,33 @@ const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }
       <span className='welcome-text'>
         {textForKey('reset_password_message')}
       </span>
-      <EASTextField
-        type="email"
-        fieldLabel={textForKey('Email')}
-        value={email}
-        onChange={handleFormChange}
-      />
-      <div className='footer'>
-        <div
-          role='button'
-          tabIndex={0}
-          className='back-button'
-          onClick={onGoBack}
-        >
-          {textForKey('Go back')}
+      <form onSubmit={handleResetPassword}>
+        <EASTextField
+          type="email"
+          fieldLabel={textForKey('Email')}
+          value={email}
+          onChange={handleFormChange}
+        />
+        <div className='footer'>
+          <div
+            role='button'
+            tabIndex={0}
+            className='back-button'
+            onClick={onGoBack}
+          >
+            {textForKey('Go back')}
+          </div>
+          <LoadingButton
+            type="submit"
+            isLoading={isLoading}
+            onClick={handleResetPassword}
+            className='positive-button'
+            disabled={!isFormValid}
+          >
+            {textForKey('Reset password')}
+          </LoadingButton>
         </div>
-        <LoadingButton
-          isLoading={isLoading}
-          onClick={handleResetPassword}
-          className='positive-button'
-          disabled={!isFormValid}
-        >
-          {textForKey('Reset password')}
-        </LoadingButton>
-      </div>
+      </form>
     </div>
   );
 };

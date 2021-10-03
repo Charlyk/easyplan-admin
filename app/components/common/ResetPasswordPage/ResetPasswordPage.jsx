@@ -1,17 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
-import axios from "axios";
 import Typography from "@material-ui/core/Typography";
 
-import LoadingButton from '../LoadingButton';
 import { textForKey } from '../../../../utils/localization';
 import { isDev } from "../../../../eas.config";
 import { wrapper } from "../../../../store";
-import { JwtRegex, PasswordRegex } from '../../../utils/constants';
+import { requestResetUserPassword } from "../../../../middleware/api/auth";
 import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+import { PasswordRegex } from '../../../utils/constants';
+import LoadingButton from '../LoadingButton';
 import EASTextField from "../EASTextField";
 import styles from './ResetPasswordForm.module.scss';
-import { requestResetUserPassword } from "../../../../middleware/api/auth";
 
 const ResetPasswordForm = ({ token }) => {
   const isMobileDevice = useIsMobileDevice();
@@ -56,6 +55,8 @@ const ResetPasswordForm = ({ token }) => {
     );
   };
 
+  const isConfirmError = state.confirmPassword.length > 0 && state.confirmPassword !== state.newPassword;
+
   return (
     <div
       className={styles.generalPage}
@@ -86,7 +87,7 @@ const ResetPasswordForm = ({ token }) => {
           className={styles.formRoot}
           style={{
             width: isMobileDevice ? '90%' : '70%',
-            padding: isMobileDevice ? '2rem' : '3rem',
+            padding: '2rem',
           }}
         >
           <div className={styles.formWrapper}>
@@ -96,7 +97,7 @@ const ResetPasswordForm = ({ token }) => {
             <Typography className={styles.welcomeText}>
               {textForKey('change password message')}
             </Typography>
-            <form autoComplete="off">
+            <form autoComplete="off" onSubmit={handleSavePassword}>
               <EASTextField
                 type="password"
                 containerClass={styles.passwordField}
@@ -115,10 +116,8 @@ const ResetPasswordForm = ({ token }) => {
                 fieldLabel={textForKey('Confirm password')}
                 onChange={handleConfirmPasswordChange}
                 value={state.confirmPassword}
-                error={
-                  state.confirmPassword.length > 0 &&
-                  state.confirmPassword !== state.newPassword
-                }
+                helperText={isConfirmError ? textForKey('passwords_not_equal') : null}
+                error={isConfirmError}
               />
             </form>
           </div>
@@ -137,21 +136,5 @@ const ResetPasswordForm = ({ token }) => {
     </div>
   );
 };
-
-export const getServerSideProps = async ({ res, query }) => {
-  const { token } = query;
-
-  if (!token.match(JwtRegex)) {
-    res.writeHead(302, { Location: `/login` });
-    res.end();
-    return { props: { token } };
-  }
-
-  return {
-    props: {
-      token
-    }
-  }
-}
 
 export default wrapper.withRedux(ResetPasswordForm);

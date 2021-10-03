@@ -10,6 +10,7 @@ export const initialState = {
   website: '',
   description: '',
   countryIso: 'md',
+  country: null,
   defaultCurrency: 'MDL',
   timeZone: moment.tz.guess(true),
   timeZones: [],
@@ -74,6 +75,9 @@ const createClinicSlice = createSlice({
     setCountryIso(state, action) {
       state.countryIso = action.payload;
     },
+    setCountry(state, action) {
+      state.country = action.payload;
+    }
   },
 });
 
@@ -88,7 +92,7 @@ export const {
   setInitialData,
   setDefaultCurrency,
   setIsDomainAvailable,
-  setCountryIso,
+  setCountry,
 } = createClinicSlice.actions;
 
 export default createClinicSlice.reducer;

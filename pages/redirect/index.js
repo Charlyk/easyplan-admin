@@ -4,9 +4,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography'
 import { useRouter } from "next/router";
 import getRedirectUrlForUser from '../../utils/getRedirectUrlForUser';
-import setCookies from '../../utils/setCookies';
 import { getCurrentUser } from "../../middleware/api/auth";
 import { textForKey } from "../../utils/localization";
+import setCookies from '../../utils/setCookies';
 
 const Redirect = () => {
   const router = useRouter();
@@ -31,19 +31,21 @@ const Redirect = () => {
   }
 
   return (
-    <Box
-      width='100vh'
-      height='100vh'
-      display='flex'
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='center'
+    <div
+      style={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       <CircularProgress className='circular-progress-bar'/>
       <Typography className='typography' style={{ marginTop: '1rem' }}>
         {textForKey('Redirecting to clinic')}...
       </Typography>
-    </Box>
+    </div>
   )
 }
 

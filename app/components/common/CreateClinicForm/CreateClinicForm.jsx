@@ -1,14 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from "react";
-import { Form, Image, InputGroup } from "react-bootstrap";
 import clsx from "clsx";
+import sortBy from 'lodash/sortBy';
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
+import Typography from "@material-ui/core/Typography";
 
 import { isDev } from "../../../../eas.config";
 import { textForKey } from "../../../../utils/localization";
 import { WebRegex } from "../../../utils/constants";
-import { checkDomainAvailability, clinicTimeZones, fetchAvailableCurrencies } from "../../../../middleware/api/clinic";
-import IconAvatar from "../../icons/iconAvatar";
+import {
+  checkDomainAvailability,
+  clinicTimeZones,
+  fetchAvailableCurrencies
+} from "../../../../middleware/api/clinic";
 import LoadingButton from "../LoadingButton";
 
 import reducer, {
@@ -22,11 +26,15 @@ import reducer, {
   setInitialData,
   setDefaultCurrency,
   setIsDomainAvailable,
-  setCountryIso,
+  setCountry,
 } from './createClinicSlice'
+import EASTextField from "../EASTextField";
+import UploadAvatar from "../UploadAvatar";
+import EASSelect from "../EASSelect";
 import styles from "./CreateClinicForm.module.scss";
+import EASTextarea from "../EASTextarea";
 
-const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }) => {
+const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, onSubmit }) => {
   const [{
     logoFile,
     clinicName,
@@ -38,8 +46,29 @@ const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }
     currencies,
     defaultCurrency,
     isDomainAvailable,
-    countryIso
+    country,
   }, localDispatch] = useReducer(reducer, initialState);
+
+  const mappedCountries = useMemo(() => {
+    return countries.map((item) => ({
+      ...item,
+      label: item.name,
+    }))
+  }, [countries]);
+
+  const mappedCurrencies = useMemo(() => {
+    return currencies.map((item) => ({
+      ...item,
+      name: `${item.id} - ${item.name}`,
+    }));
+  }, [currencies]);
+
+  const mappedTimeZones = useMemo(() => {
+    return sortBy(timeZones.map((item) => ({
+      id: item,
+      name: item,
+    })), item => item.name);
+  }, [timeZones]);
 
   useEffect(() => {
     fetchTimeZones();
@@ -61,25 +90,24 @@ const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }
     }
   };
 
-  const handleNameChange = (event) => {
-    localDispatch(setClinicName(event.target.value));
+  const handleNameChange = (newValue) => {
+    localDispatch(setClinicName(newValue));
   }
 
-  const handleDomainChange = (event) => {
-    const newDomain = event.target.value.toLowerCase()
-    localDispatch(setDomainName(newDomain));
+  const handleDomainChange = (newDomain) => {
+    localDispatch(setDomainName(newDomain.toLowerCase()));
   }
 
-  const handleWebsiteChange = (event) => {
-    localDispatch(setWebsite(event.target.value));
+  const handleWebsiteChange = (newValue) => {
+    localDispatch(setWebsite(newValue));
   }
 
   const handleTimeZoneChange = (event) => {
     localDispatch(setTimeZone(event.target.value));
   }
 
-  const handleDescriptionChange = (event) => {
-    localDispatch(setDescription(event.target.value));
+  const handleDescriptionChange = (newValue) => {
+    localDispatch(setDescription(newValue));
   }
 
   const handleCurrencyChange = (event) => {
@@ -87,7 +115,8 @@ const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }
   }
 
   const handleCountryChange = (event) => {
-    localDispatch(setCountryIso(event.target.value));
+    const country = countries.find(item => item.id === event.target.value);
+    localDispatch(setCountry(country));
   }
 
   const handleLogoChange = (event) => {
@@ -114,14 +143,26 @@ const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }
 
   const isFormValid = useMemo(() => {
     return (
+      defaultCurrency &&
+      timeZone &&
+      country != null &&
       clinicName.length > 3 &&
       domainName.length > 3 &&
       isDomainAvailable &&
       (website.length === 0 || website.match(WebRegex))
     )
-  }, [website, clinicName, domainName, isDomainAvailable]);
+  }, [
+    website,
+    clinicName,
+    domainName,
+    country,
+    defaultCurrency,
+    timeZone,
+    isDomainAvailable
+  ]);
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = (event) => {
+    event.preventDefault();
     if (!isFormValid) {
       return;
     }
@@ -131,7 +172,7 @@ const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }
       website,
       timeZone,
       description,
-      countryIso,
+      countryIso: country.iso,
       domainName: isDev ? `${domainName}-dev` : domainName,
       defaultCurrency,
     });
@@ -141,148 +182,114 @@ const CreateClinicForm = ({ isLoading, redirect, countries, onGoBack, onSubmit }
     onGoBack();
   }
 
-  const logoSrc = logoFile && window.URL.createObjectURL(logoFile);
-
   return (
-    <div className={clsx('form-root', styles['register-form'])}>
+    <div
+      className={clsx('form-root', styles['register-form'])}
+      style={{
+        padding: isMobile ? '2rem' : '3rem',
+        width: isMobile ? '90%' : '70%',
+      }}
+    >
       <span className='form-title'>{textForKey('Create clinic')}</span>
-      <div className='upload-avatar-container'>
-        {logoSrc ? <Image roundedCircle src={logoSrc}/> : <IconAvatar/>}
-        <span style={{ margin: '1rem' }}>
-          {textForKey('JPG or PNG, Max size of 800kb')}
-        </span>
-        <Form.Group>
-          <input
-            className='custom-file-button'
-            type='file'
-            name='logo-file'
-            id='logo-file'
-            accept='.jpg,.jpeg,.png'
-            onChange={handleLogoChange}
-          />
-          <label htmlFor='logo-file'>{textForKey('Upload image')}</label>
-        </Form.Group>
-      </div>
-      <Form.Group controlId='clinicName'>
-        <Form.Label>{textForKey('Clinic name')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={clinicName}
-            type='text'
-            onChange={handleNameChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='domainName'>
-        <Form.Label>{textForKey('Domain name')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            isInvalid={domainName.length > 0 && !isDomainAvailable}
-            isValid={domainName.length > 0 && isDomainAvailable}
-            value={domainName}
-            type='text'
-            onChange={handleDomainChange}
-          />
-          <InputGroup.Append>
-            <InputGroup.Text id='basic-addon1'>{isDev ? '-dev' : ''}.easyplan.pro</InputGroup.Text>
-          </InputGroup.Append>
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='website'>
-        <Form.Label>{`${textForKey('Website')} (${textForKey(
-          'optional',
-        ).toLowerCase()})`}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={website}
-            type='text'
-            onChange={handleWebsiteChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group style={{ flexDirection: 'column' }} controlId='country'>
-        <Form.Label>{textForKey('Country')}</Form.Label>
-        <Form.Control
-          as='select'
-          className='mr-sm-2'
-          custom
+      <form onSubmit={handleSubmitForm}>
+        <UploadAvatar
+          currentAvatar={logoFile}
+          onChange={handleLogoChange}
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.textField}
+          fieldLabel={textForKey('Clinic name')}
+          value={clinicName}
+          onChange={handleNameChange}
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.textField}
+          fieldLabel={textForKey('Domain name')}
+          error={domainName.length > 0 && !isDomainAvailable}
+          value={domainName}
+          onChange={handleDomainChange}
+          endAdornment={
+            <Typography noWrap className={styles.domainAdornment}>
+              {isDev ? '-dev' : ''}.easyplan.pro
+            </Typography>
+          }
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.textField}
+          fieldLabel={`${textForKey('Website')} (${textForKey('optional',).toLowerCase()})`}
+          value={website}
+          onChange={handleWebsiteChange}
+        />
+
+        <EASSelect
+          rootClass={styles.textField}
+          label={textForKey('Country')}
+          labelId="clinic-country-select"
+          disabled={countries.length === 0}
+          options={mappedCountries}
+          value={country?.id || -1}
           onChange={handleCountryChange}
-          value={countryIso}
-        >
-          {countries?.map(country => (
-            <option key={country.iso} value={country.iso}>
-              {textForKey(country.name)}
-            </option>
-          ))}
-        </Form.Control>
-      </Form.Group>
-      <Form.Group controlId='defaultCurrency'>
-        <Form.Label>{textForKey('Currency')}</Form.Label>
-        <Form.Control
-          as='select'
-          onChange={handleCurrencyChange}
+        />
+
+        <EASSelect
+          rootClass={styles.textField}
+          label={textForKey('Currency')}
+          labelId="clinic-currency-select"
+          disabled={currencies.length === 0}
           value={defaultCurrency}
-          custom
-        >
-          {currencies.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.id} - {item.name}
-            </option>
-          ))}
-        </Form.Control>
-      </Form.Group>
-      <Form.Group controlId='timeZone'>
-        <Form.Label>{textForKey('Time zone')}</Form.Label>
-        <Form.Control
-          as='select'
-          onChange={handleTimeZoneChange}
+          options={mappedCurrencies}
+          onChange={handleCurrencyChange}
+        />
+
+        <EASSelect
+          rootClass={styles.textField}
+          label={textForKey('Time zone')}
+          labelId="time-zone-select"
+          disabled={timeZones.length === 0}
           value={timeZone}
-          custom
-        >
-          {timeZones.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </Form.Control>
-      </Form.Group>
-      <Form.Group controlId='description'>
-        <Form.Label>{`${textForKey('About clinic')} (${textForKey(
-          'optional',
-        ).toLowerCase()})`}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            as='textarea'
-            value={description}
-            onChange={handleDescriptionChange}
-            aria-label='With textarea'
-          />
-        </InputGroup>
-      </Form.Group>
-      <div className='footer'>
-        <div
-          role='button'
-          tabIndex={0}
-          className='back-button'
-          onClick={handleGoBack}
-        >
-          {redirect
-            ? `${textForKey('Already have an account')}?`
-            : textForKey('go back')
-          }
+          options={mappedTimeZones}
+          onChange={handleTimeZoneChange}
+        />
+
+        <EASTextarea
+          type="text"
+          containerClass={styles.textField}
+          fieldLabel={`${textForKey('About clinic')} (${textForKey('optional').toLowerCase()})`}
+          value={description}
+          onChange={handleDescriptionChange}
+        />
+
+        <div className='footer'>
+          <div
+            role='button'
+            tabIndex={0}
+            className='back-button'
+            onClick={handleGoBack}
+          >
+            {redirect
+              ? `${textForKey('Already have an account')}?`
+              : textForKey('go back')
+            }
+          </div>
+          <LoadingButton
+            onClick={handleSubmitForm}
+            isLoading={isLoading}
+            className='positive-button'
+            disabled={!isFormValid}
+          >
+            {redirect
+              ? textForKey('Create new account')
+              : textForKey('Create clinic')
+            }
+          </LoadingButton>
         </div>
-        <LoadingButton
-          onClick={handleSubmitForm}
-          isLoading={isLoading}
-          className='positive-button'
-          disabled={!isFormValid}
-        >
-          {redirect
-            ? textForKey('Create new account')
-            : textForKey('Create clinic')
-          }
-        </LoadingButton>
-      </div>
+      </form>
     </div>
   )
 }
