@@ -7,6 +7,105 @@
     margin-right: .5rem;
   }
 
+  .outlinedBtnBlue {
+    border-color: #3A83DC;
+  }
+
+  .outlinedBtnGreen {
+    border-color: #00E987;
+  }
+
+  .outlinedBtnRed {
+    border-color: #ec3276;
+  }
+
+  .deleteBtn {
+    font-size: 11px;
+    height: 35px;
+    margin-right: 5px;
+    background-color: transparent;
+
+    .buttonLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #F44081;
+    }
+
+    &:focus, &:active, &:hover {
+      color: #F44081 !important;
+      border-color: #F44081 !important;
+      background-color: transparent !important;
+    }
+
+    svg {
+      fill: #F44081;
+      margin-left: 5px;
+      margin-bottom: 4px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .restoreBtn {
+    font-size: 11px;
+    height: 35px;
+    margin-right: 5px;
+    background-color: transparent;
+
+    .buttonLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #00E987;
+    }
+
+    &:focus, &:active, &:hover {
+      color: #00E987 !important;
+      border-color: #00E987 !important;
+      background-color: transparent !important;
+    }
+
+    svg {
+      fill: #00E987;
+      margin-left: 5px;
+      margin-bottom: 4px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .editBtn {
+    font-size: 11px;
+    height: 35px;
+    margin-right: 5px;
+    background-color: transparent;
+
+    .buttonLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #3A83DC;
+    }
+
+    &:focus, &:active, &:hover {
+      color: #3A83DC !important;
+      border-color: #3A83DC !important;
+      background-color: transparent !important;
+    }
+
+    svg {
+      fill: #3A83DC;
+      margin-left: 5px;
+      margin-bottom: 4px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
   .delete-button {
     height: 30px;
     display: flex !important;

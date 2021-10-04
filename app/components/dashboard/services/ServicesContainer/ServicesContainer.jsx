@@ -7,9 +7,9 @@ import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import UploadIcon from '@material-ui/icons/CloudUpload';
+import Button from '@material-ui/core/Button';
 import sortBy from 'lodash/sortBy';
 import indexOf from 'lodash/indexOf';
-import Button from 'react-bootstrap/Button';
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from 'react-redux';
@@ -458,30 +458,42 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
 
       {category.data != null && (
         <div className={styles['services-root__footer']}>
-          <LoadingButton
+          <Button
             disabled={category?.data?.id === 'all-services'}
-            variant='outline-primary'
-            className={clsx(styles['btn-outline-primary'], styles['import-btn'])}
+            variant='outlined'
+            classes={{
+              root: styles.importBtn,
+              outlined: styles.outlinedBtnBlue,
+              label: styles.buttonLabel,
+            }}
             isLoading={isUploading}
-            onClick={openUploading}
+            onPointerUp={openUploading}
           >
             {textForKey('Import services')}
             <UploadIcon/>
-          </LoadingButton>
+          </Button>
           <Button
             disabled={category?.data?.id === 'all-services'}
-            variant='outline-primary'
-            className={styles['edit-category-btn']}
-            onClick={handleEditCategory}
+            variant='outlined'
+            classes={{
+              root: styles.importBtn,
+              outlined: styles.outlinedBtnBlue,
+              label: styles.buttonLabel,
+            }}
+            onPointerUp={handleEditCategory}
           >
             {textForKey('Edit category')}
             <IconEdit/>
           </Button>
           <Button
             disabled={category?.data?.id === 'all-services'}
-            variant='outline-primary'
-            className={styles['add-service-btn']}
-            onClick={handleAddOrEditService}
+            variant='outlined'
+            classes={{
+              root: styles.createBtn,
+              outlined: styles.outlinedBtnGreen,
+              label: styles.buttonLabel,
+            }}
+            onPointerUp={handleAddOrEditService}
           >
             {textForKey('Add service')}
             <IconPlus fill='#00E987'/>

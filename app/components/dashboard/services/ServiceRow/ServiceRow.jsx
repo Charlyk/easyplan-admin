@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 
 import IconDelete from '../../../icons/iconDelete';
 import IconEdit from '../../../icons/iconEdit';
@@ -51,21 +51,34 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
       <td align='right'>
         <div className={styles['actions-wrapper']}>
           <Button
-            className={styles['edit-button']}
-            onClick={handleEditService}
+            variant="outlined"
+            classes={{
+              root: styles.editBtn,
+              outlined: styles.outlinedBtnBlue,
+              label: styles.buttonLabel,
+            }}
+            onPointerUp={handleEditService}
           >
-            {textForKey('Edit')} <IconEdit />
+            {textForKey('Edit')} <IconEdit/>
           </Button>
           <Button
+            variant="outlined"
             disabled={service.bracket}
-            className={clsx(
-              styles['delete-button'],
-              service.deleted && styles.positive,
-            )}
-            onClick={handleDeleteService}
+            classes={{
+              root: clsx({
+                [styles.deleteBtn]: !service.deleted,
+                [styles.restoreBtn]: service.deleted,
+              }),
+              outlined: clsx({
+                [styles.outlinedBtnRed]: !service.deleted,
+                [styles.outlinedBtnGreen]: service.deleted,
+              }),
+              label: styles.buttonLabel,
+            }}
+            onPointerUp={handleDeleteService}
           >
             {service.deleted ? textForKey('Restore') : textForKey('Delete')}{' '}
-            {service.deleted ? <IconRefresh fill='#00E987' /> : <IconDelete />}
+            {service.deleted ? <IconRefresh fill='#00E987'/> : <IconDelete/>}
           </Button>
         </div>
       </td>
