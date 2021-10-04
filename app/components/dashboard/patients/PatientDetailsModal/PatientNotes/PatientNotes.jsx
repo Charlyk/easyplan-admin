@@ -3,8 +3,6 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 
@@ -12,10 +10,11 @@ import IconPlus from '../../../../icons/iconPlus';
 import { updateNotesSelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../../common/LoadingButton';
-import { createPatientNote, getPatientNotes } from "../../../../../../middleware/api/patients";
+import { createPatientNote, requestFetchPatientNotes } from "../../../../../../middleware/api/patients";
 import PatientNote from './PatientNote';
 import { reducer, initialState, actions } from './PatientNotes.reducer';
 import styles from './PatientNotes.module.scss';
+import EASTextField from "../../../../common/EASTextField";
 
 const PatientNotes = ({ patient }) => {
   const [state, localDispatch] = useReducer(reducer, initialState);
@@ -46,7 +45,7 @@ const PatientNotes = ({ patient }) => {
   const fetchNotes = async () => {
     localDispatch(actions.setIsFetching(true));
     try {
-      const response = await getPatientNotes(patient.id);
+      const response = await requestFetchPatientNotes(patient.id);
       localDispatch(actions.setNotes(response.data || []));
     } catch (error) {
       toast.error(error.message);
@@ -61,17 +60,17 @@ const PatientNotes = ({ patient }) => {
     }
   };
 
-  const handleNewNoteChanged = event => {
-    localDispatch(actions.setNewNoteText(event.target.value));
+  const handleNewNoteChanged = (newValue) => {
+    localDispatch(actions.setNewNoteText(newValue));
   };
 
   return (
-    <div className={styles['patient-notes-list']}>
-      <Typography className={'title-label'}>
+    <div className={styles.patientNotesList}>
+      <Typography className='title-label'>
         {textForKey('Notes')}
       </Typography>
       {state.notes.length === 0 && !state.isFetching && (
-        <Typography className={'no-data-label'}>
+        <Typography className='no-data-label'>
           {textForKey('No data here yet')} :(
         </Typography>
       )}
@@ -80,27 +79,24 @@ const PatientNotes = ({ patient }) => {
           <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
         </div>
       )}
-      <div className={styles['patient-notes-list__notes-data']}>
+      <div className={styles.notesData}>
         {state.notes.map(note => (
           <PatientNote key={note.id} note={note}/>
         ))}
       </div>
-      <Box display='flex' width='100%' className={styles['patient-notes-list__actions']}>
-        <Form.Group controlId='newNoteText'>
-          <InputGroup>
-            <Form.Control
-              onKeyDown={handleInputKeyDown}
-              value={state.newNoteText}
-              type='text'
-              placeholder={`${textForKey('Enter new note')}...`}
-              onChange={handleNewNoteChanged}
-            />
-          </InputGroup>
-        </Form.Group>
+      <Box display='flex' width='100%' className={styles.actions}>
+        <EASTextField
+          type="text"
+          containerClass={styles.noteField}
+          value={state.newNoteText}
+          placeholder={`${textForKey('Enter new note')}...`}
+          onKeyDown={handleInputKeyDown}
+          onChange={handleNewNoteChanged}
+        />
         <LoadingButton
           isLoading={state.isAddingNote}
-          disabled={state.isFetching}
-          className='positive-button'
+          disabled={state.isFetching || state.newNoteText.length === 0}
+          className={styles.addNoteButton}
           onClick={handleAddNote}
         >
           {textForKey('Add note')}

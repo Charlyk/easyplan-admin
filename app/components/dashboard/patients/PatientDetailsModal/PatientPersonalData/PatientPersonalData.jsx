@@ -19,6 +19,8 @@ import { updatePatient } from "../../../../../../middleware/api/patients";
 import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
 import styles from './PatientPersonalData.module.scss';
+import EASTextField from "../../../../common/EASTextField";
+import EASPhoneInput from "../../../../common/EASPhoneInput";
 
 const EasyDatePicker = dynamic(() => import('../../../../common/EasyDatePicker'));
 
@@ -47,9 +49,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
     }
   }, [patient]);
 
-  const handleFormChange = (event) => {
-    const eventId = event.target.id;
-    const newValue = event.target.value;
+  const handleFormChange = (eventId, newValue) => {
     switch (eventId) {
       case 'lastName':
         localDispatch(actions.setLastName(newValue));
@@ -146,79 +146,64 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
         {textForKey('Personal Info')}
       </Typography>
       <Box className={styles['patient-form-wrapper']}>
-        <Form.Group controlId='lastName'>
-          <Form.Label>{textForKey('Last name')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={lastName}
-              type='text'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='firstName'>
-          <Form.Label>{textForKey('First name')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={firstName}
-              type='text'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group ref={datePickerRef}>
-          <Form.Label>{textForKey('Birthday')}</Form.Label>
-          <Form.Control
-            value={formattedBirthday}
-            readOnly
-            onClick={handleOpenDatePicker}
-          />
-        </Form.Group>
-        <Form.Group controlId='email'>
-          <Form.Label>{textForKey('Email')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={email || ''}
-              isInvalid={email?.length > 0 && !email.match(EmailRegex)}
-              type='email'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='discount'>
-          <Form.Label>{textForKey('Discount')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={String(discount)}
-              type='number'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='euroDebt'>
-          <Form.Label>{textForKey('Euro Debt')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={String(euroDebt)}
-              type='number'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='phoneNumber'>
-          <Form.Label>{textForKey('Phone number')}</Form.Label>
-          <InputGroup>
-            <PhoneInput
-              alwaysDefaultMask
-              value={`+${country.dialCode}${phoneNumber}`}
-              countryCodeEditable={false}
-              country={country.countryCode}
-              placeholder={country.format}
-              isValid={isPhoneInputValid}
-              onChange={handlePhoneChange}
-            />
-          </InputGroup>
-        </Form.Group>
+        <EASTextField
+          type="text"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Last name')}
+          value={lastName}
+          onChange={(value) => handleFormChange('lastName', value)}
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('First name')}
+          value={firstName}
+          onChange={(value) => handleFormChange('firstName', value)}
+        />
+
+        <EASTextField
+          readOnly
+          ref={datePickerRef}
+          value={formattedBirthday}
+          onPointerUp={handleOpenDatePicker}
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Birthday')}
+        />
+
+        <EASTextField
+          type="email"
+          value={email || ''}
+          containerClass={styles.simpleField}
+          error={email?.length > 0 && !email.match(EmailRegex)}
+          fieldLabel={textForKey('Email')}
+          onChange={(value) => handleFormChange('email', value)}
+        />
+
+        <EASTextField
+          type="number"
+          value={String(discount)}
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Discount')}
+          onChange={(value) => handleFormChange('discount', value)}
+        />
+
+        <EASTextField
+          type="number"
+          value={String(euroDebt)}
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Euro Debt')}
+          onChange={(value) => handleFormChange('euroDebt', value)}
+        />
+
+        <EASPhoneInput
+          fieldLabel={textForKey('Phone number')}
+          value={`+${country.dialCode}${phoneNumber}`}
+          country={country.countryCode}
+          placeholder={country.format}
+          onChange={handlePhoneChange}
+        />
+
         <Box
           mt='1rem'
           width='100%'
@@ -227,7 +212,7 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
           justifyContent='flex-end'
         >
           <LoadingButton
-            className='positive-button'
+            className={styles.saveButton}
             isLoading={isSaving}
             onClick={handleSavePatient}
             disabled={isSaving || !isFormValid()}

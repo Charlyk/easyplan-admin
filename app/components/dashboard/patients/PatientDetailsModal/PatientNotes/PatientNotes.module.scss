@@ -1,4 +1,4 @@
-.patient-notes-list {
+.patientNotesList {
   width: 100%;
   max-height: 100%;
   flex: 1;
@@ -12,7 +12,7 @@
     margin-right: 1rem;
   }
 
-  &__notes-data {
+  .notesData {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -28,7 +28,7 @@
     }
   }
 
-  &__actions {
+  .actions {
     width: 100%;
     display: flex;
     align-items: center;
@@ -36,5 +36,15 @@
     background-color: white;
     padding: 1rem 1.5rem;
     box-shadow: 0px -20px 40px -5px rgba(239, 242, 251, 0.8);
+
+    .noteField {
+      flex: 1;
+    }
+
+    .addNoteButton {
+      background-color: #3A83DC;
+      margin-left: 5px;
+      color: white;
+    }
   }
 }

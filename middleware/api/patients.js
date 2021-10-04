@@ -63,7 +63,7 @@ export async function createPatientNote(patientId, body, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function getPatientNotes(patientId, headers = null) {
+export async function requestFetchPatientNotes(patientId, headers = null) {
   return get(`/api/patients/${patientId}/notes`, headers);
 }
 

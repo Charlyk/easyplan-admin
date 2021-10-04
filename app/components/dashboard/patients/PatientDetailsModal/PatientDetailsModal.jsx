@@ -1,11 +1,13 @@
 import React, { useEffect, useReducer } from 'react';
 import clsx from "clsx";
 import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap/Modal';
-import ListGroup from 'react-bootstrap/ListGroup'
+import Modal from '@material-ui/core/Modal';
+import MenuList from '@material-ui/core/MenuList';
+import MuiMenuItem from '@material-ui/core/MenuItem';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Paper from "@material-ui/core/Paper";
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -35,9 +37,10 @@ import {
   reducer,
   initialState,
   actions,
-  MenuItem
+  MenuItem, MenuItems
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
+import IconButton from "@material-ui/core/IconButton";
 
 const PatientDetailsModal = (
   {
@@ -100,8 +103,8 @@ const PatientDetailsModal = (
     }
   };
 
-  const handleMenuClick = (event) => {
-    const targetId = event.target.id;
+  const handleMenuClick = (menuItem) => {
+    const targetId = menuItem.id;
     if (targetId === MenuItem.delete) {
       handleStartDeletePatient();
     } else if (targetId === MenuItem.addPayment) {
@@ -184,33 +187,32 @@ const PatientDetailsModal = (
 
   return (
     <Modal
-      centered
-      show={show}
-      size='xl'
-      onHide={onClose}
-      className={styles['patient-details-modal']}
+      disablePortal
+      open={show}
+      onClose={onClose}
+      onBackdropClick={onClose}
+      className={styles.patientDetailsModal}
     >
-      <Modal.Body>
-        {isFetching && <CircularProgress/>}
-        <div
-          role='button'
-          tabIndex={0}
-          className={styles['close-button']}
-          onClick={onClose}
-        >
-          <IconClose/>
-        </div>
-        {patient != null && (
-          <Box display='flex' position='relative' height='100%'>
-            <div className={styles['patient-menu-container']}>
-              <div className={styles['name-and-avatar']}>
-                <div className={styles['avatar-wrapper']}>
+      <Paper className={styles.modalPaper}>
+        <div className={styles.dataContainer}>
+          <IconButton
+            role='button'
+            tabIndex={0}
+            className={styles.closeButton}
+            onPointerUp={onClose}
+          >
+            <IconClose/>
+          </IconButton>
+          {patient != null && (
+            <div className={styles.menuContainer}>
+              <div className={styles.nameAndAvatar}>
+                <div className={styles.avatarWrapper}>
                   <IconAvatar/>
                 </div>
-                <Typography classes={{ root: styles['name-label'] }}>
+                <Typography classes={{ root: styles.nameLabel }}>
                   {patient?.fullName}
                 </Typography>
-                <Typography classes={{ root: clsx(styles['phone-label'], styles.phone) }}>
+                <Typography classes={{ root: clsx(styles.phoneLabel, styles.phone) }}>
                   <a
                     href={`tel:${patient.countryCode}${patient.phoneNumber}`}
                     onClick={stopPropagation}
@@ -219,122 +221,33 @@ const PatientDetailsModal = (
                   </a>
                 </Typography>
               </div>
-              <Box mt='1rem' mb='1rem' className={styles['menu-wrapper']}>
-                <ListGroup>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.personalInfo}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.personalInfo)}
+              <MenuList className={styles.menuList}>
+                {MenuItems.map((item) => (
+                  <MuiMenuItem
+                    key={item.id}
+                    selected={currentMenu === item.id}
+                    onPointerUp={() => handleMenuClick(item)}
+                    classes={{
+                      root: clsx(styles.menuItem, styles[item.type]),
+                      selected: styles.selectedItem,
+                    }}
                   >
-                    {textForKey('Personal info')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.purchases}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.purchases)}
-                  >
-                    {textForKey('Payments')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.debts}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.debts)}
-                  >
-                    {textForKey('Debts')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.notes}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.notes)}
-                  >
-                    {textForKey('Notes')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.appointments}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.appointments)}
-                  >
-                    {textForKey('Appointments')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.xRay}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.xRay)}
-                  >
-                    {textForKey('X-Ray')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.treatmentPlan}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.treatmentPlan)}
-                  >
-                    {textForKey('Appointments notes')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.orthodonticPlan}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.orthodonticPlan)}
-                  >
-                    {textForKey('Orthodontic plan')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.generalTreatmentPlan}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.generalTreatmentPlan)}
-                  >
-                    {textForKey('Treatment plan')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.messages}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.messages)}
-                  >
-                    {textForKey('Messages')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.phoneRecords}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.phoneRecords)}
-                  >
-                    {textForKey('Phone records')}
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    action
-                    id={MenuItem.history}
-                    onClick={handleMenuClick}
-                    className={menuItemClasses(MenuItem.history)}
-                  >
-                    {textForKey('History of changes')}
-                  </ListGroup.Item>
-                  {typeof onDelete === 'function' && (
-                    <ListGroup.Item
-                      action
-                      variant='danger'
-                      id={MenuItem.delete}
-                      onClick={handleMenuClick}
-                      className={menuItemClasses(MenuItem.delete)}
-                    >
-                      {textForKey('Delete')}
-                    </ListGroup.Item>
-                  )}
-                </ListGroup>
-              </Box>
+                    {item.name}
+                  </MuiMenuItem>
+                ))}
+              </MenuList>
             </div>
-            <div className={styles['patient-details-container']}>{menuContent()}</div>
-          </Box>
+          )}
+          {patient != null && (
+            <div className={styles.patientDetailsContainer}>{menuContent()}</div>
+          )}
+        </div>
+        {isFetching && (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress className='circular-progress-bar'/>
+          </div>
         )}
-      </Modal.Body>
+      </Paper>
     </Modal>
   );
 };
