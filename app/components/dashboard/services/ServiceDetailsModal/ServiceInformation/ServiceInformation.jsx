@@ -1,22 +1,23 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
 import { useColor } from "react-color-palette";
 
-import IconMinus from '../../../../icons/iconMinus';
-import IconPlusBig from '../../../../icons/iconPlusBig';
-import { availableCurrenciesSelector } from '../../../../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../../../../utils/localization';
 import IconPalette from "../../../../icons/iconPalette";
-import styles from './ServiceInformation.module.scss';
+import IconPlusBig from '../../../../icons/iconPlusBig';
+import IconMinus from '../../../../icons/iconMinus';
+import {
+  availableCurrenciesSelector
+} from '../../../../../../redux/selectors/clinicSelector';
+import { textForKey } from '../../../../../../utils/localization';
 import EASColorPicker from "../../../../common/EASColorPicker/EASColorPicker";
 import EASTextField from "../../../../common/EASTextField";
-import EASSelect from "../../../../common/EASSelect";
 import EASTextarea from "../../../../common/EASTextarea";
+import EASSelect from "../../../../common/EASSelect";
+import styles from './ServiceInformation.module.scss';
 
 const availableColors = [
   '#FF453A',
