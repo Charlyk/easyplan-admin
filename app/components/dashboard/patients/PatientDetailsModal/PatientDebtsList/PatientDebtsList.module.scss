@@ -6,6 +6,37 @@
   flex-direction: column;
   position: relative;
 
+  .outlinedBtnBlue {
+    border-color: #3A83DC;
+  }
+
+  .payButton {
+    font-size: 11px;
+    height: 35px;
+    background-color: transparent;
+
+    .buttonLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #3A83DC;
+    }
+
+    &:focus, &:active, &:hover {
+      color: #3A83DC !important;
+      border-color: #3A83DC !important;
+      background-color: transparent !important;
+    }
+
+    svg {
+      fill: #3A83DC;
+      margin-left: 5px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
   &__data-container {
     flex: 1;
     display: flex;

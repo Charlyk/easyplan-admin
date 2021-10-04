@@ -7,9 +7,27 @@ import { toast } from "react-toastify";
 import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
 import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../../utils/localization';
-import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { addPatientXRayImage } from "../../../../../middleware/api/patients";
+import EASModal from "../../../common/modals/EASModal";
 import styles from './AddXRay.module.scss';
+import EASSelect from "../../../common/EASSelect";
+import EASTextField from "../../../common/EASTextField";
+import Typography from "@material-ui/core/Typography";
+
+const phases = [
+  {
+    id: 'Initial',
+    name: textForKey('Initial phase'),
+  },
+  {
+    id: 'Middle',
+    name: textForKey('Middle phase'),
+  },
+  {
+    id: 'Final',
+    name: textForKey('Final phase'),
+  },
+];
 
 const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
@@ -50,43 +68,40 @@ const AddXRay = ({ open, patientId, onClose }) => {
   };
 
   return (
-    <EasyPlanModal
+    <EASModal
       onClose={onClose}
       open={open}
-      className={styles['add-x-ray-root']}
+      className={styles.addXRayRoot}
       title={textForKey('Add X-Ray image')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={imageFile == null || phase == null}
-      onPositiveClick={handleSaveImage}
+      onPrimaryClick={handleSaveImage}
     >
-      <Form.Group>
-        <Form.Label>{textForKey('Upload image')}</Form.Label>
-        <input
-          className='custom-file-input'
-          type='file'
-          name='x-ray-file'
-          id='x-ray-file'
-          accept='.jpg,.jpeg,.png'
-          onChange={handleFileChange}
-        />
-        <label htmlFor='x-ray-file'>{imageFile?.name}</label>
-      </Form.Group>
+      <form className={styles.formRoot}>
+        <div className={styles.fileInput}>
+          <Typography className={styles.formLabel}>
+            {textForKey('Upload image')}
+          </Typography>
+          <input
+            className='custom-file-input'
+            type='file'
+            name='x-ray-file'
+            id='x-ray-file'
+            accept='.jpg,.jpeg,.png'
+            onChange={handleFileChange}
+          />
+          <label htmlFor='x-ray-file'>{imageFile?.name}</label>
+        </div>
 
-      <Form.Group>
-        <Form.Label>{textForKey('Select phase')}</Form.Label>
-        <Form.Control
+        <EASSelect
+          rootClass={styles.simpleField}
+          label={textForKey('Select phase')}
+          value={phase}
+          options={phases}
           onChange={handlePhaseChange}
-          as='select'
-          className='mr-sm-2'
-          id='inlineFormCustomSelect'
-          custom
-        >
-          <option value='Initial'>{textForKey('Initial phase')}</option>
-          <option value='Middle'>{textForKey('Middle phase')}</option>
-          <option value='Final'>{textForKey('Final phase')}</option>
-        </Form.Control>
-      </Form.Group>
-    </EasyPlanModal>
+        />
+      </form>
+    </EASModal>
   );
 };
 

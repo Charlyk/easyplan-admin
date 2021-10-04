@@ -16,6 +16,7 @@ const EASTextField = React.forwardRef(
       endAdornment,
       onChange,
       helperText,
+      type,
       ...rest
     },
     ref
@@ -23,7 +24,11 @@ const EASTextField = React.forwardRef(
     const [focused, setFocused] = useState(false);
 
     const handleFieldChange = (event) => {
-      onChange?.(event.target.value);
+      if (type === 'file') {
+        onChange?.(event);
+      } else {
+        onChange?.(event.target.value);
+      }
     };
 
     const handleFocusChange = (isFocused) => {
@@ -50,6 +55,7 @@ const EASTextField = React.forwardRef(
         )}
         <TextField
           {...rest}
+          type={type}
           variant="outlined"
           error={error}
           helperText={helperText}
