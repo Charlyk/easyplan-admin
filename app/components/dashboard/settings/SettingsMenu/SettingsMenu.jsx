@@ -141,6 +141,7 @@ SettingsMenu.propTypes = {
     'securitySettings',
     'accountSettings',
     'bracesSettings',
+    'integrations',
   ]),
   selectedClinic: PropTypes.shape({
     roleInClinic: PropTypes.string,

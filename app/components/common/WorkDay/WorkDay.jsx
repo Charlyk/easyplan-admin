@@ -10,6 +10,7 @@ import { textForKey } from '../../../../utils/localization';
 import SwitchButton from '../SwitchButton';
 
 import styles from './WorkDay.module.scss';
+import EASSelect from "../EASSelect";
 
 const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   const hours = createHoursList();
@@ -43,6 +44,13 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
     onApplyToAll(day);
   };
 
+  const getMappedHours = (hours) => {
+    return hours.map(item => ({
+      id: item,
+      name: item,
+    }));
+  };
+
   return (
     <tr className={styles['work-day']}>
       <td style={{ padding: '.5rem' }}>
@@ -58,23 +66,16 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
       )}
       {day.selected && (
         <td>
-          <InputGroup>
-            <Form.Control
-              as='select'
-              className='mr-sm-2'
-              id='inlineFormCustomSelect'
-              custom
-              onChange={handleStartHourChange}
-              value={day.startHour}
-            >
-              <option value='choose'>{textForKey('Chose...')}</option>
-              {hours.map(item => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </Form.Control>
-          </InputGroup>
+          <EASSelect
+            rootClass={styles.selectRoot}
+            value={day.startHour || 'none'}
+            onChange={handleStartHourChange}
+            defaultOption={{
+              id: 'none',
+              name: textForKey('Chose...'),
+            }}
+            options={getMappedHours(hours)}
+          />
         </td>
       )}
       {day.selected && (
@@ -86,23 +87,16 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
       )}
       {day.selected && (
         <td>
-          <InputGroup>
-            <Form.Control
-              as='select'
-              className='mr-sm-2'
-              id='inlineFormCustomSelect'
-              custom
-              onChange={handleEndHourChange}
-              value={day.endHour}
-            >
-              <option value='choose'>{textForKey('Chose...')}</option>
-              {hours.map(item => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </Form.Control>
-          </InputGroup>
+          <EASSelect
+            rootClass={styles.selectRoot}
+            value={day.endHour || 'none'}
+            onChange={handleEndHourChange}
+            defaultOption={{
+              id: 'none',
+              name: textForKey('Chose...'),
+            }}
+            options={getMappedHours(hours)}
+          />
         </td>
       )}
       {day.selected && (

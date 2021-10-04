@@ -19,6 +19,15 @@
     margin-bottom: 1rem;
   }
 
+  .adornment {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+  }
+
   &__data-wrapper {
     width: 100%;
     margin-bottom: 1rem;
@@ -83,13 +92,21 @@
     justify-content: flex-end;
     width: 100%;
 
-    :global(.positive-button) {
-      max-width: 11rem;
-      margin-left: .5rem;
-    }
+    .saveButton {
+      width: 23.5%;
+      background-color: #3A83DC;
+      color: white;
 
-    :global(.delete-button) {
-      max-width: 11rem;
+      &:hover {
+        background-color: #3A83DC;
+      }
+
+      svg {
+        margin-bottom: 3px;
+        margin-left: 5px;
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 }

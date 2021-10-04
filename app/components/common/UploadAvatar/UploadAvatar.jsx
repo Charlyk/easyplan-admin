@@ -6,7 +6,7 @@ import IconEdit from "../../icons/iconEdit";
 import IconPlus from "../../icons/iconPlus";
 import styles from './UploadAvatar.module.scss';
 
-const UploadAvatar = ({ currentAvatar, className, onChange }) => {
+const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
   const inputRef = useRef(null);
   const imageRef = useRef(null);
 
@@ -48,7 +48,7 @@ const UploadAvatar = ({ currentAvatar, className, onChange }) => {
         {currentAvatar ? (
           <img ref={imageRef} alt="Avatar image"/>
         ) : (
-          <IconAvatar />
+          placeholder || <IconAvatar />
         )}
         <div className={styles.iconContainer}>
           {currentAvatar ? (

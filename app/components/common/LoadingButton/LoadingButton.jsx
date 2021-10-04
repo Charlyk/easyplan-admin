@@ -26,7 +26,8 @@ const LoadingButton = (
       disabled={disabled}
       classes={{
         root: clsx(styles.loadingButton, className),
-        label: styles.buttonLabel
+        label: styles.buttonLabel,
+        disabled: styles.disabled,
       }}
     >
       {!isLoading && children}

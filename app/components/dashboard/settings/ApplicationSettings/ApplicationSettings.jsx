@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
@@ -9,14 +7,14 @@ import LoadingButton from '../../../common/LoadingButton';
 import { textForKey } from '../../../../../utils/localization';
 import { updateClinic } from "../../../../../middleware/api/clinic";
 import styles from './ApplicationSettings.module.scss'
+import EASTextField from "../../../common/EASTextField";
 
 const ApplicationSettings = ({ currentClinic: clinic }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(String(clinic.timeBeforeOnSite));
 
-  const handleFormChange = event => {
-    const newValue = event.target.value;
+  const handleFormChange = (newValue) => {
     setTime(newValue);
   };
 
@@ -43,26 +41,22 @@ const ApplicationSettings = ({ currentClinic: clinic }) => {
   };
 
   return (
-    <div className={styles['application-settings-form']}>
-      <span className={styles['form-title']}>{textForKey('Application settings')}</span>
-      <div className={styles['data-wrapper']}>
-        <Form.Group controlId='clinicName'>
-          <Form.Label>{textForKey('Animate appointments before')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={time}
-              type='number'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-          <Form.Text>{textForKey('appointment_animation_timer')}</Form.Text>
-        </Form.Group>
+    <div className={styles.applicationSettingsForm}>
+      <span className={styles.formTitle}>{textForKey('Application settings')}</span>
+      <div className={styles.dataWrapper}>
+        <EASTextField
+          type="number"
+          fieldLabel={textForKey('Animate appointments before')}
+          value={time}
+          helperText={textForKey('appointment_animation_timer')}
+          onChange={handleFormChange}
+        />
       </div>
-      <div className={styles['footer']}>
+      <div className={styles.footer}>
         <LoadingButton
           onClick={saveTimer}
-          className='positive-button'
           isLoading={isLoading}
+          className={styles.saveButton}
           disabled={isLoading || !isFormValid()}
         >
           {textForKey('Save')}

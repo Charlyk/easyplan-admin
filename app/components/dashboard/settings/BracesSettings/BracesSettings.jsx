@@ -12,6 +12,8 @@ import { textForKey } from '../../../../../utils/localization';
 import { clinicBracesSelector } from "../../../../../redux/selectors/clinicSelector";
 import { updateClinicBraces } from "../../../../../middleware/api/clinic";
 import styles from './BracesSettings.module.scss';
+import EASTextField from "../../../common/EASTextField";
+import Typography from "@material-ui/core/Typography";
 
 const BracesSettings = ({ currentClinic: clinic }) => {
   const router = useRouter();
@@ -28,12 +30,11 @@ const BracesSettings = ({ currentClinic: clinic }) => {
     );
   };
 
-  const handlePriceChange = (event, serviceId) => {
+  const handlePriceChange = (newValue, serviceId) => {
     const service = clinicBraces.find(item => item.id === serviceId);
     if (service == null) {
       return;
     }
-    const newValue = event.target.value;
     const adjustedValue = newValue.length > 0 ? newValue : '0';
     setClinicBraces(
       clinicBraces.map(item => {
@@ -43,12 +44,11 @@ const BracesSettings = ({ currentClinic: clinic }) => {
     );
   };
 
-  const handleDurationChange = (event, serviceId) => {
+  const handleDurationChange = (newValue, serviceId) => {
     const service = clinicBraces.find(item => item.id === serviceId);
     if (service == null) {
       return;
     }
-    const newValue = event.target.value;
     const adjustedValue = newValue.length > 0 ? newValue : '0';
     setClinicBraces(
       clinicBraces.map(item => {
@@ -101,30 +101,28 @@ const BracesSettings = ({ currentClinic: clinic }) => {
               </td>
               <td>{textForKey(item.name)}</td>
               <td width={150} align='right'>
-                <InputGroup>
-                  <Form.Control
-                    disabled={!item.isEnabled}
-                    className='mr-sm-2'
-                    onChange={event => handlePriceChange(event, item.id)}
-                    value={String(item.price)}
-                  />
-                  <InputGroup.Append>
-                    <InputGroup.Text>{clinic.currency}</InputGroup.Text>
-                  </InputGroup.Append>
-                </InputGroup>
+                <EASTextField
+                  type="number"
+                  value={String(item.price)}
+                  readOnly={!item.isEnabled}
+                  onChange={(value) => handlePriceChange(value, item.id)}
+                  endAdornment={
+                    <Typography className={styles.adornment}>
+                      {clinic.currency}
+                    </Typography>
+                  }
+                />
               </td>
               <td width={150} align='right'>
-                <InputGroup>
-                  <Form.Control
-                    disabled={!item.isEnabled}
-                    className='mr-sm-2'
-                    onChange={event => handleDurationChange(event, item.id)}
-                    value={String(item.duration)}
-                  />
-                  <InputGroup.Append>
-                    <InputGroup.Text>min</InputGroup.Text>
-                  </InputGroup.Append>
-                </InputGroup>
+                <EASTextField
+                  type="number"
+                  value={String(item.duration)}
+                  readOnly={!item.isEnabled}
+                  onChange={(value) => handleDurationChange(value, item.id)}
+                  endAdornment={
+                    <Typography className={styles.adornment}>min</Typography>
+                  }
+                />
               </td>
             </tr>
           ))}
@@ -134,7 +132,7 @@ const BracesSettings = ({ currentClinic: clinic }) => {
       <div className={styles['footer']}>
         <LoadingButton
           onClick={handleSaveBracesSettings}
-          className='positive-button'
+          className={styles.saveButton}
           isLoading={isSaving}
           disabled={isSaving || isEqual(braces, clinicBraces)}
         >

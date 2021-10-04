@@ -5,6 +5,10 @@
   align-items: center;
   justify-content: flex-start;
 
+  .selectRoot {
+    width: 90px;
+  }
+
   .apply-to-all-btn {
     user-select: none;
     outline: none;

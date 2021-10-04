@@ -15,6 +15,8 @@ import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import UploadAvatar from "../../../common/UploadAvatar";
 import styles from './AccountSettings.module.scss'
+import EASTextField from "../../../common/EASTextField";
+import EASPhoneInput from "../../../common/EASPhoneInput";
 
 const AccountSettings = ({ currentUser }) => {
   const router = useRouter();
@@ -50,11 +52,11 @@ const AccountSettings = ({ currentUser }) => {
     }
   };
 
-  const handleFormChange = (event) => {
+  const handleFormChange = (fieldId, newValue) => {
     if (isLoading) return;
     setData({
       ...data,
-      [event.target.id]: event.target.value,
+      [fieldId]: newValue,
     });
   };
 
@@ -113,66 +115,51 @@ const AccountSettings = ({ currentUser }) => {
         currentAvatar={data.avatarFile || data.avatarUrl}
         onChange={handleLogoChange}
       />
-      <Form.Group controlId='lastName'>
-        <Form.Label>{textForKey('Last name')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            type='text'
-            onChange={handleFormChange}
-            value={data.lastName || ''}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='firstName'>
-        <Form.Label>{textForKey('First name')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            type='text'
-            onChange={handleFormChange}
-            value={data.firstName || ''}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='email'>
-        <Form.Label>{textForKey('Email')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            isValid={data.email?.match(EmailRegex)}
-            type='text'
-            onChange={handleFormChange}
-            value={data.email || ''}
-          />
-        </InputGroup>
-      </Form.Group>
+      <EASTextField
+        type="text"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Last name')}
+        value={data.lastName || ''}
+        onChange={(value) => handleFormChange('lastName', value)}
+      />
+
+      <EASTextField
+        type="text"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('First name')}
+        value={data.firstName || ''}
+        onChange={(value) => handleFormChange('firstName', value)}
+      />
+
+      <EASTextField
+        type="email"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Email')}
+        value={data.email || ''}
+        onChange={(value) => handleFormChange('email', value)}
+      />
+
       {isEmailChanged && (
-        <Form.Group controlId='oldPassword'>
-          <Form.Label>{textForKey('Current password')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              autoComplete='new-password'
-              value={data.oldPassword || ''}
-              type='password'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
+        <EASTextField
+          type="password"
+          autoComplete='new-password'
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Current password')}
+          value={data.oldPassword || ''}
+          onChange={(value) => handleFormChange('oldPassword', value)}
+        />
       )}
-      <Form.Group controlId='phoneNumber'>
-        <Form.Label>{textForKey('Phone number')}</Form.Label>
-        <InputGroup>
-          <PhoneInput
-            onChange={handlePhoneChange}
-            value={data.phoneNumber || ''}
-            alwaysDefaultMask
-            countryCodeEditable={false}
-            country='md'
-            isValid={isPhoneInputValid}
-          />
-        </InputGroup>
-      </Form.Group>
+
+      <EASPhoneInput
+        rootClass={styles.simpleField}
+        fieldLabel={textForKey('Phone number')}
+        value={data.phoneNumber || ''}
+        onChange={handlePhoneChange}
+      />
+
       <LoadingButton
         onClick={submitForm}
-        className='positive-button'
+        className={styles.saveButton}
         isLoading={isLoading}
         disabled={isLoading || !isFormValid()}
       >

@@ -4,22 +4,26 @@
   height: 35px;
 
   &:hover {
-    background-color: inherit;
+    background-color: currentColor;
+    color: inherit;
   }
 
   .buttonLabel {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-size: 12px !important;
+    color: inherit;
   }
 
   svg {
     width: 15px;
     height: 15px;
+    fill: currentColor;
   }
 
   &:disabled {
     color: white !important;
+    background-color: #A1A2C6 !important;
   }
 
   .spinnerWrapper {

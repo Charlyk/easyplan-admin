@@ -86,7 +86,7 @@ const ClinicWorkingHours = ({ currentClinic: clinic }) => {
       <div className={styles['footer']}>
         <LoadingButton
           onClick={submitForm}
-          className='positive-button'
+          className={styles.saveButton}
           isLoading={isLoading}
           disabled={isLoading || !clinic}
         >

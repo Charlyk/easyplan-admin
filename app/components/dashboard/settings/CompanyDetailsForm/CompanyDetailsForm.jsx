@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import upperFirst from 'lodash/upperFirst';
+import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
-import Form from 'react-bootstrap/Form';
 import Image from 'next/image';
-import PhoneInput from 'react-phone-input-2';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
@@ -18,9 +17,17 @@ import { EmailRegex } from '../../../../utils/constants';
 import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
 import urlToLambda from '../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../utils/localization';
-import { clinicTimeZones, deleteClinic, updateClinic } from "../../../../../middleware/api/clinic";
-import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
+import {
+  clinicTimeZones,
+  deleteClinic,
+  updateClinic
+} from "../../../../../middleware/api/clinic";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
+import EASTextField from "../../../common/EASTextField";
+import EASPhoneInput from "../../../common/EASPhoneInput";
+import EASSelect from "../../../common/EASSelect";
+import EASTextarea from "../../../common/EASTextarea";
+import UploadAvatar from "../../../common/UploadAvatar";
 import styles from './CompanyDetailsForm.module.scss';
 
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
@@ -57,6 +64,20 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
     hasBrackets: false,
   });
 
+  const mappedCountries = useMemo(() => {
+    return countries.map(item => ({
+      ...item,
+      id: item.iso,
+    }));
+  }, [countries]);
+
+  const mappedTimeZones = useMemo(() => {
+    return sortBy(timeZones.map(item => ({
+      id: item,
+      name: item,
+    })), item => item.name);
+  }, [timeZones]);
+
   useEffect(() => {
     fetchTimeZones();
   }, []);
@@ -65,6 +86,10 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
     setData({
       ...data,
       ...currentClinic,
+      allCurrencies: currentClinic.allCurrencies.map(item => ({
+        ...item,
+        name: `${item.id} - ${item.name}`,
+      }))
     });
   }, [currentClinic]);
 
@@ -80,21 +105,48 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
     }
   };
 
-  const handleLogoChange = (event) => {
+  const handleLogoChange = (file) => {
     if (isSaving) return;
-    const files = event.target.files;
-    if (files != null) {
-      setData({ ...data, logoFile: files[0] });
+    if (file != null) {
+      setData({ ...data, logoFile: file });
     }
   };
 
-  const handleFormChange = (event) => {
+  const handleFormChange = (fieldId, value) => {
     if (isSaving) return;
     setData({
       ...data,
-      [event.target.id]: event.target.value,
+      [fieldId]: value,
     });
   };
+
+  const handleTimeZoneChange = (event) => {
+    handleFormChange('timeZone', event.target.value);
+  };
+
+  const handleDescriptionChange = (newValue) => {
+    handleFormChange('description', newValue);
+  };
+
+  const handleCurrencyChange = (event) => {
+    handleFormChange('currency', event.target.value);
+  }
+
+  const handleClinicNameChange = (newValue) => {
+    handleFormChange('clinicName', newValue);
+  };
+
+  const handleEmailChange = (newValue) => {
+    handleFormChange('email', newValue);
+  };
+
+  const handleWebsiteChange = (newValue) => {
+    handleFormChange('website', newValue);
+  }
+
+  const handleCountryChange = (event) => {
+    handleFormChange('country', event.target.value);
+  }
 
   const handlePhoneChange = (phoneType) => (value, country, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
@@ -191,12 +243,26 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
     }
   };
 
+  const phoneNumberLabel = (icon, text) => {
+    return (
+      <span style={{ display: "flex", alignItems: 'center' }}>
+        <Image
+          width={25}
+          height={25}
+          src={`/${icon}_icon.png`}
+          alt={text}
+        />
+        {text}
+      </span>
+    )
+  }
+
   const logoSrc =
     (data.logoFile && window.URL.createObjectURL(data.logoFile)) ||
     (data.logoUrl ? urlToLambda(data.logoUrl, 150) : null);
 
   return (
-    <div className={styles['company-details-form']}>
+    <div className={styles.companyDetailsForm}>
       <ConfirmationModal
         isLoading={isDeleting}
         title={textForKey('Delete clinic')}
@@ -205,194 +271,122 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
         onClose={handleCloseDelete}
         onConfirm={handleConfirmDelete}
       />
-      <span className={styles['form-title']}>{textForKey('Company details')}</span>
-      <div className={styles['data-wrapper']}>
+      <span className={styles.formTitle}>
+        {textForKey('Company details')}
+      </span>
+      <UploadAvatar
+        currentAvatar={data.logoFile || logoSrc}
+        placeholder={<IconLogoPlaceholder/>}
+        onChange={handleLogoChange}
+      />
+
+      <div className={styles.dataWrapper}>
         <div className={styles.left}>
-          <div className='upload-avatar-container'>
-            {logoSrc ? <img alt={data.clinicName} src={logoSrc}/> : <IconLogoPlaceholder/>}
-            <span style={{ margin: '1rem' }} className={styles['info-text']}>
-              {textForKey('JPG or PNG, Max size of 800kb')}
-            </span>
-            <Form.Group>
-              <input
-                className='custom-file-button'
-                type='file'
-                name='avatar-file'
-                id='avatar-file'
-                accept='.jpg,.jpeg,.png'
-                onChange={handleLogoChange}
-              />
-              <label htmlFor='avatar-file'>{textForKey('Upload image')}</label>
-            </Form.Group>
-          </div>
-          <Form.Group controlId='clinicName'>
-            <Form.Label>{textForKey('Clinic name')}</Form.Label>
-            <Form.Control
-              type='text'
-              onChange={handleFormChange}
-              value={data.clinicName || ''}
-            />
-          </Form.Group>
-          <Form.Group controlId='email'>
-            <Form.Label>{textForKey('Email')}</Form.Label>
-            <Form.Control
-              isValid={data.email?.match(EmailRegex)}
-              type='text'
-              onChange={handleFormChange}
-              value={data.email || ''}
-            />
-          </Form.Group>
-          <Form.Group controlId='phoneNumber'>
-            <Form.Label>{textForKey('Phone number')}</Form.Label>
-            <PhoneInput
-              onChange={handlePhoneChange('phoneNumber')}
-              value={data.phoneNumber || ''}
-              alwaysDefaultMask
-              countryCodeEditable={false}
-              country='md'
-              isValid={isPhoneInputValid}
-            />
-          </Form.Group>
-          <Form.Group controlId='telegramNumber'>
-            <Form.Label>
-              <Image
-                className={styles['messenger-icon']}
-                width={25}
-                height={25}
-                src='/telegram_icon.png'
-                alt='Telegram'
-              />
-              Telegram
-            </Form.Label>
-            <PhoneInput
-              onChange={handlePhoneChange('telegramNumber')}
-              value={data.telegramNumber || ''}
-              alwaysDefaultMask
-              countryCodeEditable={false}
-              country='md'
-              isValid={isPhoneInputValid}
-            />
-          </Form.Group>
-          <Form.Group controlId='viberNumber'>
-            <Form.Label>
-              <Image className={styles['messenger-icon']}
-                     width={25}
-                     height={25} src='/viber_icon.png' alt='Viber'/>
-              Viber
-            </Form.Label>
-            <PhoneInput
-              onChange={handlePhoneChange('viberNumber')}
-              value={data.viberNumber || ''}
-              alwaysDefaultMask
-              countryCodeEditable={false}
-              country='md'
-              isValid={isPhoneInputValid}
-            />
-          </Form.Group>
-          <Form.Group controlId='whatsappNumber'>
-            <Form.Label>
-              <Image
-                className={styles['messenger-icon']}
-                width={25}
-                height={25}
-                src='/whatsapp_icon.png'
-                alt='Whatsapp'
-              />
-              WhatsApp
-            </Form.Label>
-            <PhoneInput
-              onChange={handlePhoneChange('whatsappNumber')}
-              value={data.whatsappNumber || ''}
-              alwaysDefaultMask
-              countryCodeEditable={false}
-              country='md'
-              isValid={isPhoneInputValid}
-            />
-          </Form.Group>
+          <EASTextField
+            type="text"
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Clinic name')}
+            value={data.clinicName}
+            onChange={handleClinicNameChange}
+          />
+
+          <EASTextField
+            type="email"
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Email')}
+            value={data.email}
+            onChange={handleEmailChange}
+          />
+
+          <EASPhoneInput
+            rootClass={styles.simpleField}
+            value={data.phoneNumber || ''}
+            fieldLabel={textForKey('Phone number')}
+            onChange={handlePhoneChange('phoneNumber')}
+          />
+
+          <EASPhoneInput
+            rootClass={styles.simpleField}
+            value={data.telegramNumber || ''}
+            fieldLabel={textForKey('Telegram')}
+            onChange={handlePhoneChange('telegramNumber')}
+          />
+
+          <EASPhoneInput
+            rootClass={styles.simpleField}
+            value={data.viberNumber || ''}
+            fieldLabel={textForKey('Viber')}
+            onChange={handlePhoneChange('viberNumber')}
+          />
+
+          <EASPhoneInput
+            rootClass={styles.simpleField}
+            value={data.whatsappNumber || ''}
+            fieldLabel={textForKey('Whatsapp')}
+            onChange={handlePhoneChange('whatsappNumber')}
+          />
         </div>
         <div className={styles.right}>
-          <Form.Group controlId='website'>
-            <Form.Label>{textForKey('Website')}</Form.Label>
-            <Form.Control
-              type='text'
-              onChange={handleFormChange}
-              value={data.website || ''}
-            />
-          </Form.Group>
-          <Form.Group style={{ flexDirection: 'column' }} controlId='currency'>
-            <Form.Label>{textForKey('Default currency')}</Form.Label>
-            <Form.Control
-              as='select'
-              className='mr-sm-2'
-              custom
-              onChange={handleFormChange}
-              value={data.currency}
-            >
-              {data.allCurrencies.map((currency) => (
-                <option key={currency.id} value={currency.id}>
-                  {currency.id} - {currency.name}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group style={{ flexDirection: 'column' }} controlId='country'>
-            <Form.Label>{textForKey('Country')}</Form.Label>
-            <Form.Control
-              as='select'
-              className='mr-sm-2'
-              custom
-              onChange={handleFormChange}
-              value={data.country}
-            >
-              {countries?.map(country => (
-                <option key={country.iso} value={country.iso}>
-                  {textForKey(country.name)}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group style={{ flexDirection: 'column' }} controlId='timeZone'>
-            <Form.Label>{textForKey('Time zone')}</Form.Label>
-            <Form.Control
-              as='select'
-              className='mr-sm-2'
-              custom
-              onChange={handleFormChange}
-              value={data.timeZone}
-            >
-              {timeZones.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId='description'>
-            <Form.Label>{textForKey('About clinic')}</Form.Label>
-            <Form.Control
-              className={styles['description-text-area']}
-              as='textarea'
-              value={data.description}
-              aria-label='With textarea'
-              onChange={handleFormChange}
-            />
-          </Form.Group>
+          <EASTextField
+            type="text"
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Website')}
+            value={data.website || ''}
+            onChange={handleWebsiteChange}
+          />
+
+          <EASSelect
+            label={textForKey('Default currency')}
+            labelId="currency-select-label"
+            rootClass={styles.simpleField}
+            options={data.allCurrencies}
+            value={data.currency}
+            onChange={handleCurrencyChange}
+          />
+
+          <EASSelect
+            label={textForKey('Country')}
+            labelId="country-select-label"
+            rootClass={styles.simpleField}
+            options={mappedCountries}
+            value={data.country}
+            onChange={handleCountryChange}
+          />
+
+          <EASSelect
+            label={textForKey('Time zone')}
+            labelId="time-zone-select-label"
+            rootClass={styles.simpleField}
+            options={mappedTimeZones}
+            value={data.timeZone}
+            onChange={handleTimeZoneChange}
+          />
+
+          <EASTextarea
+            type="text"
+            maxRows={4}
+            rows={4}
+            containerClass={styles.descriptionTextArea}
+            fieldLabel={textForKey('About clinic')}
+            value={data.description}
+            onChange={handleDescriptionChange}
+          />
         </div>
       </div>
-      <div className={styles['footer']}>
+      <div className={styles.footer}>
         <LoadingButton
           onClick={handleStartDelete}
-          className='delete-button'
-          isLoading={isSaving}
-          disabled={isSaving || !isFormValid()}
+          isLoading={isDeleting}
+          className={styles.deleteButton}
+          disabled={isDeleting || isSaving}
         >
           {textForKey('Delete')}
           <IconTrash/>
         </LoadingButton>
         <LoadingButton
           onClick={submitForm}
-          className='positive-button'
           isLoading={isSaving}
+          className={styles.saveButton}
           disabled={isSaving || !isFormValid()}
         >
           {textForKey('Save')}

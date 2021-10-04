@@ -119,10 +119,9 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
     localDispatch(setCountry(country));
   }
 
-  const handleLogoChange = (event) => {
-    const files = event.target.files;
-    if (files != null) {
-      localDispatch(setLogoFile(files[0]));
+  const handleLogoChange = (file) => {
+    if (file != null) {
+      localDispatch(setLogoFile(file));
     }
   };
 

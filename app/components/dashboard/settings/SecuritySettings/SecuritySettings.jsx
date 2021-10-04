@@ -9,6 +9,7 @@ import LoadingButton from '../../../common/LoadingButton';
 import { textForKey } from '../../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import styles from './SecuritySettings.module.scss';
+import EASTextField from "../../../common/EASTextField";
 
 const SecuritySettings = ({ currentUser }) => {
   const router = useRouter();
@@ -19,10 +20,10 @@ const SecuritySettings = ({ currentUser }) => {
     confirmPassword: '',
   });
 
-  const handleFormChange = (event) => {
+  const handleFormChange = (fieldId, newValue) => {
     setData({
       ...data,
-      [event.target.id]: event.target.value,
+      [fieldId]: newValue,
     });
   };
 
@@ -56,46 +57,37 @@ const SecuritySettings = ({ currentUser }) => {
   return (
     <div className={styles['security-settings']}>
       <span className={styles['form-title']}>{textForKey('Security settings')}</span>
-      <Form.Group controlId='oldPassword'>
-        <Form.Label>{textForKey('Current password')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            autoComplete='new-password'
-            value={data.oldPassword || ''}
-            type='password'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='password'>
-        <Form.Label>{textForKey('New password')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            autoComplete='new-password'
-            value={data.password || ''}
-            type='password'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='confirmPassword'>
-        <Form.Label>{textForKey('Confirm new password')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            isInvalid={
-              data.confirmPassword.length > 0 &&
-              data.confirmPassword !== data.password
-            }
-            autoComplete='new-password'
-            value={data.confirmPassword || ''}
-            type='password'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
+      <EASTextField
+        type="password"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Current password')}
+        value={data.oldPassword || ''}
+        onChange={(value) => handleFormChange('oldPassword', value)}
+      />
+
+      <EASTextField
+        type="password"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('New password')}
+        value={data.password || ''}
+        onChange={(value) => handleFormChange('password', value)}
+      />
+
+      <EASTextField
+        type="password"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Confirm new password')}
+        value={data.confirmPassword || ''}
+        error={
+          data.confirmPassword.length > 0 &&
+          data.confirmPassword !== data.password
+        }
+        onChange={(value) => handleFormChange('confirmPassword', value)}
+      />
+
       <LoadingButton
         onClick={submitForm}
-        className='positive-button'
+        className={styles.saveButton}
         isLoading={isLoading}
         disabled={isLoading || !isFormValid()}
       >
