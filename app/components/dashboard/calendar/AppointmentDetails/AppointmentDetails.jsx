@@ -155,7 +155,7 @@ const AppointmentDetails = (
     if (isFinished || isLoading) {
       return;
     }
-    onEdit(schedule);
+    onEdit(details);
   };
 
   const handleFinalizeSchedule = () => {

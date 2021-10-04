@@ -216,7 +216,10 @@ export const reducer = (state, action) => {
       return {
         ...state,
         scheduleId: schedule.id,
-        patient: schedule.patient,
+        patient: {
+          ...schedule.patient,
+          name: schedule.patient.fullName,
+        },
         doctor: schedule.doctor,
         service: schedule.service,
         appointmentNote: schedule.noteText,

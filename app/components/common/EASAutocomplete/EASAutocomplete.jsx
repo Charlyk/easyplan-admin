@@ -60,7 +60,7 @@ const EASAutocomplete = (
   };
 
   const getOptionLabel = (option) => {
-    return option.name;
+    return option.name || '';
   }
 
   return (

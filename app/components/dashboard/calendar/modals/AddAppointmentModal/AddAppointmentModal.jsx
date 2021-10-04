@@ -4,8 +4,6 @@ import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import Box from "@material-ui/core/Box";
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -28,6 +26,8 @@ import EASPhoneInput from "../../../../common/EASPhoneInput";
 import EASTextField from "../../../../common/EASTextField";
 import EASAutocomplete from "../../../../common/EASAutocomplete";
 import EASSelect from "../../../../common/EASSelect";
+import EASTextarea from "../../../../common/EASTextarea";
+import { Checkbox, FormControlLabel } from "@material-ui/core";
 
 const AddAppointmentModal = (
   {
@@ -96,13 +96,24 @@ const AddAppointmentModal = (
     localDispatch,
   ] = useReducer(reducer, initialState);
 
+  const getLabelKey = useCallback((option) => {
+    return option.firstName || option.lastName
+      ? `${option.lastName} ${option.firstName}`
+      : option.phoneNumber;
+  }, []);
+
   const suggestionPatients = useMemo(() => {
+    if (patients.length === 0 && patient != null) {
+      return [{
+        ...patient,
+        name: patient.fullName,
+      }]
+    }
     return patients.map(item => ({
       ...item,
       name: item.fullName,
-      label: item.fullName,
     }))
-  }, [patients]);
+  }, [patients, patient]);
 
   useEffect(() => {
     if (schedule != null) {
@@ -121,6 +132,7 @@ const AddAppointmentModal = (
       localDispatch(
         actions.setDoctor({
           ...selectedDoctor,
+          name: `${selectedDoctor.firstName} ${selectedDoctor.lastName}`,
           fullName: `${selectedDoctor.firstName} ${selectedDoctor.lastName}`,
         }),
       );
@@ -131,10 +143,12 @@ const AddAppointmentModal = (
     }
 
     if (selectedPatient != null) {
+      const fullName = getLabelKey(selectedPatient);
       localDispatch(
         actions.setPatient({
           ...selectedPatient,
-          fullName: getLabelKey(selectedPatient),
+          fullName,
+          name: fullName,
         }),
       );
     }
@@ -239,12 +253,6 @@ const AddAppointmentModal = (
     localDispatch(actions.setService(selectedService));
   };
 
-  const getLabelKey = (option) => {
-    return option.firstName || option.lastName
-      ? `${option.lastName} ${option.firstName}`
-      : option.phoneNumber;
-  };
-
   const handlePatientSearch = useCallback(
     debounce(async (query) => {
       localDispatch(actions.setPatientsLoading(true));
@@ -316,15 +324,18 @@ const AddAppointmentModal = (
     localDispatch(actions.setEndTime(event.target.value));
   }
 
-  const handleNoteChange = (event) => {
-    localDispatch(actions.setAppointmentNote(event.target.value));
+  const handleNoteChange = (newValue) => {
+    localDispatch(actions.setAppointmentNote(newValue));
   };
 
-  const handleIsUrgentChange = () => {
-    localDispatch(actions.setIsUrgent(!isUrgent));
+  const handleIsUrgentChange = (event, checked) => {
+    localDispatch(actions.setIsUrgent(checked));
   };
 
   const changePatientMode = () => {
+    if (schedule != null) {
+      return;
+    }
     const isNew = !isNewPatient;
     localDispatch(actions.setIsNewPatient(isNew));
     if (isNew) {
@@ -437,6 +448,8 @@ const AddAppointmentModal = (
     appointmentStatus === 'PartialPaid' ||
     appointmentStatus === 'CompletedFree';
 
+  // console.log(patient);
+
   return (
     <EASModal
       onClose={onClose}
@@ -506,6 +519,7 @@ const AddAppointmentModal = (
 
         {!isNewPatient && (
           <EASAutocomplete
+            disabled={schedule != null}
             fieldLabel={textForKey('Patient')}
             options={suggestionPatients}
             onTextChange={handleSearchQueryChange}
@@ -584,25 +598,25 @@ const AddAppointmentModal = (
           />
         </div>
 
-        <Form.Group controlId='isUrgent'>
-          <Form.Check
-            onChange={handleIsUrgentChange}
-            type='checkbox'
-            checked={isUrgent}
+        <div>
+          <FormControlLabel
+            control={<Checkbox checked={isUrgent} />}
             label={textForKey('Is urgent')}
+            onChange={handleIsUrgentChange}
+            classes={{
+              root: styles.urgentCheck,
+              label: styles.urgentLabel,
+            }}
           />
-        </Form.Group>
-        <Form.Group controlId='description'>
-          <Form.Label>{textForKey('Notes')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              as='textarea'
-              value={appointmentNote}
-              onChange={handleNoteChange}
-              aria-label='With textarea'
-            />
-          </InputGroup>
-        </Form.Group>
+        </div>
+
+        <EASTextarea
+          containerClass={styles.simpleField}
+          value={appointmentNote || ''}
+          onChange={handleNoteChange}
+          fieldLabel={textForKey('Notes')}
+        />
+
         {datePicker}
         {birthdayPicker}
       </Box>

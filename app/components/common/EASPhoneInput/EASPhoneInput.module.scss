@@ -4,6 +4,7 @@
   flex-direction: column;
 
   .formLabel {
+    user-select: none;
     font-family: Inter, sans-serif !important;
     font-style: normal !important;
     font-weight: bold !important;

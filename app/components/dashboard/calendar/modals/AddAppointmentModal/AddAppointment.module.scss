@@ -24,8 +24,18 @@
     margin-top: 10px;
   }
 
-  :global(.modal-content) {
-    box-shadow: 0 1px 10px 10px #34344E1A;
+  .urgentCheck {
+    margin-top: 5px;
+    user-select: none;
+    margin-bottom: 0;
+
+    .urgentLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 14px;
+      color: #ec3276;
+      cursor: pointer;
+    }
   }
 
   .patientNameContainer {
@@ -117,59 +127,6 @@
           text-decoration: underline;
         }
       }
-    }
-  }
-
-  :global(.form-control[readonly]) {
-    background-color: #FAFAFD;
-  }
-
-  :global(.form-control:disabled) {
-    opacity: .8;
-    background-color: #ededed !important;
-  }
-
-  :global(.form-group) {
-    margin-bottom: 0;
-    margin-top: 0;
-
-    :global(.form-check) {
-      display: flex;
-      align-items: center;
-      user-select: none;
-
-      :global(.form-check-label) {
-        font-family: Inter, sans-serif;
-        font-style: normal;
-        font-size: .85rem;
-        margin-bottom: 0;
-        color: #ec3276;
-      }
-
-      input {
-        margin-top: unset;
-        margin-bottom: unset;
-        color: #ec3276;
-      }
-    }
-  }
-
-  :global(.form-label) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: .7rem;
-    margin-bottom: 0;
-  }
-
-  :global(.form-control) {
-    width: 100%;
-    background-color: #FAFAFD;
-  }
-
-  :global(.input-group) {
-    textarea {
-      height: 5rem !important;
     }
   }
 
