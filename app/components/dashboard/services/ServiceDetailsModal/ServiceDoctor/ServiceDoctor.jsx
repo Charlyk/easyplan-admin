@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
+import Typography from "@material-ui/core/Typography";
 
 import SwitchButton from '../../../../common/SwitchButton';
+import EASTextField from "../../../../common/EASTextField";
 import styles from './ServiceDoctor.module.scss';
 
-const ServiceDoctor = ({ serviceData, onChange }) => {
+const ServiceDoctor = ({ serviceData, clinic, onChange }) => {
   const [doctorService, setDoctorService] = useState({
     selected: false,
     doctorName: '',
@@ -28,8 +28,7 @@ const ServiceDoctor = ({ serviceData, onChange }) => {
     }
   }, [serviceData]);
 
-  const handlePercentageChange = event => {
-    let newValue = event.target.value;
+  const handlePercentageChange = (newValue) => {
     onChange({
       ...doctorService,
       price: null,
@@ -37,8 +36,7 @@ const ServiceDoctor = ({ serviceData, onChange }) => {
     });
   };
 
-  const handlePriceChanged = event => {
-    let newValue = event.target.value;
+  const handlePriceChanged = (newValue) => {
     onChange({
       ...doctorService,
       price: parseFloat(newValue),
@@ -57,7 +55,7 @@ const ServiceDoctor = ({ serviceData, onChange }) => {
   };
 
   const textClasses = clsx(
-    styles['service-doctor__text'],
+    styles.text,
     doctorService.selected ? styles.selected : styles.default,
   );
 
@@ -67,43 +65,40 @@ const ServiceDoctor = ({ serviceData, onChange }) => {
     !doctorService.selected || doctorService.percentage.length > 0;
 
   return (
-    <div className={styles['service-doctor']}>
-      <div className={styles['service-doctor__name-and-switch']}>
+    <div className={styles.serviceDoctor}>
+      <div className={styles.nameAndSwitch}>
         <SwitchButton
           isChecked={doctorService.selected}
           onChange={handleDoctorToggle}
         />
         <div className={textClasses}>{doctorService.doctorName}</div>
       </div>
-      <div className={styles['service-doctor__fields']}>
-        <InputGroup>
-          <Form.Control
-            value={String(doctorService.percentage)}
-            onChange={handlePercentageChange}
-            disabled={isPercentageDisabled}
-            className={styles['service-doctor__field']}
-            min='0'
-            placeholder='%'
-            type='number'
-          />
-          <InputGroup.Append>
-            <InputGroup.Text id='basic-addon1'>%</InputGroup.Text>
-          </InputGroup.Append>
-        </InputGroup>
-        <InputGroup>
-          <Form.Control
-            value={String(doctorService.price)}
-            onChange={handlePriceChanged}
-            disabled={isPriceDisabled}
-            className={styles['service-doctor__field']}
-            min='0'
-            type='number'
-            placeholder='$'
-          />
-          <InputGroup.Append>
-            <InputGroup.Text id='basic-addon1'>mdl</InputGroup.Text>
-          </InputGroup.Append>
-        </InputGroup>
+      <div className={styles.fields}>
+        <EASTextField
+          type="number"
+          containerClass={styles.field}
+          readOnly={isPercentageDisabled}
+          value={String(doctorService.percentage)}
+          placeholder="0"
+          endAdornment={
+            <Typography className={styles.adornment}>%</Typography>
+          }
+          onChange={handlePercentageChange}
+        />
+
+        <EASTextField
+          type="number"
+          containerClass={styles.field}
+          readOnly={isPriceDisabled}
+          value={String(doctorService.price)}
+          placeholder="0"
+          endAdornment={
+            <Typography className={styles.adornment}>
+              {clinic?.currency || 'MDL'}
+            </Typography>
+          }
+          onChange={handlePriceChanged}
+        />
       </div>
     </div>
   );

@@ -193,6 +193,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
             />
 
             <ServiceDoctors
+              clinic={currentClinic}
               onDoctorChange={handleDoctorChange}
               serviceId={service?.id}
               doctors={serviceInfo.doctors}

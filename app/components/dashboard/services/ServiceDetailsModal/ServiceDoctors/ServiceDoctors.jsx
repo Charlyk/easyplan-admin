@@ -10,6 +10,7 @@ import styles from './ServiceDoctors.module.scss';
 
 const ServiceDoctors = (
   {
+    clinic,
     isExpanded,
     showStep,
     onToggle,
@@ -55,6 +56,7 @@ const ServiceDoctors = (
         )}
         {doctors?.map((doctor) => (
           <ServiceDoctor
+            clinic={clinic}
             onChange={onDoctorChange}
             key={doctor.doctorId}
             serviceId={serviceId}
