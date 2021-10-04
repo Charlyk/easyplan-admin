@@ -10,9 +10,6 @@ import { fetchAllCountries } from "../../middleware/api/countries";
 import SettingsWrapper from "../../app/components/dashboard/settings/SettingsWrapper";
 
 const Settings = ({ currentUser, currentClinic, countries, authToken }) => {
-  useEffect(() => {
-    console.log(currentUser, currentClinic);
-  }, [currentUser, currentClinic]);
   return (
     <MainComponent
       currentUser={currentUser}
@@ -55,7 +52,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     await handleRequestError(error, req, res);
     return {
       props: {}

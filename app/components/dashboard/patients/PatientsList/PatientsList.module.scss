@@ -6,6 +6,21 @@
   position: relative;
   padding: 8px;
 
+  .loadingButton {
+    background-color: #3A83DC;
+    color: white;
+    margin-left: 5px;
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+
+    svg {
+      margin-left: 5px;
+      margin-bottom: 5px;
+    }
+  }
+
   .content {
     height: 100%;
     width: 100%;
@@ -134,8 +149,8 @@
       }
 
       .createBtn {
-        height: 30px;
-        margin-left: .5rem;
+        height: 35px;
+        margin-right: 5px;
         color: #00E987;
         border-color: #00E987;
         font-size: 11px;
@@ -145,13 +160,43 @@
           border-color: #00E987 !important;
           background-color: transparent !important;
         }
+
+        .buttonLabel {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          color: #00E987;
+        }
+
+        svg {
+          margin-bottom: 2px;
+          margin-left: 2px;
+        }
+      }
+
+      .outlinedBtnBlue {
+        border-color: #3A83DC;
+      }
+
+      .outlinedBtnGreen {
+        border-color: #00E987;
       }
 
       .importBtn {
         font-size: 11px;
-        height: 30px;
-        width: 11rem !important;
+        height: 35px;
+        width: 12rem !important;
+        margin-right: 5px;
         background-color: transparent;
+
+        .buttonLabel {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 12px;
+          color: #3A83DC;
+        }
 
         &:focus, &:active, &:hover {
           color: #3A83DC !important;
@@ -161,6 +206,9 @@
 
         svg {
           fill: #3A83DC;
+          margin-left: 5px;
+          width: 20px;
+          height: 20px;
         }
       }
     }

@@ -116,7 +116,7 @@ const AcceptInvitation = () => {
   }
 
   const handleAcceptInvitation = async (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     if (isNewUser && !isFormValid()) {
       return;
     }

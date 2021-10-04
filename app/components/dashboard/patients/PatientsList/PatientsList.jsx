@@ -11,7 +11,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableContainer from '@material-ui/core/TableContainer';
 import PropTypes from 'prop-types';
 import UploadIcon from '@material-ui/icons/CloudUpload';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,6 +48,7 @@ import reducer, {
   setIsLoading,
 } from './PatientsList.reducer'
 import styles from './PatientsList.module.scss';
+import EASTextField from "../../../common/EASTextField";
 
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
@@ -142,9 +143,8 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
     }
   };
 
-  const handleSearchQueryChange = (event) => {
-    const newQuery = event.target.value;
-    localDispatch(setSearchQuery(newQuery));
+  const handleSearchQueryChange = (newValue) => {
+    localDispatch(setSearchQuery(newValue));
   };
 
   const handleSearchClick = () => {
@@ -323,39 +323,43 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
         <div className={styles.actionsContainer}>
-          <LoadingButton
-            variant='outline-primary'
-            className={clsx('btn-outline-primary', styles.importBtn)}
+          <Button
+            variant='outlined'
+            className={styles.importBtn}
+            classes={{
+              root: styles.importBtn,
+              outlined: styles.outlinedBtnBlue
+            }}
             isLoading={isUploading}
             onClick={handleStartUploadPatients}
           >
-            {textForKey('Import patients')}
+            <Typography noWrap className={styles.buttonLabel}>
+              {textForKey('Import patients')}
+            </Typography>
             <UploadIcon/>
-          </LoadingButton>
+          </Button>
           <Button
-            variant='outline-primary'
+            variant="outlined"
             className={styles.createBtn}
             onClick={handleCreatePatient}
           >
-            {textForKey('Add patient')}
+            <Typography noWrap className={styles.buttonLabel}>
+              {textForKey('Add patient')}
+            </Typography>
             <IconPlus fill='#00E987'/>
           </Button>
           <div className='flexContainer'>
-            <Form.Group controlId='email'>
-              <InputGroup>
-                <Form.Control
-                  onKeyDown={handleSearchFieldKeyDown}
-                  value={searchQuery}
-                  onChange={handleSearchQueryChange}
-                  type='text'
-                  placeholder={`${textForKey('Search patient')}...`}
-                />
-              </InputGroup>
-            </Form.Group>
+            <EASTextField
+              type="text"
+              placeholder={`${textForKey('Search patient')}...`}
+              value={searchQuery || ''}
+              onChange={handleSearchQueryChange}
+              onKeyDown={handleSearchFieldKeyDown}
+            />
             <LoadingButton
               disabled={isLoading}
+              className={styles.loadingButton}
               isLoading={isLoading}
-              className='positive-button'
               onClick={handleSearchClick}
             >
               {textForKey('Search')}

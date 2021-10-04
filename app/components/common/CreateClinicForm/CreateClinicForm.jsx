@@ -162,7 +162,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
   ]);
 
   const handleSubmitForm = (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     if (!isFormValid) {
       return;
     }

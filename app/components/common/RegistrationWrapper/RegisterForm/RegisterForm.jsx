@@ -61,7 +61,7 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
   };
 
   const submitForm = async (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     if (!isFormValid() || isLoading) {
       return;
     }

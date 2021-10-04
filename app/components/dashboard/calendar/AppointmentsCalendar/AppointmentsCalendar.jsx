@@ -10,6 +10,7 @@ import { isCalendarLoadingSelector } from '../../../../../redux/selectors/calend
 import getCurrentWeek from '../../../../../utils/getCurrentWeek';
 import CalendarHeader from "../CalendarHeader";
 import styles from './AppointmentsCalendar.module.scss';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const AppointmentDetails = dynamic(() => import('../AppointmentDetails'));
 
@@ -126,7 +127,7 @@ const AppointmentsCalendar = (
   );
 };
 
-export default AppointmentsCalendar;
+export default React.memo(AppointmentsCalendar, areComponentPropsEqual);
 
 AppointmentsCalendar.propTypes = {
   isUploading: PropTypes.bool,

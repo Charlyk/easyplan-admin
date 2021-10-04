@@ -1,5 +1,22 @@
 .loadingButton {
-  width: 10rem;
+  min-width: 100px !important;
+  outline: none;
+  height: 35px;
+
+  &:hover {
+    background-color: inherit;
+  }
+
+  .buttonLabel {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 12px !important;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
 
   &:disabled {
     color: white !important;
@@ -15,7 +32,7 @@
     .loadingButtonSpinner {
       height: 1.3rem !important;
       width: 1.3rem !important;
-      position: unset !important;
+      position: relative !important;
       color: inherit !important;
 
       svg {

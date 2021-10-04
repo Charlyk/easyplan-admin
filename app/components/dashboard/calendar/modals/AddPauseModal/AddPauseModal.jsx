@@ -1,18 +1,21 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup'
 import { toast } from 'react-toastify';
 
 import { textForKey } from '../../../../../../utils/localization';
 import EasyDatePicker from '../../../../common/EasyDatePicker';
-import EasyPlanModal from '../../../../common/modals/EasyPlanModal';
 import {
   createPauseRecord,
   deletePauseRecord,
   fetchPausesAvailableTime
 } from "../../../../../../middleware/api/pauses";
+import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
+import Box from "@material-ui/core/Box";
+import EASModal from "../../../../common/modals/EASModal";
+import EASTextField from "../../../../common/EASTextField";
+import EASSelect from "../../../../common/EASSelect";
+import EASTextarea from "../../../../common/EASTextarea";
 import reducer, {
   initialState,
   setShowDatePicker,
@@ -24,11 +27,9 @@ import reducer, {
   setStartHour,
   setIsDeleting,
   setIsLoading,
+  resetState,
 } from './AddPauseModal.reducer';
 import styles from './AddPauseModal.module.scss';
-import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
-import Box from "@material-ui/core/Box";
-import EASModal from "../../../../common/modals/EASModal";
 
 const AddPauseModal = (
   {
@@ -60,6 +61,12 @@ const AddPauseModal = (
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    if (!open) {
+      localDispatch(resetState());
+    }
+  }, [open])
+
+  useEffect(() => {
     if (doctor != null) {
       fetchPauseAvailableTime();
     }
@@ -84,6 +91,13 @@ const AddPauseModal = (
   useEffect(() => {
     localDispatch(setComment(defaultComment));
   }, [defaultComment]);
+
+  const getMappedTime = (hours) => {
+    return hours.map(item => ({
+      id: item,
+      name: item,
+    }));
+  };
 
   const fetchPauseAvailableTime = async () => {
     localDispatch(setIsFetchingHours(true));
@@ -130,7 +144,8 @@ const AddPauseModal = (
     localDispatch(setShowDatePicker(false));
   };
 
-  const handleCreateSchedule = async () => {
+  const handleCreateSchedule = async (event) => {
+    event?.preventDefault();
     if (!isFormValid()) {
       return;
     }
@@ -185,20 +200,16 @@ const AddPauseModal = (
     localDispatch(setShowDatePicker(true));
   };
 
-  const handleCommentChange = (event) => {
-    localDispatch(setComment(event.target.value));
+  const handleCommentChange = (newValue) => {
+    localDispatch(setComment(newValue));
   };
 
-  const handleHourChange = (event) => {
-    const targetId = event.target.id;
-    switch (targetId) {
-      case 'startTime':
-        localDispatch(setStartHour(event.target.value));
-        break;
-      case 'endTime':
-        localDispatch(setEndHour(event.target.value));
-        break;
-    }
+  const handleStartHourChange = (event) => {
+    localDispatch(setStartHour(event.target.value));
+  };
+
+  const handleEndHourChange = (event) => {
+    localDispatch(setEndHour(event.target.value));
   };
 
   const datePicker = (
@@ -238,66 +249,44 @@ const AddPauseModal = (
       isPositiveLoading={isLoading || isDeleting}
     >
       <Box display='flex' flexDirection='column' padding='16px'>
-        <Form.Group className={styles['date-form-group']}>
-          <Form.Label>{textForKey('Date')}</Form.Label>
-          <Form.Control
-            value={moment(pauseDate).format('DD MMMM YYYY')}
-            ref={datePickerAnchor}
+        <form onSubmit={handleCreateSchedule}>
+          <EASTextField
             readOnly
-            onClick={handleDateFieldClick}
+            containerClass={styles.simpleField}
+            ref={datePickerAnchor}
+            fieldLabel={textForKey('Date')}
+            value={moment(pauseDate).format('DD MMMM YYYY')}
+            onPointerUp={handleDateFieldClick}
           />
-        </Form.Group>
-        <InputGroup className={styles.inputGroup}>
-          <Form.Group controlId='startTime' className={styles.formGroup}>
-            <Form.Label>{textForKey('Start time')}</Form.Label>
-            <Form.Control
-              as='select'
-              onChange={handleHourChange}
+          <div className={styles.timePickerContainer}>
+            <EASSelect
+              id="startTime"
+              rootClass={styles.timeSelect}
+              label={textForKey('Start time')}
+              labelId="start-time-select"
+              onChange={handleStartHourChange}
               value={startHour}
+              options={getMappedTime(availableStartTime)}
               disabled={isFetchingHours || availableStartTime.length === 0}
-              custom
-            >
-              {availableStartTime.map((item) => (
-                <option key={`start-${item}`} value={item}>
-                  {item}
-                </option>
-              ))}
-              {availableStartTime.length === 0 && (
-                <option value={-1}>{textForKey('No available time')}</option>
-              )}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId='endTime' className={styles.formGroup}>
-            <Form.Label>{textForKey('End time')}</Form.Label>
-            <Form.Control
-              as='select'
-              onChange={handleHourChange}
-              value={endHour}
-              disabled={isFetchingHours || availableEndTime.length === 0}
-              custom
-            >
-              {availableEndTime.map((item) => (
-                <option key={`end-${item}`} value={item}>
-                  {item}
-                </option>
-              ))}
-              {availableEndTime.length === 0 && (
-                <option value={-1}>{textForKey('No available time')}</option>
-              )}
-            </Form.Control>
-          </Form.Group>
-        </InputGroup>
-        <Form.Group controlId='description'>
-          <Form.Label>{textForKey('Notes')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              as='textarea'
-              value={comment || ''}
-              onChange={handleCommentChange}
-              aria-label='With textarea'
             />
-          </InputGroup>
-        </Form.Group>
+            <EASSelect
+              id="endTime"
+              rootClass={styles.timeSelect}
+              label={textForKey('Ent time')}
+              labelId="end-time-select"
+              onChange={handleEndHourChange}
+              value={endHour}
+              options={getMappedTime(availableEndTime)}
+              disabled={isFetchingHours || availableEndTime.length === 0}
+            />
+          </div>
+
+          <EASTextarea
+            fieldLabel={textForKey('Notes')}
+            value={comment || ''}
+            onChange={handleCommentChange}
+          />
+        </form>
         {datePicker}
       </Box>
     </EASModal>

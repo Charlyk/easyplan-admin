@@ -5,7 +5,6 @@ const getRedirectUrlForUser = (user, subdomain) => {
     return '/login';
   }
   const { clinics } = user;
-  console.log(user);
   const userClinic = clinics.find((item) =>
     item.clinicDomain.toLowerCase() === subdomain?.toLowerCase()
   );

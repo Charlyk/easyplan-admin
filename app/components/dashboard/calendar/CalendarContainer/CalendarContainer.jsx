@@ -15,9 +15,10 @@ import {
   importSchedulesFromFile,
   requestDeleteSchedule
 } from "../../../../../middleware/api/schedules";
-import { HeaderKeys } from "../../../../utils/constants";
 import redirectIfOnGeneralHost from '../../../../../utils/redirectIfOnGeneralHost';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from '../../../../../utils/localization';
+import { HeaderKeys } from "../../../../utils/constants";
 import MainComponent from "../../../common/MainComponent/MainComponent";
 import AppointmentsCalendar from '../AppointmentsCalendar';
 import reducer, {
@@ -159,16 +160,16 @@ const CalendarContainer = (
       };
     }) ?? [];
     localDispatch(setFilters({ doctors: newDoctors, services }));
-    if (newDoctors.length > 0 && doctorId == null) {
-      localDispatch(setSelectedDoctor(newDoctors[0]));
-    }
+  }, [currentClinic]);
 
-    // set selected doctor
+  useEffect(() => {
     if (doctorId != null) {
-      const doctor = newDoctors.find((item) => item.id === parseInt(doctorId));
-      localDispatch(setSelectedDoctor(doctor));
+      const doctor = doctors.find((item) => item.id === parseInt(doctorId));
+      localDispatch(setSelectedDoctor(doctor ?? doctors[0]));
+    } else {
+      localDispatch(setSelectedDoctor(doctors[0]));
     }
-  }, [currentClinic, doctorId]);
+  }, [doctorId, doctors]);
 
   const handlePubnubMessageReceived = (remoteMessage) => {
     const { message, channel } = remoteMessage;
@@ -212,8 +213,8 @@ const CalendarContainer = (
     await router.replace({
       pathname: `/calendar/${viewMode}`,
       query: {
-        doctorId: doctor.id ?? doctorId,
-        date: dateString
+        date: dateString,
+        doctorId: doctor.id
       }
     });
   };
@@ -222,14 +223,17 @@ const CalendarContainer = (
     const stringDate = moment(newDate).format('YYYY-MM-DD');
     const query = {
       date: stringDate,
+      doctorId: doctorId,
     }
-    if (doctorId != null) {
-      query.doctorId = doctorId;
+
+    if (query.doctorId == null || viewMode === 'day' || moveToDay) {
+      delete query.doctorId;
     }
+
     await router.replace({
       pathname: `/calendar/${moveToDay ? 'day' : viewMode}`,
       query,
-    });
+    }, null, { scroll: true });
   };
 
   const handleCloseImportModal = () => {
@@ -262,8 +266,8 @@ const CalendarContainer = (
     localDispatch(setViewMode(newMode));
     const stringDate = moment(viewDate).format('YYYY-MM-DD');
     const query = { date: stringDate };
-    if (newMode !== 'day' && doctorId != null) {
-      query.doctorId = doctorId;
+    if (newMode !== 'day') {
+      query.doctorId = doctorId ?? doctors[0].id;
     }
     await router.replace({
       pathname: `/calendar/${newMode}`,
@@ -384,4 +388,4 @@ const CalendarContainer = (
   );
 };
 
-export default CalendarContainer;
+export default React.memo(CalendarContainer, areComponentPropsEqual);

@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import dynamic from 'next/dynamic';
 import clsx from "clsx";
 import PropTypes from 'prop-types';
-import MaterialButton from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,7 +12,6 @@ import ArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import Popper from "@material-ui/core/Popper";
 import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import UploadIcon from "@material-ui/icons/CloudUpload";
-import Button from "react-bootstrap/Button";
 import { Calendar } from "react-date-range";
 import * as locales from "react-date-range/dist/locale";
 import moment from "moment-timezone";
@@ -20,7 +19,6 @@ import moment from "moment-timezone";
 import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
 import { getAppLanguage, textForKey } from "../../../../../utils/localization";
 import EasyTab from "../../../common/EasyTab";
-import LoadingButton from "../../../common/LoadingButton";
 import IconPlus from "../../../icons/iconPlus";
 import IconInfo from "../../../icons/iconInfo";
 import styles from "./CalendarHeader.module.scss";
@@ -150,12 +148,12 @@ const CalendarHeader = (
         >
           <ArrowRight/>
         </IconButton>
-        <MaterialButton
+        <Button
           onClick={handleTodayClick}
           classes={{ root: styles.todayBtn }}
         >
           {textForKey('Today')}
-        </MaterialButton>
+        </Button>
       </div>
       {calendarPopper}
       <CalendarLegend open={legendVisible} anchorEl={legendAnchor}/>
@@ -177,13 +175,12 @@ const CalendarHeader = (
         />
       </div>
       <div className={clsx(styles.rightBtnsWrapper, 'flexContainer')}>
-        <LoadingButton
-          variant='outline-primary'
-          className={clsx('btn-outline-primary', styles.importBtn)}
+        <IconButton
+          className={styles.importBtn}
           onClick={onImportSchedules}
         >
           <UploadIcon/>
-        </LoadingButton>
+        </IconButton>
         <ClickAwayListener onClickAway={handleCloseLegend}>
           <IconButton
             ref={legendAnchor}

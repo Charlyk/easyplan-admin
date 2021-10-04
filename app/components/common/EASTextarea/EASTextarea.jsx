@@ -4,7 +4,7 @@ import { TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
 
-const EASTextarea = ({ fieldLabel, containerClass, value, type, onChange }) => {
+const EASTextarea = ({ fieldLabel, containerClass, value, error, type, helperText, onChange }) => {
   const [focused, setFocused] = useState(false);
 
   const handleFocusChange = (isFocused) => {
@@ -24,12 +24,20 @@ const EASTextarea = ({ fieldLabel, containerClass, value, type, onChange }) => {
       )}
       <TextField
         multiline
+        error={error}
         type={type}
         value={value}
+        helperText={helperText}
         onFocus={() => handleFocusChange(true)}
         onBlur={() => handleFocusChange(false)}
         variant="outlined"
         onChange={handleValueChange}
+        FormHelperTextProps={{
+          classes: {
+            root: styles.helperText,
+            error: clsx(styles.helperText, styles.error),
+          }
+        }}
         InputProps={{
           classes: {
             root: styles.textInput,

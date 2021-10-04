@@ -29,7 +29,7 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
   };
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     if (isLoggingIn || !isFormValid()) {
       return;
     }

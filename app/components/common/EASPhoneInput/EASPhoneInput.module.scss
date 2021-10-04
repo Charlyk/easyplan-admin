@@ -20,6 +20,10 @@
     position: relative;
     height: 35px;
 
+    :global(.country-list) {
+      position: fixed !important;
+    }
+
     .easPhoneInput {
       outline: none;
       width: 100%;

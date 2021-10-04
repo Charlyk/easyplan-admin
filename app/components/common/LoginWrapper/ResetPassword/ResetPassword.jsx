@@ -19,7 +19,7 @@ const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }
   const isFormValid = email.match(EmailRegex);
 
   const handleResetPassword = async (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     if (!isFormValid || isLoading) {
       return;
     }

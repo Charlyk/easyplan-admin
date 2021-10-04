@@ -34,6 +34,20 @@
     }
   }
 
+  .helperText {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #3A83DC !important;
+    margin: 0;
+    line-height: unset;
+
+    &.error {
+      color: #ec3276 !important;
+    }
+  }
+
   .formLabel {
     user-select: none;
     font-family: Inter, sans-serif !important;

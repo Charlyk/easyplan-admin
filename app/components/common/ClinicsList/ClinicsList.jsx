@@ -30,7 +30,6 @@ export default function ClinicsList({ user, authToken }) {
   const handleClinicSelected = async (clinic) => {
     await signOut()
     const clinicUrl = getClinicUrl(clinic, authToken);
-    console.log(clinicUrl);
     await router.replace(clinicUrl);
   }
 

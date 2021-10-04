@@ -9,7 +9,7 @@ import { fetchAppData } from "../../../middleware/api/initialization";
 import { Role } from "../../../app/utils/constants";
 import parseCookies from "../../../utils/parseCookies";
 
-export default function Month({ currentUser, currentClinic, doctorId, date, doctors, authToken }) {
+const Month = ({ currentUser, currentClinic, doctorId, date, doctors, authToken }) => {
   const viewDate = moment(date).toDate();
   return (
     <CalendarContainer
@@ -28,6 +28,8 @@ export default function Month({ currentUser, currentClinic, doctorId, date, doct
     </CalendarContainer>
   )
 };
+
+export default Month;
 
 export const getServerSideProps = async ({ req, res, query }) => {
   if (query.date == null) {

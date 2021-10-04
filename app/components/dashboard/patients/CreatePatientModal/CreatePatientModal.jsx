@@ -16,6 +16,9 @@ import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import EasyPlanModal from '../../../common/modals/EasyPlanModal';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
+import EASModal from "../../../common/modals/EASModal";
+import EASTextField from "../../../common/EASTextField";
+import EASPhoneInput from "../../../common/EASPhoneInput";
 
 const EasyDatePicker = dynamic(() => import('../../../common/EasyDatePicker'));
 
@@ -45,7 +48,8 @@ const CreatePatientModal = ({ open, onClose }) => {
     }
   }, [open]);
 
-  const handleSavePatient = async () => {
+  const handleSavePatient = async (event) => {
+    event?.preventDefault();
     if (!isFormValid) return;
     localDispatch(actions.setIsLoading(true));
     try {
@@ -67,20 +71,16 @@ const CreatePatientModal = ({ open, onClose }) => {
     }
   };
 
-  const handlePatientDataChange = (event) => {
-    const targetId = event.target.id;
-    const newValue = event.target.value;
-    switch (targetId) {
-      case 'firstName':
-        localDispatch(actions.setFirstName(newValue));
-        break;
-      case 'lastName':
-        localDispatch(actions.setLastName(newValue));
-        break;
-      case 'email':
-        localDispatch(actions.setEmail(newValue));
-        break;
-    }
+  const handlePatientEmailChange = (newValue) => {
+    localDispatch(actions.setEmail(newValue));
+  };
+
+  const handlePatientLastNameChange = (newValue) => {
+    localDispatch(actions.setLastName(newValue));
+  };
+
+  const handlePatientFirstNameChange = (newValue) => {
+    localDispatch(actions.setFirstName(newValue));
   };
 
   const handleBirthdayChange = (newDate) => {
@@ -117,68 +117,62 @@ const CreatePatientModal = ({ open, onClose }) => {
   );
 
   return (
-    <EasyPlanModal
+    <EASModal
       className={styles['create-patient-modal']}
+      paperClass={styles.modalPaper}
       title={textForKey('Create patient')}
       onClose={onClose}
       open={open}
-      positiveBtnText={textForKey('Create')}
-      onPositiveClick={handleSavePatient}
+      primaryBtnText={textForKey('Create')}
+      onPrimaryClick={handleSavePatient}
       isPositiveLoading={isLoading}
       isPositiveDisabled={!isFormValid}
     >
       {birthdayPicker}
-      <Form.Group>
-        <Form.Label>{textForKey('Patient name')}</Form.Label>
+      <form onSubmit={handleSavePatient} className={styles.formContainer}>
         <div className={styles['first-and-last-name']}>
-          <Form.Control
-            id='lastName'
+          <EASTextField
+            type="text"
+            containerClass={styles.nameField}
+            fieldLabel={textForKey('Last name')}
             value={lastName}
-            onChange={handlePatientDataChange}
-            placeholder={textForKey('Last name')}
+            onChange={handlePatientLastNameChange}
           />
-          <Form.Control
-            id='firstName'
+          <EASTextField
+            type="text"
+            containerClass={styles.nameField}
+            fieldLabel={textForKey('First name')}
             value={firstName}
-            onChange={handlePatientDataChange}
-            placeholder={textForKey('First name')}
+            onChange={handlePatientFirstNameChange}
           />
         </div>
-      </Form.Group>
-      <Form.Group controlId='phoneNumber'>
-        <Form.Label>{textForKey('Phone number')}</Form.Label>
-        <InputGroup>
-          <PhoneInput
-            alwaysDefaultMask
-            value={`+${phoneCountry?.dialCode}${phoneNumber}`}
-            countryCodeEditable={false}
-            country={phoneCountry.countryCode || 'md'}
-            placeholder='79123456'
-            isValid={isPhoneInputValid}
-            onChange={handlePhoneChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='email'>
-        <Form.Label>{textForKey('Email')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={email}
-            isInvalid={email.length > 0 && !isEmailValid}
-            type='email'
-            onChange={handlePatientDataChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group ref={birthdayPickerAnchor}>
-        <Form.Label>{textForKey('Birthday')}</Form.Label>
-        <Form.Control
-          value={birthday ? moment(birthday).format('DD MMM YYYY') : ''}
-          readOnly
-          onClick={handleOpenBirthdayPicker}
+
+        <EASPhoneInput
+          rootClass={styles.simpleField}
+          fieldLabel={textForKey('Phone number')}
+          value={`+${phoneCountry?.dialCode}${phoneNumber}`}
+          country={phoneCountry.countryCode || 'md'}
+          onChange={handlePhoneChange}
         />
-      </Form.Group>
-    </EasyPlanModal>
+
+        <EASTextField
+          type="email"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Email')}
+          value={email}
+          error={email.length > 0 && !isEmailValid}
+          onChange={handlePatientEmailChange}
+        />
+
+        <EASTextField
+          readOnly
+          ref={birthdayPickerAnchor}
+          fieldLabel={textForKey('Birthday')}
+          value={birthday ? moment(birthday).format('DD MMM YYYY') : ''}
+          onPointerUp={handleOpenBirthdayPicker}
+        />
+      </form>
+    </EASModal>
   );
 };
 

@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import clsx from "clsx";
 
 import { textForKey } from "../../../../../../utils/localization";
+import EASTextField from "../../../../common/EASTextField";
 import {
   availableHours,
   charactersRegex,
@@ -22,6 +23,23 @@ import reducer, {
   setMessageData,
 } from './scheduleMessageSlice';
 import styles from './ScheduleMessageForm.module.scss';
+import EASSelect from "../../../../common/EASSelect";
+import EASTextarea from "../../../../common/EASTextarea";
+
+const languages = [
+  {
+    id: 'ro',
+    name: 'Română',
+  },
+  {
+    id: 'ru',
+    name: 'Русский',
+  },
+  {
+    id: 'en',
+    name: 'English',
+  },
+];
 
 const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
   const availableTags = tags.filter((item) =>
@@ -66,13 +84,12 @@ const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
     onMessageChange?.(requestBody);
   }, [message, messageTitle, hourToSend]);
 
-  const handleMessageChange = (event) => {
-    const newMessage = event.target.value;
-    localDispatch(setMessage({ [language]: newMessage }));
+  const handleMessageChange = (newValue) => {
+    localDispatch(setMessage({ [language]: newValue }));
   };
 
-  const handleMessageTitleChange = (event) => {
-    localDispatch(setMessageTitle(event.target.value));
+  const handleMessageTitleChange = (newValue) => {
+    localDispatch(setMessageTitle(newValue));
   };
 
   const handleLanguageChange = (event) => {
@@ -101,6 +118,13 @@ const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
     return messageValue.length;
   };
 
+  const getMappedHours = (hours) => {
+    return hours.map(item => ({
+      id: item,
+      name: item,
+    }));
+  };
+
   const isLengthExceeded = getRealMessageLength(language) > maxLength;
 
   return (
@@ -109,78 +133,73 @@ const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
         <Typography className={styles.formTitle}>
           {textForKey(messageTypeEnum.ScheduleNotification)}
         </Typography>
-        <Form.Group>
-          <Form.Label>{textForKey('Message title')}</Form.Label>
-          <Form.Control
-            value={messageTitle}
-            onChange={handleMessageTitleChange}
-          />
-        </Form.Group>
-        <Form.Text className={styles['message-title']}>
-          {textForKey('messagetitledesc')}
-        </Form.Text>
-        <Form.Group controlId='messageText' className={styles.messageGroup}>
-          <Form.Label>{textForKey('Message text')}</Form.Label>
-          <Form.Control
-            custom
-            className={styles.languagesSelect}
-            as='select'
-            onChange={handleLanguageChange}
-            value={language}
-          >
-            <option value='ro'>Română</option>
-            <option value='ru'>Русский</option>
-            <option value='en'>English</option>
-          </Form.Control>
-          <Form.Control
-            isInvalid={isLengthExceeded}
-            as='textarea'
-            value={message[language]}
-            onChange={handleMessageChange}
-            aria-label='With textarea'
-          />
-          <Box
-            display='flex'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            <Form.Text className={styles.languageDesc}>{textForKey('languagedesc')}</Form.Text>
-            <Form.Text
-              className={clsx(styles['message-length'], { [styles.exceeded]: isLengthExceeded })}
+        <EASTextField
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Message title')}
+          value={messageTitle}
+          helperText={textForKey('messagetitledesc')}
+          onChange={handleMessageTitleChange}
+        />
+
+        <EASSelect
+          rootClass={styles.simpleField}
+          label={textForKey('Message language')}
+          labelId="language-select"
+          value={language}
+          onChange={handleLanguageChange}
+          options={languages}
+        />
+
+        <EASTextarea
+          containerClass={styles.simpleField}
+          error={isLengthExceeded}
+          value={message[language]}
+          fieldLabel={textForKey('Message text')}
+          onChange={handleMessageChange}
+          helperText={
+            <Box
+              display='flex'
+              alignItems='center'
+              justifyContent='space-between'
             >
-              {getRealMessageLength(language)}/{maxLength}
-            </Form.Text>
-          </Box>
-          <div className={styles['tags-wrapper']}>
-            {availableTags.map((tag) => (
-              <span
-                role='button'
-                tabIndex={0}
-                key={tag.id}
-                className={styles['tag-label']}
-                onClick={handleTagClick(tag)}
+              <Typography className={styles.descriptionHelper}>
+                {textForKey('languagedesc')}
+              </Typography>
+              <Typography
+                className={clsx(
+                  styles.messageLength,
+                  {
+                    [styles.exceeded]: isLengthExceeded
+                  }
+                )}
               >
+                {getRealMessageLength(language)}/{maxLength}
+              </Typography>
+            </Box>
+          }
+        />
+
+        <div className={styles.tagsWrapper}>
+          {availableTags.map((tag) => (
+            <span
+              role='button'
+              tabIndex={0}
+              key={tag.id}
+              className={styles['tag-label']}
+              onClick={handleTagClick(tag)}
+            >
                 #{tag.label}
               </span>
-            ))}
-          </div>
-        </Form.Group>
-        <Form.Group controlId='hourToSendAt'>
-          <Form.Label>{textForKey('Send notification at')}:</Form.Label>
-          <Form.Control
-            custom
-            className={styles.languagesSelect}
-            as='select'
-            onChange={handleMessageHourChange}
-            value={hourToSend}
-          >
-            {availableHours.map((hour) => (
-              <option key={hour} value={hour}>
-                {hour}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
+          ))}
+        </div>
+
+        <EASSelect
+          rootClass={styles.simpleField}
+          label={textForKey('Send notification at')}
+          options={getMappedHours(availableHours)}
+          onChange={handleMessageHourChange}
+          value={hourToSend}
+        />
       </div>
       <div className={styles.descriptionContainer}>
         <Typography className={styles.description}>

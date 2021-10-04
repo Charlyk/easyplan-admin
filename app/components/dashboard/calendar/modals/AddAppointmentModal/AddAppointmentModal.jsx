@@ -448,8 +448,6 @@ const AddAppointmentModal = (
     appointmentStatus === 'PartialPaid' ||
     appointmentStatus === 'CompletedFree';
 
-  // console.log(patient);
-
   return (
     <EASModal
       onClose={onClose}

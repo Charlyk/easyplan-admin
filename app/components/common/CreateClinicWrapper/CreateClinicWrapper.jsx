@@ -61,8 +61,6 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
     }
   }
 
-  console.log(isMobileDevice)
-
   return (
     <div className={styles.createClinicRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
