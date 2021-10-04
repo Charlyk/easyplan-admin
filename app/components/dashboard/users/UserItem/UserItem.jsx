@@ -1,13 +1,16 @@
 import React from 'react';
+import clsx from 'clsx';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
+import Button from '@material-ui/core/Button';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import Image from 'react-bootstrap/Image'
+import Image from 'next/image'
 
+import { Role } from '../../../../utils/constants';
+import urlToLambda from '../../../../../utils/urlToLambda';
+import { textForKey } from '../../../../../utils/localization';
 import IconAvatar from '../../../icons/iconAvatar';
 import IconDelete from '../../../icons/iconDelete';
 import IconEdit from '../../../icons/iconEdit';
@@ -15,22 +18,21 @@ import IconEmail from '../../../icons/iconEmail';
 import IconPhone from '../../../icons/iconPhone';
 import IconRefresh from '../../../icons/iconRefresh';
 import LoadingButton from '../../../common/LoadingButton';
-import { Role } from '../../../../utils/constants';
-import urlToLambda from '../../../../../utils/urlToLambda';
-import { textForKey } from '../../../../../utils/localization';
 import SwitchButton from "../../../common/SwitchButton";
 import styles from './UserItem.module.scss';
 
-const UserItem = ({
-                    user,
-                    isInvitation,
-                    isInviting,
-                    onDelete,
-                    onEdit,
-                    onResend,
-                    onRestore,
-                    onCashierChange,
-                  }) => {
+const UserItem = (
+  {
+    user,
+    isInvitation,
+    isInviting,
+    onDelete,
+    onEdit,
+    onResend,
+    onRestore,
+    onCashierChange,
+  }
+) => {
   const handleDeleteUser = event => {
     onDelete(event, user, isInvitation);
   };
@@ -51,34 +53,35 @@ const UserItem = ({
     onCashierChange(user, enabled);
   }
 
-  const rootClasses = clsx(styles['user-item'], user.isHidden ? styles.fired : styles.active);
+  const rootClasses = clsx(styles.userItem, user.isHidden ? styles.fired : styles.active);
 
   return (
-    <TableRow classes={{ root: rootClasses }}>
+    <TableRow className={rootClasses}>
       {!isInvitation && (
         <TableCell
           valign='middle'
-          classes={{ root: styles['user-item__name-and-avatar'] }}
+          className={styles.nameAndAvatar}
         >
           <div className={styles.flexContainer} style={{ height: '100%' }}>
             <div
               className={clsx(
-                styles['status-indicator'],
+                styles.statusIndicator,
                 user.isHidden ? styles.fired : styles.active,
               )}
             />
-            <div className={styles['user-item__avatar']}>
+            <div className={styles.avatar}>
               {user.avatar ? (
                 <Image
-                  className={styles['user-item__avatar']}
-                  roundedCircle
+                  width={30}
+                  height={30}
+                  className={styles.avatar}
                   src={urlToLambda(user.avatar)}
                 />
               ) : (
-                <IconAvatar />
+                <IconAvatar/>
               )}
             </div>
-            <Typography classes={{ root: styles['user-item__name'] }}>
+            <Typography className={styles.name}>
               {upperFirst(user.firstName.toLowerCase())}{' '}
               {upperFirst(user.lastName.toLowerCase())}
             </Typography>
@@ -86,10 +89,10 @@ const UserItem = ({
         </TableCell>
       )}
       {!isInvitation && (
-        <TableCell valign='middle' classes={{ root: styles['user-item__contact'] }}>
+        <TableCell valign='middle' className={styles.contact}>
           <div className={styles.flexContainer}>
-            <IconPhone />
-            <Typography classes={{ root: styles['contact-label'] }}>
+            <IconPhone/>
+            <Typography className={styles.contactLabel}>
               {user.phoneNumber
                 ? user.phoneNumber
                 : textForKey('No phone number')}
@@ -100,30 +103,37 @@ const UserItem = ({
       <TableCell
         valign='middle'
         colSpan={isInvitation ? 3 : 1}
-        classes={{ root: styles['user-item__contact'] }}
+        className={styles.contact}
       >
         <div className={styles.flexContainer}>
-          <IconEmail />
-          <Typography classes={{ root: styles['contact-label'] }}>
+          <IconEmail/>
+          <Typography classes={{ root: styles.contactLabel }}>
             {user.email}
           </Typography>
         </div>
       </TableCell>
       <TableCell valign='middle'>
-        <div className={styles['user-item__action-buttons']}>
-          {user.status === 'Pending' ||
-          (isInvitation && (
+        <div className={styles.actionButtons}>
+          {(user.status === 'Pending' || isInvitation) && (
             <LoadingButton
               isLoading={isInviting}
-              className={styles['user-item__resend-button']}
+              className={styles.resendButton}
               onClick={handleResendInvitation}
             >
-              {textForKey('Invite')} <IconRefresh fill='#FDC534' />
+              {textForKey('Invite')} <IconRefresh fill='#FDC534'/>
             </LoadingButton>
-          ))}
+          )}
           {user.roleInClinic === Role.doctor && !isInvitation && (
-            <Button className={styles['user-item__edit-button']} onClick={handleEditUser}>
-              {textForKey('Edit')} <IconEdit />
+            <Button
+              variant="outlined"
+              classes={{
+                root: styles.editBtn,
+                outlined: styles.outlinedBtnBlue,
+                label: styles.buttonLabel,
+              }}
+              onClick={handleEditUser}
+            >
+              {textForKey('Edit')} <IconEdit/>
             </Button>
           )}
           {user.roleInClinic === Role.reception && !isInvitation && (
@@ -139,17 +149,27 @@ const UserItem = ({
           )}
           {user.isHidden ? (
             <Button
-              className={styles['user-item__restore-button']}
+              variant="outlined"
+              classes={{
+                root: styles.restoreBtn,
+                outlined: styles.outlinedBtnGreen,
+                label: styles.buttonLabel,
+              }}
               onClick={handleRestoreUser}
             >
-              {textForKey('Restore')} <IconRefresh fill='#00E987' />
+              {textForKey('Restore')} <IconRefresh fill='#00E987'/>
             </Button>
           ) : (
             <Button
-              className={styles['user-item__delete-button']}
+              variant="outlined"
               onClick={handleDeleteUser}
+              classes={{
+                root: styles.deleteBtn,
+                outlined: styles.outlinedBtnRed,
+                label: styles.buttonLabel,
+              }}
             >
-              {textForKey('Delete')} <IconDelete />
+              {textForKey('Delete')} <IconDelete/>
             </Button>
           )}
         </div>

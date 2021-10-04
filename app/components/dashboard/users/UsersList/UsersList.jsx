@@ -191,7 +191,7 @@ const UsersList = (
     const role = type === Role.admin ? Role.manager : type;
 
     return (
-      <TableRow classes={{ root: styles['users-root__no-data'] }}>
+      <TableRow classes={{ root: styles.noData }}>
         <TableCell colSpan={5}>
           <div
             className={styles.flexContainer}
@@ -200,12 +200,12 @@ const UsersList = (
               justifyContent: 'center'
             }}
           >
-            <Typography classes={{ root: styles['no-data-label'] }}>
+            <Typography classes={{ root: styles.noDataLabel }}>
               {message}
             </Typography>
             <div
               role='button'
-              className={styles['add-data-btn']}
+              className={styles.addDataBtn}
               tabIndex={0}
               onClick={event => handleInviteUserStart(event, role)}
             >
@@ -280,7 +280,7 @@ const UsersList = (
   };
 
   return (
-    <div className={styles['users-root']}>
+    <div className={styles.usersRoot}>
       <InviteUserModal
         error={invitingExistentError}
         isLoading={isInvitingExistent}
@@ -335,15 +335,15 @@ const UsersList = (
         </div>
       )}
 
-      <div className={styles['users-root__content']}>
+      <div className={styles.content}>
         {!isLoading && (
-          <TableContainer classes={{ root: styles['table-container'] }}>
-            <Table classes={{ root: styles['data-table'] }}>
-              <TableBody>
+          <TableContainer className={styles.tableContainer}>
+            <Table className={styles.dataTable}>
+              <TableBody className={styles.tableBody}>
                 {canShowType(Role.invitations) && (
-                  <TableRow>
+                  <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles['users-root__group-title']}>
+                    <span className={styles.groupTitle}>
                       {textForKey('Invitations')}
                     </span>
                     </TableCell>
@@ -365,9 +365,9 @@ const UsersList = (
                 ))}
                 {canShowType(Role.invitations) && renderNoData(Role.invitations)}
                 {canShowType(Role.doctor) && (
-                  <TableRow>
+                  <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles['users-root__group-title']}>
+                    <span className={styles.groupTitle}>
                       {textForKey('Doctors')}
                     </span>
                     </TableCell>
@@ -389,9 +389,9 @@ const UsersList = (
                 ))}
                 {canShowType(Role.doctor) && renderNoData(Role.doctor)}
                 {canShowType(Role.reception) && (
-                  <TableRow>
+                  <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles['users-root__group-title']}>
+                    <span className={styles.groupTitle}>
                       {textForKey('Receptionists')}
                     </span>
                     </TableCell>
@@ -414,9 +414,9 @@ const UsersList = (
                 ))}
                 {canShowType(Role.reception) && renderNoData(Role.reception)}
                 {canShowType(Role.admin) && (
-                  <TableRow>
+                  <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles['users-root__group-title']}>
+                    <span className={styles.groupTitle}>
                       {textForKey('Administrators')}
                     </span>
                     </TableCell>

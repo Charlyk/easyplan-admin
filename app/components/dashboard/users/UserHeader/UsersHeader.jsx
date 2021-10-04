@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 
 import IconPlus from '../../../icons/iconPlus';
 import EasyTab from '../../../common/EasyTab';
@@ -44,8 +44,10 @@ const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {
       </div>
       <div className={styles['buttons-wrapper']}>
         <Button
-          className={'positive-button'}
-          onClick={() => onInviteUser(Role.reception)}
+          classes={{
+            root: styles.inviteButton
+          }}
+          onPointerUp={() => onInviteUser(Role.reception)}
         >
           {textForKey('Invite user')}
           <IconPlus />

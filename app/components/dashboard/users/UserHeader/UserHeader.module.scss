@@ -9,6 +9,16 @@
   margin-right: 8px;
   margin-top: .5rem;
 
+  .inviteButton {
+    height: 35px;
+    background-color: #3A83DC;
+    color: white;
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+  }
+
   .buttons-wrapper {
     display: flex;
     align-items: center;
