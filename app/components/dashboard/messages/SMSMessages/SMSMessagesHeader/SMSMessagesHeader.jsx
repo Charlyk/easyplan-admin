@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 
 import IconPlus from '../../../../icons/iconPlus';
 import { textForKey } from '../../../../../../utils/localization';
@@ -10,7 +10,7 @@ const SMSMessagesHeader = ({ canCreate, onCreate }) => {
   return (
     <div className={styles['create-message-header']}>
       <Button
-        className={'positive-button'}
+        className={styles.createButton}
         disabled={!canCreate}
         onClick={onCreate}
       >
