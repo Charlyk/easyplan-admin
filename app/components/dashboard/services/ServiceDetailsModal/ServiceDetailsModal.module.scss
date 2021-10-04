@@ -79,12 +79,41 @@
     background-color: white;
     box-shadow: 0px -20px 40px -5px rgba(239, 242, 251, 0.8);
 
-    :global(.cancel-button) {
-      margin-right: .5rem;
+    .saveButton {
+      flex: 1;
+      background-color: #3A83DC !important;
+      color: white !important;
+
+      &:hover {
+        background-color: #3A83DC;
+      }
+
+      svg {
+        margin-bottom: 3px;
+        margin-left: 5px;
+        width: 20px;
+        height: 20px;
+      }
     }
 
-    :global(.delete-button) {
-      margin-right: .5rem;
+    .closeButton {
+      flex: 1;
+      height: 35px;
+      margin-right: 5px;
+      background-color: #E5E5F7 !important;
+      color: #a1a2c6 !important;
+
+      &:hover {
+        background-color: #3A83DC;
+      }
+
+      svg {
+        fill: currentColor;
+        margin-bottom: 3px;
+        margin-left: 5px;
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 }

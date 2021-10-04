@@ -1,15 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
 import { useColor } from "react-color-palette";
 
@@ -20,6 +14,9 @@ import { textForKey } from '../../../../../../utils/localization';
 import IconPalette from "../../../../icons/iconPalette";
 import styles from './ServiceInformation.module.scss';
 import EASColorPicker from "../../../../common/EASColorPicker/EASColorPicker";
+import EASTextField from "../../../../common/EASTextField";
+import EASSelect from "../../../../common/EASSelect";
+import EASTextarea from "../../../../common/EASTextarea";
 
 const availableColors = [
   '#FF453A',
@@ -33,6 +30,21 @@ const availableColors = [
   '#BF5AF2',
   '#F44081'
 ]
+
+const serviceTypes = [
+  {
+    id: 'All',
+    name: textForKey('Applicable on all teeth'),
+  },
+  {
+    id: 'Single',
+    name: textForKey('Applicable on single tooth'),
+  },
+  {
+    id: 'Braces',
+    name: textForKey('Braces service'),
+  },
+];
 
 const ServiceInformation = (
   {
@@ -50,30 +62,38 @@ const ServiceInformation = (
   const [showPicker, setShowPicker] = useState(false);
   const [color, setColor] = useColor('hex', '#3A83DC');
 
+  useEffect(() => {
+    if (data == null) {
+      return;
+    }
+    if (!colors.includes(data.color) && data.color.length > 0) {
+      setColors([...colors, data.color]);
+    }
+  }, [data.color, colors]);
+
+  const mappedCurrencies = useMemo(() => {
+    return currencies.map(item => ({
+      id: item,
+      name: item,
+    }));
+  }, [currencies]);
+
   const handleInfoExpand = () => {
     onToggle();
   };
 
-  const handleFormChange = (event) => {
-    if (typeof event === 'string') {
-      onChange({
-        ...data,
-        color: event,
-      });
-    } else {
-      const fieldName = event.target.id;
-      onChange({
-        ...data,
-        [fieldName]: event.target.value,
-      });
-    }
+  const handleFormChange = (fieldId, value) => {
+    onChange({
+      ...data,
+      [fieldId]: value,
+    });
   };
 
   const handleSaveColor = (event) => {
     event.stopPropagation();
     setColors([...colors, color.hex]);
     handleHidePicker();
-    handleFormChange(color.hex);
+    handleFormChange('color', color.hex);
   }
 
   const handleShowPicker = (event) => {
@@ -86,7 +106,7 @@ const ServiceInformation = (
   }
 
   const contentClasses = clsx(
-    styles['service-information__content'],
+    styles.content,
     isExpanded ? styles.expanded : styles.collapsed,
   );
 
@@ -102,11 +122,11 @@ const ServiceInformation = (
   )
 
   return (
-    <div className={styles['service-information']} onPointerUp={handleHidePicker}>
-      <div className={styles['service-information__header']}>
-        <div className={styles['service-information__header__title']}>
+    <div className={styles.serviceInformation} onPointerUp={handleHidePicker}>
+      <div className={styles.header}>
+        <div className={styles.title}>
           {showStep && (
-            <div className={styles['service-information__header__step']}>
+            <div className={styles.step}>
               {textForKey('Step 1.')}
             </div>
           )}
@@ -115,7 +135,7 @@ const ServiceInformation = (
         <div
           tabIndex={0}
           role='button'
-          className={styles['service-information__header__button']}
+          className={styles.button}
           onClick={handleInfoExpand}
         >
           {isExpanded ? <IconMinus/> : <IconPlusBig/>}
@@ -123,108 +143,84 @@ const ServiceInformation = (
       </div>
 
       <div className={contentClasses}>
-        <Form>
-          <Form.Group controlId='name'>
-            <Form.Label>{textForKey('Service name')}</Form.Label>
-            <InputGroup>
-              <Form.Control
-                type='text'
-                value={data.name}
-                onChange={handleFormChange}
-              />
-            </InputGroup>
-          </Form.Group>
+        <form>
+          <EASTextField
+            type="text"
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Service name')}
+            value={data.name}
+            onChange={(value) => handleFormChange('name', value)}
+          />
 
-          <Form.Group controlId='duration'>
-            <Form.Label>{textForKey('Required time')}</Form.Label>
-            <InputGroup>
-              <Form.Control
-                type='number'
-                min='0'
-                value={data.duration}
-                onChange={handleFormChange}
-              />
-              <InputGroup.Append>
-                <InputGroup.Text>min</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-          </Form.Group>
+          <EASTextField
+            type="number"
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Required time')}
+            min='0'
+            value={data.duration}
+            onChange={(value) => handleFormChange('duration', value)}
+            endAdornment={<Typography className={styles.adornment}>min</Typography>}
+          />
 
-          <Form.Label>{textForKey('Service price')}</Form.Label>
-          <InputGroup className={styles['price-group']}>
-            <Form.Control
-              id='price'
-              type='number'
-              value={data.price}
-              min='0'
-              onChange={handleFormChange}
-            />
-            <InputGroup.Append>
-              <Form.Control
-                id='currency'
-                as='select'
-                className='mr-sm-2'
-                custom
-                onChange={handleFormChange}
+          <EASTextField
+            type="number"
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Service price')}
+            value={data.price}
+            min='0'
+            onChange={(value) => handleFormChange('price', value)}
+            endAdornment={
+              <EASSelect
+                rootClass={styles.currencyField}
+                options={mappedCurrencies}
                 value={data.currency}
-              >
-                {currencies.map((item, index) => (
-                  <option key={`${item}-${index}`} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </Form.Control>
-            </InputGroup.Append>
-          </InputGroup>
-
-          <Form.Group
-            controlId='serviceType'
-            style={{ flexDirection: 'column' }}
-          >
-            <Form.Label>{textForKey('Service type')}</Form.Label>
-            <Form.Control
-              as='select'
-              className='mr-sm-2'
-              custom
-              onChange={handleFormChange}
-              value={data.serviceType}
-            >
-              <option value='All'>
-                {textForKey('Applicable on all teeth')}
-              </option>
-              <option value='Single'>
-                {textForKey('Applicable on single tooth')}
-              </option>
-              <option value='Braces'>{textForKey('Braces service')}</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId='description'>
-            <Form.Label>{textForKey('Description')}</Form.Label>
-            <InputGroup>
-              <Form.Control
-                as='textarea'
-                value={data.description || ''}
-                onChange={handleFormChange}
-                aria-label='With textarea'
+                onChange={(event) => handleFormChange('currency', event.target.value)}
               />
-            </InputGroup>
-          </Form.Group>
-        </Form>
+            }
+          />
+          <EASSelect
+            type="text"
+            rootClass={styles.simpleField}
+            label={textForKey('Service type')}
+            labelId="service-type-select"
+            onChange={(event) => handleFormChange('serviceType', event.target.value)}
+            value={data.serviceType}
+            options={serviceTypes}
+          />
 
-        <Form.Label>{textForKey('Select color')}</Form.Label>
+          <EASTextarea
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Description')}
+            rows={4}
+            maxRows={4}
+            value={data.description || ''}
+            onChange={(value) => handleFormChange('description', value)}
+          />
+        </form>
         <div className={styles.colorsWrapper}>
+          <Typography className={styles.formLabel}>
+            {textForKey('Select color')}
+          </Typography>
           <ToggleButtonGroup
-            onChange={handleFormChange}
-            className={styles['service-information__content__colors']}
+            exclusive
+            onChange={(event, value) => handleFormChange('color', value)}
+            className={styles.colors}
             type='radio'
             value={data.color}
             name='serviceColors'
           >
             {colors.map(color => (
-              <ToggleButton key={color} value={color}>
+              <ToggleButton
+                key={color}
+                value={color}
+                style={{ color }}
+                classes={{
+                  root: styles.toggleButton,
+                  selected: styles.selectedButton,
+                }}
+              >
                 <div
-                  className={styles['service-information__content__colors__color-container']}
+                  className={styles.colorContainer}
                   style={{ backgroundColor: color }}
                 />
               </ToggleButton>

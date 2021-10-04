@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 
@@ -205,7 +205,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
 
         <div className={styles['service-details-modal__footer']}>
           <Button
-            className='cancel-button'
+            className={styles.closeButton}
             disabled={isLoading}
             onClick={handleCloseModal}
           >
@@ -214,7 +214,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
           </Button>
           <LoadingButton
             onClick={handleSaveService}
-            className='positive-button'
+            className={styles.saveButton}
             isLoading={isLoading}
             disabled={!isFormValid || isLoading}
           >
