@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useReducer, useRef } from "react";
 import dynamic from 'next/dynamic';
 import debounce from 'lodash/debounce';
-import Form from "react-bootstrap/Form";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import clsx from "clsx";
 import { toast } from "react-toastify";
 import moment from "moment-timezone";
 
@@ -31,6 +28,8 @@ import reducer, {
   setRecipientsCount,
 } from './promotionalMessageSlice';
 import styles from './PromotionalMessageForm.module.scss';
+import MainMessageForm from "../MainMessageForm";
+import EASTextField from "../../../../common/EASTextField";
 
 const EasyDatePicker = dynamic(() => import("../../../../common/EasyDatePicker"));
 
@@ -40,7 +39,8 @@ const PromotionalMessageForm = (
     initialMessage,
     isLoading,
     onMessageChange,
-    onLanguageChange
+    onLanguageChange,
+    onSubmit,
   }
 ) => {
   const datePickerAnchor = useRef(null);
@@ -122,13 +122,17 @@ const PromotionalMessageForm = (
     updateRecipientsCount();
   }, [filterData]);
 
-  const handleMessageChange = (event) => {
-    const newMessage = event.target.value;
-    localDispatch(setMessage({ [language]: newMessage }));
+  const handleSubmit = (event) => {
+    event?.preventDefault();
+    onSubmit?.();
+  }
+
+  const handleMessageChange = (newValue) => {
+    localDispatch(setMessage({ [language]: newValue }));
   };
 
-  const handleMessageTitleChange = (event) => {
-    localDispatch(setMessageTitle(event.target.value));
+  const handleMessageTitleChange = (newValue) => {
+    localDispatch(setMessageTitle(newValue));
   };
 
   const handleLanguageChange = (event) => {
@@ -187,92 +191,37 @@ const PromotionalMessageForm = (
 
   return (
     <div className={styles.promotionalMessageRoot}>
-      <div className={styles.formContainer}>
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
         <Typography className={styles.formTitle}>
           {textForKey(messageTypeEnum.PromotionalMessage)}
         </Typography>
         {showDatePicker && datePicker}
-        <Form.Group>
-          <Form.Label>{textForKey('Message title')}</Form.Label>
-          <Form.Control
-            value={messageTitle}
-            onChange={handleMessageTitleChange}
-          />
-        </Form.Group>
-        <Form.Text className={styles['message-title']}>
-          {textForKey('messagetitledesc')}
-        </Form.Text>
-        <Form.Group controlId='messageText' className={styles.messageGroup}>
-          <Form.Label>{textForKey('Message text')}</Form.Label>
-          <Form.Control
-            custom
-            className={styles.languagesSelect}
-            as='select'
-            onChange={handleLanguageChange}
-            value={language}
-          >
-            <option value='ro'>Română</option>
-            <option value='ru'>Русский</option>
-            <option value='en'>English</option>
-          </Form.Control>
-          <Form.Control
-            isInvalid={isLengthExceeded}
-            as='textarea'
-            value={message[language]}
-            onChange={handleMessageChange}
-            aria-label='With textarea'
-          />
-          <Box
-            display='flex'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            <Form.Text className={styles.languageDesc}>{textForKey('languagedesc')}</Form.Text>
-            <Form.Text
-              className={clsx(styles['message-length'], { [styles.exceeded]: isLengthExceeded })}
-            >
-              {getRealMessageLength(language)}/{maxLength}
-            </Form.Text>
-          </Box>
-          <div className={styles['tags-wrapper']}>
-            {availableTags.map((tag) => (
-              <span
-                role='button'
-                tabIndex={0}
-                key={tag.id}
-                className={styles['tag-label']}
-                onClick={handleTagClick(tag)}
-              >
-                #{tag.label}
-              </span>
-            ))}
-          </div>
-        </Form.Group>
-        <Form.Group controlId='hourToSendAt'>
-          <Form.Label>{textForKey('Send notification at')}:</Form.Label>
-          <Form.Control
-            custom
-            className={styles.languagesSelect}
-            as='select'
-            onChange={handleMessageHourChange}
-            value={hourToSend}
-          >
-            {availableHours.map((hour) => (
-              <option key={hour} value={hour}>
-                {hour}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group className={styles.dateField}>
-          <Form.Label>{textForKey('Date')}</Form.Label>
-          <Form.Control
-            readOnly
-            value={moment(messageDate).format('DD MMMM')}
-            ref={datePickerAnchor}
-            onClick={handleShowDatePicker}
-          />
-        </Form.Group>
+        <MainMessageForm
+          currentClinic={currentClinic}
+          messageTitle={messageTitle}
+          language={language}
+          message={message}
+          maxLength={maxLength}
+          availableHours={availableHours}
+          availableTags={availableTags}
+          hourToSend={hourToSend}
+          isLengthExceeded={isLengthExceeded}
+          onMessageTitleChange={handleMessageTitleChange}
+          onLanguageChange={handleLanguageChange}
+          onMessageChange={handleMessageChange}
+          onTagClick={handleTagClick}
+          onMessageHourChange={handleMessageHourChange}
+        />
+
+        <EASTextField
+          readOnly
+          ref={datePickerAnchor}
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Date')}
+          value={moment(messageDate).format('DD MMMM')}
+          onPointerUp={handleShowDatePicker}
+        />
+
         <ReceiversFilter
           currentClinic={currentClinic}
           recipientsCount={recipientsCount}
@@ -280,7 +229,7 @@ const PromotionalMessageForm = (
           isLoading={isLoading}
           onChange={handleFilterChange}
         />
-      </div>
+      </form>
       <div className={styles.descriptionContainer}>
         <Typography className={styles.description}>
           {textForKey('promotionalmessagedesc')}

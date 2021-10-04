@@ -1,15 +1,11 @@
 import React, { useEffect, useReducer } from "react";
 import moment from "moment-timezone";
-import Form from "react-bootstrap/Form";
-import Box from "@material-ui/core/Box";
 import Typography from '@material-ui/core/Typography';
-import clsx from "clsx";
 
 import { textForKey } from "../../../../../../utils/localization";
-import EASTextField from "../../../../common/EASTextField";
 import {
   availableHours,
-  charactersRegex,
+  charactersRegex, getRealMessageLength,
   messageTypeEnum,
   tags
 } from "../CreateMessageDialog.constants";
@@ -23,25 +19,9 @@ import reducer, {
   setMessageData,
 } from './scheduleMessageSlice';
 import styles from './ScheduleMessageForm.module.scss';
-import EASSelect from "../../../../common/EASSelect";
-import EASTextarea from "../../../../common/EASTextarea";
+import MainMessageForm from "../MainMessageForm";
 
-const languages = [
-  {
-    id: 'ro',
-    name: 'Română',
-  },
-  {
-    id: 'ru',
-    name: 'Русский',
-  },
-  {
-    id: 'en',
-    name: 'English',
-  },
-];
-
-const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
+const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange, onSubmit }) => {
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.ScheduleNotification),
   );
@@ -84,6 +64,11 @@ const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
     onMessageChange?.(requestBody);
   }, [message, messageTitle, hourToSend]);
 
+  const handleSubmit = (event) => {
+    event?.preventDefault();
+    onSubmit?.();
+  }
+
   const handleMessageChange = (newValue) => {
     localDispatch(setMessage({ [language]: newValue }));
   };
@@ -107,100 +92,35 @@ const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
     );
   };
 
-  const getRealMessageLength = (language) => {
-    let messageValue = message[language];
-    tags.forEach((tag) => {
-      messageValue = messageValue.replace(
-        tag.id,
-        tag.id !== '{{clinicName}}' ? tag.placeholder : currentClinic.smsAlias,
-      );
-    });
-    return messageValue.length;
+  const getMessageLength = (language) => {
+    return getRealMessageLength(language, message, currentClinic);
   };
 
-  const getMappedHours = (hours) => {
-    return hours.map(item => ({
-      id: item,
-      name: item,
-    }));
-  };
-
-  const isLengthExceeded = getRealMessageLength(language) > maxLength;
+  const isLengthExceeded = getMessageLength(language) > maxLength;
 
   return (
     <div className={styles.scheduleMessageRoot}>
-      <div className={styles.formContainer}>
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
         <Typography className={styles.formTitle}>
           {textForKey(messageTypeEnum.ScheduleNotification)}
         </Typography>
-        <EASTextField
-          containerClass={styles.simpleField}
-          fieldLabel={textForKey('Message title')}
-          value={messageTitle}
-          helperText={textForKey('messagetitledesc')}
-          onChange={handleMessageTitleChange}
+        <MainMessageForm
+          currentClinic={currentClinic}
+          maxLength={maxLength}
+          messageTitle={messageTitle}
+          message={message}
+          language={language}
+          availableTags={availableTags}
+          hourToSend={hourToSend}
+          availableHours={availableHours}
+          isLengthExceeded={isLengthExceeded}
+          onMessageTitleChange={handleMessageTitleChange}
+          onMessageChange={handleMessageChange}
+          onLanguageChange={handleLanguageChange}
+          onMessageHourChange={handleMessageHourChange}
+          onTagClick={handleTagClick}
         />
-
-        <EASSelect
-          rootClass={styles.simpleField}
-          label={textForKey('Message language')}
-          labelId="language-select"
-          value={language}
-          onChange={handleLanguageChange}
-          options={languages}
-        />
-
-        <EASTextarea
-          containerClass={styles.simpleField}
-          error={isLengthExceeded}
-          value={message[language]}
-          fieldLabel={textForKey('Message text')}
-          onChange={handleMessageChange}
-          helperText={
-            <Box
-              display='flex'
-              alignItems='center'
-              justifyContent='space-between'
-            >
-              <Typography className={styles.descriptionHelper}>
-                {textForKey('languagedesc')}
-              </Typography>
-              <Typography
-                className={clsx(
-                  styles.messageLength,
-                  {
-                    [styles.exceeded]: isLengthExceeded
-                  }
-                )}
-              >
-                {getRealMessageLength(language)}/{maxLength}
-              </Typography>
-            </Box>
-          }
-        />
-
-        <div className={styles.tagsWrapper}>
-          {availableTags.map((tag) => (
-            <span
-              role='button'
-              tabIndex={0}
-              key={tag.id}
-              className={styles['tag-label']}
-              onClick={handleTagClick(tag)}
-            >
-                #{tag.label}
-              </span>
-          ))}
-        </div>
-
-        <EASSelect
-          rootClass={styles.simpleField}
-          label={textForKey('Send notification at')}
-          options={getMappedHours(availableHours)}
-          onChange={handleMessageHourChange}
-          value={hourToSend}
-        />
-      </div>
+      </form>
       <div className={styles.descriptionContainer}>
         <Typography className={styles.description}>
           {textForKey('schedulenotificationdesc')}

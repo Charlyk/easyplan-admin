@@ -1,8 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import clsx from "clsx";
 import moment from "moment-timezone";
-import Form from "react-bootstrap/Form";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 
 import { textForKey } from "../../../../../../utils/localization";
@@ -20,6 +17,7 @@ import reducer, {
   setMessageTitle
 } from "./oneTimeMessageSlice";
 import styles from "./OneTimeMessageForm.module.scss";
+import MainMessageForm from "../MainMessageForm";
 
 const OneTimeMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange }) => {
   const availableTags = tags.filter((item) =>
@@ -64,13 +62,12 @@ const OneTimeMessageForm = ({ currentClinic, initialMessage, onMessageChange, on
     onMessageChange?.(requestBody);
   }, [message, messageTitle, hourToSend]);
 
-  const handleMessageChange = (event) => {
-    const newMessage = event.target.value;
-    localDispatch(setMessage({ [language]: newMessage }));
+  const handleMessageChange = (newValue) => {
+    localDispatch(setMessage({ [language]: newValue }));
   };
 
-  const handleMessageTitleChange = (event) => {
-    localDispatch(setMessageTitle(event.target.value));
+  const handleMessageTitleChange = (newValue) => {
+    localDispatch(setMessageTitle(newValue));
   };
 
   const handleLanguageChange = (event) => {
@@ -103,62 +100,20 @@ const OneTimeMessageForm = ({ currentClinic, initialMessage, onMessageChange, on
         <Typography className={styles.formTitle}>
           {textForKey(messageTypeEnum.OnetimeMessage)}
         </Typography>
-        <Form.Group>
-          <Form.Label>{textForKey('Message title')}</Form.Label>
-          <Form.Control
-            value={messageTitle}
-            onChange={handleMessageTitleChange}
-          />
-        </Form.Group>
-        <Form.Text className={styles['message-title']}>
-          {textForKey('messagetitledesc')}
-        </Form.Text>
-        <Form.Group controlId='messageText' className={styles.messageGroup}>
-          <Form.Label>{textForKey('Message text')}</Form.Label>
-          <Form.Control
-            custom
-            className={styles.languagesSelect}
-            as='select'
-            onChange={handleLanguageChange}
-            value={language}
-          >
-            <option value='ro'>Română</option>
-            <option value='ru'>Русский</option>
-            <option value='en'>English</option>
-          </Form.Control>
-          <Form.Control
-            isInvalid={isLengthExceeded}
-            as='textarea'
-            value={message[language]}
-            onChange={handleMessageChange}
-            aria-label='With textarea'
-          />
-          <Box
-            display='flex'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            <Form.Text className={styles.languageDesc}>{textForKey('languagedesc')}</Form.Text>
-            <Form.Text
-              className={clsx(styles['message-length'], { [styles.exceeded]: isLengthExceeded })}
-            >
-              {getRealMessageLength(language)}/{maxLength}
-            </Form.Text>
-          </Box>
-          <div className={styles['tags-wrapper']}>
-            {availableTags.map((tag) => (
-              <span
-                role='button'
-                tabIndex={0}
-                key={tag.id}
-                className={styles['tag-label']}
-                onClick={handleTagClick(tag)}
-              >
-                #{tag.label}
-              </span>
-            ))}
-          </div>
-        </Form.Group>
+        <MainMessageForm
+          hideHour
+          currentClinic={currentClinic}
+          messageTitle={messageTitle}
+          onMessageTitleChange={handleMessageTitleChange}
+          language={language}
+          onLanguageChange={handleLanguageChange}
+          message={message}
+          onMessageChange={handleMessageChange}
+          availableTags={availableTags}
+          onTagClick={handleTagClick}
+          maxLength={maxLength}
+          isLengthExceeded={isLengthExceeded}
+        />
       </div>
       <div className={styles.descriptionContainer}>
         <Typography className={styles.description}>

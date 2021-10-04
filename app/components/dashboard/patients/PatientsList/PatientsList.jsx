@@ -12,10 +12,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import PropTypes from 'prop-types';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import Button from '@material-ui/core/Button';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { useDispatch, useSelector } from 'react-redux';
-import clsx from "clsx";
 import { toast } from "react-toastify";
 
 import IconPlus from '../../../icons/iconPlus';
@@ -33,6 +30,7 @@ import {
   getPatients,
   importPatientsFromFile
 } from "../../../../../middleware/api/patients";
+import EASTextField from "../../../common/EASTextField";
 import PatientRow from './PatientRow';
 import reducer, {
   initialState,
@@ -48,7 +46,6 @@ import reducer, {
   setIsLoading,
 } from './PatientsList.reducer'
 import styles from './PatientsList.module.scss';
-import EASTextField from "../../../common/EASTextField";
 
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
