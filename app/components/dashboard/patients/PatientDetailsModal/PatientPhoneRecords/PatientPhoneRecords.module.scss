@@ -54,7 +54,7 @@
 
   .footer {
     border-top: #ededed 1px solid;
-    width: 100%;
+    width: calc(100% - 2rem);
     height: 55px;
     background-color: #fff;
     display: flex;
@@ -62,5 +62,26 @@
     justify-content: space-between;
     padding-left: 1rem;
     padding-right: 1rem;
+
+    .navButtons {
+      height: 35px;
+      color: #3A83DC;
+
+      .label {
+        color: currentColor;
+      }
+    }
+
+    .disabled {
+      border-color: #ced4da !important;
+
+      .label {
+        color: #ced4da;
+      }
+    }
+
+    .outlined {
+      border-color: #3A83DC;
+    }
   }
 }

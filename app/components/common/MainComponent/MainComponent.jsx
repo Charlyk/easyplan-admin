@@ -127,7 +127,7 @@ const MainComponent = (
   };
 
   return (
-    <div className={styles['main-page']} id='main-page'>
+    <div className={styles.mainPage} id='main-page'>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <ServiceDetailsModal currentClinic={currentClinic}/>
       {isExchangeRatesModalOpen && (
@@ -185,7 +185,7 @@ const MainComponent = (
         />
       )}
       {currentUser != null && (
-        <div className={styles['data-container']}>
+        <div className={styles.dataContainer}>
           <PageHeader
             currentClinic={currentClinic}
             title={pageTitle}

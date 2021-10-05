@@ -163,13 +163,17 @@ const CalendarContainer = (
   }, [currentClinic]);
 
   useEffect(() => {
+    updateSelectedDoctor(doctorId);
+  }, [doctorId, doctors]);
+
+  const updateSelectedDoctor = (doctorId) => {
     if (doctorId != null) {
       const doctor = doctors.find((item) => item.id === parseInt(doctorId));
       localDispatch(setSelectedDoctor(doctor ?? doctors[0]));
     } else {
       localDispatch(setSelectedDoctor(doctors[0]));
     }
-  }, [doctorId, doctors]);
+  }
 
   const handlePubnubMessageReceived = (remoteMessage) => {
     const { message, channel } = remoteMessage;
@@ -193,14 +197,11 @@ const CalendarContainer = (
   };
 
   const handleAppointmentModalOpen = (doctor, startHour, endHour, selectedDate = null) => {
+    console.log(selectedDoctor);
     dispatch(
       setAppointmentModal({
         open: true,
-        doctor: viewMode === 'day'
-          ? doctor
-          : viewMode !== 'day'
-            ? selectedDoctor
-            : null,
+        doctor: selectedDoctor ?? doctor,
         startHour,
         endHour,
         date: selectedDate ?? viewDate,
@@ -210,6 +211,7 @@ const CalendarContainer = (
 
   const handleDoctorSelected = async (doctor) => {
     const dateString = moment(viewDate).format('YYYY-MM-DD')
+    updateSelectedDoctor(doctor.id);
     await router.replace({
       pathname: `/calendar/${viewMode}`,
       query: {

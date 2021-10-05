@@ -4,14 +4,17 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import { toast } from "react-toastify";
 import { useSelector } from 'react-redux';
 
 import IconPlus from '../../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../../utils/localization';
-import { deletePatientXRayImage, getPatientXRayImages } from "../../../../../../middleware/api/patients";
+import {
+  deletePatientXRayImage,
+  getPatientXRayImages
+} from "../../../../../../middleware/api/patients";
 import XRayPhase from './XRayPhase';
 import styles from './PatientXRay.module.scss'
 
@@ -141,10 +144,14 @@ const PatientXRay = ({ patient, onAddXRay }) => {
       </div>
       <div className={styles['patient-x-ray__actions']}>
         <Button
-          className='btn-outline-primary'
-          variant='outline-primary'
-          onClick={onAddXRay}
+          variant='outlined'
           disabled={state.isFetching}
+          classes={{
+            root: styles.addButton,
+            label: styles.addButtonLabel,
+            outlined: styles.outlinedButton,
+          }}
+          onClick={onAddXRay}
         >
           {textForKey('Add image')}
           <IconPlus fill={null}/>

@@ -50,7 +50,7 @@ const EASAutocomplete = (
           },
           endAdornment: (
             <>
-              {loading ? <CircularProgress size={20} className={styles.progressBar} /> : null}
+              {loading ? <CircularProgress size={20} className={styles.progressBar}/> : null}
               {params.InputProps.endAdornment}
             </>
           )
@@ -109,11 +109,13 @@ EASAutocomplete.propTypes = {
   placeholder: PropTypes.string,
   fieldLabel: PropTypes.string,
   containerClass: PropTypes.any,
-  options: PropTypes.shape({
-    id: PropTypes.any,
-    name: PropTypes.string,
-    label: PropTypes.string
-  }),
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.any,
+      name: PropTypes.string,
+      label: PropTypes.string
+    })
+  ),
   onChange: PropTypes.func,
   onTextChange: PropTypes.func,
 }

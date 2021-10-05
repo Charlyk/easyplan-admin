@@ -1,8 +1,9 @@
-.checkout-modal-root {
+.checkoutModalRoot {
   user-select: none;
 
-  &__paper {
+  .paper {
     width: 80%;
+    height: 60%;
     min-width: 800px;
     outline: none;
     position: absolute;
@@ -13,20 +14,20 @@
     overflow: hidden;
     transform: translate(-50%, -50%);
 
-    .data-container {
-      width: 50%;
-      height: 100%;
+    .dataContainer {
+      width: calc(50% - 2rem);
+      height: calc(100% - 2rem);
       position: relative;
       padding: 1rem;
 
-      .close-button {
+      .closeButton {
         outline: none;
         position: absolute;
         top: 0;
         right: 0;
       }
 
-      .loading-wrapper {
+      .loadingWrapper {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -47,7 +48,7 @@
         height: 30px !important;
       }
 
-      .pay-btn {
+      .payBtn {
         outline: none;
         background-color: #3A83DC;
         color: white;
@@ -65,13 +66,16 @@
         }
       }
 
-      .details-table-container {
+      .detailsTableContainer {
+        height: calc(100% - 90px);
+        width: 100%;
         margin-top: 1.5rem;
-        height: 375px;
 
-        .details-table {
-          &__row {
-            &__cell {
+        .detailsTable {
+          width: calc(100% - .25rem);
+
+          .row {
+            .cell {
               border-bottom: #ededed 1px solid;
               padding-top: .5rem;
               padding-bottom: .5rem;
@@ -84,7 +88,7 @@
                 padding-right: 0;
               }
 
-              .autocomplete-root {
+              .autocompleteRoot {
                 :global(.input-root) {
                   font-family: Inter, sans-serif;
                   font-style: normal;
@@ -141,7 +145,7 @@
                 }
               }
 
-              &.for-payment-title-cell {
+              &.forPaymentTitleCell {
                 border-bottom: none;
 
                 .label {
@@ -154,7 +158,7 @@
                 }
               }
 
-              &.for-payment-field-cell {
+              &.forPaymentFieldCell {
                 border-bottom: none;
 
                 input {
@@ -181,7 +185,7 @@
                 }
               }
 
-              &.total-amount-cell {
+              &.totalAmountCell {
                 border-bottom: none;
 
                 .label {
@@ -193,7 +197,7 @@
                 }
               }
 
-              &.total-discount-cell {
+              &.totalDiscountCell {
                 border-bottom: none;
 
                 .label {

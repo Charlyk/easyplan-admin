@@ -192,7 +192,7 @@ const UsersList = (
 
     return (
       <TableRow classes={{ root: styles.noData }}>
-        <TableCell colSpan={5}>
+        <TableCell colSpan={5} className={styles.tableCell}>
           <div
             className={styles.flexContainer}
             style={{

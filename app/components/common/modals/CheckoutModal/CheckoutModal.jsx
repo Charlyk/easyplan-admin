@@ -426,9 +426,9 @@ const CheckoutModal = (
     <Modal
       open={open}
       onBackdropClick={handleCloseModal}
-      className={styles['checkout-modal-root']}
+      className={styles.checkoutModalRoot}
     >
-      <Paper classes={{ root: styles['checkout-modal-root__paper'] }}>
+      <Paper classes={{ root: styles.paper }}>
         <TeethModal
           open={teethModal.open}
           service={teethModal.service}
@@ -446,9 +446,9 @@ const CheckoutModal = (
           onServiceSelected={handleNewServiceSelected}
           onServiceDeleted={handleServiceRemoved}
         />
-        <div className={styles['data-container']}>
+        <div className={styles.dataContainer}>
           <IconButton
-            classes={{ root: styles['close-button'] }}
+            classes={{ root: styles.closeButton }}
             onClick={handleCloseModal}
           >
             <IconClose/>
@@ -462,8 +462,8 @@ const CheckoutModal = (
             {textForKey('Details')}
           </Typography>
           {!isFetching && (
-            <TableContainer classes={{ root: styles['details-table-container'] }}>
-              <Table classes={{ root: styles['details-table'] }}>
+            <TableContainer classes={{ root: styles.detailsTableContainer }}>
+              <Table classes={{ root: styles.detailsTable }}>
                 <TableBody>
                   {invoiceDetails.doctor != null && (
                     <DetailsRow
@@ -499,14 +499,14 @@ const CheckoutModal = (
                       value={{ name: scheduleTime }}
                     />
                   )}
-                  <TableRow>
+                  <TableRow className={styles.row}>
                     <TableCell
                       align='center'
                       colSpan={2}
                       classes={{
                         root: clsx(
-                          styles['details-table__row__cell'],
-                          styles['for-payment-title-cell'],
+                          styles.cell,
+                          styles.forPaymentTitleCell,
                         ),
                       }}
                     >
@@ -515,14 +515,14 @@ const CheckoutModal = (
                       </Typography>
                     </TableCell>
                   </TableRow>
-                  <TableRow>
+                  <TableRow className={styles.row}>
                     <TableCell
                       align='center'
                       colSpan={2}
                       classes={{
                         root: clsx(
-                          styles['details-table__row__cell'],
-                          styles['for-payment-field-cell'],
+                          styles.cell,
+                          styles.forPaymentFieldCell,
                         ),
                       }}
                     >
@@ -539,14 +539,14 @@ const CheckoutModal = (
                       />
                     </TableCell>
                   </TableRow>
-                  <TableRow>
+                  <TableRow className={styles.row}>
                     <TableCell
                       colSpan={2}
                       align='center'
                       classes={{
                         root: clsx(
-                          styles['details-table__row__cell'],
-                          styles['total-amount-cell'],
+                          styles.cell,
+                          styles.totalAmountCell,
                         ),
                       }}
                     >
@@ -556,14 +556,14 @@ const CheckoutModal = (
                       </Typography>
                     </TableCell>
                   </TableRow>
-                  <TableRow>
+                  <TableRow className={styles.row}>
                     <TableCell
                       colSpan={2}
                       align='center'
                       classes={{
                         root: clsx(
-                          styles['details-table__row__cell'],
-                          styles['total-discount-cell'],
+                          styles.cell,
+                          styles.totalDiscountCell,
                         ),
                       }}
                     >
@@ -597,7 +597,7 @@ const CheckoutModal = (
                 <Button
                   disabled={!canPay}
                   onClick={handleSubmit}
-                  classes={{ root: styles['pay-btn'] }}
+                  classes={{ root: styles.payBtn }}
                   variant='contained'
                 >
                   {textForKey('Pay')}{' '}

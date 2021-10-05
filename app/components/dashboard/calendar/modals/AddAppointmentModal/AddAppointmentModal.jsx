@@ -611,6 +611,8 @@ const AddAppointmentModal = (
         <EASTextarea
           containerClass={styles.simpleField}
           value={appointmentNote || ''}
+          rows={4}
+          maxRows={6}
           onChange={handleNoteChange}
           fieldLabel={textForKey('Notes')}
         />

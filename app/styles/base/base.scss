@@ -1,7 +1,5 @@
 @import "~react-phone-input-2/lib/material.css";
 @import "~react-toastify/dist/ReactToastify.css";
-@import "~bootstrap/dist/css/bootstrap.min.css";
-@import "~react-bootstrap-typeahead/css/Typeahead.css";
 @import "~react-color-palette/lib/css/styles.css";
 @import "~react-date-range/dist/theme/default.css";
 @import "~react-date-range/dist/styles.css";
@@ -10,13 +8,9 @@ body {
   margin: 0;
   font-family: Inter, serif;
   font-style: normal;
-  height: 100%;
+  height: 100vh;
+  width: 100%;
   overflow: auto;
-
-  #__next {
-    width: 100%;
-    height: 100vh;
-  }
 
   .modal-backdrop {
     background-color: rgba(52, 53, 76, 0.25);

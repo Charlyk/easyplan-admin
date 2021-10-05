@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
@@ -84,8 +84,12 @@ const PatientAppointments = ({ patient, isDoctor }) => {
       {!isDoctor && (
         <div className={styles['patient-appointments-list__actions']}>
           <Button
-            className='btn-outline-primary'
-            variant='outline-primary'
+            variant='outlined'
+            classes={{
+              root: styles.addButton,
+              label: styles.addButtonLabel,
+              outlined: styles.outlinedButton
+            }}
             onClick={handleAddAppointment}
           >
             {textForKey('Add appointment')}

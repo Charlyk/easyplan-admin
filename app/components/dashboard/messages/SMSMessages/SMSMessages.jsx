@@ -116,7 +116,7 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
   };
 
   return (
-    <div className={styles['sms-messages-root']}>
+    <div className={styles.smsMessagesRoot}>
       <CreateMessageDialog
         open={isCreatingMessage}
         initialMessage={messageToEdit}
@@ -134,38 +134,29 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
           isLoading={isDeleting}
         />
       )}
-      {/*{isCreatingMessage && (*/}
-      {/*  <CreateMessageModal*/}
-      {/*    currentClinic={currentClinic}*/}
-      {/*    message={messageToEdit}*/}
-      {/*    onClose={handleCloseCreateMessage}*/}
-      {/*    onCreateMessage={handleMessageCreated}*/}
-      {/*    open={isCreatingMessage}*/}
-      {/*  />*/}
-      {/*)}*/}
       <SMSMessagesHeader
         canCreate={hasSMSAlias}
         onCreate={handleStartCreateMessage}
       />
-      <div className={styles['sms-messages-root__data-wrapper']}>
+      <div className={styles.dataWrapper}>
         {hasSMSAlias && isLoading && (
-          <div className={styles['progress-wrapper']}>
+          <div className={styles.progressWrapper}>
             <CircularProgress classes={{ root: styles.progress }}/>
           </div>
         )}
         {!hasSMSAlias && (
-          <Typography classes={{ root: styles['no-alias-label'] }}>
+          <Typography classes={{ root: styles.noAliasLabel }}>
             {textForKey('no_sms_alias_message')}
             <a href='tel:37360112286'>+373 (60) 112286</a>
           </Typography>
         )}
         {!isLoading && messages.length === 0 && hasSMSAlias && (
-          <Typography classes={{ root: styles['no-alias-label'] }}>
+          <Typography classes={{ root: styles.noAliasLabel }}>
             {textForKey('no_sms_messages')}
           </Typography>
         )}
         {hasSMSAlias && !isLoading && messages.length > 0 && (
-          <TableContainer classes={{ root: styles['table-container'] }}>
+          <TableContainer classes={{ root: styles.tableContainer }}>
             <Table>
               <TableHead>
                 <TableRow>

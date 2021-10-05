@@ -9,6 +9,8 @@ import * as locales from 'react-date-range/dist/locale';
 import { getAppLanguage, textForKey } from '../../../../../../utils/localization';
 import EASModal from "../../../../common/modals/EASModal";
 import styles from './CreateHolidayModal.module.scss';
+import EASTextField from "../../../../common/EASTextField";
+import EASTextarea from "../../../../common/EASTextarea";
 
 const initialRange = {
   startDate: moment().toDate(),
@@ -47,8 +49,8 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
     setDateRanges([item.selection]);
   };
 
-  const handleDescriptionChange = (event) => {
-    setDescription(event.target.value);
+  const handleDescriptionChange = (newValue) => {
+    setDescription(newValue);
   };
 
   const handleCloseModal = () => {
@@ -84,17 +86,14 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
           ranges={dateRanges}
           locale={locales[getAppLanguage()]}
         />
-        <Form.Group controlId='description'>
-          <Form.Label>{textForKey('Description')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              value={description}
-              onChange={handleDescriptionChange}
-              as='textarea'
-              aria-label='With textarea'
-            />
-          </InputGroup>
-        </Form.Group>
+        <EASTextarea
+          type="text"
+          fieldLabel={textForKey('Description')}
+          value={description}
+          rows={4}
+          maxRows={4}
+          onChange={handleDescriptionChange}
+        />
       </div>
     </EASModal>
   );

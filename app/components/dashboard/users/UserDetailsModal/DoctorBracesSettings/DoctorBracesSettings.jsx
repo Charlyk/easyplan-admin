@@ -39,7 +39,7 @@ const DoctorBracesSettings = ({ show, data, onChange, clinicBraces }) => {
 
   const sortedBraces = sortBy(clinicBraces, item => item.name);
   const classes = clsx(
-    styles['doctor-braces-settings'],
+    styles.doctorBracesSettings,
     show ? styles.expanded : styles.collapsed,
   );
   return (

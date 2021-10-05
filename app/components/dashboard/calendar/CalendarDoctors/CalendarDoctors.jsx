@@ -7,6 +7,7 @@ import { textForKey } from '../../../../../utils/localization';
 import CalendarDoctor from './CalendarDoctor';
 import styles from './CalendarDoctors.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import EASTextField from "../../../common/EASTextField";
 
 const CalendarDoctors = (
   {
@@ -33,24 +34,20 @@ const CalendarDoctors = (
     setFilteredDoctors(newDoctors);
   }, [doctors, selectedService, searchText]);
 
-  const handleSearchTextChange = event => {
-    setSearchText(event.target.value);
+  const handleSearchTextChange = (newValue) => {
+    setSearchText(newValue);
   };
 
   return (
     <div className={styles.calendarDoctors}>
       <div className={styles['doctors-header']}>Doctors</div>
       <div className={styles['doctors-search']}>
-        <Form.Group>
-          <InputGroup>
-            <Form.Control
-              onChange={handleSearchTextChange}
-              value={searchText}
-              placeholder={`${textForKey('Search')}...`}
-              type='text'
-            />
-          </InputGroup>
-        </Form.Group>
+        <EASTextField
+          type="text"
+          value={searchText}
+          placeholder={`${textForKey('Search')}...`}
+          onChange={handleSearchTextChange}
+        />
       </div>
       <div className={styles['doctors-content']}>
         {isFetching && (

@@ -52,18 +52,18 @@
   }
 
   .title {
-    padding: 1rem;
-    height: 50px;
+    padding: 1rem 1rem .5rem 1rem;
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
     color: #34344E;
-    width: 100%;
+    width: calc(100% - 2rem);
     border-bottom: #ededed 1px solid;
   }
 
   .services-table-container {
+    width: calc(100% - 2rem);
     padding-left: 1rem;
     padding-right: 1rem;
     height: 450px;

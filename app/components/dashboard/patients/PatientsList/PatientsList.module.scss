@@ -71,10 +71,10 @@
     }
 
     .tableContainer {
-      max-height: 100%;
+      max-height: calc(100% - 4rem);
       overflow-x: hidden;
       overflow-y: auto;
-      padding-bottom: 3.25rem;
+      padding-bottom: 4rem;
     }
 
     .tableFooter {

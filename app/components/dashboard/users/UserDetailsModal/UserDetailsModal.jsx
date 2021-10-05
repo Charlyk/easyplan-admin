@@ -209,8 +209,8 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
         onCreate={handleSaveHoliday}
         onClose={handleCloseHolidayModal}
       />
-      <div className={styles['user-details-root']}>
-        <div className={styles['user-details-root__content']}>
+      <div className={styles.userDetailsRoot}>
+        <div className={styles.content}>
           {!isLoading && (
             <DoctorForm
               currentClinic={currentClinic}
@@ -227,7 +227,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
             </div>
           )}
         </div>
-        <div className={styles['user-details-root__footer']}>
+        <div className={styles.footer}>
           <Button className='cancel-button' onClick={handleModalClose}>
             {textForKey('Close')}
             <IconClose/>

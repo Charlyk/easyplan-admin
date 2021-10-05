@@ -6,9 +6,9 @@
   border-radius: 4px;
 
   .doctors-header {
-    padding: .5rem 1rem;
+    padding: 0 .5rem;
     display: flex;
-    width: 100%;
+    width: calc(100% - 2rem);
     height: 3rem;
     align-items: center;
     font-family: Inter, sans-serif;
@@ -19,19 +19,18 @@
   }
 
   .doctors-search {
-    height: 3rem;
-    width: 100%;
-    padding: .5rem 1rem;
+    width: calc(100% - 1rem);
+    padding: .5rem .5rem;
     border-bottom: #FAFAFD .1rem solid;
   }
 
   .doctors-content {
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 90%;
+    width: calc(100%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: .5rem;
 
     .loading-spinner {
       width: 2rem !important;

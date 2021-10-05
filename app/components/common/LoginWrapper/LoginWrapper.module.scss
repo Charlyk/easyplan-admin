@@ -19,7 +19,7 @@
 
   .formContainer {
     width: 60%;
-    height: 100%;
+    height: calc(100% - 1rem);
     display: flex;
     flex-direction: column;
     align-items: center;

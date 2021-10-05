@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 
 import IconDelete from '../../../../icons/iconDelete';
 import IconEdit from '../../../../icons/iconEdit';
@@ -12,14 +12,14 @@ import styles from './DoctorHolidays.module.scss';
 
 const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
   return (
-    <div className={styles['doctor-holidays__holiday']}>
+    <div className={styles.holiday}>
       <IconUmbrella />
-      <div className={styles['doctor-holidays__holiday__data']}>
-        <div className={styles['doctor-holidays__holiday__title']}>
+      <div className={styles.data}>
+        <div className={styles.title}>
           {moment(holiday.startDate).format('DD MMM yyyy')} -{' '}
           {moment(holiday.endDate).format('DD MMM yyyy')}
         </div>
-        <div className={styles['doctor-holidays__holiday__description']}>
+        <div className={styles.description}>
           {holiday.description?.length > 0
             ? holiday.description
             : textForKey('No description')}
@@ -28,7 +28,7 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
       <div
         role='button'
         tabIndex={0}
-        className={styles['doctor-holidays__edit']}
+        className={styles.edit}
         onClick={() => onEdit(holiday)}
       >
         <IconEdit />
@@ -36,7 +36,7 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
       <div
         role='button'
         tabIndex={0}
-        className={styles['doctor-holidays__delete']}
+        className={styles.delete}
         onClick={() => onDelete(holiday)}
       >
         <IconDelete />
@@ -47,15 +47,16 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
 
 const DoctorHolidays = (props) => {
   const { show, data, onCreateOrUpdate, onDeleteHoliday } = props;
-  const classes = clsx(styles['doctor-holidays'], show ? styles.expanded : styles.collapsed);
+  const classes = clsx(styles.doctorHolidays, show ? styles.expanded : styles.collapsed);
   return (
     <div className={classes}>
-      <div className={styles['doctor-holidays__header']}>
-        <div className={styles['doctor-holidays__header__title']}>
-          {textForKey('Add a holiday')}
-        </div>
+      <div className={styles.header}>
         <Button
-          variant='outline-primary'
+          variant='outlined'
+          classes={{
+            root: styles.addButton,
+            label: styles.addButtonLabel
+          }}
           onClick={() => onCreateOrUpdate(null)}
         >
           {textForKey('Add holiday')}

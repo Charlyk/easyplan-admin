@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import moment from "moment-timezone";
-import Button from "react-bootstrap/Button";
+import Button from "@material-ui/core/Button";
 
 import { getPatientPhoneRecords } from "../../../../../../middleware/api/patients";
 import { textForKey } from "../../../../../../utils/localization";
@@ -125,15 +125,27 @@ const PatientPhoneRecords = ({ patient }) => {
       </div>
       <div className={styles.footer}>
         <Button
-          variant={"outline-primary"}
+          variant="outlined"
           disabled={page === 0}
+          classes={{
+            root: styles.navButtons,
+            label: styles.label,
+            outlined: styles.outlined,
+            disabled: styles.disabled,
+          }}
           onClick={handlePrevClick}
         >
           {textForKey('Previous')}
         </Button>
         <Button
-          variant={"outline-primary"}
+          variant="outlined"
           disabled={records.length < 30}
+          classes={{
+            root: styles.navButtons,
+            label: styles.label,
+            outlined: styles.outlined,
+            disabled: styles.disabled,
+          }}
           onClick={handleNextClick}
         >
           {textForKey('Next')}

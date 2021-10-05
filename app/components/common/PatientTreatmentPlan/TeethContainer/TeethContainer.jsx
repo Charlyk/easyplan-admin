@@ -15,38 +15,42 @@ const TeethContainer = (
 ) => {
   return (
     <div className={styles.teethContainer}>
-      <TeethBlock
-        readOnly={readOnly}
-        toothServices={toothServices}
-        selectedServices={selectedServices}
-        completedServices={completedServices}
-        position='top-left'
-        onToothServiceChange={onServicesChange}
-      />
-      <TeethBlock
-        readOnly={readOnly}
-        toothServices={toothServices}
-        selectedServices={selectedServices}
-        completedServices={completedServices}
-        position='top-right'
-        onToothServiceChange={onServicesChange}
-      />
-      <TeethBlock
-        readOnly={readOnly}
-        toothServices={toothServices}
-        selectedServices={selectedServices}
-        completedServices={completedServices}
-        position='bottom-left'
-        onToothServiceChange={onServicesChange}
-      />
-      <TeethBlock
-        readOnly={readOnly}
-        toothServices={toothServices}
-        selectedServices={selectedServices}
-        completedServices={completedServices}
-        position='bottom-right'
-        onToothServiceChange={onServicesChange}
-      />
+      <div className={styles.teethColumn}>
+        <TeethBlock
+          readOnly={readOnly}
+          toothServices={toothServices}
+          selectedServices={selectedServices}
+          completedServices={completedServices}
+          position='top-left'
+          onToothServiceChange={onServicesChange}
+        />
+        <TeethBlock
+          readOnly={readOnly}
+          toothServices={toothServices}
+          selectedServices={selectedServices}
+          completedServices={completedServices}
+          position='bottom-left'
+          onToothServiceChange={onServicesChange}
+        />
+      </div>
+      <div className={styles.teethColumn}>
+        <TeethBlock
+          readOnly={readOnly}
+          toothServices={toothServices}
+          selectedServices={selectedServices}
+          completedServices={completedServices}
+          position='top-right'
+          onToothServiceChange={onServicesChange}
+        />
+        <TeethBlock
+          readOnly={readOnly}
+          toothServices={toothServices}
+          selectedServices={selectedServices}
+          completedServices={completedServices}
+          position='bottom-right'
+          onToothServiceChange={onServicesChange}
+        />
+      </div>
     </div>
   )
 }

@@ -60,7 +60,7 @@ const UserItem = (
       {!isInvitation && (
         <TableCell
           valign='middle'
-          className={styles.nameAndAvatar}
+          className={clsx(styles.nameAndAvatar, styles.tableCell)}
         >
           <div className={styles.flexContainer} style={{ height: '100%' }}>
             <div
@@ -89,7 +89,7 @@ const UserItem = (
         </TableCell>
       )}
       {!isInvitation && (
-        <TableCell valign='middle' className={styles.contact}>
+        <TableCell valign='middle' className={clsx(styles.contact, styles.tableCell)}>
           <div className={styles.flexContainer}>
             <IconPhone/>
             <Typography className={styles.contactLabel}>
@@ -103,7 +103,7 @@ const UserItem = (
       <TableCell
         valign='middle'
         colSpan={isInvitation ? 3 : 1}
-        className={styles.contact}
+        className={clsx(styles.contact, styles.tableCell)}
       >
         <div className={styles.flexContainer}>
           <IconEmail/>
@@ -112,7 +112,7 @@ const UserItem = (
           </Typography>
         </div>
       </TableCell>
-      <TableCell valign='middle'>
+      <TableCell valign='middle' className={styles.tableCell}>
         <div className={styles.actionButtons}>
           {(user.status === 'Pending' || isInvitation) && (
             <LoadingButton

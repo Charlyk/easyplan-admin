@@ -4,10 +4,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
 import IconMessages from '@material-ui/icons/Message';
-import AssessmentIcon from '@material-ui/icons/Assessment';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Nav } from 'react-bootstrap';
 import Link from 'next/link';
 
 import IconArrowDown from '../../../icons/iconArrowDown';
@@ -123,14 +126,14 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   );
 
   useEffect(() => {
-    setIsAnalyticsExpanded(isAnalyticsEnabled());
+    setIsAnalyticsExpanded(checkIsAnalyticsEnabled());
   }, [currentPath]);
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
   };
 
-  const isAnalyticsEnabled = () => {
+  const checkIsAnalyticsEnabled = () => {
     return currentPath !== '/' && currentPath.startsWith('/analytics');
   };
 
@@ -163,28 +166,17 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     (item) => item.clinicId === currentClinic.id,
   );
 
-  const analyticsClass = clsx(
-    styles['navigation__item'],
-    styles['div-item'],
-    isAnalyticsEnabled() && styles.active,
-  );
-
-  const analyticsChildClass = clsx(
-    styles['child-container'],
-    isAnalyticsExpanded && styles.expanded,
-  );
-
   return (
-    <div className={styles['main-menu']}>
+    <div className={styles.mainMenu}>
       <ClickAwayListener onClickAway={handleCompanyClose}>
         <div
           role='button'
           tabIndex={0}
           ref={buttonRef}
-          className={styles['main-menu__logo-container']}
+          className={styles.logoContainer}
           onClick={handleCompanyClick}
         >
-          <span className={styles['clinic-name']}>
+          <span className={styles.clinicName}>
             {userClinic?.clinicName || textForKey('Create clinic')}
           </span>
           <IconArrowDown/>
@@ -199,73 +191,81 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
         </div>
       </ClickAwayListener>
 
-      <Nav defaultActiveKey={currentPath} className={clsx(styles.navigation, 'flex-column')}>
+      <List className={styles.menuList}>
         {menuItems.map((item) => {
           if (!item.roles.includes(userClinic?.roleInClinic)) return null;
           if (item.type === 'group') {
             return (
-              <Nav.Item key={item.id} as='div' className={analyticsClass}>
-                <div
-                  tabIndex={0}
-                  className={styles['title-container']}
-                  role='button'
-                  onClick={handleAnalyticsClick}
+              <React.Fragment key={item.id}>
+                <ListItem
+                  classes={{ root: styles.listItem, selected: styles.selected }}
+                  onPointerUp={handleAnalyticsClick}
                 >
-                  {item.icon}
-                  {item.text}
-                </div>
-                <div className={analyticsChildClass}>
-                  {item.children.map((child) => {
-                    if (!child.roles.includes(userClinic?.roleInClinic)) return null;
-                    return (
-                      <Nav.Item key={child.href}>
-                        <Link href={child.href}>
-                          <a
-                            className={clsx(styles['link-item'], {
-                              [styles.active]: isActive(child.href)
-                            })}
+                  <ListItemIcon className={styles.itemIcon}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    classes={{ primary: styles.itemText }}
+                  />
+                </ListItem>
+                <Collapse in={isAnalyticsExpanded}>
+                  <List>
+                    {item.children.map((child) => {
+                      if (!child.roles.includes(userClinic?.roleInClinic)) return null
+                      return (
+                        <Link href={child.href} key={child.href}>
+                          <ListItem
+                            classes={{ root: clsx(styles.listItem, styles.child), selected: styles.selected }}
+                            selected={isActive(child.href)}
                           >
-                            <MenuEllipse/>
-                            {child.text}
-                          </a>
+                            <ListItemIcon className={clsx(styles.itemIcon, styles.child)}>
+                              <MenuEllipse/>
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={child.text}
+                              classes={{ primary: clsx(styles.itemText, styles.child) }}
+                            />
+                          </ListItem>
                         </Link>
-                      </Nav.Item>
-                    );
-                  })}
-                </div>
-              </Nav.Item>
-            );
+                      )
+                    })}
+                  </List>
+                </Collapse>
+              </React.Fragment>
+            )
           } else {
             return (
-              <Nav.Item key={item.id}>
-                <Link href={item.href}>
-                  <a
-                    className={
-                      clsx(styles['navigation__item'], styles['link-item'], {
-                        [styles.active]: isActive(item.href)
-                      })
-                    }
-                  >
+              <Link href={item.href}>
+                <ListItem
+                  classes={{ root: styles.listItem, selected: styles.selected }}
+                  selected={isActive(item.href)}
+                >
+                  <ListItemIcon className={styles.itemIcon}>
                     {item.icon}
-                    {item.text}
-                  </a>
-                </Link>
-              </Nav.Item>
-            );
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    classes={{ primary: styles.itemText }}
+                  />
+                </ListItem>
+              </Link>
+            )
           }
         })}
-      </Nav>
+      </List>
+
       {currentClinic.isImporting && (
         <Box
-          className={styles['import-data-wrapper']}
+          className={styles.importDataWrapper}
           position='absolute'
           bottom='4rem'
           left='1rem'
           display='flex'
           alignItems='center'
         >
-          <CircularProgress classes={{ root: styles['import-progress-bar'] }}/>
-          <Typography classes={{ root: styles['import-data-label'] }}>
+          <CircularProgress classes={{ root: styles.importProgressBar }}/>
+          <Typography classes={{ root: styles.importDataLabel }}>
             {textForKey('Importing data in progress')}
           </Typography>
         </Box>

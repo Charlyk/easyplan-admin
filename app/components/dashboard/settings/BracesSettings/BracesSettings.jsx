@@ -81,7 +81,7 @@ const BracesSettings = ({ currentClinic: clinic }) => {
             <th width={42} align='center'>
               {''}
             </th>
-            <th>{textForKey('Name')}</th>
+            <th align="left">{textForKey('Name')}</th>
             <th width={150} align='right'>
               {textForKey('Price')}
             </th>

@@ -23,9 +23,6 @@ const Week = (
     authToken,
   }
 ) => {
-  useEffect(() => {
-    console.log(doctorId);
-  }, [doctorId])
   const viewDate = moment(date).toDate();
   return (
     <CalendarContainer
@@ -77,7 +74,6 @@ export const getServerSideProps = async ({ req, res, query }) => {
 
     // check if doctor id is present in query
     let doctorId = queryDoctorId;
-    console.log('test', queryDoctorId);
     if (doctorId == null) {
       doctorId = doctors[0]?.id ?? 0;
     }

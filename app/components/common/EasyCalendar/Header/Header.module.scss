@@ -1,8 +1,8 @@
 .headerRoot {
-  width: 100%;
+  width: calc(100% - 26px);
   height: 1.8rem;
   display: flex;
-  padding-left: 2.8rem;
+  padding-left: 30px;
   align-items: center;
   z-index: 200;
   overflow: hidden;

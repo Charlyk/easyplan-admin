@@ -132,6 +132,7 @@ export default React.memo(AppointmentsCalendar, areComponentPropsEqual);
 AppointmentsCalendar.propTypes = {
   isUploading: PropTypes.bool,
   doctor: PropTypes.object,
+  doctorId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   viewDate: PropTypes.instanceOf(Date),
   onDateChange: PropTypes.func,
   onViewDateChange: PropTypes.func,

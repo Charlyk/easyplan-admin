@@ -1,22 +1,23 @@
-.service-details-modal {
+.serviceDetailsModal {
   display: flex;
   flex-direction: column;
   background-color: #FAFAFD;
   height: calc(100% - 121px);
+  width: 100%;
 
-  &__header {
+  .header {
     width: 100%;
     padding: .5rem;
     background-color: #FFFFFF;
 
-    &__close-container {
+    .closeContainer {
       display: flex;
       width: 100%;
       align-items: flex-end;
       justify-content: flex-end;
       outline: none;
 
-      .close-btn {
+      .closeBtn {
         outline: none;
         cursor: pointer;
 
@@ -27,7 +28,7 @@
       }
     }
 
-    &__title {
+    .title {
       margin-left: 1.3rem;
       margin-top: -.8rem;
       font-family: Inter, sans-serif;
@@ -37,7 +38,7 @@
       line-height: 48px;
     }
 
-    &__breadcrumb-container {
+    .breadcrumbContainer {
       margin: .5rem 1.2rem 1rem;
       display: flex;
       flex-direction: row;
@@ -50,7 +51,7 @@
       }
     }
 
-    &__breadcrumb {
+    .breadcrumb {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -64,16 +65,17 @@
     }
   }
 
-  &__data {
-    padding: 1rem;
+  .data {
     flex: 1;
+    padding: 1rem;
+    width: calc(100% - 2rem);
     overflow-y: scroll;
   }
 
-  &__footer {
-    width: 100%;
+  .footer {
+    width: calc(100% - 2rem);
     display: flex;
-    height: 6rem;
+    height: 2rem;
     z-index: 2;
     padding: 2rem 1rem;
     background-color: white;

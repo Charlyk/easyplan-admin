@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: calc(100% - 2rem);
   background: #FFFFFF;
   box-shadow: 0 -1px 90px -5px rgba(239, 242, 251, 0.8);
   border-radius: .1rem;

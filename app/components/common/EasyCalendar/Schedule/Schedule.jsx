@@ -103,8 +103,8 @@ const Schedule = (
           ? 0
           : `calc(${schedule.offset} * ${offsetDistance}px)`,
         width: isHighlighted
-          ? '99.5%'
-          : `calc(99.5% - ${schedule.offset} * ${offsetDistance}px)`,
+          ? 'calc(100% - .3rem)'
+          : `calc(100% - .3rem - ${schedule.offset} * ${offsetDistance}px)`,
         top: itemRect.top,
         zIndex: isHighlighted ? 500 : 100 + index,
         height: itemRect.height,

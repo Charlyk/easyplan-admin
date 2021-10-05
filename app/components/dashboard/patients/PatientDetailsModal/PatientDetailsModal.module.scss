@@ -179,10 +179,10 @@
         }
 
         :global(.title-label) {
-          width: 100%;
+          width: calc(100% - 2rem);
           background-color: white;
           border-bottom: #ededed 1px solid;
-          padding: 1rem 1.5rem;
+          padding: 1rem 1rem;
           font-family: Inter, sans-serif;
           font-style: normal;
           font-weight: 600;

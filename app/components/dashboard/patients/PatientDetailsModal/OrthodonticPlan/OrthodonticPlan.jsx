@@ -31,6 +31,7 @@ import {
   fallenBracketsList
 } from './OrthodonticPlan.reducer';
 import styles from './OrthodonticPlan.module.scss';
+import EASTextarea from "../../../../common/EASTextarea";
 
 const OrthodonticPlan = (
   {
@@ -204,9 +205,8 @@ const OrthodonticPlan = (
     );
   };
 
-  const handleNoteChange = event => {
-    const newNote = event.target.value;
-    updatePlan({ note: newNote });
+  const handleNoteChange = (newValue) => {
+    updatePlan({ note: newValue });
   };
 
   const saveTreatmentPlan = async (patientId, requestBody) => {
@@ -251,22 +251,22 @@ const OrthodonticPlan = (
   const classRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles['group-subtitle']}>{textForKey('Class')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('Class')}</span>
       </td>
       <td valign='top'>
-        <div className={styles['options-container']}>
+        <div className={styles.optionsContainer}>
           {diagnosisClass.map(item => (
             <div
               role='button'
               tabIndex={0}
               onClick={() => handleClassChange(item)}
               className={clsx(
-                styles['option-button'],
+                styles.optionButton,
                 classes.includes(item) && styles.selected,
               )}
               key={item}
             >
-              <span className={styles['option-text']}>{item}</span>
+              <span className={styles.optionText}>{item}</span>
             </div>
           ))}
         </div>
@@ -277,22 +277,22 @@ const OrthodonticPlan = (
   const occlusionRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles['group-subtitle']}>{textForKey('Occlusion')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('Occlusion')}</span>
       </td>
       <td valign='top'>
-        <div className={styles['options-container']}>
+        <div className={styles.optionsContainer}>
           {diagnosisOcclusion.map(item => (
             <div
               role='button'
               tabIndex={0}
               onClick={() => handleOcclusionChange(item)}
               className={clsx(
-                styles['option-button'],
+                styles.optionButton,
                 occlusions.includes(item) && styles.selected,
               )}
               key={item}
             >
-              <span className={styles['option-text']}>{textForKey(item)}</span>
+              <span className={styles.optionText}>{textForKey(item)}</span>
             </div>
           ))}
         </div>
@@ -303,22 +303,22 @@ const OrthodonticPlan = (
   const fallenBracketsRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles['group-subtitle']}>{textForKey('Fallen brackets')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('Fallen brackets')}</span>
       </td>
       <td valign='top'>
-        <div className={styles['options-container']}>
+        <div className={styles.optionsContainer}>
           {fallenBracketsList.map(item => (
             <div
               role='button'
               tabIndex={0}
               onClick={() => handleFallenBracketsChange(item)}
               className={clsx(
-                styles['option-button'],
+                styles.optionButton,
                 fallenBraces.includes(item) && styles.selected,
               )}
               key={item}
             >
-              <span className={styles['option-text']}>{item}</span>
+              <span className={styles.optionText}>{item}</span>
             </div>
           ))}
         </div>
@@ -329,22 +329,22 @@ const OrthodonticPlan = (
   const radiographRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles['group-subtitle']}>{textForKey('Radiografie')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('Radiografie')}</span>
       </td>
       <td valign='top'>
-        <div className={styles['options-container']}>
+        <div className={styles.optionsContainer}>
           {radiographic.map(item => (
             <div
               role='button'
               tabIndex={0}
               onClick={() => handleRadiographChange(item)}
               className={clsx(
-                styles['option-button'],
+                styles.optionButton,
                 radiographs.includes(item) && styles.selected,
               )}
               key={item}
             >
-              <span className={styles['option-text']}>{textForKey(item)}</span>
+              <span className={styles.optionText}>{textForKey(item)}</span>
             </div>
           ))}
         </div>
@@ -355,22 +355,22 @@ const OrthodonticPlan = (
   const bracesRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles['group-subtitle']}>{textForKey('Braces')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('Braces')}</span>
       </td>
       <td valign='top'>
-        <div className={styles['options-container']}>
+        <div className={styles.optionsContainer}>
           {braces.map(item => (
             <div
               role='button'
               tabIndex={0}
               onClick={() => handleBracesChange(item)}
               className={clsx(
-                styles['option-button'],
+                styles.optionButton,
                 selectedBraces.some(it => it.id === item.id) && styles.selected,
               )}
               key={item.id}
             >
-              <span className={styles['option-text']}>{textForKey(item.name)}</span>
+              <span className={styles.optionText}>{textForKey(item.name)}</span>
             </div>
           ))}
         </div>
@@ -381,22 +381,22 @@ const OrthodonticPlan = (
   const treatmentTypeRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles['group-subtitle']}>{textForKey('Service type')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('Service type')}</span>
       </td>
       <td valign='top'>
-        <div className={styles['options-container']}>
+        <div className={styles.optionsContainer}>
           {services.map(item => (
             <div
               role='button'
               tabIndex={0}
               onClick={() => handleTreatmentTypesChange(item)}
               className={clsx(
-                styles['option-button'],
+                styles.optionButton,
                 selectedServices.some(it => it.id === item.id) && styles.selected,
               )}
               key={item.id}
             >
-              <span className={styles['option-text']}>{item.name}</span>
+              <span className={styles.optionText}>{item.name}</span>
             </div>
           ))}
         </div>
@@ -407,10 +407,10 @@ const OrthodonticPlan = (
   const molarCaninRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles['group-subtitle']}>{textForKey('Angle Class')}</span>
+        <span className={styles.groupSubtitle}>{textForKey('Angle Class')}</span>
       </td>
       <td valign='top'>
-        <div className={styles['options-container']}>
+        <div className={styles.optionsContainer}>
           <Form.Control
             disabled={!isDoctor}
             as='select'
@@ -474,7 +474,7 @@ const OrthodonticPlan = (
   );
 
   return (
-    <div className={styles['patient-treatment-plans']}>
+    <div className={styles.patientTreatmentPlans}>
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Orthodontic plan')}
       </Typography>
@@ -485,8 +485,8 @@ const OrthodonticPlan = (
       )}
       {!isLoading && (
         <React.Fragment>
-          <div className={styles['treatment-plan-modal-content']}>
-            <div className={styles['tabs-container']}>
+          <div className={styles.treatmentPlanModalContent}>
+            <div className={styles.tabsContainer}>
               <EasyTab
                 onClick={() => handlePlanTypeChange(PlanType.mandible)}
                 title={textForKey('Mandible')}
@@ -502,7 +502,7 @@ const OrthodonticPlan = (
               <tbody>
               <tr>
                 <td>
-                    <span className={styles['group-title']}>
+                    <span className={styles.groupTitle}>
                       {textForKey('Diagnosis')}
                     </span>
                 </td>
@@ -516,23 +516,19 @@ const OrthodonticPlan = (
               {fallenBracketsRow}
               </tbody>
             </table>
-            <Form.Group controlId='note'>
-              <Form.Label>{textForKey('Notes')}</Form.Label>
-              <InputGroup>
-                <FormControl
-                  disabled={!isDoctor}
-                  onChange={handleNoteChange}
-                  value={bracketsPlan[planType].note}
-                  as='textarea'
-                  aria-label={textForKey('Enter note')}
-                />
-              </InputGroup>
-            </Form.Group>
+            <EASTextarea
+              disabled={!isDoctor}
+              value={bracketsPlan[planType].note}
+              fieldLabel={textForKey('Notes')}
+              rows={4}
+              maxRows={5}
+              onChange={handleNoteChange}
+            />
           </div>
         </React.Fragment>
       )}
       {isDoctor && !isLoading && (
-        <div className={styles['patient-treatment-plans__actions']}>
+        <div className={styles.actions}>
           <LoadingButton
             isLoading={isSaving}
             className='positive-button'

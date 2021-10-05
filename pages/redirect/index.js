@@ -19,7 +19,6 @@ const Redirect = () => {
       const response = await getCurrentUser();
       const [subdomain] = window.location.host.split('.');
       const redirectUrl = getRedirectUrlForUser(response.data, subdomain);
-      console.log(redirectUrl)
       if (redirectUrl == null || router.asPath === redirectUrl) {
         return;
       }

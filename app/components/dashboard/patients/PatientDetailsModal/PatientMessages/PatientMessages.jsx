@@ -19,6 +19,7 @@ import {
   charactersRegex
 } from './PatientMessages.reducer';
 import styles from './PatientMessages.module.scss';
+import EASTextField from "../../../../common/EASTextField";
 
 const PatientMessages = ({ patient }) => {
   const [state, localDispatch] = useReducer(reducer, initialState);
@@ -49,8 +50,8 @@ const PatientMessages = ({ patient }) => {
     }
   };
 
-  const handleNewMessageChange = (event) => {
-    localDispatch(actions.setNewMessageText(event.target.value));
+  const handleNewMessageChange = (newValue) => {
+    localDispatch(actions.setNewMessageText(newValue));
   };
 
   const handleInputKeyDown = (event) => {
@@ -81,7 +82,7 @@ const PatientMessages = ({ patient }) => {
   };
 
   return (
-    <div className={styles['patients-messages-list']}>
+    <div className={styles.patientsMessagesList}>
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Messages')}
       </Typography>
@@ -93,24 +94,21 @@ const PatientMessages = ({ patient }) => {
       {state.isFetching && (
         <CircularProgress classes={{ root: 'circular-progress-bar' }} />
       )}
-      <div className={styles['patients-messages-list__data']}>
+      <div className={styles.data}>
         {state.messages.map((item) => (
           <PatientMessage key={item.id} message={item} />
         ))}
       </div>
-      <Box display='flex' width='100%' className={styles['patients-messages-list__actions']}>
-        <Form.Group controlId='newMessageText'>
-          <InputGroup>
-            <Form.Control
-              isInvalid={!isValidMessage}
-              onKeyDown={handleInputKeyDown}
-              value={state.newMessageText}
-              type='text'
-              placeholder={`${textForKey('Enter new message')}...`}
-              onChange={handleNewMessageChange}
-            />
-          </InputGroup>
-        </Form.Group>
+      <Box display='flex' width='100%' className={styles.actions}>
+        <EASTextField
+          type="text"
+          containerClass={styles.field}
+          placeholder={textForKey('Enter new message')}
+          value={state.newMessageText}
+          onChange={handleNewMessageChange}
+          onKeyDown={handleInputKeyDown}
+          error={!isValidMessage}
+        />
         <LoadingButton
           isLoading={state.isSendingMessage}
           disabled={
@@ -118,7 +116,6 @@ const PatientMessages = ({ patient }) => {
             state.newMessageText.length === 0 ||
             !isValidMessage
           }
-          className='positive-button'
           onClick={handleSendMessage}
         >
           {textForKey('Send message')}

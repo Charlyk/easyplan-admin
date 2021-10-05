@@ -179,9 +179,9 @@ const ServiceDetailsModal = ({ currentClinic }) => {
         service == null ? textForKey('Add service') : textForKey('Edit service')
       }
     >
-      <div className={styles['service-details-modal']}>
+      <div className={styles.serviceDetailsModal}>
         {open && (
-          <div className={styles['service-details-modal__data']}>
+          <div className={styles.data}>
             <ServiceInformation
               currentClinic={currentClinic}
               clinicCurrency={clinicCurrency}
@@ -204,7 +204,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
           </div>
         )}
 
-        <div className={styles['service-details-modal__footer']}>
+        <div className={styles.footer}>
           <Button
             className={styles.closeButton}
             disabled={isLoading}

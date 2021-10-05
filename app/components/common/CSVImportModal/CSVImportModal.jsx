@@ -151,12 +151,12 @@ const CSVImportModal = ({ open, title, iconTitle, iconSubtitle, importBtnTitle, 
     >
       <div className={styles.modalBody}>
         {data.length === 0 ? (
-          <Box padding="16px" width="25%" height="250px" alignSelf="center">
+          <Box padding="16px" alignSelf="center">
             <CSVReader
               noDrag
               addRemoveButton
               accept="text/csv, .csv"
-              style={{ margin: '16px !important' }}
+              style={{ margin: '16px !important', padding: 0 }}
               onDrop={handleOnDrop}
               config={{
                 preview: 10

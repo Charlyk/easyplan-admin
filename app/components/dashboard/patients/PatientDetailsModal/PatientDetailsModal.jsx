@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Modal from '@material-ui/core/Modal';
 import MenuList from '@material-ui/core/MenuList';
 import MuiMenuItem from '@material-ui/core/MenuItem';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from "@material-ui/core/Paper";
@@ -19,7 +18,6 @@ import {
   togglePatientsListUpdate,
 } from '../../../../../redux/actions/actions';
 import { setAddPaymentModal } from '../../../../../redux/actions/addPaymentModalActions';
-import { textForKey } from '../../../../../utils/localization';
 import { getPatientDetails } from "../../../../../middleware/api/patients";
 import AppointmentNotes from './AppointmentNotes';
 import PatientAppointments from './PatientAppointments';

@@ -81,7 +81,7 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
         tabIndex={0}
         onClick={() => handleDayClick(day)}
         className={clsx(styles['item-data-container'], day.isSameDay && styles['current-date'])}
-        style={{ height: calendarRect?.height / rowsCount }}
+        style={{ height: calendarRect?.height / rowsCount - 3 }}
         key={`${day.date}-${day.isCurrent}-${day.month}`}
       >
         <span

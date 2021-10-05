@@ -36,9 +36,8 @@ const DoctorWorkHours = props => {
     onChange(newDays);
   };
 
-  const classes = clsx(styles['doctor-work-hours'], show ? styles.expanded : styles.collapsed);
   return (
-    <div className={classes} style={{ height: show ? days.length * 48 : 0 }}>
+    <div className={styles.doctorWorkHours}>
       <table>
         <tbody>
         {data.workdays.map((day, index) => (

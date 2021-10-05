@@ -1,4 +1,4 @@
-.doctor-holidays {
+.doctorHolidays {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -15,17 +15,32 @@
     margin-bottom: 0;
   }
 
-  &__header {
-    width: 100%;
+  .header {
+    width: calc(100% - 2rem);
     display: flex;
     margin-top: .5rem;
     flex: 1;
     align-items: center;
     justify-content: space-between;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 
-    &__title {
+    .addButton {
+      width: 100%;
+      height: 35px;
+      border-color: #3A83DC;
+      color: #3A83DC;
+
+      .addButtonLabel {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        color: currentColor;
+      }
+    }
+
+    .title {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -39,7 +54,7 @@
     }
   }
 
-  &__holiday {
+  .holiday {
     background: #EDFDF4;
     border: 1px solid #7DD7C8;
     box-sizing: border-box;
@@ -54,7 +69,7 @@
     align-items: center;
     justify-content: flex-start;
 
-    &__title {
+    .title {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -64,7 +79,7 @@
       color: #34354C;
     }
 
-    &__description {
+    .description {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -74,7 +89,7 @@
       color: #7DD7C8;
     }
 
-    &__data {
+    .data {
       flex: 1;
       margin-left: 1rem;
       display: flex;
@@ -82,7 +97,7 @@
     }
   }
 
-  &__delete {
+  .delete {
     margin-left: .3rem;
     outline: none;
     cursor: pointer;
@@ -99,7 +114,7 @@
     }
   }
 
-  &__edit {
+  .edit {
     outline: none;
     cursor: pointer;
     display: flex;

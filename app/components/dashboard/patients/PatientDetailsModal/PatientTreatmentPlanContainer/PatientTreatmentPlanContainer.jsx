@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { textForKey } from "../../../../../../utils/localization";
@@ -9,6 +8,7 @@ import { fetchDoctorScheduleDetails } from "../../../../../../middleware/api/sch
 import getTreatmentPlanURL from "../../../../../utils/getTreatmentPlanURL";
 import PatientTreatmentPlan from "../../../../common/PatientTreatmentPlan";
 import styles from './PatientTreatmentPlanContainer.module.scss';
+import EASTextField from "../../../../common/EASTextField";
 
 const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, patientId }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,8 +36,8 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
     window.open(planUrl, '_blank');
   }
 
-  const handleGuideNameChange = (event) => {
-    setGuideName(event.target.value);
+  const handleGuideNameChange = (newValue) => {
+    setGuideName(newValue);
   }
 
   return (
@@ -63,16 +63,17 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
       </div>
       {!isLoading && (
         <div className={styles.footer}>
-          <Form.Group className={styles.guideNameField}>
-            <Form.Label>{textForKey('Enter guide name')}</Form.Label>
-            <Form.Control
-              onChange={handleGuideNameChange}
-              value={guideName}
-              aria-label={textForKey('Enter guide name')}
-            />
-          </Form.Group>
+          <EASTextField
+            fieldLabel={textForKey('Enter guide name')}
+            value={guideName}
+            containerClass={styles.guideNameField}
+            onChange={handleGuideNameChange}
+          />
           <Button
-            className='positive-button'
+            classes={{
+              root: styles.printBtn,
+              label: styles.label
+            }}
             onPointerUp={handlePrintTreatmentPlan}
           >
             {textForKey('Print plan')}

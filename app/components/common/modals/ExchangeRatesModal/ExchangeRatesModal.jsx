@@ -164,7 +164,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
       onPrimaryClick={handleSaveRates}
     >
       {!isLoading && (
-        <TableContainer style={{ padding: '16px' }}>
+        <TableContainer className={styles.tableContainer}>
           <Table>
             <TableHead>
               <TableRow>
