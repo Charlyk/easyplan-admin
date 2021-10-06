@@ -197,7 +197,6 @@ const CalendarContainer = (
   };
 
   const handleAppointmentModalOpen = (doctor, startHour, endHour, selectedDate = null) => {
-    console.log(selectedDoctor);
     dispatch(
       setAppointmentModal({
         open: true,

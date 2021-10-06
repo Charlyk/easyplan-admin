@@ -23,14 +23,14 @@ export const getServerSideProps = async ({ req }) => {
     const response = await getCurrentUser(req.headers);
     props.currentUser = response.data;
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
   }
 
   try {
     const response = await getClinicDetails(null, req.headers);
     props.currentClinic = response.data;
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
   }
 
   return { props };
