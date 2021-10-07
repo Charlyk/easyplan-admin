@@ -9,11 +9,11 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Typography from '@material-ui/core/Typography';
 import DoneIcon from '@material-ui/icons/Done';
+import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -275,7 +275,7 @@ const AppointmentDetails = (
   const statusesList = (
     <Popper
       disablePortal
-      className={styles['statuses-popper-root']}
+      className={styles.statusesPopperRoot}
       anchorEl={statusesAnchor.current}
       open={showStatuses}
       placement='bottom'
@@ -294,12 +294,12 @@ const AppointmentDetails = (
                     className={styles.item}
                     key={status.id}
                   >
-                    <div className={styles['name-and-icon']}>
+                    <div className={styles.nameAndIcon}>
                       {status.icon}
                       {status.name}
                     </div>
                     {scheduleStatus.id === status.id && (
-                      <div className={styles['checkmark-wrapper']}>
+                      <div className={styles.checkmarkWrapper}>
                         <DoneIcon/>
                       </div>
                     )}
@@ -316,7 +316,7 @@ const AppointmentDetails = (
   return (
     <div
       className={clsx(
-        styles['appointment-details-root'],
+        styles.appointmentDetailsRoot,
         {
           [styles.urgent]: details?.isUrgent || details?.urgent
         },
@@ -346,17 +346,17 @@ const AppointmentDetails = (
         />
       )}
       {statusesList}
-      <div className={styles['header-wrapper']}>
+      <div className={styles.headerWrapper}>
         <Box display="flex" alignItems="center">
           <div
             role='button'
             tabIndex={0}
             onClick={onClose}
-            className={styles['close-button']}
+            className={styles.closeButton}
           >
             <IconClose/>
           </div>
-          <span className={styles['schedule-title']}>
+          <span className={styles.scheduleTitle}>
             {patientName}:{' '}
             <span style={{ color: serviceColor }}>{serviceName}</span>
           </span>
@@ -371,20 +371,20 @@ const AppointmentDetails = (
           </IconButton>
         )}
       </div>
-      <div className={styles['content-wrapper']}>
+      <div className={styles.contentWrapper}>
         {isLoading && (
           <div className='progress-bar-wrapper'>
             <CircularProgress className='circular-progress-bar'/>
           </div>
         )}
         {!isLoading && details != null && (
-          <div className={styles['info-wrapper']}>
+          <div className={styles.infoWrapper}>
             <div
               ref={statusesAnchor}
               role='button'
               tabIndex={0}
               onClick={!isFinished ? openStatusesList : () => null}
-              className={styles['schedule-status']}
+              className={styles.scheduleStatus}
               style={{
                 color: scheduleStatus.color,
                 backgroundColor: `${scheduleStatus.color}1A`,
@@ -394,12 +394,12 @@ const AppointmentDetails = (
               {scheduleStatus.name}
               <IconArrowDown fill={scheduleStatus.color}/>
             </div>
-            <div className={styles['schedule-info-wrapper']}>
+            <div className={styles.scheduleInfoWrapper}>
               <table>
                 <tbody>
                 <tr>
                   <td colSpan={2}>
-                    <div className={styles['group-title']}>{textForKey('Info')}</div>
+                    <div className={styles.groupTitle}>{textForKey('Info')}</div>
                   </td>
                 </tr>
                 <tr>
@@ -407,6 +407,7 @@ const AppointmentDetails = (
                     style={{
                       width: '35%',
                       paddingRight: '1rem',
+                      userSelect: 'none',
                     }}
                   >
                     {textForKey('Doctor')}:
@@ -414,7 +415,7 @@ const AppointmentDetails = (
                   <td>{details.doctor.fullName}</td>
                 </tr>
                 <tr>
-                  <td style={{ paddingRight: '1rem' }}>
+                  <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {textForKey('Date')}:
                   </td>
                   <td>
@@ -424,7 +425,7 @@ const AppointmentDetails = (
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ paddingRight: '1rem' }}>
+                  <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {textForKey('Hour')}:
                   </td>
                   <td>
@@ -433,13 +434,13 @@ const AppointmentDetails = (
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ paddingRight: '1rem' }}>
+                  <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {upperFirst(textForKey('Created by'))}:
                   </td>
                   <td>{details.createdBy.fullName}</td>
                 </tr>
                 <tr>
-                  <td style={{ paddingRight: '1rem' }}>
+                  <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {upperFirst(textForKey('Created at'))}:
                   </td>
                   <td>
@@ -448,7 +449,7 @@ const AppointmentDetails = (
                 </tr>
                 {scheduleStatus.id === 'Canceled' && details.canceledReason != null && (
                   <tr>
-                    <td style={{ paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                       {upperFirst(textForKey('Canceled reason'))}:
                     </td>
                     <td>{details.canceledReason}</td>
@@ -456,7 +457,7 @@ const AppointmentDetails = (
                 )}
                 {scheduleStatus.id === 'Late' && details.delayTime > 0 && (
                   <tr>
-                    <td style={{ paddingRight: '1rem' }}>
+                    <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                       {upperFirst(textForKey('delaytime'))}:
                     </td>
                     <td>{details.delayTime} min</td>
@@ -464,7 +465,7 @@ const AppointmentDetails = (
                 )}
                 {details.noteText?.length > 0 && (
                   <tr>
-                    <td valign='top' style={{ paddingRight: '1rem' }}>
+                    <td valign='top' style={{ paddingRight: '1rem', userSelect: 'none', }}>
                       {textForKey('Note')}:
                     </td>
                     <td valign='top'>{details.noteText}</td>
@@ -472,11 +473,11 @@ const AppointmentDetails = (
                 )}
                 <tr>
                   <td colSpan={2}>
-                    <div className={styles['group-title']}>{textForKey('Patient')}</div>
+                    <div className={styles.groupTitle}>{textForKey('Patient')}</div>
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ paddingRight: '1rem' }}>
+                  <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {textForKey('Name')}:
                   </td>
                   <td>
@@ -484,30 +485,31 @@ const AppointmentDetails = (
                       role='button'
                       tabIndex={0}
                       onClick={handlePatientClick}
-                      className={styles['patient-name']}
+                      className={styles.patientName}
                     >
                       {details.patient.fullName}
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ paddingRight: '1rem' }}>
+                  <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {textForKey('Phone')}:
                   </td>
                   <td>
                     <a
                       href={`tel:${details.patient.countryCode}${details.patient.phoneNumber}`}
+                      className={styles.patientLink}
                     >
                       {`+${details.patient.countryCode}${details.patient.phoneNumber}`}
                     </a>
                   </td>
                 </tr>
                 <tr>
-                  <td style={{ paddingRight: '1rem' }}>
+                  <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {textForKey('Email')}:
                   </td>
                   <td>
-                    <a href={`mailto:${details.patient.email}`}>
+                    <a href={`mailto:${details.patient.email}`} className={styles.patientLink}>
                       {details.patient.email}
                     </a>
                   </td>
@@ -515,8 +517,8 @@ const AppointmentDetails = (
                 </tbody>
               </table>
             </div>
-            <div className={styles['debts-wrapper']}>
-              <div className={styles['group-title']}>{textForKey('Debts')}</div>
+            <div className={styles.debtsWrapper}>
+              <div className={styles.groupTitle}>{textForKey('Debts')}</div>
               <table>
                 <thead>
                 <tr>
@@ -529,25 +531,30 @@ const AppointmentDetails = (
                 <tbody>
                 {details.patient.debts.map((item) => (
                   <tr key={item.id}>
-                    <td align='left' className={styles['services-cell']}>
-                      <Typography noWrap classes={{ root: styles['services-label'] }}>
+                    <td align='left' className={styles.servicesCell}>
+                      <Typography noWrap classes={{ root: styles.servicesLabel }}>
                         {item.services.join(', ')}
                       </Typography>
                     </td>
-                    <td align='left' className={styles['totals-cell']}>
+                    <td align='left' className={styles.totalsCell}>
                       <Typography
                         noWrap
-                        classes={{ root: styles['clinic-name-label'] }}
+                        classes={{ root: styles.clinicNameLabel }}
                       >
                         {item.clinicName}
                       </Typography>
                     </td>
-                    <td align='right' className={styles['remained-cell']}>
+                    <td align='right' className={styles.remainedCell}>
                       {formattedAmount(item.remainedAmount, item.currency)}
                     </td>
-                    <td align='right' className={styles['actions-cell']}>
+                    <td align='right' className={styles.actionsCell}>
                       <Button
-                        variant='outline-primary'
+                        disableRipple
+                        variant='text'
+                        classes={{
+                          root: styles.btnOutlinePrimary,
+                          label: styles.label,
+                        }}
                         onClick={() => handlePayDebt(item)}
                       >
                         {textForKey('Pay')}
@@ -558,7 +565,7 @@ const AppointmentDetails = (
                 {details.patient.debts.length === 0 && (
                   <tr>
                     <td colSpan={4} align='center'>
-                      <div className={styles['no-debts-label']}>
+                      <div className={styles.noDebtsLabel}>
                         {textForKey('No debts found')}
                       </div>
                     </td>
@@ -570,7 +577,7 @@ const AppointmentDetails = (
           </div>
         )}
       </div>
-      <div className={styles['footer-wrapper']}>
+      <div className={styles.footerWrapper}>
         <Box width='100%' display='flex'>
           <Button
             className='cancel-button'
@@ -602,7 +609,7 @@ const AppointmentDetails = (
             target='_blank'
             rel='noreferrer'
           >
-            <span className={styles['print-label']}>{textForKey('Print receipt')}</span>
+            <span className={styles.printLabel}>{textForKey('Print receipt')}</span>
           </a>
         )}
       </div>

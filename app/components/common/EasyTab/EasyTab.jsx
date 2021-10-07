@@ -5,14 +5,14 @@ import styles from './EasyTab.module.scss';
 
 const EasyTab = ({ title, selected, highlighted, onClick }) => {
   const tabClass = clsx(
-    styles['easy-tab'],
+    styles.easyTab,
     selected ? styles.selected : styles.default,
     highlighted && styles.highlighted,
   );
   return (
-    <div role='button' tabIndex={0} onClick={onClick} className={tabClass}>
+    <div tabIndex={0} onClick={onClick} className={tabClass}>
       {title}
-      <div className={styles['tab-indicator']} />
+      <div className={styles.tabIndicator} />
     </div>
   );
 };

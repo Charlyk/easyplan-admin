@@ -1,4 +1,4 @@
-.easy-tab {
+.easyTab {
   outline: none;
   margin-right: 1.5rem;
   cursor: pointer;
@@ -11,7 +11,7 @@
   font-weight: 600;
   font-size: 12px;
 
-  .tab-indicator {
+  .tabIndicator {
     margin-top: .2rem;
     width: .25rem;
     height: .25rem;
@@ -21,7 +21,7 @@
   &:hover {
     color: #3A83DC !important;
 
-    .tab-indicator {
+    .tabIndicator {
       background-color: #3A83DC !important;
     }
   }
@@ -29,7 +29,7 @@
   &.selected {
     color: #3A83DC;
 
-    .tab-indicator {
+    .tabIndicator {
       background-color: #3A83DC;
     }
   }
@@ -37,13 +37,13 @@
   &.default {
     color: #B8DBF8;
 
-    .tab-indicator {
+    .tabIndicator {
       background-color: #B8DBF8;
     }
   }
 
   &.highlighted {
-    .tab-indicator {
+    .tabIndicator {
       background-color: #ec3276 !important;
     }
   }

@@ -200,6 +200,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                 <ListItem
                   classes={{ root: styles.listItem, selected: styles.selected }}
                   onPointerUp={handleAnalyticsClick}
+                  selected={checkIsAnalyticsEnabled()}
                 >
                   <ListItemIcon className={styles.itemIcon}>
                     {item.icon}

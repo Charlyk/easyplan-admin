@@ -7,7 +7,7 @@
 
   .dataContainer {
     height: 100%;
-    width: 89%;
+    width: calc(100% - 180px);
     display: flex;
     flex-direction: column;
     overflow: auto;
