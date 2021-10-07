@@ -14,14 +14,13 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector
 } from '../../../../../redux/selectors/scheduleSelector';
-import { wrapper } from "../../../../../store";
 import { fetchSchedulesHours } from "../../../../../middleware/api/schedules";
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import isOutOfBounds from "../../../../utils/isOutOfBounds";
-import EasyCalendar from "../../../common/EasyCalendar";
 import { actions, reducer, initialState } from './CalendarDayView.reducer'
 import styles from './CalendarDayView.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
+const EasyCalendar = dynamic(() => import('../../../common/EasyCalendar'));
 const AddPauseModal = dynamic(() => import('../modals/AddPauseModal'));
 
 const moment = extendMoment(Moment);

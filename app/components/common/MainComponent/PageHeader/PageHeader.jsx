@@ -110,9 +110,8 @@ const PageHeader = (
         </div>
         <div className={styles.avatarContainer}>
           {user?.avatar ? (
-            <Image
-              width={50}
-              height={50}
+            <img
+              alt='Avatar'
               className={styles.avatarImage}
               src={user.avatar}
             />

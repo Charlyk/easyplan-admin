@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
+import dynamic from 'next/dynamic';
 import Typography from "@material-ui/core/Typography";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
@@ -9,8 +10,6 @@ import { textForKey } from "../../../../utils/localization";
 import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
 import { appBaseUrl, isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";
-import ResetPassword from './ResetPassword';
-import LoginForm from './LoginForm';
 import reducer, {
   initialState,
   setCurrentForm,
@@ -20,6 +19,9 @@ import reducer, {
 } from './loginWrapperSlice'
 import styles from './LoginWrapper.module.scss';
 import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+
+const ResetPassword = dynamic(() => import('./ResetPassword'));
+const LoginForm = dynamic(() => import('./LoginForm'));
 
 export default function LoginWrapper({ currentUser, currentClinic, authToken }) {
   const router = useRouter();

@@ -1,19 +1,21 @@
 import React, { useReducer } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from "next/router";
 import Typography from "@material-ui/core/Typography";
 import { toast } from "react-toastify";
 
-import RegisterForm from "./RegisterForm/RegisterForm";
 import uploadFileToAWS from "../../../../utils/uploadFileToAWS";
 import { registerUser } from "../../../../middleware/api/auth";
 import { textForKey } from "../../../../utils/localization";
+import useIsMobileDevice from "../../../utils/useIsMobileDevice";
 import { isDev } from "../../../../eas.config";
 import reducer, {
   initialState,
   setIsLoading
 } from './registrationWrapperSlice'
 import styles from './RegistrationWrapper.module.scss';
-import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+
+const RegisterForm = dynamic(() => import('./RegisterForm'));
 
 export default function RegistrationWrapper() {
   const router = useRouter();

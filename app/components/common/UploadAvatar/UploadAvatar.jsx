@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef } from "react";
 import clsx from "clsx";
-import Box from "@material-ui/core/Box";
 import IconAvatar from "../../icons/iconAvatar";
 import IconEdit from "../../icons/iconEdit";
 import IconPlus from "../../icons/iconPlus";

@@ -25,10 +25,8 @@ import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
 import { setClinic } from "../../../../redux/actions/clinicActions";
 import { environment, isDev } from "../../../../eas.config";
 import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
-import MainMenu from './MainMenu/MainMenu';
-import PageHeader from './PageHeader/PageHeader';
-import styles from './MainComponent.module.scss';
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
+import styles from './MainComponent.module.scss';
 
 const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
 const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
@@ -36,6 +34,8 @@ const ServiceDetailsModal = dynamic(() => import('../../dashboard/services/Servi
 const DataMigrationModal = dynamic(() => import('../modals/DataMigrationModal'));
 const ExchangeRatesModal = dynamic(() => import('../modals/ExchangeRatesModal'));
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
+const MainMenu = dynamic(() => import('./MainMenu/MainMenu'));
+const PageHeader = dynamic(() => import('./PageHeader/PageHeader'));
 
 const MainComponent = (
   {
