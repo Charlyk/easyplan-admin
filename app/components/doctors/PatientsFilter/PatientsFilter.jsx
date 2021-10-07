@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Calendar } from 'react-date-range';
@@ -11,6 +11,8 @@ import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelect
 import { Statuses } from '../../../utils/constants';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
 import styles from './PatientsFilter.module.scss';
+import EASTextField from "../../common/EASTextField";
+import EASSelect from "../../common/EASSelect";
 
 const PatientsFilter = (
   {
@@ -31,58 +33,41 @@ const PatientsFilter = (
   }, [services])
 
   return (
-    <div className={styles['patients-filter']}>
+    <div className={styles.patientsFilter}>
       <Button
-        variant='outline-primary'
-        style={{ width: '100%', marginTop: '1.3rem' }}
+        variant='outlined'
+        style={{ width: '100%', marginTop: '1.3rem', marginBottom: '5px' }}
         onClick={onViewModeChange}
       >
         {viewMode === 'day' ? textForKey('Week schedules') : textForKey('Day schedules')}
       </Button>
-      <Form.Group controlId='patientName'>
-        <Form.Label>{textForKey('Patient')}</Form.Label>
-        <InputGroup>
-          <Form.Control onChange={onNameChange} type='text'/>
-        </InputGroup>
-      </Form.Group>
-      <Form.Group
-        style={{ flexDirection: 'column' }}
-        controlId='inlineFormCustomSelect'
-      >
-        <Form.Label>{textForKey('Service')}</Form.Label>
-        <Form.Control
-          as='select'
-          className='mr-sm-2'
-          onChange={onServiceChange}
-          custom
-        >
-          <option value='all'>{textForKey('All services')}</option>
-          {sortedServices.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </Form.Control>
-      </Form.Group>
-      <Form.Group
-        style={{ flexDirection: 'column' }}
-        controlId='inlineFormCustomSelect'
-      >
-        <Form.Label>{textForKey('Appointment status')}</Form.Label>
-        <Form.Control
-          as='select'
-          className='mr-sm-2'
-          onChange={onStatusChange}
-          custom
-        >
-          <option value='all'>{textForKey('All statuses')}</option>
-          {Statuses.map((status) => (
-            <option key={status.id} value={status.id}>
-              {status.name}
-            </option>
-          ))}
-        </Form.Control>
-      </Form.Group>
+      <EASTextField
+        type="text"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Patient')}
+        onChange={onNameChange}
+      />
+      <EASSelect
+        rootClass={styles.simpleField}
+        label={textForKey('Service')}
+        labelId="service-select-label"
+        defaultOption={{
+          id: 'all',
+          name: textForKey('All services')
+        }}
+        options={sortedServices}
+      />
+      <EASSelect
+        label={textForKey('Appointment status')}
+        labelId="status-select-label"
+        rootClass={styles.simpleField}
+        defaultOption={{
+          id: 'all',
+          name: textForKey('All statuses')
+        }}
+        options={Statuses}
+      />
+
       <Calendar
         locale={locales[getAppLanguage()]}
         onChange={onDateChange}

@@ -1,5 +1,5 @@
-.patients-filter {
-  width: 20rem;
+.patientsFilter {
+  width: 160px;
   display: flex;
   padding: 1rem;
   flex: 1;
@@ -8,6 +8,11 @@
   background: #FFFFFF;
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
+
+  .simpleField {
+    margin-bottom: 5px;
+    width: 100%;
+  }
 
   :global(.custom-select) {
     font-size: .7rem;
