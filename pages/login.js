@@ -18,6 +18,10 @@ const Login = ({ currentUser, currentClinic, authToken }) => {
 export const getServerSideProps = async ({ req }) => {
   const { auth_token: authToken } = parseCookies(req);
 
+  if (authToken == null) {
+    return { props: { } };
+  }
+
   const props = { authToken: authToken ?? null };
   try {
     const response = await getCurrentUser(req.headers);

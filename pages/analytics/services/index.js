@@ -8,29 +8,29 @@ import { getServicesStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import parseCookies from "../../../utils/parseCookies";
 import ServicesAnalytics from "../../../app/components/dashboard/analytics/ServicesAnalytics";
+import { APP_DATA_API, JwtRegex } from "../../../app/utils/constants";
+import { SWRConfig } from "swr";
 
 export default function Services(
   {
-    currentUser,
-    currentClinic,
+    fallback,
     statistics,
     query,
     authToken,
   }
 ) {
   return (
-    <MainComponent
-      currentUser={currentUser}
-      currentClinic={currentClinic}
-      currentPath='/analytics/services'
-      authToken={authToken}
-    >
-      <ServicesAnalytics
-        query={query}
-        currentClinic={currentClinic}
-        statistics={statistics}
-      />
-    </MainComponent>
+    <SWRConfig value={{ fallback }}>
+      <MainComponent
+        currentPath='/analytics/services'
+        authToken={authToken}
+      >
+        <ServicesAnalytics
+          query={query}
+          statistics={statistics}
+        />
+      </MainComponent>
+    </SWRConfig>
   );
 };
 
@@ -56,12 +56,29 @@ export const getServerSideProps = async ({ req, res, query }) => {
       query.status = 'All'
     }
     const { auth_token: authToken } = parseCookies(req);
+    if (!authToken || !authToken.match(JwtRegex)) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
+      };
+    }
+
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/services');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData.data } };
+      return {
+        props: {
+          fallback: {
+            [APP_DATA_API]: {
+              ...appData.data
+            }
+          }
+        }
+      };
     }
 
     const { data: statistics } = await getServicesStatistics(query, req.headers);
@@ -70,7 +87,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
         authToken,
         statistics,
         query,
-        ...appData.data,
+        fallback: {
+          [APP_DATA_API]: {
+            ...appData.data
+          }
+        }
       }
     };
   } catch (error) {

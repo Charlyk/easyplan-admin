@@ -31,7 +31,6 @@ import {
   importPatientsFromFile
 } from "../../../../../middleware/api/patients";
 import EASTextField from "../../../common/EASTextField";
-import PatientRow from './PatientRow';
 import reducer, {
   initialState,
   setPage,
@@ -47,6 +46,7 @@ import reducer, {
 } from './PatientsList.reducer'
 import styles from './PatientsList.module.scss';
 
+const PatientRow = dynamic(() => import('./PatientRow'));
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
 const CreatePatientModal = dynamic(() => import('../CreatePatientModal'));
@@ -327,7 +327,6 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
               root: styles.importBtn,
               outlined: styles.outlinedBtnBlue
             }}
-            isLoading={isUploading}
             onClick={handleStartUploadPatients}
           >
             <Typography noWrap className={styles.buttonLabel}>
@@ -372,7 +371,7 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
 export default PatientsList;
 
 PatientsList.propTypes = {
-  currentClinic: PropTypes.object.isRequired,
+  currentClinic: PropTypes.object,
   data: PropTypes.object.isRequired,
   query: PropTypes.object.isRequired,
 };

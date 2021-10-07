@@ -15,13 +15,13 @@ import { Role, Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import EASSelect from "../../../common/EASSelect";
 import EASTextField from "../../../common/EASTextField";
-import StatisticFilter from '../StatisticFilter';
-import IncomeStatisticItem from './IncomeStatisticItem';
-import StatusItem from './StatusItem';
 import { reducer, actions, initialState } from "./GeneralAnalytics.reducer";
 import styles from './GeneralAnalytics.module.scss';
 
 const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
+const StatisticFilter = dynamic(() => import('../StatisticFilter'));
+const IncomeStatisticItem = dynamic(() => import('./IncomeStatisticItem'));
+const StatusItem = dynamic(() => import('./StatusItem'));
 
 const General = (
   {

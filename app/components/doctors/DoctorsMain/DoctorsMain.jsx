@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { useDispatch } from 'react-redux';
 import { useRouter } from "next/router";
 import { usePubNub } from "pubnub-react";
+import useSWR from "swr";
 import Head from "next/head";
 
 import IconArrowDown from '../../icons/iconArrowDown';
@@ -13,6 +14,7 @@ import { setClinic } from "../../../../redux/actions/clinicActions";
 import { textForKey } from '../../../../utils/localization';
 import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
 import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
+import { APP_DATA_API } from "../../../utils/constants";
 import { environment, isDev } from "../../../../eas.config";
 import PageHeader from '../../common/MainComponent/PageHeader/PageHeader';
 import styles from './DoctorsMain.module.scss';
@@ -20,7 +22,10 @@ import styles from './DoctorsMain.module.scss';
 const ClinicSelector = dynamic(() => import('../../common/ClinicSelector'));
 const EditProfileModal = dynamic(() => import('../../common/modals/EditProfileModal'));
 
-const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
+const DoctorsMain = ({ children, pageTitle }) => {
+  const { data } = useSWR(APP_DATA_API);
+  const { currentUser, currentClinic } = data;
+
   const dispatch = useDispatch();
   const pubnub = usePubNub();
   const router = useRouter();
@@ -136,7 +141,14 @@ const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
         />
       </div>
       <div className={styles.doctorDataContainer}>
-        {children}
+        {React.cloneElement(
+          children,
+          {
+            ...children.props,
+            currentUser,
+            currentClinic,
+          }
+        )}
       </div>
     </div>
   );

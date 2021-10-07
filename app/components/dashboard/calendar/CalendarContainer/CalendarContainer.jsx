@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import useSWR from "swr";
 
 import {
   setAppointmentModal,
@@ -18,9 +19,7 @@ import {
 import redirectIfOnGeneralHost from '../../../../../utils/redirectIfOnGeneralHost';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from '../../../../../utils/localization';
-import { HeaderKeys } from "../../../../utils/constants";
-import MainComponent from "../../../common/MainComponent/MainComponent";
-import AppointmentsCalendar from '../AppointmentsCalendar';
+import { APP_DATA_API, HeaderKeys } from "../../../../utils/constants";
 import reducer, {
   initialState,
   setParsedValue,
@@ -39,6 +38,8 @@ import styles from './CalendarContainer.module.scss';
 const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 const CalendarDoctors = dynamic(() => import('../CalendarDoctors'));
+const AppointmentsCalendar = dynamic(() => import('../AppointmentsCalendar'));
+const MainComponent = dynamic(() => import('../../../common/MainComponent'));
 
 const importFields = [
   {
@@ -99,12 +100,13 @@ const CalendarContainer = (
     doctorId,
     doctors,
     viewMode,
-    currentUser,
-    currentClinic,
     children,
     authToken
   }
 ) => {
+  const { data } = useSWR(APP_DATA_API);
+  const { currentUser, currentClinic } = data;
+
   const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
@@ -325,8 +327,6 @@ const CalendarContainer = (
 
   return (
     <MainComponent
-      currentUser={currentUser}
-      currentClinic={currentClinic}
       currentPath='/calendar'
       authToken={authToken}
     >

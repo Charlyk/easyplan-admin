@@ -19,8 +19,6 @@ import {
   updateUserCashierStatus
 } from "../../../../../middleware/api/users";
 import { deleteInvitation } from "../../../../../middleware/api/clinic";
-import UserItem from '../UserItem';
-import UsersHeader from '../UserHeader';
 import reducer, {
   initialState,
   setPageData,
@@ -37,6 +35,8 @@ import reducer, {
 } from './UsersList.reducer';
 import styles from './UsersList.module.scss';
 
+const UserItem = dynamic(() => import('../UserItem'));
+const UsersHeader = dynamic(() => import('../UserHeader'));
 const UserDetailsModal = dynamic(() => import('../UserDetailsModal'));
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 const InviteUserModal = dynamic(() => import('../../../common/modals/InviteUserModal'));

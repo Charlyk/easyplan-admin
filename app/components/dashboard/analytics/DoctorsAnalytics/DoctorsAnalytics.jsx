@@ -18,7 +18,8 @@ import IconList from "../../../icons/iconList";
 import { textForKey } from '../../../../../utils/localization';
 import formattedAmount from "../../../../../utils/formattedAmount";
 import { Role } from "../../../../utils/constants";
-import StatisticFilter from '../StatisticFilter';
+import EASSelect from "../../../common/EASSelect";
+import EASTextField from "../../../common/EASTextField";
 import reducer, {
   initialState,
   setSelectedDoctor,
@@ -29,12 +30,10 @@ import reducer, {
   setServicesModal,
 } from "./DoctorsAnalytics.reducer";
 import styles from './DoctorsAnalytics.module.scss';
-import ServicesListModal from "./ServicesListModal";
-import ListItemText from "@material-ui/core/ListItemText";
-import EASSelect from "../../../common/EASSelect";
-import EASTextField from "../../../common/EASTextField";
 
 const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
+const StatisticFilter = dynamic(() => import('../StatisticFilter'));
+const ServicesListModal = dynamic(() => import('./ServicesListModal'));
 
 const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) => {
   const pickerRef = useRef(null);

@@ -25,7 +25,6 @@ import { getServicesStatistics } from "../../../../../middleware/api/analytics";
 import { fetchAppData } from "../../../../../middleware/api/initialization";
 import parseCookies from "../../../../../utils/parseCookies";
 import EASSelect from "../../../common/EASSelect";
-import StatisticFilter from '../StatisticFilter';
 import reducer, {
   initialState,
   setSelectedDoctors,
@@ -43,6 +42,7 @@ import styles from './ServicesAnalytics.module.scss';
 import EASTextField from "../../../common/EASTextField";
 
 const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
+const StatisticFilter = dynamic(() => import('../StatisticFilter'));
 
 const ServicesAnalytics = (
   {

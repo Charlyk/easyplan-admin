@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Role } from "../../../../utils/constants";
-import AccountSettings from '../AccountSettings';
-import ApplicationSettings from '../ApplicationSettings';
-import BracesSettings from '../BracesSettings';
-import ClinicWorkingHours from '../ClinicWorkingHours';
-import CompanyDetailsForm from '../CompanyDetailsForm';
-import SecuritySettings from '../SecuritySettings';
-import SettingsMenu from '../SettingsMenu';
+const AccountSettings = dynamic(() => import('../AccountSettings'));
+const ApplicationSettings = dynamic(() => import('../ApplicationSettings'));
+const BracesSettings = dynamic(() => import('../BracesSettings'));
+const ClinicWorkingHours = dynamic(() => import('../ClinicWorkingHours'));
+const CompanyDetailsForm = dynamic(() => import('../CompanyDetailsForm'));
+const SecuritySettings = dynamic(() => import('../SecuritySettings'));
+const SettingsMenu = dynamic(() => import('../SettingsMenu'));
+const Integrations = dynamic(() => import("../Integrations"));
 import styles from './SettingsWrapper.module.scss';
-import Integrations from "../Integrations";
 
 const SettingsForm = {
   companyDetails: 'companyDetails',

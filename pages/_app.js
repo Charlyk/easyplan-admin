@@ -56,6 +56,7 @@ export default wrapper.withRedux(
       if (UnauthorizedPaths.includes(router.pathname)) {
         return;
       }
+      console.log(pageProps);
       fetchInitializationData();
     }, []);
 
@@ -149,4 +150,4 @@ export default wrapper.withRedux(
       </>
     );
   }
-)
+);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,10 +10,11 @@ import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
 import getDays from '../../../../../utils/getDays';
 import { textForKey } from '../../../../../utils/localization';
-import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
-import ScheduleItem from './ScheduleItem';
-import styles from './CalendarMonthView.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
+import styles from './CalendarMonthView.module.scss';
+
+const ScheduleItem = dynamic(() => import('./ScheduleItem'));
 
 const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   const dispatch = useDispatch();

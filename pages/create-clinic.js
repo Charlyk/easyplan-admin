@@ -3,6 +3,7 @@ import parseCookies from "../utils/parseCookies";
 import CreateClinicWrapper from "../app/components/common/CreateClinicWrapper";
 import { wrapper } from "../store";
 import { fetchAllCountries } from "../middleware/api/countries";
+import { JwtRegex } from "../app/utils/constants";
 
 const CreateClinic = ({ token, redirect, countries, login }) => {
   return (
@@ -18,6 +19,15 @@ const CreateClinic = ({ token, redirect, countries, login }) => {
 export const getServerSideProps = async ({ req, query }) => {
   try {
     const { auth_token } = parseCookies(req);
+    if (!auth_token || !auth_token.match(JwtRegex)) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
+      };
+    }
+
     const { data: countries } = await fetchAllCountries(req.headers);
     const { redirect, login } = query;
     return {

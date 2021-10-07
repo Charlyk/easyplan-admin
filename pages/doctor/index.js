@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
+import { SWRConfig } from "swr";
 import DoctorsMain from "../../app/components/doctors/DoctorsMain";
 import { wrapper } from "../../store";
 import getCurrentWeek from "../../utils/getCurrentWeek";
@@ -11,11 +12,11 @@ import parseCookies from "../../utils/parseCookies";
 import DoctorCalendar from "../../app/components/doctors/DoctorCalendar";
 import { getSchedulesForInterval } from "../../middleware/api/schedules";
 import { textForKey } from "../../utils/localization";
+import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
 
 const Doctor = (
   {
-    currentUser,
-    currentClinic,
+    fallback,
     schedules,
     date,
     authToken,
@@ -23,20 +24,18 @@ const Doctor = (
   }
 ) => {
   return (
-    <DoctorsMain
-      currentClinic={currentClinic}
-      currentUser={currentUser}
-      authToken={authToken}
-      pageTitle={textForKey('Schedules')}
-    >
-      <DoctorCalendar
-        viewMode={viewMode}
-        schedules={schedules}
-        currentClinic={currentClinic}
-        currentUser={currentUser}
-        date={date}
-      />
-    </DoctorsMain>
+    <SWRConfig value={{ fallback }}>
+      <DoctorsMain
+        authToken={authToken}
+        pageTitle={textForKey('Schedules')}
+      >
+        <DoctorCalendar
+          viewMode={viewMode}
+          schedules={schedules}
+          date={date}
+        />
+      </DoctorsMain>
+    </SWRConfig>
   );
 };
 
@@ -47,12 +46,29 @@ export const getServerSideProps = async ({ res, req, query }) => {
       date = moment(query.date).toDate();
     }
     const { auth_token: authToken } = parseCookies(req);
+    if (!authToken || !authToken.match(JwtRegex)) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
+      };
+    }
+
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
     if (redirectTo != null) {
       redirectUserTo(redirectTo, res);
-      return { props: { ...appData.data } };
+      return {
+        props: {
+          fallback: {
+            [APP_DATA_API]: {
+              ...appData.data
+            }
+          },
+        }
+      };
     }
     const viewMode = query.viewMode ?? 'week';
 
@@ -67,7 +83,11 @@ export const getServerSideProps = async ({ res, req, query }) => {
         viewMode,
         schedules: response.data,
         date: moment(date).format('YYYY-MM-DD'),
-        ...appData.data,
+        fallback: {
+          [APP_DATA_API]: {
+            ...appData.data
+          }
+        },
       },
     };
   } catch (error) {

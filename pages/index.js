@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
-import MainComponent from "../app/components/common/MainComponent/MainComponent";
 import { useRouter } from "next/router";
+import { SWRConfig } from "swr";
+import MainComponent from "../app/components/common/MainComponent/MainComponent";
 import { fetchAppData } from "../middleware/api/initialization";
 import handleRequestError from '../utils/handleRequestError';
 import getRedirectUrlForUser from '../utils/redirectToUrl';
 import parseCookies from "../utils/parseCookies";
+import { APP_DATA_API } from "../app/utils/constants";
 
-const MainPage = ({ currentClinic, currentUser, authToken }) => {
+const MainPage = ({ fallback, authToken }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -22,12 +24,12 @@ const MainPage = ({ currentClinic, currentUser, authToken }) => {
   }
 
   return (
-    <MainComponent
-      currentClinic={currentClinic}
-      currentUser={currentUser}
-      authToken={authToken}
-      currentPath='/'
-    />
+    <SWRConfig value={{ fallback }}>
+      <MainComponent
+        authToken={authToken}
+        currentPath='/'
+      />
+    </SWRConfig>
   )
 }
 
@@ -37,7 +39,11 @@ export const getServerSideProps = async ({ req, res }) => {
     const appData = await fetchAppData(req.headers);
     return {
       props: {
-        ...appData.data,
+        fallback: {
+          [APP_DATA_API]: {
+            ...appData.data
+          }
+        },
         authToken,
       }
     }

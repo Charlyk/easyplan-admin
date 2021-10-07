@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
 import {
   setAppointmentModal,
@@ -26,6 +27,7 @@ import { setClinic } from "../../../../redux/actions/clinicActions";
 import { environment, isDev } from "../../../../eas.config";
 import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
+import { APP_DATA_API } from "../../../utils/constants";
 import styles from './MainComponent.module.scss';
 
 const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
@@ -41,11 +43,15 @@ const MainComponent = (
   {
     children,
     currentPath,
-    currentUser,
-    currentClinic,
     authToken
   }
 ) => {
+  const { data, error } = useSWR(APP_DATA_API);
+  const { currentUser, currentClinic } = data;
+
+  if (error) return 'An error has occurred';
+  if (!data) return 'Loading...';
+
   const pubnub = usePubNub();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -193,7 +199,16 @@ const MainComponent = (
             onLogout={handleStartLogout}
           />
           <div className={styles.data}>
-            {currentClinic != null && children}
+            {currentClinic != null && (
+              React.cloneElement(
+                children,
+                {
+                  ...children.props,
+                  currentUser,
+                  currentClinic,
+                }
+              )
+            )}
           </div>
         </div>
       )}

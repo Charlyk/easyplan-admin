@@ -4,6 +4,7 @@ import handleRequestError from '../utils/handleRequestError';
 import parseCookies from "../utils/parseCookies";
 import ClinicsList from "../app/components/common/ClinicsList";
 import { wrapper } from "../store";
+import { JwtRegex } from "../app/utils/constants";
 
 const Clinics = ({ user, authToken }) => {
   return <ClinicsList authToken={authToken} user={user} />;
@@ -12,6 +13,15 @@ const Clinics = ({ user, authToken }) => {
 export const getServerSideProps = async ({ req, res }) => {
   try {
     const { auth_token } = parseCookies(req);
+    if (!auth_token || !auth_token.match(JwtRegex)) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
+      };
+    }
+
     const response = await getCurrentUser(req.headers);
     return {
       props: {
