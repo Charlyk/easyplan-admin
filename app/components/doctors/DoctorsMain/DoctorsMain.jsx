@@ -89,7 +89,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
   };
 
   return (
-    <div className={styles['doctors-main-root']}>
+    <div className={styles.doctorsMainRoot}>
       <Head>
         <title>
           {currentClinic?.clinicName || 'EasyPlan.pro'} - {pageTitle || ''}
@@ -101,7 +101,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
         currentUser={currentUser}
         onClose={handleCloseEditProfile}
       />
-      <div className={styles['doctor-page-header-root']}>
+      <div className={styles.doctorPageHeaderRoot}>
         <PageHeader
           isDoctor
           showLogo
@@ -114,11 +114,11 @@ const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
               <div
                 role='button'
                 tabIndex={0}
-                className={styles['company-selector-container']}
+                className={styles.companySelectorContainer}
                 ref={buttonRef}
                 onClick={handleCompanyOpen}
               >
-                <span className={styles['clinic-name']}>
+                <span className={styles.clinicName}>
                   {selectedClinic?.clinicName || textForKey('Create clinic')}
                 </span>
                 <IconArrowDown fill='#34344E'/>
@@ -135,7 +135,7 @@ const DoctorsMain = ({ children, currentUser, currentClinic, pageTitle }) => {
           }
         />
       </div>
-      <div className={styles['doctor-data-container']}>
+      <div className={styles.doctorDataContainer}>
         {children}
       </div>
     </div>

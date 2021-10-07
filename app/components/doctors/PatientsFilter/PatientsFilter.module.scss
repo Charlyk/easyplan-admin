@@ -1,9 +1,8 @@
 .patientsFilter {
-  width: 160px;
+  width: calc(100% - 32px);
   display: flex;
-  padding: 1rem;
+  padding: 16px;
   margin-left: 8px;
-  flex: 1;
   flex-direction: column;
   align-items: center;
   background: #FFFFFF;
@@ -34,33 +33,6 @@
   .tabSelected {
     background-color: #3A83DC !important;
     color: white !important;
-  }
-
-  :global(.custom-select) {
-    font-size: .7rem;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-  }
-
-  :global(.form-group) {
-    width: 100%;
-  }
-
-  :global(.form-label) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: .7rem;
-    margin-bottom: 0;
-  }
-
-  :global(.form-control) {
-    background-color: #FAFAFD;
-  }
-
-  :global(.positive-button) {
-    margin-top: 1rem;
   }
 
   :global(.rdrCalendarWrapper) {

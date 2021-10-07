@@ -1,16 +1,16 @@
-.companies-popper-root {
+.companiesPopperRoot {
   left: unset !important;
   width: 100%;
   top: 0 !important;
   right: 0;
   z-index: 10;
 
-  .companies-paper {
+  .companiesPaper {
     width: 100%;
     background: #FFFFFF;
     border-radius: 4px !important;
 
-    .options-wrapper {
+    .optionsWrapper {
       display: flex;
       flex-direction: column;
       width: 100%;

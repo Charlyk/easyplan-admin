@@ -183,13 +183,13 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
 
   return (
     <div
-      className={clsx('form-root', styles['register-form'])}
+      className={styles.registerForm}
       style={{
-        padding: isMobile ? '2rem' : '3rem',
-        width: isMobile ? '90%' : '70%',
+        padding: isMobile ? '1rem' : '2rem',
+        width: isMobile ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
       }}
     >
-      <span className='form-title'>{textForKey('Create clinic')}</span>
+      <span className={styles.formTitle}>{textForKey('Create clinic')}</span>
       <form onSubmit={handleSubmitForm}>
         <UploadAvatar
           currentAvatar={logoFile}
@@ -264,11 +264,11 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
           onChange={handleDescriptionChange}
         />
 
-        <div className='footer'>
+        <div className={styles.footer}>
           <div
             role='button'
             tabIndex={0}
-            className='back-button'
+            className={styles.backButton}
             onClick={handleGoBack}
           >
             {redirect

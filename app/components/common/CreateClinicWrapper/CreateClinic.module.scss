@@ -19,7 +19,6 @@
   }
 
   .formContainer {
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -34,7 +33,7 @@
     }
   }
 
-  :global(.form-title) {
+  .formTitle {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: bold;
@@ -43,7 +42,7 @@
     color: #34354C;
   }
 
-  :global(.welcome-text) {
+  .welcomeText {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -53,7 +52,7 @@
     margin-bottom: .5rem;
   }
 
-  :global(.error-text) {
+  .errorText {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -66,38 +65,7 @@
     color: #ec3276;
   }
 
-  :global(.form-label) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: .7rem;
-    margin-bottom: 0;
-  }
-
-  :global(.form-text) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    color: #ec3276;
-    font-size: .7rem;
-    margin-bottom: 0;
-  }
-
-  :global(.form-control) {
-    background-color: #FAFAFD;
-  }
-
-  :global(.form-group) {
-    :global(.custom-select) {
-      width: 100%;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: .7rem;
-    }
-  }
-
-  :global(.form-root) {
+  .formRoot {
     padding: 3rem;
     display: flex;
     flex-direction: column;
@@ -106,14 +74,14 @@
     border-radius: 4px;
   }
 
-  :global(.footer) {
+  .footer {
     margin-top: 1.5rem;
     user-select: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    :global(.back-button) {
+    .backButton {
       outline: none;
       font-family: Inter, sans-serif;
       font-style: normal;

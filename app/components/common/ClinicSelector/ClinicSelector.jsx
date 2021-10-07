@@ -20,7 +20,7 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange, currentUs
 
   return (
     <Popper
-      className={styles['companies-popper-root']}
+      className={styles.companiesPopperRoot}
       anchorEl={anchorEl}
       disablePortal
       open={open}
@@ -29,8 +29,8 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange, currentUs
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className={styles['companies-paper']}>
-            <div className={styles['options-wrapper']}>
+          <Paper className={styles.companiesPaper}>
+            <div className={styles.optionsWrapper}>
               {currentUser?.clinics.map(clinic => (
                 <div
                   role='button'
