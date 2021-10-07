@@ -136,12 +136,8 @@ const PatientTreatmentPlan = (
 
   /**
    * Handle new service selected from search box
-   * @param {Array.<Object>} selectedItems
    */
-  const handleSelectedItemsChange = (selectedItems) => {
-    if (selectedItems.length === 0) return;
-    const newService = selectedItems[0];
-
+  const handleSelectedItemsChange = (event, newService) => {
     if (newService.serviceType === 'Single' && newService.toothId == null) {
       localDispatch(setTeethModal({ open: true, service: newService }));
       return;

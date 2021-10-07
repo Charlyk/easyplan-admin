@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import sum from 'lodash/sum';
 import moment from 'moment-timezone';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Button from '@material-ui/core/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -24,6 +23,7 @@ import {
   updatePatientGeneralTreatmentPlan
 } from "../../../../middleware/api/patients";
 import getErrorMessage from "../../../../app/utils/getErrorMessage";
+import EASTextField from "../../common/EASTextField";
 import reducer, {
   initialState,
   actions
@@ -225,8 +225,8 @@ const DoctorPatientDetails = (
     }
   };
 
-  const handleGuideNameChange = (event) => {
-    setGuideName(event.target.value);
+  const handleGuideNameChange = (newValue) => {
+    setGuideName(newValue);
   }
 
   const handlePrintTreatmentPlan = () => {
@@ -244,7 +244,7 @@ const DoctorPatientDetails = (
   }, [schedule]);
 
   return (
-    <div className={styles['doctor-patient-root']}>
+    <div className={styles.doctorPatientRoot}>
         <FinalizeTreatmentModal
           currentClinic={currentClinic}
           onSave={finalizeTreatment}
@@ -264,33 +264,31 @@ const DoctorPatientDetails = (
             {isFinalizing && textForKey('Finalizing treatment...')}
           </Modal.Body>
         </Modal>
-        <div className={styles['left-container']}>
-          <div className={styles['patient-info']}>
+        <div className={styles.leftContainer}>
+          <div className={styles.patientInfo}>
             <IconAvatar/>
-            <div className={styles['personal-data-container']}>
-              <span className={styles['patient-name']}>{getPatientName()}</span>
-              <div className={styles['patient-info-row']}>
-                <span className={styles['patient-info-title']}>{textForKey('Date')}:</span>
-                <span className={styles['patient-info-value']}>
+            <div className={styles.personalDataContainer}>
+              <span className={styles.patientName}>{getPatientName()}</span>
+              <div className={styles.patientInfoRow}>
+                <span className={styles.patientInfoTitle}>{textForKey('Date')}:</span>
+                <span className={styles.patientInfoValue}>
                 {formattedTime}
               </span>
               </div>
-              <div className={styles['patient-info-row']}>
-              <span className={styles['patient-info-title']}>
+              <div className={styles.patientInfoRow}>
+              <span className={styles.patientInfoTitle}>
                 {textForKey('Doctor')}:
               </span>
-                <span className={styles['patient-info-value']}>{currentUser.fullName}</span>
+                <span className={styles.patientInfoValue}>{currentUser.fullName}</span>
               </div>
             </div>
             <div className={styles.printableWrapper}>
-              <Form.Group className={styles.guideNameField}>
-                <Form.Label>{textForKey('Enter guide name')}</Form.Label>
-                <Form.Control
-                  onChange={handleGuideNameChange}
-                  value={guideName}
-                  aria-label={textForKey('Enter guide name')}
-                />
-              </Form.Group>
+              <EASTextField
+                containerClass={styles.guideNameField}
+                value={guideName}
+                fieldLabel={textForKey('Enter guide name')}
+                onChange={handleGuideNameChange}
+              />
               <Button className='positive-button' onPointerUp={handlePrintTreatmentPlan}>
                 {textForKey('Print plan')}
               </Button>
@@ -304,7 +302,7 @@ const DoctorPatientDetails = (
             onFinalize={handleFinalizeTreatment}
           />
         </div>
-        <div className={styles['right-container']}>
+        <div className={styles.rightContainer}>
           {patient && (
             <PatientDetails
               isDoctor

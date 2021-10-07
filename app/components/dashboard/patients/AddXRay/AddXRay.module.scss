@@ -1,7 +1,6 @@
 .addXRayRoot {
   .simpleField {
     width: 100%;
-    margin-bottom: 5px;
   }
 
   .formRoot {
@@ -11,7 +10,8 @@
   .fileInput {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: calc(100% - 16px);
+    margin-bottom: 5px;
 
     input {
       font-size: .9rem;

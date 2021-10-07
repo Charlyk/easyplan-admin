@@ -67,8 +67,8 @@ const PatientDetails = (
   };
 
   return (
-    <div className={styles['patient-details-root']}>
-      <div className={styles['patient-details-root__header']}>
+    <div className={styles.patientDetailsRoot}>
+      <div className={styles.header}>
         {showTabs.includes(TabId.appointmentsNotes) && (
           <EasyTab
             title={textForKey('Appointments notes')}
@@ -117,7 +117,7 @@ const PatientDetails = (
           />
         )}
       </div>
-      <div className={styles['patient-details-root__content']}>
+      <div className={styles.content}>
         {selectedTab === TabId.appointmentsNotes && (
           <AppointmentNotes
             currentUser={currentUser}

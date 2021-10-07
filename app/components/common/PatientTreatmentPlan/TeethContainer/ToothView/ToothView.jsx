@@ -132,7 +132,7 @@ const ToothView = (
   const infoPopper =
     infoServices.length > 0 ? (
       <Popper
-        className={styles['tooth-services-paper-root']}
+        className={styles.toothServicesPaperRoot}
         anchorEl={infoAnchor.current}
         open={showInfo}
         placement='right'
@@ -140,18 +140,18 @@ const ToothView = (
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper className={styles['services-tooth-paper']}>
-              <div className={styles['options-wrapper']}>
+            <Paper className={styles.servicesToothPaper}>
+              <div className={styles.optionsWrapper}>
                 {infoServices.map((item) => (
                   <div
-                    key={`${item.id}-${item.historyId}`}
-                    className={styles['option-row']}
+                    key={`${item.id}-${item.planServiceId}`}
+                    className={styles.optionRow}
                   >
                     <div
-                      className={styles['service-color-indicator']}
+                      className={styles.serviceColorIndicator}
                       style={{ backgroundColor: item.color }}
                     />
-                    <span className={styles['service-name']}>{item.name}</span>
+                    <span className={styles.serviceName}>{item.name}</span>
                   </div>
                 ))}
               </div>
@@ -162,9 +162,9 @@ const ToothView = (
     ) : null;
 
   return (
-    <div className={styles['tooth-view']}>
+    <div className={styles.toothView}>
       {direction === 'top' && (
-        <span className={styles['tooth-text']} ref={anchorEl}>
+        <span className={styles.toothText} ref={anchorEl}>
           {toothId}
         </span>
       )}
@@ -174,19 +174,19 @@ const ToothView = (
         ref={infoAnchor}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={clsx(styles['tooth-icon'], direction === 'top' && styles.top)}
+        className={clsx(styles.toothIcon, direction === 'top' && styles.top)}
         onClick={handleOpenServicesPopper}
       >
         {icon}
         <div
           className={clsx(
-            styles['tooth-services-container'],
+            styles.toothServicesContainer,
             direction === 'top' && styles.top,
           )}
         >
           {infoServices.map((item, index) => (
             <div
-              className={styles['service-indicator']}
+              className={styles.serviceIndicator}
               key={`${item.id}-${item.toothId}-${index}`}
               style={{ backgroundColor: item.color }}
             />
@@ -194,7 +194,7 @@ const ToothView = (
         </div>
       </div>
       {direction === 'bottom' && (
-        <span className={styles['tooth-text']} ref={anchorEl}>
+        <span className={styles.toothText} ref={anchorEl}>
           {toothId}
         </span>
       )}
@@ -215,6 +215,7 @@ ToothView.propTypes = {
       name: PropTypes.string,
       price: PropTypes.number,
       color: PropTypes.string,
+      planServiceId: PropTypes.number,
     }),
   ),
   toothId: PropTypes.string,
@@ -227,6 +228,7 @@ ToothView.propTypes = {
       price: PropTypes.number,
       color: PropTypes.string,
       completed: PropTypes.bool,
+      planServiceId: PropTypes.number,
     }),
   ),
   completedServices: PropTypes.arrayOf(
@@ -236,6 +238,7 @@ ToothView.propTypes = {
       price: PropTypes.number,
       color: PropTypes.string,
       completed: PropTypes.bool,
+      planServiceId: PropTypes.number,
     }),
   ),
 };

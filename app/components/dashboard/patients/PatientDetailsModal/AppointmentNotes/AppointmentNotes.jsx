@@ -68,7 +68,7 @@ export default AppointmentNotes;
 
 AppointmentNotes.propTypes = {
   onEditNote: PropTypes.func,
-  scheduleId: PropTypes.string,
+  scheduleId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   patient: PropTypes.shape({
     id: PropTypes.number,
   }).isRequired,

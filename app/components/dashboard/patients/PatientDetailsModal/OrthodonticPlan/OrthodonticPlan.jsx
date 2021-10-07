@@ -6,9 +6,6 @@ import Typography from '@material-ui/core/Typography'
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import InputGroup from 'react-bootstrap/InputGroup'
 import { toast } from 'react-toastify';
 
 import IconSuccess from '../../../../icons/iconSuccess';
@@ -20,6 +17,8 @@ import { Role } from '../../../../../utils/constants';
 import { textForKey } from '../../../../../../utils/localization';
 import EasyTab from '../../../../common/EasyTab';
 import LoadingButton from '../../../../common/LoadingButton';
+import EASTextarea from "../../../../common/EASTextarea";
+import EASSelect from "../../../../common/EASSelect";
 import {
   reducer,
   initialState,
@@ -31,7 +30,36 @@ import {
   fallenBracketsList
 } from './OrthodonticPlan.reducer';
 import styles from './OrthodonticPlan.module.scss';
-import EASTextarea from "../../../../common/EASTextarea";
+
+const molarOptions = [
+  {
+    id: 1,
+    name: `${textForKey('Molar')} 1`
+  },
+  {
+    id: 2,
+    name: `${textForKey('Molar')} 2`
+  },
+  {
+    id: 3,
+    name: `${textForKey('Molar')} 3`
+  },
+];
+
+const caninOptions = [
+  {
+    id: 1,
+    name: `${textForKey('Canin')} 1`
+  },
+  {
+    id: 2,
+    name: `${textForKey('Canin')} 2`
+  },
+  {
+    id: 3,
+    name: `${textForKey('Canin')} 3`
+  },
+];
 
 const OrthodonticPlan = (
   {
@@ -411,63 +439,47 @@ const OrthodonticPlan = (
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
-          <Form.Control
-            disabled={!isDoctor}
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            onChange={handleMolarCaninMolarChange}
+          <EASSelect
+            rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.molarCaninMolar}
-            custom
-          >
-            <option value='0'>{textForKey('Molar')}...</option>
-            <option value='1'>{textForKey('Molar')} 1</option>
-            <option value='2'>{textForKey('Molar')} 2</option>
-            <option value='3'>{textForKey('Molar')} 3</option>
-          </Form.Control>
-          <Form.Control
-            disabled={!isDoctor}
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            onChange={handleMolarCaninCaninChange}
+            defaultOption={{
+              id: 0,
+              name: `${textForKey('Molar')}...`
+            }}
+            options={molarOptions}
+            onChange={handleMolarCaninMolarChange}
+          />
+          <EASSelect
+            rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.molarCaninCanin}
-            custom
-          >
-            <option value='0'>{textForKey('Canin')}...</option>
-            <option value='1'>{textForKey('Canin')} 1</option>
-            <option value='2'>{textForKey('Canin')} 2</option>
-            <option value='3'>{textForKey('Canin')} 3</option>
-          </Form.Control>
+            defaultOption={{
+              id: 0,
+              name: `${textForKey('Canin')}...`
+            }}
+            options={caninOptions}
+            onChange={handleMolarCaninCaninChange}
+          />
           <div className='separator'/>
-          <Form.Control
-            disabled={!isDoctor}
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            onChange={handleCaninMolarCaninChange}
+          <EASSelect
+            rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.caninMolarCanin}
-            custom
-          >
-            <option value='0'>{textForKey('Canin')}...</option>
-            <option value='1'>{textForKey('Canin')} 1</option>
-            <option value='2'>{textForKey('Canin')} 2</option>
-            <option value='3'>{textForKey('Canin')} 3</option>
-          </Form.Control>
-          <Form.Control
-            disabled={!isDoctor}
-            as='select'
-            className='mr-sm-2'
-            id='inlineFormCustomSelect'
-            onChange={handleCaninMolarMolarChange}
+            defaultOption={{
+              id: 0,
+              name: `${textForKey('Canin')}...`
+            }}
+            options={caninOptions}
+            onChange={handleCaninMolarCaninChange}
+          />
+          <EASSelect
+            rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.caninMolarMolar}
-            custom
-          >
-            <option value='0'>{textForKey('Molar')}...</option>
-            <option value='1'>{textForKey('Molar')} 1</option>
-            <option value='2'>{textForKey('Molar')} 2</option>
-            <option value='3'>{textForKey('Molar')} 3</option>
-          </Form.Control>
+            defaultOption={{
+              id: 0,
+              name: `${textForKey('Molar')}...`
+            }}
+            options={molarOptions}
+            onChange={handleCaninMolarMolarChange}
+          />
         </div>
       </td>
     </tr>

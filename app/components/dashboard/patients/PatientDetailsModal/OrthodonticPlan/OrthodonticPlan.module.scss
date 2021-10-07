@@ -6,6 +6,15 @@
   min-height: 10rem;
   position: relative;
 
+  .angleClassSelect {
+    width: 24%;
+    margin-right: 5px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
   .treatmentPlanModalContent {
     display: flex;
     flex-direction: column;

@@ -1,161 +1,160 @@
-.doctor-patient-root {
+.doctorPatientRoot {
   height: 100%;
   width: 100%;
-  overflow-y: auto;
   display: flex;
 
-  .left-container {
-    padding: 1rem 1rem;
-    width: 50%;
-    height: 100%;
+  .leftContainer {
+    padding: 8px;
+    width: calc(50% - 16px);
+    height: calc(100% - 16px);
     display: flex;
     flex-direction: column;
 
-    .services-container {
-      box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
-      margin-top: 1rem;
-      user-select: none;
-      min-height: 385px;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: calc(100% - 24rem);
-      position: relative;
-
-      .services-results-menu {
-        max-height: 300px !important;
-      }
-
-      .input-wrapper {
-        border-bottom: #34344E1A 1px solid;
-        padding: 1rem 1rem .5rem;
-
-        :global(.form-group) {
-          height: 33px;
-          margin-bottom: 0;
-
-          :global(.dropdown-menu) {
-            padding: .1rem 0;
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 13px;
-          }
-        }
-      }
-
-      .selected-services-wrapper {
-        flex: 1;
-        overflow-y: scroll;
-        padding: 1rem;
-      }
-
-      .selected-services-footer {
-        width: 100%;
-        height: 50px;
-        border-top: #34344E1A 1px solid;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        :global(.positive-button) {
-          flex: unset;
-          margin-bottom: 0;
-        }
-      }
-
-      .total-title, :global(.no-data-label) {
-        margin-bottom: 1rem;
-        font-family: Inter, sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 24px;
-        color: #A1A2C6;
-      }
-
-      .available-services {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        height: 100%;
-        padding-right: 1rem;
-
-        .available-services-paper {
-          box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
-          padding: 1rem;
-          display: flex;
-          height: 100%;
-          width: 100%;
-          overflow-y: scroll;
-          flex-direction: column;
-          align-items: flex-start;
-
-          :global(.form-group) {
-            margin-bottom: .5rem;
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 20px;
-            color: #34354C;
-
-            :global(.form-check) {
-              align-items: center;
-              display: flex;
-            }
-
-            :global(.form-check-input) {
-              margin-top: 0;
-              color: transparent;
-            }
-          }
-        }
-      }
-
-      .services-total {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 50%;
-
-        .offered-services-paper {
-          overflow-y: scroll;
-          padding-top: 1rem;
-          padding-bottom: 1rem;
-
-          .offered-services-table {
-
-          }
-        }
-
-        :global(.no-data-label) {
-          width: 100%;
-          text-align: center;
-          margin-top: 1rem;
-          font-weight: normal;
-          font-size: .8rem;
-        }
-
-        .total-price {
-          width: 100%;
-          text-align: end;
-          font-family: Inter, sans-serif;
-          font-style: normal;
-          font-weight: 600;
-          font-size: 16px;
-          line-height: 24px;
-          color: #34354C;
-        }
-
-        :global(.positive-button) {
-          margin-top: 2rem;
-          height: 2rem;
-          flex: unset;
-        }
-      }
-    }
+    //.servicesContainer {
+    //  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+    //  margin-top: 1rem;
+    //  user-select: none;
+    //  min-height: 385px;
+    //  display: flex;
+    //  flex-direction: column;
+    //  width: 100%;
+    //  height: calc(100% - 24rem);
+    //  position: relative;
+    //
+    //  .servicesResultsMenu {
+    //    max-height: 300px !important;
+    //  }
+    //
+    //  .inputWrapper {
+    //    border-bottom: #34344E1A 1px solid;
+    //    padding: 1rem 1rem .5rem;
+    //
+    //    :global(.form-group) {
+    //      height: 33px;
+    //      margin-bottom: 0;
+    //
+    //      :global(.dropdown-menu) {
+    //        padding: .1rem 0;
+    //        font-family: Inter, sans-serif;
+    //        font-style: normal;
+    //        font-weight: normal;
+    //        font-size: 13px;
+    //      }
+    //    }
+    //  }
+    //
+    //  .selectedServicesWrapper {
+    //    flex: 1;
+    //    overflow-y: scroll;
+    //    padding: 1rem;
+    //  }
+    //
+    //  .selectedServicesFooter {
+    //    width: 100%;
+    //    height: 50px;
+    //    border-top: #34344E1A 1px solid;
+    //    display: flex;
+    //    align-items: center;
+    //    justify-content: center;
+    //
+    //    :global(.positive-button) {
+    //      flex: unset;
+    //      margin-bottom: 0;
+    //    }
+    //  }
+    //
+    //  .totalTitle, :global(.no-data-label) {
+    //    margin-bottom: 1rem;
+    //    font-family: Inter, sans-serif;
+    //    font-style: normal;
+    //    font-weight: 600;
+    //    font-size: 16px;
+    //    line-height: 24px;
+    //    color: #A1A2C6;
+    //  }
+    //
+    //  .availableServices {
+    //    display: flex;
+    //    flex-direction: column;
+    //    align-items: flex-start;
+    //    width: 100%;
+    //    height: 100%;
+    //    padding-right: 1rem;
+    //
+    //    .availableServicesPaper {
+    //      box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
+    //      padding: 1rem;
+    //      display: flex;
+    //      height: 100%;
+    //      width: 100%;
+    //      overflow-y: scroll;
+    //      flex-direction: column;
+    //      align-items: flex-start;
+    //
+    //      :global(.form-group) {
+    //        margin-bottom: .5rem;
+    //        font-family: Inter, sans-serif;
+    //        font-style: normal;
+    //        font-weight: 600;
+    //        font-size: 14px;
+    //        line-height: 20px;
+    //        color: #34354C;
+    //
+    //        :global(.form-check) {
+    //          align-items: center;
+    //          display: flex;
+    //        }
+    //
+    //        :global(.form-check-input) {
+    //          margin-top: 0;
+    //          color: transparent;
+    //        }
+    //      }
+    //    }
+    //  }
+    //
+    //  .servicesTotal {
+    //    display: flex;
+    //    flex-direction: column;
+    //    height: 100%;
+    //    width: 50%;
+    //
+    //    .offeredServicesPaper {
+    //      overflow-y: scroll;
+    //      padding-top: 1rem;
+    //      padding-bottom: 1rem;
+    //
+    //      .offered-services-table {
+    //
+    //      }
+    //    }
+    //
+    //    :global(.no-data-label) {
+    //      width: 100%;
+    //      text-align: center;
+    //      margin-top: 1rem;
+    //      font-weight: normal;
+    //      font-size: .8rem;
+    //    }
+    //
+    //    .totalPrice {
+    //      width: 100%;
+    //      text-align: end;
+    //      font-family: Inter, sans-serif;
+    //      font-style: normal;
+    //      font-weight: 600;
+    //      font-size: 16px;
+    //      line-height: 24px;
+    //      color: #34354C;
+    //    }
+    //
+    //    :global(.positive-button) {
+    //      margin-top: 2rem;
+    //      height: 2rem;
+    //      flex: unset;
+    //    }
+    //  }
+    //}
 
     .printableWrapper {
       flex: 1;
@@ -180,22 +179,16 @@
       .guideNameField {
         width: 56%;
         margin-bottom: .2rem !important;
-        padding: 0;
-        font-family: Inter, sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 14px;
       }
     }
   }
 
-  .right-container {
-    width: 50%;
-    height: 100%;
-    min-height: 745px;
+  .rightContainer {
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    width: calc(50% - 16px);
+    height: calc(100% - 16px);
 
     :global(.title-label) {
       padding-left: 1.5rem;
@@ -237,9 +230,10 @@
     }
   }
 
-  .patient-info {
-    width: 100%;
-    height: 6rem;
+  .patientInfo {
+    width: calc(100% - 2rem);
+    min-height: 90px;
+    max-height: 90px;
     background: #FFFFFF;
     box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
     border-radius: 4px;
@@ -247,7 +241,7 @@
     display: flex;
     align-items: center;
 
-    .patient-name {
+    .patientName {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: bold;
@@ -255,16 +249,16 @@
       color: #34354C;
     }
 
-    .personal-data-container {
+    .personalDataContainer {
       margin-left: .5rem;
       display: flex;
       flex-direction: column;
     }
 
-    .patient-info-row {
+    .patientInfoRow {
       display: flex;
 
-      .patient-info-title {
+      .patientInfoTitle {
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: 600;
@@ -272,7 +266,7 @@
         color: #34354C;
       }
 
-      .patient-info-value {
+      .patientInfoValue {
         margin-left: .5rem;
         font-family: Inter, sans-serif;
         font-style: normal;

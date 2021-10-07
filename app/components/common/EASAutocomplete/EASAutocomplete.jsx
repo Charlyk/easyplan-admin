@@ -15,6 +15,7 @@ const EASAutocomplete = (
     loading,
     disabled,
     placeholder,
+    clearOnSelect,
     value,
     fieldLabel,
     containerClass,
@@ -24,10 +25,18 @@ const EASAutocomplete = (
 ) => {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [fieldKey, setFieldKey] = useState(1);
 
   const handleFocusChange = (isFocused) => {
     setFocused(isFocused);
   };
+
+  const handleChange = (event, value) => {
+    onChange?.(event, value);
+    if (clearOnSelect) {
+      setFieldKey(fieldKey + 1);
+    }
+  }
 
   const renderInput = (params) => {
     return (
@@ -72,6 +81,7 @@ const EASAutocomplete = (
           </Typography>
         )}
         <Autocomplete
+          key={fieldKey}
           disabled={disabled}
           open={open}
           value={value}
@@ -81,7 +91,7 @@ const EASAutocomplete = (
           renderInput={renderInput}
           getOptionLabel={getOptionLabel}
           noOptionsText={textForKey('No options')}
-          onChange={onChange}
+          onChange={handleChange}
           onOpen={() => {
             setOpen(true);
           }}
@@ -105,6 +115,7 @@ export default EASAutocomplete;
 EASAutocomplete.propTypes = {
   loading: PropTypes.bool,
   value: PropTypes.any,
+  clearOnSelect: PropTypes.bool,
   disabled: PropTypes.bool,
   placeholder: PropTypes.string,
   fieldLabel: PropTypes.string,
@@ -112,6 +123,7 @@ EASAutocomplete.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.any,
+      key: PropTypes.any,
       name: PropTypes.string,
       label: PropTypes.string
     })

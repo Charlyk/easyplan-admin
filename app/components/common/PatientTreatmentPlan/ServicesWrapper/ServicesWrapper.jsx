@@ -1,17 +1,13 @@
-import React, { useRef } from "react";
+import React, { useMemo } from "react";
 import PropTypes from 'prop-types';
-import Form from "react-bootstrap/Form";
-import Image from 'next/image';
 import Paper from "@material-ui/core/Paper";
-import { Menu, MenuItem, Typeahead } from "react-bootstrap-typeahead";
 import clsx from "clsx";
 
 import { textForKey } from "../../../../../utils/localization";
 import getServiceName from "../../../../../utils/getServiceName";
 import FinalServiceItem from "../../../doctors/FinalServiceItem";
 import LoadingButton from "../../LoadingButton";
-import ToothIcon from '../../../../../public/icon-tooth.png';
-import BracesIcon from '../../../../../public/icon-dental-braces.png';
+import EASAutocomplete from "../../EASAutocomplete";
 import styles from './ServicesWrapper.module.scss';
 
 const ServicesWrapper = (
@@ -28,8 +24,6 @@ const ServicesWrapper = (
     onFinalize
   }
 ) => {
-  const servicesRef = useRef(null);
-
   /**
    * Get unique html key for a service item
    * @param {Object} service
@@ -39,46 +33,24 @@ const ServicesWrapper = (
     return `${service.id}-${service.toothId}-${service.name}-${service.destination}-${service.completed}-${service.completedAt}`;
   };
 
+  const mappedOptions = useMemo(() => {
+    return allServices.map((item) => ({
+      ...item,
+      name: getServiceName(item),
+    }));
+  }, [allServices])
+
   return (
     <Paper className={styles.servicesWrapper} elevation={0}>
       {!readOnly && (
         <div className={styles.inputWrapper}>
-          <Form.Group>
-            <Typeahead
-              ref={servicesRef}
-              placeholder={textForKey('Enter service name')}
-              id='services'
-              options={allServices}
-              filterBy={['name']}
-              labelKey='name'
-              selected={[]}
-              onChange={onItemSelected}
-              renderMenu={(results, menuProps) => {
-                return (
-                  <Menu {...menuProps}>
-                    {results.map((result, index) => (
-                      <MenuItem
-                        key={`${result.id}-${result.destination}`}
-                        option={result}
-                        position={index}
-                      >
-                        {getServiceName(result)}
-
-                        {result.serviceType !== 'All' && (
-                          <Image
-                            src={result.serviceType === 'Single' ? ToothIcon : BracesIcon}
-                            alt={textForKey(result.serviceType)}
-                            width={20}
-                            height={20}
-                          />
-                        )}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                );
-              }}
-            />
-          </Form.Group>
+          <EASAutocomplete
+            clearOnSelect
+            value={null}
+            placeholder={textForKey('Enter service name')}
+            options={mappedOptions}
+            onChange={onItemSelected}
+          />
         </div>
       )}
 
