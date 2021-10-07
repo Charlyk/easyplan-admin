@@ -14,8 +14,8 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
     }
   }, [open]);
 
-  const handleFieldChange = (event) => {
-    setValue(event.target.value);
+  const handleFieldChange = (newValue) => {
+    setValue(newValue);
   };
 
   const handleSubmit = () => {
