@@ -55,7 +55,7 @@ const DoctorCalendar = (
         return (
           (filterData.patientName.length === 0 ||
             schedule.patient.fullName.toLowerCase().startsWith(filterData.patientName)) &&
-          (filterData.serviceId === 'all' ||
+          (filterData.serviceId === -1 ||
             schedule.serviceId === parseInt(filterData.serviceId)) &&
           (filterData.appointmentStatus === 'all' ||
             schedule.scheduleStatus === filterData.appointmentStatus)
@@ -67,7 +67,7 @@ const DoctorCalendar = (
       }
     });
     localDispatch(actions.setSchedules(filteredSchedules));
-  }, [filterData]);
+  }, [filterData, initialData]);
 
   useEffect(() => {
     handleScheduleUpdate();
@@ -127,11 +127,8 @@ const DoctorCalendar = (
     }
   }
 
-  const handlePatientNameChange = (event) => {
-    localDispatch(actions.setFilterData({
-      ...filterData,
-      patientName: event.target.value,
-    }));
+  const handlePatientNameChange = (patientName) => {
+    localDispatch(actions.setFilterData({ ...filterData, patientName }));
   };
 
   const handleServiceChange = (event) => {
@@ -188,6 +185,7 @@ const DoctorCalendar = (
     <div className={styles.doctorCalendarRoot}>
       <div className={styles.filterWrapper}>
         <PatientsFilter
+          filterData={filterData}
           viewMode={viewMode}
           currentClinic={currentClinic}
           selectedDate={viewDate}

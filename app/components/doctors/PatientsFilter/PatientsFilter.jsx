@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
-import Button from '@material-ui/core/Button';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from "@material-ui/core/Typography";
@@ -18,6 +17,7 @@ import styles from './PatientsFilter.module.scss';
 
 const PatientsFilter = (
   {
+    filterData,
     selectedDate,
     currentClinic,
     viewMode,
@@ -28,7 +28,7 @@ const PatientsFilter = (
     onViewModeChange,
   }
 ) => {
-  const services = clinicServicesSelector(currentClinic)
+  const services = clinicServicesSelector(currentClinic);
 
   const sortedServices = useMemo(() => {
     return sortBy(services, item => item.name.toLowerCase())
@@ -51,6 +51,7 @@ const PatientsFilter = (
       </ToggleButtonGroup>
       <EASTextField
         type="text"
+        value={filterData.patientName || ''}
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Patient')}
         onChange={onNameChange}
@@ -59,21 +60,25 @@ const PatientsFilter = (
         rootClass={styles.simpleField}
         label={textForKey('Service')}
         labelId="service-select-label"
+        value={filterData.serviceId || -1}
         defaultOption={{
-          id: 'all',
+          id: -1,
           name: textForKey('All services')
         }}
         options={sortedServices}
+        onChange={onServiceChange}
       />
       <EASSelect
         label={textForKey('Appointment status')}
         labelId="status-select-label"
+        value={filterData.appointmentStatus ?? 'all'}
         rootClass={styles.simpleField}
         defaultOption={{
           id: 'all',
           name: textForKey('All statuses')
         }}
         options={Statuses}
+        onChange={onStatusChange}
       />
 
       <Calendar
@@ -90,6 +95,11 @@ export default React.memo(PatientsFilter, areComponentPropsEqual);
 PatientsFilter.propTypes = {
   selectedDate: PropTypes.instanceOf(Date),
   viewMode: PropTypes.oneOf(['day', 'week']),
+  filterData: PropTypes.shape({
+    patientName: PropTypes.string,
+    serviceId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    appointmentStatus: PropTypes.string,
+  }),
   onNameChange: PropTypes.func,
   onDateChange: PropTypes.func,
   onServiceChange: PropTypes.func,

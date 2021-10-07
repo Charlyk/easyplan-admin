@@ -8,7 +8,7 @@ export const initialState = {
   isLoading: false,
   filterData: {
     patientName: '',
-    serviceId: 'all',
+    serviceId: -1,
     appointmentStatus: 'all',
   }
 };
