@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from "next/router";
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 
 import IconSuccess from '../../../icons/iconSuccess';
 import LoadingButton from '../../../common/LoadingButton';
 import { textForKey } from '../../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
-import styles from './SecuritySettings.module.scss';
 import EASTextField from "../../../common/EASTextField";
+import styles from './SecuritySettings.module.scss';
 
 const SecuritySettings = ({ currentUser }) => {
   const router = useRouter();

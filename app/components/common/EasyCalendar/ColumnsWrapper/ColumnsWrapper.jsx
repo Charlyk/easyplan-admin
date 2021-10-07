@@ -23,9 +23,9 @@ const ColumnsWrapper = (
 
   return (
     <div className={styles.columnsWrapperRoot}>
-      {columns.map((column) => (
+      {columns.map((column, index) => (
         <Column
-          key={column.id}
+          key={`${column.id}-${index}`}
           isSingleMode={isSingleMode}
           animatedStatuses={animatedStatuses}
           schedules={getSchedulesForColumn(column)}

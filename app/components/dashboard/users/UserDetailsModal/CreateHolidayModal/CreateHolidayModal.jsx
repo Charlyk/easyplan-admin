@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { getAppLanguage, textForKey } from '../../../../../../utils/localization';
+import EASTextarea from "../../../../common/EASTextarea";
 import EASModal from "../../../../common/modals/EASModal";
 import styles from './CreateHolidayModal.module.scss';
-import EASTextField from "../../../../common/EASTextField";
-import EASTextarea from "../../../../common/EASTextarea";
 
 const initialRange = {
   startDate: moment().toDate(),

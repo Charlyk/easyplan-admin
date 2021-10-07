@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, InputGroup } from 'react-bootstrap';
 import clsx from "clsx";
 
 import LoadingButton from '../../LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
-import styles from './ResetPassword.module.scss';
 import EASTextField from "../../EASTextField";
+import styles from './ResetPassword.module.scss';
 
 const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }) => {
   const [email, setEmail] = useState('');

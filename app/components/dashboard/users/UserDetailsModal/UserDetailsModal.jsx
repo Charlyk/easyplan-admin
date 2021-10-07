@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { remove, cloneDeep, isEqual } from 'lodash';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
 import { toast } from 'react-toastify';
 import CircularProgress from "@material-ui/core/CircularProgress";
 

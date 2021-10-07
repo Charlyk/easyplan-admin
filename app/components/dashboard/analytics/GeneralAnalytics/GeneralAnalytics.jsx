@@ -3,7 +3,6 @@ import sortBy from "lodash/sortBy";
 import clsx from "clsx";
 import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
-import Form from 'react-bootstrap/Form';
 import { useRouter } from 'next/router';
 
 import IconCheckMark from '../../../icons/iconCheckMark';
@@ -14,13 +13,13 @@ import IconSuccess from '../../../icons/iconSuccess';
 import IconXPerson from '../../../icons/iconXPerson';
 import { Role, Statuses } from '../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
+import EASSelect from "../../../common/EASSelect";
+import EASTextField from "../../../common/EASTextField";
 import StatisticFilter from '../StatisticFilter';
 import IncomeStatisticItem from './IncomeStatisticItem';
 import StatusItem from './StatusItem';
 import { reducer, actions, initialState } from "./GeneralAnalytics.reducer";
 import styles from './GeneralAnalytics.module.scss';
-import EASSelect from "../../../common/EASSelect";
-import EASTextField from "../../../common/EASTextField";
 
 const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
 

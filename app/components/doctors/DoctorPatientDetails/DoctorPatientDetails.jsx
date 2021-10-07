@@ -4,13 +4,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import sum from 'lodash/sum';
 import moment from 'moment-timezone';
 import Button from '@material-ui/core/Button';
-import Modal from 'react-bootstrap/Modal';
+import Typography from "@material-ui/core/Typography";
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 
-import IconAvatar from '../../icons/iconAvatar';
-import PatientDetails from '../PatientDetails';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
@@ -24,11 +22,14 @@ import {
 } from "../../../../middleware/api/patients";
 import getErrorMessage from "../../../../app/utils/getErrorMessage";
 import EASTextField from "../../common/EASTextField";
+import IconAvatar from '../../icons/iconAvatar';
+import PatientDetails from '../PatientDetails';
 import reducer, {
   initialState,
   actions
 } from './DoctorPatientDetails.reducer';
 import styles from './DoctorPatientDetails.module.scss';
+import EASPersistentModal from "../../common/modals/EASPersistentModal";
 
 const FinalizeTreatmentModal = dynamic(() => import('../../../../app/components/doctors/FinalizeTreatmentModal'));
 
@@ -236,86 +237,85 @@ const DoctorPatientDetails = (
 
   return (
     <div className={styles.doctorPatientRoot}>
-        <FinalizeTreatmentModal
-          currentClinic={currentClinic}
-          onSave={finalizeTreatment}
-          totalPrice={getTotalPrice()}
-          services={finalServices}
-          open={showFinalizeTreatment}
-          onClose={handleCloseFinalizeTreatment}
-        />
-        <Modal
-          centered
-          className='loading-modal'
-          show={isFinalizing}
-          onHide={() => null}
-        >
-          <Modal.Body>
-            <CircularProgress className='circular-progress-bar'/>
-            {isFinalizing && textForKey('Finalizing treatment...')}
-          </Modal.Body>
-        </Modal>
-        <div className={styles.leftContainer}>
-          <div className={styles.patientInfo}>
-            <IconAvatar/>
-            <div className={styles.personalDataContainer}>
-              <span className={styles.patientName}>{getPatientName()}</span>
-              <div className={styles.patientInfoRow}>
-                <span className={styles.patientInfoTitle}>{textForKey('Date')}:</span>
-                <span className={styles.patientInfoValue}>
+      <FinalizeTreatmentModal
+        currentClinic={currentClinic}
+        onSave={finalizeTreatment}
+        totalPrice={getTotalPrice()}
+        services={finalServices}
+        open={showFinalizeTreatment}
+        onClose={handleCloseFinalizeTreatment}
+      />
+      <EASPersistentModal open={isFinalizing}>
+        <div className={styles.progressBar}>
+          <CircularProgress className='circular-progress-bar'/>
+        </div>
+        {isFinalizing && (
+          <Typography className={styles.loadingLabel}>
+            {textForKey('Finalizing treatment...')}
+          </Typography>
+        )}
+      </EASPersistentModal>
+      <div className={styles.leftContainer}>
+        <div className={styles.patientInfo}>
+          <IconAvatar/>
+          <div className={styles.personalDataContainer}>
+            <span className={styles.patientName}>{getPatientName()}</span>
+            <div className={styles.patientInfoRow}>
+              <span className={styles.patientInfoTitle}>{textForKey('Date')}:</span>
+              <span className={styles.patientInfoValue}>
                 {formattedTime}
               </span>
-              </div>
-              <div className={styles.patientInfoRow}>
+            </div>
+            <div className={styles.patientInfoRow}>
               <span className={styles.patientInfoTitle}>
                 {textForKey('Doctor')}:
               </span>
-                <span className={styles.patientInfoValue}>{currentUser.fullName}</span>
-              </div>
-            </div>
-            <div className={styles.printableWrapper}>
-              <EASTextField
-                containerClass={styles.guideNameField}
-                value={guideName}
-                fieldLabel={textForKey('Enter guide name')}
-                onChange={handleGuideNameChange}
-              />
-              <Button className='positive-button' onPointerUp={handlePrintTreatmentPlan}>
-                {textForKey('Print plan')}
-              </Button>
+              <span className={styles.patientInfoValue}>{currentUser.fullName}</span>
             </div>
           </div>
-          <PatientTreatmentPlan
+          <div className={styles.printableWrapper}>
+            <EASTextField
+              containerClass={styles.guideNameField}
+              value={guideName}
+              fieldLabel={textForKey('Enter guide name')}
+              onChange={handleGuideNameChange}
+            />
+            <Button className='positive-button' onPointerUp={handlePrintTreatmentPlan}>
+              {textForKey('Print plan')}
+            </Button>
+          </div>
+        </div>
+        <PatientTreatmentPlan
+          currentClinic={currentClinic}
+          currentUser={currentUser}
+          scheduleData={initialSchedule}
+          scheduleId={scheduleId}
+          onFinalize={handleFinalizeTreatment}
+        />
+      </div>
+      <div className={styles.rightContainer}>
+        {patient && (
+          <PatientDetails
+            isDoctor
             currentClinic={currentClinic}
             currentUser={currentUser}
-            scheduleData={initialSchedule}
-            scheduleId={scheduleId}
-            onFinalize={handleFinalizeTreatment}
+            scheduleId={schedule.id}
+            onAddXRay={handleAddXRay}
+            onSaveOrthodonticPlan={handleSaveTreatmentPlan}
+            onEditAppointmentNote={handleEditAppointmentNote}
+            patient={patient}
+            defaultTab={TabId.notes}
+            showTabs={[
+              TabId.appointments,
+              TabId.orthodonticPlan,
+              TabId.appointmentsNotes,
+              TabId.xRay,
+              TabId.notes,
+            ]}
           />
-        </div>
-        <div className={styles.rightContainer}>
-          {patient && (
-            <PatientDetails
-              isDoctor
-              currentClinic={currentClinic}
-              currentUser={currentUser}
-              scheduleId={schedule.id}
-              onAddXRay={handleAddXRay}
-              onSaveOrthodonticPlan={handleSaveTreatmentPlan}
-              onEditAppointmentNote={handleEditAppointmentNote}
-              patient={patient}
-              defaultTab={TabId.notes}
-              showTabs={[
-                TabId.appointments,
-                TabId.orthodonticPlan,
-                TabId.appointmentsNotes,
-                TabId.xRay,
-                TabId.notes,
-              ]}
-            />
-          )}
-        </div>
+        )}
       </div>
+    </div>
   );
 };
 

@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 
@@ -11,12 +8,11 @@ import { EmailRegex } from '../../../../utils/constants';
 import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
-import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import UploadAvatar from "../../../common/UploadAvatar";
-import styles from './AccountSettings.module.scss'
 import EASTextField from "../../../common/EASTextField";
 import EASPhoneInput from "../../../common/EASPhoneInput";
+import styles from './AccountSettings.module.scss'
 
 const AccountSettings = ({ currentUser }) => {
   const router = useRouter();

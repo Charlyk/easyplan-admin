@@ -2,15 +2,12 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 
 import { createHoursList, days } from '../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 import SwitchButton from '../SwitchButton';
-
-import styles from './WorkDay.module.scss';
 import EASSelect from "../EASSelect";
+import styles from './WorkDay.module.scss';
 
 const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   const hours = createHoursList();
