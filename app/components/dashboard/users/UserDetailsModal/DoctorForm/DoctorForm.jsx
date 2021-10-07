@@ -3,6 +3,7 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 
 import { textForKey } from '../../../../../../utils/localization';
+import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
 import DoctorBracesSettings from '../DoctorBracesSettings';
 import DoctorHolidays from '../DoctorHolidays';
 import DoctorServices from '../DoctorServices';
@@ -32,19 +33,19 @@ const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHo
   }, []);
 
   return (
-    <div className={styles['doctor-form']}>
-      <div className={styles['doctor-form__group']}>
-        <div className={styles['doctor-form__group-header']}>
-          <div className={styles['doctor-form__group-header__title-container']}>
+    <div className={styles.doctorForm}>
+      <div className={styles.group}>
+        <div className={styles.groupHeader}>
+          <div className={styles.titleContainer}>
             {textForKey('Work hours')}
           </div>
         </div>
         <DoctorWorkHours show data={data} onChange={handleWorkDaysChange} />
       </div>
 
-      <div className={styles['doctor-form__group']}>
-        <div className={styles['doctor-form__group-header']}>
-          <div className={styles['doctor-form__group-header__title-container']}>
+      <div className={styles.group}>
+        <div className={styles.groupHeader}>
+          <div className={styles.titleContainer}>
             {textForKey('Holidays')}
           </div>
         </div>
@@ -56,18 +57,18 @@ const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHo
         />
       </div>
 
-      <div className={styles['doctor-form__group']}>
-        <div className={styles['doctor-form__group-header']}>
-          <div className={styles['doctor-form__group-header__title-container']}>
+      <div className={styles.group}>
+        <div className={styles.groupHeader}>
+          <div className={styles.titleContainer}>
             {textForKey('Braces')}
           </div>
         </div>
         <DoctorBracesSettings show clinicBraces={clinicBraces} data={data} onChange={handleBracesChange} />
       </div>
 
-      <div className={styles['doctor-form__group']}>
-        <div className={styles['doctor-form__group-header']}>
-          <div className={styles['doctor-form__group-header__title-container']}>
+      <div className={styles.group}>
+        <div className={styles.groupHeader}>
+          <div className={styles.titleContainer}>
             {textForKey('Provided services')}
           </div>
         </div>
@@ -77,7 +78,7 @@ const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHo
   );
 };
 
-export default DoctorForm;
+export default React.memo(DoctorForm, areComponentPropsEqual);
 
 DoctorForm.propTypes = {
   onChange: PropTypes.func,

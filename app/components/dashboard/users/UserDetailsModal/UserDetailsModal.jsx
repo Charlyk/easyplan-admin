@@ -9,6 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import IconClose from '../../../icons/iconClose';
 import IconSuccess from '../../../icons/iconSuccess';
 import { Role } from '../../../../utils/constants';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from '../../../../../utils/localization';
 import LeftSideModal from '../../../common/LeftSideModal';
 import LoadingButton from '../../../common/LoadingButton';
@@ -17,7 +18,6 @@ import {
   getUserDetails,
   updateUserDetails
 } from "../../../../../middleware/api/users";
-import DoctorForm from './DoctorForm';
 import reducer, {
   initialData,
   initialState,
@@ -25,12 +25,13 @@ import reducer, {
   setUserHolidays,
   setIsSaving,
   setUserData,
-  setUserType,
   setIsLoading,
+  resetState,
 } from './UserDetailsModal.reducer';
 import styles from './UserDetailsModal.module.scss';
 
 const CreateHolidayModal = dynamic(() => import('./CreateHolidayModal'));
+const DoctorForm = dynamic(() => import('./DoctorForm'));
 
 const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
   const [
@@ -41,22 +42,21 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
       isLoading,
     },
     localDispatch
-  ] = useReducer(reducer, initialState)
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localDispatch(setUserType(role))
-  }, [role]);
+    if (!show) {
+      localDispatch(resetState());
+    }
+  }, [show]);
 
   useEffect(() => {
     if (user != null) {
-      setTimeout(() => {
-        fetchUserDetails();
-      }, 300);
+      fetchUserDetails();
     }
   }, [user]);
 
   const fetchUserDetails = async () => {
-    localDispatch(setIsLoading(true));
     try {
       const response = await getUserDetails(user.id);
       const { data: userDetails } = response;
@@ -82,11 +82,6 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
 
   const handleModalClose = () => {
     onClose();
-    setTimeout(() => handleTabSelect(Role.doctor), 300);
-  };
-
-  const handleTabSelect = newKey => {
-    localDispatch(setUserType(newKey));
   };
 
   const handleFormChange = newData => {
@@ -210,44 +205,48 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
         onClose={handleCloseHolidayModal}
       />
       <div className={styles.userDetailsRoot}>
-        <div className={styles.content}>
-          {!isLoading && (
-            <DoctorForm
-              currentClinic={currentClinic}
-              onCreateHoliday={handleCreateHoliday}
-              onDeleteHoliday={handleHolidayDelete}
-              onChange={handleFormChange}
-              data={userData}
-              showSteps={user == null}
-            />
-          )}
-          {isLoading && (
-            <div className='progress-bar-wrapper'>
-              <CircularProgress classes={{ root: 'circular-progress-bar'}}/>
+        {!isLoading && (
+          <>
+            <div className={styles.content}>
+              {!isLoading && (
+                <DoctorForm
+                  currentClinic={currentClinic}
+                  onCreateHoliday={handleCreateHoliday}
+                  onDeleteHoliday={handleHolidayDelete}
+                  onChange={handleFormChange}
+                  data={userData}
+                  showSteps={user == null}
+                />
+              )}
+              {isLoading && (
+                <div className='progress-bar-wrapper'>
+                  <CircularProgress classes={{ root: 'circular-progress-bar'}}/>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className={styles.footer}>
-          <Button className='cancel-button' onClick={handleModalClose}>
-            {textForKey('Close')}
-            <IconClose/>
-          </Button>
-          <LoadingButton
-            onClick={handleSaveForm}
-            className='positive-button'
-            disabled={isSaving || isLoading}
-            isLoading={isSaving}
-          >
-            {textForKey('Save')}
-            {!isSaving && <IconSuccess/>}
-          </LoadingButton>
-        </div>
+            <div className={styles.footer}>
+              <Button className='cancel-button' onClick={handleModalClose}>
+                {textForKey('Close')}
+                <IconClose/>
+              </Button>
+              <LoadingButton
+                onClick={handleSaveForm}
+                className='positive-button'
+                disabled={isSaving || isLoading}
+                isLoading={isSaving}
+              >
+                {textForKey('Save')}
+                {!isSaving && <IconSuccess/>}
+              </LoadingButton>
+            </div>
+          </>
+        )}
       </div>
     </LeftSideModal>
   );
 };
 
-export default UserDetailsModal;
+export default React.memo(UserDetailsModal, areComponentPropsEqual);
 
 UserDetailsModal.propTypes = {
   onClose: PropTypes.func.isRequired,

@@ -1,12 +1,11 @@
 import React from 'react';
-
+import Drawer from "@material-ui/core/Drawer";
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
+import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import ModalHeader from './ModalHeader';
 import styles from './LeftSideModal.module.scss';
-import Drawer from "@material-ui/core/Drawer";
-import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 
 const LeftSideModal = (props) => {
   const { show, onClose, children, title, steps, className } = props;
