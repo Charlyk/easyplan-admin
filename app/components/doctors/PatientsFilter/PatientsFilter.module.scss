@@ -2,6 +2,7 @@
   width: 160px;
   display: flex;
   padding: 1rem;
+  margin-left: 8px;
   flex: 1;
   flex-direction: column;
   align-items: center;
@@ -12,6 +13,27 @@
   .simpleField {
     margin-bottom: 5px;
     width: 100%;
+  }
+
+  .tabsLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 10px !important;
+    color: currentColor !important;
+  }
+
+  .tabRoot {
+    background-color: white !important;
+    color: #3A83DC !important;
+    width: 50%;
+    border-color: #3A83DC;
+    padding: 8px;
+  }
+
+  .tabSelected {
+    background-color: #3A83DC !important;
+    color: white !important;
   }
 
   :global(.custom-select) {

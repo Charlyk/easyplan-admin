@@ -2,17 +2,19 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import Button from '@material-ui/core/Button';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import Typography from "@material-ui/core/Typography";
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
 import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
 import { Statuses } from '../../../utils/constants';
 import { getAppLanguage, textForKey } from '../../../../utils/localization';
-import styles from './PatientsFilter.module.scss';
+import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import EASTextField from "../../common/EASTextField";
 import EASSelect from "../../common/EASSelect";
+import styles from './PatientsFilter.module.scss';
 
 const PatientsFilter = (
   {
@@ -34,13 +36,19 @@ const PatientsFilter = (
 
   return (
     <div className={styles.patientsFilter}>
-      <Button
-        variant='outlined'
-        style={{ width: '100%', marginTop: '1.3rem', marginBottom: '5px' }}
-        onClick={onViewModeChange}
+      <ToggleButtonGroup
+        exclusive
+        value={viewMode}
+        onChange={onViewModeChange}
+        style={{ marginBottom: '5px' }}
       >
-        {viewMode === 'day' ? textForKey('Week schedules') : textForKey('Day schedules')}
-      </Button>
+        <ToggleButton value='day' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
+          <Typography className={styles.tabsLabel}>{textForKey('Week schedules')}</Typography>
+        </ToggleButton>
+        <ToggleButton value='week' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
+          <Typography className={styles.tabsLabel}>{textForKey('Day schedules')}</Typography>
+        </ToggleButton>
+      </ToggleButtonGroup>
       <EASTextField
         type="text"
         containerClass={styles.simpleField}
@@ -77,7 +85,7 @@ const PatientsFilter = (
   );
 };
 
-export default PatientsFilter;
+export default React.memo(PatientsFilter, areComponentPropsEqual);
 
 PatientsFilter.propTypes = {
   selectedDate: PropTypes.instanceOf(Date),
