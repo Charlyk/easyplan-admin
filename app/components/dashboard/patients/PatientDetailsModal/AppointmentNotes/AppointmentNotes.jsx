@@ -36,7 +36,7 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
   };
 
   return (
-    <div className={styles['patient-visits-list']}>
+    <div className={styles.patientVisitsList}>
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Appointments notes')}
       </Typography>
@@ -45,20 +45,23 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
           {textForKey('No data here yet')} :(
         </Typography>
       )}
-      <div className={styles['patient-visits-list__visits-data']}>
+      <div className={styles.visitsData}>
         {isFetching && (
           <div className='progress-bar-wrapper'>
             <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
-        {visits.map((visit, index) => (
-          <AppointmentNote
-            canEdit={visit.doctorId === currentUser.id}
-            key={`${visit.scheduleId}-${visit.doctorId}-${visit.created}-${index}`}
-            visit={visit}
-            onEdit={onEditNote}
-          />
-        ))}
+        {visits.map((visit, index) => {
+          const { doctor } = visit;
+          return (
+            <AppointmentNote
+              canEdit={doctor.id === currentUser.id}
+              key={`${visit.scheduleId}-${doctor.id}-${visit.created}-${index}`}
+              visit={visit}
+              onEdit={onEditNote}
+            />
+          )
+        })}
       </div>
     </div>
   );

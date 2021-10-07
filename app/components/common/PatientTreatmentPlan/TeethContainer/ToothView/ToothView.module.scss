@@ -78,6 +78,20 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+
+      .urgentCheck {
+        margin-top: 5px;
+        user-select: none;
+        margin-bottom: 0;
+
+        .urgentLabel {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-size: 14px;
+          color: #ec3276;
+          cursor: pointer;
+        }
+      }
     }
 
     :global(.form-group) {
@@ -101,21 +115,21 @@
   }
 }
 
-.tooth-services-paper-root {
+.toothServicesPaperRoot {
   user-select: none;
   z-index: 10000;
 
-  .services-tooth-paper {
+  .servicesToothPaper {
     width: 100%;
     background: #FFFFFF;
     border-radius: 4px !important;
 
-    .options-wrapper {
+    .optionsWrapper {
       display: flex;
       flex-direction: column;
       width: 100%;
 
-      .option-row {
+      .optionRow {
         margin: .2rem;
         padding-left: .2rem;
         padding-right: .2rem;
@@ -124,14 +138,14 @@
         align-items: center;
       }
 
-      .service-color-indicator {
+      .serviceColorIndicator {
         margin-right: .3rem;
         width: .35rem;
         height: .35rem;
         border-radius: 50%;
       }
 
-      .service-name {
+      .serviceName {
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: normal;

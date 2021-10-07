@@ -15,25 +15,25 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
   }
 
   return (
-    <div className={styles['appointment-note']}>
-      <div className={styles['appointment-note__note-date']}>
+    <div className={styles.appointmentNote}>
+      <div className={styles.noteDate}>
         {moment(visit.created).format('DD MMM YYYY HH:mm')}
       </div>
-      <div className={styles['appointment-note__data-wrapper']}>
-        <div className={styles['appointment-note__creator-info']}>
-          <span className={styles['appointment-note__creator-info__doctor-title']}>
+      <div className={styles.dataWrapper}>
+        <div className={styles.creatorInfo}>
+          <span className={styles.doctorTitle}>
             {textForKey('Doctor')}:
           </span>
-          <span className={styles['appointment-note__creator-info__doctor-name']}>
+          <span className={styles.doctorName}>
             {doctor.fullName}
           </span>
         </div>
-        <div className={styles['appointment-note__note-text']}>
+        <div className={styles.noteText}>
           {visit.note.length === 0 ? textForKey('No notes') : visit.note}
         </div>
-        <div className={styles['services-container']}>
+        <div className={styles.servicesContainer}>
           {visit?.planServices?.map((planService, index) => (
-            <div key={`${planService.id}-${index}`} className={styles['visit-service-item']}>
+            <div key={`${planService.id}-${index}`} className={styles.visitServiceItem}>
               {serviceName(planService)}
             </div>
           ))}
@@ -42,7 +42,7 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
           <div
             role='button'
             tabIndex={0}
-            className={styles['edit-note-btn']}
+            className={styles.editNoteBtn}
             onClick={() => onEdit(visit)}
           >
             <IconEditService />

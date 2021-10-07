@@ -1,11 +1,11 @@
-.appointment-note {
+.appointmentNote {
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
   width: 100%;
   position: relative;
 
-  .edit-note-btn {
+  .editNoteBtn {
     outline: none;
     position: absolute;
     right: 1rem;
@@ -13,13 +13,13 @@
     top: 50%
   }
 
-  .services-container {
+  .servicesContainer {
     margin-top: 1rem;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
 
-    .visit-service-item {
+    .visitServiceItem {
       background-color: #ededed;
       border-radius: .2rem;
       padding: .5rem;
@@ -33,7 +33,7 @@
     }
   }
 
-  &__data-wrapper {
+  .dataWrapper {
     display: flex;
     flex-direction: column;
     background: #FFFFFF;
@@ -42,11 +42,11 @@
     padding: 1rem;
   }
 
-  &__creator-info {
+  .creatorInfo {
     display: flex;
     margin-bottom: .5rem;
 
-    &__doctor-title {
+    .doctorTitle {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: 600;
@@ -56,7 +56,7 @@
       margin-right: .3rem;
     }
 
-    &__doctor-name {
+    .doctorName {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -66,7 +66,7 @@
     }
   }
 
-  &__note-text {
+  .noteText {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -76,7 +76,7 @@
     color: #6F7091;
   }
 
-  &__note-date {
+  .noteDate {
     font-family: Inter, sans-serif;
     margin-bottom: .5rem;
     margin-left: 1rem;

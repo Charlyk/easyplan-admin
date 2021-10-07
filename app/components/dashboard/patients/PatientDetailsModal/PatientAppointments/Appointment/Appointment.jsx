@@ -19,32 +19,32 @@ const Appointment = ({ appointment }) => {
   );
   return (
     <div className={styles.appointment}>
-      <div className={styles['appointment-info']}>
-        <div className={styles['appointment-info-row']}>
-          <div className={styles['appointment-info-title']}>{textForKey('Doctor')}:</div>
+      <div className={styles.appointmentInfo}>
+        <div className={styles.appointmentInfoRow}>
+          <div className={styles.appointmentInfoTitle}>{textForKey('Doctor')}:</div>
           <div>{doctor.fullName}</div>
         </div>
-        <div className={styles['appointment-info-row']}>
-          <div className={styles['appointment-info-title']}>
+        <div className={styles.appointmentInfoRow}>
+          <div className={styles.appointmentInfoTitle}>
             {textForKey('Services')}:
           </div>
           <div>{service.name}</div>
         </div>
-        <div className={styles['appointment-info-row']}>
-          <div className={styles['appointment-info-title']}>{textForKey('Clinic')}:</div>
+        <div className={styles.appointmentInfoRow}>
+          <div className={styles.appointmentInfoTitle}>{textForKey('Clinic')}:</div>
           <div>{clinic.clinicName}</div>
         </div>
       </div>
-      <div className={styles['appointment-time']}>
-        <div className={styles['appointment-time-row']}>
+      <div className={styles.appointmentTime}>
+        <div className={styles.appointmentTimeRow}>
           <IconAppointmentCalendar />
-          <div className={styles['appointment-time-text']}>
+          <div className={styles.appointmentTimeText}>
             {scheduleDate.format('DD MMM YYYY')}
           </div>
         </div>
-        <div className={styles['appointment-time-row']}>
+        <div className={styles.appointmentTimeRow}>
           <IconAppointmentClock />
-          <div className={styles['appointment-time-text']}>
+          <div className={styles.appointmentTimeText}>
             {scheduleDate.format('HH:mm')}
           </div>
         </div>
@@ -56,11 +56,11 @@ const Appointment = ({ appointment }) => {
         alignItems='center'
       >
         <div
-          className={styles['appointment-status-indicator']}
+          className={styles.appointmentStatusIndicator}
           style={{ backgroundColor: `${status.color}1A` }}
         >
           <Typography
-            classes={{ root: styles['status-name-label'] }}
+            classes={{ root: styles.statusNameLabel }}
             style={{ color: status.color }}
           >
             {status?.name}
@@ -72,10 +72,10 @@ const Appointment = ({ appointment }) => {
             target='_blank'
             rel='noreferrer'
           >
-            <span className={styles['print-label']}>{textForKey('Print receipt')}</span>
+            <span className={styles.printLabel}>{textForKey('Print receipt')}</span>
           </a>
         )}
-        <Typography classes={{ root: styles['canceled-reason-label'] }}>
+        <Typography classes={{ root: styles.canceledReasonLabel }}>
           {appointment.canceledReason}
         </Typography>
       </Box>

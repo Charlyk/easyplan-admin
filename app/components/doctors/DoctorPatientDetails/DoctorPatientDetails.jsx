@@ -78,15 +78,6 @@ const DoctorPatientDetails = (
   }, []);
 
   /**
-   * Handle start adding a note for patient
-   */
-  const handleAddNote = () => {
-    dispatch(
-      setPatientNoteModal({ open: true, patientId: patient.id, mode: 'notes' }),
-    );
-  };
-
-  /**
    * Handle start adding x-ray image
    */
   const handleAddXRay = () => {
@@ -310,7 +301,6 @@ const DoctorPatientDetails = (
               currentUser={currentUser}
               scheduleId={schedule.id}
               onAddXRay={handleAddXRay}
-              onAddNote={handleAddNote}
               onSaveOrthodonticPlan={handleSaveTreatmentPlan}
               onEditAppointmentNote={handleEditAppointmentNote}
               patient={patient}

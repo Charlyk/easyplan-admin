@@ -17,6 +17,7 @@ const EASTextField = React.forwardRef(
       onChange,
       helperText,
       type,
+      autoFocus,
       ...rest
     },
     ref
@@ -58,6 +59,7 @@ const EASTextField = React.forwardRef(
           type={type}
           variant="outlined"
           error={error}
+          autoFocus={autoFocus}
           helperText={helperText}
           onFocus={() => handleFocusChange(true)}
           onBlur={() => handleFocusChange(false)}

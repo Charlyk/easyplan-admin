@@ -4,9 +4,6 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import PhoneInput from 'react-phone-input-2';
 import { toast } from "react-toastify";
 
 import IconSuccess from '../../../../icons/iconSuccess';
@@ -16,11 +13,10 @@ import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../../common/LoadingButton';
 import { actions, initialState, reducer } from './PatientPersonalData.reducer';
 import { updatePatient } from "../../../../../../middleware/api/patients";
-import isPhoneInputValid from "../../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
-import styles from './PatientPersonalData.module.scss';
 import EASTextField from "../../../../common/EASTextField";
 import EASPhoneInput from "../../../../common/EASPhoneInput";
+import styles from './PatientPersonalData.module.scss';
 
 const EasyDatePicker = dynamic(() => import('../../../../common/EasyDatePicker'));
 

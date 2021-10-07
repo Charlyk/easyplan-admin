@@ -62,7 +62,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
   };
 
   return (
-    <div className={styles['patient-appointments-list']}>
+    <div className={styles.patientAppointmentsList}>
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Appointments')}
       </Typography>
@@ -71,7 +71,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
           {textForKey('No data here yet')} :(
         </Typography>
       )}
-      <div className={styles['patient-appointments-list__appointments-data']}>
+      <div className={styles.appointmentsData}>
         {isLoading && (
           <div className='progress-bar-wrapper'>
             <CircularProgress classes={{ root: 'circular-progress-bar' }} />
@@ -82,7 +82,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
         ))}
       </div>
       {!isDoctor && (
-        <div className={styles['patient-appointments-list__actions']}>
+        <div className={styles.actions}>
           <Button
             variant='outlined'
             classes={{

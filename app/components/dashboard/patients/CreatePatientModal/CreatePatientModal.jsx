@@ -3,22 +3,17 @@ import axios from "axios";
 import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import PhoneInput from 'react-phone-input-2';
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
 
 import { togglePatientsListUpdate } from '../../../../../redux/actions/actions';
 import { textForKey } from '../../../../../utils/localization';
-import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import EasyPlanModal from '../../../common/modals/EasyPlanModal';
-import { reducer, initialState, actions } from './CreatePatientModal.reducer';
-import styles from './CreatePatientModal.module.scss';
 import EASModal from "../../../common/modals/EASModal";
 import EASTextField from "../../../common/EASTextField";
 import EASPhoneInput from "../../../common/EASPhoneInput";
+import { reducer, initialState, actions } from './CreatePatientModal.reducer';
+import styles from './CreatePatientModal.module.scss';
 
 const EasyDatePicker = dynamic(() => import('../../../common/EasyDatePicker'));
 

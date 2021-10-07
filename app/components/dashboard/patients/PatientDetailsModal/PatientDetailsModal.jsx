@@ -13,7 +13,6 @@ import { toast } from 'react-toastify';
 import IconAvatar from '../../../icons/iconAvatar';
 import IconClose from '../../../icons/iconClose';
 import {
-  setPatientNoteModal,
   setPatientXRayModal,
   togglePatientsListUpdate,
 } from '../../../../../redux/actions/actions';
@@ -91,10 +90,6 @@ const PatientDetailsModal = (
     }
   };
 
-  const handleAddNote = () => {
-    dispatch(setPatientNoteModal({ open: true, patientId, mode: 'notes' }));
-  };
-
   const handleStartDeletePatient = () => {
     if (typeof onDelete === 'function') {
       onDelete(patient);
@@ -116,10 +111,6 @@ const PatientDetailsModal = (
     localDispatch(actions.setViewInvoice(null));
   };
 
-  const menuItemClasses = (itemId) => {
-    return currentMenu === itemId ? styles.selected : '';
-  };
-
   const handleAddXRayImages = () => {
     dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
@@ -138,7 +129,7 @@ const PatientDetailsModal = (
           />
         );
       case MenuItem.notes:
-        return <PatientNotes patient={patient} onAddNote={handleAddNote}/>;
+        return <PatientNotes patient={patient}/>;
       case MenuItem.appointments:
         return <PatientAppointments patient={patient}/>;
       case MenuItem.xRay:

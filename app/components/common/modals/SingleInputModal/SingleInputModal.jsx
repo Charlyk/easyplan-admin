@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Box from "@material-ui/core/Box";
-import Form from 'react-bootstrap/Form';
+import EASTextField from "../../EASTextField";
 import EASModal from "../EASModal";
 import styles from './SingleInputModal.module.scss';
 
@@ -32,15 +32,12 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
       onPrimaryClick={handleSubmit}
     >
       <Box padding='16px'>
-        <Form.Group>
-          <Form.Label>{label}</Form.Label>
-          <Form.Control
-            onChange={handleFieldChange}
-            value={value}
-            as='textarea'
-            aria-label={label}
-          />
-        </Form.Group>
+        <EASTextField
+          type="text"
+          fieldLabel={label}
+          value={value}
+          onChange={handleFieldChange}
+        />
       </Box>
     </EASModal>
   );

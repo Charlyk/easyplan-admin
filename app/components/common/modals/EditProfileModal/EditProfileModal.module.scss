@@ -1,17 +1,26 @@
-.edit-profile-modal {
+.editProfileModal {
 
-  .modal-account-settings {
+  .modalPaper {
+    width: 30%;
+  }
+
+  .modalAccountSettings {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 100%;
-    border-radius: 4px;
+    width: calc(100% - 32px);
+    padding: 16px;
 
-    .form-group {
+    .simpleField {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+
+    .formGroup {
       width: 100%;
 
-      .form-label {
+      .formLabel {
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: 600;
@@ -19,7 +28,7 @@
         margin-bottom: 0;
       }
 
-      .form-text {
+      .formText {
         font-family: Inter, sans-serif;
         font-style: normal;
         font-weight: normal;
@@ -28,17 +37,17 @@
         margin-bottom: 0;
       }
 
-      .form-control {
+      .formControl {
         background-color: #FAFAFD;
       }
     }
 
-    .upload-avatar-container {
+    .uploadAvatarContainer {
       justify-content: space-between;
       margin-bottom: 1rem;
       width: 100%;
 
-      .form-group {
+      .formGroup {
         width: max-content !important;
 
         label {

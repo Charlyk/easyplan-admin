@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import Image from 'react-bootstrap/Image';
-import InputGroup from 'react-bootstrap/InputGroup';
-import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
+import { useRouter } from "next/router";
 import axios from "axios";
 
-import IconAvatar from '../../../icons/iconAvatar';
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
 import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
 import urlToLambda from '../../../../../utils/urlToLambda';
 import { textForKey } from '../../../../../utils/localization';
-import EasyPlanModal from '../EasyPlanModal';
-import styles from './EditProfileModal.module.scss';
-import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
-import { useRouter } from "next/router";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
+import styles from './EditProfileModal.module.scss';
+import EASModal from "../EASModal";
+import UploadAvatar from "../../UploadAvatar";
+import EASTextField from "../../EASTextField";
+import EASPhoneInput from "../../EASPhoneInput";
 
 const EditProfileModal = ({ open, currentUser, onClose }) => {
   const router = useRouter();
@@ -34,6 +31,10 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
     password: '',
     confirmPassword: '',
   });
+  const avatarSrc = data.avatarUrl ? urlToLambda(data.avatarUrl, 64) : null;
+
+  const isPasswordValid = data.password.length === 0 || data.password.match(PasswordRegex);
+  const isConfirmPasswordValid = data.password.length === 0 || data.confirmPassword === data.password;
 
   useEffect(() => {
     setData({ ...data, ...currentUser, email: currentUser?.email });
@@ -47,19 +48,18 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
     setIsEmailChanged(isChanged);
   }, [data.email]);
 
-  const handleLogoChange = event => {
+  const handleLogoChange = (file) => {
     if (isLoading) return;
-    const files = event.target.files;
-    if (files != null) {
-      setData({ ...data, avatarFile: files[0] });
+    if (file != null) {
+      setData({ ...data, avatarFile: file });
     }
   };
 
-  const handleFormChange = event => {
+  const handleFormChange = (fieldId) => (newValue) => {
     if (isLoading) return;
     setData({
       ...data,
-      [event.target.id]: event.target.value,
+      [fieldId]: newValue,
     });
   };
 
@@ -72,7 +72,8 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
     });
   };
 
-  const submitForm = async () => {
+  const submitForm = async (event) => {
+    event?.preventDefault();
     setIsLoading(true);
     try {
       let avatar = data.avatarUrl;
@@ -120,134 +121,85 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
     return isNameValid && isPhoneNumberValid && isEmailValid && isPasswordValid;
   };
 
-  const avatarSrc =
-    (data.avatarFile && window.URL.createObjectURL(data.avatarFile)) ||
-    (data.avatarUrl ? urlToLambda(data.avatarUrl, 64) : null);
-
   return (
-    <EasyPlanModal
+    <EASModal
       title={textForKey('Account settings')}
       open={open}
-      className={styles['edit-profile-modal']}
+      className={styles.editProfileModal}
+      paperClass={styles.modalPaper}
       onClose={onClose}
       isPositiveDisabled={!isFormValid()}
-      onPositiveClick={submitForm}
+      onPrimaryClick={submitForm}
       isPositiveLoading={isLoading}
     >
-      <div className={styles['modal-account-settings']}>
-        <div className={styles['upload-avatar-container']}>
-          {avatarSrc ? <Image roundedCircle src={avatarSrc} /> : <IconAvatar />}
-          <span style={{ margin: '1rem' }} className={styles['info-text']}>
-            {textForKey('JPG or PNG, Max size of 800kb')}
-          </span>
-          <Form.Group>
-            <input
-              className={styles['custom-file-button']}
-              type='file'
-              name='avatar-file'
-              id='avatar-file'
-              accept='.jpg,.jpeg,.png'
-              onChange={handleLogoChange}
-            />
-            <label htmlFor='avatar-file'>{textForKey('Upload image')}</label>
-          </Form.Group>
-        </div>
-        <Form.Group controlId='lastName'>
-          <Form.Label>{textForKey('Last name')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              type='text'
-              onChange={handleFormChange}
-              value={data.lastName || ''}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='firstName'>
-          <Form.Label>{textForKey('First name')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              type='text'
-              onChange={handleFormChange}
-              value={data.firstName || ''}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='email'>
-          <Form.Label>{textForKey('Email')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              isValid={data.email?.match(EmailRegex)}
-              type='text'
-              onChange={handleFormChange}
-              value={data.email || ''}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='phoneNumber'>
-          <Form.Label>{textForKey('Phone number')}</Form.Label>
-          <InputGroup>
-            <PhoneInput
-              onChange={handlePhoneChange}
-              value={data.phoneNumber || ''}
-              alwaysDefaultMask
-              countryCodeEditable={false}
-              country='md'
-              isValid={isPhoneInputValid}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='oldPassword'>
-          <Form.Label>{textForKey('Current password')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              autoComplete='new-password'
-              value={data.oldPassword || ''}
-              type='password'
-              onChange={handleFormChange}
-            />
-            {isEmailChanged && (
-              <Form.Text className={styles['text-muted']}>
-                {textForKey('Current password is required')}
-              </Form.Text>
-            )}
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='password'>
-          <Form.Label>{textForKey('New password')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              autoComplete='new-password'
-              value={data.password || ''}
-              isValid={data.password.match(PasswordRegex)}
-              isInvalid={
-                data.password.length > 0 && !data.password.match(PasswordRegex)
-              }
-              type='password'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
-        <Form.Group controlId='confirmPassword'>
-          <Form.Label>{textForKey('Confirm new password')}</Form.Label>
-          <InputGroup>
-            <Form.Control
-              isInvalid={
-                data.confirmPassword.length > 0 &&
-                data.confirmPassword !== data.password
-              }
-              isValid={
-                data.password.length > 0 &&
-                data.confirmPassword === data.password
-              }
-              autoComplete='new-password'
-              value={data.confirmPassword || ''}
-              type='password'
-              onChange={handleFormChange}
-            />
-          </InputGroup>
-        </Form.Group>
-      </div>
-    </EasyPlanModal>
+      <form className={styles.modalAccountSettings} onSubmit={submitForm}>
+        <UploadAvatar
+          currentAvatar={data.avatarFile ?? avatarSrc}
+          onChange={handleLogoChange}
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Last name')}
+          value={data.lastName ?? ''}
+          onChange={handleFormChange('lastName')}
+        />
+
+        <EASTextField
+          type="text"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('First name')}
+          value={data.lastName ?? ''}
+          onChange={handleFormChange('firstName')}
+        />
+
+        <EASTextField
+          type="email"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Email')}
+          value={data.email ?? ''}
+          onChange={handleFormChange('email')}
+        />
+
+        <EASPhoneInput
+          rootClass={styles.simpleField}
+          fieldLabel={textForKey('Phone number')}
+          onChange={handlePhoneChange}
+          value={data.phoneNumber ?? ''}
+          country='md'
+        />
+
+        <EASTextField
+          type="password"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Current password')}
+          value={data.oldPassword ?? ''}
+          onChange={handleFormChange('oldPassword')}
+          helperText={isEmailChanged ? textForKey('Current password is required') : null}
+        />
+
+        <EASTextField
+          type="password"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('new password')}
+          value={data.password ?? ''}
+          error={!isPasswordValid}
+          onChange={handleFormChange('password')}
+          helperText={!isPasswordValid ? textForKey('passwordvalidationmessage') : null}
+        />
+
+        <EASTextField
+          type="password"
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Confirm new password')}
+          value={data.confirmPassword ?? ''}
+          error={!isConfirmPasswordValid}
+          onChange={handleFormChange('confirmPassword')}
+          helperText={!isConfirmPasswordValid ? textForKey('passwords_not_equal') : null}
+        />
+      </form>
+    </EASModal>
   );
 };
 

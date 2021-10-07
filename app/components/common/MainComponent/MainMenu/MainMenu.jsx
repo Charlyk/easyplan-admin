@@ -237,7 +237,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
             )
           } else {
             return (
-              <Link href={item.href}>
+              <Link href={item.href} key={item.id}>
                 <ListItem
                   classes={{ root: styles.listItem, selected: styles.selected }}
                   selected={isActive(item.href)}

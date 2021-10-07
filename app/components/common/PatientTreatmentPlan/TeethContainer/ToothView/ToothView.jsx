@@ -5,8 +5,9 @@ import Popper from '@material-ui/core/Popper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
 import styles from './ToothView.module.scss';
+import Checkbox from "@material-ui/core/Checkbox";
+import { FormControlLabel } from "@material-ui/core";
 
 const ToothView = (
   {
@@ -82,7 +83,7 @@ const ToothView = (
 
   const servicesPopper = (
     <Popper
-      className={styles['tooth-popper-root']}
+      className={styles.toothPopperRoot}
       anchorEl={anchorEl.current}
       open={showServices}
       placement='bottom'
@@ -90,24 +91,20 @@ const ToothView = (
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className={styles['tooth-paper']}>
+          <Paper className={styles.toothPaper}>
             <ClickAwayListener onClickAway={handleCloseServicesPopper}>
-              <div className={styles['options-wrapper']}>
+              <div className={styles.optionsWrapper}>
                 {toothServices.map((service) => (
-                  <Form.Group
+                  <FormControlLabel
                     key={service.id}
-                    controlId={`tooth-${service.id}`}
-                  >
-                    <Form.Check
-                      disabled={service.canRemove === false}
-                      onChange={() =>
-                        handleServiceSelected(service, !service.selected)
-                      }
-                      type='checkbox'
-                      checked={service.selected}
-                      label={service.name}
-                    />
-                  </Form.Group>
+                    control={<Checkbox checked={service.selected} />}
+                    label={service.name}
+                    onChange={handleServiceSelected}
+                    classes={{
+                      root: styles.urgentCheck,
+                      label: styles.urgentLabel,
+                    }}
+                  />
                 ))}
               </div>
             </ClickAwayListener>

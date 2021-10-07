@@ -4,6 +4,11 @@
   flex-direction: column;
   align-items: center;
 
+  .simpleField {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
   .form-title {
     font-family: Inter, sans-serif;
     font-style: normal;

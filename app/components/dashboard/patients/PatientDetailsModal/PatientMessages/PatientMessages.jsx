@@ -3,8 +3,6 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 import axios from "axios";
 
@@ -12,6 +10,7 @@ import IconPlus from '../../../../icons/iconPlus';
 import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../../common/LoadingButton';
 import PatientMessage from './PatientMessage';
+import EASTextField from "../../../../common/EASTextField";
 import {
   reducer,
   initialState,
@@ -19,7 +18,6 @@ import {
   charactersRegex
 } from './PatientMessages.reducer';
 import styles from './PatientMessages.module.scss';
-import EASTextField from "../../../../common/EASTextField";
 
 const PatientMessages = ({ patient }) => {
   const [state, localDispatch] = useReducer(reducer, initialState);

@@ -46,7 +46,8 @@ const InviteUserModal = (
     setRole(type);
   }, [type]);
 
-  const handleInviteUser = () => {
+  const handleInviteUser = (event) => {
+    event?.preventDefault();
     onInvite(email, role);
   };
 
@@ -72,8 +73,9 @@ const InviteUserModal = (
       isPositiveLoading={isLoading}
       isPositiveDisabled={!email.match(EmailRegex)}
     >
-      <div className={styles.content}>
+      <form className={styles.content} onSubmit={handleInviteUser}>
         <EASTextField
+          autoFocus
           error={!isEmailValid}
           containerClass={styles.input}
           fieldLabel={textForKey('Email')}
@@ -87,7 +89,7 @@ const InviteUserModal = (
           value={role}
           onChange={handleRoleChange}
         />
-      </div>
+      </form>
       {error && <span className={styles.errorMessage}>{textForKey(error)}</span>}
     </EASModal>
   );

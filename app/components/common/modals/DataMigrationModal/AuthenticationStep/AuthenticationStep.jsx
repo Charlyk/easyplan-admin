@@ -1,14 +1,13 @@
 import React, { useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { toast } from 'react-toastify';
 
 import { YClientAPIUrl } from '../../../../../utils/constants';
 import generateReducerActions from '../../../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../LoadingButton';
+import EASTextField from "../../../EASTextField";
 import styles from './AuthenticationStep.module.scss'
 
 // const initialState = {
@@ -55,17 +54,16 @@ const AuthenticationStep = ({ onLogin }) => {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  const handleFormChange = (event) => {
-    const targetId = event.target.id;
+  const handleFormChange = (targetId) => (newValue) => {
     switch (targetId) {
       case 'username':
-        localDispatch(actions.setUsername(event.target.value));
+        localDispatch(actions.setUsername(newValue));
         break;
       case 'password':
-        localDispatch(actions.setPassword(event.target.value));
+        localDispatch(actions.setPassword(newValue));
         break;
       case 'partnerToken':
-        localDispatch(actions.setPartnerToken(event.target.value));
+        localDispatch(actions.setPartnerToken(newValue));
         break;
     }
   };
@@ -105,37 +103,27 @@ const AuthenticationStep = ({ onLogin }) => {
       <Typography classes={{ root: styles['form-title'] }}>
         {textForKey('Authenticate with Yclients account')}
       </Typography>
-      <Form.Group controlId='username'>
-        <Form.Label>{textForKey('Username')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={username}
-            type='email'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='password'>
-        <Form.Label>{textForKey('Password')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            autoComplete='new-password'
-            value={password}
-            type='password'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
-      <Form.Group controlId='partnerToken'>
-        <Form.Label>{textForKey('Partner token')}</Form.Label>
-        <InputGroup>
-          <Form.Control
-            value={partnerToken}
-            type='text'
-            onChange={handleFormChange}
-          />
-        </InputGroup>
-      </Form.Group>
+      <EASTextField
+        type="email"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Username')}
+        value={username}
+        onChange={handleFormChange('username')}
+      />
+      <EASTextField
+        type="password"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Password')}
+        value={password}
+        onChange={handleFormChange('password')}
+      />
+      <EASTextField
+        type="text"
+        containerClass={styles.simpleField}
+        fieldLabel={textForKey('Partner token')}
+        value={partnerToken}
+        onChange={handleFormChange('partnerToken')}
+      />
       <LoadingButton
         onClick={handleLogin}
         className='positive-button'

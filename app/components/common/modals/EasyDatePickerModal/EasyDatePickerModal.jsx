@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
-import Form from "react-bootstrap/Form";
 import Box from "@material-ui/core/Box";
 import * as locales from "react-date-range/dist/locale";
 import { Calendar } from "react-date-range";
@@ -10,6 +9,7 @@ import moment from "moment-timezone";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { getAppLanguage, textForKey } from "../../../../../utils/localization";
 import EASModal from "../EASModal";
+import EASSelect from "../../EASSelect";
 
 const EasyDatePickerModal = (
   {
@@ -66,6 +66,13 @@ const EasyDatePickerModal = (
     setHour(event.target.value);
   }
 
+  const mappedHours = useMemo(() => {
+    return hours.map(item => ({
+      id: item,
+      name: item,
+    }));
+  }, [hours]);
+
   return (
     <EASModal
       open={open}
@@ -85,25 +92,13 @@ const EasyDatePickerModal = (
         date={date}
       />
       {isHourRequired && (
-        <Form.Group style={{ width: '100%' }} controlId='startTime'>
-          <Form.Label>{textForKey('Hour')}</Form.Label>
-          <Form.Control
-            as='select'
-            onChange={handleHourChange}
-            value={hour}
-            disabled={isLoading || hours.length === 0}
-            custom
-          >
-            {hours.map((item) => (
-              <option key={`start-${item}`} value={item}>
-                {item}
-              </option>
-            ))}
-            {hours.length === 0 && (
-              <option value={-1}>{textForKey('No available time')}</option>
-            )}
-          </Form.Control>
-        </Form.Group>
+        <EASSelect
+          label={textForKey('Hour')}
+          labelId="hour-select-label"
+          value={hour}
+          options={mappedHours}
+          onChange={handleHourChange}
+        />
       )}
       </Box>
     </EASModal>

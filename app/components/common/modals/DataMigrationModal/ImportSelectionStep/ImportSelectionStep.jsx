@@ -10,7 +10,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify';
 
 import IconArrowDown from '../../../../icons/iconArrowDown';
@@ -18,6 +17,7 @@ import { YClientAPIUrl } from '../../../../../utils/constants';
 import generateReducerActions from '../../../../../../utils/generateReducerActions';
 import { textForKey } from '../../../../../../utils/localization';
 import LoadingButton from '../../../LoadingButton';
+import EASTextField from "../../../EASTextField";
 import styles from './ImportSelectionStep.module.scss';
 
 const EasyDatePicker = dynamic(() => import('../../../EasyDatePicker'));
@@ -163,9 +163,8 @@ const ImportSelectionStep = ({ userData, onImport }) => {
     dispatch(actions.setIsDatePickerOpen({ open: true, type }));
   };
 
-  const handleDateFieldClick = (event) => {
+  const handleDateFieldClick = (targetId) => (event) => {
     datePickerRef.current = event.target;
-    const targetId = event.target.id;
     handleOpenDatePicker(targetId);
   };
 
@@ -269,22 +268,20 @@ const ImportSelectionStep = ({ userData, onImport }) => {
         label={textForKey('Services')}
       />
       <Box display='flex'>
-        <Form.Group className={styles['date-form-group']} controlId='start'>
-          <Form.Label>{textForKey('Start date')}</Form.Label>
-          <Form.Control
-            value={moment(startDate).format('DD MMMM YYYY')}
-            readOnly
-            onClick={handleDateFieldClick}
-          />
-        </Form.Group>
-        <Form.Group className={styles['date-form-group']} controlId='end'>
-          <Form.Label>{textForKey('End date')}</Form.Label>
-          <Form.Control
-            value={moment(endDate).format('DD MMMM YYYY')}
-            readOnly
-            onClick={handleDateFieldClick}
-          />
-        </Form.Group>
+        <EASTextField
+          readOnly
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('Start date')}
+          value={moment(startDate).format('DD MMMM YYYY')}
+          onPointerUp={handleDateFieldClick('start')}
+        />
+        <EASTextField
+          readOnly
+          containerClass={styles.simpleField}
+          fieldLabel={textForKey('End date')}
+          value={moment(endDate).format('DD MMMM YYYY')}
+          onPointerUp={handleDateFieldClick('end')}
+        />
       </Box>
       <div
         onClick={handleOpenCompanies}

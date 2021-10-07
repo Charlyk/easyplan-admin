@@ -3,13 +3,14 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Typography from '@material-ui/core/Typography';
+import Paper from "@material-ui/core/Paper";
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import styles from './DataMigrationModal.module.scss';
 import { usePubNub } from 'pubnub-react';
-import Modal from 'react-bootstrap/Modal';
+import Modal from '@material-ui/core/Modal';
 
 import IconClose from '../../../icons/iconClose';
 import { env } from '../../../../utils/constants';
@@ -194,13 +195,11 @@ const DataMigrationModal = ({ show, currentClinic, authToken, onClose }) => {
 
   return (
     <Modal
+      open={show}
       className={styles['data-migration-modal-root']}
-      centered
-      show={show}
-      size='xl'
-      onHide={handleModalClose}
+      onClose={handleModalClose}
     >
-      <Modal.Header>
+      <Paper>
         <Typography classes={{ root: styles['modal-title-label'] }}>
           {textForKey('Migrate data from Yclients')}
         </Typography>
@@ -212,7 +211,7 @@ const DataMigrationModal = ({ show, currentClinic, authToken, onClose }) => {
         >
           <IconClose />
         </div>
-      </Modal.Header>
+      </Paper>
       <Modal.Body>{getStepContent(activeStep)}</Modal.Body>
       <Modal.Footer>
         <Stepper activeStep={activeStep}>

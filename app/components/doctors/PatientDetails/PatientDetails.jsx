@@ -26,7 +26,6 @@ const PatientDetails = (
   {
     currentUser,
     currentClinic,
-    onAddNote,
     onAddXRay,
     onEditAppointmentNote,
     onSaveOrthodonticPlan,
@@ -130,7 +129,7 @@ const PatientDetails = (
           <PatientAppointments patient={patient} isDoctor={isDoctor}/>
         )}
         {selectedTab === TabId.notes && (
-          <PatientNotes patient={patient} onAddNote={onAddNote}/>
+          <PatientNotes patient={patient}/>
         )}
         {selectedTab === TabId.xRay && (
           <PatientXRay onAddXRay={onAddXRay} patient={patient}/>

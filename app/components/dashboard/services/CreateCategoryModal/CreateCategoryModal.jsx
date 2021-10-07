@@ -27,7 +27,8 @@ const CreateCategoryModal = props => {
     setCategoryName(category ? category.name : '');
   }, [category]);
 
-  const handleCategorySave = async () => {
+  const handleCategorySave = async (event) => {
+    event?.preventDefault();
     setIsLoading(true);
     if (category != null) {
       await editCategoryName();
@@ -85,13 +86,14 @@ const CreateCategoryModal = props => {
       isPositiveLoading={isLoading}
       isPositiveDisabled={isLoading}
     >
-      <div style={{ padding: '16px' }}>
+      <form style={{ padding: '16px' }} onSubmit={handleCategorySave}>
         <EASTextField
+          autoFocus
           fieldLabel={textForKey('Enter category name')}
           value={categoryName}
           onChange={handleCategoryNameChange}
         />
-      </div>
+      </form>
     </EASModal>
   );
 };

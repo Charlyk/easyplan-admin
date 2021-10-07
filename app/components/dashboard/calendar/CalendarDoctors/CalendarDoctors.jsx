@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Spinner from 'react-bootstrap/Spinner';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { textForKey } from '../../../../../utils/localization';
-import CalendarDoctor from './CalendarDoctor';
-import styles from './CalendarDoctors.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import EASTextField from "../../../common/EASTextField";
+import CalendarDoctor from './CalendarDoctor';
+import styles from './CalendarDoctors.module.scss';
 
 const CalendarDoctors = (
   {
@@ -51,7 +49,9 @@ const CalendarDoctors = (
       </div>
       <div className={styles['doctors-content']}>
         {isFetching && (
-          <Spinner animation='border' className={styles['loading-spinner']}/>
+          <div className='progress-bar-wrapper'>
+            <CircularProgress className='circular-progress-bar'/>
+          </div>
         )}
         {filteredDoctors.map(doctor => (
           <CalendarDoctor

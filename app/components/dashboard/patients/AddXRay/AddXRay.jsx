@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
 import { useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
 
@@ -11,7 +10,6 @@ import { addPatientXRayImage } from "../../../../../middleware/api/patients";
 import EASModal from "../../../common/modals/EASModal";
 import styles from './AddXRay.module.scss';
 import EASSelect from "../../../common/EASSelect";
-import EASTextField from "../../../common/EASTextField";
 import Typography from "@material-ui/core/Typography";
 
 const phases = [

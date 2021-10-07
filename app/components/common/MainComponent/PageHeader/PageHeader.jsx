@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
-import Image from 'react-bootstrap/Image';
+import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 
 import IconAvatar from '../../../icons/iconAvatar';
@@ -16,8 +16,8 @@ import { setPaymentModal } from '../../../../../redux/actions/actions';
 import { textForKey } from '../../../../../utils/localization';
 import InvoicesButton from '../../../dashboard/InvoicesButton';
 import { Role } from "../../../../utils/constants";
-import styles from './PageHeader.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import styles from './PageHeader.module.scss';
 
 const ActionsSheet = dynamic(() => import('../../ActionsSheet'));
 
@@ -73,7 +73,7 @@ const PageHeader = (
   };
 
   return (
-    <div className={styles['page-header']}>
+    <div className={styles.pageHeader}>
       <ActionsSheet
         onClose={handleActionsClose}
         onSelect={handleActionSelected}
@@ -83,7 +83,7 @@ const PageHeader = (
         placement='bottom-end'
       />
       <div
-        className={styles['page-header__title']}
+        className={styles.title}
         style={{ marginTop: titleComponent != null ? 0 : '0.5rem' }}
       >
         {titleComponent || title}
@@ -96,7 +96,7 @@ const PageHeader = (
           />
           <Tooltip title={textForKey('Add payment')}>
             <IconButton
-              classes={{ root: styles['add-invoice-btn'] }}
+              classes={{ root: styles.addInvoiceBtn }}
               onClick={handleOpenPaymentModal}
             >
               <IconPlus fill='#3A83DC'/>
@@ -104,13 +104,18 @@ const PageHeader = (
           </Tooltip>
         </div>
       )}
-      <div className={styles['page-header__actions']}>
-        <div className={styles['page-header__notifications']}>
+      <div className={styles.actions}>
+        <div className={styles.notifications}>
           <IconNotifications/>
         </div>
-        <div className={styles['avatar-container']}>
+        <div className={styles.avatarContainer}>
           {user?.avatar ? (
-            <Image roundedCircle className={styles['avatar-image']} src={user.avatar}/>
+            <Image
+              width={50}
+              height={50}
+              className={styles.avatarImage}
+              src={user.avatar}
+            />
           ) : (
             <IconAvatar/>
           )}
@@ -119,7 +124,7 @@ const PageHeader = (
           role='button'
           tabIndex={0}
           onClick={handleActionsOpen}
-          className={styles['page-header__notifications']}
+          className={styles.notifications}
           ref={actionsAnchor}
         >
           <IconMore/>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { triggerUpdateNotes } from '../../../../../redux/actions/actions';
 import { textForKey } from '../../../../../utils/localization';
 import { createPatientNote, updateVisitNote } from "../../../../../middleware/api/patients";
-import EasyPlanModal from '../EasyPlanModal';
+import EASTextarea from "../../EASTextarea";
+import EASModal from "../EASModal";
 import styles from './AddNote.module.scss';
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
@@ -25,11 +25,12 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
     }
   }, [visit]);
 
-  const handleNoteChange = event => {
-    setNoteText(event.target.value);
+  const handleNoteChange = (newValue) => {
+    setNoteText(newValue);
   };
 
-  const handleSaveNote = async () => {
+  const handleSaveNote = async (event) => {
+    event?.preventDefault();
     setIsLoading(true);
     try {
       if (mode === 'visits') {
@@ -54,26 +55,26 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   };
 
   return (
-    <EasyPlanModal
-      onClose={onClose}
+    <EASModal
       open={open}
-      size='sm'
       className={styles.addNoteRoot}
+      paperClass={styles.modalPaper}
       title={textForKey('Create note')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={noteText.length === 0}
-      onPositiveClick={handleSaveNote}
+      onPrimaryClick={handleSaveNote}
+      onClose={onClose}
     >
-      <Form.Group>
-        <Form.Label>{textForKey('Enter note')}</Form.Label>
-        <Form.Control
-          onChange={handleNoteChange}
+      <form className={styles.modalContent} onSubmit={handleSaveNote}>
+        <EASTextarea
+          fieldLabel={textForKey('Enter note')}
           value={noteText}
-          as='textarea'
-          aria-label={textForKey('Enter category name')}
+          rows={4}
+          maxRows={5}
+          onChange={handleNoteChange}
         />
-      </Form.Group>
-    </EasyPlanModal>
+      </form>
+    </EASModal>
   );
 };
 
@@ -85,5 +86,5 @@ AddNote.propTypes = {
   onClose: PropTypes.func,
   mode: PropTypes.string.isRequired,
   visit: PropTypes.object,
-  scheduleId: PropTypes.string,
+  scheduleId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

@@ -3,8 +3,8 @@ import Fade from "@material-ui/core/Fade";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
+import Button from "@material-ui/core/Button";
 import { ColorPicker } from "react-color-palette";
-import { Button } from "react-bootstrap";
 
 import { textForKey } from "../../../../utils/localization";
 import styles from "./EASColorPicker.module.scss";
