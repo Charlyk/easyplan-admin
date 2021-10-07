@@ -82,6 +82,7 @@ const AppointmentsCalendar = (
     <div className={clsx(styles.appointmentsCalendar, 'full-height')}>
       {selectedSchedule != null && (
         <AppointmentDetails
+          key={selectedSchedule.id}
           onPayDebt={onPayDebt}
           onDelete={onDeleteSchedule}
           onEdit={onEditSchedule}
