@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Button from '@material-ui/core/Button';
+import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 
@@ -13,9 +14,10 @@ import { closeServiceDetailsModal } from '../../../../../redux/actions/serviceDe
 import { serviceDetailsModalSelector } from '../../../../../redux/selectors/serviceDetailsSelector';
 import { setUpdatedService } from "../../../../../redux/actions/servicesActions";
 import { clinicActiveDoctorsSelector } from "../../../../../redux/selectors/clinicSelector";
-import ServiceDoctors from './ServiceDoctors';
-import ServiceInformation from './ServiceInformation';
 import styles from './ServiceDetailsModal.module.scss';
+
+const ServiceDoctors = dynamic(() => import('./ServiceDoctors'));
+const ServiceInformation = dynamic(() => import('./ServiceInformation'));
 
 const initialService = {
   name: '',
@@ -183,22 +185,22 @@ const ServiceDetailsModal = ({ currentClinic }) => {
         {open && (
           <div className={styles.data}>
             <ServiceInformation
+              isExpanded
               currentClinic={currentClinic}
               clinicCurrency={clinicCurrency}
               onChange={handleInfoChanged}
               data={serviceInfo}
               onToggle={handleInfoToggle}
-              isExpanded={expandedMenu === 'info'}
               showStep={service == null}
             />
 
             <ServiceDoctors
+              isExpanded
               clinic={currentClinic}
               onDoctorChange={handleDoctorChange}
               serviceId={service?.id}
               doctors={serviceInfo.doctors}
               onToggle={handleDoctorsToggle}
-              isExpanded={expandedMenu === 'doctors'}
               showStep={!service}
             />
           </div>

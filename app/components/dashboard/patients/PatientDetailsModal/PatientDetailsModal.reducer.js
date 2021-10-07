@@ -54,11 +54,11 @@ export const MenuItems = [
     name: textForKey('Appointments notes'),
     type: 'default',
   },
-  // {
-  //   id: MenuItem.orthodonticPlan,
-  //   name: textForKey('Orthodontic plan'),
-  //   type: 'default',
-  // },
+  {
+    id: MenuItem.orthodonticPlan,
+    name: textForKey('Orthodontic plan'),
+    type: 'default',
+  },
   {
     id: MenuItem.generalTreatmentPlan,
     name: textForKey('Treatment plan'),

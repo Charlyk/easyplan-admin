@@ -9,14 +9,16 @@ import styles from './SMSMessagesHeader.module.scss'
 const SMSMessagesHeader = ({ canCreate, onCreate }) => {
   return (
     <div className={styles['create-message-header']}>
-      <Button
-        className={styles.createButton}
-        disabled={!canCreate}
-        onClick={onCreate}
-      >
-        {textForKey('Create message')}
-        <IconPlus fill='#fff' />
-      </Button>
+      {canCreate && (
+        <Button
+          className={styles.createButton}
+          disabled={!canCreate}
+          onClick={onCreate}
+        >
+          {textForKey('Create message')}
+          <IconPlus fill='#fff' />
+        </Button>
+      )}
     </div>
   );
 };

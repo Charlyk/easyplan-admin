@@ -440,6 +440,7 @@ const OrthodonticPlan = (
       <td valign='top'>
         <div className={styles.optionsContainer}>
           <EASSelect
+            disabled={!isDoctor}
             rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.molarCaninMolar}
             defaultOption={{
@@ -450,6 +451,7 @@ const OrthodonticPlan = (
             onChange={handleMolarCaninMolarChange}
           />
           <EASSelect
+            disabled={!isDoctor}
             rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.molarCaninCanin}
             defaultOption={{
@@ -461,6 +463,7 @@ const OrthodonticPlan = (
           />
           <div className='separator'/>
           <EASSelect
+            disabled={!isDoctor}
             rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.caninMolarCanin}
             defaultOption={{
@@ -471,6 +474,7 @@ const OrthodonticPlan = (
             onChange={handleCaninMolarCaninChange}
           />
           <EASSelect
+            disabled={!isDoctor}
             rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.caninMolarMolar}
             defaultOption={{

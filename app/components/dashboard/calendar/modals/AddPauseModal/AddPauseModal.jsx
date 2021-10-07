@@ -30,6 +30,7 @@ import reducer, {
   resetState,
 } from './AddPauseModal.reducer';
 import styles from './AddPauseModal.module.scss';
+import { CircularProgress } from "@material-ui/core";
 
 const AddPauseModal = (
   {
@@ -249,45 +250,53 @@ const AddPauseModal = (
       isPositiveLoading={isLoading || isDeleting}
     >
       <Box display='flex' flexDirection='column' padding='16px'>
-        <form onSubmit={handleCreateSchedule}>
-          <EASTextField
-            readOnly
-            containerClass={styles.simpleField}
-            ref={datePickerAnchor}
-            fieldLabel={textForKey('Date')}
-            value={moment(pauseDate).format('DD MMMM YYYY')}
-            onPointerUp={handleDateFieldClick}
-          />
-          <div className={styles.timePickerContainer}>
-            <EASSelect
-              id="startTime"
-              rootClass={styles.timeSelect}
-              label={textForKey('Start time')}
-              labelId="start-time-select"
-              onChange={handleStartHourChange}
-              value={startHour}
-              options={getMappedTime(availableStartTime)}
-              disabled={isFetchingHours || availableStartTime.length === 0}
-            />
-            <EASSelect
-              id="endTime"
-              rootClass={styles.timeSelect}
-              label={textForKey('Ent time')}
-              labelId="end-time-select"
-              onChange={handleEndHourChange}
-              value={endHour}
-              options={getMappedTime(availableEndTime)}
-              disabled={isFetchingHours || availableEndTime.length === 0}
-            />
+        {isFetchingHours ? (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress className='circular-progress-bar'/>
           </div>
+        ) : (
+          <>
+            <form onSubmit={handleCreateSchedule}>
+              <EASTextField
+                readOnly
+                containerClass={styles.simpleField}
+                ref={datePickerAnchor}
+                fieldLabel={textForKey('Date')}
+                value={moment(pauseDate).format('DD MMMM YYYY')}
+                onPointerUp={handleDateFieldClick}
+              />
+              <div className={styles.timePickerContainer}>
+                <EASSelect
+                  id="startTime"
+                  rootClass={styles.timeSelect}
+                  label={textForKey('Start time')}
+                  labelId="start-time-select"
+                  onChange={handleStartHourChange}
+                  value={startHour}
+                  options={getMappedTime(availableStartTime)}
+                  disabled={isFetchingHours || availableStartTime.length === 0}
+                />
+                <EASSelect
+                  id="endTime"
+                  rootClass={styles.timeSelect}
+                  label={textForKey('Ent time')}
+                  labelId="end-time-select"
+                  onChange={handleEndHourChange}
+                  value={endHour}
+                  options={getMappedTime(availableEndTime)}
+                  disabled={isFetchingHours || availableEndTime.length === 0}
+                />
+              </div>
 
-          <EASTextarea
-            fieldLabel={textForKey('Notes')}
-            value={comment || ''}
-            onChange={handleCommentChange}
-          />
-        </form>
-        {datePicker}
+              <EASTextarea
+                fieldLabel={textForKey('Notes')}
+                value={comment || ''}
+                onChange={handleCommentChange}
+              />
+            </form>
+            {datePicker}
+          </>
+        )}
       </Box>
     </EASModal>
   );

@@ -61,7 +61,7 @@ const DoctorServiceItem = props => {
           type="number"
           placeholder="0"
           value={price}
-          readOnly={!selected || price.length > 0}
+          readOnly={!selected || percentage.length > 0}
           onChange={handlePriceChange}
           endAdornment={
             <Typography className={styles.adornment}>

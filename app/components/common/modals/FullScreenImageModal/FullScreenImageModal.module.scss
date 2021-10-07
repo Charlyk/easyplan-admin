@@ -1,27 +1,16 @@
-.image-modal-root {
-  :global(.modal-dialog) {
-    width: fit-content;
-    max-width: 80%;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    height: fit-content;
-  }
+.imageModalRoot {
+  .modalPaper {
+    max-width: 90%;
+    max-height: 90%;
 
-  :global(.modal-content) {
-    background-color: transparent;
+    .modalContent {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
 
-    .image-loading-spinner {
-      top: 50%;
-      left: 50%;
-      position: absolute;
-      color: #3A83DC;
-    }
-
-    :global(.modal-body) {
       img {
         width: 100%;
-        box-shadow: 0 1px 10px 10px #34344E1A;
+        max-height: 100%;
       }
     }
   }

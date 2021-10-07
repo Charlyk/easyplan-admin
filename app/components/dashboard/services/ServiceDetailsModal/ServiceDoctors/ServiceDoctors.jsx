@@ -1,12 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
 
 import IconMinus from '../../../../icons/iconMinus';
 import IconPlusBig from '../../../../icons/iconPlusBig';
 import { textForKey } from '../../../../../../utils/localization';
-import ServiceDoctor from '../ServiceDoctor';
 import styles from './ServiceDoctors.module.scss';
+
+const ServiceDoctor = dynamic(() => import('../ServiceDoctor'))
 
 const ServiceDoctors = (
   {
