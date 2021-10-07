@@ -43,7 +43,7 @@ const ToothView = (
     );
   }, [services, selectedServices]);
 
-  const handleServiceSelected = (service, selected) => {
+  const handleServiceSelected = (service) => (event, selected) => {
     const newServices = toothServices.map((item) => {
       if (item.id !== service.id) {
         return item;
@@ -97,12 +97,17 @@ const ToothView = (
                 {toothServices.map((service) => (
                   <FormControlLabel
                     key={service.id}
-                    control={<Checkbox checked={service.selected} />}
+                    control={
+                      <Checkbox
+                        classes={{ root: styles.checkBox, checked: styles.checkedCheckBox }}
+                        checked={service.selected}
+                      />
+                    }
                     label={service.name}
-                    onChange={handleServiceSelected}
+                    onChange={handleServiceSelected(service)}
                     classes={{
-                      root: styles.urgentCheck,
-                      label: styles.urgentLabel,
+                      root: styles.formGroupRoot,
+                      label: styles.formGroupLabel,
                     }}
                   />
                 ))}

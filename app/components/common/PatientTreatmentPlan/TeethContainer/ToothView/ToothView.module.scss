@@ -68,27 +68,40 @@
 
   .toothPaper {
     border: #3A83DC 1px solid;
-    width: 100%;
     background: #FFFFFF;
+    width: 100%;
+    padding: 8px;
     border-radius: 4px !important;
-    max-height: 20rem;
+    max-height: 300px;
     overflow-y: scroll;
 
     .optionsWrapper {
       display: flex;
       flex-direction: column;
       width: 100%;
+      padding: 0;
 
-      .urgentCheck {
-        margin-top: 5px;
+      .checkBox {
+        padding: 0;
+        margin-right: 5px;
+      }
+
+      .checkedCheckBox {
+        color: #3A83DC;
+      }
+
+      .formGroupRoot {
+        width: 100%;
         user-select: none;
         margin-bottom: 0;
+        margin-left: 0;
+        margin-right: 0;
 
-        .urgentLabel {
+        .formGroupLabel {
           font-family: Inter, sans-serif;
           font-style: normal;
-          font-size: 14px;
-          color: #ec3276;
+          font-size: 12px;
+          color: #34354C;
           cursor: pointer;
         }
       }
