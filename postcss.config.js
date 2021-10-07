@@ -24,7 +24,6 @@ module.exports = {
           './node_modules/react-color-palette/**/*.{js,jsx,ts,tsx}',
           './node_modules/react-toastify/**/*.{js,jsx,ts,tsx}',
           './node_modules/react-phone-input-2/**/*.{js,jsx,ts,tsx}',
-          './node_modules/bootstrap/**/*.{js,jsx,ts,tsx}',
         ],
         defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
         safelist: ["html", "body"],
