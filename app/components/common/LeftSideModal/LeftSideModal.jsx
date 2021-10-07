@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ModalHeader from './ModalHeader';
 import styles from './LeftSideModal.module.scss';
 import Drawer from "@material-ui/core/Drawer";
+import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 
 const LeftSideModal = (props) => {
   const { show, onClose, children, title, steps, className } = props;
@@ -28,7 +29,7 @@ const LeftSideModal = (props) => {
   );
 };
 
-export default LeftSideModal;
+export default React.memo(LeftSideModal, areComponentPropsEqual);
 
 LeftSideModal.propTypes = {
   title: PropTypes.string,
