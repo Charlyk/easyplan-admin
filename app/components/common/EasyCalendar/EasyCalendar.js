@@ -33,6 +33,7 @@ const EasyCalendar = (
         />
         <Hours hours={dayHours}/>
         <ColumnsWrapper
+          viewDate={viewDate}
           schedules={schedules}
           hours={dayHours}
           columns={columns}

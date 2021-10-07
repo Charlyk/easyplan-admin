@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import Column from "./Column";
 import styles from './ColumnsWrapper.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import moment from "moment-timezone";
 
 const ColumnsWrapper = (
   {
+    viewDate,
     schedules,
     hours,
     columns,
@@ -25,7 +27,8 @@ const ColumnsWrapper = (
     <div className={styles.columnsWrapperRoot}>
       {columns.map((column) => (
         <Column
-          key={column.id}
+          key={`${column.id}-${moment(viewDate).format('YYYY-MM-DD')}`}
+          viewDate={viewDate}
           isSingleMode={isSingleMode}
           animatedStatuses={animatedStatuses}
           schedules={getSchedulesForColumn(column)}
@@ -43,6 +46,7 @@ const ColumnsWrapper = (
 export default React.memo(ColumnsWrapper, areComponentPropsEqual);
 
 ColumnsWrapper.propTypes = {
+  viewDate: PropTypes.instanceOf(Date),
   hours: PropTypes.arrayOf(PropTypes.string),
   hideCreateIndicator: PropTypes.bool,
   columns: PropTypes.arrayOf(PropTypes.shape({

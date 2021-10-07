@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import PropTypes from 'prop-types';
 import Moment from "moment-timezone";
@@ -22,7 +22,6 @@ const Column = (
     hours,
     column,
     animatedStatuses,
-    isSingleMode,
     hideCreateIndicator,
     onAddSchedule,
     onScheduleSelected
@@ -30,11 +29,11 @@ const Column = (
 ) => {
   const hoursContainers = createContainerHours(hours);
 
-  function handleAddSchedule(startHour, endHour) {
+  const handleAddSchedule = (startHour, endHour) => {
     onAddSchedule(startHour, endHour, column.doctorId, column.date);
-  }
+  };
 
-  function schedulesWithOffset() {
+  const schedulesWithOffset = useMemo(() => {
     if (column.disabled) {
       return [];
     }
@@ -64,7 +63,7 @@ const Column = (
       newSchedules.push({ ...schedule, offset });
     }
     return newSchedules;
-  }
+  }, [schedules, column])
 
   function renderHoursContainers() {
     return hoursContainers.map((hour, index) => {
@@ -118,7 +117,7 @@ const Column = (
         </div>
       )}
       {renderHoursContainers()}
-      {schedulesWithOffset().map((schedule, index) => (
+      {schedulesWithOffset.map((schedule, index) => (
         <Schedule
           key={schedule.id}
           schedule={schedule}
@@ -136,6 +135,7 @@ export default React.memo(Column, areComponentPropsEqual);
 
 Column.propTypes = {
   disabled: PropTypes.bool,
+  viewDate: PropTypes.instanceOf(Date),
   hideCreateIndicator: PropTypes.bool,
   hours: PropTypes.arrayOf(PropTypes.string),
   isSingleMode: PropTypes.bool,

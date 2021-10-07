@@ -10,7 +10,7 @@ import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
 import { parseCookies } from "../../../utils";
 
-export default function Day({ currentUser, currentClinic, date, schedules, dayHours, doctors, authToken }) {
+const Day = ({ currentUser, currentClinic, date, schedules, dayHours, doctors, authToken }) => {
   const viewDate = moment(date).toDate();
 
   const updatedSchedules = useMemo(() => {
@@ -38,6 +38,8 @@ export default function Day({ currentUser, currentClinic, date, schedules, dayHo
     </CalendarContainer>
   )
 };
+
+export default Day;
 
 export const getServerSideProps = async ({ query, req, res }) => {
   if (query.date == null) {
