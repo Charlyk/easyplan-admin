@@ -5,6 +5,7 @@ import MainComponent from "../../../app/components/common/MainComponent/MainComp
 import { getServicesStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import parseCookies from "../../../utils/parseCookies";
+import handleRequestError from "../../../utils/handleRequestError";
 import ServicesAnalytics from "../../../app/components/dashboard/analytics/ServicesAnalytics";
 import { APP_DATA_API, JwtRegex } from "../../../app/utils/constants";
 import { SWRConfig } from "swr";
@@ -89,11 +90,6 @@ export const getServerSideProps = async ({ req, res, query }) => {
       }
     };
   } catch (error) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: true,
-      },
-    }
+    return handleRequestError(error);
   }
 }

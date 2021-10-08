@@ -6,6 +6,7 @@ import MainComponent from "../../../app/components/common/MainComponent/MainComp
 import { getGeneralStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import parseCookies from "../../../utils/parseCookies";
+import handleRequestError from "../../../utils/handleRequestError";
 import GeneralAnalytics from "../../../app/components/dashboard/analytics/GeneralAnalytics";
 import { APP_DATA_API, JwtRegex } from "../../../app/utils/constants";
 
@@ -82,20 +83,6 @@ export const getServerSideProps = async ({ req, query }) => {
       },
     };
   } catch (error) {
-    const message = error?.response?.data?.message || error?.response?.statusText || error?.message;
-    const statusCode = error?.response?.status ?? 400;
-    if (statusCode === 401) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      }
-    }
-    return {
-      redirect: {
-        destination: `/error?message=${message}&status=${statusCode}`,
-      },
-    }
+    return handleRequestError(error);
   }
 }

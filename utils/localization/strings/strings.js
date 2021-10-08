@@ -582,6 +582,8 @@ export default {
     link_patient: 'Link patient',
     complete_deal: 'Complete',
     passwords_not_equal: 'Passwords do not match',
+    'go to home': 'Go to home',
+    page_not_found: 'Page not found',
   },
   ro: {
     analytics: 'Analitică',
@@ -1172,6 +1174,8 @@ export default {
     link_patient: 'Atribuire pacient',
     complete_deal: 'Confirmă',
     passwords_not_equal: 'Parolele nu coincid',
+    'go to home': 'La pagina principală',
+    page_not_found: 'Pagina nu a fost găsită',
   },
   ru: {
     analytics: 'Analytics',
@@ -1753,5 +1757,7 @@ export default {
     link_patient: 'Link patient',
     complete_deal: 'Complete',
     passwords_not_equal: 'Passwords do not match',
+    'go to home': 'Go to home',
+    page_not_found: 'Page not found',
   },
 };

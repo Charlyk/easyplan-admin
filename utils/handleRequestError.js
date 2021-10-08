@@ -1,5 +1,4 @@
-const handleRequestError = (error) => {
-  const message = error?.response?.data?.message || error?.response?.statusText || error?.message;
+const handleRequestError = (error, res) => {
   const statusCode = error?.response?.status ?? 400;
   if (statusCode === 401) {
     return {
@@ -9,11 +8,16 @@ const handleRequestError = (error) => {
       },
     }
   }
+
+  const message = error?.response?.data
+    ? error.response.data.message
+    : error?.response
+      ? error.response.statusText
+      : error.message;
+
   return {
-    redirect: {
-      destination: `/error?message=${message}&status=${statusCode}`,
-    },
-  }
+    notFound: true,
+  };
 }
 
 export default handleRequestError

@@ -1,20 +1,22 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../utils/localization";
-import styles from './ErrorPage.module.scss';
 import Button from "@material-ui/core/Button";
 import { useRouter } from "next/router";
+import Image from 'next/image';
+import { textForKey } from "../../../../utils/localization";
+import styles from './ErrorPage.module.scss';
 
 const ErrorPage = ({ query }) => {
   const router = useRouter();
 
   const handleRetry = () => {
-    router.back();
+    router.replace('/analytics/general');
   };
 
   return (
     <div className={styles.errorPageRoot}>
       <div className={styles.errorContent}>
+        <Image src='/broken_tooth.png' width={400} height={400}/>
         <Typography variant="h1" className={styles.errorStatus}>
           {query.status}
         </Typography>
@@ -29,7 +31,7 @@ const ErrorPage = ({ query }) => {
             outlined: styles.outlinedRetry,
           }}
         >
-          <Typography className={styles.retryLabel}>{textForKey('Retry')}</Typography>
+          <Typography className={styles.retryLabel}>{textForKey('Go to home')}</Typography>
         </Button>
       </div>
     </div>
