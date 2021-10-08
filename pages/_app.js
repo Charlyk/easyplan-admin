@@ -7,7 +7,9 @@ import Head from 'next/head';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from '@material-ui/core/styles';
 
+import theme from '../app/styles/theme';
 import {
   patientNoteModalSelector,
   patientXRayModalSelector,
@@ -31,7 +33,6 @@ import 'moment/locale/ro';
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../app/utils'
-import getCookie from "../app/utils/getCookie";
 
 const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
 const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
@@ -54,6 +55,14 @@ export default wrapper.withRedux(
     const imageModal = useSelector(imageModalSelector);
     const logout = useSelector(logoutSelector);
     const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
+
+    useEffect(() => {
+      // Remove the server-side injected CSS.
+      const jssStyles = document.querySelector('#jss-server-side');
+      if (jssStyles) {
+        jssStyles.parentElement.removeChild(jssStyles);
+      }
+    }, []);
 
     useEffect(() => {
       if (isWindowFocused) {
@@ -117,44 +126,48 @@ export default wrapper.withRedux(
             }
           </title>
         </Head>
-        <ToastContainer/>
-        <PubNubProvider client={pubnub}>
+        <ThemeProvider theme={theme}>
           <>
-            {logout && (
-              <ConfirmationModal
-                title={textForKey('Logout')}
-                message={textForKey('logout message')}
-                onConfirm={handleUserLogout}
-                onClose={handleCancelLogout}
-                show={logout}
-              />
-            )}
-            {imageModal.open && (
-              <FullScreenImageModal
-                {...imageModal}
-                onClose={handleCloseImageModal}
-              />
-            )}
-            {patientNoteModal.open && (
-              <AddNote
-                {...patientNoteModal}
-                onClose={handleClosePatientNoteModal}
-              />
-            )}
-            {patientXRayModal.open && (
-              <AddXRay
-                {...patientXRayModal}
-                onClose={handleClosePatientXRayModal}
-              />
-            )}
-            <NextNprogress
-              color='#29D'
-              startPosition={0.3}
-              height='2'
-            />
-            <Component {...pageProps} />
+            <ToastContainer/>
+            <PubNubProvider client={pubnub}>
+              <>
+                {logout && (
+                  <ConfirmationModal
+                    title={textForKey('Logout')}
+                    message={textForKey('logout message')}
+                    onConfirm={handleUserLogout}
+                    onClose={handleCancelLogout}
+                    show={logout}
+                  />
+                )}
+                {imageModal.open && (
+                  <FullScreenImageModal
+                    {...imageModal}
+                    onClose={handleCloseImageModal}
+                  />
+                )}
+                {patientNoteModal.open && (
+                  <AddNote
+                    {...patientNoteModal}
+                    onClose={handleClosePatientNoteModal}
+                  />
+                )}
+                {patientXRayModal.open && (
+                  <AddXRay
+                    {...patientXRayModal}
+                    onClose={handleClosePatientXRayModal}
+                  />
+                )}
+                <NextNprogress
+                  color='#29D'
+                  startPosition={0.3}
+                  height='2'
+                />
+                <Component {...pageProps} />
+              </>
+            </PubNubProvider>
           </>
-        </PubNubProvider>
+        </ThemeProvider>
       </>
     );
   }

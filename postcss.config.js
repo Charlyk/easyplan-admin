@@ -24,7 +24,7 @@ module.exports = {
         ],
         defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
         skippedContentGlobs: ['node_modules/**', 'app/components/**'],
-        safelist: ["html", "body", /^rdr/, /^Toastify/, /^rcp/, '::after', /^Mui/],
+        safelist: ["html", "body", /^rdr/, /^Toastify/, /^rcp/, '::after'],
       }
     ],
   ]
