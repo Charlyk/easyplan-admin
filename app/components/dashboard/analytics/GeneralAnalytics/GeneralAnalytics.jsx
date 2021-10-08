@@ -167,48 +167,50 @@ const General = (
           </div>
         ) : null}
       </div>
-      <div className={styles['right-content-wrapper']}>
-        {financeStats != null && isAdmin && (
-          <div className={styles['items-wrapper']}>
-            <IncomeStatisticItem
-              title={textForKey('Expectations')}
-              icon={<IconClock/>}
-              amount={financeStats?.expectations.amount}
-              persons={financeStats?.expectations.persons}
-            />
-            <IncomeStatisticItem
-              title={textForKey('Confirmed')}
-              icon={<IconCheckMark/>}
-              amount={financeStats?.confirmed.amount}
-              persons={financeStats?.confirmed.persons}
-            />
-            <IncomeStatisticItem
-              title={textForKey('Did not came')}
-              icon={<IconXPerson/>}
-              amount={financeStats?.canceled.amount}
-              persons={financeStats?.canceled.persons}
-            />
-            <IncomeStatisticItem
-              title={textForKey('Finished')}
-              icon={<IconSuccess fill='#ffffff'/>}
-              amount={financeStats?.finished.amount}
-              persons={financeStats?.finished.persons}
-            />
-            <IncomeStatisticItem
-              title={textForKey('Liabilities')}
-              icon={<IconLiabilities/>}
-              amount={financeStats?.debts.amount}
-              persons={financeStats?.debts.persons}
-            />
-            <IncomeStatisticItem
-              title={textForKey('Paid')}
-              icon={<IconCreditCard/>}
-              amount={financeStats?.paid.amount}
-              persons={financeStats?.paid.persons}
-            />
-          </div>
-        )}
-      </div>
+      {isAdmin && (
+        <div className={styles['right-content-wrapper']}>
+          {financeStats != null && (
+            <div className={styles['items-wrapper']}>
+              <IncomeStatisticItem
+                title={textForKey('Expectations')}
+                icon={<IconClock/>}
+                amount={financeStats?.expectations.amount}
+                persons={financeStats?.expectations.persons}
+              />
+              <IncomeStatisticItem
+                title={textForKey('Confirmed')}
+                icon={<IconCheckMark/>}
+                amount={financeStats?.confirmed.amount}
+                persons={financeStats?.confirmed.persons}
+              />
+              <IncomeStatisticItem
+                title={textForKey('Did not came')}
+                icon={<IconXPerson/>}
+                amount={financeStats?.canceled.amount}
+                persons={financeStats?.canceled.persons}
+              />
+              <IncomeStatisticItem
+                title={textForKey('Finished')}
+                icon={<IconSuccess fill='#ffffff'/>}
+                amount={financeStats?.finished.amount}
+                persons={financeStats?.finished.persons}
+              />
+              <IncomeStatisticItem
+                title={textForKey('Liabilities')}
+                icon={<IconLiabilities/>}
+                amount={financeStats?.debts.amount}
+                persons={financeStats?.debts.persons}
+              />
+              <IncomeStatisticItem
+                title={textForKey('Paid')}
+                icon={<IconCreditCard/>}
+                amount={financeStats?.paid.amount}
+                persons={financeStats?.paid.persons}
+              />
+            </div>
+          )}
+        </div>
+      )}
       <EasyDateRangePicker
         open={showRangePicker}
         onChange={handleDateChange}
