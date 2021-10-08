@@ -27,7 +27,7 @@
 
   .statusesPopperRoot {
     user-select: none;
-    width: calc(100% - 2rem);
+    width: 100%;
     z-index: 1000 !important;
 
     .paper {
@@ -83,7 +83,7 @@
   }
 
   .headerWrapper {
-    width: calc(100% - 1rem);
+    width: 100%;
     padding: .5rem;
     display: flex;
     align-items: center;
@@ -104,6 +104,8 @@
     .closeButton {
       outline: none;
       cursor: pointer;
+      line-height: 1;
+      height: 24px;
     }
 
     .scheduleTitle {
@@ -315,7 +317,7 @@
   }
 
   .footerWrapper {
-    width: calc(100% - 2rem);
+    width: 100%;
     padding: 1rem;
     display: flex;
     flex-direction: column;
