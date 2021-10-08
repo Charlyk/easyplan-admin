@@ -36,7 +36,7 @@ const DoctorServices = ({ show, data, onChange, clinicServices }) => {
   };
 
   const sortedServices = sortBy(clinicServices, item => item.name);
-  const classes = clsx(styles['doctor-services'], show ? styles.expanded : styles.collapsed);
+  const classes = clsx(styles.doctorServices);
   return (
     <div className={classes} style={{ height: show ? 'unset' : 0 }}>
       {sortedServices.map(service => (

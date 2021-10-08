@@ -96,7 +96,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   }
 
   return (
-    <div className={styles['patient-x-ray']}>
+    <div className={styles.patientXRay}>
       <ConfirmationModal
         show={deleteModal.show}
         isLoading={isDeleting}
@@ -108,7 +108,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('X-Ray')}
       </Typography>
-      <div className={styles['images-container']}>
+      <div className={styles.imagesContainer}>
         {!isFetching && (
           <XRayPhase
             title={textForKey('Initial phase')}
@@ -142,7 +142,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           </div>
         )}
       </div>
-      <div className={styles['patient-x-ray__actions']}>
+      <div className={styles.actions}>
         <Button
           variant='outlined'
           disabled={state.isFetching}

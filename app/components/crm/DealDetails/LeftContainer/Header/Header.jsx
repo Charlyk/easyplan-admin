@@ -16,8 +16,6 @@ const Header = ({ deal, states }) => {
     return deal.service.name;
   }, [deal]);
 
-  console.log(states);
-
   const passedStates = useMemo(() => {
     if (deal == null) {
       return [];

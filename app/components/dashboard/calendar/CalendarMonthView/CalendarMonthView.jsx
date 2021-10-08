@@ -82,25 +82,25 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
         role='button'
         tabIndex={0}
         onClick={() => handleDayClick(day)}
-        className={clsx(styles['item-data-container'], day.isSameDay && styles['current-date'])}
+        className={clsx(styles.itemDataContainer, day.isSameDay && styles.currentDate)}
         style={{ height: calendarRect?.height / rowsCount - 3 }}
         key={`${day.date}-${day.isCurrent}-${day.month}`}
       >
         <span
           className={clsx(
-            styles['item-text'],
-            styles['month-day'],
-            !day.isCurrent && styles['next-month'],
+            styles.itemText,
+            styles.monthDay,
+            !day.isCurrent && styles.nextMonth,
           )}
         >
           {day.date}
         </span>
         {day.isCurrent && (
-          <div className={styles['appointments-container']}>
+          <div className={styles.appointmentsContainer}>
             {daySchedules.slice(0, 3).map(renderSchedule)}
             {daySchedules.length > 3 && (
-              <div className={styles['view-more-container']}>
-                <span className={styles['view-more-button']}>
+              <div className={styles.viewMoreContainer}>
+                <span className={styles.viewMoreButton}>
                   {textForKey('View more')} ({daySchedules.length - 3})
                 </span>
               </div>
@@ -111,7 +111,7 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
     );
   };
 
-  return <div className={styles['month-view']}>{monthDays.map(renderDayItem)}</div>;
+  return <div className={styles.monthView}>{monthDays.map(renderDayItem)}</div>;
 };
 
 export default React.memo(CalendarMonthView, areComponentPropsEqual);

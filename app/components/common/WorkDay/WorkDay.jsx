@@ -11,7 +11,7 @@ import styles from './WorkDay.module.scss';
 
 const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   const hours = createHoursList();
-  const titleClasses = clsx(styles['day-title'], day.selected ? styles.selected : styles.default);
+  const titleClasses = clsx(styles.dayTitle, day.selected ? styles.selected : styles.default);
 
   const handleDayToggle = () => {
     onChange(day, day.startHour, day.endHour, !day.selected);
@@ -49,8 +49,8 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   };
 
   return (
-    <tr className={styles['work-day']}>
-      <td style={{ padding: '.5rem' }}>
+    <tr className={styles.workDay}>
+      <td>
         <SwitchButton isChecked={day.selected} onChange={handleDayToggle}/>
       </td>
       <td style={{ width: '20%' }}>
@@ -58,7 +58,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
       </td>
       {!day.selected && (
         <td colSpan={4}>
-          <div className={styles['work-day__day-off']}>{textForKey('Day off')}</div>
+          <div className={styles.dayOff}>{textForKey('Day off')}</div>
         </td>
       )}
       {day.selected && (
@@ -76,8 +76,8 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
         </td>
       )}
       {day.selected && (
-        <td style={{ padding: '.3rem' }}>
-          <Typography noWrap classes={{ root: styles['separator-text'] }}>
+        <td style={{ padding: '0 .5rem' }}>
+          <Typography noWrap classes={{ root: styles.separatorText }}>
             {textForKey('to')}
           </Typography>
         </td>
@@ -97,13 +97,13 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
         </td>
       )}
       {day.selected && (
-        <td style={{ padding: '.5rem' }}>
+        <td style={{ paddingLeft: '.5rem' }}>
           <div
             role='button'
             tabIndex={0}
             onClick={handleApplyToAll}
             className={clsx(
-              styles['apply-to-all-btn'],
+              styles.applyToAllBtn,
               (day.startHour == null || day.endHour == null) && styles.disabled,
               !isFirst && styles.hidden,
             )}

@@ -10,17 +10,17 @@ const ModalHeader = props => {
   const { onClose, title, steps } = props;
   return (
     <div className={styles.header}>
-      <div className={styles['header__close-container']}>
-        <div className={styles['close-btn']} role='button' tabIndex={0} onClick={onClose}>
+      <div className={styles.closeContainer}>
+        <div className={styles.closeBtn} role='button' tabIndex={0} onClick={onClose}>
           <IconClose />
         </div>
       </div>
-      <div className={styles['header__title']}>{title}</div>
-      <div className={styles['header__breadcrumb-container']}>
+      <div className={styles.title}>{title}</div>
+      <div className={styles.breadcrumbContainer}>
         {steps?.map((step, index) => {
           const isLast = index === steps.length - 1;
           const classes = clsx(
-            styles['header__breadcrumb'],
+            styles.breadcrumb,
             !isLast && styles.current,
           );
           return (

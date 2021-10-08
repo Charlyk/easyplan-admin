@@ -1,19 +1,21 @@
 .drawerRoot {
+  position: relative;
+  height: 100%;
 
   .drawerPaperRoot {
     width: 500px;
     height: 100%;
     overflow: hidden;
-  }
 
-  .drawerContent {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #FAFAFD;
-    display: flex;
-    flex-direction: column;
+    .drawerContent {
+      position: absolute;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      background-color: #FAFAFD;
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   .drawerPaper {

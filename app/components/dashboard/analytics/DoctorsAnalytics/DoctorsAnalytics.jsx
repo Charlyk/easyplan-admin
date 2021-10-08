@@ -205,7 +205,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
               </TableHead>
               <TableBody>
                 {statistics.map((item) => (
-                  <TableRow key={item.id}>
+                  <TableRow key={item.doctor.id}>
                     <TableCell>{item.doctor.fullName}</TableCell>
                     <TableCell align="right">
                       {formattedAmount(item.totalAmount, currentClinic.currency)}

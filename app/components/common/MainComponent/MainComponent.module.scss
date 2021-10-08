@@ -19,7 +19,8 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      margin-top: -3rem;
+      margin-top: -4rem;
+      z-index: 3;
     }
   }
 }

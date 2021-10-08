@@ -83,13 +83,13 @@ const ServicesList = (
   }, [availableServices])
 
   return (
-    <Box className={styles['services-list']}>
+    <Box className={styles.servicesList}>
       <Typography classes={{ root: styles.title }}>
         {textForKey('Services')}
       </Typography>
-      <TableContainer classes={{ root: styles['services-table-container'] }}>
-        <Table classes={{ root: styles['services-table'] }}>
-          <TableBody classes={{ root: styles.body }}>
+      <TableContainer classes={{ root: styles.servicesTableContainer }}>
+        <Table classes={{ root: styles.servicesTable }}>
+          <TableBody>
             {services.map((service, index) => (
               <ServiceRow
                 currencies={currencies}
@@ -118,8 +118,8 @@ const ServicesList = (
         <Autocomplete
           key={autocompleteClearKey}
           classes={{
-            root: styles['autocomplete-root'],
-            inputRoot: styles['input-root'],
+            root: styles.autocompleteRoot,
+            inputRoot: styles.inputRoot,
           }}
           value={null}
           onChange={handleServiceSelected}

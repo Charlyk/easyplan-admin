@@ -38,8 +38,8 @@ const CalendarDoctors = (
 
   return (
     <div className={styles.calendarDoctors}>
-      <div className={styles['doctors-header']}>Doctors</div>
-      <div className={styles['doctors-search']}>
+      <div className={styles.doctorsHeader}>Doctors</div>
+      <div className={styles.doctorsSearch}>
         <EASTextField
           type="text"
           value={searchText}
@@ -47,7 +47,7 @@ const CalendarDoctors = (
           onChange={handleSearchTextChange}
         />
       </div>
-      <div className={styles['doctors-content']}>
+      <div className={styles.doctorsContent}>
         {isFetching && (
           <div className='progress-bar-wrapper'>
             <CircularProgress className='circular-progress-bar'/>

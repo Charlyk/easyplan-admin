@@ -2,7 +2,7 @@
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   user-select: none;
   display: flex;
-  max-height: calc(100% - 320px - 14px);
+  max-height: calc(100% - 14rem - 6.5rem); // 14rem teeth container, 7rem patient info container
   flex-direction: column;
 
   .servicesResultsMenu {

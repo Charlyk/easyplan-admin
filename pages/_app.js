@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import { PubNubProvider } from "pubnub-react";
 import dynamic from 'next/dynamic';
 import PubNub from "pubnub";
@@ -25,15 +25,14 @@ import { setImageModal } from "../redux/actions/imageModalActions";
 import { textForKey } from "../app/utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
 import { signOut } from "../middleware/api/auth";
-import { fetchAppData } from "../middleware/api/initialization";
 import useWindowFocused from "../app/utils/hooks/useWindowFocused";
-import { UnauthorizedPaths } from "../app/utils/constants";
 import { wrapper } from "../store";
-import paths from "../app/utils/paths";
 import 'moment/locale/ro';
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../app/utils'
+import paths from "../app/utils/paths";
+import { APP_DATA_API } from "../app/utils/constants";
 
 const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
 const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
@@ -46,131 +45,115 @@ const pubnub = new PubNub({
   uuid: PubNub.generateUUID(),
 });
 
-export default wrapper.withRedux(
-  ({ Component, pageProps }) => {
-    const router = useRouter();
-    const dispatch = useDispatch();
-    const isWindowFocused = useWindowFocused();
-    const patientXRayModal = useSelector(patientXRayModalSelector);
-    const patientNoteModal = useSelector(patientNoteModalSelector);
-    const imageModal = useSelector(imageModalSelector);
-    const logout = useSelector(logoutSelector);
-    const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
+const App = ({ Component, pageProps }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const isWindowFocused = useWindowFocused();
+  const patientXRayModal = useSelector(patientXRayModalSelector);
+  const patientNoteModal = useSelector(patientNoteModalSelector);
+  const imageModal = useSelector(imageModalSelector);
+  const logout = useSelector(logoutSelector);
 
-    useEffect(() => {
-      // Remove the server-side injected CSS.
-      const jssStyles = document.querySelector('#jss-server-side');
-      if (jssStyles) {
-        jssStyles.parentElement.removeChild(jssStyles);
-      }
-    }, []);
+  useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
 
-    useEffect(() => {
-      if (isWindowFocused) {
-        router.replace(router.asPath);
-      }
-    }, [isWindowFocused]);
-
-    useEffect(() => {
-      if (UnauthorizedPaths.includes(router.pathname)) {
-        return;
-      }
-      fetchInitializationData();
-    }, []);
-
-    const fetchInitializationData = async () => {
-      try {
-        const appData = await fetchAppData();
-        setState(appData.data);
-      } catch (error) {
-        // ignore this error
-      }
+  useEffect(() => {
+    const { currentClinic } = pageProps.fallback[APP_DATA_API];
+    if (currentClinic == null) {
+      return;
     }
 
-    const getPageTitle = () => {
-      return paths[router.pathname] || '';
-    };
+    updatePageTitle(currentClinic);
+  }, [pageProps])
 
-    const clinicName = useMemo(() => {
-      return currentClinic?.clinicName || 'EasyPlan'
-    }, [currentClinic]);
+  useEffect(() => {
+    if (isWindowFocused && router.isReady) {
+      router.replace(router.asPath);
+    }
+  }, [isWindowFocused]);
 
-    const handleClosePatientXRayModal = () => {
-      dispatch(setPatientXRayModal({ open: false, patientId: null }));
-    };
+  const updatePageTitle = (clinic) => {
+    const pathName = paths[router.pathname] || '';
+    if (!pathName) {
+      document.title = clinic.clinicName;
+    } else {
+      document.title = `${clinic.clinicName} - ${pathName}`;
+    }
+  };
 
-    const handleClosePatientNoteModal = () => {
-      dispatch(setPatientNoteModal({ open: false }));
-    };
+  const handleClosePatientXRayModal = () => {
+    dispatch(setPatientXRayModal({ open: false, patientId: null }));
+  };
 
-    const handleCloseImageModal = () => {
-      dispatch(setImageModal({ open: false }));
-    };
+  const handleClosePatientNoteModal = () => {
+    dispatch(setPatientNoteModal({ open: false }));
+  };
 
-    const handleUserLogout = async () => {
-      await signOut();
-      router.reload()
-    };
+  const handleCloseImageModal = () => {
+    dispatch(setImageModal({ open: false }));
+  };
 
-    const handleCancelLogout = () => {
-      dispatch(triggerUserLogout(false));
-    };
+  const handleUserLogout = async () => {
+    await signOut();
+    router.reload()
+  };
 
-    return (
-      <>
-        <Head>
-          <title>
-            {
-              currentClinic
-                ? `${clinicName} - ${getPageTitle()}`
-                : `EasyPlan.pro - ${getPageTitle()}`
-            }
-          </title>
-        </Head>
-        <ThemeProvider theme={theme}>
-          <>
-            <CssBaseline/>
-            <ToastContainer/>
-            <PubNubProvider client={pubnub}>
-              <>
-                {logout && (
-                  <ConfirmationModal
-                    title={textForKey('Logout')}
-                    message={textForKey('logout message')}
-                    onConfirm={handleUserLogout}
-                    onClose={handleCancelLogout}
-                    show={logout}
-                  />
-                )}
-                {imageModal.open && (
-                  <FullScreenImageModal
-                    {...imageModal}
-                    onClose={handleCloseImageModal}
-                  />
-                )}
-                {patientNoteModal.open && (
-                  <AddNote
-                    {...patientNoteModal}
-                    onClose={handleClosePatientNoteModal}
-                  />
-                )}
-                {patientXRayModal.open && (
-                  <AddXRay
-                    {...patientXRayModal}
-                    onClose={handleClosePatientXRayModal}
-                  />
-                )}
-                <NextNprogress
-                  color='#29D'
-                  startPosition={0.3}
-                  height='2'
+  const handleCancelLogout = () => {
+    dispatch(triggerUserLogout(false));
+  };
+
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        <>
+          <CssBaseline/>
+          <ToastContainer/>
+          <PubNubProvider client={pubnub}>
+            <>
+              {logout && (
+                <ConfirmationModal
+                  title={textForKey('Logout')}
+                  message={textForKey('logout message')}
+                  onConfirm={handleUserLogout}
+                  onClose={handleCancelLogout}
+                  show={logout}
                 />
-                <Component {...pageProps} />
-              </>
-            </PubNubProvider>
-          </>
-        </ThemeProvider>
-      </>
-    );
-  }
-);
+              )}
+              {imageModal.open && (
+                <FullScreenImageModal
+                  {...imageModal}
+                  onClose={handleCloseImageModal}
+                />
+              )}
+              {patientNoteModal.open && (
+                <AddNote
+                  {...patientNoteModal}
+                  onClose={handleClosePatientNoteModal}
+                />
+              )}
+              {patientXRayModal.open && (
+                <AddXRay
+                  {...patientXRayModal}
+                  onClose={handleClosePatientXRayModal}
+                />
+              )}
+              <NextNprogress
+                color='#29D'
+                startPosition={0.3}
+                height='2'
+              />
+              <Component {...pageProps} />
+            </>
+          </PubNubProvider>
+        </>
+      </ThemeProvider>
+    </>
+  );
+};
+
+export default wrapper.withRedux(App);

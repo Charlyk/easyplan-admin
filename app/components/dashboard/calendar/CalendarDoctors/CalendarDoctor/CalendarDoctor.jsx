@@ -16,17 +16,17 @@ const CalendarDoctor = ({ doctor, isSelected, onSelect }) => {
     <div
       role='button'
       tabIndex={0}
-      className={clsx(styles['doctor-item'], isSelected && styles.selected)}
+      className={clsx(styles.doctorItem, isSelected && styles.selected)}
       onClick={handleDoctorClick}
     >
       <div>
         <IconAvatar />
       </div>
-      <div className={styles['name-and-service']}>
-        <Typography noWrap classes={{ root: styles['doctor-name'] }}>
+      <div className={styles.nameAndService}>
+        <Typography noWrap classes={{ root: styles.doctorName }}>
           {doctor.firstName} {doctor.lastName}
         </Typography>
-        <Typography noWrap classes={{ root: styles['service-name'] }}>
+        <Typography noWrap classes={{ root: styles.serviceName }}>
           {services}
         </Typography>
       </div>

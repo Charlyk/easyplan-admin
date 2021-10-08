@@ -1,25 +1,25 @@
-.service-doctors {
+.serviceDoctors {
   margin-top: 1rem;
-  width: calc(100% - 2rem);
+  width: 100%;
   background: #FFFFFF;
   box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
   padding: 1rem;
   user-select: none;
 
-  &__header {
+  .header {
     flex: 1;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 
-    &__step {
+    .step {
       color: #7DD7C8 !important;
       margin-right: .5rem;
     }
 
-    &__title, &__step {
+    .title, .step {
       display: flex;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -28,7 +28,7 @@
       color: #34354C;
     }
 
-    &__button {
+    .button {
       outline: none;
       cursor: pointer;
       display: flex;
@@ -45,14 +45,14 @@
     }
   }
 
-  &__content {
+  .content {
     display: flex;
     flex-direction: column;
     overflow: hidden;
     flex: 1;
     transition: height .2s ease-out, padding-top .2s ease-out;
 
-    &__no-data {
+    .noData {
       width: 100%;
       height: 8rem;
       display: flex;

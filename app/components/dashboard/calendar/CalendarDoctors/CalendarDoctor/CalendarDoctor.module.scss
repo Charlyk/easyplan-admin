@@ -1,4 +1,4 @@
-.doctor-item {
+.doctorItem {
   outline: none;
   margin-bottom: .5rem;
   padding: .5rem;
@@ -22,14 +22,14 @@
     width: 30px;
   }
 
-  .name-and-service {
+  .nameAndService {
     padding-right: .4rem;
     margin-left: .4rem;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 
-    .doctor-name {
+    .doctorName {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -37,7 +37,7 @@
       color: #34354C;
     }
 
-    .service-name {
+    .serviceName {
       margin-top: .1rem;
       font-family: Inter, sans-serif;
       font-style: normal;

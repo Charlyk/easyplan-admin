@@ -183,7 +183,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
     >
       <div className={styles.serviceDetailsModal}>
         {open && (
-          <div className={styles.data}>
+          <div className={styles.content}>
             <ServiceInformation
               isExpanded
               currentClinic={currentClinic}

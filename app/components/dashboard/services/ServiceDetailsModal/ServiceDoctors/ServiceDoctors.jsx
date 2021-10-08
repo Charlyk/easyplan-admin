@@ -26,33 +26,25 @@ const ServiceDoctors = (
   };
 
   const contentClasses = clsx(
-    styles['service-doctors__content'],
+    styles.content,
     isExpanded ? styles.expanded : styles.collapsed,
   );
 
   return (
-    <div className={styles['service-doctors']}>
-      <div className={styles['service-doctors__header']}>
-        <div className={styles['service-doctors__header__title']}>
+    <div className={styles.serviceDoctors}>
+      <div className={styles.header}>
+        <div className={styles.title}>
           {showStep && (
-            <div className={styles['service-doctors__header__step']}>
+            <div className={styles.step}>
               {textForKey('Step 2.')}
             </div>
           )}
           {textForKey('Doctors who provide this service')}
         </div>
-        <div
-          tabIndex={0}
-          role='button'
-          className={styles['service-doctors__header__button']}
-          onClick={handleInfoExpand}
-        >
-          {isExpanded ? <IconMinus/> : <IconPlusBig/>}
-        </div>
       </div>
       <div className={contentClasses}>
         {doctors?.length === 0 && (
-          <div className={styles['service-doctors__content__no-data']}>
+          <div className={styles.noData}>
             {textForKey('No doctors yet.')}
           </div>
         )}

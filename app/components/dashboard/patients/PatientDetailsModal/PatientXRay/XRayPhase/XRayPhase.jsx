@@ -21,8 +21,8 @@ const XRayPhase = ({ title, images, isExpanded, onDeleteImage }) => {
 
   return (
     <div className={clsx(styles.phase, isExpanded && styles.expanded)}>
-      <div className={styles['phase-header']}>{title}</div>
-      <div className={styles['phase-images']}>
+      <div className={styles.phaseHeader}>{title}</div>
+      <div className={styles.phaseImages}>
         <Grid container>
           {images.map(image => (
             <XRayImage

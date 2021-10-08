@@ -4,19 +4,9 @@
   width: 100%;
   flex: 1;
   overflow: hidden;
-  transition: height .2s ease-out, padding-top .2s ease-out;
 
   table {
     table-layout: fixed;
     width: 100%;
-  }
-
-  &.expanded {
-    margin-bottom: 1rem;
-  }
-
-  &.collapsed {
-    height: 0;
-    margin-bottom: 0;
   }
 }

@@ -118,13 +118,13 @@ ServicesListModal.propTypes = {
     services: {
       count: PropTypes.number,
       currency: PropTypes.string,
-      destination: PropTypes.oneOfType([PropTypes.string, null]),
-      doctorPercentage: PropTypes.oneOfType([PropTypes.number, null]),
-      doctorPrice: PropTypes.oneOfType([PropTypes.number, null]),
+      destination: PropTypes.string,
+      doctorPercentage: PropTypes.string,
+      doctorPrice: PropTypes.string,
       id: PropTypes.number,
       name: PropTypes.string,
       price: PropTypes.number,
-      toothId: PropTypes.oneOfType([PropTypes.string, null]),
+      toothId: PropTypes.string,
     }
   }),
   onClose: PropTypes.func,

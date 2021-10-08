@@ -1,13 +1,10 @@
 import React from 'react';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
-
-import { days } from '../../../../../utils/constants';
 import WorkDay from '../../../../common/WorkDay';
 import styles from './DoctorWorkHours.module.scss';
 
 const DoctorWorkHours = props => {
-  const { show, data, onChange } = props;
+  const { data, onChange } = props;
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
     const newDays = data.workdays.map(item => {

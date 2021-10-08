@@ -32,7 +32,7 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
       )}`}
       key={appointment.id}
       className={clsx(
-        styles['schedule-item'],
+        styles.scheduleItem,
         shouldAnimate && styles.upcoming,
         appointment.isUrgent && styles.urgent,
       )}
@@ -40,17 +40,17 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
       style={{ backgroundColor: `${scheduleStatus.color}47` }}
     >
       <div
-        className={styles['service-indicator']}
+        className={styles.serviceIndicator}
         style={{ backgroundColor: appointment.serviceColor }}
       />
-      <div className={styles['name-and-status']}>
-        <Typography noWrap classes={{ root: styles['patient-name'] }}>
+      <div className={styles.nameAndStatus}>
+        <Typography noWrap classes={{ root: styles.patientName }}>
           {appointment.patient.fullName}
         </Typography>
         {scheduleStatus.statusIcon != null && (
           <div
             className={clsx(
-              styles['status-icon'],
+              styles.statusIcon,
               (scheduleStatus.id === 'DidNotCome' ||
                 scheduleStatus.id === 'Canceled') &&
               styles.negative,
@@ -61,7 +61,7 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
         )}
       </div>
       {showHour && (
-        <Typography noWrap classes={{ root: styles['schedule-time'] }}>
+        <Typography noWrap classes={{ root: styles.scheduleTime }}>
           {startTime.format('HH:mm')} - {endTime.format('HH:mm')}
         </Typography>
       )}

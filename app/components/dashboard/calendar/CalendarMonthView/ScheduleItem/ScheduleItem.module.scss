@@ -16,8 +16,8 @@
   }
 }
 
-.schedule-item {
-  width: calc(100% - .8rem);
+.scheduleItem {
+  width: 100%;
   outline: none;
   background-color: white;
   position: relative;
@@ -38,12 +38,12 @@
     animation-iteration-count: infinite;
   }
 
-  .name-and-status {
+  .nameAndStatus {
     width: 100%;
     display: flex;
     align-items: center;
 
-    .patient-name {
+    .patientName {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -51,7 +51,7 @@
       color: #34344E;
     }
 
-    .status-icon {
+    .statusIcon {
       width: 1.2rem;
       height: 1.2rem;
       display: flex;
@@ -75,7 +75,7 @@
     }
   }
 
-  .schedule-time {
+  .scheduleTime {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -84,7 +84,7 @@
     width: 100%;
   }
 
-  .service-indicator {
+  .serviceIndicator {
     position: absolute;
     left: 0;
     top: 0;

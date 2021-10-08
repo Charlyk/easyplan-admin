@@ -133,14 +133,6 @@ const ServiceInformation = (
           )}
           {textForKey('Service information')}
         </div>
-        <div
-          tabIndex={0}
-          role='button'
-          className={styles.button}
-          onClick={handleInfoExpand}
-        >
-          {isExpanded ? <IconMinus/> : <IconPlusBig/>}
-        </div>
       </div>
 
       <div className={contentClasses}>

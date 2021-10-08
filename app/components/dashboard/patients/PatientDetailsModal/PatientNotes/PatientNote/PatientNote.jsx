@@ -7,12 +7,12 @@ import styles from './PatientNote.module.scss';
 
 const PatientNote = ({ note }) => {
   return (
-    <div className={styles['note-item']}>
-      <div className={styles['note-item__note-date']}>
+    <div className={styles.noteItem}>
+      <div className={styles.noteDate}>
         {moment(note.created).format('DD MMM YYYY HH:mm')}{' '}
         {textForKey('created by')} {note.createdBy}
       </div>
-      <div className={styles['note-item__note-text']}>{note.noteText}</div>
+      <div className={styles.noteText}>{note.noteText}</div>
     </div>
   );
 };

@@ -5,8 +5,8 @@
 
   .leftContainer {
     padding: 8px;
-    width: calc(50% - 16px);
-    height: calc(100% - 16px);
+    width: 50%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 
@@ -41,8 +41,8 @@
     padding: 8px;
     display: flex;
     flex-direction: column;
-    width: calc(50% - 16px);
-    height: calc(100% - 16px);
+    width: 50%;
+    height: 100%;
 
     :global(.title-label) {
       padding-left: 1.5rem;
@@ -85,13 +85,14 @@
   }
 
   .patientInfo {
-    width: calc(100% - 2rem);
-    min-height: 90px;
-    max-height: 90px;
+    width: 100%;
     background: #FFFFFF;
+    height: 6.5rem;
     box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
     border-radius: 4px;
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
     display: flex;
     align-items: center;
 
