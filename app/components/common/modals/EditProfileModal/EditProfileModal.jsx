@@ -35,6 +35,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
 
   const isPasswordValid = data.password.length === 0 || data.password.match(PasswordRegex);
   const isConfirmPasswordValid = data.password.length === 0 || data.confirmPassword === data.password;
+  const isEmailValid = data.email.length === 0 || data.email.match(EmailRegex);
 
   useEffect(() => {
     setData({ ...data, ...currentUser, email: currentUser?.email });
@@ -156,6 +157,8 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
 
         <EASTextField
           type="email"
+          error={!isEmailValid}
+          helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Email')}
           value={data.email ?? ''}
