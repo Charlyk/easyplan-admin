@@ -50,7 +50,15 @@ const EASTextField = React.forwardRef(
         ref={ref}
       >
         {fieldLabel && (
-          <Typography className={clsx(styles.formLabel, { [styles.focused]: focused })}>
+          <Typography
+            className={clsx(
+              styles.formLabel,
+              {
+                [styles.focused]: focused && !error,
+                [styles.error]: error,
+              }
+            )}
+          >
             {fieldLabel}
           </Typography>
         )}
@@ -80,6 +88,7 @@ const EASTextField = React.forwardRef(
               root: clsx(styles.searchField, fieldClass),
               input: styles.searchInput,
               notchedOutline: styles.focusedInput,
+              error: styles.errorField,
               focused: styles.focusedField,
               adornedEnd: styles.inputAdornedEnd,
             }

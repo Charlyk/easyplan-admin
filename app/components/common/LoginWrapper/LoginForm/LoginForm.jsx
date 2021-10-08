@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import VisibilityOn from "@material-ui/icons/Visibility";
 import IconButton from "@material-ui/core/IconButton";
-import Box from "@material-ui/core/Box";
 
 import { EmailRegex } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../LoadingButton';
-import EASTextField from "../../EASTextField";
+import EASTextField from '../../EASTextField';
 import styles from './LoginForm.module.scss';
 
-const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSignUp, onLogin }) => {
+const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSignUp, onLogin, onChange }) => {
   const [data, setData] = useState({ email: '', password: '' });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const isEmailValid = data.email.length === 0 || data.email.match(EmailRegex);
+
+  useEffect(() => {
+    onChange?.(data);
+  }, [data])
 
   const handleEmailChange = (newValue) => {
     setData({ ...data, email: newValue });
@@ -65,6 +69,7 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
       <form onSubmit={handleLogin}>
         <EASTextField
           value={data.email}
+          error={!isEmailValid}
           type="email"
           containerClass={styles.fieldContainer}
           fieldLabel={textForKey('Email')}

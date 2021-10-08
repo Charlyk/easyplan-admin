@@ -25,6 +25,8 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     avatarFile: null,
     isPhoneValid: false,
   });
+  const isPasswordFieldValid = data.password.length === 0 || data.password.match(PasswordRegex);
+  const isEmailFieldValid = data.username.length === 0 || data.username.match(EmailRegex);
 
   const handleLastNameChange = (newValue) => {
     setData({ ...data, lastName: newValue });
@@ -114,6 +116,8 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
 
         <EASTextField
           type="email"
+          error={!isEmailFieldValid}
+          helperText={isEmailFieldValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.textField}
           value={data.username}
           onChange={handleEmailChange}
@@ -124,7 +128,9 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
           type={isPasswordVisible ? 'text' : 'password'}
           containerClass={styles.textField}
           value={data.password}
+          error={!isPasswordFieldValid}
           onChange={handlePasswordChange}
+          helperText={textForKey('passwordvalidationmessage')}
           fieldLabel={textForKey('Password')}
           endAdornment={
             <IconButton

@@ -3,6 +3,19 @@
   display: flex;
   flex-direction: column;
 
+  .helperText {
+    user-select: none;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #3A83DC !important;
+
+    &.error {
+      color: #ec3276 !important;
+    }
+  }
+
   .formLabel {
     user-select: none;
     font-family: Inter, sans-serif !important;
@@ -13,6 +26,10 @@
 
     &.focused {
       color: #3A83DC !important;
+    }
+
+    &.error {
+      color: #ec3276 !important;
     }
   }
 
@@ -37,6 +54,10 @@
       font-size: 13px !important;
       color: #34354C !important;
       background-color: transparent !important;
+
+      &:global(.invalid-number) {
+        border-color: #ec3276 !important;
+      }
 
       &:hover {
         border-color: #3A83DC;

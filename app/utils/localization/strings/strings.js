@@ -584,6 +584,8 @@ export default {
     passwords_not_equal: 'Passwords do not match',
     'go to home': 'Go to home',
     page_not_found: 'Page not found',
+    phone_invalid_message: 'Invalid phone number.',
+    email_invalid_message: 'Invalid email address',
   },
   ro: {
     analytics: 'Analitică',
@@ -1176,6 +1178,8 @@ export default {
     passwords_not_equal: 'Parolele nu coincid',
     'go to home': 'La pagina principală',
     page_not_found: 'Pagina nu a fost găsită',
+    phone_invalid_message: 'Numărul de telefon nu este valid.',
+    email_invalid_message: 'Adresa de email nu este validă',
   },
   ru: {
     analytics: 'Analytics',
@@ -1759,5 +1763,7 @@ export default {
     passwords_not_equal: 'Passwords do not match',
     'go to home': 'Go to home',
     page_not_found: 'Page not found',
+    phone_invalid_message: 'Invalid phone number.',
+    email_invalid_message: 'Invalid email address',
   },
 };

@@ -5,7 +5,19 @@
 
     &:hover {
       .focusedInput {
-        border-color: #3A83DC !important;
+        border-color: #3A83DC;
+      }
+    }
+  }
+
+  .errorField {
+    .focusedInput {
+      border-color: #ec3276;
+    }
+
+    &:hover {
+      .focusedInput {
+        border-color: #ec3276;
       }
     }
   }
@@ -26,7 +38,7 @@
 
   .focusedField {
     .focusedInput {
-      border-color: #3A83DC !important;
+      border-color: #3A83DC;
     }
   }
 
@@ -45,6 +57,10 @@
 
     &.focused {
       color: #3A83DC !important;
+    }
+
+    &.error {
+      color: #ec3276 !important;
     }
   }
 

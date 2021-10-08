@@ -74,7 +74,11 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken }) 
       return;
     }
     await router.push(redirectUrl);
-  }
+  };
+
+  const handleFormDataChange = () => {
+    localDispatch(setErrorMessage(null));
+  };
 
   /**
    * Request password reset for user
@@ -218,6 +222,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken }) 
             isLoggingIn={isLoading}
             onLogin={handleLoginSubmit}
             onSignUp={handleGoToSignUp}
+            onChange={handleFormDataChange}
             onResetPassword={handleGoToResetPassword}
           />
         )}

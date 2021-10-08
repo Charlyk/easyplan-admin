@@ -10,6 +10,7 @@ import styles from './ResetPassword.module.scss';
 
 const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
   const [email, setEmail] = useState('');
+  const isEmailValid = email.length === 0 || email.match(EmailRegex);
 
   const handleFormChange = (newValue) => {
     setEmail(newValue);
@@ -41,6 +42,8 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
       <form onSubmit={handleResetPassword}>
         <EASTextField
           type="email"
+          error={!isEmailValid}
+          helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           fieldLabel={textForKey('Email')}
           value={email}
           onChange={handleFormChange}

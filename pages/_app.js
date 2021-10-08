@@ -63,6 +63,10 @@ const App = ({ Component, pageProps }) => {
   }, []);
 
   useEffect(() => {
+    if (pageProps.fallback == null) {
+      updatePageTitle(null);
+      return;
+    }
     const { currentClinic } = pageProps.fallback[APP_DATA_API];
     if (currentClinic == null) {
       return;
@@ -79,10 +83,11 @@ const App = ({ Component, pageProps }) => {
 
   const updatePageTitle = (clinic) => {
     const pathName = paths[router.pathname] || '';
+    const clinicName = clinic?.clinicName || 'EasyPlan.pro'
     if (!pathName) {
-      document.title = clinic.clinicName;
+      document.title = clinicName;
     } else {
-      document.title = `${clinic.clinicName} - ${pathName}`;
+      document.title = `${clinicName} - ${pathName}`;
     }
   };
 

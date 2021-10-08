@@ -58,7 +58,7 @@ class AppDocument extends Document {
 
   render() {
     const { currentClinic } = this.props;
-    const clinicName = currentClinic?.clinicName || 'EasyPlan';
+    const clinicName = currentClinic?.clinicName || 'EasyPlan.pro';
     return (
       <Html>
         <Head>
