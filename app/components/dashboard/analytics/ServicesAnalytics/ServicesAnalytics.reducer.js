@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
 import { createSlice } from "@reduxjs/toolkit";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 
 export const initialState = {
   selectedDoctor: { id: -1 },

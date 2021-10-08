@@ -5,7 +5,7 @@ import {
   requestCreateCategory,
   requestEditCategory
 } from "../../../../../middleware/api/categories";
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import EASModal from "../../../common/modals/EASModal";
 import EASTextField from "../../../common/EASTextField";
 import styles from './CreateCategoryModal.module.scss';

@@ -1,6 +1,6 @@
 import uuid from "react-uuid";
 import S3 from 'react-aws-s3';
-import { S3Config } from "../app/utils/constants";
+import { S3Config } from "./constants";
 
 /**
  * Upload a file to AWS

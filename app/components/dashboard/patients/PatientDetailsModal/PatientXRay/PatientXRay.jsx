@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 import IconPlus from '../../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import {
   deletePatientXRayImage,
   getPatientXRayImages

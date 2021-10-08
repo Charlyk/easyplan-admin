@@ -1,4 +1,4 @@
-import { Role } from "../app/utils/constants";
+import { Role } from "./constants";
 
 export default function redirectToUrl(user, clinic, path) {
   const selectedClinic = user?.clinics.find((item) => item.clinicId === clinic?.id);

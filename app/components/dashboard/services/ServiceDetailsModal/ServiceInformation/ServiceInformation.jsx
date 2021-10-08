@@ -12,7 +12,7 @@ import IconMinus from '../../../../icons/iconMinus';
 import {
   availableCurrenciesSelector
 } from '../../../../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import EASColorPicker from "../../../../common/EASColorPicker/EASColorPicker";
 import EASTextField from "../../../../common/EASTextField";
 import EASTextarea from "../../../../common/EASTextarea";

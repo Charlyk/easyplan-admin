@@ -4,9 +4,9 @@ import Typography from "@material-ui/core/Typography";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 
-import getRedirectUrlForUser from "../../../../utils/getRedirectUrlForUser";
-import getClinicUrl from '../../../../utils/getClinicUrl'
-import { textForKey } from "../../../../utils/localization";
+import getRedirectUrlForUser from "../../../utils/getRedirectUrlForUser";
+import getClinicUrl from '../../../utils/getClinicUrl'
+import { textForKey } from "../../../utils/localization";
 import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
 import { appBaseUrl, isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";

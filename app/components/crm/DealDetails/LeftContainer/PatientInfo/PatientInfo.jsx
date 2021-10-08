@@ -7,7 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import getPatientName from "../../../../../utils/getPatientName";
 import styles from './PatientInfo.module.scss';
 

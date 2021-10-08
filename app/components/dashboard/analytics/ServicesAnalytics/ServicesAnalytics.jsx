@@ -17,7 +17,7 @@ import { useRouter } from 'next/router';
 
 import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { Role, ScheduleStatuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import EASSelect from "../../../common/EASSelect";
 import reducer, {
   initialState,

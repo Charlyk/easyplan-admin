@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { isCalendarLoadingSelector } from '../../../../../redux/selectors/calendarSelector';
-import getCurrentWeek from '../../../../../utils/getCurrentWeek';
+import getCurrentWeek from '../../../../utils/getCurrentWeek';
 import CalendarHeader from "../CalendarHeader";
 import styles from './AppointmentsCalendar.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";

@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 
 import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
 import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import getDays from '../../../../../utils/getDays';
-import { textForKey } from '../../../../../utils/localization';
+import getDays from '../../../../utils/getDays';
+import { textForKey } from '../../../../utils/localization';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
 import styles from './CalendarMonthView.module.scss';

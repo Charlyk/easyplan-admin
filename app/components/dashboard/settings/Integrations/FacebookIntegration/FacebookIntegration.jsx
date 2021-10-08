@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 import { saveClinicFacebookPage } from "../../../../../../middleware/api/clinic";
 import { saveFacebookToken } from "../../../../../../middleware/api/users";
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import { FacebookAppId } from "../../../../../utils/constants";
 import PagesListModal from "./PagesListModal";
 import styles from './FacebookIntegration.module.scss';

@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { Typography } from "@material-ui/core";
 
-import getClinicUrl from "../../../../utils/getClinicUrl";
-import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
+import getClinicUrl from "../../../utils/getClinicUrl";
+import uploadFileToAWS from '../../../utils/uploadFileToAWS';
 import { createNewClinic } from "../../../../middleware/api/clinic";
 import { isDev } from "../../../../eas.config";
 import CreateClinicForm from "../CreateClinicForm";

@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import { updateExchangeRatesSelector } from '../../../../../redux/selectors/rootSelector';
 import { setIsExchangeRatesModalOpen } from "../../../../../redux/actions/exchangeRatesActions";
 import { fetchClinicExchangeRates } from "../../../../../middleware/api/clinic";
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { Role } from '../../../../utils/constants';
 import IconTrash from "../../../icons/iconTrash";
 import EASTextField from "../../EASTextField";

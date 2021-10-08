@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import EASTextField from "../../../../common/EASTextField";
 import EASSelect from "../../../../common/EASSelect";
 import EASTextarea from "../../../../common/EASTextarea";

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 import IconPlus from '../../../../icons/iconPlus';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './SMSMessagesHeader.module.scss'
 
 const SMSMessagesHeader = ({ canCreate, onCreate }) => {

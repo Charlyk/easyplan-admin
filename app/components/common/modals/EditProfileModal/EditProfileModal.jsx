@@ -5,9 +5,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
-import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
-import urlToLambda from '../../../../../utils/urlToLambda';
-import { textForKey } from '../../../../../utils/localization';
+import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
+import urlToLambda from '../../../../utils/urlToLambda';
+import { textForKey } from '../../../../utils/localization';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import styles from './EditProfileModal.module.scss';
 import EASModal from "../EASModal";

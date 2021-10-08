@@ -5,7 +5,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import TextField from "@material-ui/core/TextField";
 import styles from './EASAutocomplete.module.scss';
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
 

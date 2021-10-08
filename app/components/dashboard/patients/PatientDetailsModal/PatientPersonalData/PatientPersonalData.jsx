@@ -8,8 +8,8 @@ import { toast } from "react-toastify";
 
 import IconSuccess from '../../../../icons/iconSuccess';
 import { EmailRegex } from '../../../../../utils/constants';
-import adjustValueToNumber from '../../../../../../utils/adjustValueToNumber';
-import { textForKey } from '../../../../../../utils/localization';
+import adjustValueToNumber from '../../../../../utils/adjustValueToNumber';
+import { textForKey } from '../../../../../utils/localization';
 import LoadingButton from '../../../../common/LoadingButton';
 import { actions, initialState, reducer } from './PatientPersonalData.reducer';
 import { updatePatient } from "../../../../../../middleware/api/patients";

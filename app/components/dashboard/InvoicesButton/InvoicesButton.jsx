@@ -14,10 +14,10 @@ import {
   totalInvoicesSelector,
   updateInvoiceSelector
 } from "../../../../redux/selectors/invoicesSelector";
-import formattedAmount from '../../../../utils/formattedAmount';
-import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
+import formattedAmount from '../../../utils/formattedAmount';
+import getClinicExchangeRates from '../../../utils/getClinicExchangeRates';
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 import { setTotalInvoices } from "../../../../redux/actions/invoiceActions";
 import { fetchPendingInvoices } from "../../../../middleware/api/invoices";
 import styles from './InvoicesButton.module.scss';

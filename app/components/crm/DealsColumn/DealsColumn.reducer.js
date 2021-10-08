@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import orderBy from 'lodash/orderBy';
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 
 export const sheetActions = [
   {

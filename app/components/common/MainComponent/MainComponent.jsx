@@ -19,13 +19,13 @@ import {
   isImportModalOpenSelector,
   patientDetailsSelector,
 } from '../../../../redux/selectors/rootSelector';
-import paths from '../../../../utils/paths';
+import paths from '../../../utils/paths';
 import { isExchangeRateModalOpenSelector } from "../../../../redux/selectors/exchangeRatesModalSelector";
 import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";
-import { handleRemoteMessage } from "../../../../utils/pubnubUtils";
+import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 import { setClinic } from "../../../../redux/actions/clinicActions";
 import { environment, isDev } from "../../../../eas.config";
-import redirectIfOnGeneralHost from "../../../../utils/redirectIfOnGeneralHost";
+import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import { APP_DATA_API } from "../../../utils/constants";
 import styles from './MainComponent.module.scss';

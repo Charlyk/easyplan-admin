@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import IconNext from '../../../../icons/iconNext';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import styles from '../GeneralAnalytics.module.scss';
 
 const IncomeStatisticItem = ({ title, icon, persons, amount }) => {

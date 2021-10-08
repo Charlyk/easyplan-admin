@@ -9,7 +9,7 @@ import * as locales from 'react-date-range/dist/locale';
 
 import { clinicServicesSelector } from '../../../../redux/selectors/clinicSelector';
 import { Statuses } from '../../../utils/constants';
-import { getAppLanguage, textForKey } from '../../../../utils/localization';
+import { getAppLanguage, textForKey } from '../../../utils/localization';
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import EASTextField from "../../common/EASTextField";
 import EASSelect from "../../common/EASSelect";

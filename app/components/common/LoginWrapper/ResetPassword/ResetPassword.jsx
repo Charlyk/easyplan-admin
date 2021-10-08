@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 import LoadingButton from '../../LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import EASTextField from "../../EASTextField";
 import styles from './ResetPassword.module.scss';
 

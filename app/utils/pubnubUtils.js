@@ -5,15 +5,15 @@ import {
   togglePatientsListUpdate,
   toggleUpdateInvoices,
   triggerUsersUpdate,
-} from '../redux/actions/actions';
-import { setClinicExchangeRatesUpdateRequired } from '../redux/actions/clinicActions';
-import { toggleUpdateInvoice } from '../redux/actions/invoiceActions';
-import { setSMSMessageStatus } from '../redux/actions/patientActions';
+} from '../../redux/actions/actions';
+import { setClinicExchangeRatesUpdateRequired } from '../../redux/actions/clinicActions';
+import { toggleUpdateInvoice } from '../../redux/actions/invoiceActions';
+import { setSMSMessageStatus } from '../../redux/actions/patientActions';
 import {
   toggleDeleteSchedule,
   toggleUpdateSchedule,
-} from '../redux/actions/scheduleActions';
-import { userSelector } from '../redux/selectors/rootSelector';
+} from '../../redux/actions/scheduleActions';
+import { userSelector } from '../../redux/selectors/rootSelector';
 
 export const handleRemoteMessage = (message) => (dispatch, getState) => {
   const appState = getState();

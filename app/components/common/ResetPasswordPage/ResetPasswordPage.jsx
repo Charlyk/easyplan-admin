@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import Typography from "@material-ui/core/Typography";
 
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 import { isDev } from "../../../../eas.config";
 import { wrapper } from "../../../../store";
 import { requestResetUserPassword } from "../../../../middleware/api/auth";

@@ -19,18 +19,18 @@ import {
 } from "../redux/actions/actions";
 import { imageModalSelector } from "../redux/selectors/imageModalSelector";
 import { setImageModal } from "../redux/actions/imageModalActions";
-import { textForKey } from "../utils/localization";
+import { textForKey } from "../app/utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
 import { signOut } from "../middleware/api/auth";
 import { fetchAppData } from "../middleware/api/initialization";
 import useWindowFocused from "../app/utils/hooks/useWindowFocused";
 import { UnauthorizedPaths } from "../app/utils/constants";
 import { wrapper } from "../store";
-import paths from "../utils/paths";
+import paths from "../app/utils/paths";
 import 'moment/locale/ro';
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
-import '../utils'
+import '../app/utils'
 import getCookie from "../app/utils/getCookie";
 
 const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));

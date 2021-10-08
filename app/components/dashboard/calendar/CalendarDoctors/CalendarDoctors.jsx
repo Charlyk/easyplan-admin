@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import EASTextField from "../../../common/EASTextField";
 import CalendarDoctor from './CalendarDoctor';

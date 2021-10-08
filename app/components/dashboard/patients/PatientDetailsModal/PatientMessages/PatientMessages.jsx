@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import axios from "axios";
 
 import IconPlus from '../../../../icons/iconPlus';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import LoadingButton from '../../../../common/LoadingButton';
 import PatientMessage from './PatientMessage';
 import EASTextField from "../../../../common/EASTextField";

@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconDelete from '../../../../icons/iconDelete';
 import IconEdit from '../../../../icons/iconEdit';
 import IconUmbrella from '../../../../icons/iconUmbrella';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './DoctorHolidays.module.scss';
 
 const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {

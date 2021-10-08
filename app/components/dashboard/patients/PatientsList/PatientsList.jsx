@@ -24,7 +24,7 @@ import {
 } from '../../../../../redux/actions/actions';
 import { HeaderKeys } from "../../../../utils/constants";
 import { updatePatientsListSelector } from '../../../../../redux/selectors/rootSelector';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import {
   deletePatient,
   getPatients,

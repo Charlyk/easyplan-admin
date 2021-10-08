@@ -5,7 +5,7 @@ import upperFirst from 'lodash/upperFirst';
 import { toast } from "react-toastify";
 
 import { fetchAllDealStates, requestConfirmFirstContact, updateDealState } from "../../../../middleware/api/crm";
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import DealsColumn from "../DealsColumn";
 import reducer, {
   initialState,

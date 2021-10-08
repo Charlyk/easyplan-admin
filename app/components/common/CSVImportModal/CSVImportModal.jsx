@@ -19,7 +19,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import IconsUploadCSV from "../../icons/iconsUploadCSV";
 import BendArrow from "../../../../public/bend-arrow.png";
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import getCSVRowsCount from "../../../utils/getCSVRowsCount";
 import EASModal from "../modals/EASModal";
 import reducer, {

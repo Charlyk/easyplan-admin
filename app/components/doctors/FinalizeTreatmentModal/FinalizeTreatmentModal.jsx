@@ -9,10 +9,10 @@ import { toast } from 'react-toastify';
 
 import IconMinus from '../../icons/iconMinus';
 import IconPlus from '../../icons/iconPlus';
-import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
-import getServiceName from '../../../../utils/getServiceName';
-import formattedAmount from '../../../../utils/formattedAmount';
-import { textForKey } from '../../../../utils/localization';
+import getClinicExchangeRates from '../../../utils/getClinicExchangeRates';
+import getServiceName from '../../../utils/getServiceName';
+import formattedAmount from '../../../utils/formattedAmount';
+import { textForKey } from '../../../utils/localization';
 import styles from './FinalizeTreatmentModal.module.scss';
 import EASModal from "../../common/modals/EASModal";
 import EASTextField from "../../common/EASTextField";

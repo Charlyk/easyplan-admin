@@ -9,8 +9,8 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 
 import { requestAcceptInvitation } from "../../../../middleware/api/users";
-import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
-import { textForKey } from '../../../../utils/localization';
+import uploadFileToAWS from '../../../utils/uploadFileToAWS';
+import { textForKey } from '../../../utils/localization';
 import { PasswordRegex, Role } from '../../../utils/constants';
 import isPhoneNumberValid from "../../../utils/isPhoneNumberValid";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";

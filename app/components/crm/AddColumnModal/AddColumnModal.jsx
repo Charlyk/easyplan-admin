@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import EASModal from "../../common/modals/EASModal";
 import styles from './AddColumnModal.module.scss';
 

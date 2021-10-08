@@ -1,13 +1,13 @@
 import React from 'react';
 import { SWRConfig } from "swr";
-import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectToUrl from '../../../app/utils/redirectToUrl';
 import DoctorsMain from "../../../app/components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
-import parseCookies from "../../../utils/parseCookies";
+import parseCookies from "../../../app/utils/parseCookies";
 import DoctorPatientDetails from "../../../app/components/doctors/DoctorPatientDetails";
 import { APP_DATA_API, JwtRegex } from "../../../app/utils/constants";
-import handleRequestError from "../../../utils/handleRequestError";
+import handleRequestError from "../../../app/utils/handleRequestError";
 
 const DoctorScheduleDetails = (
   {

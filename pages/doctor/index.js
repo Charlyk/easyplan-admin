@@ -3,15 +3,15 @@ import moment from 'moment-timezone';
 import { SWRConfig } from "swr";
 import DoctorsMain from "../../app/components/doctors/DoctorsMain";
 import { wrapper } from "../../store";
-import getCurrentWeek from "../../utils/getCurrentWeek";
-import redirectToUrl from '../../utils/redirectToUrl';
+import getCurrentWeek from "../../app/utils/getCurrentWeek";
+import redirectToUrl from '../../app/utils/redirectToUrl';
 import { fetchAppData } from "../../middleware/api/initialization";
-import parseCookies from "../../utils/parseCookies";
+import parseCookies from "../../app/utils/parseCookies";
 import DoctorCalendar from "../../app/components/doctors/DoctorCalendar";
 import { getSchedulesForInterval } from "../../middleware/api/schedules";
-import { textForKey } from "../../utils/localization";
+import { textForKey } from "../../app/utils/localization";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../utils/handleRequestError";
+import handleRequestError from "../../app/utils/handleRequestError";
 
 const Doctor = (
   {

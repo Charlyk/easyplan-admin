@@ -38,8 +38,8 @@ import {
 } from '../../../../../redux/selectors/scheduleSelector';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { ManualStatuses, Statuses } from '../../../../utils/constants';
-import formattedAmount from '../../../../../utils/formattedAmount';
-import { textForKey } from '../../../../../utils/localization';
+import formattedAmount from '../../../../utils/formattedAmount';
+import { textForKey } from '../../../../utils/localization';
 import reducer, {
   initialState,
   setIsLoading,

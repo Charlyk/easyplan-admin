@@ -10,7 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import styles from './BottomSheetDialog.module.scss';
 import { CircularProgress } from "@material-ui/core";
 

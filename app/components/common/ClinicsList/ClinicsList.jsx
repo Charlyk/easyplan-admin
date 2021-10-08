@@ -5,8 +5,8 @@ import Button from '@material-ui/core/Button';
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 
-import getClinicUrl from "../../../../utils/getClinicUrl";
-import { textForKey } from "../../../../utils/localization";
+import getClinicUrl from "../../../utils/getClinicUrl";
+import { textForKey } from "../../../utils/localization";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import { triggerUserLogout } from "../../../../redux/actions/actions";
 import { signOut } from "../../../../middleware/api/auth";

@@ -7,7 +7,7 @@ import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 
 import { requestLinkPatient } from "../../../../middleware/api/crm";
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import onRequestError from "../../../utils/onRequestError";
 import EASModal from "../../common/modals/EASModal";
 import ExistentPatientForm from "./ExistentPatientForm";

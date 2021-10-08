@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import IconSuccess from '../../../icons/iconSuccess';
 import LoadingButton from '../../../common/LoadingButton';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import EASTextField from "../../../common/EASTextField";
 import styles from './SecuritySettings.module.scss';

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { DateRangePicker } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import { getAppLanguage } from '../../../../utils/localization';
+import { getAppLanguage } from '../../../utils/localization';
 import { localizedInputRanges, localizedStaticRanges } from './ranges';
 import styles from './EasyDateRangePicker.module.scss';
 

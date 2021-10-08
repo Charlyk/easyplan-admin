@@ -6,7 +6,7 @@ import moment from "moment-timezone";
 import debounce from 'lodash/debounce';
 
 import { fetchAllServices } from "../../../../../../middleware/api/services";
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import { ScheduleStatuses } from "../../../../../utils/constants";
 import EASTextField from "../../../../common/EASTextField";
 import EASSelect from "../../../../common/EASSelect";

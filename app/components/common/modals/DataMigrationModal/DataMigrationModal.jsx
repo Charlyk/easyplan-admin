@@ -14,8 +14,8 @@ import Modal from '@material-ui/core/Modal';
 
 import IconClose from '../../../icons/iconClose';
 import { env } from '../../../../utils/constants';
-import generateReducerActions from '../../../../../utils/generateReducerActions';
-import { textForKey } from '../../../../../utils/localization';
+import generateReducerActions from '../../../../utils/generateReducerActions';
+import { textForKey } from '../../../../utils/localization';
 import AuthenticationStep from './AuthenticationStep';
 import DataMigrationFinalStep from './DataMigrationFinalStep';
 import ImportSelectionStep from './ImportSelectionStep';

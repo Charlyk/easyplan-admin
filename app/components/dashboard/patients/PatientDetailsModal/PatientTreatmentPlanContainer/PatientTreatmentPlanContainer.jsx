@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import { fetchDoctorScheduleDetails } from "../../../../../../middleware/api/schedules";
 import getTreatmentPlanURL from "../../../../../utils/getTreatmentPlanURL";
 import PatientTreatmentPlan from "../../../../common/PatientTreatmentPlan";

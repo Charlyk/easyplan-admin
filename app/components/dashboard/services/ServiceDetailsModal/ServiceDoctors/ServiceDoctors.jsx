@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 import IconMinus from '../../../../icons/iconMinus';
 import IconPlusBig from '../../../../icons/iconPlusBig';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import styles from './ServiceDoctors.module.scss';
 
 const ServiceDoctor = dynamic(() => import('../ServiceDoctor'))

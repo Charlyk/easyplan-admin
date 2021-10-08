@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import IconSuccess from '../../../icons/iconSuccess';
 import LoadingButton from '../../../common/LoadingButton';
 import SwitchButton from '../../../common/SwitchButton';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { clinicBracesSelector } from "../../../../../redux/selectors/clinicSelector";
 import { updateClinicBraces } from "../../../../../middleware/api/clinic";
 import EASTextField from "../../../common/EASTextField";

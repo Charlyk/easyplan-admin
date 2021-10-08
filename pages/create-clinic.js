@@ -1,10 +1,10 @@
 import React from 'react';
-import parseCookies from "../utils/parseCookies";
+import parseCookies from "../app/utils/parseCookies";
 import CreateClinicWrapper from "../app/components/common/CreateClinicWrapper";
 import { wrapper } from "../store";
 import { fetchAllCountries } from "../middleware/api/countries";
 import { JwtRegex } from "../app/utils/constants";
-import handleRequestError from "../utils/handleRequestError";
+import handleRequestError from "../app/utils/handleRequestError";
 
 const CreateClinic = ({ token, redirect, countries, login }) => {
   return (

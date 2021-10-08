@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import moment from "moment-timezone";
 import clsx from "clsx";
 
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import { Statuses } from "../../../../utils/constants";
 import styles from './ScheduleItem.module.scss';
 

@@ -14,8 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchClinicExchangeRates } from "../../../../../middleware/api/clinic";
 import { Role } from "../../../../utils/constants";
-import { textForKey } from "../../../../../utils/localization";
-import formattedAmount from "../../../../../utils/formattedAmount";
+import { textForKey } from "../../../../utils/localization";
+import formattedAmount from "../../../../utils/formattedAmount";
 import { setIsExchangeRatesModalOpen } from "../../../../../redux/actions/exchangeRatesActions";
 import { updateExchangeRatesSelector } from "../../../../../redux/selectors/rootSelector";
 import styles from './ExchangeRates.module.scss';

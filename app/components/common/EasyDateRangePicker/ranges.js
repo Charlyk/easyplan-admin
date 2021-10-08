@@ -11,7 +11,7 @@ import {
   differenceInCalendarDays,
 } from 'date-fns';
 
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 
 const defineds = {
   startOfWeek: startOfWeek(new Date(), { weekStartsOn: 1 }),

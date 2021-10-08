@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 import IconPlus from '../../../../icons/iconPlus';
 import { updateNotesSelector } from '../../../../../../redux/selectors/rootSelector';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import LoadingButton from '../../../../common/LoadingButton';
 import { createPatientNote, requestFetchPatientNotes } from "../../../../../../middleware/api/patients";
 import PatientNote from './PatientNote';

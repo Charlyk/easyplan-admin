@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import PropTypes from 'prop-types';
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import BottomSheetDialog from "../../common/BottomSheetDialog";
 import LeftContainer from "./LeftContainer";
 import styles from './DealDetails.module.scss';

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { triggerUpdateNotes } from '../../../../../redux/actions/actions';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { createPatientNote, updateVisitNote } from "../../../../../middleware/api/patients";
 import EASTextarea from "../../EASTextarea";
 import EASModal from "../EASModal";

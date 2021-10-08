@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
 
 import { togglePatientsListUpdate } from '../../../../../redux/actions/actions';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import EASModal from "../../../common/modals/EASModal";
 import EASTextField from "../../../common/EASTextField";

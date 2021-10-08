@@ -22,7 +22,7 @@ import MenuEllipse from '../../../icons/menuEllipse';
 import MenuPatients from '../../../icons/menuPatients';
 import MenuSettings from '../../../icons/menuSettings';
 import MenuUsers from '../../../icons/menuUsers';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import ClinicSelector from '../../ClinicSelector';
 import { Role } from "../../../../utils/constants";
 import ExchangeRates from "../ExchageRates";

@@ -1,4 +1,4 @@
-import { Role } from "../app/utils/constants";
+import { Role } from "./constants";
 
 const getRedirectUrlForUser = (user, subdomain) => {
   if (user == null) {

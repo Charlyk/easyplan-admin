@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import { getAppLanguage } from '../../../../utils/localization';
+import { getAppLanguage } from '../../../utils/localization';
 import styles from './EasyDatePicker.module.scss';
 
 const EasyDatePicker = (

@@ -5,7 +5,7 @@ import Popper from '@material-ui/core/Popper';
 import Typography from '@material-ui/core/Typography';
 
 import { Statuses } from "../../../../utils/constants";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import styles from './CalendarLegend.module.scss'
 
 const StatusItem = ({ item }) => {

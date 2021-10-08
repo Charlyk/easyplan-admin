@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
 import DoctorBracesSettings from '../DoctorBracesSettings';
 import DoctorHolidays from '../DoctorHolidays';

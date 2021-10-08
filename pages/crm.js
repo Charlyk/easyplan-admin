@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { SWRConfig } from "swr";
 import MainComponent from "../app/components/common/MainComponent";
-import parseCookies from '../utils/parseCookies';
-import redirectToUrl from "../utils/redirectToUrl";
+import parseCookies from '../app/utils/parseCookies';
+import redirectToUrl from "../app/utils/redirectToUrl";
 import { fetchAppData } from "../middleware/api/initialization";
 import { fetchAllDealStates } from "../middleware/api/crm";
 import CrmMain from "../app/components/crm/CrmMain";
 import { APP_DATA_API, JwtRegex } from "../app/utils/constants";
-import handleRequestError from "../utils/handleRequestError";
+import handleRequestError from "../app/utils/handleRequestError";
 
 const Crm = ({ fallback, authToken, states }) => {
   return (

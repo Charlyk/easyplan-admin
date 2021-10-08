@@ -1,5 +1,5 @@
 import moment from "moment-timezone";
-import generateReducerActions from "../../../../../utils/generateReducerActions";
+import generateReducerActions from "../../../../utils/generateReducerActions";
 
 export const initialState = {
   doctors: [],

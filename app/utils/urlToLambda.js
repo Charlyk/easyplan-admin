@@ -1,4 +1,4 @@
-import { imageLambdaUrl } from "../eas.config";
+import { imageLambdaUrl } from "../../eas.config";
 
 /**
  * convert image url to lambda url

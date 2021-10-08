@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import IconNext from '../../../icons/iconNext';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { Role } from "../../../../utils/constants";
 import styles from './SettingsMenu.module.scss';
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { EmailRegex, Role } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import EASTextField from "../../EASTextField";
 import EASSelect from "../../EASSelect";
 import EASModal from "../EASModal";

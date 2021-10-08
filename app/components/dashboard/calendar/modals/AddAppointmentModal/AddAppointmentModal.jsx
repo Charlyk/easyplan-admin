@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
 import { EmailRegex, Role } from '../../../../../utils/constants';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import EasyDatePicker from '../../../../common/EasyDatePicker';
 import {
   getAvailableHours,

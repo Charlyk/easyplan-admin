@@ -2,12 +2,12 @@ import React from 'react';
 import { SWRConfig } from "swr";
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { fetchAppData } from "../../middleware/api/initialization";
-import redirectToUrl from '../../utils/redirectToUrl';
-import parseCookies from "../../utils/parseCookies";
+import redirectToUrl from '../../app/utils/redirectToUrl';
+import parseCookies from "../../app/utils/parseCookies";
 import { fetchAllCountries } from "../../middleware/api/countries";
 import SettingsWrapper from "../../app/components/dashboard/settings/SettingsWrapper";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../utils/handleRequestError";
+import handleRequestError from "../../app/utils/handleRequestError";
 
 const Settings = ({ fallback, countries, authToken }) => {
   return (

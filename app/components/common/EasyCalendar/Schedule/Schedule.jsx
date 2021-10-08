@@ -6,7 +6,7 @@ import moment from 'moment-timezone';
 import Typography from '@material-ui/core/Typography';
 
 import { Statuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import styles from './Schedule.module.scss';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 

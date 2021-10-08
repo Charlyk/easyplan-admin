@@ -7,8 +7,8 @@ import Button from '@material-ui/core/Button';
 import IconDelete from '../../../icons/iconDelete';
 import IconEdit from '../../../icons/iconEdit';
 import IconRefresh from '../../../icons/iconRefresh';
-import formattedAmount from '../../../../../utils/formattedAmount';
-import { textForKey } from '../../../../../utils/localization';
+import formattedAmount from '../../../../utils/formattedAmount';
+import { textForKey } from '../../../../utils/localization';
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, onEditService, onDeleteService }) => {

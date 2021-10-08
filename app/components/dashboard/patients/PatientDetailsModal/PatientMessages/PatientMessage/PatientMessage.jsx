@@ -10,7 +10,7 @@ import IconPending from '../../../../../icons/IconPending';
 import IconSuccess from '../../../../../icons/iconSuccess';
 import { setSMSMessageStatus } from '../../../../../../../redux/actions/patientActions';
 import { updateSMSMessageStatusSelector } from '../../../../../../../redux/selectors/patientSelector';
-import { textForKey } from '../../../../../../../utils/localization';
+import { textForKey } from '../../../../../../utils/localization';
 import styles from './PatientMessage.module.scss';
 
 const PatientMessage = ({ message }) => {

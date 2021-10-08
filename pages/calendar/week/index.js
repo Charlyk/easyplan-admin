@@ -4,13 +4,13 @@ import { SWRConfig } from "swr";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import getCurrentWeek from "../../../utils/getCurrentWeek";
-import redirectToUrl from '../../../utils/redirectToUrl';
+import getCurrentWeek from "../../../app/utils/getCurrentWeek";
+import redirectToUrl from '../../../app/utils/redirectToUrl';
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
-import parseCookies from "../../../utils/parseCookies";
+import parseCookies from "../../../app/utils/parseCookies";
 import areComponentPropsEqual from "../../../app/utils/areComponentPropsEqual";
-import handleRequestError from "../../../utils/handleRequestError";
+import handleRequestError from "../../../app/utils/handleRequestError";
 
 const Week = (
   {
