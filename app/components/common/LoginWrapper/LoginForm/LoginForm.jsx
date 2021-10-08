@@ -50,8 +50,8 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
         }
       )}
       style={{
-        padding: isMobile ? '2rem' : '3rem',
-        width: isMobile ? '90%' : '70%',
+        padding: isMobile ? '1rem' : '2rem',
+        width: isMobile ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
       }}
     >
       <span className='welcome-text'>{textForKey('Welcome to EasyPlan')}</span>

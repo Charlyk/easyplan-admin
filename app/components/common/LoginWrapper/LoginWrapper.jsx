@@ -10,7 +10,7 @@ import { textForKey } from "../../../../utils/localization";
 import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
 import { appBaseUrl, isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";
-import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import reducer, {
   initialState,
   setCurrentForm,

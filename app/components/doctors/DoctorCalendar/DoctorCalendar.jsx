@@ -14,7 +14,7 @@ import {
 import PatientsFilter from "../PatientsFilter";
 import getCurrentWeek from "../../../../utils/getCurrentWeek";
 import { getSchedulesForInterval } from "../../../../middleware/api/schedules";
-import usePrevious from "../../../utils/usePrevious";
+import usePrevious from "../../../utils/hooks/usePrevious";
 import EasyCalendar from "../../common/EasyCalendar";
 import DoctorsCalendarDay from "../DoctorsCalendarDay";
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';

@@ -13,7 +13,7 @@ import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../utils/localization';
 import { JwtRegex, PasswordRegex, Role } from '../../../utils/constants';
 import isPhoneNumberValid from "../../../utils/isPhoneNumberValid";
-import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import LoadingButton from '../LoadingButton';
 import UploadAvatar from "../UploadAvatar";
 import EASTextField from "../EASTextField";

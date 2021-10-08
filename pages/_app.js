@@ -23,6 +23,7 @@ import { textForKey } from "../utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
 import { signOut } from "../middleware/api/auth";
 import { fetchAppData } from "../middleware/api/initialization";
+import useWindowFocused from "../app/utils/hooks/useWindowFocused";
 import { UnauthorizedPaths } from "../app/utils/constants";
 import { wrapper } from "../store";
 import paths from "../utils/paths";
@@ -46,11 +47,16 @@ export default wrapper.withRedux(
   ({ Component, pageProps }) => {
     const router = useRouter();
     const dispatch = useDispatch();
+    const isWindowFocused = useWindowFocused();
     const patientXRayModal = useSelector(patientXRayModalSelector);
     const patientNoteModal = useSelector(patientNoteModalSelector);
     const imageModal = useSelector(imageModalSelector);
     const logout = useSelector(logoutSelector);
     const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
+
+    useEffect(() => {
+      console.log(isWindowFocused);
+    }, [isWindowFocused]);
 
     useEffect(() => {
       if (UnauthorizedPaths.includes(router.pathname)) {

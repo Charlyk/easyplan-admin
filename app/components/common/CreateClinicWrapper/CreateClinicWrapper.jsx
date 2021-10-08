@@ -13,7 +13,7 @@ import reducer, {
   initialState
 } from './createClinicWrapperSlice';
 import styles from './CreateClinic.module.scss';
-import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 
 export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin }) {
   const router = useRouter();

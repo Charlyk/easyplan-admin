@@ -6,7 +6,7 @@ import { textForKey } from '../../../../utils/localization';
 import { isDev } from "../../../../eas.config";
 import { wrapper } from "../../../../store";
 import { requestResetUserPassword } from "../../../../middleware/api/auth";
-import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import { PasswordRegex } from '../../../utils/constants';
 import LoadingButton from '../LoadingButton';
 import EASTextField from "../EASTextField";
@@ -86,8 +86,8 @@ const ResetPasswordForm = ({ token }) => {
         <div
           className={styles.formRoot}
           style={{
-            width: isMobileDevice ? '90%' : '70%',
-            padding: '2rem',
+            width: isMobileDevice ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
+            padding: isMobileDevice ? '1rem' : '2rem',
           }}
         >
           <div className={styles.formWrapper}>

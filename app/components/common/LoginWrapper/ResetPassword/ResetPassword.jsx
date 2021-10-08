@@ -8,7 +8,7 @@ import { textForKey } from '../../../../../utils/localization';
 import EASTextField from "../../EASTextField";
 import styles from './ResetPassword.module.scss';
 
-const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }) => {
+const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
   const [email, setEmail] = useState('');
 
   const handleFormChange = (newValue) => {
@@ -30,8 +30,8 @@ const ResetPassword = ({ isLoading, errorMessage, isMobile, onSubmit, onGoBack }
     <div
       className={clsx('form-root', styles['reset-password-form'])}
       style={{
-        padding: isMobile ? '2rem' : '3rem',
-        width: isMobile ? '90%' : '70%',
+        padding: isMobile ? '1rem' : '2rem',
+        width: isMobile ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
       }}
     >
       <span className='form-title'>{textForKey('Reset Password')}</span>

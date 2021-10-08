@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 
 import getClinicUrl from "../../../../utils/getClinicUrl";
 import { textForKey } from "../../../../utils/localization";
-import useIsMobileDevice from "../../../utils/useIsMobileDevice";
+import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import { triggerUserLogout } from "../../../../redux/actions/actions";
 import { signOut } from "../../../../middleware/api/auth";
 import { isDev } from "../../../../eas.config";
@@ -64,7 +64,8 @@ export default function ClinicsList({ user, authToken }) {
         <div
           className={styles.clinicsWrapper}
           style={{
-            width: isMobileDevice ? '90%' : '70%',
+            padding: isMobileDevice ? '1rem' : '2rem',
+            width: isMobileDevice ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
           }}
         >
           <Typography className={styles.formTitle}>
