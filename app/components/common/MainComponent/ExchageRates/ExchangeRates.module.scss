@@ -1,5 +1,6 @@
 .exchangeRate {
   width: calc(100% - 1rem);
+  margin-top: 1rem;
   min-height: 35px;
   background-color: white;
   position: relative;
@@ -10,7 +11,7 @@
   box-shadow: 0 1px 10px 10px #34344E1A;
 
   .titleLabel {
-    width: calc(100% - 16px);
+    width: 100%;
     font-family: Inter, sans-serif !important;
     font-style: normal !important;
     color: #34354C;
