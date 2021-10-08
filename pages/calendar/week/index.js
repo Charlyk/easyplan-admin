@@ -5,13 +5,12 @@ import CalendarContainer from "../../../app/components/dashboard/calendar/Calend
 import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import getCurrentWeek from "../../../utils/getCurrentWeek";
-import handleRequestError from '../../../utils/handleRequestError';
 import redirectToUrl from '../../../utils/redirectToUrl';
-import redirectUserTo from '../../../utils/redirectUserTo';
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
 import parseCookies from "../../../utils/parseCookies";
 import areComponentPropsEqual from "../../../app/utils/areComponentPropsEqual";
+import handleRequestError from "../../../utils/handleRequestError";
 
 const Week = (
   {
@@ -46,7 +45,7 @@ const Week = (
 
 export default React.memo(Week, areComponentPropsEqual)
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
     if (query.date == null) {
       query.date = moment().format('YYYY-MM-DD');
@@ -69,15 +68,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
     // check if user is on the allowed page
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/week');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
 
@@ -117,12 +112,6 @@ export const getServerSideProps = async ({ req, res, query }) => {
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        date: query.date,
-        schedules: []
-      },
-    };
+    return handleRequestError(error);
   }
 };

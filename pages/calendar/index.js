@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 
 export default function Calendar(){
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/calendar/day');
-  }, [])
-
   return (
     <div />
   );
 }
+
+export const getServerSideProps = async () => {
+  return {
+    redirect: {
+      destination: '/calendar/day',
+      permanent: true,
+    },
+  };
+};

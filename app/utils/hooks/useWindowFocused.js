@@ -4,11 +4,11 @@ const useWindowFocused = () => {
   const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
-    window.addEventListener('focus', handleWindowFocused);
-    window.addEventListener('blur', handleWindowBlurred);
+    window?.addEventListener('focus', handleWindowFocused);
+    window?.addEventListener('blur', handleWindowBlurred);
     return () => {
-      window.removeEventListener('focus', handleWindowFocused);
-      window.removeEventListener('blur', handleWindowBlurred);
+      window?.removeEventListener('focus', handleWindowFocused);
+      window?.removeEventListener('blur', handleWindowBlurred);
     }
   }, []);
 

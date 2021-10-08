@@ -20,13 +20,11 @@ module.exports = {
         content: [
           './pages/**/*.{js,jsx,ts,tsx}',
           './app/**/*.{js,jsx,ts,tsx}',
-          './node_modules/react-date-range/dist/**/*.{js,jsx,ts,tsx}',
-          './node_modules/react-color-palette/**/*.{js,jsx,ts,tsx}',
-          './node_modules/react-toastify/**/*.{js,jsx,ts,tsx}',
           './node_modules/react-phone-input-2/**/*.{js,jsx,ts,tsx}',
         ],
         defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-        safelist: ["html", "body"],
+        skippedContentGlobs: ['node_modules/**', 'app/components/**'],
+        safelist: ["html", "body", /^rdr/, /^Toastify/, /^rcp/, '::after'],
       }
     ],
   ]

@@ -6,7 +6,7 @@ export default function setCookies(res, authToken, clinicId) {
     httpOnly: true,
     secure: environment !== 'local',
     sameSite: 'strict',
-    maxAge: 36000,
+    maxAge: 86400 * 30,
     path: '/'
   }
   const tokenCookie = cookie.serialize('auth_token', String(authToken), cookieOpts);

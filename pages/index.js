@@ -33,7 +33,7 @@ const MainPage = ({ fallback, authToken }) => {
   )
 }
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     const appData = await fetchAppData(req.headers);
@@ -48,10 +48,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {},
-    };
+    return handleRequestError(error);
   }
 }
 

@@ -10,12 +10,13 @@ const getClinicUrl = (clinic, authToken) => {
     token: authToken,
     clinicId: clinic.clinicId
   });
+  const clinicDomain = clinic.clinicDomain ?? clinic.domainName;
   switch (environment) {
     case 'production':
     case 'local':
-      return `${protocol}//${clinic.clinicDomain}.${domain}.${location}/redirect?${queryString}`;
+      return `${protocol}//${clinicDomain}.${domain}.${location}/redirect?${queryString}`;
     default:
-      return `${protocol}//${clinic.clinicDomain}.${domain}.${location}.${location2}/redirect?${queryString}`;
+      return `${protocol}//${clinicDomain}.${domain}.${location}.${location2}/redirect?${queryString}`;
   }
 
 }

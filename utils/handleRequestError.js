@@ -1,19 +1,18 @@
-import { textForKey } from "./localization";
-import Router from "next/router";
-import { toast } from "react-toastify";
-
-const handleRequestError = async (error, req, res) => {
-  const status = error?.response?.status;
-  const statusText = error?.response?.statusText || textForKey('something_went_wrong');
-  if (status === 401) {
-    if (req && req.url !== '/login') {
-      res.writeHead(302, { Location: `/login` });
-      res.end();
-    } else if (!req && Router?.asPath !== '/login') {
-      await Router?.replace('/login');
+const handleRequestError = (error) => {
+  const message = error?.response?.data?.message || error?.response?.statusText || error?.message;
+  const statusCode = error?.response?.status ?? 400;
+  if (statusCode === 401) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: true,
+      },
     }
-  } else {
-    toast.error(statusText)
+  }
+  return {
+    redirect: {
+      destination: `/error?message=${message}&status=${statusCode}`,
+    },
   }
 }
 

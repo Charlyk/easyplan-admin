@@ -1,9 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { SWRConfig } from 'swr';
-import handleRequestError from '../../../utils/handleRequestError';
 import redirectToUrl from '../../../utils/redirectToUrl';
-import redirectUserTo from '../../../utils/redirectUserTo';
 import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
 import { getGeneralStatistics } from "../../../middleware/api/analytics";
 import { fetchAppData } from "../../../middleware/api/initialization";
@@ -36,7 +34,7 @@ export default function General(
   );
 };
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
     if (query.fromDate == null) {
       query.fromDate = moment().startOf('week').format('YYYY-MM-DD');
@@ -62,15 +60,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/general');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          }
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
 
@@ -88,11 +82,20 @@ export const getServerSideProps = async ({ req, res, query }) => {
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res)
-    return {
-      props: {
-        query: {}
+    const message = error?.response?.data?.message || error?.response?.statusText || error?.message;
+    const statusCode = error?.response?.status ?? 400;
+    if (statusCode === 401) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
       }
+    }
+    return {
+      redirect: {
+        destination: `/error?message=${message}&status=${statusCode}`,
+      },
     }
   }
 }

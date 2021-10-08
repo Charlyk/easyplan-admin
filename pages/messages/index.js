@@ -1,14 +1,13 @@
 import React from 'react';
 import { SWRConfig } from "swr";
-import handleRequestError from '../../utils/handleRequestError';
 import redirectToUrl from '../../utils/redirectToUrl';
-import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getMessages } from "../../middleware/api/messages";
 import { fetchAppData } from "../../middleware/api/initialization";
 import parseCookies from "../../utils/parseCookies";
 import SMSMessages from "../../app/components/dashboard/messages/SMSMessages";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
+import handleRequestError from "../../utils/handleRequestError";
 
 const Messages = ({ fallback, messages: initialMessages, authToken }) => {
   return (
@@ -23,7 +22,7 @@ const Messages = ({ fallback, messages: initialMessages, authToken }) => {
   );
 };
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
@@ -39,15 +38,11 @@ export const getServerSideProps = async ({ req, res }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/messages');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
 
@@ -65,12 +60,7 @@ export const getServerSideProps = async ({ req, res }) => {
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        messages: [],
-      },
-    };
+    return handleRequestError(error);
   }
 }
 

@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { SWRConfig } from "swr";
 import MainComponent from "../app/components/common/MainComponent";
 import parseCookies from '../utils/parseCookies';
-import handleRequestError from "../utils/handleRequestError";
-import redirectUserTo from "../utils/redirectUserTo";
 import redirectToUrl from "../utils/redirectToUrl";
 import { fetchAppData } from "../middleware/api/initialization";
 import { fetchAllDealStates } from "../middleware/api/crm";
 import CrmMain from "../app/components/crm/CrmMain";
 import { APP_DATA_API, JwtRegex } from "../app/utils/constants";
+import handleRequestError from "../utils/handleRequestError";
 
 const Crm = ({ fallback, authToken, states }) => {
   return (
@@ -24,7 +23,7 @@ const Crm = ({ fallback, authToken, states }) => {
   );
 };
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
@@ -39,15 +38,11 @@ export const getServerSideProps = async ({ req, res }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          }
-        }
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
       };
     }
 
@@ -65,13 +60,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        users: [],
-        invitations: [],
-      }
-    }
+    return handleRequestError(error);
   }
 }
 

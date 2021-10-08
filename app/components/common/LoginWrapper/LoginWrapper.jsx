@@ -33,17 +33,23 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken }) 
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (currentClinic != null && authToken) {
+    if (currentUser != null && authToken) {
+      handleUserAuthenticated(currentUser, authToken);
+    } else if (currentClinic != null && authToken) {
       handleClinicExists(currentClinic, authToken);
-    } else if (currentUser != null) {
-      router.replace('/clinics');
     }
   }, [currentUser, currentClinic, authToken]);
 
   const handleClinicExists = async (clinic, token) => {
-    await signOut();
-    const clinicUrl = getClinicUrl(clinic, token);
-    await router.replace(clinicUrl);
+    const { host } = window.location;
+    const [subdomain] = host.split('.');
+    if (RestrictedSubdomains.includes(subdomain)) {
+      await signOut();
+      const clinicUrl = getClinicUrl(clinic, token);
+      await router.replace(clinicUrl);
+    } else {
+      await router.replace('/analytics/general');
+    }
   }
 
   const handleFormChange = (newForm) => {
@@ -67,7 +73,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken }) 
     if (redirectUrl == null || router.asPath === redirectUrl) {
       return;
     }
-    await router.replace(redirectUrl);
+    await router.push(redirectUrl);
   }
 
   /**
@@ -130,7 +136,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken }) 
         await router.push('/create-clinic?redirect=1');
         break;
       case 'SelectClinic':
-        await router.push('/clinics');
+        await router.replace('/clinics');
         break;
       default:
         localDispatch(setIsLoading(false));

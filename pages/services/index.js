@@ -1,14 +1,13 @@
 import React from 'react';
 import { SWRConfig } from "swr";
-import handleRequestError from '../../utils/handleRequestError';
 import redirectToUrl from '../../utils/redirectToUrl';
-import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { fetchAllServices } from "../../middleware/api/services";
 import { fetchAppData } from "../../middleware/api/initialization";
 import parseCookies from "../../utils/parseCookies";
 import ServicesContainer from "../../app/components/dashboard/services/ServicesContainer";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
+import handleRequestError from "../../utils/handleRequestError";
 
 const Services = ({ fallback, categories: clinicCategories, services, authToken }) => {
   return (
@@ -27,7 +26,7 @@ const Services = ({ fallback, categories: clinicCategories, services, authToken 
   );
 };
 
-export const getServerSideProps = async ({ req, res, }) => {
+export const getServerSideProps = async ({ req, }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
@@ -43,15 +42,11 @@ export const getServerSideProps = async ({ req, res, }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/services');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          }
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
 
@@ -68,13 +63,7 @@ export const getServerSideProps = async ({ req, res, }) => {
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        categories: [],
-        services: []
-      }
-    }
+    return handleRequestError(error);
   }
 }
 

@@ -3,12 +3,11 @@ import moment from "moment-timezone";
 import { SWRConfig } from "swr";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarMonthView from "../../../app/components/dashboard/calendar/CalendarMonthView";
-import handleRequestError from '../../../utils/handleRequestError';
 import redirectToUrl from '../../../utils/redirectToUrl';
-import redirectUserTo from '../../../utils/redirectUserTo';
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
 import parseCookies from "../../../utils/parseCookies";
+import handleRequestError from "../../../utils/handleRequestError";
 
 const Month = ({ fallback, doctorId, date, doctors, authToken }) => {
   const viewDate = moment(date).toDate();
@@ -51,15 +50,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/month');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
     // filter clinic doctors
@@ -87,11 +82,6 @@ export const getServerSideProps = async ({ req, res, query }) => {
       }
     }
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        date: query.date
-      }
-    }
+    return handleRequestError(error);
   }
 };

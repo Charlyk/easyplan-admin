@@ -4,6 +4,7 @@ import LoginWrapper from "../app/components/common/LoginWrapper";
 import { wrapper } from "../store";
 import { getClinicDetails } from "../middleware/api/clinic";
 import parseCookies from "../utils/parseCookies";
+import setCookies from "../utils/setCookies";
 
 const Login = ({ currentUser, currentClinic, authToken }) => {
   return (
@@ -15,7 +16,7 @@ const Login = ({ currentUser, currentClinic, authToken }) => {
   );
 };
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, res }) => {
   const { auth_token: authToken } = parseCookies(req);
 
   if (authToken == null) {
@@ -33,8 +34,9 @@ export const getServerSideProps = async ({ req }) => {
   try {
     const response = await getClinicDetails(null, req.headers);
     props.currentClinic = response.data;
+    setCookies(res, authToken, props.currentClinic.id);
   } catch (error) {
-    console.error(error.message);
+    // console.error(error.message);
   }
 
   return { props };
