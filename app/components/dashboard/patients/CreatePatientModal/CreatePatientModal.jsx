@@ -14,6 +14,7 @@ import EASTextField from "../../../common/EASTextField";
 import EASPhoneInput from "../../../common/EASPhoneInput";
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
+import { EmailRegex } from "../../../../utils/constants";
 
 const EasyDatePicker = dynamic(() => import('../../../common/EasyDatePicker'));
 
@@ -36,6 +37,7 @@ const CreatePatientModal = ({ open, onClose }) => {
     localDispatch,
   ] = useReducer(reducer, initialState);
   const isFormValid = (email.length === 0 || isEmailValid) && isPhoneValid;
+  const isEmailFieldValid = email.length === 0 || email.match(EmailRegex);
 
   useEffect(() => {
     if (!open) {
@@ -155,7 +157,8 @@ const CreatePatientModal = ({ open, onClose }) => {
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Email')}
           value={email}
-          error={email.length > 0 && !isEmailValid}
+          error={!isEmailFieldValid}
+          helperText={isEmailFieldValid ? null : textForKey('email_invalid_message')}
           onChange={handlePatientEmailChange}
         />
 
