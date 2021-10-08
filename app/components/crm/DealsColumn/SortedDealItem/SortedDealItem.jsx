@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment-timezone";
 
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import getPatientName from "../../../../utils/getPatientName";
 import styles from "./SortedDealItem.module.scss";
 

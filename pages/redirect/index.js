@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography'
 import { useRouter } from "next/router";
-import getRedirectUrlForUser from '../../utils/getRedirectUrlForUser';
+import getRedirectUrlForUser from '../../app/utils/getRedirectUrlForUser';
 import { getCurrentUser } from "../../middleware/api/auth";
-import { textForKey } from "../../utils/localization";
-import setCookies from '../../utils/setCookies';
+import { textForKey } from "../../app/utils/localization";
+import setCookies from '../../app/utils/setCookies';
 import { JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../utils/handleRequestError";
+import handleRequestError from "../../app/utils/handleRequestError";
 
 const Redirect = () => {
   const router = useRouter();

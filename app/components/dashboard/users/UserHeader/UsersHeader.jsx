@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import IconPlus from '../../../icons/iconPlus';
 import EasyTab from '../../../common/EasyTab';
 import { Role } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import styles from './UserHeader.module.scss'
 
 const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {

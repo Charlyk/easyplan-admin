@@ -1,5 +1,5 @@
 import orderBy from 'lodash/orderBy';
-import generateReducerActions from "../../../../../utils/generateReducerActions";
+import generateReducerActions from "../../../../utils/generateReducerActions";
 import createContainerHours from "../../../../utils/createContainerHours";
 
 export const initialState = {

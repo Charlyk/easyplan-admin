@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 
 import { EmailRegex } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import LoadingButton from '../../LoadingButton';
 import EASTextField from "../../EASTextField";
 import styles from './LoginForm.module.scss';

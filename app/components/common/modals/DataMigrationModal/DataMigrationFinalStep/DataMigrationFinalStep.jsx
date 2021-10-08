@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import LoadingButton from '../../../LoadingButton';
 import styles from './DataMigrationFinalStep.module.scss';
 

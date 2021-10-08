@@ -1,4 +1,4 @@
-import { environment } from "../eas.config";
+import { environment } from "../../eas.config";
 
 const getClinicUrl = (clinic, authToken) => {
   if (typeof window === 'undefined') {

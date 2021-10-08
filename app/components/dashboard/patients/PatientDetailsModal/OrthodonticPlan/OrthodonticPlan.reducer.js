@@ -1,4 +1,4 @@
-import generateReducerActions from "../../../../../../utils/generateReducerActions";
+import generateReducerActions from "../../../../../utils/generateReducerActions";
 import cloneDeep from "lodash/cloneDeep";
 
 export const diagnosisClass = [1, 2, 3];

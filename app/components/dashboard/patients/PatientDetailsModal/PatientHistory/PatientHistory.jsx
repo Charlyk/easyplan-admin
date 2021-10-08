@@ -5,7 +5,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import { getPatientHistory } from "../../../../../../middleware/api/patients";
 import HistoryItem from './HistoryItem';
 import styles from './PatientHistory.module.scss';

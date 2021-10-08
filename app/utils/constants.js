@@ -45,7 +45,7 @@ import IconTooth46 from '../components/icons/iconTooth46';
 import IconTooth47 from '../components/icons/iconTooth47';
 import IconTooth48 from '../components/icons/iconTooth48';
 import IconXPerson from '../components/icons/iconXPerson';
-import { textForKey } from '../../utils/localization';
+import { textForKey } from './localization';
 
 const host = typeof window !== 'undefined' ? window?.location.host : '';
 export const env = host.startsWith('develop')

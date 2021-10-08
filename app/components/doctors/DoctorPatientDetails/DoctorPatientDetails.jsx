@@ -13,7 +13,7 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from '../../../../redux/actions/actions';
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 import PatientTreatmentPlan from "../../../../app/components/common/PatientTreatmentPlan";
 import getTreatmentPlanURL from "../../../../app/utils/getTreatmentPlanURL";
 import {

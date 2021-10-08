@@ -9,8 +9,8 @@ import PropTypes from 'prop-types';
 import Image from 'next/image'
 
 import { Role } from '../../../../utils/constants';
-import urlToLambda from '../../../../../utils/urlToLambda';
-import { textForKey } from '../../../../../utils/localization';
+import urlToLambda from '../../../../utils/urlToLambda';
+import { textForKey } from '../../../../utils/localization';
 import IconAvatar from '../../../icons/iconAvatar';
 import IconDelete from '../../../icons/iconDelete';
 import IconEdit from '../../../icons/iconEdit';

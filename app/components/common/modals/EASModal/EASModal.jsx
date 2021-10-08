@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import IconClose from "../../../icons/iconClose";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import styles from './EASModal.module.scss';
 

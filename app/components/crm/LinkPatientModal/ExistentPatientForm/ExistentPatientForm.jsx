@@ -10,7 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import SearchIcon from '@material-ui/icons/Search';
 import Divider from "@material-ui/core/Divider";
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { requestSearchPatients } from "../../../../../middleware/api/patients";
 import reducer, {
   initialState,

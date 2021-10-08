@@ -10,7 +10,7 @@ import moment from "moment-timezone";
 import Button from "@material-ui/core/Button";
 
 import { getPatientPhoneRecords } from "../../../../../../middleware/api/patients";
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import IconIncomeCall from "../../../../icons/iconIncomeCall";
 import IconOutCall from "../../../../icons/IconOutCall";
 import styles from './PatientPhoneRecords.module.scss';

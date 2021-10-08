@@ -12,7 +12,7 @@ import UploadIcon from "@material-ui/icons/CloudUpload";
 import moment from "moment-timezone";
 
 import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import EasyTab from "../../../common/EasyTab";
 import IconPlus from "../../../icons/iconPlus";
 import IconInfo from "../../../icons/iconInfo";

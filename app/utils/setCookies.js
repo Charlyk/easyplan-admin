@@ -1,4 +1,4 @@
-import { environment } from "../eas.config";
+import { environment } from "../../eas.config";
 import cookie from "cookie";
 
 export default function setCookies(res, authToken, clinicId) {

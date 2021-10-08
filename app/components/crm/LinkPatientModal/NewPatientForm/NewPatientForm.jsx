@@ -4,7 +4,7 @@ import moment from "moment-timezone";
 import Typography from "@material-ui/core/Typography";
 import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import { EmailRegex } from "../../../../utils/constants";
 import EASTextField from "../../../common/EASTextField";
 import reducer, {

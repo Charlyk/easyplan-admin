@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import { createHoursList, days } from '../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 import SwitchButton from '../SwitchButton';
 import EASSelect from "../EASSelect";
 import styles from './WorkDay.module.scss';

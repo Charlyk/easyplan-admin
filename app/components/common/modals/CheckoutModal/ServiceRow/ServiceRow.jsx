@@ -13,8 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import IconMinus from '../../../../icons/iconMinus';
 import IconPlus from '../../../../icons/iconPlus';
 import IconTrash from '../../../../icons/iconTrash';
-import adjustValueToNumber from '../../../../../../utils/adjustValueToNumber';
-import { textForKey } from "../../../../../../utils/localization";
+import adjustValueToNumber from '../../../../../utils/adjustValueToNumber';
+import { textForKey } from "../../../../../utils/localization";
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelete }) => {

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import moment from "moment-timezone";
 import Typography from "@material-ui/core/Typography";
 
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import {
   availableHours,
   charactersRegex,

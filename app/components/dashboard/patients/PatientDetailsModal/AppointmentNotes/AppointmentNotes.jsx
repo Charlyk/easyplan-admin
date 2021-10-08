@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import {
   updateNotesSelector,
 } from '../../../../../../redux/selectors/rootSelector';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import { getPatientVisits } from "../../../../../../middleware/api/patients";
 import AppointmentNote from './AppointmentNote';
 import styles from './AppointmentNotes.module.scss';

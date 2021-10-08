@@ -22,7 +22,7 @@ import {
   setServiceModalCategory,
   setServiceModalService,
 } from '../../../../../redux/actions/serviceDetailsActions';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { HeaderKeys } from "../../../../utils/constants";
 import { updatedServiceSelector } from "../../../../../redux/selectors/servicesSelector";
 import { setUpdatedService } from "../../../../../redux/actions/servicesActions";

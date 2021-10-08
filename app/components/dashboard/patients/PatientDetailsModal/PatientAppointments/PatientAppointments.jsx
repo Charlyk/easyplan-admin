@@ -12,7 +12,7 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector,
 } from '../../../../../../redux/selectors/scheduleSelector';
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import { getPatientSchedules } from "../../../../../../middleware/api/patients";
 import Appointment from './Appointment';
 import { reducer, initialState, actions } from './PatientAppointments.reducer'

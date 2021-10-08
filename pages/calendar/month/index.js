@@ -3,11 +3,11 @@ import moment from "moment-timezone";
 import { SWRConfig } from "swr";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarMonthView from "../../../app/components/dashboard/calendar/CalendarMonthView";
-import redirectToUrl from '../../../utils/redirectToUrl';
+import redirectToUrl from '../../../app/utils/redirectToUrl';
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
-import parseCookies from "../../../utils/parseCookies";
-import handleRequestError from "../../../utils/handleRequestError";
+import parseCookies from "../../../app/utils/parseCookies";
+import handleRequestError from "../../../app/utils/handleRequestError";
 
 const Month = ({ fallback, doctorId, date, doctors, authToken }) => {
   const viewDate = moment(date).toDate();

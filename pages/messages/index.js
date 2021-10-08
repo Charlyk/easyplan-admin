@@ -1,13 +1,13 @@
 import React from 'react';
 import { SWRConfig } from "swr";
-import redirectToUrl from '../../utils/redirectToUrl';
+import redirectToUrl from '../../app/utils/redirectToUrl';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getMessages } from "../../middleware/api/messages";
 import { fetchAppData } from "../../middleware/api/initialization";
-import parseCookies from "../../utils/parseCookies";
+import parseCookies from "../../app/utils/parseCookies";
 import SMSMessages from "../../app/components/dashboard/messages/SMSMessages";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../utils/handleRequestError";
+import handleRequestError from "../../app/utils/handleRequestError";
 
 const Messages = ({ fallback, messages: initialMessages, authToken }) => {
   return (

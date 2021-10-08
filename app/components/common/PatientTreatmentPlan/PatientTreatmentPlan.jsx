@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import cloneDeep from "lodash/cloneDeep";
 import remove from "lodash/remove";
 
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import { Statuses } from "../../../utils/constants";
 import { deletePatientPlanService } from "../../../../middleware/api/patients";
 import reducer, {

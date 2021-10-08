@@ -10,7 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesList.module.scss'
 

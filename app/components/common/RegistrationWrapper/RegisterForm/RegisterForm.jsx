@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from "clsx";
 
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import LoadingButton from '../../LoadingButton';
 import UploadAvatar from "../../UploadAvatar";

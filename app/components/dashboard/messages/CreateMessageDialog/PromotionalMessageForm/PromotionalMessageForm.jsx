@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import moment from "moment-timezone";
 
 import { countMessageRecipients } from "../../../../../../middleware/api/messages";
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import {
   availableHours,
   charactersRegex,

@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 
 import ActionsSheet from "../../../common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import getPatientName from "../../../../utils/getPatientName";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
 import IconAvatar from "../../../icons/iconAvatar";

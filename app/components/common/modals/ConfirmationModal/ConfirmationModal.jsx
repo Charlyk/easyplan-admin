@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './ConfirmationModal.module.scss';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import EASModal from "../EASModal";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";

@@ -10,7 +10,7 @@ import moment from "moment-timezone";
 import { toast } from "react-toastify";
 
 import BottomSheetDialog from "../../../common/BottomSheetDialog";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import { createMessage, updateMessage } from "../../../../../middleware/api/messages";
 import { availableLanguages, charactersRegex, messageTypeEnum, tags } from "./CreateMessageDialog.constants";
 import ScheduleMessageForm from "./ScheduleMessageForm";

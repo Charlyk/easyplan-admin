@@ -6,7 +6,7 @@ import Popper from "@material-ui/core/Popper";
 import Button from "@material-ui/core/Button";
 import { ColorPicker } from "react-color-palette";
 
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import styles from "./EASColorPicker.module.scss";
 
 const EASColorPicker = ({ open, anchorEl, placement, color, onClose, onSave, setColor }) => {

@@ -4,11 +4,11 @@ import { SWRConfig } from "swr";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarDayView from "../../../app/components/dashboard/calendar/CalendarDayView";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
-import redirectToUrl from '../../../utils/redirectToUrl'
+import redirectToUrl from '../../../app/utils/redirectToUrl'
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
-import parseCookies from "../../../utils/parseCookies";
-import handleRequestError from "../../../utils/handleRequestError";
+import parseCookies from "../../../app/utils/parseCookies";
+import handleRequestError from "../../../app/utils/handleRequestError";
 
 const Day = ({ fallback, date, schedules, dayHours, doctors, authToken }) => {
   const viewDate = moment(date).toDate();

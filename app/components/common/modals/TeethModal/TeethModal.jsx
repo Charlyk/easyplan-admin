@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from 'prop-types';
 
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import { Teeth } from "../../../../utils/constants";
 import IconCheckMark from "../../../icons/iconCheckMark";
 import EASModal from "../EASModal";

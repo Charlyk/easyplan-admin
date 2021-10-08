@@ -1,8 +1,8 @@
 import axios from "axios";
 import cookie from 'cookie';
-import getSubdomain from "../../../utils/getSubdomain";
+import getSubdomain from "../../../app/utils/getSubdomain";
 import { HeaderKeys } from "../../../app/utils/constants";
-import updatedServerUrl from "../../../utils/updateServerUrl";
+import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { handler } from "../handler";
 import { authorized } from "../authorized";
 

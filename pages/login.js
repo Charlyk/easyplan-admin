@@ -3,8 +3,8 @@ import { getCurrentUser } from "../middleware/api/auth";
 import LoginWrapper from "../app/components/common/LoginWrapper";
 import { wrapper } from "../store";
 import { getClinicDetails } from "../middleware/api/clinic";
-import parseCookies from "../utils/parseCookies";
-import setCookies from "../utils/setCookies";
+import parseCookies from "../app/utils/parseCookies";
+import setCookies from "../app/utils/setCookies";
 
 const Login = ({ currentUser, currentClinic, authToken }) => {
   return (

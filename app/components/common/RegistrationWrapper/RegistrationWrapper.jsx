@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import Typography from "@material-ui/core/Typography";
 import { toast } from "react-toastify";
 
-import uploadFileToAWS from "../../../../utils/uploadFileToAWS";
+import uploadFileToAWS from "../../../utils/uploadFileToAWS";
 import { registerUser } from "../../../../middleware/api/auth";
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import { isDev } from "../../../../eas.config";
 import reducer, {

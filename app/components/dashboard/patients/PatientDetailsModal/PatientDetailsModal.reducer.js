@@ -1,5 +1,5 @@
-import generateReducerActions from "../../../../../utils/generateReducerActions";
-import { textForKey } from "../../../../../utils/localization";
+import generateReducerActions from "../../../../utils/generateReducerActions";
+import { textForKey } from "../../../../utils/localization";
 
 export const MenuItem = {
   personalInfo: 'personal-info',

@@ -6,7 +6,7 @@ import { extendMoment } from "moment-range";
 import Typography from "@material-ui/core/Typography";
 
 import createContainerHours from "../../../../utils/createContainerHours";
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 import IconUmbrella from "../../../icons/iconUmbrella";
 import Schedule from "../Schedule/Schedule";
 import ColumnCell from "./ColumnCell";

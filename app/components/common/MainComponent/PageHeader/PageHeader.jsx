@@ -13,7 +13,7 @@ import IconNotifications from '../../../icons/iconNotifications';
 import IconPlus from '../../../icons/iconPlus';
 import IconTurnOff from '../../../icons/iconTurnOff';
 import { setPaymentModal } from '../../../../../redux/actions/actions';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import InvoicesButton from '../../../dashboard/InvoicesButton';
 import { Role } from "../../../../utils/constants";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";

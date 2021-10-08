@@ -12,7 +12,7 @@ import IconLiabilities from '../../../icons/iconLiabilities';
 import IconSuccess from '../../../icons/iconSuccess';
 import IconXPerson from '../../../icons/iconXPerson';
 import { Role, Statuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import EASSelect from "../../../common/EASSelect";
 import EASTextField from "../../../common/EASTextField";
 import { reducer, actions, initialState } from "./GeneralAnalytics.reducer";

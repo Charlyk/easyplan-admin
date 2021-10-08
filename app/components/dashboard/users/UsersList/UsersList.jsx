@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
 import { Role } from '../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import {
   deleteUser,
   getUsers,

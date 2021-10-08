@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
 
 import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
-import uploadFileToAWS from '../../../../../utils/uploadFileToAWS';
-import { textForKey } from '../../../../../utils/localization';
+import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
+import { textForKey } from '../../../../utils/localization';
 import { addPatientXRayImage } from "../../../../../middleware/api/patients";
 import EASModal from "../../../common/modals/EASModal";
 import styles from './AddXRay.module.scss';

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import IconPlus from '../../icons/iconPlus';
 import IconSuccess from '../../icons/iconSuccess';
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from '../../../utils/localization';
 import styles from './ClinicSelector.module.scss';
 
 const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange, currentUser }) => {

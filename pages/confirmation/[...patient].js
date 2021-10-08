@@ -13,13 +13,13 @@ import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../app/components/icons/appLogoBlue';
 import LoadingButton from '../../app/components/common/LoadingButton';
-import urlToLambda from '../../utils/urlToLambda';
-import { textForKey } from '../../utils/localization';
+import urlToLambda from '../../app/utils/urlToLambda';
+import { textForKey } from '../../app/utils/localization';
 import {
   fetchScheduleConfirmationInfo,
   requestConfirmSchedule
 } from "../../middleware/api/schedules";
-import styles from '../../styles/ScheduleConfirmation.module.scss';
+import styles from '../../app/styles/ScheduleConfirmation.module.scss';
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();

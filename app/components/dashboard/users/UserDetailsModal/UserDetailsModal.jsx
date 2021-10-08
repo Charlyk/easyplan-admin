@@ -10,7 +10,7 @@ import IconClose from '../../../icons/iconClose';
 import IconSuccess from '../../../icons/iconSuccess';
 import { Role } from '../../../../utils/constants';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import LeftSideModal from '../../../common/LeftSideModal';
 import LoadingButton from '../../../common/LoadingButton';
 import {

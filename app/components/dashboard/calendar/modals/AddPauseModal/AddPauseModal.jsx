@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import EasyDatePicker from '../../../../common/EasyDatePicker';
 import {
   createPauseRecord,

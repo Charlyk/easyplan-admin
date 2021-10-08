@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import styles from "./Header.module.scss";
 
 const Header = ({ deal, states }) => {

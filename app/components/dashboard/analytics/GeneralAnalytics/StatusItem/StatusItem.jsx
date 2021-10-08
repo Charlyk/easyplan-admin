@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
-import { textForKey } from '../../../../../../utils/localization';
+import { textForKey } from '../../../../../utils/localization';
 import styles from '../GeneralAnalytics.module.scss';
 
 const StatusItem = (

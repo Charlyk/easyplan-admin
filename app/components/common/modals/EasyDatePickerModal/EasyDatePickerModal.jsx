@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import moment from "moment-timezone";
 
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { getAppLanguage, textForKey } from "../../../../../utils/localization";
+import { getAppLanguage, textForKey } from "../../../../utils/localization";
 import EASModal from "../EASModal";
 import EASSelect from "../../EASSelect";
 

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import Typography from "@material-ui/core/Typography";
 
 import { isDev } from "../../../../eas.config";
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 import { WebRegex } from "../../../utils/constants";
 import {
   checkDomainAvailability,

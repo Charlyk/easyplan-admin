@@ -16,9 +16,9 @@ import {
   importSchedulesFromFile,
   requestDeleteSchedule
 } from "../../../../../middleware/api/schedules";
-import redirectIfOnGeneralHost from '../../../../../utils/redirectIfOnGeneralHost';
+import redirectIfOnGeneralHost from '../../../../utils/redirectIfOnGeneralHost';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import { APP_DATA_API, HeaderKeys } from "../../../../utils/constants";
 import reducer, {
   initialState,

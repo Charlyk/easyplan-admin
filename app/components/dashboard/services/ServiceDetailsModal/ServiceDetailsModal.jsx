@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 
-import { textForKey } from '../../../../../utils/localization';
+import { textForKey } from '../../../../utils/localization';
 import LeftSideModal from '../../../common/LeftSideModal';
 import { createService, updateService } from "../../../../../middleware/api/services";
 import IconClose from '../../../icons/iconClose';
