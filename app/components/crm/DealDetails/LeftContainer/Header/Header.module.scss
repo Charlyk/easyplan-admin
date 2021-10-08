@@ -1,5 +1,5 @@
 .header {
-  width: 100%;
+  width: calc(100% - 32px);
   padding: 16px;
   background-color: #34344E;
   display: flex;
@@ -64,6 +64,7 @@
       overflow-y: hidden;
 
       .statusIndicator {
+        cursor: pointer;
         height: 100%;
 
         &:last-child {

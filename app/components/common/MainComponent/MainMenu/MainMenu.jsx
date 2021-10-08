@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -74,14 +75,14 @@ const menuItems = [
     icon: <MenuUsers/>,
     href: '/users',
   },
-  // {
-  //   id: 'crm',
-  //   type: 'link',
-  //   roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
-  //   text: textForKey('CRM Board'),
-  //   icon: <AssessmentIcon />,
-  //   href: '/crm'
-  // },
+  {
+    id: 'crm',
+    type: 'link',
+    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+    text: textForKey('CRM Board'),
+    icon: <AssessmentIcon />,
+    href: '/crm'
+  },
   {
     id: 'calendar',
     type: 'link',

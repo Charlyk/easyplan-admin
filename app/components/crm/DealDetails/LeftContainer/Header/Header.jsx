@@ -1,5 +1,7 @@
 import React, { useMemo } from "react";
+import PropTypes from 'prop-types';
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import { textForKey } from "../../../../../../utils/localization";
 import styles from "./Header.module.scss";
@@ -13,6 +15,8 @@ const Header = ({ deal, states }) => {
     }
     return deal.service.name;
   }, [deal]);
+
+  console.log(states);
 
   const passedStates = useMemo(() => {
     if (deal == null) {
@@ -46,13 +50,15 @@ const Header = ({ deal, states }) => {
         </Typography>
         <div className={styles.progressContainer}>
           {passedStates.map(item => (
-            <div
-              className={styles.statusIndicator}
-              style={{
-                backgroundColor: item.color,
-                width: `calc(100% / ${states.length - 1})`,
-              }}
-            />
+            <Tooltip title={item.name}>
+              <div
+                className={styles.statusIndicator}
+                style={{
+                  backgroundColor: item.color,
+                  width: `calc(100% / ${states.length - 1})`,
+                }}
+              />
+            </Tooltip>
           ))}
         </div>
       </div>
@@ -61,3 +67,15 @@ const Header = ({ deal, states }) => {
 };
 
 export default Header;
+
+Header.propTypes = {
+  states: PropTypes.arrayOf(PropTypes.shape({
+    color: PropTypes.string,
+    deleteable: PropTypes.bool,
+    id: PropTypes.number,
+    name: PropTypes.string,
+    orderId: PropTypes.number,
+    type: PropTypes.string,
+  })),
+  deal: PropTypes.any,
+}
