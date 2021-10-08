@@ -1,9 +1,11 @@
 .teethContainer {
-  margin-top: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   display: flex;
   width: 100%;
   min-height: 180px;
   max-height: 180px;
+  background-color: white;
 
   .teethColumn {
     display: flex;
