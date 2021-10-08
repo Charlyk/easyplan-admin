@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { requestAcceptInvitation } from "../../../../middleware/api/users";
 import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../utils/localization';
-import { JwtRegex, PasswordRegex, Role } from '../../../utils/constants';
+import { PasswordRegex, Role } from '../../../utils/constants';
 import isPhoneNumberValid from "../../../utils/isPhoneNumberValid";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import LoadingButton from '../LoadingButton';
@@ -30,10 +30,9 @@ import reducer, {
 } from './AcceptClinicInvitation.reducer';
 import styles from './AcceptInvitation.module.scss';
 
-const AcceptInvitation = () => {
+const AcceptInvitation = ({ token, isNew }) => {
   const router = useRouter();
   const isMobileDevice = useIsMobileDevice();
-  const { isNew, token } = router.query;
   const isNewUser = isNew === '1';
   const [
     {
@@ -48,11 +47,6 @@ const AcceptInvitation = () => {
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
-
-  if (!token.match(JwtRegex)) {
-    router.replace('/login');
-    return null;
-  }
 
   const handleFirstNameChange = (newValue) => {
     localDispatch(setFirstName(newValue));

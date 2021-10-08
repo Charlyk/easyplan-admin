@@ -4,12 +4,11 @@ import { SWRConfig } from "swr";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarDayView from "../../../app/components/dashboard/calendar/CalendarDayView";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
-import redirectUserTo from "../../../utils/redirectUserTo";
-import handleRequestError from "../../../utils/handleRequestError";
 import redirectToUrl from '../../../utils/redirectToUrl'
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
 import parseCookies from "../../../utils/parseCookies";
+import handleRequestError from "../../../utils/handleRequestError";
 
 const Day = ({ fallback, date, schedules, dayHours, doctors, authToken }) => {
   const viewDate = moment(date).toDate();
@@ -63,15 +62,11 @@ export const getServerSideProps = async ({ query, req, res }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/day');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
 
@@ -97,15 +92,6 @@ export const getServerSideProps = async ({ query, req, res }) => {
       }
     }
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        doctors: [],
-        date: queryDate,
-        schedules: [],
-        dayHours: [],
-
-      }
-    }
+    return handleRequestError(error);
   }
 };

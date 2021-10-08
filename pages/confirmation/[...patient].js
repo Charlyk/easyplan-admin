@@ -226,7 +226,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   );
 };
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
     const { patient } = query
     const [scheduleId, patientId] = patient;

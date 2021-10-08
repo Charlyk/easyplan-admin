@@ -6,6 +6,8 @@ import getRedirectUrlForUser from '../../utils/getRedirectUrlForUser';
 import { getCurrentUser } from "../../middleware/api/auth";
 import { textForKey } from "../../utils/localization";
 import setCookies from '../../utils/setCookies';
+import { JwtRegex } from "../../app/utils/constants";
+import handleRequestError from "../../utils/handleRequestError";
 
 const Redirect = () => {
   const router = useRouter();
@@ -50,10 +52,24 @@ const Redirect = () => {
 export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
+    // try to check if clinic id is a number
+    parseInt(clinicId);
+
+    // check if token is valid
+    if (!token.match(JwtRegex) || !clinicId) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
+      };
+    }
+
+    // set cookies
     setCookies(res, token, clinicId);
     return { props: {} }
   } catch (error) {
-    return { props: {} }
+    return handleRequestError(error);
   }
 }
 

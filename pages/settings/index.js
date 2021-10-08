@@ -2,13 +2,12 @@ import React from 'react';
 import { SWRConfig } from "swr";
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { fetchAppData } from "../../middleware/api/initialization";
-import handleRequestError from '../../utils/handleRequestError';
 import redirectToUrl from '../../utils/redirectToUrl';
-import redirectUserTo from '../../utils/redirectUserTo';
 import parseCookies from "../../utils/parseCookies";
 import { fetchAllCountries } from "../../middleware/api/countries";
 import SettingsWrapper from "../../app/components/dashboard/settings/SettingsWrapper";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
+import handleRequestError from "../../utils/handleRequestError";
 
 const Settings = ({ fallback, countries, authToken }) => {
   return (
@@ -25,7 +24,7 @@ const Settings = ({ fallback, countries, authToken }) => {
   );
 };
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
@@ -42,17 +41,11 @@ export const getServerSideProps = async ({ req, res }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/settings');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
-          countries,
-          authToken,
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
 
@@ -68,11 +61,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (error) {
-    console.error(error);
-    await handleRequestError(error, req, res);
-    return {
-      props: {}
-    }
+    return handleRequestError(error);
   }
 }
 

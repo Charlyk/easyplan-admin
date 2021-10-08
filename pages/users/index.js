@@ -1,14 +1,13 @@
 import React from 'react';
 import { SWRConfig } from "swr";
-import handleRequestError from '../../utils/handleRequestError';
 import redirectToUrl from '../../utils/redirectToUrl';
-import redirectUserTo from '../../utils/redirectUserTo';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
 import { getUsers } from "../../middleware/api/users";
 import { fetchAppData } from "../../middleware/api/initialization";
 import parseCookies from "../../utils/parseCookies";
 import UsersList from "../../app/components/dashboard/users/UsersList";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
+import handleRequestError from "../../utils/handleRequestError";
 
 const Users = (
   {
@@ -33,7 +32,7 @@ const Users = (
   );
 };
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
@@ -49,14 +48,10 @@ export const getServerSideProps = async ({ req, res }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
         },
       };
     }
@@ -74,13 +69,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        users: [],
-        invitations: [],
-      }
-    }
+    return handleRequestError(error);
   }
 }
 

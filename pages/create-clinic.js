@@ -4,6 +4,7 @@ import CreateClinicWrapper from "../app/components/common/CreateClinicWrapper";
 import { wrapper } from "../store";
 import { fetchAllCountries } from "../middleware/api/countries";
 import { JwtRegex } from "../app/utils/constants";
+import handleRequestError from "../utils/handleRequestError";
 
 const CreateClinic = ({ token, redirect, countries, login }) => {
   return (
@@ -39,15 +40,7 @@ export const getServerSideProps = async ({ req, query }) => {
       },
     }
   } catch (e) {
-    if (e.response) {
-      const { data } = e.response;
-      console.error(data?.message);
-    } else {
-      console.error(e.message);
-    }
-    return {
-      props: {}
-    }
+    return handleRequestError(e);
   }
 };
 

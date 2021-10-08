@@ -20,5 +20,6 @@ export default {
   '/login': textForKey('Authentication'),
   '/clinics': textForKey('Select a clinic'),
   '/create-clinic': textForKey('Create clinic'),
-  '/register': textForKey('Create new account')
+  '/register': textForKey('Create new account'),
+  '/error': textForKey('Error')
 };

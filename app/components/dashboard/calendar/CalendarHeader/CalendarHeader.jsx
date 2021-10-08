@@ -4,25 +4,21 @@ import clsx from "clsx";
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Fade from '@material-ui/core/Fade';
 import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import Popper from "@material-ui/core/Popper";
 import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import UploadIcon from "@material-ui/icons/CloudUpload";
-import { Calendar } from "react-date-range";
-import * as locales from "react-date-range/dist/locale";
 import moment from "moment-timezone";
 
 import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
-import { getAppLanguage, textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import EasyTab from "../../../common/EasyTab";
 import IconPlus from "../../../icons/iconPlus";
 import IconInfo from "../../../icons/iconInfo";
 import styles from "./CalendarHeader.module.scss";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import EasyDatePicker from "../../../common/EasyDatePicker";
 
 const CalendarLegend = dynamic(() => import("../CalendarLegend"));
 
@@ -100,27 +96,15 @@ const CalendarHeader = (
   };
 
   const calendarPopper = (
-    <Popper
-      className={styles.appointmentsDatePickerRoot}
-      anchorEl={calendarAnchor.current}
+    <EasyDatePicker
+      disablePortal={false}
       open={calendarVisible}
-      placement='bottom'
-      transition
-    >
-      {({ TransitionProps }) => (
-        <Fade {...TransitionProps} timeout={350}>
-          <Paper className={styles.calendarPaper}>
-            <ClickAwayListener onClickAway={handleCloseCalendar}>
-              <Calendar
-                locale={locales[getAppLanguage()]}
-                onChange={handleDateChange}
-                date={viewDate}
-              />
-            </ClickAwayListener>
-          </Paper>
-        </Fade>
-      )}
-    </Popper>
+      selectedDate={viewDate}
+      placement="bottom"
+      pickerAnchor={calendarAnchor.current}
+      onChange={handleDateChange}
+      onClose={handleCloseCalendar}
+    />
   );
 
   return (

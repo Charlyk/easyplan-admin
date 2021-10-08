@@ -1,14 +1,13 @@
 import React from 'react';
 import { SWRConfig } from "swr";
-import handleRequestError from '../../../utils/handleRequestError';
 import redirectToUrl from '../../../utils/redirectToUrl';
-import redirectUserTo from '../../../utils/redirectUserTo';
 import DoctorsMain from "../../../app/components/doctors/DoctorsMain";
 import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
 import parseCookies from "../../../utils/parseCookies";
 import DoctorPatientDetails from "../../../app/components/doctors/DoctorPatientDetails";
 import { APP_DATA_API, JwtRegex } from "../../../app/utils/constants";
+import handleRequestError from "../../../utils/handleRequestError";
 
 const DoctorScheduleDetails = (
   {
@@ -34,7 +33,7 @@ const DoctorScheduleDetails = (
   );
 };
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
@@ -50,15 +49,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
 
@@ -77,10 +72,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {}
-    }
+    return handleRequestError(error);
   }
 }
 

@@ -31,6 +31,7 @@ import 'moment/locale/ro';
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../utils'
+import getCookie from "../app/utils/getCookie";
 
 const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
 const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
@@ -55,14 +56,15 @@ export default wrapper.withRedux(
     const [{ currentClinic }, setState] = useState({ currentClinic: null, currentUser: null });
 
     useEffect(() => {
-      console.log(isWindowFocused);
+      if (isWindowFocused) {
+        router.replace(router.asPath);
+      }
     }, [isWindowFocused]);
 
     useEffect(() => {
       if (UnauthorizedPaths.includes(router.pathname)) {
         return;
       }
-      console.log(pageProps);
       fetchInitializationData();
     }, []);
 

@@ -4,15 +4,14 @@ import { SWRConfig } from "swr";
 import DoctorsMain from "../../app/components/doctors/DoctorsMain";
 import { wrapper } from "../../store";
 import getCurrentWeek from "../../utils/getCurrentWeek";
-import handleRequestError from '../../utils/handleRequestError';
 import redirectToUrl from '../../utils/redirectToUrl';
-import redirectUserTo from '../../utils/redirectUserTo';
 import { fetchAppData } from "../../middleware/api/initialization";
 import parseCookies from "../../utils/parseCookies";
 import DoctorCalendar from "../../app/components/doctors/DoctorCalendar";
 import { getSchedulesForInterval } from "../../middleware/api/schedules";
 import { textForKey } from "../../utils/localization";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
+import handleRequestError from "../../utils/handleRequestError";
 
 const Doctor = (
   {
@@ -39,7 +38,7 @@ const Doctor = (
   );
 };
 
-export const getServerSideProps = async ({ res, req, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
     let date = moment().toDate();
     if (query.date != null) {
@@ -59,15 +58,11 @@ export const getServerSideProps = async ({ res, req, query }) => {
     const { currentUser, currentClinic } = appData.data;
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
       return {
-        props: {
-          fallback: {
-            [APP_DATA_API]: {
-              ...appData.data
-            }
-          },
-        }
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
       };
     }
     const viewMode = query.viewMode ?? 'week';
@@ -91,13 +86,7 @@ export const getServerSideProps = async ({ res, req, query }) => {
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        schedules: [],
-        date: query.date,
-      },
-    };
+    return handleRequestError(error);
   }
 }
 

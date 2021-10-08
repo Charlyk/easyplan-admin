@@ -7,13 +7,16 @@ const ResetPasswordForm = ({ token }) => {
   return <ResetPasswordPage token={token} />;
 };
 
-export const getServerSideProps = async ({ res, query }) => {
+export const getServerSideProps = async ({ query }) => {
   const { token } = query;
 
   if (!token.match(JwtRegex)) {
-    res.writeHead(302, { Location: `/login` });
-    res.end();
-    return { props: { token } };
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: true,
+      },
+    };
   }
 
   return {
