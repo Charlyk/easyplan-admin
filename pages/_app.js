@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import theme from '../app/styles/theme';
 import {
@@ -128,6 +129,7 @@ export default wrapper.withRedux(
         </Head>
         <ThemeProvider theme={theme}>
           <>
+            <CssBaseline/>
             <ToastContainer/>
             <PubNubProvider client={pubnub}>
               <>
