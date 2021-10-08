@@ -35,6 +35,7 @@ const InviteUserModal = (
 ) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(type || Role.reception);
+  const isEmailValid = email.length === 0 || email.match(EmailRegex);
 
   useEffect(() => {
     if (!open) {
@@ -60,8 +61,6 @@ const InviteUserModal = (
     setRole(newValue);
   };
 
-  const isEmailValid = email.length === 0 || email.match(EmailRegex);
-
   return (
     <EASModal
       open={open}
@@ -77,6 +76,7 @@ const InviteUserModal = (
         <EASTextField
           autoFocus
           error={!isEmailValid}
+          helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.input}
           fieldLabel={textForKey('Email')}
           type="email"
