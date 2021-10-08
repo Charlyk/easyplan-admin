@@ -28,6 +28,7 @@ const AccountSettings = ({ currentUser }) => {
     oldPassword: null,
     isPhoneValid: true,
   });
+  const isEmailValid = data.email.length === 0 || data.email.match(EmailRegex);
 
   useEffect(() => {
     setData({ ...data, ...currentUser, email: currentUser?.email });
@@ -130,6 +131,8 @@ const AccountSettings = ({ currentUser }) => {
       <EASTextField
         type="email"
         containerClass={styles.simpleField}
+        error={!isEmailValid}
+        helperText={isEmailValid ? null : textForKey('email_invalid_message')}
         fieldLabel={textForKey('Email')}
         value={data.email || ''}
         onChange={(value) => handleFormChange('email', value)}
