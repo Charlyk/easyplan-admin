@@ -8,6 +8,7 @@ import { textForKey } from '../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import EASTextField from "../../../common/EASTextField";
 import styles from './SecuritySettings.module.scss';
+import { PasswordRegex } from "../../../../utils/constants";
 
 const SecuritySettings = ({ currentUser }) => {
   const router = useRouter();
@@ -17,6 +18,9 @@ const SecuritySettings = ({ currentUser }) => {
     password: '',
     confirmPassword: '',
   });
+
+  const isNewPasswordValid = data.password.length === 0 || data.password.match(PasswordRegex);
+  const isConfirmPasswordValid = data.confirmPassword.length === 0 || data.confirmPassword === data.password;
 
   const handleFormChange = (fieldId, newValue) => {
     setData({
@@ -66,6 +70,8 @@ const SecuritySettings = ({ currentUser }) => {
       <EASTextField
         type="password"
         containerClass={styles.simpleField}
+        error={!isNewPasswordValid}
+        helperText={textForKey('passwordvalidationmessage')}
         fieldLabel={textForKey('New password')}
         value={data.password || ''}
         onChange={(value) => handleFormChange('password', value)}
@@ -76,10 +82,8 @@ const SecuritySettings = ({ currentUser }) => {
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Confirm new password')}
         value={data.confirmPassword || ''}
-        error={
-          data.confirmPassword.length > 0 &&
-          data.confirmPassword !== data.password
-        }
+        error={!isConfirmPasswordValid}
+        helperText={isConfirmPasswordValid ? null : textForKey('passwords_not_equal')}
         onChange={(value) => handleFormChange('confirmPassword', value)}
       />
 
