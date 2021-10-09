@@ -35,9 +35,13 @@ class AppDocument extends Document {
   }
 
   render() {
+    const { currentClinic } = this.props;
+    const clinicName = currentClinic?.clinicName || 'EasyPlan.pro';
     return (
       <Html>
         <Head>
+          <title>{clinicName}</title>
+          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
           <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" />
         </Head>
         <body>
