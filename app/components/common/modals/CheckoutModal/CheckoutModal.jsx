@@ -627,7 +627,7 @@ CheckoutModal.propTypes = {
     status: PropTypes.oneOf(['PendingPayment', 'Paid', 'PartialPaid']),
     doctorFullName: PropTypes.string,
     patientFullName: PropTypes.string,
-    services: PropTypes.arrayOf(PropTypes.object),
+    services: PropTypes.arrayOf(PropTypes.any),
   }),
   schedule: PropTypes.shape({
     id: PropTypes.number,

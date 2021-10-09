@@ -20,6 +20,7 @@ import redirectIfOnGeneralHost from '../../../../utils/redirectIfOnGeneralHost';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { textForKey } from '../../../../utils/localization';
 import { APP_DATA_API, HeaderKeys } from "../../../../utils/constants";
+import MainComponent from '../../../common/MainComponent';
 import reducer, {
   initialState,
   setParsedValue,
@@ -39,7 +40,6 @@ const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 const CalendarDoctors = dynamic(() => import('../CalendarDoctors'));
 const AppointmentsCalendar = dynamic(() => import('../AppointmentsCalendar'));
-const MainComponent = dynamic(() => import('../../../common/MainComponent'));
 
 const importFields = [
   {
@@ -329,6 +329,7 @@ const CalendarContainer = (
     <MainComponent
       currentPath='/calendar'
       authToken={authToken}
+      provideAppData={false}
     >
       <div className={styles.calendarRoot}>
         <CSVImportModal

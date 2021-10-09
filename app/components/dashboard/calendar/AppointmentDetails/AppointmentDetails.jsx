@@ -81,6 +81,13 @@ const AppointmentDetails = (
   const updateInvoice = useSelector(updateInvoiceSelector);
 
   useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [])
+
+  useEffect(() => {
     if (schedule == null) {
       return;
     }
@@ -125,6 +132,12 @@ const AppointmentDetails = (
     }));
   }, [updateInvoice]);
 
+  const handleKeyDown = (event) => {
+    if (event?.keyCode === 27 && !isLoading) {
+      onClose?.();
+    }
+  }
+
   const fetchAppointmentDetails = async (schedule) => {
     if (schedule == null) {
       return;
@@ -135,7 +148,7 @@ const AppointmentDetails = (
       const { data: details } = response;
       localDispatch(setDetails(details));
     } catch (error) {
-      toast.error(error.message);
+      toast?.error(error.message);
     } finally {
       localDispatch(setIsLoading(false));
     }
@@ -198,7 +211,7 @@ const AppointmentDetails = (
       localDispatch(setIsDelayTimeRequired(false));
       dispatch(toggleAppointmentsUpdate());
     } catch (error) {
-      toast.error(error.message);
+      toast?.error(error.message);
     }
   };
 

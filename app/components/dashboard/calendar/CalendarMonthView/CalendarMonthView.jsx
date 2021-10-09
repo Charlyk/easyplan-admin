@@ -68,6 +68,7 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   const renderSchedule = (schedule) => {
     return (
       <ScheduleItem
+        key={schedule.id}
         appointment={schedule}
         hidden={schedule.isHidden}
         showHour={false}

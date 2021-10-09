@@ -306,7 +306,7 @@ export default React.memo(AddPauseModal, areComponentPropsEqual);
 
 AddPauseModal.propTypes = {
   open: PropTypes.bool,
-  viewDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  viewDate: PropTypes.any,
   onClose: PropTypes.func,
   doctor: PropTypes.shape({
     id: PropTypes.number,

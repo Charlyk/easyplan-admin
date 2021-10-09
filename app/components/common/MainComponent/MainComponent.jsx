@@ -32,7 +32,6 @@ import styles from './MainComponent.module.scss';
 
 const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
 const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
-const ServiceDetailsModal = dynamic(() => import('../../dashboard/services/ServiceDetailsModal'));
 const DataMigrationModal = dynamic(() => import('../modals/DataMigrationModal'));
 const ExchangeRatesModal = dynamic(() => import('../modals/ExchangeRatesModal'));
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
@@ -43,6 +42,7 @@ const MainComponent = (
   {
     children,
     currentPath,
+    provideAppData = true,
     authToken
   }
 ) => {
@@ -60,6 +60,10 @@ const MainComponent = (
   const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
+  let childrenProps = children.props;
+  if (provideAppData) {
+    childrenProps = { ...childrenProps, currentUser, currentClinic };
+  }
 
   useEffect(() => {
     redirectIfOnGeneralHost(currentUser, router);
@@ -135,7 +139,6 @@ const MainComponent = (
   return (
     <div className={styles.mainPage} id='main-page'>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      <ServiceDetailsModal currentClinic={currentClinic}/>
       {isExchangeRatesModalOpen && (
         <ExchangeRatesModal
           currentClinic={currentClinic}
@@ -202,11 +205,7 @@ const MainComponent = (
             {currentClinic != null && (
               React.cloneElement(
                 children,
-                {
-                  ...children.props,
-                  currentUser,
-                  currentClinic,
-                }
+                childrenProps,
               )
             )}
           </div>

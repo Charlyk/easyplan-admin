@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from "clsx";
 import Modal from '@material-ui/core/Modal';
@@ -36,6 +36,12 @@ const EASModal = (
   }
 ) => {
   const showDestroyBtn = typeof onDestroyClick === 'function';
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 27 && !isPositiveLoading) {
+      handleBackdropClick();
+    }
+  }
 
   const handleCloseModal = () => {
     if (isPositiveLoading) {
@@ -86,6 +92,7 @@ const EASModal = (
       open={open}
       className={clsx(styles.modalRoot, className)}
       onBackdropClick={handleBackdropClick}
+      onKeyDown={handleKeyDown}
     >
       <Paper className={clsx(styles.modalPaper, paperClass)}>
         <div className={styles.modalHeader}>

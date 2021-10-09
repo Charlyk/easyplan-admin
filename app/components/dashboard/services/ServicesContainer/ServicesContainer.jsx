@@ -47,6 +47,7 @@ import styles from './ServicesContainer.module.scss';
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
 const CreateCategoryModal = dynamic(() => import('../CreateCategoryModal'));
+const ServiceDetailsModal = dynamic(() => import('../ServiceDetailsModal'));
 
 const importServicesFields = [
   {
@@ -309,6 +310,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
 
   return (
     <div className={styles['services-root']}>
+      <ServiceDetailsModal currentClinic={currentClinic}/>
       <CSVImportModal
         open={showImportModal}
         title={textForKey('Import services')}
