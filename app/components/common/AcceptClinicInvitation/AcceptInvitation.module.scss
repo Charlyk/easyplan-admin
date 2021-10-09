@@ -25,7 +25,7 @@
   }
 
   .formContainer {
-    width: calc(60% - 2rem);
+    width: 60%;
     padding: 1rem;
     display: flex;
     flex-direction: column;
@@ -42,7 +42,7 @@
     &.mobileDevice {
       margin-right: 1rem;
       margin-left: 1rem;
-      width: calc(100% - 2rem);
+      width: 100%;
       background-color: #34344E;
 
       img {
