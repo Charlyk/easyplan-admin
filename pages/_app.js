@@ -3,7 +3,6 @@ import { PubNubProvider } from "pubnub-react";
 import dynamic from 'next/dynamic';
 import PubNub from "pubnub";
 import NextNprogress from 'nextjs-progressbar';
-import Head from 'next/head';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
