@@ -12,6 +12,25 @@
     align-items: center;
   }
 
+  .createButton {
+    margin-left: .5rem;
+    height: 35px;
+    background-color: #3A83DC;
+    color: white;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+
+    svg {
+      margin-left: 5px;
+    }
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+  }
+
   :global(.positive-button) {
     margin-left: .5rem;
     flex: unset;

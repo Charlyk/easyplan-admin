@@ -81,10 +81,8 @@ const calendarContainerSlice = createSlice({
 
 export const {
   setIsUploading,
-  setImportData,
   setParsedValue,
   setShowImportModal,
-  setSetupExcelModal,
   setFilters,
   setSelectedDoctor,
   setIsDeleting,
@@ -93,7 +91,6 @@ export const {
   setSelectedSchedule,
   setViewDate,
   setViewMode,
-  setSelectedService,
   setDeleteSchedule,
 } = calendarContainerSlice.actions;
 

@@ -1,0 +1,77 @@
+.header {
+  width: calc(100% - 32px);
+  padding: 16px;
+  background-color: #34344E;
+  display: flex;
+  flex-direction: column;
+
+  .titleLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 15px !important;
+    color: #fff !important;
+    margin-bottom: 20px;
+  }
+
+  .subtitleContainer {
+    display: flex;
+    margin-bottom: 20px;
+
+    .dealId {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 14px !important;
+      color: #6F7091 !important;
+    }
+
+    .responsibleName {
+      background-color: #6F7091;
+      padding-left: 5px;
+      padding-right: 5px;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #fff !important;
+      margin-left: 10px;
+      border-radius: 4px;
+    }
+  }
+
+  .statusContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+    .statusName {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 14px !important;
+      color: white !important;
+    }
+
+    .progressContainer {
+      width: 100%;
+      margin-top: 10px;
+      background-color: #1d1d2a;
+      height: 5px;
+      border-radius: 2.5px;
+      display: flex;
+      align-items: flex-start;
+      overflow-y: hidden;
+
+      .statusIndicator {
+        cursor: pointer;
+        height: 100%;
+
+        &:last-child {
+          border-bottom-right-radius: 2.5px;
+          border-top-right-radius: 2.5px;
+        }
+      }
+    }
+  }
+}

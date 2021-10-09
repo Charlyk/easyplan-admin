@@ -1,20 +1,20 @@
-.patient-appointments-list {
+.patientAppointmentsList {
   width: 100%;
   display: flex;
   height: 100%;
   flex-direction: column;
 
-  &__appointments-data {
+  .appointmentsData {
     display: flex;
     flex: 1;
     flex-direction: column;
     overflow-y: auto;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1rem;
     min-height: 10rem;
     position: relative;
   }
 
-  &__actions {
+  .actions {
     width: 100%;
     padding: 1rem;
     display: flex;
@@ -22,101 +22,26 @@
     align-items: center;
     background-color: white;
     box-shadow: 0px -20px 40px -5px rgba(239, 242, 251, 0.8);
-  }
 
-  &__item {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    background: #FFFFFF;
-    box-shadow: 0 -1px 90px -5px rgba(239, 242, 251, 0.8);
-    border-radius: .1rem;
+    .outlinedButton {
+      border-color: #3A83DC;
+    }
 
-    .print-label {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 12px;
+    .addButton {
+      border-color: #3A83DC;
       color: #3A83DC;
-    }
+      height: 35px;
 
-    .canceled-reason-label {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-size: 12px;
-      color: #34354C;
-    }
-
-    .appointment-status-indicator {
-      width: 100%;
-      padding: .5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .status-name-label {
+      .addButtonLabel {
         font-family: Inter, sans-serif;
         font-style: normal;
-        font-size: .8rem;
-        color: #34354C;
-      }
-    }
-
-    .appointment-info {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      width: 40%;
-
-      .appointment-info-row {
-        display: flex;
-        margin-bottom: .15rem;
-        margin-top: .15rem;
-        font-family: Inter, sans-serif;
-        font-style: normal;
-        font-size: .8rem;
-        color: #34354C;
+        font-size: 12px;
+        color: #3A83DC;
       }
 
-      .appointment-info-title {
-        font-weight: 600;
-        margin-right: .5rem;
-      }
-    }
-
-    .appointment-time {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      width: 40%;
-
-      .appointment-time-row {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        margin-bottom: .15rem;
-        margin-top: .15rem;
-        font-family: Inter, sans-serif;
-        font-style: normal;
-        font-size: .8rem;
-        color: #34354C;
-      }
-
-      .appointment-time-text {
-        margin-top: .1rem;
-        margin-left: .5rem;
-        font-family: Inter, sans-serif;
-        font-style: normal;
-        font-weight: normal;
-        font-size: .8rem;
-        line-height: 16px;
-        letter-spacing: 0.01em;
-        color: #34354C;
+      svg {
+        fill: currentColor;
+        margin-bottom: 3px;
       }
     }
   }

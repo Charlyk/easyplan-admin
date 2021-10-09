@@ -55,7 +55,7 @@ export const initialData = {
 export const initialState = {
   currentTab: Role.doctor,
   isSaving: false,
-  isLoading: false,
+  isLoading: true,
   userData: initialData,
   isCreatingHoliday: {
     open: false,
@@ -88,6 +88,9 @@ const userDetailsModalSlice = createSlice({
     setUserHolidays(state, action) {
       state.userData = { ...state.userData, holidays: action.payload };
     },
+    resetState() {
+      return initialState;
+    }
   },
 });
 
@@ -98,6 +101,7 @@ export const {
   setUserHolidays,
   setUserType,
   setIsLoading,
+  resetState,
 } = userDetailsModalSlice.actions;
 
 export default userDetailsModalSlice.reducer;

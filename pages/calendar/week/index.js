@@ -1,64 +1,79 @@
 import React from "react";
 import moment from "moment-timezone";
+import { SWRConfig } from "swr";
 import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
 import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
 import { fetchAppData } from "../../../middleware/api/initialization";
-import getCurrentWeek from "../../../utils/getCurrentWeek";
-import handleRequestError from '../../../utils/handleRequestError';
-import redirectToUrl from '../../../utils/redirectToUrl';
-import redirectUserTo from '../../../utils/redirectUserTo';
+import getCurrentWeek from "../../../app/utils/getCurrentWeek";
+import redirectToUrl from '../../../app/utils/redirectToUrl';
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
-import { Role } from "../../../app/utils/constants";
-import { parseCookies } from "../../../utils";
+import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
+import parseCookies from "../../../app/utils/parseCookies";
+import areComponentPropsEqual from "../../../app/utils/areComponentPropsEqual";
+import handleRequestError from "../../../app/utils/handleRequestError";
 
-export default function Week(
+const Week = (
   {
-    currentUser,
-    currentClinic,
+    fallback,
     doctors,
     date,
     doctorId,
     schedules,
     authToken,
   }
-) {
+) => {
   const viewDate = moment(date).toDate();
   return (
-    <CalendarContainer
-      doctors={doctors}
-      doctorId={doctorId}
-      authToken={authToken}
-      currentClinic={currentClinic}
-      currentUser={currentUser}
-      date={viewDate}
-      viewMode='week'
-    >
-      <CalendarWeekView
-        viewDate={viewDate}
+    <SWRConfig value={{ fallback }}>
+      <CalendarContainer
         doctors={doctors}
-        schedules={schedules}
         doctorId={doctorId}
-      />
-    </CalendarContainer>
+        authToken={authToken}
+        date={viewDate}
+        viewMode='week'
+      >
+        <CalendarWeekView
+          viewDate={viewDate}
+          doctors={doctors}
+          schedules={schedules}
+          doctorId={doctorId}
+        />
+      </CalendarContainer>
+    </SWRConfig>
   )
 };
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export default React.memo(Week, areComponentPropsEqual)
+
+export const getServerSideProps = async ({ req, query }) => {
   try {
     if (query.date == null) {
       query.date = moment().format('YYYY-MM-DD');
     }
-    const { date: queryDate } = query;
+    const { date: queryDate, doctorId: queryDoctorId } = query;
 
     const { auth_token: authToken } = parseCookies(req);
+    if (!authToken || !authToken.match(JwtRegex)) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
+      };
+    }
+
     const appData = await fetchAppData(req.headers, queryDate);
     const { currentUser, currentClinic } = appData.data;
 
     // check if user is on the allowed page
     const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/week');
     if (redirectTo != null) {
-      redirectUserTo(redirectTo, res);
-      return { props: { ...appData.data } };
+      return {
+        redirect: {
+          destination: redirectTo,
+          permanent: true,
+        },
+      };
     }
 
     // fetch schedules for current week
@@ -70,7 +85,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     ) || [];
 
     // check if doctor id is present in query
-    let doctorId = query.doctorId;
+    let doctorId = queryDoctorId;
     if (doctorId == null) {
       doctorId = doctors[0]?.id ?? 0;
     }
@@ -89,16 +104,14 @@ export const getServerSideProps = async ({ req, res, query }) => {
         date: query.date,
         schedules: response.data,
         authToken,
-        ...appData.data,
+        fallback: {
+          [APP_DATA_API]: {
+            ...appData.data
+          }
+        },
       },
     };
   } catch (error) {
-    await handleRequestError(error, req, res);
-    return {
-      props: {
-        date: query.date,
-        schedules: []
-      },
-    };
+    return handleRequestError(error);
   }
 };

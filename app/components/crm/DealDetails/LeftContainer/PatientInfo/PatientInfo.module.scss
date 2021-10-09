@@ -1,0 +1,30 @@
+.patientInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+
+  .titleLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    margin-left: 16px;
+    color: #34354C !important;
+  }
+
+  .rowTitle {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 13px !important;
+    color: #6F7091 !important;
+  }
+
+  .rowValue {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 13px !important;
+    color: #34354C !important;
+  }
+}

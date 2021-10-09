@@ -1,4 +1,7 @@
 .create-patient-modal {
+  .modalPaper {
+    overflow: visible !important;
+  }
   .modal-content {
 
     .modal-body {
@@ -6,8 +9,26 @@
     }
   }
 
+  .formContainer {
+    padding: 16px;
+  }
+
+  .simpleField {
+    margin-bottom: 5px;
+  }
+
+  .nameField {
+    width: 50%;
+    margin-right: 5px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
   .first-and-last-name {
     display: flex;
+    margin-bottom: 5px;
   }
 
   .form-control[readonly] {

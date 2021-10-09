@@ -1,24 +1,42 @@
-.service-information {
+.serviceInformation {
   width: 100%;
   background: #FFFFFF;
   box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
-  padding: 1.5rem;
+  padding: 1rem;
   user-select: none;
 
-  &__header {
+  .simpleField {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .currencyField {
+    width: 90px;
+  }
+
+  .adornment {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+  }
+
+  .header {
     flex: 1;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 
-    &__step {
+    .step {
       color: #7DD7C8 !important;
       margin-right: .5rem;
     }
 
-    &__title, &__step {
+    .title, .step {
       display: flex;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -27,7 +45,7 @@
       color: #34354C;
     }
 
-    &__button {
+    .button {
       outline: none;
       cursor: pointer;
       display: flex;
@@ -44,7 +62,7 @@
     }
   }
 
-  &__content {
+  .content {
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -56,20 +74,24 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+
+      .formLabel {
+        user-select: none !important;
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-weight: bold !important;
+        font-size: 10px !important;
+        color: #6F7091 !important;
+      }
     }
 
     .popper {
       z-index: 1000;
-
-      :global(.positive-button) {
-        width: 100%;
-      }
     }
 
     &.expanded {
       padding-top: .5rem;
       height: auto;
-      min-height: 33rem;
       transition: height .2s ease-out, padding-top .2s ease-out;
     }
 
@@ -77,50 +99,6 @@
       padding-top: 0;
       min-height: 0;
       transition: height .2s ease-out, padding-top .2s ease-out;
-    }
-
-    :global(.custom-select) {
-      font-size: .8rem;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-    }
-
-    :global(.form-label) {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: .7rem;
-      margin-bottom: 0;
-    }
-
-    :global(.form-control) {
-      background-color: #FAFAFD;
-      height: 33.19px;
-    }
-
-    .price-group {
-      margin-bottom: 1rem;
-      :global(.custom-select) {
-        margin-right: 0 !important;
-        font-family: Inter, sans-serif;
-        font-style: normal;
-      }
-    }
-
-    :global(.input-group) {
-      textarea {
-        height: 80px;
-      }
-    }
-
-    :global(.input-group-append) {
-      height: 33.19px;
-
-      :global(.input-group-text) {
-        font-family: Inter, sans-serif;
-        font-style: normal;
-        font-size: 12px;
-      }
     }
 
     .paletteWrapper {
@@ -149,41 +127,29 @@
       }
     }
 
-    &__colors {
+    .colors {
       display: flex !important;
-      margin-top: 1rem;
       align-items: center;
       max-width: 100%;
       flex-wrap: wrap;
       justify-content: flex-start;
 
-      &__color-container {
-        padding: .63rem;
-        border-radius: 1rem;
+      .selectedButton {
+        border: currentColor 3px solid;
       }
 
-      :global(.btn-primary) {
-        width: 2rem;
-        height: 2rem;
-        flex: unset !important;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        border-color: white;
-        background-color: white;
-        border-radius: 1rem !important;
-        margin-right: .3rem;
-        margin-bottom: .5rem;
+      .toggleButton {
+        padding: 0;
+        margin-right: 5px;
 
-        &:hover {
-          background-color: white !important;
-          border-color: #3A83DC !important;
+        &:last-child {
+          margin-right: 0;
         }
+      }
 
-        &:global(.active) {
-          border-color: #3A83DC !important;
-          background-color: white !important;
-        }
+      .colorContainer {
+        width: 23px;
+        height: 23px;
       }
     }
   }

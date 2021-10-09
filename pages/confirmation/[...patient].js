@@ -12,15 +12,14 @@ import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
 import AppLogoBlue from '../../app/components/icons/appLogoBlue';
-import LoadingButton from '../../components/common/LoadingButton';
-import urlToLambda from '../../utils/urlToLambda';
-import { textForKey } from '../../utils/localization';
+import LoadingButton from '../../app/components/common/LoadingButton';
+import urlToLambda from '../../app/utils/urlToLambda';
+import { textForKey } from '../../app/utils/localization';
 import {
   fetchScheduleConfirmationInfo,
   requestConfirmSchedule
 } from "../../middleware/api/schedules";
-import styles from '../../styles/ScheduleConfirmation.module.scss';
-import Box from "@material-ui/core/Box";
+import styles from '../../app/styles/ScheduleConfirmation.module.scss';
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
@@ -93,24 +92,24 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
         <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo'/>
       )}
       {schedule != null && !isError && (
-        <TableContainer className={styles['table-container']}>
+        <TableContainer className={styles.tableContainer}>
           <Table>
             <TableBody>
               <TableRow>
                 <TableCell colSpan={2} align='center'>
-                  <Typography className={styles['title-label']}>
+                  <Typography className={styles.titleLabel}>
                     {textForKey('Detalii programare')}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <Typography align='right' className={styles['data-label']}>
+                  <Typography align='left' className={styles.dataLabel}>
                     {textForKey('Date')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography className={styles['data-label']}>
+                  <Typography className={styles.dataLabel}>
                     {moment(schedule.startTime)
                       .tz(schedule.timeZone)
                       .format('DD.MM.YYYY')}
@@ -118,13 +117,13 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align='right'>
-                  <Typography className={styles['data-label']}>
+                <TableCell align='left'>
+                  <Typography className={styles.dataLabel}>
                     {textForKey('Hour')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography className={styles['data-label']}>
+                  <Typography className={styles.dataLabel}>
                     {moment(schedule.startTime)
                       .tz(schedule.timeZone)
                       .format('HH:mm')}
@@ -133,24 +132,24 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <Typography align='right' className={styles['data-label']}>
+                  <Typography align='left' className={styles.dataLabel}>
                     {textForKey('Doctor')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography className={styles['data-label']}>
+                  <Typography className={styles.dataLabel}>
                     {schedule.doctorName}
                   </Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <Typography align='right' className={styles['data-label']}>
+                  <Typography align='left' className={styles.dataLabel}>
                     {textForKey('Service')}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography className={styles['data-label']}>
+                  <Typography className={styles.dataLabel}>
                     {schedule.service}
                   </Typography>
                 </TableCell>
@@ -158,12 +157,12 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
               {schedule.clinicPhone && (
                 <TableRow>
                   <TableCell>
-                    <Typography align='right' className={styles['data-label']}>
+                    <Typography align='left' className={styles.dataLabel}>
                       {textForKey('Phone number')}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography className={styles['data-label']}>
+                    <Typography className={styles.dataLabel}>
                       <a href={`tel:${schedule.clinicPhone.replace('+', '')}`}>
                         {schedule.clinicPhone}
                       </a>
@@ -176,13 +175,13 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
         </TableContainer>
       )}
       {schedule != null && (
-        <Box display="flex" alignItems="center">
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           {schedule.status !== 'Canceled' && (
             <LoadingButton
               isLoading={isConfirming}
               disabled={isConfirming || isCanceling || schedule.status !== 'Pending'}
               className={clsx('positive-button', {
-                [styles['confirmed']]: schedule.status !== 'Pending',
+                [styles.confirmed]: schedule.status !== 'Pending',
               })}
               onClick={confirmSchedule}
             >
@@ -203,7 +202,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                 : textForKey('Canceled')}
             </LoadingButton>
           )}
-        </Box>
+        </div>
       )}
 
       <div className={styles.covidNoticeContainer}>
@@ -216,18 +215,18 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
       </div>
 
       <div className={styles.footer}>
-        <Typography className={styles.label}>
+        <div className={styles.label}>
           powered by{' '}
-          <a href='https://easyplan.pro' target='_blank' rel='noreferrer'>
+          <a href='https://easyplan.md' target='_blank' rel='noreferrer'>
             <AppLogoBlue/>
           </a>
-        </Typography>
+        </div>
       </div>
     </div>
   );
 };
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
     const { patient } = query
     const [scheduleId, patientId] = patient;

@@ -24,15 +24,24 @@
   }
 
   .footer {
-    width: 100%;
+    width: calc(100% - 2rem);
     border-top: #ededed 1px solid;
-    padding: .5rem;
+    padding: 1rem;
     display: flex;
     align-items: flex-end;
     justify-content: center;
 
-    :global(.positive-button) {
-      margin-bottom: .1rem;
+    .printBtn {
+      height: 35px;
+      background-color: #3A83DC;
+      color: white;
+
+      .label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+      }
     }
 
     .guideNameField {

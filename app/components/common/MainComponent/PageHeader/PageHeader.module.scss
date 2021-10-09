@@ -16,11 +16,11 @@
   }
 }
 
-.page-header {
-  width: 100%;
+.pageHeader {
+  max-width: 100%;
   padding: 1.8rem;
   align-items: flex-start;
-  height: 11rem;
+  height: 10rem;
   background: rgb(255,255,255);
   background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 57%, rgba(255,255,255,0) 100%);
   display: flex;
@@ -32,7 +32,7 @@
     justify-content: center;
   }
 
-  .exchange-rate-btn {
+  .exchangeRateBtn {
     margin-right: 1rem;
 
     &.upcoming {
@@ -41,7 +41,7 @@
     }
   }
 
-  &__title {
+  .title {
     margin-top: 0;
     font-weight: bold;
     font-size: 24px;
@@ -50,17 +50,21 @@
     font-style: normal;
   }
 
-  .avatar-container {
-    .avatar-image, svg {
+  .avatarContainer {
+    .avatarImage {
+      border-radius: 25px;
       object-fit: cover;
-      width: 3rem;
-      height: 3rem;
+    }
+    .avatarImage, svg {
+      object-fit: cover;
+      width: 50px;
+      height: 50px;
       margin-left: 1rem;
       margin-right: .5rem;
     }
   }
 
-  &__actions {
+  .actions {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,7 +99,7 @@
     }
   }
 
-  .add-invoice-btn {
+  .addInvoiceBtn {
     outline: none;
     width: 45px;
     height: 45px;
@@ -132,7 +136,7 @@
     }
   }
 
-  &__notifications {
+  .notifications {
     outline: none;
     cursor: pointer;
     display: flex;

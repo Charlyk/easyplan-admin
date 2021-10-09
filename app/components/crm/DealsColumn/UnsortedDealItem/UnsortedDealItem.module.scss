@@ -95,7 +95,7 @@
 
     .lastMessageContainer {
       margin-top: 5px;
-      max-width: 100%;
+      max-width: calc(100% - 20px);
       width: fit-content;
       display: flex;
       position: relative;

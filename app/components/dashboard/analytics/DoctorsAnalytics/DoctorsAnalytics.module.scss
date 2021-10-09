@@ -63,6 +63,7 @@
 
     .table-container {
       padding: .5rem 8px;
+      width: unset;
 
       .data-table {
         width: 100%;
@@ -154,4 +155,16 @@
       }
     }
   }
+
+  .selectRoot {
+    width: calc(100% / 3);
+    margin-right: 10px;
+  }
+}
+
+.analyticsMenuItemText {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
 }

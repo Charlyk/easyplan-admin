@@ -7,8 +7,12 @@ import { get } from "./request";
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function fetchAppData(headers = null, date = null) {
-  if (date == null) {
-    return get(`/api/analytics/app-data`, headers)
+  try {
+    if (date == null) {
+      return get(`/api/analytics/app-data`, headers)
+    }
+    return get(`/api/analytics/app-data?date=${date}`, headers)
+  } catch (error) {
+    throw new Error(error.message);
   }
-  return get(`/api/analytics/app-data?date=${date}`, headers)
 }

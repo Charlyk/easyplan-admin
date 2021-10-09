@@ -1,0 +1,77 @@
+.editProfileModal {
+
+  .modalPaper {
+    width: 30%;
+  }
+
+  .modalAccountSettings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: calc(100% - 32px);
+    padding: 16px;
+
+    .simpleField {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+
+    .formGroup {
+      width: 100%;
+
+      .formLabel {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: .7rem;
+        margin-bottom: 0;
+      }
+
+      .formText {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: .7rem;
+        color: #7b7ca0;
+        margin-bottom: 0;
+      }
+
+      .formControl {
+        background-color: #FAFAFD;
+      }
+    }
+
+    .uploadAvatarContainer {
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      width: 100%;
+
+      .formGroup {
+        width: max-content !important;
+
+        label {
+          min-width: 9rem;
+        }
+      }
+    }
+
+    .react-tel-input {
+      .form-control {
+        width: 100%;
+      }
+    }
+
+    .form-title {
+      width: 100%;
+    }
+
+    .positive-button {
+      max-width: 15rem;
+    }
+
+    .form-control {
+      width: 100%;
+    }
+  }
+}

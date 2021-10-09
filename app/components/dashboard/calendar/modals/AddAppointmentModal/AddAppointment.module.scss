@@ -16,16 +16,37 @@
     }
   }
 
-  :global(.modal-content) {
-    box-shadow: 0 1px 10px 10px #34344E1A;
+  .simpleField {
+    margin-top: 10px;
   }
 
-  .first-and-last-name {
+  .phoneInput {
+    margin-top: 10px;
+  }
+
+  .urgentCheck {
+    margin-top: 5px;
+    user-select: none;
+    margin-bottom: 0;
+
+    .urgentLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-size: 14px;
+      color: #ec3276;
+      cursor: pointer;
+    }
+  }
+
+  .patientNameContainer {
     display: flex;
 
-    input {
-      &:first-child {
-        margin-right: 5px;
+    .nameField {
+      width: 50%;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
@@ -75,84 +96,37 @@
     }
   }
 
-  .patient-mode-button {
-    user-select: none;
-    margin-top: .2rem;
-    outline: none;
-    display: flex;
-    align-self: flex-end;
-    justify-content: flex-end;
+  .modeWrapper {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
-    &.disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    span {
-      outline: none;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-size: .75rem;
-      margin-bottom: 0;
-      color: #3A83DC;
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  :global(.form-control[readonly]) {
-    background-color: #FAFAFD;
-  }
-
-  :global(.form-control:disabled) {
-    opacity: .8;
-    background-color: #ededed !important;
-  }
-
-  :global(.form-group) {
-    margin-bottom: 0;
-    margin-top: 0;
-
-    :global(.form-check) {
-      display: flex;
-      align-items: center;
+    .patientModeButton {
       user-select: none;
+      margin-top: .2rem;
+      outline: none;
+      display: flex;
+      align-self: flex-end;
+      justify-content: flex-end;
 
-      :global(.form-check-label) {
+      &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      span {
+        outline: none;
         font-family: Inter, sans-serif;
         font-style: normal;
-        font-size: .85rem;
+        font-size: .75rem;
         margin-bottom: 0;
-        color: #ec3276;
+        color: #3A83DC;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       }
-
-      input {
-        margin-top: unset;
-        margin-bottom: unset;
-        color: #ec3276;
-      }
-    }
-  }
-
-  :global(.form-label) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: .7rem;
-    margin-bottom: 0;
-  }
-
-  :global(.form-control) {
-    width: 100%;
-    background-color: #FAFAFD;
-  }
-
-  :global(.input-group) {
-    textarea {
-      height: 5rem !important;
     }
   }
 
@@ -191,6 +165,21 @@
 
     .date-append {
       width: 40%;
+    }
+  }
+
+  .timeContainer {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+
+    .timeSelect {
+      width: 50%;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 }

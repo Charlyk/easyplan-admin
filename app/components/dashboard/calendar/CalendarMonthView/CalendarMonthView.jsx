@@ -1,0 +1,127 @@
+import React, { useEffect, useState } from 'react';
+import clsx from 'clsx';
+import dynamic from 'next/dynamic';
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
+import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
+import getDays from '../../../../utils/getDays';
+import { textForKey } from '../../../../utils/localization';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
+import styles from './CalendarMonthView.module.scss';
+
+const ScheduleItem = dynamic(() => import('./ScheduleItem'));
+
+const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
+  const dispatch = useDispatch();
+  const updateAppointments = useSelector(updateAppointmentsSelector);
+  const [schedules, setSchedules] = useState([]);
+  const [monthDays, setMonthDays] = useState([]);
+
+  useEffect(() => {
+    if (viewDate != null && doctorId != null) {
+      setMonthDays(getDays(viewDate));
+      setSchedules([]);
+      fetchSchedules();
+    }
+  }, [viewDate, doctorId, updateAppointments]);
+
+  const fetchSchedules = async () => {
+    if (doctorId == null) {
+      return;
+    }
+    dispatch(setIsCalendarLoading(true));
+    try {
+      const date = moment(viewDate).format('YYYY-MM-DD')
+      const response = await getPeriodSchedules(doctorId, date, 'month')
+      const newSchedules = [];
+      for (let prop in response.data) {
+        const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');
+        newSchedules.push({ date, schedules: response.data[prop] });
+      }
+      setSchedules(newSchedules);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      dispatch(setIsCalendarLoading(false));
+    }
+  };
+
+  const rowsCount = monthDays.length / 7;
+  const calendarRect = typeof document !== 'undefined' ? document
+    .getElementById('calendar-content')
+    ?.getBoundingClientRect() : { height: 1 };
+
+  const handleDayClick = (day) => {
+    const date = moment(day.fullDate, 'YYYY-DD-MM').toDate();
+    onDateClick(date, true);
+  };
+
+  const getSchedules = (day) => {
+    return schedules.find((item) => item.date === day.date)?.schedules || [];
+  };
+
+  const renderSchedule = (schedule) => {
+    return (
+      <ScheduleItem
+        appointment={schedule}
+        hidden={schedule.isHidden}
+        showHour={false}
+      />
+    );
+  };
+
+  const renderDayItem = (day) => {
+    const daySchedules = getSchedules(day);
+    return (
+      <div
+        role='button'
+        tabIndex={0}
+        onClick={() => handleDayClick(day)}
+        className={clsx(styles.itemDataContainer, day.isSameDay && styles.currentDate)}
+        style={{ height: calendarRect?.height / rowsCount - 3 }}
+        key={`${day.date}-${day.isCurrent}-${day.month}`}
+      >
+        <span
+          className={clsx(
+            styles.itemText,
+            styles.monthDay,
+            !day.isCurrent && styles.nextMonth,
+          )}
+        >
+          {day.date}
+        </span>
+        {day.isCurrent && (
+          <div className={styles.appointmentsContainer}>
+            {daySchedules.slice(0, 3).map(renderSchedule)}
+            {daySchedules.length > 3 && (
+              <div className={styles.viewMoreContainer}>
+                <span className={styles.viewMoreButton}>
+                  {textForKey('View more')} ({daySchedules.length - 3})
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return <div className={styles.monthView}>{monthDays.map(renderDayItem)}</div>;
+};
+
+export default React.memo(CalendarMonthView, areComponentPropsEqual);
+
+CalendarMonthView.propTypes = {
+  viewDate: PropTypes.instanceOf(Date),
+  doctorId: PropTypes.number,
+  onDateClick: PropTypes.func,
+};
+
+CalendarMonthView.defaultProps = {
+  onDateClick: () => null,
+};

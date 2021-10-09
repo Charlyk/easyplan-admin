@@ -1,11 +1,12 @@
 import moment from "moment-timezone";
 import { createSlice } from "@reduxjs/toolkit";
+import { textForKey } from "../../../../utils/localization";
 
 export const initialState = {
   selectedDoctor: { id: -1 },
-  selectedDoctors: [],
+  selectedDoctors: [{ id: -1, name: textForKey('All doctors') }],
   selectedService: { id: -1 },
-  selectedServices: [],
+  selectedServices: [{ id: -1, name: textForKey('All services') }],
   selectedStatus: { id: 'All' },
   selectedStatuses: [],
   statistics: [],
@@ -93,8 +94,14 @@ const servicesAnalyticsSlice = createSlice({
       state.page = page;
       state.rowsPerPage = rowsPerPage;
       state.selectedStatuses = [{ id: status }];
-      state.selectedDoctors = [{ id: parseInt(String(doctorId || -1)) }];
-      state.selectedServices = [{ id: parseInt(String(serviceId || -1)) }];
+      state.selectedDoctors = [{
+        id: parseInt(String(doctorId || -1)),
+        name: textForKey('All doctors')
+      }];
+      state.selectedServices = [{
+        id: parseInt(String(serviceId || -1)),
+        name: textForKey('All services')
+      }];
       state.dateRange = [moment(fromDate).toDate(), moment(toDate).toDate()];
     },
     setUrlParams(state, action) {

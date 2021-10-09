@@ -1,24 +1,98 @@
-.main-menu {
+.mainMenu {
   background-color: #34344E;
-  width: 11rem;
-  padding: 2rem 1rem;
-  height: 100%;
+  width: 180px;
+  padding: 2rem 0;
   overflow-y: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  .import-data-wrapper {
+  .menuList {
+    width: 100%;
+    user-select: none;
+
+    .listItem {
+      cursor: pointer;
+      color: white;
+      padding-left: 16px;
+      padding-right: 8px;
+
+      &.child {
+        padding-left: 30px;
+      }
+
+      &:hover {
+        color: #3E83DC;
+      }
+
+      &.selected {
+        background-color: transparent;
+        color: #3E83DC;
+
+        .itemText {
+          font-weight: bold;
+        }
+      }
+
+      .itemIcon {
+        min-width: 35px;
+        color: currentColor;
+
+        &.child {
+          min-width: 20px;
+
+          svg {
+            width: 10px;
+            height: 10px;
+          }
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
+          fill: currentColor;
+        }
+      }
+
+      .itemText {
+        color: currentColor;
+        font-weight: normal;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-size: 12px;
+
+        &.child {
+          a {
+            font-size: 11px;
+          }
+        }
+
+        a {
+          font-weight: normal;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-size: 12px;
+          color: currentColor;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .importDataWrapper {
     background: white;
     width: 85%;
     padding: .7rem;
     border-radius: 3px;
 
-    .import-progress-bar {
+    .importProgressBar {
       color: #3A83DC;
       width: 1.2rem !important;
       height: 1.2rem !important;
     }
 
-    .import-data-label {
+    .importDataLabel {
       flex: 1;
       color: #3A83DC;
       font-weight: normal;
@@ -29,7 +103,7 @@
     }
   }
 
-  .trust-seal-image {
+  .trustSealImage {
     height: 25px;
     width: auto;
     position: fixed;
@@ -37,7 +111,7 @@
     left: 1rem;
   }
 
-  .clinic-name {
+  .clinicName {
     flex: 1;
     color: #FAFAFD;
     font-weight: 600;
@@ -46,11 +120,11 @@
     font-size: 12px;
   }
 
-  &__logo-container {
+  .logoContainer {
     user-select: none;
     position: relative;
     outline: none;
-    width: 100%;
+    width: calc(100% - 2rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,16 +139,16 @@
     }
   }
 
-  &__logo {
+  .logo {
     height: 3rem;
   }
 
-  &__menu-icon {
+  .menuIcon {
     width: 20px;
     height: 20px;
   }
 
-  &__drop-down-icon {
+  .dropDownIcon {
     width: 1.8rem;
     height: 1.8rem;
     margin-left: 1rem;
@@ -88,7 +162,7 @@
 
 .navigation {
   padding-bottom: 2rem;
-  &__item {
+  .item {
     outline: none;
     color: #FAFAFD;
     min-height: 3rem;
@@ -102,7 +176,7 @@
       height: 16px;
     }
 
-    &.link-item {
+    &.linkItem {
       outline: none;
       display: flex;
       align-items: center;
@@ -130,14 +204,14 @@
       }
     }
 
-    &.div-item {
+    &.divItem {
       overflow: hidden;
       display: flex;
       flex-direction: column;
       font-size: 12px;
       font-weight: 300;
 
-      .title-container {
+      .titleContainer {
         outline: none;
         height: 3rem;
         user-select: none;
@@ -166,7 +240,7 @@
         }
       }
 
-      .child-container {
+      .childContainer {
         height: 0;
         margin-left: 1px;
         margin-top: unset;

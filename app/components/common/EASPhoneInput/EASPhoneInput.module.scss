@@ -1,0 +1,71 @@
+.inputRoot {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .helperText {
+    user-select: none;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #3A83DC !important;
+
+    &.error {
+      color: #ec3276 !important;
+    }
+  }
+
+  .formLabel {
+    user-select: none;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #6F7091 !important;
+
+    &.focused {
+      color: #3A83DC !important;
+    }
+
+    &.error {
+      color: #ec3276 !important;
+    }
+  }
+
+  .reactTelInput {
+    position: relative;
+    height: 35px;
+
+    :global(.country-list) {
+      position: fixed !important;
+    }
+
+    .easPhoneInput {
+      outline: none;
+      width: 100%;
+      height: 100%;
+      border: rgba(0, 0, 0, 0.23) 1px solid;
+      border-radius: 4px;
+      padding: 0 14px 0 58px;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #34354C !important;
+      background-color: transparent !important;
+
+      &:global(.invalid-number) {
+        border-color: #ec3276 !important;
+      }
+
+      &:hover {
+        border-color: #3A83DC;
+      }
+
+      &:focus {
+        border-color: #3A83DC;
+      }
+    }
+  }
+}

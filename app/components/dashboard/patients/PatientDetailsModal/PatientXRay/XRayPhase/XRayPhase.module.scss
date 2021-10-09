@@ -8,20 +8,20 @@
   position: relative;
 
   &.expanded {
-    .phase-header {
-      .expand-button {
+    .phaseHeader {
+      .expandButton {
         svg {
           transform: rotate(90deg);
         }
       }
     }
 
-    .phase-images {
+    .phaseImages {
       padding: 1rem;
     }
   }
 
-  .phase-header {
+  .phaseHeader {
     padding: 1rem;
     display: flex;
     justify-content: space-between;
@@ -62,7 +62,7 @@
     }
   }
 
-  .phase-images {
+  .phaseImages {
     overflow: hidden;
     width: 100%;
     height: 100%;

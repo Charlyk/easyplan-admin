@@ -1,0 +1,49 @@
+.loadingButton {
+  min-width: 100px !important;
+  outline: none;
+  height: 35px;
+
+  &:hover {
+    background-color: currentColor;
+    color: inherit;
+  }
+
+  .buttonLabel {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-size: 12px !important;
+    color: inherit;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+  }
+
+  &:disabled {
+    color: white !important;
+    background-color: #A1A2C6 !important;
+  }
+
+  .spinnerWrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+
+    .loadingButtonSpinner {
+      height: 1.3rem !important;
+      width: 1.3rem !important;
+      position: relative !important;
+      color: inherit !important;
+
+      svg {
+        margin: 0 !important;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}

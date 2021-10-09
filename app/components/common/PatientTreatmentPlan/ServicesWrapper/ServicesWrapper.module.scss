@@ -1,13 +1,9 @@
 .servicesWrapper {
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
-  margin-top: 1rem;
   user-select: none;
-  min-height: 385px;
   display: flex;
+  max-height: calc(100% - 14rem - 6.5rem); // 14rem teeth container, 7rem patient info container
   flex-direction: column;
-  width: 100%;
-  height: calc(100% - 24rem);
-  position: relative;
 
   .servicesResultsMenu {
     max-height: 300px !important;

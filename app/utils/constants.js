@@ -45,7 +45,7 @@ import IconTooth46 from '../components/icons/iconTooth46';
 import IconTooth47 from '../components/icons/iconTooth47';
 import IconTooth48 from '../components/icons/iconTooth48';
 import IconXPerson from '../components/icons/iconXPerson';
-import { textForKey } from '../../utils/localization';
+import { textForKey } from './localization';
 
 const host = typeof window !== 'undefined' ? window?.location.host : '';
 export const env = host.startsWith('develop')
@@ -80,55 +80,6 @@ export const S3Config = (dirname) => ({
   secretAccessKey: 'hfPv7beCRvEm6v7j1nBzWgZyxX0MELjLzBv6rDai',
   // s3Url: 'https:/your-custom-s3-url.com/' /* optional */,
 });
-
-export const localeNameMapper = {
-  ar: 'Arabic',
-  bg: 'Bulgarian',
-  ca: 'Catalan',
-  cs: 'Czech',
-  cy: 'Welsh',
-  da: 'Danish',
-  de: 'German',
-  el: 'Greek',
-  enGB: 'English (United Kingdom)',
-  enUS: 'English (United States)',
-  eo: 'Esperanto',
-  es: 'Spanish',
-  et: 'Estonian',
-  faIR: 'Persian',
-  fi: 'Finnish',
-  fil: 'Filipino',
-  fr: 'French',
-  hi: 'Hindi',
-  hr: 'Croatian',
-  hu: 'Hungarian',
-  hy: 'Armenian',
-  id: 'Indonesian',
-  is: 'Icelandic',
-  it: 'Italian',
-  ja: 'Japanese',
-  ka: 'Georgian',
-  ko: 'Korean',
-  lt: 'Lithuanian',
-  lv: 'Latvian',
-  mk: 'Macedonian',
-  nb: 'Norwegian Bokmål',
-  nl: 'Dutch',
-  pl: 'Polish',
-  pt: 'Portuguese',
-  ro: 'Romanian',
-  ru: 'Russian',
-  sk: 'Slovak',
-  sl: 'Slovenian',
-  sr: 'Serbian',
-  sv: 'Swedish',
-  th: 'Thai',
-  tr: 'Turkish',
-  uk: 'Ukrainian',
-  vi: 'Vietnamese',
-  zhCN: 'Chinese Simplified',
-  zhTW: 'Chinese Traditional',
-};
 
 export function createHoursList() {
   return [].concat(
@@ -445,53 +396,6 @@ export const Teeth = [
   },
 ];
 
-export const Action = {
-  CreateCategory: 'CreateCategory',
-  EditCategory: 'EditCategory',
-  DeleteCategory: 'DeleteCategory',
-  ViewCategory: 'ViewCategory',
-  CreateService: 'CreateService',
-  EditService: 'EditService',
-  DeleteService: 'DeleteService',
-  ViewService: 'ViewService',
-  ViewServices: 'ViewServices',
-  CreateAppointment: 'CreateAppointment',
-  EditAppointment: 'EditAppointment',
-  DeleteAppointment: 'DeleteAppointment',
-  ViewAppointment: 'ViewAppointment',
-  ViewAppointments: 'ViewAppointments',
-  CreatePatient: 'CreatePatient',
-  EditPatient: 'EditPatient',
-  DeletePatient: 'DeletePatient',
-  ViewPatient: 'ViewPatient',
-  ViewPatients: 'ViewPatients',
-  CreateClinic: 'CreateClinic',
-  EditClinic: 'EditClinic',
-  PayInvoice: 'PayInvoice',
-  FinalizeTreatment: 'FinalizeTreatment',
-  UpdateTreatmentPlan: 'UpdateTreatmentPlan',
-  ViewGeneralStatistics: 'ViewGeneralStatistics',
-  ViewServicesStatistics: 'ViewServicesStatistics',
-  ViewDoctorsStatistics: 'ViewDoctorsStatistics',
-  ViewActivityLogs: 'ViewActivityLogs',
-  SwitchClinic: 'SwitchClinic',
-  CreateUser: 'CreateUser',
-  EditUser: 'EditUser',
-  ViewUser: 'ViewUser',
-  ViewUsers: 'ViewUsers',
-  DeleteUser: 'DeleteUser',
-  RestoreUser: 'RestoreUser',
-  DeleteInvitation: 'DeleteInvitation',
-  CreatePatientNote: 'CreatePatientNote',
-  AddPatientXRayImage: 'AddPatientXRayImage',
-  EditVisitNote: 'EditVisitNote',
-  UpdatedOrthodonticPlan: 'UpdatedOrthodonticPlan',
-};
-
-export const UploadDestination = {
-  patients: 'patients',
-};
-
 export const UnauthorizedPaths = [
   '/accept-invitation',
   '/confirmation',
@@ -505,3 +409,5 @@ export const HeaderKeys = {
   clinicId: 'X-EasyPlan-Clinic-Id',
   subdomain: 'X-EasyPlan-Subdomain',
 };
+
+export const APP_DATA_API = '/api/analytics/app-data';

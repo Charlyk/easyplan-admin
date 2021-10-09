@@ -2,13 +2,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 40rem;
+  width: 100%;
   background: #FFFFFF;
   box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
-  padding: 1.5rem;
+  padding: 1rem;
   max-height: 100%;
   overflow-y: auto;
+
+  .simpleField {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .saveButton {
+    width: 23.5%;
+    background-color: #3A83DC;
+    color: white !important;
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+
+    svg {
+      margin-bottom: 3px;
+      margin-left: 5px;
+      width: 20px;
+      height: 20px;
+    }
+  }
 
   .form-title {
     width: 100%;
@@ -21,56 +43,7 @@
     margin-bottom: 1rem;
   }
 
-  :global(.upload-avatar-container) {
-    width: 100%;
-
-    span {
-      width: 100%;
-    }
-  }
-
-  :global(.react-tel-input) {
-    :global(.form-control) {
-      width: 100%;
-    }
-  }
-
   .form-title {
     width: 100%;
-  }
-
-  :global(.positive-button) {
-    max-width: 15rem;
-  }
-
-  :global(.form-control) {
-    width: 100%;
-  }
-
-  :global(.form-group) {
-    width: 100%;
-
-    :global(.form-label) {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: .7rem;
-      margin-bottom: 0;
-      align-items: center;
-      display: flex;
-    }
-
-    :global(.form-text) {
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: .7rem;
-      color: #7b7ca0;
-      margin-bottom: 0;
-    }
-
-    :global(.form-control) {
-      background-color: #FAFAFD;
-    }
   }
 }

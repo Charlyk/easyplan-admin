@@ -1,4 +1,4 @@
-import generateReducerActions from "../../../../../utils/generateReducerActions";
+import generateReducerActions from "../../../../utils/generateReducerActions";
 import { EmailRegex } from "../../../../utils/constants";
 
 export const initialState = {

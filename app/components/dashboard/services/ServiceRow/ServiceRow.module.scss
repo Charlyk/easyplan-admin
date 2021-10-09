@@ -7,58 +7,102 @@
     margin-right: .5rem;
   }
 
-  .delete-button {
-    height: 30px;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    margin-left: .5rem;
-    background: rgba(244, 64, 129, 0.03) !important;
-    border: 1px solid #F44081 !important;
-    color: #F44081 !important;
-    text-transform: uppercase;
-    box-sizing: border-box;
-    border-radius: 4px;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-size: 12px !important;
-    line-height: 16px !important;
+  .outlinedBtnBlue {
+    border-color: #3A83DC;
+  }
 
-    &.positive {
-      border: 1px solid #00E987 !important;
-      color: #00E987 !important;
+  .outlinedBtnGreen {
+    border-color: #00E987;
+  }
 
-      svg {
-        fill: #00E987;
-        margin-left: .5rem;
-      }
+  .outlinedBtnRed {
+    border-color: #ec3276;
+  }
+
+  .deleteBtn {
+    font-size: 11px;
+    height: 35px;
+    margin-right: 5px;
+    background-color: transparent;
+
+    .buttonLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #F44081;
+    }
+
+    &:focus, &:active, &:hover {
+      color: #F44081 !important;
+      border-color: #F44081 !important;
+      background-color: transparent !important;
     }
 
     svg {
       fill: #F44081;
-      margin-left: .5rem;
+      margin-left: 5px;
+      margin-bottom: 4px;
+      width: 20px;
+      height: 20px;
     }
   }
 
-  .edit-button {
-    height: 30px;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    background: #F4FAFE !important;
-    border: 1px solid #74A8E5 !important;
-    color: #74A8E5 !important;
-    text-transform: uppercase;
-    box-sizing: border-box;
-    border-radius: 4px;
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-size: 12px !important;
-    line-height: 16px !important;
+  .restoreBtn {
+    font-size: 11px;
+    height: 35px;
+    margin-right: 5px;
+    background-color: transparent;
+
+    .buttonLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #00E987;
+    }
+
+    &:focus, &:active, &:hover {
+      color: #00E987 !important;
+      border-color: #00E987 !important;
+      background-color: transparent !important;
+    }
 
     svg {
-      fill: #74A8E5;
-      margin-left: .5rem;
+      fill: #00E987;
+      margin-left: 5px;
+      margin-bottom: 4px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .editBtn {
+    font-size: 11px;
+    height: 35px;
+    margin-right: 5px;
+    background-color: transparent;
+
+    .buttonLabel {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #3A83DC;
+    }
+
+    &:focus, &:active, &:hover {
+      color: #3A83DC !important;
+      border-color: #3A83DC !important;
+      background-color: transparent !important;
+    }
+
+    svg {
+      fill: #3A83DC;
+      margin-left: 5px;
+      margin-bottom: 4px;
+      width: 20px;
+      height: 20px;
     }
   }
 

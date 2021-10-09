@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import Box from "@material-ui/core/Box";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography'
 import { useRouter } from "next/router";
-import getRedirectUrlForUser from '../../utils/getRedirectUrlForUser';
-import setCookies from '../../utils/setCookies';
+import getRedirectUrlForUser from '../../app/utils/getRedirectUrlForUser';
 import { getCurrentUser } from "../../middleware/api/auth";
-import { textForKey } from "../../utils/localization";
+import { textForKey } from "../../app/utils/localization";
+import setCookies from '../../app/utils/setCookies';
+import { JwtRegex } from "../../app/utils/constants";
+import handleRequestError from "../../app/utils/handleRequestError";
 
 const Redirect = () => {
   const router = useRouter();
@@ -20,41 +21,55 @@ const Redirect = () => {
       const response = await getCurrentUser();
       const [subdomain] = window.location.host.split('.');
       const redirectUrl = getRedirectUrlForUser(response.data, subdomain);
-      console.log(redirectUrl)
       if (redirectUrl == null || router.asPath === redirectUrl) {
         return;
       }
       await router.replace(redirectUrl);
     } catch (error) {
-      console.error(error)
-      // await router.replace('/login');
+      await router.replace('/login');
     }
   }
 
   return (
-    <Box
-      width='100%'
-      height='100%'
-      display='flex'
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='center'
+    <div
+      style={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       <CircularProgress className='circular-progress-bar'/>
       <Typography className='typography' style={{ marginTop: '1rem' }}>
         {textForKey('Redirecting to clinic')}...
       </Typography>
-    </Box>
+    </div>
   )
 }
 
 export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
+    // try to check if clinic id is a number
+    parseInt(clinicId);
+
+    // check if token is valid
+    if (!token.match(JwtRegex) || !clinicId) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: true,
+        },
+      };
+    }
+
+    // set cookies
     setCookies(res, token, clinicId);
     return { props: {} }
   } catch (error) {
-    return { props: {} }
+    return handleRequestError(error);
   }
 }
 

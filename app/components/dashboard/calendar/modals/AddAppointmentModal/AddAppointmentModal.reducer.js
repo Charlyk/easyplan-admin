@@ -1,5 +1,5 @@
 import moment from "moment-timezone";
-import generateReducerActions from "../../../../../../utils/generateReducerActions";
+import generateReducerActions from "../../../../../utils/generateReducerActions";
 
 /**
  * Filter available time based on start time and service duration
@@ -128,6 +128,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         doctor: action.payload,
+        service: null,
         isDoctorValid: action.payload != null,
       };
     case reducerTypes.setPatients:
@@ -215,7 +216,10 @@ export const reducer = (state, action) => {
       return {
         ...state,
         scheduleId: schedule.id,
-        patient: schedule.patient,
+        patient: {
+          ...schedule.patient,
+          name: schedule.patient.fullName,
+        },
         doctor: schedule.doctor,
         service: schedule.service,
         appointmentNote: schedule.noteText,

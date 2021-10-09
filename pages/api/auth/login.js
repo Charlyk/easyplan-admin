@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { handler } from "../handler";
-import getSubdomain from "../../../utils/getSubdomain";
-import { baseApiUrl } from "../../../eas.config";
+import getSubdomain from "../../../app/utils/getSubdomain";
 import { HeaderKeys } from "../../../app/utils/constants";
+import { baseApiUrl } from "../../../eas.config";
+import { handler } from "../handler";
 
 export default async function login(req, res) {
   const data = await handler(authenticateWithBackend, req, res);

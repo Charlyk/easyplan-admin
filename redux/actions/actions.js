@@ -126,7 +126,7 @@ export function toggleAppointmentsUpdate() {
  * @param {Object} payload
  * @param {boolean} payload.open
  * @param {string?} payload.patientId
- * @param {'notes'|'appointments'|'visits'|null} payload.mode
+ * @param {('notes'|'appointments'|'visits'|null)?} payload.mode
  * @param {string?} payload.scheduleId
  * @return {{payload: *, type: string}}
  */

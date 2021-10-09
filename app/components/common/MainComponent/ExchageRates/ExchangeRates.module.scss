@@ -1,5 +1,6 @@
 .exchangeRate {
-  width: 100%;
+  width: calc(100% - 1rem);
+  margin-top: 1rem;
   min-height: 35px;
   background-color: white;
   position: relative;

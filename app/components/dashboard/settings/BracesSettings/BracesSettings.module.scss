@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 40rem;
+  width: 100%;
   background: #FFFFFF;
   box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
-  padding: 1.5rem;
+  padding: 1rem;
 
   .form-title {
     width: 100%;
@@ -17,6 +17,15 @@
     line-height: 24px;
     color: #34354C;
     margin-bottom: 1rem;
+  }
+
+  .adornment {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
   }
 
   &__data-wrapper {
@@ -83,13 +92,21 @@
     justify-content: flex-end;
     width: 100%;
 
-    :global(.positive-button) {
-      max-width: 11rem;
-      margin-left: .5rem;
-    }
+    .saveButton {
+      width: 23.5%;
+      background-color: #3A83DC;
+      color: white;
 
-    :global(.delete-button) {
-      max-width: 11rem;
+      &:hover {
+        background-color: #3A83DC;
+      }
+
+      svg {
+        margin-bottom: 3px;
+        margin-left: 5px;
+        width: 20px;
+        height: 20px;
+      }
     }
   }
 }

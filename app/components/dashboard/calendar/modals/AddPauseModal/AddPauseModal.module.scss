@@ -1,6 +1,28 @@
 .add-pause-root {
   .modalPaper {
     width: 400px;
+    min-height: 300px;
+    overflow: visible;
+
+    .simpleField {
+      margin-bottom: 5px;
+      width: 100%;
+    }
+
+    .timePickerContainer {
+      display: flex;
+      width: 100%;
+      margin-bottom: 5px;
+
+      .timeSelect {
+        width: 50%;
+        margin-right: 5px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
 
     .inputGroup {
       width: 100%;

@@ -1,0 +1,75 @@
+.autocompleteWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.autocompleteField {
+  .autocompleteInputRoot {
+    width: 100%;
+    height: 35px;
+    padding: 0 9px !important;
+
+    &:hover {
+      .focusedInput {
+        border-color: #3A83DC !important;
+      }
+    }
+  }
+
+  .inputAdornedEnd {
+    padding-right: 35px !important;
+  }
+
+  .progressBar {
+    color: #3A83DC;
+  }
+
+  .focusedField {
+    .focusedInput {
+      border-color: #3A83DC !important;
+    }
+  }
+
+  .autocompleteInput {
+    padding: 10px;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    color: #34354C !important;
+  }
+}
+
+.autocompleteFormLabel {
+  user-select: none;
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: bold !important;
+  font-size: 10px !important;
+  color: #6F7091 !important;
+
+  &.focused {
+    color: #3A83DC !important;
+  }
+}
+
+.autocompleteResultPaper {
+  border: #ededed 1px solid;
+}
+
+.autocompleteResultItem {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
+  color: #34354C !important;
+}
+
+.autocompleteNoResultItem {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
+  color: #6F7091 !important;
+}

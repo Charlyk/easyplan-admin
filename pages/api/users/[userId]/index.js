@@ -2,8 +2,8 @@ import axios from "axios";
 import { authorized } from "../../authorized";
 import cookie from 'cookie';
 import { handler } from "../../handler";
-import getSubdomain from "../../../../utils/getSubdomain";
-import updatedServerUrl from "../../../../utils/updateServerUrl";
+import getSubdomain from "../../../../app/utils/getSubdomain";
+import updatedServerUrl from "../../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../../app/utils/constants";
 
 export default authorized(async (req, res) => {

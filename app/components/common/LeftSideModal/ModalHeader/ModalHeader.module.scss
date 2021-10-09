@@ -1,15 +1,16 @@
 .header {
   width: 100%;
   padding: .5rem;
+  height: 8rem;
   background-color: #FFFFFF;
 
-  &__close-container {
+  .closeContainer {
     display: flex;
     width: 100%;
     align-items: flex-end;
     justify-content: flex-end;
 
-    .close-btn {
+    .closeBtn {
       cursor: pointer;
 
       &:hover {
@@ -19,7 +20,7 @@
     }
   }
 
-  &__title {
+  .title {
     margin-left: 1.3rem;
     margin-top: -.8rem;
     font-family: Inter, sans-serif;
@@ -29,7 +30,7 @@
     line-height: 48px;
   }
 
-  &__breadcrumb-container {
+  .breadcrumbContainer {
     margin: .5rem 1.2rem 1rem;
     display: flex;
     flex-direction: row;
@@ -42,7 +43,7 @@
     }
   }
 
-  &__breadcrumb {
+  .breadcrumb {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;

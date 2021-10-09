@@ -3,9 +3,31 @@
   flex-direction: column;
   height: 100%;
 
+  .simpleField {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
   .patient-form-wrapper {
-    padding: 1rem 1.5rem;
+    padding: 1rem 1rem;
     overflow-y: auto;
     max-height: 100%;
+  }
+
+  .saveButton {
+    width: 23.5%;
+    background-color: #3A83DC;
+    color: white !important;
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+
+    svg {
+      margin-bottom: 3px;
+      margin-left: 5px;
+      width: 20px;
+      height: 20px;
+    }
   }
 }

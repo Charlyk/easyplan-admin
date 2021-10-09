@@ -1,6 +1,6 @@
 .clinicsListRoot {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   position: relative;
 
@@ -36,7 +36,6 @@
       display: flex;
       width: 60%;
       background-color: white;
-      padding: 1rem;
       border-radius: 4px;
       flex-direction: column;
       align-items: flex-start;
@@ -61,59 +60,6 @@
     line-height: 20px;
     color: #A1A2C6;
     margin-bottom: .5rem;
-  }
-
-  :global(.error-text) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    margin-bottom: .5rem;
-    position: absolute;
-    bottom: 1rem;
-    right: 3rem;
-    color: #ec3276;
-  }
-
-  :global(.form-label) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: .7rem;
-    margin-bottom: 0;
-  }
-
-  :global(.form-text) {
-    font-family: Inter, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    color: #ec3276;
-    font-size: .7rem;
-    margin-bottom: 0;
-  }
-
-  :global(.form-control) {
-    background-color: #FAFAFD;
-  }
-
-  :global(.form-group) {
-    :global(.custom-select) {
-      width: 100%;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: .7rem;
-    }
-  }
-
-  :global(.form-root) {
-    padding: 3rem;
-    display: flex;
-    flex-direction: column;
-    width: 70%;
-    background: #FFFFFF;
-    border-radius: 4px;
   }
 
   :global(.footer) {

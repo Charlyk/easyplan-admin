@@ -1,4 +1,4 @@
-.patient-visits-list {
+.patientVisitsList {
   width: 100%;
   max-height: 100%;
   flex: 1;
@@ -12,11 +12,11 @@
     margin-right: 1rem;
   }
 
-  &__visits-data {
+  .visitsData {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1rem;
     min-height: 10rem;
     overflow-y: auto;
     position: relative;
@@ -28,7 +28,7 @@
     }
   }
 
-  &__actions {
+  .actions {
     width: 100%;
     display: flex;
     align-items: center;

@@ -1,4 +1,4 @@
-.appointment-details-root {
+.appointmentDetailsRoot {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -16,8 +16,18 @@
     border: #ec3276 1px solid;
   }
 
-  .statuses-popper-root {
-    width: calc(100% - 2rem);
+  .patientLink {
+    color: #3A83DC;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .statusesPopperRoot {
+    user-select: none;
+    width: 100%;
     z-index: 1000 !important;
 
     .paper {
@@ -40,7 +50,7 @@
       font-size: .8rem;
       padding: .5rem;
 
-      .name-and-icon {
+      .nameAndIcon {
         display: flex;
         flex: 1;
         align-items: center;
@@ -50,7 +60,7 @@
         font-size: 12px;
       }
 
-      .checkmark-wrapper {
+      .checkmarkWrapper {
         display: flex;
         align-items: center;
       }
@@ -72,7 +82,7 @@
     }
   }
 
-  .header-wrapper {
+  .headerWrapper {
     width: 100%;
     padding: .5rem;
     display: flex;
@@ -91,13 +101,14 @@
       }
     }
 
-    .close-button {
+    .closeButton {
       outline: none;
       cursor: pointer;
+      line-height: 1;
+      height: 24px;
     }
 
-    .schedule-title {
-      margin-top: .2rem;
+    .scheduleTitle {
       margin-left: 1rem;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -107,7 +118,7 @@
     }
   }
 
-  .content-wrapper {
+  .contentWrapper {
     padding-left: 1rem;
     padding-right: 1rem;
     flex: 1;
@@ -121,7 +132,7 @@
       left: 50%;
     }
 
-    .group-title {
+    .groupTitle {
       margin-top: 1rem;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -131,13 +142,13 @@
       color: #34344E;
     }
 
-    .info-wrapper {
+    .infoWrapper {
       display: flex;
       flex-direction: column;
       flex: 1;
     }
 
-    .schedule-status {
+    .scheduleStatus {
       user-select: none;
       outline: none;
       border-radius: .3rem;
@@ -152,13 +163,14 @@
       font-size: 14px;
       line-height: 32px;
       padding: .2rem 1rem;
+      cursor: pointer;
 
       svg {
         margin-left: .5rem;
       }
     }
 
-    .schedule-info-wrapper {
+    .scheduleInfoWrapper {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -172,19 +184,19 @@
       }
     }
 
-    .debts-wrapper {
+    .debtsWrapper {
       width: 100%;
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
 
-      .pay-btn-spinner {
+      .payBtnSpinner {
         width: 1.5rem;
         height: 1.5rem;
         color: #3A83DC;
       }
 
-      .no-debts-label {
+      .noDebtsLabel {
         margin-top: 1rem;
         margin-left: 1rem;
         font-family: Inter, sans-serif;
@@ -195,7 +207,7 @@
         color: #34344E;
       }
 
-      .group-title {
+      .groupTitle {
         margin-top: 2rem;
         margin-bottom: 0;
       }
@@ -205,12 +217,16 @@
         width: 100%;
 
         thead > tr > td {
-          padding-right: 1rem;
+          padding-right: 8px;
           font-family: Inter, sans-serif;
           font-style: normal;
           font-weight: bold;
           font-size: 12px;
           color: #34344E;
+
+           &:last-child {
+             padding-right: 0;
+           }
         }
 
         tbody {
@@ -220,27 +236,38 @@
             width: 100%;
 
             td {
-              padding-right: 1rem;
+              padding-right: 8px;
               font-family: Inter, sans-serif;
               font-style: normal;
               font-weight: normal;
               font-size: 14px;
               color: #34344E;
               margin-right: 0;
-            }
 
-            .actions-cell {
-              .btn-outline-primary {
-                height: 25px;
-                margin-top: 1px;
-                margin-bottom: 1px;
-                font-size: 12px;
+              &:last-child {
+                padding-right: 0;
               }
             }
 
-            .services-cell {
+            .actionsCell {
+              .btnOutlinePrimary {
+                min-width: unset;
+                padding: 0;
+                line-height: 1;
 
-              .services-label {
+                .label {
+                  font-family: Inter, sans-serif;
+                  font-style: normal;
+                  font-weight: normal;
+                  font-size: 12px;
+                  color: #3A83DC;
+                }
+              }
+            }
+
+            .servicesCell {
+
+              .servicesLabel {
                 max-width: 300px;
                 font-family: Inter, sans-serif;
                 font-style: normal;
@@ -250,8 +277,8 @@
               }
             }
 
-            .totals-cell {
-              .clinic-name-label {
+            .totalsCell {
+              .clinicNameLabel {
                 max-width: 100px;
                 padding-right: 1rem;
                 font-family: Inter, sans-serif;
@@ -262,7 +289,7 @@
               }
             }
 
-            .remained-cell {
+            .remainedCell {
               font-family: Inter, sans-serif;
               font-style: normal;
               font-weight: normal;
@@ -274,7 +301,7 @@
       }
     }
 
-    .patient-name {
+    .patientName {
       outline: none;
       cursor: pointer;
       font-family: Inter, sans-serif;
@@ -289,14 +316,14 @@
     }
   }
 
-  .footer-wrapper {
+  .footerWrapper {
     width: 100%;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .print-label {
+    .printLabel {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;

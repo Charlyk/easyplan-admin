@@ -43,6 +43,7 @@ const addPauseModalSlice = createSlice({
     },
     setPauseDate(state, action) {
       state.pauseDate = action.payload;
+      state.showDatePicker = false;
     },
     setStartHour(state, action) {
       const startHour = action.payload;
@@ -94,6 +95,9 @@ const addPauseModalSlice = createSlice({
     setIsDeleting(state, action) {
       state.isDeleting = action.payload;
     },
+    resetState() {
+      return initialState;
+    }
   },
 });
 
@@ -109,6 +113,7 @@ export const {
   setStartHour,
   setAvailableAllTime,
   setAvailableEndTime,
+  resetState,
 } = addPauseModalSlice.actions;
 
 export default addPauseModalSlice.reducer;

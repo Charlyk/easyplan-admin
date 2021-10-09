@@ -1,6 +1,21 @@
-import { textForKey } from "../../../../../utils/localization";
+import { textForKey } from "../../../../utils/localization";
 
 export const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
+
+export const languages = [
+  {
+    id: 'ro',
+    name: 'Română',
+  },
+  {
+    id: 'ru',
+    name: 'Русский',
+  },
+  {
+    id: 'en',
+    name: 'English',
+  },
+];
 
 export const tags = [
   {
@@ -100,4 +115,15 @@ export const messageTypeEnum = {
   HolidayCongrats: 'HolidayCongrats',
   PromotionalMessage: 'PromotionalMessage',
   OnetimeMessage: 'OnetimeMessage',
+};
+
+export const getRealMessageLength = (language, message, currentClinic) => {
+  let messageValue = message[language];
+  tags.forEach((tag) => {
+    messageValue = messageValue.replace(
+      tag.id,
+      tag.id !== '{{clinicName}}' ? tag.placeholder : currentClinic.smsAlias,
+    );
+  });
+  return messageValue.length;
 };

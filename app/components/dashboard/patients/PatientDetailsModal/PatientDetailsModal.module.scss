@@ -1,259 +1,229 @@
-.patient-details-modal {
-
-  :global(.modal-dialog) {
+.patientDetailsModal {
+  .modalPaper {
     height: calc(100% - 3.5rem);
     max-width: unset;
     width: calc(100% - 15rem);
+    outline: none;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    border-radius: 10px !important;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
 
-    :global(.modal-content) {
+    .dataContainer {
+      position: relative;
+      width: 100%;
       height: 100%;
-      overflow: hidden;
+      display: flex;
 
-      :global(.modal-body) {
-        padding: 0;
-        height: 100%;
+      .closeButton {
+        z-index: 2;
+        cursor: pointer;
+        outline: none;
+        position: absolute;
+        top: 0;
+        right: 0;
 
-        :global(.totals-text) {
-          font-family: Inter, sans-serif;
-          font-style: normal;
-          font-weight: 600;
-          font-size: 14px;
-          color: #34344E;
-
-          &.totals-amount {
-            color: #3A83DC;
-            margin-left: .5rem;
-          }
+        &:hover {
+          background-color: #0000001a;
         }
+      }
 
-        .totals-amount {
+      .menuContainer {
+        width: 15rem;
+        background-color: #DBEEFB;
 
-        }
-
-        :global(.MuiCircularProgress-root) {
-          color: #3A83DC;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-        }
-
-        :global(.amount-cell) {
-          color: #3A83DC !important;
-          font-weight: 600 !important;
-        }
-
-        .close-button {
-          z-index: 2;
-          cursor: pointer;
-          outline: none;
-          position: absolute;
-          top: .8rem;
-          right: 1.2rem;
-
-          &:hover {
-            background-color: #0000001a;
-          }
-        }
-
-        .patient-menu-container {
-          min-height: 100px;
-          width: 18rem;
-          background-color: #DBEEFB;
-          height: 100%;
-          max-height: 100%;
-          padding: 1rem;
+        .nameAndAvatar {
+          padding: 16px;
+          width: calc(100% - 32px);
+          align-items: center;
+          justify-content: center;
           display: flex;
           flex-direction: column;
-          overflow-y: auto;
 
-          .name-and-avatar {
-            width: 100%;
-            align-items: center;
-            justify-content: center;
+          .phoneLabel {
             display: flex;
-            flex-direction: column;
-
-            .phone-label {
-              display: flex;
-              align-items: center;
-              font-family: Inter, sans-serif;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 14px !important;
-              margin-bottom: 0;
-
-              svg {
-                fill: #3A83DC;
-                margin-right: .5rem;
-              }
-
-              &.phone {
-                color: #3A83DC !important;
-
-                a {
-                  color: #3A83DC !important;
-
-                  &:hover {
-                    color: #3A83DC !important;
-                  }
-                }
-              }
-            }
-
-            .avatar-wrapper {
-              width: 90px;
-              height: 90px;
-
-              svg {
-                width: 100%;
-                height: 100%;
-              }
-
-              img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 50%;
-              }
-            }
-
-            .name-label {
-              margin-top: 1rem;
-              font-family: Inter, sans-serif;
-              font-style: normal;
-              font-weight: 600;
-              font-size: 16px;
-              line-height: 20px;
-              color: #34354C;
-            }
-          }
-
-          .menu-wrapper {
-            #delete {
-              background-color: #F44081;
-              color: white;
-
-              &:hover {
-                background-color: #ee568d;
-              }
-            }
-
-            :global(.list-group-item) {
-              outline: none;
-              font-family: Inter, sans-serif;
-              font-style: normal;
-              font-weight: normal;
-              font-size: 14px;
-              line-height: 20px;
-              color: #34354C;
-
-              &.selected {
-                background-color: #f1f8fd;
-              }
-            }
-          }
-        }
-
-        .patient-details-container {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          max-height: 100%;
-          position: relative;
-
-          :global(.MuiTableCell-head) {
-            padding: .3rem 1rem;
-            border-bottom: none;
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: 600;
-            font-size: .8rem;
-            color: #34354C;
-          }
-
-          :global(.MuiTableCell-body) {
-            padding: .5rem 1rem;
+            align-items: center;
             font-family: Inter, sans-serif;
             font-style: normal;
             font-weight: normal;
-            font-size: .8rem;
-            color: #34354C;
-          }
-
-          :global(.MuiTableCell-footer) {
-            padding: 1rem 1rem;
-            border-bottom: none;
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: 600;
-            font-size: .8rem;
-            color: #34354C;
-          }
-
-          :global(.no-data-label) {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 12px;
-            line-height: 20px;
-            color: #34354C;
-          }
-
-          :global(.title-label) {
-            width: 100%;
-            background-color: white;
-            border-bottom: #ededed 1px solid;
-            padding: 1rem 1.5rem;
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 20px;
-            line-height: 20px;
-            color: #34354C;
-          }
-
-          :global(.form-group) {
-            margin-bottom: .3rem;
-          }
-
-          :global(.form-label) {
-            font-family: Inter, sans-serif;
-            font-style: normal;
-            font-weight: 600;
-            font-size: .7rem;
+            font-size: 14px !important;
             margin-bottom: 0;
+
+            &.phone {
+              color: #3A83DC !important;
+
+              a {
+                color: #3A83DC !important;
+
+                &:hover {
+                  color: #3A83DC !important;
+                }
+              }
+            }
           }
 
-          :global(.form-control[readonly]) {
-            background-color: #FAFAFD;
+          .avatarWrapper {
+            width: 90px;
+            height: 90px;
+
+            svg {
+              width: 100%;
+              height: 100%;
+            }
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 50%;
+            }
           }
 
-          :global(.form-control) {
-            outline: none;
-            width: 100%;
-            background-color: #FAFAFD;
-          }
-
-          :global(.circular-progress-bar) {
-            top: 45%;
-            left: 45%;
-            position: absolute;
+          .nameLabel {
+            margin-top: 1rem;
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            color: #34354C;
           }
         }
 
-        :global(.positive-button) {
-          flex: unset;
+        .menuList {
+          margin-right: 8px;
+          margin-left: 8px;
+          background-color: white;
+          border-radius: 4px;
+
+          .selectedItem {
+            background-color: transparent;
+            color: #3A83DC !important;
+            font-weight: bold !important;
+          }
+
+          .menuItem {
+            font-family: Inter, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            color: #34344E;
+            background-color: transparent;
+
+            &:hover {
+              background-color: #DBEEFB;
+
+              &.destructive {
+                background-color: #ec32761a;
+              }
+            }
+
+            &.destructive {
+              color: #ec3276 !important;
+            }
+          }
+        }
+      }
+
+      .patientDetailsContainer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        position: relative;
+
+        :global(.MuiTableCell-head) {
+          padding: .3rem 1rem;
+          border-bottom: none;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: .8rem;
+          color: #34354C;
+        }
+
+        :global(.MuiTableCell-body) {
+          padding: .5rem 1rem;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: .8rem;
+          color: #34354C;
+        }
+
+        :global(.MuiTableCell-footer) {
+          padding: 1rem 1rem;
+          border-bottom: none;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: .8rem;
+          color: #34354C;
+        }
+
+        :global(.no-data-label) {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 20px;
+          color: #34354C;
+        }
+
+        :global(.title-label) {
+          width: calc(100% - 2rem);
+          background-color: white;
+          border-bottom: #ededed 1px solid;
+          padding: 1rem 1rem;
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 20px;
+          color: #34354C;
+        }
+
+        :global(.form-group) {
+          margin-bottom: .3rem;
+        }
+
+        :global(.form-label) {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: .7rem;
+          margin-bottom: 0;
+        }
+
+        :global(.form-control[readonly]) {
+          background-color: #FAFAFD;
+        }
+
+        :global(.form-control) {
+          outline: none;
+          width: 100%;
+          background-color: #FAFAFD;
+        }
+
+        :global(.circular-progress-bar) {
+          top: 45%;
+          left: 45%;
+          position: absolute;
         }
       }
     }
   }
 }
 
-.patient-debts-list {
+.patientDebtsList {
   width: 100%;
   max-height: 100%;
   flex: 1;
@@ -261,7 +231,7 @@
   flex-direction: column;
   position: relative;
 
-  &__data-container {
+  .dataContainer {
     flex: 1;
     display: flex;
     flex-direction: column;

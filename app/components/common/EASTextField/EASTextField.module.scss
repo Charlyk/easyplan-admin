@@ -1,21 +1,73 @@
 .root {
   .searchField {
     width: 100%;
-    height: 35px;
-  }
+    min-height: 35px;
 
-  :global(.Mui-focused) {
-    .focusedInput {
-      border-color: #3A83DC !important;
+    &:hover {
+      .focusedInput {
+        border-color: #3A83DC;
+      }
     }
   }
 
+  .errorField {
+    .focusedInput {
+      border-color: #ec3276;
+    }
+
+    &:hover {
+      .focusedInput {
+        border-color: #ec3276;
+      }
+    }
+  }
+
+  .helperText {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    color: #3A83DC !important;
+    margin: 0;
+    line-height: unset;
+
+    &.error {
+      color: #ec3276 !important;
+    }
+  }
+
+  .focusedField {
+    .focusedInput {
+      border-color: #3A83DC;
+    }
+  }
+
+  .inputAdornedEnd {
+    padding-right: 0;
+    height: 35px;
+  }
+
   .formLabel {
+    user-select: none;
     font-family: Inter, sans-serif !important;
     font-style: normal !important;
     font-weight: bold !important;
     font-size: 10px !important;
     color: #6F7091 !important;
+
+    &.focused {
+      color: #3A83DC !important;
+    }
+
+    &.error {
+      color: #ec3276 !important;
+    }
+  }
+
+  &.readOnly {
+    .searchInput {
+      cursor: pointer !important;
+    }
   }
 
   .searchInput {

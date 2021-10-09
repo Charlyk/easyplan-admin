@@ -1,27 +1,33 @@
-.finalize-treatment-root {
-  .finalize-treatment-content {
+.finalizeTreatmentRoot {
+  .modalPaper {
+    width: 45%;
+  }
+
+  .minusBtn {
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .finalizeTreatmentContent {
     display: flex;
+    padding: 8px;
     flex-direction: column;
     align-items: center;
     position: unset !important;
 
-    .price-form-group {
-      flex: 1;
-      height: 35px;
+    .currencies {
       width: 130px;
-      flex-wrap: unset;
-
-      .input-group-append {
-        height: 33px;
-
-        .btn-outline-primary {
-          height: 100%;
-          font-weight: bold;
-        }
-      }
     }
 
-    .service-check-box {
+    .priceField {
+      width: 200px;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+
+    .serviceCheckBox {
       color: #3A83DC;
 
       &.Mui-checked {
@@ -29,22 +35,7 @@
       }
     }
 
-    .service-price-input {
-      outline: none;
-      border: #ced4da 1px solid;
-      border-radius: 4px;
-      padding: 1px 0;
-      width: 100px;
-      text-align: center;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 20px;
-      color: #34344E;
-    }
-
-    .modal-subtitle {
+    .modalSubtitle {
       width: 100%;
       font-family: Inter, sans-serif;
       font-style: normal;
@@ -54,7 +45,7 @@
       color: #A1A2C6;
     }
 
-    .totals-text-wrapper {
+    .totalsTextWrapper {
       margin-top: 1rem;
       width: 100%;
       display: flex;
@@ -68,11 +59,12 @@
       color: #34354C;
     }
 
-    .final-service-item {
+    .finalServiceItem {
       outline: none;
       margin-top: .5rem;
       width: 100%;
-      padding: .5rem 1rem;
+      padding-left: 16px;
+      padding-right: 4px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -83,7 +75,7 @@
       border-radius: 4px;
       cursor: pointer;
 
-      .service-name {
+      .serviceName {
         user-select: none;
         font-family: Inter, sans-serif;
         font-style: normal;
@@ -93,7 +85,7 @@
         color: #34354C;
       }
 
-      .count-label {
+      .countLabel {
         user-select: none;
         font-family: Inter, sans-serif;
         font-style: normal;
@@ -103,7 +95,7 @@
         color: #34354C;
       }
 
-      .service-price {
+      .servicePrice {
         margin-right: 1rem;
         font-family: Inter, sans-serif;
         font-style: normal;
