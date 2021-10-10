@@ -6,7 +6,7 @@ import NextNprogress from 'nextjs-progressbar';
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { ThemeProvider } from '@material-ui/core/styles';
+import ThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import theme from '../app/styles/theme';

@@ -1,15 +1,13 @@
-import {
-  addDays,
-  endOfDay,
-  startOfDay,
-  startOfMonth,
-  endOfMonth,
-  addMonths,
-  startOfWeek,
-  endOfWeek,
-  isSameDay,
-  differenceInCalendarDays,
-} from 'date-fns';
+import addDays from 'date-fns/addDays';
+import endOfDay from 'date-fns/endOfDay';
+import startOfDay from 'date-fns/startOfDay';
+import startOfMonth from 'date-fns/startOfMonth';
+import endOfMonth from 'date-fns/endOfMonth';
+import addMonths from 'date-fns/addMonths';
+import startOfWeek from 'date-fns/startOfWeek';
+import endOfWeek from 'date-fns/endOfWeek';
+import isSameDay from 'date-fns/isSameDay';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 
 import { textForKey } from '../../../utils/localization';
 
