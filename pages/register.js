@@ -6,10 +6,4 @@ const Register = () => {
   return <RegistrationWrapper />;
 };
 
-export const getServerSideProps = async () => {
-  return {
-    props: {}
-  }
-};
-
 export default wrapper.withRedux(Register);

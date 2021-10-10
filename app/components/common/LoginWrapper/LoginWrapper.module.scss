@@ -4,6 +4,10 @@
   display: flex;
   position: relative;
 
+  .logoImage {
+    width: 40%;
+  }
+
   .logoContainer {
     background-color: #34344E;
     width: 40%;
@@ -11,10 +15,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    img {
-      width: 40%;
-    }
   }
 
   .formContainer {
@@ -28,8 +28,7 @@
     background-color: #E5E5E5;
     padding-bottom: 1rem;
 
-    img {
-      width: 40%;
+    .logoImage {
       margin-bottom: 2rem;
     }
   }

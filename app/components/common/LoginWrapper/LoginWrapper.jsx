@@ -197,6 +197,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken }) 
       {!isMobileDevice && (
         <div className={styles.logoContainer}>
           <img
+            className={styles.logoImage}
             src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
             alt='EasyPlan'
           />
@@ -211,6 +212,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken }) 
       >
         {isMobileDevice && (
           <img
+            className={styles.logoImage}
             src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
             alt='EasyPlan'
           />
