@@ -23,14 +23,15 @@ import styles from './LoginWrapper.module.scss';
 const ResetPassword = dynamic(() => import('./ResetPassword'));
 const LoginForm = dynamic(() => import('./LoginForm'));
 
-export default function LoginWrapper({ currentUser, currentClinic, authToken }) {
+export default function LoginWrapper({ currentUser, currentClinic, authToken, isMobile }) {
   const router = useRouter();
-  const isMobileDevice = useIsMobileDevice();
+  const isOnPhone = useIsMobileDevice();
   const [{
     currentForm,
     isLoading,
     errorMessage
   }, localDispatch] = useReducer(reducer, initialState);
+  const isMobileDevice = isMobile || isOnPhone;
 
   useEffect(() => {
     if (currentUser != null && authToken) {
