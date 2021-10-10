@@ -93,7 +93,7 @@
     "find:unused": "next-unused"
   },
   "next-unused": {
-    "include": ["pages", "app"]
+    "include": ["pages", "app", "public", "redux"]
   },
   "eslintConfig": {
     "extends": "react-app"
