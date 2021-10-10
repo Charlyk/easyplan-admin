@@ -79,6 +79,7 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "html-webpack-plugin": "^5.2.0",
+    "next-unused": "^0.0.6",
     "prettier": "^2.2.1",
     "prop-types": "^15.7.2",
     "url-loader": "^4.1.1",
@@ -88,7 +89,11 @@
   "scripts": {
     "dev": "next dev -p 80",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "find:unused": "next-unused"
+  },
+  "next-unused": {
+    "include": ["pages", "app", "public", "redux"]
   },
   "eslintConfig": {
     "extends": "react-app"

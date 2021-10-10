@@ -35,8 +35,8 @@ const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/Patie
 const DataMigrationModal = dynamic(() => import('../modals/DataMigrationModal'));
 const ExchangeRatesModal = dynamic(() => import('../modals/ExchangeRatesModal'));
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
-const MainMenu = dynamic(() => import('./MainMenu/MainMenu'));
-const PageHeader = dynamic(() => import('./PageHeader/PageHeader'));
+const MainMenu = dynamic(() => import('./MainMenu'));
+const PageHeader = dynamic(() => import('./PageHeader'));
 
 const MainComponent = (
   {

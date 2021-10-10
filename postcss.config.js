@@ -20,11 +20,22 @@ module.exports = {
         content: [
           './pages/**/*.{js,jsx,ts,tsx}',
           './app/**/*.{js,jsx,ts,tsx}',
-          './node_modules/react-phone-input-2/**/*.{js,jsx,ts,tsx}',
         ],
         defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
         skippedContentGlobs: ['node_modules/**', 'app/components/**'],
-        safelist: ["html", "body", /^rdr/, /^Toastify/, /^rcp/, '::after'],
+        safelist: [
+          "html",
+          "body",
+          /^rdr/,
+          /^Toastify/,
+          /^rcp/,
+          '::after',
+          /^react-tel-input/,
+          /^form-control/,
+          /^flag/,
+          /^selected-flag/,
+          /^arrow/,
+        ],
       }
     ],
   ]

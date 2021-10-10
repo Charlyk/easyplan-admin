@@ -14,6 +14,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import IconArrowDown from '../../../icons/iconArrowDown';
 import MenuAnalytics from '../../../icons/menuAnalytics';
 import MenuCalendar from '../../../icons/menuCalendar';
@@ -27,7 +28,6 @@ import ClinicSelector from '../../ClinicSelector';
 import { Role } from "../../../../utils/constants";
 import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const menuItems = [
   {

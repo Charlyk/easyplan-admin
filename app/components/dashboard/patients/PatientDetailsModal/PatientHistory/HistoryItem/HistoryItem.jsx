@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';

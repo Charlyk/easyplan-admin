@@ -5,13 +5,13 @@ import Moment from "moment-timezone";
 import { extendMoment } from "moment-range";
 import Typography from "@material-ui/core/Typography";
 
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import createContainerHours from "../../../../utils/createContainerHours";
 import { textForKey } from "../../../../utils/localization";
 import IconUmbrella from "../../../icons/iconUmbrella";
-import Schedule from "../Schedule/Schedule";
+import Schedule from "../Schedule";
 import ColumnCell from "./ColumnCell";
 import styles from './ColumnsWrapper.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const moment = extendMoment(Moment);
 const maxOffset = 6;
