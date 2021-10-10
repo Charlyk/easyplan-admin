@@ -15,9 +15,10 @@ import reducer, {
 import styles from './CreateClinic.module.scss';
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 
-export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin }) {
+export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin, isMobile }) {
   const router = useRouter();
-  const isMobileDevice = useIsMobileDevice();
+  const isOnPhone = useIsMobileDevice();
+  const isMobileDevice = isMobile || isOnPhone;
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
   const handleGoBack = async () => {

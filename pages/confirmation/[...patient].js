@@ -20,6 +20,7 @@ import {
   requestConfirmSchedule
 } from "../../middleware/api/schedules";
 import styles from '../../app/styles/ScheduleConfirmation.module.scss';
+import checkIsMobileDevice from "../../app/utils/checkIsMobileDevice";
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
@@ -228,11 +229,13 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
+    const isMobile = checkIsMobileDevice(req);
     const { patient } = query
     const [scheduleId, patientId] = patient;
     const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId, req.headers);
     return {
       props: {
+        isMobile,
         patient,
         schedule,
         scheduleId,

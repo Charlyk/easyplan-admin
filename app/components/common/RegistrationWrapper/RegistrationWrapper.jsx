@@ -17,9 +17,10 @@ import styles from './RegistrationWrapper.module.scss';
 
 const RegisterForm = dynamic(() => import('./RegisterForm'));
 
-export default function RegistrationWrapper() {
+export default function RegistrationWrapper({ isMobile }) {
   const router = useRouter();
-  const isMobileDevice = useIsMobileDevice();
+  const isOnPhone = useIsMobileDevice();
+  const isMobileDevice = isMobile || isOnPhone;
   const [{ errorMessage, isLoading }, dispatch] = useReducer(reducer, initialState);
 
   const handleOpenLogin = () => {

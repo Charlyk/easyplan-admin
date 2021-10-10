@@ -14,10 +14,11 @@ import { isDev } from "../../../../eas.config";
 import ClinicItem from "./ClinicItem";
 import styles from './ClnicsList.module.scss';
 
-export default function ClinicsList({ user, authToken }) {
+export default function ClinicsList({ user, authToken, isMobile }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const isMobileDevice = useIsMobileDevice();
+  const isOnPhone = useIsMobileDevice();
+  const isMobileDevice = isMobile || isOnPhone;
 
   useEffect(() => {
     if (user?.clinics.length === 1) {

@@ -5,6 +5,7 @@ import { wrapper } from "../store";
 import { getClinicDetails } from "../middleware/api/clinic";
 import parseCookies from "../app/utils/parseCookies";
 import setCookies from "../app/utils/setCookies";
+import checkIsMobileDevice from "../app/utils/checkIsMobileDevice";
 
 const Login = ({ currentUser, currentClinic, authToken, isMobile }) => {
   return (
@@ -18,10 +19,7 @@ const Login = ({ currentUser, currentClinic, authToken, isMobile }) => {
 };
 
 export const getServerSideProps = async ({ req, res }) => {
-  const userAgent = req.headers['user-agent']
-  let isMobile = Boolean(userAgent?.match(
-    /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
-  ));
+  const isMobile = checkIsMobileDevice(req);
   const { auth_token: authToken } = parseCookies(req);
 
   if (authToken == null) {

@@ -30,9 +30,10 @@ import reducer, {
 } from './AcceptClinicInvitation.reducer';
 import styles from './AcceptInvitation.module.scss';
 
-const AcceptInvitation = ({ token, isNew }) => {
+const AcceptInvitation = ({ token, isNew, isMobile }) => {
   const router = useRouter();
-  const isMobileDevice = useIsMobileDevice();
+  const isOnPhone = useIsMobileDevice();
+  const isMobileDevice = isMobile || isOnPhone
   const isNewUser = isNew === '1';
   const [
     {

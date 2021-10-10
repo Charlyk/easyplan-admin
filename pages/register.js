@@ -1,9 +1,20 @@
 import React from 'react';
 import { wrapper } from "../store";
 import RegistrationWrapper from "../app/components/common/RegistrationWrapper";
+import checkIsMobileDevice from "../app/utils/checkIsMobileDevice";
 
-const Register = () => {
-  return <RegistrationWrapper />;
+const Register = ({ isMobile }) => {
+  return <RegistrationWrapper isMobile={isMobile} />;
+};
+
+export const getServerSideProps = async ({ req }) => {
+  const isMobile = checkIsMobileDevice(req);
+
+  return {
+    props: {
+      isMobile
+    }
+  };
 };
 
 export default wrapper.withRedux(Register);
