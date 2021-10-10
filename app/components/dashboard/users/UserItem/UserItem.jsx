@@ -71,9 +71,8 @@ const UserItem = (
             />
             <div className={styles.avatar}>
               {user.avatar ? (
-                <Image
-                  width={30}
-                  height={30}
+                <img
+                  alt="Avatar"
                   className={styles.avatar}
                   src={urlToLambda(user.avatar)}
                 />
