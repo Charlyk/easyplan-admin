@@ -2,7 +2,7 @@
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   user-select: none;
   display: flex;
-  max-height: calc(100% - 14rem - 6.5rem); // 14rem teeth container, 7rem patient info container
+  height: 67.3%;
   flex-direction: column;
 
   .servicesResultsMenu {
@@ -11,7 +11,7 @@
 
   .inputWrapper {
     border-bottom: #34344E1A 1px solid;
-    padding: 1rem 1rem .5rem;
+    padding: 0 1rem 1rem 1rem;
 
     :global(.form-group) {
       height: 33px;

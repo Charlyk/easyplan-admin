@@ -285,13 +285,15 @@ const DoctorPatientDetails = (
             </Button>
           </div>
         </div>
-        <PatientTreatmentPlan
-          currentClinic={currentClinic}
-          currentUser={currentUser}
-          scheduleData={initialSchedule}
-          scheduleId={scheduleId}
-          onFinalize={handleFinalizeTreatment}
-        />
+        <div className={styles.treatmentPlanWrapper}>
+          <PatientTreatmentPlan
+            currentClinic={currentClinic}
+            currentUser={currentUser}
+            scheduleData={initialSchedule}
+            scheduleId={scheduleId}
+            onFinalize={handleFinalizeTreatment}
+          />
+        </div>
       </div>
       <div className={styles.rightContainer}>
         {patient && (

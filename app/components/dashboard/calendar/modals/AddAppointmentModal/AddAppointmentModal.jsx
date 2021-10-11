@@ -52,12 +52,8 @@ const AddAppointmentModal = (
       !item.isInVacation
     ).map(item => ({
       ...item,
-      name: item.fullName,
+      name: `${item.fullName} ${item.phoneNumber}`,
       label: item.fullName,
-      services: item.services.map(service => ({
-        ...service,
-        label: service.name,
-      })),
     }));
   }, [currentClinic]);
 
@@ -107,11 +103,13 @@ const AddAppointmentModal = (
       return [{
         ...patient,
         name: `${patient.fullName} +${patient.countryCode}${patient.phoneNumber}`,
+        label: patients.fullName,
       }]
     }
     return patients.map(item => ({
       ...item,
       name: `${item.fullName} +${item.countryCode}${item.phoneNumber}`,
+      label: item.fullName,
     }))
   }, [patients, patient]);
 
@@ -270,7 +268,7 @@ const AddAppointmentModal = (
       } finally {
         localDispatch(actions.setPatientsLoading(false));
       }
-    }, 500),
+    }, 700),
     [],
   );
 
@@ -549,6 +547,7 @@ const AddAppointmentModal = (
         </div>
 
         <EASAutocomplete
+          filterLocally
           options={doctors}
           value={doctor}
           fieldLabel={textForKey('Doctor')}
@@ -557,6 +556,7 @@ const AddAppointmentModal = (
         />
 
         <EASAutocomplete
+          filterLocally
           disabled={doctor == null}
           containerClass={styles.simpleField}
           options={doctor?.services || []}

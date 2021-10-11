@@ -45,6 +45,7 @@ const ServicesWrapper = (
       {!readOnly && (
         <div className={styles.inputWrapper}>
           <EASAutocomplete
+            filterLocally
             clearOnSelect
             value={null}
             placeholder={textForKey('Enter service name')}

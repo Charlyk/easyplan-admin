@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import clsx from "clsx";
 import PropTypes from 'prop-types';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import TextField from "@material-ui/core/TextField";
-import styles from './EASAutocomplete.module.scss';
-import { textForKey } from "../../../utils/localization";
 import Typography from "@material-ui/core/Typography";
-import clsx from "clsx";
+import { textForKey } from "../../../utils/localization";
+import styles from './EASAutocomplete.module.scss';
 
 const EASAutocomplete = (
   {
@@ -19,6 +19,7 @@ const EASAutocomplete = (
     value,
     fieldLabel,
     containerClass,
+    filterLocally,
     onTextChange,
     onChange
   }
@@ -73,7 +74,16 @@ const EASAutocomplete = (
   }
 
   const getOptionLabel = (option) => {
-    return option.name || '';
+    return option.label || '';
+  }
+
+  const filterOptions = (options, state) => {
+    if (filterLocally) {
+      return options.filter(item => (
+        item.name.toLowerCase().includes(state.inputValue.toLowerCase())
+      ))
+    }
+    return options;
   }
 
   return (
@@ -90,6 +100,7 @@ const EASAutocomplete = (
           open={open}
           value={value}
           options={options}
+          filterOptions={filterOptions}
           loading={loading}
           placeholder={placeholder}
           renderInput={renderInput}
@@ -125,6 +136,7 @@ EASAutocomplete.propTypes = {
   placeholder: PropTypes.string,
   fieldLabel: PropTypes.string,
   containerClass: PropTypes.any,
+  filterLocally: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.any,
