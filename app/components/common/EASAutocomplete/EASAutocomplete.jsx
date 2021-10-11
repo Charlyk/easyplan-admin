@@ -68,6 +68,10 @@ const EASAutocomplete = (
     )
   };
 
+  const renderOption = (data) => {
+    return data.name;
+  }
+
   const getOptionLabel = (option) => {
     return option.name || '';
   }
@@ -89,6 +93,7 @@ const EASAutocomplete = (
           loading={loading}
           placeholder={placeholder}
           renderInput={renderInput}
+          renderOption={renderOption}
           getOptionLabel={getOptionLabel}
           noOptionsText={textForKey('No options')}
           onChange={handleChange}

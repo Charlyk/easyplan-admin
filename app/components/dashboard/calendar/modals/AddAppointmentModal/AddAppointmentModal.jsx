@@ -106,12 +106,12 @@ const AddAppointmentModal = (
     if (patients.length === 0 && patient != null) {
       return [{
         ...patient,
-        name: patient.fullName,
+        name: `${patient.fullName} +${patient.countryCode}${patient.phoneNumber}`,
       }]
     }
     return patients.map(item => ({
       ...item,
-      name: item.fullName,
+      name: `${item.fullName} +${item.countryCode}${item.phoneNumber}`,
     }))
   }, [patients, patient]);
 
