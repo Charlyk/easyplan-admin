@@ -586,6 +586,7 @@ export default {
     page_not_found: 'Page not found',
     phone_invalid_message: 'Invalid phone number.',
     email_invalid_message: 'Invalid email address',
+    tech_support: 'Tech support',
   },
   ro: {
     analytics: 'Analitică',
@@ -1180,6 +1181,7 @@ export default {
     page_not_found: 'Pagina nu a fost găsită',
     phone_invalid_message: 'Numărul de telefon nu este valid.',
     email_invalid_message: 'Adresa de email nu este validă',
+    tech_support: 'Suport tehnic',
   },
   ru: {
     analytics: 'Analytics',
@@ -1765,5 +1767,6 @@ export default {
     page_not_found: 'Page not found',
     phone_invalid_message: 'Invalid phone number.',
     email_invalid_message: 'Invalid email address',
+    tech_support: 'Tech support',
   },
 };

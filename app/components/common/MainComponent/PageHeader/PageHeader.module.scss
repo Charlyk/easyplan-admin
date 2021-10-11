@@ -18,13 +18,19 @@
 
 .pageHeader {
   max-width: 100%;
-  padding: 1.8rem;
+  padding: 1rem 1.8rem 1.8rem;
   align-items: flex-start;
   height: 10rem;
   background: rgb(255,255,255);
   background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 57%, rgba(255,255,255,0) 100%);
   display: flex;
   justify-content: space-between;
+
+  .helpButton {
+    color: #3A83DC;
+    font-weight: bold;
+    font-size: 16px;
+  }
 
   .invoicesBtnWrapper {
     display: flex;

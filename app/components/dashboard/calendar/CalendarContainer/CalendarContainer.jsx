@@ -356,6 +356,7 @@ const CalendarContainer = (
         {viewMode !== 'day' && (
           <div className={styles.leftContainer}>
             <CalendarDoctors
+              key={`${doctorId}-${viewDate}`}
               isFetching={isFetching}
               selectedDoctor={selectedDoctor}
               selectedService={selectedService}
@@ -366,9 +367,11 @@ const CalendarContainer = (
         )}
         <div className={styles.centerContainer}>
           <AppointmentsCalendar
+            key={`${doctorId}-${viewDate}`}
             canAddAppointment
             viewMode={viewMode}
             isUploading={isUploading}
+            doctorId={doctorId}
             doctor={selectedDoctor}
             doctors={doctors}
             viewDate={viewDate}

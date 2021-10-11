@@ -18,6 +18,7 @@ import InvoicesButton from '../../../dashboard/InvoicesButton';
 import { Role } from "../../../../utils/constants";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import styles from './PageHeader.module.scss';
+import Button from "@material-ui/core/Button";
 
 const ActionsSheet = dynamic(() => import('../../ActionsSheet'));
 
