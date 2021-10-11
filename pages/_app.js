@@ -83,7 +83,7 @@ const App = ({ Component, pageProps }) => {
   const checkUserIsAuthenticated = async () => {
     try {
       await requestCheckIsAuthenticated();
-      if (UnauthorizedPaths.includes(router.asPath)) {
+      if (router.asPath === '/login') {
         await router.reload();
       }
     } catch (error) {
