@@ -51,10 +51,11 @@ const DoctorCalendar = (
 
     const { schedules: initialSchedules } = initialData;
     const filteredSchedules = initialSchedules.map((item) => {
+      console.log(item.schedules);
       const itemSchedules = item.schedules.filter((schedule) => {
         return (
           (filterData.patientName.length === 0 ||
-            schedule.patient.fullName.toLowerCase().startsWith(filterData.patientName)) &&
+            schedule.patient?.fullName.toLowerCase().startsWith(filterData.patientName)) &&
           (filterData.serviceId === -1 ||
             schedule.serviceId === parseInt(filterData.serviceId)) &&
           (filterData.appointmentStatus === 'all' ||
