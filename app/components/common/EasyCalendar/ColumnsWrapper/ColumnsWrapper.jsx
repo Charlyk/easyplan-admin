@@ -27,7 +27,7 @@ const ColumnsWrapper = (
     <div className={styles.columnsWrapperRoot}>
       {columns.map((column) => (
         <Column
-          key={`${column.id}-${moment(viewDate).format('YYYY-MM-DD')}`}
+          key={`${column.id}-${moment(viewDate).format('YYYY-MM-DD')}-${column.doctorId}`}
           viewDate={viewDate}
           isSingleMode={isSingleMode}
           animatedStatuses={animatedStatuses}

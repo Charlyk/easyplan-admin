@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
-import Image from 'next/image'
 
 import { Role } from '../../../../utils/constants';
 import urlToLambda from '../../../../utils/urlToLambda';
