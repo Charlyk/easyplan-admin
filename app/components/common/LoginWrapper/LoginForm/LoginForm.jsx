@@ -62,10 +62,6 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
       <span className='form-title' style={{ marginBottom: '1rem' }}>
         {textForKey('Log in to your account')}
       </span>
-      {errorMessage && (
-        <span className='error-text'>{textForKey(errorMessage)}</span>
-      )}
-
       <form onSubmit={handleLogin}>
         <EASTextField
           value={data.email}
@@ -128,6 +124,9 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
             {textForKey('Login')}
           </LoadingButton>
         </div>
+        {errorMessage && (
+          <span className='error-text'>{textForKey(errorMessage)}</span>
+        )}
       </form>
     </div>
   );

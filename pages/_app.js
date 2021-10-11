@@ -23,7 +23,7 @@ import { imageModalSelector } from "../redux/selectors/imageModalSelector";
 import { setImageModal } from "../redux/actions/imageModalActions";
 import { textForKey } from "../app/utils/localization";
 import { logoutSelector } from "../redux/selectors/rootSelector";
-import { signOut } from "../middleware/api/auth";
+import { requestCheckIsAuthenticated, signOut } from "../middleware/api/auth";
 import useWindowFocused from "../app/utils/hooks/useWindowFocused";
 import { wrapper } from "../store";
 import 'moment/locale/ro';
@@ -31,7 +31,7 @@ import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../app/utils'
 import paths from "../app/utils/paths";
-import { APP_DATA_API } from "../app/utils/constants";
+import { APP_DATA_API, UnauthorizedPaths } from "../app/utils/constants";
 
 const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
 const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
@@ -75,10 +75,29 @@ const App = ({ Component, pageProps }) => {
   }, [pageProps])
 
   useEffect(() => {
-    if (isWindowFocused && router.isReady) {
-      router.replace(router.asPath);
+    if (isWindowFocused) {
+      checkUserIsAuthenticated();
     }
   }, [isWindowFocused]);
+
+  const checkUserIsAuthenticated = async () => {
+    try {
+      await requestCheckIsAuthenticated();
+      if (router.asPath === '/login') {
+        await router.reload();
+      }
+    } catch (error) {
+      if (error.response != null) {
+        const { status } = error.response;
+        if (status === 401) {
+          if (UnauthorizedPaths.includes(router.asPath)) {
+            return;
+          }
+          await router.reload();
+        }
+      }
+    }
+  }
 
   const updatePageTitle = (clinic) => {
     const pathName = paths[router.pathname] || '';

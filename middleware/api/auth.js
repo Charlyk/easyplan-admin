@@ -73,3 +73,12 @@ export async function getCurrentUser(headers = null) {
 export async function updateUserAccount(body, headers = null) {
   return put('/api/auth/update-account', headers, body);
 }
+
+/**
+ * Check if user is authenticated
+ * @param {any} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestCheckIsAuthenticated(headers = null) {
+  return get('/api/auth/check', headers);
+}

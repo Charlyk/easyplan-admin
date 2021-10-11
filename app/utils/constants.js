@@ -400,6 +400,8 @@ export const UnauthorizedPaths = [
   '/accept-invitation',
   '/confirmation',
   '/reset-password',
+  '/register',
+  '/login',
 ];
 
 export const RestrictedSubdomains = ['app', 'app-dev', 'api', 'dev-api', ''];

@@ -22,6 +22,7 @@ const reducerTypes = {
   updateSchedule: 'updateSchedule',
   setData: 'setData',
   setIsLoading: 'setIsLoading',
+  updateFilter: 'updateFilter'
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -30,6 +31,14 @@ export const reducer = (state, action) => {
   switch (action.type) {
     case reducerTypes.setFilterData:
       return { ...state, filterData: action.payload }
+    case reducerTypes.updateFilter:
+      return {
+        ...state,
+        filterData: {
+          ...state.filterData,
+          ...action.payload
+        }
+      };
     case reducerTypes.setHours: {
       return { ...state, hours: action.payload };
     }

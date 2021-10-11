@@ -213,21 +213,23 @@ export const reducer = (state, action) => {
       const schedule = action.payload;
       const scheduleStartDate = moment(schedule.startTime);
       const scheduleEndDate = moment(schedule.endTime);
+      const { patient, doctor, service, noteText, scheduleStatus, isUrgent } = schedule;
       return {
         ...state,
         scheduleId: schedule.id,
         patient: {
-          ...schedule.patient,
-          name: schedule.patient.fullName,
+          ...patient,
+          name: patient.fullName,
+          label: patient.fullName,
         },
-        doctor: schedule.doctor,
-        service: schedule.service,
-        appointmentNote: schedule.noteText,
+        doctor: doctor,
+        service: { ...service, label: service.name },
+        appointmentNote: noteText,
         appointmentDate: scheduleStartDate.toDate(),
         startTime: scheduleStartDate.format('HH:mm'),
         endTime: scheduleEndDate.format('HH:mm'),
-        appointmentStatus: schedule.scheduleStatus,
-        isUrgent: schedule.isUrgent,
+        appointmentStatus: scheduleStatus,
+        isUrgent: isUrgent,
         isPatientValid: true,
         isDoctorValid: true,
         isServiceValid: true,

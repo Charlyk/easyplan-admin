@@ -42,16 +42,16 @@ const PatientsFilter = (
         onChange={onViewModeChange}
         style={{ marginBottom: '5px' }}
       >
-        <ToggleButton value='day' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
+        <ToggleButton value='week' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
           <Typography className={styles.tabsLabel}>{textForKey('Week schedules')}</Typography>
         </ToggleButton>
-        <ToggleButton value='week' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
+        <ToggleButton value='day' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
           <Typography className={styles.tabsLabel}>{textForKey('Day schedules')}</Typography>
         </ToggleButton>
       </ToggleButtonGroup>
       <EASTextField
         type="text"
-        value={filterData.patientName || ''}
+        value={filterData?.patientName || ''}
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Patient')}
         onChange={onNameChange}
@@ -60,7 +60,7 @@ const PatientsFilter = (
         rootClass={styles.simpleField}
         label={textForKey('Service')}
         labelId="service-select-label"
-        value={filterData.serviceId || -1}
+        value={filterData?.serviceId || -1}
         defaultOption={{
           id: -1,
           name: textForKey('All services')
