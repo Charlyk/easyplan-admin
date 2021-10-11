@@ -1,6 +1,6 @@
 .inviteUserModal {
   .content {
-    padding: 16px;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -11,8 +11,11 @@
   }
 
   .errorMessage {
+    margin: 1rem;
     color: #ec3276;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
     font-size: .7rem;
-    margin-top: 1rem;
   }
 }
