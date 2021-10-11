@@ -471,14 +471,14 @@ const AddAppointmentModal = (
               value={patientLastName}
               containerClass={styles.nameField}
               fieldLabel={textForKey('Last name')}
-              onChange={handlePatientFirstNameChange}
+              onChange={handlePatientLastNameChange}
             />
             <EASTextField
               type="text"
               value={patientFirstName}
               containerClass={styles.nameField}
               fieldLabel={textForKey('First name')}
-              onChange={handlePatientLastNameChange}
+              onChange={handlePatientFirstNameChange}
             />
           </div>
         )}
