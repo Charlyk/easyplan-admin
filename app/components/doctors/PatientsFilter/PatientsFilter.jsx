@@ -42,10 +42,10 @@ const PatientsFilter = (
         onChange={onViewModeChange}
         style={{ marginBottom: '5px' }}
       >
-        <ToggleButton value='day' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
+        <ToggleButton value='week' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
           <Typography className={styles.tabsLabel}>{textForKey('Week schedules')}</Typography>
         </ToggleButton>
-        <ToggleButton value='week' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
+        <ToggleButton value='day' classes={{ root: styles.tabRoot, selected: styles.tabSelected }}>
           <Typography className={styles.tabsLabel}>{textForKey('Day schedules')}</Typography>
         </ToggleButton>
       </ToggleButtonGroup>
