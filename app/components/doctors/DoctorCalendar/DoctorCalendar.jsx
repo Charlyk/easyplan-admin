@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import PropTypes from 'prop-types';
 import { useRouter } from "next/router";
 import moment from "moment-timezone";
@@ -128,14 +128,11 @@ const DoctorCalendar = (
   }
 
   const handlePatientNameChange = (patientName) => {
-    localDispatch(actions.setFilterData({ ...filterData, patientName }));
+    localDispatch(actions.updateFilter({ patientName }))
   };
 
   const handleServiceChange = (event) => {
-    localDispatch(actions.setFilterData({
-      ...filterData,
-      serviceId: event.target.value,
-    }));
+    localDispatch(actions.updateFilter({ serviceId: event.target.value }));
   };
 
   const handleScheduleSelected = async (schedule) => {
@@ -153,10 +150,7 @@ const DoctorCalendar = (
   }
 
   const handleAppointmentStatusChange = (event) => {
-    localDispatch(actions.setFilterData({
-      ...filterData,
-      appointmentStatus: event.target.value,
-    }));
+    localDispatch(actions.updateFilter({ appointmentStatus: event.target.value }));
   };
 
   const handleDateChange = async (newDate, mode = viewMode) => {
