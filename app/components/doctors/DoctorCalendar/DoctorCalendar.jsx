@@ -51,7 +51,6 @@ const DoctorCalendar = (
 
     const { schedules: initialSchedules } = initialData;
     const filteredSchedules = initialSchedules.map((item) => {
-      console.log(item.schedules);
       const itemSchedules = item.schedules.filter((schedule) => {
         return (
           (filterData.patientName.length === 0 ||
