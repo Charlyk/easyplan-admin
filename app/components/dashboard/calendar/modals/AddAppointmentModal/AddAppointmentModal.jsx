@@ -127,11 +127,13 @@ const AddAppointmentModal = (
 
   useEffect(() => {
     if (selectedDoctor != null) {
+      const fullName = `${selectedDoctor.firstName} ${selectedDoctor.lastName}`
       localDispatch(
         actions.setDoctor({
           ...selectedDoctor,
-          name: `${selectedDoctor.firstName} ${selectedDoctor.lastName}`,
-          fullName: `${selectedDoctor.firstName} ${selectedDoctor.lastName}`,
+          name: `${fullName} ${selectedDoctor.phoneNumber}`,
+          label: fullName,
+          fullName,
         }),
       );
     }
