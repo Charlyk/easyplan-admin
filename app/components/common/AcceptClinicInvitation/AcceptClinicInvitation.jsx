@@ -182,11 +182,6 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
           )}
         >
           <div className={styles.fieldsWrapper}>
-            {!isNewUser && isLoading && (
-              <div className='progress-bar-wrapper'>
-                <CircularProgress className='circular-progress-bar'/>
-              </div>
-            )}
             {isNewUser ? (
               <div className={styles.formWrapper}>
                   <span className={styles.formTitle}>
