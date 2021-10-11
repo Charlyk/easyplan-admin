@@ -9,11 +9,11 @@ import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
 import urlToLambda from '../../../../utils/urlToLambda';
 import { textForKey } from '../../../../utils/localization';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import styles from './EditProfileModal.module.scss';
-import EASModal from "../EASModal";
 import UploadAvatar from "../../UploadAvatar";
 import EASTextField from "../../EASTextField";
 import EASPhoneInput from "../../EASPhoneInput";
+import EASModal from "../EASModal";
+import styles from './EditProfileModal.module.scss';
 
 const EditProfileModal = ({ open, currentUser, onClose }) => {
   const router = useRouter();
@@ -151,7 +151,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
           type="text"
           containerClass={styles.simpleField}
           fieldLabel={textForKey('First name')}
-          value={data.lastName ?? ''}
+          value={data.firstName ?? ''}
           onChange={handleFormChange('firstName')}
         />
 
