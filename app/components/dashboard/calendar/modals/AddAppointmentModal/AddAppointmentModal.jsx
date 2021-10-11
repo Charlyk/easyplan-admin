@@ -113,6 +113,17 @@ const AddAppointmentModal = (
     }))
   }, [patients, patient]);
 
+  const mappedServices = useMemo(() => {
+    if (doctor?.services == null) {
+      return [];
+    }
+
+    return doctor.services.map((service) => ({
+      ...service,
+      label: service.name,
+    }));
+  }, [doctor]);
+
   useEffect(() => {
     if (schedule != null) {
       fetchScheduleDetails();
@@ -561,7 +572,7 @@ const AddAppointmentModal = (
           filterLocally
           disabled={doctor == null}
           containerClass={styles.simpleField}
-          options={doctor?.services || []}
+          options={mappedServices}
           value={service}
           fieldLabel={textForKey('Service')}
           placeholder={textForKey('Enter service name')}
