@@ -81,15 +81,18 @@ const App = ({ Component, pageProps }) => {
   }, [isWindowFocused]);
 
   const checkUserIsAuthenticated = async () => {
-    if (UnauthorizedPaths.includes(router.asPath)) {
-      return;
-    }
     try {
       await requestCheckIsAuthenticated();
+      if (UnauthorizedPaths.includes(router.asPath)) {
+        await router.reload();
+      }
     } catch (error) {
       if (error.response != null) {
         const { status } = error.response;
         if (status === 401) {
+          if (UnauthorizedPaths.includes(router.asPath)) {
+            return;
+          }
           await router.reload();
         }
       }
