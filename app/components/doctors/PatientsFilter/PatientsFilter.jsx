@@ -51,7 +51,7 @@ const PatientsFilter = (
       </ToggleButtonGroup>
       <EASTextField
         type="text"
-        value={filterData.patientName || ''}
+        value={filterData?.patientName || ''}
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Patient')}
         onChange={onNameChange}
@@ -60,7 +60,7 @@ const PatientsFilter = (
         rootClass={styles.simpleField}
         label={textForKey('Service')}
         labelId="service-select-label"
-        value={filterData.serviceId || -1}
+        value={filterData?.serviceId || -1}
         defaultOption={{
           id: -1,
           name: textForKey('All services')
