@@ -50,11 +50,15 @@ const AddAppointmentModal = (
       item.roleInClinic === Role.doctor &&
       !item.isHidden &&
       !item.isInVacation
-    ).map(item => ({
-      ...item,
-      name: `${item.fullName} ${item.phoneNumber}`,
-      label: item.fullName,
-    }));
+    ).map(item => {
+      const { phoneNumber, fullName } = item;
+      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+      return {
+        ...item,
+        name: name,
+        label: item.fullName,
+      }
+    });
   }, [currentClinic]);
 
   const [
@@ -139,12 +143,14 @@ const AddAppointmentModal = (
   useEffect(() => {
     if (selectedDoctor != null) {
       const fullName = `${selectedDoctor.firstName} ${selectedDoctor.lastName}`
+      const { phoneNumber } = selectedDoctor;
+      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
       localDispatch(
         actions.setDoctor({
           ...selectedDoctor,
-          name: `${fullName} ${selectedDoctor.phoneNumber}`,
           label: fullName,
           fullName,
+          name,
         }),
       );
     }
