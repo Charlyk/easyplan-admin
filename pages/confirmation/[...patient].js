@@ -38,7 +38,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
     try {
       await requestConfirmSchedule(scheduleId, patientId);
       setIsError(false);
-      await router.replace(router.asPath);
+      await router.reload();
     } catch (error) {
       toast.error(error.message);
       setIsError(true);
@@ -52,7 +52,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
     try {
       await requestConfirmSchedule(scheduleId, patientId, 'Canceled', textForKey('canceled_by_patient'));
       setIsError(false);
-      await router.replace(router.asPath);
+      await router.reload();
     } catch (error) {
       toast.error(error.message);
       setIsError(true);
