@@ -28,6 +28,8 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const [isCanceling, setIsCanceling] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  const isPending = schedule.status === 'Pending';
+
   const confirmSchedule = async () => {
     if (schedule.status === 'Confirmed') {
       return;
@@ -84,7 +86,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
           }
         </title>
       </Head>
-      {schedule == null && (
+      {schedule && (
         <Typography className={styles['no-data-label']}>
           {textForKey('Schedule info not found')}
         </Typography>
@@ -92,7 +94,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
       {logoSrc && (
         <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo'/>
       )}
-      {schedule != null && !isError && (
+      {schedule && !isError && (
         <TableContainer className={styles.tableContainer}>
           <Table>
             <TableBody>
@@ -175,32 +177,26 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
           </Table>
         </TableContainer>
       )}
-      {schedule != null && (
+      {schedule && (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {schedule.status !== 'Canceled' && (
-            <LoadingButton
-              isLoading={isConfirming}
-              disabled={isConfirming || isCanceling || schedule.status !== 'Pending'}
-              className={clsx('positive-button', {
-                [styles.confirmed]: schedule.status !== 'Pending',
-              })}
-              onClick={confirmSchedule}
-            >
-              {schedule.status !== 'Pending'
-                ? textForKey('Confirmed')
-                : textForKey('Confirm')}
-            </LoadingButton>
-          )}
-          {schedule.status !== 'Confirmed' && (
+          <LoadingButton
+            isLoading={isConfirming}
+            disabled={isConfirming || isCanceling || !isPending}
+            className={clsx('positive-button', {
+              [styles.confirmed]: schedule.status === 'Confirmed',
+            })}
+            onClick={confirmSchedule}
+          >
+            {textForKey(schedule.status)}
+          </LoadingButton>
+          {isPending && (
             <LoadingButton
               isLoading={isCanceling}
-              disabled={isConfirming || isCanceling || schedule.status === 'Canceled'}
+              disabled={isConfirming || isCanceling || !isPending}
               className='delete-button'
               onClick={handleCancelSchedule}
             >
-              {schedule.status !== 'Canceled'
-                ? textForKey('cancel_schedule')
-                : textForKey('Canceled')}
+              {textForKey('cancel_schedule')}
             </LoadingButton>
           )}
         </div>
