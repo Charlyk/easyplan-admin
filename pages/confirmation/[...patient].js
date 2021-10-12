@@ -187,7 +187,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
             })}
             onClick={confirmSchedule}
           >
-            {textForKey(schedule.status)}
+            {isPending ? textForKey('Confirm') : textForKey(schedule.status)}
           </LoadingButton>
           {isPending && (
             <LoadingButton
