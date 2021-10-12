@@ -28,7 +28,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const [isCanceling, setIsCanceling] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const isPending = schedule.status === 'Pending';
+  const isPending = schedule.status === 'Pending' || schedule.status === 'WaitingForPatient';
 
   const confirmSchedule = async () => {
     if (schedule.status === 'Confirmed') {
