@@ -86,7 +86,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
           }
         </title>
       </Head>
-      {schedule && (
+      {!schedule && (
         <Typography className={styles['no-data-label']}>
           {textForKey('Schedule info not found')}
         </Typography>
