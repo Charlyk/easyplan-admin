@@ -6,7 +6,6 @@ import LeftContainer from "./LeftContainer";
 import styles from './DealDetails.module.scss';
 
 const DealDetails = ({ open, deal, states, onClose, onLink }) => {
-  console.log(deal);
   const dialogTitle = useMemo(() => {
     if (deal == null) return '';
     const mainTitle = `${textForKey('Deal')}: #${deal.id}`;
