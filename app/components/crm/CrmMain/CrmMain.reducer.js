@@ -13,7 +13,6 @@ const crmMainSlice = createSlice({
   initialState,
   reducers: {
     setColumns(state, action) {
-      console.log(action.payload)
       state.columns = action.payload;
     },
     setLinkModal(state, action) {

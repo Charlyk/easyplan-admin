@@ -97,9 +97,15 @@ const AddAppointmentModal = (
   ] = useReducer(reducer, initialState);
 
   const getLabelKey = useCallback((option) => {
-    return option.firstName || option.lastName
-      ? `${option.lastName} ${option.firstName}`
-      : option.phoneNumber;
+    if (option.firstName && option.lastName) {
+      return `${option.lastName} ${option.firstName}`
+    } else if (option.firstName) {
+      return option.firstName
+    } else if (option.lastName) {
+      return option.lastName
+    } else {
+      return `+${option.countryCode}${option.phoneNumber}`
+    }
   }, []);
 
   const suggestionPatients = useMemo(() => {
@@ -161,11 +167,13 @@ const AddAppointmentModal = (
 
     if (selectedPatient != null) {
       const fullName = getLabelKey(selectedPatient);
+      const { countryCode, phoneNumber } = selectedPatient;
       localDispatch(
         actions.setPatient({
           ...selectedPatient,
           fullName,
-          name: fullName,
+          name: `${fullName} +${countryCode}${phoneNumber}`,
+          label: fullName,
         }),
       );
     }

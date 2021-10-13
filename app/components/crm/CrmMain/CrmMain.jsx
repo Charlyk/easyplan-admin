@@ -20,12 +20,15 @@ import reducer, {
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
 import onRequestError from "../../../utils/onRequestError";
+import { setAppointmentModal } from "../../../../redux/actions/actions";
+import { useDispatch } from "react-redux";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
 const DealDetails = dynamic(() => import('../DealDetails'));
 
 const CrmMain = ({ states }) => {
+  const dispatch = useDispatch();
   const [{
     columns,
     linkModal,
@@ -104,6 +107,18 @@ const CrmMain = ({ states }) => {
     }
   }
 
+  const handleAddSchedule = (deal) => {
+    if (deal.patient == null) {
+      return;
+    }
+    dispatch(
+      setAppointmentModal({
+        open: true,
+        patient: deal.patient,
+      }),
+    );
+  }
+
   return (
     <div className={styles.crmMain}>
       <LinkPatientModal
@@ -126,6 +141,7 @@ const CrmMain = ({ states }) => {
         states={states}
         onLink={handleLinkPatient}
         onClose={handleCloseDetails}
+        onAddSchedule={handleAddSchedule}
       />
       <div className={styles.columnsContainer}>
         {columns.map((dealState, index) => (

@@ -4,13 +4,23 @@ import Header from "./Header";
 import styles from './LeftContainer.module.scss';
 import PatientInfo from "./PatientInfo";
 import ScheduleInfo from "./ScheduleInfo";
+import Button from "@material-ui/core/Button";
+import { textForKey } from "../../../../utils/localization";
+import IconPlus from "../../../icons/iconPlus";
 
-const LeftContainer = ({ deal, states, onLink }) => {
+const LeftContainer = ({ deal, states, onLink, onAddSchedule }) => {
   return (
     <div className={styles.leftContainer}>
       <Header deal={deal} states={states} />
       <PatientInfo deal={deal} onLink={onLink} />
-      {deal?.schedule && <ScheduleInfo deal={deal} />}
+      {deal?.schedule != null ? (
+        <ScheduleInfo deal={deal} />
+      ) : deal?.patient != null ? (
+        <Button className={styles.addScheduleBtn} onPointerUp={onAddSchedule}>
+          <IconPlus fill="#3A83DC"/>
+          {textForKey('Add appointment')}
+        </Button>
+      ) : null}
     </div>
   )
 };
@@ -71,5 +81,6 @@ LeftContainer.propTypes = {
     }),
   }),
   states: PropTypes.any,
+  onAddSchedule: PropTypes.func,
   onLink: PropTypes.func,
 }

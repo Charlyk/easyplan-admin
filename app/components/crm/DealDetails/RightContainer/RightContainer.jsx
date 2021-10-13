@@ -1,54 +1,22 @@
-import React, { useMemo } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
-import { textForKey } from "../../../utils/localization";
-import BottomSheetDialog from "../../common/BottomSheetDialog";
-import LeftContainer from "./LeftContainer";
-import styles from './DealDetails.module.scss';
-import RightContainer from "./RightContainer";
+import styles from './RightContainer.module.scss';
+import DealHistory from "./DealHistory";
+import FooterContainer from "./FooterContainer";
 
-const DealDetails = ({ open, deal, states, onClose, onLink, onAddSchedule }) => {
-  const dialogTitle = useMemo(() => {
-    if (deal == null) return '';
-    const mainTitle = `${textForKey('Deal')}: #${deal.id}`;
-    if (deal.service == null) {
-      return mainTitle;
-    }
-    return `${mainTitle} - ${deal.service.name} (${deal.service.price} ${deal.service.currency})`;
-  }, [deal]);
-
-  const handleLinkPatient = () => {
-    onLink?.(deal);
-  }
-
-  const handleAddSchedule = () => {
-    onAddSchedule?.(deal);
-  }
-
+const RightContainer = ({ deal }) => {
   return (
-    <BottomSheetDialog
-      canSave={false}
-      open={open && deal != null}
-      onClose={onClose}
-      title={dialogTitle}
-    >
-      <div className={styles.dealDetails}>
-        <LeftContainer
-          deal={deal}
-          states={states}
-          onLink={handleLinkPatient}
-          onAddSchedule={handleAddSchedule}
-        />
-        <RightContainer deal={deal}/>
-      </div>
-    </BottomSheetDialog>
+    <div className={styles.rightContainer}>
+      <DealHistory deal={deal}/>
+      <FooterContainer deal={deal}/>
+    </div>
   )
-};
+}
 
-export default DealDetails;
+export default RightContainer;
 
-DealDetails.propTypes = {
-  open: PropTypes.bool,
-  dealItem: PropTypes.shape({
+RightContainer.propTypes = {
+  deal: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
     lastUpdated: PropTypes.string,
@@ -100,7 +68,4 @@ DealDetails.propTypes = {
       }),
     }),
   }),
-  onAddSchedule: PropTypes.func,
-  onLink: PropTypes.func,
-  onClose: PropTypes.func,
 }
