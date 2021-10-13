@@ -13,7 +13,7 @@ const DealDetails = ({ open, deal, states, onClose, onLink }) => {
     if (deal.service == null) {
       return mainTitle;
     }
-    return `${mainTitle} - ${deal.service.name}`;
+    return `${mainTitle} - ${deal.service.name} (${deal.service.price} ${deal.service.currency})`;
   }, [deal]);
 
   const handleLinkPatient = () => {
