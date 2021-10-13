@@ -2,8 +2,8 @@
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   user-select: none;
   display: flex;
-  height: 67.3%;
-  max-height: 67.3%;
+  width: 100%;
+  height: calc(100% - 224px);
   flex-direction: column;
 
   .servicesResultsMenu {
