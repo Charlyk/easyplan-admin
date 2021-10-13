@@ -6,7 +6,7 @@ import LeftContainer from "./LeftContainer";
 import styles from './DealDetails.module.scss';
 import RightContainer from "./RightContainer";
 
-const DealDetails = ({ open, deal, states, onClose, onLink, onAddSchedule }) => {
+const DealDetails = ({ open, deal, states, currentClinic, currentUser, onClose, onLink, onAddSchedule }) => {
   const dialogTitle = useMemo(() => {
     if (deal == null) return '';
     const mainTitle = `${textForKey('Deal')}: #${deal.id}`;
@@ -38,7 +38,11 @@ const DealDetails = ({ open, deal, states, onClose, onLink, onAddSchedule }) => 
           onLink={handleLinkPatient}
           onAddSchedule={handleAddSchedule}
         />
-        <RightContainer deal={deal}/>
+        <RightContainer
+          deal={deal}
+          currentUser={currentUser}
+          currentClinic={currentClinic}
+        />
       </div>
     </BottomSheetDialog>
   )
@@ -48,6 +52,8 @@ export default DealDetails;
 
 DealDetails.propTypes = {
   open: PropTypes.bool,
+  currentUser: PropTypes.any,
+  currentClinic: PropTypes.any,
   dealItem: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,

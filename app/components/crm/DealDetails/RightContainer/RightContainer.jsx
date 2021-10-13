@@ -4,11 +4,11 @@ import styles from './RightContainer.module.scss';
 import DealHistory from "./DealHistory";
 import FooterContainer from "./FooterContainer";
 
-const RightContainer = ({ deal }) => {
+const RightContainer = ({ deal, currentClinic, currentUser }) => {
   return (
     <div className={styles.rightContainer}>
       <DealHistory deal={deal}/>
-      <FooterContainer deal={deal}/>
+      <FooterContainer deal={deal} currentClinic={currentClinic}/>
     </div>
   )
 }
@@ -68,4 +68,6 @@ RightContainer.propTypes = {
       }),
     }),
   }),
+  currentUser: PropTypes.any,
+  currentClinic: PropTypes.any,
 }

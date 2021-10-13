@@ -10,6 +10,16 @@
     }
   }
 
+  .underline {
+    &.text::before {
+      border-bottom: none !important;
+    }
+
+    &.text::after {
+      border-bottom: none !important;
+    }
+  }
+
   .errorField {
     .focusedInput {
       border-color: #ec3276;

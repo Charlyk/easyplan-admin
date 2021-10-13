@@ -34,6 +34,10 @@
     font-weight: normal !important;
     font-size: 13px !important;
 
+    &.text {
+      border: none !important;
+    }
+
     &:hover {
       border-color: #3A83DC !important;
     }

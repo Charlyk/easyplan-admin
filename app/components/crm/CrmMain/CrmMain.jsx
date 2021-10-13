@@ -27,7 +27,7 @@ const ConfirmationModal = dynamic(() => import("../../common/modals/Confirmation
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
 const DealDetails = dynamic(() => import('../DealDetails'));
 
-const CrmMain = ({ states }) => {
+const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
   const [{
     columns,
@@ -138,6 +138,8 @@ const CrmMain = ({ states }) => {
       <DealDetails
         open={detailsModal.open}
         deal={detailsModal.deal}
+        currentUser={currentUser}
+        currentClinic={currentClinic}
         states={states}
         onLink={handleLinkPatient}
         onClose={handleCloseDetails}

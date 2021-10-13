@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Typography from "@material-ui/core/Typography";
 import styles from './EASTextField.module.scss'
 import { TextField } from "@material-ui/core";
@@ -12,12 +11,14 @@ const EASTextField = React.forwardRef(
       readOnly,
       containerClass,
       fieldClass,
+      inputClass,
       error,
       endAdornment,
       onChange,
       helperText,
       type,
       autoFocus,
+      variant = 'outlined',
       ...rest
     },
     ref
@@ -65,7 +66,7 @@ const EASTextField = React.forwardRef(
         <TextField
           {...rest}
           type={type}
-          variant="outlined"
+          variant={variant}
           error={error}
           autoFocus={autoFocus}
           helperText={helperText}
@@ -86,11 +87,14 @@ const EASTextField = React.forwardRef(
             endAdornment: endAdornment,
             classes: {
               root: clsx(styles.searchField, fieldClass),
-              input: styles.searchInput,
-              notchedOutline: styles.focusedInput,
+              input: clsx(styles.searchInput, inputClass),
+              notchedOutline: variant === 'outlined' ? styles.focusedInput : null,
               error: styles.errorField,
               focused: styles.focusedField,
-              adornedEnd: styles.inputAdornedEnd,
+              adornedEnd: variant === 'outlined' ? styles.inputAdornedEnd : null,
+              underline: variant === 'standard' ? clsx(styles.underline, {
+                [styles.text]: variant === 'standard'
+              }) : null
             }
           }}
         />

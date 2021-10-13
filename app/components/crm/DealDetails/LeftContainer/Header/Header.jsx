@@ -67,7 +67,7 @@ const Header = ({ deal, states }) => {
         </Typography>
         <div className={styles.progressContainer}>
           {passedStates.map(item => (
-            <Tooltip title={item.name}>
+            <Tooltip title={item.name} key={item.type}>
               <div
                 className={styles.statusIndicator}
                 style={{

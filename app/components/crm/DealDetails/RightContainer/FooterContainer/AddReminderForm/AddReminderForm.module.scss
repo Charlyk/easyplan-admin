@@ -1,0 +1,55 @@
+.addReminderForm {
+  flex: 1;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  margin-bottom: .5rem;
+
+  .header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    .fieldContainer {
+      width: 140px;
+      margin-right: 5px;
+    }
+
+    .fieldRoot {
+      height: 25px;
+      min-height: 25px;
+    }
+
+    .timeField {
+
+    }
+
+    .fieldText {
+      padding: 0 8px;
+    }
+
+    .selectRoot {
+      color: #3A83DC !important;
+    }
+
+    .text {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #A1A2C6 !important;
+
+      &.start {
+        margin-right: 5px;
+      }
+
+      &.middle {
+        margin-right: 2px;
+        margin-left: 2px;
+      }
+
+      &.end {
+        margin-left: 4px;
+      }
+    }
+  }
+}

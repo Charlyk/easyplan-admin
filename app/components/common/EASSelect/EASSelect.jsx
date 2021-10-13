@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 
 const EASSelect = (
   {
+    selectClass,
     rootClass,
     disabled,
     checkable,
@@ -21,7 +22,8 @@ const EASSelect = (
     options,
     defaultOption,
     value,
-    onChange
+    variant,
+    onChange,
   }
 ) => {
   const renderSelectedOptions = (selected) => {
@@ -87,8 +89,8 @@ const EASSelect = (
         value={value}
         onChange={onChange}
         classes={{
-          root: styles.muiSelectRoot,
-          select: styles.muiSelectSelect
+          root: clsx(styles.muiSelectRoot, selectClass),
+          select: clsx(styles.muiSelectSelect, styles[variant])
         }}
         renderValue={renderSelectedOptions}
       >
@@ -102,6 +104,7 @@ const EASSelect = (
 export default EASSelect;
 
 EASSelect.propTypes = {
+  variant: PropTypes.oneOf(['outlined', 'text']),
   label: PropTypes.string,
   rootClass: PropTypes.any,
   checkable: PropTypes.bool,

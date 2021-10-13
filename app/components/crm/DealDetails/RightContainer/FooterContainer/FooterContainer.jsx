@@ -1,11 +1,52 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import styles from './FooterContainer.module.scss'
+import AddNoteForm from "./AddNoteForm";
+import Box from "@material-ui/core/Box";
+import TabList from "@material-ui/lab/TabList";
+import Tab from "@material-ui/core/Tab";
+import { textForKey } from "../../../../../utils/localization";
+import TabPanel from "@material-ui/lab/TabPanel";
+import TabContext from "@material-ui/lab/TabContext";
+import AddReminderForm from "./AddReminderForm";
 
-const FooterContainer = ({ deal }) => {
+const FooterContainer = ({ deal, currentClinic }) => {
+  const [currentTab, setCurrentTab] = useState('0');
+
+  const handleTabChange = (event, newValue) => {
+    setCurrentTab(`${newValue}`);
+  };
+
   return (
     <div className={styles.footerContainer}>
-      <div/>
+      <TabContext value={currentTab}>
+        <Box>
+          <TabList
+            classes={{
+              root: styles.tabsRoot,
+              indicator: styles.tabsIndicator
+            }}
+            onChange={handleTabChange}
+          >
+            <Tab
+              value="0"
+              label={textForKey('crm_new_note')}
+              classes={{ root: styles.tabItem }}
+            />
+            <Tab
+              value="1"
+              label={textForKey('crm_new_reminder')}
+              classes={{ root: styles.tabItem }}
+            />
+          </TabList>
+        </Box>
+        <TabPanel value="0" style={{ padding: 0 }}>
+          <AddNoteForm/>
+        </TabPanel>
+        <TabPanel value="1" style={{ padding: 0 }}>
+          <AddReminderForm currentClinic={currentClinic} />
+        </TabPanel>
+      </TabContext>
     </div>
   )
 };
@@ -13,6 +54,7 @@ const FooterContainer = ({ deal }) => {
 export default FooterContainer;
 
 FooterContainer.propTypes = {
+  currentClinic: PropTypes.any,
   deal: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
