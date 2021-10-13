@@ -1,5 +1,5 @@
 .header {
-  width: calc(100% - 32px);
+  width: 100%;
   padding: 16px;
   background-color: #34344E;
   display: flex;
@@ -15,6 +15,7 @@
   }
 
   .subtitleContainer {
+    flex-wrap: wrap;
     display: flex;
     margin-bottom: 20px;
 
@@ -27,6 +28,7 @@
     }
 
     .responsibleName {
+      margin-bottom: 5px;
       background-color: #6F7091;
       padding-left: 5px;
       padding-right: 5px;

@@ -1,42 +1,28 @@
 import React, { useMemo } from "react";
 import PropTypes from 'prop-types';
+import getPatientName from "../../../../../utils/getPatientName";
+import styles from "../PatientInfo/PatientInfo.module.scss";
 import Typography from "@material-ui/core/Typography";
+import { textForKey } from "../../../../../utils/localization";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
+import moment from "moment-timezone";
 
-import IconLink from "../../../../icons/iconLink";
-import { textForKey } from "../../../../../utils/localization";
-import getPatientName from "../../../../../utils/getPatientName";
-import styles from './PatientInfo.module.scss';
+const ScheduleInfo = ({ deal }) => {
+  const { schedule } = deal;
 
-const PatientInfo = ({ deal, onLink }) => {
-  const patientName = useMemo(() => {
-    if (deal == null) {
-      return ''
-    }
-    if (deal?.patient == null) {
-      return deal?.contact.name;
-    }
-    const { patient } = deal;
-    return getPatientName(patient);
-  }, [deal]);
-
-  const patientPhone = useMemo(() => {
-    if (deal?.patient == null) {
-      return deal?.contact.phoneNumber || '-'
-    }
-    const { patient } = deal;
-    return patient.phoneWithCode;
-  }, [deal]);
+  const doctorName = useMemo(() => {
+    const { doctor } = schedule;
+    return `${doctor.firstName} ${doctor.lastName}`
+  }, [schedule.doctor]);
 
   return (
     <div className={styles.patientInfo}>
       <Typography className={styles.titleLabel}>
-        {textForKey('Patient')}
+        {textForKey('Appointment')}
       </Typography>
       <TableContainer>
         <Table>
@@ -44,45 +30,74 @@ const PatientInfo = ({ deal, onLink }) => {
             <TableRow>
               <TableCell>
                 <Typography className={styles.rowTitle}>
-                  {textForKey('Name')}
+                  {textForKey('Budget')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography className={styles.rowValue}>
-                  {patientName}
+                  {deal.service.price} {deal.service.currency}
                 </Typography>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
                 <Typography className={styles.rowTitle}>
-                  {textForKey('Phone')}
+                  {textForKey('Doctor')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography className={styles.rowValue}>
-                  <a href={`tel:${patientPhone.replace('+', '')}`}>
-                    {patientPhone}
-                  </a>
+                  {doctorName}
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography className={styles.rowTitle}>
+                  {textForKey('Service')}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography className={styles.rowValue}>
+                  {deal.service.name}
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography className={styles.rowTitle}>
+                  {textForKey('Date')}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography className={styles.rowValue}>
+                  {moment(schedule.dateAndTime).format('DD.MM.YYYY')}
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography className={styles.rowTitle}>
+                  {textForKey('Hour')}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography className={styles.rowValue}>
+                  {moment(schedule.dateAndTime).format('HH:mm')} -{' '}
+                  {moment(schedule.endTime).format('HH:mm')}
                 </Typography>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      {deal?.patient == null && (
-        <Button className={styles.linkPatientBtn} onPointerUp={onLink}>
-          <IconLink fill="#3A83DC" />
-          {textForKey('link_patient')}
-        </Button>
-      )}
     </div>
   )
 };
 
-export default PatientInfo;
+export default ScheduleInfo;
 
-PatientInfo.propTypes = {
+ScheduleInfo.propTypes = {
   deal: PropTypes.shape({
     contact: PropTypes.shape({
       id: PropTypes.number,
@@ -110,5 +125,4 @@ PatientInfo.propTypes = {
       }),
     }),
   }),
-  onLink: PropTypes.func,
 }

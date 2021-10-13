@@ -587,7 +587,9 @@ export default {
     phone_invalid_message: 'Invalid phone number.',
     email_invalid_message: 'Invalid email address',
     tech_support: 'Tech support',
-    help_tech_support_message: 'Click here if you need any help with using the app or if you are facing some errors, to discuss with our technical support.'
+    help_tech_support_message: 'Click here if you need any help with using the app or if you are facing some errors, to discuss with our technical support.',
+    responsible: 'Responsible',
+    budget: 'Budget',
   },
   ro: {
     analytics: 'Analitică',
@@ -1183,7 +1185,9 @@ export default {
     phone_invalid_message: 'Numărul de telefon nu este valid.',
     email_invalid_message: 'Adresa de email nu este validă',
     tech_support: 'Suport tehnic',
-    help_tech_support_message: 'Apăsați aici dacă ați întâmpinat careva probleme în utilizarea aplicației sau a apărut vreo eroare, pentru a discuta cu suportul tehnic.'
+    help_tech_support_message: 'Apăsați aici dacă ați întâmpinat careva probleme în utilizarea aplicației sau a apărut vreo eroare, pentru a discuta cu suportul tehnic.',
+    responsible: 'Responsabil',
+    budget: 'Buget',
   },
   ru: {
     analytics: 'Analytics',
@@ -1770,6 +1774,8 @@ export default {
     phone_invalid_message: 'Invalid phone number.',
     email_invalid_message: 'Invalid email address',
     tech_support: 'Tech support',
-    help_tech_support_message: 'Click here if you need any help with using the app or if you are facing some errors, to discuss with our technical support.'
+    help_tech_support_message: 'Click here if you need any help with using the app or if you are facing some errors, to discuss with our technical support.',
+    responsible: 'Responsible',
+    budget: 'Budget',
   },
 };

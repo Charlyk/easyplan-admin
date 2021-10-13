@@ -10,7 +10,10 @@ import styles from './ActionsSheet.module.scss';
 const ActionsSheet = props => {
   const { actions, onSelect, onClose, placement } = props;
 
-  const handleActionClick = action => onSelect(action);
+  const handleActionClick = (action, event) => {
+    event.stopPropagation();
+    onSelect(action);
+  }
 
   return (
     <Popper {...props} placement={placement} style={{ zIndex: 999 }} transition>
@@ -23,7 +26,7 @@ const ActionsSheet = props => {
                   <div
                     role='button'
                     tabIndex={0}
-                    onClick={() => handleActionClick(action)}
+                    onPointerUp={(event) => handleActionClick(action, event)}
                     className={clsx(styles['actions-sheet__item'], styles[action.type])}
                     key={action.key}
                   >

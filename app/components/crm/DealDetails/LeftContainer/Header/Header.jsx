@@ -16,6 +16,14 @@ const Header = ({ deal, states }) => {
     return deal.service.name;
   }, [deal]);
 
+  const doctorName = useMemo(() => {
+    if (deal?.schedule == null) {
+      return ''
+    }
+    const { doctor } = deal.schedule;
+    return `${doctor.firstName} ${doctor.lastName}`
+  }, [deal?.schedule]);
+
   const passedStates = useMemo(() => {
     if (deal == null) {
       return [];
@@ -38,7 +46,18 @@ const Header = ({ deal, states }) => {
         </Typography>
         {deal?.assignedTo != null && (
           <Typography className={styles.responsibleName}>
-            {deal?.assignedTo.firstName} {deal?.assignedTo.lastName}
+            {textForKey('Responsible')}: {deal?.assignedTo.firstName} {deal?.assignedTo.lastName}
+          </Typography>
+        )}
+        {deal?.service != null && (
+          <Typography className={styles.responsibleName}>
+            {textForKey('Service')}: {deal.service.name}
+          </Typography>
+        )}
+
+        {doctorName && (
+          <Typography className={styles.responsibleName}>
+            {textForKey('Doctor')}: {doctorName}
           </Typography>
         )}
       </div>

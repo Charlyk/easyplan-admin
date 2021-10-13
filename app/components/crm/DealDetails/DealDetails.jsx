@@ -5,7 +5,8 @@ import BottomSheetDialog from "../../common/BottomSheetDialog";
 import LeftContainer from "./LeftContainer";
 import styles from './DealDetails.module.scss';
 
-const DealDetails = ({ open, deal, states, onClose }) => {
+const DealDetails = ({ open, deal, states, onClose, onLink }) => {
+  console.log(deal);
   const dialogTitle = useMemo(() => {
     if (deal == null) return '';
     const mainTitle = `${textForKey('Deal')}: #${deal.id}`;
@@ -15,6 +16,10 @@ const DealDetails = ({ open, deal, states, onClose }) => {
     return `${mainTitle} - ${deal.service.name}`;
   }, [deal]);
 
+  const handleLinkPatient = () => {
+    onLink?.(deal);
+  }
+
   return (
     <BottomSheetDialog
       canSave={false}
@@ -23,7 +28,7 @@ const DealDetails = ({ open, deal, states, onClose }) => {
       title={dialogTitle}
     >
       <div className={styles.dealDetails}>
-        <LeftContainer deal={deal} states={states} />
+        <LeftContainer deal={deal} states={states} onLink={handleLinkPatient} />
       </div>
     </BottomSheetDialog>
   )
@@ -85,5 +90,6 @@ DealDetails.propTypes = {
       }),
     }),
   }),
+  onLink: PropTypes.func,
   onClose: PropTypes.func,
 }

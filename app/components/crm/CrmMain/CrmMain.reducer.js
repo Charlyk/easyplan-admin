@@ -13,6 +13,7 @@ const crmMainSlice = createSlice({
   initialState,
   reducers: {
     setColumns(state, action) {
+      console.log(action.payload)
       state.columns = action.payload;
     },
     setLinkModal(state, action) {
@@ -32,6 +33,9 @@ const crmMainSlice = createSlice({
       state.linkModal = { open: false, deal: null, confirmContact: false };
     },
     setUpdatedDeal(state, action) {
+      if (action.payload.id === state.detailsModal.deal?.id) {
+        state.detailsModal = { ...state.detailsModal, deal: action.payload };
+      }
       state.updatedDeal = action.payload;
     },
     openDetailsModal(state, action) {

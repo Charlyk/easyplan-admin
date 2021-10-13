@@ -124,6 +124,7 @@ const CrmMain = ({ states }) => {
         open={detailsModal.open}
         deal={detailsModal.deal}
         states={states}
+        onLink={handleLinkPatient}
         onClose={handleCloseDetails}
       />
       <div className={styles.columnsContainer}>

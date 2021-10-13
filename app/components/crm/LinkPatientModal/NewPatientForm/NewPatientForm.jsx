@@ -1,11 +1,9 @@
 import React, { useEffect, useReducer } from "react";
-import PhoneInput from "react-phone-input-2";
 import moment from "moment-timezone";
-import Typography from "@material-ui/core/Typography";
-import isPhoneInputValid from "../../../../utils/isPhoneInputValid";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import { textForKey } from "../../../../utils/localization";
 import { EmailRegex } from "../../../../utils/constants";
+import EASPhoneInput from "../../../common/EASPhoneInput";
 import EASTextField from "../../../common/EASTextField";
 import reducer, {
   initialState,
@@ -98,19 +96,11 @@ const NewPatientForm = ({ contact, onChange }) => {
         onChange={handleFirstNameChange}
       />
 
-      <Typography className={styles.formLabel}>
-        {textForKey('Phone number')}
-        <span style={{ color: 'red', marginLeft: '2px' }}>*</span>
-      </Typography>
-      <PhoneInput
-        alwaysDefaultMask
-        containerClass={styles.searchField}
-        inputClass={styles.phoneInput}
-        value={`+${phoneCountry?.dialCode}${phoneNumber}`}
-        countryCodeEditable={false}
+      <EASPhoneInput
+        fieldLabel={textForKey('Phone number')}
+        rootClass={styles.searchField}
         country={phoneCountry.countryCode || 'md'}
-        placeholder='79123456'
-        isValid={isPhoneInputValid}
+        value={`+${phoneCountry?.dialCode}${phoneNumber}`}
         onChange={handlePhoneChange}
       />
 
