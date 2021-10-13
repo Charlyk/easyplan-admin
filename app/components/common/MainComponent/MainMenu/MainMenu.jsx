@@ -4,17 +4,22 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
 import IconMessages from '@material-ui/icons/Message';
+import IconLiveHelp from '@material-ui/icons/LiveHelp';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AssessmentIcon from '@material-ui/icons/Assessment';
 import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
+import { textForKey } from '../../../../utils/localization';
+import { Role, TECH_SUPPORT_URL } from "../../../../utils/constants";
+import notifications from "../../../../utils/notifications/notifications";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import wasNotificationShown from "../../../../utils/notifications/wasNotificationShown";
+import updateNotificationState from "../../../../utils/notifications/updateNotificationState";
 import IconArrowDown from '../../../icons/iconArrowDown';
 import MenuAnalytics from '../../../icons/menuAnalytics';
 import MenuCalendar from '../../../icons/menuCalendar';
@@ -23,9 +28,8 @@ import MenuEllipse from '../../../icons/menuEllipse';
 import MenuPatients from '../../../icons/menuPatients';
 import MenuSettings from '../../../icons/menuSettings';
 import MenuUsers from '../../../icons/menuUsers';
-import { textForKey } from '../../../../utils/localization';
 import ClinicSelector from '../../ClinicSelector';
-import { Role } from "../../../../utils/constants";
+import EASHelpView from "../../EASHelpView";
 import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';
 
@@ -62,7 +66,7 @@ const menuItems = [
   {
     id: 'services',
     type: 'link',
-    roles: ['ADMIN', 'MANAGER'],
+    roles: [Role.admin, Role.manager],
     text: textForKey('Services'),
     icon: <MenuCategories/>,
     href: '/services',
@@ -70,7 +74,7 @@ const menuItems = [
   {
     id: 'users',
     type: 'link',
-    roles: ['ADMIN', 'MANAGER'],
+    roles: [Role.admin, Role.manager],
     text: textForKey('Users'),
     icon: <MenuUsers/>,
     href: '/users',
@@ -86,7 +90,7 @@ const menuItems = [
   {
     id: 'calendar',
     type: 'link',
-    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+    roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('Calendar'),
     icon: <MenuCalendar/>,
     href: '/calendar/day',
@@ -94,7 +98,7 @@ const menuItems = [
   {
     id: 'patients',
     type: 'link',
-    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+    roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('Patients'),
     icon: <MenuPatients/>,
     href: '/patients',
@@ -102,7 +106,7 @@ const menuItems = [
   {
     id: 'messages',
     type: 'link',
-    roles: ['ADMIN', 'MANAGER'],
+    roles: [Role.admin, Role.manager],
     text: textForKey('Messages'),
     icon: <IconMessages/>,
     href: '/messages',
@@ -110,18 +114,28 @@ const menuItems = [
   {
     id: 'settings',
     type: 'link',
-    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+    roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('Settings'),
     icon: <MenuSettings/>,
     href: '/settings',
   },
+  {
+    id: 'tech_support',
+    type: 'button',
+    roles: [Role.admin, Role.manager, Role.reception],
+    text: textForKey('tech_support'),
+    icon: <IconLiveHelp/>,
+    href: TECH_SUPPORT_URL,
+  }
 ];
 
 const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) => {
   const buttonRef = useRef(null);
   const selectedClinic = currentUser?.clinics?.find((item) => item.clinicId === currentClinic.id);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
+  const [techSupportRef, setTechSupportRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
+  const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
@@ -129,6 +143,10 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   useEffect(() => {
     setIsAnalyticsExpanded(checkIsAnalyticsEnabled());
   }, [currentPath]);
+
+  useEffect(() => {
+    setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id))
+  }, [])
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
@@ -162,6 +180,17 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     onCreateClinic();
     handleCompanyClose();
   };
+
+  const handleNotificationClose = (notification) => {
+    updateNotificationState(notification.id, true);
+    if (notification.id === notifications.techSupport.id) {
+      setShowTechSupportHelp(false);
+    }
+  }
+
+  const handleHelpClick = () => {
+    window.open('https://m.me/easyplan.pro', '_blank')
+  }
 
   const userClinic = currentUser.clinics.find(
     (item) => item.clinicId === currentClinic.id,
@@ -236,7 +265,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                 </Collapse>
               </React.Fragment>
             )
-          } else {
+          } else if (item.type === 'link') {
             return (
               <Link href={item.href} key={item.id}>
                 <ListItem
@@ -252,6 +281,24 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                   />
                 </ListItem>
               </Link>
+            )
+          } else {
+            return (
+              <ListItem
+                ref={setTechSupportRef}
+                key={item.id}
+                classes={{ root: styles.listItem, selected: styles.selected }}
+                onPointerUp={handleHelpClick}
+                selected={isActive(item.href)}
+              >
+                <ListItemIcon className={styles.itemIcon}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  classes={{ primary: styles.itemText }}
+                />
+              </ListItem>
             )
           }
         })}
@@ -276,6 +323,13 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
         currentUser={currentUser}
         currentClinic={currentClinic}
         canEdit={canRegisterPayments}
+      />
+      <EASHelpView
+        placement="right"
+        onClose={handleNotificationClose}
+        notification={notifications.techSupport}
+        anchorEl={techSupportRef}
+        open={showTechSupportHelp}
       />
     </div>
   );

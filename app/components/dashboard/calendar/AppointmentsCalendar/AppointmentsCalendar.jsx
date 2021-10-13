@@ -24,6 +24,7 @@ const CalendarView = {
 const AppointmentsCalendar = (
   {
     viewDate,
+    doctorId,
     viewMode: currentTab,
     selectedSchedule,
     canAddAppointment,
@@ -91,6 +92,7 @@ const AppointmentsCalendar = (
         />
       )}
       <CalendarHeader
+        key={`${viewDate}-${doctorId}`}
         viewDate={viewDate}
         dateBtnText={getTitleText()}
         currentTab={currentTab}
