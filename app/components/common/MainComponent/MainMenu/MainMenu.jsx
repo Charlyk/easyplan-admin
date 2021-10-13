@@ -26,7 +26,7 @@ import MenuSettings from '../../../icons/menuSettings';
 import MenuUsers from '../../../icons/menuUsers';
 import { textForKey } from '../../../../utils/localization';
 import ClinicSelector from '../../ClinicSelector';
-import { Role } from "../../../../utils/constants";
+import { Role, TECH_SUPPORT_URL } from "../../../../utils/constants";
 import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';
 
@@ -122,7 +122,7 @@ const menuItems = [
     roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('tech_support'),
     icon: <IconLiveHelp/>,
-    href: 'https://m.me/easyplan.pro',
+    href: TECH_SUPPORT_URL,
   }
 ];
 

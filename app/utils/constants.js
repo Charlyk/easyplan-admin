@@ -413,3 +413,5 @@ export const HeaderKeys = {
 };
 
 export const APP_DATA_API = '/api/analytics/app-data';
+
+export const TECH_SUPPORT_URL = 'https://m.me/108785330910403'

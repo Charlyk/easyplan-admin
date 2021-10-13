@@ -19,6 +19,10 @@ import EasyCalendar from "../../common/EasyCalendar";
 import DoctorsCalendarDay from "../DoctorsCalendarDay";
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 import styles from './DoctorCalendar.module.scss';
+import Button from "@material-ui/core/Button";
+import { textForKey } from "../../../utils/localization";
+import IconLiveHelp from "@material-ui/icons/LiveHelp";
+import { TECH_SUPPORT_URL } from "../../../utils/constants";
 
 const DoctorCalendar = (
   {
@@ -163,6 +167,10 @@ const DoctorCalendar = (
     await handleDateChange(date, 'day');
   }
 
+  const handleSupportClick = () => {
+    window.open(TECH_SUPPORT_URL, '_blank');
+  }
+
   const mappedWeek = week.map((date) => {
     const dayId = moment(date).format('YYYY-MM-DD')
     const day = schedules.find(item => item.id === dayId)
@@ -189,6 +197,11 @@ const DoctorCalendar = (
           onServiceChange={handleServiceChange}
           onStatusChange={handleAppointmentStatusChange}
         />
+
+        <Button className={styles.supportButton} onPointerUp={handleSupportClick}>
+          <IconLiveHelp/>
+          {textForKey('tech_support')}
+        </Button>
       </div>
       <div className={styles.dataWrapper}>
         {isLoading && (

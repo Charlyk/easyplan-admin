@@ -6,11 +6,26 @@
 
   .filterWrapper {
     display: flex;
+    flex-direction: column;
     padding-left: 8px;
     padding-right: 8px;
     width: 330px;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .supportButton {
+    color: #3A83DC;
+    margin-top: 1rem;
+    width: 100%;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 14px !important;
+
+    svg {
+      margin-right: 10px;
+    }
   }
 
   .dataWrapper {
