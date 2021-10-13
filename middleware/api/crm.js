@@ -95,3 +95,45 @@ export async function requestConfirmFirstContact(dealId, headers = null) {
   const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
   return get(`/api/crm/first-contact?${queryString}`, headers);
 }
+
+/**
+ * Create a note for a deal
+ * @param {number} dealId
+ * @param {string} noteText
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestCreateDealNote(dealId, noteText, headers = null) {
+  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
+  return put(`/api/crm/notes?${queryString}`, headers, { noteText });
+}
+
+/**
+ * Create new reminder for a deal
+ * @param {number} dealId
+ * @param {{
+ *   date: string,
+ *   startTime: string,
+ *   endTime: string,
+ *   userId: number,
+ *   type: string,
+ *   comment?: string
+ * }} reminder
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestCreateDealReminder(dealId, reminder, headers = null) {
+  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
+  return put(`/api/crm/reminders?${queryString}`, headers, reminder);
+}
+
+/**
+ * Fetch all details for a deal
+ * @param {number} dealId
+ * @param {any} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchDealDetails(dealId, headers = null) {
+  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
+  return get(`/api/crm/details?${queryString}`, headers);
+}

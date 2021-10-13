@@ -13,6 +13,9 @@ const EASTextField = React.forwardRef(
       fieldClass,
       inputClass,
       error,
+      max,
+      min,
+      step,
       endAdornment,
       onChange,
       helperText,
@@ -85,6 +88,11 @@ const EASTextField = React.forwardRef(
           }}
           InputProps={{
             endAdornment: endAdornment,
+            inputProps: {
+              max,
+              min,
+              step,
+            },
             classes: {
               root: clsx(styles.searchField, fieldClass),
               input: clsx(styles.searchInput, inputClass),

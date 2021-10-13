@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import Box from "@material-ui/core/Box";
 import { textForKey } from "../../../../../../utils/localization";
@@ -9,16 +9,20 @@ import styles from './AddNoteForm.module.scss';
 const AddNoteForm = ({ isLoading, onSubmit }) => {
   const [noteText, setNoteText] = useState('');
 
+  useEffect(() => {
+    if (!isLoading) {
+      setNoteText('');
+    }
+  }, [isLoading]);
+
   const handleSubmit = (event) => {
+    console.log(event)
     event.preventDefault();
+    console.log(noteText);
     if (noteText.length === 0) {
       return;
     }
     onSubmit?.(noteText)
-  }
-
-  const handleTextChange = (newText) => {
-    setNoteText(newText);
   }
 
   return (
@@ -29,14 +33,14 @@ const AddNoteForm = ({ isLoading, onSubmit }) => {
         rows={4}
         maxRows={4}
         placeholder={textForKey('Enter new note')}
-        onChange={handleTextChange}
+        onChange={setNoteText}
       />
       <Box marginTop={.5}>
         <LoadingButton
           isLoading={isLoading}
           disabled={isLoading || noteText.length === 0}
           className="positive-button"
-          onPointerUp={handleSubmit}
+          onClick={handleSubmit}
         >
           {textForKey('Add note')}
         </LoadingButton>
