@@ -9,13 +9,17 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AssessmentIcon from '@material-ui/icons/Assessment';
 import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
+import { textForKey } from '../../../../utils/localization';
+import { Role, TECH_SUPPORT_URL } from "../../../../utils/constants";
+import notifications from "../../../../utils/notifications/notifications";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import wasNotificationShown from "../../../../utils/notifications/wasNotificationShown";
+import updateNotificationState from "../../../../utils/notifications/updateNotificationState";
 import IconArrowDown from '../../../icons/iconArrowDown';
 import MenuAnalytics from '../../../icons/menuAnalytics';
 import MenuCalendar from '../../../icons/menuCalendar';
@@ -24,9 +28,8 @@ import MenuEllipse from '../../../icons/menuEllipse';
 import MenuPatients from '../../../icons/menuPatients';
 import MenuSettings from '../../../icons/menuSettings';
 import MenuUsers from '../../../icons/menuUsers';
-import { textForKey } from '../../../../utils/localization';
 import ClinicSelector from '../../ClinicSelector';
-import { Role, TECH_SUPPORT_URL } from "../../../../utils/constants";
+import EASHelpView from "../../EASHelpView";
 import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';
 
@@ -130,7 +133,9 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   const buttonRef = useRef(null);
   const selectedClinic = currentUser?.clinics?.find((item) => item.clinicId === currentClinic.id);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
+  const [techSupportRef, setTechSupportRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
+  const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
@@ -138,6 +143,10 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   useEffect(() => {
     setIsAnalyticsExpanded(checkIsAnalyticsEnabled());
   }, [currentPath]);
+
+  useEffect(() => {
+    setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id))
+  }, [])
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
@@ -171,6 +180,13 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     onCreateClinic();
     handleCompanyClose();
   };
+
+  const handleNotificationClose = (notification) => {
+    updateNotificationState(notification.id, true);
+    if (notification.id === notifications.techSupport.id) {
+      setShowTechSupportHelp(false);
+    }
+  }
 
   const handleHelpClick = () => {
     window.open('https://m.me/easyplan.pro', '_blank')
@@ -269,6 +285,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
           } else {
             return (
               <ListItem
+                ref={setTechSupportRef}
                 key={item.id}
                 classes={{ root: styles.listItem, selected: styles.selected }}
                 onPointerUp={handleHelpClick}
@@ -306,6 +323,13 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
         currentUser={currentUser}
         currentClinic={currentClinic}
         canEdit={canRegisterPayments}
+      />
+      <EASHelpView
+        placement="right"
+        onClose={handleNotificationClose}
+        notification={notifications.techSupport}
+        anchorEl={techSupportRef}
+        open={showTechSupportHelp}
       />
     </div>
   );

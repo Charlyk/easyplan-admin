@@ -1,0 +1,91 @@
+.helpView {
+
+  .arrow {
+    position: absolute;
+  }
+
+  &.right {
+    margin-left: -20px;
+
+    .arrow {
+      left: -10px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right:10px solid white;
+    }
+  }
+
+  &.left {
+    margin-right: -20px;
+
+    .arrow {
+      right: -10px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 10px solid white;
+    }
+  }
+
+  &.top {
+    .arrow {
+      width: 0;
+      height: 0;
+      bottom: -10px;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid white;
+    }
+  }
+
+  &.bottom {
+    margin-top: 10px;
+    .arrow {
+      width: 0;
+      height: 0;
+      top: -10px;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+    }
+  }
+
+  .paper {
+    z-index: 9999;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+
+    .message {
+      padding: 1rem;
+      width: 100%;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-size: .9rem !important;
+      color: #34344E !important;
+    }
+
+    .title {
+      padding-top: 1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      width: 100%;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: bold;
+      font-size: 1rem !important;
+      color: #3A83DC !important;
+    }
+
+    .closeBtn {
+      color: #3A83DC;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+    }
+  }
+}

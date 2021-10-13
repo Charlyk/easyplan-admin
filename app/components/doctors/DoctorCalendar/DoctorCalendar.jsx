@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import PropTypes from 'prop-types';
 import { useRouter } from "next/router";
 import moment from "moment-timezone";
@@ -23,6 +23,10 @@ import Button from "@material-ui/core/Button";
 import { textForKey } from "../../../utils/localization";
 import IconLiveHelp from "@material-ui/icons/LiveHelp";
 import { TECH_SUPPORT_URL } from "../../../utils/constants";
+import notifications from "../../../utils/notifications/notifications";
+import EASHelpView from "../../common/EASHelpView";
+import wasNotificationShown from "../../../utils/notifications/wasNotificationShown";
+import updateNotificationState from "../../../utils/notifications/updateNotificationState";
 
 const DoctorCalendar = (
   {
@@ -39,7 +43,13 @@ const DoctorCalendar = (
   const router = useRouter();
   const week = getCurrentWeek(viewDate);
   const previousDate = usePrevious(date);
+  const [techSupportRef, setTechSupportRef] = useState(null);
+  const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
   const [{ schedules, hours, filterData, isLoading }, localDispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id))
+  }, [])
 
   useEffect(() => {
     if (previousDate !== date) {
@@ -165,11 +175,18 @@ const DoctorCalendar = (
   const handleDateClick = async (column) => {
     const date = moment(column.id).toDate();
     await handleDateChange(date, 'day');
-  }
+  };
 
   const handleSupportClick = () => {
     window.open(TECH_SUPPORT_URL, '_blank');
-  }
+  };
+
+  const handleNotificationClose = (notification) => {
+    updateNotificationState(notification.id, true);
+    if (notification.id === notifications.techSupport.id) {
+      setShowTechSupportHelp(false);
+    }
+  };
 
   const mappedWeek = week.map((date) => {
     const dayId = moment(date).format('YYYY-MM-DD')
@@ -198,7 +215,11 @@ const DoctorCalendar = (
           onStatusChange={handleAppointmentStatusChange}
         />
 
-        <Button className={styles.supportButton} onPointerUp={handleSupportClick}>
+        <Button
+          ref={setTechSupportRef}
+          className={styles.supportButton}
+          onPointerUp={handleSupportClick}
+        >
           <IconLiveHelp/>
           {textForKey('tech_support')}
         </Button>
@@ -230,6 +251,13 @@ const DoctorCalendar = (
           />
         )}
       </div>
+      <EASHelpView
+        placement="right"
+        onClose={handleNotificationClose}
+        notification={notifications.techSupport}
+        anchorEl={techSupportRef}
+        open={showTechSupportHelp}
+      />
     </div>
   )
 }
