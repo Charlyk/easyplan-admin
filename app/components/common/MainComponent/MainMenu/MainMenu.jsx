@@ -135,8 +135,10 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   const selectedClinic = currentUser?.clinics?.find((item) => item.clinicId === currentClinic.id);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
   const [techSupportRef, setTechSupportRef] = useState(null);
+  const [crmDashboardRef, setCrmDashboardRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
+  const [showCrmHelp, setShowCrmHelp] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
@@ -146,8 +148,15 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   }, [currentPath]);
 
   useEffect(() => {
-    setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id))
-  }, [])
+    setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
+  }, []);
+
+  useEffect(() => {
+    setShowCrmHelp(
+      !wasNotificationShown(notifications.menuCRMImplementation.id) &&
+      !showTechSupportHelp,
+    );
+  }, [showTechSupportHelp])
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
@@ -186,8 +195,10 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     updateNotificationState(notification.id, true);
     if (notification.id === notifications.techSupport.id) {
       setShowTechSupportHelp(false);
+    } else if (notification.id === notifications.menuCRMImplementation.id) {
+      setShowCrmHelp(false);
     }
-  }
+  };
 
   const handleHelpClick = () => {
     window.open('https://m.me/easyplan.pro', '_blank')
@@ -270,6 +281,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
             return (
               <Link href={item.href} key={item.id}>
                 <ListItem
+                  ref={item.id === 'crm' ? setCrmDashboardRef : null}
                   classes={{ root: styles.listItem, selected: styles.selected }}
                   selected={isActive(item.href)}
                 >
@@ -331,6 +343,13 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
         notification={notifications.techSupport}
         anchorEl={techSupportRef}
         open={showTechSupportHelp}
+      />
+      <EASHelpView
+        placement="right"
+        onClose={handleNotificationClose}
+        notification={notifications.menuCRMImplementation}
+        anchorEl={crmDashboardRef}
+        open={showCrmHelp}
       />
     </div>
   );

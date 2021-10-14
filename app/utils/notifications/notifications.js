@@ -10,6 +10,11 @@ const notifications = {
     id: 'CRM_ADD_REMINDER_BTN',
     message: textForKey('help_crm_add_reminder_message'),
     title: textForKey('crm_add_reminder'),
+  },
+  menuCRMImplementation: {
+    id: 'MENU_CRM_IMPL',
+    message: textForKey('menu_crm_help_message'),
+    title: textForKey('menu_crm_help_title'),
   }
 };
 
