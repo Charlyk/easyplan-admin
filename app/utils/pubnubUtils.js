@@ -6,6 +6,13 @@ import {
   toggleUpdateInvoices,
   triggerUsersUpdate,
 } from '../../redux/actions/actions';
+import {
+  setUpdatedDeal,
+  setNewDeal,
+  setDeletedDeal,
+  setUpdatedReminder,
+  setNewReminder
+} from '../../redux/slices/crmSlice';
 import { setClinicExchangeRatesUpdateRequired } from '../../redux/actions/clinicActions';
 import { toggleUpdateInvoice } from '../../redux/actions/invoiceActions';
 import { setSMSMessageStatus } from '../../redux/actions/patientActions';
@@ -68,6 +75,47 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       dispatch(setSMSMessageStatus({ id: payload.id, status: payload.status }));
       break;
     }
+    case MessageAction.NewDealCreated: {
+      if (payload == null) {
+        break;
+      }
+      dispatch(setNewDeal(payload));
+      setTimeout(() => dispatch(setNewDeal(null)), 400);
+      break;
+    }
+    case MessageAction.DealDataUpdated: {
+      if (payload == null) {
+        break;
+      }
+      dispatch(setUpdatedDeal(payload));
+      setTimeout(() => dispatch(setUpdatedDeal(null)), 400);
+      break;
+    }
+    case MessageAction.DealRemoved: {
+      if (payload == null) {
+        break;
+      }
+      dispatch(setDeletedDeal(payload));
+      setTimeout(() => dispatch(setDeletedDeal(null)), 400);
+      break;
+    }
+    case MessageAction.DealReminderCreated: {
+      if (payload == null) {
+        break;
+      }
+      dispatch(setNewReminder(payload));
+      setTimeout(() => dispatch(setNewReminder(null)), 400);
+      break;
+    }
+    case MessageAction.ReminderIsDueDate:
+    case MessageAction.DealReminderUpdated: {
+      if (payload == null) {
+        break;
+      }
+      dispatch(setUpdatedReminder(payload));
+      setTimeout(() => dispatch(setUpdatedReminder(null)), 400);
+      break;
+    }
   }
 };
 
@@ -92,4 +140,10 @@ const MessageAction = {
   ExchangeRatesUpdateRequired: 'ExchangeRatesUpdateRequired',
   UpdateMessageStatus: 'UpdateMessageStatus',
   ScheduleDeleted: 'ScheduleDeleted',
+  NewDealCreated: 'NewDealCreated',
+  DealDataUpdated: 'DealDataUpdated',
+  DealRemoved: 'DealRemoved',
+  DealReminderUpdated: 'DealReminderUpdated',
+  DealReminderCreated: 'DealReminderCreated',
+  ReminderIsDueDate: 'ReminderIsDueDate',
 };

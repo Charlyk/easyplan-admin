@@ -8,7 +8,12 @@ import Box from "@material-ui/core/Box";
 import DoneIcon from '@material-ui/icons/Done';
 import { useColor } from "react-color-palette";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
+import {
+  newDealSelector,
+  updatedDealSelector
+} from "../../../../redux/selectors/crmSelector";
 import {
   createNewDealState,
   deleteDealState,
@@ -18,6 +23,7 @@ import {
 import ActionsSheet from "../../common/ActionsSheet";
 import EASColorPicker from "../../common/EASColorPicker";
 import AddColumnModal from "../AddColumnModal";
+import DealItem from "./DealItem";
 import reducer, {
   sheetActions,
   initialState,
@@ -29,10 +35,11 @@ import reducer, {
   setColumnColor,
   setShowCreateColumn,
   setData,
-  setIsFetching, setUpdatedDeal
+  setIsFetching,
+  setUpdatedDeal,
+  addNewDeal,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
-import DealItem from "./DealItem";
 
 const DealsColumn = (
   {
@@ -50,6 +57,8 @@ const DealsColumn = (
 ) => {
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
+  const createdDeal = useSelector(newDealSelector);
+  const updatedDealData = useSelector(updatedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
   const [{
     showActions,
@@ -63,6 +72,13 @@ const DealsColumn = (
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    if (createdDeal == null || createdDeal.state.id !== dealState.id) {
+      return;
+    }
+    localDispatch(addNewDeal(createdDeal));
+  }, [createdDeal]);
+
+  useEffect(() => {
     if (dealState == null) {
       return;
     }
@@ -71,12 +87,12 @@ const DealsColumn = (
   }, [dealState]);
 
   useEffect(() => {
-    if (updatedDeal == null) {
+    if (updatedDeal == null && updatedDealData == null) {
       return;
     }
 
-    localDispatch(setUpdatedDeal(updatedDeal));
-  }, [updatedDeal]);
+    localDispatch(setUpdatedDeal(updatedDeal ?? updatedDealData));
+  }, [updatedDeal, updatedDealData]);
 
   const filteredActions = useMemo(() => {
     return sheetActions.filter(action => {

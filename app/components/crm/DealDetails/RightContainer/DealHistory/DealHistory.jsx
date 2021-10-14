@@ -1,24 +1,51 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
+import moment from "moment-timezone";
 import PropTypes from 'prop-types';
 import last from 'lodash/last';
 import first from 'lodash/first';
+import orderBy from 'lodash/orderBy';
+import { useSelector } from "react-redux";
+import { CircularProgress } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import onRequestError from "../../../../../utils/onRequestError";
 import { requestFetchDealDetails } from "../../../../../../middleware/api/crm";
+import { updatedDealSelector, updatedReminderSelector } from "../../../../../../redux/selectors/crmSelector";
+import MessageItem from "./MessageItem";
+import NoteItem from "./NoteItem";
 import reducer, {
-  initialState, ItemType,
+  initialState,
+  ItemType,
   setHistory,
   setIsFetching,
+  setUpdatedReminder,
 } from './DealHistory.reducer';
 import styles from './DealHistory.module.scss';
-import { CircularProgress } from "@material-ui/core";
-import Box from "@material-ui/core/Box";
-import MessageItem from "./MessageItem";
-import Typography from "@material-ui/core/Typography";
-import moment from "moment-timezone";
-import NoteItem from "./NoteItem";
+import ReminderItem from "./ReminderItem";
+import { textForKey } from "../../../../../utils/localization";
+import LogItem from "./LogItem";
 
 const DealHistory = ({ deal }) => {
-  const [{ items, reminders, isFetching }, localDispatch] = useReducer(reducer, initialState);
+  const containerRef = useRef(null);
+  const updatedDeal = useSelector(updatedDealSelector);
+  const updatedReminder = useSelector(updatedReminderSelector);
+  const [{ items, isFetching }, localDispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (updatedReminder != null) {
+      localDispatch(setUpdatedReminder({ reminder: updatedReminder, dealId: deal.id }));
+      if (containerRef.current != null) {
+        containerRef.current.scrollTop = containerRef.current.scrollHeight
+      }
+    }
+  }, [updatedReminder, deal]);
+
+  useEffect(() => {
+    if (deal == null || updatedDeal?.id !== deal?.id) {
+      return;
+    }
+    fetchDealDetails();
+  }, [updatedDeal, deal]);
 
   useEffect(() => {
     if (deal == null) {
@@ -36,6 +63,9 @@ const DealHistory = ({ deal }) => {
       onRequestError(error);
     } finally {
       localDispatch(setIsFetching(false));
+      if (containerRef.current != null) {
+        containerRef.current.scrollTop = containerRef.current.scrollHeight
+      }
     }
   };
 
@@ -51,13 +81,18 @@ const DealHistory = ({ deal }) => {
         const outgoingItems = messages.filter((item) => (item.senderId !== contact.identificator));
         const messageType = contact.identificator === historyItem.senderId ? 'income' : 'outgoing';
         const lastItem = last(messageType === 'income' ? incomeItems : outgoingItems);
-        const isLast = lastItem.id === historyItem.id;
+        const isLastOfType = lastItem.id === historyItem.id;
         const firstItem = first(messages);
-        const isFirst = firstItem.id === historyItem.id;
+        const isFirstOfType = firstItem.id === historyItem.id;
+
+        const lastMessage = last(messages);
+        const isLastMessage = lastMessage.id === historyItem.id;
         return (
           <MessageItem
-            isFirst={isFirst}
-            isLast={isLast}
+            isFirstOfType={isFirstOfType}
+            isLastOfType={isLastOfType}
+            isLastMessage={isLastMessage}
+            isFirstMessage={isFirstOfType}
             message={historyItem}
             contact={deal.contact}
             messageType={messageType}
@@ -69,13 +104,33 @@ const DealHistory = ({ deal }) => {
           <NoteItem key={historyItem.id} note={historyItem}/>
         )
       }
+      case ItemType.reminder: {
+        return (
+          <ReminderItem key={historyItem.id} reminder={historyItem} />
+        )
+      }
+      case ItemType.log: {
+        const logItems = items.filter((item) => (item.itemType === ItemType.log));
+        const lastItem = last(logItems);
+        const isLast = lastItem.id === historyItem.id;
+        const firstItem = first(logItems);
+        const isFirst = firstItem.id === historyItem.id;
+        return (
+          <LogItem
+            key={historyItem.id}
+            isLast={isLast}
+            isFirst={isFirst}
+            log={historyItem}
+          />
+        )
+      }
       default:
         return null
     }
   };
 
   return (
-    <div className={styles.dealHistory}>
+    <div ref={containerRef} className={styles.dealHistory}>
       {isFetching && (
         <div className="progress-bar-wrapper">
           <CircularProgress className="circular-progress-bar"/>
@@ -83,13 +138,15 @@ const DealHistory = ({ deal }) => {
       )}
       <Box padding={1}>
         {Object.keys(items).sort().map((value) => {
-          const data = items[value];
+          const data = orderBy(items[value], (item) => item.messageDate ?? item.created, ['asc']);
+          const groupDate = moment(value);
+          const isToday = groupDate.isSame(moment(), 'date')
           return (
             <Box key={value}>
               <div className={styles.groupItem}>
                 <div className={styles.divider}/>
                 <Typography className={styles.groupTitle}>
-                  {moment(value).format('DD MMMM YYYY')}
+                  {isToday ? textForKey('Today') : groupDate.format('DD MMMM YYYY')}
                 </Typography>
                 <div className={styles.divider}/>
               </div>

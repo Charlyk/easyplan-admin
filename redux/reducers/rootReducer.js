@@ -17,6 +17,7 @@ import schedule from './scheduleReducer';
 import serviceDetailsModal from './serviceDetailsReducer';
 import services from './servicesReducer';
 import users from "./usersReducer";
+import crm from '../slices/crmSlice';
 
 export default combineReducers({
   main,
@@ -35,6 +36,7 @@ export default combineReducers({
   invoices,
   services,
   users,
+  crm,
 });
 
 function main(state = initialState, action) {

@@ -1,15 +1,15 @@
 import React, { useMemo } from "react";
 import PropTypes from 'prop-types';
-import getPatientName from "../../../../../utils/getPatientName";
-import styles from "../PatientInfo/PatientInfo.module.scss";
-import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../../utils/localization";
-import TableContainer from "@material-ui/core/TableContainer";
+import moment from "moment-timezone";
 import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import moment from "moment-timezone";
+import TableBody from "@material-ui/core/TableBody";
+import Typography from "@material-ui/core/Typography";
+import TableContainer from "@material-ui/core/TableContainer";
+
+import { textForKey } from "../../../../../utils/localization";
+import styles from "../PatientInfo/PatientInfo.module.scss";
 
 const ScheduleInfo = ({ deal }) => {
   const { schedule } = deal;
@@ -60,6 +60,18 @@ const ScheduleInfo = ({ deal }) => {
               <TableCell>
                 <Typography className={styles.rowValue}>
                   {deal.service.name}
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography className={styles.rowTitle}>
+                  {textForKey('Status')}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography className={styles.rowValue}>
+                  {textForKey(deal.schedule.status)}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -118,6 +130,7 @@ ScheduleInfo.propTypes = {
       dateAndTime: PropTypes.string,
       endTime: PropTypes.string,
       canceledReason: PropTypes.string,
+      status: PropTypes.string,
       doctor: PropTypes.shape({
         id: PropTypes.number,
         firstName: PropTypes.string,

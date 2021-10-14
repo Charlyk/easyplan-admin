@@ -94,6 +94,13 @@ const dealsColumnSlice = createSlice({
     setIsFetching(state, action) {
       state.isFetching = action.payload;
     },
+    addNewDeal(state, action) {
+      const dealExists = state.items.some(item => item.id === action.payload.id);
+      if (!dealExists) {
+        state.items = orderBy([...state.items, action.payload], ['created'], ['desc']);
+        state.totalElements = state.items.length;
+      }
+    },
     setUpdatedDeal(state, action) {
       const newDeal = action.payload;
       const { state: itemState } = newDeal;
@@ -130,6 +137,7 @@ export const {
   setData,
   setIsFetching,
   setUpdatedDeal,
+  addNewDeal,
 } = dealsColumnSlice.actions;
 
 export default dealsColumnSlice.reducer;

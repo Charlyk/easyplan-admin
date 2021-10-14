@@ -21,7 +21,8 @@ import reducer, {
 import styles from './CrmMain.module.scss';
 import onRequestError from "../../../utils/onRequestError";
 import { setAppointmentModal } from "../../../../redux/actions/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updatedDealSelector } from "../../../../redux/selectors/crmSelector";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -29,6 +30,7 @@ const DealDetails = dynamic(() => import('../DealDetails'));
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
+  const remoteDeal = useSelector(updatedDealSelector);
   const [{
     columns,
     linkModal,
@@ -36,6 +38,13 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     updatedDeal,
     detailsModal,
   }, localDispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (remoteDeal == null) {
+      return;
+    }
+    localDispatch(setUpdatedDeal(remoteDeal));
+  }, [remoteDeal]);
 
   useEffect(() => {
     localDispatch(setColumns(states));

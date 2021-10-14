@@ -31,4 +31,11 @@ export default Object.freeze({
     },
   },
   updateHourIndicatorTop: false,
+  crm: {
+    newDeal: null,
+    updatedDeal: null,
+    deletedDeal: null,
+    updatedReminder: null,
+    newReminder: null,
+  }
 });

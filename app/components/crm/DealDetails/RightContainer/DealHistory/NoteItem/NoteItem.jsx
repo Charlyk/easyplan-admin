@@ -1,14 +1,13 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import Typography from "@material-ui/core/Typography";
-import FeedIcon from '@material-ui/icons/Assignment';
 import styles from './NoteItem.module.scss';
 import moment from "moment-timezone";
 
 const NoteItem = ({ note }) => {
   return (
     <div className={styles.noteItem}>
-      <FeedIcon/>
+      <img src="/icon-notes-64.png" alt="Notes"/>
       <div className={styles.dataWrapper}>
         <Typography className={styles.dateText}>
           {moment(note.created).format('DD.MM.YYYY HH:mm')}{' '}

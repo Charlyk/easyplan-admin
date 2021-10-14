@@ -1,0 +1,108 @@
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.reminder {
+  width: 100%;
+  border: #c3c3c3 1px solid;
+  background-color: white;
+  padding: .5rem;
+  margin-bottom: .5rem;
+  border-radius: 4px;
+
+  &.active {
+    border-color: #00ac00;
+    background-color: #f2fff2;
+
+    .reminderDate {
+      color: #00ac00 !important;
+      font-weight: bold !important;
+    }
+
+    svg {
+      fill: #00ac00;
+    }
+  }
+
+  &.pending {
+    border-color: #FDC534;
+    background-color: #fff7ef;
+
+    .reminderDate {
+      color: #FDC534 !important;
+      font-weight: bold !important;
+    }
+
+    svg {
+      fill: #FDC534;
+    }
+  }
+
+  &.expired {
+    border-color: #ec3276;
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    animation-iteration-count: infinite;
+    background-color: #ffeded;
+
+    .reminderDate {
+      color: #ec3276 !important;
+      font-weight: bold !important;
+    }
+
+    svg {
+      fill: #ec3276;
+    }
+  }
+
+  .detailsRow {
+    display: flex;
+    align-items: center;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    color: #34344E !important;
+    padding-left: 29px;
+  }
+
+  .commentLabel {
+    display: flex;
+    align-items: center;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    color: #6F7091 !important;
+    padding-left: 29px;
+  }
+
+  .reminderDate {
+    display: flex;
+    align-items: center;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    color: #34344E !important;
+
+    svg {
+      margin-right: 5px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

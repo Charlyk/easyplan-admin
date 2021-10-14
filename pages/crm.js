@@ -9,6 +9,7 @@ import { fetchAllDealStates } from "../middleware/api/crm";
 import CrmMain from "../app/components/crm/CrmMain";
 import { APP_DATA_API, JwtRegex } from "../app/utils/constants";
 import handleRequestError from "../app/utils/handleRequestError";
+import { wrapper } from "../store";
 
 const Crm = ({ fallback, authToken, states }) => {
   return (
@@ -64,7 +65,7 @@ export const getServerSideProps = async ({ req }) => {
   }
 }
 
-export default Crm;
+export default wrapper.withRedux(Crm);
 
 Crm.propTypes = {
   currentUser: PropTypes.object,

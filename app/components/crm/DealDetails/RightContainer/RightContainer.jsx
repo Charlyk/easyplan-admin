@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import styles from './RightContainer.module.scss';
 import DealHistory from "./DealHistory";
 import FooterContainer from "./FooterContainer";
+import Box from "@material-ui/core/Box";
+import RemindersContainer from "./RemindersContainer";
 
 const RightContainer = ({ deal, currentClinic, currentUser }) => {
   return (
     <div className={styles.rightContainer}>
-      <DealHistory deal={deal}/>
-      <FooterContainer deal={deal} currentClinic={currentClinic}/>
+      <div className={styles.center}>
+        <DealHistory deal={deal}/>
+        <FooterContainer deal={deal} currentClinic={currentClinic}/>
+      </div>
+      <RemindersContainer deal={deal}/>
     </div>
   )
 }

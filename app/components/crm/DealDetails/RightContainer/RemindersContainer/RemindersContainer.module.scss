@@ -1,0 +1,21 @@
+.remindersContainer {
+  width: 20rem;
+  height: 100%;
+  position: relative;
+  border-left: #E5E5E5 1px solid;
+
+  .title {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
+    color: #34344E !important;
+    padding: .5rem 1rem;
+  }
+
+  .data {
+    flex: 1;
+    overflow: auto;
+    padding: .5rem;
+  }
+}

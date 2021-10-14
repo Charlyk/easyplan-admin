@@ -128,6 +128,17 @@ export async function requestCreateDealReminder(dealId, reminder, headers = null
 }
 
 /**
+ * Fetch all reminders for a deal
+ * @param {number} dealId
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchReminders(dealId, headers = null) {
+  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
+  return get(`/api/crm/reminders?${queryString}`, headers);
+}
+
+/**
  * Fetch all details for a deal
  * @param {number} dealId
  * @param {any} headers
@@ -136,4 +147,15 @@ export async function requestCreateDealReminder(dealId, reminder, headers = null
 export async function requestFetchDealDetails(dealId, headers = null) {
   const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
   return get(`/api/crm/details?${queryString}`, headers);
+}
+
+/**
+ * Complete a reminder for a deal
+ * @param {number} reminderId
+ * @param {string} resultComment
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestCompleteReminder(reminderId, resultComment, headers = null) {
+  return put(`/api/reminders/${reminderId}/complete`, headers, { resultComment });
 }

@@ -3,7 +3,13 @@
   height: 100%;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
   background-color: white;
   border-right: #E5E5E5 1px solid;
+
+  .center {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+  }
 }
