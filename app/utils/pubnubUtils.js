@@ -113,7 +113,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
         break;
       }
       dispatch(setUpdatedReminder(payload));
-      setTimeout(() => dispatch(setUpdatedReminder(null)), 400);
+      setTimeout(() => dispatch(setUpdatedReminder(null)), 1000);
       break;
     }
   }

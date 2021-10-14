@@ -609,6 +609,8 @@ export default {
     crm_log_action_createschedule: 'Created schedule at',
     crm_log_action_linkpatient: 'Linked to patient',
     crm_log_action_removed: 'Removed',
+    'add a comment': 'Add a comment',
+    help_crm_add_reminder_message: 'Click here to add a reminder for this deal.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1226,6 +1228,8 @@ export default {
     crm_log_action_createschedule: 'A creat o programare pentru data',
     crm_log_action_linkpatient: 'A atribuit pacientul',
     crm_log_action_removed: 'A șters acest deal',
+    'add a comment': 'Adaugă un comentariu...',
+    help_crm_add_reminder_message: 'Apăsați aici pentru a adăuga o sarcina nouă pentru acest deal.',
   },
   ru: {
     analytics: 'Analytics',
@@ -1834,5 +1838,7 @@ export default {
     crm_log_action_createschedule: 'Created schedule at',
     crm_log_action_linkpatient: 'Linked to patient',
     crm_log_action_removed: 'Removed',
+    'add a comment': 'Add a comment',
+    help_crm_add_reminder_message: 'Click here to add a reminder for this deal.',
   },
 };

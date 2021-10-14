@@ -11,12 +11,23 @@ import { useSelector } from "react-redux";
 import { updatedDealSelector, updatedReminderSelector } from "../../../../../../redux/selectors/crmSelector";
 import Reminder from "./Reminder";
 import { CircularProgress } from "@material-ui/core";
+import IconPlus from "../../../../icons/iconPlus";
+import IconButton from "@material-ui/core/IconButton";
+import EASHelpView from "../../../../common/EASHelpView";
+import notifications from "../../../../../utils/notifications/notifications";
+import updateNotificationState from "../../../../../utils/notifications/updateNotificationState";
 
-const RemindersContainer = ({ deal }) => {
+const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
   const updatedDeal = useSelector(updatedDealSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
+  const [showAddHelp, setShowAddHelp] = useState(showAddReminderHelp);
+  const [addReminderRef, setAddReminderRef] = useState(null);
   const [items, setItems] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    setShowAddHelp(showAddReminderHelp)
+  }, [showAddReminderHelp])
 
   useEffect(() => {
     if (updatedReminder == null) {
@@ -50,6 +61,15 @@ const RemindersContainer = ({ deal }) => {
     } finally {
       setIsFetching(false);
     }
+  };
+
+  const handleAddReminder = () => {
+    onAddReminder?.(deal);
+  }
+
+  const handleCloseAddHelp = () => {
+    updateNotificationState(notifications.crmAddReminder.id, true);
+    setShowAddHelp(false);
   }
 
   return (
@@ -59,15 +79,31 @@ const RemindersContainer = ({ deal }) => {
           <CircularProgress className="circular-progress-bar"/>
         </div>
       ) : null}
-      <Typography className={styles.title}>
-        {textForKey('crm_reminders')}
-      </Typography>
+      <div className={styles.titleContainer}>
+        <Typography className={styles.title}>
+          {textForKey('crm_reminders')}
+        </Typography>
+        <IconButton
+          ref={setAddReminderRef}
+          className={styles.addButton}
+          onPointerUp={handleAddReminder}
+        >
+          <IconPlus fill="#3A83DC"/>
+        </IconButton>
+      </div>
       <Divider color="#E5E5E5"/>
       <div className={styles.data}>
         {items.map((reminder) => (
           <Reminder key={reminder.id} reminder={reminder}/>
         ))}
       </div>
+      <EASHelpView
+        open={showAddHelp}
+        anchorEl={addReminderRef}
+        notification={notifications.crmAddReminder}
+        placement="left"
+        onClose={handleCloseAddHelp}
+      />
     </div>
   )
 };
@@ -75,6 +111,7 @@ const RemindersContainer = ({ deal }) => {
 export default RemindersContainer;
 
 RemindersContainer.proptType = {
+  showAddReminderHelp: PropTypes.bool,
   deal: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
@@ -127,4 +164,5 @@ RemindersContainer.proptType = {
       }),
     }),
   }),
+  onAddReminder: PropTypes.func,
 }

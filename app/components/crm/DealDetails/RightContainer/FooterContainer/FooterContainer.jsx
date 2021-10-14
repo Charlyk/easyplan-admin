@@ -5,18 +5,17 @@ import TabList from "@material-ui/lab/TabList";
 import Tab from "@material-ui/core/Tab";
 import TabPanel from "@material-ui/lab/TabPanel";
 import TabContext from "@material-ui/lab/TabContext";
+import { requestCreateDealNote } from "../../../../../../middleware/api/crm";
 import { textForKey } from "../../../../../utils/localization";
-import AddNoteForm from "./AddNoteForm";
-import AddReminderForm from "./AddReminderForm";
-import styles from './FooterContainer.module.scss'
-import { requestCreateDealNote, requestCreateDealReminder } from "../../../../../../middleware/api/crm";
 import onRequestError from "../../../../../utils/onRequestError";
-import moment from "moment-timezone";
+import AddNoteForm from "./AddNoteForm";
+import styles from './FooterContainer.module.scss'
+import AddSmsForm from "./AddSmsForm/AddSmsForm";
 
-const FooterContainer = ({ deal, currentClinic }) => {
+const FooterContainer = ({ deal }) => {
   const [currentTab, setCurrentTab] = useState('0');
   const [isAddingNote, setIsAddingNote] = useState(false);
-  const [isAddingReminder, setIsAddingReminder] = useState(false);
+  const [isAddingSms, setIsAddingSms] = useState(false);
 
   const handleTabChange = (event, newValue) => {
     setCurrentTab(`${newValue}`);
@@ -26,8 +25,7 @@ const FooterContainer = ({ deal, currentClinic }) => {
     console.log('note', note);
     try {
       setIsAddingNote(true);
-      const response = await requestCreateDealNote(deal.id, note);
-      console.log(response.data);
+      await requestCreateDealNote(deal.id, note);
     } catch (error) {
       onRequestError(error)
     } finally {
@@ -35,25 +33,8 @@ const FooterContainer = ({ deal, currentClinic }) => {
     }
   };
 
-  const handleReminderSubmit = async (reminder) => {
-    try {
-      setIsAddingReminder(true);
-      const requestBody = {
-        date: moment(reminder.date).format('YYYY-MM-DD'),
-        startTime: reminder.startTime,
-        endTime: reminder.endTime,
-        userId: reminder.user.id,
-        type: reminder.type.id,
-        comment: reminder.noteText,
-      }
-      const response = await requestCreateDealReminder(deal.id, requestBody)
-      console.log(response.data);
-    } catch (error) {
-      onRequestError(error)
-    } finally {
-      setIsAddingReminder(false);
-    }
-  };
+  const handleSmsSubmit = async (message) => {
+  }
 
   return (
     <div className={styles.footerContainer}>
@@ -73,7 +54,7 @@ const FooterContainer = ({ deal, currentClinic }) => {
             />
             <Tab
               value="1"
-              label={textForKey('crm_new_reminder')}
+              label={`${textForKey('send message')} SMS`}
               classes={{ root: styles.tabItem }}
             />
           </TabList>
@@ -84,13 +65,11 @@ const FooterContainer = ({ deal, currentClinic }) => {
             isLoading={isAddingNote}
           />
         </TabPanel>
-        <TabPanel value="1" style={{ padding: 0 }}>
-          <AddReminderForm
-            currentClinic={currentClinic}
-            onSubmit={handleReminderSubmit}
-            isLoading={isAddingReminder}
-          />
-        </TabPanel>
+        {deal?.patient ? (
+          <TabPanel value="1" style={{ padding: 0 }}>
+            <AddSmsForm isLoading={isAddingSms} onSubmit={handleSmsSubmit}/>
+          </TabPanel>
+        ) : null}
       </TabContext>
     </div>
   )

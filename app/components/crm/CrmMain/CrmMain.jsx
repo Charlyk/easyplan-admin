@@ -3,9 +3,13 @@ import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import upperFirst from 'lodash/upperFirst';
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 
 import { fetchAllDealStates, requestConfirmFirstContact, updateDealState } from "../../../../middleware/api/crm";
+import { setAppointmentModal } from "../../../../redux/actions/actions";
+import { updatedDealSelector } from "../../../../redux/selectors/crmSelector";
 import { textForKey } from "../../../utils/localization";
+import onRequestError from "../../../utils/onRequestError";
 import DealsColumn from "../DealsColumn";
 import reducer, {
   initialState,
@@ -17,16 +21,15 @@ import reducer, {
   setUpdatedDeal,
   openDetailsModal,
   closeDealDetails,
+  openReminderModal,
+  closeReminderModal,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
-import onRequestError from "../../../utils/onRequestError";
-import { setAppointmentModal } from "../../../../redux/actions/actions";
-import { useDispatch, useSelector } from "react-redux";
-import { updatedDealSelector } from "../../../../redux/selectors/crmSelector";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
 const DealDetails = dynamic(() => import('../DealDetails'));
+const AddReminderModal = dynamic(() => import('../AddReminderModal'));
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
@@ -37,6 +40,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     deleteModal,
     updatedDeal,
     detailsModal,
+    reminderModal,
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -77,11 +81,19 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
 
   const handleDealClick = (deal) => {
     localDispatch(openDetailsModal(deal));
-  }
+  };
 
   const handleCloseDetails = () => {
     localDispatch(closeDealDetails());
-  }
+  };
+
+  const handleOpenReminderModal = (deal) => {
+    localDispatch(openReminderModal(deal));
+  };
+
+  const handleCloseReminderModal = () => {
+    localDispatch(closeReminderModal());
+  };
 
   const handleDeleteConfirmed = () => {
     handleCloseDeleteModal();
@@ -137,6 +149,11 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         onClose={handleCloseLinkModal}
         onLinked={handlePatientLinked}
       />
+      <AddReminderModal
+        {...reminderModal}
+        currentClinic={currentClinic}
+        onClose={handleCloseReminderModal}
+      />
       <ConfirmationModal
         show={deleteModal.open}
         title={textForKey('delete_deal_title')}
@@ -153,6 +170,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         onLink={handleLinkPatient}
         onClose={handleCloseDetails}
         onAddSchedule={handleAddSchedule}
+        onAddReminder={handleOpenReminderModal}
       />
       <div className={styles.columnsContainer}>
         {columns.map((dealState, index) => (
@@ -178,6 +196,8 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
 export default CrmMain;
 
 CrmMain.propTypes = {
+  currentUser: PropTypes.any,
+  currentClinic: PropTypes.any,
   states: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,

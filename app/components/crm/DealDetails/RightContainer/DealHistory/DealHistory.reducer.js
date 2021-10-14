@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import orderBy from 'lodash/orderBy';
 import groupBy from 'lodash/groupBy';
 import moment from "moment-timezone";
 

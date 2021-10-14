@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment-timezone";
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from "../../../utils/localization";
 
 const tomorrow = moment().add(1, 'day');
 
@@ -21,11 +21,12 @@ export const initialState = {
   date: tomorrow.toDate(),
   user: null,
   type: reminderTypes[0],
-  note: ''
+  note: '',
+  isLoading: false,
 }
 
-const addReminderFormSlice = createSlice({
-  name: 'addReminderForm',
+const addReminderModalSlice = createSlice({
+  name: 'addReminderModal',
   initialState,
   reducers: {
     setStartTime(state, action) {
@@ -46,9 +47,12 @@ const addReminderFormSlice = createSlice({
     setNote(state, action) {
       state.note = action.payload;
     },
+    setIsLoading(state, action) {
+      state.isLoading = action.payload;
+    },
     resetState(state) {
       return { ...initialState, user: state.user };
-    }
+    },
   },
 });
 
@@ -60,6 +64,7 @@ export const {
   setStartTime,
   setDate,
   resetState,
-} = addReminderFormSlice.actions;
+  setIsLoading,
+} = addReminderModalSlice.actions;
 
-export default addReminderFormSlice.reducer;
+export default addReminderModalSlice.reducer;

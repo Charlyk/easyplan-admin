@@ -1,12 +1,28 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import { textForKey } from "../../../utils/localization";
 import BottomSheetDialog from "../../common/BottomSheetDialog";
 import LeftContainer from "./LeftContainer";
 import styles from './DealDetails.module.scss';
 import RightContainer from "./RightContainer";
+import wasNotificationShown from "../../../utils/notifications/wasNotificationShown";
+import notifications from "../../../utils/notifications/notifications";
 
-const DealDetails = ({ open, deal, states, currentClinic, currentUser, onClose, onLink, onAddSchedule }) => {
+const DealDetails = (
+  {
+    open,
+    deal,
+    states,
+    currentClinic,
+    currentUser,
+    onClose,
+    onLink,
+    onAddSchedule,
+    onAddReminder,
+  }
+) => {
+  const isOpen = open && deal != null;
+  const [showAddReminderHelp, setShowAddReminderHelp] = useState(false);
   const dialogTitle = useMemo(() => {
     if (deal == null) return '';
     const mainTitle = `${textForKey('Deal')}: #${deal.id}`;
@@ -15,6 +31,16 @@ const DealDetails = ({ open, deal, states, currentClinic, currentUser, onClose, 
     }
     return `${mainTitle} - ${deal.service.name} (${deal.service.price} ${deal.service.currency})`;
   }, [deal]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (isOpen) {
+        setShowAddReminderHelp(!wasNotificationShown(notifications.crmAddReminder.id));
+      } else {
+        setShowAddReminderHelp(false);
+      }
+    }, 1000);
+  }, [isOpen]);
 
   const handleLinkPatient = () => {
     onLink?.(deal);
@@ -40,8 +66,10 @@ const DealDetails = ({ open, deal, states, currentClinic, currentUser, onClose, 
         />
         <RightContainer
           deal={deal}
+          showAddReminderHelp={showAddReminderHelp}
           currentUser={currentUser}
           currentClinic={currentClinic}
+          onAddReminder={onAddReminder}
         />
       </div>
     </BottomSheetDialog>
@@ -109,4 +137,5 @@ DealDetails.propTypes = {
   onAddSchedule: PropTypes.func,
   onLink: PropTypes.func,
   onClose: PropTypes.func,
+  onAddReminder: PropTypes.func,
 }

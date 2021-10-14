@@ -1,0 +1,67 @@
+.addReminderModal {
+  .modalPaper {
+    flex: 1;
+
+    .formRoot {
+      padding: 1rem;
+
+      .header {
+        margin-bottom: 1rem;
+        display: flex;
+        width: 100%;
+        align-items: center;
+
+        .fieldContainer {
+          width: 140px;
+          margin-right: 5px;
+        }
+
+        .fieldRoot {
+
+        }
+
+        .timeField {
+          margin-right: 5px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+
+        .fieldText {
+          padding: 0 8px;
+        }
+
+        .selectRoot {
+          width: 50%;
+          margin-right: 5px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+
+        .text {
+          font-family: Inter, sans-serif !important;
+          font-style: normal !important;
+          font-weight: normal !important;
+          font-size: 13px !important;
+          color: #A1A2C6 !important;
+
+          &.start {
+            margin-right: 5px;
+          }
+
+          &.middle {
+            margin-right: 2px;
+            margin-left: 2px;
+          }
+
+          &.end {
+            margin-left: 4px;
+          }
+        }
+      }
+    }
+  }
+}

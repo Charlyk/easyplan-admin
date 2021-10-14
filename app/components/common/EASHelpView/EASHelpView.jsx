@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import Fade from '@material-ui/core/Fade';
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import styles from './EASHelpView.module.scss';
 import clsx from "clsx";
+import PropTypes from 'prop-types';
+import Box from "@material-ui/core/Box";
+import Fade from '@material-ui/core/Fade';
+import Paper from '@material-ui/core/Paper';
 import Button from "@material-ui/core/Button";
+import Popper from '@material-ui/core/Popper';
+import Typography from "@material-ui/core/Typography";
+import styles from './EASHelpView.module.scss';
 
 const EASHelpView = ({ notification, anchorEl, placement, onClose, ...rest }) => {
   const [arrowRef, setArrowRef] = useState(null);
@@ -22,7 +22,7 @@ const EASHelpView = ({ notification, anchorEl, placement, onClose, ...rest }) =>
       transition
       anchorEl={anchorEl}
       placement={placement}
-      style={{ zIndex: 999 }}
+      style={{ zIndex: 10000 }}
       modifiers={{
         arrow: {
           enabled: true,

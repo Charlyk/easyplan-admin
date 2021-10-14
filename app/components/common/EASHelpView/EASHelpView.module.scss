@@ -18,7 +18,7 @@
   }
 
   &.left {
-    margin-right: -20px;
+    margin-right: 10px;
 
     .arrow {
       right: -10px;
@@ -54,7 +54,7 @@
   }
 
   .paper {
-    z-index: 9999;
+    z-index: 10000;
     background-color: #FFFFFF;
     border-radius: 4px;
     width: 300px;

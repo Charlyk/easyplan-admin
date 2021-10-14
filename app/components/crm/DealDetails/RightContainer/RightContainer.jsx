@@ -6,14 +6,18 @@ import FooterContainer from "./FooterContainer";
 import Box from "@material-ui/core/Box";
 import RemindersContainer from "./RemindersContainer";
 
-const RightContainer = ({ deal, currentClinic, currentUser }) => {
+const RightContainer = ({ deal, currentClinic, currentUser, showAddReminderHelp, onAddReminder }) => {
   return (
     <div className={styles.rightContainer}>
       <div className={styles.center}>
         <DealHistory deal={deal}/>
         <FooterContainer deal={deal} currentClinic={currentClinic}/>
       </div>
-      <RemindersContainer deal={deal}/>
+      <RemindersContainer
+        deal={deal}
+        onAddReminder={onAddReminder}
+        showAddReminderHelp={showAddReminderHelp}
+      />
     </div>
   )
 }
@@ -21,6 +25,7 @@ const RightContainer = ({ deal, currentClinic, currentUser }) => {
 export default RightContainer;
 
 RightContainer.propTypes = {
+  showAddReminderHelp: PropTypes.bool,
   deal: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
@@ -75,4 +80,5 @@ RightContainer.propTypes = {
   }),
   currentUser: PropTypes.any,
   currentClinic: PropTypes.any,
+  onAddReminder: PropTypes.func,
 }
