@@ -73,7 +73,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
 
     // filter clinic doctors
     const doctors = currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && !item.isHidden && item.showInCalendar
+      item.roleInClinic === Role.doctor && item.showInCalendar
     ) || [];
 
     const response = await fetchDaySchedules(query, req.headers);

@@ -60,7 +60,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
     // filter clinic doctors
     const doctors = currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && !item.isHidden && item.showInCalendar
+      item.roleInClinic === Role.doctor && item.showInCalendar
     ) || [];
 
     // check if doctor id is present in query
