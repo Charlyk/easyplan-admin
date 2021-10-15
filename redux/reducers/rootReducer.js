@@ -18,6 +18,7 @@ import serviceDetailsModal from './serviceDetailsReducer';
 import services from './servicesReducer';
 import users from "./usersReducer";
 import crm from '../slices/crmSlice';
+import clinicData from '../slices/clinicDataSlice';
 
 export default combineReducers({
   main,
@@ -37,6 +38,7 @@ export default combineReducers({
   services,
   users,
   crm,
+  clinicData,
 });
 
 function main(state = initialState, action) {

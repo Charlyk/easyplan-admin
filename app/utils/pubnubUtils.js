@@ -1,5 +1,4 @@
 import {
-  setUpdateCurrentUser,
   toggleAppointmentsUpdate,
   toggleExchangeRateUpdate,
   togglePatientsListUpdate,
@@ -20,12 +19,10 @@ import {
   toggleDeleteSchedule,
   toggleUpdateSchedule,
 } from '../../redux/actions/scheduleActions';
-import { userSelector } from '../../redux/selectors/rootSelector';
+import { setShouldUpdateClinicData } from "../../redux/slices/clinicDataSlice";
 
-export const handleRemoteMessage = (message) => (dispatch, getState) => {
-  const appState = getState();
-  const currentUser = userSelector(appState);
-  const { action, targetUserId, payload: messagePayload } = message;
+export const handleRemoteMessage = (message) => (dispatch) => {
+  const { action, payload: messagePayload } = message;
   const payload = messagePayload != null ? JSON.parse(messagePayload) : null;
   switch (action) {
     case MessageAction.NewUserInvited:
@@ -44,11 +41,11 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       dispatch(toggleUpdateSchedule(payload));
       setTimeout(() => dispatch(toggleUpdateSchedule(null)), 600);
       break;
+    case MessageAction.UserCalendarVisibilityChanged:
     case MessageAction.UserRestoredInClinic:
     case MessageAction.UserRemovedFromClinic:
-      if (currentUser.id === targetUserId) {
-        dispatch(setUpdateCurrentUser());
-      }
+      dispatch(setShouldUpdateClinicData(true));
+      setTimeout(() => dispatch(setShouldUpdateClinicData(false)), 600);
       break;
     case MessageAction.ClinicDataImportStarted:
     case MessageAction.ClinicDataImported:
@@ -62,11 +59,11 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
       break;
     case MessageAction.ScheduleDeleted:
       dispatch(toggleDeleteSchedule(payload));
-      setTimeout(() => dispatch(toggleDeleteSchedule(null)), 400);
+      setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
       break;
     case MessageAction.NewPaymentRegistered:
       dispatch(toggleUpdateInvoice(payload));
-      setTimeout(() => dispatch(toggleUpdateInvoice(null)), 400);
+      setTimeout(() => dispatch(toggleUpdateInvoice(null)), 600);
       break;
     case MessageAction.UpdateMessageStatus: {
       if (payload == null) {
@@ -80,7 +77,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
         break;
       }
       dispatch(setNewDeal(payload));
-      setTimeout(() => dispatch(setNewDeal(null)), 400);
+      setTimeout(() => dispatch(setNewDeal(null)), 600);
       break;
     }
     case MessageAction.DealDataUpdated: {
@@ -88,7 +85,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
         break;
       }
       dispatch(setUpdatedDeal(payload));
-      setTimeout(() => dispatch(setUpdatedDeal(null)), 400);
+      setTimeout(() => dispatch(setUpdatedDeal(null)), 600);
       break;
     }
     case MessageAction.DealRemoved: {
@@ -96,7 +93,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
         break;
       }
       dispatch(setDeletedDeal(payload));
-      setTimeout(() => dispatch(setDeletedDeal(null)), 400);
+      setTimeout(() => dispatch(setDeletedDeal(null)), 600);
       break;
     }
     case MessageAction.DealReminderCreated: {
@@ -104,7 +101,7 @@ export const handleRemoteMessage = (message) => (dispatch, getState) => {
         break;
       }
       dispatch(setNewReminder(payload));
-      setTimeout(() => dispatch(setNewReminder(null)), 400);
+      setTimeout(() => dispatch(setNewReminder(null)), 600);
       break;
     }
     case MessageAction.ReminderIsDueDate:
@@ -146,4 +143,5 @@ const MessageAction = {
   DealReminderUpdated: 'DealReminderUpdated',
   DealReminderCreated: 'DealReminderCreated',
   ReminderIsDueDate: 'ReminderIsDueDate',
+  UserCalendarVisibilityChanged: 'UserCalendarVisibilityChanged'
 };

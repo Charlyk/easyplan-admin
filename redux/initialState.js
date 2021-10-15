@@ -37,5 +37,8 @@ export default Object.freeze({
     deletedDeal: null,
     updatedReminder: null,
     newReminder: null,
-  }
+  },
+  clinicData: {
+    updateClinicData: false,
+  },
 });

@@ -9,8 +9,8 @@ import redirectToUrl from '../../../app/utils/redirectToUrl';
 import { getSchedulesForInterval } from "../../../middleware/api/schedules";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
 import parseCookies from "../../../app/utils/parseCookies";
-import areComponentPropsEqual from "../../../app/utils/areComponentPropsEqual";
 import handleRequestError from "../../../app/utils/handleRequestError";
+import { wrapper } from "../../../store";
 
 const Week = (
   {
@@ -43,7 +43,7 @@ const Week = (
   )
 };
 
-export default React.memo(Week, areComponentPropsEqual)
+export default wrapper.withRedux(Week)
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
@@ -81,7 +81,7 @@ export const getServerSideProps = async ({ req, query }) => {
 
     // filter clinic doctors
     const doctors = currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && !item.isHidden
+      item.roleInClinic === Role.doctor && !item.isHidden && item.showInCalendar
     ) || [];
 
     // check if doctor id is present in query

@@ -108,3 +108,14 @@ export async function requestAcceptInvitation(body, headers = null) {
 export async function saveFacebookToken(token, headers = null) {
   return put('/api/users/integrations/facebook', headers, { token });
 }
+
+/**
+ * Change user calendar visibility
+ * @param {number} userId
+ * @param {boolean} visible
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestToggleUserCalendarVisibility(userId, visible, headers = null) {
+  return put(`/api/users/${userId}/calendar`, headers, { showInCalendar: visible });
+}

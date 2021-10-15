@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { usePubNub } from 'pubnub-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from "moment-timezone";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -35,6 +35,7 @@ import reducer, {
   setShowImportModal,
 } from './CalendarContainer.reducer';
 import styles from './CalendarContainer.module.scss';
+import { updateClinicDataSelector } from "../../../../../redux/selectors/clinicDataSelector";
 
 const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
@@ -106,6 +107,7 @@ const CalendarContainer = (
 ) => {
   const { data } = useSWR(APP_DATA_API);
   const { currentUser, currentClinic } = data;
+  const updateClinicData = useSelector(updateClinicDataSelector);
 
   const router = useRouter();
   const pubnub = usePubNub();
@@ -133,6 +135,14 @@ const CalendarContainer = (
       doctors,
     }
   });
+
+  useEffect(() => {
+    console.log(updateClinicData)
+    if (!updateClinicData) {
+      return;
+    }
+    router.replace(router.asPath);
+  }, [updateClinicData])
 
   useEffect(() => {
     if (currentUser == null) {

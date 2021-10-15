@@ -9,6 +9,7 @@ import { fetchAppData } from "../../../middleware/api/initialization";
 import { fetchDaySchedules } from "../../../middleware/api/schedules";
 import parseCookies from "../../../app/utils/parseCookies";
 import handleRequestError from "../../../app/utils/handleRequestError";
+import { wrapper } from "../../../store";
 
 const Day = ({ fallback, date, schedules, dayHours, doctors, authToken }) => {
   const viewDate = moment(date).toDate();
@@ -39,7 +40,7 @@ const Day = ({ fallback, date, schedules, dayHours, doctors, authToken }) => {
   )
 };
 
-export default Day;
+export default wrapper.withRedux(Day);
 
 export const getServerSideProps = async ({ query, req, res }) => {
   if (query.date == null) {
@@ -72,7 +73,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
 
     // filter clinic doctors
     const doctors = currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && !item.isHidden
+      item.roleInClinic === Role.doctor && !item.isHidden && item.showInCalendar
     ) || [];
 
     const response = await fetchDaySchedules(query, req.headers);

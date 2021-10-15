@@ -8,6 +8,7 @@ import { fetchAppData } from "../../../middleware/api/initialization";
 import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
 import parseCookies from "../../../app/utils/parseCookies";
 import handleRequestError from "../../../app/utils/handleRequestError";
+import { wrapper } from "../../../store";
 
 const Month = ({ fallback, doctorId, date, doctors, authToken }) => {
   const viewDate = moment(date).toDate();
@@ -29,7 +30,7 @@ const Month = ({ fallback, doctorId, date, doctors, authToken }) => {
   )
 };
 
-export default Month;
+export default wrapper.withRedux(Month);
 
 export const getServerSideProps = async ({ req, res, query }) => {
   if (query.date == null) {
@@ -59,7 +60,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     }
     // filter clinic doctors
     const doctors = currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && !item.isHidden
+      item.roleInClinic === Role.doctor && !item.isHidden && item.showInCalendar
     ) || [];
 
     // check if doctor id is present in query

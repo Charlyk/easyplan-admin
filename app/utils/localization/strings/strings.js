@@ -613,6 +613,8 @@ export default {
     help_crm_add_reminder_message: 'Click here to add a reminder for this deal.',
     menu_crm_help_message: 'Now you can manage relations with your clients inside our application. Click here to open CRM dashboard and manage clients flow.',
     menu_crm_help_title: 'CRM is here!',
+    'hide from calendar': 'Hide from calendar',
+    'show in calendar': 'Show in calendar',
   },
   ro: {
     analytics: 'Analitică',
@@ -1234,6 +1236,8 @@ export default {
     help_crm_add_reminder_message: 'Apăsați aici pentru a adăuga o sarcina nouă pentru acest deal.',
     menu_crm_help_message: 'Acum puteți ridica relațiile cu clienții Dvs la un alt nivel. Dați click aici pentru a deschide dashboard-ul CRM unde puteți controla tot flow-ul clienților.',
     menu_crm_help_title: 'Acum și CRM',
+    'hide from calendar': 'Ascunde din calendar',
+    'show in calendar': 'Arată în calendar',
   },
   ru: {
     analytics: 'Analytics',
@@ -1846,5 +1850,7 @@ export default {
     help_crm_add_reminder_message: 'Click here to add a reminder for this deal.',
     menu_crm_help_message: 'Now you can manage relations with your clients inside our application. Click here to open CRM dashboard and manage clients flow.',
     menu_crm_help_title: 'CRM is here!',
+    'hide from calendar': 'Hide from calendar',
+    'show in calendar': 'Show in calendar',
   },
 };

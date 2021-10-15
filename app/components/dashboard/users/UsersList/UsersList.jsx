@@ -14,7 +14,7 @@ import { textForKey } from '../../../../utils/localization';
 import {
   deleteUser,
   getUsers,
-  inviteUser,
+  inviteUser, requestToggleUserCalendarVisibility,
   restoreUser,
   updateUserCashierStatus
 } from "../../../../../middleware/api/users";
@@ -34,6 +34,7 @@ import reducer, {
   setIsInvitingExistentError,
 } from './UsersList.reducer';
 import styles from './UsersList.module.scss';
+import onRequestError from "../../../../utils/onRequestError";
 
 const UserItem = dynamic(() => import('../UserItem'));
 const UsersHeader = dynamic(() => import('../UserHeader'));
@@ -151,7 +152,16 @@ const UsersList = (
       await updateUserCashierStatus(user.id, isCashier);
       await fetchUsers();
     } catch (error) {
-      toast.error(error.message);
+      onRequestError(error)
+    }
+  }
+
+  const handleUserCalendarChange = async (user) => {
+    try {
+      await requestToggleUserCalendarVisibility(user.id, !user.showInCalendar);
+      await fetchUsers();
+    } catch (error) {
+      onRequestError(error)
     }
   }
 
@@ -385,6 +395,7 @@ const UsersList = (
                     onDelete={startUserDelete}
                     onEdit={handleUserModalOpen}
                     onRestore={handleRestoreUser}
+                    onCalendarChange={handleUserCalendarChange}
                   />
                 ))}
                 {canShowType(Role.doctor) && renderNoData(Role.doctor)}

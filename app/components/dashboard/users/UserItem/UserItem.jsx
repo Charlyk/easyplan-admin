@@ -3,13 +3,15 @@ import clsx from 'clsx';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 
 import { Role } from '../../../../utils/constants';
 import urlToLambda from '../../../../utils/urlToLambda';
 import { textForKey } from '../../../../utils/localization';
+import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
 import IconAvatar from '../../../icons/iconAvatar';
 import IconDelete from '../../../icons/iconDelete';
 import IconEdit from '../../../icons/iconEdit';
@@ -30,6 +32,7 @@ const UserItem = (
     onResend,
     onRestore,
     onCashierChange,
+    onCalendarChange,
   }
 ) => {
   const handleDeleteUser = event => {
@@ -50,6 +53,10 @@ const UserItem = (
 
   const handleCashierChange = (enabled) => {
     onCashierChange(user, enabled);
+  }
+
+  const handleCalendarChange = () => {
+    onCalendarChange?.(user);
   }
 
   const rootClasses = clsx(styles.userItem, user.isHidden ? styles.fired : styles.active);
@@ -122,17 +129,27 @@ const UserItem = (
             </LoadingButton>
           )}
           {user.roleInClinic === Role.doctor && !isInvitation && (
-            <Button
-              variant="outlined"
-              classes={{
-                root: styles.editBtn,
-                outlined: styles.outlinedBtnBlue,
-                label: styles.buttonLabel,
-              }}
-              onClick={handleEditUser}
+            <Tooltip
+              title={
+                user.showInCalendar
+                  ? textForKey('Hide from calendar')
+                  : textForKey('Show in calendar')
+              }
             >
-              {textForKey('Edit')} <IconEdit/>
-            </Button>
+              <IconButton
+                className={clsx(styles.iconButton, !user.showInCalendar && styles.hidden)}
+                onPointerUp={handleCalendarChange}
+              >
+                <IconAppointmentCalendar fill="#3A83DC"/>
+              </IconButton>
+            </Tooltip>
+          )}
+          {user.roleInClinic === Role.doctor && !isInvitation && (
+            <Tooltip title={textForKey('Edit')}>
+              <IconButton className={styles.iconButton} onPointerUp={handleEditUser}>
+                <IconEdit fill="#3A83DC"/>
+              </IconButton>
+            </Tooltip>
           )}
           {user.roleInClinic === Role.reception && !isInvitation && (
             <div className={styles.cashierSwitchWrapper}>
@@ -146,29 +163,17 @@ const UserItem = (
             </div>
           )}
           {user.isHidden ? (
-            <Button
-              variant="outlined"
-              classes={{
-                root: styles.restoreBtn,
-                outlined: styles.outlinedBtnGreen,
-                label: styles.buttonLabel,
-              }}
-              onClick={handleRestoreUser}
-            >
-              {textForKey('Restore')} <IconRefresh fill='#00E987'/>
-            </Button>
+            <Tooltip title={textForKey('Restore')}>
+              <IconButton className={styles.iconButton} onPointerUp={handleRestoreUser}>
+                <IconRefresh fill='#00E987'/>
+              </IconButton>
+            </Tooltip>
           ) : (
-            <Button
-              variant="outlined"
-              onClick={handleDeleteUser}
-              classes={{
-                root: styles.deleteBtn,
-                outlined: styles.outlinedBtnRed,
-                label: styles.buttonLabel,
-              }}
-            >
-              {textForKey('Delete')} <IconDelete/>
-            </Button>
+            <Tooltip title={textForKey('Delete')}>
+              <IconButton className={styles.iconButton} onPointerUp={handleDeleteUser}>
+                <IconDelete fill="#ec3276"/>
+              </IconButton>
+            </Tooltip>
           )}
         </div>
       </TableCell>
@@ -192,12 +197,14 @@ UserItem.propTypes = {
     status: PropTypes.string,
     isHidden: PropTypes.bool,
     canRegisterPayments: PropTypes.bool,
+    showInCalendar: PropTypes.bool,
   }).isRequired,
   onResend: PropTypes.func,
   onDelete: PropTypes.func,
   onRestore: PropTypes.func,
   onEdit: PropTypes.func,
   onCashierChange: PropTypes.func,
+  onCalendarChange: PropTypes.func,
 };
 
 UserItem.defaultProps = {
