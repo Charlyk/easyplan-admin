@@ -19,6 +19,7 @@ import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import isOutOfBounds from "../../../../utils/isOutOfBounds";
 import { actions, reducer, initialState } from './CalendarDayView.reducer'
 import styles from './CalendarDayView.module.scss';
+import { textForKey } from "../../../../utils/localization";
 
 const EasyCalendar = dynamic(() => import('../../../common/EasyCalendar'));
 const AddPauseModal = dynamic(() => import('../modals/AddPauseModal'));
@@ -189,6 +190,10 @@ const CalendarDayView = (
     id = null,
     comment = null,
   ) => {
+    if (doctor.isHidden) {
+      toast.warn(textForKey('doctor_is_fired'));
+      return;
+    }
     handleOpenPauseModal(doctor, startHour, endHour, id, comment);
   };
 

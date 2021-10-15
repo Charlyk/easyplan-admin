@@ -209,6 +209,10 @@ const CalendarContainer = (
   };
 
   const handleAppointmentModalOpen = (doctor, startHour, endHour, selectedDate = null) => {
+    if (doctor.isHidden) {
+      toast.warn(textForKey('doctor_is_fired'))
+      return;
+    }
     dispatch(
       setAppointmentModal({
         open: true,

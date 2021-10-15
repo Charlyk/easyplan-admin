@@ -615,6 +615,7 @@ export default {
     menu_crm_help_title: 'CRM is here!',
     'hide from calendar': 'Hide from calendar',
     'show in calendar': 'Show in calendar',
+    doctor_is_fired: 'Doctor is fired',
   },
   ro: {
     analytics: 'Analitică',
@@ -1238,6 +1239,7 @@ export default {
     menu_crm_help_title: 'Acum și CRM',
     'hide from calendar': 'Ascunde din calendar',
     'show in calendar': 'Arată în calendar',
+    doctor_is_fired: 'Doctorul este concediat!',
   },
   ru: {
     analytics: 'Analytics',
@@ -1852,5 +1854,6 @@ export default {
     menu_crm_help_title: 'CRM is here!',
     'hide from calendar': 'Hide from calendar',
     'show in calendar': 'Show in calendar',
+    doctor_is_fired: 'Doctor is fired',
   },
 };
