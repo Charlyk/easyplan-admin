@@ -151,12 +151,12 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
   }, []);
 
-  useEffect(() => {
-    setShowCrmHelp(
-      !wasNotificationShown(notifications.menuCRMImplementation.id) &&
-      !showTechSupportHelp,
-    );
-  }, [showTechSupportHelp])
+  // useEffect(() => {
+  //   setShowCrmHelp(
+  //     !wasNotificationShown(notifications.menuCRMImplementation.id) &&
+  //     !showTechSupportHelp,
+  //   );
+  // }, [showTechSupportHelp])
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
