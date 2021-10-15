@@ -48,24 +48,24 @@ const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
           </div>
         </div>
       )}
-      {/*{[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (*/}
-      {/*  <div*/}
-      {/*    role='button'*/}
-      {/*    tabIndex={0}*/}
-      {/*    onClick={() => onSelect('integrations')}*/}
-      {/*    className={clsx(*/}
-      {/*      styles['settings-menu-item'],*/}
-      {/*      isSelected('integrations') && styles.selected,*/}
-      {/*    )}*/}
-      {/*  >*/}
-      {/*    <span className={styles['item-title']}>*/}
-      {/*      {textForKey('Integrations')}*/}
-      {/*    </span>*/}
-      {/*    <div className={styles['next-arrow']}>*/}
-      {/*      {isSelected('integrations') && <IconNext />}*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*)}*/}
+      {[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (
+        <div
+          role='button'
+          tabIndex={0}
+          onClick={() => onSelect('integrations')}
+          className={clsx(
+            styles['settings-menu-item'],
+            isSelected('integrations') && styles.selected,
+          )}
+        >
+          <span className={styles['item-title']}>
+            {textForKey('Integrations')}
+          </span>
+          <div className={styles['next-arrow']}>
+            {isSelected('integrations') && <IconNext />}
+          </div>
+        </div>
+      )}
       {[Role.admin, Role.manager].includes(selectedClinic?.roleInClinic) && (
         <div
           role='button'
