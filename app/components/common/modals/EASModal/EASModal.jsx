@@ -41,18 +41,19 @@ const EASModal = (
     if (event.keyCode === 27 && !isPositiveLoading) {
       handleBackdropClick();
     }
-  }
+  };
 
   const handleCloseModal = (event) => {
-    event?.stopPropagation();
+    stopPropagation(event)
     if (isPositiveLoading) {
       return;
     }
 
     onClose?.();
-  }
+  };
 
-  const handlePrimaryClick = () => {
+  const handlePrimaryClick = (event) => {
+    stopPropagation(event);
     if (isPositiveDisabled) {
       return;
     }
@@ -64,15 +65,17 @@ const EASModal = (
     }
   };
 
-  const handleDestroyClick = () => {
+  const handleDestroyClick = (event) => {
+    stopPropagation(event);
     if (typeof onDestroyClick === 'function') {
       onDestroyClick();
     } else {
       onClose?.();
     }
-  }
+  };
 
-  const handleSecondaryClick = () => {
+  const handleSecondaryClick = (event) => {
+    stopPropagation(event);
     if (typeof onSecondaryClick === 'function') {
       onSecondaryClick();
     } else {
@@ -86,7 +89,13 @@ const EASModal = (
     } else {
       onBackdropClick?.();
     }
-  }
+  };
+
+  const stopPropagation = (event) => {
+    event?.stopPropagation();
+    event?.stopImmediatePropagation();
+    event?.preventDefault();
+  };
 
   return (
     <Modal
@@ -97,7 +106,7 @@ const EASModal = (
     >
       <Paper
         className={clsx(styles.modalPaper, paperClass)}
-        onPointerUp={event => event.stopPropagation()}
+        onPointerUp={stopPropagation}
       >
         <div className={styles.modalHeader}>
           <Typography className={styles.titleLabel} noWrap>
