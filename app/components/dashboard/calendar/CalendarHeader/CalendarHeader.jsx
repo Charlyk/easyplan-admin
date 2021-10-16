@@ -59,7 +59,8 @@ const CalendarHeader = (
     handleDateChange(new Date());
   };
 
-  const handleAddAppointment = () => {
+  const handleAddAppointment = (event) => {
+    event?.stopPropagation();
     onAddAppointment();
   };
 
@@ -161,7 +162,7 @@ const CalendarHeader = (
       <div className={clsx(styles.rightBtnsWrapper, 'flexContainer')}>
         <IconButton
           className={styles.importBtn}
-          onClick={onImportSchedules}
+          onPointerUp={onImportSchedules}
         >
           <UploadIcon/>
         </IconButton>
@@ -169,7 +170,7 @@ const CalendarHeader = (
           <IconButton
             ref={legendAnchor}
             className={styles.legendBtn}
-            onClick={handleShowLegend}
+            onPointerUp={handleShowLegend}
           >
             <IconInfo fill='#3A83DC'/>
           </IconButton>
@@ -177,7 +178,7 @@ const CalendarHeader = (
         <Button
           className={clsx('positive-button', styles.addAppointmentBtn)}
           disabled={!canAddAppointment}
-          onClick={handleAddAppointment}
+          onPointerUp={handleAddAppointment}
         >
           {textForKey('Add appointment')}
           <IconPlus/>

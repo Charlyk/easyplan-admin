@@ -484,6 +484,7 @@ const AddAppointmentModal = (
           ? textForKey('Add appointment')
           : textForKey('Edit appointment')
       }
+      onBackdropClick={() => null}
       isPositiveDisabled={!isFormValid() || isLoading}
       onPrimaryClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
