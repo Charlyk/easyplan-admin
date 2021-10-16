@@ -43,8 +43,7 @@ const EASModal = (
     }
   };
 
-  const handleCloseModal = (event) => {
-    stopPropagation(event)
+  const handleCloseModal = () => {
     if (isPositiveLoading) {
       return;
     }
@@ -52,8 +51,7 @@ const EASModal = (
     onClose?.();
   };
 
-  const handlePrimaryClick = (event) => {
-    stopPropagation(event);
+  const handlePrimaryClick = () => {
     if (isPositiveDisabled) {
       return;
     }
@@ -65,8 +63,7 @@ const EASModal = (
     }
   };
 
-  const handleDestroyClick = (event) => {
-    stopPropagation(event);
+  const handleDestroyClick = () => {
     if (typeof onDestroyClick === 'function') {
       onDestroyClick();
     } else {
@@ -74,8 +71,7 @@ const EASModal = (
     }
   };
 
-  const handleSecondaryClick = (event) => {
-    stopPropagation(event);
+  const handleSecondaryClick = () => {
     if (typeof onSecondaryClick === 'function') {
       onSecondaryClick();
     } else {
@@ -103,15 +99,12 @@ const EASModal = (
       onBackdropClick={handleBackdropClick}
       onKeyDown={handleKeyDown}
     >
-      <Paper
-        className={clsx(styles.modalPaper, paperClass)}
-        onPointerUp={stopPropagation}
-      >
+      <Paper className={clsx(styles.modalPaper, paperClass)}>
         <div className={styles.modalHeader}>
           <Typography className={styles.titleLabel} noWrap>
             {title}
           </Typography>
-          <IconButton className={styles.closeButton} onPointerUp={handleCloseModal}>
+          <IconButton className={styles.closeButton} onClick={handleCloseModal}>
             <IconClose/>
           </IconButton>
         </div>
@@ -136,7 +129,7 @@ const EASModal = (
           {!isPositiveLoading && showDestroyBtn && (
             <Button
               className={styles.destroyButton}
-              onPointerUp={handleDestroyClick}
+              onClick={handleDestroyClick}
               disabled={isPositiveDisabled}
               variant='text'
             >
@@ -146,7 +139,7 @@ const EASModal = (
           {!hidePositiveBtn && (
             <Button
               className={styles.primaryButton}
-              onPointerUp={handlePrimaryClick}
+              onClick={handlePrimaryClick}
               disabled={isPositiveDisabled}
               variant='text'
             >
