@@ -94,7 +94,6 @@ const EASModal = (
   const stopPropagation = (event) => {
     event?.stopPropagation();
     event?.stopImmediatePropagation();
-    event?.preventDefault();
   };
 
   return (
