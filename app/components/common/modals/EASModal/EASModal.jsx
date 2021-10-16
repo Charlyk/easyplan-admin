@@ -43,7 +43,8 @@ const EASModal = (
     }
   }
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (event) => {
+    event?.stopPropagation();
     if (isPositiveLoading) {
       return;
     }
@@ -94,7 +95,10 @@ const EASModal = (
       onBackdropClick={handleBackdropClick}
       onKeyDown={handleKeyDown}
     >
-      <Paper className={clsx(styles.modalPaper, paperClass)}>
+      <Paper
+        className={clsx(styles.modalPaper, paperClass)}
+        onPointerUp={event => event.stopPropagation()}
+      >
         <div className={styles.modalHeader}>
           <Typography className={styles.titleLabel} noWrap>
             {title}
