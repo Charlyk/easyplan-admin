@@ -159,3 +159,33 @@ export async function requestFetchDealDetails(dealId, headers = null) {
 export async function requestCompleteReminder(reminderId, resultComment, headers = null) {
   return put(`/api/reminders/${reminderId}/complete`, headers, { resultComment });
 }
+
+/**
+ * Move a deal to another column
+ * @param {number} columnId
+ * @param {number} dealId
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestChangeDealColumn(columnId, dealId, headers = null) {
+  return put(`/api/crm/${dealId}/move`, headers, { newState: columnId });
+}
+
+/**
+ * Fetch all deal states
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchAllDealStates(headers = null) {
+  return get('/api/crm/states', headers);
+}
+
+/**
+ * Fetch all deal states
+ * @param {{ columnId: number, visible: boolean }} body
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestUpdateDealStateVisibility(body, headers = null) {
+  return put('/api/crm/states', headers, body);
+}

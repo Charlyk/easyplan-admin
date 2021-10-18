@@ -52,17 +52,17 @@ const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
         <div
           role='button'
           tabIndex={0}
-          onClick={() => onSelect('integrations')}
+          onClick={() => onSelect('crmSettings')}
           className={clsx(
             styles['settings-menu-item'],
-            isSelected('integrations') && styles.selected,
+            isSelected('crmSettings') && styles.selected,
           )}
         >
           <span className={styles['item-title']}>
-            {textForKey('Integrations')}
+            {textForKey('CRM Settings')}
           </span>
           <div className={styles['next-arrow']}>
-            {isSelected('integrations') && <IconNext />}
+            {isSelected('crmSettings') && <IconNext />}
           </div>
         </div>
       )}
@@ -141,7 +141,7 @@ SettingsMenu.propTypes = {
     'securitySettings',
     'accountSettings',
     'bracesSettings',
-    'integrations',
+    'crmSettings',
   ]),
   selectedClinic: PropTypes.shape({
     roleInClinic: PropTypes.string,

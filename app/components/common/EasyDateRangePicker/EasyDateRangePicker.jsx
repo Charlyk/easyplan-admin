@@ -31,7 +31,7 @@ const EasyDateRangePicker = (
     >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className={styles['calendar-paper']}>
+          <Paper className={styles['calendar-paper']} onClick={event => event.stopPropagation()}>
             <ClickAwayListener onClickAway={onClose}>
               <DateRangePicker
                 weekStartsOn={1}

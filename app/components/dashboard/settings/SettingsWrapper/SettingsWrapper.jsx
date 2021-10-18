@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Role } from "../../../../utils/constants";
+import styles from './SettingsWrapper.module.scss';
+
 const AccountSettings = dynamic(() => import('../AccountSettings'));
 const ApplicationSettings = dynamic(() => import('../ApplicationSettings'));
 const BracesSettings = dynamic(() => import('../BracesSettings'));
@@ -8,8 +10,7 @@ const ClinicWorkingHours = dynamic(() => import('../ClinicWorkingHours'));
 const CompanyDetailsForm = dynamic(() => import('../CompanyDetailsForm'));
 const SecuritySettings = dynamic(() => import('../SecuritySettings'));
 const SettingsMenu = dynamic(() => import('../SettingsMenu'));
-const Integrations = dynamic(() => import("../Integrations"));
-import styles from './SettingsWrapper.module.scss';
+const CrmSettings = dynamic(() => import("../CrmSettings"));
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -18,7 +19,7 @@ const SettingsForm = {
   securitySettings: 'securitySettings',
   appSettings: 'appSettings',
   bracesSettings: 'bracesSettings',
-  integrations: 'integrations',
+  crmSettings: 'crmSettings',
 };
 
 const SettingsWrapper = ({ currentUser, currentClinic, countries }) => {
@@ -80,8 +81,8 @@ const SettingsWrapper = ({ currentUser, currentClinic, countries }) => {
               currentClinic={currentClinic}
             />
           )}
-          {currentForm === SettingsForm.integrations && (
-            <Integrations
+          {currentForm === SettingsForm.crmSettings && (
+            <CrmSettings
               currentUser={currentUser}
               currentClinic={currentClinic}
             />

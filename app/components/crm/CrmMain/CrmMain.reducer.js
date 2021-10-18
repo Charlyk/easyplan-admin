@@ -3,10 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   columns: [],
   linkModal: { open: false, deal: null },
-  deleteModal: { open: false, deal: null },
+  deleteModal: { open: false, deal: null, isLoading: false },
   detailsModal: { open: false, deal: null },
   reminderModal: { open: false, deal: null },
   updatedDeal: null,
+  showFilters: false,
+  queryParams: {},
 };
 
 const crmMainSlice = createSlice({
@@ -20,10 +22,10 @@ const crmMainSlice = createSlice({
       state.linkModal = action.payload;
     },
     openDeleteModal(state, action) {
-      state.deleteModal = { open: true, deal: action.payload };
+      state.deleteModal = { open: true, deal: action.payload, isLoading: false };
     },
     closeDeleteModal(state) {
-      state.deleteModal = { open: false, deal: null };
+      state.deleteModal = { open: false, deal: null, isLoading: false };
     },
     openLinkModal(state, action) {
       const { deal, confirm } = action.payload;
@@ -49,6 +51,15 @@ const crmMainSlice = createSlice({
     },
     closeReminderModal(state) {
       state.reminderModal = { open: false, deal: null };
+    },
+    setIsDeleting(state, action) {
+      state.deleteModal = { ...state.deleteModal, isLoading: action.payload };
+    },
+    setShowFilters(state, action) {
+      state.showFilters = action.payload;
+    },
+    setQueryParams(state, action) {
+      state.queryParams = action.payload;
     }
   },
 });
@@ -65,6 +76,9 @@ export const {
   closeDealDetails,
   openReminderModal,
   closeReminderModal,
+  setIsDeleting,
+  setShowFilters,
+  setQueryParams,
 } = crmMainSlice.actions;
 
 export default crmMainSlice.reducer;

@@ -228,7 +228,7 @@ const DealsColumn = (
           variant="rect"
           width="100%"
           height={dealState.type === "Unsorted" ? '85px' : dealState.type !== 'FirstContact' ? '120px' : '105px'}
-          style={{ backgroundColor: `${dealState.color}1A` }}
+          style={{ backgroundColor: `${dealState.color}0D` }}
         />
       )
     }

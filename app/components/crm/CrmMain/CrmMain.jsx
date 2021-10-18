@@ -1,16 +1,26 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer } from "react";
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import upperFirst from 'lodash/upperFirst';
 import { toast } from "react-toastify";
+import Fab from "@material-ui/core/Fab";
+import Tooltip from '@material-ui/core/Tooltip';
+import IconFilter from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from "react-redux";
-
-import { fetchAllDealStates, requestConfirmFirstContact, updateDealState } from "../../../../middleware/api/crm";
+import {
+  fetchAllDealStates,
+  requestChangeDealColumn,
+  requestConfirmFirstContact,
+  updateDealState
+} from "../../../../middleware/api/crm";
 import { setAppointmentModal } from "../../../../redux/actions/actions";
 import { updatedDealSelector } from "../../../../redux/selectors/crmSelector";
+import extractCookieByName from "../../../utils/extractCookieByName";
+import setDocCookies from "../../../utils/setDocCookies";
 import { textForKey } from "../../../utils/localization";
 import onRequestError from "../../../utils/onRequestError";
 import DealsColumn from "../DealsColumn";
+import CrmFilters from "./CrmFilters";
 import reducer, {
   initialState,
   setColumns,
@@ -23,6 +33,9 @@ import reducer, {
   closeDealDetails,
   openReminderModal,
   closeReminderModal,
+  setIsDeleting,
+  setShowFilters,
+  setQueryParams,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
 
@@ -30,6 +43,8 @@ const ConfirmationModal = dynamic(() => import("../../common/modals/Confirmation
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
 const DealDetails = dynamic(() => import('../DealDetails'));
 const AddReminderModal = dynamic(() => import('../AddReminderModal'));
+
+const COOKIES_KEY = 'crm_filter';
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
@@ -41,7 +56,22 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     updatedDeal,
     detailsModal,
     reminderModal,
+    showFilters,
+    queryParams,
   }, localDispatch] = useReducer(reducer, initialState);
+
+  const filteredColumns = useMemo(() => {
+    return columns.filter(item => item.visibleByDefault);
+  }, [columns]);
+
+  useEffect(() => {
+    const queryParams = extractCookieByName(COOKIES_KEY);
+    if (!queryParams) {
+      return;
+    }
+    const params = JSON.parse(atob(queryParams));
+    localDispatch(setQueryParams(params));
+  }, []);
 
   useEffect(() => {
     if (remoteDeal == null) {
@@ -95,9 +125,25 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     localDispatch(closeReminderModal());
   };
 
-  const handleDeleteConfirmed = () => {
-    handleCloseDeleteModal();
-  }
+  const handleDeleteConfirmed = async () => {
+    const { deal } = deleteModal;
+    if (deal == null) {
+      return;
+    }
+    try {
+      const column = states.find(item => item.type === 'ClosedNotRealized')
+      if (column == null) {
+        return;
+      }
+      localDispatch(setIsDeleting(true));
+      await requestChangeDealColumn(column.id, deal.id);
+      handleCloseDeleteModal();
+    } catch (error) {
+      onRequestError(error);
+    } finally {
+      localDispatch(setIsDeleting(false));
+    }
+  };
 
   const handleColumnMoved = async (direction, state) => {
     try {
@@ -106,14 +152,14 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
 
   const handlePatientLinked = async (updatedDeal, confirmContact) => {
     localDispatch(setUpdatedDeal(updatedDeal));
     if (confirmContact) {
       await handleConfirmFirstContact(updatedDeal);
     }
-  }
+  };
 
   const handleConfirmFirstContact = async (deal) => {
     try {
@@ -126,7 +172,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const handleAddSchedule = (deal) => {
     if (deal.patient == null) {
@@ -138,7 +184,30 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         patient: deal.patient,
       }),
     );
-  }
+  };
+
+  const handleOpenFilter = () => {
+    localDispatch(setShowFilters(true));
+  };
+
+  const handleCloseFilter = () => {
+    localDispatch(setShowFilters(false));
+  };
+
+  const updateParams = (newParams) => {
+    const stringQuery = JSON.stringify(newParams);
+    const encoded = btoa(unescape(encodeURIComponent(stringQuery)))
+    setDocCookies(COOKIES_KEY, encoded);
+    localDispatch(setQueryParams(newParams));
+  };
+
+  const handleShortcutSelected = (shortcut) => {
+    updateParams({ shortcut });
+  };
+
+  const handleFilterSubmit = (filterData) => {
+    updateParams(filterData);
+  };
 
   return (
     <div className={styles.crmMain}>
@@ -156,6 +225,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       />
       <ConfirmationModal
         show={deleteModal.open}
+        isLoading={deleteModal.isLoading}
         title={textForKey('delete_deal_title')}
         message={textForKey('delete_deal_message')}
         onClose={handleCloseDeleteModal}
@@ -172,8 +242,28 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         onAddSchedule={handleAddSchedule}
         onAddReminder={handleOpenReminderModal}
       />
+      {showFilters && (
+        <CrmFilters
+          currentClinic={currentClinic}
+          selectedParams={queryParams}
+          onClose={handleCloseFilter}
+          onSubmit={handleFilterSubmit}
+          onShortcutSelected={handleShortcutSelected}
+        />
+      )}
+      <div className={styles.buttonsContainer}>
+        <Tooltip title={textForKey('Filter')} placement="left">
+          <Fab
+            className={styles.fab}
+            aria-label="filter"
+            onClick={handleOpenFilter}
+          >
+            <IconFilter/>
+          </Fab>
+        </Tooltip>
+      </div>
       <div className={styles.columnsContainer}>
-        {columns.map((dealState, index) => (
+        {filteredColumns.map((dealState, index) => (
           <DealsColumn
             key={dealState.id}
             isFirst={index === 0}
@@ -196,6 +286,9 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
 export default CrmMain;
 
 CrmMain.propTypes = {
+  query: PropTypes.shape({
+    shortcut: PropTypes.string,
+  }),
   currentUser: PropTypes.any,
   currentClinic: PropTypes.any,
   states: PropTypes.arrayOf(PropTypes.shape({

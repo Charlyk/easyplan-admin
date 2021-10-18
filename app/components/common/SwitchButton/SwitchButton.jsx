@@ -7,7 +7,7 @@ const SwitchButton = (props) => {
   const { isChecked, onChange } = props;
 
   const handleToggle = () => {
-    onChange(!isChecked);
+    onChange?.(!isChecked);
   };
 
   const bgClasses = clsx(styles['switch-button'], isChecked ? styles.selected : styles.default);

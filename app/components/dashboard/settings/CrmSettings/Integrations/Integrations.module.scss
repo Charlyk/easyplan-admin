@@ -1,0 +1,26 @@
+.integrations {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+
+  .formTitle {
+    width: 100%;
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #34354C;
+    margin-bottom: 1rem;
+  }
+
+  .dataContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { textForKey } from "../../../../utils/localization";
+import { textForKey } from "../../../../../utils/localization";
 import styles from './Integrations.module.scss';
 import FacebookIntegration from "./FacebookIntegration";
 

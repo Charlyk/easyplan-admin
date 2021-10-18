@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from 'prop-types';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from "@material-ui/core/MenuItem";
-import EASModal from "../../../../../common/modals/EASModal";
-import { textForKey } from "../../../../../../utils/localization";
+import EASModal from "../../../../../../common/modals/EASModal";
+import { textForKey } from "../../../../../../../utils/localization";
 
 const PagesListModal = ({ open, pages, onClose, onSelect }) => {
   return (

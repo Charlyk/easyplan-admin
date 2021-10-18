@@ -18,7 +18,7 @@ const Crm = ({ fallback, authToken, states }) => {
         currentPath='/crm'
         authToken={authToken}
       >
-        <CrmMain states={states}/>
+        <CrmMain states={states} />
       </MainComponent>
     </SWRConfig>
   );

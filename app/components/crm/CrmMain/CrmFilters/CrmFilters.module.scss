@@ -1,0 +1,128 @@
+.filterBackdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+
+  .crmFilters {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 10px !important;
+    width: 80%;
+    height: 70%;
+    overflow: hidden;
+    box-shadow: 0px 0px 50px -3px rgba(0,0,0,0.30) !important;
+
+    .titleContainer {
+      width: 100%;
+      height: 40px;
+      padding: .3rem .3rem .3rem 1rem;
+      background-color: white;
+      border-bottom: #ededed 1px solid;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .title {
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-weight: bold !important;
+        font-size: 16px !important;
+        color: #34344E !important;
+      }
+
+      .closeButton {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+      }
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 40px);
+      width: 100%;
+
+      .dataContainer {
+        display: flex;
+        width: 100%;
+        height: 100%;
+
+        .shortcuts {
+          width: 20%;
+          height: 100%;
+          overflow-y: auto;
+          border-right: #ededed 1px solid;
+
+          .shortcut {
+            padding: .6rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: #ededed 1px solid;
+
+            &:hover {
+              .label {
+                color: #3A83DC !important;
+              }
+            }
+
+            &.selected {
+              .label {
+                font-weight: bold !important;
+                color: #3A83DC !important;
+              }
+            }
+
+            .label {
+              font-family: Inter, sans-serif !important;
+              font-style: normal !important;
+              font-weight: normal !important;
+              font-size: 13px !important;
+              color: #34344E !important;
+            }
+          }
+        }
+
+        .filters {
+          width: 80%;
+          height: 100%;
+          background-color: #fbfbfb;
+
+          .fieldsContainer {
+            display: flex;
+            padding: .5rem 1rem;
+            flex-direction: column;
+            width: 100%;
+            height: calc(100% - 40px);
+
+            .simpleField {
+              margin-bottom: 5px;
+            }
+          }
+
+          .footer {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 .5rem;
+            background-color: white;
+            border-top: #ededed 1px solid;
+
+            .applyBtn {
+              color: #3A83DC;
+            }
+          }
+        }
+      }
+    }
+  }
+}

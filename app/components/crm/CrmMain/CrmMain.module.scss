@@ -3,6 +3,24 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  position: relative;
+
+  .buttonsContainer {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+
+    .fab {
+      background-color: #3A83DC;
+      z-index: 9999;
+
+      svg {
+        fill: white;
+      }
+    }
+  }
 
   .columnsContainer {
     padding: 8px;
