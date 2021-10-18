@@ -41,6 +41,9 @@ export const sheetActions = [
   },
 ]
 
+export const STATUS_LOADING = 1;
+export const STATUS_LOADED = 2;
+
 export const initialState = {
   isFetching: false,
   showActions: false,
@@ -50,8 +53,11 @@ export const initialState = {
   columnName: '',
   columnColor: '',
   totalElements: 0,
+  page: 0,
+  itemsPerPage: 25,
   items: [],
   dealState: null,
+  loadedRowsMap: {},
 };
 
 const dealsColumnSlice = createSlice({
@@ -88,8 +94,15 @@ const dealsColumnSlice = createSlice({
     },
     setData(state, action) {
       state.totalElements = action.payload.total;
-      state.items = action.payload.data;
+      const currentItems = state.items;
+      for (let item of action.payload.data) {
+        if (!currentItems.some(deal => deal.id === item.id)) {
+          currentItems.push(item);
+        }
+      }
+      state.items = currentItems;
       state.isFetching = false;
+      state.page = state.page + 1
     },
     setIsFetching(state, action) {
       state.isFetching = action.payload;
@@ -122,6 +135,24 @@ const dealsColumnSlice = createSlice({
         }
       }
       state.totalElements = state.items.length;
+    },
+    setPage(state, action) {
+      state.page = action.payload;
+    },
+    setItemsPerPage(state, action) {
+      state.itemsPerPage = action.payload;
+    },
+    setIsRowLoading(state, action) {
+      const { row, state: loadingState } = action.payload;
+      state.loadedRowsMap = { ...state.loadedRowsMap, [row]: loadingState };
+    },
+    setRowsLoading(state, action) {
+      const { rows, state: loadingState} = action.payload;
+      const newState = {}
+      for (let row of rows) {
+        newState[row] = loadingState;
+      }
+      state.loadedRowsMap = { ...state.loadedRowsMap, ...newState };
     }
   },
 });
@@ -138,6 +169,9 @@ export const {
   setIsFetching,
   setUpdatedDeal,
   addNewDeal,
+  setPage,
+  setIsRowLoading,
+  setRowsLoading,
 } = dealsColumnSlice.actions;
 
 export default dealsColumnSlice.reducer;

@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useReducer, useRef } from "react";
 import PropTypes from 'prop-types';
+import { useColor } from "react-color-palette";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import DoneIcon from '@material-ui/icons/Done';
-import { useColor } from "react-color-palette";
+import { InfiniteLoader, List, AutoSizer } from 'react-virtualized'
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
@@ -20,11 +21,14 @@ import {
   requestFetchDeals,
   updateDealState
 } from "../../../../middleware/api/crm";
+import onRequestError from "../../../utils/onRequestError";
 import ActionsSheet from "../../common/ActionsSheet";
 import EASColorPicker from "../../common/EASColorPicker";
 import AddColumnModal from "../AddColumnModal";
 import DealItem from "./DealItem";
 import reducer, {
+  STATUS_LOADING,
+  STATUS_LOADED,
   sheetActions,
   initialState,
   setShowActions,
@@ -38,8 +42,10 @@ import reducer, {
   setIsFetching,
   setUpdatedDeal,
   addNewDeal,
+  setRowsLoading,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
+import { Skeleton } from "@material-ui/lab";
 
 const DealsColumn = (
   {
@@ -69,6 +75,9 @@ const DealsColumn = (
     showCreateColumn,
     totalElements,
     items,
+    page,
+    itemsPerPage,
+    loadedRowsMap,
   }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -83,7 +92,7 @@ const DealsColumn = (
       return;
     }
     localDispatch(setColumnData(dealState));
-    fetchDealsForState();
+    fetchDealsForState({ startIndex: 0, stopIndex: itemsPerPage - 1 });
   }, [dealState]);
 
   useEffect(() => {
@@ -104,20 +113,25 @@ const DealsColumn = (
     })
   }, [dealState, isFirst, isLast]);
 
-  const fetchDealsForState = async () => {
+  const fetchDealsForState = async ({ startIndex, stopIndex }) => {
     try {
-      localDispatch(setIsFetching(true));
-      const response = await requestFetchDeals(dealState.id, 0, 25);
-      localDispatch(setData(response.data));
-    } catch (error) {
-      if (error.response != null) {
-        const { data } = error.response;
-        toast.error(data.message ?? error.message);
-      } else {
-        toast.error(error.message);
+      const rows = [];
+      for (let i = startIndex; i <= stopIndex; i++) {
+        rows.push(i);
       }
+      localDispatch(setRowsLoading({ rows, state: STATUS_LOADING}));
+      localDispatch(setIsFetching(true));
+      const response = await requestFetchDeals(dealState.id, page, itemsPerPage);
+      localDispatch(setData(response.data));
+      localDispatch(setRowsLoading({ rows, state: STATUS_LOADED}));
+    } catch (error) {
+      onRequestError(error)
       localDispatch(setIsFetching(false));
     }
+  }
+
+  const isRowLoaded = ({ index }) => {
+    return !!loadedRowsMap[index]
   }
 
   const handleNameChange = (event) => {
@@ -206,6 +220,42 @@ const DealsColumn = (
     handleCloseActions();
   };
 
+  const rowRenderer = ({ index, key }) => {
+    const isLoaded = isRowLoaded({ index });
+    if (!isLoaded) {
+      return (
+        <Skeleton
+          variant="rect"
+          width="100%"
+          height={dealState.type === "Unsorted" ? '85px' : dealState.type !== 'FirstContact' ? '120px' : '105px'}
+          style={{ backgroundColor: `${dealState.color}1A` }}
+        />
+      )
+    }
+
+    return (
+      <DealItem
+        key={key}
+        onDealClick={onDealClick}
+        color={dealState.color}
+        dealItem={items[index]}
+        onLinkPatient={onLinkPatient}
+        onDeleteDeal={onDeleteDeal}
+        onConfirmFirstContact={onConfirmFirstContact}
+      />
+    )
+  }
+
+  const getRowHeight = ({ index }) => {
+    const deal = items[index];
+    if (deal?.state.type === 'Unsorted') {
+      return 85;
+    } else if (deal?.schedule == null) {
+      return 105;
+    }
+    return 120;
+  }
+
   return (
     <div className={styles.dealsColumn}>
       <AddColumnModal
@@ -268,17 +318,29 @@ const DealsColumn = (
         </div>
       </div>
       <div className={styles.dataContainer}>
-        {items.map(deal => (
-          <DealItem
-            key={deal.id}
-            onDealClick={onDealClick}
-            color={dealState.color}
-            dealItem={deal}
-            onLinkPatient={onLinkPatient}
-            onDeleteDeal={onDeleteDeal}
-            onConfirmFirstContact={onConfirmFirstContact}
-          />
-        ))}
+        <InfiniteLoader
+          isRowLoaded={isRowLoaded}
+          loadMoreRows={fetchDealsForState}
+          rowCount={items.length}
+          minimumBatchSize={itemsPerPage}
+          threshold={itemsPerPage}
+        >
+          {({ onRowsRendered, registerChild }) => (
+            <AutoSizer>
+              {({ width, height }) => (
+                <List
+                  ref={registerChild}
+                  onRowRendered={onRowsRendered}
+                  rowCount={items.length}
+                  rowHeight={getRowHeight}
+                  rowRenderer={rowRenderer}
+                  width={width}
+                  height={height}
+                />
+              )}
+            </AutoSizer>
+          )}
+        </InfiniteLoader>
       </div>
     </div>
   )

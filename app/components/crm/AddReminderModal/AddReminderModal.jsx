@@ -43,9 +43,10 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
     }
     return currentClinic.users
       .filter((user) => (
-        user.roleInClinic === Role.reception ||
-        user.roleInClinic === Role.manager ||
-        user.roleInClinic === Role.admin
+        (user.roleInClinic === Role.reception ||
+          user.roleInClinic === Role.manager ||
+          user.roleInClinic === Role.admin) &&
+        !user.isHidden
       ))
       .map((user) => ({
         ...user,

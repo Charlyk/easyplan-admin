@@ -6,6 +6,20 @@
   margin-right: 8px;
   background-color: #ededed;
 
+  .skeletonStyle {
+    width: 100%;
+    height: 120px;
+    background-color: white;
+    border: #cccccc 1px solid;
+    border-radius: 4px;
+
+    .skeletonText {
+      background-color: #6F7091;
+      width: 100%;
+      height: 30px;
+    }
+  }
+
   .titleContainer {
     width: 350px;
     padding: 15px 8px;
