@@ -90,6 +90,7 @@ const DealHistory = ({ deal }) => {
         const isLastMessage = lastMessage.id === historyItem.id;
         return (
           <MessageItem
+            key={historyItem.id}
             isFirstOfType={isFirstOfType}
             isLastOfType={isLastOfType}
             isLastMessage={isLastMessage}

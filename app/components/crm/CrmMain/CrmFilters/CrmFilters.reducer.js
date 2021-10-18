@@ -66,6 +66,7 @@ export const initialState = {
   selectedDoctors: [{ id: -1, name: textForKey('All doctors') }],
   selectedServices: [{ id: -1, name: textForKey('All services') }],
   selectedUsers: [{ id: -1, name: textForKey('All users') }],
+  selectedStates: [{ id: -1, name: textForKey('All states') }],
   selectedDateRange: [],
   selectedReminders: [reminderOptions[0]],
   showRangePicker: false,
@@ -103,6 +104,9 @@ const crmFiltersSlice = createSlice({
     },
     setShowRangePicker(state, action) {
       state.showRangePicker = action.payload;
+    },
+    setSelectedStates(state, action) {
+      state.selectedStates = action.payload;
     }
   },
 });
@@ -116,6 +120,7 @@ export const {
   setSelectedUsers,
   setDateRange,
   setShowRangePicker,
+  setSelectedStates,
 } = crmFiltersSlice.actions;
 
 export default crmFiltersSlice.reducer;

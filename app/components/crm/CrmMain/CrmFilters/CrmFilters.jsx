@@ -26,6 +26,7 @@ import reducer, {
   setSelectedUsers,
   setDateRange,
   setShowRangePicker,
+  setSelectedStates,
 } from './CrmFilters.reducer';
 import styles from './CrmFilters.module.scss';
 
@@ -33,6 +34,7 @@ const CrmFilters = (
   {
     selectedParams,
     currentClinic,
+    dealsStates,
     onClose,
     onShortcutSelected,
     onSubmit,
@@ -46,6 +48,7 @@ const CrmFilters = (
     selectedUsers,
     selectedDateRange,
     showRangePicker,
+    selectedStates,
   }, localDispatch] = useReducer(reducer, initialState);
 
   const {
@@ -56,6 +59,7 @@ const CrmFilters = (
     services: initialServices,
     users: initialUsers,
     dateRange: initialDateRange,
+    states: initialStates,
   } = selectedParams;
   const pickerRef = useRef(null);
   const services = currentClinic.services;
@@ -82,6 +86,14 @@ const CrmFilters = (
     const [start, end] = selectedDateRange;
     return `${moment(start).format('DD.MM.YYYY')} - ${moment(end).format('DD.MM.YYYY')}`
   }, [selectedDateRange]);
+
+  useEffect(() => {
+    if (initialStates == null || initialStates.length === 0) {
+      localDispatch(setSelectedStates(dealsStates.filter(item => item.visibleByDefault)));
+    } else {
+      localDispatch(setSelectedStates(initialStates));
+    }
+  }, [initialStates, dealsStates])
 
   useEffect(() => {
     localDispatch(setPatient(initialPatient));
@@ -139,6 +151,7 @@ const CrmFilters = (
       dateRange: selectedDateRange.length === 0
         ? null
         : selectedDateRange,
+      states: selectedStates,
     }
     if (newFilter.patient == null) delete newFilter.patient;
     if (newFilter.doctors == null) delete newFilter.doctors;
@@ -162,6 +175,20 @@ const CrmFilters = (
     );
     localDispatch(setSelectedDoctors(newDoctors.filter(doctor => doctor.id !== -1)));
   };
+
+  const handleStatesChanged = (event) => {
+    const newValue = event.target.value;
+    if (newValue.length === 0) {
+      localDispatch(setSelectedStates(
+        dealsStates.filter(item => item.visibleByDefault),
+      ));
+      return;
+    }
+    const newStates = dealsStates.filter((state) =>
+      newValue.some(item => item === state.id)
+    );
+    localDispatch(setSelectedStates(newStates.filter(state => state.id !== -1)));
+  }
 
   const handleServicesChange = (event) => {
     const newValue = event.target.value;
@@ -273,6 +300,16 @@ const CrmFilters = (
                   containerClass={styles.simpleField}
                   fieldLabel={textForKey('Patient')}
                   onSelected={handlePatientChange}
+                />
+
+                <EASSelect
+                  multiple
+                  rootClass={styles.simpleField}
+                  label={textForKey('States')}
+                  labelId="doctors-select-label"
+                  options={dealsStates}
+                  value={selectedStates?.map(item => item.id) || []}
+                  onChange={handleStatesChanged}
                 />
 
                 <EASSelect

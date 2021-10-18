@@ -20,7 +20,6 @@ import setDocCookies from "../../../utils/setDocCookies";
 import { textForKey } from "../../../utils/localization";
 import onRequestError from "../../../utils/onRequestError";
 import DealsColumn from "../DealsColumn";
-import CrmFilters from "./CrmFilters";
 import reducer, {
   initialState,
   setColumns,
@@ -43,6 +42,7 @@ const ConfirmationModal = dynamic(() => import("../../common/modals/Confirmation
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
 const DealDetails = dynamic(() => import('../DealDetails'));
 const AddReminderModal = dynamic(() => import('../AddReminderModal'));
+const CrmFilters = dynamic(() => import("./CrmFilters"));
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -245,6 +245,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       {showFilters && (
         <CrmFilters
           currentClinic={currentClinic}
+          dealsStates={states}
           selectedParams={queryParams}
           onClose={handleCloseFilter}
           onSubmit={handleFilterSubmit}

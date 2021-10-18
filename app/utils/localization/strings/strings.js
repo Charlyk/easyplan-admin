@@ -627,6 +627,7 @@ export default {
     crm_filter_today_reminders: 'For today',
     crm_filter_tomorrow_reminders: 'For tomorrow',
     crm_filter_current_week_reminders: 'Current week',
+    crm_filter_states: 'Deals states',
   },
   ro: {
     analytics: 'Analitică',
@@ -1262,6 +1263,7 @@ export default {
     crm_filter_today_reminders: 'Pentru azi',
     crm_filter_tomorrow_reminders: 'Pentru mâine',
     crm_filter_current_week_reminders: 'Săptămâna asta',
+    crm_filter_states: 'Statuturi',
   },
   ru: {
     analytics: 'Analytics',
@@ -1888,5 +1890,6 @@ export default {
     crm_filter_today_reminders: 'For today',
     crm_filter_tomorrow_reminders: 'For tomorrow',
     crm_filter_current_week_reminders: 'Current week',
+    crm_filter_states: 'Deals states',
   },
 };
