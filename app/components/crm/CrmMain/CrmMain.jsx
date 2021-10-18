@@ -61,8 +61,12 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   }, localDispatch] = useReducer(reducer, initialState);
 
   const filteredColumns = useMemo(() => {
-    return columns.filter(item => item.visibleByDefault);
-  }, [columns]);
+    const filterState = (queryParams.states ?? []).map(it => it.id);
+    return columns.filter(item => (
+      (filterState.length === 0 && item.visibleByDefault) ||
+      filterState.includes(item.id)
+    ));
+  }, [columns, queryParams.states]);
 
   useEffect(() => {
     const queryParams = extractCookieByName(COOKIES_KEY);
