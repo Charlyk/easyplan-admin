@@ -190,7 +190,7 @@ const CalendarDayView = (
     id = null,
     comment = null,
   ) => {
-    if (doctor.isHidden) {
+    if (doctor?.isHidden) {
       toast.warn(textForKey('doctor_is_fired'));
       return;
     }

@@ -41,7 +41,7 @@ const EASModal = (
     if (event.keyCode === 27 && !isPositiveLoading) {
       handleBackdropClick();
     }
-  }
+  };
 
   const handleCloseModal = () => {
     if (isPositiveLoading) {
@@ -49,7 +49,7 @@ const EASModal = (
     }
 
     onClose?.();
-  }
+  };
 
   const handlePrimaryClick = () => {
     if (isPositiveDisabled) {
@@ -69,7 +69,7 @@ const EASModal = (
     } else {
       onClose?.();
     }
-  }
+  };
 
   const handleSecondaryClick = () => {
     if (typeof onSecondaryClick === 'function') {
@@ -85,7 +85,12 @@ const EASModal = (
     } else {
       onBackdropClick?.();
     }
-  }
+  };
+
+  const stopPropagation = (event) => {
+    event?.stopPropagation();
+    event?.stopImmediatePropagation();
+  };
 
   return (
     <Modal
@@ -99,7 +104,7 @@ const EASModal = (
           <Typography className={styles.titleLabel} noWrap>
             {title}
           </Typography>
-          <IconButton className={styles.closeButton} onPointerUp={handleCloseModal}>
+          <IconButton className={styles.closeButton} onClick={handleCloseModal}>
             <IconClose/>
           </IconButton>
         </div>
@@ -124,7 +129,7 @@ const EASModal = (
           {!isPositiveLoading && showDestroyBtn && (
             <Button
               className={styles.destroyButton}
-              onPointerUp={handleDestroyClick}
+              onClick={handleDestroyClick}
               disabled={isPositiveDisabled}
               variant='text'
             >
@@ -134,7 +139,7 @@ const EASModal = (
           {!hidePositiveBtn && (
             <Button
               className={styles.primaryButton}
-              onPointerUp={handlePrimaryClick}
+              onClick={handlePrimaryClick}
               disabled={isPositiveDisabled}
               variant='text'
             >

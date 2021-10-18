@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import Typography from "@material-ui/core/Typography";
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import IconPlus from "../../../icons/iconPlus";
 import styles from './ColumnsWrapper.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const CreateScheduleView = ({ startHour, endHour, onAddSchedule }) => {
   const handleAddScheduleClink = () => {

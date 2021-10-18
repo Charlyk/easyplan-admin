@@ -4,6 +4,7 @@ import CreateScheduleView from "./CreateScheduleView";
 import styles from './ColumnsWrapper.module.scss';
 import clsx from "clsx";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import useIsMobileDevice from "../../../../utils/hooks/useIsMobileDevice";
 
 const ColumnCell = (
   {
@@ -15,6 +16,7 @@ const ColumnCell = (
   }
 ) => {
   const [showCreateView, setShowCreateView] = useState(false);
+  const isMobile = useIsMobileDevice();
 
   const content = useMemo(() => {
     if (
@@ -34,6 +36,10 @@ const ColumnCell = (
       return null
     }
   }, [startHour, endHour, showCreateView, hideCreateIndicator]);
+
+  const handleAddSchedule = () => {
+    onAddSchedule?.(startHour, endHour)
+  }
 
   const handlePointerEnter = () => {
     setShowCreateView(true);
@@ -65,6 +71,7 @@ const ColumnCell = (
       style={{ borderTop: getBorderTop() }}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
+      onPointerUp={isMobile ? handleAddSchedule : () => null}
     >
       {content}
     </div>
