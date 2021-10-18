@@ -38,6 +38,7 @@ import {
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
 import IconButton from "@material-ui/core/IconButton";
+import onRequestError from "../../../../utils/onRequestError";
 
 const PatientDetailsModal = (
   {
@@ -81,7 +82,7 @@ const PatientDetailsModal = (
       const { data: patient } = response;
       localDispatch(actions.setPatient(patient));
     } catch (error) {
-      toast.error(error.message);
+      onRequestError(error);
     } finally {
       localDispatch(actions.setIsFetching(false));
       if (updateList) {

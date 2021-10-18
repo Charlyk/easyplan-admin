@@ -4,13 +4,17 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import axios from "axios";
 
-import IconPlus from '../../../../icons/iconPlus';
+import {
+  requestFetchSmsMessages,
+  requestSendSms
+} from "../../../../../../middleware/api/patients";
+import onRequestError from "../../../../../utils/onRequestError";
 import { textForKey } from '../../../../../utils/localization';
+import IconPlus from '../../../../icons/iconPlus';
+import EASTextField from "../../../../common/EASTextField";
 import LoadingButton from '../../../../common/LoadingButton';
 import PatientMessage from './PatientMessage';
-import EASTextField from "../../../../common/EASTextField";
 import {
   reducer,
   initialState,
@@ -39,10 +43,10 @@ const PatientMessages = ({ patient }) => {
     if (patient == null) return;
     localDispatch(actions.setIsFetching(true));
     try {
-      const response = await axios.get(`/api/patients/${patient.id}/sms`);
+      const response = await requestFetchSmsMessages(patient.id);
       localDispatch(actions.setMessages(response.data));
     } catch (error) {
-      toast.error(error.message);
+      onRequestError(error);
     } finally {
       localDispatch(actions.setIsFetching(false));
     }
@@ -67,9 +71,7 @@ const PatientMessages = ({ patient }) => {
     }
     localDispatch(actions.setIsSendingMessage(true));
     try {
-      await axios.post(`/api/patients/${patient.id}/sms`, {
-        messageText: state.newMessageText,
-      });
+      await requestSendSms(state.newMessageText, patient.id);
       localDispatch(actions.setNewMessageText(''));
       await fetchMessages();
     } catch (error) {

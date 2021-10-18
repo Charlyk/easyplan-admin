@@ -3,9 +3,9 @@ import { toast } from "react-toastify";
 const onRequestError = (error) => {
   if (error.response != null) {
     const { data } = error.response;
-    toast.error(data.message || error.message);
+    toast?.error(data.message || error.message);
   } else {
-    toast.error(error.message);
+    toast?.error(error.message);
   }
 };
 

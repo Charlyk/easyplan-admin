@@ -5,12 +5,14 @@ import TabList from "@material-ui/lab/TabList";
 import Tab from "@material-ui/core/Tab";
 import TabPanel from "@material-ui/lab/TabPanel";
 import TabContext from "@material-ui/lab/TabContext";
+
+import { requestSendSms } from "../../../../../../middleware/api/patients";
 import { requestCreateDealNote } from "../../../../../../middleware/api/crm";
 import { textForKey } from "../../../../../utils/localization";
 import onRequestError from "../../../../../utils/onRequestError";
 import AddNoteForm from "./AddNoteForm";
-import styles from './FooterContainer.module.scss'
 import AddSmsForm from "./AddSmsForm/AddSmsForm";
+import styles from './FooterContainer.module.scss'
 
 const FooterContainer = ({ deal }) => {
   const [currentTab, setCurrentTab] = useState('0');
@@ -34,6 +36,17 @@ const FooterContainer = ({ deal }) => {
   };
 
   const handleSmsSubmit = async (message) => {
+    if (deal?.patient == null) {
+      return;
+    }
+    try {
+      setIsAddingSms(true);
+      await requestSendSms(message, deal.patient.id, deal.id);
+    } catch (error) {
+      onRequestError(error);
+    } finally {
+      setIsAddingSms(false);
+    }
   }
 
   return (

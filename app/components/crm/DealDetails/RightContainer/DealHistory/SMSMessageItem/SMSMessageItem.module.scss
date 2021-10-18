@@ -1,0 +1,43 @@
+.smsMessageItem {
+  border: #c3c3c3 1px solid;
+  background-color: white;
+  border-radius: 4px;
+  padding: .7rem 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+
+  svg {
+    margin-right: 5px;
+    height: 40px;
+    width: 40px;
+    fill: #A1A2C6;
+  }
+
+  .dataWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: center;
+
+    .messageText {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 14px !important;
+      color: #34344E !important;
+    }
+
+    .dateText {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 12px !important;
+      color: #A1A2C6 !important;
+    }
+  }
+}

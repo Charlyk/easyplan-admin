@@ -24,6 +24,7 @@ import styles from './DealHistory.module.scss';
 import ReminderItem from "./ReminderItem";
 import { textForKey } from "../../../../../utils/localization";
 import LogItem from "./LogItem";
+import SMSMessageItem from "./SMSMessageItem";
 
 const DealHistory = ({ deal }) => {
   const containerRef = useRef(null);
@@ -121,6 +122,14 @@ const DealHistory = ({ deal }) => {
             isLast={isLast}
             isFirst={isFirst}
             log={historyItem}
+          />
+        )
+      }
+      case ItemType.sms: {
+        return (
+          <SMSMessageItem
+            key={historyItem.id}
+            message={historyItem}
           />
         )
       }

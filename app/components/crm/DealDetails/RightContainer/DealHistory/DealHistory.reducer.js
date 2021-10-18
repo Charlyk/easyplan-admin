@@ -14,6 +14,7 @@ export const ItemType = {
   note: 'Note',
   reminder: 'Reminder',
   log: 'Log',
+  sms: 'Sms Message'
 };
 
 const dealHistorySlice = createSlice({
@@ -21,7 +22,7 @@ const dealHistorySlice = createSlice({
   initialState,
   reducers: {
     setHistory(state, action) {
-      const { messages, notes, reminders, logs } = action.payload;
+      const { messages, notes, reminders, logs, smsMessages } = action.payload;
       state.reminders = reminders;
       const filteredReminders = reminders.filter((item) => {
         return item.active || item.completed;
@@ -30,6 +31,7 @@ const dealHistorySlice = createSlice({
         ...messages.map(item => ({ ...item, itemType: ItemType.message })),
         ...notes.map(item => ({ ...item, itemType: ItemType.note })),
         ...logs.map(item => ({ ...item, itemType: ItemType.log })),
+        ...smsMessages.map(item => ({ ...item, itemType: ItemType.sms })),
         ...filteredReminders.map(item => ({
           ...item,
           itemType: ItemType.reminder,

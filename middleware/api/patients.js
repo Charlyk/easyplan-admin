@@ -273,3 +273,25 @@ export async function importPatientsFromFile(file, fields, headers = null) {
   requestBody.append('file', file, file.name);
   return axios.post(`${baseApiUrl}/patients/import`, requestBody, { headers })
 }
+
+/**
+ * Send an SMS message to patient
+ * @param {string} messageText
+ * @param {number} patientId
+ * @param {(number|null)?} dealId
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestSendSms(messageText, patientId, dealId = null, headers = null) {
+  return post(`/api/patients/${patientId}/sms`, headers, { messageText, dealId })
+}
+
+/**
+ * Fetch all sms messages for a patient
+ * @param {number} patientId
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchSmsMessages(patientId, headers = null) {
+  return get(`/api/patients/${patientId}`, headers);
+}
