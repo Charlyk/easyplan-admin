@@ -22,7 +22,6 @@ import Reminder from "./Reminder";
 import styles from './RemindersContainer.module.scss';
 
 const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
-  const updatedDeal = useSelector(updatedDealSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
   const [showAddHelp, setShowAddHelp] = useState(showAddReminderHelp);
   const [addReminderRef, setAddReminderRef] = useState(null);
@@ -34,18 +33,11 @@ const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
   }, [showAddReminderHelp])
 
   useEffect(() => {
-    if (updatedReminder == null) {
+    if (updatedReminder == null || updatedReminder.deal.id !== deal.id) {
       return;
     }
     fetchReminders();
   }, [updatedReminder, items]);
-
-  useEffect(() => {
-    if (updatedDeal == null || deal == null || updatedDeal.id !== deal.id) {
-      return;
-    }
-    fetchReminders();
-  }, [updatedDeal, deal]);
 
   useEffect(() => {
     if (deal == null) {

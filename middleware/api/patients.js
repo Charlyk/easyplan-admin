@@ -293,5 +293,5 @@ export async function requestSendSms(messageText, patientId, dealId = null, head
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function requestFetchSmsMessages(patientId, headers = null) {
-  return get(`/api/patients/${patientId}`, headers);
+  return get(`/api/patients/${patientId}/sms`, headers);
 }
