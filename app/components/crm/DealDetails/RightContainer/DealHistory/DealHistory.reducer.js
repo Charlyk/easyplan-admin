@@ -35,7 +35,6 @@ const dealHistorySlice = createSlice({
         ...filteredReminders.map(item => ({
           ...item,
           itemType: ItemType.reminder,
-          created: item.dueDate,
         })),
       ];
       state.allData = newItems;

@@ -8,9 +8,13 @@ import { useSelector } from "react-redux";
 import { CircularProgress } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import { textForKey } from "../../../../../utils/localization";
 import onRequestError from "../../../../../utils/onRequestError";
 import { requestFetchDealDetails } from "../../../../../../middleware/api/crm";
-import { updatedDealSelector, updatedReminderSelector } from "../../../../../../redux/selectors/crmSelector";
+import {
+  updatedDealSelector,
+  updatedReminderSelector
+} from "../../../../../../redux/selectors/crmSelector";
 import MessageItem from "./MessageItem";
 import NoteItem from "./NoteItem";
 import reducer, {
@@ -18,11 +22,9 @@ import reducer, {
   ItemType,
   setHistory,
   setIsFetching,
-  setUpdatedReminder,
 } from './DealHistory.reducer';
 import styles from './DealHistory.module.scss';
 import ReminderItem from "./ReminderItem";
-import { textForKey } from "../../../../../utils/localization";
 import LogItem from "./LogItem";
 import SMSMessageItem from "./SMSMessageItem";
 
@@ -33,12 +35,11 @@ const DealHistory = ({ deal }) => {
   const [{ items, isFetching }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (updatedReminder != null) {
-      localDispatch(setUpdatedReminder({ reminder: updatedReminder, dealId: deal.id }));
-      if (containerRef.current != null) {
-        containerRef.current.scrollTop = containerRef.current.scrollHeight
-      }
+    if (updatedReminder == null || updatedReminder.deal.id !== deal.id) {
+      return;
     }
+
+    fetchDealDetails();
   }, [updatedReminder, deal]);
 
   useEffect(() => {
