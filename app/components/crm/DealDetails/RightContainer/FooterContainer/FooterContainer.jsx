@@ -14,12 +14,16 @@ import AddNoteForm from "./AddNoteForm";
 import AddSmsForm from "./AddSmsForm/AddSmsForm";
 import styles from './FooterContainer.module.scss'
 
-const FooterContainer = ({ deal }) => {
+const FooterContainer = ({ deal, onAddReminder }) => {
   const [currentTab, setCurrentTab] = useState('0');
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [isAddingSms, setIsAddingSms] = useState(false);
 
   const handleTabChange = (event, newValue) => {
+    if (newValue === '3') {
+      onAddReminder?.(deal);
+      return;
+    }
     setCurrentTab(`${newValue}`);
   };
 
@@ -68,6 +72,11 @@ const FooterContainer = ({ deal }) => {
             <Tab
               value="1"
               label={`${textForKey('send message')} SMS`}
+              classes={{ root: styles.tabItem }}
+            />
+            <Tab
+              value="3"
+              label={textForKey('crm_add_reminder')}
               classes={{ root: styles.tabItem }}
             />
           </TabList>
@@ -144,4 +153,5 @@ FooterContainer.propTypes = {
       }),
     }),
   }),
+  onAddReminder: PropTypes.func,
 }

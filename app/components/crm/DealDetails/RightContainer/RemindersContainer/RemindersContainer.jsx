@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
+import { useSelector } from "react-redux";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 import Divider from "@material-ui/core/Divider";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import IconButton from "@material-ui/core/IconButton";
+import {
+  updatedDealSelector,
+  updatedReminderSelector
+} from "../../../../../../redux/selectors/crmSelector";
 import { requestFetchReminders } from "../../../../../../middleware/api/crm";
+import updateNotificationState from "../../../../../utils/notifications/updateNotificationState";
 import { textForKey } from "../../../../../utils/localization";
 import onRequestError from "../../../../../utils/onRequestError";
-import styles from './RemindersContainer.module.scss';
-import { useSelector } from "react-redux";
-import { updatedDealSelector, updatedReminderSelector } from "../../../../../../redux/selectors/crmSelector";
-import Reminder from "./Reminder";
-import { CircularProgress } from "@material-ui/core";
-import IconPlus from "../../../../icons/iconPlus";
-import IconButton from "@material-ui/core/IconButton";
-import EASHelpView from "../../../../common/EASHelpView";
 import notifications from "../../../../../utils/notifications/notifications";
-import updateNotificationState from "../../../../../utils/notifications/updateNotificationState";
+import EASHelpView from "../../../../common/EASHelpView";
+import IconPlus from "../../../../icons/iconPlus";
+import Reminder from "./Reminder";
+import styles from './RemindersContainer.module.scss';
 
 const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
   const updatedDeal = useSelector(updatedDealSelector);
@@ -78,18 +82,26 @@ const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
         <div className="progress-bar-wrapper">
           <CircularProgress className="circular-progress-bar"/>
         </div>
+      ) : items.length === 0 ? (
+        <div className={styles.noDataWrapper}>
+          <Typography className={styles.noDataLabel}>
+            {textForKey('crm_no_reminders')}
+          </Typography>
+        </div>
       ) : null}
       <div className={styles.titleContainer}>
         <Typography className={styles.title}>
           {textForKey('crm_reminders')}
         </Typography>
-        <IconButton
-          ref={setAddReminderRef}
-          className={styles.addButton}
-          onPointerUp={handleAddReminder}
-        >
-          <IconPlus fill="#3A83DC"/>
-        </IconButton>
+        <Tooltip title={textForKey('crm_add_reminder')}>
+          <IconButton
+            ref={setAddReminderRef}
+            className={styles.addButton}
+            onPointerUp={handleAddReminder}
+          >
+            <IconPlus fill="#3A83DC"/>
+          </IconButton>
+        </Tooltip>
       </div>
       <Divider color="#E5E5E5"/>
       <div className={styles.data}>

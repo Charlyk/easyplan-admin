@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import PropTypes from 'prop-types';
 import Typography from "@material-ui/core/Typography";
 import ReminderIcon from '@material-ui/icons/AccessTime';
+
+import { requestCompleteReminder } from "../../../../../../../middleware/api/crm";
 import { textForKey } from "../../../../../../utils/localization";
+import onRequestError from "../../../../../../utils/onRequestError";
 import getReminderTexts from "../../../../../../utils/getReminderTexts";
+import LoadingButton from "../../../../../common/LoadingButton";
+import EASTextarea from "../../../../../common/EASTextarea";
 import styles from './Reminder.module.scss';
 
 const Reminder = ({ reminder }) => {
+  const [resultComment, setResultComment] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { isToday, timeText, assigneeName } = getReminderTexts(reminder);
+
+  const handleCompleteReminder = async () => {
+    if (isLoading || resultComment.trim().length === 0) {
+      return;
+    }
+    try {
+      setIsLoading(true);
+      await requestCompleteReminder(reminder.id, resultComment);
+    } catch (error) {
+      onRequestError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={clsx(
@@ -39,6 +60,26 @@ const Reminder = ({ reminder }) => {
         <Typography className={styles.commentLabel}>
           {reminder.comment}
         </Typography>
+      ) : null}
+      {!reminder.completed ? (
+        <>
+          <EASTextarea
+            rows={3}
+            maxRows={3}
+            value={resultComment}
+            onChange={setResultComment}
+            containerClass={styles.resultField}
+            placeholder={textForKey('crm_reminder_enter_result')}
+          />
+          <LoadingButton
+            isLoading={isLoading}
+            disabled={resultComment.trim().length === 0}
+            className={styles.completeBtn}
+            onClick={handleCompleteReminder}
+          >
+            {textForKey('crm_reminder_complete')}
+          </LoadingButton>
+        </>
       ) : null}
     </div>
   );

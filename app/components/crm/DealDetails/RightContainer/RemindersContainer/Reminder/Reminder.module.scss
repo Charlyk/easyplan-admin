@@ -52,6 +52,22 @@
     }
   }
 
+  .resultField {
+    background-color: white;
+    margin-top: 5px;
+  }
+
+  .completeBtn {
+    width: 100%;
+    margin-top: 5px;
+    background-color: #3A83DC;
+    color: white;
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+  }
+
   &.expired {
     border-color: #ec3276;
     animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;

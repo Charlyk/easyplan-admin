@@ -628,7 +628,8 @@ export default {
     crm_filter_tomorrow_reminders: 'For tomorrow',
     crm_filter_current_week_reminders: 'Current week',
     crm_filter_states: 'Deals states',
-    reset: 'Reset'
+    reset: 'Reset',
+    crm_no_reminders: 'There are no reminders for this deal.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1265,7 +1266,8 @@ export default {
     crm_filter_tomorrow_reminders: 'Pentru mâine',
     crm_filter_current_week_reminders: 'Săptămâna asta',
     crm_filter_states: 'Statuturi',
-    reset: 'Resetează'
+    reset: 'Resetează',
+    crm_no_reminders: 'Nu sunt sarcini pentru acest deal.',
   },
   ru: {
     analytics: 'Analytics',
@@ -1893,6 +1895,7 @@ export default {
     crm_filter_tomorrow_reminders: 'For tomorrow',
     crm_filter_current_week_reminders: 'Current week',
     crm_filter_states: 'Deals states',
-    reset: 'Reset'
+    reset: 'Reset',
+    crm_no_reminders: 'There are no reminders for this deal.',
   },
 };
