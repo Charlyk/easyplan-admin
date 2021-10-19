@@ -68,7 +68,7 @@ export const initialState = {
   selectedUsers: [{ id: -1, name: textForKey('All users') }],
   selectedStates: [{ id: -1, name: textForKey('All states') }],
   selectedDateRange: [],
-  selectedReminders: [reminderOptions[0]],
+  selectedReminder: null,
   showRangePicker: false,
 };
 
@@ -90,8 +90,8 @@ const crmFiltersSlice = createSlice({
     setSelectedDoctors(state, action) {
       state.selectedDoctors = action.payload;
     },
-    setSelectedReminders(state, action) {
-      state.selectedReminders = action.payload;
+    setSelectedReminder(state, action) {
+      state.selectedReminder = action.payload;
     },
     setSelectedServices(state, action) {
       state.selectedServices = action.payload;
@@ -118,7 +118,7 @@ export const {
   setPatient,
   setPatientsLoading,
   setSelectedDoctors,
-  setSelectedReminders,
+  setSelectedReminder,
   setSelectedServices,
   setSelectedUsers,
   setDateRange,

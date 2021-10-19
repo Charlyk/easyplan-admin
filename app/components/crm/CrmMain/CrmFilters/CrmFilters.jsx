@@ -21,7 +21,7 @@ import reducer, {
   Shortcuts,
   setPatient,
   setSelectedDoctors,
-  setSelectedReminders,
+  setSelectedReminder,
   setSelectedServices,
   setSelectedUsers,
   setDateRange,
@@ -44,7 +44,7 @@ const CrmFilters = (
   const [{
     patient,
     selectedDoctors,
-    selectedReminders,
+    selectedReminder,
     selectedServices,
     selectedUsers,
     selectedDateRange,
@@ -55,7 +55,7 @@ const CrmFilters = (
   const {
     patient: initialPatient,
     doctors: initialDoctors,
-    reminders: initialReminders,
+    reminder: initialReminder,
     shortcut: selectedShortcut,
     services: initialServices,
     users: initialUsers,
@@ -101,8 +101,8 @@ const CrmFilters = (
   }, [initialDoctors]);
 
   useEffect(() => {
-    localDispatch(setSelectedReminders(initialReminders ?? initialState.selectedReminders));
-  }, [initialReminders]);
+    localDispatch(setSelectedReminder(initialReminder ?? initialState.selectedReminder));
+  }, [initialReminder]);
 
   useEffect(() => {
     localDispatch(setSelectedServices(initialServices ?? initialState.selectedServices));
@@ -162,9 +162,7 @@ const CrmFilters = (
       services: selectedServices.some(item => item.id === -1)
         ? null
         : selectedServices.map(service => ({ id: service.id, name: service.name })),
-      reminders: selectedReminders.some(item => item.id === 0)
-        ? null
-        : selectedReminders,
+      reminder: selectedReminder,
       dateRange: selectedDateRange.length === 0
         ? null
         : selectedDateRange,
@@ -237,15 +235,15 @@ const CrmFilters = (
 
   const handleRemindersChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1];
-    if (newValue.length === 0 || lastSelected === 0) {
-      localDispatch(setSelectedReminders(initialState.selectedReminders));
+    console.log(newValue);
+    if (newValue === 0) {
+      localDispatch(setSelectedReminder(null));
       return;
     }
-    const newReminders = reminderOptions.filter((reminder) =>
-      newValue.some(item => item === reminder.id)
+    const newReminder = reminderOptions.find((reminder) =>
+      newValue === reminder.id,
     );
-    localDispatch(setSelectedReminders(newReminders.filter(reminder => reminder.id !== 0)));
+    localDispatch(setSelectedReminder(newReminder));
   };
 
   const handleUsersChange = (event) => {
@@ -372,12 +370,11 @@ const CrmFilters = (
                 />
 
                 <EASSelect
-                  multiple
                   rootClass={styles.simpleField}
                   label={textForKey('crm_reminders')}
                   labelId="doctors-select-label"
                   options={reminderOptions}
-                  value={selectedReminders?.map(item => item.id) || []}
+                  value={selectedReminder?.id ?? 0}
                   onChange={handleRemindersChange}
                 />
               </div>
