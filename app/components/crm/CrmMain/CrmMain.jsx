@@ -7,15 +7,16 @@ import Zoom from '@material-ui/core/Zoom';
 import Fab from "@material-ui/core/Fab";
 import Tooltip from '@material-ui/core/Tooltip';
 import IconFilter from '@material-ui/icons/FilterList';
+import IconReminders from '@material-ui/icons/NotificationsActiveOutlined'
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllDealStates,
   requestChangeDealColumn,
-  requestConfirmFirstContact,
+  requestConfirmFirstContact, requestFetchRemindersCount,
   updateDealState
 } from "../../../../middleware/api/crm";
 import { setAppointmentModal } from "../../../../redux/actions/actions";
-import { updatedDealSelector } from "../../../../redux/selectors/crmSelector";
+import { updatedDealSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
 import extractCookieByName from "../../../utils/extractCookieByName";
 import setDocCookies from "../../../utils/setDocCookies";
 import { textForKey } from "../../../utils/localization";
@@ -36,8 +37,11 @@ import reducer, {
   setIsDeleting,
   setShowFilters,
   setQueryParams,
+  setShowReminders,
+  setActiveRemindersCount,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
+import Typography from "@material-ui/core/Typography";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -49,6 +53,7 @@ const COOKIES_KEY = 'crm_filter';
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
+  const remoteReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);
   const [{
     columns,
@@ -59,6 +64,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     reminderModal,
     showFilters,
     queryParams,
+    activeRemindersCount,
   }, localDispatch] = useReducer(reducer, initialState);
 
   const filteredColumns = useMemo(() => {
@@ -76,7 +82,15 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     }
     const params = JSON.parse(atob(queryParams));
     localDispatch(setQueryParams(params));
+    fetchRemindersCount();
   }, []);
+
+  useEffect(() => {
+    if (remoteReminder == null) {
+      return;
+    }
+    fetchRemindersCount();
+  }, [remoteReminder]);
 
   useEffect(() => {
     if (remoteDeal == null) {
@@ -88,6 +102,15 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   useEffect(() => {
     localDispatch(setColumns(states));
   }, [states]);
+
+  const fetchRemindersCount = async () => {
+    try {
+      const response = await requestFetchRemindersCount();
+      localDispatch(setActiveRemindersCount(response.data));
+    } catch (error) {
+      onRequestError(error);
+    }
+  }
 
   const updateColumns = async () => {
     try {
@@ -195,8 +218,16 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     localDispatch(setShowFilters(true));
   };
 
+  const handleOpenReminders = () => {
+    localDispatch(setShowReminders(true));
+  };
+
   const handleCloseFilter = () => {
     localDispatch(setShowFilters(false));
+  };
+
+  const handleCloseReminders = () => {
+    localDispatch(setShowReminders(false));
   };
 
   const updateParams = (newParams) => {
@@ -259,13 +290,31 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       )}
       <div className={styles.buttonsContainer}>
         <Zoom unmountOnExit in={!detailsModal.open} timeout={300}>
+          <Tooltip title={textForKey('crm_reminders')} placement="left">
+            <Fab
+              size="medium"
+              aria-label="filter"
+              className={styles.remindersFab}
+              onClick={handleOpenReminders}
+            >
+              <div className={styles.activeIndicator}>
+                <Typography className={styles.counter}>
+                  {activeRemindersCount}
+                </Typography>
+              </div>
+              <IconReminders />
+            </Fab>
+          </Tooltip>
+        </Zoom>
+        <Zoom unmountOnExit in={!detailsModal.open} timeout={300}>
           <Tooltip title={textForKey('Filter')} placement="left">
             <Fab
               className={styles.fab}
+              size="medium"
               aria-label="filter"
               onClick={handleOpenFilter}
             >
-              <IconFilter/>
+              <IconFilter />
             </Fab>
           </Tooltip>
         </Zoom>

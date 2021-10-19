@@ -7,14 +7,47 @@
 
   .buttonsContainer {
     display: flex;
+    flex-direction: column;
     align-items: center;
     position: absolute;
     bottom: 1rem;
     right: 1rem;
 
+    .remindersFab {
+      background-color: #ffffff;
+      z-index: 9999;
+
+      .activeIndicator {
+        min-width: 1.3rem;
+        padding: 0 .3rem;
+        height: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: .7rem;
+        background-color: #ec3276;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+
+        .counter {
+          color: white;
+          font-family: Inter, sans-serif !important;
+          font-style: normal !important;
+          font-weight: bold !important;
+          font-size: 14px !important;
+        }
+      }
+
+      svg {
+        fill: #3A83DC !important;
+      }
+    }
+
     .fab {
       background-color: #3A83DC;
       z-index: 9999;
+      margin-top: 14px;
 
       svg {
         fill: white;

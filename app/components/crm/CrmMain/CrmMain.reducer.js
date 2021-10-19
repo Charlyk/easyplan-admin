@@ -8,6 +8,8 @@ export const initialState = {
   reminderModal: { open: false, deal: null },
   updatedDeal: null,
   showFilters: false,
+  showReminders: false,
+  activeRemindersCount: 0,
   queryParams: {},
 };
 
@@ -60,7 +62,13 @@ const crmMainSlice = createSlice({
     },
     setQueryParams(state, action) {
       state.queryParams = action.payload;
-    }
+    },
+    setShowReminders(state, action) {
+      state.showReminders = action.payload;
+    },
+    setActiveRemindersCount(state, action) {
+      state.activeRemindersCount = action.payload;
+    },
   },
 });
 
@@ -79,6 +87,8 @@ export const {
   setIsDeleting,
   setShowFilters,
   setQueryParams,
+  setShowReminders,
+  setActiveRemindersCount,
 } = crmMainSlice.actions;
 
 export default crmMainSlice.reducer;
