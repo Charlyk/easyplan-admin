@@ -37,7 +37,7 @@ const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
       return;
     }
     fetchReminders();
-  }, [updatedReminder, items]);
+  }, [updatedReminder]);
 
   useEffect(() => {
     if (deal == null) {
