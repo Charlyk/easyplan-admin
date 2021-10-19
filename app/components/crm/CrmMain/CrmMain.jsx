@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import upperFirst from 'lodash/upperFirst';
 import { toast } from "react-toastify";
+import Zoom from '@material-ui/core/Zoom';
 import Fab from "@material-ui/core/Fab";
 import Tooltip from '@material-ui/core/Tooltip';
 import IconFilter from '@material-ui/icons/FilterList';
@@ -257,15 +258,17 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         />
       )}
       <div className={styles.buttonsContainer}>
-        <Tooltip title={textForKey('Filter')} placement="left">
-          <Fab
-            className={styles.fab}
-            aria-label="filter"
-            onClick={handleOpenFilter}
-          >
-            <IconFilter/>
-          </Fab>
-        </Tooltip>
+        <Zoom unmountOnExit in={!detailsModal.open} timeout={300}>
+          <Tooltip title={textForKey('Filter')} placement="left">
+            <Fab
+              className={styles.fab}
+              aria-label="filter"
+              onClick={handleOpenFilter}
+            >
+              <IconFilter/>
+            </Fab>
+          </Tooltip>
+        </Zoom>
       </div>
       <div className={styles.columnsContainer}>
         {filteredColumns.map((dealState, index) => (
