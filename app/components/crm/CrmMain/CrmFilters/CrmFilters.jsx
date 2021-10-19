@@ -27,6 +27,7 @@ import reducer, {
   setDateRange,
   setShowRangePicker,
   setSelectedStates,
+  resetState,
 } from './CrmFilters.reducer';
 import styles from './CrmFilters.module.scss';
 
@@ -88,11 +89,7 @@ const CrmFilters = (
   }, [selectedDateRange]);
 
   useEffect(() => {
-    if (initialStates == null || initialStates.length === 0) {
-      localDispatch(setSelectedStates(dealsStates.filter(item => item.visibleByDefault)));
-    } else {
-      localDispatch(setSelectedStates(initialStates));
-    }
+    setupDealStates();
   }, [initialStates, dealsStates])
 
   useEffect(() => {
@@ -125,6 +122,14 @@ const CrmFilters = (
     localDispatch(setDateRange([startDate, endDate]));
   }, [initialDateRange]);
 
+  const setupDealStates = () => {
+    if (initialStates == null || initialStates.length === 0) {
+      localDispatch(setSelectedStates(dealsStates.filter(item => item.visibleByDefault)));
+    } else {
+      localDispatch(setSelectedStates(initialStates));
+    }
+  }
+
   const handlePatientChange = (selectedPatient) => {
     localDispatch(setPatient(selectedPatient));
   };
@@ -133,25 +138,37 @@ const CrmFilters = (
     onClose?.();
   };
 
+  const handleResetFilters = () => {
+    localDispatch(resetState());
+    setupDealStates();
+    // setTimeout(() => {
+    //   handleSubmitFilter();
+    // }, 300);
+  }
+
   const handleSubmitFilter = () => {
     const newFilter = {
-      patient,
+      patient: patient ? {
+        id: patient.id,
+        name: patient.name,
+        label: patient.label,
+      } : null,
       doctors: selectedDoctors.some(item => item.id === -1)
         ? null
-        : selectedDoctors,
+        : selectedDoctors.map(doctor => ({ id: doctor.id, name: doctor.name })),
       users: selectedUsers.some(item => item.id === -1)
         ? null
-        : selectedUsers,
+        : selectedUsers.map(user => ({ id: user.id, name: user.name })),
       services: selectedServices.some(item => item.id === -1)
         ? null
-        : selectedServices,
-      reminders: selectedReminders.some(item => item.id === 'all')
+        : selectedServices.map(service => ({ id: service.id, name: service.name })),
+      reminders: selectedReminders.some(item => item.id === 0)
         ? null
         : selectedReminders,
       dateRange: selectedDateRange.length === 0
         ? null
         : selectedDateRange,
-      states: selectedStates,
+      states: selectedStates.map(state => ({ id: state.id, name: state.name })),
     }
     if (newFilter.patient == null) delete newFilter.patient;
     if (newFilter.doctors == null) delete newFilter.doctors;
@@ -221,14 +238,14 @@ const CrmFilters = (
   const handleRemindersChange = (event) => {
     const newValue = event.target.value;
     const lastSelected = newValue[newValue.length - 1];
-    if (newValue.length === 0 || lastSelected === 'all') {
+    if (newValue.length === 0 || lastSelected === 0) {
       localDispatch(setSelectedReminders(initialState.selectedReminders));
       return;
     }
     const newReminders = reminderOptions.filter((reminder) =>
       newValue.some(item => item === reminder.id)
     );
-    localDispatch(setSelectedReminders(newReminders.filter(reminder => reminder.id !== 'all')));
+    localDispatch(setSelectedReminders(newReminders.filter(reminder => reminder.id !== 0)));
   };
 
   const handleUsersChange = (event) => {
@@ -367,6 +384,12 @@ const CrmFilters = (
               <div className={styles.footer}>
                 <Button onClick={handleCloseFilters}>
                   {textForKey('Close')}
+                </Button>
+                <Button
+                  className={styles.resetBtn}
+                  onClick={handleResetFilters}
+                >
+                  {textForKey('Reset')}
                 </Button>
                 <Button
                   className={styles.applyBtn}

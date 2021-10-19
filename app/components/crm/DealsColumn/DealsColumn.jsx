@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useColor } from "react-color-palette";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import Skeleton from "@material-ui/lab/Skeleton";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
@@ -21,6 +22,7 @@ import {
   requestFetchDeals,
   updateDealState
 } from "../../../../middleware/api/crm";
+import extractCookieByName from "../../../utils/extractCookieByName";
 import onRequestError from "../../../utils/onRequestError";
 import ActionsSheet from "../../common/ActionsSheet";
 import EASColorPicker from "../../common/EASColorPicker";
@@ -43,9 +45,11 @@ import reducer, {
   setUpdatedDeal,
   addNewDeal,
   setRowsLoading,
+  setPage,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
-import { Skeleton } from "@material-ui/lab";
+
+const COOKIES_KEY = 'crm_filter';
 
 const DealsColumn = (
   {
@@ -53,6 +57,7 @@ const DealsColumn = (
     isFirst,
     isLast,
     updatedDeal,
+    filterData,
     onMove,
     onUpdate,
     onLinkPatient,
@@ -88,11 +93,16 @@ const DealsColumn = (
   }, [createdDeal]);
 
   useEffect(() => {
+    localDispatch(setPage(0));
+    fetchDealsForState({ startIndex: 0, stopIndex: itemsPerPage - 1 }, 0);
+  }, [filterData]);
+
+  useEffect(() => {
     if (dealState == null) {
       return;
     }
     localDispatch(setColumnData(dealState));
-    fetchDealsForState({ startIndex: 0, stopIndex: itemsPerPage - 1 });
+    fetchDealsForState({ startIndex: 0, stopIndex: itemsPerPage - 1 }, 0);
   }, [dealState]);
 
   useEffect(() => {
@@ -113,17 +123,18 @@ const DealsColumn = (
     })
   }, [dealState, isFirst, isLast]);
 
-  const fetchDealsForState = async ({ startIndex, stopIndex }) => {
+  const fetchDealsForState = async ({ startIndex, stopIndex }, page = page) => {
     try {
       const rows = [];
       for (let i = startIndex; i <= stopIndex; i++) {
         rows.push(i);
       }
-      localDispatch(setRowsLoading({ rows, state: STATUS_LOADING}));
+      localDispatch(setRowsLoading({ rows, state: STATUS_LOADING }));
       localDispatch(setIsFetching(true));
-      const response = await requestFetchDeals(dealState.id, page, itemsPerPage);
+      const filterParams = extractCookieByName(COOKIES_KEY);
+      const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
       localDispatch(setData(response.data));
-      localDispatch(setRowsLoading({ rows, state: STATUS_LOADED}));
+      localDispatch(setRowsLoading({ rows, state: STATUS_LOADED }));
     } catch (error) {
       onRequestError(error)
       localDispatch(setIsFetching(false));

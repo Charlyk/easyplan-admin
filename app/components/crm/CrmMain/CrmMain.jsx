@@ -271,6 +271,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         {filteredColumns.map((dealState, index) => (
           <DealsColumn
             key={dealState.id}
+            filterData={queryParams}
             isFirst={index === 0}
             isLast={index === (states.length - 1)}
             updatedDeal={updatedDeal}

@@ -53,15 +53,20 @@ export async function deleteDealState(dealId, headers = null) {
  * @param {number} stateId
  * @param {number} page
  * @param {number} itemsPerPage
+ * @param {(string|null)?} filter
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestFetchDeals(stateId, page, itemsPerPage, headers = null) {
-  const queryString = new URLSearchParams({
+export async function requestFetchDeals(stateId, page, itemsPerPage, filter = null, headers = null) {
+  const params = {
     stateId: `${stateId}`,
     page: `${page}`,
     itemsPerPage: `${itemsPerPage}`
-  }).toString()
+  };
+  if (filter) {
+    params.filter = filter
+  }
+  const queryString = new URLSearchParams(params).toString();
   return get(`/api/crm/deals?${queryString}`, headers)
 }
 

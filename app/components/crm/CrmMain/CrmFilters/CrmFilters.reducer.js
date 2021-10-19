@@ -35,27 +35,27 @@ export const Shortcuts = [
 
 export const reminderOptions = [
   {
-    id: 'all',
+    id: 0,
     name: textForKey('crm_filter_all_reminders'),
   },
   {
-    id: 'today',
+    id: 1,
     name: textForKey('crm_filter_today_reminders'),
   },
   {
-    id: 'tomorrow',
+    id: 2,
     name: textForKey('crm_filter_tomorrow_reminders'),
   },
   {
-    id: 'week',
+    id: 3,
     name: textForKey('crm_filter_current_week_reminders'),
   },
   {
-    id: 'withoutReminders',
+    id: 4,
     name: textForKey('crm_filter_without_tasks'),
   },
   {
-    id: 'expiredReminders',
+    id: 5,
     name: textForKey('crm_filter_expired_tasks')
   }
 ];
@@ -107,6 +107,9 @@ const crmFiltersSlice = createSlice({
     },
     setSelectedStates(state, action) {
       state.selectedStates = action.payload;
+    },
+    resetState() {
+      return initialState;
     }
   },
 });
@@ -121,6 +124,7 @@ export const {
   setDateRange,
   setShowRangePicker,
   setSelectedStates,
+  resetState
 } = crmFiltersSlice.actions;
 
 export default crmFiltersSlice.reducer;

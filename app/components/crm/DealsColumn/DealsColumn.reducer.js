@@ -137,6 +137,10 @@ const dealsColumnSlice = createSlice({
       state.totalElements = state.items.length;
     },
     setPage(state, action) {
+      if (action.payload === 0) {
+        state.totalElements = 0;
+        state.items = [];
+      }
       state.page = action.payload;
     },
     setItemsPerPage(state, action) {
