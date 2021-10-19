@@ -630,6 +630,7 @@ export default {
     crm_filter_states: 'Deals states',
     reset: 'Reset',
     crm_no_reminders: 'There are no reminders for this deal.',
+    filter: 'Filter',
   },
   ro: {
     analytics: 'Analitică',
@@ -1268,6 +1269,7 @@ export default {
     crm_filter_states: 'Statuturi',
     reset: 'Resetează',
     crm_no_reminders: 'Nu sunt sarcini pentru acest deal.',
+    filter: 'Filtre',
   },
   ru: {
     analytics: 'Analytics',
@@ -1897,5 +1899,6 @@ export default {
     crm_filter_states: 'Deals states',
     reset: 'Reset',
     crm_no_reminders: 'There are no reminders for this deal.',
+    filter: 'Filter',
   },
 };

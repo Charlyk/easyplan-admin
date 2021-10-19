@@ -4,31 +4,31 @@ import moment from "moment-timezone";
 
 export const Shortcuts = [
   {
-    id: 'all',
+    id: 0,
     name: textForKey('crm_filter_all_deals'),
   },
   {
-    id: 'opened',
+    id: 1,
     name: textForKey('crm_filter_opened_deals'),
   },
   {
-    id: 'myDeals',
+    id: 2,
     name: textForKey('crm_filter_my_deals'),
   },
   {
-    id: 'success',
+    id: 3,
     name: textForKey('crm_filter_closed_successfully'),
   },
   {
-    id: 'notRealized',
+    id: 4,
     name: textForKey('crm_filter_not_realized'),
   },
   {
-    id: 'withoutReminders',
+    id: 5,
     name: textForKey('crm_filter_without_tasks'),
   },
   {
-    id: 'expiredReminders',
+    id: 6,
     name: textForKey('crm_filter_expired_tasks'),
   },
 ];
@@ -69,6 +69,7 @@ export const initialState = {
   selectedStates: [{ id: -1, name: textForKey('All states') }],
   selectedDateRange: [],
   selectedReminder: null,
+  selectedShortcut: Shortcuts[0],
   showRangePicker: false,
 };
 
@@ -108,6 +109,9 @@ const crmFiltersSlice = createSlice({
     setSelectedStates(state, action) {
       state.selectedStates = action.payload;
     },
+    setSelectedShortcut(state, action) {
+      state.selectedShortcut = action.payload;
+    },
     resetState() {
       return initialState;
     }
@@ -124,6 +128,7 @@ export const {
   setDateRange,
   setShowRangePicker,
   setSelectedStates,
+  setSelectedShortcut,
   resetState
 } = crmFiltersSlice.actions;
 

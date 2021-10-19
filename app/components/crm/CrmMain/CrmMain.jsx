@@ -238,7 +238,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   };
 
   const handleShortcutSelected = (shortcut) => {
-    updateParams({ shortcut });
+    updateParams({ ...queryParams, shortcut });
   };
 
   const handleFilterSubmit = (filterData) => {

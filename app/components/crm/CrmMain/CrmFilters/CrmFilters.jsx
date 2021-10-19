@@ -27,6 +27,7 @@ import reducer, {
   setDateRange,
   setShowRangePicker,
   setSelectedStates,
+  setSelectedShortcut,
   resetState,
 } from './CrmFilters.reducer';
 import styles from './CrmFilters.module.scss';
@@ -50,13 +51,14 @@ const CrmFilters = (
     selectedDateRange,
     showRangePicker,
     selectedStates,
+    selectedShortcut
   }, localDispatch] = useReducer(reducer, initialState);
 
   const {
     patient: initialPatient,
     doctors: initialDoctors,
     reminder: initialReminder,
-    shortcut: selectedShortcut,
+    shortcut: initialShortcut,
     services: initialServices,
     users: initialUsers,
     dateRange: initialDateRange,
@@ -113,6 +115,10 @@ const CrmFilters = (
   }, [initialUsers]);
 
   useEffect(() => {
+    localDispatch(setSelectedShortcut(initialShortcut ?? initialState.selectedShortcut));
+  }, [initialShortcut])
+
+  useEffect(() => {
     if (initialDateRange == null) {
       return;
     }
@@ -167,13 +173,15 @@ const CrmFilters = (
         ? null
         : selectedDateRange,
       states: selectedStates.map(state => ({ id: state.id, name: state.name })),
+      shortcut: selectedShortcut,
     }
     if (newFilter.patient == null) delete newFilter.patient;
     if (newFilter.doctors == null) delete newFilter.doctors;
     if (newFilter.users == null) delete newFilter.users;
     if (newFilter.services == null) delete newFilter.services;
-    if (newFilter.reminders == null) delete newFilter.reminders;
+    if (newFilter.reminder == null) delete newFilter.reminder;
     if (newFilter.dateRange == null) delete newFilter.dateRange;
+    if (newFilter.shortcut == null || newFilter.shortcut.id === 0) delete newFilter.shortcut;
     onSubmit?.(newFilter);
     handleCloseFilters();
   };
@@ -260,12 +268,16 @@ const CrmFilters = (
   };
 
   const handleShortcutSelected = (shortcut) => {
-    onShortcutSelected?.(shortcut.id);
+    if (shortcut.id === 0) {
+      onShortcutSelected?.(null);
+    } else {
+      onShortcutSelected?.(shortcut);
+    }
     handleCloseFilters();
   };
 
   const isShortcutSelected = (shortcut) => {
-    return (selectedShortcut || 'all') === shortcut;
+    return (selectedShortcut?.id || 0) === shortcut;
   };
 
   return (
