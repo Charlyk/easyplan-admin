@@ -271,7 +271,7 @@ const CrmFilters = (
     if (shortcut.id === 0) {
       onShortcutSelected?.(null);
     } else {
-      onShortcutSelected?.(shortcut);
+      onShortcutSelected?.({ id: shortcut.id, name: shortcut.name });
     }
     handleCloseFilters();
   };
@@ -306,6 +306,9 @@ const CrmFilters = (
                   className={clsx(styles.shortcut, { [styles.selected]: isShortcutSelected(item.id) })}
                   onClick={() => handleShortcutSelected(item)}
                 >
+                  {item.type === 'reminder' ? (
+                    <div className={clsx(styles.reminderIndicator, { [styles.expired]: item.id === 6 })} />
+                  ) : null}
                   <Typography className={styles.label}>{item.name}</Typography>
                 </div>
               ))}

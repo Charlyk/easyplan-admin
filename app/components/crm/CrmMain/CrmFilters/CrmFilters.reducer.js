@@ -5,31 +5,38 @@ import moment from "moment-timezone";
 export const Shortcuts = [
   {
     id: 0,
+    type: 'default',
     name: textForKey('crm_filter_all_deals'),
   },
   {
     id: 1,
+    type: 'default',
     name: textForKey('crm_filter_opened_deals'),
   },
   {
     id: 2,
+    type: 'default',
     name: textForKey('crm_filter_my_deals'),
   },
   {
     id: 3,
+    type: 'default',
     name: textForKey('crm_filter_closed_successfully'),
   },
   {
     id: 4,
+    type: 'default',
     name: textForKey('crm_filter_not_realized'),
   },
   {
     id: 5,
-    name: textForKey('crm_filter_without_tasks'),
+    type: 'reminder',
+    name: textForKey('crm_filter_shortcuts_today_reminders'),
   },
   {
     id: 6,
-    name: textForKey('crm_filter_expired_tasks'),
+    type: 'reminder',
+    name: textForKey('crm_filter_shortcuts_expired_tasks'),
   },
 ];
 

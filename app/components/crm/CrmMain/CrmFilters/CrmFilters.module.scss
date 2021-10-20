@@ -65,8 +65,20 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             border-bottom: #ededed 1px solid;
+
+            .reminderIndicator {
+              width: .8rem;
+              height: .8rem;
+              border-radius: 50%;
+              background-color: #00ac00;
+              margin-right: 10px;
+
+              &.expired {
+                background-color: #ec3276;
+              }
+            }
 
             &:hover {
               .label {
