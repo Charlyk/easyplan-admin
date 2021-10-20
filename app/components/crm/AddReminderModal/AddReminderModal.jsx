@@ -20,9 +20,11 @@ import reducer, {
   setEndTime,
   setDate,
   setIsLoading,
+  setPatient,
   resetState,
 } from './AddReminderModal.reducer';
 import styles from './AddReminderModal.module.scss';
+import PatientsSearchField from "../../common/PatientsSearchField/PatientsSearchField";
 
 const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
   const [{
@@ -32,6 +34,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
     user,
     type,
     note,
+    patient,
     isLoading,
   }, localDispatch] = useReducer(reducer, initialState);
   const stringDate = moment(date).format('YYYY-MM-DD');
@@ -90,11 +93,16 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
     localDispatch(setEndTime(newTime));
   };
 
+  const handlePatientSelected = (patient) => {
+    localDispatch(setPatient(patient));
+  }
+
   const handleNoteChange = (newText) => {
     localDispatch(setNote(newText));
   }
 
   const handleSubmit = async (event) => {
+    event?.preventDefault();
     if (!isFormValid) {
       return;
     }
@@ -181,6 +189,14 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
             onChange={handleTypeChange}
           />
         </div>
+        {!deal ? (
+          <PatientsSearchField
+            containerClass={styles.patientField}
+            fieldLabel={textForKey('Patient')}
+            selectedPatient={patient}
+            onSelected={handlePatientSelected}
+          />
+        ) : null}
         <EASTextarea
           rows={4}
           maxRows={4}

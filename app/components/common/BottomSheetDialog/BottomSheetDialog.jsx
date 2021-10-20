@@ -18,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const BottomSheetDialog = ({ open, title, children, canSave, isLoading, onClose, onSave }) => {
+const BottomSheetDialog = ({ open, title, children, canSave, saveText, isLoading, onClose, onSave }) => {
   const handleClose = () => {
     onClose?.();
   };
@@ -53,7 +53,7 @@ const BottomSheetDialog = ({ open, title, children, canSave, isLoading, onClose,
               <CircularProgress className={styles.progressBar} />
             ) : canSave ? (
               <Button autoFocus color="inherit" onClick={handleSave}>
-                {textForKey('Save')}
+                {saveText || textForKey('Save')}
               </Button>
             ) : null}
           </Box>

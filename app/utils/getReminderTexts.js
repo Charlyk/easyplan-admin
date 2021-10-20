@@ -3,6 +3,9 @@ import moment from "moment-timezone";
 import { textForKey } from "./localization";
 
 const getReminderTexts = (reminder) => {
+  if (reminder == null) {
+    return null;
+  }
   const { assignee } = reminder
   const dueDate = moment(reminder.dueDate);
   const endDate = moment(reminder.endDate);

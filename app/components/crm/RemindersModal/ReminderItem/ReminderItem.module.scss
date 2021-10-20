@@ -1,0 +1,99 @@
+.reminderItem {
+  padding-left: 7rem;
+  padding-right: 1rem;
+  width: 100%;
+  position: relative;
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+
+  .dataContainer {
+    background-color: white;
+    width: 100%;
+    padding: 1rem;
+    border: #FDC534 1px solid;
+    border-radius: 10px;
+
+    .reminderDate {
+      svg {
+        fill: #FDC534;
+      }
+    }
+
+    &.expired {
+      border-color: #ec3276;
+
+      .reminderDate {
+        svg {
+          fill: #ec3276;
+        }
+      }
+    }
+
+    &.active, &.completed {
+      border-color: #00ac00;
+
+      .reminderDate {
+        svg {
+          fill: #00ac00;
+        }
+      }
+    }
+
+    .detailsRow {
+      display: flex;
+      align-items: center;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #34344E !important;
+      padding-left: 29px;
+    }
+
+    .commentLabel {
+      display: flex;
+      align-items: center;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 13px !important;
+      color: #6F7091 !important;
+      padding-left: 29px;
+    }
+
+    .reminderDate {
+      display: flex;
+      align-items: center;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 12px !important;
+      color: #34344E !important;
+
+      svg {
+        margin-right: 5px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .resultField {
+      background-color: white;
+      margin-top: 5px;
+      width: calc(100% - 29px);
+      margin-left: 29px;
+    }
+
+    .completeBtn {
+      margin-top: 5px;
+      background-color: #3A83DC;
+      margin-left: 29px;
+      color: white;
+
+      &:hover {
+        background-color: #3A83DC;
+      }
+    }
+  }
+}

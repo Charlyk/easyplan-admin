@@ -42,6 +42,7 @@ import reducer, {
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
 import Typography from "@material-ui/core/Typography";
+import RemindersModal from "../RemindersModal";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -65,6 +66,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     showFilters,
     queryParams,
     activeRemindersCount,
+    showReminders,
   }, localDispatch] = useReducer(reducer, initialState);
 
   const filteredColumns = useMemo(() => {
@@ -86,9 +88,6 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   }, []);
 
   useEffect(() => {
-    if (remoteReminder == null) {
-      return;
-    }
     fetchRemindersCount();
   }, [remoteReminder]);
 
@@ -267,6 +266,11 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         onClose={handleCloseDeleteModal}
         onConfirm={handleDeleteConfirmed}
       />
+      <RemindersModal
+        open={showReminders}
+        onAddReminder={handleOpenReminderModal}
+        onClose={handleCloseReminders}
+      />
       <DealDetails
         open={detailsModal.open}
         deal={detailsModal.deal}
@@ -289,7 +293,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         />
       )}
       <div className={styles.buttonsContainer}>
-        <Zoom unmountOnExit in={!detailsModal.open} timeout={300}>
+        <Zoom unmountOnExit in={!detailsModal.open && !showReminders} timeout={300}>
           <Tooltip title={textForKey('crm_reminders')} placement="left">
             <Fab
               size="medium"
@@ -306,7 +310,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
             </Fab>
           </Tooltip>
         </Zoom>
-        <Zoom unmountOnExit in={!detailsModal.open} timeout={300}>
+        <Zoom unmountOnExit in={!detailsModal.open && !showReminders} timeout={300}>
           <Tooltip title={textForKey('Filter')} placement="left">
             <Fab
               className={styles.fab}

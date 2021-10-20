@@ -633,6 +633,10 @@ export default {
     filter: 'Filter',
     crm_filter_shortcuts_expired_tasks: 'With expired tasks',
     crm_filter_shortcuts_today_reminders: 'With reminders for today',
+    crm_reminders_my_tasks: 'My tasks',
+    crm_reminders_expired_tasks: 'Expired tasks',
+    crm_reminders_completed_tasks: 'Completed tasks',
+    crm_reminders_all_tasks: 'All tasks',
   },
   ro: {
     analytics: 'Analitică',
@@ -1274,6 +1278,10 @@ export default {
     reset: 'Resetează',
     crm_no_reminders: 'Nu sunt sarcini pentru acest deal.',
     filter: 'Filtre',
+    crm_reminders_my_tasks: 'Sarcinile mele',
+    crm_reminders_expired_tasks: 'Sarcini expirate',
+    crm_reminders_completed_tasks: 'Sarcini finisate',
+    crm_reminders_all_tasks: 'Toate sarcinile',
   },
   ru: {
     analytics: 'Analytics',
@@ -1906,5 +1914,9 @@ export default {
     filter: 'Filter',
     crm_filter_shortcuts_expired_tasks: 'With expired tasks',
     crm_filter_shortcuts_today_reminders: 'With reminders for today',
+    crm_reminders_my_tasks: 'My tasks',
+    crm_reminders_expired_tasks: 'Expired tasks',
+    crm_reminders_completed_tasks: 'Completed tasks',
+    crm_reminders_all_tasks: 'All tasks',
   },
 };

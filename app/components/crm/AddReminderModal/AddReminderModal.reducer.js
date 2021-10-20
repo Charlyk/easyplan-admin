@@ -18,6 +18,7 @@ export const reminderTypes = [
 export const initialState = {
   startTime:tomorrow.format('HH:mm'),
   endTime: tomorrow.add(15, "minutes").format('HH:mm'),
+  patient: null,
   date: tomorrow.toDate(),
   user: null,
   type: reminderTypes[0],
@@ -50,6 +51,9 @@ const addReminderModalSlice = createSlice({
     setIsLoading(state, action) {
       state.isLoading = action.payload;
     },
+    setPatient(state, action) {
+      state.patient = action.payload;
+    },
     resetState(state) {
       return { ...initialState, user: state.user };
     },
@@ -65,6 +69,7 @@ export const {
   setDate,
   resetState,
   setIsLoading,
+  setPatient,
 } = addReminderModalSlice.actions;
 
 export default addReminderModalSlice.reducer;

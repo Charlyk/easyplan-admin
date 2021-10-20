@@ -64,6 +64,7 @@ const crmMainSlice = createSlice({
       state.queryParams = action.payload;
     },
     setShowReminders(state, action) {
+      state.showFilters = false;
       state.showReminders = action.payload;
     },
     setActiveRemindersCount(state, action) {
@@ -74,7 +75,6 @@ const crmMainSlice = createSlice({
 
 export const {
   setColumns,
-  setLinkModal,
   openDeleteModal,
   closeDeleteModal,
   openLinkModal,

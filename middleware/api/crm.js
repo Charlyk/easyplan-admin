@@ -175,6 +175,15 @@ export async function requestFetchRemindersCount(headers = null) {
 }
 
 /**
+ * Fetch user active reminders
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchUserReminders(headers = null) {
+  return get('/api/reminders/user', headers);
+}
+
+/**
  * Move a deal to another column
  * @param {number} columnId
  * @param {number} dealId
