@@ -110,8 +110,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
     }
   }
 
-  const handleAcceptInvitation = async (event) => {
-    event?.preventDefault();
+  const handleAcceptInvitation = async () => {
     if (isNewUser && !isFormValid()) {
       return;
     }
@@ -174,7 +173,6 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
           />
         )}
         <form
-          onSubmit={handleAcceptInvitation}
           className={clsx(
             styles.formRoot,
             styles.acceptInvitation,
