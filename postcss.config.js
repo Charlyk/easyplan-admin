@@ -31,6 +31,7 @@ module.exports = {
           /^rcp/,
           '::after',
           /^react-tel-input/,
+          /^country-list/,
           /^form-control/,
           /^flag/,
           /^selected-flag/,
