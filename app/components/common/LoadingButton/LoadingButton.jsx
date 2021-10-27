@@ -22,7 +22,7 @@ const LoadingButton = (
       type={type}
       style={style}
       className={clsx(styles.loadingButton, className)}
-      onPointerUp={onClick}
+      onClick={onClick}
       disabled={disabled}
       classes={{
         root: clsx(styles.loadingButton, className),
