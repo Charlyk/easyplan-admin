@@ -16,6 +16,7 @@ const EasyDateRangePicker = (
     pickerAnchor,
     open,
     dateRange,
+    placement = "bottom",
     onClose,
     onChange,
   }
@@ -26,7 +27,7 @@ const EasyDateRangePicker = (
       anchorEl={pickerAnchor}
       open={open}
       disablePortal
-      placement='bottom'
+      placement={placement}
       transition
     >
       {({ TransitionProps }) => (

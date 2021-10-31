@@ -176,11 +176,12 @@ export async function requestFetchRemindersCount(headers = null) {
 
 /**
  * Fetch user active reminders
- * @param headers
+ * @param {string} filters
+ * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestFetchUserReminders(headers = null) {
-  return get('/api/reminders/user', headers);
+export async function requestFetchUserReminders(filters, headers = null) {
+  return get(`/api/reminders/user?filters=${filters}`, headers);
 }
 
 /**

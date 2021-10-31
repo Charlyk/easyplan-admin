@@ -40,6 +40,12 @@
       }
     }
 
+    &.completed {
+      .typeRow {
+        text-decoration: line-through;
+      }
+    }
+
     .detailsRow {
       display: flex;
       align-items: center;

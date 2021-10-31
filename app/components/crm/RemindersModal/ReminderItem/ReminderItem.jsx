@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import PropTypes from 'prop-types';
-import getReminderTexts from "../../../../utils/getReminderTexts";
-import styles from './ReminderItem.module.scss';
-import ReminderIcon from "@material-ui/icons/AccessTime";
 import Typography from "@material-ui/core/Typography";
+import ReminderIcon from "@material-ui/icons/AccessTime";
+import { requestCompleteReminder } from "../../../../../middleware/api/crm";
+import getReminderTexts from "../../../../utils/getReminderTexts";
+import onRequestError from "../../../../utils/onRequestError";
 import { textForKey } from "../../../../utils/localization";
 import EASTextarea from "../../../common/EASTextarea";
 import LoadingButton from "../../../common/LoadingButton";
-import { requestCompleteReminder } from "../../../../../middleware/api/crm";
-import onRequestError from "../../../../utils/onRequestError";
+import styles from './ReminderItem.module.scss';
 
 const ReminderItem = ({ reminder }) => {
   const [resultComment, setResultComment] = useState('');
@@ -35,7 +35,8 @@ const ReminderItem = ({ reminder }) => {
       <div className={clsx(
         styles.dataContainer,
         {
-          [styles.active]: isToday && !reminder.active,
+          [styles.active]: isToday,
+          [styles.completed]: reminder.completed,
           [styles.expired]: reminder.active,
         }
       )}>
@@ -51,13 +52,17 @@ const ReminderItem = ({ reminder }) => {
         </Typography>
         <Typography className={styles.detailsRow}>
           {textForKey('crm_reminder_type')}:
-          <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
+          <span style={{ fontWeight: 'bold', marginLeft: 5 }} className={styles.typeRow}>
             {textForKey(`crm_reminder_type_${reminder.type}`)}
+            {reminder.comment ? ` - ${reminder.comment}` : ''}
           </span>
         </Typography>
-        {reminder.comment ? (
-          <Typography className={styles.commentLabel}>
-            {reminder.comment}
+        {reminder.resultComment ? (
+          <Typography className={styles.detailsRow}>
+            {textForKey('crm_reminder_result')}:
+            <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
+            {reminder.resultComment}
+          </span>
           </Typography>
         ) : null}
         {!reminder.completed ? (

@@ -637,6 +637,7 @@ export default {
     crm_reminders_expired_tasks: 'Expired tasks',
     crm_reminders_completed_tasks: 'Completed tasks',
     crm_reminders_all_tasks: 'All tasks',
+    crm_reminder_result: 'Result',
   },
   ro: {
     analytics: 'Analitică',
@@ -1282,6 +1283,7 @@ export default {
     crm_reminders_expired_tasks: 'Sarcini expirate',
     crm_reminders_completed_tasks: 'Sarcini finisate',
     crm_reminders_all_tasks: 'Toate sarcinile',
+    crm_reminder_result: 'Rezultat',
   },
   ru: {
     analytics: 'Analytics',
@@ -1918,5 +1920,6 @@ export default {
     crm_reminders_expired_tasks: 'Expired tasks',
     crm_reminders_completed_tasks: 'Completed tasks',
     crm_reminders_all_tasks: 'All tasks',
+    crm_reminder_result: 'Result',
   },
 };

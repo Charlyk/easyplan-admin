@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import groupBy from 'lodash/groupBy';
-import { textForKey } from "../../../utils/localization";
 import moment from "moment-timezone";
+import { textForKey } from "../../../utils/localization";
 
 export const filterOptions = [
   {
@@ -23,23 +23,33 @@ export const filterOptions = [
 ];
 
 export const initialState = {
-  selectedFilter: filterOptions[0],
+  filters: {
+    shortcut: filterOptions[0],
+    dateRange: null,
+  },
   isLoading: false,
   reminders: {},
-}
+  showDateRange: false
+};
 
 const remindersModalSlice = createSlice({
   name: 'remindersModal',
   initialState,
   reducers: {
-    setSelectedFilter(state, action) {
-      state.selectedFilter = action.payload;
+    setFilterShortcut(state, action) {
+      state.filters = { ...state.filters, shortcut: action.payload };
+    },
+    setFilters(state, action) {
+      state.filters = action.payload;
     },
     setReminders(state, action) {
       state.reminders = groupBy(action.payload, item => moment(item.dueDate).format('YYYY-MM-DD'));
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
+    },
+    setShowDateRangePicker(state, action) {
+      state.showDateRange = action.payload;
     },
     resetState() {
       return initialState;
@@ -48,10 +58,12 @@ const remindersModalSlice = createSlice({
 });
 
 export const {
-  setSelectedFilter,
+  setFilters,
   setReminders,
   setIsLoading,
   resetState,
+  setFilterShortcut,
+  setShowDateRangePicker,
 } = remindersModalSlice.actions;
 
 export default remindersModalSlice.reducer;

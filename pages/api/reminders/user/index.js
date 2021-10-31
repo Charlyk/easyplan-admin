@@ -24,7 +24,8 @@ export default authorized(async (req, res) => {
 
 async function fetchReminders(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${updatedServerUrl(req)}/crm/reminders/user`, {
+  const queryString = new URLSearchParams(req.query).toString()
+  return axios.get(`${updatedServerUrl(req)}/crm/reminders/user?${queryString}`, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
