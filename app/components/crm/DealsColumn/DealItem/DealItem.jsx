@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useDrag } from 'react-dnd';
 import UnsortedDealItem from "../UnsortedDealItem";
 import SortedDealItem from "../SortedDealItem";
+import { ItemTypes } from "../constants";
 import styles from './DealItem.module.scss';
 
 const DealItem = (
@@ -15,8 +17,26 @@ const DealItem = (
   }
 ) => {
   const isUnsorted = dealItem.state.type === 'Unsorted';
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: isUnsorted ? ItemTypes.NONE
+      : dealItem?.schedule == null
+        ? ItemTypes.UNSCHEDULED
+        : ItemTypes.SCHEDULED,
+    item: dealItem,
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   return (
-    <div className={styles.dealItem} style={{ backgroundColor: isUnsorted ? 'white' : `${color}0D`}}>
+    <div
+      ref={drag}
+      className={styles.dealItem}
+    >
+      <div
+        className={styles.backgroundHolder}
+        style={{ backgroundColor: isUnsorted ? 'white' : `${color}33` }}
+      />
       {dealItem.state.type === 'Unsorted' ? (
         <UnsortedDealItem
           deal={dealItem}

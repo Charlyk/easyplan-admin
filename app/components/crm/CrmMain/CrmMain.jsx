@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from "react";
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import orderBy from "lodash/orderBy";
 import upperFirst from 'lodash/upperFirst';
 import { toast } from "react-toastify";
 import Zoom from '@material-ui/core/Zoom';
@@ -8,19 +9,27 @@ import Fab from "@material-ui/core/Fab";
 import Tooltip from '@material-ui/core/Tooltip';
 import IconFilter from '@material-ui/icons/FilterList';
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined'
+import Typography from "@material-ui/core/Typography";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllDealStates,
   requestChangeDealColumn,
-  requestConfirmFirstContact, requestFetchRemindersCount,
-  updateDealState
+  requestConfirmFirstContact,
+  requestFetchRemindersCount,
+  updateDealState,
 } from "../../../../middleware/api/crm";
 import { setAppointmentModal } from "../../../../redux/actions/actions";
-import { updatedDealSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
+import {
+  updatedDealSelector,
+  updatedReminderSelector
+} from "../../../../redux/selectors/crmSelector";
 import extractCookieByName from "../../../utils/extractCookieByName";
 import setDocCookies from "../../../utils/setDocCookies";
 import { textForKey } from "../../../utils/localization";
 import onRequestError from "../../../utils/onRequestError";
+import RemindersModal from "../RemindersModal";
 import DealsColumn from "../DealsColumn";
 import reducer, {
   initialState,
@@ -41,8 +50,6 @@ import reducer, {
   setActiveRemindersCount,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
-import Typography from "@material-ui/core/Typography";
-import RemindersModal from "../RemindersModal";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -111,12 +118,19 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     }
   }
 
-  const updateColumns = async () => {
+  const updateColumns = async (newState) => {
     try {
       const response = await fetchAllDealStates();
-      localDispatch(setColumns(response.data));
+      localDispatch(setColumns(orderBy(response.data, ['orderId'], ['asc'])));
+
+      if (queryParams.states && newState != null) {
+        updateParams({
+          ...queryParams,
+          states: orderBy([...queryParams.states, newState], ['orderId'], ['asc']),
+        });
+      }
     } catch (error) {
-      toast.error(error.message);
+      onRequestError(error);
     }
   };
 
@@ -285,7 +299,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       {showFilters && (
         <CrmFilters
           currentClinic={currentClinic}
-          dealsStates={states}
+          dealsStates={columns}
           selectedParams={queryParams}
           onClose={handleCloseFilter}
           onSubmit={handleFilterSubmit}
@@ -306,7 +320,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
                   {activeRemindersCount}
                 </Typography>
               </div>
-              <IconReminders />
+              <IconReminders/>
             </Fab>
           </Tooltip>
         </Zoom>
@@ -318,29 +332,32 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
               aria-label="filter"
               onClick={handleOpenFilter}
             >
-              <IconFilter />
+              <IconFilter/>
             </Fab>
           </Tooltip>
         </Zoom>
       </div>
-      <div className={styles.columnsContainer}>
-        {filteredColumns.map((dealState, index) => (
-          <DealsColumn
-            key={dealState.id}
-            filterData={queryParams}
-            isFirst={index === 0}
-            isLast={index === (states.length - 1)}
-            updatedDeal={updatedDeal}
-            dealState={dealState}
-            onUpdate={updateColumns}
-            onMove={handleColumnMoved}
-            onDealClick={handleDealClick}
-            onLinkPatient={handleLinkPatient}
-            onDeleteDeal={handleDeleteDeal}
-            onConfirmFirstContact={handleConfirmFirstContact}
-          />
-        ))}
-      </div>
+      <DndProvider backend={HTML5Backend}>
+        <div className={styles.columnsContainer}>
+          {filteredColumns.map((dealState, index) => (
+            <DealsColumn
+              key={dealState.id}
+              filterData={queryParams}
+              isFirst={index === 0}
+              isLast={index === (states.length - 1)}
+              updatedDeal={updatedDeal}
+              dealState={dealState}
+              onAddSchedule={handleAddSchedule}
+              onUpdate={updateColumns}
+              onMove={handleColumnMoved}
+              onDealClick={handleDealClick}
+              onLinkPatient={handleLinkPatient}
+              onDeleteDeal={handleDeleteDeal}
+              onConfirmFirstContact={handleConfirmFirstContact}
+            />
+          ))}
+        </div>
+      </DndProvider>
     </div>
   )
 };

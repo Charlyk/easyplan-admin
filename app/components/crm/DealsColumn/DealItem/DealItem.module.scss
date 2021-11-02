@@ -4,11 +4,19 @@
   display: flex;
   margin-top: 5px;
   flex-direction: column;
-  background-color: white;
   border: #cccccc 1px solid;
   border-radius: 4px;
   position: relative;
   cursor: pointer;
+  background-color: white;
+
+  .backgroundHolder {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
 
   &:hover {
     opacity: 0.8;

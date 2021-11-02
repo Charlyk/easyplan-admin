@@ -11,14 +11,14 @@ import DoneIcon from '@material-ui/icons/Done';
 import { InfiniteLoader, List, AutoSizer } from 'react-virtualized'
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-
+import { useDrop } from 'react-dnd';
 import {
   newDealSelector,
   updatedDealSelector
 } from "../../../../redux/selectors/crmSelector";
 import {
   createNewDealState,
-  deleteDealState,
+  deleteDealState, requestChangeDealColumn,
   requestFetchDeals,
   updateDealState
 } from "../../../../middleware/api/crm";
@@ -48,6 +48,8 @@ import reducer, {
   setPage,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
+import { ItemTypes } from "./constants";
+import clsx from "clsx";
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -62,6 +64,7 @@ const DealsColumn = (
     onUpdate,
     onLinkPatient,
     onDeleteDeal,
+    onAddSchedule,
     onConfirmFirstContact,
     onDealClick,
   }
@@ -84,6 +87,30 @@ const DealsColumn = (
     itemsPerPage,
     loadedRowsMap,
   }, localDispatch] = useReducer(reducer, initialState);
+
+  const filteredActions = useMemo(() => {
+    return sheetActions.filter(action => {
+      return (
+        (dealState.deleteable || action.key !== 'deleteColumn') &&
+        (!isFirst || action.key !== 'moveToLeft') &&
+        (!isLast || action.key !== 'moveToRight')
+      )
+    })
+  }, [dealState, isFirst, isLast]);
+
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: dealState.type === 'Unsorted' || dealState.type === 'Rescheduled' || dealState.type === 'Completed'
+      ? ItemTypes.NONE
+      : dealState.type === 'Custom'
+        ? [ItemTypes.ALL, ItemTypes.SCHEDULED, ItemTypes.UNSCHEDULED]
+        : dealState.type === 'FirstContact'
+          ? [ItemTypes.UNSCHEDULED, ItemTypes.ALL]
+          : [ItemTypes.SCHEDULED, ItemTypes.UNSCHEDULED],
+    drop: (item) => handleDealDrop(item),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }), [dealState])
 
   useEffect(() => {
     if (createdDeal == null || createdDeal.state.id !== dealState.id) {
@@ -113,15 +140,28 @@ const DealsColumn = (
     localDispatch(setUpdatedDeal(updatedDeal ?? updatedDealData));
   }, [updatedDeal, updatedDealData]);
 
-  const filteredActions = useMemo(() => {
-    return sheetActions.filter(action => {
-      return (
-        (dealState.deleteable || action.key !== 'deleteColumn') &&
-        (!isFirst || action.key !== 'moveToLeft') &&
-        (!isLast || action.key !== 'moveToRight')
-      )
-    })
-  }, [dealState, isFirst, isLast]);
+  const handleDealDrop = async (deal) => {
+    try {
+      if (
+        deal.state.id === dealState.id ||
+        (dealState.type !== 'Custom' && dealState.orderId < deal.state.orderId)
+      ) {
+        // no need to change deal state
+        return;
+      }
+      if (deal.patient == null) {
+        onLinkPatient?.();
+        return;
+      }
+      if (dealState.type === 'Scheduled' && deal.schedule == null) {
+        onAddSchedule?.(deal);
+        return;
+      }
+      await requestChangeDealColumn(dealState.id, deal.id);
+    } catch (error) {
+      onRequestError(error);
+    }
+  }
 
   const fetchDealsForState = async ({ startIndex, stopIndex }, page = page) => {
     try {
@@ -152,10 +192,10 @@ const DealsColumn = (
 
   const handleCreateColumn = async (columnName) => {
     try {
-      await createNewDealState({ name: columnName, orderId: dealState.orderId + 1 });
-      await onUpdate();
+      const response = await createNewDealState({ name: columnName, orderId: dealState.orderId + 1 });
+      await onUpdate(response.data);
     } catch (error) {
-      toast.error(error.message);
+      onRequestError(error);
     } finally {
       localDispatch(setShowCreateColumn(false));
     }
@@ -268,7 +308,7 @@ const DealsColumn = (
   }
 
   return (
-    <div className={styles.dealsColumn}>
+    <div className={clsx(styles.dealsColumn, { [styles.dropOver]: isOver })} ref={drop}>
       <AddColumnModal
         open={showCreateColumn}
         onSave={handleCreateColumn}
@@ -373,6 +413,7 @@ DealsColumn.propTypes = {
   updatedDeal: PropTypes.any,
   onMove: PropTypes.func,
   onUpdate: PropTypes.func,
+  onAddSchedule: PropTypes.func,
   onLinkPatient: PropTypes.func,
   onDeleteDeal: PropTypes.func,
   onConfirmFirstContact: PropTypes.func,
