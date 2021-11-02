@@ -80,14 +80,14 @@ const menuItems = [
     icon: <MenuUsers/>,
     href: '/users',
   },
-  {
-    id: 'crm',
-    type: 'link',
-    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
-    text: textForKey('CRM Board'),
-    icon: <AssessmentIcon />,
-    href: '/crm'
-  },
+  // {
+  //   id: 'crm',
+  //   type: 'link',
+  //   roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+  //   text: textForKey('CRM Board'),
+  //   icon: <AssessmentIcon />,
+  //   href: '/crm'
+  // },
   {
     id: 'calendar',
     type: 'link',
@@ -151,12 +151,12 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
   }, []);
 
-  useEffect(() => {
-    setShowCrmHelp(
-      !wasNotificationShown(notifications.menuCRMImplementation.id) &&
-      !showTechSupportHelp,
-    );
-  }, [showTechSupportHelp])
+  // useEffect(() => {
+  //   setShowCrmHelp(
+  //     !wasNotificationShown(notifications.menuCRMImplementation.id) &&
+  //     !showTechSupportHelp,
+  //   );
+  // }, [showTechSupportHelp]);
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
