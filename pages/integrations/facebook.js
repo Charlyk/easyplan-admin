@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import FacebookLogin from "react-facebook-login";
+import { toast } from "react-toastify";
+import { textForKey } from "../../app/utils/localization";
 import handleRequestError from "../../app/utils/handleRequestError";
 import { FacebookAppId, HeaderKeys } from "../../app/utils/constants";
-import FacebookLogin from "react-facebook-login";
-import { textForKey } from "../../app/utils/localization";
 import { saveFacebookToken } from "../../middleware/api/users";
-import { toast } from "react-toastify";
 import { saveClinicFacebookPage } from "../../middleware/api/clinic";
 import PagesListModal
   from "../../app/components/dashboard/settings/CrmSettings/Integrations/FacebookIntegration/PagesListModal";
@@ -60,22 +60,15 @@ const Facebook = ({ authToken, clinicId }) => {
   };
 
   return (
-    <div style={{ alignItems: 'center', justifyItems: 'center', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
-      <PagesListModal
-        {...pagesModal}
-        onSelect={handlePageSelected}
-        onClose={handleClosePagesList}
-      />
-      <FacebookLogin
-        autoLoad={false}
-        appId={FacebookAppId}
-        fields="name,email,picture,accounts"
-        scope="public_profile,pages_show_list,pages_messaging"
-        size="small"
-        textButton={textForKey('Connect Facebook')}
-        callback={handleFacebookResponse}
-      />
-    </div>
+    <FacebookLogin
+      autoLoad={false}
+      appId={FacebookAppId}
+      fields="name,email,picture,accounts"
+      scope="public_profile,pages_show_list,pages_messaging"
+      size="small"
+      textButton={textForKey('Connect Facebook')}
+      callback={handleFacebookResponse}
+    />
   );
 };
 

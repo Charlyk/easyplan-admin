@@ -1,18 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import FacebookLogin from 'react-facebook-login';
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-
+import { appBaseUrl } from "../../../../../../../eas.config";
 import { saveClinicFacebookPage } from "../../../../../../../middleware/api/clinic";
 import { saveFacebookToken } from "../../../../../../../middleware/api/users";
 import { textForKey } from "../../../../../../utils/localization";
-import { FacebookAppId } from "../../../../../../utils/constants";
+import popupCenter from "../../../../../../utils/popupCenter";
 import PagesListModal from "./PagesListModal";
 import styles from './FacebookIntegration.module.scss';
-import { appBaseUrl } from "../../../../../../../eas.config";
-import popupCenter from "../../../../../../utils/popupCenter";
 
 const FacebookIntegration = ({ currentClinic, authToken }) => {
   const [facebookPage, setFacebookPage] = useState(currentClinic.facebookPage);
@@ -123,9 +119,11 @@ const FacebookIntegration = ({ currentClinic, authToken }) => {
             {title}
           </Typography>
         </Box>
-        <Button onClick={handleOpenNewWindow} className={styles.connectBtn}>
-          {buttonText}
-        </Button>
+        <iframe
+          id="facebookLogin"
+          className={styles.connectContainer}
+          src={`${appBaseUrl}/integrations/facebook?token=${authToken}&clinic=${currentClinic.id}`}
+        />
       </Box>
     </div>
   )

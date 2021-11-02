@@ -16,7 +16,8 @@ const popupCenter = ({ url, title, w, h }) => {
       height=${h / systemZoom}, 
       top=${top}, 
       left=${left}
-      `
+      `,
+    true
   )
 
   if (window.focus) newWindow.focus();
