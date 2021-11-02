@@ -22,7 +22,7 @@ const SettingsForm = {
   crmSettings: 'crmSettings',
 };
 
-const SettingsWrapper = ({ currentUser, currentClinic, countries }) => {
+const SettingsWrapper = ({ currentUser, currentClinic, authToken, countries }) => {
   const selectedClinic = currentUser?.clinics.find(
     item => item.clinicId === currentClinic.id,
   );
@@ -85,6 +85,7 @@ const SettingsWrapper = ({ currentUser, currentClinic, countries }) => {
             <CrmSettings
               currentUser={currentUser}
               currentClinic={currentClinic}
+              authToken={authToken}
             />
           )}
         </div>

@@ -9,7 +9,7 @@ import Integrations from "./Integrations";
 import styles from './CrmSettings.module.scss';
 import CrmColumns from "./CrmColumns";
 
-const CrmSettings = ({ currentUser, currentClinic }) => {
+const CrmSettings = ({ currentUser, currentClinic, authToken }) => {
   const [currentTab, setCurrentTab] = useState('0');
 
   const handleTabChange = (event, newValue) => {
@@ -41,6 +41,7 @@ const CrmSettings = ({ currentUser, currentClinic }) => {
         </Box>
         <TabPanel value="0" style={{ padding: 0, width: '100%' }}>
           <Integrations
+            authToken={authToken}
             currentUser={currentUser}
             currentClinic={currentClinic}
           />

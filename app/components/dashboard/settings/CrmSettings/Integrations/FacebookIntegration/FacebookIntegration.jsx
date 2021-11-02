@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import FacebookLogin from 'react-facebook-login';
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import { toast } from "react-toastify";
+import FacebookLogin from 'react-facebook-login';
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 import { saveClinicFacebookPage } from "../../../../../../../middleware/api/clinic";
 import { saveFacebookToken } from "../../../../../../../middleware/api/users";
@@ -10,8 +11,10 @@ import { textForKey } from "../../../../../../utils/localization";
 import { FacebookAppId } from "../../../../../../utils/constants";
 import PagesListModal from "./PagesListModal";
 import styles from './FacebookIntegration.module.scss';
+import { appBaseUrl } from "../../../../../../../eas.config";
+import popupCenter from "../../../../../../utils/popupCenter";
 
-const FacebookIntegration = ({ currentClinic }) => {
+const FacebookIntegration = ({ currentClinic, authToken }) => {
   const [facebookPage, setFacebookPage] = useState(currentClinic.facebookPage);
   const [pagesModal, setPagesModal] = useState({ open: false, pages: [] });
   const title = useMemo(() => {
@@ -62,6 +65,15 @@ const FacebookIntegration = ({ currentClinic }) => {
       toast.error(error.message);
     }
     handleClosePagesList();
+  };
+
+  const handleOpenNewWindow = () => {
+    popupCenter({
+      url: `${appBaseUrl}/integrations/facebook?token=${authToken}&clinic=${currentClinic.id}`,
+      title: 'Integrations',
+      w: 200,
+      h: 200,
+    });
   }
 
   /**
@@ -111,15 +123,9 @@ const FacebookIntegration = ({ currentClinic }) => {
             {title}
           </Typography>
         </Box>
-        <FacebookLogin
-          autoLoad={false}
-          appId={FacebookAppId}
-          fields="name,email,picture,accounts"
-          scope="public_profile,pages_show_list,pages_messaging"
-          size="small"
-          textButton={buttonText}
-          callback={handleFacebookResponse}
-        />
+        <Button onClick={handleOpenNewWindow} className={styles.connectBtn}>
+          {buttonText}
+        </Button>
       </Box>
     </div>
   )

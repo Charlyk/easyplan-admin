@@ -19,6 +19,19 @@
     font-size: .8rem !important;
   }
 
+  .connectBtn {
+    background-color: #4c69ba;
+    color: white;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: .8rem !important;
+
+    &:hover {
+      background-color: #4c69ba;
+    }
+  }
+
   :global(.kep-login-facebook) {
     border-radius: 4px;
     font-family: Inter, sans-serif;

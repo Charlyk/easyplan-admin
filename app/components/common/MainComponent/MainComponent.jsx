@@ -66,7 +66,7 @@ const MainComponent = (
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   let childrenProps = children.props;
   if (provideAppData) {
-    childrenProps = { ...childrenProps, currentUser, currentClinic };
+    childrenProps = { ...childrenProps, currentUser, currentClinic, authToken };
   }
 
   useEffect(() => {
