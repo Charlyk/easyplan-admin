@@ -6,7 +6,7 @@ const getReminderTexts = (reminder) => {
   if (reminder == null) {
     return null;
   }
-  const { assignee } = reminder
+  const { assignee, createdBy } = reminder
   const dueDate = moment(reminder.dueDate);
   const endDate = moment(reminder.endDate);
   const isExpired = dueDate.isBefore(moment(), 'minutes');
@@ -17,6 +17,7 @@ const getReminderTexts = (reminder) => {
     ? `${textForKey('crm_reminder_today')} ${stringTime}`
     : `${stringDate} ${textForKey('crm_reminder_at')} ${stringTime}`;
   const assigneeName = `${assignee.firstName} ${assignee.lastName}`;
+  const createdByName = `${createdBy.firstName} ${createdBy.lastName}`;
   const headerText = `${timeText} ${textForKey('crm_reminder_for').toLowerCase()} ${assigneeName}`
   return {
     isExpired,
@@ -25,7 +26,8 @@ const getReminderTexts = (reminder) => {
     assigneeName,
     headerText,
     stringTime,
-    stringDate
+    stringDate,
+    createdByName,
   }
 };
 

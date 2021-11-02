@@ -20,6 +20,8 @@ import {
   toggleUpdateSchedule,
 } from '../../redux/actions/scheduleActions';
 import { setShouldUpdateClinicData } from "../../redux/slices/clinicDataSlice";
+import { toast } from "react-toastify";
+import ReminderNotification from "../components/common/ReminderNotification";
 
 export const handleRemoteMessage = (message) => (dispatch) => {
   const { action, payload: messagePayload } = message;

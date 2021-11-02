@@ -158,8 +158,8 @@ export default React.memo(UnsortedDealItem, areComponentPropsEqual);
 UnsortedDealItem.propTypes = {
   deal: PropTypes.shape({
     id: PropTypes.number,
-    created: PropTypes.string,
-    lastUpdated: PropTypes.string,
+    created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    lastUpdated: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     messageSnippet: PropTypes.string,
     source: PropTypes.string,
     sourceDescription: PropTypes.string,
