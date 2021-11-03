@@ -46,6 +46,7 @@ import reducer, {
 import styles from './DealsColumn.module.scss';
 import { ItemTypes } from "./constants";
 import { CircularProgress } from "@material-ui/core";
+import usePrevious from "../../../utils/hooks/usePrevious";
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -84,6 +85,7 @@ const DealsColumn = (
     page,
     itemsPerPage,
   }, localDispatch] = useReducer(reducer, initialState);
+  const previousPage = usePrevious(page);
 
   const filteredActions = useMemo(() => {
     return sheetActions.filter(action => {
@@ -153,8 +155,11 @@ const DealsColumn = (
   }, [updatedDeal, updatedDealData]);
 
   useEffect(() => {
+    if (previousPage && previousPage > page) {
+      return;
+    }
     fetchDealsForState();
-  }, [page]);
+  }, [page, previousPage]);
 
   const handleDealDrop = async (deal) => {
     try {
@@ -184,7 +189,11 @@ const DealsColumn = (
       localDispatch(setIsFetching(true));
       const filterParams = extractCookieByName(COOKIES_KEY);
       const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
-      localDispatch(setData(response.data));
+      if (response.data.length === 0) {
+        localDispatch(setPage(page - 1));
+      } else {
+        localDispatch(setData(response.data));
+      }
     } catch (error) {
       onRequestError(error)
     } finally {
@@ -340,17 +349,19 @@ const DealsColumn = (
         </div>
       </div>
       <div className={styles.dataContainer}>
-        {items.map((item) => (
-          <DealItem
-            key={item.id}
-            onDealClick={onDealClick}
-            color={dealState.color}
-            dealItem={item}
-            onLinkPatient={onLinkPatient}
-            onDeleteDeal={onDeleteDeal}
-            onConfirmFirstContact={onConfirmFirstContact}
-          />
-        ))}
+        <>
+          {items.map((item) => (
+            <DealItem
+              key={item.id}
+              onDealClick={onDealClick}
+              color={dealState.color}
+              dealItem={item}
+              onLinkPatient={onLinkPatient}
+              onDeleteDeal={onDeleteDeal}
+              onConfirmFirstContact={onConfirmFirstContact}
+            />
+          ))}
+        </>
         {isFetching ? (
           <CircularProgress className="circular-progress-bar"/>
         ) : null}
