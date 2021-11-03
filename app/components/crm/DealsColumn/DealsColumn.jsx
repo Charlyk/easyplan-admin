@@ -174,7 +174,10 @@ const DealsColumn = (
         onLinkPatient?.();
         return;
       }
-      if (dealState.type === 'Scheduled' && deal.schedule == null) {
+      if (
+        (dealState.type === 'Scheduled' || dealState.type === 'Completed' || dealState.type === 'Failed') &&
+        deal.schedule == null
+      ) {
         onAddSchedule?.(deal);
         return;
       }

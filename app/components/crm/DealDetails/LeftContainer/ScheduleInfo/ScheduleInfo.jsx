@@ -8,11 +8,13 @@ import TableBody from "@material-ui/core/TableBody";
 import Typography from "@material-ui/core/Typography";
 import TableContainer from "@material-ui/core/TableContainer";
 
+import { ScheduleStatuses } from "../../../../../utils/constants";
 import { textForKey } from "../../../../../utils/localization";
-import styles from "../PatientInfo/PatientInfo.module.scss";
+import styles from "./ScheduleInfo.module.scss";
 
 const ScheduleInfo = ({ deal }) => {
   const { schedule } = deal;
+  const scheduleStatus = ScheduleStatuses.find(item => item.id === schedule.status)
 
   const doctorName = useMemo(() => {
     const { doctor } = schedule;
@@ -20,7 +22,7 @@ const ScheduleInfo = ({ deal }) => {
   }, [schedule.doctor]);
 
   return (
-    <div className={styles.patientInfo}>
+    <div className={styles.scheduleInfo}>
       <Typography className={styles.titleLabel}>
         {textForKey('Appointment')}
       </Typography>
@@ -71,7 +73,7 @@ const ScheduleInfo = ({ deal }) => {
               </TableCell>
               <TableCell>
                 <Typography className={styles.rowValue}>
-                  {textForKey(deal.schedule.status)}
+                  {scheduleStatus.name}
                 </Typography>
               </TableCell>
             </TableRow>
