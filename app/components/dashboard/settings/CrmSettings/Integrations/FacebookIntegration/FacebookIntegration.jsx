@@ -6,7 +6,6 @@ import { appBaseUrl } from "../../../../../../../eas.config";
 import { saveClinicFacebookPage } from "../../../../../../../middleware/api/clinic";
 import { saveFacebookToken } from "../../../../../../../middleware/api/users";
 import { textForKey } from "../../../../../../utils/localization";
-import popupCenter from "../../../../../../utils/popupCenter";
 import PagesListModal from "./PagesListModal";
 import styles from './FacebookIntegration.module.scss';
 
@@ -40,8 +39,11 @@ const FacebookIntegration = ({ currentClinic, authToken }) => {
     setFacebookPage(currentClinic.facebookPage);
   }, [currentClinic]);
 
-  const handleFrameMessage = (event) => {
-    console.log(event.data);
+  const handleFrameMessage = async (event) => {
+    if (event.data.source != null) {
+      return;
+    }
+    await handleFacebookResponse(event.data)
   }
 
   const handleShowPagesList = (pages) => {
