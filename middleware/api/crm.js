@@ -191,11 +191,12 @@ export async function requestFetchUserReminders(filters, headers = null) {
  * Move a deal to another column
  * @param {number} columnId
  * @param {number} dealId
+ * @param {(string|null)?} deleteReason
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestChangeDealColumn(columnId, dealId, headers = null) {
-  return put(`/api/crm/${dealId}/move`, headers, { newState: columnId });
+export async function requestChangeDealColumn(columnId, dealId, deleteReason = null, headers = null) {
+  return put(`/api/crm/${dealId}/move`, headers, { newState: columnId, deleteReason });
 }
 
 /**
