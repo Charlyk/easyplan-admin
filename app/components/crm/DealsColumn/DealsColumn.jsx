@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import clsx from "clsx";
 import PropTypes from 'prop-types';
 import { useColor } from "react-color-palette";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import Skeleton from "@material-ui/lab/Skeleton";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
@@ -45,8 +45,7 @@ import reducer, {
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
 import { ItemTypes } from "./constants";
-import clsx from "clsx";
-import usePrevious from "../../../utils/hooks/usePrevious";
+import { CircularProgress } from "@material-ui/core";
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -73,6 +72,7 @@ const DealsColumn = (
   const updatedDealData = useSelector(updatedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
   const [{
+    isFetching,
     showActions,
     isEditingName,
     columnName,
@@ -83,7 +83,6 @@ const DealsColumn = (
     items,
     page,
     itemsPerPage,
-    loadedRowsMap,
   }, localDispatch] = useReducer(reducer, initialState);
 
   const filteredActions = useMemo(() => {
@@ -188,12 +187,9 @@ const DealsColumn = (
       localDispatch(setData(response.data));
     } catch (error) {
       onRequestError(error)
+    } finally {
       localDispatch(setIsFetching(false));
     }
-  }
-
-  const isRowLoaded = ({ index }) => {
-    return !!loadedRowsMap[index]
   }
 
   const handleNameChange = (event) => {
@@ -282,42 +278,6 @@ const DealsColumn = (
     handleCloseActions();
   };
 
-  const rowRenderer = ({ index, key }) => {
-    const isLoaded = isRowLoaded({ index });
-    if (!isLoaded) {
-      return (
-        <Skeleton
-          variant="rect"
-          width="100%"
-          height={dealState.type === "Unsorted" ? '85px' : dealState.type !== 'FirstContact' ? '120px' : '105px'}
-          style={{ backgroundColor: `${dealState.color}0D` }}
-        />
-      )
-    }
-
-    return (
-      <DealItem
-        key={key}
-        onDealClick={onDealClick}
-        color={dealState.color}
-        dealItem={items[index]}
-        onLinkPatient={onLinkPatient}
-        onDeleteDeal={onDeleteDeal}
-        onConfirmFirstContact={onConfirmFirstContact}
-      />
-    )
-  }
-
-  const getRowHeight = ({ index }) => {
-    const deal = items[index];
-    if (deal?.state.type === 'Unsorted') {
-      return 85;
-    } else if (deal?.schedule == null) {
-      return 105;
-    }
-    return 120;
-  }
-
   return (
     <div className={clsx(styles.dealsColumn, { [styles.dropOver]: isOver })} ref={drop}>
       <AddColumnModal
@@ -391,6 +351,9 @@ const DealsColumn = (
             onConfirmFirstContact={onConfirmFirstContact}
           />
         ))}
+        {isFetching ? (
+          <CircularProgress className="circular-progress-bar"/>
+        ) : null}
         <div ref={loaderRef} />
       </div>
     </div>
