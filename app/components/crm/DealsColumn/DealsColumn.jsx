@@ -113,10 +113,10 @@ const DealsColumn = (
 
   const handleObserver = useCallback((entries) => {
     const target = entries[0];
-    if (target.isIntersecting && totalElements > items.length) {
+    if (target.isIntersecting && totalElements > items.length && !isFetching) {
       localDispatch(setPage(page + 1));
     }
-  }, [totalElements, page, items]);
+  }, [totalElements, page, items, isFetching]);
 
   useEffect(() => {
     const options = {
