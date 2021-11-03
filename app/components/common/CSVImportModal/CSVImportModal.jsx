@@ -42,7 +42,7 @@ const CSVImportModal = ({ open, title, iconTitle, iconSubtitle, importBtnTitle, 
     }
 
     return importBtnTitle
-      .replace('#', `${rowsCount - 1}`) // subtract one row for the title row
+      .replace('{1}', `${rowsCount - 1}`) // subtract one row for the title row
   }, [data, file, importBtnTitle]);
 
   const isFormValid = useMemo(() => {
@@ -79,7 +79,7 @@ const CSVImportModal = ({ open, title, iconTitle, iconSubtitle, importBtnTitle, 
       localDispatch(
         setSnackbar({
           show: true,
-          message: textForKey('map_all_fields').replace('#', pendingFields.join(', '))
+          message: textForKey('map_all_fields').replace('{1}', pendingFields.join(', '))
         })
       );
       return;
@@ -164,7 +164,7 @@ const CSVImportModal = ({ open, title, iconTitle, iconSubtitle, importBtnTitle, 
             >
               <IconsUploadCSV
                 title={iconTitle}
-                subtitle={iconSubtitle?.replace('#', `${maxAllowedRows}`)}
+                subtitle={iconSubtitle?.replace('{1}', `${maxAllowedRows}`)}
               />
             </CSVReader>
           </Box>

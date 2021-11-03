@@ -9,7 +9,7 @@ import { textForKey } from "../../../../../../utils/localization";
 import PagesListModal from "./PagesListModal";
 import styles from './FacebookIntegration.module.scss';
 
-const FacebookIntegration = ({ currentClinic, authToken }) => {
+const FacebookIntegration = ({ currentClinic }) => {
   const [facebookPage, setFacebookPage] = useState(currentClinic.facebookPage);
   const [pagesModal, setPagesModal] = useState({ open: false, pages: [] });
   const frameRef = useRef(null);
@@ -18,14 +18,7 @@ const FacebookIntegration = ({ currentClinic, authToken }) => {
     if (facebookPage == null) {
       return textForKey('Connect facebook page for CRM')
     }
-    return textForKey('connected_facebook_page').replace('#', facebookPage.name);
-  }, [facebookPage]);
-
-  const buttonText = useMemo(() => {
-    if (facebookPage == null) {
-      return textForKey('Connect Facebook')
-    }
-    return textForKey('Connect another page');
+    return textForKey('connected_facebook_page').replace('{1}', facebookPage.name);
   }, [facebookPage]);
 
   useEffect(() => {

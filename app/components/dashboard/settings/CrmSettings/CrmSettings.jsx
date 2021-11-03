@@ -6,10 +6,10 @@ import TabPanel from "@material-ui/lab/TabPanel";
 import TabContext from "@material-ui/lab/TabContext";
 import { textForKey } from "../../../../utils/localization";
 import Integrations from "./Integrations";
-import styles from './CrmSettings.module.scss';
 import CrmColumns from "./CrmColumns";
+import styles from './CrmSettings.module.scss';
 
-const CrmSettings = ({ currentUser, currentClinic, authToken }) => {
+const CrmSettings = ({ currentUser, currentClinic }) => {
   const [currentTab, setCurrentTab] = useState('0');
 
   const handleTabChange = (event, newValue) => {
@@ -40,10 +40,7 @@ const CrmSettings = ({ currentUser, currentClinic, authToken }) => {
           </TabList>
         </Box>
         <TabPanel value="0" style={{ padding: 0, width: '100%' }}>
-          <Integrations
-            authToken={authToken}
-            currentUser={currentUser}
-            currentClinic={currentClinic}
+          <Integrations currentClinic={currentClinic}
           />
         </TabPanel>
         <TabPanel value="1" style={{ padding: 0, width: '100%' }}>
