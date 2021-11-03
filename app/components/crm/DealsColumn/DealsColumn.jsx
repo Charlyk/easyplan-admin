@@ -365,10 +365,20 @@ const DealsColumn = (
             />
           ))}
         </>
-        <div ref={loaderRef} />
-        {isFetching ? (
-          <CircularProgress className="circular-progress-bar"/>
-        ) : null}
+        <div
+          ref={loaderRef}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem'
+          }}
+        >
+          {isFetching ? (
+            <CircularProgress className="circular-progress-bar"/>
+          ) : null}
+        </div>
       </div>
     </div>
   )
