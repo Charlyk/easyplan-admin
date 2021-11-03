@@ -29,7 +29,7 @@ import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import { APP_DATA_API } from "../../../utils/constants";
 import styles from './MainComponent.module.scss';
-import { newReminderSelector } from "../../../../redux/selectors/crmSelector";
+import { newReminderSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
 import { toast } from "react-toastify";
 import ReminderNotification from "../ReminderNotification";
 
@@ -63,6 +63,7 @@ const MainComponent = (
   const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
   const newReminder = useSelector(newReminderSelector);
+  const updatedReminder = useSelector(updatedReminderSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   let childrenProps = children.props;
   if (provideAppData) {
@@ -101,6 +102,13 @@ const MainComponent = (
 
     toast(<ReminderNotification reminder={newReminder}/>);
   }, [newReminder, currentUser]);
+
+  useEffect(() => {
+    if (updatedReminder == null || updatedReminder.assignee.id !== currentUser.id) {
+      return;
+    }
+    toast(<ReminderNotification reminder={updatedReminder}/>);
+  }, [updatedReminder, currentUser]);
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
