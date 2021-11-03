@@ -37,7 +37,6 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
   const remoteReminder = useSelector(updatedReminderSelector);
   const [{
     filters,
-    isLoading,
     reminders,
     showDateRange,
   }, localDispatch] = useReducer(reducer, initialState);
@@ -86,7 +85,6 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
       localDispatch(setIsLoading(true));
       const queryParams = extractCookieByName(COOKIES_KEY);
       const response = await requestFetchUserReminders(queryParams);
-      console.log(response.data);
       localDispatch(setReminders(response.data));
     } catch (error) {
       onRequestError(error);
