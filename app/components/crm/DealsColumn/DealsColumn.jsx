@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import PropTypes from 'prop-types';
 import { useColor } from "react-color-palette";
 import Typography from "@material-ui/core/Typography";
@@ -8,7 +8,6 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import DoneIcon from '@material-ui/icons/Done';
-import { InfiniteLoader, List, AutoSizer } from 'react-virtualized'
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useDrop } from 'react-dnd';
@@ -29,8 +28,6 @@ import EASColorPicker from "../../common/EASColorPicker";
 import AddColumnModal from "../AddColumnModal";
 import DealItem from "./DealItem";
 import reducer, {
-  STATUS_LOADING,
-  STATUS_LOADED,
   sheetActions,
   initialState,
   setShowActions,
@@ -44,12 +41,12 @@ import reducer, {
   setIsFetching,
   setUpdatedDeal,
   addNewDeal,
-  setRowsLoading,
   setPage,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
 import { ItemTypes } from "./constants";
 import clsx from "clsx";
+import usePrevious from "../../../utils/hooks/usePrevious";
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -71,6 +68,7 @@ const DealsColumn = (
 ) => {
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
+  const loaderRef = useRef(null);
   const createdDeal = useSelector(newDealSelector);
   const updatedDealData = useSelector(updatedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
@@ -112,6 +110,23 @@ const DealsColumn = (
     }),
   }), [dealState])
 
+  const handleObserver = useCallback((entries) => {
+    const target = entries[0];
+    if (target.isIntersecting && totalElements > items.length) {
+      localDispatch(setPage(page + 1));
+    }
+  }, [totalElements, page, items]);
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '16px',
+      threshold: 0,
+    };
+    const observer = new IntersectionObserver(handleObserver, options);
+    if (loaderRef.current) observer.observe(loaderRef.current);
+  }, [handleObserver]);
+
   useEffect(() => {
     if (createdDeal == null || createdDeal.state.id !== dealState.id) {
       return;
@@ -121,7 +136,6 @@ const DealsColumn = (
 
   useEffect(() => {
     localDispatch(setPage(0));
-    fetchDealsForState({ startIndex: 0, stopIndex: itemsPerPage - 1 }, 0);
   }, [filterData]);
 
   useEffect(() => {
@@ -129,7 +143,6 @@ const DealsColumn = (
       return;
     }
     localDispatch(setColumnData(dealState));
-    fetchDealsForState({ startIndex: 0, stopIndex: itemsPerPage - 1 }, 0);
   }, [dealState]);
 
   useEffect(() => {
@@ -139,6 +152,10 @@ const DealsColumn = (
 
     localDispatch(setUpdatedDeal(updatedDeal ?? updatedDealData));
   }, [updatedDeal, updatedDealData]);
+
+  useEffect(() => {
+    fetchDealsForState();
+  }, [page]);
 
   const handleDealDrop = async (deal) => {
     try {
@@ -163,18 +180,12 @@ const DealsColumn = (
     }
   }
 
-  const fetchDealsForState = async ({ startIndex, stopIndex }, page = page) => {
+  const fetchDealsForState = async () => {
     try {
-      const rows = [];
-      for (let i = startIndex; i <= stopIndex; i++) {
-        rows.push(i);
-      }
-      localDispatch(setRowsLoading({ rows, state: STATUS_LOADING }));
       localDispatch(setIsFetching(true));
       const filterParams = extractCookieByName(COOKIES_KEY);
       const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
       localDispatch(setData(response.data));
-      localDispatch(setRowsLoading({ rows, state: STATUS_LOADED }));
     } catch (error) {
       onRequestError(error)
       localDispatch(setIsFetching(false));
@@ -369,29 +380,18 @@ const DealsColumn = (
         </div>
       </div>
       <div className={styles.dataContainer}>
-        <InfiniteLoader
-          isRowLoaded={isRowLoaded}
-          loadMoreRows={fetchDealsForState}
-          rowCount={items.length}
-          minimumBatchSize={itemsPerPage}
-          threshold={itemsPerPage}
-        >
-          {({ onRowsRendered, registerChild }) => (
-            <AutoSizer>
-              {({ width, height }) => (
-                <List
-                  ref={registerChild}
-                  onRowRendered={onRowsRendered}
-                  rowCount={items.length}
-                  rowHeight={getRowHeight}
-                  rowRenderer={rowRenderer}
-                  width={width}
-                  height={height}
-                />
-              )}
-            </AutoSizer>
-          )}
-        </InfiniteLoader>
+        {items.map((item) => (
+          <DealItem
+            key={item.id}
+            onDealClick={onDealClick}
+            color={dealState.color}
+            dealItem={item}
+            onLinkPatient={onLinkPatient}
+            onDeleteDeal={onDeleteDeal}
+            onConfirmFirstContact={onConfirmFirstContact}
+          />
+        ))}
+        <div ref={loaderRef} />
       </div>
     </div>
   )

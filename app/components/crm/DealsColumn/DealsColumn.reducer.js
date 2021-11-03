@@ -68,6 +68,7 @@ const dealsColumnSlice = createSlice({
       state.columnName = action.payload.name;
       state.columnColor = action.payload.color;
       state.dealState = action.payload;
+      state.page = 0;
     },
     setColumnName(state, action) {
       state.columnName = action.payload.toUpperCase();
@@ -102,7 +103,6 @@ const dealsColumnSlice = createSlice({
       }
       state.items = currentItems;
       state.isFetching = false;
-      state.page = state.page + 1
     },
     setIsFetching(state, action) {
       state.isFetching = action.payload;
