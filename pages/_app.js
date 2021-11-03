@@ -81,6 +81,10 @@ const App = ({ Component, pageProps }) => {
   }, [isWindowFocused]);
 
   const checkUserIsAuthenticated = async () => {
+    if (router.asPath.includes("integrations")) {
+      // no need to check auth status on integrations page
+      return;
+    }
     try {
       await requestCheckIsAuthenticated();
       if (router.asPath === '/login') {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
@@ -13,22 +13,36 @@ import styles from './FacebookIntegration.module.scss';
 const FacebookIntegration = ({ currentClinic, authToken }) => {
   const [facebookPage, setFacebookPage] = useState(currentClinic.facebookPage);
   const [pagesModal, setPagesModal] = useState({ open: false, pages: [] });
+  const frameRef = useRef(null);
+
   const title = useMemo(() => {
     if (facebookPage == null) {
       return textForKey('Connect facebook page for CRM')
     }
     return textForKey('connected_facebook_page').replace('#', facebookPage.name);
   }, [facebookPage]);
+
   const buttonText = useMemo(() => {
     if (facebookPage == null) {
       return textForKey('Connect Facebook')
     }
     return textForKey('Connect another page');
-  }, [facebookPage])
+  }, [facebookPage]);
+
+  useEffect(() => {
+    window.addEventListener('message', handleFrameMessage);
+    return () => {
+      window.removeEventListener('message', handleFrameMessage);
+    }
+  }, []);
 
   useEffect(() => {
     setFacebookPage(currentClinic.facebookPage);
   }, [currentClinic]);
+
+  const handleFrameMessage = (event) => {
+    console.log(event.data);
+  }
 
   const handleShowPagesList = (pages) => {
     setPagesModal({ open: true, pages });
@@ -38,16 +52,6 @@ const FacebookIntegration = ({ currentClinic, authToken }) => {
     setPagesModal({ open: false, pages: [] });
   }
 
-  /**
-   * Handle page selected from modal
-   * @param {{
-   *   access_token: string,
-   *   category: string,
-   *   id: string,
-   *   name: string,
-   *   tasks: Array<string>,
-   * }} page
-   */
   const handlePageSelected = async (page) => {
     try {
       await saveClinicFacebookPage({
@@ -62,15 +66,6 @@ const FacebookIntegration = ({ currentClinic, authToken }) => {
     }
     handleClosePagesList();
   };
-
-  const handleOpenNewWindow = () => {
-    popupCenter({
-      url: `${appBaseUrl}/integrations/facebook?token=${authToken}&clinic=${currentClinic.id}`,
-      title: 'Integrations',
-      w: 200,
-      h: 200,
-    });
-  }
 
   /**
    * Handle facebook response
@@ -120,9 +115,11 @@ const FacebookIntegration = ({ currentClinic, authToken }) => {
           </Typography>
         </Box>
         <iframe
+          ref={frameRef}
           id="facebookLogin"
+          frameBorder="0"
           className={styles.connectContainer}
-          src={`${appBaseUrl}/integrations/facebook?token=${authToken}&clinic=${currentClinic.id}`}
+          src={`${appBaseUrl}/integrations/facebook?redirect=${window.location.href}`}
         />
       </Box>
     </div>
