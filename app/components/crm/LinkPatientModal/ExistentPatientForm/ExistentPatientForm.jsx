@@ -50,7 +50,7 @@ const ExistentPatientForm = ({ deal, onChange }) => {
     if (deal == null || deal.source !== 'PhoneCall') {
       return;
     }
-    localDispatch(setSearchQuery(deal.contact.name));
+    localDispatch(setSearchQuery(deal.contact.name.trim()));
   }, [deal]);
 
   useEffect(() => {
