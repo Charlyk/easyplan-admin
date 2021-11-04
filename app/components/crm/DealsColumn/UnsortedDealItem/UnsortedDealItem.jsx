@@ -63,13 +63,16 @@ const UnsortedDealItem = (
 
   const personName = useMemo(() => {
     if (deal?.patient == null) {
-      return deal.contact.name;
+      return deal?.contact?.name || '-';
     }
     const { patient } = deal;
     return getPatientName(patient);
   }, [deal]);
 
   const contactName = useMemo(() => {
+    if (deal == null) {
+      return '-'
+    }
     return deal.source === 'PhoneCall'
       ? deal.contact.name.startsWith('+')
         ? deal.contact.name

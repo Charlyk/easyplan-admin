@@ -27,10 +27,10 @@ const PatientInfo = ({ deal, onLink }) => {
 
   const patientPhone = useMemo(() => {
     if (deal?.patient == null) {
-      if (deal.contact.phoneNumber?.startsWith('+')) {
-        return deal?.contact.phoneNumber || '-'
+      if (deal?.contact?.phoneNumber?.startsWith('+')) {
+        return deal?.contact?.phoneNumber || '-'
       } else {
-        return deal?.contact.phoneNumber ? `+${deal?.contact.phoneNumber}` : '-';
+        return deal?.contact?.phoneNumber ? `+${deal?.contact?.phoneNumber}` : '-';
       }
     }
     const { patient } = deal;
