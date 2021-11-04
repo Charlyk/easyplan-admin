@@ -195,6 +195,9 @@ const DealsColumn = (
       if (response.data.length === 0) {
         localDispatch(setPage(page - 1));
       } else {
+        if (dealState.type === 'Unsorted') {
+          console.log(response.data);
+        }
         localDispatch(setData(response.data));
       }
     } catch (error) {

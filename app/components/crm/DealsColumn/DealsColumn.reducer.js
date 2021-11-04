@@ -111,7 +111,7 @@ const dealsColumnSlice = createSlice({
       const dealExists = state.items.some(item => item.id === action.payload.id);
       if (!dealExists) {
         state.items = orderBy([...state.items, action.payload], ['created'], ['desc']);
-        state.totalElements = state.items.length;
+        state.totalElements = state.totalElements + 1;
       }
     },
     setUpdatedDeal(state, action) {
