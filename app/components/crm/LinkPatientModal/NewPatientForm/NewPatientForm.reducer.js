@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { parsePhoneNumber } from "libphonenumber-js";
 
 export const initialState = {
   firstName: '',
@@ -34,7 +35,8 @@ const newPatientFormSlice = createSlice({
     },
     setContact(state, action) {
       state.email = action.payload.email ?? ''
-      state.phoneNumber = action.payload.phoneNumber ?? ''
+      const phoneNumber = parsePhoneNumber(action.payload.phoneNumber);
+      state.phoneNumber = action.payload.phoneNumber ? phoneNumber.nationalNumber : ''
       const [firstName, lastName] = action.payload.name.split(' ');
       state.firstName = firstName;
       state.lastName = lastName;
