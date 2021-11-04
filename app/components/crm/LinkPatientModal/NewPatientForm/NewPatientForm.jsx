@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer } from "react";
 import moment from "moment-timezone";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import { textForKey } from "../../../../utils/localization";
@@ -26,6 +26,12 @@ const NewPatientForm = ({ contact, onChange }) => {
     birthday,
     isPhoneValid
   }, localDispatch] = useReducer(reducer, initialState);
+  const phoneNumberValue = useMemo(() => {
+    if (phoneNumber?.startsWith(phoneCountry?.dialCode)) {
+      return phoneNumber?.replace(phoneCountry?.dialCode, '');
+    }
+    return phoneNumber
+  }, [phoneNumber, phoneCountry]);
 
   useEffect(() => {
     if (phoneNumber.length === 0 || !isPhoneValid) {
@@ -100,7 +106,7 @@ const NewPatientForm = ({ contact, onChange }) => {
         fieldLabel={textForKey('Phone number')}
         rootClass={styles.searchField}
         country={phoneCountry.countryCode || 'md'}
-        value={`+${phoneCountry?.dialCode}${phoneNumber}`}
+        value={`+${phoneCountry?.dialCode}${phoneNumberValue}`}
         onChange={handlePhoneChange}
       />
 
