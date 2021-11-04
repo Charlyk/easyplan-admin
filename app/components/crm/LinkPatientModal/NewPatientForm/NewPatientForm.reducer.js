@@ -34,12 +34,19 @@ const newPatientFormSlice = createSlice({
       state.birthday = action.payload;
     },
     setContact(state, action) {
-      state.email = action.payload.email ?? ''
-      const phoneNumber = parsePhoneNumber(action.payload.phoneNumber);
-      state.phoneNumber = action.payload.phoneNumber ? phoneNumber.nationalNumber : ''
-      const [firstName, lastName] = action.payload.name.split(' ');
-      state.firstName = firstName;
-      state.lastName = lastName;
+      try {
+        state.email = action.payload.email ?? ''
+        const phoneWithPlus = action.payload.phoneNumber.startsWith('+')
+          ? action.payload.phoneNumber.trim()
+          : `+${action.payload.phoneNumber.trim()}`
+        const phoneNumber = parsePhoneNumber(phoneWithPlus);
+        state.phoneNumber = action.payload.phoneNumber ? phoneNumber.nationalNumber : ''
+        const [firstName, lastName] = action.payload.name.split(' ');
+        state.firstName = firstName;
+        state.lastName = lastName;
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 });
