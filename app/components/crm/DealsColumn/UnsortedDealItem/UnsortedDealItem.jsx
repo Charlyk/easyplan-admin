@@ -4,6 +4,7 @@ import moment from "moment-timezone";
 import Typography from "@material-ui/core/Typography";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
+import IconPhone from '@material-ui/icons/PhoneCallback';
 
 import ActionsSheet from "../../../common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
@@ -48,17 +49,32 @@ const UnsortedDealItem = (
   const [showActions, setShowActions] = useState(false);
 
   const sourceIcon = useMemo(() => {
-    return (
-      <IconFacebookSm/>
-    )
+    switch (deal.source) {
+      case 'PhoneCall':
+        return (
+          <IconPhone className={styles.iconFill}/>
+        )
+      default:
+        return (
+          <IconFacebookSm/>
+        );
+    }
   }, [deal]);
 
   const personName = useMemo(() => {
-    if (deal.patient == null) {
+    if (deal?.patient == null) {
       return deal.contact.name;
     }
     const { patient } = deal;
     return getPatientName(patient);
+  }, [deal]);
+
+  const contactName = useMemo(() => {
+    return deal.source === 'PhoneCall'
+      ? deal.contact.name.startsWith('+')
+        ? deal.contact.name
+        : `+${deal.contact.name}`
+      : deal.contact.name;
   }, [deal]);
 
   const filteredActions = useMemo(() => {
@@ -126,16 +142,18 @@ const UnsortedDealItem = (
       </div>
       <div className={styles.content}>
         <Typography className={styles.sourceLabel}>
-          {textForKey('from')}: {deal.source}
+          {textForKey('from')}: {textForKey(deal.source)}
         </Typography>
         <Typography className={styles.contactName}>
-          {deal.contact.name} {deal?.patient != null && <><IconLink fill="#3A83DC" /> {personName}</>}
+          {contactName} {deal?.patient != null && <><IconLink fill="#3A83DC" /> {personName}</>}
         </Typography>
-        <div className={styles.lastMessageContainer}>
-          <Typography noWrap className={styles.snippetLabel}>
-            {deal.messageSnippet}
-          </Typography>
-        </div>
+        {deal.messageSnippet && (
+          <div className={styles.lastMessageContainer}>
+            <Typography noWrap className={styles.snippetLabel}>
+              {deal.messageSnippet}
+            </Typography>
+          </div>
+        )}
       </div>
       <div className={styles.actionsContainer}>
         <Typography className={styles.dateLabel}>

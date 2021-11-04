@@ -22,7 +22,7 @@ import reducer, {
 import styles from './ExistentPatientForm.module.scss';
 import EASTextField from "../../../common/EASTextField";
 
-const ExistentPatientForm = ({ onChange }) => {
+const ExistentPatientForm = ({ deal, onChange }) => {
   const [{
     isSearching,
     patients,
@@ -45,6 +45,13 @@ const ExistentPatientForm = ({ onChange }) => {
       localDispatch(setIsSearching(false));
     }
   }, 500), []);
+
+  useEffect(() => {
+    if (deal == null || deal.source !== 'PhoneCall') {
+      return;
+    }
+    localDispatch(setSearchQuery(deal.contact.name));
+  }, [deal]);
 
   useEffect(() => {
     if (searchQuery.length < 3) {

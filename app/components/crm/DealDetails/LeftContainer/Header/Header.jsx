@@ -56,7 +56,7 @@ const Header = ({ deal, states }) => {
         )}
         {deal?.source != null && (
           <Typography className={styles.responsibleName}>
-            {textForKey('Source')}: {deal.source}
+            {textForKey('Source')}: {textForKey(deal.source)}
           </Typography>
         )}
 

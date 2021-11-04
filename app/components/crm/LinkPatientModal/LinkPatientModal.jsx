@@ -89,7 +89,7 @@ const LinkPatientModal = ({ open, deal, confirm, onClose, onLinked }) => {
           </TabList>
         </Box>
         <TabPanel value="0" style={{ padding: 0 }}>
-          <ExistentPatientForm onChange={handlePatientChange} />
+          <ExistentPatientForm deal={deal} onChange={handlePatientChange} />
         </TabPanel>
         <TabPanel value="1" style={{ padding: 0 }}>
           <NewPatientForm contact={deal?.contact} onChange={handlePatientChange}/>
