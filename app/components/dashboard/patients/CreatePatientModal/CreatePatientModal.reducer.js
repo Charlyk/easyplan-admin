@@ -6,6 +6,8 @@ export const initialState = {
   lastName: '',
   phoneNumber: '',
   isPhoneValid: false,
+  language: 'ro',
+  source: 'Unknown',
   phoneCountry: { countryCode: 'md', dialCode: '373' },
   email: '',
   isEmailValid: false,
@@ -23,6 +25,8 @@ const reducerTypes = {
   setIsLoading: 'setIsLoading',
   setShowBirthdayPicker: 'setShowBirthdayPicker',
   resetState: 'resetState',
+  setLanguage: 'setLanguage',
+  setSource: 'setSource',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -49,6 +53,10 @@ export const reducer = (state, action) => {
       };
     case reducerTypes.setShowBirthdayPicker:
       return { ...state, showBirthdayPicker: action.payload };
+    case reducerTypes.setLanguage:
+      return { ...state, language: action.payload };
+    case reducerTypes.setSource:
+      return { ...state, source: action.payload };
     case reducerTypes.resetState:
       return initialState;
     default:

@@ -11,6 +11,8 @@ export const initialState = {
   phoneNumber: '',
   discount: 0,
   euroDebt: 0,
+  language: 'ro',
+  source: 'Unknown',
   country: {
     countryCode: 'md',
     dialCode: '373',
@@ -30,6 +32,8 @@ const reducerTypes = {
   setIsSaving: 'setIsSaving',
   setDiscount: 'setDiscount',
   setEuroDebt: 'setEuroDebt',
+  setLanguage: 'setLanguage',
+  setSource: 'setSource',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -54,6 +58,10 @@ export const reducer = (state, action) => {
       return { ...state, discount: action.payload };
     case reducerTypes.setEuroDebt:
       return { ...state, euroDebt: action.payload };
+    case reducerTypes.setLanguage:
+      return { ...state, language: action.payload };
+    case reducerTypes.setSource:
+      return { ...state, source: action.payload };
     case reducerTypes.setPatient: {
       const {
         firstName,
@@ -64,11 +72,15 @@ export const reducer = (state, action) => {
         countryCode,
         discount,
         euroDebt,
+        language,
+        source,
       } = action.payload;
       return {
         ...state,
         firstName,
         lastName,
+        language,
+        source,
         birthday: birthday ? moment(birthday).toDate() : null,
         email,
         phoneNumber,

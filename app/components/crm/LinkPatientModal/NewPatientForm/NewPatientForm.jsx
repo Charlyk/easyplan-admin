@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useReducer } from "react";
 import moment from "moment-timezone";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
 import { textForKey } from "../../../../utils/localization";
-import { EmailRegex } from "../../../../utils/constants";
+import { EmailRegex, Languages, PatientSources } from "../../../../utils/constants";
 import EASPhoneInput from "../../../common/EASPhoneInput";
 import EASTextField from "../../../common/EASTextField";
+import EASSelect from "../../../common/EASSelect";
 import reducer, {
   initialState,
   setEmail,
@@ -13,10 +14,12 @@ import reducer, {
   setLastName,
   setPhoneNumber,
   setContact,
+  setLanguage,
+  setPatientSource,
 } from './NewPatientForm.reducer';
 import styles from './NewPatientForm.module.scss';
 
-const NewPatientForm = ({ contact, onChange }) => {
+const NewPatientForm = ({ deal, onChange }) => {
   const [{
     firstName,
     lastName,
@@ -24,6 +27,8 @@ const NewPatientForm = ({ contact, onChange }) => {
     phoneCountry,
     email,
     birthday,
+    language,
+    source,
     isPhoneValid
   }, localDispatch] = useReducer(reducer, initialState);
   const phoneNumberValue = useMemo(() => {
@@ -44,16 +49,30 @@ const NewPatientForm = ({ contact, onChange }) => {
       phoneNumberValue,
       countryCode: phoneCountry.dialCode,
       emailAddress: email,
-      birthday: birthday != null ? moment(birthday).format('YYYY-MM-DD') : null
+      birthday: birthday != null ? moment(birthday).format('YYYY-MM-DD') : null,
+      language: language.id,
+      source: source.id,
     });
-  }, [firstName, lastName, phoneNumberValue, email, birthday, isPhoneValid]);
+  }, [firstName, lastName, phoneNumberValue, email, birthday, isPhoneValid, source, language]);
 
   useEffect(() => {
-    if (contact == null) {
+    if (deal?.contact == null) {
       return;
     }
-    localDispatch(setContact(contact));
-  }, [contact]);
+    localDispatch(setContact(deal.contact));
+  }, [deal]);
+
+  useEffect(() => {
+    if (deal == null) {
+      return;
+    }
+
+    if (deal.source === 'Facebook') {
+      localDispatch(setPatientSource({ id: 'Facebook', name: 'Facebook' }));
+    } else if (deal.source === 'Instagram') {
+      localDispatch(setPatientSource({ id: 'Instagram', name: 'Instagram' }));
+    }
+  }, [deal]);
 
   const handleFirstNameChange = (newValue) => {
     localDispatch(setFirstName(newValue));
@@ -78,6 +97,18 @@ const NewPatientForm = ({ contact, onChange }) => {
         && !event.target?.classList.value.includes('invalid-number'),
       country,
     }));
+  };
+
+  const handleLanguageChange = (event) => {
+    const newValue = event.target.value;
+    const newLanguage = Languages.find(item => item.id === newValue);
+    localDispatch(setLanguage(newLanguage));
+  };
+
+  const handleSourceChange = (event) => {
+    const newValue = event.target.value;
+    const newSource = PatientSources.find(item => item.id === newValue);
+    localDispatch(setPatientSource(newSource));
   };
 
   return (
@@ -129,6 +160,24 @@ const NewPatientForm = ({ contact, onChange }) => {
         placeholder={textForKey('Birthday')}
         containerClass={styles.searchField}
         onChange={handleBirthdayChange}
+      />
+
+      <EASSelect
+        label={textForKey('spoken_language')}
+        labelId="spoken-language-select"
+        options={Languages}
+        value={language.id}
+        rootClass={styles.searchField}
+        onChange={handleLanguageChange}
+      />
+
+      <EASSelect
+        label={textForKey('patient_source')}
+        labelId="patient-source-select"
+        options={PatientSources}
+        value={source.id}
+        rootClass={styles.searchField}
+        onChange={handleSourceChange}
       />
     </div>
   );

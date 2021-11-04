@@ -91,7 +91,7 @@ const SortedDealItem = ({ deal, onDealClick }) => {
         </Typography>
         <div className={styles.lastMessageContainer}>
           <Typography noWrap className={styles.snippetLabel}>
-            {deal.source}
+            {textForKey(deal.source)}
           </Typography>
           {deal.sourceDescription && (
             <Typography noWrap className={styles.snippetLabel}>

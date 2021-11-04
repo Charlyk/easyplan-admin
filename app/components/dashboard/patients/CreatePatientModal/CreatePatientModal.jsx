@@ -14,7 +14,8 @@ import EASTextField from "../../../common/EASTextField";
 import EASPhoneInput from "../../../common/EASPhoneInput";
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
-import { EmailRegex } from "../../../../utils/constants";
+import { EmailRegex, Languages, PatientSources } from "../../../../utils/constants";
+import EASSelect from "../../../common/EASSelect";
 
 const EasyDatePicker = dynamic(() => import('../../../common/EasyDatePicker'));
 
@@ -28,6 +29,8 @@ const CreatePatientModal = ({ open, onClose }) => {
       phoneNumber,
       isPhoneValid,
       phoneCountry,
+      language,
+      source,
       email,
       isEmailValid,
       birthday,
@@ -53,6 +56,8 @@ const CreatePatientModal = ({ open, onClose }) => {
       const requestBody = {
         birthday,
         phoneNumber,
+        language,
+        source,
         firstName: firstName.length > 0 ? firstName : null,
         lastName: lastName.length > 0 ? lastName : null,
         email: email.length > 0 ? email : null,
@@ -100,6 +105,14 @@ const CreatePatientModal = ({ open, onClose }) => {
 
   const handleCloseBirthdayPicker = () => {
     localDispatch(actions.setShowBirthdayPicker(false));
+  };
+
+  const handleLanguageChange = (event) => {
+    localDispatch(actions.setLanguage(event.target.value));
+  };
+
+  const handleSourceChange = (event) => {
+    localDispatch(actions.setSource(event.target.value));
   };
 
   const birthdayPicker = (
@@ -168,6 +181,24 @@ const CreatePatientModal = ({ open, onClose }) => {
           fieldLabel={textForKey('Birthday')}
           value={birthday ? moment(birthday).format('DD MMM YYYY') : ''}
           onPointerUp={handleOpenBirthdayPicker}
+        />
+
+        <EASSelect
+          label={textForKey('spoken_language')}
+          labelId="spoken-language-select"
+          options={Languages}
+          value={language}
+          rootClass={styles.simpleField}
+          onChange={handleLanguageChange}
+        />
+
+        <EASSelect
+          label={textForKey('patient_source')}
+          labelId="patient-source-select"
+          options={PatientSources}
+          value={source}
+          rootClass={styles.simpleField}
+          onChange={handleSourceChange}
         />
       </form>
     </EASModal>

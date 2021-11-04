@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
 
 import IconSuccess from '../../../../icons/iconSuccess';
-import { EmailRegex } from '../../../../../utils/constants';
+import { EmailRegex, Languages, PatientSources } from '../../../../../utils/constants';
 import adjustValueToNumber from '../../../../../utils/adjustValueToNumber';
 import { textForKey } from '../../../../../utils/localization';
 import LoadingButton from '../../../../common/LoadingButton';
@@ -17,6 +17,7 @@ import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
 import EASTextField from "../../../../common/EASTextField";
 import EASPhoneInput from "../../../../common/EASPhoneInput";
 import styles from './PatientPersonalData.module.scss';
+import EASSelect from "../../../../common/EASSelect";
 
 const EasyDatePicker = dynamic(() => import('../../../../common/EasyDatePicker'));
 
@@ -35,6 +36,8 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       discount,
       euroDebt,
       country,
+      language,
+      source,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -87,6 +90,14 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
     localDispatch(actions.setShowDatePicker(false));
   };
 
+  const handleSourceChange = (event) => {
+    localDispatch(actions.setSource(event.target.value));
+  };
+
+  const handleLanguageChange = (event) => {
+    localDispatch(actions.setLanguage(event.target.value));
+  }
+
   const handleSavePatient = async () => {
     if (!isFormValid()) return;
     localDispatch(actions.setIsSaving(true));
@@ -96,6 +107,8 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       lastName,
       email,
       phoneNumber,
+      language,
+      source,
       euroDebt,
       countryCode: country.dialCode,
       discount: discount ? parseInt(discount) : 0,
@@ -193,11 +206,30 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
         />
 
         <EASPhoneInput
+          rootClass={styles.simpleField}
           fieldLabel={textForKey('Phone number')}
           value={`+${country.dialCode}${phoneNumber}`}
           country={country.countryCode}
           placeholder={country.format}
           onChange={handlePhoneChange}
+        />
+
+        <EASSelect
+          label={textForKey('spoken_language')}
+          labelId="spoken-language-select"
+          options={Languages}
+          value={language}
+          rootClass={styles.simpleField}
+          onChange={handleLanguageChange}
+        />
+
+        <EASSelect
+          label={textForKey('patient_source')}
+          labelId="patient-source-select"
+          options={PatientSources}
+          value={source}
+          rootClass={styles.simpleField}
+          onChange={handleSourceChange}
         />
 
         <Box

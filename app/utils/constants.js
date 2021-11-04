@@ -397,6 +397,60 @@ export const Teeth = [
   },
 ];
 
+export const Languages = [
+  {
+    id: 'ro',
+    name: 'Româna',
+  },
+  {
+    id: 'ru',
+    name: 'Русский',
+  },
+  {
+    id: 'en',
+    name: 'English'
+  },
+  {
+    id: 'it',
+    name: 'Italiana'
+  },
+  {
+    id: 'de',
+    name: 'Deutsche'
+  },
+];
+
+export const PatientSources = [
+  {
+    id: 'Unknown',
+    name: textForKey('Unknown'),
+  },
+  {
+    id: 'Facebook',
+    name: textForKey('Facebook'),
+  },
+  {
+    id: 'Instagram',
+    name: textForKey('Instagram'),
+  },
+  {
+    id: 'TV',
+    name: textForKey('TV'),
+  },
+  {
+    id: 'Radio',
+    name: textForKey('Radio'),
+  },
+  {
+    id: 'Friend',
+    name: textForKey('Friend'),
+  },
+  {
+    id: 'Other',
+    name: textForKey('Other')
+  }
+]
+
 export const UnauthorizedPaths = [
   '/accept-invitation',
   '/confirmation',

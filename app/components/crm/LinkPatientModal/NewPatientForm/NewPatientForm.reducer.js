@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { parsePhoneNumber } from "libphonenumber-js";
+import { textForKey } from "../../../../utils/localization";
 
 export const initialState = {
   firstName: '',
   lastName: '',
   phoneNumber: '',
+  language: { id: 'ro', name: 'Româna' },
+  source: { id: 'Unknown', name: textForKey('Unknown') },
   isPhoneValid: false,
   phoneCountry: { countryCode: 'md', dialCode: '373' },
   email: '',
@@ -48,6 +51,12 @@ const newPatientFormSlice = createSlice({
         console.error(error);
       }
     },
+    setLanguage(state, action) {
+      state.language = action.payload
+    },
+    setPatientSource(state, action) {
+      state.source = action.payload;
+    }
   },
 });
 
@@ -58,6 +67,8 @@ export const {
   setPhoneNumber,
   setLastName,
   setContact,
+  setLanguage,
+  setPatientSource,
 } = newPatientFormSlice.actions;
 
 export default newPatientFormSlice.reducer;

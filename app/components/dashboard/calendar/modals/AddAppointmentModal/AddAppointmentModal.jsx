@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
-import { EmailRegex, Role } from '../../../../../utils/constants';
+import { EmailRegex, Languages, PatientSources, Role } from '../../../../../utils/constants';
 import { textForKey } from '../../../../../utils/localization';
 import EasyDatePicker from '../../../../common/EasyDatePicker';
 import {
@@ -73,6 +73,8 @@ const AddAppointmentModal = (
       patientFirstName,
       patientPhoneNumber,
       patientBirthday,
+      patientLanguage,
+      patientSource,
       patientEmail,
       phoneCountry,
       isPhoneValid,
@@ -377,6 +379,14 @@ const AddAppointmentModal = (
     localDispatch(actions.setPatientLastName(newValue));
   }
 
+  const handlePatientLanguageChange = (event) => {
+    localDispatch(actions.setPatientLanguage(event.target.value));
+  };
+
+  const handlePatientSourceChange = (event) => {
+    localDispatch(actions.setPatientSource(event.target.value));
+  };
+
   const isFormValid = () => {
     return (
       isDoctorValid &&
@@ -410,6 +420,8 @@ const AddAppointmentModal = (
         patientLastName,
         patientPhoneNumber,
         patientBirthday,
+        patientLanguage,
+        patientSource,
         patientEmail,
         isUrgent,
         patientCountryCode: phoneCountry.dialCode,
@@ -538,6 +550,28 @@ const AddAppointmentModal = (
             fieldLabel={textForKey('Birthday')}
             value={patientBirthday ? moment(patientBirthday).format('DD MMM YYYY') : ''}
             onPointerUp={handleOpenBirthdayPicker}
+          />
+        )}
+
+        {isNewPatient && (
+          <EASSelect
+            label={textForKey('spoken_language')}
+            labelId="spoken-language-select"
+            options={Languages}
+            value={patientLanguage}
+            rootClass={styles.simpleField}
+            onChange={handlePatientLanguageChange}
+          />
+        )}
+
+        {isNewPatient && (
+          <EASSelect
+            label={textForKey('patient_source')}
+            labelId="patient-source-select"
+            options={PatientSources}
+            value={patientSource}
+            rootClass={styles.simpleField}
+            onChange={handlePatientSourceChange}
           />
         )}
 

@@ -111,6 +111,8 @@ export async function getPatientPhoneRecords(patientId, page, headers = null) {
  *   birthday: string|null,
  *   euroDebt: number,
  *   discount: number,
+ *   language: string,
+ *   source: string,
  * }} requestBody
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}

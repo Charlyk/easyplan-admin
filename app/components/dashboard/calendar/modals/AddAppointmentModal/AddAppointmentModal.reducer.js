@@ -55,6 +55,8 @@ export const initialState = {
   patientPhoneNumber: '',
   patientBirthday: null,
   patientEmail: '',
+  patientLanguage: 'ro',
+  patientSource: 'Unknown',
   phoneCountry: { countryCode: 'md', dialCode: '373' },
   isFetchingHours: false,
   isCreatingSchedule: false,
@@ -110,6 +112,8 @@ const reducerTypes = {
   setAvailableTime: 'setAvailableTime',
   setAvailableStartTime: 'setAvailableStartTime',
   setAvailableEndTime: 'setAvailableEndTime',
+  setPatientLanguage: 'setPatientLanguage',
+  setPatientSource: 'setPatientSource',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -303,6 +307,10 @@ export const reducer = (state, action) => {
       return { ...state, availableEndTime: action.payload };
     case reducerTypes.resetState:
       return initialState;
+    case reducerTypes.setPatientLanguage:
+      return { ...state, patientLanguage: action.payload };
+    case reducerTypes.setPatientSource:
+      return { ...state, patientSource: action.payload };
     default:
       return state;
   }
