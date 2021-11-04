@@ -118,10 +118,13 @@ const dealsColumnSlice = createSlice({
       const newDeal = action.payload;
       const { state: itemState } = newDeal;
       const { dealState: columnState } = state;
+      const itemExists = state.items.some((item) => item.id === newDeal.id);
       if (itemState.id !== columnState.id) {
         state.items = state.items.filter((item) => item.id !== newDeal.id);
+        if (itemExists) {
+          state.totalElements = state.totalElements - 1;
+        }
       } else {
-        const itemExists = state.items.some((item) => item.id === newDeal.id);
         if (itemExists) {
           state.items = state.items.map((item) => {
             if (item.id !== newDeal.id) {
@@ -132,9 +135,9 @@ const dealsColumnSlice = createSlice({
           });
         } else {
           state.items = orderBy([...state.items, newDeal], ['created'], ['desc']);
+          state.totalElements = state.totalElements + 1;
         }
       }
-      state.totalElements = state.items.length;
     },
     setPage(state, action) {
       if (action.payload === 0) {
