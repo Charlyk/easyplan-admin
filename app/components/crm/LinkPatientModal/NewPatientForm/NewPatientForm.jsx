@@ -34,19 +34,19 @@ const NewPatientForm = ({ contact, onChange }) => {
   }, [phoneNumber, phoneCountry]);
 
   useEffect(() => {
-    if (phoneNumber.length === 0 || !isPhoneValid) {
+    if (phoneNumberValue.length === 0 || !isPhoneValid) {
       onChange?.(null);
       return;
     }
     onChange?.({
       firstName,
       lastName,
-      phoneNumber,
+      phoneNumberValue,
       countryCode: phoneCountry.dialCode,
       emailAddress: email,
       birthday: birthday != null ? moment(birthday).format('YYYY-MM-DD') : null
     });
-  }, [firstName, lastName, phoneNumber, email, birthday, isPhoneValid]);
+  }, [firstName, lastName, phoneNumberValue, email, birthday, isPhoneValid]);
 
   useEffect(() => {
     if (contact == null) {
