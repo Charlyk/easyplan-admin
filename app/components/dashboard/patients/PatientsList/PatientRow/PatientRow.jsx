@@ -6,6 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
+import { textForKey } from "../../../../../utils/localization";
 import IconAvatar from '../../../../icons/iconAvatar';
 import IconEmail from '../../../../icons/iconEmail';
 import IconPhone from '../../../../icons/iconPhone';
@@ -63,6 +64,11 @@ const PatientRow = ({ patient, onSelect }) => {
           ) : (
             '-'
           )}
+        </Typography>
+      </TableCell>
+      <TableCell>
+        <Typography classes={{ root: clsx(styles['row-label'], styles.email) }}>
+          {textForKey(patient.source)}
         </Typography>
       </TableCell>
       <TableCell>

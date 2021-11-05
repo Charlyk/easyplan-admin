@@ -285,6 +285,11 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
                 </TableCell>
                 <TableCell>
                   <Typography classes={{ root: styles.headerLabel }}>
+                    {textForKey('Source')}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography classes={{ root: styles.headerLabel }}>
                     {textForKey('Discount')}
                   </Typography>
                 </TableCell>
