@@ -74,10 +74,10 @@ const UnsortedDealItem = (
       return '-'
     }
     return deal.source === 'PhoneCall'
-      ? deal.contact.name.startsWith('+')
-        ? deal.contact.name
-        : `+${deal.contact.name}`
-      : deal.contact.name;
+      ? deal?.contact?.name.startsWith('+')
+        ? deal?.contact?.name
+        : `+${deal?.contact?.name}`
+      : deal?.contact?.name;
   }, [deal]);
 
   const filteredActions = useMemo(() => {
