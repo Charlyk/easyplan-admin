@@ -10,16 +10,17 @@ import PagesListModal from "./PagesListModal";
 import styles from './FacebookIntegration.module.scss';
 
 const FacebookIntegration = ({ currentClinic }) => {
-  const [facebookPage, setFacebookPage] = useState(currentClinic.facebookPage);
+  const [facebookPages, setFacebookPages] = useState(currentClinic.facebookPages);
   const [pagesModal, setPagesModal] = useState({ open: false, pages: [] });
   const frameRef = useRef(null);
 
   const title = useMemo(() => {
-    if (facebookPage == null) {
+    if (facebookPages == null) {
       return textForKey('Connect facebook page for CRM')
     }
-    return textForKey('connected_facebook_page').replace('{1}', facebookPage.name);
-  }, [facebookPage]);
+    return textForKey('connected_facebook_page')
+      .replace('{1}', facebookPages.map(it => it.name).join(', '));
+  }, [facebookPages]);
 
   useEffect(() => {
     window.addEventListener('message', handleFrameMessage);
@@ -29,7 +30,7 @@ const FacebookIntegration = ({ currentClinic }) => {
   }, []);
 
   useEffect(() => {
-    setFacebookPage(currentClinic.facebookPage);
+    setFacebookPages(currentClinic.facebookPages);
   }, [currentClinic]);
 
   const handleFrameMessage = async (event) => {
@@ -57,7 +58,7 @@ const FacebookIntegration = ({ currentClinic }) => {
           pageId: page.id,
         }
       ]);
-      setFacebookPage(page);
+      setFacebookPages(page);
     } catch (error) {
       toast.error(error.message);
     }
