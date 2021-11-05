@@ -12,10 +12,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AssessmentIcon from '@material-ui/icons/Assessment'
 import Collapse from "@material-ui/core/Collapse";
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
+import { useSelector } from "react-redux";
 
+import { requestFetchRemindersCount } from "../../../../../middleware/api/crm";
+import { updatedReminderSelector } from "../../../../../redux/selectors/crmSelector";
 import { textForKey } from '../../../../utils/localization';
+import onRequestError from "../../../../utils/onRequestError";
 import { Role, TECH_SUPPORT_URL } from "../../../../utils/constants";
 import notifications from "../../../../utils/notifications/notifications";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
@@ -71,6 +75,7 @@ const menuItems = [
     text: textForKey('Services'),
     icon: <MenuCategories/>,
     href: '/services',
+    hasCounter: false,
   },
   {
     id: 'users',
@@ -79,15 +84,17 @@ const menuItems = [
     text: textForKey('Users'),
     icon: <MenuUsers/>,
     href: '/users',
+    hasCounter: false,
   },
-  // {
-  //   id: 'crm',
-  //   type: 'link',
-  //   roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
-  //   text: textForKey('CRM Board'),
-  //   icon: <AssessmentIcon />,
-  //   href: '/crm'
-  // },
+  {
+    id: 'crm',
+    type: 'link',
+    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+    text: textForKey('CRM Board'),
+    icon: <AssessmentIcon/>,
+    href: '/crm',
+    hasCounter: true,
+  },
   {
     id: 'calendar',
     type: 'link',
@@ -95,6 +102,7 @@ const menuItems = [
     text: textForKey('Calendar'),
     icon: <MenuCalendar/>,
     href: '/calendar/day',
+    hasCounter: false,
   },
   {
     id: 'patients',
@@ -103,6 +111,7 @@ const menuItems = [
     text: textForKey('Patients'),
     icon: <MenuPatients/>,
     href: '/patients',
+    hasCounter: false,
   },
   {
     id: 'messages',
@@ -111,6 +120,7 @@ const menuItems = [
     text: textForKey('Messages'),
     icon: <IconMessages/>,
     href: '/messages',
+    hasCounter: false,
   },
   {
     id: 'settings',
@@ -119,6 +129,7 @@ const menuItems = [
     text: textForKey('Settings'),
     icon: <MenuSettings/>,
     href: '/settings',
+    hasCounter: false,
   },
   {
     id: 'tech_support',
@@ -127,6 +138,7 @@ const menuItems = [
     text: textForKey('tech_support'),
     icon: <IconLiveHelp/>,
     href: TECH_SUPPORT_URL,
+    hasCounter: false,
   }
 ];
 
@@ -134,11 +146,13 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   const buttonRef = useRef(null);
   const selectedClinic = currentUser?.clinics?.find((item) => item.clinicId === currentClinic.id);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
+  const remoteReminder = useSelector(updatedReminderSelector);
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [crmDashboardRef, setCrmDashboardRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
   const [showCrmHelp, setShowCrmHelp] = useState(false);
+  const [remindersCount, setRemindersCount] = useState(0);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
@@ -151,12 +165,25 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
   }, []);
 
-  // useEffect(() => {
-  //   setShowCrmHelp(
-  //     !wasNotificationShown(notifications.menuCRMImplementation.id) &&
-  //     !showTechSupportHelp,
-  //   );
-  // }, [showTechSupportHelp]);
+  useEffect(() => {
+    setShowCrmHelp(
+      !wasNotificationShown(notifications.menuCRMImplementation.id) &&
+      !showTechSupportHelp,
+    );
+  }, [showTechSupportHelp]);
+
+  useEffect(() => {
+    fetchRemindersCount();
+  }, [remoteReminder]);
+
+  const fetchRemindersCount = async () => {
+    try {
+      const response = await requestFetchRemindersCount();
+      setRemindersCount(response.data)
+    } catch (error) {
+      onRequestError(error);
+    }
+  }
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
@@ -176,6 +203,15 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
 
   const isActive = (itemHref) => {
     return currentPath !== '/' && itemHref.startsWith(currentPath);
+  };
+
+  const getCounterValue = (item) => {
+    switch (item.id) {
+      case 'crm':
+        return remindersCount;
+      default:
+        return 0;
+    }
   };
 
   const handleCompanySelected = async (company) => {
@@ -289,8 +325,15 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText
-                    primary={item.text}
                     classes={{ primary: styles.itemText }}
+                    primary={
+                      <Typography className={styles.itemText}>
+                        {item.text}
+                        {(item.hasCounter && getCounterValue(item) > 0) && (
+                          <div className={styles.counterLabel}>{getCounterValue(item)}</div>
+                        )}
+                      </Typography>
+                    }
                   />
                 </ListItem>
               </Link>
