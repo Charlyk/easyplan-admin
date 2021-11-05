@@ -446,6 +446,10 @@ export const PatientSources = [
     name: textForKey('Friend'),
   },
   {
+    id: 'Google',
+    name: textForKey('Google'),
+  },
+  {
     id: 'Other',
     name: textForKey('Other')
   }
