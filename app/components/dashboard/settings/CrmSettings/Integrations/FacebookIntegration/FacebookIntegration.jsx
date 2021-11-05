@@ -15,7 +15,7 @@ const FacebookIntegration = ({ currentClinic }) => {
   const frameRef = useRef(null);
 
   const title = useMemo(() => {
-    if (facebookPages == null) {
+    if (facebookPages == null || !Array.isArray(facebookPages)) {
       return textForKey('Connect facebook page for CRM')
     }
     return textForKey('connected_facebook_page')
