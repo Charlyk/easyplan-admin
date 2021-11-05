@@ -22,6 +22,7 @@ import {
 } from "../../../../middleware/api/crm";
 import { setAppointmentModal } from "../../../../redux/actions/actions";
 import {
+  newReminderSelector,
   updatedDealSelector,
   updatedReminderSelector
 } from "../../../../redux/selectors/crmSelector";
@@ -61,7 +62,8 @@ const COOKIES_KEY = 'crm_filter';
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
-  const remoteReminder = useSelector(updatedReminderSelector);
+  const remoteReminder = useSelector(newReminderSelector);
+  const updateReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);
   const [{
     columns,
@@ -96,7 +98,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
 
   useEffect(() => {
     fetchRemindersCount();
-  }, [remoteReminder]);
+  }, [remoteReminder, updateReminder]);
 
   useEffect(() => {
     if (remoteDeal == null) {

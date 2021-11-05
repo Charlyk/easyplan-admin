@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from "react-redux";
 
 import { requestFetchRemindersCount } from "../../../../../middleware/api/crm";
-import { updatedReminderSelector } from "../../../../../redux/selectors/crmSelector";
+import { newReminderSelector, updatedReminderSelector } from "../../../../../redux/selectors/crmSelector";
 import { textForKey } from '../../../../utils/localization';
 import onRequestError from "../../../../utils/onRequestError";
 import { Role, TECH_SUPPORT_URL } from "../../../../utils/constants";
@@ -146,7 +146,8 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   const buttonRef = useRef(null);
   const selectedClinic = currentUser?.clinics?.find((item) => item.clinicId === currentClinic.id);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
-  const remoteReminder = useSelector(updatedReminderSelector);
+  const remoteReminder = useSelector(newReminderSelector);
+  const updatedReminder = useSelector(updatedReminderSelector);
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [crmDashboardRef, setCrmDashboardRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
@@ -174,7 +175,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
 
   useEffect(() => {
     fetchRemindersCount();
-  }, [remoteReminder]);
+  }, [remoteReminder, updatedReminder]);
 
   const fetchRemindersCount = async () => {
     try {
