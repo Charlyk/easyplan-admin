@@ -46,7 +46,7 @@ const NewPatientForm = ({ deal, onChange }) => {
     onChange?.({
       firstName,
       lastName,
-      phoneNumberValue,
+      phoneNumber: phoneNumberValue,
       countryCode: phoneCountry.dialCode,
       emailAddress: email,
       birthday: birthday != null ? moment(birthday).format('YYYY-MM-DD') : null,

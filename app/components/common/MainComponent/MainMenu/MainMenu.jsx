@@ -331,7 +331,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                       <Typography className={styles.itemText}>
                         {item.text}
                         {(item.hasCounter && getCounterValue(item) > 0) && (
-                          <div className={styles.counterLabel}>{getCounterValue(item)}</div>
+                          <span className={styles.counterLabel}>{getCounterValue(item)}</span>
                         )}
                       </Typography>
                     }

@@ -17,7 +17,8 @@ import {
 } from "../../../../redux/selectors/crmSelector";
 import {
   createNewDealState,
-  deleteDealState, requestChangeDealColumn,
+  deleteDealState,
+  requestChangeDealColumn,
   requestFetchDeals,
   updateDealState
 } from "../../../../middleware/api/crm";
@@ -27,6 +28,7 @@ import ActionsSheet from "../../common/ActionsSheet";
 import EASColorPicker from "../../common/EASColorPicker";
 import AddColumnModal from "../AddColumnModal";
 import DealItem from "./DealItem";
+import { ItemTypes } from "./constants";
 import reducer, {
   sheetActions,
   initialState,
@@ -44,9 +46,6 @@ import reducer, {
   setPage,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
-import { ItemTypes } from "./constants";
-import { CircularProgress } from "@material-ui/core";
-import usePrevious from "../../../utils/hooks/usePrevious";
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -85,7 +84,6 @@ const DealsColumn = (
     page,
     itemsPerPage,
   }, localDispatch] = useReducer(reducer, initialState);
-  const previousPage = usePrevious(page);
 
   const filteredActions = useMemo(() => {
     return sheetActions.filter(action => {
@@ -136,7 +134,14 @@ const DealsColumn = (
   }, [createdDeal]);
 
   useEffect(() => {
-    localDispatch(setPage(0));
+    if (page === 0) {
+      localDispatch(setPage(-1));
+      setTimeout(() => {
+        localDispatch(setPage(0));
+      }, 100);
+    } else {
+      localDispatch(setPage(0));
+    }
   }, [filterData]);
 
   useEffect(() => {
@@ -155,17 +160,18 @@ const DealsColumn = (
   }, [updatedDeal, updatedDealData]);
 
   useEffect(() => {
-    if (previousPage && previousPage > page) {
+    if (page === -1) {
       return;
     }
     fetchDealsForState();
-  }, [page, previousPage]);
+  }, [page]);
 
   const handleDealDrop = async (deal) => {
     try {
       if (
         deal.state.id === dealState.id ||
-        (dealState.type !== 'Custom' && dealState.orderId < deal.state.orderId)
+        (dealState.type !== 'Custom' && dealState.orderId < deal.state.orderId) ||
+        deal.state.type === 'Completed' && dealState.type === 'Failed'
       ) {
         // no need to change deal state
         return;
@@ -189,15 +195,13 @@ const DealsColumn = (
 
   const fetchDealsForState = async () => {
     try {
+      console.log('fetchDealsForState', dealState.type);
       localDispatch(setIsFetching(true));
       const filterParams = extractCookieByName(COOKIES_KEY);
       const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
       if (response.data.length === 0) {
         localDispatch(setPage(page - 1));
       } else {
-        if (dealState.type === 'Unsorted') {
-          console.log(response.data);
-        }
         localDispatch(setData(response.data));
       }
     } catch (error) {
@@ -368,14 +372,7 @@ const DealsColumn = (
             />
           ))}
         </>
-        <div
-          ref={loaderRef}
-          className={styles.scrollIndicator}
-        >
-          {isFetching ? (
-            <CircularProgress className="circular-progress-bar"/>
-          ) : null}
-        </div>
+        <div ref={loaderRef} />
       </div>
     </div>
   )
