@@ -70,7 +70,7 @@ const UnsortedDealItem = (
   }, [deal]);
 
   const contactName = useMemo(() => {
-    if (deal == null) {
+    if (deal == null || deal?.contact == null) {
       return '-'
     }
     return deal.source === 'PhoneCall'
