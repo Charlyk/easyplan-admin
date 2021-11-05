@@ -645,6 +645,7 @@ export default {
     unknown: 'Unknown',
     friend: 'Friend',
     other: 'Other',
+    reminder_updated: 'Reminder updated',
   },
   ro: {
     analytics: 'Analitică',
@@ -1298,6 +1299,7 @@ export default {
     unknown: 'Necunoscut',
     friend: 'Prieteni',
     other: 'Altele',
+    reminder_updated: 'Sarcină modificată',
   },
   ru: {
     analytics: 'Analytics',
@@ -1942,5 +1944,6 @@ export default {
     unknown: 'Unknown',
     friend: 'Friend',
     other: 'Other',
+    reminder_updated: 'Reminder updated',
   },
 };

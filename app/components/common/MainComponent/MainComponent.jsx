@@ -104,10 +104,14 @@ const MainComponent = (
   }, [newReminder, currentUser]);
 
   useEffect(() => {
-    if (updatedReminder == null || updatedReminder.assignee.id !== currentUser.id) {
+    if (
+      updatedReminder == null ||
+      updatedReminder.assignee.id !== currentUser.id ||
+      updatedReminder.completed
+    ) {
       return;
     }
-    toast(<ReminderNotification reminder={updatedReminder}/>, { toastId: updatedReminder.id });
+    toast(<ReminderNotification isUpdate reminder={updatedReminder}/>, { toastId: updatedReminder.id });
   }, [updatedReminder, currentUser]);
 
   const handlePubnubMessageReceived = ({ message }) => {

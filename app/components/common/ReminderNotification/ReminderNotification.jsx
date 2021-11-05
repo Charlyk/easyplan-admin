@@ -6,12 +6,12 @@ import getReminderTexts from "../../../utils/getReminderTexts";
 import { textForKey } from "../../../utils/localization";
 import styles from './ReminderNotification.module.scss';
 
-const ReminderNotification = ({ reminder }) => {
-  const { isToday, timeText, createdByName } = getReminderTexts(reminder);
+const ReminderNotification = ({ reminder, isUpdate }) => {
+  const { timeText, createdByName } = getReminderTexts(reminder);
   return (
     <div className={styles.reminderNotification}>
       <Typography className={styles.titleLabel}>
-        {textForKey('crm_new_reminder')}
+        {textForKey(isUpdate ? 'reminder_updated' : 'crm_new_reminder')}
       </Typography>
       <Typography className={styles.createdLabel}>
         {upperFirst(textForKey('Created by'))}: {createdByName}
