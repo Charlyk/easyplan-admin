@@ -14,7 +14,7 @@ const Facebook = ({ redirect }) => {
         autoLoad={false}
         appId={FacebookAppId}
         fields="name,email,picture,accounts"
-        scope="public_profile,pages_show_list,pages_messaging"
+        scope="public_profile,pages_show_list,pages_messaging,instagram_basic,instagram_manage_messages,pages_manage_metadata"
         size="small"
         textButton={textForKey('Connect Facebook')}
         callback={handleFacebookResponse}

@@ -114,15 +114,15 @@ export async function fetchClinicExchangeRates(headers = null) {
 
 /**
  * Save facebook page for current clinic
- * @param {{
+ * @param {Array<{
  *   accessToken: string,
  *   category?: string,
  *   name: string,
  *   pageId: string,
- * }} pageData
+ * }>} pageData
  * @param headers
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function saveClinicFacebookPage(pageData, headers = null) {
-  return put('/api/clinic/integrations/facebook', headers, pageData);
+  return put('/api/clinic/integrations/facebook', headers, { pages: pageData });
 }

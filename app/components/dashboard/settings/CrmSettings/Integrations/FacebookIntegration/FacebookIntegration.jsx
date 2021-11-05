@@ -49,12 +49,14 @@ const FacebookIntegration = ({ currentClinic }) => {
 
   const handlePageSelected = async (page) => {
     try {
-      await saveClinicFacebookPage({
-        accessToken: page.access_token,
-        category: page.category,
-        name: page.name,
-        pageId: page.id,
-      });
+      await saveClinicFacebookPage([
+        {
+          accessToken: page.access_token,
+          category: page.category,
+          name: page.name,
+          pageId: page.id,
+        }
+      ]);
       setFacebookPage(page);
     } catch (error) {
       toast.error(error.message);
@@ -114,7 +116,7 @@ const FacebookIntegration = ({ currentClinic }) => {
           id="facebookLogin"
           frameBorder="0"
           className={styles.connectContainer}
-          src={`${appBaseUrl}/integrations/facebook?redirect=${window.location.href}`}
+          src={`https://app.easyplan.pro/integrations/facebook?redirect=${window.location.href}`}
         />
       </Box>
     </div>
