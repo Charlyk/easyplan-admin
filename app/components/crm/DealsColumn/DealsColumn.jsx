@@ -342,17 +342,19 @@ const DealsColumn = (
             </div>
           }
         >
-          {items.map((item) => (
-            <DealItem
-              key={item.id}
-              onDealClick={onDealClick}
-              color={dealState.color}
-              dealItem={item}
-              onLinkPatient={onLinkPatient}
-              onDeleteDeal={onDeleteDeal}
-              onConfirmFirstContact={onConfirmFirstContact}
-            />
-          ))}
+          <div className={styles.itemsContainer}>
+            {items.map((item) => (
+              <DealItem
+                key={item.id}
+                onDealClick={onDealClick}
+                color={dealState.color}
+                dealItem={item}
+                onLinkPatient={onLinkPatient}
+                onDeleteDeal={onDeleteDeal}
+                onConfirmFirstContact={onConfirmFirstContact}
+              />
+            ))}
+          </div>
         </InfiniteScroll>
       </div>
     </div>

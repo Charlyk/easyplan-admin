@@ -31,6 +31,7 @@ const DealItem = (
   return (
     <div
       ref={drag}
+      key={dealItem.id}
       className={styles.dealItem}
     >
       <div
