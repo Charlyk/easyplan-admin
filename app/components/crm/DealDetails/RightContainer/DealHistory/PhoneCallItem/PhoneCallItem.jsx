@@ -32,11 +32,22 @@ const PhoneCallItem = ({ call }) => {
       .replace('{2}', `${call.duration}`)
   }, [call]);
 
+  const callIcon = useMemo(() => {
+    switch (call.direction) {
+      case "Incoming":
+        return <IncomeCallIcon className={styles.arrowIcon}/>
+      case "Outgoing":
+        return <OutgoingCallIcon className={styles.arrowIcon}/>
+      default:
+        return <FailedCallIcon className={styles.arrowIcon}/>
+    }
+  }, [call]);
+
   return (
     <div className={styles.phoneCall}>
       <div className={styles.iconWrapper}>
         <PhoneIcon/>
-        <OutgoingCallIcon className={styles.arrowIcon}/>
+        {callIcon}
       </div>
       <div className={styles.dataContainer}>
         <Typography className={styles.dateLabel}>
