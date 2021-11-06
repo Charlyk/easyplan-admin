@@ -267,7 +267,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     const date = createdDate.format('DD');
     localDispatch(setCallToPlay({
       ...call,
-      fullUrl: `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace('+', '')}`
+      fullUrl: `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
     }));
   }
 
@@ -291,7 +291,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   };
 
   const handlePlayerError = () => {
-    toast.error('Play error')
+    toast.error('Play error', { toastId: 'play-error' });
   }
 
   return (
