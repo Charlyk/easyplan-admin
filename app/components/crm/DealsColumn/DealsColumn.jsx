@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import clsx from "clsx";
 import PropTypes from 'prop-types';
-import debounce from 'lodash/debounce';
 import { useColor } from "react-color-palette";
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -47,6 +47,7 @@ import reducer, {
   setPage,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
+import { CircularProgress } from "@material-ui/core";
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -68,12 +69,10 @@ const DealsColumn = (
 ) => {
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
-  const loaderRef = useRef(null);
   const createdDeal = useSelector(newDealSelector);
   const updatedDealData = useSelector(updatedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
   const [{
-    isFetching,
     showActions,
     isEditingName,
     columnName,
@@ -110,44 +109,6 @@ const DealsColumn = (
     }),
   }), [dealState])
 
-  const handleObserver = useCallback((entries) => {
-    const target = entries[0];
-    if (target.isIntersecting && totalElements > items.length && !isFetching) {
-      localDispatch(setPage(page + 1));
-    }
-  }, [totalElements, page, items, isFetching]);
-
-  const fetchDealsForState = useCallback(debounce(async () => {
-    try {
-      if (isFetching) {
-        return;
-      }
-      console.log('fetchDealsForState', dealState.type);
-      localDispatch(setIsFetching(true));
-      const filterParams = extractCookieByName(COOKIES_KEY);
-      const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
-      if (response.data.length === 0) {
-        localDispatch(setPage(page - 1));
-      } else {
-        localDispatch(setData(response.data));
-      }
-    } catch (error) {
-      onRequestError(error)
-    } finally {
-      localDispatch(setIsFetching(false));
-    }
-  }, 200), [isFetching]);
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '16px',
-      threshold: 0,
-    };
-    const observer = new IntersectionObserver(handleObserver, options);
-    if (loaderRef.current) observer.observe(loaderRef.current);
-  }, [handleObserver]);
-
   useEffect(() => {
     if (createdDeal == null || createdDeal.state.id !== dealState.id) {
       return;
@@ -156,14 +117,8 @@ const DealsColumn = (
   }, [createdDeal]);
 
   useEffect(() => {
-    if (page === 0) {
-      localDispatch(setPage(-1));
-      setTimeout(() => {
-        localDispatch(setPage(0));
-      }, 100);
-    } else {
-      localDispatch(setPage(0));
-    }
+    localDispatch(setPage(0));
+    setTimeout(fetchDealsForState, 200);
   }, [filterData]);
 
   useEffect(() => {
@@ -171,6 +126,9 @@ const DealsColumn = (
       return;
     }
     localDispatch(setColumnData(dealState));
+    return () => {
+      localDispatch(setPage(0));
+    }
   }, [dealState]);
 
   useEffect(() => {
@@ -181,12 +139,20 @@ const DealsColumn = (
     localDispatch(setUpdatedDeal(updatedDeal ?? updatedDealData));
   }, [updatedDeal, updatedDealData]);
 
-  useEffect(() => {
-    if (page === -1) {
-      return;
+  const fetchDealsForState = useCallback(async () => {
+    try {
+      console.log('fetchDealsForState', dealState.type);
+      localDispatch(setIsFetching(true));
+      const filterParams = extractCookieByName(COOKIES_KEY);
+      const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
+      localDispatch(setData(response.data));
+      localDispatch(setPage(page + 1));
+    } catch (error) {
+      onRequestError(error);
+    } finally {
+      localDispatch(setIsFetching(false));
     }
-    fetchDealsForState();
-  }, [page]);
+  }, [page, itemsPerPage, dealState]);
 
   const handleDealDrop = async (deal) => {
     try {
@@ -362,22 +328,25 @@ const DealsColumn = (
           </IconButton>
         </div>
       </div>
-      <div className={styles.dataContainer}>
-        <>
-          {items.map((item) => (
-            <DealItem
-              key={item.id}
-              onDealClick={onDealClick}
-              color={dealState.color}
-              dealItem={item}
-              onLinkPatient={onLinkPatient}
-              onDeleteDeal={onDeleteDeal}
-              onConfirmFirstContact={onConfirmFirstContact}
-            />
-          ))}
-        </>
-        <div ref={loaderRef}/>
-      </div>
+      <InfiniteScroll
+        className={styles.dataContainer}
+        next={fetchDealsForState}
+        hasMore={items.length < totalElements}
+        loader={<CircularProgress className="circular-progress-bar"/>}
+        dataLength={items.length}
+      >
+        {items.map((item) => (
+          <DealItem
+            key={item.id}
+            onDealClick={onDealClick}
+            color={dealState.color}
+            dealItem={item}
+            onLinkPatient={onLinkPatient}
+            onDeleteDeal={onDeleteDeal}
+            onConfirmFirstContact={onConfirmFirstContact}
+          />
+        ))}
+      </InfiniteScroll>
     </div>
   )
 };
