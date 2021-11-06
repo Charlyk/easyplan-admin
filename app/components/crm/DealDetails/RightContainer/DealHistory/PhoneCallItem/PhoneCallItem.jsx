@@ -47,6 +47,19 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
     onPlayAudio?.(call);
   }
 
+  const handleDownloadRecord = () => {
+    if (call.fileUrl == null) {
+      return;
+    }
+    const recordDate = moment(call.created);
+    const year = recordDate.format('YYYY')
+    const month = recordDate.format('MM')
+    const date = recordDate.format('DD')
+    const recordUrl =
+      `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl}`
+    window.open(recordUrl, '_blank');
+  }
+
   return (
     <div className={styles.phoneCall}>
       <div className={styles.iconWrapper}>
@@ -62,7 +75,7 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
             {directionAndTime}
           </Typography>
           <Button
-            disabled={call?.fileUrl == null}
+            disabled={call?.fileUrl == null || call.status !== 'Answered'}
             variant="outlined"
             onClick={handlePlayAudio}
             classes={{
@@ -75,8 +88,9 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
             {textForKey('call_listen')}
           </Button>
           <Button
-            disabled={call?.fileUrl == null}
+            disabled={call?.fileUrl == null || call.status !== 'Answered'}
             variant="text"
+            onClick={handleDownloadRecord}
             classes={{
               root: styles.downloadBtn,
               disabled: styles.disabledBtn,
@@ -87,7 +101,7 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
           </Button>
         </div>
         <Typography className={styles.detailsLabel}>
-          {textForKey('call_answered')}
+          {textForKey(`call_${call.status}`)}
         </Typography>
       </div>
     </div>
@@ -105,7 +119,7 @@ PhoneCallItem.propTypes = {
     sourcePhone: PropTypes.string,
     targetPhone: PropTypes.string,
     fileUrl: PropTypes.string,
-    status: PropTypes.string,
+    status: PropTypes.oneOf(['Answered', 'Failed', 'Busy', 'NoAnswer', 'Unknown']),
     duration: PropTypes.number,
   }),
   onPlayAudio: PropTypes.func,
