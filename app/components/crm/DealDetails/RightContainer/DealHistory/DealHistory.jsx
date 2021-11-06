@@ -27,6 +27,7 @@ import styles from './DealHistory.module.scss';
 import ReminderItem from "./ReminderItem";
 import LogItem from "./LogItem";
 import SMSMessageItem from "./SMSMessageItem";
+import PhoneCallItem from "./PhoneCallItem";
 
 const DealHistory = ({ deal }) => {
   const containerRef = useRef(null);
@@ -135,6 +136,14 @@ const DealHistory = ({ deal }) => {
           />
         )
       }
+      case ItemType.phoneCall: {
+        return (
+          <PhoneCallItem
+            key={historyItem.id}
+            call={historyItem}
+          />
+        )
+      }
       default:
         return null
     }
@@ -162,6 +171,7 @@ const DealHistory = ({ deal }) => {
                 <div className={styles.divider}/>
               </div>
               {data.map(renderItem)}
+              <PhoneCallItem call={null}/>
             </Box>
           )
         })}
