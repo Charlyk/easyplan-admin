@@ -376,7 +376,10 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       </div>
       {callToPlay != null && (
         <div className={styles.playerContainer}>
-          <IconButton className={styles.closeIcon}>
+          <IconButton
+            className={styles.closeIcon}
+            onClick={handleClosePlayer}
+          >
             <IconClose />
           </IconButton>
           <AudioPlayer
