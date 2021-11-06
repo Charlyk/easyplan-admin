@@ -186,7 +186,7 @@ const DealsColumn = (
       return;
     }
     fetchDealsForState();
-  }, [page, fetchDealsForState]);
+  }, [page]);
 
   const handleDealDrop = async (deal) => {
     try {
