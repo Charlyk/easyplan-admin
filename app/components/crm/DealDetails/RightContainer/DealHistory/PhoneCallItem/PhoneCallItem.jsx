@@ -9,6 +9,7 @@ import FailedCallIcon from '@material-ui/icons/CallMissed';
 import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import { textForKey } from "../../../../../../utils/localization";
 import styles from './PhoneCallItem.module.scss';
+import formatSeconds from "../../../../../../utils/formatSeconds";
 
 const PhoneCallItem = ({ call, onPlayAudio, }) => {
   const dateText = useMemo(() => {
@@ -29,7 +30,7 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
     }
     return textForKey('call_direction_with_time')
       .replace('{1}', textForKey(`call_${call.direction}`))
-      .replace('{2}', `${call.duration}`)
+      .replace('{2}', formatSeconds(call.duration))
   }, [call]);
 
   const callIcon = useMemo(() => {
