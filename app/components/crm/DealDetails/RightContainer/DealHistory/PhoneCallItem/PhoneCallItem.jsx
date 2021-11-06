@@ -56,7 +56,7 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
     const month = recordDate.format('MM')
     const date = recordDate.format('DD')
     const recordUrl =
-      `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl}`
+      `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
     window.open(recordUrl, '_blank');
   }
 
