@@ -44,7 +44,6 @@ const PatientMessages = ({ patient }) => {
     localDispatch(actions.setIsFetching(true));
     try {
       const response = await requestFetchSmsMessages(patient.id);
-      console.log(response.data);
       localDispatch(actions.setMessages(response.data));
     } catch (error) {
       onRequestError(error);

@@ -243,7 +243,6 @@ const CrmFilters = (
 
   const handleRemindersChange = (event) => {
     const newValue = event.target.value;
-    console.log(newValue);
     if (newValue === 0) {
       localDispatch(setSelectedReminder(null));
       return;

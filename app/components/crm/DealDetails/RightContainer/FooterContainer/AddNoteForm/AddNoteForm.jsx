@@ -16,9 +16,7 @@ const AddNoteForm = ({ isLoading, onSubmit }) => {
   }, [isLoading]);
 
   const handleSubmit = (event) => {
-    console.log(event)
-    event.preventDefault();
-    console.log(noteText);
+    event?.preventDefault();
     if (noteText.length === 0) {
       return;
     }

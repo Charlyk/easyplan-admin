@@ -28,7 +28,6 @@ const FooterContainer = ({ deal, onAddReminder }) => {
   };
 
   const handleNoteSubmit = async (note) => {
-    console.log('note', note);
     try {
       setIsAddingNote(true);
       await requestCreateDealNote(deal.id, note);

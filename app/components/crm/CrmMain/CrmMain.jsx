@@ -70,7 +70,6 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   const remoteReminder = useSelector(newReminderSelector);
   const updateReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);
-  const [fileUrl, setFileUrl] = useState('');
   const [{
     columns,
     linkModal,
@@ -101,11 +100,6 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     const params = JSON.parse(atob(queryParams));
     localDispatch(setQueryParams(params));
     fetchRemindersCount();
-
-    const encodedFile = window.encodeURIComponent('in-22011021- 37379476515-20211106-130447-1636196687.527349.wav'.replace(' ', '+'));
-    const fileUrl = `https://sip6215.iphost.md/monitor/2021/11/06/in-22011021-+37379476515-20211106-130447-1636196687.527349.wav`
-    console.log(fileUrl);
-    setFileUrl(fileUrl);
   }, []);
 
   useEffect(() => {

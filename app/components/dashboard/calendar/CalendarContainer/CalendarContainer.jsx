@@ -137,7 +137,6 @@ const CalendarContainer = (
   });
 
   useEffect(() => {
-    console.log(updateClinicData)
     if (!updateClinicData) {
       return;
     }
