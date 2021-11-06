@@ -37,6 +37,7 @@ module.exports = {
           /^selected-flag/,
           /^arrow/,
           /^rhap/,
+          /^infinite-scroll/,
         ],
       }
     ],
