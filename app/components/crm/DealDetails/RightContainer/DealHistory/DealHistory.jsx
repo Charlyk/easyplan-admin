@@ -171,7 +171,6 @@ const DealHistory = ({ deal }) => {
                 <div className={styles.divider}/>
               </div>
               {data.map(renderItem)}
-              <PhoneCallItem call={null}/>
             </Box>
           )
         })}
