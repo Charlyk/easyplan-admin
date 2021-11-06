@@ -110,12 +110,12 @@ const DealsColumn = (
     }),
   }), [dealState])
 
-  const handleObserver = useCallback(debounce((entries) => {
+  const handleObserver = useCallback((entries) => {
     const target = entries[0];
     if (target.isIntersecting && totalElements > items.length && !isFetching) {
       localDispatch(setPage(page + 1));
     }
-  }, 200), [totalElements, page, items, isFetching]);
+  }, [totalElements, page, items, isFetching]);
 
   const fetchDealsForState = useCallback(debounce(async () => {
     try {
