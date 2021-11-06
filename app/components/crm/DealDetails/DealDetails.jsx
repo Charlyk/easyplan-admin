@@ -19,6 +19,7 @@ const DealDetails = (
     onLink,
     onAddSchedule,
     onAddReminder,
+    onPlayAudio,
   }
 ) => {
   const isOpen = open && deal != null;
@@ -70,6 +71,7 @@ const DealDetails = (
           currentUser={currentUser}
           currentClinic={currentClinic}
           onAddReminder={onAddReminder}
+          onPlayAudio={onPlayAudio}
         />
       </div>
     </BottomSheetDialog>
@@ -138,4 +140,5 @@ DealDetails.propTypes = {
   onLink: PropTypes.func,
   onClose: PropTypes.func,
   onAddReminder: PropTypes.func,
+  onPlayAudio: PropTypes.func,
 }

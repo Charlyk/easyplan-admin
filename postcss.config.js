@@ -36,6 +36,7 @@ module.exports = {
           /^flag/,
           /^selected-flag/,
           /^arrow/,
+          /^rhap/,
         ],
       }
     ],

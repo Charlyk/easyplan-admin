@@ -29,7 +29,7 @@ import LogItem from "./LogItem";
 import SMSMessageItem from "./SMSMessageItem";
 import PhoneCallItem from "./PhoneCallItem";
 
-const DealHistory = ({ deal }) => {
+const DealHistory = ({ deal, onPlayAudio, }) => {
   const containerRef = useRef(null);
   const updatedDeal = useSelector(updatedDealSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
@@ -141,6 +141,7 @@ const DealHistory = ({ deal }) => {
           <PhoneCallItem
             key={historyItem.id}
             call={historyItem}
+            onPlayAudio={onPlayAudio}
           />
         )
       }
@@ -235,4 +236,5 @@ DealHistory.propTypes = {
       }),
     }),
   }),
+  onPlayAudio: PropTypes.func
 }

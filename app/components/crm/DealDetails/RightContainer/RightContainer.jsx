@@ -5,11 +5,11 @@ import DealHistory from "./DealHistory";
 import FooterContainer from "./FooterContainer";
 import RemindersContainer from "./RemindersContainer";
 
-const RightContainer = ({ deal, currentClinic, showAddReminderHelp, onAddReminder }) => {
+const RightContainer = ({ deal, currentClinic, showAddReminderHelp, onAddReminder, onPlayAudio }) => {
   return (
     <div className={styles.rightContainer}>
       <div className={styles.center}>
-        <DealHistory deal={deal}/>
+        <DealHistory deal={deal} onPlayAudio={onPlayAudio}/>
         <FooterContainer
           deal={deal}
           currentClinic={currentClinic}
@@ -84,4 +84,5 @@ RightContainer.propTypes = {
   currentUser: PropTypes.any,
   currentClinic: PropTypes.any,
   onAddReminder: PropTypes.func,
+  onPlayAudio: PropTypes.func,
 }

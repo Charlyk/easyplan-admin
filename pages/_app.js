@@ -27,6 +27,7 @@ import { requestCheckIsAuthenticated, signOut } from "../middleware/api/auth";
 import useWindowFocused from "../app/utils/hooks/useWindowFocused";
 import { wrapper } from "../store";
 import 'moment/locale/ro';
+import 'react-h5-audio-player/src/styles.scss';
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../app/utils'

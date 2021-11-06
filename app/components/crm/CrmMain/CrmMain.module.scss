@@ -55,6 +55,28 @@
     }
   }
 
+  .playerContainer {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3000;
+    background-color: white;
+
+    .closeIcon {
+      position: absolute;
+      top: -2.3rem;
+      right: -1rem;
+      fill: #3A83DC;
+    }
+
+    .player {
+      width: 350px;
+      box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+  }
+
   .columnsContainer {
     padding: 8px;
     display: flex;

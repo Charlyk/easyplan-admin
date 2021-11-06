@@ -10,7 +10,7 @@ import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import { textForKey } from "../../../../../../utils/localization";
 import styles from './PhoneCallItem.module.scss';
 
-const PhoneCallItem = ({ call }) => {
+const PhoneCallItem = ({ call, onPlayAudio, }) => {
   const dateText = useMemo(() => {
     if (call == null) {
       return '-'
@@ -43,6 +43,10 @@ const PhoneCallItem = ({ call }) => {
     }
   }, [call]);
 
+  const handlePlayAudio = () => {
+    onPlayAudio?.(call);
+  }
+
   return (
     <div className={styles.phoneCall}>
       <div className={styles.iconWrapper}>
@@ -60,6 +64,7 @@ const PhoneCallItem = ({ call }) => {
           <Button
             disabled={call?.fileUrl == null}
             variant="outlined"
+            onClick={handlePlayAudio}
             classes={{
               root: styles.listenBtn,
               label: styles.buttonLabel,
@@ -103,4 +108,5 @@ PhoneCallItem.propTypes = {
     status: PropTypes.string,
     duration: PropTypes.number,
   }),
+  onPlayAudio: PropTypes.func,
 }

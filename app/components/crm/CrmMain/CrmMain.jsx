@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import orderBy from "lodash/orderBy";
 import upperFirst from 'lodash/upperFirst';
 import { toast } from "react-toastify";
+import AudioPlayer from 'react-h5-audio-player';
 import Zoom from '@material-ui/core/Zoom';
 import Fab from "@material-ui/core/Fab";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -48,9 +49,13 @@ import reducer, {
   setShowFilters,
   setQueryParams,
   setShowReminders,
+  setCallToPlay,
   setActiveRemindersCount,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
+import IconClose from "../../icons/iconClose";
+import IconButton from "@material-ui/core/IconButton";
+import moment from "moment-timezone";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -65,6 +70,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   const remoteReminder = useSelector(newReminderSelector);
   const updateReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);
+  const [fileUrl, setFileUrl] = useState('');
   const [{
     columns,
     linkModal,
@@ -76,6 +82,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     queryParams,
     activeRemindersCount,
     showReminders,
+    callToPlay,
   }, localDispatch] = useReducer(reducer, initialState);
 
   const filteredColumns = useMemo(() => {
@@ -94,6 +101,11 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     const params = JSON.parse(atob(queryParams));
     localDispatch(setQueryParams(params));
     fetchRemindersCount();
+
+    const encodedFile = window.encodeURIComponent('in-22011021- 37379476515-20211106-130447-1636196687.527349.wav'.replace(' ', '+'));
+    const fileUrl = `https://sip6215.iphost.md/monitor/2021/11/06/in-22011021-+37379476515-20211106-130447-1636196687.527349.wav`
+    console.log(fileUrl);
+    setFileUrl(fileUrl);
   }, []);
 
   useEffect(() => {
@@ -245,6 +257,24 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     localDispatch(setShowReminders(false));
   };
 
+  const handlePlayAudio = (call) => {
+    if (call?.fileUrl == null) {
+      return;
+    }
+    const createdDate = moment(call.created);
+    const year = createdDate.format('YYYY');
+    const month = createdDate.format('MM');
+    const date = createdDate.format('DD');
+    localDispatch(setCallToPlay({
+      ...call,
+      fullUrl: `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace('+', '')}`
+    }));
+  }
+
+  const handleClosePlayer = () => {
+    localDispatch(setCallToPlay(null))
+  }
+
   const updateParams = (newParams) => {
     const stringQuery = JSON.stringify(newParams);
     const encoded = btoa(unescape(encodeURIComponent(stringQuery)))
@@ -259,6 +289,10 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   const handleFilterSubmit = (filterData) => {
     updateParams(filterData);
   };
+
+  const handlePlayerError = () => {
+    toast.error('Play error')
+  }
 
   return (
     <div className={styles.crmMain}>
@@ -297,6 +331,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         onClose={handleCloseDetails}
         onAddSchedule={handleAddSchedule}
         onAddReminder={handleOpenReminderModal}
+        onPlayAudio={handlePlayAudio}
       />
       {showFilters && (
         <CrmFilters
@@ -339,6 +374,22 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
           </Tooltip>
         </Zoom>
       </div>
+      {callToPlay != null && (
+        <div className={styles.playerContainer}>
+          <IconButton className={styles.closeIcon}>
+            <IconClose />
+          </IconButton>
+          <AudioPlayer
+            autoPlay
+            src={callToPlay.fullUrl}
+            className={styles.player}
+            onError={handlePlayerError}
+            showJumpControls={false}
+            showSkipControls={false}
+            onPlayError={handlePlayerError}
+          />
+        </div>
+      )}
       <DndProvider backend={HTML5Backend}>
         <div className={styles.columnsContainer}>
           {filteredColumns.map((dealState, index) => (
