@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import clsx from "clsx";
 import PropTypes from 'prop-types';
+import debounce from 'lodash/debounce';
 import { useColor } from "react-color-palette";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -109,12 +110,33 @@ const DealsColumn = (
     }),
   }), [dealState])
 
-  const handleObserver = useCallback((entries) => {
+  const handleObserver = useCallback(debounce((entries) => {
     const target = entries[0];
     if (target.isIntersecting && totalElements > items.length && !isFetching) {
       localDispatch(setPage(page + 1));
     }
-  }, [totalElements, page, items, isFetching]);
+  }, 200), [totalElements, page, items, isFetching]);
+
+  const fetchDealsForState = useCallback(debounce(async () => {
+    try {
+      if (isFetching) {
+        return;
+      }
+      console.log('fetchDealsForState', dealState.type);
+      localDispatch(setIsFetching(true));
+      const filterParams = extractCookieByName(COOKIES_KEY);
+      const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
+      if (response.data.length === 0) {
+        localDispatch(setPage(page - 1));
+      } else {
+        localDispatch(setData(response.data));
+      }
+    } catch (error) {
+      onRequestError(error)
+    } finally {
+      localDispatch(setIsFetching(false));
+    }
+  }, 200), [isFetching]);
 
   useEffect(() => {
     const options = {
@@ -164,7 +186,7 @@ const DealsColumn = (
       return;
     }
     fetchDealsForState();
-  }, [page]);
+  }, [page, fetchDealsForState]);
 
   const handleDealDrop = async (deal) => {
     try {
@@ -190,24 +212,6 @@ const DealsColumn = (
       await requestChangeDealColumn(dealState.id, deal.id);
     } catch (error) {
       onRequestError(error);
-    }
-  }
-
-  const fetchDealsForState = async () => {
-    try {
-      console.log('fetchDealsForState', dealState.type);
-      localDispatch(setIsFetching(true));
-      const filterParams = extractCookieByName(COOKIES_KEY);
-      const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
-      if (response.data.length === 0) {
-        localDispatch(setPage(page - 1));
-      } else {
-        localDispatch(setData(response.data));
-      }
-    } catch (error) {
-      onRequestError(error)
-    } finally {
-      localDispatch(setIsFetching(false));
     }
   }
 
@@ -372,7 +376,7 @@ const DealsColumn = (
             />
           ))}
         </>
-        <div ref={loaderRef} />
+        <div ref={loaderRef}/>
       </div>
     </div>
   )
