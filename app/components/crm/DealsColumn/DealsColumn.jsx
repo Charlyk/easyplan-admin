@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import React, { useEffect, useMemo, useReducer, useRef } from "react";
 import clsx from "clsx";
 import PropTypes from 'prop-types';
 import { useColor } from "react-color-palette";
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroller';
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -118,7 +118,7 @@ const DealsColumn = (
 
   useEffect(() => {
     localDispatch(setPage(0));
-    setTimeout(fetchDealsForState, 200);
+    setTimeout(fetchDealsForState, 100);
   }, [filterData]);
 
   useEffect(() => {
@@ -139,9 +139,9 @@ const DealsColumn = (
     localDispatch(setUpdatedDeal(updatedDeal ?? updatedDealData));
   }, [updatedDeal, updatedDealData]);
 
-  const fetchDealsForState = useCallback(async () => {
+  const fetchDealsForState = async () => {
     try {
-      console.log('fetchDealsForState', dealState.type);
+
       localDispatch(setIsFetching(true));
       const filterParams = extractCookieByName(COOKIES_KEY);
       const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
@@ -152,7 +152,7 @@ const DealsColumn = (
     } finally {
       localDispatch(setIsFetching(false));
     }
-  }, [page, itemsPerPage, dealState]);
+  };
 
   const handleDealDrop = async (deal) => {
     try {
@@ -328,25 +328,33 @@ const DealsColumn = (
           </IconButton>
         </div>
       </div>
-      <InfiniteScroll
-        className={styles.dataContainer}
-        next={fetchDealsForState}
-        hasMore={items.length < totalElements}
-        loader={<CircularProgress className="circular-progress-bar"/>}
-        dataLength={items.length}
-      >
-        {items.map((item) => (
-          <DealItem
-            key={item.id}
-            onDealClick={onDealClick}
-            color={dealState.color}
-            dealItem={item}
-            onLinkPatient={onLinkPatient}
-            onDeleteDeal={onDeleteDeal}
-            onConfirmFirstContact={onConfirmFirstContact}
-          />
-        ))}
-      </InfiniteScroll>
+      <div id="scrollableDiv" className={styles.dataContainer}>
+        <InfiniteScroll
+          initialLoad
+          pageStart={0}
+          useWindow={false}
+          style={{ width: '100%' }}
+          loadMore={fetchDealsForState}
+          hasMore={items.length < totalElements}
+          loader={
+            <div className={styles.progressWrapper}>
+              <CircularProgress className="circular-progress-bar"/>
+            </div>
+          }
+        >
+          {items.map((item) => (
+            <DealItem
+              key={item.id}
+              onDealClick={onDealClick}
+              color={dealState.color}
+              dealItem={item}
+              onLinkPatient={onLinkPatient}
+              onDeleteDeal={onDeleteDeal}
+              onConfirmFirstContact={onConfirmFirstContact}
+            />
+          ))}
+        </InfiniteScroll>
+      </div>
     </div>
   )
 };
