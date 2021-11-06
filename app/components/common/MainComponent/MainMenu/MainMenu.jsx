@@ -86,15 +86,15 @@ const menuItems = [
     href: '/users',
     hasCounter: false,
   },
-  {
-    id: 'crm',
-    type: 'link',
-    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
-    text: textForKey('CRM Board'),
-    icon: <AssessmentIcon/>,
-    href: '/crm',
-    hasCounter: true,
-  },
+  // {
+  //   id: 'crm',
+  //   type: 'link',
+  //   roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+  //   text: textForKey('CRM Board'),
+  //   icon: <AssessmentIcon/>,
+  //   href: '/crm',
+  //   hasCounter: true,
+  // },
   {
     id: 'calendar',
     type: 'link',
@@ -166,12 +166,12 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
   }, []);
 
-  useEffect(() => {
-    setShowCrmHelp(
-      !wasNotificationShown(notifications.menuCRMImplementation.id) &&
-      !showTechSupportHelp,
-    );
-  }, [showTechSupportHelp]);
+  // useEffect(() => {
+  //   setShowCrmHelp(
+  //     !wasNotificationShown(notifications.menuCRMImplementation.id) &&
+  //     !showTechSupportHelp,
+  //   );
+  // }, [showTechSupportHelp]);
 
   useEffect(() => {
     fetchRemindersCount();
