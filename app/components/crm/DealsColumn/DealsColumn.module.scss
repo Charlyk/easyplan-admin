@@ -1,7 +1,6 @@
 .dealsColumn {
   display: flex;
   flex-direction: column;
-  width: 350px;
   height: 100%;
   margin-right: 8px;
   background-color: #ededed;
@@ -21,7 +20,6 @@
   }
 
   .titleContainer {
-    width: 350px;
     padding: 15px 8px;
     display: flex;
     align-items: center;

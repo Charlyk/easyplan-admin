@@ -54,6 +54,7 @@ const COOKIES_KEY = 'crm_filter';
 const DealsColumn = (
   {
     dealState,
+    width,
     isFirst,
     isLast,
     updatedDeal,
@@ -267,7 +268,11 @@ const DealsColumn = (
   };
 
   return (
-    <div className={clsx(styles.dealsColumn, { [styles.dropOver]: isOver })} ref={drop}>
+    <div
+      ref={drop}
+      style={{ width }}
+      className={clsx(styles.dealsColumn, { [styles.dropOver]: isOver })}
+    >
       <AddColumnModal
         open={showCreateColumn}
         onSave={handleCreateColumn}
@@ -289,7 +294,7 @@ const DealsColumn = (
         onSave={handleSaveColor}
         onClose={handleCloseColorPicker}
       />
-      <div className={styles.titleContainer}>
+      <div className={styles.titleContainer} style={{ width }}>
         {isEditingName ? (
           <Box display="flex">
             <TextField
@@ -365,6 +370,7 @@ export default DealsColumn;
 DealsColumn.propTypes = {
   isFirst: PropTypes.bool,
   isLast: PropTypes.bool,
+  width: PropTypes.number,
   dealState: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -381,4 +387,8 @@ DealsColumn.propTypes = {
   onDeleteDeal: PropTypes.func,
   onConfirmFirstContact: PropTypes.func,
   onDealClick: PropTypes.func,
+};
+
+DealsColumn.defaultProps = {
+  width: 350,
 };

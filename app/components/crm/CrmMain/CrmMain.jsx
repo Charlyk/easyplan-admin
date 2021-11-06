@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer } from "react";
+import React, { useEffect, useMemo, useReducer, useRef } from "react";
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import orderBy from "lodash/orderBy";
@@ -56,6 +56,7 @@ import styles from './CrmMain.module.scss';
 import IconClose from "../../icons/iconClose";
 import IconButton from "@material-ui/core/IconButton";
 import moment from "moment-timezone";
+import HorizontalScrollHelper from "../../common/HorizontalScrollHelper";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -64,12 +65,14 @@ const AddReminderModal = dynamic(() => import('../AddReminderModal'));
 const CrmFilters = dynamic(() => import("./CrmFilters"));
 
 const COOKIES_KEY = 'crm_filter';
+const COLUMN_WIDTH = 350;
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
   const remoteReminder = useSelector(newReminderSelector);
   const updateReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);
+  const columnsContainerRef = useRef(null);
   const [{
     columns,
     linkModal,
@@ -289,6 +292,10 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
 
   const handlePlayerError = () => {
     toast.error('Play error', { toastId: 'play-error' });
+  };
+
+  const handleScrollUpdate = (scrollOffset) => {
+    columnsContainerRef.current.scrollLeft = scrollOffset
   }
 
   return (
@@ -391,10 +398,14 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         </div>
       )}
       <DndProvider backend={HTML5Backend}>
-        <div className={styles.columnsContainer}>
+        <div
+          ref={columnsContainerRef}
+          className={styles.columnsContainer}
+        >
           {filteredColumns.map((dealState, index) => (
             <DealsColumn
               key={dealState.id}
+              width={COLUMN_WIDTH}
               filterData={queryParams}
               isFirst={index === 0}
               isLast={index === (states.length - 1)}
@@ -411,6 +422,17 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
           ))}
         </div>
       </DndProvider>
+      <HorizontalScrollHelper
+        columnsCount={filteredColumns.length}
+        columnWidth={COLUMN_WIDTH}
+        parentEl={columnsContainerRef.current}
+        columnSpacing={8} // margin between columns
+        onScrollUpdate={handleScrollUpdate}
+        position={{
+          bottom: '1rem',
+          right: '5rem'
+        }}
+      />
     </div>
   )
 };

@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from 'prop-types';
 import moment from "moment-timezone";
-import { animated, interpolate, useSpring } from "react-spring";
+import { animated, useSpring } from "react-spring";
 import { useDispatch, useSelector } from "react-redux";
 import { START_TIMER, STOP_TIMER } from "redux-timer-middleware";
 import types from "../../../../../redux/types/types";
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import { updateHourIndicatorPositionSelector } from "../../../../../redux/selectors/rootSelector";
 import styles from './HourIndicator.module.scss'
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const HourIndicator = ({ dayHours, viewDate, disabled }) => {
   const dispatch = useDispatch()
@@ -124,7 +124,7 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
     <animated.div
       className={styles.hourIndicatorRoot}
       style={{
-        top: interpolate([hourTop], hourTopInterpolator),
+        top: hourTop.to(hourTopInterpolator),
       }}
     >
       <div className={styles.hourLabel}>
