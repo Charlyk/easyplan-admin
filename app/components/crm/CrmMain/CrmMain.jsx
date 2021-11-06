@@ -378,7 +378,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
           </IconButton>
           <AudioPlayer
             autoPlay
-            src="https://dentusplus.moizvonki.ru/calls/recordings/LJPpVEpfSIFlzntECulSisEJOXYayVda.mp4/"
+            src={callToPlay.fullUrl}
             className={styles.player}
             onError={handlePlayerError}
             showJumpControls={false}
