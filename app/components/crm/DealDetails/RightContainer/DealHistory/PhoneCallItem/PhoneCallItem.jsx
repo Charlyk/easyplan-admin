@@ -56,8 +56,9 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
     const year = recordDate.format('YYYY')
     const month = recordDate.format('MM')
     const date = recordDate.format('DD')
-    const recordUrl =
-      `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
+    const recordUrl = call.callId
+      ? `https://sip6215.iphost.md/amocrm/router.php?route=record/get&call_id=${call.callId}`
+      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
     window.open(recordUrl, '_blank');
   }
 
@@ -122,6 +123,7 @@ PhoneCallItem.propTypes = {
     fileUrl: PropTypes.string,
     status: PropTypes.oneOf(['Answered', 'Failed', 'Busy', 'NoAnswer', 'Unknown']),
     duration: PropTypes.number,
+    callId: PropTypes.string,
   }),
   onPlayAudio: PropTypes.func,
 }

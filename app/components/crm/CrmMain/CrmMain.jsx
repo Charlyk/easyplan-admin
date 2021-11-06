@@ -259,9 +259,12 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     const year = createdDate.format('YYYY');
     const month = createdDate.format('MM');
     const date = createdDate.format('DD');
+    const recordUrl = call.callId
+      ? `https://sip6215.iphost.md/amocrm/router.php?route=record/get&call_id=${call.callId}`
+      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
     localDispatch(setCallToPlay({
       ...call,
-      fullUrl: `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
+      fullUrl: recordUrl
     }));
   }
 
