@@ -141,7 +141,6 @@ const DealsColumn = (
 
   const fetchDealsForState = async () => {
     try {
-
       localDispatch(setIsFetching(true));
       const filterParams = extractCookieByName(COOKIES_KEY);
       const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
