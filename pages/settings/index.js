@@ -47,7 +47,6 @@ export const getServerSideProps = async ({ req, query }) => {
         redirect: {
           destination: redirectTo,
           permanent: true,
-          menu: query.menu,
         },
       };
     }
@@ -59,7 +58,7 @@ export const getServerSideProps = async ({ req, query }) => {
             ...appData.data
           }
         },
-        menu: query.menu,
+        menu: query?.menu ?? '',
         countries,
         authToken,
       }

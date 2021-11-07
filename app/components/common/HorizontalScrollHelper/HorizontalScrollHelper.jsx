@@ -143,7 +143,7 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
           style={{
             left: x,
             width: `${helperWidthPercentage}%`,
-            cursor: isMoving ? 'grabbing' : 'pointer',
+            cursor: isMoving ? 'grabbing' : 'grab',
           }}
         />
         {columns}

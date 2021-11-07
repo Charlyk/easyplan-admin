@@ -32,10 +32,8 @@ const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu }
       : SettingsForm.accountSettings,
   );
 
-  console.log(selectedMenu)
-
   useEffect(() => {
-    if (selectedMenu == null) {
+    if (!selectedMenu) {
       return;
     }
     setCurrentForm(selectedMenu);
