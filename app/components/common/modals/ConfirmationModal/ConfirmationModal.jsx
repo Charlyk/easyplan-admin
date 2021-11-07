@@ -20,7 +20,7 @@ const ConfirmationModal = ({ show, title, message, isLoading, primaryBtnText = t
       isPositiveLoading={isLoading}
       className={styles['confirmation-modal']}
       primaryBtnText={primaryBtnText}
-      size='sm'
+      size='small'
     >
       <Box padding='16px'>
         <Typography className={styles.messageLabel}>

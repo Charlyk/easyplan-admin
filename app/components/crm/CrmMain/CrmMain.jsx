@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useReducer, useRef } from "react";
 import dynamic from 'next/dynamic';
+import { useRouter } from "next/router";
+import moment from "moment-timezone";
 import PropTypes from 'prop-types';
 import orderBy from "lodash/orderBy";
 import upperFirst from 'lodash/upperFirst';
@@ -9,6 +11,7 @@ import Zoom from '@material-ui/core/Zoom';
 import Fab from "@material-ui/core/Fab";
 import Tooltip from '@material-ui/core/Tooltip';
 import IconFilter from '@material-ui/icons/FilterList';
+import IconButton from "@material-ui/core/IconButton";
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined'
 import Typography from "@material-ui/core/Typography";
 import { DndProvider } from 'react-dnd';
@@ -31,6 +34,9 @@ import extractCookieByName from "../../../utils/extractCookieByName";
 import setDocCookies from "../../../utils/setDocCookies";
 import { textForKey } from "../../../utils/localization";
 import onRequestError from "../../../utils/onRequestError";
+import { Role } from "../../../utils/constants";
+import HorizontalScrollHelper from "../../common/HorizontalScrollHelper";
+import IconClose from "../../icons/iconClose";
 import RemindersModal from "../RemindersModal";
 import DealsColumn from "../DealsColumn";
 import reducer, {
@@ -50,13 +56,10 @@ import reducer, {
   setQueryParams,
   setShowReminders,
   setCallToPlay,
+  setShowPageConnectModal,
   setActiveRemindersCount,
 } from './CrmMain.reducer';
 import styles from './CrmMain.module.scss';
-import IconClose from "../../icons/iconClose";
-import IconButton from "@material-ui/core/IconButton";
-import moment from "moment-timezone";
-import HorizontalScrollHelper from "../../common/HorizontalScrollHelper";
 
 const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
 const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
@@ -69,10 +72,12 @@ const COLUMN_WIDTH = 350;
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const remoteReminder = useSelector(newReminderSelector);
   const updateReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);
   const columnsContainerRef = useRef(null);
+  const userClinic = currentUser.clinics.find(item => item.clinicId === currentClinic.id);
   const [{
     columns,
     linkModal,
@@ -85,6 +90,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     activeRemindersCount,
     showReminders,
     callToPlay,
+    showPageConnectModal,
   }, localDispatch] = useReducer(reducer, initialState);
 
   const filteredColumns = useMemo(() => {
@@ -97,6 +103,10 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
 
   useEffect(() => {
     const queryParams = extractCookieByName(COOKIES_KEY);
+    const { roleInClinic } = userClinic;
+    const showConnectModal = currentClinic.facebookPages.length === 0 &&
+      (roleInClinic === Role.admin || roleInClinic === Role.manager);
+    localDispatch(setShowPageConnectModal(showConnectModal));
     if (!queryParams) {
       return;
     }
@@ -296,6 +306,15 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
 
   const handleScrollUpdate = (scrollOffset) => {
     columnsContainerRef.current.scrollLeft = scrollOffset
+  };
+
+  const handleCloseConnectSocial = () => {
+    localDispatch(setShowPageConnectModal(false));
+  }
+
+  const handleConnectSocial = async () => {
+    handleCloseConnectSocial();
+    await router.replace('/settings?menu=crmSettings');
   }
 
   return (
@@ -319,6 +338,14 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         message={textForKey('delete_deal_message')}
         onClose={handleCloseDeleteModal}
         onConfirm={handleDeleteConfirmed}
+      />
+      <ConfirmationModal
+        show={showPageConnectModal}
+        title={textForKey('connect_social_networks')}
+        message={textForKey('connect_social_message')}
+        primaryBtnText={textForKey('Connect')}
+        onClose={handleCloseConnectSocial}
+        onConfirm={handleConnectSocial}
       />
       <RemindersModal
         open={showReminders}

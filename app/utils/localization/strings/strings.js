@@ -659,6 +659,9 @@ export default {
     call_unkwnon: 'Status unknown',
     call_listen: 'Listen',
     call_download: 'Download',
+    connect_social_networks: 'Connect social networks',
+    connect_social_message: 'Connect your company social networks pages to receive more leads and increase the number of clients.',
+    connect: 'Connect',
   },
   ro: {
     analytics: 'Analitică',
@@ -1326,6 +1329,9 @@ export default {
     call_busy: 'Ocupat',
     call_listen: 'Ascultă',
     call_download: 'Descarcă',
+    connect_social_networks: 'Conectați rețelele sociale',
+    connect_social_message: 'Conectați rețelele sociale pentru a genera mai multe leaduri și a crește numarul de clienți.',
+    connect: 'Conectează',
   },
   ru: {
     analytics: 'Analytics',
@@ -1984,5 +1990,8 @@ export default {
     call_unkwnon: 'Status unknown',
     call_listen: 'Listen',
     call_download: 'Download',
+    connect_social_networks: 'Connect social networks',
+    connect_social_message: 'Connect your company social networks pages to receive more leads and increase the number of clients.',
+    connect: 'Connect',
   },
 };

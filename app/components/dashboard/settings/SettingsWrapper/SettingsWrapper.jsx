@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Role } from "../../../../utils/constants";
 import styles from './SettingsWrapper.module.scss';
@@ -22,7 +22,7 @@ const SettingsForm = {
   crmSettings: 'crmSettings',
 };
 
-const SettingsWrapper = ({ currentUser, currentClinic, countries }) => {
+const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu }) => {
   const selectedClinic = currentUser?.clinics.find(
     item => item.clinicId === currentClinic.id,
   );
@@ -31,6 +31,15 @@ const SettingsWrapper = ({ currentUser, currentClinic, countries }) => {
       ? SettingsForm.companyDetails
       : SettingsForm.accountSettings,
   );
+
+  console.log(selectedMenu)
+
+  useEffect(() => {
+    if (selectedMenu == null) {
+      return;
+    }
+    setCurrentForm(selectedMenu);
+  }, [selectedMenu]);
 
   const handleFormChange = newForm => setCurrentForm(newForm);
 

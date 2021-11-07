@@ -17,6 +17,7 @@ const EASModal = (
   {
     open,
     title,
+    size,
     destroyBtnText = textForKey('Delete'),
     primaryBtnText,
     secondaryBtnText,
@@ -99,7 +100,7 @@ const EASModal = (
       onBackdropClick={handleBackdropClick}
       onKeyDown={handleKeyDown}
     >
-      <Paper className={clsx(styles.modalPaper, paperClass)}>
+      <Paper className={clsx(styles.modalPaper, styles[size], paperClass)}>
         <div className={styles.modalHeader}>
           <Typography className={styles.titleLabel} noWrap>
             {title}
@@ -159,6 +160,7 @@ export default React.memo(EASModal, areComponentPropsEqual);
 EASModal.propTypes = {
   open: PropTypes.bool.isRequired,
   title: PropTypes.string,
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'unset']),
   destroyBtnText: PropTypes.string,
   primaryBtnText: PropTypes.string,
   secondaryBtnText: PropTypes.string,
@@ -180,4 +182,5 @@ EASModal.defaultProps = {
   title: '',
   primaryBtnText: textForKey('OK'),
   secondaryBtnText: textForKey('Close'),
+  size: 'unset'
 }

@@ -9,7 +9,7 @@ import SettingsWrapper from "../../app/components/dashboard/settings/SettingsWra
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
 import handleRequestError from "../../app/utils/handleRequestError";
 
-const Settings = ({ fallback, countries, authToken }) => {
+const Settings = ({ fallback, countries, authToken, menu }) => {
   return (
     <SWRConfig value={{ fallback }}>
       <MainComponent
@@ -18,14 +18,16 @@ const Settings = ({ fallback, countries, authToken }) => {
       >
         <SettingsWrapper
           countries={countries}
+          selectedMenu={menu}
         />
       </MainComponent>
     </SWRConfig>
   );
 };
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
+    console.log(query)
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
       return {
@@ -45,6 +47,7 @@ export const getServerSideProps = async ({ req }) => {
         redirect: {
           destination: redirectTo,
           permanent: true,
+          menu: query.menu,
         },
       };
     }
@@ -56,6 +59,7 @@ export const getServerSideProps = async ({ req }) => {
             ...appData.data
           }
         },
+        menu: query.menu,
         countries,
         authToken,
       }
