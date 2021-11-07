@@ -37,6 +37,7 @@ import ClinicSelector from '../../ClinicSelector';
 import EASHelpView from "../../EASHelpView";
 import ExchangeRates from "../ExchageRates";
 import styles from './MainMenu.module.scss';
+import { environment } from "../../../../../eas.config";
 
 const menuItems = [
   {
@@ -86,15 +87,15 @@ const menuItems = [
     href: '/users',
     hasCounter: false,
   },
-  // {
-  //   id: 'crm',
-  //   type: 'link',
-  //   roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
-  //   text: textForKey('CRM Board'),
-  //   icon: <AssessmentIcon/>,
-  //   href: '/crm',
-  //   hasCounter: true,
-  // },
+  {
+    id: 'crm',
+    type: 'link',
+    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
+    text: textForKey('CRM Board'),
+    icon: <AssessmentIcon/>,
+    href: '/crm',
+    hasCounter: true,
+  },
   {
     id: 'calendar',
     type: 'link',
@@ -157,6 +158,11 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
+  const canShowCrm =
+    environment !== 'production' ||
+    currentClinic.id === 1772 ||
+    currentClinic.id === 46 ||
+    currentClinic.id === 289747;
 
   useEffect(() => {
     setIsAnalyticsExpanded(checkIsAnalyticsEnabled());
@@ -166,12 +172,15 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
   }, []);
 
-  // useEffect(() => {
-  //   setShowCrmHelp(
-  //     !wasNotificationShown(notifications.menuCRMImplementation.id) &&
-  //     !showTechSupportHelp,
-  //   );
-  // }, [showTechSupportHelp]);
+  useEffect(() => {
+    if (!canShowCrm) {
+      return;
+    }
+    setShowCrmHelp(
+      !wasNotificationShown(notifications.menuCRMImplementation.id) &&
+      !showTechSupportHelp,
+    );
+  }, [showTechSupportHelp, canShowCrm]);
 
   useEffect(() => {
     fetchRemindersCount();
@@ -315,6 +324,9 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
               </React.Fragment>
             )
           } else if (item.type === 'link') {
+            if (item.id === 'crm' && !canShowCrm) {
+              return null;
+            }
             return (
               <Link href={item.href} key={item.id}>
                 <ListItem
