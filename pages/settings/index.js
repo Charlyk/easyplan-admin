@@ -27,7 +27,6 @@ const Settings = ({ fallback, countries, authToken, menu }) => {
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
-    console.log(query)
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
       return {

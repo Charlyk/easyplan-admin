@@ -1,17 +1,18 @@
 import React from "react";
+import clsx from "clsx";
 import PropTypes from 'prop-types';
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
+import Typography from "@material-ui/core/Typography";
+import upperFirst from 'lodash/upperFirst';
 import CheckableMenuItem from "../CheckableMenuItem";
 import styles from './EASSelect.module.scss';
-import clsx from "clsx";
-import Typography from "@material-ui/core/Typography";
 
 const EASSelect = (
   {
+    updateText,
     selectClass,
     rootClass,
     disabled,
@@ -26,17 +27,24 @@ const EASSelect = (
     onChange,
   }
 ) => {
+  const updated = (value) => {
+    if (!updateText) {
+      return value;
+    }
+    return upperFirst(value?.toLowerCase());
+  }
+
   const renderSelectedOptions = (selected) => {
     if (multiple) {
       const filteredOptions = options.filter(item =>
         selected.includes(item.id),
       );
       if (filteredOptions.length === 0) {
-        return defaultOption?.name;
+        return updated(defaultOption?.name);
       }
-      return filteredOptions.map(item => item.name ?? defaultOption?.name).join(', ')
+      return filteredOptions.map(item => updated(item.name ?? defaultOption?.name)).join(', ')
     }
-    return options.find(item => item.id === value)?.name ?? defaultOption?.name;
+    return updated(options.find(item => item.id === value)?.name ?? defaultOption?.name);
   }
 
   const isChecked = (option) => {
@@ -55,7 +63,7 @@ const EASSelect = (
         <CheckableMenuItem
           key={option.id}
           value={option.id}
-          title={option.name}
+          title={updated(option.name)}
           checked={isChecked(option)}
         />
       )
@@ -68,7 +76,7 @@ const EASSelect = (
       >
         <ListItemText
           classes={{ primary: styles.analyticsMenuItemText }}
-          primary={option.name}
+          primary={updated(option.name)}
         />
       </MenuItem>
     )
@@ -109,6 +117,7 @@ EASSelect.propTypes = {
   rootClass: PropTypes.any,
   checkable: PropTypes.bool,
   multiple: PropTypes.bool,
+  updateText: PropTypes.bool,
   options: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.any,
     name: PropTypes.string,

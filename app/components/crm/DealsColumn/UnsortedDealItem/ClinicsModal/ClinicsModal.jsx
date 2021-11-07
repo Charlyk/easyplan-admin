@@ -8,6 +8,12 @@ import EASModal from "../../../../common/modals/EASModal";
 import styles from './ClinicsModal.module.scss';
 
 const ClinicsModal = ({ open, clinics, onClose, onSelect }) => {
+  const handleClinicSelected = (clinic, event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    onSelect?.(clinic);
+  }
+
   return (
     <EASModal
       open={open}
@@ -18,7 +24,7 @@ const ClinicsModal = ({ open, clinics, onClose, onSelect }) => {
     >
       <MenuList>
         {clinics.map(clinic => (
-          <MenuItem key={clinic.id} onClick={() => onSelect(clinic)}>
+          <MenuItem key={clinic.id} onClick={(event) => handleClinicSelected(clinic, event)}>
             <Typography className={styles.label}>{clinic.clinicName}</Typography>
           </MenuItem>
         ))}
@@ -37,6 +43,6 @@ ClinicsModal.propTypes = {
     id: PropTypes.number,
     clinicName: PropTypes.string,
     logoUrl: PropTypes.string,
-    timeZone: PropTypes.arrayOf(PropTypes.string),
+    timeZone: PropTypes.string,
   }))
 }

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import orderBy from 'lodash/orderBy';
 import { textForKey } from "../../../utils/localization";
+import moment from "moment-timezone";
 
 export const sheetActions = [
   {
@@ -110,12 +111,25 @@ const dealsColumnSlice = createSlice({
     addNewDeal(state, action) {
       const dealExists = state.items.some(item => item.id === action.payload.id);
       if (!dealExists) {
-        state.items = orderBy([...state.items, action.payload], ['created'], ['desc']);
+        const newDeal = {
+          ...action.payload,
+          lastUpdated: moment(new Date(action.payload.lastUpdated)).format('YYYY-MM-DD HH:mm:ss')
+        };
+        console.log(newDeal);
+        state.items = orderBy([...state.items, newDeal], ['lastUpdated'], ['desc']);
         state.totalElements = state.totalElements + 1;
       }
     },
+    removeDeal(state, action) {
+      const dealExists = state.items.some(item => item.id === action.payload.id);
+      state.items = state.items.filter(item => item.id !== action.payload.id);
+      state.totalElements = dealExists ? state.totalElements - 1 : state.totalElements;
+    },
     setUpdatedDeal(state, action) {
-      const newDeal = action.payload;
+      const newDeal = {
+        ...action.payload,
+        lastUpdated: moment(new Date(action.payload.lastUpdated)).format('YYYY-MM-DD HH:mm:ss')
+      };
       const { state: itemState } = newDeal;
       const { dealState: columnState } = state;
       const itemExists = state.items.some((item) => item.id === newDeal.id);
@@ -134,7 +148,7 @@ const dealsColumnSlice = createSlice({
             return newDeal;
           });
         } else {
-          state.items = orderBy([...state.items, newDeal], ['created'], ['desc']);
+          state.items = orderBy([...state.items, newDeal], ['lastUpdated'], ['desc']);
           state.totalElements = state.totalElements + 1;
         }
       }
@@ -176,6 +190,7 @@ export const {
   setIsFetching,
   setUpdatedDeal,
   addNewDeal,
+  removeDeal,
   setPage,
   setIsRowLoading,
   setRowsLoading,

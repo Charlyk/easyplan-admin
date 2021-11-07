@@ -333,6 +333,7 @@ const CrmFilters = (
 
                 <EASSelect
                   multiple
+                  updateText
                   rootClass={styles.simpleField}
                   label={textForKey('States')}
                   labelId="doctors-select-label"
@@ -386,7 +387,7 @@ const CrmFilters = (
                 <EASSelect
                   rootClass={styles.simpleField}
                   label={textForKey('crm_reminders')}
-                  labelId="doctors-select-label"
+                  labelId="reminder-select-label"
                   options={reminderOptions}
                   value={selectedReminder?.id ?? 0}
                   onChange={handleRemindersChange}

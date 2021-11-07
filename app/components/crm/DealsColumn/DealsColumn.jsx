@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useDrop } from 'react-dnd';
 import {
+  deletedDealSelector,
   newDealSelector,
   updatedDealSelector
 } from "../../../../redux/selectors/crmSelector";
@@ -44,6 +45,7 @@ import reducer, {
   setIsFetching,
   setUpdatedDeal,
   addNewDeal,
+  removeDeal,
   setPage,
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
@@ -73,6 +75,7 @@ const DealsColumn = (
   const colorPickerRef = useRef(null);
   const createdDeal = useSelector(newDealSelector);
   const updatedDealData = useSelector(updatedDealSelector);
+  const deletedDeal = useSelector(deletedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
   const [{
     showActions,
@@ -117,6 +120,13 @@ const DealsColumn = (
     }
     localDispatch(addNewDeal(createdDeal));
   }, [createdDeal]);
+
+  useEffect(() => {
+    if (deletedDeal == null || deletedDeal.state.id !== dealState.id) {
+      return;
+    }
+    localDispatch(removeDeal(deletedDeal));
+  }, [deletedDeal]);
 
   useEffect(() => {
     localDispatch(setPage(0));
