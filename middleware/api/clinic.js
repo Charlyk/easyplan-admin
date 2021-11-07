@@ -126,3 +126,12 @@ export async function fetchClinicExchangeRates(headers = null) {
 export async function saveClinicFacebookPage(pageData, headers = null) {
   return put('/api/clinic/integrations/facebook', headers, { pages: pageData });
 }
+
+/**
+ * Fetch all clinics for owner of current clinic
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchAllOwnerClinics(headers = null) {
+  return get('/api/clinic/owner', headers);
+}

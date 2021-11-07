@@ -6,6 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import styles from './ActionsSheet.module.scss';
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import Typography from "@material-ui/core/Typography";
 
 const ActionsSheet = props => {
   const { actions, onSelect, onClose, placement } = props;
@@ -16,25 +19,30 @@ const ActionsSheet = props => {
   }
 
   return (
-    <Popper {...props} placement={placement} style={{ zIndex: 999 }} transition>
+    <Popper
+      {...props}
+      transition
+      placement={placement}
+      style={{ zIndex: 999 }}
+    >
       {({ TransitionProps }) => (
         <Fade {...TransitionProps} timeout={350}>
-          <Paper className={styles['actions-sheet__paper']}>
+          <Paper className={styles.actionsSheet}>
             <ClickAwayListener onClickAway={onClose}>
-              <div>
+              <MenuList>
                 {actions.map(action => (
-                  <div
-                    role='button'
-                    tabIndex={0}
-                    onPointerUp={(event) => handleActionClick(action, event)}
-                    className={clsx(styles['actions-sheet__item'], styles[action.type])}
+                  <MenuItem
                     key={action.key}
+                    className={styles.item}
+                    onClick={(event) => handleActionClick(action, event)}
                   >
                     {action.icon}
-                    {action.name}
-                  </div>
+                    <Typography className={clsx(styles.label, styles[action.type])}>
+                      {action.name}
+                    </Typography>
+                  </MenuItem>
                 ))}
-              </div>
+              </MenuList>
             </ClickAwayListener>
           </Paper>
         </Fade>

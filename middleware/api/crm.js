@@ -217,3 +217,14 @@ export async function requestFetchAllDealStates(headers = null) {
 export async function requestUpdateDealStateVisibility(body, headers = null) {
   return put('/api/crm/states', headers, body);
 }
+
+/**
+ * Move deal to another clinic
+ * @param {number} dealId
+ * @param {number} branchId
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestChangeDealClinic(dealId, branchId, headers = null) {
+  return put(`/api/crm/${dealId}/change-branch?branchId=${branchId}`, headers, { branchId });
+}

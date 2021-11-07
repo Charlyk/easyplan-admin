@@ -10,6 +10,7 @@ const DealItem = (
   {
     dealItem,
     color,
+    currentClinic,
     onLinkPatient,
     onDeleteDeal,
     onConfirmFirstContact,
@@ -41,6 +42,7 @@ const DealItem = (
       {dealItem.state.type === 'Unsorted' ? (
         <UnsortedDealItem
           deal={dealItem}
+          currentClinic={currentClinic}
           onDealClick={onDealClick}
           onLinkPatient={onLinkPatient}
           onDeleteDeal={onDeleteDeal}
@@ -63,6 +65,7 @@ DealItem.propTypes = {
   onLinkPatient: PropTypes.func,
   onDeleteDeal: PropTypes.func,
   onConfirmFirstContact: PropTypes.func,
+  currentClinic: PropTypes.any,
   dealItem: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
@@ -70,6 +73,10 @@ DealItem.propTypes = {
     messageSnippet: PropTypes.string,
     source: PropTypes.string,
     sourceDescription: PropTypes.string,
+    movedToClinic: PropTypes.shape({
+      id: PropTypes.number,
+      clinicName: PropTypes.string,
+    }),
     contact: PropTypes.shape({
       id: PropTypes.number,
       email: PropTypes.string,

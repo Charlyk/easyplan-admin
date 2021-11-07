@@ -609,6 +609,7 @@ export default {
     crm_log_action_createschedule: 'Created schedule at',
     crm_log_action_linkpatient: 'Linked to patient',
     crm_log_action_removed: 'Removed',
+    crm_log_action_changeclinic: 'Changed clinic',
     'add a comment': 'Add a comment',
     help_crm_add_reminder_message: 'Click here to add a reminder for this deal.',
     menu_crm_help_message: 'Now you can manage relations with your clients inside our application. Click here to open CRM dashboard and manage clients flow.',
@@ -662,6 +663,7 @@ export default {
     connect_social_networks: 'Connect social networks',
     connect_social_message: 'Connect your company social networks pages to receive more leads and increase the number of clients.',
     connect: 'Connect',
+    crm_move_to_clinic: 'Move to another branch',
   },
   ro: {
     analytics: 'Analitică',
@@ -1279,6 +1281,7 @@ export default {
     crm_log_action_createschedule: 'A creat o programare pentru data',
     crm_log_action_linkpatient: 'A atribuit pacientul',
     crm_log_action_removed: 'A șters acest deal',
+    crm_log_action_changeclinic: 'A modificat clinica',
     'add a comment': 'Adaugă un comentariu...',
     help_crm_add_reminder_message: 'Apăsați aici pentru a adăuga o sarcina nouă pentru acest deal.',
     menu_crm_help_message: 'Acum puteți ridica relațiile cu clienții Dvs la un alt nivel. Dați click aici pentru a deschide dashboard-ul CRM unde puteți controla tot flow-ul clienților.',
@@ -1332,6 +1335,7 @@ export default {
     connect_social_networks: 'Conectați rețelele sociale',
     connect_social_message: 'Conectați rețelele sociale pentru a genera mai multe leaduri și a crește numarul de clienți.',
     connect: 'Conectează',
+    crm_move_to_clinic: 'Mută în altă filială',
   },
   ru: {
     analytics: 'Analytics',
@@ -1940,6 +1944,7 @@ export default {
     crm_log_action_createschedule: 'Created schedule at',
     crm_log_action_linkpatient: 'Linked to patient',
     crm_log_action_removed: 'Removed',
+    crm_log_action_changeclinic: 'Changed clinic',
     'add a comment': 'Add a comment',
     help_crm_add_reminder_message: 'Click here to add a reminder for this deal.',
     menu_crm_help_message: 'Now you can manage relations with your clients inside our application. Click here to open CRM dashboard and manage clients flow.',
@@ -1993,5 +1998,6 @@ export default {
     connect_social_networks: 'Connect social networks',
     connect_social_message: 'Connect your company social networks pages to receive more leads and increase the number of clients.',
     connect: 'Connect',
+    crm_move_to_clinic: 'Move to another branch',
   },
 };

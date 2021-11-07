@@ -1,37 +1,34 @@
-.actions-sheet {
+.actionsSheet {
+  z-index: 9999;
+  background-color: #FFFFFF;
+  border-radius: 4px;
+  box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
 
-  &__paper {
-    z-index: 9999;
-    background-color: #FFFFFF;
-    border-radius: 4px;
-    box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
-  }
-
-  &__item {
+  .item {
     outline: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    font-size: .8rem;
     padding: .5rem;
-    font-family: Inter, sans-serif;
-    font-style: normal;
+
+    .label {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-size: .8rem !important;
+      color: #34354C !important;
+
+      &.destructive {
+        color: #F44081 !important;
+
+        svg {
+          fill: #F44081;
+        }
+      }
+    }
 
     svg {
       margin-right: .3rem;
-    }
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    &.destructive {
-      color: #F44081;
-
-      svg {
-        fill: #F44081;
-      }
     }
   }
 }

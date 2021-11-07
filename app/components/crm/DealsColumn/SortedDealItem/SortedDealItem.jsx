@@ -122,6 +122,10 @@ SortedDealItem.propTypes = {
     messageSnippet: PropTypes.string,
     source: PropTypes.string,
     sourceDescription: PropTypes.string,
+    movedToClinic: PropTypes.shape({
+      id: PropTypes.number,
+      clinicName: PropTypes.string,
+    }),
     contact: PropTypes.shape({
       id: PropTypes.number,
       email: PropTypes.string,

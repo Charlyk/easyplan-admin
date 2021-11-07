@@ -44,7 +44,8 @@ const EASModal = (
     }
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (event) => {
+    event?.stopPropagation();
     if (isPositiveLoading) {
       return;
     }
@@ -52,7 +53,8 @@ const EASModal = (
     onClose?.();
   };
 
-  const handlePrimaryClick = () => {
+  const handlePrimaryClick = (event) => {
+    event?.stopPropagation();
     if (isPositiveDisabled) {
       return;
     }
@@ -64,7 +66,8 @@ const EASModal = (
     }
   };
 
-  const handleDestroyClick = () => {
+  const handleDestroyClick = (event) => {
+    event?.stopPropagation();
     if (typeof onDestroyClick === 'function') {
       onDestroyClick();
     } else {
@@ -72,7 +75,8 @@ const EASModal = (
     }
   };
 
-  const handleSecondaryClick = () => {
+  const handleSecondaryClick = (event) => {
+    event?.stopPropagation();
     if (typeof onSecondaryClick === 'function') {
       onSecondaryClick();
     } else {
@@ -86,11 +90,6 @@ const EASModal = (
     } else {
       onBackdropClick?.();
     }
-  };
-
-  const stopPropagation = (event) => {
-    event?.stopPropagation();
-    event?.stopImmediatePropagation();
   };
 
   return (
@@ -121,7 +120,7 @@ const EASModal = (
           {!isPositiveLoading && (
             <Button
               className={styles.secondaryButton}
-              onPointerUp={handleSecondaryClick}
+              onClick={handleSecondaryClick}
               variant='text'
             >
               {secondaryBtnText}

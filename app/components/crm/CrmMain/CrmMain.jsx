@@ -437,6 +437,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
               isFirst={index === 0}
               isLast={index === (states.length - 1)}
               updatedDeal={updatedDeal}
+              currentClinic={currentClinic}
               dealState={dealState}
               onAddSchedule={handleAddSchedule}
               onUpdate={updateColumns}

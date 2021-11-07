@@ -59,6 +59,7 @@ const DealsColumn = (
     isLast,
     updatedDeal,
     filterData,
+    currentClinic,
     onMove,
     onUpdate,
     onLinkPatient,
@@ -119,7 +120,7 @@ const DealsColumn = (
 
   useEffect(() => {
     localDispatch(setPage(0));
-    setTimeout(fetchDealsForState, 100);
+    setTimeout(fetchDealsForState, 200);
   }, [filterData]);
 
   useEffect(() => {
@@ -350,6 +351,7 @@ const DealsColumn = (
             {items.map((item) => (
               <DealItem
                 key={item.id}
+                currentClinic={currentClinic}
                 onDealClick={onDealClick}
                 color={dealState.color}
                 dealItem={item}
@@ -371,6 +373,7 @@ DealsColumn.propTypes = {
   isFirst: PropTypes.bool,
   isLast: PropTypes.bool,
   width: PropTypes.number,
+  currentClinic: PropTypes.any,
   dealState: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,

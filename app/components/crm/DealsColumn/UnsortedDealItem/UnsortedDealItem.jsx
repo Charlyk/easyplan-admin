@@ -2,23 +2,34 @@ import React, { useMemo, useRef, useState } from "react";
 import PropTypes from 'prop-types';
 import moment from "moment-timezone";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 import IconPhone from '@material-ui/icons/PhoneCallback';
-
+import { requestChangeDealClinic } from "../../../../../middleware/api/crm";
+import { requestFetchAllOwnerClinics } from "../../../../../middleware/api/clinic";
 import ActionsSheet from "../../../common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import onRequestError from "../../../../utils/onRequestError";
 import { textForKey } from "../../../../utils/localization";
 import getPatientName from "../../../../utils/getPatientName";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
 import IconAvatar from "../../../icons/iconAvatar";
 import IconLink from "../../../icons/iconLink";
+import ClinicsModal from "./ClinicsModal";
 import styles from './UnsortedDealItem.module.scss';
+
 
 const actions = [
   {
     name: textForKey('link_patient'),
     key: 'linkPatient',
+    icon: null,
+    type: 'default'
+  },
+  {
+    name: textForKey('crm_move_to_clinic'),
+    key: 'changeClinic',
     icon: null,
     type: 'default'
   },
@@ -39,6 +50,7 @@ const actions = [
 const UnsortedDealItem = (
   {
     deal,
+    currentClinic,
     onLinkPatient,
     onDeleteDeal,
     onConfirmFirstContact,
@@ -47,6 +59,7 @@ const UnsortedDealItem = (
 ) => {
   const moreBtnRef = useRef(null);
   const [showActions, setShowActions] = useState(false);
+  const [clinicsModal, setClinicsModal] = useState({ open: false, clinics: [] });
 
   const sourceIcon = useMemo(() => {
     switch (deal.source) {
@@ -97,10 +110,36 @@ const UnsortedDealItem = (
         handleConfirmFirstContact();
         break;
       case 'deleteDeal':
-        handleDeleteDeal()
+        handleDeleteDeal();
+        break;
+      case 'changeClinic':
+        handleChangeDealClinic();
         break;
     }
     handleCloseActions();
+  };
+
+  const handleChangeDealClinic = async () => {
+    try {
+      const response = await requestFetchAllOwnerClinics();
+      const clinics = response.data.filter(item => item.id !== currentClinic.id)
+      setClinicsModal({ open: true, clinics });
+    } catch (error) {
+      onRequestError(error);
+    }
+  };
+
+  const handleCloseClinics = () => {
+    setClinicsModal({ ...clinicsModal, open: false });
+  };
+
+  const handleSelectClinic = async (clinic) => {
+    try {
+      handleCloseClinics();
+      await requestChangeDealClinic(deal.id, clinic.id);
+    } catch (error) {
+      onRequestError(error);
+    }
   };
 
   const handleMoreClick = (event) => {
@@ -129,7 +168,12 @@ const UnsortedDealItem = (
   };
 
   return (
-    <div className={styles.unsortedDealItem} onPointerUp={handleDealClick}>
+    <Box className={styles.unsortedDealItem} onClick={handleDealClick}>
+      <ClinicsModal
+        {...clinicsModal}
+        onClose={handleCloseClinics}
+        onSelect={handleSelectClinic}
+      />
       <ActionsSheet
         open={showActions}
         anchorEl={moreBtnRef.current}
@@ -165,18 +209,19 @@ const UnsortedDealItem = (
         <IconButton
           ref={moreBtnRef}
           className={styles.moreBtn}
-          onPointerUp={handleMoreClick}
+          onClick={handleMoreClick}
         >
           <MoreHorizIcon/>
         </IconButton>
       </div>
-    </div>
+    </Box>
   )
 };
 
 export default React.memo(UnsortedDealItem, areComponentPropsEqual);
 
 UnsortedDealItem.propTypes = {
+  currentClinic: PropTypes.any,
   deal: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -227,6 +272,10 @@ UnsortedDealItem.propTypes = {
         firstName: PropTypes.string,
         lastName: PropTypes.string,
       }),
+    }),
+    movedToClinic: PropTypes.shape({
+      id: PropTypes.number,
+      clinicName: PropTypes.string,
     }),
   }),
   onLinkPatient: PropTypes.func,
