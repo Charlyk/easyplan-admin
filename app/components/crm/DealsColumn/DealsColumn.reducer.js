@@ -104,6 +104,9 @@ const dealsColumnSlice = createSlice({
       }
       state.items = currentItems;
       state.isFetching = false;
+      if (state.totalElements > currentItems.length) {
+        state.page = state.page + 1;
+      }
     },
     setIsFetching(state, action) {
       state.isFetching = action.payload;

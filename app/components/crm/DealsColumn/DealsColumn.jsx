@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useReducer, useRef } from "react";
 import clsx from "clsx";
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import { useColor } from "react-color-palette";
 import InfiniteScroll from 'react-infinite-scroller';
 import Typography from "@material-ui/core/Typography";
@@ -50,6 +51,7 @@ import reducer, {
 } from './DealsColumn.reducer';
 import styles from './DealsColumn.module.scss';
 import { CircularProgress } from "@material-ui/core";
+import usePrevious from "../../../utils/hooks/usePrevious";
 
 const COOKIES_KEY = 'crm_filter';
 
@@ -77,7 +79,9 @@ const DealsColumn = (
   const updatedDealData = useSelector(updatedDealSelector);
   const deletedDeal = useSelector(deletedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
+  const previousFilter = usePrevious(filterData);
   const [{
+    isFetching,
     showActions,
     isEditingName,
     columnName,
@@ -112,7 +116,14 @@ const DealsColumn = (
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
-  }), [dealState])
+  }), [dealState]);
+
+  useEffect(() => {
+    if (isEqual(filterData, previousFilter)) {
+      return;
+    }
+    fetchDealsForState();
+  }, [filterData, previousFilter]);
 
   useEffect(() => {
     if (createdDeal == null || createdDeal.state.id !== dealState.id) {
@@ -127,11 +138,6 @@ const DealsColumn = (
     }
     localDispatch(removeDeal(deletedDeal));
   }, [deletedDeal]);
-
-  useEffect(() => {
-    localDispatch(setPage(0));
-    setTimeout(fetchDealsForState, 200);
-  }, [filterData]);
 
   useEffect(() => {
     if (dealState == null) {
@@ -153,14 +159,15 @@ const DealsColumn = (
 
   const fetchDealsForState = async () => {
     try {
+      if (isFetching) {
+        return;
+      }
       localDispatch(setIsFetching(true));
       const filterParams = extractCookieByName(COOKIES_KEY);
       const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
       localDispatch(setData(response.data));
-      localDispatch(setPage(page + 1));
     } catch (error) {
       onRequestError(error);
-    } finally {
       localDispatch(setIsFetching(false));
     }
   };
