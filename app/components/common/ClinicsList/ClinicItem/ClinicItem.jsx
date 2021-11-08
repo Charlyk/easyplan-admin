@@ -51,7 +51,8 @@ ClinicItem.propTypes = {
     ),
     clinicLogo: PropTypes.string,
     canRegisterPayments: PropTypes.bool,
-    clinicDomain: PropTypes.string
+    clinicDomain: PropTypes.string,
+    accessBlocked: PropTypes.bool,
   }),
   onSelected: PropTypes.func,
 }

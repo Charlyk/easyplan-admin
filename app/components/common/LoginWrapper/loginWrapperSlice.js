@@ -9,6 +9,7 @@ export const initialState = {
   currentForm: FormType.login,
   isLoading: false,
   errorMessage: null,
+  showBlockedAccess: false,
 };
 
 const loginWrapperSlice = createSlice({
@@ -25,9 +26,18 @@ const loginWrapperSlice = createSlice({
     setErrorMessage(state, action) {
       state.errorMessage = action.payload;
     },
+    setShowBlockedAccess(state, action) {
+      state.isLoading = false;
+      state.showBlockedAccess = action.payload;
+    }
   },
 });
 
-export const { setCurrentForm, setIsLoading, setErrorMessage } = loginWrapperSlice.actions;
+export const {
+  setCurrentForm,
+  setIsLoading,
+  setErrorMessage,
+  setShowBlockedAccess
+} = loginWrapperSlice.actions;
 
 export default loginWrapperSlice.reducer;

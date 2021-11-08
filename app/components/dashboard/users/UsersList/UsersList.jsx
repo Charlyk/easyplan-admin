@@ -14,7 +14,7 @@ import { textForKey } from '../../../../utils/localization';
 import {
   deleteUser,
   getUsers,
-  inviteUser, requestToggleUserCalendarVisibility,
+  inviteUser, requestToggleUserAccessToClinic, requestToggleUserCalendarVisibility,
   restoreUser,
   updateUserCashierStatus
 } from "../../../../../middleware/api/users";
@@ -289,6 +289,15 @@ const UsersList = (
     }
   };
 
+  const handleUserAccessChange = async (user, accessBlocked) => {
+    try {
+      await requestToggleUserAccessToClinic(user.id, accessBlocked);
+      await fetchUsers();
+    } catch (error) {
+      onRequestError(error);
+    }
+  }
+
   return (
     <div className={styles.usersRoot}>
       <InviteUserModal
@@ -371,6 +380,7 @@ const UsersList = (
                     key={`invitation-${item.id}`}
                     onDelete={startUserDelete}
                     onEdit={handleUserModalOpen}
+                    onAccessToggle={handleUserAccessChange}
                   />
                 ))}
                 {canShowType(Role.invitations) && renderNoData(Role.invitations)}
@@ -396,6 +406,7 @@ const UsersList = (
                     onEdit={handleUserModalOpen}
                     onRestore={handleRestoreUser}
                     onCalendarChange={handleUserCalendarChange}
+                    onAccessToggle={handleUserAccessChange}
                   />
                 ))}
                 {canShowType(Role.doctor) && renderNoData(Role.doctor)}
@@ -421,6 +432,7 @@ const UsersList = (
                     onEdit={handleUserModalOpen}
                     onRestore={handleRestoreUser}
                     onCashierChange={handleUserCashierStatusChange}
+                    onAccessToggle={handleUserAccessChange}
                   />
                 ))}
                 {canShowType(Role.reception) && renderNoData(Role.reception)}
@@ -445,6 +457,7 @@ const UsersList = (
                     onDelete={startUserDelete}
                     onEdit={handleUserModalOpen}
                     onRestore={handleRestoreUser}
+                    onAccessToggle={handleUserAccessChange}
                   />
                 ))}
                 {canShowType(Role.admin) && renderNoData(Role.admin)}

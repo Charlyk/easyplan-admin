@@ -4,6 +4,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import IconButton from "@material-ui/core/IconButton";
+import IconLockOpen from '@material-ui/icons/LockOpen';
+import IconLockClosed from '@material-ui/icons/Lock';
 import Tooltip from "@material-ui/core/Tooltip";
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
@@ -33,6 +35,7 @@ const UserItem = (
     onRestore,
     onCashierChange,
     onCalendarChange,
+    onAccessToggle,
   }
 ) => {
   const handleDeleteUser = event => {
@@ -57,6 +60,10 @@ const UserItem = (
 
   const handleCalendarChange = () => {
     onCalendarChange?.(user);
+  }
+
+  const handleAccessToggle = () => {
+    onAccessToggle?.(user, !user.accessBlocked);
   }
 
   const rootClasses = clsx(styles.userItem, user.isHidden ? styles.fired : styles.active);
@@ -138,7 +145,7 @@ const UserItem = (
             >
               <IconButton
                 className={clsx(styles.iconButton, !user.showInCalendar && styles.hidden)}
-                onPointerUp={handleCalendarChange}
+                onClick={handleCalendarChange}
               >
                 <IconAppointmentCalendar fill="#3A83DC"/>
               </IconButton>
@@ -146,7 +153,7 @@ const UserItem = (
           )}
           {user.roleInClinic === Role.doctor && !isInvitation && (
             <Tooltip title={textForKey('Edit')}>
-              <IconButton className={styles.iconButton} onPointerUp={handleEditUser}>
+              <IconButton className={styles.iconButton} onClick={handleEditUser}>
                 <IconEdit fill="#3A83DC"/>
               </IconButton>
             </Tooltip>
@@ -162,15 +169,26 @@ const UserItem = (
               />
             </div>
           )}
+          {user.roleInClinic !== Role.admin && (
+            <Tooltip title={user.accessBlocked ? textForKey('allow_access') : textForKey('block_access')}>
+              <IconButton className={styles.iconButton} onClick={handleAccessToggle}>
+                {user.accessBlocked ? (
+                  <IconLockClosed className={styles.blueIcon}/>
+                ) : (
+                  <IconLockOpen className={styles.blueIcon}/>
+                )}
+              </IconButton>
+            </Tooltip>
+          )}
           {user.isHidden ? (
             <Tooltip title={textForKey('Restore')}>
-              <IconButton className={styles.iconButton} onPointerUp={handleRestoreUser}>
+              <IconButton className={styles.iconButton} onClick={handleRestoreUser}>
                 <IconRefresh fill='#00E987'/>
               </IconButton>
             </Tooltip>
           ) : (
             <Tooltip title={textForKey('Delete')}>
-              <IconButton className={styles.iconButton} onPointerUp={handleDeleteUser}>
+              <IconButton className={styles.iconButton} onClick={handleDeleteUser}>
                 <IconDelete fill="#ec3276"/>
               </IconButton>
             </Tooltip>
@@ -198,6 +216,7 @@ UserItem.propTypes = {
     isHidden: PropTypes.bool,
     canRegisterPayments: PropTypes.bool,
     showInCalendar: PropTypes.bool,
+    accessBlocked: PropTypes.bool,
   }).isRequired,
   onResend: PropTypes.func,
   onDelete: PropTypes.func,
@@ -205,6 +224,7 @@ UserItem.propTypes = {
   onEdit: PropTypes.func,
   onCashierChange: PropTypes.func,
   onCalendarChange: PropTypes.func,
+  onAccessToggle: PropTypes.func,
 };
 
 UserItem.defaultProps = {

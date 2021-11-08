@@ -11,12 +11,14 @@ import { loginUser, resetUserPassword, signOut } from "../../../../middleware/ap
 import { appBaseUrl, isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
+import ConfirmationModal from "../modals/ConfirmationModal";
 import reducer, {
   initialState,
   setCurrentForm,
   setErrorMessage,
   setIsLoading,
-  FormType
+  setShowBlockedAccess,
+  FormType,
 } from './loginWrapperSlice'
 import styles from './LoginWrapper.module.scss';
 
@@ -29,7 +31,8 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
   const [{
     currentForm,
     isLoading,
-    errorMessage
+    errorMessage,
+    showBlockedAccess,
   }, localDispatch] = useReducer(reducer, initialState);
   const isMobileDevice = isMobile || isOnPhone;
 
@@ -132,7 +135,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
 
   /**
    * Called when an action is received from server. Used to redirect user to create a clinic or to select one
-   * @param {'CreateClinic'|'SelectClinic'} action
+   * @param {'CreateClinic'|'SelectClinic'|'AccessBlocked'} action
    * @return {Promise<void>}
    */
   const handleLoginActionReceived = async (action) => {
@@ -143,10 +146,17 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       case 'SelectClinic':
         await router.replace('/clinics');
         break;
+      case 'AccessBlocked':
+        localDispatch(setShowBlockedAccess(true))
+        break
       default:
         localDispatch(setIsLoading(false));
         break;
     }
+  }
+
+  const handleCloseAccessBlocked = () => {
+    localDispatch(setShowBlockedAccess(false));
   }
 
   /**
@@ -194,6 +204,12 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
 
   return (
     <div className={styles.loginFormRoot}>
+      <ConfirmationModal
+        show={showBlockedAccess}
+        title={textForKey('access_blocked')}
+        message={textForKey('access_blocked_message')}
+        onClose={handleCloseAccessBlocked}
+      />
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <div className={styles.logoContainer}>

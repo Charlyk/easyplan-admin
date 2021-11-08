@@ -98,6 +98,7 @@ const App = ({ Component, pageProps }) => {
           if (UnauthorizedPaths.includes(router.asPath)) {
             return;
           }
+          await signOut();
           await router.reload();
         }
       }

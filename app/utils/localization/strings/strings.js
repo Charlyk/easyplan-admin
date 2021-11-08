@@ -664,6 +664,10 @@ export default {
     connect_social_message: 'Connect your company social networks pages to receive more leads and increase the number of clients.',
     connect: 'Connect',
     crm_move_to_clinic: 'Move to another branch',
+    allow_access: 'Allow access',
+    block_access: 'Block access',
+    access_blocked: 'Access blocked',
+    access_blocked_message: 'Your access to this clinic was blocked, please contact clinic manager for more information.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1336,6 +1340,10 @@ export default {
     connect_social_message: 'Conectați rețelele sociale pentru a genera mai multe leaduri și a crește numarul de clienți.',
     connect: 'Conectează',
     crm_move_to_clinic: 'Mută în altă filială',
+    allow_access: 'Deschide accesul',
+    block_access: 'Blochează accesul',
+    access_blocked: 'Acces blocat',
+    access_blocked_message: 'Accesul Dvs. la aceasta clinica a fost blocat, vă rugăm să contactați managerul clinicii pentru mai multe informații.',
   },
   ru: {
     analytics: 'Analytics',
@@ -1999,5 +2007,9 @@ export default {
     connect_social_message: 'Connect your company social networks pages to receive more leads and increase the number of clients.',
     connect: 'Connect',
     crm_move_to_clinic: 'Move to another branch',
+    allow_access: 'Allow access',
+    block_access: 'Block access',
+    access_blocked: 'Access blocked',
+    access_blocked_message: 'Your access to this clinic was blocked, please contact clinic manager for more information.',
   },
 };

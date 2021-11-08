@@ -119,3 +119,14 @@ export async function saveFacebookToken(token, headers = null) {
 export async function requestToggleUserCalendarVisibility(userId, visible, headers = null) {
   return put(`/api/users/${userId}/calendar`, headers, { showInCalendar: visible });
 }
+
+/**
+ * Toggle user access to clinic
+ * @param {number} userId
+ * @param {boolean} accessBlocked
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestToggleUserAccessToClinic(userId, accessBlocked, headers = null) {
+  return put('/api/users/toggle-access', headers, { userId, accessBlocked });
+}
