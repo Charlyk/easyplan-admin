@@ -26,7 +26,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
     if (user?.clinics.length === 1) {
       const userClinic = user.clinics[0];
       if (userClinic.accessBlocked) {
-        setShowBlockedAccess(true);
+        handleAccessBlocked();
         return;
       }
       handleClinicSelected(user.clinics[0]);
@@ -34,6 +34,12 @@ export default function ClinicsList({ user, authToken, isMobile }) {
       router.replace('/create-clinic');
     }
   }, [user]);
+
+  const handleAccessBlocked = async () => {
+    setShowBlockedAccess(true);
+    await signOut();
+    await router.reload();
+  }
 
   const handleClinicSelected = async (clinic) => {
     if (clinic.accessBlocked) {

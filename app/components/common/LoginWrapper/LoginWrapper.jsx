@@ -148,6 +148,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
         break;
       case 'AccessBlocked':
         localDispatch(setShowBlockedAccess(true))
+        await signOut();
         break
       default:
         localDispatch(setIsLoading(false));
