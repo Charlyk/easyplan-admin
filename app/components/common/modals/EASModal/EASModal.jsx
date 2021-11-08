@@ -128,20 +128,26 @@ const EASModal = (
           )}
           {!isPositiveLoading && showDestroyBtn && (
             <Button
-              className={styles.destroyButton}
               onClick={handleDestroyClick}
               disabled={isPositiveDisabled}
               variant='text'
+              classes={{
+                root: styles.destroyButton,
+                disabled: styles.buttonDisabled,
+              }}
             >
               {destroyBtnText}
             </Button>
           )}
           {!hidePositiveBtn && (
             <Button
-              className={styles.primaryButton}
               onClick={handlePrimaryClick}
               disabled={isPositiveDisabled}
               variant='text'
+              classes={{
+                root: styles.primaryButton,
+                disabled: styles.buttonDisabled,
+              }}
             >
               {isPositiveLoading ? (
                 <CircularProgress className={clsx('circular-progress-bar', styles.progressBar)}/>
