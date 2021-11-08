@@ -37,7 +37,7 @@ export const getServerSideProps = async ({ req }) => {
     }
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData.data;
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
+    const redirectTo = redirectToUrl(currentUser, currentClinic, '/crm');
     if (redirectTo != null) {
       return {
         redirect: {

@@ -3,7 +3,7 @@ import { Role } from "./constants";
 export default function redirectToUrl(user, clinic, path) {
   const selectedClinic = user?.clinics.find((item) => item.clinicId === clinic?.id);
 
-  if (selectedClinic == null) {
+  if (selectedClinic == null || selectedClinic.accessBlocked) {
     return '/login';
   }
 
