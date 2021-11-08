@@ -19,7 +19,7 @@ import {
   toggleDeleteSchedule,
   toggleUpdateSchedule,
 } from '../../redux/actions/scheduleActions';
-import { setShouldUpdateClinicData } from "../../redux/slices/clinicDataSlice";
+import { setShouldUpdateClinicData, setUserClinicAccessChange } from "../../redux/slices/clinicDataSlice";
 
 export const handleRemoteMessage = (message) => (dispatch) => {
   const { action, payload: messagePayload } = message;
@@ -113,6 +113,15 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       setTimeout(() => dispatch(setUpdatedReminder(null)), 1000);
       break;
     }
+    case MessageAction.UserAccessRestored:
+    case MessageAction.UserAccessBlocked: {
+      if (payload == null) {
+        break;
+      }
+      dispatch(setUserClinicAccessChange(payload))
+      setTimeout(() => dispatch(setUserClinicAccessChange(null)), 600);
+      break;
+    }
   }
 };
 
@@ -143,5 +152,7 @@ const MessageAction = {
   DealReminderUpdated: 'DealReminderUpdated',
   DealReminderCreated: 'DealReminderCreated',
   ReminderIsDueDate: 'ReminderIsDueDate',
-  UserCalendarVisibilityChanged: 'UserCalendarVisibilityChanged'
+  UserCalendarVisibilityChanged: 'UserCalendarVisibilityChanged',
+  UserAccessBlocked: 'UserAccessBlocked',
+  UserAccessRestored: 'UserAccessRestored',
 };

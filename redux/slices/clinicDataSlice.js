@@ -8,11 +8,15 @@ const clinicDataSlice = createSlice({
     setShouldUpdateClinicData(state, action) {
       state.updateClinicData = action.payload;
     },
+    setUserClinicAccessChange(state, action) {
+      state.userClinicAccessChange = action.payload;
+    }
   },
 });
 
 export const {
   setShouldUpdateClinicData,
+  setUserClinicAccessChange,
 } = clinicDataSlice.actions;
 
 export default clinicDataSlice.reducer;

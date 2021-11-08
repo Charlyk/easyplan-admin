@@ -6,7 +6,7 @@ import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/router";
 import useSWR from "swr";
-
+import { toast } from "react-toastify";
 import {
   setAppointmentModal,
   setPatientDetails,
@@ -20,18 +20,19 @@ import {
   patientDetailsSelector,
 } from '../../../../redux/selectors/rootSelector';
 import paths from '../../../utils/paths';
+import { signOut } from "../../../../middleware/api/auth";
 import { isExchangeRateModalOpenSelector } from "../../../../redux/selectors/exchangeRatesModalSelector";
 import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";
+import { newReminderSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
+import { userClinicAccessChangeSelector } from "../../../../redux/selectors/clinicDataSelector";
 import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 import { setClinic } from "../../../../redux/actions/clinicActions";
 import { environment, isDev } from "../../../../eas.config";
 import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
 import { APP_DATA_API } from "../../../utils/constants";
-import styles from './MainComponent.module.scss';
-import { newReminderSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
-import { toast } from "react-toastify";
 import ReminderNotification from "../ReminderNotification";
+import styles from './MainComponent.module.scss';
 
 const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
 const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
@@ -65,6 +66,7 @@ const MainComponent = (
   const newReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
+  const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
   let childrenProps = children.props;
   if (provideAppData) {
     childrenProps = { ...childrenProps, currentUser, currentClinic, authToken };
@@ -113,6 +115,29 @@ const MainComponent = (
     }
     toast(<ReminderNotification isUpdate reminder={updatedReminder}/>, { toastId: updatedReminder.id });
   }, [updatedReminder, currentUser]);
+
+  useEffect(() => {
+    handleUserAccessChange();
+  }, [clinicAccessChange, currentUser, currentClinic]);
+
+  const handleUserAccessChange = async () => {
+    if (
+      clinicAccessChange == null ||
+      currentUser == null ||
+      currentClinic == null ||
+      clinicAccessChange.clinicId !== currentClinic.id ||
+      clinicAccessChange.userId !== currentUser.id ||
+      !clinicAccessChange.accessBlocked
+    ) {
+      return;
+    }
+    try {
+      await signOut();
+      await router.replace(router.asPath)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));

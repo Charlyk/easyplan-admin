@@ -40,5 +40,6 @@ export default Object.freeze({
   },
   clinicData: {
     updateClinicData: false,
+    userClinicAccessChange: null,
   },
 });

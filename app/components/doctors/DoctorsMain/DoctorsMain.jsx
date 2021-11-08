@@ -2,20 +2,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/router";
 import { usePubNub } from "pubnub-react";
 import useSWR from "swr";
 import Head from "next/head";
-
-import IconArrowDown from '../../icons/iconArrowDown';
+import { signOut } from "../../../../middleware/api/auth";
+import { environment, isDev } from "../../../../eas.config";
 import { triggerUserLogout } from '../../../../redux/actions/actions';
+import { userClinicAccessChangeSelector } from "../../../../redux/selectors/clinicDataSelector";
 import { setClinic } from "../../../../redux/actions/clinicActions";
+import { APP_DATA_API } from "../../../utils/constants";
 import { textForKey } from '../../../utils/localization';
 import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
-import { APP_DATA_API } from "../../../utils/constants";
-import { environment, isDev } from "../../../../eas.config";
+import IconArrowDown from '../../icons/iconArrowDown';
 import PageHeader from '../../common/MainComponent/PageHeader/PageHeader';
 import styles from './DoctorsMain.module.scss';
 
@@ -25,7 +26,7 @@ const EditProfileModal = dynamic(() => import('../../common/modals/EditProfileMo
 const DoctorsMain = ({ children, pageTitle }) => {
   const { data } = useSWR(APP_DATA_API);
   const { currentUser, currentClinic } = data;
-
+  const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
   const dispatch = useDispatch();
   const pubnub = usePubNub();
   const router = useRouter();
@@ -56,6 +57,29 @@ const DoctorsMain = ({ children, pageTitle }) => {
       };
     }
   }, [currentUser, currentClinic]);
+
+  useEffect(() => {
+    handleUserAccessChange();
+  }, [clinicAccessChange, currentUser, currentClinic]);
+
+  const handleUserAccessChange = async () => {
+    if (
+      clinicAccessChange == null ||
+      currentUser == null ||
+      currentClinic == null ||
+      clinicAccessChange.clinicId !== currentClinic.id ||
+      clinicAccessChange.userId !== currentUser.id ||
+      !clinicAccessChange.accessBlocked
+    ) {
+      return;
+    }
+    try {
+      await signOut();
+      await router.replace(router.asPath)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handlePubnubMessageReceived = ({ message }) => {
     dispatch(handleRemoteMessage(message));
