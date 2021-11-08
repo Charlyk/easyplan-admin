@@ -1,31 +1,42 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import moment from "moment-timezone";
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import IconRemove from '@material-ui/icons/Clear';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-
 import IconCheckMark from '../../icons/iconCheckMark';
 import getServiceName from '../../../utils/getServiceName';
 import { textForKey } from '../../../utils/localization';
 import styles from './FinalServiceItem.module.scss';
 
 const FinalServiceItem = ({ service, canRemove, onRemove }) => {
+  const completedDate = useMemo(() => {
+    if (!service.completed) {
+      return null;
+    }
+    return moment(service.completedAt).format('DD.MM.YYYY HH:mm');
+  }, [service]);
+
+  const addedDate = useMemo(() => {
+    return moment(service.created).format('DD.MM.YYYY HH:MM');
+  }, [service]);
+
   return (
-    <tr className={styles['final-service-root']}>
+    <tr className={styles.finalServiceRoot}>
       <td>
-        <div className={styles['service-wrapper']}>
-          <Typography classes={{ root: styles['service-name'] }}>
+        <div className={styles.serviceWrapper}>
+          <Typography classes={{ root: styles.serviceName }}>
             {getServiceName(service)}
           </Typography>
           {service.completedBy && (
-            <Typography classes={{ root: styles['completed-by-label'] }}>
-              {textForKey('completed by')} {service.completedBy}
+            <Typography classes={{ root: styles.completedByLabel }}>
+              {textForKey('completed by', service.completedBy, completedDate)}
             </Typography>
           )}
           {!service.completed && service.addedByName && (
-            <Typography classes={{ root: styles['completed-by-label'] }}>
-              {textForKey('added by')} {service.addedByName}
+            <Typography classes={{ root: styles.completedByLabel }}>
+              {textForKey('added by', service.addedByName, addedDate)}
             </Typography>
           )}
         </div>
@@ -35,7 +46,7 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
           disabled={!canRemove}
           onClick={() => onRemove(service)}
           classes={{
-            root: clsx(styles['remove-btn'], {
+            root: clsx(styles.removeBtn, {
               [styles.disabled]: !canRemove && !service.completed,
               [styles.completed]: service.completed,
             }),

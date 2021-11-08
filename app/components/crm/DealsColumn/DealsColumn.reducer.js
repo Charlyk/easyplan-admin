@@ -116,7 +116,7 @@ const dealsColumnSlice = createSlice({
       if (!dealExists) {
         const newDeal = {
           ...action.payload,
-          lastUpdated: moment(new Date(action.payload.lastUpdated)).format('YYYY-MM-DD HH:mm:ss')
+          lastUpdated: moment(action.payload.lastUpdated).format('YYYY-MM-DD HH:mm:ss')
         };
         console.log(newDeal);
         state.items = orderBy([...state.items, newDeal], ['lastUpdated'], ['desc']);
@@ -131,7 +131,7 @@ const dealsColumnSlice = createSlice({
     setUpdatedDeal(state, action) {
       const newDeal = {
         ...action.payload,
-        lastUpdated: moment(new Date(action.payload.lastUpdated)).format('YYYY-MM-DD HH:mm:ss')
+        lastUpdated: moment(action.payload.lastUpdated).format('YYYY-MM-DD HH:mm:ss')
       };
       const { state: itemState } = newDeal;
       const { dealState: columnState } = state;

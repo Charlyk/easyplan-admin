@@ -30,7 +30,7 @@ const ServicesWrapper = (
    * @return {string}
    */
   const keyForService = (service) => {
-    return `${service.id}-${service.toothId}-${service.name}-${service.destination}-${service.completed}-${service.completedAt}`;
+    return `${service.id}-${service.toothId}-${service.name}-${service.destination}-${service.completed}-${service.completedAt}-${service.scheduleId}`;
   };
 
   const mappedOptions = useMemo(() => {

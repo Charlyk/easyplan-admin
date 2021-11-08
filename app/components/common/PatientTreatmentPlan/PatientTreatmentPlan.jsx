@@ -14,6 +14,7 @@ import reducer, {
   setTeethModal,
 } from "./PatientTreatmentPlan.reducer";
 import styles from './PatientTreatmentPlan.module.scss';
+import { toast } from "react-toastify";
 
 const TeethContainer = dynamic(() => import('./TeethContainer'));
 const TeethModal = dynamic(() => import("../modals/TeethModal"));
@@ -43,12 +44,12 @@ const PatientTreatmentPlan = (
   ] = useReducer(reducer, initialState);
   const clinicServices = currentClinic.services?.filter((item) => !item.deleted) || [];
   const clinicCurrency = currentClinic.currency;
-  const isFinished =
+  const isScheduleFinished =
     schedule?.scheduleStatus === 'CompletedNotPaid' ||
     schedule?.scheduleStatus === 'CompletedPaid' ||
     schedule?.scheduleStatus === 'PartialPaid';
 
-  const canFinalize =
+  const canFinalizeSchedule =
     schedule?.scheduleStatus === 'OnSite' ||
     schedule?.scheduleStatus === 'CompletedNotPaid';
 
@@ -78,7 +79,7 @@ const PatientTreatmentPlan = (
   const isButtonDisabled = useMemo(() => {
     const newServices = selectedServices.filter((item) => !item.isExistent);
     return (
-      (!canFinalize && newServices.length === 0) ||
+      (!canFinalizeSchedule && newServices.length === 0) ||
       finalServicesList.length === 0
     );
   }, [selectedServices, finalServicesList]);
@@ -87,7 +88,7 @@ const PatientTreatmentPlan = (
     return selectedServices.some(
       (item) =>
         item.id === service.id &&
-        !item.completed &&
+        (item.scheduleId === service.scheduleId || !item.completed) &&
         (item.toothId == null || item.toothId === service.toothId) &&
         (item.destination == null ||
           item.destination === service.destination)
@@ -127,9 +128,17 @@ const PatientTreatmentPlan = (
    * @param {Array.<Object>} services
    */
   const handleToothServicesChange = ({ toothId, services }) => {
-    const newServices = selectedServices.filter((item) => item.toothId !== toothId || item.completed)
+    const newServices = selectedServices.filter((item) => {
+      return item.toothId !== toothId || item.completed
+    })
     for (let service of services) {
-      newServices.unshift(mappedService(service, toothId));
+      const updatedService = mappedService(service, toothId);
+      const serviceExists = doesServiceExists(updatedService);
+      if (!serviceExists) {
+        newServices.unshift(updatedService);
+      } else {
+        toast.warn(textForKey('service_already_exists_on_schedule'));
+      }
     }
     localDispatch(setSelectedServices({ services: newServices }));
   };
@@ -142,12 +151,14 @@ const PatientTreatmentPlan = (
       localDispatch(setTeethModal({ open: true, service: newService }));
       return;
     }
-
+    const updatedService = mappedService(newService);
     const newServices = cloneDeep(selectedServices);
-    const serviceExists = doesServiceExists(newService)
+    const serviceExists = doesServiceExists(updatedService)
     if (!serviceExists) {
-      newServices.unshift(mappedService(newService));
+      newServices.unshift(updatedService);
       localDispatch(setSelectedServices({ services: newServices }));
+    } else {
+      toast.warn(textForKey('service_already_exists_on_schedule'));
     }
   };
 
@@ -159,18 +170,16 @@ const PatientTreatmentPlan = (
   const handleSaveTeethService = (service, teeth) => {
     const updatedServices = []
     for (const toothId of teeth) {
-      updatedServices.push({
-        ...service,
-        toothId,
-      });
+      updatedServices.push(mappedService(service, toothId));
     }
 
     const newServices = cloneDeep(selectedServices);
     for (const newService of updatedServices) {
       if (doesServiceExists(newService)) {
+        toast.warn(textForKey('service_already_exists_on_schedule'));
         continue;
       }
-      newServices.unshift(mappedService(newService))
+      newServices.unshift(newService)
     }
     localDispatch(setSelectedServices({ services: newServices }));
   }
@@ -218,10 +227,10 @@ const PatientTreatmentPlan = (
   const buttonText = () => {
     const newServices = selectedServices.filter((item) => !item.isExistent);
     let text = textForKey('Finalize');
-    if ((!canFinalize && newServices.length > 0) || isFinished) {
+    if ((!canFinalizeSchedule && newServices.length > 0) || isScheduleFinished) {
       text = textForKey('Edit');
     }
-    if (!canFinalize && newServices.length === 0 && isFinished) {
+    if (!canFinalizeSchedule && newServices.length === 0 && isScheduleFinished) {
       text = scheduleStatus?.name;
     }
     return text;

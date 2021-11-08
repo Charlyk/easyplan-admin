@@ -1,10 +1,10 @@
-.final-service-root {
+.finalServiceRoot {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: #ededed 1px solid;
 
-  .remove-btn {
+  .removeBtn {
     outline: none;
 
     &.completed {
@@ -30,13 +30,13 @@
     }
   }
 
-  .service-wrapper {
+  .serviceWrapper {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
 
-    .service-name {
+    .serviceName {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -48,7 +48,7 @@
       color: #34354C;
     }
 
-    .completed-by-label {
+    .completedByLabel {
       font-family: Inter, sans-serif;
       font-style: normal;
       font-weight: normal;
@@ -58,7 +58,7 @@
     }
   }
 
-  .service-price {
+  .servicePrice {
     font-family: Inter, sans-serif;
     font-style: normal;
     font-weight: normal;

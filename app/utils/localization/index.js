@@ -20,11 +20,16 @@ export function getAppLanguage() {
 /**
  * Get translated text by key
  * @param {string} key
+ * @param {strings} params
  * @return {string}
  */
-export function textForKey(key) {
+export function textForKey(key, ...params) {
   if (typeof key !== 'string') return key;
   const lang = getAppLanguage();
-  const text = strings[lang][key.toLowerCase()];
-  return text ? text : key;
+  let text = strings[lang][key.toLowerCase()];
+  if (text == null) return key;
+  for (let i = 0; i < params.length; i++) {
+    text = text.replace(`{${i + 1}}`, params[i]);
+  }
+  return text;
 }
