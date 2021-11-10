@@ -6,6 +6,8 @@ import { HeaderKeys } from "../../../app/utils/constants";
 import { authorized } from "../authorized";
 import { handler } from "../handler";
 
+export const config = { api: { bodyParser: false } };
+
 export default authorized(async function clinicDetails(req, res) {
   switch (req.method) {
     case 'GET': {

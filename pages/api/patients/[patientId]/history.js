@@ -1,10 +1,12 @@
 import axios from "axios";
-import { authorized } from "../../authorized";
 import cookie from 'cookie';
-import { handler } from "../../handler";
 import getSubdomain from "../../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../../app/utils/constants";
+import { handler } from "../../handler";
+import { authorized } from "../../authorized";
+
+export const config = { api: { bodyParser: false } };
 
 export default authorized(async (req, res) => {
   switch (req.method) {

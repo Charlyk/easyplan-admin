@@ -1,10 +1,12 @@
 import axios from "axios";
-import { authorized } from "../authorized";
 import cookie from 'cookie';
-import { handler } from "../handler";
 import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
+import { handler } from "../handler";
+import { authorized } from "../authorized";
+
+export const config = { api: { bodyParser: false } };
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -43,8 +45,7 @@ async function fetchInvoices(req) {
 
 async function createNewInvoice(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const requestBody = req.body;
-  return axios.post(`${updatedServerUrl(req)}/invoices`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/invoices`, req.body, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,

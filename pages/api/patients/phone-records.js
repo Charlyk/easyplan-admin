@@ -6,6 +6,8 @@ import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
+export const config = { api: { bodyParser: false } };
+
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {

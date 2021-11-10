@@ -6,7 +6,7 @@ import { authorized } from "../../authorized";
 import { handler } from "../../handler";
 import { HeaderKeys } from "../../../../app/utils/constants";
 
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
+export const config = { api: { bodyParser: false } };
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -53,8 +53,7 @@ function fetchPatientXRayImages(req) {
 function addXRayImage(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
-  const requestBody = req.body;
-  return axios.post(`${updatedServerUrl(req)}/patients/${patientId}/x-ray`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/patients/${patientId}/x-ray`, req.body, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,

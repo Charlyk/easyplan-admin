@@ -6,6 +6,8 @@ import getSubdomain from "../../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../../app/utils/constants";
 
+export const config = { api: { bodyParser: false } };
+
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
@@ -44,8 +46,7 @@ function fetchPatientMessages(req) {
 function sendMessageToPatient(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;
-  const requestBody = req.body;
-  return axios.post(`${updatedServerUrl(req)}/sms/patients/${patientId}`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/sms/patients/${patientId}`, req.body, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,

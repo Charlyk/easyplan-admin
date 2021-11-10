@@ -1,5 +1,7 @@
 import setCookies from "../../../app/utils/setCookies";
 
+export const config = { api: { bodyParser: false } };
+
 export default async (req, res) => {
   if (req.method !== 'GET') {
     return

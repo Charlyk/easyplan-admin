@@ -6,6 +6,8 @@ import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { handler } from "../handler";
 import { authorized } from "../authorized";
 
+export const config = { api: { bodyParser: false } };
+
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
@@ -56,8 +58,7 @@ async function fetchDealStates(req) {
 
 async function createNewDealState(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const requestBody = req.body;
-  return axios.post(`${updatedServerUrl(req)}/crm/deal-state`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/crm/deal-state`, req.body, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
@@ -68,9 +69,8 @@ async function createNewDealState(req) {
 
 async function updateDealState(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const requestBody = req.body;
   const { dealId } = req.query;
-  return axios.put(`${updatedServerUrl(req)}/crm/deal-state/${dealId}`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/crm/deal-state/${dealId}`, req.body, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,

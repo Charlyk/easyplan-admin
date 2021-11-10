@@ -4,6 +4,8 @@ import { HeaderKeys } from "../../../app/utils/constants";
 import { baseApiUrl } from "../../../eas.config";
 import { handler } from "../handler";
 
+export const config = { api: { bodyParser: false } };
+
 export default async function login(req, res) {
   const data = await handler(authenticateWithBackend, req, res);
   if (data != null) {

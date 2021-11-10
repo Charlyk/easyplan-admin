@@ -6,6 +6,8 @@ import { HeaderKeys } from "../../../../app/utils/constants";
 import { authorized } from "../../authorized";
 import { handler } from "../../handler";
 
+export const config = { api: { bodyParser: false } };
+
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
@@ -24,9 +26,8 @@ export default authorized(async (req, res) => {
 
 async function updateDealState(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const requestBody = req.body;
   const { dealId } = req.query;
-  return axios.put(`${updatedServerUrl(req)}/crm/deals/${dealId}/state`, requestBody, {
+  return axios.put(`${updatedServerUrl(req)}/crm/deals/${dealId}/state`, req.body, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
