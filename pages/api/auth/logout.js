@@ -2,9 +2,6 @@ import { environment } from "../../../eas.config";
 import { authorized } from "../authorized";
 import cookie from 'cookie';
 
-
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
-
 export default authorized(async (req, res) => {
   clearCookies(res, '', -1);
   res.json({ message: 'OK' });

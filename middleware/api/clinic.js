@@ -1,6 +1,7 @@
 import { del, get, post, put } from "./request";
 import moment from "moment-timezone";
 import imageToBase64 from "../../app/utils/imageToBase64";
+import axios from "axios";
 
 /**
  * Delete clinic invitation
@@ -67,7 +68,7 @@ export async function updateClinic(body, logo, headers = null) {
   if (logo != null) {
     updatedBody.logo = await imageToBase64(logo)
   }
-  return put('/api/clinic', headers, updatedBody)
+  return axios.put('/api/clinic', updatedBody, { headers })
 }
 
 /**
@@ -82,7 +83,7 @@ export async function createNewClinic(body, logo, headers = null) {
   if (logo != null) {
     updatedBody.logo = await imageToBase64(logo)
   }
-  return post('/api/clinic', headers, updatedBody);
+  return axios.post('/api/clinic', updatedBody, { headers });
 }
 
 /**

@@ -1,5 +1,6 @@
 import { del, get, post, put } from "./request";
 import imageToBase64 from "../../app/utils/imageToBase64";
+import axios from "axios";
 
 /**
  * Perform login request
@@ -29,7 +30,7 @@ export async function registerUser(body, avatar, headers = null) {
   if (avatar != null) {
     updatedBody.avatar = await imageToBase64(avatar)
   }
-  return post('/api/auth/register', headers, updatedBody)
+  return axios.post('/api/auth/register', updatedBody, { headers });
 }
 
 /**
@@ -81,7 +82,7 @@ export async function updateUserAccount(body, avatar, headers = null) {
   if (avatar != null) {
     updatedBody.avatar = await imageToBase64(avatar)
   }
-  return put('/api/auth/update-account', headers, updatedBody);
+  return axios.put('/api/auth/update-account', updatedBody, { headers });
 }
 
 /**

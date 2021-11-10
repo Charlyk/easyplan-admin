@@ -1,8 +1,5 @@
 import setCookies from "../../../app/utils/setCookies";
 
-
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
-
 export default async (req, res) => {
   if (req.method !== 'GET') {
     return

@@ -6,9 +6,6 @@ import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import parseCookies from "../../../app/utils/parseCookies";
 import { HeaderKeys } from "../../../app/utils/constants";
 
-
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
-
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {

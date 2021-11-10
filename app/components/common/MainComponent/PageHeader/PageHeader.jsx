@@ -104,9 +104,9 @@ const PageHeader = (
         </div>
       )}
       <div className={styles.actions}>
-        <div className={styles.notifications}>
+        <IconButton className={styles.notifications}>
           <IconNotifications/>
-        </div>
+        </IconButton>
         <div className={styles.avatarContainer}>
           {user?.avatar ? (
             <img
@@ -118,15 +118,13 @@ const PageHeader = (
             <IconAvatar/>
           )}
         </div>
-        <div
-          role='button'
-          tabIndex={0}
-          onClick={handleActionsOpen}
-          className={styles.notifications}
+        <IconButton
           ref={actionsAnchor}
+          className={styles.notifications}
+          onClick={handleActionsOpen}
         >
           <IconMore/>
-        </div>
+        </IconButton>
       </div>
     </div>
   );

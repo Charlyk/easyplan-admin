@@ -1,5 +1,6 @@
 import { del, get, post, put } from "./request";
 import imageToBase64 from "../../app/utils/imageToBase64";
+import axios from "axios";
 
 /**
  * Fetch users list
@@ -101,7 +102,7 @@ export async function requestAcceptInvitation(body, avatar, headers = null) {
   if (avatar != null) {
     updatedBody.avatar = await imageToBase64(avatar);
   }
-  return put('/api/users/accept-invitation', headers, updatedBody);
+  return axios.put('/api/users/accept-invitation', updatedBody, { headers });
 }
 
 /**

@@ -8,8 +8,9 @@ import { textForKey } from '../../../../utils/localization';
 import { updateClinic } from "../../../../../middleware/api/clinic";
 import styles from './ApplicationSettings.module.scss'
 import EASTextField from "../../../common/EASTextField";
+import { HeaderKeys } from "../../../../utils/constants";
 
-const ApplicationSettings = ({ currentClinic: clinic }) => {
+const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(String(clinic.timeBeforeOnSite));
@@ -30,7 +31,11 @@ const ApplicationSettings = ({ currentClinic: clinic }) => {
         ...clinic,
         timeBeforeOnSite: parseInt(time),
       };
-      await updateClinic(requestBody);
+      await updateClinic(requestBody, null, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinic.id,
+        [HeaderKeys.subdomain]: clinic.domainName,
+      });
       await router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {

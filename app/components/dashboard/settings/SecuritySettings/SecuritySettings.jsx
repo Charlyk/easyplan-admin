@@ -8,9 +8,9 @@ import { textForKey } from '../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import EASTextField from "../../../common/EASTextField";
 import styles from './SecuritySettings.module.scss';
-import { PasswordRegex } from "../../../../utils/constants";
+import { HeaderKeys, PasswordRegex } from "../../../../utils/constants";
 
-const SecuritySettings = ({ currentUser }) => {
+const SecuritySettings = ({ currentClinic, authToken }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
@@ -42,7 +42,11 @@ const SecuritySettings = ({ currentUser }) => {
 
     setIsLoading(true);
     try {
-      await updateUserAccount(data);
+      await updateUserAccount(data, null, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
       await router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {

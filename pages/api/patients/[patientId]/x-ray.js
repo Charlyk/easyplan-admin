@@ -6,9 +6,6 @@ import { authorized } from "../../authorized";
 import { handler } from "../../handler";
 import { HeaderKeys } from "../../../../app/utils/constants";
 
-
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
-
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {

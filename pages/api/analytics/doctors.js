@@ -6,9 +6,6 @@ import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
-
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
-
 export default authorized(async (req, res) => {
   const data = await handler(fetchDoctorsStatistics, req, res);
   if (data == null) {

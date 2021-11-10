@@ -22,7 +22,7 @@ const SettingsForm = {
   crmSettings: 'crmSettings',
 };
 
-const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu }) => {
+const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu, authToken }) => {
   const selectedClinic = currentUser?.clinics.find(
     item => item.clinicId === currentClinic.id,
   );
@@ -56,6 +56,7 @@ const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu }
               countries={countries}
               currentUser={currentUser}
               currentClinic={currentClinic}
+              authToken={authToken}
             />
           )}
           {currentForm === SettingsForm.workingHours && (
@@ -68,16 +69,19 @@ const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu }
             <AccountSettings
               currentUser={currentUser}
               currentClinic={currentClinic}
+              authToken={authToken}
             />
           )}
           {currentForm === SettingsForm.securitySettings && (
             <SecuritySettings
+              authToken={authToken}
               currentUser={currentUser}
               currentClinic={currentClinic}
             />
           )}
           {currentForm === SettingsForm.appSettings && (
             <ApplicationSettings
+              authToke={authToken}
               currentUser={currentUser}
               currentClinic={currentClinic}
             />

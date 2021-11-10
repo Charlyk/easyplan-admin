@@ -40,7 +40,7 @@ export const getServerSideProps = async ({ req, query }) => {
         token: auth_token,
         redirect: redirect === '1',
         shouldLogin: login === '1',
-        countries,
+        countries
       },
     }
   } catch (e) {

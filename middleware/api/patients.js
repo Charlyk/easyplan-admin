@@ -125,7 +125,7 @@ export async function requestUpdatePatient(patientId, requestBody, photo, header
   if (photo != null) {
     updatedBody.photo = await imageToBase64(photo)
   }
-  return put(`/api/patients/${patientId}`, headers, updatedBody);
+  return axios.put(`/api/patients/${patientId}`, updatedBody, { headers });
 }
 
 /**
@@ -316,5 +316,5 @@ export async function requestCreatePatient(requestBody, photo, headers = null) {
   if (photo != null) {
     updatedBody.photo = await imageToBase64(photo)
   }
-  return post(`${baseApiUrl}/patients`, headers, requestBody);
+  return axios.post(`${baseApiUrl}/patients`, requestBody, { headers });
 }

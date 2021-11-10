@@ -13,6 +13,7 @@ import reducer, {
 import styles from './CreateClinic.module.scss';
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import urlToLambda from "../../../utils/urlToLambda";
+import { HeaderKeys } from "../../../utils/constants";
 
 export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin, isMobile }) {
   const router = useRouter();
@@ -38,7 +39,9 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
     try {
       const requestBody = { ...clinicData };
       delete requestBody.logoFile;
-      const response = await createNewClinic(clinicData, clinicData.logoFile);
+      const response = await createNewClinic(clinicData, clinicData.logoFile, {
+        [HeaderKeys.authorization]: token,
+      });
       if (shouldLogin) {
         await router.replace('/login')
       } else if (redirect) {

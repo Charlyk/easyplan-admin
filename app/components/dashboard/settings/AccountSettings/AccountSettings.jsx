@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 import IconSuccess from '../../../icons/iconSuccess';
 import LoadingButton from '../../../common/LoadingButton';
-import { EmailRegex } from '../../../../utils/constants';
+import { EmailRegex, HeaderKeys } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
@@ -12,7 +12,7 @@ import EASTextField from "../../../common/EASTextField";
 import EASPhoneInput from "../../../common/EASPhoneInput";
 import styles from './AccountSettings.module.scss'
 
-const AccountSettings = ({ currentUser }) => {
+const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
@@ -75,7 +75,11 @@ const AccountSettings = ({ currentUser }) => {
         phoneNumber: data.phoneNumber,
       };
 
-      await updateUserAccount(requestBody, data.avatarFile);
+      await updateUserAccount(requestBody, data.avatarFile, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
       await router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {

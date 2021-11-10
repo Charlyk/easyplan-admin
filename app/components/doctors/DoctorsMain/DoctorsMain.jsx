@@ -23,7 +23,7 @@ import styles from './DoctorsMain.module.scss';
 const ClinicSelector = dynamic(() => import('../../common/ClinicSelector'));
 const EditProfileModal = dynamic(() => import('../../common/modals/EditProfileModal'));
 
-const DoctorsMain = ({ children, pageTitle }) => {
+const DoctorsMain = ({ children, pageTitle, authToken }) => {
   const { data } = useSWR(APP_DATA_API);
   const { currentUser, currentClinic } = data;
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
@@ -127,6 +127,8 @@ const DoctorsMain = ({ children, pageTitle }) => {
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       <EditProfileModal
         open={isEditingProfile}
+        currentClinic={currentClinic}
+        authToken={authToken}
         currentUser={currentUser}
         onClose={handleCloseEditProfile}
       />

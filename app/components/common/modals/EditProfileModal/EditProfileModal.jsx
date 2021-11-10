@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
-import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
+import { EmailRegex, HeaderKeys, PasswordRegex } from '../../../../utils/constants';
 import urlToLambda from '../../../../utils/urlToLambda';
 import { textForKey } from '../../../../utils/localization';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
@@ -13,7 +13,7 @@ import EASModal from "../EASModal";
 import styles from './EditProfileModal.module.scss';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 
-const EditProfileModal = ({ open, currentUser, onClose }) => {
+const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
@@ -84,7 +84,11 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
         password: data.password,
         confirmPassword: data.confirmPassword,
       };
-      await updateUserAccount(requestBody, data.avatarUrl);
+      await updateUserAccount(requestBody, data.avatarUrl, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
       toast.success(textForKey('Saved successfully'));
       onClose();
       await router.replace(router.asPath);

@@ -5,9 +5,6 @@ import updatedServerUrl from "../../../../app/utils/updateServerUrl";
 import setCookies from '../../../../app/utils/setCookies';
 import { HeaderKeys } from "../../../../app/utils/constants";
 
-
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
-
 export default async (req, res) => {
   switch (req.method) {
     case 'PUT':

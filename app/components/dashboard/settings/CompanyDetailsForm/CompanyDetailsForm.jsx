@@ -12,7 +12,7 @@ import IconSuccess from '../../../icons/iconSuccess';
 import IconTrash from '../../../icons/iconTrash';
 import LoadingButton from '../../../common/LoadingButton';
 import { changeSelectedClinic } from '../../../../../redux/actions/actions';
-import { EmailRegex } from '../../../../utils/constants';
+import { EmailRegex, HeaderKeys } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
 import {
   clinicTimeZones,
@@ -29,7 +29,7 @@ import styles from './CompanyDetailsForm.module.scss';
 
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 
-const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
+const CompanyDetailsForm = ({ currentUser, currentClinic, countries, authToken }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
@@ -222,7 +222,11 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
         hasBrackets: data.hasBrackets,
       };
 
-      const response = await updateClinic(requestBody, data.logoFile);
+      const response = await updateClinic(requestBody, data.logoFile, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
       await router.replace(router.asPath);
       setData({ ...data, ...response.data });
       toast.success(textForKey('Saved successfully'));

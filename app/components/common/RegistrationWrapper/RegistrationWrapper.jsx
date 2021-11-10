@@ -13,6 +13,7 @@ import reducer, {
 } from './registrationWrapperSlice'
 import styles from './RegistrationWrapper.module.scss';
 import urlToLambda from "../../../utils/urlToLambda";
+import { HeaderKeys } from "../../../utils/constants";
 
 const RegisterForm = dynamic(() => import('./RegisterForm'));
 
@@ -31,7 +32,9 @@ export default function RegistrationWrapper({ isMobile }) {
     try {
       const requestBody = { ...accountData };
       delete requestBody.avatarFile;
-      await registerUser(accountData, accountData.avatarFile);
+      await registerUser(accountData, accountData.avatarFile, {
+        [HeaderKeys.clinicId]: -1,
+      });
       toast.success(textForKey('account_created_success'));
       await router.replace('/create-clinic?login=1');
     } catch (error) {
