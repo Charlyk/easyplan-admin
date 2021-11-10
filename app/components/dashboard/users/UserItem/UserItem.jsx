@@ -84,6 +84,7 @@ const UserItem = (
               )}
             />
             <EASImage
+              enableLoading
               src={user.avatar}
               placeholder={<IconAvatar/>}
               className={styles.avatarRoot}

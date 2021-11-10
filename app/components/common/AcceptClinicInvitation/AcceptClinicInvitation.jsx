@@ -28,6 +28,7 @@ import reducer, {
 import styles from './AcceptInvitation.module.scss';
 import { baseApiUrl } from "../../../../eas.config";
 import urlToLambda from "../../../utils/urlToLambda";
+import EASImage from "../EASImage";
 
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
   const router = useRouter();
@@ -146,12 +147,13 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
       )}
     >
       {!isMobileDevice && (
-        <div className={styles.logoContainer}>
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
-        </div>
+        <EASImage
+          src="settings/easyplan-logo.svg"
+          classes={{
+            root: styles.logoContainer,
+            image: styles.logoImage,
+          }}
+        />
       )}
       <div
         className={clsx(
@@ -160,9 +162,9 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
         )}
       >
         {isMobileDevice && (
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
+          <EASImage
+            src="settings/easyplan-logo.svg"
+            className={styles.logoImage}
           />
         )}
         <form

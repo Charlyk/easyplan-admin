@@ -3,10 +3,13 @@ import axios from "axios";
 const remoteImageToBase64 = (imageUrl) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const parts = imageUrl.split('.')
+      let extension = parts[parts.length - 1];
+      if (extension === 'svg') extension = `${extension}+xml`
       const response = await axios.get(`/api/files?fileName=${imageUrl}`, { responseType: "arraybuffer" });
       const buffer = response.data;
       const bytes = new Uint8Array(buffer);
-      const imageData = 'data:image/png;base64,' + encode(bytes);
+      const imageData = `data:image/${extension};base64,` + encode(bytes);
       resolve(imageData);
     } catch (error) {
       reject(error);

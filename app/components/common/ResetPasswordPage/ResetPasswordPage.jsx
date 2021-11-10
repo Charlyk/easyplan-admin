@@ -10,8 +10,8 @@ import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import { PasswordRegex } from '../../../utils/constants';
 import LoadingButton from '../LoadingButton';
 import EASTextField from "../EASTextField";
+import EASImage from "../EASImage";
 import styles from './ResetPasswordForm.module.scss';
-import urlToLambda from "../../../utils/urlToLambda";
 
 const ResetPasswordForm = ({ token }) => {
   const isMobileDevice = useIsMobileDevice();
@@ -64,12 +64,13 @@ const ResetPasswordForm = ({ token }) => {
     >
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <div className={styles.logoContainer}>
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
-        </div>
+        <EASImage
+          src="settings/easyplan-logo.svg"
+          classes={{
+            root: styles.logoContainer,
+            image: styles.logoImage,
+          }}
+        />
       )}
       <div
         className={styles.formContainer}
@@ -79,10 +80,7 @@ const ResetPasswordForm = ({ token }) => {
         }}
       >
         {isMobileDevice && (
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
+          <EASImage src="settings/easyplan-logo.svg" className={styles.logoImage} />
         )}
         <div
           className={styles.formRoot}

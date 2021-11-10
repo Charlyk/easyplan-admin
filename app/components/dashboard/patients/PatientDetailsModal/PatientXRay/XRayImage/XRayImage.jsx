@@ -1,10 +1,12 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 
 import urlToLambda from "../../../../../../utils/urlToLambda";
 import IconTrash from "../../../../../icons/iconTrash";
 import styles from "./XRayImage.module.scss";
+import EASImage from "../../../../../common/EASImage";
 
 const XRayImage = ({ image, onImageClick, onImageDelete }) => {
 
@@ -34,11 +36,9 @@ const XRayImage = ({ image, onImageClick, onImageDelete }) => {
         tabIndex={0}
         onPointerUp={handleImageClick}
       >
-        <img
-          className={styles.image}
-          key={image.id}
-          src={urlToLambda(image.imageUrl)}
-          alt='X-Ray'
+        <EASImage
+          enableLoading
+          src={image.thumbnailUrl}
         />
         <IconButton
           classes={{ root: styles.trashButton }}
@@ -51,4 +51,12 @@ const XRayImage = ({ image, onImageClick, onImageDelete }) => {
   )
 }
 
-export default XRayImage
+export default XRayImage;
+
+XRayImage.propTypes = {
+  image: PropTypes.shape({
+    id: PropTypes.number,
+    imageUrl: PropTypes.string,
+    thumbnailUrl: PropTypes.string,
+  })
+}

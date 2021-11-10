@@ -115,11 +115,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
     };
 
     try {
-      await requestUpdatePatient(patient.id, requestBody, null, {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: currentClinic.id,
-        [HeaderKeys.subdomain]: currentClinic.domainName,
-      });
+      await requestUpdatePatient(patient.id, requestBody, null);
       await onPatientUpdated(true);
       toast.success(textForKey('Saved successfully'))
     } catch (error) {

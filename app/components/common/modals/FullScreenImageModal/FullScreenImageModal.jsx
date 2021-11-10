@@ -4,6 +4,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import EASModal from "../EASModal";
 import styles from './FullScreenImageModal.module.scss'
 import urlToLambda from "../../../../utils/urlToLambda";
+import EASImage from "../../EASImage";
 
 const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,15 +16,8 @@ const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
       paperClass={styles.modalPaper}
     >
       <div className={styles.modalContent}>
-        {isLoading && (
-          <div className='progress-bar-wrapper'>
-            <CircularProgress className='circular-progress-bar' />
-          </div>
-        )}
-        <img
-          src={urlToLambda(imageUrl)}
-          alt='Full screen'
-          onLoad={() => setIsLoading(false)}
+        <EASImage
+          src={imageUrl}
         />
       </div>
     </EASModal>

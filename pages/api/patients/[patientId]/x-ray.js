@@ -36,6 +36,8 @@ export default authorized(async (req, res) => {
   }
 });
 
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
+
 function fetchPatientXRayImages(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;

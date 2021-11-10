@@ -21,6 +21,7 @@ import {
 } from "../../middleware/api/schedules";
 import styles from '../../app/styles/ScheduleConfirmation.module.scss';
 import checkIsMobileDevice from "../../app/utils/checkIsMobileDevice";
+import EASImage from "../../app/components/common/EASImage";
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
@@ -92,7 +93,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
         </Typography>
       )}
       {logoSrc && (
-        <img className={styles['logo-image']} src={logoSrc} alt='Clinic logo'/>
+        <EASImage className={styles['logo-image']}  src={logoSrc}/>
       )}
       {schedule && !isError && (
         <TableContainer className={styles.tableContainer}>

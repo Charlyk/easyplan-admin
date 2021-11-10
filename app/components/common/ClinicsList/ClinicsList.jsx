@@ -15,6 +15,7 @@ import ConfirmationModal from "../modals/ConfirmationModal";
 import ClinicItem from "./ClinicItem";
 import styles from './ClnicsList.module.scss';
 import urlToLambda from "../../../utils/urlToLambda";
+import EASImage from "../EASImage";
 
 export default function ClinicsList({ user, authToken, isMobile }) {
   const router = useRouter();
@@ -70,12 +71,13 @@ export default function ClinicsList({ user, authToken, isMobile }) {
       />
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <div className={styles.logoContainer}>
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
-        </div>
+        <EASImage
+          src="settings/easyplan-logo.svg"
+          classes={{
+            root: styles.logoContainer,
+            image: styles.logoImage
+          }}
+        />
       )}
       <div
         className={styles.formContainer}
@@ -85,10 +87,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
         }}
       >
         {isMobileDevice && (
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
+          <EASImage src="settings/easyplan-logo.svg" className={styles.logoImage} />
         )}
         <div
           className={styles.clinicsWrapper}

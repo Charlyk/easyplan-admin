@@ -13,7 +13,7 @@ import styles from './EASImage.module.scss';
 import urlToLambda from "../../../utils/urlToLambda";
 import IconAvatar from "../../icons/iconAvatar";
 
-const EASImage = ({ src, classes, className, placeholder }) => {
+const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
   const [{ isLoading, imageContent, isError }, localDispatch] = useReducer(reducer, initialState);
 
   const downloadImageAndSetContent = useCallback(async () => {
@@ -66,9 +66,9 @@ const EASImage = ({ src, classes, className, placeholder }) => {
         )}
       />
       {(isError || imageContent == null) && (
-        placeholder || <IconAvatar />
+        placeholder
       )}
-      {isLoading && (
+      {isLoading && enableLoading && (
         <div className={styles.progressBarWrapper}>
           <CircularProgress className={styles.progressBar}/>
         </div>
@@ -80,11 +80,16 @@ const EASImage = ({ src, classes, className, placeholder }) => {
 EASImage.propTypes = {
   src: PropTypes.any,
   placeholder: PropTypes.any,
+  enableLoading: PropTypes.bool,
   classes: PropTypes.shape({
     root: PropTypes.any,
     image: PropTypes.any,
   }),
   className: PropTypes.any
+}
+
+EASImage.defaultProps = {
+  enableLoading: false,
 }
 
 export default EASImage;

@@ -12,8 +12,9 @@
     align-items: center;
     justify-content: center;
 
-    img {
+    .logoImage {
       width: 40%;
+      height: auto;
     }
   }
 
@@ -29,8 +30,7 @@
     background-color: #E5E5E5;
     padding-bottom: 1rem;
 
-    img {
-      width: 40%;
+    .logoImage {
       margin-bottom: 2rem;
     }
   }

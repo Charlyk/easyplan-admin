@@ -12,6 +12,8 @@ export default async function register(req, res) {
   }
 }
 
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
+
 /**
  * Authenticate an user with EasyPlan backend
  * @param req

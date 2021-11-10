@@ -10,7 +10,7 @@ const ResetPasswordForm = ({ token }) => {
 export const getServerSideProps = async ({ query }) => {
   const { token } = query;
 
-  if (!token.match(JwtRegex)) {
+  if (!token?.match(JwtRegex)) {
     return {
       redirect: {
         destination: '/login',
@@ -21,7 +21,7 @@ export const getServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      token
+      token: token ?? ""
     }
   }
 }

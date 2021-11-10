@@ -34,8 +34,6 @@ import '../app/utils'
 import paths from "../app/utils/paths";
 import { APP_DATA_API, UnauthorizedPaths } from "../app/utils/constants";
 
-const AddNote = dynamic(() => import("../app/components/common/modals/AddNote"));
-const AddXRay = dynamic(() => import("../app/components/dashboard/patients/AddXRay"));
 const FullScreenImageModal = dynamic(() => import("../app/components/common/modals/FullScreenImageModal"));
 const ConfirmationModal = dynamic(() => import("../app/components/common/modals/ConfirmationModal"));
 
@@ -49,8 +47,6 @@ const App = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const isWindowFocused = useWindowFocused();
-  const patientXRayModal = useSelector(patientXRayModalSelector);
-  const patientNoteModal = useSelector(patientNoteModalSelector);
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
 
@@ -115,14 +111,6 @@ const App = ({ Component, pageProps }) => {
     }
   };
 
-  const handleClosePatientXRayModal = () => {
-    dispatch(setPatientXRayModal({ open: false, patientId: null }));
-  };
-
-  const handleClosePatientNoteModal = () => {
-    dispatch(setPatientNoteModal({ open: false }));
-  };
-
   const handleCloseImageModal = () => {
     dispatch(setImageModal({ open: false }));
   };
@@ -157,18 +145,6 @@ const App = ({ Component, pageProps }) => {
                 <FullScreenImageModal
                   {...imageModal}
                   onClose={handleCloseImageModal}
-                />
-              )}
-              {patientNoteModal.open && (
-                <AddNote
-                  {...patientNoteModal}
-                  onClose={handleClosePatientNoteModal}
-                />
-              )}
-              {patientXRayModal.open && (
-                <AddXRay
-                  {...patientXRayModal}
-                  onClose={handleClosePatientXRayModal}
                 />
               )}
               <NextNprogress

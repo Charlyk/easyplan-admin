@@ -31,6 +31,7 @@ const PatientRow = ({ patient, onSelect }) => {
       <TableCell classes={{ root: styles['name-and-photo'] }}>
         <Box display='flex' alignItems='center'>
           <EASImage
+            enableLoading
             src={patient.avatar}
             placeholder={<IconAvatar/>}
             className={styles.avatarRoot}

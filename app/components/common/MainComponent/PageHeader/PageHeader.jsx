@@ -110,6 +110,7 @@ const PageHeader = (
         </IconButton>
         <div className={styles.avatarContainer}>
           <EASImage
+            enableLoading
             src={user.avatar}
             className={styles.avatarImage}
             placeholder={<IconAvatar />}

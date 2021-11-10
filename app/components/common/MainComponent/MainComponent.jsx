@@ -10,11 +10,18 @@ import { toast } from "react-toastify";
 import {
   setAppointmentModal,
   setPatientDetails,
+  setPatientNoteModal,
+  setPatientXRayModal,
   setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
 } from '../../../../redux/actions/actions';
-import { appointmentModalSelector, paymentModalSelector } from '../../../../redux/selectors/modalsSelector';
+import {
+  appointmentModalSelector,
+  patientNoteModalSelector,
+  patientXRayModalSelector,
+  paymentModalSelector
+} from '../../../../redux/selectors/modalsSelector';
 import {
   isImportModalOpenSelector,
   patientDetailsSelector,
@@ -36,6 +43,8 @@ import styles from './MainComponent.module.scss';
 
 const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
 const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
+const AddXRay = dynamic(() => import("../../dashboard/patients/AddXRay"));
+const AddNote = dynamic(() => import("../modals/AddNote"));
 const DataMigrationModal = dynamic(() => import('../modals/DataMigrationModal'));
 const ExchangeRatesModal = dynamic(() => import('../modals/ExchangeRatesModal'));
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
@@ -61,6 +70,8 @@ const MainComponent = (
   const dispatch = useDispatch();
   const appointmentModal = useSelector(appointmentModalSelector);
   const paymentModal = useSelector(paymentModalSelector);
+  const patientXRayModal = useSelector(patientXRayModalSelector);
+  const patientNoteModal = useSelector(patientNoteModalSelector);
   const isImportModalOpen = useSelector(isImportModalOpenSelector);
   const patientDetails = useSelector(patientDetailsSelector);
   const newReminder = useSelector(newReminderSelector);
@@ -173,6 +184,14 @@ const MainComponent = (
     dispatch(toggleImportModal());
   };
 
+  const handleClosePatientXRayModal = () => {
+    dispatch(setPatientXRayModal({ open: false, patientId: null }));
+  };
+
+  const handleClosePatientNoteModal = () => {
+    dispatch(setPatientNoteModal({ open: false }));
+  };
+
   const handleClosePaymentModal = () => {
     dispatch(
       setPaymentModal({
@@ -188,6 +207,20 @@ const MainComponent = (
   return (
     <div className={styles.mainPage} id='main-page'>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
+      {patientNoteModal.open && (
+        <AddNote
+          {...patientNoteModal}
+          onClose={handleClosePatientNoteModal}
+        />
+      )}
+      {patientXRayModal.open && (
+        <AddXRay
+          {...patientXRayModal}
+          currentClinic={currentClinic}
+          authToken={authToken}
+          onClose={handleClosePatientXRayModal}
+        />
+      )}
       {isExchangeRatesModalOpen && (
         <ExchangeRatesModal
           currentClinic={currentClinic}

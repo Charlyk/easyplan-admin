@@ -23,6 +23,7 @@ const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
         onPointerUp={handleIconClick}
       >
         <EASImage
+          enableLoading
           src={currentAvatar}
           className={styles.imageRoot}
           placeholder={placeholder}

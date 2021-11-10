@@ -4,10 +4,6 @@
   display: flex;
   position: relative;
 
-  .logoImage {
-    width: 40%;
-  }
-
   .logoContainer {
     background-color: #34344E;
     width: 40%;
@@ -15,6 +11,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .logoImage {
+      width: 40%;
+      height: auto !important;
+    }
   }
 
   .formContainer {

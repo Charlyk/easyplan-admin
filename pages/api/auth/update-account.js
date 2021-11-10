@@ -1,9 +1,9 @@
 import axios from "axios";
-import { handler } from "../handler";
 import cookie from "cookie";
 import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
+import { handler } from "../handler";
 
 export default async function resetPassword(req, res) {
   switch (req.method) {
@@ -22,6 +22,8 @@ export default async function resetPassword(req, res) {
     }
   }
 }
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
 
 function updateUserAccount(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);

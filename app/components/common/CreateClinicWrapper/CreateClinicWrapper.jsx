@@ -14,6 +14,7 @@ import styles from './CreateClinic.module.scss';
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import urlToLambda from "../../../utils/urlToLambda";
 import { HeaderKeys } from "../../../utils/constants";
+import EASImage from "../EASImage";
 
 export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin, isMobile }) {
   const router = useRouter();
@@ -65,12 +66,13 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
     <div className={styles.createClinicRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <div className={styles.logoContainer}>
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
-        </div>
+        <EASImage
+          src="settings/easyplan-logo.svg"
+          classes={{
+            root: styles.logoContainer,
+            image: styles.logoImage,
+          }}
+        />
       )}
       <div
         className={styles.formContainer}
@@ -80,9 +82,9 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
         }}
       >
         {isMobileDevice && (
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
+          <EASImage
+            src="settings/easyplan-logo.svg"
+            className={styles.logoImage}
           />
         )}
         <CreateClinicForm

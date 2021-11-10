@@ -90,11 +90,7 @@ const PatientDetailsModal = (
     }
 
     try {
-      await requestUpdatePatient(patient.id, patient, avatarFile, {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: currentClinic.id,
-        [HeaderKeys.subdomain]: currentClinic.domainName,
-      });
+      await requestUpdatePatient(patient.id, patient, avatarFile);
       await fetchPatientDetails(true);
       localDispatch(setAvatarFile(null));
       toast.success(textForKey('Saved successfully'))
@@ -248,6 +244,7 @@ const PatientDetailsModal = (
               <div className={styles.nameAndAvatar}>
                 <div className={styles.avatarWrapper}>
                   <EASImage
+                    enableLoading
                     src={patientAvatar}
                     placeholder={<IconAvatar />}
                     className={styles.avatarRoot}

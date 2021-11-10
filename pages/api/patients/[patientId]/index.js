@@ -29,6 +29,8 @@ export default authorized(async (req, res) => {
   }
 });
 
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
+
 function fetchPatientDetails(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { patientId } = req.query;

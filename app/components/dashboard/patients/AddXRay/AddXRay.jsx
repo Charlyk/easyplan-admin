@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
 import { addPatientXRayImage } from "../../../../../middleware/api/patients";
 import { textForKey } from '../../../../utils/localization';
+import { HeaderKeys } from "../../../../utils/constants";
 import EASModal from "../../../common/modals/EASModal";
 import EASSelect from "../../../common/EASSelect";
 import styles from './AddXRay.module.scss';
@@ -25,7 +26,7 @@ const phases = [
   },
 ];
 
-const AddXRay = ({ open, patientId, onClose }) => {
+const AddXRay = ({ open, currentClinic, authToken, patientId, onClose }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);

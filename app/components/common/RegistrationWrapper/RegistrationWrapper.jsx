@@ -6,14 +6,14 @@ import { toast } from "react-toastify";
 import { registerUser } from "../../../../middleware/api/auth";
 import { textForKey } from "../../../utils/localization";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
+import { HeaderKeys } from "../../../utils/constants";
 import { isDev } from "../../../../eas.config";
 import reducer, {
   initialState,
   setIsLoading
 } from './registrationWrapperSlice'
 import styles from './RegistrationWrapper.module.scss';
-import urlToLambda from "../../../utils/urlToLambda";
-import { HeaderKeys } from "../../../utils/constants";
+import EASImage from "../EASImage";
 
 const RegisterForm = dynamic(() => import('./RegisterForm'));
 
@@ -53,12 +53,13 @@ export default function RegistrationWrapper({ isMobile }) {
     <div className={styles.registerFormRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <div className={styles.logoContainer}>
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
-        </div>
+        <EASImage
+          src="settings/easyplan-logo.svg"
+          classes={{
+            root: styles.logoContainer,
+            image: styles.logoImage,
+          }}
+        />
       )}
       <div
         className={styles.formContainer}
@@ -68,10 +69,7 @@ export default function RegistrationWrapper({ isMobile }) {
         }}
       >
         {isMobileDevice && (
-          <img
-            src={urlToLambda('settings/easyplan-logo.svg')}
-            alt='EasyPlan'
-          />
+          <EASImage src="settings/easyplan-logo.svg" className={styles.logoImage}/>
         )}
         <RegisterForm
           isMobile={isMobileDevice}
