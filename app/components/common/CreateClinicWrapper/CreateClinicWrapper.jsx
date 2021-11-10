@@ -2,9 +2,7 @@ import React, { useReducer } from 'react';
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { Typography } from "@material-ui/core";
-
 import getClinicUrl from "../../../utils/getClinicUrl";
-import uploadFileToAWS from '../../../utils/uploadFileToAWS';
 import { createNewClinic } from "../../../../middleware/api/clinic";
 import { isDev } from "../../../../eas.config";
 import CreateClinicForm from "../CreateClinicForm";
@@ -14,6 +12,7 @@ import reducer, {
 } from './createClinicWrapperSlice';
 import styles from './CreateClinic.module.scss';
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
+import urlToLambda from "../../../utils/urlToLambda";
 
 export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin, isMobile }) {
   const router = useRouter();
@@ -37,12 +36,9 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
   const handleCreateClinic = async (clinicData) => {
     dispatch(setIsLoading(true));
     try {
-      if (clinicData.logoFile != null) {
-        const uploadResult = await uploadFileToAWS('avatars', clinicData.logoFile);
-        clinicData.logo = uploadResult?.location;
-        delete clinicData.logoFile;
-      }
-      const response = await createNewClinic(clinicData);
+      const requestBody = { ...clinicData };
+      delete requestBody.logoFile;
+      const response = await createNewClinic(clinicData, clinicData.logoFile);
       if (shouldLogin) {
         await router.replace('/login')
       } else if (redirect) {
@@ -68,7 +64,7 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
       {!isMobileDevice && (
         <div className={styles.logoContainer}>
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         </div>
@@ -82,7 +78,7 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
       >
         {isMobileDevice && (
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         )}

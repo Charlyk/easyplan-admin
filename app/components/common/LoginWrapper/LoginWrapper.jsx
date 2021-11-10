@@ -21,6 +21,7 @@ import reducer, {
   FormType,
 } from './loginWrapperSlice'
 import styles from './LoginWrapper.module.scss';
+import urlToLambda from "../../../utils/urlToLambda";
 
 const ResetPassword = dynamic(() => import('./ResetPassword'));
 const LoginForm = dynamic(() => import('./LoginForm'));
@@ -216,7 +217,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
         <div className={styles.logoContainer}>
           <img
             className={styles.logoImage}
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         </div>
@@ -231,7 +232,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
         {isMobileDevice && (
           <img
             className={styles.logoImage}
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         )}

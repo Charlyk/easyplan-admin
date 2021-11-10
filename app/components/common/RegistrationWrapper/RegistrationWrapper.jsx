@@ -3,8 +3,6 @@ import dynamic from 'next/dynamic';
 import { useRouter } from "next/router";
 import Typography from "@material-ui/core/Typography";
 import { toast } from "react-toastify";
-
-import uploadFileToAWS from "../../../utils/uploadFileToAWS";
 import { registerUser } from "../../../../middleware/api/auth";
 import { textForKey } from "../../../utils/localization";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
@@ -14,6 +12,7 @@ import reducer, {
   setIsLoading
 } from './registrationWrapperSlice'
 import styles from './RegistrationWrapper.module.scss';
+import urlToLambda from "../../../utils/urlToLambda";
 
 const RegisterForm = dynamic(() => import('./RegisterForm'));
 
@@ -30,12 +29,9 @@ export default function RegistrationWrapper({ isMobile }) {
   const handleCreateAccount = async (accountData) => {
     dispatch(setIsLoading(true));
     try {
-      if (accountData.avatarFile != null) {
-        const uploadResult = await uploadFileToAWS('avatars', accountData.avatarFile);
-        accountData.avatar = uploadResult?.location;
-        delete accountData.avatarFile;
-      }
-      await registerUser(accountData);
+      const requestBody = { ...accountData };
+      delete requestBody.avatarFile;
+      await registerUser(accountData, accountData.avatarFile);
       toast.success(textForKey('account_created_success'));
       await router.replace('/create-clinic?login=1');
     } catch (error) {
@@ -56,7 +52,7 @@ export default function RegistrationWrapper({ isMobile }) {
       {!isMobileDevice && (
         <div className={styles.logoContainer}>
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         </div>
@@ -70,7 +66,7 @@ export default function RegistrationWrapper({ isMobile }) {
       >
         {isMobileDevice && (
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         )}

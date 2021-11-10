@@ -31,7 +31,7 @@ const ApplicationSettings = ({ currentClinic: clinic }) => {
         timeBeforeOnSite: parseInt(time),
       };
       await updateClinic(requestBody);
-      router.replace(router.asPath);
+      await router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
       toast.error(error.message);

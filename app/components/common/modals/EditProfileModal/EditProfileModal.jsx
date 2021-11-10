@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
-import axios from "axios";
-
 import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
-import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
 import urlToLambda from '../../../../utils/urlToLambda';
 import { textForKey } from '../../../../utils/localization';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
@@ -14,6 +11,7 @@ import EASTextField from "../../EASTextField";
 import EASPhoneInput from "../../EASPhoneInput";
 import EASModal from "../EASModal";
 import styles from './EditProfileModal.module.scss';
+import { updateUserAccount } from "../../../../../middleware/api/auth";
 
 const EditProfileModal = ({ open, currentUser, onClose }) => {
   const router = useRouter();
@@ -77,13 +75,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
     event?.preventDefault();
     setIsLoading(true);
     try {
-      let avatar = data.avatarUrl;
-      if (data.avatarFile != null) {
-        const uploadResult = await uploadFileToAWS('avatars', data.avatarFile);
-        avatar = uploadResult?.location;
-      }
       const requestBody = {
-        avatar,
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.email,
@@ -92,7 +84,7 @@ const EditProfileModal = ({ open, currentUser, onClose }) => {
         password: data.password,
         confirmPassword: data.confirmPassword,
       };
-      await axios.put(`/api/auth/update-account`, requestBody);
+      await updateUserAccount(requestBody, data.avatarUrl);
       toast.success(textForKey('Saved successfully'));
       onClose();
       await router.replace(router.asPath);

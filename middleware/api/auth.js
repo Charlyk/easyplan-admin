@@ -1,4 +1,5 @@
 import { del, get, post, put } from "./request";
+import imageToBase64 from "../../app/utils/imageToBase64";
 
 /**
  * Perform login request
@@ -18,13 +19,17 @@ export async function loginUser(body, headers = null) {
  *   username: string,
  *   password: string,
  *   phoneNumber: string,
- *   avatar: string|null,
  * }} body
+ * @param {File?} avatar
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function registerUser(body, headers = null) {
-  return post('/api/auth/register', headers, body)
+export async function registerUser(body, avatar, headers = null) {
+  const updatedBody = { ...body };
+  if (avatar != null) {
+    updatedBody.avatar = await imageToBase64(avatar)
+  }
+  return post('/api/auth/register', headers, updatedBody)
 }
 
 /**
@@ -67,11 +72,16 @@ export async function getCurrentUser(headers = null) {
 /**
  * Update current user account
  * @param {Object} body
+ * @param {File?} avatar
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updateUserAccount(body, headers = null) {
-  return put('/api/auth/update-account', headers, body);
+export async function updateUserAccount(body, avatar, headers = null) {
+  const updatedBody = { ...body };
+  if (avatar != null) {
+    updatedBody.avatar = await imageToBase64(avatar)
+  }
+  return put('/api/auth/update-account', headers, updatedBody);
 }
 
 /**

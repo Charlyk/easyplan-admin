@@ -11,6 +11,7 @@ import { PasswordRegex } from '../../../utils/constants';
 import LoadingButton from '../LoadingButton';
 import EASTextField from "../EASTextField";
 import styles from './ResetPasswordForm.module.scss';
+import urlToLambda from "../../../utils/urlToLambda";
 
 const ResetPasswordForm = ({ token }) => {
   const isMobileDevice = useIsMobileDevice();
@@ -65,7 +66,7 @@ const ResetPasswordForm = ({ token }) => {
       {!isMobileDevice && (
         <div className={styles.logoContainer}>
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         </div>
@@ -79,7 +80,7 @@ const ResetPasswordForm = ({ token }) => {
       >
         {isMobileDevice && (
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         )}

@@ -6,6 +6,8 @@ import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
+export const config = { api: { bodyParser: { sizeLimit: '20mb' } } };
+
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
@@ -48,9 +50,9 @@ async function deletePatient(req) {
 
 function createPatient(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const requestBody = req.body;
-  return axios.post(`${updatedServerUrl(req)}/patients`, requestBody, {
+  return axios.post(`${updatedServerUrl(req)}/patients`, req.body, {
     headers: {
+      ...req.headers,
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),

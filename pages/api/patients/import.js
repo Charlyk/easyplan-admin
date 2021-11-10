@@ -1,12 +1,12 @@
 import axios from "axios";
 import cookie from 'cookie';
-import { IncomingForm } from "formidable";
-
 import { handler } from "../handler";
 import { authorized } from "../authorized";
 import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -26,15 +26,6 @@ export default authorized(async (req, res) => {
 
 async function importPatients(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const data = await new Promise((resolve, reject) => {
-    const form = new IncomingForm();
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve({ fields, files });
-    });
-  });
   return axios.post(`${updatedServerUrl(req)}/patients/import`, req.body, {
     headers: {
       ...req.headers,

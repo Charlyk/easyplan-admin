@@ -1,4 +1,5 @@
 import { del, get, post, put } from "./request";
+import imageToBase64 from "../../app/utils/imageToBase64";
 
 /**
  * Fetch users list
@@ -90,13 +91,17 @@ export async function updateUserCashierStatus(userId, isCashier, headers = null)
  *   password: any,
  *   phoneNumber: any,
  *   invitationToken: any,
- *   avatar: any
  * }} body
+ * @param {File} avatar
  * @param headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestAcceptInvitation(body, headers = null) {
-  return put('/api/users/accept-invitation', headers, body);
+export async function requestAcceptInvitation(body, avatar, headers = null) {
+  const updatedBody = { ...body };
+  if (avatar != null) {
+    updatedBody.avatar = await imageToBase64(avatar);
+  }
+  return put('/api/users/accept-invitation', headers, updatedBody);
 }
 
 /**

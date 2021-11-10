@@ -37,7 +37,7 @@ const XRayImage = ({ image, onImageClick, onImageDelete }) => {
         <img
           className={styles.image}
           key={image.id}
-          src={urlToLambda(image.imageUrl, 150)}
+          src={urlToLambda(image.imageUrl)}
           alt='X-Ray'
         />
         <IconButton

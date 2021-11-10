@@ -5,23 +5,22 @@ import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
-
-import IconSuccess from '../../../../icons/iconSuccess';
-import { EmailRegex, Languages, PatientSources } from '../../../../../utils/constants';
+import { requestUpdatePatient } from "../../../../../../middleware/api/patients";
+import { EmailRegex, HeaderKeys, Languages, PatientSources } from '../../../../../utils/constants';
 import adjustValueToNumber from '../../../../../utils/adjustValueToNumber';
-import { textForKey } from '../../../../../utils/localization';
-import LoadingButton from '../../../../common/LoadingButton';
-import { actions, initialState, reducer } from './PatientPersonalData.reducer';
-import { updatePatient } from "../../../../../../middleware/api/patients";
 import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
+import { textForKey } from '../../../../../utils/localization';
+import IconSuccess from '../../../../icons/iconSuccess';
+import LoadingButton from '../../../../common/LoadingButton';
 import EASTextField from "../../../../common/EASTextField";
 import EASPhoneInput from "../../../../common/EASPhoneInput";
-import styles from './PatientPersonalData.module.scss';
 import EASSelect from "../../../../common/EASSelect";
+import { actions, initialState, reducer } from './PatientPersonalData.reducer';
+import styles from './PatientPersonalData.module.scss';
 
 const EasyDatePicker = dynamic(() => import('../../../../common/EasyDatePicker'));
 
-const PatientPersonalData = ({ patient, onPatientUpdated }) => {
+const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdated }) => {
   const datePickerRef = useRef();
   const [
     {
@@ -110,16 +109,13 @@ const PatientPersonalData = ({ patient, onPatientUpdated }) => {
       language,
       source,
       euroDebt,
+      birthday: birthday ? moment(birthday).format('YYYY-MM-DD') : null,
       countryCode: country.dialCode,
       discount: discount ? parseInt(discount) : 0,
     };
 
-    if (birthday) {
-      requestBody.birthday = moment(birthday).format('YYYY-MM-DD');
-    }
-
     try {
-      await updatePatient(patient.id, requestBody);
+      await requestUpdatePatient(patient.id, requestBody);
       await onPatientUpdated(true);
       toast.success(textForKey('Saved successfully'))
     } catch (error) {

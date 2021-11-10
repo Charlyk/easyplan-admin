@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
-
-import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
-import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
-import { textForKey } from '../../../../utils/localization';
-import { addPatientXRayImage } from "../../../../../middleware/api/patients";
-import EASModal from "../../../common/modals/EASModal";
-import styles from './AddXRay.module.scss';
-import EASSelect from "../../../common/EASSelect";
 import Typography from "@material-ui/core/Typography";
+import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
+import { addPatientXRayImage } from "../../../../../middleware/api/patients";
+import { textForKey } from '../../../../utils/localization';
+import EASModal from "../../../common/modals/EASModal";
+import EASSelect from "../../../common/EASSelect";
+import styles from './AddXRay.module.scss';
 
 const phases = [
   {
@@ -44,14 +42,8 @@ const AddXRay = ({ open, patientId, onClose }) => {
 
   const handleSaveImage = async () => {
     setIsLoading(true);
-    const uploadResult = await uploadFileToAWS('x-ray', imageFile);
-    if (!uploadResult) return;
     try {
-      const requestBody = {
-        imageUrl: uploadResult.location,
-        type: phase,
-      };
-      await addPatientXRayImage(patientId, requestBody);
+      await addPatientXRayImage(patientId, phase, imageFile);
       dispatch(triggerUpdateXRay());
       onClose();
     } catch (error) {

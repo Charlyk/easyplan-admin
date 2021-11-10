@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import EASModal from "../EASModal";
 import styles from './FullScreenImageModal.module.scss'
+import urlToLambda from "../../../../utils/urlToLambda";
 
 const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +21,7 @@ const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
           </div>
         )}
         <img
-          src={imageUrl}
+          src={urlToLambda(imageUrl)}
           alt='Full screen'
           onLoad={() => setIsLoading(false)}
         />

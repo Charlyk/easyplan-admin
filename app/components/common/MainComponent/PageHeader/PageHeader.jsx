@@ -3,22 +3,20 @@ import dynamic from 'next/dynamic';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
-import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-
-import IconAvatar from '../../../icons/iconAvatar';
+import { setPaymentModal } from '../../../../../redux/actions/actions';
+import { Role } from "../../../../utils/constants";
+import urlToLambda from "../../../../utils/urlToLambda";
+import { textForKey } from '../../../../utils/localization';
+import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import IconEdit from '../../../icons/iconEdit';
 import IconMore from '../../../icons/iconMore';
-import IconNotifications from '../../../icons/iconNotifications';
 import IconPlus from '../../../icons/iconPlus';
+import IconAvatar from '../../../icons/iconAvatar';
 import IconTurnOff from '../../../icons/iconTurnOff';
-import { setPaymentModal } from '../../../../../redux/actions/actions';
-import { textForKey } from '../../../../utils/localization';
 import InvoicesButton from '../../../dashboard/InvoicesButton';
-import { Role } from "../../../../utils/constants";
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import IconNotifications from '../../../icons/iconNotifications';
 import styles from './PageHeader.module.scss';
-import Button from "@material-ui/core/Button";
 
 const ActionsSheet = dynamic(() => import('../../ActionsSheet'));
 
@@ -114,7 +112,7 @@ const PageHeader = (
             <img
               alt='Avatar'
               className={styles.avatarImage}
-              src={user.avatar}
+              src={urlToLambda(user.avatar)}
             />
           ) : (
             <IconAvatar/>

@@ -7,15 +7,12 @@ import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
-
 import IconLogoPlaceholder from '../../../icons/iconLogoPlaceholder';
 import IconSuccess from '../../../icons/iconSuccess';
 import IconTrash from '../../../icons/iconTrash';
 import LoadingButton from '../../../common/LoadingButton';
 import { changeSelectedClinic } from '../../../../../redux/actions/actions';
 import { EmailRegex } from '../../../../utils/constants';
-import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
-import urlToLambda from '../../../../utils/urlToLambda';
 import { textForKey } from '../../../../utils/localization';
 import {
   clinicTimeZones,
@@ -209,11 +206,6 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
     if (!isFormValid()) return;
     setIsSaving(true);
     try {
-      let logoUrl = data.logoUrl;
-      if (data.logoFile != null) {
-        const uploadResult = await uploadFileToAWS('avatars', data.logoFile);
-        logoUrl = uploadResult?.location;
-      }
       const requestBody = {
         id: data.id,
         clinicName: data.clinicName,
@@ -228,11 +220,10 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
         description: data.description,
         workdays: data.workdays,
         hasBrackets: data.hasBrackets,
-        logoUrl,
       };
 
-      const response = await updateClinic(requestBody);
-      router.replace(router.asPath);
+      const response = await updateClinic(requestBody, data.logoFile);
+      await router.replace(router.asPath);
       setData({ ...data, ...response.data });
       toast.success(textForKey('Saved successfully'));
 
@@ -259,7 +250,7 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries }) => {
 
   const logoSrc =
     (data.logoFile && window.URL.createObjectURL(data.logoFile)) ||
-    (data.logoUrl ? urlToLambda(data.logoUrl, 150) : null);
+    (data.logoUrl ? data.logoUrl : null);
 
   return (
     <div className={styles.companyDetailsForm}>

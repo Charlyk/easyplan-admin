@@ -1,5 +1,5 @@
-import generateReducerActions from "../../../../utils/generateReducerActions";
 import { textForKey } from "../../../../utils/localization";
+import { createSlice } from "@reduxjs/toolkit";
 
 export const MenuItem = {
   personalInfo: 'personal-info',
@@ -91,36 +91,40 @@ export const initialState = {
   isFetching: false,
   patient: null,
   viewInvoice: null,
+  avatarFile: null,
 };
 
-const reducerTypes = {
-  setCurrentMenu: 'setCurrentMenu',
-  setIsFetching: 'setIsFetching',
-  setPatient: 'setPatient',
-  setViewInvoice: 'setViewInvoice',
-};
-
-export const actions = generateReducerActions(reducerTypes);
-
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setCurrentMenu:
-      return { ...state, currentMenu: action.payload };
-    case reducerTypes.setIsFetching:
-      return { ...state, isFetching: action.payload };
-    case reducerTypes.setPatient:
-      return { ...state, patient: action.payload };
-    case reducerTypes.setViewInvoice:
+const patientDetailsModalSlice = createSlice({
+  name: 'patientDetailsModal',
+  initialState,
+  reducers: {
+    setCurrentMenu(state, action) {
+      state.currentMenu = action.payload;
+    },
+    setIsFetching(state, action) {
+      state.isFetching = action.payload;
+    },
+    setPatient(state, action) {
+      state.patient = action.payload;
+    },
+    setViewInvoice(state, action) {
+      state.viewInvoice = action.payload;
       if (action.payload != null) {
-        return {
-          ...state,
-          viewInvoice: action.payload,
-          currentMenu: MenuItem.debts,
-        };
-      } else {
-        return { ...state, viewInvoice: action.payload };
+        state.currentMenu = MenuItems.debts;
       }
-    default:
-      return state;
-  }
-};
+    },
+    setAvatarFile(state, action) {
+      state.avatarFile = action.payload;
+    },
+  },
+});
+
+export const {
+  setAvatarFile,
+  setCurrentMenu,
+  setViewInvoice,
+  setPatient,
+  setIsFetching,
+} = patientDetailsModalSlice.actions;
+
+export default patientDetailsModalSlice.reducer;

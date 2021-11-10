@@ -1,25 +1,25 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-import axios from "axios";
 import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
 
+import { requestCreatePatient } from "../../../../../middleware/api/patients";
 import { togglePatientsListUpdate } from '../../../../../redux/actions/actions';
 import { textForKey } from '../../../../utils/localization';
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
+import { EmailRegex, HeaderKeys, Languages, PatientSources } from "../../../../utils/constants";
 import EASModal from "../../../common/modals/EASModal";
 import EASTextField from "../../../common/EASTextField";
 import EASPhoneInput from "../../../common/EASPhoneInput";
+import EASSelect from "../../../common/EASSelect";
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 import styles from './CreatePatientModal.module.scss';
-import { EmailRegex, Languages, PatientSources } from "../../../../utils/constants";
-import EASSelect from "../../../common/EASSelect";
 
 const EasyDatePicker = dynamic(() => import('../../../common/EasyDatePicker'));
 
-const CreatePatientModal = ({ open, onClose }) => {
+const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
   const dispatch = useDispatch();
   const birthdayPickerAnchor = useRef();
   const [
@@ -63,7 +63,11 @@ const CreatePatientModal = ({ open, onClose }) => {
         email: email.length > 0 ? email : null,
         countryCode: phoneCountry.dialCode,
       };
-      await axios.post(`/api/patients`, requestBody);
+      await requestCreatePatient(requestBody, null, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
       dispatch(togglePatientsListUpdate(true));
       onClose();
     } catch (error) {

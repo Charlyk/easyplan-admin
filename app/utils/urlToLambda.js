@@ -1,4 +1,5 @@
-import { imageLambdaUrl } from "../../eas.config";
+import { baseApiUrl, imageLambdaUrl } from "../../eas.config";
+import isValidUrl from "./isValidUrl";
 
 /**
  * convert image url to lambda url
@@ -7,6 +8,11 @@ import { imageLambdaUrl } from "../../eas.config";
  * @return {string}
  */
 export default function urlToLambda(imageUrl, width = 50) {
-  const url = new URL(imageUrl);
-  return `${imageLambdaUrl}${url.pathname}?width=${width}`;
+  console.log(imageUrl)
+  if (isValidUrl(imageUrl)) {
+    const url = new URL(imageUrl);
+    return `${baseApiUrl}/files${url.pathname}`;
+  } else {
+    return `${baseApiUrl}/files/${imageUrl}`;
+  }
 }

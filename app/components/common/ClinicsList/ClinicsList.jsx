@@ -14,6 +14,7 @@ import { isDev } from "../../../../eas.config";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import ClinicItem from "./ClinicItem";
 import styles from './ClnicsList.module.scss';
+import urlToLambda from "../../../utils/urlToLambda";
 
 export default function ClinicsList({ user, authToken, isMobile }) {
   const router = useRouter();
@@ -71,7 +72,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
       {!isMobileDevice && (
         <div className={styles.logoContainer}>
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         </div>
@@ -85,7 +86,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
       >
         {isMobileDevice && (
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         )}

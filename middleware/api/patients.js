@@ -1,6 +1,7 @@
-import { del, get, post, put } from "./request";
 import axios from "axios";
 import { baseApiUrl } from "../../eas.config";
+import { del, get, post, put } from "./request";
+import imageToBase64 from "../../app/utils/imageToBase64";
 
 /**
  * Delete patient
@@ -113,12 +114,18 @@ export async function getPatientPhoneRecords(patientId, page, headers = null) {
  *   discount: number,
  *   language: string,
  *   source: string,
+ *   countryCode: string,
  * }} requestBody
+ * @param {File?} photo
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updatePatient(patientId, requestBody, headers = null) {
-  return put(`/api/patients/${patientId}`, headers, requestBody)
+export async function requestUpdatePatient(patientId, requestBody, photo, headers = null) {
+  const updatedBody = { ...requestBody };
+  if (photo != null) {
+    updatedBody.photo = await imageToBase64(photo)
+  }
+  return put(`/api/patients/${patientId}`, headers, updatedBody);
 }
 
 /**
@@ -209,15 +216,14 @@ export async function updatePatientGeneralTreatmentPlan(requestBody, headers = n
 /**
  * Add an image to patient x-ray files
  * @param {number} patientId
- * @param {{
- *   imageUrl: string,
-     type: string,
- * }} requestBody
+ * @param {string} type
+ * @param {File} image
  * @param {Object | null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function addPatientXRayImage(patientId, requestBody, headers = null) {
-  return post(`/api/patients/${patientId}/x-ray`, headers, requestBody);
+export async function addPatientXRayImage(patientId, type, image, headers = null) {
+  const encodedImage = await imageToBase64(image);
+  return post(`/api/patients/${patientId}/x-ray`, headers, { type, image: encodedImage });
 }
 
 /**
@@ -296,4 +302,19 @@ export async function requestSendSms(messageText, patientId, dealId = null, head
  */
 export async function requestFetchSmsMessages(patientId, headers = null) {
   return get(`/api/patients/${patientId}/sms`, headers);
+}
+
+/**
+ * Create new patient
+ * @param {*} requestBody
+ * @param {File?} photo
+ * @param headers
+ * @return {Promise<AxiosResponse<any>>}
+ */
+export async function requestCreatePatient(requestBody, photo, headers = null) {
+  const updatedBody = { ...requestBody };
+  if (photo != null) {
+    updatedBody.photo = await imageToBase64(photo)
+  }
+  return post(`${baseApiUrl}/patients`, headers, requestBody);
 }

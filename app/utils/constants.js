@@ -73,15 +73,6 @@ export const FacebookAppId = environment === 'local' ? '367664371555800' : '2924
 
 export const YClientAPIUrl = 'https://api.yclients.com/api';
 
-export const S3Config = (dirname) => ({
-  bucketName: 'easyplan-pro-files',
-  dirName: dirname,
-  region: 'eu-central-1',
-  accessKeyId: 'AKIAIIQ6GZLJGOFJ77LA',
-  secretAccessKey: 'hfPv7beCRvEm6v7j1nBzWgZyxX0MELjLzBv6rDai',
-  // s3Url: 'https:/your-custom-s3-url.com/' /* optional */,
-});
-
 export function createHoursList() {
   return [].concat(
     ...Array.from(Array(24), (_, hour) => [
@@ -469,6 +460,7 @@ export const HeaderKeys = {
   authorization: 'Authorization',
   clinicId: 'X-EasyPlan-Clinic-Id',
   subdomain: 'X-EasyPlan-Subdomain',
+  contentType: 'Content-Type'
 };
 
 export const APP_DATA_API = '/api/analytics/app-data';

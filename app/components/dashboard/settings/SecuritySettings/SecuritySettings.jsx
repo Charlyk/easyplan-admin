@@ -42,12 +42,8 @@ const SecuritySettings = ({ currentUser }) => {
 
     setIsLoading(true);
     try {
-      const requestBody = {
-        ...data,
-        avatar: currentUser.avatar,
-      };
-      await updateUserAccount(requestBody);
-      router.replace(router.asPath);
+      await updateUserAccount(data);
+      await router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
       toast.error(error.message);

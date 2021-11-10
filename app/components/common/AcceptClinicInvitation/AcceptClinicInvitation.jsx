@@ -1,15 +1,12 @@
 import React, { useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress'
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from "@material-ui/core/IconButton";
 import clsx from 'clsx';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
-
 import { requestAcceptInvitation } from "../../../../middleware/api/users";
-import uploadFileToAWS from '../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../utils/localization';
 import { PasswordRegex, Role } from '../../../utils/constants';
 import isPhoneNumberValid from "../../../utils/isPhoneNumberValid";
@@ -29,6 +26,8 @@ import reducer, {
   setIsLoading,
 } from './AcceptClinicInvitation.reducer';
 import styles from './AcceptInvitation.module.scss';
+import { baseApiUrl } from "../../../../eas.config";
+import urlToLambda from "../../../utils/urlToLambda";
 
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
   const router = useRouter();
@@ -123,13 +122,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
         phoneNumber,
         invitationToken: token,
       };
-      if (avatarFile != null) {
-        const uploadResult = await uploadFileToAWS('avatars', avatarFile);
-        if (uploadResult?.location != null) {
-          requestBody.avatar = uploadResult.location;
-        }
-      }
-      const { data: user } = await requestAcceptInvitation(requestBody);
+      const { data: user } = await requestAcceptInvitation(requestBody, avatarFile);
       toast.success(textForKey('invitation_accepted_success'));
       await handleSuccessResponse(user)
     } catch (error) {
@@ -155,7 +148,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
       {!isMobileDevice && (
         <div className={styles.logoContainer}>
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         </div>
@@ -168,7 +161,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
       >
         {isMobileDevice && (
           <img
-            src='https://easyplan-pro-files.s3.eu-central-1.amazonaws.com/settings/easyplan-logo.svg'
+            src={urlToLambda('settings/easyplan-logo.svg')}
             alt='EasyPlan'
           />
         )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import clsx from "clsx";
 import PropTypes from 'prop-types';
 import Modal from '@material-ui/core/Modal';
@@ -7,16 +7,22 @@ import MuiMenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
-
-import IconAvatar from '../../../icons/iconAvatar';
-import IconClose from '../../../icons/iconClose';
 import {
   setPatientXRayModal,
   togglePatientsListUpdate,
 } from '../../../../../redux/actions/actions';
 import { setAddPaymentModal } from '../../../../../redux/actions/addPaymentModalActions';
-import { getPatientDetails } from "../../../../../middleware/api/patients";
+import { getPatientDetails, requestUpdatePatient } from "../../../../../middleware/api/patients";
+import onRequestError from "../../../../utils/onRequestError";
+import { textForKey } from "../../../../utils/localization";
+import urlToLambda from "../../../../utils/urlToLambda";
+import { HeaderKeys } from "../../../../utils/constants";
+import IconEdit from "../../../icons/iconEdit";
+import IconAvatar from '../../../icons/iconAvatar';
+import IconClose from '../../../icons/iconClose';
 import AppointmentNotes from './AppointmentNotes';
 import PatientAppointments from './PatientAppointments';
 import PatientHistory from './PatientHistory';
@@ -29,15 +35,17 @@ import OrthodonticPlan from './OrthodonticPlan';
 import PatientXRay from './PatientXRay';
 import PatientTreatmentPlanContainer from "./PatientTreatmentPlanContainer";
 import PatientPhoneRecords from "./PatientPhoneRecords";
-import {
-  reducer,
+import reducer, {
   initialState,
-  actions,
-  MenuItem, MenuItems
+  setAvatarFile,
+  setCurrentMenu,
+  setViewInvoice,
+  setPatient,
+  setIsFetching,
+  MenuItem,
+  MenuItems
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
-import IconButton from "@material-ui/core/IconButton";
-import onRequestError from "../../../../utils/onRequestError";
 
 const PatientDetailsModal = (
   {
@@ -52,20 +60,43 @@ const PatientDetailsModal = (
   }
 ) => {
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
+  const imageRef = useRef(null);
   const [
-    { currentMenu, isFetching, patient, viewInvoice },
+    { currentMenu, isFetching, patient, viewInvoice, avatarFile },
     localDispatch,
   ] = useReducer(reducer, initialState);
+  const patientAvatar = avatarFile ?? patient?.avatar;
+
+  const updateImagePreview = useCallback((reader) => {
+    if (imageRef.current != null) {
+      imageRef.current.src = reader.target.result;
+    }
+  }, [imageRef.current]);
+
+  useEffect(() => {
+    if (patientAvatar == null) {
+      return;
+    }
+    if (typeof patientAvatar === 'object') {
+      const reader = new FileReader();
+      reader.addEventListener('load', updateImagePreview)
+      reader.readAsDataURL(avatarFile);
+    } else if (typeof patientAvatar === 'string') {
+      imageRef.current.crossOrigin = 'anonymous';
+      imageRef.current.src = urlToLambda(patientAvatar, 100);
+    }
+  }, [patientAvatar, updateImagePreview]);
 
   useEffect(() => {
     if (!show) {
-      localDispatch(actions.setCurrentMenu(MenuItem.personalInfo));
+      localDispatch(setCurrentMenu(MenuItem.personalInfo));
     }
   }, [show]);
 
   useEffect(() => {
     if (menuItem != null) {
-      localDispatch(actions.setCurrentMenu(menuItem));
+      localDispatch(setCurrentMenu(menuItem));
     }
   }, [menuItem]);
 
@@ -73,17 +104,32 @@ const PatientDetailsModal = (
     fetchPatientDetails();
   }, [patientId]);
 
+  const updatePatientPhoto = async (avatarFile) => {
+    if (avatarFile == null) {
+      return;
+    }
+
+    try {
+      await requestUpdatePatient(patient.id, patient, avatarFile);
+      await fetchPatientDetails(true);
+      localDispatch(setAvatarFile(null));
+      toast.success(textForKey('Saved successfully'))
+    } catch (error) {
+      onRequestError(error);
+    }
+  }
+
   const fetchPatientDetails = async (updateList = false) => {
     if (patientId == null) return;
-    localDispatch(actions.setIsFetching(true));
+    localDispatch(setIsFetching(true));
     try {
       const response = await getPatientDetails(patientId);
       const { data: patient } = response;
-      localDispatch(actions.setPatient(patient));
+      localDispatch(setPatient(patient));
     } catch (error) {
       onRequestError(error);
     } finally {
-      localDispatch(actions.setIsFetching(false));
+      localDispatch(setIsFetching(false));
       if (updateList) {
         dispatch(togglePatientsListUpdate(true));
       }
@@ -103,12 +149,12 @@ const PatientDetailsModal = (
     } else if (targetId === MenuItem.addPayment) {
       dispatch(setAddPaymentModal({ open: true, patient }));
     } else {
-      localDispatch(actions.setCurrentMenu(targetId));
+      localDispatch(setCurrentMenu(targetId));
     }
   };
 
   const handleDebtViewed = () => {
-    localDispatch(actions.setViewInvoice(null));
+    localDispatch(setViewInvoice(null));
   };
 
   const handleAddXRayImages = () => {
@@ -119,12 +165,24 @@ const PatientDetailsModal = (
     event.stopPropagation();
   };
 
+  const handleEditAvatar = () => {
+    inputRef.current?.click();
+  };
+
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files[0];
+    updatePatientPhoto(file);
+    localDispatch(setAvatarFile(file));
+  }
+
   const menuContent = () => {
     switch (currentMenu) {
       case MenuItem.personalInfo:
         return (
           <PatientPersonalData
             patient={patient}
+            currentClinic={currentClinic}
+            authToken={authToken}
             onPatientUpdated={fetchPatientDetails}
           />
         );
@@ -183,6 +241,15 @@ const PatientDetailsModal = (
       className={styles.patientDetailsModal}
     >
       <Paper className={styles.modalPaper}>
+        <input
+          ref={inputRef}
+          className='custom-file-button'
+          type='file'
+          name='avatar-file'
+          id='avatar-file'
+          accept='.jpg,.jpeg,.png'
+          onChange={handleAvatarChange}
+        />
         <div className={styles.dataContainer}>
           <IconButton
             role='button'
@@ -196,7 +263,19 @@ const PatientDetailsModal = (
             <div className={styles.menuContainer}>
               <div className={styles.nameAndAvatar}>
                 <div className={styles.avatarWrapper}>
-                  <IconAvatar/>
+                  <div className={styles.editAvatarWrapper}>
+                    <IconButton
+                      className={styles.editBtn}
+                      onClick={handleEditAvatar}
+                    >
+                      <IconEdit fill="#3A83DC" />
+                    </IconButton>
+                  </div>
+                  {patientAvatar ? (
+                    <img ref={imageRef} alt="Avatar image"/>
+                  ) : (
+                    <IconAvatar />
+                  )}
                 </div>
                 <Typography classes={{ root: styles.nameLabel }}>
                   {patient?.fullName}

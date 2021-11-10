@@ -4,6 +4,7 @@ import IconAvatar from "../../icons/iconAvatar";
 import IconEdit from "../../icons/iconEdit";
 import IconPlus from "../../icons/iconPlus";
 import styles from './UploadAvatar.module.scss';
+import urlToLambda from "../../../utils/urlToLambda";
 
 const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
   const inputRef = useRef(null);
@@ -25,7 +26,7 @@ const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
       reader.readAsDataURL(currentAvatar);
       return () => reader.removeEventListener('load', updateImagePreview);
     } else if (imageRef.current != null) {
-      imageRef.current.src = currentAvatar;
+      imageRef.current.src = urlToLambda(currentAvatar);
     }
   }, [currentAvatar, updateImagePreview]);
 

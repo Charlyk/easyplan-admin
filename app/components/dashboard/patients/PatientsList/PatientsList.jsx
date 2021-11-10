@@ -255,6 +255,8 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
       />
       <CreatePatientModal
         open={showCreateModal}
+        currentClinic={currentClinic}
+        authToken={authToken}
         onClose={handleCloseCreatePatient}
       />
       <div className={styles.content}>

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
-
 import IconSuccess from '../../../icons/iconSuccess';
 import LoadingButton from '../../../common/LoadingButton';
 import { EmailRegex } from '../../../../utils/constants';
-import uploadFileToAWS from '../../../../utils/uploadFileToAWS';
 import { textForKey } from '../../../../utils/localization';
 import { updateUserAccount } from "../../../../../middleware/api/auth";
 import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
@@ -69,13 +67,7 @@ const AccountSettings = ({ currentUser }) => {
   const submitForm = async () => {
     setIsLoading(true);
     try {
-      let avatar = data.avatarUrl;
-      if (data.avatarFile != null) {
-        const uploadResult = await uploadFileToAWS('avatars', data.avatarFile);
-        avatar = uploadResult?.location;
-      }
       const requestBody = {
-        avatar,
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.email,
@@ -83,8 +75,8 @@ const AccountSettings = ({ currentUser }) => {
         phoneNumber: data.phoneNumber,
       };
 
-      await updateUserAccount(requestBody);
-      router.replace(router.asPath);
+      await updateUserAccount(requestBody, data.avatarFile);
+      await router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
       toast.error(error.message);
