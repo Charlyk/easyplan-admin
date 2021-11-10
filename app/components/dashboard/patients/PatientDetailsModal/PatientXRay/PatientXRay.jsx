@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { toast } from "react-toastify";
 import { useSelector } from 'react-redux';
-
+import Lightbox from "react-awesome-lightbox";
 import IconPlus from '../../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../utils/localization';
@@ -17,6 +17,8 @@ import {
 } from "../../../../../../middleware/api/patients";
 import XRayPhase from './XRayPhase';
 import styles from './PatientXRay.module.scss'
+import urlToLambda from "../../../../../utils/urlToLambda";
+import urlToAWS from "../../../../../utils/urlToAWS";
 
 const ConfirmationModal = dynamic(() => import("../../../../common/modals/ConfirmationModal"));
 
@@ -29,6 +31,7 @@ const ExpandedPhase = {
 const PatientXRay = ({ patient, onAddXRay }) => {
   const updateXRay = useSelector(updateXRaySelector);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [imageToView, setImageToView] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ show: false, image: null });
   const [isFetching, setIsFetching] = useState(false);
   const [state, setState] = useState({
@@ -73,6 +76,14 @@ const PatientXRay = ({ patient, onAddXRay }) => {
     setDeleteModal({ show: false, image: null });
   }
 
+  const handleImageClick = (image) => {
+    setImageToView(image);
+  };
+
+  const handleCloseImageView = () => {
+    setImageToView(null);
+  }
+
   const deleteXRayImage = async () => {
     if (deleteModal.image == null) {
       return;
@@ -97,6 +108,13 @@ const PatientXRay = ({ patient, onAddXRay }) => {
 
   return (
     <div className={styles.patientXRay}>
+      {imageToView && (
+        <Lightbox
+          title={textForKey(`${imageToView.imageType} phase`)}
+          image={urlToAWS(imageToView.imageUrl)}
+          onClose={handleCloseImageView}
+        />
+      )}
       <ConfirmationModal
         show={deleteModal.show}
         isLoading={isDeleting}
@@ -115,6 +133,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             isExpanded
             images={state.images.initial}
             phaseId={ExpandedPhase.initial}
+            onImageClick={handleImageClick}
             onDeleteImage={handleDeleteXRayImage}
           />
         )}
@@ -124,6 +143,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             isExpanded
             images={state.images.middle}
             phaseId={ExpandedPhase.middle}
+            onImageClick={handleImageClick}
             onDeleteImage={handleDeleteXRayImage}
           />
         )}
@@ -133,6 +153,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
             isExpanded
             images={state.images.final}
             phaseId={ExpandedPhase.final}
+            onImageClick={handleImageClick}
             onDeleteImage={handleDeleteXRayImage}
           />
         )}

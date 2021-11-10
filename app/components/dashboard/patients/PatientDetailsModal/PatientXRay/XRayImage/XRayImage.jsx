@@ -2,8 +2,6 @@ import React from "react";
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-
-import urlToLambda from "../../../../../../utils/urlToLambda";
 import IconTrash from "../../../../../icons/iconTrash";
 import styles from "./XRayImage.module.scss";
 import EASImage from "../../../../../common/EASImage";
@@ -58,5 +56,7 @@ XRayImage.propTypes = {
     id: PropTypes.number,
     imageUrl: PropTypes.string,
     thumbnailUrl: PropTypes.string,
-  })
+  }),
+  onImageClick: PropTypes.func,
+  onImageDelete: PropTypes.func,
 }

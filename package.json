@@ -38,6 +38,7 @@
     "pubnub": "^4.29.11",
     "pubnub-react": "^2.1.0",
     "react": "^17.0.1",
+    "react-awesome-lightbox": "^1.8.1",
     "react-aws-s3": "^1.4.0",
     "react-chartjs-2": "^3.3.0",
     "react-color-palette": "^6.1.0",

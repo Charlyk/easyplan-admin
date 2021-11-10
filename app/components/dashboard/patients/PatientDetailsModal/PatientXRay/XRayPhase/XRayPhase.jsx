@@ -8,11 +8,9 @@ import { setImageModal } from '../../../../../../../redux/actions/imageModalActi
 import XRayImage from "../XRayImage";
 import styles from './XRayPhase.module.scss';
 
-const XRayPhase = ({ title, images, isExpanded, onDeleteImage }) => {
-  const dispatch = useDispatch();
-
+const XRayPhase = ({ title, images, isExpanded, onDeleteImage, onImageClick }) => {
   const handleImageClick = image => {
-    dispatch(setImageModal({ open: true, imageUrl: image.imageUrl }));
+    onImageClick?.(image);
   };
 
   const handleDeleteImage = (image) => {
@@ -54,6 +52,8 @@ XRayPhase.propTypes = {
   isExpanded: PropTypes.bool,
   phaseId: PropTypes.oneOf(['Initial', 'Middle', 'Final']),
   onExpand: PropTypes.func,
+  onImageClick: PropTypes.func,
+  onDeleteImage: PropTypes.func,
 };
 
 XRayPhase.defaultProps = {

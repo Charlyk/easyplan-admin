@@ -11,12 +11,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import theme from '../app/styles/theme';
 import {
-  patientNoteModalSelector,
-  patientXRayModalSelector,
-} from "../redux/selectors/modalsSelector";
-import {
-  setPatientNoteModal,
-  setPatientXRayModal,
   triggerUserLogout
 } from "../redux/actions/actions";
 import { imageModalSelector } from "../redux/selectors/imageModalSelector";
@@ -28,6 +22,7 @@ import useWindowFocused from "../app/utils/hooks/useWindowFocused";
 import { wrapper } from "../store";
 import 'moment/locale/ro';
 import 'react-h5-audio-player/src/styles.scss';
+import "react-awesome-lightbox/build/style.css";
 import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../app/utils'

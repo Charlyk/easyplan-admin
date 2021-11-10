@@ -38,6 +38,11 @@ module.exports = {
           /^arrow/,
           /^rhap/,
           /^infinite-scroll/,
+          /^lb/,
+          'mobile-controls',
+          'rotater',
+          'rotatel',
+          'close',
         ],
       }
     ],
