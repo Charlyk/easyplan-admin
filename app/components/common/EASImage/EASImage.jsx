@@ -70,7 +70,7 @@ const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
       )}
       {isLoading && enableLoading && (
         <div className={styles.progressBarWrapper}>
-          <CircularProgress className={styles.progressBar}/>
+          <CircularProgress className={clsx(styles.progressBar, classes?.loader)}/>
         </div>
       )}
     </div>
@@ -84,6 +84,7 @@ EASImage.propTypes = {
   classes: PropTypes.shape({
     root: PropTypes.any,
     image: PropTypes.any,
+    loader: PropTypes.any,
   }),
   className: PropTypes.any
 }

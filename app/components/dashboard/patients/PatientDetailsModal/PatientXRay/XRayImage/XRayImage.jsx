@@ -37,6 +37,10 @@ const XRayImage = ({ image, onImageClick, onImageDelete }) => {
         <EASImage
           enableLoading
           src={image.thumbnailUrl}
+          classes={{
+            root: styles.imageContainer,
+            loader: styles.imageProgress,
+          }}
         />
         <IconButton
           classes={{ root: styles.trashButton }}
