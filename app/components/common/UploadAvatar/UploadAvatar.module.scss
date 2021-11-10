@@ -10,10 +10,13 @@
     height: 90px;
     overflow: hidden;
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-radius: 50%;
+
+    .imageRoot {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
 
     .iconContainer {
       pointer-events: none;
@@ -37,12 +40,6 @@
   svg {
     width: 100% !important;
     height: 100% !important;
-  }
-
-  img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover;
   }
 
   input {

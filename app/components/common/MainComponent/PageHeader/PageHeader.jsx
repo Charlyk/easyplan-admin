@@ -17,6 +17,7 @@ import IconTurnOff from '../../../icons/iconTurnOff';
 import InvoicesButton from '../../../dashboard/InvoicesButton';
 import IconNotifications from '../../../icons/iconNotifications';
 import styles from './PageHeader.module.scss';
+import EASImage from "../../EASImage";
 
 const ActionsSheet = dynamic(() => import('../../ActionsSheet'));
 
@@ -108,15 +109,11 @@ const PageHeader = (
           <IconNotifications/>
         </IconButton>
         <div className={styles.avatarContainer}>
-          {user?.avatar ? (
-            <img
-              alt='Avatar'
-              className={styles.avatarImage}
-              src={urlToLambda(user.avatar)}
-            />
-          ) : (
-            <IconAvatar/>
-          )}
+          <EASImage
+            src={user.avatar}
+            className={styles.avatarImage}
+            placeholder={<IconAvatar />}
+          />
         </div>
         <IconButton
           ref={actionsAnchor}

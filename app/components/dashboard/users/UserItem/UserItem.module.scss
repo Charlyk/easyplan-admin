@@ -204,11 +204,10 @@
     }
   }
 
-  .avatar {
+  .avatarRoot {
+    border-radius: 15px;
     width: 30px;
     height: 30px;
-    border-radius: 15px;
-    object-fit: cover;
   }
 
   .name {

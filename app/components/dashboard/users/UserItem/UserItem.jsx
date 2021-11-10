@@ -23,6 +23,7 @@ import IconRefresh from '../../../icons/iconRefresh';
 import LoadingButton from '../../../common/LoadingButton';
 import SwitchButton from "../../../common/SwitchButton";
 import styles from './UserItem.module.scss';
+import EASImage from "../../../common/EASImage";
 
 const UserItem = (
   {
@@ -82,17 +83,11 @@ const UserItem = (
                 user.isHidden ? styles.fired : styles.active,
               )}
             />
-            <div className={styles.avatar}>
-              {user.avatar ? (
-                <img
-                  alt="Avatar"
-                  className={styles.avatar}
-                  src={urlToLambda(user.avatar)}
-                />
-              ) : (
-                <IconAvatar/>
-              )}
-            </div>
+            <EASImage
+              src={user.avatar}
+              placeholder={<IconAvatar/>}
+              className={styles.avatarRoot}
+            />
             <Typography className={styles.name}>
               {upperFirst(user.firstName.toLowerCase())}{' '}
               {upperFirst(user.lastName.toLowerCase())}
