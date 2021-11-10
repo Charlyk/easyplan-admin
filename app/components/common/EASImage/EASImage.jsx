@@ -3,6 +3,7 @@ import clsx from "clsx";
 import PropTypes from 'prop-types';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import remoteImageToBase64 from "../../../utils/remoteImageToBase64";
+import urlToLambda from "../../../utils/urlToLambda";
 import reducer, {
   initialState,
   setIsError,
@@ -10,8 +11,6 @@ import reducer, {
   setIsLoading
 } from './EASImage.reducer';
 import styles from './EASImage.module.scss';
-import urlToLambda from "../../../utils/urlToLambda";
-import IconAvatar from "../../icons/iconAvatar";
 
 const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
   const [{ isLoading, imageContent, isError }, localDispatch] = useReducer(reducer, initialState);
@@ -25,6 +24,7 @@ const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
       const imageData = await remoteImageToBase64(urlToLambda(src));
       localDispatch(setImageContent(imageData));
     } catch (error) {
+      console.error(error);
       localDispatch(setIsError(true));
     }
   }, [src]);
@@ -66,7 +66,7 @@ const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
         )}
       />
       {(isError || imageContent == null) && (
-        placeholder
+        placeholder || <div className={styles.placeholderRect} />
       )}
       {isLoading && enableLoading && (
         <div className={styles.progressBarWrapper}>
