@@ -15,7 +15,7 @@ const port = environment === 'local' ? 80 : isDev ? 3001 : 3000
  */
 export async function request(path, method, headers = null, body = null) {
   const agent = new Agent({
-    rejectUnauthorized: environment !== 'production',
+    rejectUnauthorized: environment === 'production',
   });
 
   switch (method) {
