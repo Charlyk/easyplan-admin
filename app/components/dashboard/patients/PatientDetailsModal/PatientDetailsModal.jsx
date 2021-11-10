@@ -46,6 +46,7 @@ import reducer, {
   MenuItems
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
+import EASImage from "../../../common/EASImage";
 
 const PatientDetailsModal = (
   {
@@ -61,32 +62,11 @@ const PatientDetailsModal = (
 ) => {
   const dispatch = useDispatch();
   const inputRef = useRef(null);
-  const imageRef = useRef(null);
   const [
     { currentMenu, isFetching, patient, viewInvoice, avatarFile },
     localDispatch,
   ] = useReducer(reducer, initialState);
   const patientAvatar = avatarFile ?? patient?.avatar;
-
-  const updateImagePreview = useCallback((reader) => {
-    if (imageRef.current != null) {
-      imageRef.current.src = reader.target.result;
-    }
-  }, [imageRef.current]);
-
-  useEffect(() => {
-    if (patientAvatar == null) {
-      return;
-    }
-    if (typeof patientAvatar === 'object') {
-      const reader = new FileReader();
-      reader.addEventListener('load', updateImagePreview)
-      reader.readAsDataURL(avatarFile);
-    } else if (typeof patientAvatar === 'string') {
-      imageRef.current.crossOrigin = 'anonymous';
-      imageRef.current.src = urlToLambda(patientAvatar);
-    }
-  }, [patientAvatar, updateImagePreview]);
 
   useEffect(() => {
     if (!show) {
@@ -267,6 +247,11 @@ const PatientDetailsModal = (
             <div className={styles.menuContainer}>
               <div className={styles.nameAndAvatar}>
                 <div className={styles.avatarWrapper}>
+                  <EASImage
+                    src={patientAvatar}
+                    placeholder={<IconAvatar />}
+                    className={styles.avatarRoot}
+                  />
                   <div className={styles.editAvatarWrapper}>
                     <IconButton
                       className={styles.editBtn}
@@ -275,11 +260,6 @@ const PatientDetailsModal = (
                       <IconEdit fill="#3A83DC" />
                     </IconButton>
                   </div>
-                  {patientAvatar ? (
-                    <img ref={imageRef} alt="Avatar image"/>
-                  ) : (
-                    <IconAvatar />
-                  )}
                 </div>
                 <Typography classes={{ root: styles.nameLabel }}>
                   {patient?.fullName}

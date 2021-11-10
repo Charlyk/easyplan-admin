@@ -11,6 +11,7 @@ import IconAvatar from '../../../../icons/iconAvatar';
 import IconEmail from '../../../../icons/iconEmail';
 import IconPhone from '../../../../icons/iconPhone';
 import styles from './PatientRow.module.scss';
+import EASImage from "../../../../common/EASImage";
 
 const PatientRow = ({ patient, onSelect }) => {
   const handlePatientNameClick = () => {
@@ -29,7 +30,11 @@ const PatientRow = ({ patient, onSelect }) => {
     >
       <TableCell classes={{ root: styles['name-and-photo'] }}>
         <Box display='flex' alignItems='center'>
-          <IconAvatar />
+          <EASImage
+            src={patient.avatar}
+            placeholder={<IconAvatar/>}
+            className={styles.avatarRoot}
+          />
           <Typography
             classes={{ root: clsx(styles['row-label'], styles.name) }}
             onClick={handlePatientNameClick}

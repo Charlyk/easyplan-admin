@@ -1,4 +1,4 @@
-import { awsBaseUrl } from "../../eas.config";
+import { awsBaseUrl, baseApiUrl } from "../../eas.config";
 import isValidUrl from "./isValidUrl";
 
 /**
@@ -9,8 +9,8 @@ import isValidUrl from "./isValidUrl";
 export default function urlToLambda(imageUrl) {
   if (isValidUrl(imageUrl)) {
     const url = new URL(imageUrl);
-    return `${awsBaseUrl}${url.pathname}`;
+    return url.pathname.replace('/', '');
   } else {
-    return `${awsBaseUrl}/${imageUrl}`;
+    return imageUrl;
   }
 }

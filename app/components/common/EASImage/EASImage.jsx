@@ -23,7 +23,6 @@ const EASImage = ({ src, classes, className, placeholder }) => {
     try {
       localDispatch(setIsLoading(true));
       const imageData = await remoteImageToBase64(urlToLambda(src));
-      console.log(imageData)
       localDispatch(setImageContent(imageData));
     } catch (error) {
       localDispatch(setIsError(true));

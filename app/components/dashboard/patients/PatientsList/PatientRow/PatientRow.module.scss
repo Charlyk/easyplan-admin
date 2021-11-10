@@ -9,9 +9,16 @@
 
   .name-and-photo {
     svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    .avatarRoot {
       margin-right: .8rem !important;
       width: 30px;
       height: 30px;
+      border-radius: 50%;
+      border: #3A83DC 1px solid;
     }
   }
 

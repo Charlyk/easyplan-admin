@@ -75,6 +75,13 @@
             width: 90px;
             height: 90px;
 
+            .avatarRoot {
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+              border: #3A83DC 2px solid;
+            }
+
             .editAvatarWrapper {
               position: absolute;
               top: 0;
