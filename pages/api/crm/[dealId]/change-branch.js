@@ -6,7 +6,8 @@ import { HeaderKeys } from "../../../../app/utils/constants";
 import { authorized } from "../../authorized";
 import { handler } from "../../handler";
 
-export const config = { api: { bodyParser: false } };
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -32,6 +33,7 @@ async function moveDealToAnotherBranch(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
     }
   });
 }

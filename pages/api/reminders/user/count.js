@@ -6,7 +6,8 @@ import updatedServerUrl from "../../../../app/utils/updateServerUrl";
 import { handler } from "../../handler";
 import { authorized } from "../../authorized";
 
-export const config = { api: { bodyParser: false } };
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
 
 export default authorized(async (req, res) => {
   switch (req.method) {

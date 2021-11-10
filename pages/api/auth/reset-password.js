@@ -4,7 +4,8 @@ import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
-export const config = { api: { bodyParser: false } };
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
 
 export default async function resetPassword(req, res) {
   switch (req.method) {
@@ -38,6 +39,7 @@ async function updateUserPassword(req) {
     headers: {
       [HeaderKeys.clinicId]: -1,
       [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
     }
   });
 }
@@ -47,6 +49,7 @@ function resetUserPassword(req) {
     headers: {
       [HeaderKeys.clinicId]: -1,
       [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
     }
   });
 }

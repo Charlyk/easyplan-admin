@@ -6,7 +6,8 @@ import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
 
-export const config = { api: { bodyParser: false } };
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -43,6 +44,7 @@ async function createClinic(req) {
   return axios.post(`${updatedServerUrl(req)}/clinics`, req.body, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
+      [HeaderKeys.contentType]: 'application/json',
     }
   });
 }
@@ -55,6 +57,7 @@ async function updateClinicInfo(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
     }
   });
 }
