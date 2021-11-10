@@ -16,4 +16,4 @@ export const baseUrl =
 
 export const baseApiUrl = `${baseUrl}/api`
 
-export const imageLambdaUrl = 'https://d25mcgbnpi.execute-api.eu-west-1.amazonaws.com/production';
+export const awsBaseUrl = 'https://easyplan-pro-files.s3.eu-central-1.amazonaws.com'

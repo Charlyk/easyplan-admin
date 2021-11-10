@@ -84,7 +84,7 @@ const PatientDetailsModal = (
       reader.readAsDataURL(avatarFile);
     } else if (typeof patientAvatar === 'string') {
       imageRef.current.crossOrigin = 'anonymous';
-      imageRef.current.src = urlToLambda(patientAvatar, 100);
+      imageRef.current.src = urlToLambda(patientAvatar);
     }
   }, [patientAvatar, updateImagePreview]);
 

@@ -72,7 +72,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   };
 
   const logoSrc = schedule?.clinicLogo
-    ? urlToLambda(schedule.clinicLogo, 130)
+    ? urlToLambda(schedule.clinicLogo)
     : null;
 
   return (
