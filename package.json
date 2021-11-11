@@ -98,7 +98,7 @@
   "scripts": {
     "dev": "next dev -p 80",
     "build": "next build",
-    "start": "next start -p 3001",
+    "start": "next start",
     "find:unused": "next-unused"
   },
   "next-unused": {
