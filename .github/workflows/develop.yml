@@ -17,11 +17,15 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: self-hosted
+    env:
+      working-directory: /var/www/easyplan-admin
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - uses: actions/cache@v2
         with:
@@ -32,30 +36,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
-      - name: Pull code updates
-        working-directory: /var/www/easyplan-admin
-        run: git pull origin develop
-        with:
-          Username: Charlyk
-          Password: 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
-
       - name: Checkout develop branch
-        working-directory: /var/www/easyplan-admin
+        working-directory: ${{env.working-directory}}
         run: git checkout develop
 
       - name: Install all dependencies
-        working-directory: /var/www/easyplan-admin
+        working-directory: ${{env.working-directory}}
         run: yarn install
 
       - name: Build application
-        working-directory: /var/www/easyplan-admin
+        working-directory: ${{env.working-directory}}
         run: yarn build
 
       - name: Try to reload app
-        working-directory: /var/www/easyplan-admin
+        working-directory: ${{env.working-directory}}
         run: pm2 reload easyplan-dev
 
       - name: Start app if reload fails
         if: ${{ failure() }}
-        working-directory: /var/www/easyplan-admin
+        working-directory: ${{env.working-directory}}
         run: pm2 start ecosystem.config.js
