@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import clsx from "clsx";
 import PropTypes from 'prop-types';
 import { useGesture } from "@use-gesture/react";
 import { animated, useSpring } from "react-spring";
 import styles from './HorizontalScrollHelper.module.scss';
-import clsx from "clsx";
 
 const HELPER_WIDTH = 130;
 
