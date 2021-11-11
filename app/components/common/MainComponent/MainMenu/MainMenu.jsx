@@ -225,9 +225,9 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   };
 
   const handleCompanySelected = async (company) => {
-    const [_, domain, location] = window.location.host.split('.');
+    const [_, domain, location, suffix] = window.location.host.split('.');
     const { protocol } = window.location;
-    const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}`;
+    const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}${environment === 'testing' ? `.${suffix}` : ''}`;
     window.open(clinicUrl, '_blank')
     handleCompanyClose();
   };
