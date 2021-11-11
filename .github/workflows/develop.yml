@@ -35,6 +35,9 @@ jobs:
       - name: Pull code updates
         working-directory: /var/www/easyplan-admin
         run: git pull origin develop
+        with:
+          Username: Charlyk
+          Password: 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
 
       - name: Checkout develop branch
         working-directory: /var/www/easyplan-admin
