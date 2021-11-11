@@ -46,6 +46,7 @@ function fetchPatientXRayImages(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
     }
   });
 }
@@ -58,7 +59,6 @@ function addXRayImage(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
     }
   });
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import clsx from "clsx";
 import PropTypes from 'prop-types';
 import Modal from '@material-ui/core/Modal';
@@ -18,11 +18,10 @@ import { setAddPaymentModal } from '../../../../../redux/actions/addPaymentModal
 import { getPatientDetails, requestUpdatePatient } from "../../../../../middleware/api/patients";
 import onRequestError from "../../../../utils/onRequestError";
 import { textForKey } from "../../../../utils/localization";
-import urlToLambda from "../../../../utils/urlToLambda";
-import { HeaderKeys } from "../../../../utils/constants";
 import IconEdit from "../../../icons/iconEdit";
 import IconAvatar from '../../../icons/iconAvatar';
 import IconClose from '../../../icons/iconClose';
+import EASImage from "../../../common/EASImage";
 import AppointmentNotes from './AppointmentNotes';
 import PatientAppointments from './PatientAppointments';
 import PatientHistory from './PatientHistory';
@@ -46,7 +45,6 @@ import reducer, {
   MenuItems
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
-import EASImage from "../../../common/EASImage";
 
 const PatientDetailsModal = (
   {
