@@ -125,6 +125,16 @@ export async function fetchClinicExchangeRates(headers = null) {
 }
 
 /**
+ * Update clinic exchange rates
+ * @param {*} requestBody
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestUpdateExchangeRates(requestBody, headers = null) {
+  return put('/api/clinic/exchange-rates', headers, requestBody);
+}
+
+/**
  * Save facebook page for current clinic
  * @param {Array<{
  *   accessToken: string,

@@ -45,6 +45,7 @@ import reducer, {
   MenuItems
 } from './PatientDetailsModal.reducer';
 import styles from './PatientDetailsModal.module.scss';
+import { HeaderKeys } from "../../../../utils/constants";
 
 const PatientDetailsModal = (
   {
@@ -88,7 +89,11 @@ const PatientDetailsModal = (
     }
 
     try {
-      await requestUpdatePatient(patient.id, patient, avatarFile);
+      await requestUpdatePatient(patient.id, patient, avatarFile, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
       await fetchPatientDetails(true);
       localDispatch(setAvatarFile(null));
       toast.success(textForKey('Saved successfully'))
