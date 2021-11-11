@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from "react";
-import clsx from "clsx";
 import sortBy from 'lodash/sortBy';
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 import Typography from "@material-ui/core/Typography";
-
-import { isDev } from "../../../../eas.config";
 import { textForKey } from "../../../utils/localization";
 import { WebRegex } from "../../../utils/constants";
 import {
@@ -14,7 +11,10 @@ import {
   fetchAvailableCurrencies
 } from "../../../../middleware/api/clinic";
 import LoadingButton from "../LoadingButton";
-
+import EASTextField from "../EASTextField";
+import UploadAvatar from "../UploadAvatar";
+import EASSelect from "../EASSelect";
+import EASTextarea from "../EASTextarea";
 import reducer, {
   initialState,
   setLogoFile,
@@ -28,11 +28,7 @@ import reducer, {
   setIsDomainAvailable,
   setCountry,
 } from './createClinicSlice'
-import EASTextField from "../EASTextField";
-import UploadAvatar from "../UploadAvatar";
-import EASSelect from "../EASSelect";
 import styles from "./CreateClinicForm.module.scss";
-import EASTextarea from "../EASTextarea";
 
 const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, onSubmit }) => {
   const [{
@@ -127,11 +123,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
 
   const checkIsDomainAvailable = async () => {
     try {
-      let domainToCheck = domainName;
-      if (isDev) {
-        domainToCheck = `${domainToCheck}-dev`
-      }
-      const { data: isAvailable } = await checkDomainAvailability(domainToCheck);
+      const { data: isAvailable } = await checkDomainAvailability(domainName);
       localDispatch(setIsDomainAvailable(isAvailable));
     } catch (error) {
       toast.error(error.message);
@@ -172,7 +164,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
       timeZone,
       description,
       countryIso: country.iso,
-      domainName: isDev ? `${domainName}-dev` : domainName,
+      domainName: domainName,
       defaultCurrency,
     });
   }
@@ -213,7 +205,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
           onChange={handleDomainChange}
           endAdornment={
             <Typography noWrap className={styles.domainAdornment}>
-              {isDev ? '-dev' : ''}.easyplan.pro
+              .easyplan.pro
             </Typography>
           }
         />

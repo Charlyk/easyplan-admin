@@ -123,7 +123,7 @@ export async function getPatientPhoneRecords(patientId, page, headers = null) {
 export async function requestUpdatePatient(patientId, requestBody, photo, headers = null) {
   const updatedBody = { ...requestBody };
   if (photo != null) {
-    updatedBody.photo = await imageToBase64(photo)
+    updatedBody.photo = await imageToBase64(photo);
   }
   return put(`/api/patients/${patientId}`, headers, updatedBody);
 }
@@ -316,5 +316,5 @@ export async function requestCreatePatient(requestBody, photo, headers = null) {
   if (photo != null) {
     updatedBody.photo = await imageToBase64(photo)
   }
-  return post(`/api/patients`, headers, requestBody);
+  return post('/api/patients', headers, requestBody);
 }
