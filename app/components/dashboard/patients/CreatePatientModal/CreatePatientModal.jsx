@@ -63,7 +63,11 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         email: email.length > 0 ? email : null,
         countryCode: phoneCountry.dialCode,
       };
-      await requestCreatePatient(requestBody, null);
+      await requestCreatePatient(requestBody, null, {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: currentClinic.id,
+        [HeaderKeys.subdomain]: currentClinic.domainName,
+      });
       dispatch(togglePatientsListUpdate(true));
       onClose();
     } catch (error) {

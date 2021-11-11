@@ -52,7 +52,6 @@ function createPatient(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   return axios.post(`${updatedServerUrl(req)}/patients`, req.body, {
     headers: {
-      ...req.headers,
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),

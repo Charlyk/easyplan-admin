@@ -1,5 +1,4 @@
-import { del, get, post, put } from "./request";
-import moment from "moment-timezone";
+import { del, get, put } from "./request";
 import imageToBase64 from "../../app/utils/imageToBase64";
 import axios from "axios";
 
@@ -122,6 +121,16 @@ export async function checkDomainAvailability(domain, headers = null) {
  */
 export async function fetchClinicExchangeRates(headers = null) {
   return get('/api/clinic/exchange-rates', headers);
+}
+
+/**
+ * Update clinic exchange rates
+ * @param {*} requestBody
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestUpdateExchangeRates(requestBody, headers = null) {
+  return put('/api/clinic/exchange-rates', headers, requestBody);
 }
 
 /**

@@ -32,9 +32,7 @@ export default function RegistrationWrapper({ isMobile }) {
     try {
       const requestBody = { ...accountData };
       delete requestBody.avatarFile;
-      await registerUser(accountData, accountData.avatarFile, {
-        [HeaderKeys.clinicId]: -1,
-      });
+      await registerUser(accountData, accountData.avatarFile);
       toast.success(textForKey('account_created_success'));
       await router.replace('/create-clinic?login=1');
     } catch (error) {

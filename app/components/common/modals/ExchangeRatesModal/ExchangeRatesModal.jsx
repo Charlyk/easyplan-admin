@@ -12,14 +12,12 @@ import debounce from 'lodash/debounce';
 import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import axios from "axios";
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
 import { updateExchangeRatesSelector } from '../../../../../redux/selectors/rootSelector';
 import { setIsExchangeRatesModalOpen } from "../../../../../redux/actions/exchangeRatesActions";
-import { fetchClinicExchangeRates } from "../../../../../middleware/api/clinic";
+import { fetchClinicExchangeRates, requestUpdateExchangeRates } from "../../../../../middleware/api/clinic";
 import { textForKey } from '../../../../utils/localization';
 import { Role } from '../../../../utils/constants';
 import IconTrash from "../../../icons/iconTrash";
@@ -141,7 +139,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
         }
         return { ...item, value: 1 };
       });
-      await axios.put(`/api/clinic/exchange-rates`, { rates: requestBody });
+      await requestUpdateExchangeRates(`/api/clinic/exchange-rates`, { rates: requestBody });
       toast.success(textForKey('Saved successfully'));
       dispatch(setIsExchangeRatesModalOpen(false));
       onClose();

@@ -48,7 +48,6 @@ function updatePatientData(req) {
   const { patientId } = req.query;
   return axios.put(`${updatedServerUrl(req)}/patients/${patientId}`, req.body, {
     headers: {
-      ...req.headers,
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
