@@ -6,7 +6,7 @@ const remoteImageToBase64 = (imageUrl) => {
       const parts = imageUrl.split('.')
       let extension = parts[parts.length - 1];
       if (extension === 'svg') extension = `${extension}+xml`
-      const response = await axios.get(`/api/files?fileName=${imageUrl}`, { responseType: "arraybuffer" });
+      const response = await axios.get(`/api/files?fileName=${encodeURI(imageUrl)}`, { responseType: "arraybuffer" });
       const buffer = response.data;
       const bytes = new Uint8Array(buffer);
       const imageData = `data:image/${extension};base64,` + encode(bytes);
