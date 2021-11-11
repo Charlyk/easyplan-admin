@@ -17,8 +17,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: self-hosted
-    env:
-      working-directory: /var/www/easyplan-admin
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -26,11 +24,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          path: ../../../../../../var/www
 
       - uses: actions/cache@v2
         with:
-          path: /var/www/easyplan-admin/.next/cache
+          path: ${{ github.workspace }}/.next/cache
           # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
@@ -38,26 +35,20 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: CHOWN to www-data
-        working-directory: ${{env.working-directory}}
-        run: chown -R www-data:wwwdata easyplan-admin
+        run: chown -R www-data:wwwdata /root/actions-runner/
 
       - name: Checkout develop branch
-        working-directory: ${{env.working-directory}}
         run: git checkout develop
 
       - name: Install all dependencies
-        working-directory: ${{env.working-directory}}
         run: yarn install
 
       - name: Build application
-        working-directory: ${{env.working-directory}}
         run: yarn build
 
       - name: Try to reload app
-        working-directory: ${{env.working-directory}}
         run: pm2 reload easyplan-dev
 
       - name: Start app if reload fails
         if: ${{ failure() }}
-        working-directory: ${{env.working-directory}}
         run: pm2 start ecosystem.config.js
