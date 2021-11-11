@@ -10,7 +10,6 @@ import { updateHourIndicatorPositionSelector } from "../../../../../redux/select
 import styles from './HourIndicator.module.scss'
 
 const HourIndicator = ({ dayHours, viewDate, disabled }) => {
-  const dispatch = useDispatch()
   const [hideIndicator, setHideIndicator] = useState(disabled);
   const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
   const initialHourIndicatorTop = getHourIndicatorTop();
@@ -23,30 +22,16 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
       return;
     }
     if (isOutOfBounds(new Date())) {
-      dispatch({
-        type: STOP_TIMER,
-        payload: {
-          timerName: 'hourIndicatorTimer'
-        }
-      });
       if (!hideIndicator) {
         setHideIndicator(true);
       }
     } else {
-      dispatch({
-        type: START_TIMER,
-        payload: {
-          actionName: types.setUpdateHourIndicatorPosition,
-          timerName: 'hourIndicatorTimer',
-          timerInterval: 1000
-        }
-      });
       if (hideIndicator) {
         setHideIndicator(false);
       }
       updateHourIndicatorTop();
     }
-  }, [dayHours, viewDate, disabled])
+  }, [dayHours, viewDate, disabled]);
 
   useEffect(() => {
     if (disabled) {

@@ -1,12 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setPaymentModal } from '../../../../../redux/actions/actions';
+import { updateHourIndicatorPositionSelector } from "../../../../../redux/selectors/rootSelector";
 import { Role } from "../../../../utils/constants";
-import urlToLambda from "../../../../utils/urlToLambda";
 import { textForKey } from '../../../../utils/localization';
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import IconEdit from '../../../icons/iconEdit';
@@ -16,8 +16,10 @@ import IconAvatar from '../../../icons/iconAvatar';
 import IconTurnOff from '../../../icons/iconTurnOff';
 import InvoicesButton from '../../../dashboard/InvoicesButton';
 import IconNotifications from '../../../icons/iconNotifications';
-import styles from './PageHeader.module.scss';
 import EASImage from "../../EASImage";
+import styles from './PageHeader.module.scss';
+import moment from "moment-timezone";
+import Typography from "@material-ui/core/Typography";
 
 const ActionsSheet = dynamic(() => import('../../ActionsSheet'));
 
@@ -50,8 +52,14 @@ const PageHeader = (
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(moment().format('HH:mm').split(':'))
+  const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
   const userClinic = user.clinics.find(item => item.clinicId === currentClinic.id);
   const { canRegisterPayments } = userClinic;
+
+  useEffect(() => {
+    setCurrentTime(moment().format('HH:mm').split(':'));
+  }, [updateHourIndicator])
 
   const handleActionsClose = () => setIsActionsOpen(false);
 
@@ -108,6 +116,16 @@ const PageHeader = (
         <IconButton className={styles.notifications}>
           <IconNotifications/>
         </IconButton>
+        <div className={styles.timeWrapper}>
+          <Typography className={styles.dateLabel}>
+            {moment().format('DD MMM YYYY')}
+          </Typography>
+          <Typography className={styles.timeLabel}>
+            {currentTime[0]}
+            <div className={styles.timeSeparator}>:</div>
+            {currentTime[1]}
+          </Typography>
+        </div>
         <div className={styles.avatarContainer}>
           <EASImage
             enableLoading

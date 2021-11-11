@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
+import { START_TIMER, STOP_TIMER } from "redux-timer-middleware";
 import theme from '../app/styles/theme';
 import {
   triggerUserLogout
@@ -28,6 +28,7 @@ import '../app/styles/base/base.scss';
 import '../app/utils'
 import paths from "../app/utils/paths";
 import { APP_DATA_API, UnauthorizedPaths } from "../app/utils/constants";
+import types from "../redux/types/types";
 
 const FullScreenImageModal = dynamic(() => import("../app/components/common/modals/FullScreenImageModal"));
 const ConfirmationModal = dynamic(() => import("../app/components/common/modals/ConfirmationModal"));
@@ -44,6 +45,25 @@ const App = ({ Component, pageProps }) => {
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
+
+  useEffect(() => {
+    dispatch({
+      type: START_TIMER,
+      payload: {
+        actionName: types.setUpdateHourIndicatorPosition,
+        timerName: 'hourIndicatorTimer',
+        timerInterval: 1000
+      }
+    });
+    return () => {
+      dispatch({
+        type: STOP_TIMER,
+        payload: {
+          timerName: 'hourIndicatorTimer'
+        }
+      });
+    }
+  }, []);
 
   useEffect(() => {
     // Remove the server-side injected CSS.

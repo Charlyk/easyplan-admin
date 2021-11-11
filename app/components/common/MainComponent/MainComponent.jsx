@@ -32,8 +32,8 @@ import { isExchangeRateModalOpenSelector } from "../../../../redux/selectors/exc
 import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";
 import { newReminderSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
 import { userClinicAccessChangeSelector } from "../../../../redux/selectors/clinicDataSelector";
-import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 import { setClinic } from "../../../../redux/actions/clinicActions";
+import { handleRemoteMessage } from "../../../utils/pubnubUtils";
 import { environment, isDev } from "../../../../eas.config";
 import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
 import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
