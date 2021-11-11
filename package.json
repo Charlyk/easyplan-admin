@@ -98,7 +98,7 @@
   "scripts": {
     "dev": "APP_ENV=testing next dev -p 80",
     "build": "APP_ENV=testing next build",
-    "start": "APP_ENV=testing next start",
+    "start": "APP_ENV=testing next start -p 3001",
     "find:unused": "next-unused"
   },
   "next-unused": {
