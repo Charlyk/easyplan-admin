@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from 'prop-types';
-import { useGesture } from "react-use-gesture";
+import { useGesture } from "@use-gesture/react";
 import { animated, useSpring } from "react-spring";
 import styles from './HorizontalScrollHelper.module.scss';
 import clsx from "clsx";
