@@ -12,6 +12,7 @@ import { appBaseUrl, isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import ConfirmationModal from "../modals/ConfirmationModal";
+import EASImage from "../EASImage";
 import reducer, {
   initialState,
   setCurrentForm,
@@ -21,8 +22,6 @@ import reducer, {
   FormType,
 } from './loginWrapperSlice'
 import styles from './LoginWrapper.module.scss';
-import urlToLambda from "../../../utils/urlToLambda";
-import EASImage from "../EASImage";
 
 const ResetPassword = dynamic(() => import('./ResetPassword'));
 const LoginForm = dynamic(() => import('./LoginForm'));

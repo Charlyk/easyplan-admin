@@ -454,7 +454,7 @@ export const UnauthorizedPaths = [
   '/login',
 ];
 
-export const RestrictedSubdomains = ['app', 'app-dev', 'api', 'dev-api', ''];
+export const RestrictedSubdomains = ['app', 'app-dev', 'api', 'dev-api', 'easyplan', ''];
 
 export const HeaderKeys = {
   authorization: 'Authorization',
