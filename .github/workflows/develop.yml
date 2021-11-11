@@ -25,7 +25,7 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: /var/www/easyplan-admin/.next/cache
+          path: ${{ github.workspace }}/.next/cache
           # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
@@ -45,9 +45,9 @@ jobs:
       - name: Build application
         run: yarn build
 
-      - name: Delete app from PM2
+      - name: Try ti reload app
         run: pm2 reload easyplan-dev
 
-      - name: Reload PM2
+      - name: Start app if reload fails
         if: ${{ failure() }}
         run: pm2 start /var/www/easyplan-admin/ecosystem.config.js

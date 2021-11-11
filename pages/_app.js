@@ -29,6 +29,7 @@ import '../app/utils'
 import paths from "../app/utils/paths";
 import { APP_DATA_API, UnauthorizedPaths } from "../app/utils/constants";
 import types from "../redux/types/types";
+import { appBaseUrl } from "../eas.config";
 
 const FullScreenImageModal = dynamic(() => import("../app/components/common/modals/FullScreenImageModal"));
 const ConfirmationModal = dynamic(() => import("../app/components/common/modals/ConfirmationModal"));
@@ -109,8 +110,7 @@ const App = ({ Component, pageProps }) => {
           if (UnauthorizedPaths.includes(router.asPath)) {
             return;
           }
-          await signOut();
-          await router.reload();
+          await handleUserLogout()
         }
       }
     }
@@ -132,7 +132,7 @@ const App = ({ Component, pageProps }) => {
 
   const handleUserLogout = async () => {
     await signOut();
-    router.reload()
+    window.location = appBaseUrl
   };
 
   const handleCancelLogout = () => {
