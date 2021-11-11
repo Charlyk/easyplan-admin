@@ -231,3 +231,5 @@ yarn-error.log
 # End of https://www.toptal.com/developers/gitignore/api/yarn,macos,webstorm,jetbrains,nextjs
 
 ecosystem.config.js
+
+.env.local
