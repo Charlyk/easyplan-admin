@@ -58,8 +58,13 @@ const PageHeader = (
   const { canRegisterPayments } = userClinic;
 
   useEffect(() => {
+    const newTime = moment().format('HH:mm').split(':');
+    if (newTime === currentTime) {
+      // time is same so we don't need to update it
+      return;
+    }
     setCurrentTime(moment().format('HH:mm').split(':'));
-  }, [updateHourIndicator])
+  }, [updateHourIndicator, currentTime])
 
   const handleActionsClose = () => setIsActionsOpen(false);
 
