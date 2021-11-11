@@ -20,17 +20,17 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
       - uses: actions/cache@v2
         with:
-          path: ${{ github.workspace }}/.next/cache
+          path: /var/www/easyplan-admin/.next/cache
           # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
       - name: CD in app directory
@@ -45,5 +45,8 @@ jobs:
       - name: Build application
         run: yarn build
 
+      - name: Delete app from PM2
+        run: pm2 delete easyplan-dev
+
       - name: Reload PM2
-        run: pm2 reload easyplan-dev
+        run: pm2 start ecosystem.config.js
