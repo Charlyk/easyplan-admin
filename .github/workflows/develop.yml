@@ -46,7 +46,8 @@ jobs:
         run: yarn build
 
       - name: Delete app from PM2
-        run: pm2 delete easyplan-dev
+        run: pm2 reload easyplan-dev
 
       - name: Reload PM2
+        if: ${{ failure() }}
         run: pm2 start /var/www/easyplan-admin/ecosystem.config.js
