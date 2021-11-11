@@ -7,7 +7,7 @@ Axios.interceptors.request.use(function (config) {
   config.headers['Accept-Language'] = 'ro';
   config.headers['X-EasyPlan-Platform'] = 'web';
   if (environment === 'testing') {
-    config.headers['Host'] = 'dev.easyplan.pro';
+    config.headers['Origin'] = '*';
   }
   return config;
 });
