@@ -34,9 +34,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
-      - name: CHOWN to www-data
-        run: chown -R www-data:wwwdata /root/actions-runner/
-
       - name: Checkout develop branch
         run: git checkout develop
 
