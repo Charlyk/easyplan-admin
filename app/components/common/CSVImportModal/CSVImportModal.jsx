@@ -16,9 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
 import IconsUploadCSV from "../../icons/iconsUploadCSV";
-import BendArrow from "../../../../public/bend-arrow.png";
 import { textForKey } from "../../../utils/localization";
 import getCSVRowsCount from "../../../utils/getCSVRowsCount";
 import EASModal from "../modals/EASModal";
@@ -180,7 +178,7 @@ const CSVImportModal = ({ open, title, iconTitle, iconSubtitle, importBtnTitle, 
                         key={`header-cell-${value}-${index}`}
                       >
                         <div className={styles.dataContainer}>
-                          <Image src={BendArrow} alt="" width={8} height={4}/>
+                          <Image src="/bend-arrow.png" alt="" width={8} height={4}/>
                           <Typography noWrap className={styles.label}>{value || '-'}</Typography>
                         </div>
                       </TableCell>
