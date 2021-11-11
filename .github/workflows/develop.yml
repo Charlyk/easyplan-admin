@@ -43,9 +43,8 @@ jobs:
       - name: Build application
         run: yarn build
 
-      - name: Try to reload app
-        run: pm2 reload easyplan-dev
+      - name: Stopping app service
+        run: systemctl stop easyplan-admin
 
-      - name: Start app if reload fails
-        if: ${{ failure() }}
-        run: pm2 start ecosystem.config.js
+      - name: Starting app service
+        run: systemctl start easyplan-admin
