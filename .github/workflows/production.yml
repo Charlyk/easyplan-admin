@@ -41,7 +41,7 @@ jobs:
         run: yarn build
 
       - name: Copy build folder
-        run: cp -r .next/ ../_next/
+        run: cp -r ../easyplan-admin/ ../easyplan-admin-fallback/
 
       - name: Start application
         run: pm2 reload easyplan
