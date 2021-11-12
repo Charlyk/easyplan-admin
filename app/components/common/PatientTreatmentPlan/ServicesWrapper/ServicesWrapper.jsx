@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import PropTypes from 'prop-types';
 import Paper from "@material-ui/core/Paper";
 import clsx from "clsx";
-
 import { textForKey } from "../../../../utils/localization";
 import getServiceName from "../../../../utils/getServiceName";
 import FinalServiceItem from "../../../doctors/FinalServiceItem";
