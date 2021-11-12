@@ -140,6 +140,7 @@ Temporary Items
 ### NextJS ###
 # Next build dir
 .next/
+_next/
 
 ### WebStorm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -229,7 +230,5 @@ yarn-error.log
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/yarn,macos,webstorm,jetbrains,nextjs
-
-ecosystem.config.js
 
 .env.local

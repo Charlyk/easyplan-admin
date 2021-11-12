@@ -139,7 +139,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
         }
         return { ...item, value: 1 };
       });
-      await requestUpdateExchangeRates(`/api/clinic/exchange-rates`, { rates: requestBody });
+      await requestUpdateExchangeRates({ rates: requestBody });
       toast.success(textForKey('Saved successfully'));
       dispatch(setIsExchangeRatesModalOpen(false));
       onClose();
