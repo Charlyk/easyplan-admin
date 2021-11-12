@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPaymentModal } from '../../../../../redux/actions/actions';
 import { updateHourIndicatorPositionSelector } from "../../../../../redux/selectors/rootSelector";
@@ -52,19 +53,19 @@ const PageHeader = (
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
-  const [currentTime, setCurrentTime] = useState(moment().format('HH:mm').split(':'))
   const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
-  const userClinic = user.clinics.find(item => item.clinicId === currentClinic.id);
-  const { canRegisterPayments } = userClinic;
 
-  useEffect(() => {
-    const newTime = moment().format('HH:mm').split(':');
-    if (newTime === currentTime) {
-      // time is same so we don't need to update it
-      return;
-    }
-    setCurrentTime(moment().format('HH:mm').split(':'));
-  }, [updateHourIndicator, currentTime])
+  const userClinic = useMemo(() => {
+    return user.clinics.find(item => item.clinicId === currentClinic.id);
+  }, [user, currentClinic]);
+
+  const canRegisterPayments = useMemo(() => {
+    return userClinic.canRegisterPayments
+  }, [userClinic]);
+
+  const currentTime = useMemo(() => {
+    return moment().format('HH:mm').split(':');
+  }, [updateHourIndicator]);
 
   const handleActionsClose = () => setIsActionsOpen(false);
 
@@ -127,7 +128,7 @@ const PageHeader = (
           </Typography>
           <Typography className={styles.timeLabel}>
             {currentTime[0]}
-            <div className={styles.timeSeparator}>:</div>
+            <span className={styles.timeSeparator}>:</span>
             {currentTime[1]}
           </Typography>
         </div>

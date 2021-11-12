@@ -58,7 +58,7 @@ const ToothView = (
     setToothServices(newServices);
     onServicesChange({
       toothId,
-      services: newServices.filter((item) => item.selected),
+      services: newServices,
     });
   };
 

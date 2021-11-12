@@ -3,7 +3,8 @@ import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import cloneDeep from "lodash/cloneDeep";
 import remove from "lodash/remove";
-
+import isEqualWith from 'lodash/isEqualWith';
+import { toast } from "react-toastify";
 import { textForKey } from "../../../utils/localization";
 import { Statuses } from "../../../utils/constants";
 import { deletePatientPlanService } from "../../../../middleware/api/patients";
@@ -14,7 +15,6 @@ import reducer, {
   setTeethModal,
 } from "./PatientTreatmentPlan.reducer";
 import styles from './PatientTreatmentPlan.module.scss';
-import { toast } from "react-toastify";
 
 const TeethContainer = dynamic(() => import('./TeethContainer'));
 const TeethModal = dynamic(() => import("../modals/TeethModal"));
@@ -84,14 +84,18 @@ const PatientTreatmentPlan = (
     );
   }, [selectedServices, finalServicesList]);
 
+  const equalityCustomizer = (item, service) => {
+    return (
+      item.id === service.id &&
+      item.toothId === service.toothId &&
+      item.destination === service.destination &&
+      (item.scheduleId === service.scheduleId || item.completed === service.completed)
+    )
+  }
+
   const doesServiceExists = (service) => {
     return selectedServices.some(
-      (item) =>
-        item.id === service.id &&
-        (item.scheduleId === service.scheduleId || !item.completed) &&
-        (item.toothId == null || item.toothId === service.toothId) &&
-        (item.destination == null ||
-          item.destination === service.destination)
+      (item) => isEqualWith(item, service, equalityCustomizer)
     );
   }
 
@@ -128,16 +132,14 @@ const PatientTreatmentPlan = (
    * @param {Array.<Object>} services
    */
   const handleToothServicesChange = ({ toothId, services }) => {
-    const newServices = selectedServices.filter((item) => {
-      return item.toothId !== toothId || item.completed
-    })
+    let newServices = cloneDeep(selectedServices);
     for (let service of services) {
       const updatedService = mappedService(service, toothId);
       const serviceExists = doesServiceExists(updatedService);
-      if (!serviceExists) {
+      if (!serviceExists && service.selected) {
         newServices.unshift(updatedService);
-      } else {
-        toast.warn(textForKey('service_already_exists_on_schedule'));
+      } else if (!service.selected) {
+        remove(newServices, (item) => isEqualWith(item, service, equalityCustomizer));
       }
     }
     localDispatch(setSelectedServices({ services: newServices }));
@@ -158,6 +160,7 @@ const PatientTreatmentPlan = (
       newServices.unshift(updatedService);
       localDispatch(setSelectedServices({ services: newServices }));
     } else {
+      console.log('exists');
       toast.warn(textForKey('service_already_exists_on_schedule'));
     }
   };
@@ -177,9 +180,9 @@ const PatientTreatmentPlan = (
     for (const newService of updatedServices) {
       if (doesServiceExists(newService)) {
         toast.warn(textForKey('service_already_exists_on_schedule'));
-        continue;
+      } else {
+        newServices.unshift(newService)
       }
-      newServices.unshift(newService)
     }
     localDispatch(setSelectedServices({ services: newServices }));
   }
@@ -205,14 +208,13 @@ const PatientTreatmentPlan = (
    * @param {Object} service
    */
   const handleRemoveSelectedService = async (service) => {
-    let newServices = cloneDeep(selectedServices);
-    remove(
-      newServices,
-      (item) =>
-        item.id === service.id &&
-        item.toothId === service.toothId &&
-        item.destination === service.destination,
-    );
+    let newServices = selectedServices.filter((item) => (
+      item.id !== service.id ||
+      item.toothId !== service.toothId ||
+      item.destination !== service.destination ||
+      item.scheduleId !== service.scheduleId ||
+      item.completed !== service.completed
+    ));
     if (service.isExistent && service.planServiceId != null) {
       // delete service from server
       await deletePatientPlanService(scheduleData.patient.id, service.planServiceId);
