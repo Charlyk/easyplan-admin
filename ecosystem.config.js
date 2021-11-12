@@ -6,7 +6,7 @@ module.exports = {
       args: 'start',
       instances: 'max',
       exec_mode: 'cluster',
-      interpreter: '/bin/bash',
+      interpreter: 'bash',
     }
   ]
 }
