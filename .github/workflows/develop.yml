@@ -34,20 +34,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
-      - name: Checkout develop branch
-        run: git checkout develop
-
-      - name: Start fallback app
-        run: systemctl stop easyplan-admin && systemctl start easyplan-admin-fallback
-
       - name: Install all dependencies
         run: yarn install
 
       - name: Build application
         run: yarn build
 
-      - name: Stop fallback app and start main app
-        run: systemctl stop easyplan-admin-fallback && systemctl start easyplan-admin
+      - name: Reload application
+        run: pm2 reload easyplan-admin
 
-      - name: Copy app files to fallback directory
-        run: cp -r ../easyplan-admin ../easyplan-admin-fallback
+      - name: Start if reload fails
+        if: ${{ failure() }}
+        run: pm2 start ecosystem.config.js
