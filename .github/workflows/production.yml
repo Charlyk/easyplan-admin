@@ -34,6 +34,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
+      - name: Start fallback application
+        run: pm2 stop easyplan && pm2 start easyplan-fallback && pm2 reload easyplan-fallback
+
       - name: Install all dependencies
         run: yarn install
 
@@ -44,4 +47,4 @@ jobs:
         run: /bin/cp -rf ../easyplan-admin/* ../easyplan-admin-fallback/
 
       - name: Start application
-        run: pm2 reload easyplan
+        run: pm2 stop easyplan-fallback && pm2 start easyplan && pm2 reload easyplan
