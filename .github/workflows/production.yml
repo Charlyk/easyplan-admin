@@ -40,6 +40,9 @@ jobs:
       - name: Build application
         run: yarn build
 
+      - name: Copy build folder
+        run: cm -r .next/ _next/
+
       - name: Reload application
         run: pm2 reload easyplan-admin
 
