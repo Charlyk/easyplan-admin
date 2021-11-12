@@ -669,6 +669,8 @@ export default {
     access_blocked: 'Access blocked',
     access_blocked_message: 'Your access to this clinic was blocked, please contact clinic manager for more information.',
     service_already_exists_on_schedule: 'This service already added on this schedule.',
+    clinic_delete_requested: 'Delete requested',
+    clinic_delete_requested_message: "We've received your delete request. Our support will contact you soon to confirm all the details.",
   },
   ro: {
     analytics: 'Analitică',
@@ -1346,6 +1348,8 @@ export default {
     access_blocked: 'Acces blocat',
     access_blocked_message: 'Accesul Dvs. la aceasta clinica a fost blocat, vă rugăm să contactați managerul clinicii pentru mai multe informații.',
     service_already_exists_on_schedule: 'Acest serviciu deja există pentru programarea dată.',
+    clinic_delete_requested: 'Cerere primită',
+    clinic_delete_requested_message: "Cererea Dvs. a fost primită, în scurt timp vă vom contacta pentru a confirma toate detaliile.",
   },
   ru: {
     analytics: 'Analytics',
@@ -2014,5 +2018,7 @@ export default {
     access_blocked: 'Access blocked',
     access_blocked_message: 'Your access to this clinic was blocked, please contact clinic manager for more information.',
     service_already_exists_on_schedule: 'This service already added on this schedule.',
+    clinic_delete_requested: 'Delete requested',
+    clinic_delete_requested_message: "We've received your delete request. Our support will contact you soon to confirm all the details.",
   },
 };
