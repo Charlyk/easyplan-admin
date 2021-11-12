@@ -1,19 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import upperFirst from 'lodash/upperFirst';
 import sortBy from 'lodash/sortBy';
-import moment from 'moment-timezone';
-import Image from 'next/image';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 import IconLogoPlaceholder from '../../../icons/iconLogoPlaceholder';
 import IconSuccess from '../../../icons/iconSuccess';
 import IconTrash from '../../../icons/iconTrash';
 import LoadingButton from '../../../common/LoadingButton';
-import { changeSelectedClinic } from '../../../../../redux/actions/actions';
 import { EmailRegex, HeaderKeys } from '../../../../utils/constants';
 import { textForKey } from '../../../../utils/localization';
+import onRequestError from "../../../../utils/onRequestError";
 import {
   clinicTimeZones,
   deleteClinic,
@@ -25,41 +22,31 @@ import EASPhoneInput from "../../../common/EASPhoneInput";
 import EASSelect from "../../../common/EASSelect";
 import EASTextarea from "../../../common/EASTextarea";
 import UploadAvatar from "../../../common/UploadAvatar";
+import reducer, {
+  initialState,
+  setIsSaving,
+  setTimeZones,
+  setData,
+  setIsDeleting,
+  closeDeleteConfirmation,
+  closeDeleteRequestSent,
+  openDeleteRequestSent,
+  openDeleteConfirmation,
+} from './CompanyDetailsForm.reducer';
 import styles from './CompanyDetailsForm.module.scss';
 
 const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
 
-const CompanyDetailsForm = ({ currentUser, currentClinic, countries, authToken }) => {
-  const dispatch = useDispatch();
+const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
   const router = useRouter();
-  const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteModal, setDeleteModal] = useState({ open: false });
-  const [timeZones, setTimeZones] = useState([]);
-  const [data, setData] = useState({
-    id: '',
-    logoUrl: null,
-    logoFile: null,
-    clinicName: '',
-    email: '',
-    website: '',
-    phoneNumber: '',
-    telegramNumber: '',
-    viberNumber: '',
-    whatsappNumber: '',
-    description: '',
-    socialNetworks: '',
-    workdays: [],
-    currency: 'MDL',
-    allCurrencies: [],
-    country: 'md',
-    timeZone: moment.tz.guess(true),
-    isValidPhoneNumber: true,
-    isValidViberNumber: true,
-    isValidTelegramNumber: true,
-    isValidWhatsappNumber: true,
-    hasBrackets: false,
-  });
+  const [{
+    isSaving,
+    isDeleting,
+    showDeleteRequestSent,
+    deleteModal,
+    timeZones,
+    data,
+  }, localDispatch] = useReducer(reducer, initialState);
 
   const mappedCountries = useMemo(() => {
     return countries.map(item => ({
@@ -80,41 +67,40 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries, authToken }
   }, []);
 
   useEffect(() => {
-    setData({
+    localDispatch(setData({
       ...data,
       ...currentClinic,
       allCurrencies: currentClinic.allCurrencies.map(item => ({
         ...item,
         name: `${item.id} - ${item.name}`,
       }))
-    });
+    }));
   }, [currentClinic]);
 
   const fetchTimeZones = async () => {
-    setIsSaving(true);
     try {
+      localDispatch(setIsSaving(true));
       const response = await clinicTimeZones();
-      setTimeZones(response.data);
+      localDispatch(setTimeZones(response.data));
     } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsSaving(false);
+      onRequestError(error);
+      localDispatch(setIsSaving(false));
     }
   };
 
   const handleLogoChange = (file) => {
     if (isSaving) return;
     if (file != null) {
-      setData({ ...data, logoFile: file });
+      localDispatch(setData({ ...data, logoFile: file }));
     }
   };
 
   const handleFormChange = (fieldId, value) => {
     if (isSaving) return;
-    setData({
+    localDispatch(setData({
       ...data,
       [fieldId]: value,
-    });
+    }));
   };
 
   const handleTimeZoneChange = (event) => {
@@ -148,38 +134,38 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries, authToken }
   const handlePhoneChange = (phoneType) => (value, country, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
     if (isSaving) return;
-    setData({
+    localDispatch(setData({
       ...data,
       [phoneType]: `+${value}`,
       [validationFieldName]: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
         'invalid-number',
       ),
-    });
+    }));
   };
 
   const handleStartDelete = () => {
-    setDeleteModal({ open: true });
+    localDispatch(openDeleteConfirmation());
   };
 
   const handleCloseDelete = () => {
-    setDeleteModal({ open: false });
+    localDispatch(closeDeleteConfirmation());
   };
 
   const handleConfirmDelete = async () => {
-    setIsDeleting(true);
     try {
+      localDispatch(setIsDeleting(true));
       await deleteClinic();
-      if (currentUser.clinicIds.length > 0) {
-        dispatch(changeSelectedClinic(currentUser.clinicIds[0]));
-      } else {
-        await router.push('/create-clinic?redirect=1');
-      }
+      localDispatch(openDeleteRequestSent());
     } catch (error) {
-      toast.error(error.response);
+      onRequestError(error);
     } finally {
-      setIsDeleting(false);
+      localDispatch(setIsDeleting(false));
     }
   };
+
+  const handleCloseDeleteRequestSent = () => {
+    localDispatch(closeDeleteRequestSent());
+  }
 
   const isFormValid = () => {
     return (
@@ -204,8 +190,8 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries, authToken }
 
   const submitForm = async () => {
     if (!isFormValid()) return;
-    setIsSaving(true);
     try {
+      localDispatch(setIsSaving(true));
       const requestBody = {
         id: data.id,
         clinicName: data.clinicName,
@@ -221,36 +207,19 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries, authToken }
         workdays: data.workdays,
         hasBrackets: data.hasBrackets,
       };
-
-      const response = await updateClinic(requestBody, data.logoFile, {
+      await updateClinic(requestBody, data.logoFile, {
         [HeaderKeys.authorization]: authToken,
         [HeaderKeys.clinicId]: currentClinic.id,
         [HeaderKeys.subdomain]: currentClinic.domainName,
       });
-      await router.replace(router.asPath);
-      setData({ ...data, ...response.data });
       toast.success(textForKey('Saved successfully'));
-
+      await router.replace(router.asPath);
     } catch (error) {
-      toast.error(error.message);
+      onRequestError(error)
     } finally {
-      setIsSaving(false);
+      localDispatch(setIsSaving(false));
     }
   };
-
-  const phoneNumberLabel = (icon, text) => {
-    return (
-      <span style={{ display: "flex", alignItems: 'center' }}>
-        <Image
-          width={25}
-          height={25}
-          src={`/${icon}_icon.png`}
-          alt={text}
-        />
-        {text}
-      </span>
-    )
-  }
 
   const logoSrc =
     (data.logoFile && window.URL.createObjectURL(data.logoFile)) ||
@@ -259,10 +228,16 @@ const CompanyDetailsForm = ({ currentUser, currentClinic, countries, authToken }
   return (
     <div className={styles.companyDetailsForm}>
       <ConfirmationModal
+        show={showDeleteRequestSent}
+        title={textForKey('clinic_delete_requested')}
+        message={textForKey('clinic_delete_requested_message')}
+        onClose={handleCloseDeleteRequestSent}
+      />
+      <ConfirmationModal
+        show={deleteModal.open}
         isLoading={isDeleting}
         title={textForKey('Delete clinic')}
         message={textForKey('delete_clinic_message')}
-        show={deleteModal.open}
         onClose={handleCloseDelete}
         onConfirm={handleConfirmDelete}
       />
