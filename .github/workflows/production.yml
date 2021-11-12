@@ -41,11 +41,7 @@ jobs:
         run: yarn build
 
       - name: Copy build folder
-        run: cm -r .next/ _next/
-
-      - name: Reload application
-        run: pm2 reload easyplan-admin
+        run: cp -r .next/ _next/
 
       - name: Start if reload fails
-        if: ${{ failure() }}
-        run: pm2 start ecosystem.config.js
+        run: yarn pm2
