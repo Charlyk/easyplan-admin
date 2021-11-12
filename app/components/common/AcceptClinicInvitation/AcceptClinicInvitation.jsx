@@ -15,6 +15,7 @@ import LoadingButton from '../LoadingButton';
 import UploadAvatar from "../UploadAvatar";
 import EASTextField from "../EASTextField";
 import EASPhoneInput from "../EASPhoneInput";
+import EASImage from "../EASImage";
 import reducer, {
   initialState,
   setFirstName,
@@ -26,9 +27,6 @@ import reducer, {
   setIsLoading,
 } from './AcceptClinicInvitation.reducer';
 import styles from './AcceptInvitation.module.scss';
-import { baseApiUrl } from "../../../../eas.config";
-import urlToLambda from "../../../utils/urlToLambda";
-import EASImage from "../EASImage";
 
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
   const router = useRouter();
@@ -123,7 +121,9 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
         phoneNumber,
         invitationToken: token,
       };
-      const { data: user } = await requestAcceptInvitation(requestBody, avatarFile);
+      const { data: user } = await requestAcceptInvitation(requestBody, avatarFile, {
+        [HeaderKeys.clinicId]: -1,
+      });
       toast.success(textForKey('invitation_accepted_success'));
       await handleSuccessResponse(user)
     } catch (error) {
