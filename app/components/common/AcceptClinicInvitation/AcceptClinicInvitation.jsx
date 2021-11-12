@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 import { requestAcceptInvitation } from "../../../../middleware/api/users";
 import { textForKey } from '../../../utils/localization';
-import { HeaderKeys, PasswordRegex, Role } from '../../../utils/constants';
+import { PasswordRegex, Role } from '../../../utils/constants';
 import isPhoneNumberValid from "../../../utils/isPhoneNumberValid";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import LoadingButton from '../LoadingButton';
