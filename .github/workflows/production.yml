@@ -43,5 +43,5 @@ jobs:
       - name: Copy build folder
         run: cp -r .next/ _next/
 
-      - name: Start if reload fails
-        run: yarn pm2
+      - name: Start application
+        run: pm2 start ecosystem.config.js
