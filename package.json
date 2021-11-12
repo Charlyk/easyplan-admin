@@ -99,7 +99,6 @@
     "dev": "next dev -p 80",
     "build": "next build",
     "start": "next start",
-    "pm2": "pm2 start ecosystem.config.js",
     "find:unused": "next-unused"
   },
   "next-unused": {
