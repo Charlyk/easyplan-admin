@@ -414,7 +414,7 @@ const AddAppointmentModal = (
       const endDate = moment(appointmentDate);
       endDate.set({ hour: parseInt(endHour), minute: parseInt(endMinute) });
 
-      // build request body
+      // build.yml request body
       const requestBody = {
         patientFirstName,
         patientLastName,

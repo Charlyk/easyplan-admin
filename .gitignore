@@ -138,7 +138,7 @@ Temporary Items
 .apdisk
 
 ### NextJS ###
-# Next build dir
+# Next build.yml dir
 .next/
 _next/
 

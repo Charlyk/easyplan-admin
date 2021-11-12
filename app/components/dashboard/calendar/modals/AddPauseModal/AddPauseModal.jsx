@@ -153,7 +153,7 @@ const AddPauseModal = (
     // toggle loading spinner
     localDispatch(setIsLoading(true));
     try {
-      // build request body
+      // build.yml request body
       const startHourParts = startHour.split(':');
       const endHourParts = endHour.split(':');
       const requestBody = {
