@@ -44,4 +44,4 @@ jobs:
         run: cp -r .next/ _next/
 
       - name: Start application
-        run: pm2 start ecosystem.config.js
+        run: pm2 start yarn --interpreter bash --name easyplan -- start
