@@ -12,7 +12,6 @@ import reducer, {
 } from './createClinicWrapperSlice';
 import styles from './CreateClinic.module.scss';
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import urlToLambda from "../../../utils/urlToLambda";
 import { HeaderKeys } from "../../../utils/constants";
 import EASImage from "../EASImage";
 

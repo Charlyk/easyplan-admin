@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import CircularProgress from "@material-ui/core/CircularProgress";
 import EASModal from "../EASModal";
 import styles from './FullScreenImageModal.module.scss'
-import urlToLambda from "../../../../utils/urlToLambda";
 import EASImage from "../../EASImage";
 
 const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
-  const [isLoading, setIsLoading] = useState(true);
   return (
     <EASModal
       open={open}

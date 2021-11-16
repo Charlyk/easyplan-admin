@@ -11,14 +11,13 @@ import Lightbox from "react-awesome-lightbox";
 import IconPlus from '../../../../icons/iconPlus';
 import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
 import { textForKey } from '../../../../../utils/localization';
+import urlToAWS from "../../../../../utils/urlToAWS";
 import {
   deletePatientXRayImage,
   getPatientXRayImages
 } from "../../../../../../middleware/api/patients";
 import XRayPhase from './XRayPhase';
 import styles from './PatientXRay.module.scss'
-import urlToLambda from "../../../../../utils/urlToLambda";
-import urlToAWS from "../../../../../utils/urlToAWS";
 
 const ConfirmationModal = dynamic(() => import("../../../../common/modals/ConfirmationModal"));
 
