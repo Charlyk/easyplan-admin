@@ -247,7 +247,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   };
 
   const handleHelpClick = () => {
-    window.open('https://m.me/easyplan.pro', '_blank')
+    window.open(TECH_SUPPORT_URL, '_blank')
   }
 
   const userClinic = currentUser.clinics.find(

@@ -465,4 +465,4 @@ export const HeaderKeys = {
 
 export const APP_DATA_API = '/api/analytics/app-data';
 
-export const TECH_SUPPORT_URL = 'https://m.me/108785330910403'
+export const TECH_SUPPORT_URL = 'https://tawk.to/chat/619407696bb0760a4942ea33/1fkl3ptc4'
