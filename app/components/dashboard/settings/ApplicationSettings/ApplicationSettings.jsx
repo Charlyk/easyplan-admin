@@ -9,6 +9,10 @@ import { updateClinic } from "../../../../../middleware/api/clinic";
 import styles from './ApplicationSettings.module.scss'
 import EASTextField from "../../../common/EASTextField";
 import { HeaderKeys } from "../../../../utils/constants";
+import TimeBeforeOnSite from "./TimeBeforeOnSite";
+import ClinicTags from "./ClinicTags";
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
 
 const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
   const router = useRouter();
@@ -49,20 +53,26 @@ const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
     <div className={styles.applicationSettingsForm}>
       <span className={styles.formTitle}>{textForKey('Application settings')}</span>
       <div className={styles.dataWrapper}>
-        <EASTextField
-          type="number"
-          fieldLabel={textForKey('Animate appointments before')}
+        <Typography className={styles.titleLabel}>
+          {textForKey('app_settings_time_before_on_site')}
+        </Typography>
+        <TimeBeforeOnSite
           value={time}
-          helperText={textForKey('appointment_animation_timer')}
           onChange={handleFormChange}
         />
+        <Divider className={styles.divider}/>
+        <Typography className={styles.titleLabel}>
+          {textForKey('app_settings_tags')}
+        </Typography>
+        <ClinicTags />
+        <Divider className={styles.divider}/>
       </div>
       <div className={styles.footer}>
         <LoadingButton
           onClick={saveTimer}
           isLoading={isLoading}
           className={styles.saveButton}
-          disabled={isLoading || !isFormValid()}
+          disabled={isLoading || !isFormValid() || time === String(clinic.timeBeforeOnSite)}
         >
           {textForKey('Save')}
           <IconSuccess />

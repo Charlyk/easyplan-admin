@@ -20,6 +20,20 @@
     margin-bottom: 1rem;
   }
 
+  .titleLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
   .dataWrapper {
     flex: 1;
     display: flex;
@@ -31,22 +45,10 @@
     align-items: flex-end;
     justify-content: flex-end;
     width: 100%;
+    margin-top: 10px;
 
     .saveButton {
       width: 23.5%;
-      background-color: #3A83DC !important;
-      color: white !important;
-
-      &:hover {
-        background-color: #3A83DC;
-      }
-
-      svg {
-        margin-bottom: 3px;
-        margin-left: 5px;
-        width: 20px;
-        height: 20px;
-      }
     }
   }
 }
