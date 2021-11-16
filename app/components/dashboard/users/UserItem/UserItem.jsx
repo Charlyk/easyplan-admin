@@ -11,7 +11,6 @@ import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 
 import { Role } from '../../../../utils/constants';
-import urlToLambda from '../../../../utils/urlToLambda';
 import { textForKey } from '../../../../utils/localization';
 import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
 import IconAvatar from '../../../icons/iconAvatar';

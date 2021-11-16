@@ -14,7 +14,6 @@ import { isDev } from "../../../../eas.config";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import ClinicItem from "./ClinicItem";
 import styles from './ClnicsList.module.scss';
-import urlToLambda from "../../../utils/urlToLambda";
 import EASImage from "../EASImage";
 
 export default function ClinicsList({ user, authToken, isMobile }) {
