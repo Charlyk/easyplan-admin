@@ -42,6 +42,7 @@ class AppDocument extends Document {
         <Head>
           <title>{clinicName}</title>
           <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+          <script type="text/javascript" src="/tawkto.js"/>
           <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" />
         </Head>
         <body>
