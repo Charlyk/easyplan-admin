@@ -51,6 +51,7 @@ import reducer, {
   setShowStatuses,
 } from "./AppointmentDetails.reducer";
 import styles from './AppointmentDetails.module.scss';
+import IconPlus from "../../../icons/iconPlus";
 
 const SingleInputModal = dynamic(() => import('../../../common/modals/SingleInputModal'));
 const EasyDatePickerModal = dynamic(() => import("../../../common/modals/EasyDatePickerModal"));
@@ -63,6 +64,7 @@ const AppointmentDetails = (
     onDelete,
     onEdit,
     onPayDebt,
+    onAddSchedule,
   }
 ) => {
   const dispatch = useDispatch();
@@ -85,7 +87,7 @@ const AppointmentDetails = (
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (schedule == null) {
@@ -136,7 +138,7 @@ const AppointmentDetails = (
     if (event?.keyCode === 27 && !isLoading) {
       onClose?.();
     }
-  }
+  };
 
   const fetchAppointmentDetails = async (schedule) => {
     if (schedule == null) {
@@ -162,7 +164,7 @@ const AppointmentDetails = (
       scheduleId: schedule.id,
     }
     return getAvailableHours(query);
-  }
+  };
 
   const handleEditSchedule = () => {
     if (isFinished || isLoading) {
@@ -241,7 +243,7 @@ const AppointmentDetails = (
   const handleDelayTimeSubmitted = async (delayTime) => {
     const status = Statuses.find((item) => item.id === 'Late');
     await changeScheduleStatus(status, null, null, delayTime);
-  }
+  };
 
   const handleCanceledReasonSubmitted = async (canceledReason) => {
     const status = Statuses.find((item) => item.id === 'Canceled');
@@ -251,7 +253,7 @@ const AppointmentDetails = (
   const handleRescheduleDateSelected = async (newDate) => {
     const status = Statuses.find((item) => item.id === 'Rescheduled');
     await changeScheduleStatus(status, null, newDate);
-  }
+  };
 
   const handleCloseCanceledReasonModal = () => {
     localDispatch(setIsCanceledReasonRequired(false));
@@ -259,11 +261,11 @@ const AppointmentDetails = (
 
   const handleCloseDateModal = () => {
     localDispatch(setIsNewDateRequired(false));
-  }
+  };
 
   const handleCloseDelayModal = () => {
     localDispatch(setIsDelayTimeRequired(false));
-  }
+  };
 
   const handlePatientClick = () => {
     dispatch(
@@ -273,6 +275,10 @@ const AppointmentDetails = (
         onDelete: null,
       }),
     );
+  };
+
+  const handleAddSchedule = () => {
+    onAddSchedule?.(null, null, null, null, details.patient);
   };
 
   const isFinished =
@@ -527,6 +533,16 @@ const AppointmentDetails = (
                     </a>
                   </td>
                 </tr>
+                <tr>
+                  <td colSpan={2} align="center">
+                    <Button
+                      className={styles.addScheduleBtn}
+                      onClick={handleAddSchedule}
+                    >
+                      {textForKey('add_new_appointment')}
+                    </Button>
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -637,6 +653,7 @@ AppointmentDetails.propTypes = {
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
   onPayDebt: PropTypes.func,
+  onAddSchedule: PropTypes.func,
   schedule: PropTypes.shape({
     id: PropTypes.number,
     patient: PropTypes.shape({
