@@ -2,7 +2,7 @@ export const environment = process.env.APP_ENV;
 export const isDev = environment === 'local' || environment === 'testing';
 
 export const appBaseUrl = environment === 'local'
-  ? 'http://app.easyplan.loc'
+  ? 'http://localhost:3000'
   : environment === 'testing'
     ? 'https://app.dev.easyplan.pro'
     : 'https://app.easyplan.pro'
