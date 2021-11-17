@@ -1,4 +1,4 @@
-import generateReducerActions from "../../../utils/generateReducerActions";
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   patient: null,
@@ -9,44 +9,39 @@ export const initialState = {
   finalServices: [],
 };
 
-const reducerTypes = {
-  setPatient: 'setPatient',
-  setSchedule: 'setSchedule',
-  setShowFinalizeTreatment: 'setShowFinalizeTreatment',
-  setIsFinalizing: 'setIsFinalizing',
-  setInitialData: 'setInitialData',
-};
-
-export const actions = generateReducerActions(reducerTypes);
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setPatient:
-      return { ...state, patient: action.payload };
-    case reducerTypes.setSchedule:
-      return { ...state, schedule: action.payload };
-    case reducerTypes.setShowFinalizeTreatment: {
+const doctorPatientDetailsSlice = createSlice({
+  name: 'doctorPatientDetails',
+  initialState,
+  reducers: {
+    setPatient(state, action) {
+      state.patient = action.payload;
+    },
+    setSchedule(state, action) {
+      state.schedule = action.payload;
+    },
+    setShowFinalizeTreatment(state, action) {
       const { open, finalServices, selectedServices } = action.payload;
-      return {
-        ...state,
-        showFinalizeTreatment: open,
-        finalServices: finalServices ?? [],
-        selectedServices: selectedServices ?? [],
-      };
-    }
-    case reducerTypes.setIsFinalizing:
-      return { ...state, isFinalizing: action.payload };
-    case reducerTypes.setInitialData: {
+      state.showFinalizeTreatment = open;
+      state.finalServices = finalServices;
+      state.selectedServices = selectedServices;
+    },
+    setIsFinalizing(state, action) {
+      state.isFinalizing = action.payload;
+    },
+    setInitialData(state, action) {
       const { schedule } = action.payload;
-      return {
-        ...state,
-        schedule,
-        patient: schedule.patient,
-      };
-    }
-    default:
-      return state;
-  }
-};
+      state.schedule = schedule;
+      state.patient = schedule.patient;
+    },
+  },
+});
 
-export default reducer
+export const {
+  setShowFinalizeTreatment,
+  setSchedule,
+  setPatient,
+  setInitialData,
+  setIsFinalizing,
+} = doctorPatientDetailsSlice.actions
+
+export default doctorPatientDetailsSlice.reducer

@@ -1,35 +1,35 @@
 import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import dynamic from 'next/dynamic';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import sum from 'lodash/sum';
 import moment from 'moment-timezone';
 import Button from '@material-ui/core/Button';
 import Typography from "@material-ui/core/Typography";
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
-
-import {
-  setPatientNoteModal,
-  setPatientXRayModal,
-} from '../../../../redux/actions/actions';
-import { textForKey } from '../../../utils/localization';
-import PatientTreatmentPlan from "../../../../app/components/common/PatientTreatmentPlan";
-import getTreatmentPlanURL from "../../../../app/utils/getTreatmentPlanURL";
 import {
   savePatientGeneralTreatmentPlan,
   updatePatientGeneralTreatmentPlan
 } from "../../../../middleware/api/patients";
+import {
+  setPatientNoteModal,
+  setPatientXRayModal,
+} from '../../../../redux/actions/actions';
+import PatientTreatmentPlan from "../../../../app/components/common/PatientTreatmentPlan";
+import getTreatmentPlanURL from "../../../../app/utils/getTreatmentPlanURL";
 import getErrorMessage from "../../../../app/utils/getErrorMessage";
+import { textForKey } from '../../../utils/localization';
+import EASPersistentModal from "../../common/modals/EASPersistentModal";
 import EASTextField from "../../common/EASTextField";
 import IconAvatar from '../../icons/iconAvatar';
 import PatientDetails from '../PatientDetails';
 import reducer, {
   initialState,
-  actions
+  setShowFinalizeTreatment,
+  setIsFinalizing,
+  setInitialData,
 } from './DoctorPatientDetails.reducer';
 import styles from './DoctorPatientDetails.module.scss';
-import EASPersistentModal from "../../common/modals/EASPersistentModal";
 
 const FinalizeTreatmentModal = dynamic(() => import('../../../../app/components/doctors/FinalizeTreatmentModal'));
 
@@ -58,7 +58,6 @@ const DoctorPatientDetails = (
     {
       patient,
       schedule,
-      selectedServices,
       showFinalizeTreatment,
       isFinalizing,
       finalServices,
@@ -73,9 +72,7 @@ const DoctorPatientDetails = (
 
   useEffect(() => {
     // filter clinic services to get only provided by current user services
-    localDispatch(
-      actions.setInitialData({ schedule: initialSchedule })
-    );
+    localDispatch(setInitialData({ schedule: initialSchedule }));
   }, []);
 
   /**
@@ -118,15 +115,6 @@ const DoctorPatientDetails = (
   };
 
   /**
-   * Get treatment total price
-   * @return {*}
-   */
-  const getTotalPrice = () => {
-    const prices = selectedServices.map((item) => item.price);
-    return sum(prices);
-  };
-
-  /**
    * Handle orthodontic plan saved
    */
   const handleSaveTreatmentPlan = async () => {
@@ -139,7 +127,7 @@ const DoctorPatientDetails = (
   const handleFinalizeTreatment = (finalServices, selectedServices) => {
     if (canFinalize) {
       localDispatch(
-        actions.setShowFinalizeTreatment({
+        setShowFinalizeTreatment({
           open: true,
           finalServices,
           selectedServices
@@ -154,7 +142,7 @@ const DoctorPatientDetails = (
    * Close finalize treatment modal
    */
   const handleCloseFinalizeTreatment = () => {
-    localDispatch(actions.setShowFinalizeTreatment({ open: false }));
+    localDispatch(setShowFinalizeTreatment({ open: false }));
   };
 
   const saveTreatmentPlan = async (requestBody, update) => {
@@ -178,7 +166,7 @@ const DoctorPatientDetails = (
    */
   const finalizeTreatment = async (plannedServices) => {
     handleCloseFinalizeTreatment();
-    localDispatch(actions.setIsFinalizing(true));
+    localDispatch(setIsFinalizing(true));
 
     try {
       let services = plannedServices;
@@ -213,7 +201,7 @@ const DoctorPatientDetails = (
     } catch (error) {
       toast.error(getErrorMessage(error));
     } finally {
-      localDispatch(actions.setIsFinalizing(false))
+      localDispatch(setIsFinalizing(false))
     }
   };
 
@@ -240,7 +228,6 @@ const DoctorPatientDetails = (
       <FinalizeTreatmentModal
         currentClinic={currentClinic}
         onSave={finalizeTreatment}
-        totalPrice={getTotalPrice()}
         services={finalServices}
         open={showFinalizeTreatment}
         onClose={handleCloseFinalizeTreatment}
