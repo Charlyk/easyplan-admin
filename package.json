@@ -96,7 +96,7 @@
     "webpack-bundle-analyzer": "^4.4.2"
   },
   "scripts": {
-    "dev": "next dev -p 80",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "find:unused": "next-unused"

@@ -8,7 +8,7 @@ import getRedirectUrlForUser from "../../../utils/getRedirectUrlForUser";
 import getClinicUrl from '../../../utils/getClinicUrl'
 import { textForKey } from "../../../utils/localization";
 import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
-import { appBaseUrl, isDev } from "../../../../eas.config";
+import { appBaseUrl, environment, isDev } from "../../../../eas.config";
 import { RestrictedSubdomains } from "../../../utils/constants";
 import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
 import ConfirmationModal from "../modals/ConfirmationModal";
@@ -46,6 +46,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
   }, [currentUser, currentClinic, authToken]);
 
   const handleClinicExists = async (clinic, token) => {
+    localDispatch(setIsLoading(false));
     const { host } = window.location;
     const [subdomain] = host.split('.');
     if (RestrictedSubdomains.includes(subdomain)) {
@@ -116,7 +117,9 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
    */
   const handleUserAuthenticated = async (user, token) => {
     localDispatch(setErrorMessage(null));
-    const [subdomain] = window.location.host.split('.');
+    localDispatch(setIsLoading(false));
+    const [subdomainPart] = window.location.host.split('.');
+    const subdomain = environment === 'local' ? process.env.DEFAULT_CLINIC : subdomainPart
     if (RestrictedSubdomains.includes(subdomain)) {
       if (user.clinics.length > 1) {
         // user has more than one clinic so we need to allow to select a clinic
@@ -174,7 +177,6 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       toast.error(message);
       localDispatch(setErrorMessage(message));
     }
-    localDispatch(setIsLoading(false));
   }
 
   /**
@@ -201,6 +203,8 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       }
     } catch (error) {
       handleLoginError(error);
+    } finally {
+      localDispatch(setIsLoading(false));
     }
   }
 

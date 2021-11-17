@@ -23,7 +23,6 @@ function authenticateWithBackend(req) {
     {
       headers: {
         [HeaderKeys.subdomain]: getSubdomain(req),
-        [HeaderKeys.contentType]: 'application/json',
       }
     }
   );
