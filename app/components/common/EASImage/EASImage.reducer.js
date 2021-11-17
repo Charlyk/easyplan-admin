@@ -4,6 +4,7 @@ export const initialState = {
   isLoading: false,
   isError: false,
   imageContent: null,
+  isAttached: false,
 }
 
 const easImageSlice = createSlice({
@@ -28,6 +29,9 @@ const easImageSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
     },
+    setIsAttached(state, action) {
+      state.isAttached = action.payload;
+    },
   },
 });
 
@@ -35,6 +39,7 @@ export const {
   setIsError,
   setIsLoading,
   setImageContent,
+  setIsAttached,
 } = easImageSlice.actions;
 
 export default easImageSlice.reducer;

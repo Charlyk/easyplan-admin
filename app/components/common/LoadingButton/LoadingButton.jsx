@@ -21,7 +21,6 @@ const LoadingButton = (
     <Button
       type={type}
       style={style}
-      className={clsx(styles.loadingButton, className)}
       onClick={onClick}
       disabled={disabled}
       classes={{
