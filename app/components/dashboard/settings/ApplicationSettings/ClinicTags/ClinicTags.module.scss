@@ -12,6 +12,32 @@
     margin-bottom: 5px;
   }
 
+  .shareAllBtn {
+    margin-top: 16px;
+    width: fit-content;
+    align-self: center;
+    color: #3A83DC;
+
+    svg {
+      margin-right: 10px;
+      margin-bottom: 2px;
+    }
+
+    .label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      color: #3A83DC;
+    }
+  }
+
+  .icon {
+    color: #3A83DC;
+    width: 20px;
+    height: 20px;
+  }
+
   .tagsContainer {
     display: flex;
     flex-wrap: wrap;
@@ -19,7 +45,13 @@
     .tagItem {
       margin-right: 5px;
 
-      svg {
+      .shareBtn {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+      }
+
+      .deleteIcon {
         color: #ec3276;
       }
 

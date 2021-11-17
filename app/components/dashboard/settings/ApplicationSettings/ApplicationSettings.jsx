@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-
-import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../common/LoadingButton';
-import { textForKey } from '../../../../utils/localization';
-import { updateClinic } from "../../../../../middleware/api/clinic";
-import styles from './ApplicationSettings.module.scss'
-import EASTextField from "../../../common/EASTextField";
-import { HeaderKeys } from "../../../../utils/constants";
-import TimeBeforeOnSite from "./TimeBeforeOnSite";
-import ClinicTags from "./ClinicTags";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import { requestShareTags } from "../../../../../middleware/api/tags";
+import { updateClinic } from "../../../../../middleware/api/clinic";
+import { textForKey } from '../../../../utils/localization';
+import { HeaderKeys } from "../../../../utils/constants";
+import onRequestError from "../../../../utils/onRequestError";
+import LoadingButton from '../../../common/LoadingButton';
+import ClinicsModal from "../../../common/modals/ClinicsModal";
+import IconSuccess from '../../../icons/iconSuccess';
+import TimeBeforeOnSite from "./TimeBeforeOnSite";
+import ClinicTags from "./ClinicTags";
+import styles from './ApplicationSettings.module.scss'
 
 const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(String(clinic.timeBeforeOnSite));
+  const [clinicsModal, setClinicsModal] = useState({ open: false, tags: [] });
 
   const handleFormChange = (newValue) => {
     setTime(newValue);
@@ -49,8 +51,33 @@ const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
     }
   };
 
+  const handleShareTags = (tags) => {
+    setClinicsModal({ open: true, tags });
+  };
+
+  const handleCloseClinics = () => {
+    setClinicsModal({ open: false, tags: [] });
+  };
+
+  const handleClinicSelected = async (clinic) => {
+    const tags = clinicsModal.tags;
+    handleCloseClinics();
+    try {
+      await requestShareTags(clinic.id, tags);
+      toast.success(textForKey('share_tags_success', clinic.clinicName));
+    } catch (error) {
+      onRequestError(error);
+    }
+  };
+
   return (
     <div className={styles.applicationSettingsForm}>
+      <ClinicsModal
+        open={clinicsModal.open}
+        currentClinicId={clinic.id}
+        onSelect={handleClinicSelected}
+        onClose={handleCloseClinics}
+      />
       <span className={styles.formTitle}>{textForKey('Application settings')}</span>
       <div className={styles.dataWrapper}>
         <Typography className={styles.titleLabel}>
@@ -64,7 +91,9 @@ const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
         <Typography className={styles.titleLabel}>
           {textForKey('app_settings_tags')}
         </Typography>
-        <ClinicTags />
+        <ClinicTags
+          onShare={handleShareTags}
+        />
         <Divider className={styles.divider}/>
       </div>
       <div className={styles.footer}>

@@ -676,6 +676,8 @@ export default {
     setting_tags_current: 'Current tags',
     app_settings_tags: 'Patient tags',
     app_settings_time_before_on_site: 'Time before on site',
+    setting_tags_share_all: 'Share all tags',
+    share_tags_success: 'Tags shared with clinic {1}',
   },
   ro: {
     analytics: 'Analitică',
@@ -1360,6 +1362,8 @@ export default {
     setting_tags_current: 'Tagurile curente',
     app_settings_tags: 'Tagurile pacienților',
     app_settings_time_before_on_site: 'Timp înainte de a fi pe loc',
+    setting_tags_share_all: 'Partajați toate tagurile',
+    share_tags_success: 'Tagurile au fost partajate cu clinica {1}',
   },
   ru: {
     analytics: 'Analytics',
@@ -2035,5 +2039,7 @@ export default {
     setting_tags_current: 'Current tags',
     app_settings_tags: 'Patient tags',
     app_settings_time_before_on_site: 'Time before on site',
+    setting_tags_share_all: 'Share all tags',
+    share_tags_success: 'Tags shared with clinic {1}',
   },
 };

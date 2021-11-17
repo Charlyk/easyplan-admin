@@ -27,5 +27,18 @@ export async function requestCreateTag(title, headers = null) {
  */
 export async function requestDeleteTag(tagId, headers = null) {
   const queryString = new URLSearchParams({ tagId: `${tagId}` }).toString()
-  return del(`/api/tags?${queryString}`, headers)
+  return del(`/api/tags?${queryString}`, headers);
+}
+
+/**
+ * Share tags between clinics
+ * @param {number} clinicId
+ * @param {Array<*>} tags
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestShareTags(clinicId, tags, headers = null) {
+  const queryString = new URLSearchParams({ clinicId: `${clinicId}` }).toString()
+  const tagIds = tags.map(item => item.id);
+  return post(`/api/tags/share?${queryString}`, headers, { tagIds });
 }
