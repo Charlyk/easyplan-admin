@@ -88,6 +88,7 @@ const AppointmentsCalendar = (
           onDelete={onDeleteSchedule}
           onEdit={onEditSchedule}
           schedule={selectedSchedule}
+          onAddSchedule={onAddAppointment}
           onClose={handleDetailsClose}
         />
       )}

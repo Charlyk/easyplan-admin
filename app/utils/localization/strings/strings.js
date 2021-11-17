@@ -678,6 +678,7 @@ export default {
     app_settings_time_before_on_site: 'Time before on site',
     setting_tags_share_all: 'Share all tags',
     share_tags_success: 'Tags shared with clinic {1}',
+    add_new_appointment: 'Add new appointment',
   },
   ro: {
     analytics: 'Analitică',
@@ -1364,6 +1365,7 @@ export default {
     app_settings_time_before_on_site: 'Timp înainte de a fi pe loc',
     setting_tags_share_all: 'Partajați toate tagurile',
     share_tags_success: 'Tagurile au fost partajate cu clinica {1}',
+    add_new_appointment: 'Adaugă programare nouă',
   },
   ru: {
     analytics: 'Analytics',
@@ -2041,5 +2043,6 @@ export default {
     app_settings_time_before_on_site: 'Time before on site',
     setting_tags_share_all: 'Share all tags',
     share_tags_success: 'Tags shared with clinic {1}',
+    add_new_appointment: 'Add new appointment',
   },
 };
