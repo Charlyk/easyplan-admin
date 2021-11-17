@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
 import ShareIcon from '@material-ui/icons/Share';
 import {
   requestCreateTag,
@@ -11,8 +13,6 @@ import { textForKey } from "../../../../../utils/localization";
 import onRequestError from "../../../../../utils/onRequestError";
 import EASTextField from "../../../../common/EASTextField";
 import styles from './ClinicTags.module.scss';
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
 
 const ClinicTags = ({ onShare }) => {
   const [text, setText] = useState('');
