@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-
-import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../common/LoadingButton';
-import { textForKey } from '../../../../utils/localization';
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
+import { requestShareTags } from "../../../../../middleware/api/tags";
 import { updateClinic } from "../../../../../middleware/api/clinic";
-import styles from './ApplicationSettings.module.scss'
-import EASTextField from "../../../common/EASTextField";
+import { textForKey } from '../../../../utils/localization';
 import { HeaderKeys } from "../../../../utils/constants";
+import onRequestError from "../../../../utils/onRequestError";
+import LoadingButton from '../../../common/LoadingButton';
+import ClinicsModal from "../../../common/modals/ClinicsModal";
+import IconSuccess from '../../../icons/iconSuccess';
+import TimeBeforeOnSite from "./TimeBeforeOnSite";
+import ClinicTags from "./ClinicTags";
+import styles from './ApplicationSettings.module.scss'
 
 const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(String(clinic.timeBeforeOnSite));
+  const [clinicsModal, setClinicsModal] = useState({ open: false, tags: [] });
 
   const handleFormChange = (newValue) => {
     setTime(newValue);
@@ -45,24 +51,57 @@ const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
     }
   };
 
+  const handleShareTags = (tags) => {
+    setClinicsModal({ open: true, tags });
+  };
+
+  const handleCloseClinics = () => {
+    setClinicsModal({ open: false, tags: [] });
+  };
+
+  const handleClinicSelected = async (clinic) => {
+    const tags = clinicsModal.tags;
+    handleCloseClinics();
+    try {
+      await requestShareTags(clinic.id, tags);
+      toast.success(textForKey('share_tags_success', clinic.clinicName));
+    } catch (error) {
+      onRequestError(error);
+    }
+  };
+
   return (
     <div className={styles.applicationSettingsForm}>
+      <ClinicsModal
+        open={clinicsModal.open}
+        currentClinicId={clinic.id}
+        onSelect={handleClinicSelected}
+        onClose={handleCloseClinics}
+      />
       <span className={styles.formTitle}>{textForKey('Application settings')}</span>
       <div className={styles.dataWrapper}>
-        <EASTextField
-          type="number"
-          fieldLabel={textForKey('Animate appointments before')}
+        <Typography className={styles.titleLabel}>
+          {textForKey('app_settings_time_before_on_site')}
+        </Typography>
+        <TimeBeforeOnSite
           value={time}
-          helperText={textForKey('appointment_animation_timer')}
           onChange={handleFormChange}
         />
+        <Divider className={styles.divider}/>
+        <Typography className={styles.titleLabel}>
+          {textForKey('app_settings_tags')}
+        </Typography>
+        <ClinicTags
+          onShare={handleShareTags}
+        />
+        <Divider className={styles.divider}/>
       </div>
       <div className={styles.footer}>
         <LoadingButton
           onClick={saveTimer}
           isLoading={isLoading}
           className={styles.saveButton}
-          disabled={isLoading || !isFormValid()}
+          disabled={isLoading || !isFormValid() || time === String(clinic.timeBeforeOnSite)}
         >
           {textForKey('Save')}
           <IconSuccess />

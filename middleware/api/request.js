@@ -1,7 +1,7 @@
 import axios from "axios";
 import { environment } from "../../eas.config";
-const host = environment === 'local' ? 'http://app.easyplan.loc' : 'http://localhost';
-const port = environment === 'local' ? 80 : 3000
+const host = 'http://localhost';
+const port = 3000;
 
 /**
  * perform an axios request to the server

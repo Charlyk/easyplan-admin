@@ -60,7 +60,9 @@ const Column = (
         }
       }
       // add the new schedules to array to check the next one against it
-      newSchedules.push({ ...schedule, offset });
+      if (!newSchedules.some(item => item.id === schedule.id)) {
+        newSchedules.push({ ...schedule, offset });
+      }
     }
     return newSchedules;
   }, [schedules, column])

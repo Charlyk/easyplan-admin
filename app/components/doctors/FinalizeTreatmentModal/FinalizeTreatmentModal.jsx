@@ -6,17 +6,16 @@ import Typography from '@material-ui/core/Typography';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-
+import getClinicExchangeRates from '../../../utils/getClinicExchangeRates';
+import formattedAmount from '../../../utils/formattedAmount';
+import getServiceName from '../../../utils/getServiceName';
+import { textForKey } from '../../../utils/localization';
+import EASTextField from "../../common/EASTextField";
+import EASModal from "../../common/modals/EASModal";
+import EASSelect from "../../common/EASSelect";
 import IconMinus from '../../icons/iconMinus';
 import IconPlus from '../../icons/iconPlus';
-import getClinicExchangeRates from '../../../utils/getClinicExchangeRates';
-import getServiceName from '../../../utils/getServiceName';
-import formattedAmount from '../../../utils/formattedAmount';
-import { textForKey } from '../../../utils/localization';
 import styles from './FinalizeTreatmentModal.module.scss';
-import EASModal from "../../common/modals/EASModal";
-import EASTextField from "../../common/EASTextField";
-import EASSelect from "../../common/EASSelect";
 
 const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave }) => {
   const [planServices, setPlanServices] = useState([]);

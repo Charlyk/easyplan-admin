@@ -1,4 +1,4 @@
-import { environment } from "../../eas.config";
+import { appBaseUrl, environment } from "../../eas.config";
 
 const getClinicUrl = (clinic, authToken) => {
   if (typeof window === 'undefined') {
@@ -13,8 +13,9 @@ const getClinicUrl = (clinic, authToken) => {
   const clinicDomain = clinic.clinicDomain ?? clinic.domainName;
   switch (environment) {
     case 'production':
-    case 'local':
       return `${protocol}//${clinicDomain}.${domain}.${location}/redirect?${queryString}`;
+    case 'local':
+      return `${appBaseUrl}/redirect?${queryString}`;
     default:
       return `${protocol}//${clinicDomain}.${domain}.${location}.${location2}/redirect?${queryString}`;
   }

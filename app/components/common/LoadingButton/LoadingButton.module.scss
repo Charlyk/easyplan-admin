@@ -2,9 +2,11 @@
   min-width: 100px !important;
   outline: none;
   height: 35px;
+  background-color: #3A83DC !important;
+  color: white !important;
 
   &:hover {
-    background-color: currentColor;
+    background-color: #3A83DC;
     color: inherit;
   }
 
@@ -18,15 +20,12 @@
   svg {
     width: 15px;
     height: 15px;
+    margin-bottom: 3px;
+    margin-left: 5px;
     fill: currentColor;
   }
 
-  &:disabled {
-    color: white !important;
-    background-color: #A1A2C6 !important;
-  }
-
-  .disabled {
+  &.disabled {
     color: white !important;
     background-color: #A1A2C6 !important;
   }

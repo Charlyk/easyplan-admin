@@ -8,26 +8,30 @@ import reducer, {
   initialState,
   setIsError,
   setImageContent,
-  setIsLoading
+  setIsLoading,
+  setIsAttached,
 } from './EASImage.reducer';
 import styles from './EASImage.module.scss';
 
 const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
-  const [{ isLoading, imageContent, isError }, localDispatch] = useReducer(reducer, initialState);
+  const [{ isLoading, imageContent, isError, isAttached }, localDispatch] = useReducer(reducer, initialState);
 
   const downloadImageAndSetContent = useCallback(async () => {
     if (src == null) {
       return;
     }
     try {
+      if (!isAttached) return;
       localDispatch(setIsLoading(true));
       const imageData = await remoteImageToBase64(urlToLambda(src));
+      if (!isAttached) return;
       localDispatch(setImageContent(imageData));
     } catch (error) {
       console.error(error);
+      if (!isAttached) return;
       localDispatch(setIsError(true));
     }
-  }, [src]);
+  }, [src, isAttached]);
 
   const updateImageContent = useCallback(() => {
     if (src == null) {
@@ -35,10 +39,18 @@ const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
     }
     const reader = new FileReader();
     reader.addEventListener('load', (reader) => {
+      if (!isAttached) return;
       localDispatch(setImageContent(reader.target.result));
     })
     reader.readAsDataURL(src);
-  }, [src]);
+  }, [src, isAttached]);
+
+  useEffect(() => {
+    localDispatch(setIsAttached(true));
+    return () => {
+      localDispatch(setIsAttached(false));
+    }
+  }, [])
 
   useEffect(() => {
     if (src == null) {

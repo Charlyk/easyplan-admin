@@ -7,16 +7,15 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
 import IconPhone from '@material-ui/icons/PhoneCallback';
 import { requestChangeDealClinic } from "../../../../../middleware/api/crm";
-import { requestFetchAllOwnerClinics } from "../../../../../middleware/api/clinic";
-import ActionsSheet from "../../../common/ActionsSheet";
 import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 import onRequestError from "../../../../utils/onRequestError";
 import { textForKey } from "../../../../utils/localization";
 import getPatientName from "../../../../utils/getPatientName";
+import ClinicsModal from "../../../common/modals/ClinicsModal";
+import ActionsSheet from "../../../common/ActionsSheet";
 import IconFacebookSm from "../../../icons/iconFacebookSm";
 import IconAvatar from "../../../icons/iconAvatar";
 import IconLink from "../../../icons/iconLink";
-import ClinicsModal from "./ClinicsModal";
 import styles from './UnsortedDealItem.module.scss';
 
 
@@ -59,7 +58,7 @@ const UnsortedDealItem = (
 ) => {
   const moreBtnRef = useRef(null);
   const [showActions, setShowActions] = useState(false);
-  const [clinicsModal, setClinicsModal] = useState({ open: false, clinics: [] });
+  const [clinicsModal, setClinicsModal] = useState(false);
 
   const sourceIcon = useMemo(() => {
     switch (deal.source) {
@@ -120,17 +119,11 @@ const UnsortedDealItem = (
   };
 
   const handleChangeDealClinic = async () => {
-    try {
-      const response = await requestFetchAllOwnerClinics();
-      const clinics = response.data.filter(item => item.id !== currentClinic.id)
-      setClinicsModal({ open: true, clinics });
-    } catch (error) {
-      onRequestError(error);
-    }
+    setClinicsModal(true);
   };
 
   const handleCloseClinics = () => {
-    setClinicsModal({ ...clinicsModal, open: false });
+    setClinicsModal(false);
   };
 
   const handleSelectClinic = async (clinic) => {
@@ -170,7 +163,8 @@ const UnsortedDealItem = (
   return (
     <Box className={styles.unsortedDealItem} onClick={handleDealClick}>
       <ClinicsModal
-        {...clinicsModal}
+        open={clinicsModal}
+        currentClinicId={currentClinic.id}
         onClose={handleCloseClinics}
         onSelect={handleSelectClinic}
       />
