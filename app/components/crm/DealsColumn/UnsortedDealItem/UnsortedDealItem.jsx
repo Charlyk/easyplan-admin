@@ -17,6 +17,7 @@ import IconFacebookSm from "../../../icons/iconFacebookSm";
 import IconAvatar from "../../../icons/iconAvatar";
 import IconLink from "../../../icons/iconLink";
 import styles from './UnsortedDealItem.module.scss';
+import Chip from "@material-ui/core/Chip";
 
 
 const actions = [
@@ -59,6 +60,7 @@ const UnsortedDealItem = (
   const moreBtnRef = useRef(null);
   const [showActions, setShowActions] = useState(false);
   const [clinicsModal, setClinicsModal] = useState(false);
+  const hasTags = deal.patient?.tags?.length > 0;
 
   const sourceIcon = useMemo(() => {
     switch (deal.source) {
@@ -195,6 +197,23 @@ const UnsortedDealItem = (
             </Typography>
           </div>
         )}
+        {hasTags && (
+          <div className={styles.tagsContainer}>
+            {deal.patient.tags.map((tag) => (
+              <Chip
+                size="small"
+                variant="outlined"
+                label={tag.title}
+                key={tag.id}
+                classes={{
+                  root: styles.tagItem,
+                  label: styles.label,
+                  outlined: styles.outlined
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div className={styles.actionsContainer}>
         <Typography className={styles.dateLabel}>
@@ -235,6 +254,10 @@ UnsortedDealItem.propTypes = {
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       phoneWithCode: PropTypes.string,
+      tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+      })),
     }),
     state: PropTypes.shape({
       id: PropTypes.number,

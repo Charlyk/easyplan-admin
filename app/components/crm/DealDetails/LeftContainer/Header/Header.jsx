@@ -7,6 +7,8 @@ import { textForKey } from "../../../../../utils/localization";
 import styles from "./Header.module.scss";
 
 const Header = ({ deal, states }) => {
+  const hasTags = deal?.patient?.tags.length > 0;
+
   const headerTitle = useMemo(() => {
     if (deal == null) return '';
     const mainTitle = `${textForKey('Deal')}: #${deal.id}`;
@@ -65,6 +67,11 @@ const Header = ({ deal, states }) => {
             {textForKey('Doctor')}: {doctorName}
           </Typography>
         )}
+        {hasTags && (deal.patient.tags.map(tag => (
+          <Typography key={tag.id} className={styles.responsibleName}>
+            {tag.title}
+          </Typography>
+        )))}
       </div>
       <div className={styles.statusContainer}>
         <Typography className={styles.statusName}>

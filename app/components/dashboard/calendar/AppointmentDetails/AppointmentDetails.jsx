@@ -10,13 +10,13 @@ import Popper from '@material-ui/core/Popper';
 import Typography from '@material-ui/core/Typography';
 import DoneIcon from '@material-ui/icons/Done';
 import Button from '@material-ui/core/Button';
+import Chip from "@material-ui/core/Chip";
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
 import { baseApiUrl } from "../../../../../eas.config";
 import {
   getAvailableHours,
@@ -51,7 +51,6 @@ import reducer, {
   setShowStatuses,
 } from "./AppointmentDetails.reducer";
 import styles from './AppointmentDetails.module.scss';
-import IconPlus from "../../../icons/iconPlus";
 
 const SingleInputModal = dynamic(() => import('../../../common/modals/SingleInputModal'));
 const EasyDatePickerModal = dynamic(() => import("../../../common/modals/EasyDatePickerModal"));
@@ -495,6 +494,27 @@ const AppointmentDetails = (
                     <div className={styles.groupTitle}>{textForKey('Patient')}</div>
                   </td>
                 </tr>
+                {details.patient.tags.length > 0 && (
+                  <tr>
+                    <td colSpan={2}>
+                      <div className={styles.tagsContainer}>
+                        {details.patient.tags.map(tag => (
+                          <Chip
+                            size="small"
+                            key={tag.id}
+                            variant="outlined"
+                            label={tag.title}
+                            classes={{
+                              root: styles.tagItem,
+                              label: styles.label,
+                              outlined: styles.outlined
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                )}
                 <tr>
                   <td style={{ paddingRight: '1rem', userSelect: 'none', }}>
                     {textForKey('Name')}:
