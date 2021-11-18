@@ -679,6 +679,7 @@ export default {
     setting_tags_share_all: 'Share all tags',
     share_tags_success: 'Tags shared with clinic {1}',
     add_new_appointment: 'Add new appointment',
+    add_tag_to_patient: 'Add new tag',
   },
   ro: {
     analytics: 'Analitică',
@@ -1366,6 +1367,7 @@ export default {
     setting_tags_share_all: 'Partajați toate tagurile',
     share_tags_success: 'Tagurile au fost partajate cu clinica {1}',
     add_new_appointment: 'Adaugă programare nouă',
+    add_tag_to_patient: 'Adaugă tag',
   },
   ru: {
     analytics: 'Analytics',
@@ -2044,5 +2046,6 @@ export default {
     setting_tags_share_all: 'Share all tags',
     share_tags_success: 'Tags shared with clinic {1}',
     add_new_appointment: 'Add new appointment',
+    add_tag_to_patient: 'Add new tag',
   },
 };

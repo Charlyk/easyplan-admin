@@ -15,8 +15,28 @@ import LoadingButton from '../../../../common/LoadingButton';
 import EASTextField from "../../../../common/EASTextField";
 import EASPhoneInput from "../../../../common/EASPhoneInput";
 import EASSelect from "../../../../common/EASSelect";
-import { actions, initialState, reducer } from './PatientPersonalData.reducer';
+import reducer, {
+  initialState,
+  setFirstName,
+  setShowDatePicker,
+  setPatient,
+  setIsSaving,
+  setPhoneNumber,
+  setLastName,
+  setBirthday,
+  setDiscount,
+  setEuroDebt,
+  setSource,
+  setLanguage,
+  setEmail,
+  setAllTags,
+  removeTag,
+  addPatientTag,
+} from './PatientPersonalData.reducer';
 import styles from './PatientPersonalData.module.scss';
+import onRequestError from "../../../../../utils/onRequestError";
+import { requestAssignTag, requestFetchTags, requestUnassignTag } from "../../../../../../middleware/api/tags";
+import Chip from "@material-ui/core/Chip";
 
 const EasyDatePicker = dynamic(() => import('../../../../common/EasyDatePicker'));
 
@@ -37,33 +57,48 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
       country,
       language,
       source,
+      allTags,
+      tags,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    fetchAllTags();
+  }, []);
+
+  useEffect(() => {
     if (patient != null) {
-      localDispatch(actions.setPatient(patient));
+      localDispatch(setPatient(patient));
     }
   }, [patient]);
+
+  const fetchAllTags = async () => {
+    try {
+      const response = await requestFetchTags();
+      localDispatch(setAllTags(response.data));
+    } catch (error) {
+      onRequestError(error)
+    }
+  }
 
   const handleFormChange = (eventId, newValue) => {
     switch (eventId) {
       case 'lastName':
-        localDispatch(actions.setLastName(newValue));
+        localDispatch(setLastName(newValue));
         break;
       case 'firstName':
-        localDispatch(actions.setFirstName(newValue));
+        localDispatch(setFirstName(newValue));
         break;
       case 'email':
-        localDispatch(actions.setEmail(newValue));
+        localDispatch(setEmail(newValue));
         break;
       case 'discount':
-        localDispatch(actions.setDiscount(adjustValueToNumber(newValue, 100)));
+        localDispatch(setDiscount(adjustValueToNumber(newValue, 100)));
         break;
       case 'euroDebt':
         localDispatch(
-          actions.setEuroDebt(adjustValueToNumber(newValue, Number.MAX_VALUE)),
+          setEuroDebt(adjustValueToNumber(newValue, Number.MAX_VALUE)),
         );
         break;
     }
@@ -74,32 +109,61 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
     const isPhoneValid = isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
       'invalid-number',
     );
-    localDispatch(actions.setPhoneNumber({ newNumber, isPhoneValid, country }));
+    localDispatch(setPhoneNumber({ newNumber, isPhoneValid, country }));
   };
 
   const handleBirthdayChange = (newDate) => {
-    localDispatch(actions.setBirthday(newDate));
+    localDispatch(setBirthday(newDate));
   };
 
   const handleOpenDatePicker = () => {
-    localDispatch(actions.setShowDatePicker(true));
+    localDispatch(setShowDatePicker(true));
   };
 
   const handleCloseDatePicker = () => {
-    localDispatch(actions.setShowDatePicker(false));
+    localDispatch(setShowDatePicker(false));
   };
 
   const handleSourceChange = (event) => {
-    localDispatch(actions.setSource(event.target.value));
+    localDispatch(setSource(event.target.value));
   };
 
+  const handleTagsChange = (event) => {
+    const newValue = event.target.value;
+    if (!newValue) {
+      return;
+    }
+    const newTag = allTags.find(item => item.id === parseInt(newValue));
+    if (newTag != null) {
+      handleAssignTag(newTag);
+    }
+  };
+
+  const handleAssignTag = async (tag) => {
+    try {
+      await requestAssignTag(tag.id, patient.id);
+      localDispatch(addPatientTag(tag));
+    } catch (error) {
+      onRequestError(error);
+    }
+  }
+
+  const handleDeleteTag = async (tag) => {
+    try {
+      await requestUnassignTag(tag.id, patient.id);
+      localDispatch(removeTag(tag));
+    } catch (error) {
+      onRequestError(error);
+    }
+  }
+
   const handleLanguageChange = (event) => {
-    localDispatch(actions.setLanguage(event.target.value));
+    localDispatch(setLanguage(event.target.value));
   }
 
   const handleSavePatient = async () => {
     if (!isFormValid()) return;
-    localDispatch(actions.setIsSaving(true));
+    localDispatch(setIsSaving(true));
 
     const requestBody = {
       firstName,
@@ -125,7 +189,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsSaving(false));
+      localDispatch(setIsSaving(false));
     }
   };
 
@@ -232,6 +296,32 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
           onChange={handleSourceChange}
         />
 
+        <EASSelect
+          label={textForKey('add_tag_to_patient')}
+          labelId="patient-source-select"
+          options={allTags}
+          value={[]}
+          rootClass={styles.simpleField}
+          onChange={handleTagsChange}
+        />
+
+        <div className={styles.tagsContainer}>
+          {tags.map(tag => (
+            <Chip
+              key={tag.id}
+              label={tag.title}
+              variant="outlined"
+              classes={{
+                root: styles.tag,
+                outlined: styles.outlined,
+                label: styles.label,
+                deleteIcon: styles.deleteIcon,
+              }}
+              onDelete={() => handleDeleteTag(tag)}
+            />
+          ))}
+        </div>
+
         <Box
           mt='1rem'
           width='100%'
@@ -246,7 +336,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
             disabled={isSaving || !isFormValid()}
           >
             {textForKey('Save')}
-            {!isSaving && <IconSuccess />}
+            {!isSaving && <IconSuccess/>}
           </LoadingButton>
         </Box>
       </Box>
@@ -266,5 +356,9 @@ PatientPersonalData.propTypes = {
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
     discount: PropTypes.number,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      title: PropTypes.string,
+    })),
   }),
 };
