@@ -7,7 +7,6 @@ import { getGeneralStatistics } from "../../middleware/api/analytics";
 import { fetchAppData } from "../../middleware/api/initialization";
 import parseCookies from "../../app/utils/parseCookies";
 import handleRequestError from "../../app/utils/handleRequestError";
-import GeneralAnalytics from "../../app/components/dashboard/analytics/GeneralAnalytics";
 import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
 import ClinicAnalytics from "../../app/components/dashboard/analytics/ClinicAnalytics";
 
@@ -70,10 +69,9 @@ export const getServerSideProps = async ({ req, query }) => {
       };
     }
 
-    const { data } = await getGeneralStatistics(query, req.headers);
+    // const { data } = await getGeneralStatistics(query, req.headers);
     return {
       props: {
-        ...data,
         authToken,
         query,
         fallback: {

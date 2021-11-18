@@ -1,3 +1,40 @@
 .clinicAnalytics {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 
+  .dataContainer {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .gridContainer {
+      padding: 8px;
+      grid-auto-rows: 1fr !important;
+
+      :global(.chartTitle) {
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-weight: bold !important;
+        font-size: 18px !important;
+        color: #34354C !important;
+        margin-bottom: 10px;
+      }
+
+      :global(.chartItem) {
+        width: 100%;
+        padding: 16px;
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 5px 24px 0 rgba(214,214,214,1);
+      }
+    }
+  }
+
+  .filterField {
+    width: 100% !important;
+    margin-right: 10px !important;
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PubNubProvider } from "pubnub-react";
 import dynamic from 'next/dynamic';
 import PubNub from "pubnub";
@@ -43,6 +43,7 @@ const pubnub = new PubNub({
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isChecking, setIsChecking] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
@@ -125,11 +126,12 @@ const App = ({ Component, pageProps }) => {
   }
 
   const checkUserIsAuthenticated = async () => {
-    if (router.asPath.includes("integrations")) {
+    if (router.asPath.includes("integrations") || isChecking) {
       // no need to check auth status on integrations page
       return;
     }
     try {
+      setIsChecking(true)
       await requestCheckIsAuthenticated();
       const { currentClinic, currentUser } = pageProps.fallback[APP_DATA_API];
       setChatUserData(currentUser, currentClinic);
@@ -146,6 +148,8 @@ const App = ({ Component, pageProps }) => {
           await handleUserLogout()
         }
       }
+    } finally {
+      setIsChecking(false);
     }
   }
 
