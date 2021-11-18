@@ -28,15 +28,16 @@ import {
   registerInvoicePayment
 } from "../../../../../middleware/api/invoices";
 import { savePatientGeneralTreatmentPlan } from "../../../../../middleware/api/patients";
-import IconClose from '../../../icons/iconClose';
-import { setPatientDetails } from '../../../../../redux/actions/actions';
 import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from '../../../../../redux/selectors/rootSelector';
+import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
+import { setPatientDetails } from '../../../../../redux/actions/actions';
 import adjustValueToNumber from '../../../../utils/adjustValueToNumber';
 import formattedAmount from '../../../../utils/formattedAmount';
-import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
 import { textForKey } from '../../../../utils/localization';
+import onRequestError from "../../../../utils/onRequestError";
 import { Role } from "../../../../utils/constants";
+import IconClose from '../../../icons/iconClose';
 import TeethModal from "../TeethModal";
 import DetailsRow from './DetailsRow';
 import ServicesList from './ServicesList';
@@ -396,12 +397,7 @@ const CheckoutModal = (
         onClose();
       }
     } catch (error) {
-      if (error.response != null) {
-        const { data } = error.response;
-        toast.error(data.message || error.message);
-      } else {
-        toast.error(error.message);
-      }
+      onRequestError(error);
     } finally {
       localDispatch(actions.setIsLoading(false));
     }
