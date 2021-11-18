@@ -1,5 +1,5 @@
-import generateReducerActions from "../../../../../utils/generateReducerActions";
 import moment from "moment-timezone";
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   isSaving: false,
@@ -13,6 +13,8 @@ export const initialState = {
   euroDebt: 0,
   language: 'ro',
   source: 'Unknown',
+  allTags: [],
+  tags: [],
   country: {
     countryCode: 'md',
     dialCode: '373',
@@ -21,48 +23,30 @@ export const initialState = {
   }
 };
 
-const reducerTypes = {
-  setFirstName: 'setFirstName',
-  setLastName: 'setLastName',
-  setBirthday: 'setBirthday',
-  setEmail: 'setEmail',
-  setPhoneNumber: 'setPhoneNumber',
-  setShowDatePicker: 'setShowDatePicker',
-  setPatient: 'setPatient',
-  setIsSaving: 'setIsSaving',
-  setDiscount: 'setDiscount',
-  setEuroDebt: 'setEuroDebt',
-  setLanguage: 'setLanguage',
-  setSource: 'setSource',
-};
-
-export const actions = generateReducerActions(reducerTypes);
-
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setShowDatePicker:
-      return { ...state, showDatePicker: action.payload };
-    case reducerTypes.setFirstName:
-      return { ...state, firstName: action.payload };
-    case reducerTypes.setLastName:
-      return { ...state, lastName: action.payload };
-    case reducerTypes.setBirthday:
-      return { ...state, birthday: action.payload, showDatePicker: false };
-    case reducerTypes.setEmail:
-      return { ...state, email: action.payload };
-    case reducerTypes.setPhoneNumber: {
+const patientPersonalDataSlice = createSlice({
+  name: 'patientPersonaData',
+  initialState,
+  reducers: {
+    setFirstName(state, action) {
+      state.firstName = action.payload;
+    },
+    setLastName(state, action) {
+      state.lastName = action.payload;
+    },
+    setBirthday(state, action) {
+      state.birthday = action.payload;
+      state.showDatePicker = false;
+    },
+    setEmail(state, action) {
+      state.email = action.payload;
+    },
+    setPhoneNumber(state, action) {
       const { isPhoneValid, newNumber, country } = action.payload;
-      return { ...state, phoneNumber: newNumber, isPhoneValid, country };
-    }
-    case reducerTypes.setDiscount:
-      return { ...state, discount: action.payload };
-    case reducerTypes.setEuroDebt:
-      return { ...state, euroDebt: action.payload };
-    case reducerTypes.setLanguage:
-      return { ...state, language: action.payload };
-    case reducerTypes.setSource:
-      return { ...state, source: action.payload };
-    case reducerTypes.setPatient: {
+      state.phoneNumber = newNumber;
+      state.country = country;
+      state.isPhoneValid = isPhoneValid;
+    },
+    setPatient(state, action) {
       const {
         firstName,
         lastName,
@@ -74,25 +58,74 @@ export const reducer = (state, action) => {
         euroDebt,
         language,
         source,
+        tags,
       } = action.payload;
-      return {
-        ...state,
-        firstName,
-        lastName,
-        language,
-        source,
-        birthday: birthday ? moment(birthday).toDate() : null,
-        email,
-        phoneNumber,
-        country: { dialCode: countryCode, countryCode: 'md' },
-        euroDebt,
-        discount: String(discount || '0'),
-        isPhoneValid: true,
-      };
-    }
-    case reducerTypes.setIsSaving:
-      return { ...state, isSaving: action.payload };
-    default:
-      return state;
-  }
-};
+
+      state.firstName = firstName;
+      state.lastName = lastName;
+      state.language = language;
+      state.source = source;
+      state.birthday = birthday ? moment(birthday).toDate() : null
+      state.email = email
+      state.phoneNumber = phoneNumber;
+      state.country = { dialCode: countryCode, countryCode: 'md' };
+      state.euroDebt = euroDebt;
+      state.discount = String(discount || '0');
+      state.isPhoneValid = true;
+      state.tags = tags ?? [];
+    },
+    setShowDatePicker(state, action) {
+      state.showDatePicker = action.payload;
+    },
+    setIsSaving(state, action) {
+      state.isSaving = action.payload;
+    },
+    setDiscount(state, action) {
+      state.discount = action.payload;
+    },
+    setEuroDebt(state, action) {
+      state.euroDebt = action.payload;
+    },
+    setLanguage(state, action) {
+      state.language = action.payload;
+    },
+    setSource(state, action) {
+      state.source = action.payload;
+    },
+    setAllTags(state, action) {
+      state.allTags = action.payload.map(item => ({ ...item, name: item.title }));
+    },
+    setPatientTags(state, action) {
+      state.tags = action.payload;
+    },
+    addPatientTag(state, action) {
+      if (!state.tags.some(it => it.id === action.payload.id)) {
+        state.tags = [action.payload, ...state.tags];
+      }
+    },
+    removeTag(state, action) {
+      state.tags = state.tags.filter(it => it.id !== action.payload.id);
+    },
+  },
+});
+
+export const {
+  setShowDatePicker,
+  setPatient,
+  setFirstName,
+  setIsSaving,
+  setBirthday,
+  setSource,
+  setEmail,
+  setLanguage,
+  setDiscount,
+  setEuroDebt,
+  setPhoneNumber,
+  setLastName,
+  setAllTags,
+  setPatientTags,
+  addPatientTag,
+  removeTag,
+} = patientPersonalDataSlice.actions
+
+export default patientPersonalDataSlice.reducer
