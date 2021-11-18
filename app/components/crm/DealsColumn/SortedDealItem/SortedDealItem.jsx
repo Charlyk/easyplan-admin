@@ -8,6 +8,8 @@ import getPatientName from "../../../../utils/getPatientName";
 import styles from "./SortedDealItem.module.scss";
 
 const SortedDealItem = ({ deal, onDealClick }) => {
+  const hasTags = deal.patient?.tags.length > 0;
+
   const personName = useMemo(() => {
     if (deal.patient == null) {
       return deal.contact.name;
@@ -103,6 +105,11 @@ const SortedDealItem = ({ deal, onDealClick }) => {
               {assigneeName}
             </Typography>
           )}
+          {hasTags && deal.patient.tags.map((tag) => (
+            <Typography key={tag.id} className={styles.snippetLabel}>
+              {tag.title}
+            </Typography>
+          ))}
         </div>
       </div>
       <Typography className={styles.dateLabel}>
@@ -138,6 +145,10 @@ SortedDealItem.propTypes = {
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       phoneWithCode: PropTypes.string,
+      tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+      })),
     }),
     state: PropTypes.shape({
       id: PropTypes.number,

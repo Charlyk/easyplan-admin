@@ -59,6 +59,7 @@ const UnsortedDealItem = (
   const moreBtnRef = useRef(null);
   const [showActions, setShowActions] = useState(false);
   const [clinicsModal, setClinicsModal] = useState(false);
+  const hasTags = deal.patient?.tags?.length > 0;
 
   const sourceIcon = useMemo(() => {
     switch (deal.source) {
@@ -195,6 +196,13 @@ const UnsortedDealItem = (
             </Typography>
           </div>
         )}
+        {hasTags && (
+          <div className={styles.tagsContainer}>
+            {deal.patient.tags.map((tag) => (
+              <Typography key={tag.id} className={styles.tagItem}>{tag.title}</Typography>
+            ))}
+          </div>
+        )}
       </div>
       <div className={styles.actionsContainer}>
         <Typography className={styles.dateLabel}>
@@ -235,6 +243,10 @@ UnsortedDealItem.propTypes = {
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       phoneWithCode: PropTypes.string,
+      tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+      })),
     }),
     state: PropTypes.shape({
       id: PropTypes.number,

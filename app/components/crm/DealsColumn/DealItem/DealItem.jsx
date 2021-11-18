@@ -89,6 +89,10 @@ DealItem.propTypes = {
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       phoneWithCode: PropTypes.string,
+      tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+      })),
     }),
     state: PropTypes.shape({
       id: PropTypes.number,
