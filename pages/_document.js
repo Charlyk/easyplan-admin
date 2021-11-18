@@ -36,8 +36,7 @@ class AppDocument extends Document {
 
   render() {
     const { currentClinic } = this.props;
-    const currentPage = this.props.__NEXT_DATA__.page
-    console.log(currentPage)
+    const currentPage = this.props.__NEXT_DATA__.page;
     const clinicName = currentClinic?.clinicName || 'EasyPlan.pro';
     return (
       <Html>
