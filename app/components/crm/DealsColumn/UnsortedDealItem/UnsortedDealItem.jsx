@@ -17,6 +17,7 @@ import IconFacebookSm from "../../../icons/iconFacebookSm";
 import IconAvatar from "../../../icons/iconAvatar";
 import IconLink from "../../../icons/iconLink";
 import styles from './UnsortedDealItem.module.scss';
+import Chip from "@material-ui/core/Chip";
 
 
 const actions = [
@@ -199,7 +200,17 @@ const UnsortedDealItem = (
         {hasTags && (
           <div className={styles.tagsContainer}>
             {deal.patient.tags.map((tag) => (
-              <Typography key={tag.id} className={styles.tagItem}>{tag.title}</Typography>
+              <Chip
+                size="small"
+                variant="outlined"
+                label={tag.title}
+                key={tag.id}
+                classes={{
+                  root: styles.tagItem,
+                  label: styles.label,
+                  outlined: styles.outlined
+                }}
+              />
             ))}
           </div>
         )}
