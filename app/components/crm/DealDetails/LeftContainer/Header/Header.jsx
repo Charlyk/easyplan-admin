@@ -7,7 +7,7 @@ import { textForKey } from "../../../../../utils/localization";
 import styles from "./Header.module.scss";
 
 const Header = ({ deal, states }) => {
-  const hasTags = deal.patient?.tags.length > 0;
+  const hasTags = deal?.patient?.tags.length > 0;
 
   const headerTitle = useMemo(() => {
     if (deal == null) return '';
