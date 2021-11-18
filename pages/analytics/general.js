@@ -1,14 +1,14 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { SWRConfig } from 'swr';
-import redirectToUrl from '../../../app/utils/redirectToUrl';
-import MainComponent from "../../../app/components/common/MainComponent/MainComponent";
-import { getGeneralStatistics } from "../../../middleware/api/analytics";
-import { fetchAppData } from "../../../middleware/api/initialization";
-import parseCookies from "../../../app/utils/parseCookies";
-import handleRequestError from "../../../app/utils/handleRequestError";
-import GeneralAnalytics from "../../../app/components/dashboard/analytics/GeneralAnalytics";
-import { APP_DATA_API, JwtRegex } from "../../../app/utils/constants";
+import redirectToUrl from '../../app/utils/redirectToUrl';
+import MainComponent from "../../app/components/common/MainComponent/MainComponent";
+import { getGeneralStatistics } from "../../middleware/api/analytics";
+import { fetchAppData } from "../../middleware/api/initialization";
+import parseCookies from "../../app/utils/parseCookies";
+import handleRequestError from "../../app/utils/handleRequestError";
+import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
+import ClinicAnalytics from "../../app/components/dashboard/analytics/ClinicAnalytics";
 
 export default function General(
   {
@@ -25,7 +25,7 @@ export default function General(
         currentPath='/analytics/general'
         authToken={authToken}
       >
-        <GeneralAnalytics
+        <ClinicAnalytics
           query={query}
           financeStats={financeStats}
           scheduleStats={scheduleStats}
@@ -69,10 +69,9 @@ export const getServerSideProps = async ({ req, query }) => {
       };
     }
 
-    const { data } = await getGeneralStatistics(query, req.headers);
+    // const { data } = await getGeneralStatistics(query, req.headers);
     return {
       props: {
-        ...data,
         authToken,
         query,
         fallback: {
