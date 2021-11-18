@@ -94,17 +94,21 @@ const App = ({ Component, pageProps }) => {
   }, [isWindowFocused]);
 
   const setChatUserData = (currentUser, currentClinic) => {
-    if (currentUser == null) {
-      return;
-    }
-    window.Tawk_API.setAttributes({
-      id: currentUser.id,
-      clinicId: currentClinic?.id,
-      name: `${currentUser.firstName} ${currentUser.lastName}`,
-      email: currentUser.email
-    });
-    if (currentClinic != null) {
-      window.Tawk_API.addTags([currentClinic.clinicName])
+    try {
+      if (currentUser == null) {
+        return;
+      }
+      window.Tawk_API.setAttributes({
+        id: currentUser.id,
+        clinicId: currentClinic?.id,
+        name: `${currentUser.firstName} ${currentUser.lastName}`,
+        email: currentUser.email
+      });
+      if (currentClinic != null) {
+        window.Tawk_API.addTags([currentClinic.clinicName])
+      }
+    } catch (error) {
+      console.error('Error setting user info', error);
     }
   }
 
