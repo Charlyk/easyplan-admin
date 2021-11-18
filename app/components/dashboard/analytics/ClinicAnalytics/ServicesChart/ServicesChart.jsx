@@ -5,13 +5,14 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { getServicesChartData, noLegendOptions } from "../ClinicAnalytics.utils";
 import styles from "./ServicesChart.module.scss";
+import { textForKey } from "../../../../../utils/localization";
 
 const ServicesChart = () => {
   return (
     <Grid item xs={12} className={styles.servicesChart}>
       <div className={clsx(styles.servicesChart, 'chartItem')}>
         <Typography className="chartTitle">
-          Servicii efectuate / planificate
+          {textForKey('analytics_services_completed_planned')}
         </Typography>
         <div className={styles.chartWrapper}>
           <Line

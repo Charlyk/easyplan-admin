@@ -2,13 +2,14 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import styles from "./AmountsChart.module.scss";
+import { textForKey } from "../../../../../utils/localization";
 
 const AmountsChart = () => {
   return (
     <Grid item xs={6} className={styles.amountsChartRoot}>
       <div className="chartItem">
         <Typography className="chartTitle">
-          Achitat / Datorii
+          {textForKey('analytics_paid_unpaid')}
         </Typography>
         <div className={styles.amountsContainer}>
           <Typography className={styles.counterLabel}>
