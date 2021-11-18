@@ -6,6 +6,7 @@ import moment from "moment-timezone";
 import { textForKey } from "../../../../utils/localization";
 import getPatientName from "../../../../utils/getPatientName";
 import styles from "./SortedDealItem.module.scss";
+import Chip from "@material-ui/core/Chip";
 
 const SortedDealItem = ({ deal, onDealClick }) => {
   const hasTags = deal.patient?.tags.length > 0;
@@ -92,23 +93,52 @@ const SortedDealItem = ({ deal, onDealClick }) => {
           {itemResponsible}
         </Typography>
         <div className={styles.lastMessageContainer}>
-          <Typography noWrap className={styles.snippetLabel}>
-            {textForKey(deal.source)}
-          </Typography>
+          <Chip
+            size="small"
+            variant="outlined"
+            label={textForKey(deal.source)}
+            classes={{
+              root: styles.tagItem,
+              label: styles.label,
+              outlined: styles.outlined
+            }}
+          />
           {deal.sourceDescription && (
-            <Typography noWrap className={styles.snippetLabel}>
-              {deal.sourceDescription}
-            </Typography>
+            <Chip
+              size="small"
+              variant="outlined"
+              label={deal.sourceDescription}
+              classes={{
+                root: styles.tagItem,
+                label: styles.label,
+                outlined: styles.outlined
+              }}
+            />
           )}
           {deal?.schedule != null && (
-            <Typography noWrap className={styles.snippetLabel}>
-              {assigneeName}
-            </Typography>
+            <Chip
+              size="small"
+              variant="outlined"
+              label={assigneeName}
+              classes={{
+                root: styles.tagItem,
+                label: styles.label,
+                outlined: styles.outlined
+              }}
+            />
           )}
           {hasTags && deal.patient.tags.map((tag) => (
-            <Typography key={tag.id} className={styles.snippetLabel}>
-              {tag.title}
-            </Typography>
+            <Chip
+              size="small"
+              variant="outlined"
+              label={tag.title}
+              key={tag.id}
+              classes={{
+                root: styles.tagItem,
+                label: styles.label,
+                outlined: styles.outlined
+              }}
+            />
           ))}
         </div>
       </div>
