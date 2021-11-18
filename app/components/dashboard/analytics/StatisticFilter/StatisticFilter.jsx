@@ -15,7 +15,7 @@ const StatisticFilter = ({ children, isLoading, onUpdate }) => {
         isLoading={isLoading}
         disabled={isLoading}
       >
-        {textForKey('Apply')} <IconRefresh fill='#3A83DC' />
+        {textForKey('Apply')} <IconRefresh fill='#fff' />
       </LoadingButton>
     </div>
   );
