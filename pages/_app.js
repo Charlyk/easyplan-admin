@@ -79,7 +79,8 @@ const App = ({ Component, pageProps }) => {
       updatePageTitle(null);
       return;
     }
-    const { currentClinic } = pageProps.fallback[APP_DATA_API];
+    const { currentClinic, currentUser } = pageProps.fallback[APP_DATA_API];
+    setChatVisitor(currentUser);
     if (currentClinic == null) {
       return;
     }
@@ -92,6 +93,17 @@ const App = ({ Component, pageProps }) => {
       checkUserIsAuthenticated();
     }
   }, [isWindowFocused]);
+
+  const setChatVisitor = (currentUser) => {
+    if (currentUser == null) {
+      return
+    }
+    window.Tawk_API = window.Tawk_API || {};
+    window.Tawk_API.visitor = {
+      name: `${currentUser.firstName} ${currentUser.lastName}`,
+      email: currentUser.email
+    }
+  }
 
   const setChatUserData = (currentUser, currentClinic) => {
     try {
