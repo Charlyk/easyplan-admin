@@ -56,4 +56,4 @@ jobs:
         run: cp -a public/ ../deploy
 
       - name: Start application
-        run: pm2 reload easyplan
+        run: PM2_HOME=/root/.pm2 pm2 reload easyplan
