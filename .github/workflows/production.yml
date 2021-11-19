@@ -40,8 +40,20 @@ jobs:
       - name: Build application
         run: yarn build
 
-      - name: Copy build folder
-        run: rm -rf ../.next/ && cp -rf .next/ ../.next/
+      - name: Create deploy folder
+        run: rm -rf ../deploy && mkdir ../deploy
+
+      - name: Copy .next folder to depoy
+        run: cp -a .next/ ../deploy/
+
+      - name: Copy package.json to deploy
+        run: cp package.json ../deploy/
+
+      - name: Copy node_modules to deploy
+        run: cp -a node_modules/ ../deploy/
+
+      - name: Copy public to deploy
+        run: cp -a public/ ../deploy
 
       - name: Start application
         run: pm2 reload easyplan
