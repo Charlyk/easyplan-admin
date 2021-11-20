@@ -1,10 +1,12 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import styles from "./SentMessagesChart.module.scss";
 import { textForKey } from "../../../../../utils/localization";
+import formattedNumber from "../../../../../utils/formattedNumber";
+import styles from "./SentMessagesChart.module.scss";
 
-const SentMessagesChart = () => {
+const SentMessagesChart = ({ messages }) => {
   return (
     <Grid item xs={4} className={styles.sentMessagesChart}>
       <div className="chartItem">
@@ -12,7 +14,7 @@ const SentMessagesChart = () => {
           {textForKey('analytics_total_messages')}
         </Typography>
         <div className={styles.messagesCountContainer}>
-          <Typography className={styles.counterLabel}>1,432</Typography>
+          <Typography className={styles.counterLabel}>{formattedNumber(messages)}</Typography>
         </div>
       </div>
     </Grid>
@@ -20,3 +22,7 @@ const SentMessagesChart = () => {
 };
 
 export default SentMessagesChart;
+
+SentMessagesChart.propTypes = {
+  messages: PropTypes.number,
+}

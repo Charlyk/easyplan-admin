@@ -23,7 +23,7 @@ import { wrapper } from "../store";
 import 'moment/locale/ro';
 import 'react-h5-audio-player/src/styles.scss';
 import "react-awesome-lightbox/build/style.css";
-import '../app/utils/extensions';
+// import '../app/utils/extensions';
 import '../app/styles/base/base.scss';
 import '../app/utils'
 import paths from "../app/utils/paths";

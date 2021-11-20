@@ -1,5 +1,4 @@
 import axios from "axios";
-import { environment } from "../../eas.config";
 const host = 'http://localhost';
 const port = 3000;
 

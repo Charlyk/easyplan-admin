@@ -1,15 +1,15 @@
+import { authorized } from "../authorized";
+import cookie from "cookie";
 import axios from "axios";
-import cookie from 'cookie';
+import { handler } from "../handler";
 import getSubdomain from "../../../app/utils/getSubdomain";
 import updatedServerUrl from "../../../app/utils/updateServerUrl";
 import { HeaderKeys } from "../../../app/utils/constants";
-import { authorized } from "../authorized";
-import { handler } from "../handler";
 
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
-      const data = await handler(fetchAppData, req, res);
+      const data = await handler(fetchClinicAnalytics, req, res);
       if (data != null) {
         res.json(data);
       }
@@ -18,14 +18,15 @@ export default authorized(async (req, res) => {
     default:
       res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
-      break;
+      break
   }
 });
 
-function fetchAppData(req) {
+const fetchClinicAnalytics = async (req) => {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const queryString = new URLSearchParams(req.query).toString();
-  return axios.get(`${updatedServerUrl(req)}/app/app-data?${queryString}`, {
+  const queryString = new URLSearchParams(req.query);
+  const url = `${updatedServerUrl(req)}/analytics?${queryString}`;
+  return axios.get(url, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,

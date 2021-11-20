@@ -1,3 +1,6 @@
+import moment from "moment-timezone";
+import { textForKey } from "../../../../utils/localization";
+
 export const noLegendOptions = {
   maintainAspectRatio: false,
   responsive: true,
@@ -46,21 +49,25 @@ export const rightLegendOptions = {
   },
 };
 
-export const getServicesChartData = () => {
-  const labels = ['Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri', 'Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri']
+/**
+ * Build and return chart data for services
+ * @param {{ labels: string[], planned: number[], completed: number[] }?} services
+ * @return {{datasets: [{backgroundColor: string, borderColor: string, data: number[], label: string, fill: boolean}, {backgroundColor: string, borderColor: string, data: number[], label: string, fill: boolean}], labels: string[]}}
+ */
+export const getServicesChartData = (services) => {
   return {
-    labels: labels,
+    labels: formatDates(services?.labels || []),
     datasets: [
       {
-        label: 'Efectuate',
-        data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+        label: textForKey('analytics_executed'),
+        data: services?.completed || [],
         fill: false,
         backgroundColor: '#3A83DC',
         borderColor: '#3A83DC',
       },
       {
-        label: 'Planificate',
-        data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3].reverse(),
+        label: textForKey('analytics_planned'),
+        data: services?.planned || [],
         fill: false,
         backgroundColor: '#FDC534',
         borderColor: '#FDC534',
@@ -68,6 +75,14 @@ export const getServicesChartData = () => {
     ],
   };
 };
+
+/**
+ * Format dates for UI
+ * @param {string[]} dates
+ */
+const formatDates = (dates) => {
+  return dates.map(date => moment(date).format('DD MMM'))
+}
 
 export const getBarchartTestData = () => {
   return {

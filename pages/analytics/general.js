@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { SWRConfig } from 'swr';
 import redirectToUrl from '../../app/utils/redirectToUrl';
 import MainComponent from "../../app/components/common/MainComponent/MainComponent";
-import { getGeneralStatistics } from "../../middleware/api/analytics";
+import { getGeneralStatistics, requestFetchClinicAnalytics } from "../../middleware/api/analytics";
 import { fetchAppData } from "../../middleware/api/initialization";
 import parseCookies from "../../app/utils/parseCookies";
 import handleRequestError from "../../app/utils/handleRequestError";
@@ -13,10 +13,9 @@ import ClinicAnalytics from "../../app/components/dashboard/analytics/ClinicAnal
 export default function General(
   {
     fallback,
-    scheduleStats,
-    financeStats,
     query,
     authToken,
+    analytics
   }
 ) {
   return (
@@ -27,8 +26,7 @@ export default function General(
       >
         <ClinicAnalytics
           query={query}
-          financeStats={financeStats}
-          scheduleStats={scheduleStats}
+          analytics={analytics}
         />
       </MainComponent>
     </SWRConfig>
@@ -37,14 +35,11 @@ export default function General(
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
-    if (query.fromDate == null) {
-      query.fromDate = moment().startOf('week').format('YYYY-MM-DD');
+    if (query.startDate == null) {
+      query.startDate = moment().startOf('week').format('YYYY-MM-DD');
     }
-    if (query.toDate == null) {
-      query.toDate = moment().endOf('week').format('YYYY-MM-DD');
-    }
-    if (query.doctorId == null) {
-      query.doctorId = -1;
+    if (query.endDate == null) {
+      query.endDate = moment().endOf('week').format('YYYY-MM-DD');
     }
 
     const { auth_token: authToken } = parseCookies(req);
@@ -70,8 +65,14 @@ export const getServerSideProps = async ({ req, query }) => {
     }
 
     // const { data } = await getGeneralStatistics(query, req.headers);
+    const { data: analytics } = await requestFetchClinicAnalytics(
+      query.startDate,
+      query.endDate,
+      req.headers,
+    )
     return {
       props: {
+        analytics,
         authToken,
         query,
         fallback: {

@@ -1,12 +1,10 @@
-import React, { useMemo, useReducer, useRef } from "react";
-import sortBy from "lodash/sortBy";
+import React, { useEffect, useReducer, useRef } from "react";
+import PropTypes from 'prop-types';
 import moment from "moment-timezone";
 import Grid from "@material-ui/core/Grid";
 import { textForKey } from "../../../../utils/localization";
-import { Role } from "../../../../utils/constants";
 import EasyDateRangePicker from "../../../common/EasyDateRangePicker";
 import EASTextField from "../../../common/EASTextField";
-import EASSelect from "../../../common/EASSelect";
 import StatisticFilter from "../StatisticFilter";
 import ServicesChart from "./ServicesChart";
 import DoctorVisitsChart from "./DoctorVisitsChart";
@@ -27,8 +25,10 @@ import reducer, {
 } from './ClinicAnalytics.reducer';
 import styles from './ClinicAnalytics.module.scss';
 import PatientsSourceChart from "./PatientsSourceChart";
+import { useRouter } from "next/router";
 
-const ClinicAnalytics = ({ currentUser, currentClinic }) => {
+const ClinicAnalytics = ({ currentUser, query, currentClinic, analytics }) => {
+  const router = useRouter();
   const pickerRef = useRef(null);
   const [
     {
@@ -40,15 +40,14 @@ const ClinicAnalytics = ({ currentUser, currentClinic }) => {
   ] = useReducer(reducer, initialState);
   const [startDate, endDate] = selectedRange
 
-  const doctors = useMemo(() => {
-    return sortBy(
-      currentClinic?.users?.filter(user => user.roleInClinic === Role.doctor) || [],
-      user => user.fullName.toLowerCase(),
-    ).map(({ id, fullName, isHidden }) => ({
-      id,
-      name: `${fullName} ${isHidden ? `(${textForKey('Fired')})` : ''}`
-    }))
-  }, [currentClinic]);
+  useEffect(() => {
+    if (query == null) {
+      return;
+    }
+    const startDate = moment(query.startDate).toDate();
+    const endDate = moment(query.endDate).toDate();
+    localDispatch(setSelectedRange([startDate, endDate]));
+  }, [query]);
 
   const handleDatePickerClose = () => {
     localDispatch(setShowRangePicker(false));
@@ -65,12 +64,16 @@ const ClinicAnalytics = ({ currentUser, currentClinic }) => {
 
   const handleFilterSubmit = async () => {
     const params = {
-      fromDate: moment(startDate).format('YYYY-MM-DD'),
-      toDate: moment(endDate).format('YYYY-MM-DD'),
+      startDate: moment(startDate).format('YYYY-MM-DD'),
+      endDate: moment(endDate).format('YYYY-MM-DD'),
     }
     if (selectedDoctor.id !== -1) {
       params.doctorId = selectedDoctor.id
     }
+    await router.replace({
+      pathname: '/analytics/general',
+      query: params
+    })
   };
 
   return (
@@ -95,12 +98,15 @@ const ClinicAnalytics = ({ currentUser, currentClinic }) => {
           alignItems="stretch"
           className={styles.gridContainer}
         >
-          <ServicesChart />
-          <AmountsChart />
+          <ServicesChart services={analytics.services} />
+          <AmountsChart
+            currency={currentClinic.currency}
+            payments={analytics.payments}
+          />
           <ClientsChart />
-          <TotalVisitsChart />
-          <SentMessagesChart />
-          <TreatedPatientsChart />
+          <TotalVisitsChart visits={analytics.visits} />
+          <SentMessagesChart messages={analytics.messages} />
+          <TreatedPatientsChart patients={analytics.treatedPatients} />
           <DoctorVisitsChart />
           <DoctorsIncomeChart />
           <DoctorsConversionChart />
@@ -119,3 +125,41 @@ const ClinicAnalytics = ({ currentUser, currentClinic }) => {
 };
 
 export default ClinicAnalytics;
+
+ClinicAnalytics.propTypes = {
+  query: PropTypes.shape({
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+  }),
+  analytics: PropTypes.shape({
+    services: PropTypes.shape({
+      labels: PropTypes.arrayOf(PropTypes.string),
+      planned: PropTypes.arrayOf(PropTypes.number),
+      completed: PropTypes.arrayOf(PropTypes.number),
+    }),
+    payments: PropTypes.shape({
+      paidAmount: PropTypes.number,
+      debtAmount: PropTypes.number,
+    }),
+    visits: PropTypes.number,
+    messages: PropTypes.number,
+    treatedPatients: PropTypes.number,
+  }),
+};
+
+ClinicAnalytics.defaultProps = {
+  analytics: {
+    services: {
+      labels: [],
+      planned: [],
+      completed: [],
+    },
+    payments: {
+      paidAmount: 0,
+      debtAmount: 0,
+    },
+    visits: 0,
+    messages: 0,
+    treatedPatients: 0,
+  },
+};
