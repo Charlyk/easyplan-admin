@@ -1386,7 +1386,7 @@ export default {
     analytics_doctor_income: 'Venit / Medic',
     analytics_doctor_visits: 'Vizite / Medic',
     analytics_clients_source: 'Sursa clienților',
-    analytics_total_messages: 'Total mesaje trimis',
+    analytics_total_messages: 'Total mesaje trimise',
     analytics_services_completed_planned: 'Servicii efectuate / planificate',
     analytics_total_visits: 'Total vizite',
     analytics_treated_patients: 'Pacienți cu plan de tratament',
