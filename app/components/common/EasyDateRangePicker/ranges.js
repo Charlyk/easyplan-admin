@@ -9,7 +9,7 @@ import startOfDay from 'date-fns/startOfDay';
 import startOfMonth from 'date-fns/startOfMonth';
 import startOfWeek from 'date-fns/startOfWeek';
 
-import { textForKey } from '../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 
 const defineds = {
   startOfWeek: startOfWeek(new Date(), { weekStartsOn: 1 }),

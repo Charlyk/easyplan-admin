@@ -6,18 +6,24 @@ import Typography from '@material-ui/core/Typography';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import getClinicExchangeRates from '../../../utils/getClinicExchangeRates';
-import formattedAmount from '../../../utils/formattedAmount';
-import getServiceName from '../../../utils/getServiceName';
-import { textForKey } from '../../../utils/localization';
-import EASTextField from "../../common/EASTextField";
-import EASModal from "../../common/modals/EASModal";
-import EASSelect from "../../common/EASSelect";
-import IconMinus from '../../icons/iconMinus';
-import IconPlus from '../../icons/iconPlus';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import IconMinus from 'app/components/icons/iconMinus';
+import IconPlus from 'app/components/icons/iconPlus';
+import formattedAmount from 'app/utils/formattedAmount';
+import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
+import getServiceName from 'app/utils/getServiceName';
+import { textForKey } from 'app/utils/localization';
 import styles from './FinalizeTreatmentModal.module.scss';
 
-const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave }) => {
+const FinalizeTreatmentModal = ({
+  open,
+  services,
+  currentClinic,
+  onClose,
+  onSave,
+}) => {
   const [planServices, setPlanServices] = useState([]);
   const rates = getClinicExchangeRates(currentClinic);
   const clinicCurrency = currentClinic.currentUser;
@@ -27,7 +33,7 @@ const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave
       id: item.currency,
       name: item.currency,
       currency: item.currency,
-    }))
+    }));
   }, [rates]);
 
   useEffect(() => {
@@ -147,7 +153,7 @@ const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave
   };
 
   const handleCurrencySelected = (serviceToChange) => (event) => {
-    const rate = rates.find(item => item.currency === event.target.value);
+    const rate = rates.find((item) => item.currency === event.target.value);
     if (rate == null) return;
     const newServices = planServices.map((item) => {
       if (
@@ -222,7 +228,7 @@ const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave
                 <IconPlus fill='#3A83DC' />
               </IconButton>
               <EASTextField
-                type="number"
+                type='number'
                 containerClass={styles.priceField}
                 value={String(item.price)}
                 endAdornment={

@@ -3,8 +3,57 @@ import cookie from 'cookie';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { authorized } from '../../authorized';
-import { handler } from '../../handler';
+import authorized from '../../authorized';
+import handler from '../../handler';
+
+function deleteMessage(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { messageId } = req.query;
+  return axios.delete(`${updatedServerUrl(req)}/sms/${messageId}`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
+
+async function updateMessage(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { messageId } = req.query;
+  return axios.put(`${updatedServerUrl(req)}/sms/${messageId}`, req.body, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
+    },
+  });
+}
+
+async function setMessageDisabled(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { status, messageId } = req.query;
+  const url = `${updatedServerUrl(req)}/sms/${messageId}/${status}`;
+  return axios.put(
+    url,
+    {},
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
+}
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -38,46 +87,3 @@ export default authorized(async (req, res) => {
       break;
   }
 });
-
-function deleteMessage(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { messageId } = req.query;
-  return axios.delete(`${updatedServerUrl(req)}/sms/${messageId}`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    },
-  });
-}
-
-async function updateMessage(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { messageId } = req.query;
-  return axios.put(`${updatedServerUrl(req)}/sms/${messageId}`, req.body, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
-    },
-  });
-}
-
-async function setMessageDisabled(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { status, messageId } = req.query;
-  const url = `${updatedServerUrl(req)}/sms/${messageId}/${status}`;
-  return axios.put(
-    url,
-    {},
-    {
-      headers: {
-        [HeaderKeys.authorization]: auth_token,
-        [HeaderKeys.clinicId]: clinic_id,
-        [HeaderKeys.subdomain]: getSubdomain(req),
-        [HeaderKeys.contentType]: 'application/json',
-      },
-    },
-  );
-}

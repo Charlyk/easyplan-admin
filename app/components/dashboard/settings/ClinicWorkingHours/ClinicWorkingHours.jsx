@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-
-import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../common/LoadingButton';
-import WorkDay from '../../../common/WorkDay';
-import { textForKey } from '../../../../utils/localization';
-import { updateClinic } from "../../../../../middleware/api/clinic";
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import LoadingButton from 'app/components/common/LoadingButton';
+import WorkDay from 'app/components/common/WorkDay';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import { textForKey } from 'app/utils/localization';
+import { updateClinic } from 'middleware/api/clinic';
 import styles from './ClinicWorkingHours.module.scss';
 
 const ClinicWorkingHours = ({ currentClinic: clinic }) => {
@@ -16,7 +15,7 @@ const ClinicWorkingHours = ({ currentClinic: clinic }) => {
 
   useEffect(() => {
     setWorkDays(
-      clinic.workdays.map(it => ({
+      clinic.workdays.map((it) => ({
         ...it,
         selected: !it.isDayOff,
       })),
@@ -24,7 +23,7 @@ const ClinicWorkingHours = ({ currentClinic: clinic }) => {
   }, []);
 
   const handleDayChange = (day, startHour, endHour, isSelected) => {
-    const newDays = workdays.map(workDay => {
+    const newDays = workdays.map((workDay) => {
       if (workDay.day !== day.day) {
         return workDay;
       }
@@ -54,8 +53,8 @@ const ClinicWorkingHours = ({ currentClinic: clinic }) => {
     }
   };
 
-  const handleApplyToAll = day => {
-    const newDays = workdays.map(workDay => {
+  const handleApplyToAll = (day) => {
+    const newDays = workdays.map((workDay) => {
       return {
         ...workDay,
         isDayOff: false,
@@ -72,15 +71,15 @@ const ClinicWorkingHours = ({ currentClinic: clinic }) => {
       <span className={styles['form-title']}>{textForKey('Work Hours')}</span>
       <table className={styles['days-wrapper']}>
         <tbody>
-        {workdays.map((day, index) => (
-          <WorkDay
-            onApplyToAll={handleApplyToAll}
-            day={day}
-            key={day.day}
-            onChange={handleDayChange}
-            isFirst={index === 0}
-          />
-        ))}
+          {workdays.map((day, index) => (
+            <WorkDay
+              onApplyToAll={handleApplyToAll}
+              day={day}
+              key={day.day}
+              onChange={handleDayChange}
+              isFirst={index === 0}
+            />
+          ))}
         </tbody>
       </table>
       <div className={styles['footer']}>

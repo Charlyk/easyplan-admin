@@ -1,14 +1,16 @@
-import React, { useEffect, useReducer } from "react";
-import moment from "moment-timezone";
+import React, { useEffect, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
-
-import { textForKey } from "../../../../../utils/localization";
+import moment from 'moment-timezone';
+import { textForKey } from 'app/utils/localization';
 import {
   availableHours,
-  charactersRegex, getRealMessageLength,
+  charactersRegex,
+  getRealMessageLength,
   messageTypeEnum,
-  tags
-} from "../CreateMessageDialog.constants";
+  tags,
+} from '../CreateMessageDialog.constants';
+import MainMessageForm from '../MainMessageForm';
+import styles from './ScheduleMessageForm.module.scss';
 import reducer, {
   initialState,
   setLanguage,
@@ -18,20 +20,21 @@ import reducer, {
   setHourToSend,
   setMessageData,
 } from './scheduleMessageSlice';
-import styles from './ScheduleMessageForm.module.scss';
-import MainMessageForm from "../MainMessageForm";
 
-const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange, onSubmit }) => {
+const ScheduleMessageForm = ({
+  currentClinic,
+  initialMessage,
+  onMessageChange,
+  onLanguageChange,
+  onSubmit,
+}) => {
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.ScheduleNotification),
   );
-  const [{
-    messageTitle,
-    language,
-    message,
-    maxLength,
-    hourToSend,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    { messageTitle, language, message, maxLength, hourToSend },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (initialMessage == null) {
@@ -67,7 +70,7 @@ const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
   const handleSubmit = (event) => {
     event?.preventDefault();
     onSubmit?.();
-  }
+  };
 
   const handleMessageChange = (newValue) => {
     localDispatch(setMessage({ [language]: newValue }));
@@ -87,9 +90,7 @@ const ScheduleMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
 
   const handleTagClick = (tag) => () => {
     const currentMessage = message[language];
-    localDispatch(
-      setMessage({ [language]: `${currentMessage}${tag.id}` }),
-    );
+    localDispatch(setMessage({ [language]: `${currentMessage}${tag.id}` }));
   };
 
   const getMessageLength = (language) => {

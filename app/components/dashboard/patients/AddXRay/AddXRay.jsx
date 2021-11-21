@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { toast } from "react-toastify";
-import Typography from "@material-ui/core/Typography";
-import { triggerUpdateXRay } from '../../../../../redux/actions/actions';
-import { addPatientXRayImage } from "../../../../../middleware/api/patients";
-import { textForKey } from '../../../../utils/localization';
-import { HeaderKeys } from "../../../../utils/constants";
-import EASModal from "../../../common/modals/EASModal";
-import EASSelect from "../../../common/EASSelect";
+import { toast } from 'react-toastify';
+import EASSelect from 'app/components/common/EASSelect';
+import EASModal from 'app/components/common/modals/EASModal';
+import { textForKey } from 'app/utils/localization';
+import { addPatientXRayImage } from 'middleware/api/patients';
+import { triggerUpdateXRay } from 'redux/actions/actions';
 import styles from './AddXRay.module.scss';
 
 const phases = [
@@ -26,7 +25,7 @@ const phases = [
   },
 ];
 
-const AddXRay = ({ open, currentClinic, authToken, patientId, onClose }) => {
+const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);

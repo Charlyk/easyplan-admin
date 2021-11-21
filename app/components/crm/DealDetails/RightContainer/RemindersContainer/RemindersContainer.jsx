@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 import orderBy from 'lodash/orderBy';
-import { useSelector } from "react-redux";
-import Typography from "@material-ui/core/Typography";
-import Tooltip from "@material-ui/core/Tooltip";
-import Divider from "@material-ui/core/Divider";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import IconButton from "@material-ui/core/IconButton";
-import {
-  updatedDealSelector,
-  updatedReminderSelector
-} from "../../../../../../redux/selectors/crmSelector";
-import { requestFetchReminders } from "../../../../../../middleware/api/crm";
-import updateNotificationState from "../../../../../utils/notifications/updateNotificationState";
-import { textForKey } from "../../../../../utils/localization";
-import onRequestError from "../../../../../utils/onRequestError";
-import notifications from "../../../../../utils/notifications/notifications";
-import EASHelpView from "../../../../common/EASHelpView";
-import IconPlus from "../../../../icons/iconPlus";
-import Reminder from "./Reminder";
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import EASHelpView from 'app/components/common/EASHelpView';
+import IconPlus from 'app/components/icons/iconPlus';
+import { textForKey } from 'app/utils/localization';
+import notifications from 'app/utils/notifications/notifications';
+import updateNotificationState from 'app/utils/notifications/updateNotificationState';
+import onRequestError from 'app/utils/onRequestError';
+import { requestFetchReminders } from 'middleware/api/crm';
+import { updatedReminderSelector } from 'redux/selectors/crmSelector';
+import Reminder from './Reminder';
 import styles from './RemindersContainer.module.scss';
 
 const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
@@ -29,8 +26,8 @@ const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    setShowAddHelp(showAddReminderHelp)
-  }, [showAddReminderHelp])
+    setShowAddHelp(showAddReminderHelp);
+  }, [showAddReminderHelp]);
 
   useEffect(() => {
     if (updatedReminder == null || updatedReminder.deal.id !== deal.id) {
@@ -43,14 +40,14 @@ const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
     if (deal == null) {
       return;
     }
-    fetchReminders()
+    fetchReminders();
   }, [deal]);
 
   const fetchReminders = async () => {
     try {
       setIsFetching(true);
       const response = await requestFetchReminders(deal.id);
-      const uncompletedItems = response.data.filter(item => !item.completed)
+      const uncompletedItems = response.data.filter((item) => !item.completed);
       setItems(orderBy(uncompletedItems, ['dueDate'], ['asc']));
     } catch (error) {
       onRequestError(error);
@@ -61,18 +58,18 @@ const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
 
   const handleAddReminder = () => {
     onAddReminder?.(deal);
-  }
+  };
 
   const handleCloseAddHelp = () => {
     updateNotificationState(notifications.crmAddReminder.id, true);
     setShowAddHelp(false);
-  }
+  };
 
   return (
     <div className={styles.remindersContainer}>
       {isFetching ? (
-        <div className="progress-bar-wrapper">
-          <CircularProgress className="circular-progress-bar"/>
+        <div className='progress-bar-wrapper'>
+          <CircularProgress className='circular-progress-bar' />
         </div>
       ) : items.length === 0 ? (
         <div className={styles.noDataWrapper}>
@@ -91,25 +88,25 @@ const RemindersContainer = ({ deal, showAddReminderHelp, onAddReminder }) => {
             className={styles.addButton}
             onPointerUp={handleAddReminder}
           >
-            <IconPlus fill="#3A83DC"/>
+            <IconPlus fill='#3A83DC' />
           </IconButton>
         </Tooltip>
       </div>
-      <Divider color="#E5E5E5"/>
+      <Divider color='#E5E5E5' />
       <div className={styles.data}>
         {items.map((reminder) => (
-          <Reminder key={reminder.id} reminder={reminder}/>
+          <Reminder key={reminder.id} reminder={reminder} />
         ))}
       </div>
       <EASHelpView
         open={showAddHelp}
         anchorEl={addReminderRef}
         notification={notifications.crmAddReminder}
-        placement="left"
+        placement='left'
         onClose={handleCloseAddHelp}
       />
     </div>
-  )
+  );
 };
 
 export default RemindersContainer;
@@ -128,7 +125,7 @@ RemindersContainer.proptType = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
@@ -169,4 +166,4 @@ RemindersContainer.proptType = {
     }),
   }),
   onAddReminder: PropTypes.func,
-}
+};

@@ -1,4 +1,4 @@
-import { del, get, post } from "./request";
+import { del, get, post } from './request';
 
 /**
  * Fetch available time for pause record
@@ -25,7 +25,7 @@ export async function fetchPausesAvailableTime(date, doctorId, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function createPauseRecord(body, headers = null) {
-  return post(`/api/pauses`, headers, body);
+  return post('/api/pauses', headers, body);
 }
 
 /**

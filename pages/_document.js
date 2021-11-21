@@ -36,13 +36,9 @@ class AppDocument extends Document {
   }
 
   render() {
-    const currentPage = this.props.__NEXT_DATA__.page;
     return (
       <Html>
         <Head>
-          {!currentPage.includes('confirmation') ? (
-            <script type='text/javascript' src='/tawkto.js' />
-          ) : null}
           <link
             rel='stylesheet'
             href='https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap'

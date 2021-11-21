@@ -1,12 +1,11 @@
-import { appBaseUrl, environment } from '../../eas.config';
+import { appBaseUrl, environment } from 'eas.config';
 
 const getClinicUrl = (clinic, authToken) => {
   if (typeof window === 'undefined') {
     return '';
   }
   const { host, protocol } = window.location;
-  const [unused, domain, location, location2] = host.split('.');
-  console.log(unused);
+  const [_, domain, location, location2] = host.split('.');
   const queryString = new URLSearchParams({
     token: authToken,
     clinicId: clinic.clinicId,

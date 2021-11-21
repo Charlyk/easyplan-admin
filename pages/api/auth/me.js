@@ -1,10 +1,20 @@
 import axios from 'axios';
+import cookie from 'cookie';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
-import parseCookies from 'app/utils/parseCookies';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { authorized } from '../authorized';
-import { handler } from '../handler';
+import authorized from '../authorized';
+import handler from '../handler';
+
+function getCurrentUser(req) {
+  const { auth_token: authToken } = cookie.parse(req.headers.cookie);
+  return axios.get(`${updatedServerUrl(req)}/authentication/v1/me`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
 
 export default authorized(async (req, res) => {
   const data = await handler(getCurrentUser, req, res);
@@ -12,13 +22,3 @@ export default authorized(async (req, res) => {
     res.json(data);
   }
 });
-
-function getCurrentUser(req) {
-  const { auth_token } = parseCookies(req);
-  return axios.get(`${updatedServerUrl(req)}/authentication/v1/me`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    },
-  });
-}

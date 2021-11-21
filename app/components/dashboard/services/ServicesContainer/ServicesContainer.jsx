@@ -1,37 +1,38 @@
 import React, { useEffect, useReducer } from 'react';
-import dynamic from 'next/dynamic';
-import clsx from "clsx";
-import Typography from '@material-ui/core/Typography';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Tooltip from '@material-ui/core/Tooltip';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import UploadIcon from '@material-ui/icons/CloudUpload';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import sortBy from 'lodash/sortBy';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import UploadIcon from '@material-ui/icons/CloudUpload';
+import clsx from 'clsx';
 import indexOf from 'lodash/indexOf';
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import sortBy from 'lodash/sortBy';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-
-import IconEdit from '../../../icons/iconEdit';
-import IconPlus from '../../../icons/iconPlus';
+import { toast } from 'react-toastify';
+import IconEdit from 'app/components/icons/iconEdit';
+import IconPlus from 'app/components/icons/iconPlus';
+import { HeaderKeys } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import {
+  deleteService,
+  importServicesFromFile,
+  restoreService,
+} from 'middleware/api/services';
 import {
   closeServiceDetailsModal,
   setServiceDetailsModal,
   setServiceModalCategory,
   setServiceModalService,
-} from '../../../../../redux/actions/serviceDetailsActions';
-import { textForKey } from '../../../../utils/localization';
-import { HeaderKeys } from "../../../../utils/constants";
-import { updatedServiceSelector } from "../../../../../redux/selectors/servicesSelector";
-import { setUpdatedService } from "../../../../../redux/actions/servicesActions";
-import {
-  deleteService,
-  importServicesFromFile,
-  restoreService
-} from "../../../../../middleware/api/services";
+} from 'redux/actions/serviceDetailsActions';
+import { setUpdatedService } from 'redux/actions/servicesActions';
+import { updatedServiceSelector } from 'redux/selectors/servicesSelector';
 import ServiceRow from '../ServiceRow';
+import styles from './ServicesContainer.module.scss';
 import reducer, {
   initialState,
   categoryModalState,
@@ -42,10 +43,13 @@ import reducer, {
   setClinicServices,
   setShowImportModal,
 } from './servicesContainerSlice';
-import styles from './ServicesContainer.module.scss';
 
-const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
-const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
+const ConfirmationModal = dynamic(() =>
+  import('app/components/common/modals/ConfirmationModal'),
+);
+const CSVImportModal = dynamic(() =>
+  import('app/components/common/CSVImportModal'),
+);
 const CreateCategoryModal = dynamic(() => import('../CreateCategoryModal'));
 const ServiceDetailsModal = dynamic(() => import('../ServiceDetailsModal'));
 
@@ -70,9 +74,14 @@ const importServicesFields = [
     name: textForKey('Currency'),
     required: false,
   },
-]
+];
 
-const ServicesContainer = ({ categories: clinicCategories, services, currentClinic, authToken }) => {
+const ServicesContainer = ({
+  categories: clinicCategories,
+  services,
+  currentClinic,
+  authToken,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const updatedService = useSelector(updatedServiceSelector);
@@ -93,23 +102,25 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
   useEffect(() => {
     localDispatch(
       setClinicServices(
-        sortBy(services, service => service.name.toLowerCase())
+        sortBy(services, (service) => service.name.toLowerCase()),
       ),
     );
 
     localDispatch(
       setCategories(
-        sortBy(clinicCategories, category => category.name.toLowerCase())
-      )
-    )
-  }, [])
+        sortBy(clinicCategories, (category) => category.name.toLowerCase()),
+      ),
+    );
+  }, []);
 
   useEffect(() => {
     if (updatedService != null) {
-      const existentService = clinicServices.find(item => item.id === updatedService.id);
+      const existentService = clinicServices.find(
+        (item) => item.id === updatedService.id,
+      );
       let newServices;
       if (existentService != null) {
-        newServices = clinicServices.map(item => {
+        newServices = clinicServices.map((item) => {
           if (item.id !== existentService.id) {
             return item;
           }
@@ -120,7 +131,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
       }
       localDispatch(
         setClinicServices(
-          sortBy(newServices, item => item.name.toLowerCase()),
+          sortBy(newServices, (item) => item.name.toLowerCase()),
         ),
       );
       dispatch(setUpdatedService(null));
@@ -182,14 +193,14 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
     } else {
       setTimeout(() => {
         handleCloseDeleteService();
-        const updatedServices = clinicServices.map(service => {
+        const updatedServices = clinicServices.map((service) => {
           if (service.id !== deleteServiceModal.service.id) {
             return service;
           }
           return {
             ...service,
-            deleted: !deleteServiceModal.service.deleted
-          }
+            deleted: !deleteServiceModal.service.deleted,
+          };
         });
         localDispatch(setClinicServices(updatedServices));
       }, 300);
@@ -197,9 +208,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
   };
 
   const handleCreateCategory = () => {
-    localDispatch(
-      setCategoryModal({ state: categoryModalState.create }),
-    );
+    localDispatch(setCategoryModal({ state: categoryModalState.create }));
   };
 
   const handleEditCategory = () => {
@@ -207,9 +216,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
   };
 
   const handleCloseCategoryModal = () => {
-    localDispatch(
-      setCategoryModal({ state: categoryModalState.closed }),
-    );
+    localDispatch(setCategoryModal({ state: categoryModalState.closed }));
   };
 
   const openUploading = () => {
@@ -222,7 +229,10 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
 
   const handleImportServices = async (file, fields) => {
     try {
-      const mappedFields = fields.map(item => ({ fieldId: item.id, index: item.index }));
+      const mappedFields = fields.map((item) => ({
+        fieldId: item.id,
+        index: item.index,
+      }));
       await importServicesFromFile(file, mappedFields, category.data.id, {
         [HeaderKeys.authorization]: authToken,
         [HeaderKeys.clinicId]: currentClinic.id,
@@ -236,9 +246,9 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
   };
 
   const handleCategorySave = (data) => {
-    const existentCategory = categories.find(item => item.id === data.id);
+    const existentCategory = categories.find((item) => item.id === data.id);
     if (existentCategory != null) {
-      const updateCategories = categories.map(category => {
+      const updateCategories = categories.map((category) => {
         if (category.id !== data.id) {
           return category;
         }
@@ -249,8 +259,8 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
       });
       localDispatch(
         setCategories(
-          sortBy(updateCategories, category => category.name.toLowerCase())
-        )
+          sortBy(updateCategories, (category) => category.name.toLowerCase()),
+        ),
       );
       localDispatch(
         setCategory({
@@ -259,7 +269,9 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
         }),
       );
     } else {
-      const newCategories = sortBy([...categories, data], category => category.name.toLowerCase());
+      const newCategories = sortBy([...categories, data], (category) =>
+        category.name.toLowerCase(),
+      );
       localDispatch(setCategories(newCategories));
       localDispatch(
         setCategory({
@@ -274,9 +286,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
   const handleTabChange = (event, newValue) => {
     if (category.index !== newValue) {
       const newCategory = categories[newValue];
-      localDispatch(
-        setCategory({ data: newCategory, index: newValue }),
-      );
+      localDispatch(setCategory({ data: newCategory, index: newValue }));
     }
   };
 
@@ -310,7 +320,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
 
   return (
     <div className={styles['services-root']}>
-      <ServiceDetailsModal currentClinic={currentClinic}/>
+      <ServiceDetailsModal currentClinic={currentClinic} />
       <CSVImportModal
         open={showImportModal}
         title={textForKey('Import services')}
@@ -341,7 +351,9 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
       {categoryModal.state !== categoryModalState.closed && (
         <CreateCategoryModal
           category={
-            categoryModal.state === categoryModalState.edit ? category.data : null
+            categoryModal.state === categoryModalState.edit
+              ? category.data
+              : null
           }
           show={categoryModal.state !== categoryModalState.closed}
           onClose={handleCloseCategoryModal}
@@ -351,36 +363,32 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
       <div className={styles['services-root__content-wrapper']}>
         {isLoading && (
           <div className={styles.progressWrapper}>
-            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
         {!isLoading && filteredServices.length === 0 && (
           <div className={styles['services-root__no-data-wrapper']}>
             <Typography classes={{ root: styles['no-data-label'] }}>
               {textForKey('no_services_message')}
-              <span
+              <Box
                 className={styles['add-btn']}
-                role='button'
-                tabIndex={0}
                 onClick={handleAddOrEditService}
               >
                 {textForKey('Add service')}
-                <IconPlus fill='#3A83DC'/>
-              </span>
+                <IconPlus fill='#3A83DC' />
+              </Box>
             </Typography>
           </div>
         )}
         <div className={styles['tabs-container']}>
           <Tooltip title={textForKey('Add category')}>
-            <div
-              role='button'
-              tabIndex={0}
+            <Box
               onClick={handleCreateCategory}
               className={styles['services-root__add-tab']}
               style={{ outline: 'none' }}
             >
-              <IconPlus fill='#FFFF'/>
-            </div>
+              <IconPlus fill='#FFFF' />
+            </Box>
           </Tooltip>
           <Tabs
             scrollButtons='auto'
@@ -404,10 +412,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
                 style={{ outline: 'none', maxHeight: 50, maxWidth: 'unset' }}
                 key={item.id}
                 value={index}
-                label={tabLabel(
-                  textForKey(item.name),
-                  getServicesCount(item),
-                )}
+                label={tabLabel(textForKey(item.name), getServicesCount(item))}
               />
             ))}
           </Tabs>
@@ -415,43 +420,63 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
         {filteredServices.length > 0 && (
           <table>
             <thead>
-            <tr>
-              <td>
-                <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
-                  {textForKey('Service name')}
-                </Typography>
-              </td>
-              <td align='left'>
-                <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
-                  {textForKey('Description')}
-                </Typography>
-              </td>
-              <td align='right'>
-                <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
-                  {textForKey('Duration')}
-                </Typography>
-              </td>
-              <td align='right'>
-                <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
-                  {textForKey('Price')}
-                </Typography>
-              </td>
-              <td align='right'>
-                <Typography classes={{ root: clsx(styles['row-label'], styles['title-label']) }}>
-                  {textForKey('Actions')}
-                </Typography>
-              </td>
-            </tr>
+              <tr>
+                <td>
+                  <Typography
+                    classes={{
+                      root: clsx(styles['row-label'], styles['title-label']),
+                    }}
+                  >
+                    {textForKey('Service name')}
+                  </Typography>
+                </td>
+                <td align='left'>
+                  <Typography
+                    classes={{
+                      root: clsx(styles['row-label'], styles['title-label']),
+                    }}
+                  >
+                    {textForKey('Description')}
+                  </Typography>
+                </td>
+                <td align='right'>
+                  <Typography
+                    classes={{
+                      root: clsx(styles['row-label'], styles['title-label']),
+                    }}
+                  >
+                    {textForKey('Duration')}
+                  </Typography>
+                </td>
+                <td align='right'>
+                  <Typography
+                    classes={{
+                      root: clsx(styles['row-label'], styles['title-label']),
+                    }}
+                  >
+                    {textForKey('Price')}
+                  </Typography>
+                </td>
+                <td align='right'>
+                  <Typography
+                    classes={{
+                      root: clsx(styles['row-label'], styles['title-label']),
+                    }}
+                  >
+                    {textForKey('Actions')}
+                  </Typography>
+                </td>
+              </tr>
             </thead>
             <tbody>
-            {filteredServices.map((item) => (
-              <ServiceRow
-                key={item.id}
-                service={item}
-                onEditService={handleEditService}
-                onDeleteService={handleDeleteService}
-              />
-            ))}
+              {filteredServices.map((item) => (
+                <ServiceRow
+                  key={item.id}
+                  service={item}
+                  onEditService={handleEditService}
+                  onDeleteService={handleDeleteService}
+                />
+              ))}
             </tbody>
           </table>
         )}
@@ -471,7 +496,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
             onPointerUp={openUploading}
           >
             {textForKey('Import services')}
-            <UploadIcon/>
+            <UploadIcon />
           </Button>
           <Button
             disabled={category?.data?.id === 'all-services'}
@@ -484,7 +509,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
             onPointerUp={handleEditCategory}
           >
             {textForKey('Edit category')}
-            <IconEdit/>
+            <IconEdit />
           </Button>
           <Button
             disabled={category?.data?.id === 'all-services'}
@@ -497,7 +522,7 @@ const ServicesContainer = ({ categories: clinicCategories, services, currentClin
             onPointerUp={handleAddOrEditService}
           >
             {textForKey('Add service')}
-            <IconPlus fill='#00E987'/>
+            <IconPlus fill='#00E987' />
           </Button>
         </div>
       )}

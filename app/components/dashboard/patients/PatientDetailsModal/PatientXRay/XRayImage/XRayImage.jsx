@@ -1,21 +1,20 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import IconTrash from "../../../../../icons/iconTrash";
-import styles from "./XRayImage.module.scss";
-import EASImage from "../../../../../common/EASImage";
+import PropTypes from 'prop-types';
+import EASImage from 'app/components/common/EASImage';
+import IconTrash from 'app/components/icons/iconTrash';
+import styles from './XRayImage.module.scss';
 
 const XRayImage = ({ image, onImageClick, onImageDelete }) => {
-
   const handleImageClick = () => {
-    onImageClick?.(image)
-  }
+    onImageClick?.(image);
+  };
 
   const handleImageDelete = (event) => {
     event.stopPropagation();
     onImageDelete?.(image);
-  }
+  };
 
   return (
     <Grid
@@ -46,12 +45,12 @@ const XRayImage = ({ image, onImageClick, onImageDelete }) => {
           classes={{ root: styles.trashButton }}
           onPointerUp={handleImageDelete}
         >
-          <IconTrash/>
+          <IconTrash />
         </IconButton>
       </div>
     </Grid>
-  )
-}
+  );
+};
 
 export default XRayImage;
 
@@ -63,4 +62,4 @@ XRayImage.propTypes = {
   }),
   onImageClick: PropTypes.func,
   onImageDelete: PropTypes.func,
-}
+};

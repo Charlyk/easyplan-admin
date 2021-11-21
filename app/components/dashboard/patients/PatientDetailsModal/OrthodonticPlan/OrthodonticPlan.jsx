@@ -1,24 +1,25 @@
 import React, { useEffect, useReducer } from 'react';
-import clsx from 'clsx';
-import axios from "axios";
+import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
+import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-
-import IconSuccess from '../../../../icons/iconSuccess';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EasyTab from 'app/components/common/EasyTab';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
-} from '../../../../../../redux/selectors/clinicSelector';
-import { Role } from '../../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
-import EasyTab from '../../../../common/EasyTab';
-import LoadingButton from '../../../../common/LoadingButton';
-import EASTextarea from "../../../../common/EASTextarea";
-import EASSelect from "../../../../common/EASSelect";
+} from 'redux/selectors/clinicSelector';
+import styles from './OrthodonticPlan.module.scss';
 import {
   reducer,
   initialState,
@@ -27,59 +28,54 @@ import {
   diagnosisClass,
   PlanType,
   radiographic,
-  fallenBracketsList
+  fallenBracketsList,
 } from './OrthodonticPlan.reducer';
-import styles from './OrthodonticPlan.module.scss';
 
 const molarOptions = [
   {
     id: 1,
-    name: `${textForKey('Molar')} 1`
+    name: `${textForKey('Molar')} 1`,
   },
   {
     id: 2,
-    name: `${textForKey('Molar')} 2`
+    name: `${textForKey('Molar')} 2`,
   },
   {
     id: 3,
-    name: `${textForKey('Molar')} 3`
+    name: `${textForKey('Molar')} 3`,
   },
 ];
 
 const caninOptions = [
   {
     id: 1,
-    name: `${textForKey('Canin')} 1`
+    name: `${textForKey('Canin')} 1`,
   },
   {
     id: 2,
-    name: `${textForKey('Canin')} 2`
+    name: `${textForKey('Canin')} 2`,
   },
   {
     id: 3,
-    name: `${textForKey('Canin')} 3`
+    name: `${textForKey('Canin')} 3`,
   },
 ];
 
-const OrthodonticPlan = (
-  {
-    currentUser,
-    currentClinic: clinic,
-    patient,
-    scheduleId,
-    onSave
-  }
-) => {
+const OrthodonticPlan = ({
+  currentUser,
+  currentClinic: clinic,
+  patient,
+  scheduleId,
+  onSave,
+}) => {
   const services = clinicBracesServicesSelector(clinic);
   const braces = clinicEnabledBracesSelector(clinic);
   const currentClinic = currentUser.clinics.find(
-    it => it.clinicId === clinic.id,
+    (it) => it.clinicId === clinic.id,
   );
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
-  const [
-    { planType, bracketsPlan, isLoading, isSaving },
-    localDispatch,
-  ] = useReducer(reducer, initialState);
+  const [{ planType, bracketsPlan, isLoading, isSaving }, localDispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(() => {
     if (patient != null) {
@@ -93,9 +89,11 @@ const OrthodonticPlan = (
       const query = {
         patientId: patient.id,
         planType,
-      }
-      const queryString = new URLSearchParams(query).toString()
-      const response = await axios.get(`/api/treatment-plans/orthodontic?${queryString}`);
+      };
+      const queryString = new URLSearchParams(query).toString();
+      const response = await axios.get(
+        `/api/treatment-plans/orthodontic?${queryString}`,
+      );
       updatePlan(response.data);
     } catch (error) {
       toast.error(error.message);
@@ -115,7 +113,7 @@ const OrthodonticPlan = (
 
   const updateArray = (array, item) => {
     if (array.includes(item)) {
-      remove(array, it => it === item);
+      remove(array, (it) => it === item);
     } else {
       array.push(item);
     }
@@ -123,15 +121,15 @@ const OrthodonticPlan = (
   };
 
   const updateServicesArray = (array, item) => {
-    if (array.some(it => it.id === item.id)) {
-      remove(array, it => it.id === item.id);
+    if (array.some((it) => it.id === item.id)) {
+      remove(array, (it) => it.id === item.id);
     } else {
       array.push(item);
     }
     return array;
   };
 
-  const handleClassChange = newClass => {
+  const handleClassChange = (newClass) => {
     if (!isDoctor) return;
     const newClasses = updateArray(
       cloneDeep(bracketsPlan[planType].classes),
@@ -140,7 +138,7 @@ const OrthodonticPlan = (
     updatePlan({ classes: newClasses });
   };
 
-  const handleOcclusionChange = newOcclusion => {
+  const handleOcclusionChange = (newOcclusion) => {
     if (!isDoctor) return;
     const newOcclusions = updateArray(
       cloneDeep(bracketsPlan[planType].occlusions),
@@ -149,7 +147,7 @@ const OrthodonticPlan = (
     updatePlan({ occlusions: newOcclusions });
   };
 
-  const handleRadiographChange = newRadioGraph => {
+  const handleRadiographChange = (newRadioGraph) => {
     if (!isDoctor) return;
     const newRadiographs = updateArray(
       cloneDeep(bracketsPlan[planType].radiographs),
@@ -158,7 +156,7 @@ const OrthodonticPlan = (
     updatePlan({ radiographs: newRadiographs });
   };
 
-  const handleFallenBracketsChange = newBracket => {
+  const handleFallenBracketsChange = (newBracket) => {
     if (!isDoctor) return;
     const newFallenBrackets = updateArray(
       cloneDeep(bracketsPlan[planType].fallenBraces),
@@ -167,7 +165,7 @@ const OrthodonticPlan = (
     updatePlan({ fallenBraces: newFallenBrackets });
   };
 
-  const handleBracesChange = newBracket => {
+  const handleBracesChange = (newBracket) => {
     if (!isDoctor) return;
     let newBraces = updateServicesArray(
       cloneDeep(bracketsPlan[planType].braces),
@@ -176,7 +174,7 @@ const OrthodonticPlan = (
     updatePlan({ braces: newBraces });
   };
 
-  const handleTreatmentTypesChange = newTreatment => {
+  const handleTreatmentTypesChange = (newTreatment) => {
     if (!isDoctor) return;
     let newTypes = updateServicesArray(
       cloneDeep(bracketsPlan[planType].services),
@@ -185,7 +183,7 @@ const OrthodonticPlan = (
     updatePlan({ services: newTypes });
   };
 
-  const handleMolarCaninMolarChange = event => {
+  const handleMolarCaninMolarChange = (event) => {
     if (!isDoctor) return;
     let newValue = event.target.value;
     if (newValue === 'select') newValue = '0';
@@ -197,7 +195,7 @@ const OrthodonticPlan = (
     );
   };
 
-  const handleMolarCaninCaninChange = event => {
+  const handleMolarCaninCaninChange = (event) => {
     if (!isDoctor) return;
     let newValue = event.target.value;
     if (newValue === 'select') newValue = '0';
@@ -209,7 +207,7 @@ const OrthodonticPlan = (
     );
   };
 
-  const handleCaninMolarMolarChange = event => {
+  const handleCaninMolarMolarChange = (event) => {
     if (!isDoctor) return;
     let newValue = event.target.value;
     if (newValue === 'select') newValue = '0';
@@ -221,7 +219,7 @@ const OrthodonticPlan = (
     );
   };
 
-  const handleCaninMolarCaninChange = event => {
+  const handleCaninMolarCaninChange = (event) => {
     if (!isDoctor) return;
     let newValue = event.target.value;
     if (newValue === 'select') newValue = '0';
@@ -238,11 +236,11 @@ const OrthodonticPlan = (
   };
 
   const saveTreatmentPlan = async (patientId, requestBody) => {
-    return axios.post(`/api/treatment-plans/orthodontic`, {
+    return axios.post('/api/treatment-plans/orthodontic', {
       ...requestBody,
       patientId,
     });
-  }
+  };
 
   const handleSaveTreatmentPlan = async () => {
     localDispatch(actions.setIsSaving(true));
@@ -252,8 +250,8 @@ const OrthodonticPlan = (
         ...requestPlan,
         planType,
         scheduleId,
-        braces: requestPlan.braces.map(it => it.id),
-        services: requestPlan.services.map(it => it.id),
+        braces: requestPlan.braces.map((it) => it.id),
+        services: requestPlan.services.map((it) => it.id),
       };
       await saveTreatmentPlan(patient.id, updatedBraces);
       await fetchOrthodonticPlan();
@@ -265,7 +263,7 @@ const OrthodonticPlan = (
     }
   };
 
-  const handlePlanTypeChange = newType => {
+  const handlePlanTypeChange = (newType) => {
     localDispatch(actions.setPlanType(newType));
   };
 
@@ -283,10 +281,8 @@ const OrthodonticPlan = (
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
-          {diagnosisClass.map(item => (
-            <div
-              role='button'
-              tabIndex={0}
+          {diagnosisClass.map((item) => (
+            <Box
               onClick={() => handleClassChange(item)}
               className={clsx(
                 styles.optionButton,
@@ -295,7 +291,7 @@ const OrthodonticPlan = (
               key={item}
             >
               <span className={styles.optionText}>{item}</span>
-            </div>
+            </Box>
           ))}
         </div>
       </td>
@@ -309,10 +305,8 @@ const OrthodonticPlan = (
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
-          {diagnosisOcclusion.map(item => (
-            <div
-              role='button'
-              tabIndex={0}
+          {diagnosisOcclusion.map((item) => (
+            <Box
               onClick={() => handleOcclusionChange(item)}
               className={clsx(
                 styles.optionButton,
@@ -321,7 +315,7 @@ const OrthodonticPlan = (
               key={item}
             >
               <span className={styles.optionText}>{textForKey(item)}</span>
-            </div>
+            </Box>
           ))}
         </div>
       </td>
@@ -331,14 +325,14 @@ const OrthodonticPlan = (
   const fallenBracketsRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>{textForKey('Fallen brackets')}</span>
+        <span className={styles.groupSubtitle}>
+          {textForKey('Fallen brackets')}
+        </span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
-          {fallenBracketsList.map(item => (
-            <div
-              role='button'
-              tabIndex={0}
+          {fallenBracketsList.map((item) => (
+            <Box
               onClick={() => handleFallenBracketsChange(item)}
               className={clsx(
                 styles.optionButton,
@@ -347,7 +341,7 @@ const OrthodonticPlan = (
               key={item}
             >
               <span className={styles.optionText}>{item}</span>
-            </div>
+            </Box>
           ))}
         </div>
       </td>
@@ -357,14 +351,14 @@ const OrthodonticPlan = (
   const radiographRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>{textForKey('Radiografie')}</span>
+        <span className={styles.groupSubtitle}>
+          {textForKey('Radiografie')}
+        </span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
-          {radiographic.map(item => (
-            <div
-              role='button'
-              tabIndex={0}
+          {radiographic.map((item) => (
+            <Box
               onClick={() => handleRadiographChange(item)}
               className={clsx(
                 styles.optionButton,
@@ -373,7 +367,7 @@ const OrthodonticPlan = (
               key={item}
             >
               <span className={styles.optionText}>{textForKey(item)}</span>
-            </div>
+            </Box>
           ))}
         </div>
       </td>
@@ -387,19 +381,18 @@ const OrthodonticPlan = (
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
-          {braces.map(item => (
-            <div
-              role='button'
-              tabIndex={0}
+          {braces.map((item) => (
+            <Box
               onClick={() => handleBracesChange(item)}
               className={clsx(
                 styles.optionButton,
-                selectedBraces.some(it => it.id === item.id) && styles.selected,
+                selectedBraces.some((it) => it.id === item.id) &&
+                  styles.selected,
               )}
               key={item.id}
             >
               <span className={styles.optionText}>{textForKey(item.name)}</span>
-            </div>
+            </Box>
           ))}
         </div>
       </td>
@@ -409,23 +402,24 @@ const OrthodonticPlan = (
   const treatmentTypeRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>{textForKey('Service type')}</span>
+        <span className={styles.groupSubtitle}>
+          {textForKey('Service type')}
+        </span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
-          {services.map(item => (
-            <div
-              role='button'
-              tabIndex={0}
+          {services.map((item) => (
+            <Box
               onClick={() => handleTreatmentTypesChange(item)}
               className={clsx(
                 styles.optionButton,
-                selectedServices.some(it => it.id === item.id) && styles.selected,
+                selectedServices.some((it) => it.id === item.id) &&
+                  styles.selected,
               )}
               key={item.id}
             >
               <span className={styles.optionText}>{item.name}</span>
-            </div>
+            </Box>
           ))}
         </div>
       </td>
@@ -435,7 +429,9 @@ const OrthodonticPlan = (
   const molarCaninRow = (
     <tr>
       <td valign='top' style={{ paddingTop: '1rem', minWidth: '10rem' }}>
-        <span className={styles.groupSubtitle}>{textForKey('Angle Class')}</span>
+        <span className={styles.groupSubtitle}>
+          {textForKey('Angle Class')}
+        </span>
       </td>
       <td valign='top'>
         <div className={styles.optionsContainer}>
@@ -445,7 +441,7 @@ const OrthodonticPlan = (
             value={bracketsPlan[planType].angleClasses.molarCaninMolar}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Molar')}...`
+              name: `${textForKey('Molar')}...`,
             }}
             options={molarOptions}
             onChange={handleMolarCaninMolarChange}
@@ -456,19 +452,19 @@ const OrthodonticPlan = (
             value={bracketsPlan[planType].angleClasses.molarCaninCanin}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Canin')}...`
+              name: `${textForKey('Canin')}...`,
             }}
             options={caninOptions}
             onChange={handleMolarCaninCaninChange}
           />
-          <div className='separator'/>
+          <div className='separator' />
           <EASSelect
             disabled={!isDoctor}
             rootClass={styles.angleClassSelect}
             value={bracketsPlan[planType].angleClasses.caninMolarCanin}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Canin')}...`
+              name: `${textForKey('Canin')}...`,
             }}
             options={caninOptions}
             onChange={handleCaninMolarCaninChange}
@@ -479,7 +475,7 @@ const OrthodonticPlan = (
             value={bracketsPlan[planType].angleClasses.caninMolarMolar}
             defaultOption={{
               id: 0,
-              name: `${textForKey('Molar')}...`
+              name: `${textForKey('Molar')}...`,
             }}
             options={molarOptions}
             onChange={handleCaninMolarMolarChange}
@@ -496,7 +492,7 @@ const OrthodonticPlan = (
       </Typography>
       {isLoading && (
         <div className='progress-bar-wrapper'>
-          <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+          <CircularProgress classes={{ root: 'circular-progress-bar' }} />
         </div>
       )}
       {!isLoading && (
@@ -516,20 +512,20 @@ const OrthodonticPlan = (
             </div>
             <table>
               <tbody>
-              <tr>
-                <td>
+                <tr>
+                  <td>
                     <span className={styles.groupTitle}>
                       {textForKey('Diagnosis')}
                     </span>
-                </td>
-              </tr>
-              {classRow}
-              {occlusionRow}
-              {molarCaninRow}
-              {radiographRow}
-              {bracesRow}
-              {treatmentTypeRow}
-              {fallenBracketsRow}
+                  </td>
+                </tr>
+                {classRow}
+                {occlusionRow}
+                {molarCaninRow}
+                {radiographRow}
+                {bracesRow}
+                {treatmentTypeRow}
+                {fallenBracketsRow}
               </tbody>
             </table>
             <EASTextarea
@@ -551,7 +547,7 @@ const OrthodonticPlan = (
             onClick={handleSaveTreatmentPlan}
           >
             {textForKey('Save')}
-            <IconSuccess/>
+            <IconSuccess />
           </LoadingButton>
         </div>
       )}

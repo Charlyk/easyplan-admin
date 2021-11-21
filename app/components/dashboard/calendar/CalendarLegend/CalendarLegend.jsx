@@ -1,24 +1,26 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React from 'react';
 import Fade from '@material-ui/core/Fade';
 import Popper from '@material-ui/core/Popper';
 import Typography from '@material-ui/core/Typography';
-
-import { Statuses } from "../../../../utils/constants";
-import { textForKey } from "../../../../utils/localization";
-import styles from './CalendarLegend.module.scss'
+import PropTypes from 'prop-types';
+import { Statuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import styles from './CalendarLegend.module.scss';
 
 const StatusItem = ({ item }) => {
   return (
     <div className={styles.statusItem}>
-      <div className={styles.colorIndicator} style={{ backgroundColor: item.color }} />
+      <div
+        className={styles.colorIndicator}
+        style={{ backgroundColor: item.color }}
+      />
       <Typography className={styles.statusName}>{item.name}</Typography>
     </div>
-  )
-}
+  );
+};
 
 const CalendarLegend = ({ open, anchorEl, placement }) => {
-  const scheduleStatuses = Statuses.filter(item => item.isSchedule);
+  const scheduleStatuses = Statuses.filter((item) => item.isSchedule);
   return (
     <Popper
       disablePortal
@@ -33,17 +35,17 @@ const CalendarLegend = ({ open, anchorEl, placement }) => {
             <Typography className={styles.titleLabel}>
               {textForKey('Calendar legend')}
             </Typography>
-            {scheduleStatuses.map(status => (
-              <StatusItem key={status.id} item={status}/>
+            {scheduleStatuses.map((status) => (
+              <StatusItem key={status.id} item={status} />
             ))}
           </div>
         </Fade>
       )}
     </Popper>
-  )
-}
+  );
+};
 
-export default CalendarLegend
+export default CalendarLegend;
 
 StatusItem.propTypes = {
   item: PropTypes.shape({
@@ -51,11 +53,11 @@ StatusItem.propTypes = {
     name: PropTypes.string,
     color: PropTypes.string,
     icon: PropTypes.any,
-    statusIcon: PropTypes.any ,
+    statusIcon: PropTypes.any,
     manual: PropTypes.bool,
     isSchedule: PropTypes.bool,
   }),
-}
+};
 
 CalendarLegend.propTypes = {
   open: PropTypes.bool.isRequired,
@@ -72,8 +74,8 @@ CalendarLegend.propTypes = {
     'right-start',
     'right-end',
   ]),
-}
+};
 
 CalendarLegend.defaultProps = {
-  placement: 'bottom'
-}
+  placement: 'bottom',
+};

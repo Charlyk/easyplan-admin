@@ -3,10 +3,29 @@ import cookie from 'cookie';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { authorized } from '../../authorized';
-import { handler } from '../../handler';
+import authorized from '../../authorized';
+import handler from '../../handler';
 
-export default authorized(async function clinicDetails(req, res) {
+async function updateBracesSettings(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const requestBody = req.body;
+  return axios.put(
+    `${updatedServerUrl(req)}/clinics/braces-types`,
+    requestBody,
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
+}
+
+export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
       const data = await handler(updateBracesSettings, req, res);
@@ -21,20 +40,3 @@ export default authorized(async function clinicDetails(req, res) {
       break;
   }
 });
-
-async function updateBracesSettings(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const requestBody = req.body;
-  return axios.put(
-    `${updatedServerUrl(req)}/clinics/braces-types`,
-    requestBody,
-    {
-      headers: {
-        [HeaderKeys.authorization]: auth_token,
-        [HeaderKeys.clinicId]: clinic_id,
-        [HeaderKeys.subdomain]: getSubdomain(req),
-        [HeaderKeys.contentType]: 'application/json',
-      },
-    },
-  );
-}

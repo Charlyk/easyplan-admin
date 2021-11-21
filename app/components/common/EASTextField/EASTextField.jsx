@@ -107,4 +107,6 @@ const EASTextField = React.forwardRef(
   },
 );
 
+EASTextField.displayName = 'EASTextField';
+
 export default EASTextField;

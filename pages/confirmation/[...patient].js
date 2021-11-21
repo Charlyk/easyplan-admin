@@ -77,7 +77,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
     }
   };
 
-  const logoSrc = schedule?.clinicLogo
+  const logoSource = schedule?.clinicLogo
     ? urlToLambda(schedule.clinicLogo)
     : null;
 
@@ -95,7 +95,9 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
           {textForKey('Schedule info not found')}
         </Typography>
       )}
-      {logoSrc && <EASImage className={styles['logo-image']} src={logoSrc} />}
+      {logoSource && (
+        <EASImage className={styles['logo-image']} src={logoSource} />
+      )}
       {schedule && !isError && (
         <TableContainer className={styles.tableContainer}>
           <Table>
@@ -245,7 +247,10 @@ export const getServerSideProps = async ({ req, query }) => {
       },
     };
   } catch (error) {
-    throw error;
+    console.error(error);
+    return {
+      props: {},
+    };
   }
 };
 

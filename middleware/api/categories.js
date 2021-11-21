@@ -1,4 +1,4 @@
-import { post, put } from "./request";
+import { post, put } from './request';
 
 /**
  * Change name for a category
@@ -7,7 +7,11 @@ import { post, put } from "./request";
  * @param {any} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestEditCategory(categoryName, categoryId, headers = null) {
+export async function requestEditCategory(
+  categoryName,
+  categoryId,
+  headers = null,
+) {
   return put(`/api/categories/${categoryId}`, headers, { categoryName });
 }
 

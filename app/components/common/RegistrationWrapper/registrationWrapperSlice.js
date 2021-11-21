@@ -44,13 +44,10 @@ const registrationWrapperSlice = createSlice({
 });
 
 export const {
-  setStep,
-  setAccountCompleted,
   setIsLoading,
   setErrorMessage,
   setCompletedSteps,
   setAccountData,
-  setClinicData,
 } = registrationWrapperSlice.actions;
 
 export default registrationWrapperSlice.reducer;

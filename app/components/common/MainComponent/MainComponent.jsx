@@ -160,7 +160,7 @@ const MainComponent = ({
       await signOut();
       await router.replace(router.asPath);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

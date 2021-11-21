@@ -10,7 +10,7 @@ import redirectToUrl from 'app/utils/redirectToUrl';
 import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
 import { fetchAppData } from 'middleware/api/initialization';
 
-export default function General({ fallback, query, authToken, analytics }) {
+const General = ({ fallback, query, authToken, analytics }) => {
   return (
     <SWRConfig value={{ fallback }}>
       <MainComponent currentPath='/analytics/general' authToken={authToken}>
@@ -18,7 +18,9 @@ export default function General({ fallback, query, authToken, analytics }) {
       </MainComponent>
     </SWRConfig>
   );
-}
+};
+
+export default General;
 
 export const getServerSideProps = async ({ req, query }) => {
   try {

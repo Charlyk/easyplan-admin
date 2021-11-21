@@ -65,8 +65,6 @@ export const getServerSideProps = async ({ req }) => {
 export default wrapper.withRedux(Crm);
 
 Crm.propTypes = {
-  currentUser: PropTypes.object,
-  currentClinic: PropTypes.object,
   authToken: PropTypes.string,
   states: PropTypes.arrayOf(
     PropTypes.shape({

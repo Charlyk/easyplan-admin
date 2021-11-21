@@ -2,18 +2,17 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from "react-toastify";
-
-import { textForKey } from '../../../../utils/localization';
-import LeftSideModal from '../../../common/LeftSideModal';
-import { createService, updateService } from "../../../../../middleware/api/services";
-import IconClose from '../../../icons/iconClose';
-import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../common/LoadingButton';
-import { closeServiceDetailsModal } from '../../../../../redux/actions/serviceDetailsActions';
-import { serviceDetailsModalSelector } from '../../../../../redux/selectors/serviceDetailsSelector';
-import { setUpdatedService } from "../../../../../redux/actions/servicesActions";
-import { clinicActiveDoctorsSelector } from "../../../../../redux/selectors/clinicSelector";
+import { toast } from 'react-toastify';
+import LeftSideModal from 'app/components/common/LeftSideModal';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconClose from 'app/components/icons/iconClose';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import { textForKey } from 'app/utils/localization';
+import { createService, updateService } from 'middleware/api/services';
+import { closeServiceDetailsModal } from 'redux/actions/serviceDetailsActions';
+import { setUpdatedService } from 'redux/actions/servicesActions';
+import { clinicActiveDoctorsSelector } from 'redux/selectors/clinicSelector';
+import { serviceDetailsModalSelector } from 'redux/selectors/serviceDetailsSelector';
 import styles from './ServiceDetailsModal.module.scss';
 
 const ServiceDoctors = dynamic(() => import('./ServiceDoctors'));
@@ -35,7 +34,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
   const dispatch = useDispatch();
   const { category, service, open } = useSelector(serviceDetailsModalSelector);
   const modalData = useSelector(serviceDetailsModalSelector);
-  const clinicDoctors = clinicActiveDoctorsSelector(currentClinic)
+  const clinicDoctors = clinicActiveDoctorsSelector(currentClinic);
   const clinicCurrency = currentClinic?.currency;
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
@@ -69,8 +68,8 @@ const ServiceDetailsModal = ({ currentClinic }) => {
   useEffect(() => {
     setIsFormValid(
       serviceInfo.name.length > 0 &&
-      serviceInfo.color.length > 0 &&
-      parseInt(serviceInfo.duration) > 0,
+        serviceInfo.color.length > 0 &&
+        parseInt(serviceInfo.duration) > 0,
     );
   }, [serviceInfo]);
 

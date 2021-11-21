@@ -1,20 +1,19 @@
 import React, { useMemo, useState } from 'react';
-import sortBy from 'lodash/sortBy';
-import { createFilterOptions } from '@material-ui/lab';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-
-import { textForKey } from '../../../../../utils/localization';
+import { createFilterOptions } from '@material-ui/lab';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import sortBy from 'lodash/sortBy';
+import PropTypes from 'prop-types';
+import { textForKey } from 'app/utils/localization';
 import ServiceRow from '../ServiceRow';
-import styles from './ServicesList.module.scss'
+import styles from './ServicesList.module.scss';
 
-const getOptionLabel = option => {
+const getOptionLabel = (option) => {
   let name = option.name;
   if (option.destination != null) {
     name = `${name} (${textForKey(option.destination)})`;
@@ -28,26 +27,24 @@ const filterOptions = createFilterOptions({
   ignoreCase: true,
 });
 
-const ServicesList = (
-  {
-    isDebt,
-    currencies,
-    canAddService,
-    services,
-    availableServices,
-    onServiceChanged,
-    onServiceSelected,
-    onServiceDeleted,
-  }
-) => {
+const ServicesList = ({
+  isDebt,
+  currencies,
+  canAddService,
+  services,
+  availableServices,
+  onServiceChanged,
+  onServiceSelected,
+  onServiceDeleted,
+}) => {
   const [autocompleteClearKey, setAutocompleteClearKey] = useState(false);
-  const autocompleteInput = params => {
+  const autocompleteInput = (params) => {
     return (
-      <TextField {...params} placeholder={textForKey('Select services')}/>
+      <TextField {...params} placeholder={textForKey('Select services')} />
     );
   };
 
-  const autocompleteOption = option => {
+  const autocompleteOption = (option) => {
     return (
       <Typography
         id={option.id}
@@ -79,8 +76,8 @@ const ServicesList = (
         updatedServices.push(service);
       }
     }
-    return sortBy(updatedServices, item => item.name.toLowerCase())
-  }, [availableServices])
+    return sortBy(updatedServices, (item) => item.name.toLowerCase());
+  }, [availableServices]);
 
   return (
     <Box className={styles.servicesList}>

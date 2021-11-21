@@ -1,28 +1,29 @@
 import React, { useEffect, useReducer } from 'react';
-import dynamic from 'next/dynamic';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Table from '@material-ui/core/Table'
+import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import dynamic from 'next/dynamic';
 import { toast } from 'react-toastify';
-
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 import {
   deleteMessage,
   getMessages,
-  toggleMessageStatus
-} from "../../../../../middleware/api/messages";
+  toggleMessageStatus,
+} from 'middleware/api/messages';
 import SMSMessageItem from './SMSMessageItem';
-import SMSMessagesHeader from './SMSMessagesHeader';
-import { initialState, actions, reducer } from './SMSMessages.reducer'
 import styles from './SMSMessages.module.scss';
+import { initialState, actions, reducer } from './SMSMessages.reducer';
+import SMSMessagesHeader from './SMSMessagesHeader';
 
-const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
-const CreateMessageDialog = dynamic(() => import("../CreateMessageDialog"));
+const ConfirmationModal = dynamic(() =>
+  import('app/components/common/modals/ConfirmationModal'),
+);
+const CreateMessageDialog = dynamic(() => import('../CreateMessageDialog'));
 
 const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
   const hasSMSAlias = currentClinic?.smsAlias != null;
@@ -41,7 +42,7 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
 
   useEffect(() => {
     localDispatch(actions.setMessages(initialMessages));
-  }, [])
+  }, []);
 
   const fetchMessages = async (silent) => {
     localDispatch(actions.setIsLoading(!silent));
@@ -141,7 +142,7 @@ const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
       <div className={styles.dataWrapper}>
         {hasSMSAlias && isLoading && (
           <div className={styles.progressWrapper}>
-            <CircularProgress classes={{ root: styles.progress }}/>
+            <CircularProgress classes={{ root: styles.progress }} />
           </div>
         )}
         {!hasSMSAlias && (

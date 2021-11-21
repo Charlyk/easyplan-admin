@@ -77,8 +77,6 @@ export const {
   setRowsPerPage,
   setSearchQuery,
   setShowImportModal,
-  setIsUploading,
-  setShowUploadModal,
   setShowCreateModal,
 } = patientsListSlice.actions;
 

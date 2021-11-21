@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useReducer } from "react";
-import debounce from 'lodash/debounce';
-import { toast } from "react-toastify";
+import React, { useCallback, useEffect, useReducer } from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
+import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
-import Divider from "@material-ui/core/Divider";
-import { textForKey } from '../../../../utils/localization';
-import { requestSearchPatients } from "../../../../../middleware/api/patients";
+import debounce from 'lodash/debounce';
+import { toast } from 'react-toastify';
+import EASTextField from 'app/components/common/EASTextField';
+import { textForKey } from 'app/utils/localization';
+import { requestSearchPatients } from 'middleware/api/patients';
+import styles from './ExistentPatientForm.module.scss';
 import reducer, {
   initialState,
   setIsSearching,
@@ -19,32 +20,31 @@ import reducer, {
   setSearchQuery,
   setSelectedPatient,
 } from './ExistentPatientForm.reducer';
-import styles from './ExistentPatientForm.module.scss';
-import EASTextField from "../../../common/EASTextField";
 
 const ExistentPatientForm = ({ deal, onChange }) => {
-  const [{
-    isSearching,
-    patients,
-    searchQuery,
-    selectedPatient,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    { isSearching, patients, searchQuery, selectedPatient },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
-  const searchPatients = useCallback(debounce(async (query) => {
-    try {
-      localDispatch(setIsSearching(true));
-      const response = await requestSearchPatients(query);
-      localDispatch(setPatients(response.data));
-    } catch (error) {
-      if (error.response != null) {
-        const { data } = error.response;
-        toast.error(data.message);
-      } else {
-        toast.error(error.message);
+  const searchPatients = useCallback(
+    debounce(async (query) => {
+      try {
+        localDispatch(setIsSearching(true));
+        const response = await requestSearchPatients(query);
+        localDispatch(setPatients(response.data));
+      } catch (error) {
+        if (error.response != null) {
+          const { data } = error.response;
+          toast.error(data.message);
+        } else {
+          toast.error(error.message);
+        }
+        localDispatch(setIsSearching(false));
       }
-      localDispatch(setIsSearching(false));
-    }
-  }, 500), []);
+    }, 500),
+    [],
+  );
 
   useEffect(() => {
     if (deal == null || deal.source !== 'PhoneCall') {
@@ -69,11 +69,11 @@ const ExistentPatientForm = ({ deal, onChange }) => {
 
   const handleQueryChange = (newQuery) => {
     localDispatch(setSearchQuery(newQuery));
-  }
+  };
 
   const handlePatientClick = (patient) => {
     localDispatch(setSelectedPatient(patient));
-  }
+  };
 
   return (
     <div className={styles.existentPatientForm}>
@@ -84,7 +84,7 @@ const ExistentPatientForm = ({ deal, onChange }) => {
         endAdornment={
           isSearching && (
             <div className={styles.progressContainer}>
-              <CircularProgress className={styles.progressBar}/>
+              <CircularProgress className={styles.progressBar} />
             </div>
           )
         }
@@ -97,30 +97,30 @@ const ExistentPatientForm = ({ deal, onChange }) => {
                 dense
                 key={patient.id}
                 selected={selectedPatient?.id === patient.id}
-                alignItems="flex-start"
+                alignItems='flex-start'
                 className={styles.listItem}
                 onClick={() => handlePatientClick(patient)}
               >
                 <ListItemAvatar>
-                  <Avatar alt={patient.fullName}/>
+                  <Avatar alt={patient.fullName} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={patient.fullName}
                   secondary={`+${patient.countryCode}${patient.phoneNumber}`}
                 />
               </ListItem>
-              <Divider variant="inset" component="li"/>
+              <Divider variant='inset' component='li' />
             </React.Fragment>
           ))}
         </List>
         {patients.length === 0 && (
           <div className={styles.noDataContainer}>
-            <SearchIcon/>
+            <SearchIcon />
           </div>
         )}
       </div>
     </div>
-  )
+  );
 };
 
 export default ExistentPatientForm;

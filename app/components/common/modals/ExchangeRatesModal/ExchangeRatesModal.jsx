@@ -15,28 +15,29 @@ import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { updateExchangeRatesSelector } from '../../../../../redux/selectors/rootSelector';
-import { setIsExchangeRatesModalOpen } from "../../../../../redux/actions/exchangeRatesActions";
-import { fetchClinicExchangeRates, requestUpdateExchangeRates } from "../../../../../middleware/api/clinic";
-import { textForKey } from '../../../../utils/localization';
-import { Role } from '../../../../utils/constants';
-import IconTrash from "../../../icons/iconTrash";
-import EASTextField from "../../EASTextField";
-import EASSelect from "../../EASSelect";
-import EASModal from "../EASModal";
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import IconTrash from 'app/components/icons/iconTrash';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import {
-  reducer,
-  initialState,
-  actions
-} from './ExchangeRatesModal.reducer';
+  fetchClinicExchangeRates,
+  requestUpdateExchangeRates,
+} from 'middleware/api/clinic';
+import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
+import { updateExchangeRatesSelector } from 'redux/selectors/rootSelector';
+import EASModal from '../EASModal';
 import styles from './ExchangeRates.module.scss';
+import { reducer, initialState, actions } from './ExchangeRatesModal.reducer';
 
 const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
   const dispatch = useDispatch();
   const updateRates = useSelector(updateExchangeRatesSelector);
   const allCurrencies = currentClinic.allCurrencies;
   const clinicCurrency = currentClinic.currency;
-  const selectedClinic = currentUser.clinics.find((item) => item.clinicId === currentClinic.id);
+  const selectedClinic = currentUser.clinics.find(
+    (item) => item.clinicId === currentClinic.id,
+  );
   const [{ isLoading, rates, isSaving }, localDispatch] = useReducer(
     reducer,
     initialState,
@@ -49,10 +50,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
   }, [updateRates, open, clinicCurrency, selectedClinic]);
 
   const fetchExchangeRates = async () => {
-    if (
-      selectedClinic == null ||
-      selectedClinic.roleInClinic === Role.doctor
-    ) {
+    if (selectedClinic == null || selectedClinic.roleInClinic === Role.doctor) {
       return;
     }
     localDispatch(actions.setIsLoading(true));
@@ -87,19 +85,21 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
     localDispatch(actions.setRates(newRates));
   };
 
-  const handleRateValueChange = (rate) => ({ floatValue }) => {
-    const newRates = rates.map((item) => {
-      if (item.currency !== rate.currency) {
-        return item;
-      }
+  const handleRateValueChange =
+    (rate) =>
+    ({ floatValue }) => {
+      const newRates = rates.map((item) => {
+        if (item.currency !== rate.currency) {
+          return item;
+        }
 
-      return {
-        ...item,
-        value: floatValue,
-      };
-    });
-    localDispatch(actions.setRates(newRates));
-  };
+        return {
+          ...item,
+          value: floatValue,
+        };
+      });
+      localDispatch(actions.setRates(newRates));
+    };
 
   const handleRemoveRate = (rate) => () => {
     const newRates = cloneDeep(rates);
@@ -110,14 +110,16 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
   const getAvailableCurrencies = (exception) => {
     if (allCurrencies == null) return [];
     const existentRates = rates.map((it) => it.currency);
-    return allCurrencies.filter(
-      (it) =>
-        (!existentRates.includes(it.id) && it.id !== clinicCurrency) ||
-        it.id === exception,
-    ).map(item => ({
-      ...item,
-      name: `${item.id} - ${item.name}`,
-    }));
+    return allCurrencies
+      .filter(
+        (it) =>
+          (!existentRates.includes(it.id) && it.id !== clinicCurrency) ||
+          it.id === exception,
+      )
+      .map((item) => ({
+        ...item,
+        name: `${item.id} - ${item.name}`,
+      }));
   };
 
   const handleAddExchangeRate = () => {
@@ -203,7 +205,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
                       onClick={handleRemoveRate(rate)}
                       classes={{ root: styles['remove-button'] }}
                     >
-                      <IconTrash/>
+                      <IconTrash />
                     </IconButton>
                   </TableCell>
                 </TableRow>

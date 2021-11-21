@@ -1,15 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-
-import IconPlus from '../../../icons/iconPlus';
-import EasyTab from '../../../common/EasyTab';
-import { Role } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import styles from './UserHeader.module.scss'
+import PropTypes from 'prop-types';
+import EasyTab from 'app/components/common/EasyTab';
+import IconPlus from 'app/components/icons/iconPlus';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import styles from './UserHeader.module.scss';
 
 const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {
-  const handleTabClick = tabName => {
+  const handleTabClick = (tabName) => {
     onFilterChange(tabName);
   };
 
@@ -45,7 +44,7 @@ const UsersHeader = ({ onFilterChange, filter, onInviteUser }) => {
       <div className={styles['buttons-wrapper']}>
         <Button
           classes={{
-            root: styles.inviteButton
+            root: styles.inviteButton,
           }}
           onPointerUp={() => onInviteUser(Role.reception)}
         >

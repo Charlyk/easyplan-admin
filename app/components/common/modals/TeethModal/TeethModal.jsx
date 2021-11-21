@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import Typography from "@material-ui/core/Typography";
+import React, { useEffect, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-
-import { textForKey } from "../../../../utils/localization";
-import { Teeth } from "../../../../utils/constants";
-import IconCheckMark from "../../../icons/iconCheckMark";
-import EASModal from "../EASModal";
+import IconCheckMark from 'app/components/icons/iconCheckMark';
+import { Teeth } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import EASModal from '../EASModal';
 import styles from './TeethModal.module.scss';
 
-const topLeft = Teeth.filter(item => item.type === 'top-left');
-const topRight = Teeth.filter(item => item.type === 'top-right');
-const bottomLeft = Teeth.filter(item => item.type === 'bottom-left');
-const bottomRight = Teeth.filter(item => item.type === 'bottom-right');
+const topLeft = Teeth.filter((item) => item.type === 'top-left');
+const topRight = Teeth.filter((item) => item.type === 'top-right');
+const bottomLeft = Teeth.filter((item) => item.type === 'bottom-left');
+const bottomRight = Teeth.filter((item) => item.type === 'bottom-right');
 
 const TeethModal = ({ open, service, onClose, onSave }) => {
   const [selectedTeeth, setSelectedTeeth] = useState([]);
@@ -19,8 +18,8 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
   useEffect(() => {
     return () => {
       setSelectedTeeth([]);
-    }
-  }, [open])
+    };
+  }, [open]);
 
   const handleSave = () => {
     if (selectedTeeth.length === 0) {
@@ -28,19 +27,19 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
     }
     onSave(service, selectedTeeth);
     onClose();
-  }
+  };
 
   const handleToothClick = (tooth) => {
     if (selectedTeeth.includes(tooth.toothId)) {
-      setSelectedTeeth(selectedTeeth.filter(item => item !== tooth.toothId));
+      setSelectedTeeth(selectedTeeth.filter((item) => item !== tooth.toothId));
     } else {
       setSelectedTeeth([...selectedTeeth, tooth.toothId]);
     }
-  }
+  };
 
   const isSelected = (tooth) => {
     return selectedTeeth.includes(tooth.toothId);
-  }
+  };
 
   return (
     <EASModal
@@ -54,7 +53,7 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
     >
       <div className={styles.teethModalBody}>
         <div className={styles.teethRow}>
-          {topLeft.map(item => (
+          {topLeft.map((item) => (
             <div
               key={item.toothId}
               className={styles.toothWrapper}
@@ -73,7 +72,7 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
           ))}
         </div>
         <div className={styles.teethRow}>
-          {topRight.map(item => (
+          {topRight.map((item) => (
             <div
               key={item.toothId}
               className={styles.toothWrapper}
@@ -92,7 +91,7 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
           ))}
         </div>
         <div className={styles.teethRow}>
-          {bottomLeft.map(item => (
+          {bottomLeft.map((item) => (
             <div
               key={item.toothId}
               className={styles.toothWrapper}
@@ -111,7 +110,7 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
           ))}
         </div>
         <div className={styles.teethRow}>
-          {bottomRight.map(item => (
+          {bottomRight.map((item) => (
             <div
               key={item.toothId}
               className={styles.toothWrapper}
@@ -131,7 +130,7 @@ const TeethModal = ({ open, service, onClose, onSave }) => {
         </div>
       </div>
     </EASModal>
-  )
+  );
 };
 
 export default TeethModal;
@@ -140,7 +139,7 @@ TeethModal.propTypes = {
   open: PropTypes.bool.isRequired,
   service: PropTypes.object,
   onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func
+  onSave: PropTypes.func,
 };
 
 TeethModal.defaultProps = {

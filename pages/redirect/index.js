@@ -53,7 +53,7 @@ export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
     // try to check if clinic id is a number
-    parseInt(clinicId);
+    parseInt(clinicId, 10);
 
     // check if token is valid
     if (!token.match(JwtRegex) || !clinicId) {

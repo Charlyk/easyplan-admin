@@ -1,4 +1,4 @@
-import types from '../types/types';
+import types from 'redux/types';
 
 const initialState = Object.freeze({
   open: false,
@@ -8,16 +8,19 @@ const initialState = Object.freeze({
   patient: null,
 });
 
-export default function appointmentModal(state = initialState, action) {
-  switch (action.type) {
+export default function appointmentModal(
+  state = initialState,
+  { type, payload } = {},
+) {
+  switch (type) {
     case types.setAppointmentModal:
       return {
         ...state,
-        ...action.payload,
-        date: action.payload.open ? action.payload.date : null,
-        doctor: action.payload.open ? action.payload.doctor : null,
-        patient: action.payload.open ? action.payload.patient : null,
-        schedule: action.payload.open ? action.payload.schedule : null,
+        ...payload,
+        date: payload.open ? payload.date : null,
+        doctor: payload.open ? payload.doctor : null,
+        patient: payload.open ? payload.patient : null,
+        schedule: payload.open ? payload.schedule : null,
       };
     default:
       return state;

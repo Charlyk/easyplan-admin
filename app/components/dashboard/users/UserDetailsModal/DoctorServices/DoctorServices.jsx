@@ -1,20 +1,18 @@
 import React from 'react';
 import clsx from 'clsx';
-import remove from 'lodash/remove';
 import cloneDeep from 'lodash/cloneDeep';
+import remove from 'lodash/remove';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-
 import DoctorServiceItem from '../DoctorServiceItem';
 import styles from './DoctorServices.module.scss';
 
 const DoctorServices = ({ show, data, onChange, clinicServices }) => {
-
   const handleServiceSelected = (service, price, percentage, isSelected) => {
     let newList = cloneDeep(data.services);
     if (isSelected) {
-      if (newList.some(item => item.serviceId === service.id)) {
-        newList = newList.map(item => {
+      if (newList.some((item) => item.serviceId === service.id)) {
+        newList = newList.map((item) => {
           if (item.serviceId !== service.id) return item;
           return {
             serviceId: service.id,
@@ -30,24 +28,24 @@ const DoctorServices = ({ show, data, onChange, clinicServices }) => {
         });
       }
     } else {
-      remove(newList, item => item.serviceId === service.id);
+      remove(newList, (item) => item.serviceId === service.id);
     }
     onChange(newList);
   };
 
-  const sortedServices = sortBy(clinicServices, item => item.name);
+  const sortedServices = sortBy(clinicServices, (item) => item.name);
   const classes = clsx(styles.doctorServices);
   return (
     <div className={classes} style={{ height: show ? 'unset' : 0 }}>
-      {sortedServices.map(service => (
+      {sortedServices.map((service) => (
         <DoctorServiceItem
           key={`${service.id}-service`}
           service={service}
           doctorService={data.services.find(
-            item => item.serviceId === service.id,
+            (item) => item.serviceId === service.id,
           )}
           onSelected={handleServiceSelected}
-          selected={data.services.some(item => item.serviceId === service.id)}
+          selected={data.services.some((item) => item.serviceId === service.id)}
         />
       ))}
     </div>

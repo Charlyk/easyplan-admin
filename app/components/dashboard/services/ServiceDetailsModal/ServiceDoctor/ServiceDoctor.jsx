@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
-
-import SwitchButton from '../../../../common/SwitchButton';
-import EASTextField from "../../../../common/EASTextField";
+import EASTextField from 'app/components/common/EASTextField';
+import SwitchButton from 'app/components/common/SwitchButton';
 import styles from './ServiceDoctor.module.scss';
 
 const ServiceDoctor = ({ serviceData, clinic, onChange }) => {
@@ -75,23 +74,21 @@ const ServiceDoctor = ({ serviceData, clinic, onChange }) => {
       </div>
       <div className={styles.fields}>
         <EASTextField
-          type="number"
+          type='number'
           containerClass={styles.field}
           readOnly={isPercentageDisabled}
           value={String(doctorService.percentage)}
-          placeholder="0"
-          endAdornment={
-            <Typography className={styles.adornment}>%</Typography>
-          }
+          placeholder='0'
+          endAdornment={<Typography className={styles.adornment}>%</Typography>}
           onChange={handlePercentageChange}
         />
 
         <EASTextField
-          type="number"
+          type='number'
           containerClass={styles.field}
           readOnly={isPriceDisabled}
           value={String(doctorService.price)}
-          placeholder="0"
+          placeholder='0'
           endAdornment={
             <Typography className={styles.adornment}>
               {clinic?.currency || 'MDL'}

@@ -20,7 +20,7 @@ const Doctors = ({ fallback, statistics, query: initialQuery, authToken }) => {
   );
 };
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   try {
     if (query.fromDate == null) {
       query.fromDate = moment().startOf('month').format('YYYY-MM-DD');

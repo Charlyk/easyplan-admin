@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-import { Statuses } from '../../../../utils/constants';
+import { Statuses } from 'app/utils/constants';
 
 export const initialState = {
   details: null,

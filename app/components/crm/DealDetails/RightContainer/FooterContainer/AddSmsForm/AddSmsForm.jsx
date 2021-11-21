@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
-import { charactersRegex } from "../../../../../dashboard/messages/CreateMessageDialog/CreateMessageDialog.constants";
-import { textForKey } from "../../../../../../utils/localization";
-import LoadingButton from "../../../../../common/LoadingButton";
-import EASTextarea from "../../../../../common/EASTextarea";
+import EASTextarea from 'app/components/common/EASTextarea';
+import LoadingButton from 'app/components/common/LoadingButton';
+import { charactersRegex } from 'app/components/dashboard/messages/CreateMessageDialog/CreateMessageDialog.constants';
+import { textForKey } from 'app/utils/localization';
 import styles from './AddSmsForm.module.scss';
 
 const AddSmsForm = ({ isLoading, onSubmit }) => {
@@ -32,7 +32,7 @@ const AddSmsForm = ({ isLoading, onSubmit }) => {
       return;
     }
     onSubmit?.(messageText);
-  }
+  };
 
   return (
     <form className={styles.addNoteForm} onSubmit={handleSubmit}>
@@ -45,18 +45,18 @@ const AddSmsForm = ({ isLoading, onSubmit }) => {
         placeholder={textForKey('Enter new message')}
         onChange={setMessageText}
       />
-      <Box marginTop={.5}>
+      <Box marginTop={0.5}>
         <LoadingButton
           isLoading={isLoading}
           disabled={isLoading || messageText.length === 0 || isLengthExceeded}
-          className="positive-button"
+          className='positive-button'
           onClick={handleSubmit}
         >
           {textForKey('Send message')}
         </LoadingButton>
       </Box>
     </form>
-  )
+  );
 };
 
 export default AddSmsForm;

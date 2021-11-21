@@ -10,7 +10,7 @@ import redirectToUrl from 'app/utils/redirectToUrl';
 import { getServicesStatistics } from 'middleware/api/analytics';
 import { fetchAppData } from 'middleware/api/initialization';
 
-export default function Services({ fallback, statistics, query, authToken }) {
+const Services = ({ fallback, statistics, query, authToken }) => {
   return (
     <SWRConfig value={{ fallback }}>
       <MainComponent currentPath='/analytics/services' authToken={authToken}>
@@ -18,9 +18,11 @@ export default function Services({ fallback, statistics, query, authToken }) {
       </MainComponent>
     </SWRConfig>
   );
-}
+};
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export default Services;
+
+export const getServerSideProps = async ({ req, query }) => {
   try {
     if (query.page == null) {
       query.page = 0;

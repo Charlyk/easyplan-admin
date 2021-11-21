@@ -1,1 +1,1 @@
-export const imageModalSelector = state => state.imageModal;
+export const imageModalSelector = (state) => state.imageModal;

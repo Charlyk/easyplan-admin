@@ -1,23 +1,23 @@
 import React, { useEffect, useReducer } from 'react';
-import dynamic from 'next/dynamic';
-import { remove, cloneDeep, isEqual } from 'lodash';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { remove, cloneDeep, isEqual } from 'lodash';
+import dynamic from 'next/dynamic';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import CircularProgress from "@material-ui/core/CircularProgress";
-
-import IconClose from '../../../icons/iconClose';
-import IconSuccess from '../../../icons/iconSuccess';
-import { Role } from '../../../../utils/constants';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { textForKey } from '../../../../utils/localization';
-import LeftSideModal from '../../../common/LeftSideModal';
-import LoadingButton from '../../../common/LoadingButton';
+import LeftSideModal from 'app/components/common/LeftSideModal';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconClose from 'app/components/icons/iconClose';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import {
   deleteUserHoliday,
   getUserDetails,
-  updateUserDetails
-} from "../../../../../middleware/api/users";
+  updateUserDetails,
+} from 'middleware/api/users';
+import styles from './UserDetailsModal.module.scss';
 import reducer, {
   initialData,
   initialState,
@@ -28,21 +28,13 @@ import reducer, {
   setIsLoading,
   resetState,
 } from './UserDetailsModal.reducer';
-import styles from './UserDetailsModal.module.scss';
 
 const CreateHolidayModal = dynamic(() => import('./CreateHolidayModal'));
 const DoctorForm = dynamic(() => import('./DoctorForm'));
 
-const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
-  const [
-    {
-      isSaving,
-      userData,
-      isCreatingHoliday,
-      isLoading,
-    },
-    localDispatch
-  ] = useReducer(reducer, initialState);
+const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
+  const [{ isSaving, userData, isCreatingHoliday, isLoading }, localDispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(() => {
     if (!show) {
@@ -67,11 +59,11 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
           holidays: userDetails.holidays,
           braces: userDetails.braces,
           workdays:
-            userDetails.workdays?.map(item => ({
+            userDetails.workdays?.map((item) => ({
               ...item,
               selected: !item.isDayOff,
             })) || [],
-        })
+        }),
       );
     } catch (error) {
       toast.error(error.message);
@@ -84,17 +76,17 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
     onClose();
   };
 
-  const handleFormChange = newData => {
+  const handleFormChange = (newData) => {
     localDispatch(setUserData({ ...userData, ...newData }));
   };
 
   const saveUser = async () => {
-    const newServices = userData.services.map(item => {
+    const newServices = userData.services.map((item) => {
       if (item.price != null || item.percentage != null) return item;
       return { ...item, price: 0 };
     });
 
-    const newBraces = userData.braces.map(item => {
+    const newBraces = userData.braces.map((item) => {
       if (item.price != null || item.percentage != null) return item;
       return { ...item, price: 0 };
     });
@@ -110,7 +102,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
     }
   };
 
-  const updateUser = async requestBody => {
+  const updateUser = async (requestBody) => {
     try {
       await updateUserDetails(user.id, requestBody);
       handleModalClose();
@@ -125,21 +117,21 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
     localDispatch(setIsSaving(false));
   };
 
-  const handleCreateHoliday = holiday => {
+  const handleCreateHoliday = (holiday) => {
     localDispatch(setIsCreatingHoliday({ open: true, holiday: holiday }));
   };
 
-  const handleHolidayDelete = async holiday => {
+  const handleHolidayDelete = async (holiday) => {
     if (holiday.id == null) {
       const newHolidays = cloneDeep(userData.holidays);
-      remove(newHolidays, item => isEqual(item, holiday));
+      remove(newHolidays, (item) => isEqual(item, holiday));
       localDispatch(setUserHolidays(newHolidays));
       return;
     }
     try {
       await deleteUserHoliday(user.id, holiday.id);
       const newHolidays = cloneDeep(userData.holidays);
-      remove(newHolidays, item => item.id === holiday.id);
+      remove(newHolidays, (item) => item.id === holiday.id);
       localDispatch(setUserHolidays(newHolidays));
     } catch (error) {
       toast.error(error.message);
@@ -151,17 +143,17 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
       (first.id != null && second.id != null && first.id === second.id) ||
       (isEqual(first.startDate, second.startDate) &&
         isEqual(first.endDate, second.endDate))
-    )
-  }
+    );
+  };
 
-  const handleSaveHoliday = holiday => {
+  const handleSaveHoliday = (holiday) => {
     let newHolidays = cloneDeep(userData.holidays);
-    const exists = newHolidays.some(item => {
-      return areSameHolidays(item, holiday)
-    })
+    const exists = newHolidays.some((item) => {
+      return areSameHolidays(item, holiday);
+    });
     if (exists) {
       // holiday already in the list so we need just to update it
-      newHolidays = newHolidays.map(item => {
+      newHolidays = newHolidays.map((item) => {
         if (!areSameHolidays(item, holiday)) return item;
         return {
           ...item,
@@ -176,11 +168,11 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
     }
 
     localDispatch(setUserHolidays(newHolidays));
-    localDispatch(setIsCreatingHoliday({ open: false, holiday: null }))
+    localDispatch(setIsCreatingHoliday({ open: false, holiday: null }));
   };
 
   const handleCloseHolidayModal = () => {
-    localDispatch(setIsCreatingHoliday({ open: false, holiday: null }))
+    localDispatch(setIsCreatingHoliday({ open: false, holiday: null }));
   };
 
   const steps = [textForKey('Users')];
@@ -220,14 +212,16 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
               )}
               {isLoading && (
                 <div className='progress-bar-wrapper'>
-                  <CircularProgress classes={{ root: 'circular-progress-bar'}}/>
+                  <CircularProgress
+                    classes={{ root: 'circular-progress-bar' }}
+                  />
                 </div>
               )}
             </div>
             <div className={styles.footer}>
               <Button className='cancel-button' onClick={handleModalClose}>
                 {textForKey('Close')}
-                <IconClose/>
+                <IconClose />
               </Button>
               <LoadingButton
                 onClick={handleSaveForm}
@@ -236,7 +230,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic, role }) => {
                 isLoading={isSaving}
               >
                 {textForKey('Save')}
-                {!isSaving && <IconSuccess/>}
+                {!isSaving && <IconSuccess />}
               </LoadingButton>
             </div>
           </>

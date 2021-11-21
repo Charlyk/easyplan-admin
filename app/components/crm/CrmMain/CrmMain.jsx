@@ -1,44 +1,45 @@
-import React, { useEffect, useMemo, useReducer, useRef } from "react";
-import dynamic from 'next/dynamic';
-import { useRouter } from "next/router";
-import moment from "moment-timezone";
-import PropTypes from 'prop-types';
-import orderBy from "lodash/orderBy";
-import upperFirst from 'lodash/upperFirst';
-import { toast } from "react-toastify";
-import AudioPlayer from 'react-h5-audio-player';
-import Zoom from '@material-ui/core/Zoom';
-import Fab from "@material-ui/core/Fab";
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import Zoom from '@material-ui/core/Zoom';
 import IconFilter from '@material-ui/icons/FilterList';
-import IconButton from "@material-ui/core/IconButton";
-import IconReminders from '@material-ui/icons/NotificationsActiveOutlined'
-import Typography from "@material-ui/core/Typography";
+import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
+import orderBy from 'lodash/orderBy';
+import upperFirst from 'lodash/upperFirst';
+import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useDispatch, useSelector } from "react-redux";
+import AudioPlayer from 'react-h5-audio-player';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import HorizontalScrollHelper from 'app/components/common/HorizontalScrollHelper';
+import IconClose from 'app/components/icons/iconClose';
+import { Role } from 'app/utils/constants';
+import extractCookieByName from 'app/utils/extractCookieByName';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import setDocCookies from 'app/utils/setDocCookies';
 import {
   fetchAllDealStates,
   requestChangeDealColumn,
   requestConfirmFirstContact,
   requestFetchRemindersCount,
   updateDealState,
-} from "../../../../middleware/api/crm";
-import { setAppointmentModal } from "../../../../redux/actions/actions";
+} from 'middleware/api/crm';
+import { setAppointmentModal } from 'redux/actions/actions';
 import {
   newReminderSelector,
   updatedDealSelector,
-  updatedReminderSelector
-} from "../../../../redux/selectors/crmSelector";
-import extractCookieByName from "../../../utils/extractCookieByName";
-import setDocCookies from "../../../utils/setDocCookies";
-import { textForKey } from "../../../utils/localization";
-import onRequestError from "../../../utils/onRequestError";
-import { Role } from "../../../utils/constants";
-import HorizontalScrollHelper from "../../common/HorizontalScrollHelper";
-import IconClose from "../../icons/iconClose";
-import RemindersModal from "../RemindersModal";
-import DealsColumn from "../DealsColumn";
+  updatedReminderSelector,
+} from 'redux/selectors/crmSelector';
+import DealsColumn from '../DealsColumn';
+import RemindersModal from '../RemindersModal';
+import styles from './CrmMain.module.scss';
 import reducer, {
   initialState,
   setColumns,
@@ -59,13 +60,14 @@ import reducer, {
   setShowPageConnectModal,
   setActiveRemindersCount,
 } from './CrmMain.reducer';
-import styles from './CrmMain.module.scss';
 
-const ConfirmationModal = dynamic(() => import("../../common/modals/ConfirmationModal"));
-const LinkPatientModal = dynamic(() => import("../LinkPatientModal"));
+const ConfirmationModal = dynamic(() =>
+  import('../../common/modals/ConfirmationModal'),
+);
+const LinkPatientModal = dynamic(() => import('../LinkPatientModal'));
 const DealDetails = dynamic(() => import('../DealDetails'));
 const AddReminderModal = dynamic(() => import('../AddReminderModal'));
-const CrmFilters = dynamic(() => import("./CrmFilters"));
+const CrmFilters = dynamic(() => import('./CrmFilters'));
 
 const COOKIES_KEY = 'crm_filter';
 const COLUMN_WIDTH = 350;
@@ -77,34 +79,41 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   const updateReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);
   const columnsContainerRef = useRef(null);
-  const userClinic = currentUser.clinics.find(item => item.clinicId === currentClinic.id);
-  const [{
-    columns,
-    linkModal,
-    deleteModal,
-    updatedDeal,
-    detailsModal,
-    reminderModal,
-    showFilters,
-    queryParams,
-    activeRemindersCount,
-    showReminders,
-    callToPlay,
-    showPageConnectModal,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const userClinic = currentUser.clinics.find(
+    (item) => item.clinicId === currentClinic.id,
+  );
+  const [
+    {
+      columns,
+      linkModal,
+      deleteModal,
+      updatedDeal,
+      detailsModal,
+      reminderModal,
+      showFilters,
+      queryParams,
+      activeRemindersCount,
+      showReminders,
+      callToPlay,
+      showPageConnectModal,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   const filteredColumns = useMemo(() => {
-    const filterState = (queryParams.states ?? []).map(it => it.id);
-    return columns.filter(item => (
-      (filterState.length === 0 && item.visibleByDefault) ||
-      filterState.includes(item.id)
-    ));
+    const filterState = (queryParams.states ?? []).map((it) => it.id);
+    return columns.filter(
+      (item) =>
+        (filterState.length === 0 && item.visibleByDefault) ||
+        filterState.includes(item.id),
+    );
   }, [columns, queryParams.states]);
 
   useEffect(() => {
     const queryParams = extractCookieByName(COOKIES_KEY);
     const { roleInClinic } = userClinic;
-    const showConnectModal = currentClinic.facebookPages.length === 0 &&
+    const showConnectModal =
+      currentClinic.facebookPages.length === 0 &&
       (roleInClinic === Role.admin || roleInClinic === Role.manager);
     localDispatch(setShowPageConnectModal(showConnectModal));
     if (!queryParams) {
@@ -137,7 +146,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const updateColumns = async (newState) => {
     try {
@@ -147,7 +156,11 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       if (queryParams.states && newState != null) {
         updateParams({
           ...queryParams,
-          states: orderBy([...queryParams.states, newState], ['orderId'], ['asc']),
+          states: orderBy(
+            [...queryParams.states, newState],
+            ['orderId'],
+            ['asc'],
+          ),
         });
       }
     } catch (error) {
@@ -193,7 +206,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       return;
     }
     try {
-      const column = states.find(item => item.type === 'ClosedNotRealized')
+      const column = states.find((item) => item.type === 'ClosedNotRealized');
       if (column == null) {
         return;
       }
@@ -274,20 +287,25 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     const date = createdDate.format('DD');
     const recordUrl = call.callId
       ? `https://sip6215.iphost.md/amocrm/router.php?route=record/get&call_id=${call.callId}`
-      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
-    localDispatch(setCallToPlay({
-      ...call,
-      fullUrl: recordUrl
-    }));
-  }
+      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(
+          ' ',
+          '+',
+        )}`;
+    localDispatch(
+      setCallToPlay({
+        ...call,
+        fullUrl: recordUrl,
+      }),
+    );
+  };
 
   const handleClosePlayer = () => {
-    localDispatch(setCallToPlay(null))
-  }
+    localDispatch(setCallToPlay(null));
+  };
 
   const updateParams = (newParams) => {
     const stringQuery = JSON.stringify(newParams);
-    const encoded = btoa(unescape(encodeURIComponent(stringQuery)))
+    const encoded = btoa(unescape(encodeURIComponent(stringQuery)));
     setDocCookies(COOKIES_KEY, encoded);
     localDispatch(setQueryParams(newParams));
   };
@@ -305,17 +323,17 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
   };
 
   const handleScrollUpdate = (scrollOffset) => {
-    columnsContainerRef.current.scrollLeft = scrollOffset
+    columnsContainerRef.current.scrollLeft = scrollOffset;
   };
 
   const handleCloseConnectSocial = () => {
     localDispatch(setShowPageConnectModal(false));
-  }
+  };
 
   const handleConnectSocial = async () => {
     handleCloseConnectSocial();
     await router.replace('/settings?menu=crmSettings');
-  }
+  };
 
   return (
     <div className={styles.crmMain}>
@@ -375,11 +393,15 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         />
       )}
       <div className={styles.buttonsContainer}>
-        <Zoom unmountOnExit in={!detailsModal.open && !showReminders} timeout={300}>
-          <Tooltip title={textForKey('crm_reminders')} placement="left">
+        <Zoom
+          unmountOnExit
+          in={!detailsModal.open && !showReminders}
+          timeout={300}
+        >
+          <Tooltip title={textForKey('crm_reminders')} placement='left'>
             <Fab
-              size="medium"
-              aria-label="filter"
+              size='medium'
+              aria-label='filter'
               className={styles.remindersFab}
               onClick={handleOpenReminders}
             >
@@ -388,29 +410,30 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
                   {activeRemindersCount}
                 </Typography>
               </div>
-              <IconReminders/>
+              <IconReminders />
             </Fab>
           </Tooltip>
         </Zoom>
-        <Zoom unmountOnExit in={!detailsModal.open && !showReminders} timeout={300}>
-          <Tooltip title={textForKey('Filter')} placement="left">
+        <Zoom
+          unmountOnExit
+          in={!detailsModal.open && !showReminders}
+          timeout={300}
+        >
+          <Tooltip title={textForKey('Filter')} placement='left'>
             <Fab
               className={styles.fab}
-              size="medium"
-              aria-label="filter"
+              size='medium'
+              aria-label='filter'
               onClick={handleOpenFilter}
             >
-              <IconFilter/>
+              <IconFilter />
             </Fab>
           </Tooltip>
         </Zoom>
       </div>
       {callToPlay != null && (
         <div className={styles.playerContainer}>
-          <IconButton
-            className={styles.closeIcon}
-            onClick={handleClosePlayer}
-          >
+          <IconButton className={styles.closeIcon} onClick={handleClosePlayer}>
             <IconClose />
           </IconButton>
           <AudioPlayer
@@ -425,17 +448,14 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         </div>
       )}
       <DndProvider backend={HTML5Backend}>
-        <div
-          ref={columnsContainerRef}
-          className={styles.columnsContainer}
-        >
+        <div ref={columnsContainerRef} className={styles.columnsContainer}>
           {filteredColumns.map((dealState, index) => (
             <DealsColumn
               key={dealState.id}
               width={COLUMN_WIDTH}
               filterData={queryParams}
               isFirst={index === 0}
-              isLast={index === (states.length - 1)}
+              isLast={index === states.length - 1}
               updatedDeal={updatedDeal}
               currentClinic={currentClinic}
               dealState={dealState}
@@ -458,11 +478,11 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         onScrollUpdate={handleScrollUpdate}
         position={{
           bottom: '1rem',
-          right: '5rem'
+          right: '5rem',
         }}
       />
     </div>
-  )
+  );
 };
 
 export default CrmMain;
@@ -473,11 +493,13 @@ CrmMain.propTypes = {
   }),
   currentUser: PropTypes.any,
   currentClinic: PropTypes.any,
-  states: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    color: PropTypes.string,
-    orderId: PropTypes.number,
-    deleteable: PropTypes.bool,
-  })),
-}
+  states: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      color: PropTypes.string,
+      orderId: PropTypes.number,
+      deleteable: PropTypes.bool,
+    }),
+  ),
+};

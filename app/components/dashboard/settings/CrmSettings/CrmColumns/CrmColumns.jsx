@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { textForKey } from "../../../../../utils/localization";
-import styles from './CrmColumns.module.scss'
-import onRequestError from "../../../../../utils/onRequestError";
-import { requestFetchAllDealStates, requestUpdateDealStateVisibility } from "../../../../../../middleware/api/crm";
-import Typography from "@material-ui/core/Typography";
-import SwitchButton from "../../../../common/SwitchButton";
-import { Tooltip } from "@material-ui/core";
+import React, { useEffect, useState } from 'react';
+import { Tooltip } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import SwitchButton from 'app/components/common/SwitchButton';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import {
+  requestFetchAllDealStates,
+  requestUpdateDealStateVisibility,
+} from 'middleware/api/crm';
+import styles from './CrmColumns.module.scss';
 
-const CrmColumns = ({ currentUser, currentClinic }) => {
+const CrmColumns = () => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
     fetchAllStates();
-  }, [])
+  }, []);
 
   const fetchAllStates = async () => {
     try {
@@ -28,16 +31,16 @@ const CrmColumns = ({ currentUser, currentClinic }) => {
       await requestUpdateDealStateVisibility({ columnId: column.id, visible });
       await fetchAllStates();
     } catch (error) {
-      onRequestError(error)
+      onRequestError(error);
     }
-  }
+  };
 
   return (
     <div className={styles.crmColumns}>
       <span className={styles.formTitle}>{textForKey('Columns')}</span>
       <div className={styles.dataContainer}>
         {items.map((state) => (
-          <div className={styles.item}>
+          <div key={state.id} className={styles.item}>
             <Typography className={styles.itemTitle}>{state.name}</Typography>
             <Tooltip title={textForKey('visible_by_default')}>
               <SwitchButton
@@ -49,7 +52,7 @@ const CrmColumns = ({ currentUser, currentClinic }) => {
         ))}
       </div>
     </div>
-  )
+  );
 };
 
 export default CrmColumns;

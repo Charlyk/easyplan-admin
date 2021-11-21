@@ -57,7 +57,7 @@ export const reducer = (state, action) => {
           };
         }),
       };
-    case reducerTypes.setData:
+    case reducerTypes.setData: {
       const { hours, schedules } = action.payload;
       return {
         ...state,
@@ -73,6 +73,7 @@ export const reducer = (state, action) => {
           };
         }),
       };
+    }
     case reducerTypes.addSchedule: {
       const newSchedule = action.payload;
       const scheduleDate = moment(newSchedule.startTime).format('YYYY-MM-DD');

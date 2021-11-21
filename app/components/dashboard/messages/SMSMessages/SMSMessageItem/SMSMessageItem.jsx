@@ -10,9 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-
-import IconMore from '../../../../icons/iconMore';
-import { getAppLanguage, textForKey } from '../../../../../utils/localization';
+import IconMore from 'app/components/icons/iconMore';
+import { getAppLanguage, textForKey } from 'app/utils/localization';
 import styles from './SMSMessageItem.module.scss';
 
 const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
@@ -31,7 +30,9 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
         return message.hourToSendAt;
       case 'HolidayCongrats':
       case 'PromotionalMessage':
-        return `${moment(message.dateToSend).format('DD MMMM')} ${message.hourToSendAt}`;
+        return `${moment(message.dateToSend).format('DD MMMM')} ${
+          message.hourToSendAt
+        }`;
       default:
         return '-';
     }
@@ -63,17 +64,26 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
       anchorEl={menuAnchor.current}
       classes={{ list: styles['message-menu'] }}
     >
-      <MenuItem classes={{ root: styles['menu-item'] }} onClick={handleEditItem}>
+      <MenuItem
+        classes={{ root: styles['menu-item'] }}
+        onClick={handleEditItem}
+      >
         <Typography classes={{ root: styles['item-text'] }}>
           {textForKey('edit')}
         </Typography>
       </MenuItem>
-      <MenuItem classes={{ root: styles['menu-item'] }} onClick={handleDisableItem}>
+      <MenuItem
+        classes={{ root: styles['menu-item'] }}
+        onClick={handleDisableItem}
+      >
         <Typography classes={{ root: styles['item-text'] }}>
           {message.disabled ? textForKey('enable') : textForKey('disable')}
         </Typography>
       </MenuItem>
-      <MenuItem classes={{ root: styles['menu-item'] }} onClick={handleDeleteItem}>
+      <MenuItem
+        classes={{ root: styles['menu-item'] }}
+        onClick={handleDeleteItem}
+      >
         <Typography classes={{ root: styles['item-text'] }}>
           {textForKey('delete')}
         </Typography>
@@ -82,7 +92,13 @@ const SMSMessageItem = ({ message, onEdit, onDisable, onDelete }) => {
   );
 
   return (
-    <TableRow classes={{ root: clsx(styles['message-item-row'], { [styles.disabled]: message.disabled }) }}>
+    <TableRow
+      classes={{
+        root: clsx(styles['message-item-row'], {
+          [styles.disabled]: message.disabled,
+        }),
+      }}
+    >
       {moreMenu}
       <TableCell classes={{ root: styles['message-title'] }}>
         <Typography noWrap classes={{ root: styles['message-title'] }}>

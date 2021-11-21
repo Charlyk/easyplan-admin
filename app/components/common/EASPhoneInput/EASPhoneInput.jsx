@@ -1,22 +1,20 @@
-import React, { useState } from "react";
-import clsx from "clsx";
-import PhoneInput from "react-phone-input-2";
-import Typography from "@material-ui/core/Typography";
-import isPhoneInputValid from "../../../utils/isPhoneInputValid";
+import React, { useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import PhoneInput from 'react-phone-input-2';
+import isPhoneInputValid from 'app/utils/isPhoneInputValid';
+import { textForKey } from 'app/utils/localization';
 import styles from './EASPhoneInput.module.scss';
-import { textForKey } from "../../../utils/localization";
 
-const EASPhoneInput = (
-  {
-    value,
-    fieldLabel,
-    country = 'md',
-    placeholder = '079123456',
-    helperText,
-    rootClass,
-    onChange
-  }
-) => {
+const EASPhoneInput = ({
+  value,
+  fieldLabel,
+  country = 'md',
+  placeholder = '079123456',
+  helperText,
+  rootClass,
+  onChange,
+}) => {
   const [focused, setFocused] = useState(false);
   const [isValid, setIsValid] = useState(true);
 
@@ -28,13 +26,10 @@ const EASPhoneInput = (
     <div className={clsx(styles.inputRoot, rootClass)}>
       {fieldLabel && (
         <Typography
-          className={clsx(
-            styles.formLabel,
-            {
-              [styles.focused]: focused && isValid,
-              [styles.error]: !isValid,
-            }
-          )}
+          className={clsx(styles.formLabel, {
+            [styles.focused]: focused && isValid,
+            [styles.error]: !isValid,
+          })}
         >
           {fieldLabel}
         </Typography>
@@ -59,18 +54,15 @@ const EASPhoneInput = (
       />
       {(helperText || !isValid) && (
         <Typography
-          className={clsx(
-            styles.helperText,
-            {
-              [styles.error]: !isValid
-            }
-          )}
+          className={clsx(styles.helperText, {
+            [styles.error]: !isValid,
+          })}
         >
           {isValid ? helperText : textForKey('phone_invalid_message')}
         </Typography>
       )}
     </div>
-  )
+  );
 };
 
 export default EASPhoneInput;

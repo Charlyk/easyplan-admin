@@ -1,27 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
+import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from "next/router";
-import { usePubNub } from "pubnub-react";
-import useSWR from "swr";
-import Head from "next/head";
-import { signOut } from "../../../../middleware/api/auth";
-import { environment, isDev } from "../../../../eas.config";
-import { triggerUserLogout } from '../../../../redux/actions/actions';
-import { userClinicAccessChangeSelector } from "../../../../redux/selectors/clinicDataSelector";
-import { setClinic } from "../../../../redux/actions/clinicActions";
-import { APP_DATA_API } from "../../../utils/constants";
-import { textForKey } from '../../../utils/localization';
-import { handleRemoteMessage } from "../../../utils/pubnubUtils";
-import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
-import IconArrowDown from '../../icons/iconArrowDown';
-import PageHeader from '../../common/MainComponent/PageHeader/PageHeader';
+import useSWR from 'swr';
+import PageHeader from 'app/components/common/MainComponent/PageHeader/PageHeader';
+import IconArrowDown from 'app/components/icons/iconArrowDown';
+import { APP_DATA_API } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import { handleRemoteMessage } from 'app/utils/pubnubUtils';
+import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
+import { environment, isDev } from 'eas.config';
+import { signOut } from 'middleware/api/auth';
+import { triggerUserLogout } from 'redux/actions/actions';
+import { setClinic } from 'redux/actions/clinicActions';
+import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
 import styles from './DoctorsMain.module.scss';
 
-const ClinicSelector = dynamic(() => import('../../common/ClinicSelector'));
-const EditProfileModal = dynamic(() => import('../../common/modals/EditProfileModal'));
+const ClinicSelector = dynamic(() =>
+  import('app/components/common/ClinicSelector'),
+);
+const EditProfileModal = dynamic(() =>
+  import('app/components/common/modals/EditProfileModal'),
+);
 
 const DoctorsMain = ({ children, pageTitle, authToken }) => {
   const { data } = useSWR(APP_DATA_API);
@@ -38,7 +43,7 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
   );
 
   useEffect(() => {
-    redirectIfOnGeneralHost(currentUser, router)
+    redirectIfOnGeneralHost(currentUser, router);
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }
@@ -75,9 +80,9 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
     }
     try {
       await signOut();
-      await router.replace(router.asPath)
+      await router.replace(router.asPath);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -97,7 +102,7 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
     const [_, domain, location] = window.location.host.split('.');
     const { protocol } = window.location;
     const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}`;
-    window.open(clinicUrl, '_blank')
+    window.open(clinicUrl, '_blank');
     handleCompanyClose();
   };
 
@@ -142,9 +147,7 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
           onLogout={handleStartLogout}
           titleComponent={
             <ClickAwayListener onClickAway={handleCompanyClose}>
-              <div
-                role='button'
-                tabIndex={0}
+              <Box
                 className={styles.companySelectorContainer}
                 ref={buttonRef}
                 onClick={handleCompanyOpen}
@@ -152,7 +155,7 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
                 <span className={styles.clinicName}>
                   {selectedClinic?.clinicName || textForKey('Create clinic')}
                 </span>
-                <IconArrowDown fill='#34344E'/>
+                <IconArrowDown fill='#34344E' />
                 <ClinicSelector
                   open={isSelectorOpen}
                   anchorEl={buttonRef}
@@ -161,20 +164,17 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
                   onClose={handleCompanyClose}
                   onChange={handleCompanyChange}
                 />
-              </div>
+              </Box>
             </ClickAwayListener>
           }
         />
       </div>
       <div className={styles.doctorDataContainer}>
-        {React.cloneElement(
-          children,
-          {
-            ...children.props,
-            currentUser,
-            currentClinic,
-          }
-        )}
+        {React.cloneElement(children, {
+          ...children.props,
+          currentUser,
+          currentClinic,
+        })}
       </div>
     </div>
   );

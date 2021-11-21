@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Chip from "@material-ui/core/Chip";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
+import React, { useEffect, useState } from 'react';
+import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import ShareIcon from '@material-ui/icons/Share';
+import EASTextField from 'app/components/common/EASTextField';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   requestCreateTag,
   requestDeleteTag,
-  requestFetchTags
-} from "../../../../../../middleware/api/tags";
-import { textForKey } from "../../../../../utils/localization";
-import onRequestError from "../../../../../utils/onRequestError";
-import EASTextField from "../../../../common/EASTextField";
+  requestFetchTags,
+} from 'middleware/api/tags';
 import styles from './ClinicTags.module.scss';
 
 const ClinicTags = ({ onShare }) => {
@@ -20,7 +20,7 @@ const ClinicTags = ({ onShare }) => {
 
   useEffect(() => {
     fetchClinicTags();
-  }, [])
+  }, []);
 
   const fetchClinicTags = async () => {
     try {
@@ -35,14 +35,14 @@ const ClinicTags = ({ onShare }) => {
     if (event.key === 'Enter') {
       handleCreateTag();
     }
-  }
+  };
 
   const handleCreateTag = async () => {
     try {
       const response = await requestCreateTag(text);
       setTags([response.data, ...tags]);
     } catch (error) {
-      onRequestError(error)
+      onRequestError(error);
     } finally {
       setText('');
     }
@@ -51,19 +51,19 @@ const ClinicTags = ({ onShare }) => {
   const handleDeleteTag = async (tag) => {
     try {
       await requestDeleteTag(tag.id);
-      setTags(tags.filter(item => item.id !== tag.id));
+      setTags(tags.filter((item) => item.id !== tag.id));
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const handleShareTag = (tag) => {
     onShare?.([tag]);
-  }
+  };
 
   const handleShareAllTags = () => {
     onShare?.(tags);
-  }
+  };
 
   return (
     <div className={styles.clinicTags}>
@@ -79,7 +79,7 @@ const ClinicTags = ({ onShare }) => {
         {textForKey('setting_tags_current')}
       </Typography>
       <div className={styles.tagsContainer}>
-        {tags.map(tag => (
+        {tags.map((tag) => (
           <Chip
             key={tag.id}
             label={tag.title}
@@ -88,10 +88,10 @@ const ClinicTags = ({ onShare }) => {
                 className={styles.shareBtn}
                 onClick={() => handleShareTag(tag)}
               >
-                <ShareIcon className={styles.icon}/>
+                <ShareIcon className={styles.icon} />
               </IconButton>
             }
-            variant="outlined"
+            variant='outlined'
             classes={{
               root: styles.tagItem,
               outlined: styles.outlined,
@@ -107,15 +107,15 @@ const ClinicTags = ({ onShare }) => {
           onClick={handleShareAllTags}
           classes={{
             root: styles.shareAllBtn,
-            label: styles.label
+            label: styles.label,
           }}
         >
-          <ShareIcon className={styles.icon}/>
+          <ShareIcon className={styles.icon} />
           {textForKey('setting_tags_share_all')}
         </Button>
       )}
     </div>
-  )
+  );
 };
 
 export default ClinicTags;

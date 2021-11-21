@@ -1,19 +1,18 @@
 import React, { useReducer } from 'react';
+import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
-import { useRouter } from "next/router";
-import Typography from "@material-ui/core/Typography";
-import { toast } from "react-toastify";
-import { registerUser } from "../../../../middleware/api/auth";
-import { textForKey } from "../../../utils/localization";
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import { HeaderKeys } from "../../../utils/constants";
-import { isDev } from "../../../../eas.config";
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
+import { isDev } from 'eas.config';
+import { registerUser } from 'middleware/api/auth';
+import EASImage from '../EASImage';
+import styles from './RegistrationWrapper.module.scss';
 import reducer, {
   initialState,
-  setIsLoading
-} from './registrationWrapperSlice'
-import styles from './RegistrationWrapper.module.scss';
-import EASImage from "../EASImage";
+  setIsLoading,
+} from './registrationWrapperSlice';
 
 const RegisterForm = dynamic(() => import('./RegisterForm'));
 
@@ -21,7 +20,10 @@ export default function RegistrationWrapper({ isMobile }) {
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;
-  const [{ errorMessage, isLoading }, dispatch] = useReducer(reducer, initialState);
+  const [{ errorMessage, isLoading }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   const handleOpenLogin = () => {
     router.back();
@@ -45,14 +47,14 @@ export default function RegistrationWrapper({ isMobile }) {
     } finally {
       dispatch(setIsLoading(false));
     }
-  }
+  };
 
   return (
     <div className={styles.registerFormRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <EASImage
-          src="settings/easyplan-logo.svg"
+          src='settings/easyplan-logo.svg'
           classes={{
             root: styles.logoContainer,
             image: styles.logoImage,
@@ -67,7 +69,10 @@ export default function RegistrationWrapper({ isMobile }) {
         }}
       >
         {isMobileDevice && (
-          <EASImage src="settings/easyplan-logo.svg" className={styles.logoImage}/>
+          <EASImage
+            src='settings/easyplan-logo.svg'
+            className={styles.logoImage}
+          />
         )}
         <RegisterForm
           isMobile={isMobileDevice}
@@ -79,4 +84,4 @@ export default function RegistrationWrapper({ isMobile }) {
       </div>
     </div>
   );
-};
+}

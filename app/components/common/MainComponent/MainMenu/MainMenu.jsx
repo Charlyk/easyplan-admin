@@ -313,7 +313,7 @@ const MainMenu = ({
                       if (!child.roles.includes(userClinic?.roleInClinic))
                         return null;
                       return (
-                        <Link href={child.href} key={child.href}>
+                        <Link passHref href={child.href} key={child.href}>
                           <ListItem
                             classes={{
                               root: clsx(styles.listItem, styles.child),
@@ -345,7 +345,7 @@ const MainMenu = ({
               return null;
             }
             return (
-              <Link href={item.href} key={item.id}>
+              <Link passHref href={item.href} key={item.id}>
                 <ListItem
                   ref={item.id === 'crm' ? setCrmDashboardRef : null}
                   classes={{ root: styles.listItem, selected: styles.selected }}

@@ -1,12 +1,14 @@
-import React from "react";
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import moment from "moment-timezone";
-import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../../../utils/localization";
+import { textForKey } from 'app/utils/localization';
 import styles from './LogItem.module.scss';
 
 const LogItem = ({ log, isFirst, isLast }) => {
-  const userName = log.user ? `${log.user.firstName} ${log.user.lastName}` : textForKey('System');
+  const userName = log.user
+    ? `${log.user.firstName} ${log.user.lastName}`
+    : textForKey('System');
   return (
     <div
       className={styles.logItem}
@@ -16,13 +18,13 @@ const LogItem = ({ log, isFirst, isLast }) => {
       }}
     >
       <Typography className={styles.noteText}>
-        {moment(log.created).format('DD.MM.YYYY HH:mm')}{' '}
-        {userName}{' - '}
+        {moment(log.created).format('DD.MM.YYYY HH:mm')} {userName}
+        {' - '}
         {textForKey(`crm_log_action_${log.action}`)}:{' '}
         <span className={styles.payload}>{log.payload}</span>
       </Typography>
     </div>
-  )
+  );
 };
 
 export default LogItem;

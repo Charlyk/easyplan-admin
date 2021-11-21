@@ -1,23 +1,29 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux';
-
-import { requestCreatePatient } from "../../../../../middleware/api/patients";
-import { togglePatientsListUpdate } from '../../../../../redux/actions/actions';
-import { textForKey } from '../../../../utils/localization';
-import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import { EmailRegex, HeaderKeys, Languages, PatientSources } from "../../../../utils/constants";
-import EASModal from "../../../common/modals/EASModal";
-import EASTextField from "../../../common/EASTextField";
-import EASPhoneInput from "../../../common/EASPhoneInput";
-import EASSelect from "../../../common/EASSelect";
-import { reducer, initialState, actions } from './CreatePatientModal.reducer';
+import { toast } from 'react-toastify';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import {
+  EmailRegex,
+  HeaderKeys,
+  Languages,
+  PatientSources,
+} from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import { requestCreatePatient } from 'middleware/api/patients';
+import { togglePatientsListUpdate } from 'redux/actions/actions';
 import styles from './CreatePatientModal.module.scss';
+import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 
-const EasyDatePicker = dynamic(() => import('../../../common/EasyDatePicker'));
+const EasyDatePicker = dynamic(() =>
+  import('app/components/common/EasyDatePicker'),
+);
 
 const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
   const dispatch = useDispatch();
@@ -97,7 +103,9 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
     localDispatch(
       actions.setPhoneNumber({
         phoneNumber: value.replace(country.dialCode, ''),
-        isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+        isPhoneValid:
+          isPhoneNumberValid(value, country) &&
+          !event.target?.classList.value.includes('invalid-number'),
         country,
       }),
     );
@@ -146,14 +154,14 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
       <form onSubmit={handleSavePatient} className={styles.formContainer}>
         <div className={styles['first-and-last-name']}>
           <EASTextField
-            type="text"
+            type='text'
             containerClass={styles.nameField}
             fieldLabel={textForKey('Last name')}
             value={lastName}
             onChange={handlePatientLastNameChange}
           />
           <EASTextField
-            type="text"
+            type='text'
             containerClass={styles.nameField}
             fieldLabel={textForKey('First name')}
             value={firstName}
@@ -170,12 +178,14 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         />
 
         <EASTextField
-          type="email"
+          type='email'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Email')}
           value={email}
           error={!isEmailFieldValid}
-          helperText={isEmailFieldValid ? null : textForKey('email_invalid_message')}
+          helperText={
+            isEmailFieldValid ? null : textForKey('email_invalid_message')
+          }
           onChange={handlePatientEmailChange}
         />
 
@@ -189,7 +199,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
 
         <EASSelect
           label={textForKey('spoken_language')}
-          labelId="spoken-language-select"
+          labelId='spoken-language-select'
           options={Languages}
           value={language}
           rootClass={styles.simpleField}
@@ -198,7 +208,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
 
         <EASSelect
           label={textForKey('patient_source')}
-          labelId="patient-source-select"
+          labelId='patient-source-select'
           options={PatientSources}
           value={source}
           rootClass={styles.simpleField}

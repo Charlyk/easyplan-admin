@@ -1,6 +1,6 @@
 import React from 'react';
 
-function MenuUsers() {
+const MenuUsers = () => {
   return (
     <svg
       width='24'
@@ -16,6 +16,6 @@ function MenuUsers() {
       />
     </svg>
   );
-}
+};
 
 export default React.memo(MenuUsers);

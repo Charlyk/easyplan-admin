@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconRefresh from '../../../icons/iconRefresh';
-import LoadingButton from '../../../common/LoadingButton';
-import { textForKey } from '../../../../utils/localization';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconRefresh from 'app/components/icons/iconRefresh';
+import { textForKey } from 'app/utils/localization';
 import styles from './StatisticFilter.module.scss';
 
 const StatisticFilter = ({ children, isLoading, onUpdate }) => {

@@ -1,14 +1,17 @@
-import types from '../types/types';
+import types from 'redux/types';
 
 const initialState = Object.freeze({
   open: false,
 });
 
-export default function addPaymentModal(state = initialState, action) {
-  switch (action.type) {
+export default function addPaymentModal(
+  state = initialState,
+  { type, payload } = {},
+) {
+  switch (type) {
     case types.setExchangeRateModalOpen:
       return {
-        open: action.payload,
+        open: payload,
       };
     default:
       return state;

@@ -1,23 +1,23 @@
 import React, { useEffect, useReducer } from 'react';
-import Stepper from '@material-ui/core/Stepper';
+import Box from '@material-ui/core/Box';
+import Modal from '@material-ui/core/Modal';
+import Paper from '@material-ui/core/Paper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
+import Stepper from '@material-ui/core/Stepper';
 import Typography from '@material-ui/core/Typography';
-import Paper from "@material-ui/core/Paper";
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import styles from './DataMigrationModal.module.scss';
 import { usePubNub } from 'pubnub-react';
-import Modal from '@material-ui/core/Modal';
-
-import IconClose from '../../../icons/iconClose';
-import { env } from '../../../../utils/constants';
-import generateReducerActions from '../../../../utils/generateReducerActions';
-import { textForKey } from '../../../../utils/localization';
+import IconClose from 'app/components/icons/iconClose';
+import { env } from 'app/utils/constants';
+import generateReducerActions from 'app/utils/generateReducerActions';
+import { textForKey } from 'app/utils/localization';
 import AuthenticationStep from './AuthenticationStep';
 import DataMigrationFinalStep from './DataMigrationFinalStep';
+import styles from './DataMigrationModal.module.scss';
 import ImportSelectionStep from './ImportSelectionStep';
 
 const steps = [
@@ -203,14 +203,9 @@ const DataMigrationModal = ({ show, currentClinic, authToken, onClose }) => {
         <Typography classes={{ root: styles['modal-title-label'] }}>
           {textForKey('Migrate data from Yclients')}
         </Typography>
-        <div
-          role='button'
-          tabIndex={0}
-          onClick={onClose}
-          className='close-button'
-        >
+        <Box onClick={onClose} className='close-button'>
           <IconClose />
-        </div>
+        </Box>
       </Paper>
       <Modal.Body>{getStepContent(activeStep)}</Modal.Body>
       <Modal.Footer>

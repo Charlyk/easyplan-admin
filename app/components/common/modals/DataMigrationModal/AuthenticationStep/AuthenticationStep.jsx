@@ -2,13 +2,12 @@ import React, { useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-
-import { YClientAPIUrl } from '../../../../../utils/constants';
-import generateReducerActions from '../../../../../utils/generateReducerActions';
-import { textForKey } from '../../../../../utils/localization';
-import LoadingButton from '../../../LoadingButton';
-import EASTextField from "../../../EASTextField";
-import styles from './AuthenticationStep.module.scss'
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import { YClientAPIUrl } from 'app/utils/constants';
+import generateReducerActions from 'app/utils/generateReducerActions';
+import { textForKey } from 'app/utils/localization';
+import styles from './AuthenticationStep.module.scss';
 
 // const initialState = {
 //   username: 'dentino.dentus@gmail.com',
@@ -49,10 +48,8 @@ const reducer = (state, action) => {
 };
 
 const AuthenticationStep = ({ onLogin }) => {
-  const [
-    { username, password, partnerToken, isLoading },
-    localDispatch,
-  ] = useReducer(reducer, initialState);
+  const [{ username, password, partnerToken, isLoading }, localDispatch] =
+    useReducer(reducer, initialState);
 
   const handleFormChange = (targetId) => (newValue) => {
     switch (targetId) {
@@ -104,21 +101,21 @@ const AuthenticationStep = ({ onLogin }) => {
         {textForKey('Authenticate with Yclients account')}
       </Typography>
       <EASTextField
-        type="email"
+        type='email'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Username')}
         value={username}
         onChange={handleFormChange('username')}
       />
       <EASTextField
-        type="password"
+        type='password'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Password')}
         value={password}
         onChange={handleFormChange('password')}
       />
       <EASTextField
-        type="text"
+        type='text'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Partner token')}
         value={partnerToken}

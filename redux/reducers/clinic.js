@@ -1,4 +1,4 @@
-import types from '../types/types';
+import types from 'redux/types';
 
 const initialState = Object.freeze({
   clinic: {
@@ -8,21 +8,21 @@ const initialState = Object.freeze({
   },
 });
 
-export default function clinic(state = initialState, action) {
-  switch (action.type) {
+export default function clinic(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case types.setClinicUsers:
-      return { ...state, clinic: { ...state.clinic, users: action.payload } };
+      return { ...state, clinic: { ...state.clinic, users: payload } };
     case types.setClinicServices:
       return {
         ...state,
-        clinic: { ...state.clinic, services: action.payload },
+        clinic: { ...state.clinic, services: payload },
       };
     case types.setClinicDetails:
-      return { clinic: action.payload };
+      return { clinic: payload };
     case types.setClinicExchangeRatesUpdateRequired:
       return {
         ...state,
-        clinic: { ...state.clinic, updateExchangeRates: action.payload },
+        clinic: { ...state.clinic, updateExchangeRates: payload },
       };
     default:
       return state;

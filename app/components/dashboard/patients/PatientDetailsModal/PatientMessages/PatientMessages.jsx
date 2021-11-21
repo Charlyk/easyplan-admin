@@ -4,24 +4,23 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconPlus from 'app/components/icons/iconPlus';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   requestFetchSmsMessages,
-  requestSendSms
-} from "../../../../../../middleware/api/patients";
-import onRequestError from "../../../../../utils/onRequestError";
-import { textForKey } from '../../../../../utils/localization';
-import IconPlus from '../../../../icons/iconPlus';
-import EASTextField from "../../../../common/EASTextField";
-import LoadingButton from '../../../../common/LoadingButton';
+  requestSendSms,
+} from 'middleware/api/patients';
 import PatientMessage from './PatientMessage';
+import styles from './PatientMessages.module.scss';
 import {
   reducer,
   initialState,
   actions,
-  charactersRegex
+  charactersRegex,
 } from './PatientMessages.reducer';
-import styles from './PatientMessages.module.scss';
 
 const PatientMessages = ({ patient }) => {
   const [state, localDispatch] = useReducer(reducer, initialState);
@@ -101,7 +100,7 @@ const PatientMessages = ({ patient }) => {
       </div>
       <Box display='flex' width='100%' className={styles.actions}>
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.field}
           placeholder={textForKey('Enter new message')}
           value={state.newMessageText}

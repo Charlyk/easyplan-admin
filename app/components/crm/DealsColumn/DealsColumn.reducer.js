@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
-
-import { textForKey } from '../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 
 export const sheetActions = [
   {
@@ -123,7 +122,6 @@ const dealsColumnSlice = createSlice({
             'YYYY-MM-DD HH:mm:ss',
           ),
         };
-        console.log(newDeal);
         state.items = orderBy(
           [...state.items, newDeal],
           ['lastUpdated'],

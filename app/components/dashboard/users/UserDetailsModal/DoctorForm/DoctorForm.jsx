@@ -1,35 +1,42 @@
 import React, { useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-
-import { textForKey } from '../../../../../utils/localization';
-import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { textForKey } from 'app/utils/localization';
 import DoctorBracesSettings from '../DoctorBracesSettings';
 import DoctorHolidays from '../DoctorHolidays';
 import DoctorServices from '../DoctorServices';
 import DoctorWorkHours from '../DoctorWorkHours';
 import styles from './DoctorForm.module.scss';
 
-const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHoliday }) => {
-  const handleServicesChange = services => {
+const DoctorForm = ({
+  data,
+  currentClinic,
+  onChange,
+  onCreateHoliday,
+  onDeleteHoliday,
+}) => {
+  const handleServicesChange = (services) => {
     onChange({ services });
   };
 
-  const handleBracesChange = braces => {
+  const handleBracesChange = (braces) => {
     onChange({ braces });
   };
 
-  const handleWorkDaysChange = workdays => {
+  const handleWorkDaysChange = (workdays) => {
     onChange({ workdays });
   };
 
   const clinicServices = useMemo(() => {
-    const activeServices = currentClinic.services.filter(item => !item.deleted);
-    return sortBy(activeServices, item => item.name.toLowerCase());
+    const activeServices = currentClinic.services.filter(
+      (item) => !item.deleted,
+    );
+    return sortBy(activeServices, (item) => item.name.toLowerCase());
   }, [currentClinic]);
 
   const clinicBraces = useMemo(() => {
-    return currentClinic.braces
+    return currentClinic.braces;
   }, []);
 
   return (
@@ -45,9 +52,7 @@ const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHo
 
       <div className={styles.group}>
         <div className={styles.groupHeader}>
-          <div className={styles.titleContainer}>
-            {textForKey('Holidays')}
-          </div>
+          <div className={styles.titleContainer}>{textForKey('Holidays')}</div>
         </div>
         <DoctorHolidays
           show
@@ -59,11 +64,14 @@ const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHo
 
       <div className={styles.group}>
         <div className={styles.groupHeader}>
-          <div className={styles.titleContainer}>
-            {textForKey('Braces')}
-          </div>
+          <div className={styles.titleContainer}>{textForKey('Braces')}</div>
         </div>
-        <DoctorBracesSettings show clinicBraces={clinicBraces} data={data} onChange={handleBracesChange} />
+        <DoctorBracesSettings
+          show
+          clinicBraces={clinicBraces}
+          data={data}
+          onChange={handleBracesChange}
+        />
       </div>
 
       <div className={styles.group}>
@@ -72,7 +80,12 @@ const DoctorForm = ({ data, currentClinic, onChange, onCreateHoliday, onDeleteHo
             {textForKey('Provided services')}
           </div>
         </div>
-        <DoctorServices show data={data} clinicServices={clinicServices} onChange={handleServicesChange} />
+        <DoctorServices
+          show
+          data={data}
+          clinicServices={clinicServices}
+          onChange={handleServicesChange}
+        />
       </div>
     </div>
   );

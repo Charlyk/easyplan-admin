@@ -1,13 +1,13 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-
-import IconDelete from '../../../../icons/iconDelete';
-import IconEdit from '../../../../icons/iconEdit';
-import IconUmbrella from '../../../../icons/iconUmbrella';
-import { textForKey } from '../../../../../utils/localization';
+import IconDelete from 'app/components/icons/iconDelete';
+import IconEdit from 'app/components/icons/iconEdit';
+import IconUmbrella from 'app/components/icons/iconUmbrella';
+import { textForKey } from 'app/utils/localization';
 import styles from './DoctorHolidays.module.scss';
 
 const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
@@ -25,29 +25,22 @@ const DoctorHoliday = ({ holiday, onEdit, onDelete }) => {
             : textForKey('No description')}
         </div>
       </div>
-      <div
-        role='button'
-        tabIndex={0}
-        className={styles.edit}
-        onClick={() => onEdit(holiday)}
-      >
+      <Box className={styles.edit} onClick={() => onEdit(holiday)}>
         <IconEdit />
-      </div>
-      <div
-        role='button'
-        tabIndex={0}
-        className={styles.delete}
-        onClick={() => onDelete(holiday)}
-      >
+      </Box>
+      <Box className={styles.delete} onClick={() => onDelete(holiday)}>
         <IconDelete />
-      </div>
+      </Box>
     </div>
   );
 };
 
 const DoctorHolidays = (props) => {
   const { show, data, onCreateOrUpdate, onDeleteHoliday } = props;
-  const classes = clsx(styles.doctorHolidays, show ? styles.expanded : styles.collapsed);
+  const classes = clsx(
+    styles.doctorHolidays,
+    show ? styles.expanded : styles.collapsed,
+  );
   return (
     <div className={classes}>
       <div className={styles.header}>
@@ -55,7 +48,7 @@ const DoctorHolidays = (props) => {
           variant='outlined'
           classes={{
             root: styles.addButton,
-            label: styles.addButtonLabel
+            label: styles.addButtonLabel,
           }}
           onClick={() => onCreateOrUpdate(null)}
         >

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import MenuItem from "@material-ui/core/MenuItem";
-import Typography from "@material-ui/core/Typography";
-import { requestFetchAllOwnerClinics } from "../../../../../middleware/api/clinic";
-import onRequestError from "../../../../utils/onRequestError";
-import { textForKey } from "../../../../utils/localization";
-import EASModal from "../EASModal";
+import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import { requestFetchAllOwnerClinics } from 'middleware/api/clinic';
+import EASModal from '../EASModal';
 import styles from './ClinicsModal.module.scss';
 
 const ClinicsModal = ({ open, currentClinicId, onClose, onSelect }) => {
@@ -15,27 +15,27 @@ const ClinicsModal = ({ open, currentClinicId, onClose, onSelect }) => {
 
   useEffect(() => {
     if (open && clinics.length === 0) {
-      fetchOwnerClinics()
+      fetchOwnerClinics();
     }
   }, [open]);
 
   const fetchOwnerClinics = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const response = await requestFetchAllOwnerClinics();
-      setClinics(response.data.filter(item => item.id !== currentClinicId));
+      setClinics(response.data.filter((item) => item.id !== currentClinicId));
     } catch (error) {
-      onRequestError(true)
+      onRequestError(true);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleClinicSelected = (clinic, event) => {
     event.stopPropagation();
     event.preventDefault();
     onSelect?.(clinic);
-  }
+  };
 
   return (
     <EASModal
@@ -47,9 +47,14 @@ const ClinicsModal = ({ open, currentClinicId, onClose, onSelect }) => {
       onClose={onClose}
     >
       <MenuList>
-        {clinics.map(clinic => (
-          <MenuItem key={clinic.id} onClick={(event) => handleClinicSelected(clinic, event)}>
-            <Typography className={styles.label}>{clinic.clinicName}</Typography>
+        {clinics.map((clinic) => (
+          <MenuItem
+            key={clinic.id}
+            onClick={(event) => handleClinicSelected(clinic, event)}
+          >
+            <Typography className={styles.label}>
+              {clinic.clinicName}
+            </Typography>
           </MenuItem>
         ))}
       </MenuList>
@@ -64,4 +69,4 @@ ClinicsModal.propTypes = {
   currentClinicId: PropTypes.number,
   onClose: PropTypes.func,
   onSelect: PropTypes.func,
-}
+};

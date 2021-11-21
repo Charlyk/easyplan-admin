@@ -3,8 +3,48 @@ import cookie from 'cookie';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { authorized } from '../authorized';
-import { handler } from '../handler';
+import authorized from '../authorized';
+import handler from '../handler';
+
+async function createNewTag(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  return axios.post(`${updatedServerUrl(req)}/tags`, req.body, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
+
+async function deleteTag(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { tagId } = req.query;
+  return axios.delete(`${updatedServerUrl(req)}/tags/${tagId}`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
+
+async function fetchAllTags(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  return axios.get(`${updatedServerUrl(req)}/tags`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -38,37 +78,3 @@ export default authorized(async (req, res) => {
       break;
   }
 });
-
-async function createNewTag(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.post(`${updatedServerUrl(req)}/tags`, req.body, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    },
-  });
-}
-
-async function deleteTag(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { tagId } = req.query;
-  return axios.delete(`${updatedServerUrl(req)}/tags/${tagId}`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    },
-  });
-}
-
-async function fetchAllTags(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${updatedServerUrl(req)}/tags`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    },
-  });
-}

@@ -1,21 +1,27 @@
 import React, { useReducer } from 'react';
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import { Typography } from "@material-ui/core";
-import getClinicUrl from "../../../utils/getClinicUrl";
-import { createNewClinic } from "../../../../middleware/api/clinic";
-import { isDev } from "../../../../eas.config";
-import CreateClinicForm from "../CreateClinicForm";
+import { Typography } from '@material-ui/core';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { HeaderKeys } from 'app/utils/constants';
+import getClinicUrl from 'app/utils/getClinicUrl';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { isDev } from 'eas.config';
+import { createNewClinic } from 'middleware/api/clinic';
+import CreateClinicForm from '../CreateClinicForm';
+import EASImage from '../EASImage';
+import styles from './CreateClinic.module.scss';
 import reducer, {
   setIsLoading,
-  initialState
+  initialState,
 } from './createClinicWrapperSlice';
-import styles from './CreateClinic.module.scss';
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import { HeaderKeys } from "../../../utils/constants";
-import EASImage from "../EASImage";
 
-export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin, isMobile }) {
+export default function CreateClinicWrapper({
+  token,
+  redirect,
+  countries,
+  shouldLogin,
+  isMobile,
+}) {
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;
@@ -32,7 +38,7 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
   const redirectToDashboard = async (clinic) => {
     const clinicUrl = getClinicUrl(clinic, token);
     await router.replace(clinicUrl);
-  }
+  };
 
   const handleCreateClinic = async (clinicData) => {
     dispatch(setIsLoading(true));
@@ -43,7 +49,7 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
         [HeaderKeys.authorization]: token,
       });
       if (shouldLogin) {
-        await router.replace('/login')
+        await router.replace('/login');
       } else if (redirect) {
         await redirectToDashboard(response.data);
       } else {
@@ -59,14 +65,14 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
     } finally {
       dispatch(setIsLoading(false));
     }
-  }
+  };
 
   return (
     <div className={styles.createClinicRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <EASImage
-          src="settings/easyplan-logo.svg"
+          src='settings/easyplan-logo.svg'
           classes={{
             root: styles.logoContainer,
             image: styles.logoImage,
@@ -82,7 +88,7 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
       >
         {isMobileDevice && (
           <EASImage
-            src="settings/easyplan-logo.svg"
+            src='settings/easyplan-logo.svg'
             className={styles.logoImage}
           />
         )}
@@ -97,4 +103,4 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
       </div>
     </div>
   );
-};
+}

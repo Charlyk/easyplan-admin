@@ -1,15 +1,21 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
+import DealHistory from './DealHistory';
+import FooterContainer from './FooterContainer';
+import RemindersContainer from './RemindersContainer';
 import styles from './RightContainer.module.scss';
-import DealHistory from "./DealHistory";
-import FooterContainer from "./FooterContainer";
-import RemindersContainer from "./RemindersContainer";
 
-const RightContainer = ({ deal, currentClinic, showAddReminderHelp, onAddReminder, onPlayAudio }) => {
+const RightContainer = ({
+  deal,
+  currentClinic,
+  showAddReminderHelp,
+  onAddReminder,
+  onPlayAudio,
+}) => {
   return (
     <div className={styles.rightContainer}>
       <div className={styles.center}>
-        <DealHistory deal={deal} onPlayAudio={onPlayAudio}/>
+        <DealHistory deal={deal} onPlayAudio={onPlayAudio} />
         <FooterContainer
           deal={deal}
           currentClinic={currentClinic}
@@ -22,8 +28,8 @@ const RightContainer = ({ deal, currentClinic, showAddReminderHelp, onAddReminde
         showAddReminderHelp={showAddReminderHelp}
       />
     </div>
-  )
-}
+  );
+};
 
 export default RightContainer;
 
@@ -41,7 +47,7 @@ RightContainer.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
@@ -85,4 +91,4 @@ RightContainer.propTypes = {
   currentClinic: PropTypes.any,
   onAddReminder: PropTypes.func,
   onPlayAudio: PropTypes.func,
-}
+};

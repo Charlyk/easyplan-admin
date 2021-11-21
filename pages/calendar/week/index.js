@@ -72,7 +72,7 @@ export const getServerSideProps = async ({ req, query }) => {
     }
 
     // fetch schedules for current week
-    let currentDate = moment(queryDate);
+    const currentDate = moment(queryDate);
 
     // filter clinic doctors
     const doctors =
@@ -101,7 +101,7 @@ export const getServerSideProps = async ({ req, query }) => {
 
     return {
       props: {
-        doctorId: parseInt(doctorId),
+        doctorId: parseInt(doctorId, 10),
         doctors,
         date: query.date,
         schedules: response.data,

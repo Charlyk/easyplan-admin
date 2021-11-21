@@ -1,20 +1,33 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import Box from '@material-ui/core/Box';
+import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { toast } from "react-toastify";
-import { requestUpdatePatient } from "../../../../../../middleware/api/patients";
-import { EmailRegex, HeaderKeys, Languages, PatientSources } from '../../../../../utils/constants';
-import adjustValueToNumber from '../../../../../utils/adjustValueToNumber';
-import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
-import { textForKey } from '../../../../../utils/localization';
-import IconSuccess from '../../../../icons/iconSuccess';
-import LoadingButton from '../../../../common/LoadingButton';
-import EASTextField from "../../../../common/EASTextField";
-import EASPhoneInput from "../../../../common/EASPhoneInput";
-import EASSelect from "../../../../common/EASSelect";
+import { toast } from 'react-toastify';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import adjustValueToNumber from 'app/utils/adjustValueToNumber';
+import {
+  EmailRegex,
+  HeaderKeys,
+  Languages,
+  PatientSources,
+} from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import { requestUpdatePatient } from 'middleware/api/patients';
+import {
+  requestAssignTag,
+  requestFetchTags,
+  requestUnassignTag,
+} from 'middleware/api/tags';
+import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,
   setFirstName,
@@ -33,14 +46,17 @@ import reducer, {
   removeTag,
   addPatientTag,
 } from './PatientPersonalData.reducer';
-import styles from './PatientPersonalData.module.scss';
-import onRequestError from "../../../../../utils/onRequestError";
-import { requestAssignTag, requestFetchTags, requestUnassignTag } from "../../../../../../middleware/api/tags";
-import Chip from "@material-ui/core/Chip";
 
-const EasyDatePicker = dynamic(() => import('../../../../common/EasyDatePicker'));
+const EasyDatePicker = dynamic(() =>
+  import('app/components/common/EasyDatePicker'),
+);
 
-const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdated }) => {
+const PatientPersonalData = ({
+  patient,
+  currentClinic,
+  authToken,
+  onPatientUpdated,
+}) => {
   const datePickerRef = useRef();
   const [
     {
@@ -78,9 +94,9 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
       const response = await requestFetchTags();
       localDispatch(setAllTags(response.data));
     } catch (error) {
-      onRequestError(error)
+      onRequestError(error);
     }
-  }
+  };
 
   const handleFormChange = (eventId, newValue) => {
     switch (eventId) {
@@ -106,9 +122,9 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
 
   const handlePhoneChange = (value, country, event) => {
     const newNumber = value.replace(country.dialCode, '');
-    const isPhoneValid = isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
-      'invalid-number',
-    );
+    const isPhoneValid =
+      isPhoneNumberValid(value, country) &&
+      !event.target?.classList.value.includes('invalid-number');
     localDispatch(setPhoneNumber({ newNumber, isPhoneValid, country }));
   };
 
@@ -133,7 +149,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
     if (!newValue) {
       return;
     }
-    const newTag = allTags.find(item => item.id === parseInt(newValue));
+    const newTag = allTags.find((item) => item.id === parseInt(newValue));
     if (newTag != null) {
       handleAssignTag(newTag);
     }
@@ -146,7 +162,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const handleDeleteTag = async (tag) => {
     try {
@@ -155,11 +171,11 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const handleLanguageChange = (event) => {
     localDispatch(setLanguage(event.target.value));
-  }
+  };
 
   const handleSavePatient = async () => {
     if (!isFormValid()) return;
@@ -185,7 +201,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
         [HeaderKeys.subdomain]: currentClinic.domainName,
       });
       await onPatientUpdated(true);
-      toast.success(textForKey('Saved successfully'))
+      toast.success(textForKey('Saved successfully'));
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -220,7 +236,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
       </Typography>
       <Box className={styles['patient-form-wrapper']}>
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Last name')}
           value={lastName}
@@ -228,7 +244,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
         />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('First name')}
           value={firstName}
@@ -245,7 +261,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
         />
 
         <EASTextField
-          type="email"
+          type='email'
           value={email || ''}
           containerClass={styles.simpleField}
           error={email?.length > 0 && !email.match(EmailRegex)}
@@ -254,7 +270,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
         />
 
         <EASTextField
-          type="number"
+          type='number'
           value={String(discount)}
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Discount')}
@@ -262,7 +278,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
         />
 
         <EASTextField
-          type="number"
+          type='number'
           value={String(euroDebt)}
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Euro Debt')}
@@ -280,7 +296,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
 
         <EASSelect
           label={textForKey('spoken_language')}
-          labelId="spoken-language-select"
+          labelId='spoken-language-select'
           options={Languages}
           value={language}
           rootClass={styles.simpleField}
@@ -289,7 +305,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
 
         <EASSelect
           label={textForKey('patient_source')}
-          labelId="patient-source-select"
+          labelId='patient-source-select'
           options={PatientSources}
           value={source}
           rootClass={styles.simpleField}
@@ -298,7 +314,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
 
         <EASSelect
           label={textForKey('add_tag_to_patient')}
-          labelId="patient-source-select"
+          labelId='patient-source-select'
           options={allTags}
           value={[]}
           rootClass={styles.simpleField}
@@ -306,11 +322,11 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
         />
 
         <div className={styles.tagsContainer}>
-          {tags.map(tag => (
+          {tags.map((tag) => (
             <Chip
               key={tag.id}
               label={tag.title}
-              variant="outlined"
+              variant='outlined'
               classes={{
                 root: styles.tag,
                 outlined: styles.outlined,
@@ -336,7 +352,7 @@ const PatientPersonalData = ({ patient, currentClinic, authToken, onPatientUpdat
             disabled={isSaving || !isFormValid()}
           >
             {textForKey('Save')}
-            {!isSaving && <IconSuccess/>}
+            {!isSaving && <IconSuccess />}
           </LoadingButton>
         </Box>
       </Box>
@@ -356,9 +372,11 @@ PatientPersonalData.propTypes = {
     email: PropTypes.string,
     phoneNumber: PropTypes.string,
     discount: PropTypes.number,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      title: PropTypes.string,
-    })),
+    tags: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+      }),
+    ),
   }),
 };

@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment-timezone';
-
-import { textForKey } from '../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 
 export const filterOptions = [
   {
@@ -65,7 +64,6 @@ export const {
   setReminders,
   setIsLoading,
   resetState,
-  setFilterShortcut,
   setShowDateRangePicker,
 } = remindersModalSlice.actions;
 

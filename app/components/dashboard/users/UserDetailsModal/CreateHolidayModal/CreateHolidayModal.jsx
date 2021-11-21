@@ -3,10 +3,9 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-
-import { getAppLanguage, textForKey } from '../../../../../utils/localization';
-import EASTextarea from "../../../../common/EASTextarea";
-import EASModal from "../../../../common/modals/EASModal";
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASModal from 'app/components/common/modals/EASModal';
+import { getAppLanguage, textForKey } from 'app/utils/localization';
 import styles from './CreateHolidayModal.module.scss';
 
 const initialRange = {
@@ -84,7 +83,7 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
           locale={locales[getAppLanguage()]}
         />
         <EASTextarea
-          type="text"
+          type='text'
           fieldLabel={textForKey('Description')}
           value={description}
           rows={4}

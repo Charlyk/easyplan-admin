@@ -57,10 +57,8 @@ const servicesContainerSlice = createSlice({
 });
 
 export const {
-  setIsUploading,
   setCategories,
   setCategoryModal,
-  setSetupExcelModal,
   setCategory,
   setDeleteServiceModal,
   setIsLoading,

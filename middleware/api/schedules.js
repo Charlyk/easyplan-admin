@@ -1,7 +1,7 @@
-import { del, get, post, put } from "./request";
-import moment from "moment-timezone";
-import axios from "axios";
-import { baseApiUrl } from "../../eas.config";
+import axios from 'axios';
+import moment from 'moment-timezone';
+import { baseApiUrl } from 'eas.config';
+import { del, get, post, put } from './request';
 
 /**
  * Fetch calendar day schedules
@@ -10,7 +10,10 @@ import { baseApiUrl } from "../../eas.config";
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function fetchDaySchedules(query, headers) {
-  const queryString = new URLSearchParams({ ...query, period: 'day' }).toString();
+  const queryString = new URLSearchParams({
+    ...query,
+    period: 'day',
+  }).toString();
   return get(`/api/schedules?${queryString}`, headers);
 }
 
@@ -21,8 +24,11 @@ export async function fetchDaySchedules(query, headers) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function fetchSchedulesHours(query, headers = null) {
-  const queryString = new URLSearchParams({ ...query, period: 'day' }).toString();
-  return get(`/api/schedules/day-hours?${queryString}`, headers)
+  const queryString = new URLSearchParams({
+    ...query,
+    period: 'day',
+  }).toString();
+  return get(`/api/schedules/day-hours?${queryString}`, headers);
 }
 
 /**
@@ -32,7 +38,11 @@ export async function fetchSchedulesHours(query, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function fetchDoctorScheduleDetails(scheduleId, patientId, headers = null) {
+export async function fetchDoctorScheduleDetails(
+  scheduleId,
+  patientId,
+  headers = null,
+) {
   let query = { scheduleId: '-1' };
   if (scheduleId != null) {
     query = { scheduleId };
@@ -50,8 +60,12 @@ export async function fetchDoctorScheduleDetails(scheduleId, patientId, headers 
  * @param {Object|null} headers
  * @return {Promise<void>}
  */
-export async function fetchScheduleConfirmationInfo(scheduleId, patientId, headers = null) {
-  return get(`/api/schedules/confirm/${scheduleId}/${patientId}`, headers)
+export async function fetchScheduleConfirmationInfo(
+  scheduleId,
+  patientId,
+  headers = null,
+) {
+  return get(`/api/schedules/confirm/${scheduleId}/${patientId}`, headers);
 }
 
 /**
@@ -75,9 +89,14 @@ export async function fetchScheduleConfirmationInfo(scheduleId, patientId, heade
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updateScheduleStatus(scheduleId, status, body, headers = null) {
+export async function updateScheduleStatus(
+  scheduleId,
+  status,
+  body,
+  headers = null,
+) {
   const queryString = new URLSearchParams({ scheduleId, status }).toString();
-  return put(`/api/schedules/status?${queryString}`, headers, body)
+  return put(`/api/schedules/status?${queryString}`, headers, body);
 }
 
 /**
@@ -123,7 +142,7 @@ export async function getAvailableHours(query, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function postSchedule(body, headers = null) {
-  return post(`/api/schedules`, headers, body)
+  return post('/api/schedules', headers, body);
 }
 
 /**
@@ -134,8 +153,17 @@ export async function postSchedule(body, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function getPeriodSchedules(doctorId, date, period, headers = null) {
-  const queryString = new URLSearchParams({ doctorId, date, period }).toString();
+export async function getPeriodSchedules(
+  doctorId,
+  date,
+  period,
+  headers = null,
+) {
+  const queryString = new URLSearchParams({
+    doctorId,
+    date,
+    period,
+  }).toString();
   return get(`/api/schedules?${queryString}`, headers);
 }
 
@@ -147,7 +175,12 @@ export async function getPeriodSchedules(doctorId, date, period, headers = null)
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function getSchedulesForInterval(startDate, endDate, doctorId, headers = null) {
+export async function getSchedulesForInterval(
+  startDate,
+  endDate,
+  doctorId,
+  headers = null,
+) {
   const queryString = new URLSearchParams({
     start: moment(startDate).format('YYYY-MM-DD'),
     end: moment(endDate).format('YYYY-MM-DD'),
@@ -164,12 +197,17 @@ export async function getSchedulesForInterval(startDate, endDate, doctorId, head
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function importSchedulesFromFile(file, fields, dateFormat, headers = null) {
+export async function importSchedulesFromFile(
+  file,
+  fields,
+  dateFormat,
+  headers = null,
+) {
   const requestBody = new FormData();
   requestBody.append('fields', JSON.stringify(fields));
   requestBody.append('file', file, file.name);
   requestBody.append('dateFormat', dateFormat);
-  return axios.post(`${baseApiUrl}/schedules/import`, requestBody, { headers })
+  return axios.post(`${baseApiUrl}/schedules/import`, requestBody, { headers });
 }
 
 /**
@@ -191,6 +229,17 @@ export async function requestDeleteSchedule(scheduleId, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestConfirmSchedule(scheduleId, patientId, status = 'Confirmed', reason = null, headers = null) {
-  return post(`/api/schedules/confirm`, headers, { scheduleId, patientId, status, reason });
+export async function requestConfirmSchedule(
+  scheduleId,
+  patientId,
+  status = 'Confirmed',
+  reason = null,
+  headers = null,
+) {
+  return post('/api/schedules/confirm', headers, {
+    scheduleId,
+    patientId,
+    status,
+    reason,
+  });
 }

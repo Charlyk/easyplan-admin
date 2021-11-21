@@ -39,7 +39,7 @@ export const getServerSideProps = async ({ req, res }) => {
     props.currentClinic = response.data;
     setCookies(res, authToken, props.currentClinic.id);
   } catch (error) {
-    // console.error(error.message);
+    console.error(error.message);
   }
 
   return { props };

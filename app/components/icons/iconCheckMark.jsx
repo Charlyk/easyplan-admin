@@ -26,5 +26,5 @@ IconCheckMark.propTypes = {
 };
 
 IconCheckMark.defaultProps = {
-  fill: 'none'
-}
+  fill: 'none',
+};

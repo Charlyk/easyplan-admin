@@ -1,6 +1,6 @@
-import { del, get, put } from "./request";
-import imageToBase64 from "../../app/utils/imageToBase64";
-import axios from "axios";
+import axios from 'axios';
+import imageToBase64 from 'app/utils/imageToBase64';
+import { del, get, put } from './request';
 
 /**
  * Delete clinic invitation
@@ -10,7 +10,7 @@ import axios from "axios";
  */
 export async function deleteInvitation(invitationId, headers = null) {
   const query = new URLSearchParams({ invitationId }).toString();
-  return del(`/api/clinic/invitations?${query}`, headers)
+  return del(`/api/clinic/invitations?${query}`, headers);
 }
 
 /**
@@ -21,9 +21,9 @@ export async function deleteInvitation(invitationId, headers = null) {
  */
 export async function getClinicDetails(date, headers = null) {
   if (date == null) {
-    return get(`/api/clinic/details`, headers)
+    return get('/api/clinic/details', headers);
   }
-  return get(`/api/clinic/details?date=${date}`, headers)
+  return get(`/api/clinic/details?date=${date}`, headers);
 }
 
 /**
@@ -34,7 +34,7 @@ export async function getClinicDetails(date, headers = null) {
  */
 export async function changeCurrentClinic(clinicId, headers = null) {
   const query = new URLSearchParams({ clinicId }).toString();
-  return get(`/api/clinic/change?${query}`, headers)
+  return get(`/api/clinic/change?${query}`, headers);
 }
 
 /**
@@ -65,9 +65,9 @@ export async function deleteClinic(headers = null) {
 export async function updateClinic(body, logo, headers = null) {
   const updatedBody = { ...body };
   if (logo != null) {
-    updatedBody.logo = await imageToBase64(logo)
+    updatedBody.logo = await imageToBase64(logo);
   }
-  return axios.put('/api/clinic', updatedBody, { headers })
+  return axios.put('/api/clinic', updatedBody, { headers });
 }
 
 /**
@@ -80,7 +80,7 @@ export async function updateClinic(body, logo, headers = null) {
 export async function createNewClinic(body, logo, headers = null) {
   const updatedBody = { ...body };
   if (logo != null) {
-    updatedBody.logo = await imageToBase64(logo)
+    updatedBody.logo = await imageToBase64(logo);
   }
   return axios.post('/api/clinic', updatedBody, { headers });
 }
@@ -111,7 +111,7 @@ export async function fetchAvailableCurrencies(headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function checkDomainAvailability(domain, headers = null) {
-  return get(`/api/clinic/domain?domain=${domain}`, headers)
+  return get(`/api/clinic/domain?domain=${domain}`, headers);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Role } from '../../../../utils/constants';
+import { Role } from 'app/utils/constants';
 
 export const initialData = {
   services: [],

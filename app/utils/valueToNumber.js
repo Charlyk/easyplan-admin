@@ -1,4 +1,6 @@
-const valueToNumber = (newValue) => {
+const valueToNumber = (value) => {
+  let newValue = value;
+
   if (newValue == null) {
     newValue = 0;
   }

@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
-
-import { textForKey } from '../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 
 const tomorrow = moment().add(1, 'day');
 

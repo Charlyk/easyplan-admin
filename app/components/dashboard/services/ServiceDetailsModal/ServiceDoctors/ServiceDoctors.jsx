@@ -1,30 +1,20 @@
 import React from 'react';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-
-import IconMinus from '../../../../icons/iconMinus';
-import IconPlusBig from '../../../../icons/iconPlusBig';
-import { textForKey } from '../../../../../utils/localization';
+import PropTypes from 'prop-types';
+import { textForKey } from 'app/utils/localization';
 import styles from './ServiceDoctors.module.scss';
 
-const ServiceDoctor = dynamic(() => import('../ServiceDoctor'))
+const ServiceDoctor = dynamic(() => import('../ServiceDoctor'));
 
-const ServiceDoctors = (
-  {
-    clinic,
-    isExpanded,
-    showStep,
-    onToggle,
-    doctors,
-    serviceId,
-    onDoctorChange,
-  }
-) => {
-  const handleInfoExpand = () => {
-    onToggle();
-  };
-
+const ServiceDoctors = ({
+  clinic,
+  isExpanded,
+  showStep,
+  doctors,
+  serviceId,
+  onDoctorChange,
+}) => {
   const contentClasses = clsx(
     styles.content,
     isExpanded ? styles.expanded : styles.collapsed,
@@ -35,18 +25,14 @@ const ServiceDoctors = (
       <div className={styles.header}>
         <div className={styles.title}>
           {showStep && (
-            <div className={styles.step}>
-              {textForKey('Step 2.')}
-            </div>
+            <div className={styles.step}>{textForKey('Step 2.')}</div>
           )}
           {textForKey('Doctors who provide this service')}
         </div>
       </div>
       <div className={contentClasses}>
         {doctors?.length === 0 && (
-          <div className={styles.noData}>
-            {textForKey('No doctors yet.')}
-          </div>
+          <div className={styles.noData}>{textForKey('No doctors yet.')}</div>
         )}
         {doctors?.map((doctor) => (
           <ServiceDoctor

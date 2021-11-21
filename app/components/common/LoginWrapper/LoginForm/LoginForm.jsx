@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -91,27 +92,17 @@ const LoginForm = ({
               </IconButton>
             }
           />
-          <div
-            role='button'
-            tabIndex={0}
-            className={styles.forgotButton}
-            onClick={onResetPassword}
-          >
+          <Box className={styles.forgotButton} onClick={onResetPassword}>
             {textForKey('Forgot your password')}?
-          </div>
+          </Box>
         </div>
 
         <div className='footer'>
           <div className={styles.footerSignUp}>
             <span className='text'>{textForKey("Don't have an account")}?</span>
-            <div
-              role='button'
-              tabIndex={0}
-              className={styles.signUpBtn}
-              onClick={onSignUp}
-            >
+            <Box className={styles.signUpBtn} onClick={onSignUp}>
               {textForKey('Sign Up')}
-            </div>
+            </Box>
           </div>
           <LoadingButton
             type='submit'

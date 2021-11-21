@@ -22,8 +22,8 @@ const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
 export const getServerSideProps = async ({ req, query }) => {
   try {
     const isMobile = checkIsMobileDevice(req);
-    const { auth_token } = parseCookies(req);
-    if (!auth_token || !auth_token.match(JwtRegex)) {
+    const { auth_token: authToken } = parseCookies(req);
+    if (!authToken || !authToken.match(JwtRegex)) {
       return {
         redirect: {
           destination: '/login',
@@ -37,7 +37,7 @@ export const getServerSideProps = async ({ req, query }) => {
     return {
       props: {
         isMobile,
-        token: auth_token,
+        token: authToken,
         redirect: redirect === '1',
         shouldLogin: login === '1',
         countries,

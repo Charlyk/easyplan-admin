@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../../utils/localization";
-import formattedAmount from "../../../../../utils/formattedAmount";
-import styles from "./AmountsChart.module.scss";
+import formattedAmount from 'app/utils/formattedAmount';
+import { textForKey } from 'app/utils/localization';
+import styles from './AmountsChart.module.scss';
 
 const AmountsChart = ({ currency, payments }) => {
   return (
     <Grid item xs={6} className={styles.amountsChartRoot}>
-      <div className="chartItem">
-        <Typography className="chartTitle">
+      <div className='chartItem'>
+        <Typography className='chartTitle'>
           {textForKey('analytics_paid_unpaid')}
         </Typography>
         <div className={styles.amountsContainer}>
@@ -24,7 +24,7 @@ const AmountsChart = ({ currency, payments }) => {
         </div>
       </div>
     </Grid>
-  )
+  );
 };
 
 export default AmountsChart;

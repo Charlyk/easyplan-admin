@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
-
 import { availableHours } from '../CreateMessageDialog.constants';
 
 export const initialState = {

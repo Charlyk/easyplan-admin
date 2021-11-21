@@ -5,7 +5,7 @@
  * @param res
  * @return {Promise<null|*>}
  */
-export const handler = async (apiCall, req, res) => {
+const handler = async (apiCall, req, res) => {
   try {
     const response = await apiCall(req);
     if (response.headers['set-cookie'] != null) {
@@ -19,16 +19,14 @@ export const handler = async (apiCall, req, res) => {
         message: responseData?.message ?? response.statusText,
       });
       return null;
-    } else {
-      const { isError, message, data } = responseData;
-      if (isError) {
-        res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
-        res.status(400).json({ message, error: true });
-        return null;
-      } else {
-        return data;
-      }
     }
+    const { isError, message, data } = responseData;
+    if (isError) {
+      res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
+      res.status(400).json({ message, error: true });
+      return null;
+    }
+    return data;
   } catch (error) {
     res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
     if (error?.response != null) {
@@ -42,3 +40,5 @@ export const handler = async (apiCall, req, res) => {
     return null;
   }
 };
+
+export default handler;

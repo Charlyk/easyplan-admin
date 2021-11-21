@@ -1,40 +1,35 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useDrag } from 'react-dnd';
-import UnsortedDealItem from "../UnsortedDealItem";
-import SortedDealItem from "../SortedDealItem";
-import { ItemTypes } from "../constants";
+import { ItemTypes } from '../constants';
+import SortedDealItem from '../SortedDealItem';
+import UnsortedDealItem from '../UnsortedDealItem';
 import styles from './DealItem.module.scss';
 
-const DealItem = (
-  {
-    dealItem,
-    color,
-    currentClinic,
-    onLinkPatient,
-    onDeleteDeal,
-    onConfirmFirstContact,
-    onDealClick,
-  }
-) => {
+const DealItem = ({
+  dealItem,
+  color,
+  currentClinic,
+  onLinkPatient,
+  onDeleteDeal,
+  onConfirmFirstContact,
+  onDealClick,
+}) => {
   const isUnsorted = dealItem.state.type === 'Unsorted';
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: isUnsorted ? ItemTypes.NONE
+  const [{ _ }, drag] = useDrag(() => ({
+    type: isUnsorted
+      ? ItemTypes.NONE
       : dealItem?.schedule == null
-        ? ItemTypes.UNSCHEDULED
-        : ItemTypes.SCHEDULED,
+      ? ItemTypes.UNSCHEDULED
+      : ItemTypes.SCHEDULED,
     item: dealItem,
-    collect: monitor => ({
+    collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   }));
 
   return (
-    <div
-      ref={drag}
-      key={dealItem.id}
-      className={styles.dealItem}
-    >
+    <div ref={drag} key={dealItem.id} className={styles.dealItem}>
       <div
         className={styles.backgroundHolder}
         style={{ backgroundColor: isUnsorted ? 'white' : `${color}33` }}
@@ -49,10 +44,7 @@ const DealItem = (
           onConfirmFirstContact={onConfirmFirstContact}
         />
       ) : (
-        <SortedDealItem
-          deal={dealItem}
-          onDealClick={onDealClick}
-        />
+        <SortedDealItem deal={dealItem} onDealClick={onDealClick} />
       )}
     </div>
   );
@@ -82,17 +74,19 @@ DealItem.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       phoneWithCode: PropTypes.string,
-      tags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        title: PropTypes.string,
-      })),
+      tags: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          title: PropTypes.string,
+        }),
+      ),
     }),
     state: PropTypes.shape({
       id: PropTypes.number,
@@ -126,4 +120,4 @@ DealItem.propTypes = {
       }),
     }),
   }),
-}
+};

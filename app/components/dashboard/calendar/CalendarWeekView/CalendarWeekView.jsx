@@ -1,38 +1,37 @@
 import React, { useEffect, useReducer } from 'react';
-import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { useSelector } from "react-redux";
-
+import { useSelector } from 'react-redux';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import getCurrentWeek from 'app/utils/getCurrentWeek';
 import {
   deleteScheduleSelector,
-  updateScheduleSelector
-} from "../../../../../redux/selectors/scheduleSelector";
-import getCurrentWeek from '../../../../utils/getCurrentWeek';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { reducer, initialState, actions } from './CalendarWeekView.reducer'
+  updateScheduleSelector,
+} from 'redux/selectors/scheduleSelector';
 import styles from './CalendarWeekView.module.scss';
+import { reducer, initialState, actions } from './CalendarWeekView.reducer';
 
-const EasyCalendar = dynamic(() => import('../../../common/EasyCalendar'));
+const EasyCalendar = dynamic(() =>
+  import('app/components/common/EasyCalendar'),
+);
 
-const CalendarWeekView = (
-  {
-    doctorId,
-    doctors,
-    showHourIndicator,
-    schedules: {
-      hours: dayHours,
-      schedules: initialSchedules
-    },
-    viewDate,
-    onDateClick,
-    onScheduleSelect,
-    onCreateSchedule,
-  }
-) => {
+const CalendarWeekView = ({
+  doctorId,
+  doctors,
+  showHourIndicator,
+  schedules: { hours: dayHours, schedules: initialSchedules },
+  viewDate,
+  onDateClick,
+  onScheduleSelect,
+  onCreateSchedule,
+}) => {
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
-  const [{ schedules, hours }, localDispatch] = useReducer(reducer, initialState);
+  const [{ schedules, hours }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
   const week = getCurrentWeek(viewDate);
 
   useEffect(() => {
@@ -56,7 +55,7 @@ const CalendarWeekView = (
       return;
     }
 
-    localDispatch(actions.deleteSchedule(deleteSchedule))
+    localDispatch(actions.deleteSchedule(deleteSchedule));
   }
 
   async function handleScheduleUpdate() {
@@ -70,9 +69,10 @@ const CalendarWeekView = (
     }
 
     const formattedDate = scheduleDate.format('YYYY-MM-DD');
-    const scheduleExists = schedules.some((item) =>
-      item.id === formattedDate &&
-      item.schedules.some((schedule) => schedule.id === updateSchedule.id)
+    const scheduleExists = schedules.some(
+      (item) =>
+        item.id === formattedDate &&
+        item.schedules.some((schedule) => schedule.id === updateSchedule.id),
     );
 
     if (scheduleExists) {
@@ -88,10 +88,10 @@ const CalendarWeekView = (
   };
 
   const handleCreateSchedule = (startHour, endHour, doctorId, selectedDate) => {
-    const dayDate = moment(selectedDate).toDate()
-    const doctor = doctors.find(item => item.id === doctorId);
+    const dayDate = moment(selectedDate).toDate();
+    const doctor = doctors.find((item) => item.id === doctorId);
     onCreateSchedule(doctor, startHour, endHour, dayDate);
-  }
+  };
 
   const handleScheduleClick = (schedule) => {
     if (schedule.type === 'Schedule') {
@@ -100,8 +100,8 @@ const CalendarWeekView = (
   };
 
   const mappedWeek = week.map((date) => {
-    const dayId = moment(date).format('YYYY-MM-DD')
-    const day = schedules.find(item => item.id === dayId)
+    const dayId = moment(date).format('YYYY-MM-DD');
+    const day = schedules.find((item) => item.id === dayId);
     return {
       id: dayId,
       doctorId,
@@ -133,32 +133,36 @@ export default React.memo(CalendarWeekView, areComponentPropsEqual);
 CalendarWeekView.propTypes = {
   schedules: PropTypes.shape({
     hours: PropTypes.arrayOf(PropTypes.string),
-    schedules: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
-      holiday: PropTypes.bool,
-      schedules: PropTypes.arrayOf(PropTypes.shape({
-        comment: PropTypes.string,
-        createdByName: PropTypes.string,
-        delayTime: PropTypes.number,
-        doctorId: PropTypes.number,
-        endTime: PropTypes.string,
-        id: PropTypes.number,
-        isUrgent: PropTypes.bool,
-        patient: PropTypes.shape({
-          id: PropTypes.number,
-          fullName: PropTypes.string,
-        }),
-        rescheduled: PropTypes.bool,
-        scheduleStatus: PropTypes.string,
-        serviceColor: PropTypes.string,
-        serviceCurrency: PropTypes.string,
-        serviceId: PropTypes.number,
-        serviceName: PropTypes.string,
-        servicePrice: PropTypes.number,
-        startTime: PropTypes.string,
-        type: PropTypes.string,
-      })),
-    }))
+    schedules: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        holiday: PropTypes.bool,
+        schedules: PropTypes.arrayOf(
+          PropTypes.shape({
+            comment: PropTypes.string,
+            createdByName: PropTypes.string,
+            delayTime: PropTypes.number,
+            doctorId: PropTypes.number,
+            endTime: PropTypes.string,
+            id: PropTypes.number,
+            isUrgent: PropTypes.bool,
+            patient: PropTypes.shape({
+              id: PropTypes.number,
+              fullName: PropTypes.string,
+            }),
+            rescheduled: PropTypes.bool,
+            scheduleStatus: PropTypes.string,
+            serviceColor: PropTypes.string,
+            serviceCurrency: PropTypes.string,
+            serviceId: PropTypes.number,
+            serviceName: PropTypes.string,
+            servicePrice: PropTypes.number,
+            startTime: PropTypes.string,
+            type: PropTypes.string,
+          }),
+        ),
+      }),
+    ),
   }),
   onScheduleSelect: PropTypes.func,
   opened: PropTypes.bool,

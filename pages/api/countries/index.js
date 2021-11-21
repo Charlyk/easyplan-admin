@@ -3,7 +3,19 @@ import cookie from 'cookie';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { handler } from '../handler';
+import handler from '../handler';
+
+async function fetchCountries(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const headers = {
+    [HeaderKeys.subdomain]: getSubdomain(req),
+  };
+  if (clinicId) headers[HeaderKeys.clinicId] = clinicId;
+  if (authToken) headers[HeaderKeys.authorization] = authToken;
+  return axios.get(`${updatedServerUrl(req)}/countries`, { headers });
+}
 
 export default async function countries(req, res) {
   switch (req.method) {
@@ -19,14 +31,4 @@ export default async function countries(req, res) {
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
-}
-
-async function fetchCountries(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  let headers = {
-    [HeaderKeys.subdomain]: getSubdomain(req),
-  };
-  if (clinic_id) headers[HeaderKeys.clinicId] = clinic_id;
-  if (auth_token) headers[HeaderKeys.authorization] = auth_token;
-  return axios.get(`${updatedServerUrl(req)}/countries`, { headers });
 }

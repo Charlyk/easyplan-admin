@@ -1,18 +1,17 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import Box from '@material-ui/core/Box';
+import Tab from '@material-ui/core/Tab';
+import TabContext from '@material-ui/lab/TabContext';
+import TabList from '@material-ui/lab/TabList';
+import TabPanel from '@material-ui/lab/TabPanel';
 import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
-import TabList from "@material-ui/lab/TabList";
-import Tab from "@material-ui/core/Tab";
-import TabPanel from "@material-ui/lab/TabPanel";
-import TabContext from "@material-ui/lab/TabContext";
-
-import { requestSendSms } from "../../../../../../middleware/api/patients";
-import { requestCreateDealNote } from "../../../../../../middleware/api/crm";
-import { textForKey } from "../../../../../utils/localization";
-import onRequestError from "../../../../../utils/onRequestError";
-import AddNoteForm from "./AddNoteForm";
-import AddSmsForm from "./AddSmsForm/AddSmsForm";
-import styles from './FooterContainer.module.scss'
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import { requestCreateDealNote } from 'middleware/api/crm';
+import { requestSendSms } from 'middleware/api/patients';
+import AddNoteForm from './AddNoteForm';
+import AddSmsForm from './AddSmsForm/AddSmsForm';
+import styles from './FooterContainer.module.scss';
 
 const FooterContainer = ({ deal, onAddReminder }) => {
   const [currentTab, setCurrentTab] = useState('0');
@@ -32,7 +31,7 @@ const FooterContainer = ({ deal, onAddReminder }) => {
       setIsAddingNote(true);
       await requestCreateDealNote(deal.id, note);
     } catch (error) {
-      onRequestError(error)
+      onRequestError(error);
     } finally {
       setIsAddingNote(false);
     }
@@ -50,7 +49,7 @@ const FooterContainer = ({ deal, onAddReminder }) => {
     } finally {
       setIsAddingSms(false);
     }
-  }
+  };
 
   return (
     <div className={styles.footerContainer}>
@@ -59,41 +58,38 @@ const FooterContainer = ({ deal, onAddReminder }) => {
           <TabList
             classes={{
               root: styles.tabsRoot,
-              indicator: styles.tabsIndicator
+              indicator: styles.tabsIndicator,
             }}
             onChange={handleTabChange}
           >
             <Tab
-              value="0"
+              value='0'
               label={textForKey('crm_new_note')}
               classes={{ root: styles.tabItem }}
             />
             <Tab
-              value="1"
+              value='1'
               label={`${textForKey('send message')} SMS`}
               classes={{ root: styles.tabItem }}
             />
             <Tab
-              value="3"
+              value='3'
               label={textForKey('crm_add_reminder')}
               classes={{ root: styles.tabItem }}
             />
           </TabList>
         </Box>
-        <TabPanel value="0" style={{ padding: 0 }}>
-          <AddNoteForm
-            onSubmit={handleNoteSubmit}
-            isLoading={isAddingNote}
-          />
+        <TabPanel value='0' style={{ padding: 0 }}>
+          <AddNoteForm onSubmit={handleNoteSubmit} isLoading={isAddingNote} />
         </TabPanel>
         {deal?.patient ? (
-          <TabPanel value="1" style={{ padding: 0 }}>
-            <AddSmsForm isLoading={isAddingSms} onSubmit={handleSmsSubmit}/>
+          <TabPanel value='1' style={{ padding: 0 }}>
+            <AddSmsForm isLoading={isAddingSms} onSubmit={handleSmsSubmit} />
           </TabPanel>
         ) : null}
       </TabContext>
     </div>
-  )
+  );
 };
 
 export default FooterContainer;
@@ -112,7 +108,7 @@ FooterContainer.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
@@ -153,4 +149,4 @@ FooterContainer.propTypes = {
     }),
   }),
   onAddReminder: PropTypes.func,
-}
+};

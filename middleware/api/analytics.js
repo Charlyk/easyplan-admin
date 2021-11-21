@@ -1,5 +1,4 @@
-import { get } from "./request";
-import moment from "moment-timezone";
+import { get } from './request';
 
 /**
  * Get clinic general statistics
@@ -41,7 +40,11 @@ export async function getServicesStatistics(query, headers = null) {
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestFetchClinicAnalytics(startDate, endDate, headers = null) {
+export async function requestFetchClinicAnalytics(
+  startDate,
+  endDate,
+  headers = null,
+) {
   const queryString = new URLSearchParams({ startDate, endDate }).toString();
-  return get(`/api/analytics?${queryString}`, headers)
+  return get(`/api/analytics?${queryString}`, headers);
 }

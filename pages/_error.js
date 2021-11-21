@@ -16,6 +16,11 @@ const Error = ({ statusCode }) => {
 export default Error;
 
 Error.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
+  let statusCode;
+  if (res) {
+    statusCode = res.statusCode;
+  } else {
+    statusCode = err ? err.statusCode : 404;
+  }
   return { statusCode };
 };

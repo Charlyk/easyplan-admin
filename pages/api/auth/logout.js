@@ -1,11 +1,6 @@
 import cookie from 'cookie';
 import { environment } from 'eas.config';
-import { authorized } from '../authorized';
-
-export default authorized(async (req, res) => {
-  clearCookies(res, '', -1);
-  res.json({ message: 'OK' });
-});
+import authorized from '../authorized';
 
 function clearCookies(res, authToken, clinicId) {
   const cookieOpts = {
@@ -19,3 +14,8 @@ function clearCookies(res, authToken, clinicId) {
   const clinicCookie = cookie.serialize('clinic_id', clinicId, cookieOpts);
   res.setHeader('Set-Cookie', [tokenCookie, clinicCookie]);
 }
+
+export default authorized(async (req, res) => {
+  clearCookies(res, '', -1);
+  res.json({ message: 'OK' });
+});

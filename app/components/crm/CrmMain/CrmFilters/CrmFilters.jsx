@@ -1,19 +1,20 @@
-import React, { useEffect, useMemo, useReducer, useRef } from "react";
-import clsx from "clsx";
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import moment from "moment-timezone";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
-
-import PatientsSearchField from "../../../common/PatientsSearchField/PatientsSearchField";
-import EasyDateRangePicker from "../../../common/EasyDateRangePicker";
-import EASTextField from "../../../common/EASTextField";
-import EASSelect from "../../../common/EASSelect";
-import { textForKey } from "../../../../utils/localization";
-import { Role } from "../../../../utils/constants";
-import IconClose from "../../../icons/iconClose";
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
+import IconClose from 'app/components/icons/iconClose';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import styles from './CrmFilters.module.scss';
 import reducer, {
   defaultRange,
   reminderOptions,
@@ -30,29 +31,29 @@ import reducer, {
   setSelectedShortcut,
   resetState,
 } from './CrmFilters.reducer';
-import styles from './CrmFilters.module.scss';
 
-const CrmFilters = (
-  {
-    selectedParams,
-    currentClinic,
-    dealsStates,
-    onClose,
-    onShortcutSelected,
-    onSubmit,
-  }
-) => {
-  const [{
-    patient,
-    selectedDoctors,
-    selectedReminder,
-    selectedServices,
-    selectedUsers,
-    selectedDateRange,
-    showRangePicker,
-    selectedStates,
-    selectedShortcut
-  }, localDispatch] = useReducer(reducer, initialState);
+const CrmFilters = ({
+  selectedParams,
+  currentClinic,
+  dealsStates,
+  onClose,
+  onShortcutSelected,
+  onSubmit,
+}) => {
+  const [
+    {
+      patient,
+      selectedDoctors,
+      selectedReminder,
+      selectedServices,
+      selectedUsers,
+      selectedDateRange,
+      showRangePicker,
+      selectedStates,
+      selectedShortcut,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   const {
     patient: initialPatient,
@@ -84,30 +85,38 @@ const CrmFilters = (
   }, [currentClinic]);
   const dateRangeText = useMemo(() => {
     if (selectedDateRange.length === 0) {
-      return ''
+      return '';
     }
     const [start, end] = selectedDateRange;
-    return `${moment(start).format('DD.MM.YYYY')} - ${moment(end).format('DD.MM.YYYY')}`
+    return `${moment(start).format('DD.MM.YYYY')} - ${moment(end).format(
+      'DD.MM.YYYY',
+    )}`;
   }, [selectedDateRange]);
 
   useEffect(() => {
     setupDealStates();
-  }, [initialStates, dealsStates])
+  }, [initialStates, dealsStates]);
 
   useEffect(() => {
     localDispatch(setPatient(initialPatient));
   }, [initialPatient]);
 
   useEffect(() => {
-    localDispatch(setSelectedDoctors(initialDoctors ?? initialState.selectedDoctors));
+    localDispatch(
+      setSelectedDoctors(initialDoctors ?? initialState.selectedDoctors),
+    );
   }, [initialDoctors]);
 
   useEffect(() => {
-    localDispatch(setSelectedReminder(initialReminder ?? initialState.selectedReminder));
+    localDispatch(
+      setSelectedReminder(initialReminder ?? initialState.selectedReminder),
+    );
   }, [initialReminder]);
 
   useEffect(() => {
-    localDispatch(setSelectedServices(initialServices ?? initialState.selectedServices));
+    localDispatch(
+      setSelectedServices(initialServices ?? initialState.selectedServices),
+    );
   }, [initialServices]);
 
   useEffect(() => {
@@ -115,8 +124,10 @@ const CrmFilters = (
   }, [initialUsers]);
 
   useEffect(() => {
-    localDispatch(setSelectedShortcut(initialShortcut ?? initialState.selectedShortcut));
-  }, [initialShortcut])
+    localDispatch(
+      setSelectedShortcut(initialShortcut ?? initialState.selectedShortcut),
+    );
+  }, [initialShortcut]);
 
   useEffect(() => {
     if (initialDateRange == null) {
@@ -130,11 +141,13 @@ const CrmFilters = (
 
   const setupDealStates = () => {
     if (initialStates == null || initialStates.length === 0) {
-      localDispatch(setSelectedStates(dealsStates.filter(item => item.visibleByDefault)));
+      localDispatch(
+        setSelectedStates(dealsStates.filter((item) => item.visibleByDefault)),
+      );
     } else {
       localDispatch(setSelectedStates(initialStates));
     }
-  }
+  };
 
   const handlePatientChange = (selectedPatient) => {
     localDispatch(setPatient(selectedPatient));
@@ -150,68 +163,82 @@ const CrmFilters = (
     // setTimeout(() => {
     //   handleSubmitFilter();
     // }, 300);
-  }
+  };
 
   const handleSubmitFilter = () => {
     const newFilter = {
-      patient: patient ? {
-        id: patient.id,
-        name: patient.name,
-        label: patient.label,
-      } : null,
-      doctors: selectedDoctors.some(item => item.id === -1)
+      patient: patient
+        ? {
+            id: patient.id,
+            name: patient.name,
+            label: patient.label,
+          }
+        : null,
+      doctors: selectedDoctors.some((item) => item.id === -1)
         ? null
-        : selectedDoctors.map(doctor => ({ id: doctor.id, name: doctor.name })),
-      users: selectedUsers.some(item => item.id === -1)
+        : selectedDoctors.map((doctor) => ({
+            id: doctor.id,
+            name: doctor.name,
+          })),
+      users: selectedUsers.some((item) => item.id === -1)
         ? null
-        : selectedUsers.map(user => ({ id: user.id, name: user.name })),
-      services: selectedServices.some(item => item.id === -1)
+        : selectedUsers.map((user) => ({ id: user.id, name: user.name })),
+      services: selectedServices.some((item) => item.id === -1)
         ? null
-        : selectedServices.map(service => ({ id: service.id, name: service.name })),
+        : selectedServices.map((service) => ({
+            id: service.id,
+            name: service.name,
+          })),
       reminder: selectedReminder,
-      dateRange: selectedDateRange.length === 0
-        ? null
-        : selectedDateRange,
-      states: selectedStates.map(state => ({ id: state.id, name: state.name })),
+      dateRange: selectedDateRange.length === 0 ? null : selectedDateRange,
+      states: selectedStates.map((state) => ({
+        id: state.id,
+        name: state.name,
+      })),
       shortcut: selectedShortcut,
-    }
+    };
     if (newFilter.patient == null) delete newFilter.patient;
     if (newFilter.doctors == null) delete newFilter.doctors;
     if (newFilter.users == null) delete newFilter.users;
     if (newFilter.services == null) delete newFilter.services;
     if (newFilter.reminder == null) delete newFilter.reminder;
     if (newFilter.dateRange == null) delete newFilter.dateRange;
-    if (newFilter.shortcut == null || newFilter.shortcut.id === 0) delete newFilter.shortcut;
+    if (newFilter.shortcut == null || newFilter.shortcut.id === 0)
+      delete newFilter.shortcut;
     onSubmit?.(newFilter);
     handleCloseFilters();
   };
 
   const handleDoctorChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedDoctors(initialState.selectedDoctors));
       return;
     }
     const newDoctors = doctors.filter((doctor) =>
-      newValue.some(item => item === doctor.id)
+      newValue.some((item) => item === doctor.id),
     );
-    localDispatch(setSelectedDoctors(newDoctors.filter(doctor => doctor.id !== -1)));
+    localDispatch(
+      setSelectedDoctors(newDoctors.filter((doctor) => doctor.id !== -1)),
+    );
   };
 
   const handleStatesChanged = (event) => {
     const newValue = event.target.value;
     if (newValue.length === 0) {
-      localDispatch(setSelectedStates(
-        dealsStates.filter(item => item.visibleByDefault),
-      ));
+      localDispatch(
+        setSelectedStates(dealsStates.filter((item) => item.visibleByDefault)),
+      );
       return;
     }
     const newStates = dealsStates.filter((state) =>
-      newValue.some(item => item === state.id)
+      newValue.some((item) => item === state.id),
     );
-    localDispatch(setSelectedStates(newStates.filter(state => state.id !== -1)));
-  }
+    localDispatch(
+      setSelectedStates(newStates.filter((state) => state.id !== -1)),
+    );
+  };
 
   const handleServicesChange = (event) => {
     const newValue = event.target.value;
@@ -221,20 +248,22 @@ const CrmFilters = (
       return;
     }
     const newServices = services.filter((service) =>
-      newValue.some(item => item === service.id)
+      newValue.some((item) => item === service.id),
     );
-    localDispatch(setSelectedServices(newServices.filter(service => service.id !== -1)));
+    localDispatch(
+      setSelectedServices(newServices.filter((service) => service.id !== -1)),
+    );
   };
 
   const handleCloseRangePicker = (event) => {
-    event?.stopPropagation()
+    event?.stopPropagation();
     localDispatch(setShowRangePicker(false));
-  }
+  };
 
   const handleOpenRangePicker = (event) => {
     event?.stopPropagation();
     localDispatch(setShowRangePicker(true));
-  }
+  };
 
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
@@ -247,23 +276,23 @@ const CrmFilters = (
       localDispatch(setSelectedReminder(null));
       return;
     }
-    const newReminder = reminderOptions.find((reminder) =>
-      newValue === reminder.id,
+    const newReminder = reminderOptions.find(
+      (reminder) => newValue === reminder.id,
     );
     localDispatch(setSelectedReminder(newReminder));
   };
 
   const handleUsersChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedUsers(initialState.selectedUsers));
       return;
     }
     const newUsers = users.filter((user) =>
-      newValue.some(item => item === user.id)
+      newValue.some((item) => item === user.id),
     );
-    localDispatch(setSelectedUsers(newUsers.filter(user => user.id !== -1)));
+    localDispatch(setSelectedUsers(newUsers.filter((user) => user.id !== -1)));
   };
 
   const handleShortcutSelected = (shortcut) => {
@@ -280,36 +309,39 @@ const CrmFilters = (
   };
 
   return (
-    <div
-      className={styles.filterBackdrop}
-      onClick={handleCloseFilters}
-    >
-      <Paper
-        className={styles.crmFilters}
-        onClick={handleCloseRangePicker}
-      >
+    <Box className={styles.filterBackdrop} onClick={handleCloseFilters}>
+      <Paper className={styles.crmFilters} onClick={handleCloseRangePicker}>
         <div className={styles.titleContainer}>
           <Typography className={styles.title}>
             {textForKey('Filter')}
           </Typography>
-          <IconButton className={styles.closeButton} onClick={handleCloseFilters}>
-            <IconClose/>
+          <IconButton
+            className={styles.closeButton}
+            onClick={handleCloseFilters}
+          >
+            <IconClose />
           </IconButton>
         </div>
         <div className={styles.container}>
           <div className={styles.dataContainer}>
             <div className={styles.shortcuts}>
               {Shortcuts.map((item) => (
-                <div
+                <Box
                   key={item.id}
-                  className={clsx(styles.shortcut, { [styles.selected]: isShortcutSelected(item.id) })}
+                  className={clsx(styles.shortcut, {
+                    [styles.selected]: isShortcutSelected(item.id),
+                  })}
                   onClick={() => handleShortcutSelected(item)}
                 >
                   {item.type === 'reminder' ? (
-                    <div className={clsx(styles.reminderIndicator, { [styles.expired]: item.id === 6 })} />
+                    <div
+                      className={clsx(styles.reminderIndicator, {
+                        [styles.expired]: item.id === 6,
+                      })}
+                    />
                   ) : null}
                   <Typography className={styles.label}>{item.name}</Typography>
-                </div>
+                </Box>
               ))}
             </div>
             <div className={styles.filters}>
@@ -318,7 +350,7 @@ const CrmFilters = (
                   readOnly
                   ref={pickerRef}
                   value={dateRangeText}
-                  placeholder="01.01.2021 - 30.01.2021"
+                  placeholder='01.01.2021 - 30.01.2021'
                   fieldLabel={textForKey('Period')}
                   containerClass={styles.simpleField}
                   onClick={handleOpenRangePicker}
@@ -336,9 +368,9 @@ const CrmFilters = (
                   updateText
                   rootClass={styles.simpleField}
                   label={textForKey('States')}
-                  labelId="doctors-select-label"
+                  labelId='doctors-select-label'
                   options={dealsStates}
-                  value={selectedStates?.map(item => item.id) || []}
+                  value={selectedStates?.map((item) => item.id) || []}
                   onChange={handleStatesChanged}
                 />
 
@@ -346,13 +378,13 @@ const CrmFilters = (
                   multiple
                   rootClass={styles.simpleField}
                   label={textForKey('Doctors')}
-                  labelId="doctors-select-label"
+                  labelId='doctors-select-label'
                   options={doctors}
                   defaultOption={{
                     id: -1,
-                    name: textForKey('All doctors')
+                    name: textForKey('All doctors'),
                   }}
-                  value={selectedDoctors?.map(item => item.id) || []}
+                  value={selectedDoctors?.map((item) => item.id) || []}
                   onChange={handleDoctorChange}
                 />
 
@@ -360,13 +392,13 @@ const CrmFilters = (
                   multiple
                   rootClass={styles.simpleField}
                   label={textForKey('Responsible')}
-                  labelId="doctors-select-label"
+                  labelId='doctors-select-label'
                   options={users}
                   defaultOption={{
                     id: -1,
-                    name: textForKey('All users')
+                    name: textForKey('All users'),
                   }}
-                  value={selectedUsers?.map(item => item.id) || []}
+                  value={selectedUsers?.map((item) => item.id) || []}
                   onChange={handleUsersChange}
                 />
 
@@ -374,20 +406,20 @@ const CrmFilters = (
                   multiple
                   rootClass={styles.simpleField}
                   label={textForKey('Services')}
-                  labelId="doctors-select-label"
+                  labelId='doctors-select-label'
                   options={services}
                   defaultOption={{
                     id: -1,
-                    name: textForKey('All services')
+                    name: textForKey('All services'),
                   }}
-                  value={selectedServices?.map(item => item.id) || []}
+                  value={selectedServices?.map((item) => item.id) || []}
                   onChange={handleServicesChange}
                 />
 
                 <EASSelect
                   rootClass={styles.simpleField}
                   label={textForKey('crm_reminders')}
-                  labelId="reminder-select-label"
+                  labelId='reminder-select-label'
                   options={reminderOptions}
                   value={selectedReminder?.id ?? 0}
                   onChange={handleRemindersChange}
@@ -425,8 +457,8 @@ const CrmFilters = (
           />
         </div>
       </Paper>
-    </div>
-  )
+    </Box>
+  );
 };
 
 export default CrmFilters;
@@ -436,4 +468,4 @@ CrmFilters.propTypes = {
   onShortcutSelected: PropTypes.func,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
-}
+};

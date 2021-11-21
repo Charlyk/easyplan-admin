@@ -1,4 +1,4 @@
-import generateReducerActions from '../../../../../utils/generateReducerActions';
+import generateReducerActions from 'app/utils/generateReducerActions';
 
 export const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
 

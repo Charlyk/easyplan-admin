@@ -1,17 +1,16 @@
 import React, { useEffect, useReducer } from 'react';
-import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
-import Box from "@material-ui/core/Box";
 import TabContext from '@material-ui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
-
-import { requestLinkPatient } from "../../../../middleware/api/crm";
-import { textForKey } from "../../../utils/localization";
-import onRequestError from "../../../utils/onRequestError";
-import EASModal from "../../common/modals/EASModal";
-import ExistentPatientForm from "./ExistentPatientForm";
-import NewPatientForm from "./NewPatientForm";
+import PropTypes from 'prop-types';
+import EASModal from 'app/components/common/modals/EASModal';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import { requestLinkPatient } from 'middleware/api/crm';
+import ExistentPatientForm from './ExistentPatientForm';
+import styles from './LinkPatientModal.module.scss';
 import reducer, {
   initialState,
   setPatientData,
@@ -19,14 +18,13 @@ import reducer, {
   setIsLoading,
   resetState,
 } from './LinkPatientModal.reducer';
-import styles from './LinkPatientModal.module.scss';
+import NewPatientForm from './NewPatientForm';
 
 const LinkPatientModal = ({ open, deal, confirm, onClose, onLinked }) => {
-  const [{
-    currentTab,
-    patientData,
-    isLoading
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [{ currentTab, patientData, isLoading }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     if (!open) {
@@ -53,7 +51,7 @@ const LinkPatientModal = ({ open, deal, confirm, onClose, onLinked }) => {
     } finally {
       localDispatch(setIsLoading(false));
     }
-  }
+  };
 
   return (
     <EASModal
@@ -69,34 +67,34 @@ const LinkPatientModal = ({ open, deal, confirm, onClose, onLinked }) => {
       <TabContext value={currentTab}>
         <Box>
           <TabList
-            variant="fullWidth"
+            variant='fullWidth'
             classes={{
               root: styles.tabsRoot,
-              indicator: styles.tabsIndicator
+              indicator: styles.tabsIndicator,
             }}
             onChange={handleTabChange}
           >
             <Tab
-              value="0"
+              value='0'
               label={textForKey('Existent patient')}
               classes={{ root: styles.tabItem }}
             />
             <Tab
-              value="1"
+              value='1'
               label={textForKey('New patient')}
               classes={{ root: styles.tabItem }}
             />
           </TabList>
         </Box>
-        <TabPanel value="0" style={{ padding: 0 }}>
+        <TabPanel value='0' style={{ padding: 0 }}>
           <ExistentPatientForm deal={deal} onChange={handlePatientChange} />
         </TabPanel>
-        <TabPanel value="1" style={{ padding: 0 }}>
-          <NewPatientForm deal={deal} onChange={handlePatientChange}/>
+        <TabPanel value='1' style={{ padding: 0 }}>
+          <NewPatientForm deal={deal} onChange={handlePatientChange} />
         </TabPanel>
       </TabContext>
     </EASModal>
-  )
+  );
 };
 
 export default LinkPatientModal;
@@ -115,10 +113,10 @@ LinkPatientModal.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.any,
   }),
   onClose: PropTypes.func,
   onLinked: PropTypes.func,
-}
+};

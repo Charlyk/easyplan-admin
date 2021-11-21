@@ -1,36 +1,36 @@
 import React, { useEffect, useReducer } from 'react';
-import dynamic from 'next/dynamic';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
-import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableContainer from '@material-ui/core/TableContainer';
-import PropTypes from 'prop-types';
-import UploadIcon from '@material-ui/icons/CloudUpload';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import UploadIcon from '@material-ui/icons/CloudUpload';
+import dynamic from 'next/dynamic';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from "react-toastify";
-
-import IconPlus from '../../../icons/iconPlus';
-import IconSearch from '../../../icons/iconSearch';
-import LoadingButton from '../../../common/LoadingButton';
-import {
-  setPatientDetails,
-  togglePatientsListUpdate,
-} from '../../../../../redux/actions/actions';
-import { HeaderKeys } from "../../../../utils/constants";
-import { updatePatientsListSelector } from '../../../../../redux/selectors/rootSelector';
-import { textForKey } from '../../../../utils/localization';
+import { toast } from 'react-toastify';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconPlus from 'app/components/icons/iconPlus';
+import IconSearch from 'app/components/icons/iconSearch';
+import { HeaderKeys } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import {
   deletePatient,
   getPatients,
-  importPatientsFromFile
-} from "../../../../../middleware/api/patients";
-import EASTextField from "../../../common/EASTextField";
+  importPatientsFromFile,
+} from 'middleware/api/patients';
+import {
+  setPatientDetails,
+  togglePatientsListUpdate,
+} from 'redux/actions/actions';
+import { updatePatientsListSelector } from 'redux/selectors/rootSelector';
+import styles from './PatientsList.module.scss';
 import reducer, {
   initialState,
   setPage,
@@ -43,12 +43,15 @@ import reducer, {
   setShowCreateModal,
   setShowImportModal,
   setIsLoading,
-} from './PatientsList.reducer'
-import styles from './PatientsList.module.scss';
+} from './PatientsList.reducer';
 
 const PatientRow = dynamic(() => import('./PatientRow'));
-const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
-const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
+const ConfirmationModal = dynamic(() =>
+  import('app/components/common/modals/ConfirmationModal'),
+);
+const CSVImportModal = dynamic(() =>
+  import('app/components/common/CSVImportModal'),
+);
 const CreatePatientModal = dynamic(() => import('../CreatePatientModal'));
 
 const importFields = [
@@ -82,15 +85,19 @@ const importFields = [
     name: textForKey('Gender'),
     required: false,
   },
-]
+];
 
-const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) => {
+const PatientsList = ({
+  currentClinic,
+  authToken,
+  data,
+  query: initialQuery,
+}) => {
   const dispatch = useDispatch();
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
     {
       isLoading,
-      isUploading,
       patients,
       rowsPerPage,
       page,
@@ -117,7 +124,10 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
   }, [updatePatients]);
 
   useEffect(() => {
-    if (page === initialQuery.page && rowsPerPage === initialQuery.rowsPerPage) {
+    if (
+      page === initialQuery.page &&
+      rowsPerPage === initialQuery.rowsPerPage
+    ) {
       return;
     }
     fetchPatients();
@@ -154,7 +164,7 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
 
   const handleCloseImportModal = () => {
     localDispatch(setShowImportModal(false));
-  }
+  };
 
   const handleSearchFieldKeyDown = (event) => {
     if (event.keyCode === 13) {
@@ -219,7 +229,10 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
 
   const handleImportPatients = async (file, fields) => {
     try {
-      const mappedFields = fields.map(item => ({ fieldId: item.id, index: item.index }));
+      const mappedFields = fields.map((item) => ({
+        fieldId: item.id,
+        index: item.index,
+      }));
       await importPatientsFromFile(file, mappedFields, {
         [HeaderKeys.authorization]: authToken,
         [HeaderKeys.clinicId]: currentClinic.id,
@@ -262,7 +275,7 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
       <div className={styles.content}>
         {isLoading && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
 
@@ -332,28 +345,28 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
             className={styles.importBtn}
             classes={{
               root: styles.importBtn,
-              outlined: styles.outlinedBtnBlue
+              outlined: styles.outlinedBtnBlue,
             }}
             onClick={handleStartUploadPatients}
           >
             <Typography noWrap className={styles.buttonLabel}>
               {textForKey('Import patients')}
             </Typography>
-            <UploadIcon/>
+            <UploadIcon />
           </Button>
           <Button
-            variant="outlined"
+            variant='outlined'
             className={styles.createBtn}
             onClick={handleCreatePatient}
           >
             <Typography noWrap className={styles.buttonLabel}>
               {textForKey('Add patient')}
             </Typography>
-            <IconPlus fill='#00E987'/>
+            <IconPlus fill='#00E987' />
           </Button>
           <div className='flexContainer'>
             <EASTextField
-              type="text"
+              type='text'
               placeholder={`${textForKey('Search patient')}...`}
               value={searchQuery || ''}
               onChange={handleSearchQueryChange}
@@ -366,14 +379,14 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
               onClick={handleSearchClick}
             >
               {textForKey('Search')}
-              <IconSearch/>
+              <IconSearch />
             </LoadingButton>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default PatientsList;
 

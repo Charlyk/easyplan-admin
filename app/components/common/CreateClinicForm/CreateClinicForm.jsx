@@ -1,20 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import debounce from 'lodash/debounce';
 import sortBy from 'lodash/sortBy';
-import debounce from "lodash/debounce";
-import { toast } from "react-toastify";
-import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../utils/localization";
-import { WebRegex } from "../../../utils/constants";
+import { toast } from 'react-toastify';
+import { WebRegex } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import {
   checkDomainAvailability,
   clinicTimeZones,
-  fetchAvailableCurrencies
-} from "../../../../middleware/api/clinic";
-import LoadingButton from "../LoadingButton";
-import EASTextField from "../EASTextField";
-import UploadAvatar from "../UploadAvatar";
-import EASSelect from "../EASSelect";
-import EASTextarea from "../EASTextarea";
+  fetchAvailableCurrencies,
+} from 'middleware/api/clinic';
+import EASSelect from '../EASSelect';
+import EASTextarea from '../EASTextarea';
+import EASTextField from '../EASTextField';
+import LoadingButton from '../LoadingButton';
+import UploadAvatar from '../UploadAvatar';
+import styles from './CreateClinicForm.module.scss';
 import reducer, {
   initialState,
   setLogoFile,
@@ -27,29 +29,38 @@ import reducer, {
   setDefaultCurrency,
   setIsDomainAvailable,
   setCountry,
-} from './createClinicSlice'
-import styles from "./CreateClinicForm.module.scss";
+} from './createClinicSlice';
 
-const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, onSubmit }) => {
-  const [{
-    logoFile,
-    clinicName,
-    website,
-    description,
-    timeZone,
-    timeZones,
-    domainName,
-    currencies,
-    defaultCurrency,
-    isDomainAvailable,
-    country,
-  }, localDispatch] = useReducer(reducer, initialState);
+const CreateClinicForm = ({
+  isLoading,
+  isMobile,
+  redirect,
+  countries,
+  onGoBack,
+  onSubmit,
+}) => {
+  const [
+    {
+      logoFile,
+      clinicName,
+      website,
+      description,
+      timeZone,
+      timeZones,
+      domainName,
+      currencies,
+      defaultCurrency,
+      isDomainAvailable,
+      country,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   const mappedCountries = useMemo(() => {
     return countries.map((item) => ({
       ...item,
       label: item.name,
-    }))
+    }));
   }, [countries]);
 
   const mappedCurrencies = useMemo(() => {
@@ -60,10 +71,13 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
   }, [currencies]);
 
   const mappedTimeZones = useMemo(() => {
-    return sortBy(timeZones.map((item) => ({
-      id: item,
-      name: item,
-    })), item => item.name);
+    return sortBy(
+      timeZones.map((item) => ({
+        id: item,
+        name: item,
+      })),
+      (item) => item.name,
+    );
   }, [timeZones]);
 
   useEffect(() => {
@@ -88,32 +102,32 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
 
   const handleNameChange = (newValue) => {
     localDispatch(setClinicName(newValue));
-  }
+  };
 
   const handleDomainChange = (newDomain) => {
     localDispatch(setDomainName(newDomain.toLowerCase()));
-  }
+  };
 
   const handleWebsiteChange = (newValue) => {
     localDispatch(setWebsite(newValue));
-  }
+  };
 
   const handleTimeZoneChange = (event) => {
     localDispatch(setTimeZone(event.target.value));
-  }
+  };
 
   const handleDescriptionChange = (newValue) => {
     localDispatch(setDescription(newValue));
-  }
+  };
 
   const handleCurrencyChange = (event) => {
     localDispatch(setDefaultCurrency(event.target.value));
-  }
+  };
 
   const handleCountryChange = (event) => {
-    const country = countries.find(item => item.id === event.target.value);
+    const country = countries.find((item) => item.id === event.target.value);
     localDispatch(setCountry(country));
-  }
+  };
 
   const handleLogoChange = (file) => {
     if (file != null) {
@@ -128,9 +142,12 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
 
-  const handleDomainNameUpdated = useCallback(debounce(checkIsDomainAvailable, 400), [domainName]);
+  const handleDomainNameUpdated = useCallback(
+    debounce(checkIsDomainAvailable, 400),
+    [domainName],
+  );
 
   const isFormValid = useMemo(() => {
     return (
@@ -141,7 +158,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
       domainName.length > 3 &&
       isDomainAvailable &&
       (website.length === 0 || website.match(WebRegex))
-    )
+    );
   }, [
     website,
     clinicName,
@@ -149,7 +166,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
     country,
     defaultCurrency,
     timeZone,
-    isDomainAvailable
+    isDomainAvailable,
   ]);
 
   const handleSubmitForm = (event) => {
@@ -167,11 +184,11 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
       domainName: domainName,
       defaultCurrency,
     });
-  }
+  };
 
   const handleGoBack = () => {
     onGoBack();
-  }
+  };
 
   return (
     <div
@@ -183,13 +200,10 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
     >
       <span className={styles.formTitle}>{textForKey('Create clinic')}</span>
       <form onSubmit={handleSubmitForm}>
-        <UploadAvatar
-          currentAvatar={logoFile}
-          onChange={handleLogoChange}
-        />
+        <UploadAvatar currentAvatar={logoFile} onChange={handleLogoChange} />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.textField}
           fieldLabel={textForKey('Clinic name')}
           value={clinicName}
@@ -197,7 +211,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
         />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.textField}
           fieldLabel={textForKey('Domain name')}
           error={domainName.length > 0 && !isDomainAvailable}
@@ -211,9 +225,11 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
         />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.textField}
-          fieldLabel={`${textForKey('Website')} (${textForKey('optional',).toLowerCase()})`}
+          fieldLabel={`${textForKey('Website')} (${textForKey(
+            'optional',
+          ).toLowerCase()})`}
           value={website}
           onChange={handleWebsiteChange}
         />
@@ -221,7 +237,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
         <EASSelect
           rootClass={styles.textField}
           label={textForKey('Country')}
-          labelId="clinic-country-select"
+          labelId='clinic-country-select'
           disabled={countries.length === 0}
           options={mappedCountries}
           value={country?.id || -1}
@@ -231,7 +247,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
         <EASSelect
           rootClass={styles.textField}
           label={textForKey('Currency')}
-          labelId="clinic-currency-select"
+          labelId='clinic-currency-select'
           disabled={currencies.length === 0}
           value={defaultCurrency}
           options={mappedCurrencies}
@@ -241,7 +257,7 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
         <EASSelect
           rootClass={styles.textField}
           label={textForKey('Time zone')}
-          labelId="time-zone-select"
+          labelId='time-zone-select'
           disabled={timeZones.length === 0}
           value={timeZone}
           options={mappedTimeZones}
@@ -249,25 +265,21 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
         />
 
         <EASTextarea
-          type="text"
+          type='text'
           containerClass={styles.textField}
-          fieldLabel={`${textForKey('About clinic')} (${textForKey('optional').toLowerCase()})`}
+          fieldLabel={`${textForKey('About clinic')} (${textForKey(
+            'optional',
+          ).toLowerCase()})`}
           value={description}
           onChange={handleDescriptionChange}
         />
 
         <div className={styles.footer}>
-          <div
-            role='button'
-            tabIndex={0}
-            className={styles.backButton}
-            onClick={handleGoBack}
-          >
+          <Box className={styles.backButton} onClick={handleGoBack}>
             {redirect
               ? `${textForKey('Already have an account')}?`
-              : textForKey('go back')
-            }
-          </div>
+              : textForKey('go back')}
+          </Box>
           <LoadingButton
             onClick={handleSubmitForm}
             isLoading={isLoading}
@@ -276,13 +288,12 @@ const CreateClinicForm = ({ isLoading, isMobile, redirect, countries, onGoBack, 
           >
             {redirect
               ? textForKey('Create new account')
-              : textForKey('Create clinic')
-            }
+              : textForKey('Create clinic')}
           </LoadingButton>
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default CreateClinicForm;

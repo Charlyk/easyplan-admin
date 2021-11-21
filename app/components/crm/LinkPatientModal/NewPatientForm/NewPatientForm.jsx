@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useReducer } from "react";
-import moment from "moment-timezone";
-import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import { textForKey } from "../../../../utils/localization";
-import { EmailRegex, Languages, PatientSources } from "../../../../utils/constants";
-import EASPhoneInput from "../../../common/EASPhoneInput";
-import EASTextField from "../../../common/EASTextField";
-import EASSelect from "../../../common/EASSelect";
+import React, { useEffect, useMemo, useReducer } from 'react';
+import moment from 'moment-timezone';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import { EmailRegex, Languages, PatientSources } from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import styles from './NewPatientForm.module.scss';
 import reducer, {
   initialState,
   setEmail,
@@ -17,25 +18,27 @@ import reducer, {
   setLanguage,
   setPatientSource,
 } from './NewPatientForm.reducer';
-import styles from './NewPatientForm.module.scss';
 
 const NewPatientForm = ({ deal, onChange }) => {
-  const [{
-    firstName,
-    lastName,
-    phoneNumber,
-    phoneCountry,
-    email,
-    birthday,
-    language,
-    source,
-    isPhoneValid
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    {
+      firstName,
+      lastName,
+      phoneNumber,
+      phoneCountry,
+      email,
+      birthday,
+      language,
+      source,
+      isPhoneValid,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
   const phoneNumberValue = useMemo(() => {
     if (phoneNumber?.startsWith(phoneCountry?.dialCode)) {
       return phoneNumber?.replace(phoneCountry?.dialCode, '');
     }
-    return phoneNumber
+    return phoneNumber;
   }, [phoneNumber, phoneCountry]);
 
   useEffect(() => {
@@ -53,7 +56,16 @@ const NewPatientForm = ({ deal, onChange }) => {
       language: language.id,
       source: source.id,
     });
-  }, [firstName, lastName, phoneNumberValue, email, birthday, isPhoneValid, source, language]);
+  }, [
+    firstName,
+    lastName,
+    phoneNumberValue,
+    email,
+    birthday,
+    isPhoneValid,
+    source,
+    language,
+  ]);
 
   useEffect(() => {
     if (deal?.contact == null) {
@@ -88,34 +100,37 @@ const NewPatientForm = ({ deal, onChange }) => {
 
   const handleBirthdayChange = (newValue) => {
     localDispatch(setBirthday(moment(newValue).toDate()));
-  }
+  };
 
   const handlePhoneChange = (value, country, event) => {
-    localDispatch(setPhoneNumber({
-      phoneNumber: value.replace(country.dialCode, ''),
-      isPhoneValid: isPhoneNumberValid(value, country)
-        && !event.target?.classList.value.includes('invalid-number'),
-      country,
-    }));
+    localDispatch(
+      setPhoneNumber({
+        phoneNumber: value.replace(country.dialCode, ''),
+        isPhoneValid:
+          isPhoneNumberValid(value, country) &&
+          !event.target?.classList.value.includes('invalid-number'),
+        country,
+      }),
+    );
   };
 
   const handleLanguageChange = (event) => {
     const newValue = event.target.value;
-    const newLanguage = Languages.find(item => item.id === newValue);
+    const newLanguage = Languages.find((item) => item.id === newValue);
     localDispatch(setLanguage(newLanguage));
   };
 
   const handleSourceChange = (event) => {
     const newValue = event.target.value;
-    const newSource = PatientSources.find(item => item.id === newValue);
+    const newSource = PatientSources.find((item) => item.id === newValue);
     localDispatch(setPatientSource(newSource));
   };
 
   return (
     <div className={styles.newPatientForm}>
       <EASTextField
-        id="firstName"
-        type="text"
+        id='firstName'
+        type='text'
         value={lastName}
         fieldLabel={textForKey('Last name')}
         placeholder={textForKey('Last name')}
@@ -124,8 +139,8 @@ const NewPatientForm = ({ deal, onChange }) => {
       />
 
       <EASTextField
-        id="lastName"
-        type="text"
+        id='lastName'
+        type='text'
         value={firstName}
         fieldLabel={textForKey('First name')}
         placeholder={textForKey('First name')}
@@ -142,8 +157,8 @@ const NewPatientForm = ({ deal, onChange }) => {
       />
 
       <EASTextField
-        id="email"
-        type="email"
+        id='email'
+        type='email'
         value={email}
         error={email.length > 0 && !email.match(EmailRegex)}
         fieldLabel={textForKey('Email')}
@@ -153,8 +168,8 @@ const NewPatientForm = ({ deal, onChange }) => {
       />
 
       <EASTextField
-        id="birthday"
-        type="date"
+        id='birthday'
+        type='date'
         value={birthday != null ? moment(birthday).format('YYYY-MM-DD') : ''}
         fieldLabel={textForKey('Birthday')}
         placeholder={textForKey('Birthday')}
@@ -164,7 +179,7 @@ const NewPatientForm = ({ deal, onChange }) => {
 
       <EASSelect
         label={textForKey('spoken_language')}
-        labelId="spoken-language-select"
+        labelId='spoken-language-select'
         options={Languages}
         value={language.id}
         rootClass={styles.searchField}
@@ -173,7 +188,7 @@ const NewPatientForm = ({ deal, onChange }) => {
 
       <EASSelect
         label={textForKey('patient_source')}
-        labelId="patient-source-select"
+        labelId='patient-source-select'
         options={PatientSources}
         value={source.id}
         rootClass={styles.searchField}

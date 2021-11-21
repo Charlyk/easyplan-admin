@@ -3,13 +3,11 @@ import { createWrapper } from 'next-redux-wrapper';
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import timerMiddleware from 'redux-timer-middleware';
-import rootReducer from './redux/reducers/rootReducer';
+import rootReducer from 'redux/reducers/rootReducer';
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-      })
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 const middlewares = [thunk, timerMiddleware];
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));

@@ -1,4 +1,4 @@
-import { get } from "./request";
+import { get } from './request';
 
 /**
  * Fetch all available countries

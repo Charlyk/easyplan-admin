@@ -1,8 +1,8 @@
 import React from 'react';
-import Image from 'next/image';
 import Typography from '@material-ui/core/Typography';
-import { textForKey } from '../../../utils/localization';
-import styles from './NewInvoiceToast.module.scss'
+import Image from 'next/image';
+import { textForKey } from 'app/utils/localization';
+import styles from './NewInvoiceToast.module.scss';
 
 const NewInvoiceToast = () => {
   return (

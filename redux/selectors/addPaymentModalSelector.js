@@ -1,1 +1,1 @@
-export const addPaymentModalSelector = state => state.addPaymentModal;
+export const addPaymentModalSelector = (state) => state.addPaymentModal;

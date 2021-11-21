@@ -1,6 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import clsx from "clsx";
-import axios from "axios";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,20 +7,21 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
+import clsx from 'clsx';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import IconPrint from '../../../../icons/iconPrint';
-import { clinicCurrencySelector } from '../../../../../../redux/selectors/clinicSelector';
-import { updateInvoiceSelector } from '../../../../../../redux/selectors/invoicesSelector';
-import formattedAmount from '../../../../../utils/formattedAmount';
-import { textForKey } from '../../../../../utils/localization';
-import { baseApiUrl } from "../../../../../../eas.config";
+import IconPrint from 'app/components/icons/iconPrint';
+import formattedAmount from 'app/utils/formattedAmount';
+import { textForKey } from 'app/utils/localization';
+import { baseApiUrl } from 'eas.config';
+import { clinicCurrencySelector } from 'redux/selectors/clinicSelector';
+import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
+import styles from './PatientPurchasesList.module.scss';
 import { reducer, initialState, actions } from './PatientPurchasesList.reducer';
-import styles from './PatientPurchasesList.module.scss'
 
 const PatientPurchasesList = ({ patient, currentClinic }) => {
   const updateInvoice = useSelector(updateInvoiceSelector);
@@ -71,7 +70,9 @@ const PatientPurchasesList = ({ patient, currentClinic }) => {
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Payments')}
       </Typography>
-      {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
+      {isLoading && (
+        <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+      )}
       {payments.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
           {textForKey('No data here yet')} :(
@@ -99,7 +100,10 @@ const PatientPurchasesList = ({ patient, currentClinic }) => {
                     {payment.comment || textForKey('Appointment')}
                   </TableCell>
                   <TableCell align='right' classes={{ root: 'amount-cell' }}>
-                    <div className='flexContainer' style={{ justifyContent: 'flex-end' }}>
+                    <div
+                      className='flexContainer'
+                      style={{ justifyContent: 'flex-end' }}
+                    >
                       {getAmount(payment)}
                       <a
                         href={`${baseApiUrl}/invoices/receipt/${payment.invoiceId}?mode=invoice`}
@@ -119,12 +123,17 @@ const PatientPurchasesList = ({ patient, currentClinic }) => {
                   colSpan={4}
                   style={{ borderBottom: 'none' }}
                 >
-                  <div className='flexContainer' style={{ width: '100%', justifyContent: 'flex-end' }}>
+                  <div
+                    className='flexContainer'
+                    style={{ width: '100%', justifyContent: 'flex-end' }}
+                  >
                     <Typography classes={{ root: 'totals-text' }}>
                       {textForKey('Total')}:
                     </Typography>
                     <Typography
-                      classes={{ root: clsx('totals-text', styles.totalsAmount) }}
+                      classes={{
+                        root: clsx('totals-text', styles.totalsAmount),
+                      }}
                     >
                       {totalAmount}
                     </Typography>

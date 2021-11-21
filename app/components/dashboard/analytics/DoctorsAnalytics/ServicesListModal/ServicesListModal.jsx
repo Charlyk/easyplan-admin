@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,11 +8,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import sumBy from 'lodash/sumBy';
 import PropTypes from 'prop-types';
-
-import formattedAmount from '../../../../../utils/formattedAmount';
-import getServiceName from '../../../../../utils/getServiceName';
-import { textForKey } from '../../../../../utils/localization';
-import LeftSideModal from '../../../../common/LeftSideModal';
+import LeftSideModal from 'app/components/common/LeftSideModal';
+import formattedAmount from 'app/utils/formattedAmount';
+import getServiceName from 'app/utils/getServiceName';
+import { textForKey } from 'app/utils/localization';
 import styles from './ServicesListModal.module.scss';
 
 const ServicesListModal = ({ open, currency, onClose, statistic }) => {
@@ -50,10 +48,10 @@ const ServicesListModal = ({ open, currency, onClose, statistic }) => {
     return (
       <TableRow key={`${service.id}-${index}`}>
         <TableCell>{getServiceName(service)}</TableCell>
-        <TableCell align="right">
+        <TableCell align='right'>
           {formattedAmount(service.price, service.currency)}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align='right'>
           {formattedAmount(doctorAmount, service.currency)}
         </TableCell>
       </TableRow>
@@ -73,17 +71,17 @@ const ServicesListModal = ({ open, currency, onClose, statistic }) => {
           <TableHead>
             <TableRow>
               <TableCell>{textForKey('Service')}</TableCell>
-              <TableCell align="right">{textForKey('Price')}</TableCell>
-              <TableCell align="right">{textForKey('Doctor part')}</TableCell>
+              <TableCell align='right'>{textForKey('Price')}</TableCell>
+              <TableCell align='right'>{textForKey('Doctor part')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{statistic?.services.map(renderServiceRow)}</TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={2} align="right">
+              <TableCell colSpan={2} align='right'>
                 {formattedAmount(totalPrice, currency)}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align='right'>
                 {formattedAmount(doctorAmount, currency)}
               </TableCell>
             </TableRow>

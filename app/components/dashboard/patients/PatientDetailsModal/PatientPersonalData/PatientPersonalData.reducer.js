@@ -126,7 +126,6 @@ export const {
   setPhoneNumber,
   setLastName,
   setAllTags,
-  setPatientTags,
   addPatientTag,
   removeTag,
 } = patientPersonalDataSlice.actions;

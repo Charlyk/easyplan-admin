@@ -1,4 +1,5 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -14,9 +15,7 @@ const HeaderItem = ({ item, onItemClick }) => {
     onItemClick(item);
   };
   return (
-    <div
-      role='button'
-      tabIndex={0}
+    <Box
       className={clsx(styles.headerItem, {
         [styles.disabled]: item.disabled,
       })}
@@ -24,7 +23,7 @@ const HeaderItem = ({ item, onItemClick }) => {
     >
       {item.disabled && <IconUmbrella />}
       <Typography className={styles.itemName}>{item.name}</Typography>
-    </div>
+    </Box>
   );
 };
 

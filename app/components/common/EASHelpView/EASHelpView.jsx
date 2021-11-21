@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
-import clsx from "clsx";
-import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
-import Button from "@material-ui/core/Button";
 import Popper from '@material-ui/core/Popper';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import styles from './EASHelpView.module.scss';
 
-const EASHelpView = ({ notification, anchorEl, placement, onClose, ...rest }) => {
+const EASHelpView = ({
+  notification,
+  anchorEl,
+  placement,
+  onClose,
+  ...rest
+}) => {
   const [arrowRef, setArrowRef] = useState(null);
 
   const handleOkClick = () => {
     onClose?.(notification);
-  }
+  };
 
   return (
     <Popper
@@ -26,8 +32,8 @@ const EASHelpView = ({ notification, anchorEl, placement, onClose, ...rest }) =>
       modifiers={{
         arrow: {
           enabled: true,
-          element: arrowRef
-        }
+          element: arrowRef,
+        },
       }}
       className={clsx(styles.helpView, styles[placement])}
     >
@@ -37,11 +43,11 @@ const EASHelpView = ({ notification, anchorEl, placement, onClose, ...rest }) =>
             <span className={styles.arrow} ref={setArrowRef} />
             <Paper className={styles.paper}>
               <Box
-                width="100%"
-                display="flex"
-                flexDirection="column"
-                alignItems="flex-end"
-                justifyContent="center"
+                width='100%'
+                display='flex'
+                flexDirection='column'
+                alignItems='flex-end'
+                justifyContent='center'
               >
                 <Typography className={styles.title}>
                   {notification.title}
@@ -49,7 +55,9 @@ const EASHelpView = ({ notification, anchorEl, placement, onClose, ...rest }) =>
                 <Typography className={styles.message}>
                   {notification.message}
                 </Typography>
-                <Button className={styles.closeBtn} onPointerUp={handleOkClick}>OK</Button>
+                <Button className={styles.closeBtn} onPointerUp={handleOkClick}>
+                  OK
+                </Button>
               </Box>
             </Paper>
           </>

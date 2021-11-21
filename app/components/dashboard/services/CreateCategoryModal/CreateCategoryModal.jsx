@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import { textForKey } from 'app/utils/localization';
 import {
   requestCreateCategory,
-  requestEditCategory
-} from "../../../../../middleware/api/categories";
-import { textForKey } from '../../../../utils/localization';
-import EASModal from "../../../common/modals/EASModal";
-import EASTextField from "../../../common/EASTextField";
+  requestEditCategory,
+} from 'middleware/api/categories';
 import styles from './CreateCategoryModal.module.scss';
 
-const CreateCategoryModal = props => {
+const CreateCategoryModal = (props) => {
   const { show, onClose, onSaved, category } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [categoryName, setCategoryName] = useState(
@@ -51,7 +51,7 @@ const CreateCategoryModal = props => {
 
   const createNewCategory = async () => {
     try {
-      const response = await requestCreateCategory(categoryName)
+      const response = await requestCreateCategory(categoryName);
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {

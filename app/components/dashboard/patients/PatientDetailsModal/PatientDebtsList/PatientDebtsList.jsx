@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
+import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import IconPrint from '../../../../icons/iconPrint';
-import { setPaymentModal } from '../../../../../../redux/actions/actions';
-import { updateInvoiceSelector } from '../../../../../../redux/selectors/invoicesSelector';
-import formattedAmount from '../../../../../utils/formattedAmount';
-import { textForKey } from '../../../../../utils/localization';
-import { baseApiUrl } from "../../../../../../eas.config";
-import { getPatientDebts } from "../../../../../../middleware/api/patients";
+import IconPrint from 'app/components/icons/iconPrint';
+import formattedAmount from 'app/utils/formattedAmount';
+import { textForKey } from 'app/utils/localization';
+import { baseApiUrl } from 'eas.config';
+import { getPatientDebts } from 'middleware/api/patients';
+import { setPaymentModal } from 'redux/actions/actions';
+import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import styles from './PatientDebtsList.module.scss';
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
@@ -100,7 +99,9 @@ const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Debts')}
       </Typography>
-      {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
+      {isLoading && (
+        <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+      )}
       {debts.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
           {textForKey('No data here yet')} :)

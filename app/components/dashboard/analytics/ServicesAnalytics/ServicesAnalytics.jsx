@@ -1,24 +1,25 @@
 import React, { useEffect, useMemo, useReducer, useRef } from 'react';
-import dynamic from 'next/dynamic';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 import isEqual from 'lodash/isEqual';
-import sortBy from 'lodash/sortBy';
 import orderBy from 'lodash/orderBy';
+import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
-import { useDispatch } from 'react-redux';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-
-import { setPatientDetails } from '../../../../../redux/actions/actions';
-import { Role, ScheduleStatuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import EASSelect from "../../../common/EASSelect";
+import { useDispatch } from 'react-redux';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import { Role, ScheduleStatuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import { setPatientDetails } from 'redux/actions/actions';
+import styles from './ServicesAnalytics.module.scss';
 import reducer, {
   initialState,
   setSelectedDoctors,
@@ -31,34 +32,34 @@ import reducer, {
   setRowsPerPage,
   setServices,
   setShowRangePicker,
-} from "./ServicesAnalytics.reducer";
-import styles from './ServicesAnalytics.module.scss';
-import EASTextField from "../../../common/EASTextField";
+} from './ServicesAnalytics.reducer';
 
-const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
+const EasyDateRangePicker = dynamic(() =>
+  import('app/components/common/EasyDateRangePicker'),
+);
 const StatisticFilter = dynamic(() => import('../StatisticFilter'));
 
-const ServicesAnalytics = (
-  {
-    currentClinic,
-    statistics: { data: statistics, total: totalItems },
-    query: initialQuery,
-  }
-) => {
-  const router = useRouter()
+const ServicesAnalytics = ({
+  currentClinic,
+  statistics: { data: statistics, total: totalItems },
+  query: initialQuery,
+}) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const pickerRef = useRef(null);
   const doctors = useMemo(() => {
     return orderBy(
-      currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
+      currentClinic.users.filter((user) => user.roleInClinic === Role.doctor),
       ['isHidden', 'fullName'],
-      ['asc', 'asc']
+      ['asc', 'asc'],
     ).map(({ id, fullName, isHidden }) => ({
       id,
-      name: `${fullName} ${isHidden ? `(${textForKey('Fired')})` : ''}`
+      name: `${fullName} ${isHidden ? `(${textForKey('Fired')})` : ''}`,
     }));
-  }, [currentClinic])
-  const services = sortBy(currentClinic.services, service => service.name.toLowerCase());
+  }, [currentClinic]);
+  const services = sortBy(currentClinic.services, (service) =>
+    service.name.toLowerCase(),
+  );
 
   const [
     {
@@ -82,7 +83,9 @@ const ServicesAnalytics = (
     if (currentClinic == null) {
       return;
     }
-    const doctors = currentClinic.users.filter(user => user.roleInClinic === Role.doctor);
+    const doctors = currentClinic.users.filter(
+      (user) => user.roleInClinic === Role.doctor,
+    );
     localDispatch(setDoctors(doctors));
     localDispatch(setServices(currentClinic.services));
   }, [currentClinic]);
@@ -93,15 +96,15 @@ const ServicesAnalytics = (
       rowsPerPage: rp,
       fromDate: moment(startDate).format('YYYY-MM-DD'),
       toDate: moment(endDate).format('YYYY-MM-DD'),
-      statuses: selectedStatuses.map(status => status.id),
+      statuses: selectedStatuses.map((status) => status.id),
+    };
+
+    if (!selectedDoctors.some((doctor) => doctor.id === -1)) {
+      query.doctorsId = selectedDoctors.map((doctor) => doctor.id);
     }
 
-    if (!selectedDoctors.some(doctor => doctor.id === -1)) {
-      query.doctorsId = selectedDoctors.map(doctor => doctor.id);
-    }
-
-    if (!selectedServices.some(services => services.id === -1)) {
-      query.servicesId = selectedServices.map(service => service.id);
+    if (!selectedServices.some((services) => services.id === -1)) {
+      query.servicesId = selectedServices.map((service) => service.id);
     }
 
     if (isEqual(query, initialQuery)) {
@@ -110,7 +113,7 @@ const ServicesAnalytics = (
 
     const queryString = new URLSearchParams(query).toString();
     router.replace(`/analytics/services?${queryString}`);
-  }
+  };
 
   const handleFilterSubmit = () => {
     handleFilterUpdated(0);
@@ -127,50 +130,53 @@ const ServicesAnalytics = (
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(
-      setDateRange([
-        startDate,
-        moment(endDate).endOf('day').toDate(),
-      ]),
+      setDateRange([startDate, moment(endDate).endOf('day').toDate()]),
     );
   };
 
   const handleDoctorChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedDoctors([{ id: -1 }]));
       return;
     }
     const newDoctors = doctors.filter((doctor) =>
-      newValue.some(item => item === doctor.id)
+      newValue.some((item) => item === doctor.id),
     );
-    localDispatch(setSelectedDoctors(newDoctors.filter(doctor => doctor.id !== -1)));
+    localDispatch(
+      setSelectedDoctors(newDoctors.filter((doctor) => doctor.id !== -1)),
+    );
   };
 
   const handleServiceChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedServices([{ id: -1 }]));
       return;
     }
     const newServices = services.filter((service) =>
-      newValue.some(item => item === service.id)
+      newValue.some((item) => item === service.id),
     );
-    localDispatch(setSelectedServices(newServices.filter(service => service.id !== -1)));
+    localDispatch(
+      setSelectedServices(newServices.filter((service) => service.id !== -1)),
+    );
   };
 
   const handleStatusChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === 'All') {
       localDispatch(setSelectedStatuses([{ id: 'All' }]));
       return;
     }
     const newStatuses = ScheduleStatuses.filter((status) =>
-      newValue.some(item => item === status.id)
+      newValue.some((item) => item === status.id),
     );
-    localDispatch(setSelectedStatuses(newStatuses.filter(status => status.id !== 'All')));
+    localDispatch(
+      setSelectedStatuses(newStatuses.filter((status) => status.id !== 'All')),
+    );
   };
 
   const titleForStatus = (status) => {
@@ -212,12 +218,12 @@ const ServicesAnalytics = (
           checkable
           rootClass={styles.selectControlRoot}
           label={textForKey('Services')}
-          labelId="services-select-label"
+          labelId='services-select-label'
           options={services}
-          value={selectedServices.map(item => item.id)}
+          value={selectedServices.map((item) => item.id)}
           defaultOption={{
             id: -1,
-            name: textForKey('All services')
+            name: textForKey('All services'),
           }}
           onChange={handleServiceChange}
         />
@@ -226,12 +232,12 @@ const ServicesAnalytics = (
           checkable
           rootClass={styles.selectControlRoot}
           label={textForKey('Doctors')}
-          labelId="doctors-select-label"
+          labelId='doctors-select-label'
           options={doctors}
-          value={selectedDoctors.map(item => item.id)}
+          value={selectedDoctors.map((item) => item.id)}
           defaultOption={{
             id: -1,
-            name: textForKey('All doctors')
+            name: textForKey('All doctors'),
           }}
           onChange={handleDoctorChange}
         />
@@ -250,9 +256,9 @@ const ServicesAnalytics = (
           checkable
           rootClass={styles.selectControlRoot}
           label={textForKey('Statuses')}
-          labelId="statuses-select-label"
+          labelId='statuses-select-label'
           options={ScheduleStatuses}
-          value={selectedStatuses.map(item => item.id)}
+          value={selectedStatuses.map((item) => item.id)}
           defaultOption={{
             id: 'All',
             name: textForKey('All statuses'),
@@ -263,11 +269,13 @@ const ServicesAnalytics = (
       <div className={styles['data-container']}>
         {isLoading && statistics.length === 0 && (
           <div className={styles.progressWrapper}>
-            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
         {!isLoading && statistics.length === 0 && (
-          <span className={styles['no-data-label']}>{textForKey('No results')}</span>
+          <span className={styles['no-data-label']}>
+            {textForKey('No results')}
+          </span>
         )}
         {statistics.length > 0 && (
           <TableContainer classes={{ root: styles['table-container'] }}>

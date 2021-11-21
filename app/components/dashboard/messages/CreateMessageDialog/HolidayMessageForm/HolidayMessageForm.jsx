@@ -1,51 +1,63 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from 'react';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
-import moment from "moment-timezone";
-import Typography from "@material-ui/core/Typography";
-
-import { textForKey } from "../../../../../utils/localization";
+import EASTextField from 'app/components/common/EASTextField';
+import { textForKey } from 'app/utils/localization';
 import {
   availableHours,
   charactersRegex,
   messageTypeEnum,
-  tags
-} from "../CreateMessageDialog.constants";
+  tags,
+} from '../CreateMessageDialog.constants';
+import MainMessageForm from '../MainMessageForm';
+import styles from './HolidayMessageForm.module.scss';
 import reducer, {
-  initialState, setHourToSend, setLanguage,
+  initialState,
+  setHourToSend,
+  setLanguage,
   setMaxLength,
   setMessage,
   setMessageData,
   setMessageDate,
   setMessageTitle,
   setShowDatePicker,
-} from "./holidayMessageSlice";
-import styles from './HolidayMessageForm.module.scss';
-import MainMessageForm from "../MainMessageForm";
-import EASTextField from "../../../../common/EASTextField";
+} from './holidayMessageSlice';
 
-const EasyDatePicker = dynamic(() => import("../../../../common/EasyDatePicker"));
+const EasyDatePicker = dynamic(() =>
+  import('app/components/common/EasyDatePicker'),
+);
 
-const HolidayMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange, onSubmit }) => {
+const HolidayMessageForm = ({
+  currentClinic,
+  initialMessage,
+  onMessageChange,
+  onLanguageChange,
+  onSubmit,
+}) => {
   const datePickerAnchor = useRef(null);
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.HolidayCongrats),
   );
-  const [{
-    messageTitle,
-    language,
-    message,
-    maxLength,
-    hourToSend,
-    showDatePicker,
-    messageDate,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    {
+      messageTitle,
+      language,
+      message,
+      maxLength,
+      hourToSend,
+      showDatePicker,
+      messageDate,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (initialMessage == null) {
       return;
     }
     localDispatch(setMessageData(initialMessage));
-  }, [initialMessage])
+  }, [initialMessage]);
 
   useEffect(() => {
     const messageValue = message[language];
@@ -74,7 +86,7 @@ const HolidayMessageForm = ({ currentClinic, initialMessage, onMessageChange, on
   const handleSubmit = (event) => {
     event?.preventDefault();
     onSubmit?.();
-  }
+  };
 
   const handleMessageChange = (newValue) => {
     localDispatch(setMessage({ [language]: newValue }));
@@ -94,9 +106,7 @@ const HolidayMessageForm = ({ currentClinic, initialMessage, onMessageChange, on
 
   const handleTagClick = (tag) => () => {
     const currentMessage = message[language];
-    localDispatch(
-      setMessage({ [language]: `${currentMessage}${tag.id}` }),
-    );
+    localDispatch(setMessage({ [language]: `${currentMessage}${tag.id}` }));
   };
 
   const handleDateChange = (newDate) => {

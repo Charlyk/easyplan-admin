@@ -1,42 +1,39 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from 'react';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import IconLiveHelp from '@material-ui/icons/LiveHelp';
+import isEqual from 'lodash/isEqual';
+import moment from 'moment-timezone';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useRouter } from "next/router";
-import moment from "moment-timezone";
-import isEqual from "lodash/isEqual";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import CircularProgress from "@material-ui/core/CircularProgress";
-
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import EASHelpView from 'app/components/common/EASHelpView';
+import EasyCalendar from 'app/components/common/EasyCalendar';
+import { TECH_SUPPORT_URL } from 'app/utils/constants';
+import getCurrentWeek from 'app/utils/getCurrentWeek';
+import usePrevious from 'app/utils/hooks/usePrevious';
+import { textForKey } from 'app/utils/localization';
+import notifications from 'app/utils/notifications/notifications';
+import updateNotificationState from 'app/utils/notifications/updateNotificationState';
+import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
+import { getSchedulesForInterval } from 'middleware/api/schedules';
 import {
   deleteScheduleSelector,
-  updateScheduleSelector
-} from "../../../../redux/selectors/scheduleSelector";
-import PatientsFilter from "../PatientsFilter";
-import getCurrentWeek from "../../../utils/getCurrentWeek";
-import { getSchedulesForInterval } from "../../../../middleware/api/schedules";
-import usePrevious from "../../../utils/hooks/usePrevious";
-import EasyCalendar from "../../common/EasyCalendar";
-import DoctorsCalendarDay from "../DoctorsCalendarDay";
-import { reducer, initialState, actions } from './DoctorCalendar.reducer';
+  updateScheduleSelector,
+} from 'redux/selectors/scheduleSelector';
+import DoctorsCalendarDay from '../DoctorsCalendarDay';
+import PatientsFilter from '../PatientsFilter';
 import styles from './DoctorCalendar.module.scss';
-import Button from "@material-ui/core/Button";
-import { textForKey } from "../../../utils/localization";
-import IconLiveHelp from "@material-ui/icons/LiveHelp";
-import { TECH_SUPPORT_URL } from "../../../utils/constants";
-import notifications from "../../../utils/notifications/notifications";
-import EASHelpView from "../../common/EASHelpView";
-import wasNotificationShown from "../../../utils/notifications/wasNotificationShown";
-import updateNotificationState from "../../../utils/notifications/updateNotificationState";
+import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 
-const DoctorCalendar = (
-  {
-    currentUser,
-    currentClinic,
-    schedules: initialData,
-    viewMode,
-    date,
-  }
-) => {
+const DoctorCalendar = ({
+  currentUser,
+  currentClinic,
+  schedules: initialData,
+  viewMode,
+  date,
+}) => {
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const viewDate = moment(date).toDate();
@@ -45,11 +42,12 @@ const DoctorCalendar = (
   const previousDate = usePrevious(date);
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
-  const [{ schedules, hours, filterData, isLoading }, localDispatch] = useReducer(reducer, initialState);
+  const [{ schedules, hours, filterData, isLoading }, localDispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(() => {
-    setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id))
-  }, [])
+    setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
+  }, []);
 
   useEffect(() => {
     if (previousDate !== date) {
@@ -68,17 +66,19 @@ const DoctorCalendar = (
       const itemSchedules = item.schedules.filter((schedule) => {
         return (
           (filterData.patientName.length === 0 ||
-            schedule.patient?.fullName.toLowerCase().startsWith(filterData.patientName)) &&
+            schedule.patient?.fullName
+              .toLowerCase()
+              .startsWith(filterData.patientName)) &&
           (filterData.serviceId === -1 ||
             schedule.serviceId === parseInt(filterData.serviceId)) &&
           (filterData.appointmentStatus === 'all' ||
             schedule.scheduleStatus === filterData.appointmentStatus)
-        )
+        );
       });
       return {
         ...item,
-        schedules: itemSchedules
-      }
+        schedules: itemSchedules,
+      };
     });
     localDispatch(actions.setSchedules(filteredSchedules));
   }, [filterData, initialData]);
@@ -95,8 +95,13 @@ const DoctorCalendar = (
     localDispatch(actions.setIsLoading(true));
     try {
       const firstDay = viewMode === 'week' ? week[0].toDate() : viewDate;
-      const lastDay = viewMode === 'week' ? week[week.length - 1].toDate() : viewDate;
-      const response = await getSchedulesForInterval(firstDay, lastDay, currentUser.id);
+      const lastDay =
+        viewMode === 'week' ? week[week.length - 1].toDate() : viewDate;
+      const response = await getSchedulesForInterval(
+        firstDay,
+        lastDay,
+        currentUser.id,
+      );
       localDispatch(actions.setData(response.data));
     } catch (error) {
       if (error.response) {
@@ -108,14 +113,14 @@ const DoctorCalendar = (
     } finally {
       localDispatch(actions.setIsLoading(false));
     }
-  }
+  };
 
   function handleScheduleDelete() {
     if (deleteSchedule == null) {
       return;
     }
 
-    localDispatch(actions.deleteSchedule(deleteSchedule))
+    localDispatch(actions.deleteSchedule(deleteSchedule));
   }
 
   async function handleScheduleUpdate() {
@@ -129,9 +134,10 @@ const DoctorCalendar = (
     }
 
     const formattedDate = scheduleDate.format('YYYY-MM-DD');
-    const scheduleExists = schedules.some((item) =>
-      item.id === formattedDate &&
-      item.schedules.some((schedule) => schedule.id === updateSchedule.id)
+    const scheduleExists = schedules.some(
+      (item) =>
+        item.id === formattedDate &&
+        item.schedules.some((schedule) => schedule.id === updateSchedule.id),
     );
 
     if (scheduleExists) {
@@ -142,7 +148,7 @@ const DoctorCalendar = (
   }
 
   const handlePatientNameChange = (patientName) => {
-    localDispatch(actions.updateFilter({ patientName }))
+    localDispatch(actions.updateFilter({ patientName }));
   };
 
   const handleServiceChange = (event) => {
@@ -154,21 +160,23 @@ const DoctorCalendar = (
       return;
     }
     await router.push(`/doctor/${schedule.id}`);
-  }
+  };
 
   const handleViewModeChange = async () => {
     const stringDate = moment(viewDate).format('YYYY-MM-DD');
     const newMode = viewMode === 'week' ? 'day' : 'week';
     const url = `/doctor?date=${stringDate}&viewMode=${newMode}`;
-    await router.replace(url)
-  }
+    await router.replace(url);
+  };
 
   const handleAppointmentStatusChange = (event) => {
-    localDispatch(actions.updateFilter({ appointmentStatus: event.target.value }));
+    localDispatch(
+      actions.updateFilter({ appointmentStatus: event.target.value }),
+    );
   };
 
   const handleDateChange = async (newDate, mode = viewMode) => {
-    const stringDate = moment(newDate).format('YYYY-MM-DD')
+    const stringDate = moment(newDate).format('YYYY-MM-DD');
     await router.replace(`/doctor?date=${stringDate}&viewMode=${mode}`);
   };
 
@@ -189,8 +197,8 @@ const DoctorCalendar = (
   };
 
   const mappedWeek = week.map((date) => {
-    const dayId = moment(date).format('YYYY-MM-DD')
-    const day = schedules.find(item => item.id === dayId)
+    const dayId = moment(date).format('YYYY-MM-DD');
+    const day = schedules.find((item) => item.id === dayId);
     return {
       id: dayId,
       doctorId: currentUser.id,
@@ -220,14 +228,14 @@ const DoctorCalendar = (
           className={styles.supportButton}
           onPointerUp={handleSupportClick}
         >
-          <IconLiveHelp/>
+          <IconLiveHelp />
           {textForKey('tech_support')}
         </Button>
       </div>
       <div className={styles.dataWrapper}>
         {isLoading && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress className='circular-progress-bar'/>
+            <CircularProgress className='circular-progress-bar' />
           </div>
         )}
         {viewMode === 'week' ? (
@@ -252,15 +260,15 @@ const DoctorCalendar = (
         )}
       </div>
       <EASHelpView
-        placement="right"
+        placement='right'
         onClose={handleNotificationClose}
         notification={notifications.techSupport}
         anchorEl={techSupportRef}
         open={showTechSupportHelp}
       />
     </div>
-  )
-}
+  );
+};
 
 export default DoctorCalendar;
 
@@ -269,8 +277,8 @@ DoctorCalendar.propTypes = {
   currentClinic: PropTypes.any,
   schedules: PropTypes.shape({
     hours: PropTypes.arrayOf(PropTypes.string),
-    schedules: PropTypes.any
+    schedules: PropTypes.any,
   }),
   viewMode: PropTypes.oneOf(['day', 'week']),
   date: PropTypes.string,
-}
+};

@@ -1,72 +1,72 @@
 import React from 'react';
-import clsx from 'clsx';
+import IconButton from '@material-ui/core/IconButton';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import IconButton from "@material-ui/core/IconButton";
-import IconLockOpen from '@material-ui/icons/LockOpen';
 import IconLockClosed from '@material-ui/icons/Lock';
-import Tooltip from "@material-ui/core/Tooltip";
+import IconLockOpen from '@material-ui/icons/LockOpen';
+import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
-
-import { Role } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
-import IconAvatar from '../../../icons/iconAvatar';
-import IconDelete from '../../../icons/iconDelete';
-import IconEdit from '../../../icons/iconEdit';
-import IconEmail from '../../../icons/iconEmail';
-import IconPhone from '../../../icons/iconPhone';
-import IconRefresh from '../../../icons/iconRefresh';
-import LoadingButton from '../../../common/LoadingButton';
-import SwitchButton from "../../../common/SwitchButton";
+import EASImage from 'app/components/common/EASImage';
+import LoadingButton from 'app/components/common/LoadingButton';
+import SwitchButton from 'app/components/common/SwitchButton';
+import IconAppointmentCalendar from 'app/components/icons/iconAppointmentCalendar';
+import IconAvatar from 'app/components/icons/iconAvatar';
+import IconDelete from 'app/components/icons/iconDelete';
+import IconEdit from 'app/components/icons/iconEdit';
+import IconEmail from 'app/components/icons/iconEmail';
+import IconPhone from 'app/components/icons/iconPhone';
+import IconRefresh from 'app/components/icons/iconRefresh';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import styles from './UserItem.module.scss';
-import EASImage from "../../../common/EASImage";
 
-const UserItem = (
-  {
-    user,
-    isInvitation,
-    isInviting,
-    onDelete,
-    onEdit,
-    onResend,
-    onRestore,
-    onCashierChange,
-    onCalendarChange,
-    onAccessToggle,
-  }
-) => {
-  const handleDeleteUser = event => {
+const UserItem = ({
+  user,
+  isInvitation,
+  isInviting,
+  onDelete,
+  onEdit,
+  onResend,
+  onRestore,
+  onCashierChange,
+  onCalendarChange,
+  onAccessToggle,
+}) => {
+  const handleDeleteUser = (event) => {
     onDelete(event, user, isInvitation);
   };
 
-  const handleRestoreUser = event => {
+  const handleRestoreUser = (event) => {
     onRestore(event, user);
   };
 
-  const handleEditUser = event => {
+  const handleEditUser = (event) => {
     onEdit(event, user);
   };
 
-  const handleResendInvitation = event => {
+  const handleResendInvitation = (event) => {
     onResend(event, user);
   };
 
   const handleCashierChange = (enabled) => {
     onCashierChange(user, enabled);
-  }
+  };
 
   const handleCalendarChange = () => {
     onCalendarChange?.(user);
-  }
+  };
 
   const handleAccessToggle = () => {
     onAccessToggle?.(user, !user.accessBlocked);
-  }
+  };
 
-  const rootClasses = clsx(styles.userItem, user.isHidden ? styles.fired : styles.active);
+  const rootClasses = clsx(
+    styles.userItem,
+    user.isHidden ? styles.fired : styles.active,
+  );
 
   return (
     <TableRow className={rootClasses}>
@@ -85,7 +85,7 @@ const UserItem = (
             <EASImage
               enableLoading
               src={user.avatar}
-              placeholder={<IconAvatar/>}
+              placeholder={<IconAvatar />}
               className={styles.avatarRoot}
             />
             <Typography className={styles.name}>
@@ -96,9 +96,12 @@ const UserItem = (
         </TableCell>
       )}
       {!isInvitation && (
-        <TableCell valign='middle' className={clsx(styles.contact, styles.tableCell)}>
+        <TableCell
+          valign='middle'
+          className={clsx(styles.contact, styles.tableCell)}
+        >
           <div className={styles.flexContainer}>
-            <IconPhone/>
+            <IconPhone />
             <Typography className={styles.contactLabel}>
               {user.phoneNumber
                 ? user.phoneNumber
@@ -113,7 +116,7 @@ const UserItem = (
         className={clsx(styles.contact, styles.tableCell)}
       >
         <div className={styles.flexContainer}>
-          <IconEmail/>
+          <IconEmail />
           <Typography classes={{ root: styles.contactLabel }}>
             {user.email}
           </Typography>
@@ -127,7 +130,7 @@ const UserItem = (
               className={styles.resendButton}
               onClick={handleResendInvitation}
             >
-              {textForKey('Invite')} <IconRefresh fill='#FDC534'/>
+              {textForKey('Invite')} <IconRefresh fill='#FDC534' />
             </LoadingButton>
           )}
           {user.roleInClinic === Role.doctor && !isInvitation && (
@@ -139,17 +142,23 @@ const UserItem = (
               }
             >
               <IconButton
-                className={clsx(styles.iconButton, !user.showInCalendar && styles.hidden)}
+                className={clsx(
+                  styles.iconButton,
+                  !user.showInCalendar && styles.hidden,
+                )}
                 onClick={handleCalendarChange}
               >
-                <IconAppointmentCalendar fill="#3A83DC"/>
+                <IconAppointmentCalendar fill='#3A83DC' />
               </IconButton>
             </Tooltip>
           )}
           {user.roleInClinic === Role.doctor && !isInvitation && (
             <Tooltip title={textForKey('Edit')}>
-              <IconButton className={styles.iconButton} onClick={handleEditUser}>
-                <IconEdit fill="#3A83DC"/>
+              <IconButton
+                className={styles.iconButton}
+                onClick={handleEditUser}
+              >
+                <IconEdit fill='#3A83DC' />
               </IconButton>
             </Tooltip>
           )}
@@ -165,26 +174,41 @@ const UserItem = (
             </div>
           )}
           {user.roleInClinic !== Role.admin && (
-            <Tooltip title={user.accessBlocked ? textForKey('allow_access') : textForKey('block_access')}>
-              <IconButton className={styles.iconButton} onClick={handleAccessToggle}>
+            <Tooltip
+              title={
+                user.accessBlocked
+                  ? textForKey('allow_access')
+                  : textForKey('block_access')
+              }
+            >
+              <IconButton
+                className={styles.iconButton}
+                onClick={handleAccessToggle}
+              >
                 {user.accessBlocked ? (
-                  <IconLockClosed className={styles.blueIcon}/>
+                  <IconLockClosed className={styles.blueIcon} />
                 ) : (
-                  <IconLockOpen className={styles.blueIcon}/>
+                  <IconLockOpen className={styles.blueIcon} />
                 )}
               </IconButton>
             </Tooltip>
           )}
           {user.isHidden ? (
             <Tooltip title={textForKey('Restore')}>
-              <IconButton className={styles.iconButton} onClick={handleRestoreUser}>
-                <IconRefresh fill='#00E987'/>
+              <IconButton
+                className={styles.iconButton}
+                onClick={handleRestoreUser}
+              >
+                <IconRefresh fill='#00E987' />
               </IconButton>
             </Tooltip>
           ) : (
             <Tooltip title={textForKey('Delete')}>
-              <IconButton className={styles.iconButton} onClick={handleDeleteUser}>
-                <IconDelete fill="#ec3276"/>
+              <IconButton
+                className={styles.iconButton}
+                onClick={handleDeleteUser}
+              >
+                <IconDelete fill='#ec3276' />
               </IconButton>
             </Tooltip>
           )}

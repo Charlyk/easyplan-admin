@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import Script from 'next/script';
 import NextNprogress from 'nextjs-progressbar';
 import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
@@ -21,7 +22,7 @@ import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
-import types from 'redux/types/types';
+import types from 'redux/types';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
 import 'react-h5-audio-player/src/styles.scss';
@@ -49,6 +50,7 @@ const App = ({ Component, pageProps }) => {
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
+  const currentPage = router.asPath;
 
   useEffect(() => {
     dispatch({
@@ -186,6 +188,9 @@ const App = ({ Component, pageProps }) => {
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
+        {!currentPage.includes('confirmation') ? (
+          <Script type='text/javascript' src='/tawkto.js' />
+        ) : null}
       </Head>
       <ThemeProvider theme={theme}>
         <>

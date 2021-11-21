@@ -1,6 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep';
-
-import generateReducerActions from '../../../../../utils/generateReducerActions';
+import generateReducerActions from 'app/utils/generateReducerActions';
 
 export const diagnosisClass = [1, 2, 3];
 export const diagnosisOcclusion = [

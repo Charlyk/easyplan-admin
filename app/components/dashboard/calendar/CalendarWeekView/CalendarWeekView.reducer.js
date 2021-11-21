@@ -1,7 +1,6 @@
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
-
-import generateReducerActions from '../../../../utils/generateReducerActions';
+import generateReducerActions from 'app/utils/generateReducerActions';
 
 export const initialState = {
   hours: [],

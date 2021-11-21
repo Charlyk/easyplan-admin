@@ -1,13 +1,16 @@
-import types from '../types/types';
+import types from 'redux/types';
 
 const initialState = Object.freeze({ open: false, imageUrl: null });
 
-export default function imageModal(state = initialState, action) {
-  switch (action.type) {
+export default function imageModal(
+  state = initialState,
+  { type, payload } = {},
+) {
+  switch (type) {
     case types.setImageModal:
       return {
-        ...action.payload,
-        imageUrl: action.payload.open ? action.payload.imageUrl : null,
+        ...payload,
+        imageUrl: payload.open ? payload.imageUrl : null,
       };
     default:
       return state;

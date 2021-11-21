@@ -1,10 +1,23 @@
 import axios from 'axios';
+import cookie from 'cookie';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
-import parseCookies from 'app/utils/parseCookies';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { authorized } from '../authorized';
-import { handler } from '../handler';
+import authorized from '../authorized';
+import handler from '../handler';
+
+function checkIsAuthenticated(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  return axios.get(`${updatedServerUrl(req)}/authentication/v1/check`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.clinicId]: clinicId,
+    },
+  });
+}
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -22,14 +35,3 @@ export default authorized(async (req, res) => {
     }
   }
 });
-
-function checkIsAuthenticated(req) {
-  const { auth_token, clinic_id } = parseCookies(req);
-  return axios.get(`${updatedServerUrl(req)}/authentication/v1/check`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.clinicId]: clinic_id,
-    },
-  });
-}

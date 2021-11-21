@@ -1,27 +1,26 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-
-import IconAppointmentCalendar from '../../../../../icons/iconAppointmentCalendar';
-import IconAppointmentClock from '../../../../../icons/iconAppointmentClock';
-import { Statuses } from '../../../../../../utils/constants';
-import { textForKey } from '../../../../../../utils/localization';
-import { baseApiUrl } from "../../../../../../../eas.config";
+import IconAppointmentCalendar from 'app/components/icons/iconAppointmentCalendar';
+import IconAppointmentClock from 'app/components/icons/iconAppointmentClock';
+import { Statuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import { baseApiUrl } from 'eas.config';
 import styles from './Appointment.module.scss';
 
 const Appointment = ({ appointment }) => {
   const scheduleDate = moment(appointment.dateAndTime);
   const { service, clinic, doctor } = appointment;
-  const status = Statuses.find(
-    (item) => item.id === appointment.status,
-  );
+  const status = Statuses.find((item) => item.id === appointment.status);
   return (
     <div className={styles.appointment}>
       <div className={styles.appointmentInfo}>
         <div className={styles.appointmentInfoRow}>
-          <div className={styles.appointmentInfoTitle}>{textForKey('Doctor')}:</div>
+          <div className={styles.appointmentInfoTitle}>
+            {textForKey('Doctor')}:
+          </div>
           <div>{doctor.fullName}</div>
         </div>
         <div className={styles.appointmentInfoRow}>
@@ -31,7 +30,9 @@ const Appointment = ({ appointment }) => {
           <div>{service.name}</div>
         </div>
         <div className={styles.appointmentInfoRow}>
-          <div className={styles.appointmentInfoTitle}>{textForKey('Clinic')}:</div>
+          <div className={styles.appointmentInfoTitle}>
+            {textForKey('Clinic')}:
+          </div>
           <div>{clinic.clinicName}</div>
         </div>
       </div>
@@ -72,7 +73,9 @@ const Appointment = ({ appointment }) => {
             target='_blank'
             rel='noreferrer'
           >
-            <span className={styles.printLabel}>{textForKey('Print receipt')}</span>
+            <span className={styles.printLabel}>
+              {textForKey('Print receipt')}
+            </span>
           </a>
         )}
         <Typography classes={{ root: styles.canceledReasonLabel }}>

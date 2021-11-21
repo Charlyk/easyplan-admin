@@ -1,21 +1,22 @@
 import React, { useEffect, useReducer, useRef } from 'react';
+import { CircularProgress } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-
-import { textForKey } from '../../../../../utils/localization';
-import EasyDatePicker from '../../../../common/EasyDatePicker';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDatePicker from 'app/components/common/EasyDatePicker';
+import EASModal from 'app/components/common/modals/EASModal';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { textForKey } from 'app/utils/localization';
 import {
   createPauseRecord,
   deletePauseRecord,
-  fetchPausesAvailableTime
-} from "../../../../../../middleware/api/pauses";
-import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
-import Box from "@material-ui/core/Box";
-import EASModal from "../../../../common/modals/EASModal";
-import EASTextField from "../../../../common/EASTextField";
-import EASSelect from "../../../../common/EASSelect";
-import EASTextarea from "../../../../common/EASTextarea";
+  fetchPausesAvailableTime,
+} from 'middleware/api/pauses';
+import styles from './AddPauseModal.module.scss';
 import reducer, {
   initialState,
   setShowDatePicker,
@@ -29,21 +30,17 @@ import reducer, {
   setIsLoading,
   resetState,
 } from './AddPauseModal.reducer';
-import styles from './AddPauseModal.module.scss';
-import { CircularProgress } from "@material-ui/core";
 
-const AddPauseModal = (
-  {
-    open,
-    viewDate,
-    doctor,
-    id,
-    startTime,
-    endTime,
-    comment: defaultComment,
-    onClose,
-  }
-) => {
+const AddPauseModal = ({
+  open,
+  viewDate,
+  doctor,
+  id,
+  startTime,
+  endTime,
+  comment: defaultComment,
+  onClose,
+}) => {
   const datePickerAnchor = useRef(null);
   const [
     {
@@ -65,7 +62,7 @@ const AddPauseModal = (
     if (!open) {
       localDispatch(resetState());
     }
-  }, [open])
+  }, [open]);
 
   useEffect(() => {
     if (doctor != null) {
@@ -94,7 +91,7 @@ const AddPauseModal = (
   }, [defaultComment]);
 
   const getMappedTime = (hours) => {
-    return hours.map(item => ({
+    return hours.map((item) => ({
       id: item,
       name: item,
     }));
@@ -103,7 +100,7 @@ const AddPauseModal = (
   const fetchPauseAvailableTime = async () => {
     localDispatch(setIsFetchingHours(true));
     try {
-      const date = moment(pauseDate | viewDate).format('YYYY-MM-DD')
+      const date = moment(pauseDate | viewDate).format('YYYY-MM-DD');
       const response = await fetchPausesAvailableTime(date, doctor.id);
       const { data: availableTime } = response;
       localDispatch(setAvailableAllTime(availableTime));
@@ -177,7 +174,7 @@ const AddPauseModal = (
       };
 
       await createPauseRecord(requestBody);
-      onClose()
+      onClose();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -195,7 +192,7 @@ const AddPauseModal = (
     } finally {
       localDispatch(setIsDeleting(false));
     }
-  }
+  };
 
   const handleDateFieldClick = () => {
     localDispatch(setShowDatePicker(true));
@@ -252,7 +249,7 @@ const AddPauseModal = (
       <Box display='flex' flexDirection='column' padding='16px'>
         {isFetchingHours ? (
           <div className='progress-bar-wrapper'>
-            <CircularProgress className='circular-progress-bar'/>
+            <CircularProgress className='circular-progress-bar' />
           </div>
         ) : (
           <>
@@ -267,20 +264,20 @@ const AddPauseModal = (
               />
               <div className={styles.timePickerContainer}>
                 <EASSelect
-                  id="startTime"
+                  id='startTime'
                   rootClass={styles.timeSelect}
                   label={textForKey('Start time')}
-                  labelId="start-time-select"
+                  labelId='start-time-select'
                   onChange={handleStartHourChange}
                   value={startHour}
                   options={getMappedTime(availableStartTime)}
                   disabled={isFetchingHours || availableStartTime.length === 0}
                 />
                 <EASSelect
-                  id="endTime"
+                  id='endTime'
                   rootClass={styles.timeSelect}
                   label={textForKey('Ent time')}
-                  labelId="end-time-select"
+                  labelId='end-time-select'
                   onChange={handleEndHourChange}
                   value={endHour}
                   options={getMappedTime(availableEndTime)}

@@ -101,17 +101,13 @@ const treatmentPlanSlice = createSlice({
 });
 
 export const {
-  setAllServices,
   setServices,
   setPatient,
   setSchedule,
-  setShouldFillTreatmentPlan,
   setShowFinalizeTreatment,
   setIsLoading,
   setInitialData,
   setSelectedServices,
-  setToothServices,
-  setIsFinalizing,
   setScheduleDetails,
   setTeethModal,
 } = treatmentPlanSlice.actions;

@@ -4,13 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-
-import IconError from '../../../../../icons/iconError';
-import IconPending from '../../../../../icons/IconPending';
-import IconSuccess from '../../../../../icons/iconSuccess';
-import { setSMSMessageStatus } from '../../../../../../../redux/actions/patientActions';
-import { updateSMSMessageStatusSelector } from '../../../../../../../redux/selectors/patientSelector';
-import { textForKey } from '../../../../../../utils/localization';
+import IconError from 'app/components/icons/iconError';
+import IconPending from 'app/components/icons/IconPending';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import { textForKey } from 'app/utils/localization';
+import { setSMSMessageStatus } from 'redux/actions/patientActions';
+import { updateSMSMessageStatusSelector } from 'redux/selectors/patientSelector';
 import styles from './PatientMessage.module.scss';
 
 const PatientMessage = ({ message }) => {

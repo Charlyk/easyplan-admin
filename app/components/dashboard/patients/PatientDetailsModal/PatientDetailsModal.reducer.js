@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 
 export const MenuItem = {
   personalInfo: 'personal-info',

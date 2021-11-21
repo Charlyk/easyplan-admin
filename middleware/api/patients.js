@@ -1,7 +1,7 @@
-import axios from "axios";
-import { baseApiUrl } from "../../eas.config";
-import { del, get, post, put } from "./request";
-import imageToBase64 from "../../app/utils/imageToBase64";
+import axios from 'axios';
+import imageToBase64 from 'app/utils/imageToBase64';
+import { baseApiUrl } from 'eas.config';
+import { del, get, post, put } from './request';
 
 /**
  * Delete patient
@@ -43,8 +43,15 @@ export async function getPatientDetails(patientId, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updateVisitNote(patientId, visitId, note, headers = null) {
-  return put(`/api/patients/${patientId}/visits?visitId=${visitId}`, headers, { note });
+export async function updateVisitNote(
+  patientId,
+  visitId,
+  note,
+  headers = null,
+) {
+  return put(`/api/patients/${patientId}/visits?visitId=${visitId}`, headers, {
+    note,
+  });
 }
 
 /**
@@ -86,7 +93,7 @@ export async function getPatientDebts(patientId, headers = null) {
  */
 export async function requestSearchPatients(searchQuery, headers = null) {
   const queryString = new URLSearchParams({ query: searchQuery }).toString();
-  return get(`/api/patients/search?${queryString}`, headers)
+  return get(`/api/patients/search?${queryString}`, headers);
 }
 
 /**
@@ -98,7 +105,7 @@ export async function requestSearchPatients(searchQuery, headers = null) {
  */
 export async function getPatientPhoneRecords(patientId, page, headers = null) {
   const queryString = new URLSearchParams({ patientId, page }).toString();
-  return get(`/api/patients/phone-records?${queryString}`, headers)
+  return get(`/api/patients/phone-records?${queryString}`, headers);
 }
 
 /**
@@ -120,7 +127,12 @@ export async function getPatientPhoneRecords(patientId, page, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestUpdatePatient(patientId, requestBody, photo, headers = null) {
+export async function requestUpdatePatient(
+  patientId,
+  requestBody,
+  photo,
+  headers = null,
+) {
   const updatedBody = { ...requestBody };
   if (photo != null) {
     updatedBody.photo = await imageToBase64(photo);
@@ -136,9 +148,17 @@ export async function requestUpdatePatient(patientId, requestBody, photo, header
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function getPatientHistory(patientId, page, itemsPerPage, headers = null) {
-  const queryString = new URLSearchParams({ page: `${page}`, itemsPerPage: `${itemsPerPage}` }).toString();
-  return get(`/api/patients/${patientId}/history?${queryString}`, headers)
+export async function getPatientHistory(
+  patientId,
+  page,
+  itemsPerPage,
+  headers = null,
+) {
+  const queryString = new URLSearchParams({
+    page: `${page}`,
+    itemsPerPage: `${itemsPerPage}`,
+  }).toString();
+  return get(`/api/patients/${patientId}/history?${queryString}`, headers);
 }
 
 /**
@@ -148,9 +168,18 @@ export async function getPatientHistory(patientId, page, itemsPerPage, headers =
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function deletePatientPlanService(patientId, serviceId, headers = null) {
-  const queryString = new URLSearchParams({ serviceId: `${serviceId}` }).toString();
-  return del(`/api/patients/${patientId}/treatment/general/service?${queryString}`, headers)
+export async function deletePatientPlanService(
+  patientId,
+  serviceId,
+  headers = null,
+) {
+  const queryString = new URLSearchParams({
+    serviceId: `${serviceId}`,
+  }).toString();
+  return del(
+    `/api/patients/${patientId}/treatment/general/service?${queryString}`,
+    headers,
+  );
 }
 
 /**
@@ -185,8 +214,11 @@ export async function deletePatientPlanService(patientId, serviceId, headers = n
  * @param headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function savePatientGeneralTreatmentPlan(requestBody, headers = null) {
-  return post(`/api/treatment-plans/general`, headers, requestBody)
+export async function savePatientGeneralTreatmentPlan(
+  requestBody,
+  headers = null,
+) {
+  return post('/api/treatment-plans/general', headers, requestBody);
 }
 
 /**
@@ -209,8 +241,11 @@ export async function savePatientGeneralTreatmentPlan(requestBody, headers = nul
  * @param headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updatePatientGeneralTreatmentPlan(requestBody, headers = null) {
-  return put(`/api/treatment-plans/general`, headers, requestBody)
+export async function updatePatientGeneralTreatmentPlan(
+  requestBody,
+  headers = null,
+) {
+  return put('/api/treatment-plans/general', headers, requestBody);
 }
 
 /**
@@ -221,9 +256,17 @@ export async function updatePatientGeneralTreatmentPlan(requestBody, headers = n
  * @param {Object | null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function addPatientXRayImage(patientId, type, image, headers = null) {
+export async function addPatientXRayImage(
+  patientId,
+  type,
+  image,
+  headers = null,
+) {
   const encodedImage = await imageToBase64(image);
-  return post(`/api/patients/${patientId}/x-ray`, headers, { type, image: encodedImage });
+  return post(`/api/patients/${patientId}/x-ray`, headers, {
+    type,
+    image: encodedImage,
+  });
 }
 
 /**
@@ -243,7 +286,11 @@ export async function getPatientXRayImages(patientId, headers = null) {
  * @param {Object | null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function deletePatientXRayImage(patientId, imageId, headers = null) {
+export async function deletePatientXRayImage(
+  patientId,
+  imageId,
+  headers = null,
+) {
   const queryString = new URLSearchParams({ imageId: `${imageId}` }).toString();
   return del(`/api/patients/${patientId}/x-ray?${queryString}`, headers);
 }
@@ -279,7 +326,7 @@ export async function importPatientsFromFile(file, fields, headers = null) {
   const requestBody = new FormData();
   requestBody.append('fields', JSON.stringify(fields));
   requestBody.append('file', file, file.name);
-  return axios.post(`${baseApiUrl}/patients/import`, requestBody, { headers })
+  return axios.post(`${baseApiUrl}/patients/import`, requestBody, { headers });
 }
 
 /**
@@ -290,8 +337,16 @@ export async function importPatientsFromFile(file, fields, headers = null) {
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestSendSms(messageText, patientId, dealId = null, headers = null) {
-  return post(`/api/patients/${patientId}/sms`, headers, { messageText, dealId })
+export async function requestSendSms(
+  messageText,
+  patientId,
+  dealId = null,
+  headers = null,
+) {
+  return post(`/api/patients/${patientId}/sms`, headers, {
+    messageText,
+    dealId,
+  });
 }
 
 /**
@@ -314,7 +369,7 @@ export async function requestFetchSmsMessages(patientId, headers = null) {
 export async function requestCreatePatient(requestBody, photo, headers = null) {
   const updatedBody = { ...requestBody };
   if (photo != null) {
-    updatedBody.photo = await imageToBase64(photo)
+    updatedBody.photo = await imageToBase64(photo);
   }
   return axios.post('/api/patients', requestBody, { headers });
 }

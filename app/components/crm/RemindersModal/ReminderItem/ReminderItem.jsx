@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import clsx from "clsx";
+import React, { useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+import ReminderIcon from '@material-ui/icons/AccessTime';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
-import ReminderIcon from "@material-ui/icons/AccessTime";
-import { requestCompleteReminder } from "../../../../../middleware/api/crm";
-import getReminderTexts from "../../../../utils/getReminderTexts";
-import onRequestError from "../../../../utils/onRequestError";
-import { textForKey } from "../../../../utils/localization";
-import EASTextarea from "../../../common/EASTextarea";
-import LoadingButton from "../../../common/LoadingButton";
+import EASTextarea from 'app/components/common/EASTextarea';
+import LoadingButton from 'app/components/common/LoadingButton';
+import getReminderTexts from 'app/utils/getReminderTexts';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import { requestCompleteReminder } from 'middleware/api/crm';
 import styles from './ReminderItem.module.scss';
 
 const ReminderItem = ({ reminder }) => {
@@ -32,27 +32,29 @@ const ReminderItem = ({ reminder }) => {
 
   return (
     <div className={styles.reminderItem}>
-      <div className={clsx(
-        styles.dataContainer,
-        {
+      <div
+        className={clsx(styles.dataContainer, {
           [styles.active]: isToday,
           [styles.completed]: reminder.completed,
           [styles.expired]: reminder.active,
-        }
-      )}>
+        })}
+      >
         <Typography className={styles.reminderDate}>
-          <ReminderIcon/>
+          <ReminderIcon />
           {timeText}
         </Typography>
         <Typography className={styles.detailsRow}>
           {textForKey('crm_reminder_for')}:
           <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
-          {assigneeName}
-        </span>
+            {assigneeName}
+          </span>
         </Typography>
         <Typography className={styles.detailsRow}>
           {textForKey('crm_reminder_type')}:
-          <span style={{ fontWeight: 'bold', marginLeft: 5 }} className={styles.typeRow}>
+          <span
+            style={{ fontWeight: 'bold', marginLeft: 5 }}
+            className={styles.typeRow}
+          >
             {textForKey(`crm_reminder_type_${reminder.type}`)}
             {reminder.comment ? ` - ${reminder.comment}` : ''}
           </span>
@@ -61,8 +63,8 @@ const ReminderItem = ({ reminder }) => {
           <Typography className={styles.detailsRow}>
             {textForKey('crm_reminder_result')}:
             <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
-            {reminder.resultComment}
-          </span>
+              {reminder.resultComment}
+            </span>
           </Typography>
         ) : null}
         {!reminder.completed ? (
@@ -114,4 +116,4 @@ ReminderItem.propTypes = {
     lastUpdated: PropTypes.string,
     type: PropTypes.string,
   }),
-}
+};

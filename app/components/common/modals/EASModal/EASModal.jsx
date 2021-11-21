@@ -1,41 +1,38 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import clsx from "clsx";
-import Modal from '@material-ui/core/Modal';
+import React from 'react';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
+import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from "@material-ui/core/CircularProgress";
-
-import IconClose from "../../../icons/iconClose";
-import { textForKey } from "../../../../utils/localization";
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import IconClose from 'app/components/icons/iconClose';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { textForKey } from 'app/utils/localization';
 import styles from './EASModal.module.scss';
 
-const EASModal = (
-  {
-    open,
-    title,
-    size,
-    destroyBtnText = textForKey('Delete'),
-    primaryBtnText,
-    secondaryBtnText,
-    hidePositiveBtn,
-    isPositiveLoading,
-    isPositiveDisabled,
-    bodyStyle,
-    note,
-    children,
-    className,
-    paperClass,
-    onClose,
-    onDestroyClick,
-    onPrimaryClick,
-    onSecondaryClick,
-    onBackdropClick
-  }
-) => {
+const EASModal = ({
+  open,
+  title,
+  size,
+  destroyBtnText = textForKey('Delete'),
+  primaryBtnText,
+  secondaryBtnText,
+  hidePositiveBtn,
+  isPositiveLoading,
+  isPositiveDisabled,
+  bodyStyle,
+  note,
+  children,
+  className,
+  paperClass,
+  onClose,
+  onDestroyClick,
+  onPrimaryClick,
+  onSecondaryClick,
+  onBackdropClick,
+}) => {
   const showDestroyBtn = typeof onDestroyClick === 'function';
 
   const handleCloseModal = (event) => {
@@ -56,7 +53,7 @@ const EASModal = (
     if (typeof onPrimaryClick === 'function') {
       onPrimaryClick();
     } else {
-      onClose?.()
+      onClose?.();
     }
   };
 
@@ -74,7 +71,7 @@ const EASModal = (
     if (typeof onSecondaryClick === 'function') {
       onSecondaryClick();
     } else {
-      onClose?.()
+      onClose?.();
     }
   };
 
@@ -82,7 +79,7 @@ const EASModal = (
     if (reason === 'backdropClick' && typeof onBackdropClick === 'function') {
       onBackdropClick?.();
     } else {
-      onClose?.()
+      onClose?.();
     }
   };
 
@@ -98,18 +95,14 @@ const EASModal = (
             {title}
           </Typography>
           <IconButton className={styles.closeButton} onClick={handleCloseModal}>
-            <IconClose/>
+            <IconClose />
           </IconButton>
         </div>
         <div className={styles.modalBody} style={bodyStyle}>
           {children}
         </div>
         <div className={styles.modalFooter}>
-          {note && (
-            <Typography className={styles.noteLabel}>
-              {note}
-            </Typography>
-          )}
+          {note && <Typography className={styles.noteLabel}>{note}</Typography>}
           {!isPositiveLoading && (
             <Button
               className={styles.secondaryButton}
@@ -143,15 +136,19 @@ const EASModal = (
               }}
             >
               {isPositiveLoading ? (
-                <CircularProgress className={clsx('circular-progress-bar', styles.progressBar)}/>
-              ) : (primaryBtnText)}
+                <CircularProgress
+                  className={clsx('circular-progress-bar', styles.progressBar)}
+                />
+              ) : (
+                primaryBtnText
+              )}
             </Button>
           )}
         </div>
       </Paper>
     </Modal>
-  )
-}
+  );
+};
 
 export default React.memo(EASModal, areComponentPropsEqual);
 
@@ -174,11 +171,11 @@ EASModal.propTypes = {
   onPrimaryClick: PropTypes.func,
   onSecondaryClick: PropTypes.func,
   onBackdropClick: PropTypes.func,
-}
+};
 
 EASModal.defaultProps = {
   title: '',
   primaryBtnText: textForKey('OK'),
   secondaryBtnText: textForKey('Close'),
-  size: 'unset'
-}
+  size: 'unset',
+};

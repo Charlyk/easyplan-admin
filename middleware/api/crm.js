@@ -1,4 +1,4 @@
-import { del, get, post, put } from "./request";
+import { del, get, post, put } from './request';
 
 /**
  * Fetch all available deal states for a clinic
@@ -57,17 +57,23 @@ export async function deleteDealState(dealId, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestFetchDeals(stateId, page, itemsPerPage, filter = null, headers = null) {
+export async function requestFetchDeals(
+  stateId,
+  page,
+  itemsPerPage,
+  filter = null,
+  headers = null,
+) {
   const params = {
     stateId: `${stateId}`,
     page: `${page}`,
-    itemsPerPage: `${itemsPerPage}`
+    itemsPerPage: `${itemsPerPage}`,
   };
   if (filter) {
-    params.filter = filter
+    params.filter = filter;
   }
   const queryString = new URLSearchParams(params).toString();
-  return get(`/api/crm/deals?${queryString}`, headers)
+  return get(`/api/crm/deals?${queryString}`, headers);
 }
 
 /**
@@ -127,7 +133,11 @@ export async function requestCreateDealNote(dealId, noteText, headers = null) {
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestCreateDealReminder(dealId, reminder, headers = null) {
+export async function requestCreateDealReminder(
+  dealId,
+  reminder,
+  headers = null,
+) {
   const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
   return put(`/api/reminders?${queryString}`, headers, reminder);
 }
@@ -161,8 +171,14 @@ export async function requestFetchDealDetails(dealId, headers = null) {
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestCompleteReminder(reminderId, resultComment, headers = null) {
-  return put(`/api/reminders/${reminderId}/complete`, headers, { resultComment });
+export async function requestCompleteReminder(
+  reminderId,
+  resultComment,
+  headers = null,
+) {
+  return put(`/api/reminders/${reminderId}/complete`, headers, {
+    resultComment,
+  });
 }
 
 /**
@@ -182,7 +198,7 @@ export async function requestFetchRemindersCount(headers = null) {
  */
 export async function requestFetchUserReminders(filters, headers = null) {
   if (!filters) {
-    return get(`/api/reminders/user`, headers);
+    return get('/api/reminders/user', headers);
   }
   return get(`/api/reminders/user?filters=${filters}`, headers);
 }
@@ -195,8 +211,16 @@ export async function requestFetchUserReminders(filters, headers = null) {
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestChangeDealColumn(columnId, dealId, deleteReason = null, headers = null) {
-  return put(`/api/crm/${dealId}/move`, headers, { newState: columnId, deleteReason });
+export async function requestChangeDealColumn(
+  columnId,
+  dealId,
+  deleteReason = null,
+  headers = null,
+) {
+  return put(`/api/crm/${dealId}/move`, headers, {
+    newState: columnId,
+    deleteReason,
+  });
 }
 
 /**
@@ -225,6 +249,12 @@ export async function requestUpdateDealStateVisibility(body, headers = null) {
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestChangeDealClinic(dealId, branchId, headers = null) {
-  return put(`/api/crm/${dealId}/change-branch?branchId=${branchId}`, headers, { branchId });
+export async function requestChangeDealClinic(
+  dealId,
+  branchId,
+  headers = null,
+) {
+  return put(`/api/crm/${dealId}/change-branch?branchId=${branchId}`, headers, {
+    branchId,
+  });
 }

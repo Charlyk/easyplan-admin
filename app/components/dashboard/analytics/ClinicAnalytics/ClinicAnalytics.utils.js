@@ -1,5 +1,4 @@
 import moment from 'moment-timezone';
-
 import { textForKey } from 'app/utils/localization';
 
 export const noLegendOptions = {

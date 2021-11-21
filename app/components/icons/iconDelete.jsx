@@ -22,9 +22,9 @@ function IconDelete({ fill }) {
 export default React.memo(IconDelete);
 
 IconDelete.propTypes = {
-  fill: PropTypes.string
+  fill: PropTypes.string,
 };
 
 IconDelete.defaultProps = {
-  fill: '#000000'
-}
+  fill: '#000000',
+};

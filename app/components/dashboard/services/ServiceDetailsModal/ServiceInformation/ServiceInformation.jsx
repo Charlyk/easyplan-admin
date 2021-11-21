@@ -1,22 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import Typography from '@material-ui/core/Typography';
-import { useColor } from "react-color-palette";
-
-import IconPalette from "../../../../icons/iconPalette";
-import IconPlusBig from '../../../../icons/iconPlusBig';
-import IconMinus from '../../../../icons/iconMinus';
-import {
-  availableCurrenciesSelector
-} from '../../../../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../../../utils/localization';
-import EASColorPicker from "../../../../common/EASColorPicker/EASColorPicker";
-import EASTextField from "../../../../common/EASTextField";
-import EASTextarea from "../../../../common/EASTextarea";
-import EASSelect from "../../../../common/EASSelect";
+import { useColor } from 'react-color-palette';
+import EASColorPicker from 'app/components/common/EASColorPicker/EASColorPicker';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import IconPalette from 'app/components/icons/iconPalette';
+import { textForKey } from 'app/utils/localization';
+import { availableCurrenciesSelector } from 'redux/selectors/clinicSelector';
 import styles from './ServiceInformation.module.scss';
 
 const availableColors = [
@@ -29,8 +24,8 @@ const availableColors = [
   '#0A84FF',
   '#3A83DC',
   '#BF5AF2',
-  '#F44081'
-]
+  '#F44081',
+];
 
 const serviceTypes = [
   {
@@ -47,16 +42,13 @@ const serviceTypes = [
   },
 ];
 
-const ServiceInformation = (
-  {
-    currentClinic,
-    isExpanded,
-    showStep,
-    onToggle,
-    data,
-    onChange,
-  }
-) => {
+const ServiceInformation = ({
+  currentClinic,
+  isExpanded,
+  showStep,
+  data,
+  onChange,
+}) => {
   const currencies = availableCurrenciesSelector(currentClinic);
   const paletteRef = useRef(null);
   const [colors, setColors] = useState(availableColors);
@@ -73,15 +65,11 @@ const ServiceInformation = (
   }, [data.color, colors]);
 
   const mappedCurrencies = useMemo(() => {
-    return currencies.map(item => ({
+    return currencies.map((item) => ({
       id: item,
       name: item,
     }));
   }, [currencies]);
-
-  const handleInfoExpand = () => {
-    onToggle();
-  };
 
   const handleFormChange = (fieldId, value) => {
     onChange({
@@ -95,16 +83,16 @@ const ServiceInformation = (
     setColors([...colors, color.hex]);
     handleHidePicker();
     handleFormChange('color', color.hex);
-  }
+  };
 
   const handleShowPicker = (event) => {
     event.stopPropagation();
     setShowPicker(true);
-  }
+  };
 
   const handleHidePicker = () => {
     setShowPicker(false);
-  }
+  };
 
   const contentClasses = clsx(
     styles.content,
@@ -120,16 +108,14 @@ const ServiceInformation = (
       onClose={handleHidePicker}
       onSave={handleSaveColor}
     />
-  )
+  );
 
   return (
     <div className={styles.serviceInformation} onPointerUp={handleHidePicker}>
       <div className={styles.header}>
         <div className={styles.title}>
           {showStep && (
-            <div className={styles.step}>
-              {textForKey('Step 1.')}
-            </div>
+            <div className={styles.step}>{textForKey('Step 1.')}</div>
           )}
           {textForKey('Service information')}
         </div>
@@ -138,7 +124,7 @@ const ServiceInformation = (
       <div className={contentClasses}>
         <form>
           <EASTextField
-            type="text"
+            type='text'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Service name')}
             value={data.name}
@@ -146,17 +132,19 @@ const ServiceInformation = (
           />
 
           <EASTextField
-            type="number"
+            type='number'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Required time')}
             min='0'
             value={data.duration}
             onChange={(value) => handleFormChange('duration', value)}
-            endAdornment={<Typography className={styles.adornment}>min</Typography>}
+            endAdornment={
+              <Typography className={styles.adornment}>min</Typography>
+            }
           />
 
           <EASTextField
-            type="number"
+            type='number'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Service price')}
             value={data.price}
@@ -167,16 +155,20 @@ const ServiceInformation = (
                 rootClass={styles.currencyField}
                 options={mappedCurrencies}
                 value={data.currency}
-                onChange={(event) => handleFormChange('currency', event.target.value)}
+                onChange={(event) =>
+                  handleFormChange('currency', event.target.value)
+                }
               />
             }
           />
           <EASSelect
-            type="text"
+            type='text'
             rootClass={styles.simpleField}
             label={textForKey('Service type')}
-            labelId="service-type-select"
-            onChange={(event) => handleFormChange('serviceType', event.target.value)}
+            labelId='service-type-select'
+            onChange={(event) =>
+              handleFormChange('serviceType', event.target.value)
+            }
             value={data.serviceType}
             options={serviceTypes}
           />
@@ -202,7 +194,7 @@ const ServiceInformation = (
             value={data.color}
             name='serviceColors'
           >
-            {colors.map(color => (
+            {colors.map((color) => (
               <ToggleButton
                 key={color}
                 value={color}
@@ -219,9 +211,13 @@ const ServiceInformation = (
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
-          <div className={styles.paletteWrapper} ref={paletteRef} onPointerUp={handleShowPicker}>
+          <div
+            className={styles.paletteWrapper}
+            ref={paletteRef}
+            onPointerUp={handleShowPicker}
+          >
             {colorPickerPopper}
-            <IconPalette fill="#3A83DC"/>
+            <IconPalette fill='#3A83DC' />
             <Typography className={styles.paletteLabel}>
               {textForKey('Add new color')}
             </Typography>

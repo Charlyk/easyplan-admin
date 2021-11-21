@@ -1,15 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
-import dynamic from 'next/dynamic';
-import { toast } from "react-toastify";
-import Typography from "@material-ui/core/Typography";
-import moment from "moment-timezone";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
+import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
-
-import { fetchAllServices } from "../../../../../../middleware/api/services";
-import { textForKey } from "../../../../../utils/localization";
-import { ScheduleStatuses } from "../../../../../utils/constants";
-import EASTextField from "../../../../common/EASTextField";
-import EASSelect from "../../../../common/EASSelect";
+import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import { ScheduleStatuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import { fetchAllServices } from 'middleware/api/services';
+import styles from './ReceiversFilter.module.scss';
 import reducer, {
   initialState,
   setSelectedStatuses,
@@ -20,37 +26,48 @@ import reducer, {
   setDateRange,
   setFilterData,
 } from './receiversFilterSlice';
-import styles from './ReceiversFilter.module.scss';
 
-const EasyDateRangePicker = dynamic(() => import("../../../../common/EasyDateRangePicker"));
+const EasyDateRangePicker = dynamic(() =>
+  import('app/components/common/EasyDateRangePicker'),
+);
 
 const defaultRange = {
   startDate: moment().toDate(),
   endDate: moment().add(7, 'days').toDate(),
 };
 
-const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCount, onChange }) => {
+const ReceiversFilter = ({
+  currentClinic,
+  initialData,
+  recipientsCount,
+  onChange,
+}) => {
   const pickerRef = useRef(null);
-  const [{
-    selectedStatuses,
-    selectedCategories,
-    categories,
-    services,
-    selectedServices,
-    showRangePicker,
-    dateRange,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    {
+      selectedStatuses,
+      selectedCategories,
+      categories,
+      services,
+      selectedServices,
+      showRangePicker,
+      dateRange,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   const filteredServices = useMemo(() => {
-    const categoriesId = selectedCategories.map(item => item.id);
-    return services.filter(service => {
-      return categoriesId.includes(-1) || categoriesId.includes(service.categoryId);
-    })
+    const categoriesId = selectedCategories.map((item) => item.id);
+    return services.filter((service) => {
+      return (
+        categoriesId.includes(-1) || categoriesId.includes(service.categoryId)
+      );
+    });
   }, [services, selectedCategories]);
 
   const rangeObj = useMemo(() => {
     if (dateRange.length === 0) {
-      return null
+      return null;
     }
     const [startDate, endDate] = dateRange;
     return { startDate, endDate };
@@ -62,19 +79,24 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
     }
     return `${moment(rangeObj.startDate).format('DD MMM YYYY')} - ${moment(
       rangeObj.endDate,
-    ).format('DD MMM YYYY')}`
+    ).format('DD MMM YYYY')}`;
   }, [rangeObj]);
 
-  const handleFilterChange = useCallback(debounce((filterData) => {
-    onChange?.(filterData)
-  }, 400), [selectedStatuses, selectedCategories, selectedServices, dateRange]);
+  const handleFilterChange = useCallback(
+    debounce((filterData) => {
+      onChange?.(filterData);
+    }, 400),
+    [selectedStatuses, selectedCategories, selectedServices, dateRange],
+  );
 
   useEffect(() => {
     if (initialData == null) {
       return;
     }
 
-    localDispatch(setFilterData({ ...initialData, clinicData: { services, categories } }));
+    localDispatch(
+      setFilterData({ ...initialData, clinicData: { services, categories } }),
+    );
   }, [initialData, services, categories]);
 
   useEffect(() => {
@@ -90,7 +112,13 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
       categories: selectedCategories,
       range: dateRange,
     });
-  }, [selectedStatuses, selectedCategories, selectedServices, dateRange, handleFilterChange]);
+  }, [
+    selectedStatuses,
+    selectedCategories,
+    selectedServices,
+    dateRange,
+    handleFilterChange,
+  ]);
 
   const fetchFilterData = async () => {
     try {
@@ -104,45 +132,53 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
         toast.error(error.message || textForKey('something_went_wrong'));
       }
     }
-  }
+  };
 
   const handleStatusChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === 'All') {
       localDispatch(setSelectedStatuses([{ id: 'All' }]));
       return;
     }
     const newStatuses = ScheduleStatuses.filter((status) =>
-      newValue.some(item => item === status.id)
+      newValue.some((item) => item === status.id),
     );
-    localDispatch(setSelectedStatuses(newStatuses.filter(status => status.id !== 'All')));
+    localDispatch(
+      setSelectedStatuses(newStatuses.filter((status) => status.id !== 'All')),
+    );
   };
 
   const handleCategoriesChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedCategories([{ id: -1 }]));
       return;
     }
     const newCategories = categories.filter((category) =>
-      newValue.some(item => item === category.id)
+      newValue.some((item) => item === category.id),
     );
-    localDispatch(setSelectedCategories(newCategories.filter(category => category.id !== -1)));
+    localDispatch(
+      setSelectedCategories(
+        newCategories.filter((category) => category.id !== -1),
+      ),
+    );
   };
 
   const handleServicesChange = (event) => {
     const newValue = event.target.value;
-    const lastSelected = newValue[newValue.length - 1]
+    const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedServices([{ id: -1 }]));
       return;
     }
     const newServices = services.filter((category) =>
-      newValue.some(item => item === category.id)
+      newValue.some((item) => item === category.id),
     );
-    localDispatch(setSelectedServices(newServices.filter(category => category.id !== -1)));
+    localDispatch(
+      setSelectedServices(newServices.filter((category) => category.id !== -1)),
+    );
   };
 
   const handleDatePickerOpen = () => {
@@ -156,10 +192,7 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(
-      setDateRange([
-        startDate,
-        moment(endDate).endOf('day').toDate(),
-      ]),
+      setDateRange([startDate, moment(endDate).endOf('day').toDate()]),
     );
   };
 
@@ -180,7 +213,8 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
         <div className={styles.recipientsCount}>
           {recipientsCount > -1 && (
             <Typography className={styles.recipientsLabel}>
-              {textForKey('Receivers')}: ~ {recipientsCount} {textForKey('patients').toLowerCase()}
+              {textForKey('Receivers')}: ~ {recipientsCount}{' '}
+              {textForKey('patients').toLowerCase()}
             </Typography>
           )}
         </div>
@@ -191,13 +225,13 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
           checkable
           rootClass={styles.simpleSelect}
           label={textForKey('Statuses')}
-          labelId="statuses-select-label"
+          labelId='statuses-select-label'
           options={ScheduleStatuses}
           defaultOption={{
             id: 'All',
-            name: textForKey('All statuses')
+            name: textForKey('All statuses'),
           }}
-          value={selectedStatuses.map(item => item.id)}
+          value={selectedStatuses.map((item) => item.id)}
           onChange={handleStatusChange}
         />
 
@@ -207,12 +241,12 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
           checkable
           rootClass={styles.simpleSelect}
           label={textForKey('Categories')}
-          labelId="categories-select-label"
-          value={selectedCategories.map(item => item.id)}
+          labelId='categories-select-label'
+          value={selectedCategories.map((item) => item.id)}
           options={categories}
           defaultOption={{
             id: -1,
-            name: textForKey('All categories')
+            name: textForKey('All categories'),
           }}
           onChange={handleCategoriesChange}
         />
@@ -223,12 +257,12 @@ const ReceiversFilter = ({ currentClinic, isLoading, initialData, recipientsCoun
           checkable
           rootClass={styles.simpleSelect}
           label={textForKey('Services')}
-          labelId="services-select-label"
-          value={selectedServices.map(item => item.id)}
+          labelId='services-select-label'
+          value={selectedServices.map((item) => item.id)}
           options={filteredServices}
           defaultOption={{
             id: -1,
-            name: textForKey('All services')
+            name: textForKey('All services'),
           }}
           onChange={handleServicesChange}
         />

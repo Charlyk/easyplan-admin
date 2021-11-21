@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import initialState from "../initialState";
+import { createSlice } from '@reduxjs/toolkit';
+import initialState from 'redux/initialState';
 
 const clinicDataSlice = createSlice({
   name: 'clinicData',
@@ -10,13 +10,11 @@ const clinicDataSlice = createSlice({
     },
     setUserClinicAccessChange(state, action) {
       state.userClinicAccessChange = action.payload;
-    }
+    },
   },
 });
 
-export const {
-  setShouldUpdateClinicData,
-  setUserClinicAccessChange,
-} = clinicDataSlice.actions;
+export const { setShouldUpdateClinicData, setUserClinicAccessChange } =
+  clinicDataSlice.actions;
 
 export default clinicDataSlice.reducer;

@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from "react-toastify";
-
-import {
-  updateNotesSelector,
-} from '../../../../../../redux/selectors/rootSelector';
-import { textForKey } from '../../../../../utils/localization';
-import { getPatientVisits } from "../../../../../../middleware/api/patients";
+import { toast } from 'react-toastify';
+import { textForKey } from 'app/utils/localization';
+import { getPatientVisits } from 'middleware/api/patients';
+import { updateNotesSelector } from 'redux/selectors/rootSelector';
 import AppointmentNote from './AppointmentNote';
 import styles from './AppointmentNotes.module.scss';
 
@@ -31,7 +28,7 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setIsFetching(false)
+      setIsFetching(false);
     }
   };
 
@@ -60,7 +57,7 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
               visit={visit}
               onEdit={onEditNote}
             />
-          )
+          );
         })}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import styles from './SwitchButton.module.scss';
@@ -10,7 +11,10 @@ const SwitchButton = (props) => {
     onChange?.(!isChecked);
   };
 
-  const bgClasses = clsx(styles['switch-button'], isChecked ? styles.selected : styles.default);
+  const bgClasses = clsx(
+    styles['switch-button'],
+    isChecked ? styles.selected : styles.default,
+  );
 
   const indicatorClasses = clsx(
     styles['switch-button__selection-indicator'],
@@ -18,14 +22,14 @@ const SwitchButton = (props) => {
   );
 
   return (
-    <div
+    <Box
       role='button'
       tabIndex={0}
       className={bgClasses}
       onClick={handleToggle}
     >
       <div className={indicatorClasses} />
-    </div>
+    </Box>
   );
 };
 

@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityOn from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import clsx from "clsx";
-
-import { EmailRegex, PasswordRegex } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import LoadingButton from '../../LoadingButton';
-import UploadAvatar from "../../UploadAvatar";
-import EASTextField from "../../EASTextField";
-import EASPhoneInput from "../../EASPhoneInput";
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import UploadAvatar from 'app/components/common/UploadAvatar';
+import { EmailRegex, PasswordRegex } from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
 import styles from './RegisterForm.module.scss';
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import VisibilityOn from "@material-ui/icons/Visibility";
-import IconButton from "@material-ui/core/IconButton";
 
-const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack }) => {
+const RegisterForm = ({
+  errorMessage,
+  isLoading,
+  isMobile,
+  onSubmit,
+  onGoBack,
+}) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [data, setData] = useState({
     firstName: '',
@@ -25,8 +31,10 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     avatarFile: null,
     isPhoneValid: false,
   });
-  const isPasswordFieldValid = data.password.length === 0 || data.password.match(PasswordRegex);
-  const isEmailFieldValid = data.username.length === 0 || data.username.match(EmailRegex);
+  const isPasswordFieldValid =
+    data.password.length === 0 || data.password.match(PasswordRegex);
+  const isEmailFieldValid =
+    data.username.length === 0 || data.username.match(EmailRegex);
 
   const handleLastNameChange = (newValue) => {
     setData({ ...data, lastName: newValue });
@@ -44,7 +52,7 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     setData({ ...data, password: newValue });
   };
 
-  const handleAvatarChange = file => {
+  const handleAvatarChange = (file) => {
     if (file != null) {
       setData({ ...data, avatarFile: file });
     }
@@ -58,7 +66,9 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: isPhoneNumberValid(value, country) && !event.target.classList.value.includes('invalid-number'),
+      isPhoneValid:
+        isPhoneNumberValid(value, country) &&
+        !event.target.classList.value.includes('invalid-number'),
     });
   };
 
@@ -99,7 +109,7 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
         />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.textField}
           value={data.lastName}
           onChange={handleLastNameChange}
@@ -107,7 +117,7 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
         />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.textField}
           value={data.firstName}
           onChange={handleFirstNameChange}
@@ -115,9 +125,11 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
         />
 
         <EASTextField
-          type="email"
+          type='email'
           error={!isEmailFieldValid}
-          helperText={isEmailFieldValid ? null : textForKey('email_invalid_message')}
+          helperText={
+            isEmailFieldValid ? null : textForKey('email_invalid_message')
+          }
           containerClass={styles.textField}
           value={data.username}
           onChange={handleEmailChange}
@@ -137,7 +149,7 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
               onClick={togglePasswordVisibility}
               className={styles.visibilityToggleBtn}
             >
-              {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
+              {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
             </IconButton>
           }
         />
@@ -150,22 +162,17 @@ const RegisterForm = ({ errorMessage, isLoading, isMobile, onSubmit, onGoBack })
         />
 
         <div className='footer'>
-          <div
-            role='button'
-            tabIndex={0}
-            className='back-button'
-            onClick={onGoBack}
-          >
+          <Box className='back-button' onClick={onGoBack}>
             {textForKey('Already have an account')}?
-          </div>
+          </Box>
           <LoadingButton
-            type="submit"
+            type='submit'
             isLoading={isLoading}
             className='positive-button'
             disabled={!isFormValid()}
             style={{
               width: isMobile ? '6.5rem' : 'unset',
-              minWidth: isMobile ? 'unset' : '8rem'
+              minWidth: isMobile ? 'unset' : '8rem',
             }}
             onClick={submitForm}
           >

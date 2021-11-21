@@ -1,43 +1,40 @@
-import React from "react";
-import clsx from "clsx";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../../utils/localization";
-import EASTextField from "../../../../common/EASTextField";
-import EASSelect from "../../../../common/EASSelect";
-import EASTextarea from "../../../../common/EASTextarea";
+import React from 'react';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import { textForKey } from 'app/utils/localization';
 import {
   getRealMessageLength,
   languages,
-} from "../CreateMessageDialog.constants";
-import styles from "./MainMessageForm.module.scss";
+} from '../CreateMessageDialog.constants';
+import styles from './MainMessageForm.module.scss';
 
-const MainMessageForm = (
-  {
-    messageTitle,
-    language,
-    message,
-    isLengthExceeded,
-    currentClinic,
-    maxLength,
-    hourToSend,
-    availableHours,
-    availableTags,
-    hideHour,
-    onMessageChange,
-    onMessageTitleChange,
-    onLanguageChange,
-    onMessageHourChange,
-    onTagClick,
-  }
-) => {
-
+const MainMessageForm = ({
+  messageTitle,
+  language,
+  message,
+  isLengthExceeded,
+  currentClinic,
+  maxLength,
+  hourToSend,
+  availableHours,
+  availableTags,
+  hideHour,
+  onMessageChange,
+  onMessageTitleChange,
+  onLanguageChange,
+  onMessageHourChange,
+  onTagClick,
+}) => {
   const getMessageLength = (language) => {
     return getRealMessageLength(language, message, currentClinic);
   };
 
   const getMappedHours = (hours) => {
-    return hours.map(item => ({
+    return hours.map((item) => ({
       id: item,
       name: item,
     }));
@@ -56,7 +53,7 @@ const MainMessageForm = (
       <EASSelect
         rootClass={styles.simpleField}
         label={textForKey('Message language')}
-        labelId="language-select"
+        labelId='language-select'
         value={language}
         onChange={onLanguageChange}
         options={languages}
@@ -78,12 +75,9 @@ const MainMessageForm = (
               {textForKey('languagedesc')}
             </Typography>
             <Typography
-              className={clsx(
-                styles.messageLength,
-                {
-                  [styles.exceeded]: isLengthExceeded
-                }
-              )}
+              className={clsx(styles.messageLength, {
+                [styles.exceeded]: isLengthExceeded,
+              })}
             >
               {getMessageLength(language)}/{maxLength}
             </Typography>
@@ -93,15 +87,13 @@ const MainMessageForm = (
 
       <div className={styles.tagsWrapper}>
         {availableTags.map((tag) => (
-          <span
-            role='button'
-            tabIndex={0}
+          <Box
             key={tag.id}
             className={styles['tag-label']}
             onClick={onTagClick(tag)}
           >
-                #{tag.label}
-              </span>
+            #{tag.label}
+          </Box>
         ))}
       </div>
 
@@ -115,7 +107,7 @@ const MainMessageForm = (
         />
       )}
     </div>
-  )
+  );
 };
 
 export default MainMessageForm;

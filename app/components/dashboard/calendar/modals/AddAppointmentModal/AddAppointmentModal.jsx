@@ -1,64 +1,75 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
-import { EmailRegex, Languages, PatientSources, Role } from '../../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
-import EasyDatePicker from '../../../../common/EasyDatePicker';
+import EASAutocomplete from 'app/components/common/EASAutocomplete';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDatePicker from 'app/components/common/EasyDatePicker';
+import EASModal from 'app/components/common/modals/EASModal';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import {
+  EmailRegex,
+  Languages,
+  PatientSources,
+  Role,
+} from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import { getPatients } from 'middleware/api/patients';
 import {
   getAvailableHours,
   getScheduleDetails,
-  postSchedule
-} from "../../../../../../middleware/api/schedules";
-import { getPatients } from "../../../../../../middleware/api/patients";
-import { reducer, initialState, actions } from "./AddAppointmentModal.reducer";
-import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
-import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
-import EASModal from "../../../../common/modals/EASModal";
+  postSchedule,
+} from 'middleware/api/schedules';
+import { toggleAppointmentsUpdate } from 'redux/actions/actions';
 import styles from './AddAppointment.module.scss';
-import EASPhoneInput from "../../../../common/EASPhoneInput";
-import EASTextField from "../../../../common/EASTextField";
-import EASAutocomplete from "../../../../common/EASAutocomplete";
-import EASSelect from "../../../../common/EASSelect";
-import EASTextarea from "../../../../common/EASTextarea";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import { reducer, initialState, actions } from './AddAppointmentModal.reducer';
 
-const AddAppointmentModal = (
-  {
-    open,
-    currentClinic,
-    doctor: selectedDoctor,
-    patient: selectedPatient,
-    startHour: selectedStartTime,
-    endHour: selectedEndTime,
-    date,
-    schedule,
-    onClose,
-  }
-) => {
+const AddAppointmentModal = ({
+  open,
+  currentClinic,
+  doctor: selectedDoctor,
+  patient: selectedPatient,
+  startHour: selectedStartTime,
+  endHour: selectedEndTime,
+  date,
+  schedule,
+  onClose,
+}) => {
   const dispatch = useDispatch();
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
   const doctors = useMemo(() => {
-    return currentClinic.users.filter((item) =>
-      item.roleInClinic === Role.doctor &&
-      !item.isHidden &&
-      !item.isInVacation
-    ).map(item => {
-      const { phoneNumber, fullName } = item;
-      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
-      return {
-        ...item,
-        name: name,
-        label: item.fullName,
-      }
-    });
+    return currentClinic.users
+      .filter(
+        (item) =>
+          item.roleInClinic === Role.doctor &&
+          !item.isHidden &&
+          !item.isInVacation,
+      )
+      .map((item) => {
+        const { phoneNumber, fullName } = item;
+        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+        return {
+          ...item,
+          name: name,
+          label: item.fullName,
+        };
+      });
   }, [currentClinic]);
 
   const [
@@ -100,29 +111,31 @@ const AddAppointmentModal = (
 
   const getLabelKey = useCallback((option) => {
     if (option.firstName && option.lastName) {
-      return `${option.lastName} ${option.firstName}`
+      return `${option.lastName} ${option.firstName}`;
     } else if (option.firstName) {
-      return option.firstName
+      return option.firstName;
     } else if (option.lastName) {
-      return option.lastName
+      return option.lastName;
     } else {
-      return `+${option.countryCode}${option.phoneNumber}`
+      return `+${option.countryCode}${option.phoneNumber}`;
     }
   }, []);
 
   const suggestionPatients = useMemo(() => {
     if (patients.length === 0 && patient != null) {
-      return [{
-        ...patient,
-        name: `${patient.fullName} +${patient.countryCode}${patient.phoneNumber}`,
-        label: patients.fullName,
-      }]
+      return [
+        {
+          ...patient,
+          name: `${patient.fullName} +${patient.countryCode}${patient.phoneNumber}`,
+          label: patients.fullName,
+        },
+      ];
     }
-    return patients.map(item => ({
+    return patients.map((item) => ({
       ...item,
       name: `${item.fullName} +${item.countryCode}${item.phoneNumber}`,
       label: item.fullName,
-    }))
+    }));
   }, [patients, patient]);
 
   const mappedServices = useMemo(() => {
@@ -150,7 +163,7 @@ const AddAppointmentModal = (
 
   useEffect(() => {
     if (selectedDoctor != null) {
-      const fullName = `${selectedDoctor.firstName} ${selectedDoctor.lastName}`
+      const fullName = `${selectedDoctor.firstName} ${selectedDoctor.lastName}`;
       const { phoneNumber } = selectedDoctor;
       const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
       localDispatch(
@@ -193,12 +206,12 @@ const AddAppointmentModal = (
   }, [selectedStartTime, selectedEndTime]);
 
   const mappedTime = (timeList) => {
-    return timeList.map(item => ({
+    return timeList.map((item) => ({
       id: item,
       label: item,
       name: item,
     }));
-  }
+  };
 
   const fetchScheduleDetails = async () => {
     if (schedule == null) {
@@ -285,7 +298,12 @@ const AddAppointmentModal = (
       localDispatch(actions.setPatientsLoading(true));
       try {
         const updatedQuery = query.replace('+', '');
-        const requestQuery = { query: updatedQuery, page: '0', rowsPerPage: '10', short: '1' };
+        const requestQuery = {
+          query: updatedQuery,
+          page: '0',
+          rowsPerPage: '10',
+          short: '1',
+        };
         const { data: response } = await getPatients(requestQuery);
         const patients = response.data.map((item) => ({
           ...item,
@@ -304,7 +322,7 @@ const AddAppointmentModal = (
   const handleSearchQueryChange = (event) => {
     const query = event.target.value;
     if (query.length < 3) {
-      localDispatch(actions.setPatients([]))
+      localDispatch(actions.setPatients([]));
       localDispatch(actions.setPatientsLoading(false));
       return;
     }
@@ -349,7 +367,7 @@ const AddAppointmentModal = (
 
   const handleEndHourChange = (event) => {
     localDispatch(actions.setEndTime(event.target.value));
-  }
+  };
 
   const handleNoteChange = (newValue) => {
     localDispatch(actions.setAppointmentNote(newValue));
@@ -373,11 +391,11 @@ const AddAppointmentModal = (
 
   const handlePatientFirstNameChange = (newValue) => {
     localDispatch(actions.setPatientFirstName(newValue));
-  }
+  };
 
   const handlePatientLastNameChange = (newValue) => {
     localDispatch(actions.setPatientLastName(newValue));
-  }
+  };
 
   const handlePatientLanguageChange = (event) => {
     localDispatch(actions.setPatientLanguage(event.target.value));
@@ -407,7 +425,10 @@ const AddAppointmentModal = (
       // set start date
       const [startHour, startMinute] = startTime.split(':');
       const startDate = moment(appointmentDate);
-      startDate.set({ hour: parseInt(startHour), minute: parseInt(startMinute) });
+      startDate.set({
+        hour: parseInt(startHour),
+        minute: parseInt(startMinute),
+      });
 
       // set end date
       const [endHour, endMinute] = endTime.split(':');
@@ -449,7 +470,9 @@ const AddAppointmentModal = (
     localDispatch(
       actions.setPatientPhoneNumber({
         phoneNumber: value.replace(country.dialCode, ''),
-        isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+        isPhoneValid:
+          isPhoneNumberValid(value, country) &&
+          !event.target?.classList.value.includes('invalid-number'),
         country,
       }),
     );
@@ -505,14 +528,14 @@ const AddAppointmentModal = (
         {isNewPatient && (
           <div className={styles.patientNameContainer}>
             <EASTextField
-              type="text"
+              type='text'
               value={patientLastName}
               containerClass={styles.nameField}
               fieldLabel={textForKey('Last name')}
               onChange={handlePatientLastNameChange}
             />
             <EASTextField
-              type="text"
+              type='text'
               value={patientFirstName}
               containerClass={styles.nameField}
               fieldLabel={textForKey('First name')}
@@ -533,7 +556,7 @@ const AddAppointmentModal = (
 
         {isNewPatient && (
           <EASTextField
-            type="email"
+            type='email'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Email')}
             value={patientEmail}
@@ -548,7 +571,11 @@ const AddAppointmentModal = (
             containerClass={styles.simpleField}
             ref={birthdayPickerAnchor}
             fieldLabel={textForKey('Birthday')}
-            value={patientBirthday ? moment(patientBirthday).format('DD MMM YYYY') : ''}
+            value={
+              patientBirthday
+                ? moment(patientBirthday).format('DD MMM YYYY')
+                : ''
+            }
             onPointerUp={handleOpenBirthdayPicker}
           />
         )}
@@ -556,7 +583,7 @@ const AddAppointmentModal = (
         {isNewPatient && (
           <EASSelect
             label={textForKey('spoken_language')}
-            labelId="spoken-language-select"
+            labelId='spoken-language-select'
             options={Languages}
             value={patientLanguage}
             rootClass={styles.simpleField}
@@ -567,7 +594,7 @@ const AddAppointmentModal = (
         {isNewPatient && (
           <EASSelect
             label={textForKey('patient_source')}
-            labelId="patient-source-select"
+            labelId='patient-source-select'
             options={PatientSources}
             value={patientSource}
             rootClass={styles.simpleField}
@@ -590,21 +617,16 @@ const AddAppointmentModal = (
 
         <div className={styles.modeWrapper}>
           <div
-            className={
-              clsx(
-                styles.patientModeButton,
-                {
-                  [styles.disabled]: isFinished,
-                },
-              )
-            }
+            className={clsx(styles.patientModeButton, {
+              [styles.disabled]: isFinished,
+            })}
             role='button'
             tabIndex={0}
             onPointerUp={changePatientMode}
           >
-          <span>
-            {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
-          </span>
+            <span>
+              {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
+            </span>
           </div>
         </div>
 
@@ -643,7 +665,7 @@ const AddAppointmentModal = (
             rootClass={styles.timeSelect}
             value={startTime || ''}
             label={textForKey('Start time')}
-            labelId="start-time-select"
+            labelId='start-time-select'
             options={mappedTime(availableStartTime)}
             onChange={handleStartHourChange}
           />
@@ -652,7 +674,7 @@ const AddAppointmentModal = (
             rootClass={styles.timeSelect}
             value={endTime || ''}
             label={textForKey('End time')}
-            labelId="start-time-select"
+            labelId='start-time-select'
             options={mappedTime(availableEndTime)}
             onChange={handleEndHourChange}
           />

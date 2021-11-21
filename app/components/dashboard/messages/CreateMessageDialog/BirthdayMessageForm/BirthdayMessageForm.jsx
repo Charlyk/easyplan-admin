@@ -1,41 +1,46 @@
-import React, { useEffect, useReducer } from "react";
-import moment from "moment-timezone";
-import Typography from "@material-ui/core/Typography";
-
-import { textForKey } from "../../../../../utils/localization";
+import React, { useEffect, useReducer } from 'react';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment-timezone';
+import { textForKey } from 'app/utils/localization';
 import {
   availableHours,
   charactersRegex,
   messageTypeEnum,
-  tags
-} from "../CreateMessageDialog.constants";
+  tags,
+} from '../CreateMessageDialog.constants';
+import MainMessageForm from '../MainMessageForm';
+import styles from './BirthdayMessageForm.module.scss';
 import reducer, {
-  initialState, setHourToSend, setLanguage,
+  initialState,
+  setHourToSend,
+  setLanguage,
   setMaxLength,
   setMessage,
-  setMessageData, setMessageTitle
-} from "./birthdayMessageSlice";
-import styles from './BirthdayMessageForm.module.scss';
-import MainMessageForm from "../MainMessageForm";
+  setMessageData,
+  setMessageTitle,
+} from './birthdayMessageSlice';
 
-const BirthdayMessageForm = ({ currentClinic, initialMessage, onMessageChange, onLanguageChange, onSubmit }) => {
+const BirthdayMessageForm = ({
+  currentClinic,
+  initialMessage,
+  onMessageChange,
+  onLanguageChange,
+  onSubmit,
+}) => {
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.BirthdayCongrats),
   );
-  const [{
-    messageTitle,
-    language,
-    message,
-    maxLength,
-    hourToSend,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    { messageTitle, language, message, maxLength, hourToSend },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (initialMessage == null) {
       return;
     }
     localDispatch(setMessageData(initialMessage));
-  }, [initialMessage])
+  }, [initialMessage]);
 
   useEffect(() => {
     const messageValue = message[language];
@@ -64,7 +69,7 @@ const BirthdayMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
   const handleSubmit = (event) => {
     event?.preventDefault();
     onSubmit?.();
-  }
+  };
 
   const handleMessageChange = (newValue) => {
     localDispatch(setMessage({ [language]: newValue }));
@@ -84,9 +89,7 @@ const BirthdayMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
 
   const handleTagClick = (tag) => () => {
     const currentMessage = message[language];
-    localDispatch(
-      setMessage({ [language]: `${currentMessage}${tag.id}` }),
-    );
+    localDispatch(setMessage({ [language]: `${currentMessage}${tag.id}` }));
   };
 
   const getRealMessageLength = (language) => {
@@ -131,7 +134,7 @@ const BirthdayMessageForm = ({ currentClinic, initialMessage, onMessageChange, o
         </Typography>
       </div>
     </div>
-  )
+  );
 };
 
 export default BirthdayMessageForm;

@@ -1,8 +1,14 @@
 import React from 'react';
 
-export default function Calendar() {
-  return <div />;
-}
+const Calendar = () => {
+  return (
+    <div>
+      <div />
+    </div>
+  );
+};
+
+export default Calendar;
 
 export const getServerSideProps = async () => {
   return {

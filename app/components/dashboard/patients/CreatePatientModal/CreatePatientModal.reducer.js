@@ -1,5 +1,5 @@
-import { EmailRegex } from '../../../../utils/constants';
-import generateReducerActions from '../../../../utils/generateReducerActions';
+import { EmailRegex } from 'app/utils/constants';
+import generateReducerActions from 'app/utils/generateReducerActions';
 
 export const initialState = {
   firstName: '',

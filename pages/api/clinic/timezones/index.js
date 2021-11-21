@@ -2,7 +2,15 @@ import axios from 'axios';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { handler } from '../../handler';
+import handler from '../../handler';
+
+function fetchAvailableTimeZones(req) {
+  return axios.get(`${updatedServerUrl(req)}/clinics/available-timezones`, {
+    headers: {
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
 
 export default async (req, res) => {
   switch (req.method) {
@@ -19,11 +27,3 @@ export default async (req, res) => {
       break;
   }
 };
-
-function fetchAvailableTimeZones(req) {
-  return axios.get(`${updatedServerUrl(req)}/clinics/available-timezones`, {
-    headers: {
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    },
-  });
-}

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
-import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../common/LoadingButton';
-import { EmailRegex, HeaderKeys } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import { updateUserAccount } from "../../../../../middleware/api/auth";
-import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import UploadAvatar from "../../../common/UploadAvatar";
-import EASTextField from "../../../common/EASTextField";
-import EASPhoneInput from "../../../common/EASPhoneInput";
-import styles from './AccountSettings.module.scss'
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import UploadAvatar from 'app/components/common/UploadAvatar';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import { EmailRegex, HeaderKeys } from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import { updateUserAccount } from 'middleware/api/auth';
+import styles from './AccountSettings.module.scss';
 
 const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
   const router = useRouter();
@@ -60,7 +60,9 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+      isPhoneValid:
+        isPhoneNumberValid(value, country) &&
+        !event.target?.classList.value.includes('invalid-number'),
     });
   };
 
@@ -103,13 +105,15 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
 
   return (
     <div className={styles['account-settings']}>
-      <span className={styles['form-title']}>{textForKey('Account settings')}</span>
+      <span className={styles['form-title']}>
+        {textForKey('Account settings')}
+      </span>
       <UploadAvatar
         currentAvatar={data.avatarFile || data.avatarUrl}
         onChange={handleLogoChange}
       />
       <EASTextField
-        type="text"
+        type='text'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Last name')}
         value={data.lastName || ''}
@@ -117,7 +121,7 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
       />
 
       <EASTextField
-        type="text"
+        type='text'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('First name')}
         value={data.firstName || ''}
@@ -125,7 +129,7 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
       />
 
       <EASTextField
-        type="email"
+        type='email'
         containerClass={styles.simpleField}
         error={!isEmailValid}
         helperText={isEmailValid ? null : textForKey('email_invalid_message')}
@@ -136,7 +140,7 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
 
       {isEmailChanged && (
         <EASTextField
-          type="password"
+          type='password'
           autoComplete='new-password'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Current password')}

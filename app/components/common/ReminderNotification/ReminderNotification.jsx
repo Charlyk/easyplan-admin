@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import upperFirst from 'lodash/upperFirst';
-import Typography from "@material-ui/core/Typography";
-import getReminderTexts from "../../../utils/getReminderTexts";
-import { textForKey } from "../../../utils/localization";
+import PropTypes from 'prop-types';
+import getReminderTexts from 'app/utils/getReminderTexts';
+import { textForKey } from 'app/utils/localization';
 import styles from './ReminderNotification.module.scss';
 
 const ReminderNotification = ({ reminder, isUpdate }) => {
@@ -20,12 +20,12 @@ const ReminderNotification = ({ reminder, isUpdate }) => {
       <Typography className={styles.typeLabel}>
         {textForKey('crm_reminder_type')}:
         <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
-            {textForKey(`crm_reminder_type_${reminder.type}`)}
+          {textForKey(`crm_reminder_type_${reminder.type}`)}
           {reminder.comment ? ` - ${reminder.comment}` : ''}
-          </span>
+        </span>
       </Typography>
     </div>
-  )
+  );
 };
 
 export default ReminderNotification;

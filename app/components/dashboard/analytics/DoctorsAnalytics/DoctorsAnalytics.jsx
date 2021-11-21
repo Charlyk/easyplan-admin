@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useReducer, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,18 +7,19 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import isEqual from "lodash/isEqual";
+import isEqual from 'lodash/isEqual';
+import sortBy from 'lodash/sortBy';
 import sum from 'lodash/sum';
-import sortBy from "lodash/sortBy";
 import moment from 'moment-timezone';
-import { useRouter } from "next/router";
-
-import IconList from "../../../icons/iconList";
-import { textForKey } from '../../../../utils/localization';
-import formattedAmount from "../../../../utils/formattedAmount";
-import { Role } from "../../../../utils/constants";
-import EASSelect from "../../../common/EASSelect";
-import EASTextField from "../../../common/EASTextField";
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import IconList from 'app/components/icons/iconList';
+import { Role } from 'app/utils/constants';
+import formattedAmount from 'app/utils/formattedAmount';
+import { textForKey } from 'app/utils/localization';
+import styles from './DoctorsAnalytics.module.scss';
 import reducer, {
   initialState,
   setSelectedDoctor,
@@ -28,14 +28,19 @@ import reducer, {
   setShowRangePicker,
   setInitialQuery,
   setServicesModal,
-} from "./DoctorsAnalytics.reducer";
-import styles from './DoctorsAnalytics.module.scss';
+} from './DoctorsAnalytics.reducer';
 
-const EasyDateRangePicker = dynamic(() => import('../../../common/EasyDateRangePicker'));
+const EasyDateRangePicker = dynamic(() =>
+  import('app/components/common/EasyDateRangePicker'),
+);
 const StatisticFilter = dynamic(() => import('../StatisticFilter'));
 const ServicesListModal = dynamic(() => import('./ServicesListModal'));
 
-const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) => {
+const DoctorsAnalytics = ({
+  currentClinic,
+  statistics,
+  query: initialQuery,
+}) => {
   const pickerRef = useRef(null);
   const router = useRouter();
   const currency = currentClinic.currency;
@@ -53,16 +58,20 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
 
   const doctors = useMemo(() => {
     return sortBy(
-      currentClinic.users.filter(user => user.roleInClinic === Role.doctor),
-      user => user.fullName.toLowerCase(),
-    ).map(doctor => ({
+      currentClinic.users.filter((user) => user.roleInClinic === Role.doctor),
+      (user) => user.fullName.toLowerCase(),
+    ).map((doctor) => ({
       id: doctor.id,
-      name: `${doctor.firstName} ${doctor.lastName} ${doctor.isHidden ? `(${textForKey('Fired')})` : ''}`
-    }))
+      name: `${doctor.firstName} ${doctor.lastName} ${
+        doctor.isHidden ? `(${textForKey('Fired')})` : ''
+      }`,
+    }));
   }, [currentClinic]);
 
   const services = useMemo(() => {
-    return sortBy(currentClinic.services, service => service.name.toLowerCase())
+    return sortBy(currentClinic.services, (service) =>
+      service.name.toLowerCase(),
+    );
   }, [currentClinic]);
 
   useEffect(() => {
@@ -100,10 +109,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(
-      setDateRange([
-        startDate,
-        moment(endDate).endOf('day').toDate(),
-      ]),
+      setDateRange([startDate, moment(endDate).endOf('day').toDate()]),
     );
   };
 
@@ -111,7 +117,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
     const query = {
       fromDate: moment(startDate).format('YYYY-MM-DD'),
       toDate: moment(endDate).format('YYYY-MM-DD'),
-    }
+    };
 
     if (selectedDoctor.id !== -1) {
       query.doctorId = selectedDoctor.id;
@@ -134,7 +140,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
       setServicesModal({
         open: true,
         statistic: statistic,
-      })
+      }),
     );
   };
 
@@ -158,7 +164,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
           labelId='services-select-label'
           defaultOption={{
             id: -1,
-            name: textForKey('All services')
+            name: textForKey('All services'),
           }}
           onChange={handleServiceChange}
         />
@@ -171,7 +177,7 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
           labelId='doctors-select-label'
           defaultOption={{
             id: -1,
-            name: textForKey('All doctors')
+            name: textForKey('All doctors'),
           }}
           onChange={handleDoctorChange}
         />
@@ -189,7 +195,9 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
       </StatisticFilter>
       <div className={styles['data-container']}>
         {!isLoading && statistics?.length === 0 && (
-          <span className={styles['no-data-label']}>{textForKey('No results')}</span>
+          <span className={styles['no-data-label']}>
+            {textForKey('No results')}
+          </span>
         )}
         {statistics?.length > 0 && (
           <TableContainer classes={{ root: styles['table-container'] }}>
@@ -197,31 +205,48 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
               <TableHead>
                 <TableRow>
                   <TableCell>{textForKey('Doctor')}</TableCell>
-                  <TableCell align="right">{textForKey('Total income')}</TableCell>
-                  <TableCell align="right">{textForKey('Doctor part')}</TableCell>
-                  <TableCell align="right">{textForKey('Clinic profit')}</TableCell>
-                  <TableCell align="right" size="small">{textForKey('Services')}</TableCell>
+                  <TableCell align='right'>
+                    {textForKey('Total income')}
+                  </TableCell>
+                  <TableCell align='right'>
+                    {textForKey('Doctor part')}
+                  </TableCell>
+                  <TableCell align='right'>
+                    {textForKey('Clinic profit')}
+                  </TableCell>
+                  <TableCell align='right' size='small'>
+                    {textForKey('Services')}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {statistics.map((item) => (
                   <TableRow key={item.doctor.id}>
                     <TableCell>{item.doctor.fullName}</TableCell>
-                    <TableCell align="right">
-                      {formattedAmount(item.totalAmount, currentClinic.currency)}
+                    <TableCell align='right'>
+                      {formattedAmount(
+                        item.totalAmount,
+                        currentClinic.currency,
+                      )}
                     </TableCell>
-                    <TableCell align="right">
-                      {formattedAmount(item.doctorAmount, currentClinic.currency)}
+                    <TableCell align='right'>
+                      {formattedAmount(
+                        item.doctorAmount,
+                        currentClinic.currency,
+                      )}
                     </TableCell>
-                    <TableCell align="right">
-                      {formattedAmount(item.clinicAmount, currentClinic.currency)}
+                    <TableCell align='right'>
+                      {formattedAmount(
+                        item.clinicAmount,
+                        currentClinic.currency,
+                      )}
                     </TableCell>
-                    <TableCell align="right" size="small">
+                    <TableCell align='right' size='small'>
                       <IconButton
                         className={styles.servicesButton}
                         onPointerUp={() => handleShowServices(item)}
                       >
-                        <IconList fill="#3A83DC"/>
+                        <IconList fill='#3A83DC' />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -229,12 +254,15 @@ const DoctorsAnalytics = ({ currentClinic, statistics, query: initialQuery }) =>
               </TableBody>
               <TableFooter>
                 <TableRow>
-                  <TableCell/>
-                  <TableCell/>
-                  <TableCell/>
+                  <TableCell />
+                  <TableCell />
+                  <TableCell />
                   <TableCell align='right'>
                     {textForKey('Total')}:{' '}
-                    {formattedAmount(sum(statistics.map((it) => it.clinicAmount)), currentClinic.currency)}
+                    {formattedAmount(
+                      sum(statistics.map((it) => it.clinicAmount)),
+                      currentClinic.currency,
+                    )}
                   </TableCell>
                 </TableRow>
               </TableFooter>

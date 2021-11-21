@@ -1,48 +1,44 @@
-import React, {
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-} from 'react';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import isOutOfBounds from 'app/utils/isOutOfBounds';
+import { textForKey } from 'app/utils/localization';
+import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
   deleteScheduleSelector,
-  updateScheduleSelector
-} from '../../../../../redux/selectors/scheduleSelector';
-import { fetchSchedulesHours } from "../../../../../middleware/api/schedules";
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import isOutOfBounds from "../../../../utils/isOutOfBounds";
-import { actions, reducer, initialState } from './CalendarDayView.reducer'
+  updateScheduleSelector,
+} from 'redux/selectors/scheduleSelector';
 import styles from './CalendarDayView.module.scss';
-import { textForKey } from "../../../../utils/localization";
+import { actions, reducer, initialState } from './CalendarDayView.reducer';
 
-const EasyCalendar = dynamic(() => import('../../../common/EasyCalendar'));
+const EasyCalendar = dynamic(() =>
+  import('app/components/common/EasyCalendar'),
+);
 const AddPauseModal = dynamic(() => import('../modals/AddPauseModal'));
 
 const moment = extendMoment(Moment);
 
-const CalendarDayView = (
-  {
-    schedules: initialSchedules,
-    showHourIndicator,
-    doctors,
-    viewDate,
-    dayHours,
-    onScheduleSelect,
-    onCreateSchedule
-  }) => {
+const CalendarDayView = ({
+  schedules: initialSchedules,
+  showHourIndicator,
+  doctors,
+  viewDate,
+  dayHours,
+  onScheduleSelect,
+  onCreateSchedule,
+}) => {
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const schedulesRef = useRef(null);
-  const [
-    { hours, pauseModal, schedules },
-    localDispatch,
-  ] = useReducer(reducer, initialState);
+  const [{ hours, pauseModal, schedules }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     handleScheduleUpdate();
@@ -50,7 +46,7 @@ const CalendarDayView = (
 
   useEffect(() => {
     handleScheduleDelete();
-  }, [deleteSchedule])
+  }, [deleteSchedule]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {
@@ -72,7 +68,7 @@ const CalendarDayView = (
       return;
     }
     const scheduleDate = moment(updateSchedule.startTime);
-    const currentDate = moment(viewDate)
+    const currentDate = moment(viewDate);
 
     if (!scheduleDate.isSame(currentDate, 'date')) {
       return;
@@ -82,9 +78,10 @@ const CalendarDayView = (
       await fetchDayHours(scheduleDate.toDate());
     }
 
-    const scheduleExists = schedules.some((item) =>
-      item.id === updateSchedule.doctorId &&
-      item.schedules.some((schedule) => schedule.id === updateSchedule.id)
+    const scheduleExists = schedules.some(
+      (item) =>
+        item.id === updateSchedule.doctorId &&
+        item.schedules.some((schedule) => schedule.id === updateSchedule.id),
     );
 
     if (scheduleExists) {
@@ -96,7 +93,7 @@ const CalendarDayView = (
 
   function handleScheduleDelete() {
     if (deleteSchedule == null) {
-      return
+      return;
     }
 
     localDispatch(actions.deleteSchedule(deleteSchedule));
@@ -150,7 +147,7 @@ const CalendarDayView = (
    * @return {function(*=, *=): void}
    */
   const handleAddSchedule = (startHour, endHour, doctorId, selectedDate) => {
-    const doctor = doctors.find(item => item.id === doctorId);
+    const doctor = doctors.find((item) => item.id === doctorId);
     onCreateSchedule(doctor, startHour, endHour, selectedDate);
   };
 
@@ -206,9 +203,9 @@ const CalendarDayView = (
    * }} item
    */
   const handleHeaderItemClick = (item) => {
-    const doctor = doctors.find(doctor => doctor.id === item.id);
+    const doctor = doctors.find((doctor) => doctor.id === item.id);
     handleCreatePause(doctor);
-  }
+  };
 
   const mappedDoctors = useMemo(() => {
     return doctors.map((doctor) => ({
@@ -222,7 +219,7 @@ const CalendarDayView = (
 
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>
-      <AddPauseModal {...pauseModal} onClose={handleClosePauseModal}/>
+      <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
       <EasyCalendar
         viewDate={viewDate}
         dayHours={hours}

@@ -11,11 +11,11 @@ const Clinics = ({ user, authToken, isMobile }) => {
   return <ClinicsList authToken={authToken} user={user} isMobile={isMobile} />;
 };
 
-export const getServerSideProps = async ({ req, res }) => {
+export const getServerSideProps = async ({ req }) => {
   try {
     const isMobile = checkIsMobileDevice(req);
-    const { auth_token } = parseCookies(req);
-    if (!auth_token || !auth_token.match(JwtRegex)) {
+    const { auth_token: authToken } = parseCookies(req);
+    if (!authToken || !authToken.match(JwtRegex)) {
       return {
         redirect: {
           destination: '/login',
@@ -28,8 +28,8 @@ export const getServerSideProps = async ({ req, res }) => {
     return {
       props: {
         isMobile,
+        authToken,
         user: response.data,
-        authToken: auth_token,
       },
     };
   } catch (error) {

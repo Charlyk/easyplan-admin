@@ -1,26 +1,25 @@
-import React, { useRef, useState } from "react";
-import dynamic from 'next/dynamic';
-import clsx from "clsx";
-import PropTypes from 'prop-types';
+import React, { useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import ArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import UploadIcon from "@material-ui/icons/CloudUpload";
-import moment from "moment-timezone";
+import UploadIcon from '@material-ui/icons/CloudUpload';
+import ArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import ArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import clsx from 'clsx';
+import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
+import PropTypes from 'prop-types';
+import EasyDatePicker from 'app/components/common/EasyDatePicker';
+import EasyTab from 'app/components/common/EasyTab';
+import IconAppointmentCalendar from 'app/components/icons/iconAppointmentCalendar';
+import IconInfo from 'app/components/icons/iconInfo';
+import IconPlus from 'app/components/icons/iconPlus';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { textForKey } from 'app/utils/localization';
+import styles from './CalendarHeader.module.scss';
 
-import IconAppointmentCalendar from "../../../icons/iconAppointmentCalendar";
-import { textForKey } from "../../../../utils/localization";
-import EasyTab from "../../../common/EasyTab";
-import IconPlus from "../../../icons/iconPlus";
-import IconInfo from "../../../icons/iconInfo";
-import styles from "./CalendarHeader.module.scss";
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import EasyDatePicker from "../../../common/EasyDatePicker";
-
-const CalendarLegend = dynamic(() => import("../CalendarLegend"));
+const CalendarLegend = dynamic(() => import('../CalendarLegend'));
 
 const CalendarView = {
   day: 'day',
@@ -29,18 +28,16 @@ const CalendarView = {
   year: 'ear',
 };
 
-const CalendarHeader = (
-  {
-    viewDate,
-    dateBtnText,
-    currentTab,
-    canAddAppointment,
-    onImportSchedules,
-    onTabChange,
-    onDateChange,
-    onAddAppointment,
-  }
-) => {
+const CalendarHeader = ({
+  viewDate,
+  dateBtnText,
+  currentTab,
+  canAddAppointment,
+  onImportSchedules,
+  onTabChange,
+  onDateChange,
+  onAddAppointment,
+}) => {
   const calendarAnchor = useRef(null);
   const legendAnchor = useRef(null);
   const [calendarVisible, setCalendarVisible] = useState(false);
@@ -66,11 +63,11 @@ const CalendarHeader = (
 
   const handleShowLegend = () => {
     setLegendVisible(true);
-  }
+  };
 
   const handleCloseLegend = () => {
     setLegendVisible(false);
-  }
+  };
 
   const handleDateNavigation = (navId) => () => {
     const currentDate = moment(viewDate);
@@ -101,7 +98,7 @@ const CalendarHeader = (
       disablePortal={false}
       open={calendarVisible}
       selectedDate={viewDate}
-      placement="bottom"
+      placement='bottom'
       pickerAnchor={calendarAnchor.current}
       onChange={handleDateChange}
       onClose={handleCloseCalendar}
@@ -115,7 +112,7 @@ const CalendarHeader = (
           onClick={handleDateNavigation('previous-date')}
           classes={{ root: styles.arrowButton, label: styles.buttonIcon }}
         >
-          <ArrowLeft/>
+          <ArrowLeft />
         </IconButton>
         <Button
           ref={calendarAnchor}
@@ -125,23 +122,20 @@ const CalendarHeader = (
           <Typography noWrap className={styles.dateBtnLabel}>
             {dateBtnText}
           </Typography>
-          <IconAppointmentCalendar fill='#fff'/>
+          <IconAppointmentCalendar fill='#fff' />
         </Button>
         <IconButton
           onClick={handleDateNavigation('next-date')}
           classes={{ root: styles.arrowButton, label: styles.buttonIcon }}
         >
-          <ArrowRight/>
+          <ArrowRight />
         </IconButton>
-        <Button
-          onClick={handleTodayClick}
-          classes={{ root: styles.todayBtn }}
-        >
+        <Button onClick={handleTodayClick} classes={{ root: styles.todayBtn }}>
           {textForKey('Today')}
         </Button>
       </div>
       {calendarPopper}
-      <CalendarLegend open={legendVisible} anchorEl={legendAnchor}/>
+      <CalendarLegend open={legendVisible} anchorEl={legendAnchor} />
       <div className={styles.tabs}>
         <EasyTab
           title={textForKey('Day')}
@@ -164,7 +158,7 @@ const CalendarHeader = (
           className={styles.importBtn}
           onPointerUp={onImportSchedules}
         >
-          <UploadIcon/>
+          <UploadIcon />
         </IconButton>
         <ClickAwayListener onClickAway={handleCloseLegend}>
           <IconButton
@@ -172,7 +166,7 @@ const CalendarHeader = (
             className={styles.legendBtn}
             onPointerUp={handleShowLegend}
           >
-            <IconInfo fill='#3A83DC'/>
+            <IconInfo fill='#3A83DC' />
           </IconButton>
         </ClickAwayListener>
         <Button
@@ -181,22 +175,26 @@ const CalendarHeader = (
           onPointerUp={handleAddAppointment}
         >
           {textForKey('Add appointment')}
-          <IconPlus/>
+          <IconPlus />
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 CalendarHeader.propTypes = {
   dateBtnText: PropTypes.string,
   viewDate: PropTypes.instanceOf(Date),
   canAddAppointment: PropTypes.bool,
-  currentTab: PropTypes.oneOf([CalendarView.day, CalendarView.week, CalendarView.month]),
+  currentTab: PropTypes.oneOf([
+    CalendarView.day,
+    CalendarView.week,
+    CalendarView.month,
+  ]),
   onAddAppointment: PropTypes.func,
   onTabChange: PropTypes.func,
   onImportSchedules: PropTypes.func,
   onDateChange: PropTypes.func,
-}
+};
 
 export default React.memo(CalendarHeader, areComponentPropsEqual);

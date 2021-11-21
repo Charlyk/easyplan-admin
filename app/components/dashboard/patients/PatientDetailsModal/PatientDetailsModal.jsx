@@ -1,39 +1,36 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-import clsx from "clsx";
-import PropTypes from 'prop-types';
-import Modal from '@material-ui/core/Modal';
-import MenuList from '@material-ui/core/MenuList';
-import MuiMenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
-import { toast } from "react-toastify";
+import IconButton from '@material-ui/core/IconButton';
+import MuiMenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Modal from '@material-ui/core/Modal';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import EASImage from 'app/components/common/EASImage';
+import IconAvatar from 'app/components/icons/iconAvatar';
+import IconClose from 'app/components/icons/iconClose';
+import IconEdit from 'app/components/icons/iconEdit';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import {
+  getPatientDetails,
+  requestUpdatePatient,
+} from 'middleware/api/patients';
 import {
   setPatientXRayModal,
   togglePatientsListUpdate,
-} from '../../../../../redux/actions/actions';
-import { setAddPaymentModal } from '../../../../../redux/actions/addPaymentModalActions';
-import { getPatientDetails, requestUpdatePatient } from "../../../../../middleware/api/patients";
-import onRequestError from "../../../../utils/onRequestError";
-import { textForKey } from "../../../../utils/localization";
-import IconEdit from "../../../icons/iconEdit";
-import IconAvatar from '../../../icons/iconAvatar';
-import IconClose from '../../../icons/iconClose';
-import EASImage from "../../../common/EASImage";
+} from 'redux/actions/actions';
+import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
+import { HeaderKeys } from '../../../../utils/constants';
 import AppointmentNotes from './AppointmentNotes';
-import PatientAppointments from './PatientAppointments';
-import PatientHistory from './PatientHistory';
-import PatientMessages from './PatientMessages';
-import PatientNotes from './PatientNotes';
-import PatientDebtsList from './PatientDebtsList';
-import PatientPersonalData from './PatientPersonalData';
-import PatientPurchasesList from './PatientPurchasesList';
 import OrthodonticPlan from './OrthodonticPlan';
-import PatientXRay from './PatientXRay';
-import PatientTreatmentPlanContainer from "./PatientTreatmentPlanContainer";
-import PatientPhoneRecords from "./PatientPhoneRecords";
+import PatientAppointments from './PatientAppointments';
+import PatientDebtsList from './PatientDebtsList';
+import styles from './PatientDetailsModal.module.scss';
 import reducer, {
   initialState,
   setAvatarFile,
@@ -42,23 +39,27 @@ import reducer, {
   setPatient,
   setIsFetching,
   MenuItem,
-  MenuItems
+  MenuItems,
 } from './PatientDetailsModal.reducer';
-import styles from './PatientDetailsModal.module.scss';
-import { HeaderKeys } from "../../../../utils/constants";
+import PatientHistory from './PatientHistory';
+import PatientMessages from './PatientMessages';
+import PatientNotes from './PatientNotes';
+import PatientPersonalData from './PatientPersonalData';
+import PatientPhoneRecords from './PatientPhoneRecords';
+import PatientPurchasesList from './PatientPurchasesList';
+import PatientTreatmentPlanContainer from './PatientTreatmentPlanContainer';
+import PatientXRay from './PatientXRay';
 
-const PatientDetailsModal = (
-  {
-    show,
-    currentUser,
-    currentClinic,
-    patientId,
-    menuItem,
-    authToken,
-    onClose,
-    onDelete,
-  }
-) => {
+const PatientDetailsModal = ({
+  show,
+  currentUser,
+  currentClinic,
+  patientId,
+  menuItem,
+  authToken,
+  onClose,
+  onDelete,
+}) => {
   const dispatch = useDispatch();
   const inputRef = useRef(null);
   const [
@@ -96,11 +97,11 @@ const PatientDetailsModal = (
       });
       await fetchPatientDetails(true);
       localDispatch(setAvatarFile(null));
-      toast.success(textForKey('Saved successfully'))
+      toast.success(textForKey('Saved successfully'));
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const fetchPatientDetails = async (updateList = false) => {
     if (patientId == null) return;
@@ -144,7 +145,7 @@ const PatientDetailsModal = (
     dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
 
-  const stopPropagation = event => {
+  const stopPropagation = (event) => {
     event.stopPropagation();
   };
 
@@ -156,7 +157,7 @@ const PatientDetailsModal = (
     const file = event.target.files[0];
     updatePatientPhoto(file);
     localDispatch(setAvatarFile(file));
-  }
+  };
 
   const menuContent = () => {
     switch (currentMenu) {
@@ -170,15 +171,15 @@ const PatientDetailsModal = (
           />
         );
       case MenuItem.notes:
-        return <PatientNotes patient={patient}/>;
+        return <PatientNotes patient={patient} />;
       case MenuItem.appointments:
-        return <PatientAppointments patient={patient}/>;
+        return <PatientAppointments patient={patient} />;
       case MenuItem.xRay:
         return (
-          <PatientXRay patient={patient} onAddXRay={handleAddXRayImages}/>
+          <PatientXRay patient={patient} onAddXRay={handleAddXRayImages} />
         );
       case MenuItem.treatmentPlan:
-        return <AppointmentNotes currentUser={currentUser} patient={patient}/>;
+        return <AppointmentNotes currentUser={currentUser} patient={patient} />;
       case MenuItem.orthodonticPlan:
         return (
           <OrthodonticPlan
@@ -196,11 +197,16 @@ const PatientDetailsModal = (
           />
         );
       case MenuItem.purchases:
-        return <PatientPurchasesList currentClinic={currentClinic} patient={patient}/>;
+        return (
+          <PatientPurchasesList
+            currentClinic={currentClinic}
+            patient={patient}
+          />
+        );
       case MenuItem.messages:
-        return <PatientMessages patient={patient}/>;
+        return <PatientMessages patient={patient} />;
       case MenuItem.history:
-        return <PatientHistory clinic={currentClinic} patient={patient}/>;
+        return <PatientHistory clinic={currentClinic} patient={patient} />;
       case MenuItem.generalTreatmentPlan:
         return (
           <PatientTreatmentPlanContainer
@@ -209,9 +215,9 @@ const PatientDetailsModal = (
             currentClinic={currentClinic}
             patientId={patient.id}
           />
-        )
+        );
       case MenuItem.phoneRecords:
-        return <PatientPhoneRecords patient={patient} />
+        return <PatientPhoneRecords patient={patient} />;
     }
   };
 
@@ -239,7 +245,7 @@ const PatientDetailsModal = (
             className={styles.closeButton}
             onPointerUp={onClose}
           >
-            <IconClose/>
+            <IconClose />
           </IconButton>
           {patient != null && (
             <div className={styles.menuContainer}>
@@ -256,14 +262,16 @@ const PatientDetailsModal = (
                       className={styles.editBtn}
                       onClick={handleEditAvatar}
                     >
-                      <IconEdit fill="#3A83DC" />
+                      <IconEdit fill='#3A83DC' />
                     </IconButton>
                   </div>
                 </div>
                 <Typography classes={{ root: styles.nameLabel }}>
                   {patient?.fullName}
                 </Typography>
-                <Typography classes={{ root: clsx(styles.phoneLabel, styles.phone) }}>
+                <Typography
+                  classes={{ root: clsx(styles.phoneLabel, styles.phone) }}
+                >
                   <a
                     href={`tel:${patient.countryCode}${patient.phoneNumber}`}
                     onClick={stopPropagation}
@@ -290,12 +298,14 @@ const PatientDetailsModal = (
             </div>
           )}
           {patient != null && (
-            <div className={styles.patientDetailsContainer}>{menuContent()}</div>
+            <div className={styles.patientDetailsContainer}>
+              {menuContent()}
+            </div>
           )}
         </div>
         {isFetching && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress className='circular-progress-bar'/>
+            <CircularProgress className='circular-progress-bar' />
           </div>
         )}
       </Paper>

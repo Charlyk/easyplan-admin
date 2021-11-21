@@ -10,6 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
@@ -19,52 +20,45 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from "axios";
 import { toast } from 'react-toastify';
 
+import IconClose from 'app/components/icons/iconClose';
+import adjustValueToNumber from 'app/utils/adjustValueToNumber';
+import { Role } from 'app/utils/constants';
+import formattedAmount from 'app/utils/formattedAmount';
+import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   createNewInvoice,
   fetchDetailsForInvoice,
-  registerInvoicePayment
-} from "../../../../../middleware/api/invoices";
-import { savePatientGeneralTreatmentPlan } from "../../../../../middleware/api/patients";
-import { updateInvoiceSelector } from '../../../../../redux/selectors/invoicesSelector';
-import { updateInvoicesSelector } from '../../../../../redux/selectors/rootSelector';
-import getClinicExchangeRates from '../../../../utils/getClinicExchangeRates';
-import { setPatientDetails } from '../../../../../redux/actions/actions';
-import adjustValueToNumber from '../../../../utils/adjustValueToNumber';
-import formattedAmount from '../../../../utils/formattedAmount';
-import { textForKey } from '../../../../utils/localization';
-import onRequestError from "../../../../utils/onRequestError";
-import { Role } from "../../../../utils/constants";
-import IconClose from '../../../icons/iconClose';
-import TeethModal from "../TeethModal";
+  registerInvoicePayment,
+} from 'middleware/api/invoices';
+import { savePatientGeneralTreatmentPlan } from 'middleware/api/patients';
+import { setPatientDetails } from 'redux/actions/actions';
+import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
+import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
+import TeethModal from '../TeethModal';
+import styles from './CheckoutModal.module.scss';
+import { actions, initialState, reducer } from './CheckoutModal.reducer';
 import DetailsRow from './DetailsRow';
 import ServicesList from './ServicesList';
-import {
-  actions,
-  initialState,
-  reducer
-} from './CheckoutModal.reducer';
-import styles from './CheckoutModal.module.scss';
 
 const getDateHour = (date) => {
   if (date == null) return '';
   return moment(date).format('HH:mm');
 };
 
-const CheckoutModal = (
-  {
-    open,
-    invoice,
-    schedule,
-    isNew,
-    openPatientDetailsOnClose,
-    onClose,
-    currentUser,
-    currentClinic,
-  }
-) => {
+const CheckoutModal = ({
+  open,
+  invoice,
+  schedule,
+  isNew,
+  openPatientDetailsOnClose,
+  onClose,
+  currentUser,
+  currentClinic,
+}) => {
   const dispatch = useDispatch();
   const [
     {
@@ -86,7 +80,9 @@ const CheckoutModal = (
   const updateInvoices = useSelector(updateInvoicesSelector);
   const exchangeRates = getClinicExchangeRates(currentClinic);
   const userClinic = useMemo(() => {
-    return currentUser.clinics.find(clinic => clinic.clinicId === currentClinic.id);
+    return currentUser.clinics.find(
+      (clinic) => clinic.clinicId === currentClinic.id,
+    );
   }, [currentClinic]);
   const { canRegisterPayments } = userClinic;
   const clinicCurrency = currentClinic.currency;
@@ -99,31 +95,36 @@ const CheckoutModal = (
     const startHour = getDateHour(invoiceDetails?.schedule?.startTime);
     const endHour = getDateHour(invoiceDetails?.schedule?.endTime);
     return `${startDate} ${startHour} - ${endHour}`;
-  }, [invoiceDetails])
+  }, [invoiceDetails]);
 
   const canPay = useMemo(() => {
-    return (!isNew || (invoiceDetails.patient.id !== -1 && services.length > 0)) && canRegisterPayments;
+    return (
+      (!isNew || (invoiceDetails.patient.id !== -1 && services.length > 0)) &&
+      canRegisterPayments
+    );
   }, [isNew, invoiceDetails, services, canRegisterPayments]);
 
   const clinicServices = useMemo(() => {
-    return currentClinic.services?.filter((service) =>
-      service.serviceType !== 'System' &&
-      (invoiceDetails.doctor?.id === -1 ||
-        invoiceDetails.doctor?.services?.some(
-          (item) => item.serviceId === service?.id,
-        )
-      )
-    ) || [];
+    return (
+      currentClinic.services?.filter(
+        (service) =>
+          service.serviceType !== 'System' &&
+          (invoiceDetails.doctor?.id === -1 ||
+            invoiceDetails.doctor?.services?.some(
+              (item) => item.serviceId === service?.id,
+            )),
+      ) || []
+    );
   }, [currentClinic.services, invoiceDetails]);
 
   const doctors = useMemo(() => {
-    return currentClinic.users.filter((item) =>
-      item.roleInClinic === Role.doctor && !item.isHidden
-    ).map((item) => ({
-      ...item,
-      name: `${item.firstName} ${item.lastName}`,
-      fullName: `${item.firstName} ${item.lastName}`,
-    }));
+    return currentClinic.users
+      .filter((item) => item.roleInClinic === Role.doctor && !item.isHidden)
+      .map((item) => ({
+        ...item,
+        name: `${item.firstName} ${item.lastName}`,
+        fullName: `${item.firstName} ${item.lastName}`,
+      }));
   }, [currentClinic.users]);
 
   useEffect(() => {
@@ -161,8 +162,10 @@ const CheckoutModal = (
     if (schedule == null || !isNew) {
       return;
     }
-    const scheduleClone = cloneDeep(schedule)
-    scheduleClone.doctor = doctors.find(item => item.id === schedule.doctorId)
+    const scheduleClone = cloneDeep(schedule);
+    scheduleClone.doctor = doctors.find(
+      (item) => item.id === schedule.doctorId,
+    );
     localDispatch(actions.setScheduleDetails(scheduleClone));
   }, [schedule, isNew]);
 
@@ -201,7 +204,7 @@ const CheckoutModal = (
       const queryParams = {
         query: updatedQuery,
       };
-      const queryString = new URLSearchParams(queryParams).toString()
+      const queryString = new URLSearchParams(queryParams).toString();
       const response = await axios.get(`/api/patients/search?${queryString}`);
       const { data } = response;
       localDispatch(
@@ -260,14 +263,16 @@ const CheckoutModal = (
 
   const handleCloseTeethModal = () => {
     localDispatch(actions.setTeethModal({ open: false, service: null }));
-  }
+  };
 
   const handleTeethSelected = (service, teeth) => {
     const newServices = cloneDeep(services);
     for (const tooth of teeth) {
       const serviceClone = { ...service, toothId: tooth };
       const serviceExists = newServices.some(
-        (item) => item.serviceId === serviceClone.id && item.toothId === serviceClone.toothId,
+        (item) =>
+          item.serviceId === serviceClone.id &&
+          item.toothId === serviceClone.toothId,
       );
       if (serviceExists) {
         continue;
@@ -284,7 +289,7 @@ const CheckoutModal = (
     localDispatch(
       actions.setServices({ services: newServices, exchangeRates }),
     );
-  }
+  };
 
   const handleNewServiceSelected = (service) => {
     if (service.serviceType === 'Single') {
@@ -292,7 +297,9 @@ const CheckoutModal = (
       return;
     }
     const serviceExists = services.some(
-      (item) => item.serviceId === service.id && item.destination === service.destination,
+      (item) =>
+        item.serviceId === service.id &&
+        item.destination === service.destination,
     );
     if (serviceExists) {
       return;
@@ -313,10 +320,12 @@ const CheckoutModal = (
 
   const handleServiceRemoved = (service) => {
     const newServices = cloneDeep(services);
-    remove(newServices, (item) =>
-      item.serviceId === service.serviceId &&
-      item.toothId === service.toothId &&
-      item.destination === service.destination
+    remove(
+      newServices,
+      (item) =>
+        item.serviceId === service.serviceId &&
+        item.toothId === service.toothId &&
+        item.destination === service.destination,
     );
     localDispatch(
       actions.setServices({ services: newServices, exchangeRates }),
@@ -327,7 +336,7 @@ const CheckoutModal = (
     return {
       patientId: invoiceDetails.patient.id,
       scheduleId: schedule.id,
-      services: services.map(service => ({
+      services: services.map((service) => ({
         serviceId: service.id,
         toothId: service.toothId ?? null,
         destination: service.destination ?? null,
@@ -384,9 +393,9 @@ const CheckoutModal = (
       localDispatch(actions.setIsLoading(true));
       schedule != null
         ? await savePatientGeneralTreatmentPlan({
-          ...getPlanRequestBody(),
-          paymentRequest: requestBody
-        })
+            ...getPlanRequestBody(),
+            paymentRequest: requestBody,
+          })
         : isNew
         ? await createNewInvoice(requestBody)
         : await registerInvoicePayment(invoiceDetails.id, requestBody);
@@ -447,11 +456,11 @@ const CheckoutModal = (
             classes={{ root: styles.closeButton }}
             onClick={handleCloseModal}
           >
-            <IconClose/>
+            <IconClose />
           </IconButton>
           {isFetching && (
             <div className='progress-bar-wrapper'>
-              <CircularProgress className='circular-progress-bar'/>
+              <CircularProgress className='circular-progress-bar' />
             </div>
           )}
           <Typography classes={{ root: styles.title }}>
@@ -489,21 +498,19 @@ const CheckoutModal = (
                     value={invoiceDetails.patient}
                     onValueClick={handlePatientClick}
                   />
-                  {(!isNew || schedule != null) && invoiceDetails.schedule != null && (
-                    <DetailsRow
-                      title={textForKey('Date')}
-                      value={{ name: scheduleTime }}
-                    />
-                  )}
+                  {(!isNew || schedule != null) &&
+                    invoiceDetails.schedule != null && (
+                      <DetailsRow
+                        title={textForKey('Date')}
+                        value={{ name: scheduleTime }}
+                      />
+                    )}
                   <TableRow className={styles.row}>
                     <TableCell
                       align='center'
                       colSpan={2}
                       classes={{
-                        root: clsx(
-                          styles.cell,
-                          styles.forPaymentTitleCell,
-                        ),
+                        root: clsx(styles.cell, styles.forPaymentTitleCell),
                       }}
                     >
                       <Typography classes={{ root: styles.label }}>
@@ -516,10 +523,7 @@ const CheckoutModal = (
                       align='center'
                       colSpan={2}
                       classes={{
-                        root: clsx(
-                          styles.cell,
-                          styles.forPaymentFieldCell,
-                        ),
+                        root: clsx(styles.cell, styles.forPaymentFieldCell),
                       }}
                     >
                       <NumberFormat
@@ -540,10 +544,7 @@ const CheckoutModal = (
                       colSpan={2}
                       align='center'
                       classes={{
-                        root: clsx(
-                          styles.cell,
-                          styles.totalAmountCell,
-                        ),
+                        root: clsx(styles.cell, styles.totalAmountCell),
                       }}
                     >
                       <Typography classes={{ root: styles.label }}>
@@ -557,10 +558,7 @@ const CheckoutModal = (
                       colSpan={2}
                       align='center'
                       classes={{
-                        root: clsx(
-                          styles.cell,
-                          styles.totalDiscountCell,
-                        ),
+                        root: clsx(styles.cell, styles.totalDiscountCell),
                       }}
                     >
                       <div
@@ -600,9 +598,7 @@ const CheckoutModal = (
                   {formattedAmount(payAmount, clinicCurrency)}
                 </Button>
               ) : (
-                <CircularProgress
-                  classes={{ root: styles.paying }}
-                />
+                <CircularProgress classes={{ root: styles.paying }} />
               )}
             </div>
           )}

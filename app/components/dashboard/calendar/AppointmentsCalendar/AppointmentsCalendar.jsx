@@ -1,16 +1,15 @@
 import React, { useMemo } from 'react';
-import dynamic from 'next/dynamic';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
-import { isCalendarLoadingSelector } from '../../../../../redux/selectors/calendarSelector';
-import getCurrentWeek from '../../../../utils/getCurrentWeek';
-import CalendarHeader from "../CalendarHeader";
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import getCurrentWeek from 'app/utils/getCurrentWeek';
+import { isCalendarLoadingSelector } from 'redux/selectors/calendarSelector';
+import CalendarHeader from '../CalendarHeader';
 import styles from './AppointmentsCalendar.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const AppointmentDetails = dynamic(() => import('../AppointmentDetails'));
 
@@ -21,24 +20,22 @@ const CalendarView = {
   year: 'ear',
 };
 
-const AppointmentsCalendar = (
-  {
-    viewDate,
-    doctorId,
-    viewMode: currentTab,
-    selectedSchedule,
-    canAddAppointment,
-    children,
-    onPayDebt,
-    onViewDateChange,
-    onEditSchedule,
-    onDeleteSchedule,
-    onScheduleSelect,
-    onViewModeChange,
-    onAddAppointment,
-    onImportSchedules,
-  }
-) => {
+const AppointmentsCalendar = ({
+  viewDate,
+  doctorId,
+  viewMode: currentTab,
+  selectedSchedule,
+  canAddAppointment,
+  children,
+  onPayDebt,
+  onViewDateChange,
+  onEditSchedule,
+  onDeleteSchedule,
+  onScheduleSelect,
+  onViewModeChange,
+  onAddAppointment,
+  onImportSchedules,
+}) => {
   const isLoading = useSelector(isCalendarLoadingSelector);
 
   const showHourIndicator = useMemo(() => {
@@ -46,11 +43,12 @@ const AppointmentsCalendar = (
     switch (currentTab) {
       case CalendarView.day:
         return moment(viewDate).isSame(now, 'date');
-      case CalendarView.week:
+      case CalendarView.week: {
         const week = getCurrentWeek(viewDate);
-        return week.some(day => now.isSame(day, 'date'));
+        return week.some((day) => now.isSame(day, 'date'));
+      }
     }
-  }, [viewDate, currentTab])
+  }, [viewDate, currentTab]);
 
   const handleTabChange = (newTab) => {
     onViewModeChange(newTab);
@@ -113,19 +111,16 @@ const AppointmentsCalendar = (
       >
         {isLoading && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
-        {React.cloneElement(
-          children,
-          {
-            ...children.props,
-            onScheduleSelect,
-            showHourIndicator,
-            onDateClick: onViewDateChange,
-            onCreateSchedule: onAddAppointment,
-          }
-        )}
+        {React.cloneElement(children, {
+          ...children.props,
+          onScheduleSelect,
+          showHourIndicator,
+          onDateClick: onViewDateChange,
+          onCreateSchedule: onAddAppointment,
+        })}
       </div>
     </div>
   );

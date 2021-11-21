@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import EASTextField from 'app/components/common/EASTextField';
@@ -48,14 +49,14 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
           onChange={handleFormChange}
         />
         <div className='footer'>
-          <div
+          <Box
             role='button'
             tabIndex={0}
             className='back-button'
             onClick={onGoBack}
           >
             {textForKey('Go back')}
-          </div>
+          </Box>
           <LoadingButton
             type='submit'
             isLoading={isLoading}

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { EmailRegex, Role } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import EASTextField from "../../EASTextField";
-import EASSelect from "../../EASSelect";
-import EASModal from "../EASModal";
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import { EmailRegex, Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import styles from './InviteUserModal.module.scss';
 
 const selectOptions = [
@@ -23,16 +22,14 @@ const selectOptions = [
   },
 ];
 
-const InviteUserModal = (
-  {
-    open,
-    type,
-    error,
-    isLoading,
-    onClose,
-    onInvite,
-  }
-) => {
+const InviteUserModal = ({
+  open,
+  type,
+  error,
+  isLoading,
+  onClose,
+  onInvite,
+}) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(type || Role.reception);
   const isEmailValid = email.length === 0 || email.match(EmailRegex);
@@ -56,7 +53,7 @@ const InviteUserModal = (
     setEmail(newValue);
   };
 
-  const handleRoleChange = event => {
+  const handleRoleChange = (event) => {
     const newValue = event.target.value;
     setRole(newValue);
   };
@@ -79,18 +76,20 @@ const InviteUserModal = (
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.input}
           fieldLabel={textForKey('Email')}
-          type="email"
+          type='email'
           onChange={handleEmailChange}
         />
         <EASSelect
           label={textForKey('Role for user')}
-          labelId="user-role-select"
+          labelId='user-role-select'
           options={selectOptions}
           value={role}
           onChange={handleRoleChange}
         />
       </form>
-      {error && <span className={styles.errorMessage}>{textForKey(error)}</span>}
+      {error && (
+        <span className={styles.errorMessage}>{textForKey(error)}</span>
+      )}
     </EASModal>
   );
 };

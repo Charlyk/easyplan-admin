@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
-
 import { ScheduleStatuses } from '../../../../../utils/constants';
 
 export const initialState = {

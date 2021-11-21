@@ -1,13 +1,16 @@
-import types from '../types/types';
+import types from 'redux/types';
 
 const initialState = Object.freeze({ open: false, patientId: null });
 
-export default function patientXRayModal(state = initialState, action) {
-  switch (action.type) {
+export default function patientXRayModal(
+  state = initialState,
+  { type, payload } = {},
+) {
+  switch (type) {
     case types.setAddPatientXRay:
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       };
     default:
       return state;

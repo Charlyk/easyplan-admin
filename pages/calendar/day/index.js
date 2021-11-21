@@ -42,7 +42,7 @@ const Day = ({ fallback, date, schedules, dayHours, doctors, authToken }) => {
 
 export default wrapper.withRedux(Day);
 
-export const getServerSideProps = async ({ query, req, res }) => {
+export const getServerSideProps = async ({ query, req }) => {
   if (query.date == null) {
     query.date = moment().format('YYYY-MM-DD');
   }

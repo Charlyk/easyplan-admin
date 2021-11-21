@@ -29,7 +29,7 @@ const Month = ({ fallback, doctorId, date, doctors, authToken }) => {
 
 export default wrapper.withRedux(Month);
 
-export const getServerSideProps = async ({ req, res, query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   if (query.date == null) {
     query.date = moment().format('YYYY-MM-DD');
   }
@@ -66,7 +66,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
       ) || [];
 
     // check if doctor id is present in query
-    let doctorId = query.doctorId;
+    let { doctorId } = query;
     if (doctorId == null) {
       doctorId = doctors[0].id ?? 0;
     }
@@ -74,7 +74,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
     return {
       props: {
         doctors,
-        doctorId: parseInt(doctorId),
+        doctorId: parseInt(doctorId, 10),
         date: query.date,
         authToken,
         fallback: {

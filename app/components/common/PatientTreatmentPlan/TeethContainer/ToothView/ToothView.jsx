@@ -1,26 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { FormControlLabel } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Checkbox from '@material-ui/core/Checkbox';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import styles from './ToothView.module.scss';
-import Checkbox from "@material-ui/core/Checkbox";
-import { FormControlLabel } from "@material-ui/core";
 
-const ToothView = (
-  {
-    readOnly,
-    icon,
-    toothId,
-    direction,
-    services,
-    selectedServices,
-    completedServices,
-    onServicesChange,
-  }
-) => {
+const ToothView = ({
+  readOnly,
+  icon,
+  toothId,
+  direction,
+  services,
+  selectedServices,
+  completedServices,
+  onServicesChange,
+}) => {
   const anchorEl = useRef(null);
   const infoAnchor = useRef(null);
   const [showInfo, setShowInfo] = useState(false);
@@ -99,7 +98,10 @@ const ToothView = (
                     key={service.id}
                     control={
                       <Checkbox
-                        classes={{ root: styles.checkBox, checked: styles.checkedCheckBox }}
+                        classes={{
+                          root: styles.checkBox,
+                          checked: styles.checkedCheckBox,
+                        }}
                         checked={service.selected}
                       />
                     }
@@ -120,10 +122,10 @@ const ToothView = (
   );
 
   const pendingServices = readOnly
-    ? selectedServices.filter((item) =>
-      item.toothId === toothId && !item.completed
-    )
-    : []
+    ? selectedServices.filter(
+        (item) => item.toothId === toothId && !item.completed,
+      )
+    : [];
 
   const infoServices = [
     ...toothServices.filter((item) => item.selected),
@@ -170,9 +172,7 @@ const ToothView = (
           {toothId}
         </span>
       )}
-      <div
-        role='button'
-        tabIndex={0}
+      <Box
         ref={infoAnchor}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -194,7 +194,7 @@ const ToothView = (
             />
           ))}
         </div>
-      </div>
+      </Box>
       {direction === 'bottom' && (
         <span className={styles.toothText} ref={anchorEl}>
           {toothId}

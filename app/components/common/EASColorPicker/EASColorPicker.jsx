@@ -1,21 +1,28 @@
-import React from "react";
-import Fade from "@material-ui/core/Fade";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import Button from "@material-ui/core/Button";
-import { ColorPicker } from "react-color-palette";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Fade from '@material-ui/core/Fade';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import { ColorPicker } from 'react-color-palette';
+import { textForKey } from 'app/utils/localization';
+import styles from './EASColorPicker.module.scss';
 
-import { textForKey } from "../../../utils/localization";
-import styles from "./EASColorPicker.module.scss";
-
-const EASColorPicker = ({ open, anchorEl, placement, color, onClose, onSave, setColor }) => {
+const EASColorPicker = ({
+  open,
+  anchorEl,
+  placement,
+  color,
+  onClose,
+  onSave,
+  setColor,
+}) => {
   return (
     <Popper
       transition
       disablePortal
-      id="color-picker"
-      placement={placement || "top-start"}
+      id='color-picker'
+      placement={placement || 'top-start'}
       open={open}
       anchorEl={anchorEl}
       className={styles.popper}
@@ -32,7 +39,7 @@ const EASColorPicker = ({ open, anchorEl, placement, color, onClose, onSave, set
                 color={color}
                 onChange={setColor}
               />
-              <Button className="positive-button" onPointerUp={onSave}>
+              <Button className='positive-button' onPointerUp={onSave}>
                 {textForKey('Save')}
               </Button>
             </Paper>
@@ -40,7 +47,7 @@ const EASColorPicker = ({ open, anchorEl, placement, color, onClose, onSave, set
         </Fade>
       )}
     </Popper>
-  )
+  );
 };
 
 export default EASColorPicker;

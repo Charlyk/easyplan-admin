@@ -1,14 +1,13 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-
-import IconDelete from '../../../icons/iconDelete';
-import IconEdit from '../../../icons/iconEdit';
-import IconRefresh from '../../../icons/iconRefresh';
-import formattedAmount from '../../../../utils/formattedAmount';
-import { textForKey } from '../../../../utils/localization';
+import IconDelete from 'app/components/icons/iconDelete';
+import IconEdit from 'app/components/icons/iconEdit';
+import IconRefresh from 'app/components/icons/iconRefresh';
+import formattedAmount from 'app/utils/formattedAmount';
+import { textForKey } from 'app/utils/localization';
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({ service, onEditService, onDeleteService }) => {
@@ -28,13 +27,19 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
             className={styles['color-indicator']}
             style={{ backgroundColor: service.color }}
           />
-          <Typography classes={{ root: clsx(styles['row-label'], styles['name-label']) }}>
+          <Typography
+            classes={{ root: clsx(styles['row-label'], styles['name-label']) }}
+          >
             {service.name}
           </Typography>
         </div>
       </td>
       <td align='left' className={styles['description-cell']}>
-        <Typography classes={{ root: clsx(styles['row-label'], styles['description-label']) }}>
+        <Typography
+          classes={{
+            root: clsx(styles['row-label'], styles['description-label']),
+          }}
+        >
           {service.description || '-'}
         </Typography>
       </td>
@@ -51,7 +56,7 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
       <td align='right'>
         <div className={styles['actions-wrapper']}>
           <Button
-            variant="outlined"
+            variant='outlined'
             classes={{
               root: styles.editBtn,
               outlined: styles.outlinedBtnBlue,
@@ -59,10 +64,10 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
             }}
             onPointerUp={handleEditService}
           >
-            {textForKey('Edit')} <IconEdit/>
+            {textForKey('Edit')} <IconEdit />
           </Button>
           <Button
-            variant="outlined"
+            variant='outlined'
             disabled={service.bracket}
             classes={{
               root: clsx({
@@ -78,7 +83,7 @@ const ServiceRow = ({ service, onEditService, onDeleteService }) => {
             onPointerUp={handleDeleteService}
           >
             {service.deleted ? textForKey('Restore') : textForKey('Delete')}{' '}
-            {service.deleted ? <IconRefresh fill='#00E987'/> : <IconDelete/>}
+            {service.deleted ? <IconRefresh fill='#00E987' /> : <IconDelete />}
           </Button>
         </div>
       </td>

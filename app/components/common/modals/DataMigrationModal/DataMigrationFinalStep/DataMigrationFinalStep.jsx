@@ -2,9 +2,8 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-
-import { textForKey } from '../../../../../utils/localization';
-import LoadingButton from '../../../LoadingButton';
+import LoadingButton from 'app/components/common/LoadingButton';
+import { textForKey } from 'app/utils/localization';
 import styles from './DataMigrationFinalStep.module.scss';
 
 const DataMigrationFinalStep = ({ onStart }) => {

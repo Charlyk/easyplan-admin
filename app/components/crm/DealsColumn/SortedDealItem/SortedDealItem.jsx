@@ -1,12 +1,11 @@
-import React, { useMemo } from "react";
-import PropTypes from "prop-types";
-import Typography from "@material-ui/core/Typography";
-import moment from "moment-timezone";
-
-import { textForKey } from "../../../../utils/localization";
-import getPatientName from "../../../../utils/getPatientName";
-import styles from "./SortedDealItem.module.scss";
-import Chip from "@material-ui/core/Chip";
+import React, { useMemo } from 'react';
+import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import getPatientName from 'app/utils/getPatientName';
+import { textForKey } from 'app/utils/localization';
+import styles from './SortedDealItem.module.scss';
 
 const SortedDealItem = ({ deal, onDealClick }) => {
   const hasTags = deal.patient?.tags.length > 0;
@@ -41,7 +40,7 @@ const SortedDealItem = ({ deal, onDealClick }) => {
     if (deal?.assignedTo == null) {
       return textForKey('Not assigned');
     }
-    return `${deal.assignedTo.firstName} ${deal.assignedTo.lastName}`
+    return `${deal.assignedTo.firstName} ${deal.assignedTo.lastName}`;
   }, [deal.assignedTo]);
 
   const itemResponsible = useMemo(() => {
@@ -61,7 +60,7 @@ const SortedDealItem = ({ deal, onDealClick }) => {
 
   const handleDealClick = () => {
     onDealClick?.(deal);
-  }
+  };
 
   return (
     <div className={styles.sortedDealItem} onPointerUp={handleDealClick}>
@@ -94,59 +93,60 @@ const SortedDealItem = ({ deal, onDealClick }) => {
         </Typography>
         <div className={styles.lastMessageContainer}>
           <Chip
-            size="small"
-            variant="outlined"
+            size='small'
+            variant='outlined'
             label={textForKey(deal.source)}
             classes={{
               root: styles.tagItem,
               label: styles.label,
-              outlined: styles.outlined
+              outlined: styles.outlined,
             }}
           />
           {deal.sourceDescription && (
             <Chip
-              size="small"
-              variant="outlined"
+              size='small'
+              variant='outlined'
               label={deal.sourceDescription}
               classes={{
                 root: styles.tagItem,
                 label: styles.label,
-                outlined: styles.outlined
+                outlined: styles.outlined,
               }}
             />
           )}
           {deal?.schedule != null && (
             <Chip
-              size="small"
-              variant="outlined"
+              size='small'
+              variant='outlined'
               label={assigneeName}
               classes={{
                 root: styles.tagItem,
                 label: styles.label,
-                outlined: styles.outlined
+                outlined: styles.outlined,
               }}
             />
           )}
-          {hasTags && deal.patient.tags.map((tag) => (
-            <Chip
-              size="small"
-              variant="outlined"
-              label={tag.title}
-              key={tag.id}
-              classes={{
-                root: styles.tagItem,
-                label: styles.label,
-                outlined: styles.outlined
-              }}
-            />
-          ))}
+          {hasTags &&
+            deal.patient.tags.map((tag) => (
+              <Chip
+                size='small'
+                variant='outlined'
+                label={tag.title}
+                key={tag.id}
+                classes={{
+                  root: styles.tagItem,
+                  label: styles.label,
+                  outlined: styles.outlined,
+                }}
+              />
+            ))}
         </div>
       </div>
       <Typography className={styles.dateLabel}>
         {moment(deal.lastUpdated).format('DD MMM YYYY HH:mm')}
       </Typography>
     </div>
-  )
+  );
 };
 
 export default SortedDealItem;
@@ -168,17 +168,19 @@ SortedDealItem.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       phoneWithCode: PropTypes.string,
-      tags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        title: PropTypes.string,
-      })),
+      tags: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          title: PropTypes.string,
+        }),
+      ),
     }),
     state: PropTypes.shape({
       id: PropTypes.number,
@@ -213,4 +215,4 @@ SortedDealItem.propTypes = {
     }),
   }),
   onDealClick: PropTypes.func,
-}
+};

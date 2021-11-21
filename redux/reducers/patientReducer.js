@@ -1,4 +1,4 @@
-import types from '../types/types';
+import types from 'redux/types';
 
 const initialState = Object.freeze({
   smsMessages: {
@@ -6,14 +6,14 @@ const initialState = Object.freeze({
   },
 });
 
-export default function patient(state = initialState, action) {
-  switch (action.type) {
+export default function patient(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case types.setSMSMessageStatus:
       return {
         ...state,
         smsMessages: {
           ...state.smsMessages,
-          updateMessageStatus: action.payload,
+          updateMessageStatus: payload,
         },
       };
     default:

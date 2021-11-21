@@ -3,8 +3,41 @@ import cookie from 'cookie';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
 import updatedServerUrl from 'app/utils/updateServerUrl';
-import { authorized } from '../../authorized';
-import { handler } from '../../handler';
+import authorized from '../../authorized';
+import handler from '../../handler';
+
+function fetchPatientNotes(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { patientId } = req.query;
+  return axios.get(`${updatedServerUrl(req)}/patients/${patientId}/notes`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
+
+function createPatientNote(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { patientId } = req.query;
+  return axios.post(
+    `${updatedServerUrl(req)}/patients/${patientId}/notes`,
+    req.body,
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
+}
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -28,32 +61,3 @@ export default authorized(async (req, res) => {
       break;
   }
 });
-
-function fetchPatientNotes(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { patientId } = req.query;
-  return axios.get(`${updatedServerUrl(req)}/patients/${patientId}/notes`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    },
-  });
-}
-
-function createPatientNote(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { patientId } = req.query;
-  return axios.post(
-    `${updatedServerUrl(req)}/patients/${patientId}/notes`,
-    req.body,
-    {
-      headers: {
-        [HeaderKeys.authorization]: auth_token,
-        [HeaderKeys.clinicId]: clinic_id,
-        [HeaderKeys.subdomain]: getSubdomain(req),
-        [HeaderKeys.contentType]: 'application/json',
-      },
-    },
-  );
-}
