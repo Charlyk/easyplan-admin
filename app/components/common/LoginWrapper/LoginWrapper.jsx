@@ -1,10 +1,10 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 import EASImage from 'app/components/common/EASImage';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
+import NotificationsContext from 'app/context/notificationsContext';
 import { RestrictedSubdomains } from 'app/utils/constants';
 import getClinicUrl from 'app/utils/getClinicUrl';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
@@ -31,6 +31,7 @@ export default function LoginWrapper({
   authToken,
   isMobile,
 }) {
+  const toast = useContext(NotificationsContext);
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
   const [

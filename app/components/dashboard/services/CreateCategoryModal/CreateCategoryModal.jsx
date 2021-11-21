@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import {
   requestCreateCategory,
@@ -11,6 +11,7 @@ import {
 import styles from './CreateCategoryModal.module.scss';
 
 const CreateCategoryModal = (props) => {
+  const toast = useContext(NotificationsContext);
   const { show, onClose, onSaved, category } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [categoryName, setCategoryName] = useState(

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,8 +13,8 @@ import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import IconPrint from 'app/components/icons/iconPrint';
+import NotificationsContext from 'app/context/notificationsContext';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
@@ -24,6 +24,7 @@ import styles from './PatientPurchasesList.module.scss';
 import { reducer, initialState, actions } from './PatientPurchasesList.reducer';
 
 const PatientPurchasesList = ({ patient, currentClinic }) => {
+  const toast = useContext(NotificationsContext);
   const updateInvoice = useSelector(updateInvoiceSelector);
   const clinicCurrency = clinicCurrencySelector(currentClinic);
   const [{ isLoading, payments }, localDispatch] = useReducer(

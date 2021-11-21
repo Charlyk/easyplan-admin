@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys, PasswordRegex } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { updateUserAccount } from 'middleware/api/auth';
@@ -11,6 +11,7 @@ import styles from './SecuritySettings.module.scss';
 
 const SecuritySettings = ({ currentClinic, authToken }) => {
   const router = useRouter();
+  const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
     oldPassword: '',

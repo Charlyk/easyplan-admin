@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import LeftSideModal from 'app/components/common/LeftSideModal';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconClose from 'app/components/icons/iconClose';
 import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { createService, updateService } from 'middleware/api/services';
 import { closeServiceDetailsModal } from 'redux/actions/serviceDetailsActions';
@@ -32,6 +32,7 @@ const initialService = {
 
 const ServiceDetailsModal = ({ currentClinic }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const { category, service, open } = useSelector(serviceDetailsModalSelector);
   const modalData = useSelector(serviceDetailsModalSelector);
   const clinicDoctors = clinicActiveDoctorsSelector(currentClinic);

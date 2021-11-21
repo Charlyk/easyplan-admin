@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -13,9 +13,9 @@ import sortBy from 'lodash/sortBy';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
+import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -82,6 +82,7 @@ const ServicesContainer = ({
   currentClinic,
   authToken,
 }) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const router = useRouter();
   const updatedService = useSelector(updatedServiceSelector);

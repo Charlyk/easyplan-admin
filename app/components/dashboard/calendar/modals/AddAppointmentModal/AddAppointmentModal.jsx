@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useReducer,
@@ -12,7 +13,6 @@ import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -20,6 +20,7 @@ import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import {
   EmailRegex,
@@ -50,6 +51,7 @@ const AddAppointmentModal = ({
   schedule,
   onClose,
 }) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);

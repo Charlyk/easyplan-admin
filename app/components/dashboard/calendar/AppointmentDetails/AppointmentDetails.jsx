@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -16,11 +16,11 @@ import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
 import IconClose from 'app/components/icons/iconClose';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconTrash from 'app/components/icons/iconTrash';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { ManualStatuses, Statuses } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
@@ -71,6 +71,7 @@ const AppointmentDetails = ({
   onPayDebt,
   onAddSchedule,
 }) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const statusesAnchor = useRef(null);
   const [

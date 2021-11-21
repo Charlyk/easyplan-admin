@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,10 +9,10 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 import EASImage from 'app/components/common/EASImage';
 import LoadingButton from 'app/components/common/LoadingButton';
 import AppLogoBlue from 'app/components/icons/appLogoBlue';
+import NotificationsContext from 'app/context/notificationsContext';
 import styles from 'app/styles/ScheduleConfirmation.module.scss';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
@@ -24,6 +24,7 @@ import {
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
+  const toast = useContext(NotificationsContext);
   const [isConfirming, setIsConfirming] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
   const [isError, setIsError] = useState(false);

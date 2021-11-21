@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -7,9 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import CloudDownload from '@material-ui/icons/CloudDownload';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import IconIncomeCall from 'app/components/icons/iconIncomeCall';
 import IconOutCall from 'app/components/icons/IconOutCall';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { getPatientPhoneRecords } from 'middleware/api/patients';
 import styles from './PatientPhoneRecords.module.scss';
@@ -51,6 +51,7 @@ const RecordItem = ({ record, onDownload }) => {
 };
 
 const PatientPhoneRecords = ({ patient }) => {
+  const toast = useContext(NotificationsContext);
   const [page, setPage] = useState(0);
   const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

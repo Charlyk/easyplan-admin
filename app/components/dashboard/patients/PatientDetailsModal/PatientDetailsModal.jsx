@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import MuiMenuItem from '@material-ui/core/MenuItem';
@@ -9,11 +9,11 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASImage from 'app/components/common/EASImage';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconClose from 'app/components/icons/iconClose';
 import IconEdit from 'app/components/icons/iconEdit';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
@@ -61,6 +61,7 @@ const PatientDetailsModal = ({
   onDelete,
 }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const inputRef = useRef(null);
   const [
     { currentMenu, isFetching, patient, viewInvoice, avatarFile },

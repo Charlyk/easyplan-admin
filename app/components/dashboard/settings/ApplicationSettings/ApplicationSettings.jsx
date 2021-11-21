@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 import LoadingButton from 'app/components/common/LoadingButton';
 import ClinicsModal from 'app/components/common/modals/ClinicsModal';
 import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
@@ -17,6 +17,7 @@ import TimeBeforeOnSite from './TimeBeforeOnSite';
 
 const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
   const router = useRouter();
+  const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(String(clinic.timeBeforeOnSite));
   const [clinicsModal, setClinicsModal] = useState({ open: false, tags: [] });

@@ -3,6 +3,7 @@ import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Alert } from '@material-ui/lab';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import EASTextField from 'app/components/common/EASTextField';
@@ -97,7 +98,12 @@ const LoginForm = ({
           </Box>
         </div>
 
-        <div className='footer'>
+        <div
+          className='footer'
+          style={{
+            marginBottom: errorMessage ? '1rem' : 0,
+          }}
+        >
           <div className={styles.footerSignUp}>
             <span className='text'>{textForKey("Don't have an account")}?</span>
             <Box className={styles.signUpBtn} onClick={onSignUp}>
@@ -119,7 +125,7 @@ const LoginForm = ({
           </LoadingButton>
         </div>
         {errorMessage && (
-          <span className='error-text'>{textForKey(errorMessage)}</span>
+          <Alert severity='error'>{textForKey(errorMessage)}</Alert>
         )}
       </form>
     </div>

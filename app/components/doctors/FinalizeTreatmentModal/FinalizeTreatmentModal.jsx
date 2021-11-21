@@ -1,16 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
+import NotificationsContext from 'app/context/notificationsContext';
 import formattedAmount from 'app/utils/formattedAmount';
 import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
 import getServiceName from 'app/utils/getServiceName';
@@ -24,6 +24,7 @@ const FinalizeTreatmentModal = ({
   onClose,
   onSave,
 }) => {
+  const toast = useContext(NotificationsContext);
   const [planServices, setPlanServices] = useState([]);
   const rates = getClinicExchangeRates(currentClinic);
   const clinicCurrency = currentClinic.currentUser;
@@ -75,7 +76,7 @@ const FinalizeTreatmentModal = ({
 
   const handleSaveTreatment = () => {
     if (!planServices.some((it) => it.isSelected)) {
-      toast(textForKey('Please select at least one service'));
+      toast.show(textForKey('Please select at least one service'));
       return;
     }
     onSave(

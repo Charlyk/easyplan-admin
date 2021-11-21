@@ -59,7 +59,6 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-spring": "^9.3.1",
-    "react-toastify": "^8.1.0",
     "react-uuid": "^1.0.2",
     "react-validation": "^3.0.7",
     "react-virtualized": "^9.22.3",

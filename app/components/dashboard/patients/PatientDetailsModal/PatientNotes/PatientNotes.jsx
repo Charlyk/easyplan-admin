@@ -1,13 +1,13 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconPlus from 'app/components/icons/iconPlus';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import {
   createPatientNote,
@@ -19,6 +19,7 @@ import styles from './PatientNotes.module.scss';
 import { reducer, initialState, actions } from './PatientNotes.reducer';
 
 const PatientNotes = ({ patient }) => {
+  const toast = useContext(NotificationsContext);
   const [state, localDispatch] = useReducer(reducer, initialState);
   const updateNotes = useSelector(updateNotesSelector);
 

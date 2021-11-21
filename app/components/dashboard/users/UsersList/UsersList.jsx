@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -8,7 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
@@ -53,6 +53,7 @@ const UsersList = ({
   users: initialUsers,
   invitations: initialInvitations,
 }) => {
+  const toast = useContext(NotificationsContext);
   const [
     {
       selectedFilter,

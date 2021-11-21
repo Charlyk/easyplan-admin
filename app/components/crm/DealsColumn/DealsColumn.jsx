@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
 import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,9 +19,9 @@ import { useColor } from 'react-color-palette';
 import { useDrop } from 'react-dnd';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import ActionsSheet from 'app/components/common/ActionsSheet';
 import EASColorPicker from 'app/components/common/EASColorPicker';
+import NotificationsContext from 'app/context/notificationsContext';
 import extractCookieByName from 'app/utils/extractCookieByName';
 import usePrevious from 'app/utils/hooks/usePrevious';
 import onRequestError from 'app/utils/onRequestError';
@@ -71,6 +77,7 @@ const DealsColumn = ({
   onConfirmFirstContact,
   onDealClick,
 }) => {
+  const toast = useContext(NotificationsContext);
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
   const createdDeal = useSelector(newDealSelector);

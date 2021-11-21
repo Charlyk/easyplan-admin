@@ -1,10 +1,16 @@
-import React, { useCallback, useEffect, useReducer, useRef } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
 import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { countMessageRecipients } from 'middleware/api/messages';
 import {
@@ -42,6 +48,7 @@ const PromotionalMessageForm = ({
   onLanguageChange,
   onSubmit,
 }) => {
+  const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.PromotionalMessage),

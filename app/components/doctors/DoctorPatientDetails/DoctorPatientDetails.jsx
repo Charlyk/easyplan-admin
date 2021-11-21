@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useReducer, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -6,11 +12,11 @@ import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import EASPersistentModal from 'app/components/common/modals/EASPersistentModal';
 import PatientTreatmentPlan from 'app/components/common/PatientTreatmentPlan';
 import IconAvatar from 'app/components/icons/iconAvatar';
+import NotificationsContext from 'app/context/notificationsContext';
 import getErrorMessage from 'app/utils/getErrorMessage';
 import getTreatmentPlanURL from 'app/utils/getTreatmentPlanURL';
 import { textForKey } from 'app/utils/localization';
@@ -51,6 +57,7 @@ const DoctorPatientDetails = ({
   scheduleId,
   authToken,
 }) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const router = useRouter();
   const clinicCurrency = currentClinic.currency;

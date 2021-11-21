@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useReducer } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer } from 'react';
 import sortBy from 'lodash/sortBy';
 import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
@@ -13,6 +12,7 @@ import UploadAvatar from 'app/components/common/UploadAvatar';
 import IconLogoPlaceholder from 'app/components/icons/iconLogoPlaceholder';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import IconTrash from 'app/components/icons/iconTrash';
+import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex, HeaderKeys } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
@@ -41,6 +41,7 @@ const ConfirmationModal = dynamic(() =>
 
 const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
   const router = useRouter();
+  const toast = useContext(NotificationsContext);
   const [
     {
       isSaving,

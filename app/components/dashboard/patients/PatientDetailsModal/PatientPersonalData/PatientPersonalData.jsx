@@ -1,16 +1,16 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
 import adjustValueToNumber from 'app/utils/adjustValueToNumber';
 import {
   EmailRegex,
@@ -58,6 +58,7 @@ const PatientPersonalData = ({
   onPatientUpdated,
 }) => {
   const datePickerRef = useRef();
+  const toast = useContext(NotificationsContext);
   const [
     {
       showDatePicker,

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -10,10 +10,10 @@ import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
+import NotificationsContext from 'app/context/notificationsContext';
 import { YClientAPIUrl } from 'app/utils/constants';
 import generateReducerActions from 'app/utils/generateReducerActions';
 import { textForKey } from 'app/utils/localization';
@@ -83,6 +83,7 @@ const reducer = (state, action) => {
 };
 
 const ImportSelectionStep = ({ userData, onImport }) => {
+  const toast = useContext(NotificationsContext);
   const companiesRef = useRef(null);
   const datePickerRef = useRef(null);
   const [

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -7,8 +13,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import BottomSheetDialog from 'app/components/common/BottomSheetDialog';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { createMessage, updateMessage } from 'middleware/api/messages';
 import BirthdayMessageForm from './BirthdayMessageForm';
@@ -39,6 +45,7 @@ const CreateMessageDialog = ({
   onClose,
   onCreateMessage,
 }) => {
+  const toast = useContext(NotificationsContext);
   const [
     { selectedMenu, currentLanguage, maxLength, message, isLoading },
     localDispatch,

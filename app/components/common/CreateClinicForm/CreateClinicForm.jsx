@@ -1,9 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
 import sortBy from 'lodash/sortBy';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { WebRegex } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -39,6 +45,7 @@ const CreateClinicForm = ({
   onGoBack,
   onSubmit,
 }) => {
+  const toast = useContext(NotificationsContext);
   const [
     {
       logoFile,

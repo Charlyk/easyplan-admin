@@ -1,9 +1,9 @@
-import React, { useReducer } from 'react';
+import React, { useContext, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
+import NotificationsContext from 'app/context/notificationsContext';
 import { YClientAPIUrl } from 'app/utils/constants';
 import generateReducerActions from 'app/utils/generateReducerActions';
 import { textForKey } from 'app/utils/localization';
@@ -48,6 +48,7 @@ const reducer = (state, action) => {
 };
 
 const AuthenticationStep = ({ onLogin }) => {
+  const toast = useContext(NotificationsContext);
   const [{ username, password, partnerToken, isLoading }, localDispatch] =
     useReducer(reducer, initialState);
 

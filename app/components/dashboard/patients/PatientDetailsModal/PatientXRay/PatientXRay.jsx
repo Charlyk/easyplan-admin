@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -7,8 +7,8 @@ import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Lightbox from 'react-awesome-lightbox';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import IconPlus from 'app/components/icons/iconPlus';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import urlToAWS from 'app/utils/urlToAWS';
 import {
@@ -30,6 +30,7 @@ const ExpandedPhase = {
 };
 
 const PatientXRay = ({ patient, onAddXRay }) => {
+  const toast = useContext(NotificationsContext);
   const updateXRay = useSelector(updateXRaySelector);
   const [isDeleting, setIsDeleting] = useState(false);
   const [imageToView, setImageToView] = useState(null);

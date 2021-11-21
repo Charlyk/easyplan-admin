@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EasyTab from 'app/components/common/EasyTab';
 import AppointmentNotes from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes';
 import OrthodonticPlan from 'app/components/dashboard/patients/PatientDetailsModal/OrthodonticPlan';
 import PatientAppointments from 'app/components/dashboard/patients/PatientDetailsModal/PatientAppointments';
 import PatientNotes from 'app/components/dashboard/patients/PatientDetailsModal/PatientNotes';
 import PatientXRay from 'app/components/dashboard/patients/PatientDetailsModal/PatientXRay';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
+import { requestFetchPatientNotes } from 'middleware/api/patients';
 import { clinicEnabledBracesSelector } from 'redux/selectors/clinicSelector';
 import styles from './PatientDetails.module.scss';
 
@@ -33,6 +33,7 @@ const PatientDetails = ({
   scheduleId,
   isDoctor,
 }) => {
+  const toast = useContext(NotificationsContext);
   const braces = clinicEnabledBracesSelector(currentClinic);
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   const [hasNotes, setHasNotes] = useState(false);
@@ -49,7 +50,7 @@ const PatientDetails = ({
     }
 
     try {
-      const response = await axios.get(`/api/patients/${patient.id}/notes`);
+      const response = await requestFetchPatientNotes(patient.id);
       setHasNotes(response.data.length > 0);
     } catch (error) {
       toast.error(error.message);

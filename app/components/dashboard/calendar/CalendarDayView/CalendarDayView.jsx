@@ -1,10 +1,16 @@
-import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import isOutOfBounds from 'app/utils/isOutOfBounds';
 import { textForKey } from 'app/utils/localization';
@@ -32,6 +38,7 @@ const CalendarDayView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
+  const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const schedulesRef = useRef(null);

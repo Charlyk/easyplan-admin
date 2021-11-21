@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useContext, useEffect, useReducer } from 'react';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -14,10 +14,10 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import IconTrash from 'app/components/icons/iconTrash';
+import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -32,6 +32,7 @@ import { reducer, initialState, actions } from './ExchangeRatesModal.reducer';
 
 const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const updateRates = useSelector(updateExchangeRatesSelector);
   const allCurrencies = currentClinic.allCurrencies;
   const clinicCurrency = currentClinic.currency;

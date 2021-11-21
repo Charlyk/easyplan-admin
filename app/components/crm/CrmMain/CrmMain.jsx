@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
 import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,9 +22,9 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AudioPlayer from 'react-h5-audio-player';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import HorizontalScrollHelper from 'app/components/common/HorizontalScrollHelper';
 import IconClose from 'app/components/icons/iconClose';
+import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import extractCookieByName from 'app/utils/extractCookieByName';
 import { textForKey } from 'app/utils/localization';
@@ -73,8 +79,9 @@ const COOKIES_KEY = 'crm_filter';
 const COLUMN_WIDTH = 350;
 
 const CrmMain = ({ states, currentUser, currentClinic }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const remoteReminder = useSelector(newReminderSelector);
   const updateReminder = useSelector(updatedReminderSelector);
   const remoteDeal = useSelector(updatedDealSelector);

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -7,12 +7,12 @@ import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EasyTab from 'app/components/common/EasyTab';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -68,6 +68,7 @@ const OrthodonticPlan = ({
   scheduleId,
   onSave,
 }) => {
+  const toast = useContext(NotificationsContext);
   const services = clinicBracesServicesSelector(clinic);
   const braces = clinicEnabledBracesSelector(clinic);
   const currentClinic = currentUser.clinics.find(

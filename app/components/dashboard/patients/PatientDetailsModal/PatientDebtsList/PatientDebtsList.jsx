@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -13,8 +13,8 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import IconPrint from 'app/components/icons/iconPrint';
+import NotificationsContext from 'app/context/notificationsContext';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
@@ -25,6 +25,7 @@ import styles from './PatientDebtsList.module.scss';
 
 const PatientDebtsList = ({ patient, viewInvoice, onDebtShowed }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const updateInvoice = useSelector(updateInvoiceSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [debts, setDebts] = useState([]);

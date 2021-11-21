@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useReducer } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqualWith from 'lodash/isEqualWith';
 import remove from 'lodash/remove';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { Statuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { deletePatientPlanService } from 'middleware/api/patients';
@@ -28,6 +28,7 @@ const PatientTreatmentPlan = ({
   readOnly,
   onFinalize,
 }) => {
+  const toast = useContext(NotificationsContext);
   const [
     {
       toothServices,

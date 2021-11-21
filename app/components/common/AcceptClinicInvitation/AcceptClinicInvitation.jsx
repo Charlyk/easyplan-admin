@@ -1,11 +1,11 @@
-import React, { useReducer } from 'react';
+import React, { useContext, useReducer } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys, PasswordRegex, Role } from 'app/utils/constants';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
@@ -29,6 +29,7 @@ import reducer, {
 import styles from './AcceptInvitation.module.scss';
 
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
+  const toast = useContext(NotificationsContext);
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;

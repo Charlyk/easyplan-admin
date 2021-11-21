@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { saveFacebookToken } from 'middleware/api/users';
@@ -9,6 +9,7 @@ import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
 const FacebookIntegration = ({ currentClinic }) => {
+  const toast = useContext(NotificationsContext);
   const [facebookPages, setFacebookPages] = useState(
     currentClinic.facebookPages,
   );

@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-import { toast } from 'react-toastify';
 import EASSelect from 'app/components/common/EASSelect';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { getAppLanguage, textForKey } from 'app/utils/localization';
 import EASModal from '../EASModal';
@@ -19,6 +19,7 @@ const EasyDatePickerModal = ({
   onClose,
   fetchHours,
 }) => {
+  const toast = useContext(NotificationsContext);
   const [date, setDate] = useState(selectedDate);
   const [hour, setHour] = useState(moment(selectedDate).format('HH:mm'));
   const [isLoading, setIsLoading] = useState(false);

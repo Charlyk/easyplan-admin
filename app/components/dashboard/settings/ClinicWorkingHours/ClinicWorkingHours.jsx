@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 import LoadingButton from 'app/components/common/LoadingButton';
 import WorkDay from 'app/components/common/WorkDay';
 import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { updateClinic } from 'middleware/api/clinic';
 import styles from './ClinicWorkingHours.module.scss';
 
 const ClinicWorkingHours = ({ currentClinic: clinic }) => {
+  const toast = useContext(NotificationsContext);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [workdays, setWorkDays] = useState([]);

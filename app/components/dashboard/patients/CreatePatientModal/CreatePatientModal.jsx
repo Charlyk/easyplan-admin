@@ -1,13 +1,13 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
 import {
   EmailRegex,
   HeaderKeys,
@@ -27,6 +27,7 @@ const EasyDatePicker = dynamic(() =>
 
 const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const birthdayPickerAnchor = useRef();
   const [
     {

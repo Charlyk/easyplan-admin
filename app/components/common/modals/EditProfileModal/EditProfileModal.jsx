@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
 import UploadAvatar from 'app/components/common/UploadAvatar';
+import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex, HeaderKeys, PasswordRegex } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
@@ -21,6 +21,7 @@ const EditProfileModal = ({
   onClose,
 }) => {
   const router = useRouter();
+  const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({

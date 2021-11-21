@@ -1,7 +1,7 @@
-import React, { useReducer } from 'react';
+import React, { useContext, useReducer } from 'react';
 import { Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
 import getClinicUrl from 'app/utils/getClinicUrl';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
@@ -22,6 +22,7 @@ export default function CreateClinicWrapper({
   shouldLogin,
   isMobile,
 }) {
+  const toast = useContext(NotificationsContext);
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;

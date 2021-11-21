@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,9 +26,8 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-
 import IconClose from 'app/components/icons/iconClose';
+import NotificationsContext from 'app/context/notificationsContext';
 import adjustValueToNumber from 'app/utils/adjustValueToNumber';
 import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
@@ -59,6 +64,7 @@ const CheckoutModal = ({
   currentUser,
   currentClinic,
 }) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const [
     {

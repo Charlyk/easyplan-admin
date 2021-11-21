@@ -1,14 +1,14 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { remove, cloneDeep, isEqual } from 'lodash';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import LeftSideModal from 'app/components/common/LeftSideModal';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconClose from 'app/components/icons/iconClose';
 import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
@@ -33,6 +33,7 @@ const CreateHolidayModal = dynamic(() => import('./CreateHolidayModal'));
 const DoctorForm = dynamic(() => import('./DoctorForm'));
 
 const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
+  const toast = useContext(NotificationsContext);
   const [{ isSaving, userData, isCreatingHoliday, isLoading }, localDispatch] =
     useReducer(reducer, initialState);
 

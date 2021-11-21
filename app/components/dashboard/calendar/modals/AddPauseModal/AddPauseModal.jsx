@@ -1,14 +1,14 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -41,6 +41,7 @@ const AddPauseModal = ({
   comment: defaultComment,
   onClose,
 }) => {
+  const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
   const [
     {

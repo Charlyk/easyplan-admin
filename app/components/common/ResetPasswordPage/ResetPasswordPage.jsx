@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { PasswordRegex } from 'app/utils/constants';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
@@ -13,6 +13,7 @@ import LoadingButton from '../LoadingButton';
 import styles from './ResetPasswordForm.module.scss';
 
 const ResetPasswordForm = ({ token }) => {
+  const toast = useContext(NotificationsContext);
   const isMobileDevice = useIsMobileDevice();
   const [state, setState] = useState({
     newPassword: '',

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -6,8 +6,8 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import useSWR from 'swr';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { APP_DATA_API } from 'app/utils/constants';
 import paths from 'app/utils/paths';
@@ -71,6 +71,7 @@ const MainComponent = ({
   provideAppData = true,
   authToken,
 }) => {
+  const toast = useContext(NotificationsContext);
   const { data, error } = useSWR(APP_DATA_API);
   const { currentUser, currentClinic } = data;
 
@@ -125,7 +126,7 @@ const MainComponent = ({
       return;
     }
 
-    toast(<ReminderNotification reminder={newReminder} />, {
+    toast.show(<ReminderNotification reminder={newReminder} />, {
       toastId: newReminder.id,
     });
   }, [newReminder, currentUser]);
@@ -138,7 +139,7 @@ const MainComponent = ({
     ) {
       return;
     }
-    toast(<ReminderNotification isUpdate reminder={updatedReminder} />, {
+    toast.show(<ReminderNotification isUpdate reminder={updatedReminder} />, {
       toastId: updatedReminder.id,
     });
   }, [updatedReminder, currentUser]);

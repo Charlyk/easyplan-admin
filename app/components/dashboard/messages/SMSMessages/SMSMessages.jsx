@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import {
   deleteMessage,
@@ -26,6 +26,7 @@ const ConfirmationModal = dynamic(() =>
 const CreateMessageDialog = dynamic(() => import('../CreateMessageDialog'));
 
 const SMSMessages = ({ currentClinic, messages: initialMessages }) => {
+  const toast = useContext(NotificationsContext);
   const hasSMSAlias = currentClinic?.smsAlias != null;
   const [
     {

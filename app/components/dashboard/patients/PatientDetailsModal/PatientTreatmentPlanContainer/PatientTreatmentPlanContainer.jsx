@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import PatientTreatmentPlan from 'app/components/common/PatientTreatmentPlan';
+import NotificationsContext from 'app/context/notificationsContext';
 import getTreatmentPlanURL from 'app/utils/getTreatmentPlanURL';
 import { textForKey } from 'app/utils/localization';
 import { fetchDoctorScheduleDetails } from 'middleware/api/schedules';
@@ -16,6 +16,7 @@ const PatientTreatmentPlanContainer = ({
   authToken,
   patientId,
 }) => {
+  const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [scheduleData, setScheduleData] = useState(null);
   const [guideName, setGuideName] = useState(

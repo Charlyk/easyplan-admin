@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
@@ -21,6 +21,7 @@ import { updateExchangeRatesSelector } from 'redux/selectors/rootSelector';
 import styles from './ExchangeRates.module.scss';
 
 const ExchangeRates = ({ currentClinic, currentUser, canEdit }) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const selectedClinic = currentUser.clinics.find(
     (item) => item.clinicId === currentClinic.id,

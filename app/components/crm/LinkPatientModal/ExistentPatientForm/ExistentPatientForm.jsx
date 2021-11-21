@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useContext, useEffect, useReducer } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Divider from '@material-ui/core/Divider';
@@ -8,8 +8,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import SearchIcon from '@material-ui/icons/Search';
 import debounce from 'lodash/debounce';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { requestSearchPatients } from 'middleware/api/patients';
 import styles from './ExistentPatientForm.module.scss';
@@ -22,6 +22,7 @@ import reducer, {
 } from './ExistentPatientForm.reducer';
 
 const ExistentPatientForm = ({ deal, onChange }) => {
+  const toast = useContext(NotificationsContext);
   const [
     { isSearching, patients, searchQuery, selectedPatient },
     localDispatch,

@@ -9,7 +9,6 @@ import NextNprogress from 'nextjs-progressbar';
 import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 import theme from 'app/styles/theme';
 import { APP_DATA_API, UnauthorizedPaths } from 'app/utils/constants';
@@ -25,10 +24,11 @@ import { logoutSelector } from 'redux/selectors/rootSelector';
 import types from 'redux/types';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
+import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
-import 'app/styles/base/base.scss';
 import 'app/utils';
+import NotificationsProvider from '../app/context/NotificationsProvider/NotificationsProvider';
 
 const FullScreenImageModal = dynamic(() =>
   import('../app/components/common/modals/FullScreenImageModal'),
@@ -195,27 +195,28 @@ const App = ({ Component, pageProps }) => {
       <ThemeProvider theme={theme}>
         <>
           <CssBaseline />
-          <ToastContainer />
           <PubNubProvider client={pubnub}>
-            <>
-              {logout && (
-                <ConfirmationModal
-                  title={textForKey('Logout')}
-                  message={textForKey('logout message')}
-                  onConfirm={handleUserLogout}
-                  onClose={handleCancelLogout}
-                  show={logout}
-                />
-              )}
-              {imageModal.open && (
-                <FullScreenImageModal
-                  {...imageModal}
-                  onClose={handleCloseImageModal}
-                />
-              )}
-              <NextNprogress color='#29D' startPosition={0.3} height={2} />
-              <Component {...pageProps} />
-            </>
+            <NotificationsProvider>
+              <>
+                {logout && (
+                  <ConfirmationModal
+                    title={textForKey('Logout')}
+                    message={textForKey('logout message')}
+                    onConfirm={handleUserLogout}
+                    onClose={handleCancelLogout}
+                    show={logout}
+                  />
+                )}
+                {imageModal.open && (
+                  <FullScreenImageModal
+                    {...imageModal}
+                    onClose={handleCloseImageModal}
+                  />
+                )}
+                <NextNprogress color='#29D' startPosition={0.3} height={2} />
+                <Component {...pageProps} />
+              </>
+            </NotificationsProvider>
           </PubNubProvider>
         </>
       </ThemeProvider>

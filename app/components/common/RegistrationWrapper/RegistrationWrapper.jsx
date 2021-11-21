@@ -1,8 +1,8 @@
-import React, { useReducer } from 'react';
+import React, { useContext, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
@@ -18,6 +18,7 @@ const RegisterForm = dynamic(() => import('./RegisterForm'));
 
 export default function RegistrationWrapper({ isMobile }) {
   const router = useRouter();
+  const toast = useContext(NotificationsContext);
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;
   const [{ errorMessage, isLoading }, dispatch] = useReducer(

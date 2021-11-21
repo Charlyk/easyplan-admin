@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { getPatientVisits } from 'middleware/api/patients';
 import { updateNotesSelector } from 'redux/selectors/rootSelector';
@@ -12,6 +12,7 @@ import AppointmentNote from './AppointmentNote';
 import styles from './AppointmentNotes.module.scss';
 
 const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
+  const toast = useContext(NotificationsContext);
   const [isFetching, setIsFetching] = useState(false);
   const [visits, setVisits] = useState([]);
   const updateNotes = useSelector(updateNotesSelector);

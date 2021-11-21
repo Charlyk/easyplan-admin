@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -13,11 +13,11 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconSearch from 'app/components/icons/iconSearch';
+import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -94,6 +94,7 @@ const PatientsList = ({
   query: initialQuery,
 }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
     {

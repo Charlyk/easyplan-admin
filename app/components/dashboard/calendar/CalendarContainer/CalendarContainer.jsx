@@ -1,12 +1,12 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import useSWR from 'swr';
 import MainComponent from 'app/components/common/MainComponent';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { APP_DATA_API, HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
@@ -106,6 +106,7 @@ const CalendarContainer = ({
   children,
   authToken,
 }) => {
+  const toast = useContext(NotificationsContext);
   const { data } = useSWR(APP_DATA_API);
   const { currentUser, currentClinic } = data;
   const updateClinicData = useSelector(updateClinicDataSelector);

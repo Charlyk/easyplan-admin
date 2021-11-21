@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASSelect from 'app/components/common/EASSelect';
 import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { addPatientXRayImage } from 'middleware/api/patients';
 import { triggerUpdateXRay } from 'redux/actions/actions';
@@ -27,6 +27,7 @@ const phases = [
 
 const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [phase, setPhase] = useState('Initial');

@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import formattedAmount from 'app/utils/formattedAmount';
 import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
@@ -22,12 +21,9 @@ import {
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
 import styles from './InvoicesButton.module.scss';
 
-const NewInvoiceToast = dynamic(() =>
-  import('app/components/common/NewInvoiceToast'),
-);
-
 const InvoicesButton = ({ currentUser, currentClinic }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const updateInvoices = useSelector(updateInvoicesSelector);
   const updateInvoice = useSelector(updateInvoiceSelector);
   const totalInvoices = useSelector(totalInvoicesSelector);
@@ -56,7 +52,7 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
       const response = await fetchPendingInvoices();
       const { data: newInvoices } = response;
       if (newInvoices?.length > totalInvoices) {
-        toast(<NewInvoiceToast />);
+        toast.success(textForKey('invoice_created'));
         dispatch(setTotalInvoices(newInvoices.length));
       }
       setInvoices(newInvoices);

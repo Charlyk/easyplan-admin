@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconLiveHelp from '@material-ui/icons/LiveHelp';
@@ -7,9 +7,9 @@ import moment from 'moment-timezone';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import EASHelpView from 'app/components/common/EASHelpView';
 import EasyCalendar from 'app/components/common/EasyCalendar';
+import NotificationsContext from 'app/context/notificationsContext';
 import { TECH_SUPPORT_URL } from 'app/utils/constants';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
 import usePrevious from 'app/utils/hooks/usePrevious';
@@ -34,6 +34,7 @@ const DoctorCalendar = ({
   viewMode,
   date,
 }) => {
+  const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const viewDate = moment(date).toDate();
