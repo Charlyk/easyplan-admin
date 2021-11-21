@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import Typography from "@material-ui/core/Typography";
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -206,6 +207,10 @@ const MainComponent = (
 
   return (
     <div className={styles.mainPage} id='main-page'>
+      <Head>
+        <title>{currentClinic.clinicName} - {pageTitle}</title>
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+      </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {patientNoteModal.open && (
         <AddNote

@@ -38,12 +38,6 @@ const EASModal = (
 ) => {
   const showDestroyBtn = typeof onDestroyClick === 'function';
 
-  const handleKeyDown = (event) => {
-    if (event.keyCode === 27 && !isPositiveLoading) {
-      handleBackdropClick();
-    }
-  };
-
   const handleCloseModal = (event) => {
     event?.stopPropagation();
     if (isPositiveLoading) {
@@ -84,11 +78,11 @@ const EASModal = (
     }
   };
 
-  const handleBackdropClick = () => {
-    if (typeof onBackdropClick !== 'function') {
-      onClose?.()
-    } else {
+  const handleBackdropClick = (event, reason) => {
+    if (reason === 'backdropClick' && typeof onBackdropClick === 'function') {
       onBackdropClick?.();
+    } else {
+      onClose?.()
     }
   };
 
@@ -96,8 +90,7 @@ const EASModal = (
     <Modal
       open={open}
       className={clsx(styles.modalRoot, className)}
-      onBackdropClick={handleBackdropClick}
-      onKeyDown={handleKeyDown}
+      onClose={handleBackdropClick}
     >
       <Paper className={clsx(styles.modalPaper, styles[size], paperClass)}>
         <div className={styles.modalHeader}>

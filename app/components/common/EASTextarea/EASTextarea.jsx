@@ -29,8 +29,8 @@ const EASTextarea = ({ fieldLabel, disabled, containerClass, placeholder, value,
         error={error}
         type={type}
         value={value}
-        rowsMax={maxRows}
-        rows={rows}
+        maxRows={maxRows}
+        minRows={rows}
         helperText={helperText}
         onFocus={() => handleFocusChange(true)}
         onBlur={() => handleFocusChange(false)}

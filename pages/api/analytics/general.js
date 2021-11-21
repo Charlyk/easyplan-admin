@@ -42,7 +42,7 @@ export default authorized(async (req, res) => {
 const fetchScheduleStats = async (req) => {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query);
-  const url = `${updatedServerUrl(req)}/analytics/general?${queryString}`;
+  const url = `${updatedServerUrl(req)}/app/general?${queryString}`;
   return axios.get(url, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
@@ -55,7 +55,7 @@ const fetchScheduleStats = async (req) => {
 const fetchIncomeStats = (req) => {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query);
-  const url = `${updatedServerUrl(req)}/analytics/finance?${queryString}`;
+  const url = `${updatedServerUrl(req)}/app/finance?${queryString}`;
   return axios.get(url, {
     headers: {
       [HeaderKeys.authorization]: auth_token,

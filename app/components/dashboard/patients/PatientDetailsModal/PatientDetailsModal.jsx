@@ -220,7 +220,6 @@ const PatientDetailsModal = (
       disablePortal
       open={show}
       onClose={onClose}
-      onBackdropClick={onClose}
       className={styles.patientDetailsModal}
     >
       <Paper className={styles.modalPaper}>

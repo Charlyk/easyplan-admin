@@ -8,7 +8,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
 import LeftSideModal from "../../../../common/LeftSideModal";
 import { textForKey } from "../../../../../utils/localization";
 import formattedAmount from "../../../../../utils/formattedAmount";

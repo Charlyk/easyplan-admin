@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PubNubProvider } from "pubnub-react";
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import PubNub from "pubnub";
 import NextNprogress from 'nextjs-progressbar';
 import { useRouter } from "next/router";
@@ -47,6 +48,7 @@ const App = ({ Component, pageProps }) => {
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
+  const currentPage = router.asPath;
 
   useEffect(() => {
     dispatch({
@@ -178,6 +180,10 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <>
+      <Head>
+        <title>EasyPlan.pro</title>
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+      </Head>
       <ThemeProvider theme={theme}>
         <>
           <CssBaseline/>

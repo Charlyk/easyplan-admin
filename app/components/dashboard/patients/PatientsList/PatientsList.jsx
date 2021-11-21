@@ -315,7 +315,7 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
           rowsPerPageOptions={[25, 50, 100]}
           colSpan={4}
           count={patients.total}
-          rowsPerPage={rowsPerPage}
+          rowsPerPage={parseInt(rowsPerPage)}
           labelRowsPerPage={textForKey('Patients per page')}
           page={page}
           component='div'
@@ -323,8 +323,8 @@ const PatientsList = ({ currentClinic, authToken, data, query: initialQuery }) =
             inputProps: { 'aria-label': 'rows per page' },
             native: true,
           }}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
         />
         <div className={styles.actionsContainer}>
           <Button

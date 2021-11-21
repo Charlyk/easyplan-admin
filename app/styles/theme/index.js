@@ -1,8 +1,8 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 
 // Create a index instance.
-const index = createMuiTheme({
+const index = createTheme({
   palette: {
     primary: {
       main: '#3A83DC',

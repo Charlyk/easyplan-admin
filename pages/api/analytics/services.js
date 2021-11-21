@@ -18,7 +18,7 @@ export default authorized(async (req, res) => {
 const fetchServicesStatistics = async (req) => {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const queryString = new URLSearchParams(req.query);
-  const url = `${updatedServerUrl(req)}/analytics/services?${queryString}`;
+  const url = `${updatedServerUrl(req)}/app/services?${queryString}`;
   return axios.get(url, {
     headers: {
       [HeaderKeys.authorization]: auth_token,

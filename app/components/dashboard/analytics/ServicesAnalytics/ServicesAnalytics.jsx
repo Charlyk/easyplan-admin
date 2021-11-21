@@ -326,8 +326,8 @@ const ServicesAnalytics = (
           inputProps: { 'aria-label': 'rows per page' },
           native: true,
         }}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        onPageChange={handleChangePage}
       />
       <EasyDateRangePicker
         onChange={handleDateChange}
