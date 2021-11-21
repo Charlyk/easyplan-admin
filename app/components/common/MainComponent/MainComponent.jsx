@@ -46,12 +46,14 @@ import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';
 
 const AddAppointmentModal = dynamic(() =>
-  import('../../dashboard/calendar/modals/AddAppointmentModal'),
+  import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
 );
 const PatientDetailsModal = dynamic(() =>
-  import('../../dashboard/patients/PatientDetailsModal'),
+  import('app/components/dashboard/patients/PatientDetailsModal'),
 );
-const AddXRay = dynamic(() => import('../../dashboard/patients/AddXRay'));
+const AddXRay = dynamic(() =>
+  import('app/components/dashboard/patients/AddXRay'),
+);
 const AddNote = dynamic(() => import('../modals/AddNote'));
 const DataMigrationModal = dynamic(() =>
   import('../modals/DataMigrationModal'),
@@ -287,7 +289,7 @@ const MainComponent = ({
           onClose={handleClosePaymentModal}
         />
       )}
-      {currentUser != null && currentClinic != null && (
+      {currentUser != null && (
         <MainMenu
           currentClinic={currentClinic}
           currentUser={currentUser}
@@ -304,8 +306,7 @@ const MainComponent = ({
             onLogout={handleStartLogout}
           />
           <div className={styles.data}>
-            {currentClinic != null &&
-              React.cloneElement(children, childrenProps)}
+            {React.cloneElement(children, childrenProps)}
           </div>
         </div>
       )}

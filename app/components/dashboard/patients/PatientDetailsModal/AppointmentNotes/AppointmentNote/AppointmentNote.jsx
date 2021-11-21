@@ -1,9 +1,8 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
-import IconEditService from 'app/icons/iconEditService';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-
+import IconEditService from 'app/components/icons/iconEditService';
 import getServiceName from 'app/utils/getServiceName';
 import { textForKey } from 'app/utils/localization';
 import styles from './AppointmentNote.module.scss';
