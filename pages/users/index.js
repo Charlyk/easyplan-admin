@@ -1,32 +1,24 @@
 import React from 'react';
-import { SWRConfig } from "swr";
-import redirectToUrl from '../../app/utils/redirectToUrl';
-import MainComponent from "../../app/components/common/MainComponent/MainComponent";
-import { getUsers } from "../../middleware/api/users";
-import { fetchAppData } from "../../middleware/api/initialization";
-import parseCookies from "../../app/utils/parseCookies";
-import UsersList from "../../app/components/dashboard/users/UsersList";
-import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../app/utils/handleRequestError";
+import { SWRConfig } from 'swr';
+import MainComponent from 'app/components/common/MainComponent/MainComponent';
+import UsersList from 'app/components/dashboard/users/UsersList';
+import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAppData } from 'middleware/api/initialization';
+import { getUsers } from 'middleware/api/users';
 
-const Users = (
-  {
-    fallback,
-    users: initialUsers,
-    invitations: initialInvitations,
-    authToken,
-  }
-) => {
+const Users = ({
+  fallback,
+  users: initialUsers,
+  invitations: initialInvitations,
+  authToken,
+}) => {
   return (
     <SWRConfig value={{ fallback }}>
-      <MainComponent
-        currentPath='/users'
-        authToken={authToken}
-      >
-        <UsersList
-          users={initialUsers}
-          invitations={initialInvitations}
-        />
+      <MainComponent currentPath='/users' authToken={authToken}>
+        <UsersList users={initialUsers} invitations={initialInvitations} />
       </MainComponent>
     </SWRConfig>
   );
@@ -62,15 +54,15 @@ export const getServerSideProps = async ({ req }) => {
         ...response.data,
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
+            ...appData.data,
           },
         },
         authToken,
-      }
-    }
+      },
+    };
   } catch (error) {
     return handleRequestError(error);
   }
-}
+};
 
 export default Users;

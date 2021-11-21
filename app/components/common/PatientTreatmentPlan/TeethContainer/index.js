@@ -1,1 +1,1 @@
-export { default } from './TeethContainer'
+export { default } from './TeethContainer';

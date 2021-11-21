@@ -1,21 +1,23 @@
 import React from 'react';
-import { SWRConfig } from "swr";
-import redirectToUrl from '../../app/utils/redirectToUrl';
-import MainComponent from "../../app/components/common/MainComponent/MainComponent";
-import { fetchAllServices } from "../../middleware/api/services";
-import { fetchAppData } from "../../middleware/api/initialization";
-import parseCookies from "../../app/utils/parseCookies";
-import ServicesContainer from "../../app/components/dashboard/services/ServicesContainer";
-import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../app/utils/handleRequestError";
+import { SWRConfig } from 'swr';
+import MainComponent from 'app/components/common/MainComponent/MainComponent';
+import ServicesContainer from 'app/components/dashboard/services/ServicesContainer';
+import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAppData } from 'middleware/api/initialization';
+import { fetchAllServices } from 'middleware/api/services';
 
-const Services = ({ fallback, categories: clinicCategories, services, authToken }) => {
+const Services = ({
+  fallback,
+  categories: clinicCategories,
+  services,
+  authToken,
+}) => {
   return (
     <SWRConfig value={{ fallback }}>
-      <MainComponent
-        currentPath='/services'
-        authToken={authToken}
-      >
+      <MainComponent currentPath='/services' authToken={authToken}>
         <ServicesContainer
           services={services}
           authToken={authToken}
@@ -26,7 +28,7 @@ const Services = ({ fallback, categories: clinicCategories, services, authToken 
   );
 };
 
-export const getServerSideProps = async ({ req, }) => {
+export const getServerSideProps = async ({ req }) => {
   try {
     const { auth_token: authToken } = parseCookies(req);
     if (!authToken || !authToken.match(JwtRegex)) {
@@ -56,8 +58,8 @@ export const getServerSideProps = async ({ req, }) => {
         ...data,
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
-          }
+            ...appData.data,
+          },
         },
         authToken,
       },
@@ -65,6 +67,6 @@ export const getServerSideProps = async ({ req, }) => {
   } catch (error) {
     return handleRequestError(error);
   }
-}
+};
 
 export default Services;

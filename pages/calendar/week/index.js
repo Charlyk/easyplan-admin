@@ -1,27 +1,18 @@
-import React from "react";
-import moment from "moment-timezone";
-import { SWRConfig } from "swr";
-import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
-import CalendarWeekView from "../../../app/components/dashboard/calendar/CalendarWeekView";
-import { fetchAppData } from "../../../middleware/api/initialization";
-import getCurrentWeek from "../../../app/utils/getCurrentWeek";
-import redirectToUrl from '../../../app/utils/redirectToUrl';
-import { getSchedulesForInterval } from "../../../middleware/api/schedules";
-import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
-import parseCookies from "../../../app/utils/parseCookies";
-import handleRequestError from "../../../app/utils/handleRequestError";
-import { wrapper } from "../../../store";
+import React from 'react';
+import moment from 'moment-timezone';
+import { SWRConfig } from 'swr';
+import CalendarContainer from 'app/components/dashboard/calendar/CalendarContainer';
+import CalendarWeekView from 'app/components/dashboard/calendar/CalendarWeekView';
+import { APP_DATA_API, JwtRegex, Role } from 'app/utils/constants';
+import getCurrentWeek from 'app/utils/getCurrentWeek';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAppData } from 'middleware/api/initialization';
+import { getSchedulesForInterval } from 'middleware/api/schedules';
+import { wrapper } from 'store';
 
-const Week = (
-  {
-    fallback,
-    doctors,
-    date,
-    doctorId,
-    schedules,
-    authToken,
-  }
-) => {
+const Week = ({ fallback, doctors, date, doctorId, schedules, authToken }) => {
   const viewDate = moment(date).toDate();
   return (
     <SWRConfig value={{ fallback }}>
@@ -40,10 +31,10 @@ const Week = (
         />
       </CalendarContainer>
     </SWRConfig>
-  )
+  );
 };
 
-export default wrapper.withRedux(Week)
+export default wrapper.withRedux(Week);
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
@@ -66,7 +57,11 @@ export const getServerSideProps = async ({ req, query }) => {
     const { currentUser, currentClinic } = appData.data;
 
     // check if user is on the allowed page
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/week');
+    const redirectTo = redirectToUrl(
+      currentUser,
+      currentClinic,
+      '/calendar/week',
+    );
     if (redirectTo != null) {
       return {
         redirect: {
@@ -77,12 +72,13 @@ export const getServerSideProps = async ({ req, query }) => {
     }
 
     // fetch schedules for current week
-    let currentDate = moment(queryDate)
+    let currentDate = moment(queryDate);
 
     // filter clinic doctors
-    const doctors = currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && item.showInCalendar
-    ) || [];
+    const doctors =
+      currentClinic?.users?.filter(
+        (item) => item.roleInClinic === Role.doctor && item.showInCalendar,
+      ) || [];
 
     // check if doctor id is present in query
     let doctorId = queryDoctorId;
@@ -91,11 +87,17 @@ export const getServerSideProps = async ({ req, query }) => {
     }
 
     // fetch schedules for specified period of time
-    const week = getCurrentWeek(currentDate.toDate())
-      .map(item => item.toDate());
+    const week = getCurrentWeek(currentDate.toDate()).map((item) =>
+      item.toDate(),
+    );
     const firstDay = week[0];
     const lastDay = week[week.length - 1];
-    const response = await getSchedulesForInterval(firstDay, lastDay, doctorId, req.headers)
+    const response = await getSchedulesForInterval(
+      firstDay,
+      lastDay,
+      doctorId,
+      req.headers,
+    );
 
     return {
       props: {
@@ -106,8 +108,8 @@ export const getServerSideProps = async ({ req, query }) => {
         authToken,
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
-          }
+            ...appData.data,
+          },
         },
       },
     };

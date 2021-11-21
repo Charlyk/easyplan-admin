@@ -1,13 +1,20 @@
 import React, { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import Typography from "@material-ui/core/Typography";
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import useSWR from 'swr';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { APP_DATA_API } from 'app/utils/constants';
+import paths from 'app/utils/paths';
+import { handleRemoteMessage } from 'app/utils/pubnubUtils';
+import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
+import { environment, isDev } from 'eas.config';
+import { signOut } from 'middleware/api/auth';
 import {
   setAppointmentModal,
   setPatientDetails,
@@ -16,50 +23,52 @@ import {
   setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
-} from '../../../../redux/actions/actions';
+} from 'redux/actions/actions';
+import { setClinic } from 'redux/actions/clinicActions';
+import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
+import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
+import {
+  newReminderSelector,
+  updatedReminderSelector,
+} from 'redux/selectors/crmSelector';
+import { isExchangeRateModalOpenSelector } from 'redux/selectors/exchangeRatesModalSelector';
 import {
   appointmentModalSelector,
   patientNoteModalSelector,
   patientXRayModalSelector,
-  paymentModalSelector
-} from '../../../../redux/selectors/modalsSelector';
+  paymentModalSelector,
+} from 'redux/selectors/modalsSelector';
 import {
   isImportModalOpenSelector,
   patientDetailsSelector,
-} from '../../../../redux/selectors/rootSelector';
-import paths from '../../../utils/paths';
-import { signOut } from "../../../../middleware/api/auth";
-import { isExchangeRateModalOpenSelector } from "../../../../redux/selectors/exchangeRatesModalSelector";
-import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";
-import { newReminderSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
-import { userClinicAccessChangeSelector } from "../../../../redux/selectors/clinicDataSelector";
-import { setClinic } from "../../../../redux/actions/clinicActions";
-import { handleRemoteMessage } from "../../../utils/pubnubUtils";
-import { environment, isDev } from "../../../../eas.config";
-import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
-import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
-import { APP_DATA_API } from "../../../utils/constants";
-import ReminderNotification from "../ReminderNotification";
+} from 'redux/selectors/rootSelector';
+import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';
 
-const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
-const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
-const AddXRay = dynamic(() => import("../../dashboard/patients/AddXRay"));
-const AddNote = dynamic(() => import("../modals/AddNote"));
-const DataMigrationModal = dynamic(() => import('../modals/DataMigrationModal'));
-const ExchangeRatesModal = dynamic(() => import('../modals/ExchangeRatesModal'));
+const AddAppointmentModal = dynamic(() =>
+  import('../../dashboard/calendar/modals/AddAppointmentModal'),
+);
+const PatientDetailsModal = dynamic(() =>
+  import('../../dashboard/patients/PatientDetailsModal'),
+);
+const AddXRay = dynamic(() => import('../../dashboard/patients/AddXRay'));
+const AddNote = dynamic(() => import('../modals/AddNote'));
+const DataMigrationModal = dynamic(() =>
+  import('../modals/DataMigrationModal'),
+);
+const ExchangeRatesModal = dynamic(() =>
+  import('../modals/ExchangeRatesModal'),
+);
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 const MainMenu = dynamic(() => import('./MainMenu'));
 const PageHeader = dynamic(() => import('./PageHeader'));
 
-const MainComponent = (
-  {
-    children,
-    currentPath,
-    provideAppData = true,
-    authToken
-  }
-) => {
+const MainComponent = ({
+  children,
+  currentPath,
+  provideAppData = true,
+  authToken,
+}) => {
   const { data, error } = useSWR(APP_DATA_API);
   const { currentUser, currentClinic } = data;
 
@@ -105,7 +114,7 @@ const MainComponent = (
     } else {
       return () => {
         pubnub.unsubscribeAll();
-      }
+      };
     }
   }, [currentUser, currentClinic]);
 
@@ -114,7 +123,9 @@ const MainComponent = (
       return;
     }
 
-    toast(<ReminderNotification reminder={newReminder}/>, { toastId: newReminder.id });
+    toast(<ReminderNotification reminder={newReminder} />, {
+      toastId: newReminder.id,
+    });
   }, [newReminder, currentUser]);
 
   useEffect(() => {
@@ -125,7 +136,9 @@ const MainComponent = (
     ) {
       return;
     }
-    toast(<ReminderNotification isUpdate reminder={updatedReminder}/>, { toastId: updatedReminder.id });
+    toast(<ReminderNotification isUpdate reminder={updatedReminder} />, {
+      toastId: updatedReminder.id,
+    });
   }, [updatedReminder, currentUser]);
 
   useEffect(() => {
@@ -145,7 +158,7 @@ const MainComponent = (
     }
     try {
       await signOut();
-      await router.replace(router.asPath)
+      await router.replace(router.asPath);
     } catch (error) {
       console.log(error);
     }
@@ -164,7 +177,7 @@ const MainComponent = (
   };
 
   const handleCreateClinic = async () => {
-    await router.push('/create-clinic?redirect=0')
+    await router.push('/create-clinic?redirect=0');
   };
 
   const handleAppointmentModalClose = () => {
@@ -208,15 +221,17 @@ const MainComponent = (
   return (
     <div className={styles.mainPage} id='main-page'>
       <Head>
-        <title>{currentClinic.clinicName} - {pageTitle}</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <title>
+          {currentClinic.clinicName} - {pageTitle}
+        </title>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width'
+        />
       </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {patientNoteModal.open && (
-        <AddNote
-          {...patientNoteModal}
-          onClose={handleClosePatientNoteModal}
-        />
+        <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
       )}
       {patientXRayModal.open && (
         <AddXRay
@@ -289,12 +304,8 @@ const MainComponent = (
             onLogout={handleStartLogout}
           />
           <div className={styles.data}>
-            {currentClinic != null && (
-              React.cloneElement(
-                children,
-                childrenProps,
-              )
-            )}
+            {currentClinic != null &&
+              React.cloneElement(children, childrenProps)}
           </div>
         </div>
       )}

@@ -1,10 +1,10 @@
-import axios from "axios";
-import { authorized } from "../authorized";
-import { handler } from "../handler";
-import getSubdomain from "../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import parseCookies from "../../../app/utils/parseCookies";
-import { HeaderKeys } from "../../../app/utils/constants";
+import axios from 'axios';
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import parseCookies from 'app/utils/parseCookies';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { authorized } from '../authorized';
+import { handler } from '../handler';
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -30,6 +30,6 @@ function checkIsAuthenticated(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.subdomain]: getSubdomain(req),
       [HeaderKeys.clinicId]: clinic_id,
-    }
+    },
   });
 }

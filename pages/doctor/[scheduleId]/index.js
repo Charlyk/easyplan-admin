@@ -1,22 +1,20 @@
 import React from 'react';
-import { SWRConfig } from "swr";
-import redirectToUrl from '../../../app/utils/redirectToUrl';
-import DoctorsMain from "../../../app/components/doctors/DoctorsMain";
-import { fetchAppData } from "../../../middleware/api/initialization";
-import { fetchDoctorScheduleDetails } from "../../../middleware/api/schedules";
-import parseCookies from "../../../app/utils/parseCookies";
-import DoctorPatientDetails from "../../../app/components/doctors/DoctorPatientDetails";
-import { APP_DATA_API, JwtRegex } from "../../../app/utils/constants";
-import handleRequestError from "../../../app/utils/handleRequestError";
+import { SWRConfig } from 'swr';
+import DoctorPatientDetails from 'app/components/doctors/DoctorPatientDetails';
+import DoctorsMain from 'app/components/doctors/DoctorsMain';
+import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAppData } from 'middleware/api/initialization';
+import { fetchDoctorScheduleDetails } from 'middleware/api/schedules';
 
-const DoctorScheduleDetails = (
-  {
-    fallback,
-    schedule: initialSchedule,
-    scheduleId,
-    authToken,
-  }
-) => {
+const DoctorScheduleDetails = ({
+  fallback,
+  schedule: initialSchedule,
+  scheduleId,
+  authToken,
+}) => {
   return (
     <SWRConfig value={{ fallback }}>
       <DoctorsMain
@@ -58,7 +56,11 @@ export const getServerSideProps = async ({ req, query }) => {
     }
 
     const { scheduleId } = query;
-    const response = await fetchDoctorScheduleDetails(scheduleId, null, req.headers);
+    const response = await fetchDoctorScheduleDetails(
+      scheduleId,
+      null,
+      req.headers,
+    );
     return {
       props: {
         scheduleId,
@@ -66,14 +68,14 @@ export const getServerSideProps = async ({ req, query }) => {
         schedule: response.data,
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
-          }
+            ...appData.data,
+          },
         },
       },
     };
   } catch (error) {
     return handleRequestError(error);
   }
-}
+};
 
 export default DoctorScheduleDetails;

@@ -7,6 +7,7 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import IconFree from '@material-ui/icons/MoneyOff';
 import moment from 'moment-timezone';
 
+import { environment } from '../../eas.config';
 import IconAppointmentCalendar from '../components/icons/iconAppointmentCalendar';
 import IconCheckMark from '../components/icons/iconCheckMark';
 import IconClock from '../components/icons/iconClock';
@@ -46,7 +47,6 @@ import IconTooth47 from '../components/icons/iconTooth47';
 import IconTooth48 from '../components/icons/iconTooth48';
 import IconXPerson from '../components/icons/iconXPerson';
 import { textForKey } from './localization';
-import { environment } from "../../eas.config";
 
 const host = typeof window !== 'undefined' ? window?.location.host : '';
 export const env = host.startsWith('develop')
@@ -65,11 +65,15 @@ export const Role = {
 };
 
 export const EmailRegex = /.+@.+\.[A-Za-z]+$/;
-export const PasswordRegex = /(?=^.{6,}$)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9]).*/;
-export const JwtRegex = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
-export const WebRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
+export const PasswordRegex =
+  /(?=^.{6,}$)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9]).*/;
+export const JwtRegex =
+  /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
+export const WebRegex =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
-export const FacebookAppId = environment === 'local' ? '367664371555800' : '2924106361197162';
+export const FacebookAppId =
+  environment === 'local' ? '367664371555800' : '2924106361197162';
 
 export const YClientAPIUrl = 'https://api.yclients.com/api';
 
@@ -218,7 +222,7 @@ export const Statuses = [
     statusIcon: null,
     manual: true,
     isSchedule: true,
-  }
+  },
 ];
 
 export const ScheduleStatuses = Statuses.filter((item) => item.isSchedule);
@@ -399,15 +403,15 @@ export const Languages = [
   },
   {
     id: 'en',
-    name: 'English'
+    name: 'English',
   },
   {
     id: 'it',
-    name: 'Italiana'
+    name: 'Italiana',
   },
   {
     id: 'de',
-    name: 'Deutsche'
+    name: 'Deutsche',
   },
 ];
 
@@ -442,9 +446,9 @@ export const PatientSources = [
   },
   {
     id: 'Other',
-    name: textForKey('Other')
-  }
-]
+    name: textForKey('Other'),
+  },
+];
 
 export const UnauthorizedPaths = [
   '/accept-invitation',
@@ -454,15 +458,23 @@ export const UnauthorizedPaths = [
   '/login',
 ];
 
-export const RestrictedSubdomains = ['app', 'app-dev', 'api', 'dev-api', 'easyplan', ''];
+export const RestrictedSubdomains = [
+  'app',
+  'app-dev',
+  'api',
+  'dev-api',
+  'easyplan',
+  '',
+];
 
 export const HeaderKeys = {
   authorization: 'Authorization',
   clinicId: 'X-EasyPlan-Clinic-Id',
   subdomain: 'X-EasyPlan-Subdomain',
-  contentType: 'Content-Type'
+  contentType: 'Content-Type',
 };
 
 export const APP_DATA_API = '/api/analytics/app-data';
 
-export const TECH_SUPPORT_URL = 'https://tawk.to/chat/619407696bb0760a4942ea33/1fkl3ptc4'
+export const TECH_SUPPORT_URL =
+  'https://tawk.to/chat/619407696bb0760a4942ea33/1fkl3ptc4';

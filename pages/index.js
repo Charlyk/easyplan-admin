@@ -1,19 +1,16 @@
-import React from "react";
+import React from 'react';
 
 const MainPage = () => {
-
-  return (
-    <div/>
-  )
-}
+  return <div />;
+};
 
 export const getServerSideProps = async () => {
   return {
     redirect: {
       destination: '/login',
       permanent: true,
-    }
-  }
-}
+    },
+  };
+};
 
 export default MainPage;

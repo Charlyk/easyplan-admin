@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import moment from "moment-timezone";
-import { ScheduleStatuses } from "../../../../../utils/constants";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
+
+import { ScheduleStatuses } from '../../../../../utils/constants';
 
 export const initialState = {
   categories: [],
@@ -23,7 +24,9 @@ const receiversFilterSlice = createSlice({
       state.selectedStatuses = [...state.selectedStatuses, action.payload];
     },
     removeSelectedStatus(state, action) {
-      state.selectedStatuses = state.selectedStatuses.filter(item => item.id !== action.payload.id);
+      state.selectedStatuses = state.selectedStatuses.filter(
+        (item) => item.id !== action.payload.id,
+      );
     },
 
     setSelectedCategories(state, action) {
@@ -33,7 +36,9 @@ const receiversFilterSlice = createSlice({
       state.selectedCategories = [...state.selectedCategories, action.payload];
     },
     removeSelectedCategory(state, action) {
-      state.selectedCategories = state.selectedCategories.filter(item => item.id !== action.payload.id);
+      state.selectedCategories = state.selectedCategories.filter(
+        (item) => item.id !== action.payload.id,
+      );
     },
 
     setSelectedServices(state, action) {
@@ -43,7 +48,9 @@ const receiversFilterSlice = createSlice({
       state.selectedServices = [...state.selectedServices, action.payload];
     },
     removeSelectedService(state, action) {
-      state.selectedServices = state.selectedServices.filter(item => item.id !== action.payload.id);
+      state.selectedServices = state.selectedServices.filter(
+        (item) => item.id !== action.payload.id,
+      );
     },
 
     setResponseData(state, action) {
@@ -65,19 +72,25 @@ const receiversFilterSlice = createSlice({
         services: initialServices,
         startDate,
         endDate,
-        clinicData
+        clinicData,
       } = action.payload;
 
       if (initialStatuses.length > 0) {
-        state.selectedStatuses = ScheduleStatuses.filter(it => initialStatuses.includes(it.id))
+        state.selectedStatuses = ScheduleStatuses.filter((it) =>
+          initialStatuses.includes(it.id),
+        );
       }
 
       if (initialCategories.length > 0) {
-        state.selectedCategories = clinicData.categories.filter(it => initialCategories.includes(it.id));
+        state.selectedCategories = clinicData.categories.filter((it) =>
+          initialCategories.includes(it.id),
+        );
       }
 
       if (initialServices.length > 0) {
-        state.selectedServices = clinicData.services.filter(it => initialServices.includes(it.id));
+        state.selectedServices = clinicData.services.filter((it) =>
+          initialServices.includes(it.id),
+        );
       }
 
       if (startDate != null && endDate != null) {

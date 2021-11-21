@@ -1,7 +1,7 @@
 import React from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/core/styles';
-import { fetchAppData } from "../middleware/api/initialization";
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { fetchAppData } from 'middleware/api/initialization';
 
 class AppDocument extends Document {
   static async getInitialProps(ctx) {
@@ -10,9 +10,10 @@ class AppDocument extends Document {
     const sheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
-    ctx.renderPage = () => originalRenderPage({
-      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
-    });
+    ctx.renderPage = () =>
+      originalRenderPage({
+        enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+      });
 
     const initialProps = await Document.getInitialProps(ctx);
 
@@ -40,17 +41,19 @@ class AppDocument extends Document {
       <Html>
         <Head>
           {!currentPage.includes('confirmation') ? (
-            <script type="text/javascript" src="/tawkto.js"/>
+            <script type='text/javascript' src='/tawkto.js' />
           ) : null}
-          <link rel="stylesheet"
-                href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap"/>
+          <link
+            rel='stylesheet'
+            href='https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap'
+          />
         </Head>
         <body>
-        <Main/>
-        <NextScript/>
+          <Main />
+          <NextScript />
         </body>
       </Html>
-    )
+    );
   }
 }
 

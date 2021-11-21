@@ -1,5 +1,5 @@
-import moment from "moment-timezone";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
 
 export const initialState = {
   isLoading: false,
@@ -54,17 +54,14 @@ const doctorAnalyticsSlice = createSlice({
         state.servicesModal = {
           open: false,
           statistic: null,
-        }
+        };
       }
     },
     setInitialQuery(state, action) {
       const { doctorId, serviceId, fromDate, toDate } = action.payload;
       state.selectedDoctor = { id: parseInt(doctorId) };
       state.selectedService = { id: parseInt(serviceId) };
-      state.dateRange = [
-        moment(fromDate).toDate(),
-        moment(toDate).toDate(),
-      ];
+      state.dateRange = [moment(fromDate).toDate(), moment(toDate).toDate()];
     },
   },
 });

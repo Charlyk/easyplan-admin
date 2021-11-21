@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from 'react';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityOn from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import VisibilityOn from "@material-ui/icons/Visibility";
-import IconButton from "@material-ui/core/IconButton";
-
-import { EmailRegex } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import LoadingButton from '../../LoadingButton';
-import EASTextField from '../../EASTextField';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import { EmailRegex } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import styles from './LoginForm.module.scss';
 
-const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSignUp, onLogin, onChange }) => {
+const LoginForm = ({
+  isLoggingIn,
+  errorMessage,
+  isMobile,
+  onResetPassword,
+  onSignUp,
+  onLogin,
+  onChange,
+}) => {
   const [data, setData] = useState({ email: '', password: '' });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const isEmailValid = data.email.length === 0 || data.email.match(EmailRegex);
 
   useEffect(() => {
     onChange?.(data);
-  }, [data])
+  }, [data]);
 
   const handleEmailChange = (newValue) => {
     setData({ ...data, email: newValue });
-  }
+  };
 
   const handlePasswordChange = (newValue) => {
     setData({ ...data, password: newValue });
-  }
+  };
 
   const isFormValid = () => {
     return data.email.match(EmailRegex) && data.password.length > 4;
@@ -37,7 +44,7 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
     if (isLoggingIn || !isFormValid()) {
       return;
     }
-    onLogin(data.email, data.password)
+    onLogin(data.email, data.password);
   };
 
   const togglePasswordVisibility = () => {
@@ -46,13 +53,9 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
 
   return (
     <div
-      className={clsx(
-        'form-root',
-        styles.loginForm,
-        {
-          [styles.disabled]: isLoggingIn,
-        }
-      )}
+      className={clsx('form-root', styles.loginForm, {
+        [styles.disabled]: isLoggingIn,
+      })}
       style={{
         padding: isMobile ? '1rem' : '2rem',
         width: isMobile ? 'calc(90% - 2rem)' : 'calc(70% - 4rem)',
@@ -66,7 +69,7 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
         <EASTextField
           value={data.email}
           error={!isEmailValid}
-          type="email"
+          type='email'
           containerClass={styles.fieldContainer}
           fieldLabel={textForKey('Email')}
           onChange={handleEmailChange}
@@ -84,7 +87,7 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
                 onClick={togglePasswordVisibility}
                 className={styles.visibilityToggleBtn}
               >
-                {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
+                {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
               </IconButton>
             }
           />
@@ -111,14 +114,14 @@ const LoginForm = ({ isLoggingIn, errorMessage, isMobile, onResetPassword, onSig
             </div>
           </div>
           <LoadingButton
-            type="submit"
+            type='submit'
             onClick={handleLogin}
             className='positive-button'
             disabled={!isFormValid() || isLoggingIn}
             isLoading={isLoggingIn}
             style={{
               width: isMobile ? '6rem' : 'unset',
-              minWidth: isMobile ? 'unset' : '8rem'
+              minWidth: isMobile ? 'unset' : '8rem',
             }}
           >
             {textForKey('Login')}

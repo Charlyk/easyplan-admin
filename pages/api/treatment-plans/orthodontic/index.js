@@ -1,10 +1,10 @@
-import axios from "axios";
-import { authorized } from "../../authorized";
+import axios from 'axios';
 import cookie from 'cookie';
-import { handler } from "../../handler";
-import getSubdomain from "../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { authorized } from '../../authorized';
+import { handler } from '../../handler';
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -36,14 +36,14 @@ async function updateOrthodonticPlan(req) {
         [HeaderKeys.clinicId]: clinic_id,
         [HeaderKeys.subdomain]: getSubdomain(req),
         [HeaderKeys.contentType]: 'application/json',
-      }
-    }
+      },
+    },
   );
 }
 
 function fetchPatientOrthodonticPlan(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const queryString = new URLSearchParams(req.query).toString()
+  const queryString = new URLSearchParams(req.query).toString();
   return axios.get(
     `${updatedServerUrl(req)}/treatment-plans/orthodontic?${queryString}`,
     {
@@ -51,7 +51,7 @@ function fetchPatientOrthodonticPlan(req) {
         [HeaderKeys.authorization]: auth_token,
         [HeaderKeys.clinicId]: clinic_id,
         [HeaderKeys.subdomain]: getSubdomain(req),
-      }
-    }
+      },
+    },
   );
 }

@@ -1,14 +1,15 @@
-import { appBaseUrl, environment } from "../../eas.config";
+import { appBaseUrl, environment } from '../../eas.config';
 
 const getClinicUrl = (clinic, authToken) => {
   if (typeof window === 'undefined') {
     return '';
   }
   const { host, protocol } = window.location;
-  const [_, domain, location, location2] = host.split('.');
+  const [unused, domain, location, location2] = host.split('.');
+  console.log(unused);
   const queryString = new URLSearchParams({
     token: authToken,
-    clinicId: clinic.clinicId
+    clinicId: clinic.clinicId,
   });
   const clinicDomain = clinic.clinicDomain ?? clinic.domainName;
   switch (environment) {
@@ -19,7 +20,6 @@ const getClinicUrl = (clinic, authToken) => {
     default:
       return `${protocol}//${clinicDomain}.${domain}.${location}.${location2}/redirect?${queryString}`;
   }
-
-}
+};
 
 export default getClinicUrl;

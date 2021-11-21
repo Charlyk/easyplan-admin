@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import isEqual from 'lodash/isEqual';
 
 export default function usePrevious(value) {

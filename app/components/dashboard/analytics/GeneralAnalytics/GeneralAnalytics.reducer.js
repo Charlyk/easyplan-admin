@@ -1,5 +1,6 @@
-import moment from "moment-timezone";
-import generateReducerActions from "../../../../utils/generateReducerActions";
+import moment from 'moment-timezone';
+
+import generateReducerActions from '../../../../utils/generateReducerActions';
 
 export const initialState = {
   doctors: [],
@@ -36,12 +37,9 @@ export const reducer = (state, action) => {
       return {
         ...state,
         selectedDoctor: { id: parseInt(doctorId) },
-        selectedRange: [
-          moment(fromDate).toDate(),
-          moment(toDate).toDate(),
-        ],
+        selectedRange: [moment(fromDate).toDate(), moment(toDate).toDate()],
       };
     default:
       return state;
   }
-}
+};

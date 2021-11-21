@@ -1,1 +1,1 @@
-export { default } from './PatientTreatmentPlanContainer'
+export { default } from './PatientTreatmentPlanContainer';

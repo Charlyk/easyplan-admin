@@ -1,10 +1,10 @@
-import axios from "axios";
-import { authorized } from "../authorized";
+import axios from 'axios';
 import cookie from 'cookie';
-import { handler } from "../handler";
-import getSubdomain from "../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { authorized } from '../authorized';
+import { handler } from '../handler';
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -40,8 +40,8 @@ function saveGeneralTreatmentPlan(req) {
         [HeaderKeys.clinicId]: clinic_id,
         [HeaderKeys.subdomain]: getSubdomain(req),
         [HeaderKeys.contentType]: 'application/json',
-      }
-    }
+      },
+    },
   );
 }
 
@@ -56,7 +56,7 @@ function updateGeneralTreatmentPlan(req) {
         [HeaderKeys.clinicId]: clinic_id,
         [HeaderKeys.subdomain]: getSubdomain(req),
         [HeaderKeys.contentType]: 'application/json',
-      }
-    }
+      },
+    },
   );
 }

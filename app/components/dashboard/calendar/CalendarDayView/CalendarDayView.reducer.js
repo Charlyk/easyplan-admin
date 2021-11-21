@@ -1,6 +1,7 @@
 import orderBy from 'lodash/orderBy';
-import generateReducerActions from "../../../../utils/generateReducerActions";
-import createContainerHours from "../../../../utils/createContainerHours";
+
+import createContainerHours from '../../../../utils/createContainerHours';
+import generateReducerActions from '../../../../utils/generateReducerActions';
 
 export const initialState = {
   hours: [],
@@ -58,10 +59,14 @@ export const reducer = (state, action) => {
     case reducerTypes.setSchedules:
       return {
         ...state,
-        schedules: action.payload.map(item => {
+        schedules: action.payload.map((item) => {
           return {
             ...item,
-            schedules: orderBy(item.schedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
+            schedules: orderBy(
+              item.schedules,
+              ['rescheduled', 'startTime'],
+              ['desc', 'asc'],
+            ),
           };
         }),
       };
@@ -86,7 +91,9 @@ export const reducer = (state, action) => {
     }
     case reducerTypes.addSchedule: {
       const newSchedule = action.payload;
-      const hasSchedules = state.schedules.some(item => item.doctorId === newSchedule.doctorId);
+      const hasSchedules = state.schedules.some(
+        (item) => item.doctorId === newSchedule.doctorId,
+      );
       if (!hasSchedules) {
         return {
           ...state,
@@ -95,22 +102,26 @@ export const reducer = (state, action) => {
             {
               id: newSchedule.doctorId,
               doctorId: newSchedule.doctorId,
-              schedules: [newSchedule]
+              schedules: [newSchedule],
             },
-          ]
-        }
+          ],
+        };
       }
-      const updatedSchedules = state.schedules.map(item => {
+      const updatedSchedules = state.schedules.map((item) => {
         if (item.doctorId !== newSchedule.doctorId) {
           return item;
         }
 
-        const newSchedules = [...item.schedules, newSchedule]
+        const newSchedules = [...item.schedules, newSchedule];
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
-        }
+          schedules: orderBy(
+            newSchedules,
+            ['rescheduled', 'startTime'],
+            ['desc', 'asc'],
+          ),
+        };
       });
       return {
         ...state,
@@ -119,26 +130,26 @@ export const reducer = (state, action) => {
     }
     case reducerTypes.deleteSchedule: {
       const scheduleToDelete = action.payload;
-      const updatedSchedules = state.schedules.map(item => {
+      const updatedSchedules = state.schedules.map((item) => {
         if (item.doctorId !== scheduleToDelete.doctorId) {
           return item;
         }
 
         return {
           ...item,
-          schedules: item.schedules.filter((schedule) =>
-            schedule.id !== scheduleToDelete.id
+          schedules: item.schedules.filter(
+            (schedule) => schedule.id !== scheduleToDelete.id,
           ),
-        }
-      })
+        };
+      });
       return {
         ...state,
-        schedules: updatedSchedules
-      }
+        schedules: updatedSchedules,
+      };
     }
     case reducerTypes.updateSchedule: {
       const scheduleToUpdate = action.payload;
-      const updatedSchedules = state.schedules.map(item => {
+      const updatedSchedules = state.schedules.map((item) => {
         if (item.doctorId !== scheduleToUpdate.doctorId) {
           return item;
         }
@@ -151,17 +162,21 @@ export const reducer = (state, action) => {
             ...schedule,
             ...scheduleToUpdate,
           };
-        })
+        });
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
-        }
-      })
+          schedules: orderBy(
+            newSchedules,
+            ['rescheduled', 'startTime'],
+            ['desc', 'asc'],
+          ),
+        };
+      });
       return {
         ...state,
-        schedules: updatedSchedules
-      }
+        schedules: updatedSchedules,
+      };
     }
     default:
       return state;

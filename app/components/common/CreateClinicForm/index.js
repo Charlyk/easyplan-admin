@@ -1,1 +1,1 @@
-export { default } from './CreateClinicForm'
+export { default } from './CreateClinicForm';

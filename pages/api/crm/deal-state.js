@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 import cookie from 'cookie';
-import getSubdomain from "../../../app/utils/getSubdomain";
-import { HeaderKeys } from "../../../app/utils/constants";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import { handler } from "../handler";
-import { authorized } from "../authorized";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { authorized } from '../authorized';
+import { handler } from '../handler';
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -50,7 +50,7 @@ async function fetchDealStates(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
-    }
+    },
   });
 }
 
@@ -62,24 +62,26 @@ async function createNewDealState(req) {
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
       [HeaderKeys.contentType]: 'application/json',
-    }
+    },
   });
 }
 
 async function updateDealState(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { dealId } = req.query;
-  return axios.put(`${updatedServerUrl(req)}/crm/deal-state/${dealId}`, req.body, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
-    }
-  });
+  return axios.put(
+    `${updatedServerUrl(req)}/crm/deal-state/${dealId}`,
+    req.body,
+    {
+      headers: {
+        [HeaderKeys.authorization]: auth_token,
+        [HeaderKeys.clinicId]: clinic_id,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
 }
-
-
 
 async function deleteDealState(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
@@ -89,6 +91,6 @@ async function deleteDealState(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
-    }
+    },
   });
 }

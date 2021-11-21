@@ -1,23 +1,20 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
-import { SWRConfig } from "swr";
-import MainComponent from "../app/components/common/MainComponent";
-import parseCookies from '../app/utils/parseCookies';
-import redirectToUrl from "../app/utils/redirectToUrl";
-import { fetchAppData } from "../middleware/api/initialization";
-import { fetchAllDealStates } from "../middleware/api/crm";
-import CrmMain from "../app/components/crm/CrmMain";
-import { APP_DATA_API, JwtRegex } from "../app/utils/constants";
-import handleRequestError from "../app/utils/handleRequestError";
-import { wrapper } from "../store";
+import { SWRConfig } from 'swr';
+import MainComponent from 'app/components/common/MainComponent';
+import CrmMain from 'app/components/crm/CrmMain';
+import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAllDealStates } from 'middleware/api/crm';
+import { fetchAppData } from 'middleware/api/initialization';
+import { wrapper } from 'store';
 
 const Crm = ({ fallback, authToken, states }) => {
   return (
     <SWRConfig value={{ fallback }}>
-      <MainComponent
-        currentPath='/crm'
-        authToken={authToken}
-      >
+      <MainComponent currentPath='/crm' authToken={authToken}>
         <CrmMain states={states} />
       </MainComponent>
     </SWRConfig>
@@ -53,17 +50,17 @@ export const getServerSideProps = async ({ req }) => {
       props: {
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
-          }
+            ...appData.data,
+          },
         },
         states: response.data,
         authToken,
-      }
-    }
+      },
+    };
   } catch (error) {
     return handleRequestError(error);
   }
-}
+};
 
 export default wrapper.withRedux(Crm);
 
@@ -71,11 +68,13 @@ Crm.propTypes = {
   currentUser: PropTypes.object,
   currentClinic: PropTypes.object,
   authToken: PropTypes.string,
-  states: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    color: PropTypes.string,
-    orderId: PropTypes.number,
-    deleteable: PropTypes.bool,
-  })),
+  states: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      color: PropTypes.string,
+      orderId: PropTypes.number,
+      deleteable: PropTypes.bool,
+    }),
+  ),
 };

@@ -1,5 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { availableHours, messageTypeEnum } from "./CreateMessageDialog.constants";
+import { createSlice } from '@reduxjs/toolkit';
+
+import {
+  availableHours,
+  messageTypeEnum,
+} from './CreateMessageDialog.constants';
 
 export const initialState = {
   isLoading: false,

@@ -1,8 +1,8 @@
-import axios from "axios";
-import { handler } from "../../handler";
-import getSubdomain from "../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../../app/utils/constants";
+import axios from 'axios';
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { handler } from '../../handler';
 
 export default async (req, res) => {
   switch (req.method) {
@@ -21,10 +21,14 @@ export default async (req, res) => {
 };
 
 async function confirmSchedule(req) {
-  return axios.post(`${updatedServerUrl(req)}/confirmation/schedule`, req.body, {
-    headers: {
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
-    }
-  });
+  return axios.post(
+    `${updatedServerUrl(req)}/confirmation/schedule`,
+    req.body,
+    {
+      headers: {
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
 }

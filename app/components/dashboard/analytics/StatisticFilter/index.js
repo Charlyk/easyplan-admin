@@ -1,1 +1,1 @@
-export { default } from './StatisticFilter'
+export { default } from './StatisticFilter';

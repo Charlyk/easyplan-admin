@@ -1,8 +1,8 @@
-import roundToTwo from "./roundToTwo";
+import roundToTwo from './roundToTwo';
 
 const adjustValueToNumber = (newValue, maxAmount) => {
   if (newValue == null) {
-    newValue = 0
+    newValue = 0;
   }
   if (typeof newValue === 'string') {
     if (newValue.length === 0) {

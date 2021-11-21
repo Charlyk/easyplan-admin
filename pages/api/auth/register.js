@@ -1,8 +1,8 @@
-import axios from "axios";
-import { handler } from "../handler";
-import getSubdomain from "../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../app/utils/constants";
+import axios from 'axios';
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { handler } from '../handler';
 
 export default async function register(req, res) {
   const data = await handler(createNewAccount, req, res);
@@ -29,7 +29,7 @@ function createNewAccount(req) {
         [HeaderKeys.clinicId]: -1,
         [HeaderKeys.subdomain]: getSubdomain(req),
         [HeaderKeys.contentType]: 'application/json',
-      }
-    }
+      },
+    },
   );
 }

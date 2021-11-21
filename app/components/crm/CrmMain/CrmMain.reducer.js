@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   columns: [],
@@ -26,7 +26,11 @@ const crmMainSlice = createSlice({
       state.linkModal = action.payload;
     },
     openDeleteModal(state, action) {
-      state.deleteModal = { open: true, deal: action.payload, isLoading: false };
+      state.deleteModal = {
+        open: true,
+        deal: action.payload,
+        isLoading: false,
+      };
     },
     closeDeleteModal(state) {
       state.deleteModal = { open: false, deal: null, isLoading: false };
@@ -77,7 +81,7 @@ const crmMainSlice = createSlice({
     },
     setShowPageConnectModal(state, action) {
       state.showPageConnectModal = action.payload;
-    }
+    },
   },
 });
 

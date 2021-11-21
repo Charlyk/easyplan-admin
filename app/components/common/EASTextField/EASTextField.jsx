@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import clsx from "clsx";
-import Typography from "@material-ui/core/Typography";
-import styles from './EASTextField.module.scss'
-import { TextField } from "@material-ui/core";
+import React, { useState } from 'react';
+import { TextField } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import styles from './EASTextField.module.scss';
 
 const EASTextField = React.forwardRef(
   (
@@ -24,7 +24,7 @@ const EASTextField = React.forwardRef(
       variant = 'outlined',
       ...rest
     },
-    ref
+    ref,
   ) => {
     const [focused, setFocused] = useState(false);
 
@@ -42,26 +42,17 @@ const EASTextField = React.forwardRef(
 
     return (
       <div
-        className={
-          clsx(
-            styles.root,
-            containerClass,
-            {
-              [styles.readOnly]: readOnly
-            }
-          )
-        }
+        className={clsx(styles.root, containerClass, {
+          [styles.readOnly]: readOnly,
+        })}
         ref={ref}
       >
         {fieldLabel && (
           <Typography
-            className={clsx(
-              styles.formLabel,
-              {
-                [styles.focused]: focused && !error,
-                [styles.error]: error,
-              }
-            )}
+            className={clsx(styles.formLabel, {
+              [styles.focused]: focused && !error,
+              [styles.error]: error,
+            })}
           >
             {fieldLabel}
           </Typography>
@@ -81,7 +72,7 @@ const EASTextField = React.forwardRef(
             classes: {
               root: styles.helperText,
               error: clsx(styles.helperText, styles.error),
-            }
+            },
           }}
           classes={{
             root: clsx(styles.searchField, fieldClass),
@@ -96,19 +87,24 @@ const EASTextField = React.forwardRef(
             classes: {
               root: clsx(styles.searchField, fieldClass),
               input: clsx(styles.searchInput, inputClass),
-              notchedOutline: variant === 'outlined' ? styles.focusedInput : null,
+              notchedOutline:
+                variant === 'outlined' ? styles.focusedInput : null,
               error: styles.errorField,
               focused: styles.focusedField,
-              adornedEnd: variant === 'outlined' ? styles.inputAdornedEnd : null,
-              underline: variant === 'standard' ? clsx(styles.underline, {
-                [styles.text]: variant === 'standard'
-              }) : null
-            }
+              adornedEnd:
+                variant === 'outlined' ? styles.inputAdornedEnd : null,
+              underline:
+                variant === 'standard'
+                  ? clsx(styles.underline, {
+                      [styles.text]: variant === 'standard',
+                    })
+                  : null,
+            },
           }}
         />
       </div>
-    )
-  }
-)
+    );
+  },
+);
 
 export default EASTextField;

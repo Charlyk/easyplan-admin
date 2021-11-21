@@ -1,37 +1,24 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { SWRConfig } from 'swr';
-import redirectToUrl from '../../app/utils/redirectToUrl';
-import MainComponent from "../../app/components/common/MainComponent/MainComponent";
-import { getGeneralStatistics, requestFetchClinicAnalytics } from "../../middleware/api/analytics";
-import { fetchAppData } from "../../middleware/api/initialization";
-import parseCookies from "../../app/utils/parseCookies";
-import handleRequestError from "../../app/utils/handleRequestError";
-import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
-import ClinicAnalytics from "../../app/components/dashboard/analytics/ClinicAnalytics";
+import MainComponent from 'app/components/common/MainComponent/MainComponent';
+import ClinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics';
+import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
+import { fetchAppData } from 'middleware/api/initialization';
 
-export default function General(
-  {
-    fallback,
-    query,
-    authToken,
-    analytics
-  }
-) {
+export default function General({ fallback, query, authToken, analytics }) {
   return (
     <SWRConfig value={{ fallback }}>
-      <MainComponent
-        currentPath='/analytics/general'
-        authToken={authToken}
-      >
-        <ClinicAnalytics
-          query={query}
-          analytics={analytics}
-        />
+      <MainComponent currentPath='/analytics/general' authToken={authToken}>
+        <ClinicAnalytics query={query} analytics={analytics} />
       </MainComponent>
     </SWRConfig>
   );
-};
+}
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
@@ -54,7 +41,11 @@ export const getServerSideProps = async ({ req, query }) => {
 
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData.data;
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/analytics/general');
+    const redirectTo = redirectToUrl(
+      currentUser,
+      currentClinic,
+      '/analytics/general',
+    );
     if (redirectTo != null) {
       return {
         redirect: {
@@ -69,7 +60,7 @@ export const getServerSideProps = async ({ req, query }) => {
       query.startDate,
       query.endDate,
       req.headers,
-    )
+    );
     return {
       props: {
         analytics,
@@ -77,12 +68,12 @@ export const getServerSideProps = async ({ req, query }) => {
         query,
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
-          }
-        }
+            ...appData.data,
+          },
+        },
       },
     };
   } catch (error) {
     return handleRequestError(error);
   }
-}
+};

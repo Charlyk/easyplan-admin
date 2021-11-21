@@ -1,11 +1,11 @@
 import React from 'react';
-import { getCurrentUser } from "../middleware/api/auth";
-import LoginWrapper from "../app/components/common/LoginWrapper";
-import { wrapper } from "../store";
-import { getClinicDetails } from "../middleware/api/clinic";
-import parseCookies from "../app/utils/parseCookies";
-import setCookies from "../app/utils/setCookies";
-import checkIsMobileDevice from "../app/utils/checkIsMobileDevice";
+import LoginWrapper from 'app/components/common/LoginWrapper';
+import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
+import parseCookies from 'app/utils/parseCookies';
+import setCookies from 'app/utils/setCookies';
+import { getCurrentUser } from 'middleware/api/auth';
+import { getClinicDetails } from 'middleware/api/clinic';
+import { wrapper } from 'store';
 
 const Login = ({ currentUser, currentClinic, authToken, isMobile }) => {
   return (

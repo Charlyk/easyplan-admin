@@ -19,6 +19,6 @@ const valueToNumber = (newValue) => {
   }
 
   return newValue;
-}
+};
 
 export default valueToNumber;

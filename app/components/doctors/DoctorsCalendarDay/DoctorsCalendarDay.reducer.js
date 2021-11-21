@@ -1,4 +1,4 @@
-import generateReducerActions from "../../../utils/generateReducerActions";
+import generateReducerActions from '../../../utils/generateReducerActions';
 
 export const initialState = {
   schedules: [],
@@ -10,7 +10,7 @@ const reducerTypes = {
   updateSchedule: 'updateSchedule',
   addSchedule: 'addSchedule',
   deleteSchedule: 'deleteSchedule',
-  setHours: 'setHours'
+  setHours: 'setHours',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -40,8 +40,8 @@ export const reducer = (state, action) => {
     case reducerTypes.deleteSchedule:
       return {
         ...state,
-        schedules: state.schedules.filter((item) =>
-          item.id !== action.payload.id
+        schedules: state.schedules.filter(
+          (item) => item.id !== action.payload.id,
         ),
       };
     case reducerTypes.setHours:
@@ -49,4 +49,4 @@ export const reducer = (state, action) => {
     default:
       return state;
   }
-}
+};

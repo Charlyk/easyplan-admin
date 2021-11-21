@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import moment from "moment-timezone";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
 
-export const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@а-яА-Я]/ig;
+export const charactersRegex = /[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/#@а-яА-Я]/gi;
 
 export const initialState = {
   logoFile: null,
@@ -16,7 +16,7 @@ export const initialState = {
   timeZones: [],
   currencies: [],
   isDomainAvailable: false,
-}
+};
 
 const createClinicSlice = createSlice({
   name: 'createClinic',
@@ -35,7 +35,7 @@ const createClinicSlice = createSlice({
         .replaceAll('ș', 's')
         .replaceAll('ț', 't')
         .replaceAll('î', 'i')
-        .replaceAll('â', 'a')
+        .replaceAll('â', 'a');
     },
     setWebsite(state, action) {
       state.website = action.payload;
@@ -77,7 +77,7 @@ const createClinicSlice = createSlice({
     },
     setCountry(state, action) {
       state.country = action.payload;
-    }
+    },
   },
 });
 

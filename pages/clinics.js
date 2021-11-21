@@ -1,11 +1,11 @@
 import React from 'react';
-import { getCurrentUser } from "../middleware/api/auth";
-import parseCookies from "../app/utils/parseCookies";
-import ClinicsList from "../app/components/common/ClinicsList";
-import { wrapper } from "../store";
-import { JwtRegex } from "../app/utils/constants";
-import handleRequestError from "../app/utils/handleRequestError";
-import checkIsMobileDevice from "../app/utils/checkIsMobileDevice";
+import ClinicsList from 'app/components/common/ClinicsList';
+import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
+import { JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import { getCurrentUser } from 'middleware/api/auth';
+import { wrapper } from 'store';
 
 const Clinics = ({ user, authToken, isMobile }) => {
   return <ClinicsList authToken={authToken} user={user} isMobile={isMobile} />;

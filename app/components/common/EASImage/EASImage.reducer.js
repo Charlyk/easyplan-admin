@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   isLoading: false,
   isError: false,
   imageContent: null,
   isAttached: false,
-}
+};
 
 const easImageSlice = createSlice({
   name: 'easImage',
@@ -35,11 +35,7 @@ const easImageSlice = createSlice({
   },
 });
 
-export const {
-  setIsError,
-  setIsLoading,
-  setImageContent,
-  setIsAttached,
-} = easImageSlice.actions;
+export const { setIsError, setIsLoading, setImageContent, setIsAttached } =
+  easImageSlice.actions;
 
 export default easImageSlice.reducer;

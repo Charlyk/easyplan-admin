@@ -1,18 +1,17 @@
 import React from 'react';
-import Drawer from "@material-ui/core/Drawer";
+import Drawer from '@material-ui/core/Drawer';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-
-import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
-import ModalHeader from './ModalHeader';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import styles from './LeftSideModal.module.scss';
+import ModalHeader from './ModalHeader';
 
 const LeftSideModal = (props) => {
   const { show, onClose, children, title, steps, className } = props;
 
   return (
     <Drawer
-      anchor="right"
+      anchor='right'
       open={show}
       onClose={onClose}
       classes={{
@@ -21,7 +20,7 @@ const LeftSideModal = (props) => {
       }}
     >
       <div className={styles.drawerContent}>
-        <ModalHeader title={title} steps={steps} onClose={onClose}/>
+        <ModalHeader title={title} steps={steps} onClose={onClose} />
         {children}
       </div>
     </Drawer>

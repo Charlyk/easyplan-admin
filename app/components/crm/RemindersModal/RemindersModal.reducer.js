@@ -1,7 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import groupBy from 'lodash/groupBy';
-import moment from "moment-timezone";
-import { textForKey } from "../../../utils/localization";
+import moment from 'moment-timezone';
+
+import { textForKey } from '../../../utils/localization';
 
 export const filterOptions = [
   {
@@ -29,7 +30,7 @@ export const initialState = {
   },
   isLoading: false,
   reminders: {},
-  showDateRange: false
+  showDateRange: false,
 };
 
 const remindersModalSlice = createSlice({
@@ -43,7 +44,9 @@ const remindersModalSlice = createSlice({
       state.filters = action.payload;
     },
     setReminders(state, action) {
-      state.reminders = groupBy(action.payload, item => moment(item.dueDate).format('YYYY-MM-DD'));
+      state.reminders = groupBy(action.payload, (item) =>
+        moment(item.dueDate).format('YYYY-MM-DD'),
+      );
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
@@ -53,7 +56,7 @@ const remindersModalSlice = createSlice({
     },
     resetState() {
       return initialState;
-    }
+    },
   },
 });
 

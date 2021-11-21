@@ -1,5 +1,6 @@
-import moment from "moment-timezone";
-import generateReducerActions from "../../../../../utils/generateReducerActions";
+import moment from 'moment-timezone';
+
+import generateReducerActions from '../../../../../utils/generateReducerActions';
 
 /**
  * Filter available time based on start time and service duration
@@ -8,7 +9,11 @@ import generateReducerActions from "../../../../../utils/generateReducerActions"
  * @param {{ duration: number}|null} service
  * @return {Array.<string>}
  */
-export const filterAvailableTime = (availableTime, startTime, service = null) => {
+export const filterAvailableTime = (
+  availableTime,
+  startTime,
+  service = null,
+) => {
   return availableTime.filter((item) => {
     const [startH, startM] = startTime.split(':');
     const [h, m] = item.split(':');
@@ -159,8 +164,8 @@ export const reducer = (state, action) => {
         endTime: availableEndTime.includes(endTime)
           ? endTime
           : availableEndTime.length > 0
-            ? availableEndTime[0]
-            : '',
+          ? availableEndTime[0]
+          : '',
       };
     }
     case reducerTypes.setEndTime: {
@@ -217,7 +222,8 @@ export const reducer = (state, action) => {
       const schedule = action.payload;
       const scheduleStartDate = moment(schedule.startTime);
       const scheduleEndDate = moment(schedule.endTime);
-      const { patient, doctor, service, noteText, scheduleStatus, isUrgent } = schedule;
+      const { patient, doctor, service, noteText, scheduleStatus, isUrgent } =
+        schedule;
       return {
         ...state,
         scheduleId: schedule.id,

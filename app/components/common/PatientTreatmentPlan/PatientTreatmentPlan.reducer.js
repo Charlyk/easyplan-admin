@@ -1,5 +1,9 @@
-import { getServicesData, getScheduleDetails } from "./PatientTreatmentPlan.utils";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+
+import {
+  getServicesData,
+  getScheduleDetails,
+} from './PatientTreatmentPlan.utils';
 
 export const initialState = {
   isLoading: false,
@@ -38,7 +42,7 @@ const treatmentPlanSlice = createSlice({
       state.selectedServices = services.map((item) => ({
         ...item,
       }));
-      state.servicesFieldValue = ''
+      state.servicesFieldValue = '';
     },
     setSchedule(state, action) {
       state.schedule = action.payload;
@@ -53,19 +57,17 @@ const treatmentPlanSlice = createSlice({
       state.isFinalizing = action.payload;
     },
     setServices(state, action) {
-      const { allServices, toothServices, bracesServices } = getServicesData(action.payload);
+      const { allServices, toothServices, bracesServices } = getServicesData(
+        action.payload,
+      );
       state.allServices = allServices;
       state.toothServices = toothServices;
       state.bracesServices = bracesServices;
     },
     setScheduleDetails(state, action) {
       const { data, clinicCurrency } = action.payload;
-      const {
-        patient,
-        schedule,
-        selectedServices,
-        completedServices
-      } = getScheduleDetails(data, clinicCurrency, state);
+      const { patient, schedule, selectedServices, completedServices } =
+        getScheduleDetails(data, clinicCurrency, state);
 
       state.patient = patient;
       state.schedule = schedule;
@@ -74,13 +76,10 @@ const treatmentPlanSlice = createSlice({
     },
     setInitialData(state, action) {
       const { schedule: schedulePayload, currency, services } = action.payload;
-      const {
-        patient,
-        schedule,
-        selectedServices,
-        completedServices
-      } = getScheduleDetails(schedulePayload, currency, state);
-      const { allServices, toothServices, bracesServices } = getServicesData(services);
+      const { patient, schedule, selectedServices, completedServices } =
+        getScheduleDetails(schedulePayload, currency, state);
+      const { allServices, toothServices, bracesServices } =
+        getServicesData(services);
 
       state.patient = patient;
       state.schedule = schedule;
@@ -98,7 +97,7 @@ const treatmentPlanSlice = createSlice({
         state.teethModal = action.payload;
       }
     },
-  }
+  },
 });
 
 export const {

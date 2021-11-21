@@ -1,28 +1,26 @@
 import React, { useMemo, useRef, useState } from 'react';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
-import Typography from '@material-ui/core/Typography';
-
-import { Statuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
+import PropTypes from 'prop-types';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { Statuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import styles from './Schedule.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const offsetDistance = 20;
 const minScheduleHeight = 32;
 const entireMinHeight = 100;
 
-const Schedule = (
-  {
-    schedule,
-    index,
-    firstHour,
-    animatedStatuses,
-    onScheduleSelect,
-  }
-) => {
+const Schedule = ({
+  schedule,
+  index,
+  firstHour,
+  animatedStatuses,
+  onScheduleSelect,
+}) => {
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
   const [isHighlighted, setIsHighlighted] = useState(false);
@@ -50,7 +48,7 @@ const Schedule = (
 
   const topPosition = useMemo(() => {
     if (firstHour == null) {
-      return 0
+      return 0;
     }
     const startTime = moment(schedule.startTime);
     const [hours, minutes] = firstHour.split(':');
@@ -82,21 +80,16 @@ const Schedule = (
   };
 
   const height = getScheduleHeight();
-  const itemRect = { height, top: topPosition }
+  const itemRect = { height, top: topPosition };
 
   return (
-    <div
-      role='button'
-      tabIndex={0}
+    <Box
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
-      className={clsx(
-        styles.dayViewSchedule,
-        {
-          [styles.upcoming]: shouldAnimate,
-          [styles.urgent]: schedule.isUrgent || schedule.urgent,
-        },
-      )}
+      className={clsx(styles.dayViewSchedule, {
+        [styles.upcoming]: shouldAnimate,
+        [styles.urgent]: schedule.isUrgent || schedule.urgent,
+      })}
       onClick={handleScheduleClick}
       style={{
         left: isHighlighted
@@ -126,7 +119,9 @@ const Schedule = (
           <div className='flexContainer'>
             <Typography
               noWrap
-              classes={{ root: clsx(styles.hourLabel, isPause && styles.pause) }}
+              classes={{
+                root: clsx(styles.hourLabel, isPause && styles.pause),
+              }}
             >
               {startHour} - {endHour}
             </Typography>
@@ -134,7 +129,9 @@ const Schedule = (
               <Typography
                 noWrap
                 style={{ marginLeft: 3 }}
-                classes={{ root: clsx(styles.hourLabel, isPause && styles.pause) }}
+                classes={{
+                  root: clsx(styles.hourLabel, isPause && styles.pause),
+                }}
               >
                 (+{schedule.delayTime} min)
               </Typography>
@@ -145,7 +142,7 @@ const Schedule = (
                   styles.statusIcon,
                   (scheduleStatus?.id === 'DidNotCome' ||
                     scheduleStatus?.id === 'Canceled') &&
-                  styles.negative,
+                    styles.negative,
                 )}
               >
                 {scheduleStatus?.statusIcon}
@@ -196,7 +193,7 @@ const Schedule = (
           )}
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 
@@ -236,7 +233,7 @@ Schedule.propTypes = {
       'PartialPaid',
       'Paid',
       'Rescheduled',
-    ])
+    ]),
   ),
   startHour: PropTypes.string,
   endHour: PropTypes.string,

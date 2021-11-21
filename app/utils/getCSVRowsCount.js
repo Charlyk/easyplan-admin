@@ -4,14 +4,17 @@
  */
 const getCSVRowsCount = async (file) => {
   return await new Promise((resolve) => {
-    const reader = new FileReader()
-    reader.onload = (ev => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
       const data = ev.target.result;
-      const lines = data.toString().split('\n').filter(line => line.length > 0);
+      const lines = data
+        .toString()
+        .split('\n')
+        .filter((line) => line.length > 0);
       resolve(lines.length);
-    });
+    };
     reader.readAsText(file);
-  })
-}
+  });
+};
 
 export default getCSVRowsCount;

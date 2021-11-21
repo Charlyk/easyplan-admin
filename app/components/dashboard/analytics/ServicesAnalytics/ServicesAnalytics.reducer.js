@@ -1,6 +1,7 @@
-import moment from "moment-timezone";
-import { createSlice } from "@reduxjs/toolkit";
-import { textForKey } from "../../../../utils/localization";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
+
+import { textForKey } from '../../../../utils/localization';
 
 export const initialState = {
   selectedDoctor: { id: -1 },
@@ -35,7 +36,9 @@ const servicesAnalyticsSlice = createSlice({
       state.selectedDoctors = [...state.selectedDoctors, action.payload];
     },
     removeSelectedDoctor(state, action) {
-      state.selectedDoctors = state.selectedDoctors.filter(item => item.id !== action.payload.id);
+      state.selectedDoctors = state.selectedDoctors.filter(
+        (item) => item.id !== action.payload.id,
+      );
     },
     setSelectedServices(state, action) {
       state.selectedServices = action.payload;
@@ -44,7 +47,9 @@ const servicesAnalyticsSlice = createSlice({
       state.selectedServices = [...state.selectedServices, action.payload];
     },
     removeSelectedService(state, action) {
-      state.selectedServices = state.selectedServices.filter(item => item.id !== action.payload.id);
+      state.selectedServices = state.selectedServices.filter(
+        (item) => item.id !== action.payload.id,
+      );
     },
     setSelectedStatuses(state, action) {
       state.selectedStatuses = action.payload;
@@ -53,7 +58,9 @@ const servicesAnalyticsSlice = createSlice({
       state.selectedStatuses = [...state.selectedStatuses, action.payload];
     },
     removeSelectedStatus(state, action) {
-      state.selectedStatuses = state.selectedStatuses.filter(item => item.id !== action.payload.id);
+      state.selectedStatuses = state.selectedStatuses.filter(
+        (item) => item.id !== action.payload.id,
+      );
     },
     setDoctors(state, action) {
       state.doctors = action.payload;
@@ -90,18 +97,30 @@ const servicesAnalyticsSlice = createSlice({
       state.selectedStatus = action.payload;
     },
     setInitialQuery(state, action) {
-      const { page, rowsPerPage, status, doctorId, serviceId, fromDate, toDate } = action.payload;
+      const {
+        page,
+        rowsPerPage,
+        status,
+        doctorId,
+        serviceId,
+        fromDate,
+        toDate,
+      } = action.payload;
       state.page = page;
       state.rowsPerPage = rowsPerPage;
       state.selectedStatuses = [{ id: status }];
-      state.selectedDoctors = [{
-        id: parseInt(String(doctorId || -1)),
-        name: textForKey('All doctors')
-      }];
-      state.selectedServices = [{
-        id: parseInt(String(serviceId || -1)),
-        name: textForKey('All services')
-      }];
+      state.selectedDoctors = [
+        {
+          id: parseInt(String(doctorId || -1)),
+          name: textForKey('All doctors'),
+        },
+      ];
+      state.selectedServices = [
+        {
+          id: parseInt(String(serviceId || -1)),
+          name: textForKey('All services'),
+        },
+      ];
       state.dateRange = [moment(fromDate).toDate(), moment(toDate).toDate()];
     },
     setUrlParams(state, action) {
@@ -116,8 +135,8 @@ const servicesAnalyticsSlice = createSlice({
       state.selectedStatus = [{ id: status || 'All' }];
       state.dateRange = [fromDate, toDate];
       state.params = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -145,4 +164,4 @@ export const {
   setUrlParams,
 } = servicesAnalyticsSlice.actions;
 
-export default servicesAnalyticsSlice.reducer
+export default servicesAnalyticsSlice.reducer;

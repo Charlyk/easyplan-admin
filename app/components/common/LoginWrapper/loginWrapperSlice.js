@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const FormType = {
   login: 'login',
@@ -21,7 +21,7 @@ const loginWrapperSlice = createSlice({
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
-      state.errorMessage = action.payload ? null : state.errorMessage
+      state.errorMessage = action.payload ? null : state.errorMessage;
     },
     setErrorMessage(state, action) {
       state.errorMessage = action.payload;
@@ -29,7 +29,7 @@ const loginWrapperSlice = createSlice({
     setShowBlockedAccess(state, action) {
       state.isLoading = false;
       state.showBlockedAccess = action.payload;
-    }
+    },
   },
 });
 
@@ -37,7 +37,7 @@ export const {
   setCurrentForm,
   setIsLoading,
   setErrorMessage,
-  setShowBlockedAccess
+  setShowBlockedAccess,
 } = loginWrapperSlice.actions;
 
 export default loginWrapperSlice.reducer;

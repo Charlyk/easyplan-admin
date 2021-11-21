@@ -1,5 +1,5 @@
-import moment from "moment-timezone";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
 
 export const initialState = {
   isSaving: false,
@@ -19,8 +19,8 @@ export const initialState = {
     countryCode: 'md',
     dialCode: '373',
     format: '+... ... ... ... ... ..',
-    name: 'Moldova'
-  }
+    name: 'Moldova',
+  },
 };
 
 const patientPersonalDataSlice = createSlice({
@@ -65,8 +65,8 @@ const patientPersonalDataSlice = createSlice({
       state.lastName = lastName;
       state.language = language;
       state.source = source;
-      state.birthday = birthday ? moment(birthday).toDate() : null
-      state.email = email
+      state.birthday = birthday ? moment(birthday).toDate() : null;
+      state.email = email;
       state.phoneNumber = phoneNumber;
       state.country = { dialCode: countryCode, countryCode: 'md' };
       state.euroDebt = euroDebt;
@@ -93,18 +93,21 @@ const patientPersonalDataSlice = createSlice({
       state.source = action.payload;
     },
     setAllTags(state, action) {
-      state.allTags = action.payload.map(item => ({ ...item, name: item.title }));
+      state.allTags = action.payload.map((item) => ({
+        ...item,
+        name: item.title,
+      }));
     },
     setPatientTags(state, action) {
       state.tags = action.payload;
     },
     addPatientTag(state, action) {
-      if (!state.tags.some(it => it.id === action.payload.id)) {
+      if (!state.tags.some((it) => it.id === action.payload.id)) {
         state.tags = [action.payload, ...state.tags];
       }
     },
     removeTag(state, action) {
-      state.tags = state.tags.filter(it => it.id !== action.payload.id);
+      state.tags = state.tags.filter((it) => it.id !== action.payload.id);
     },
   },
 });
@@ -126,6 +129,6 @@ export const {
   setPatientTags,
   addPatientTag,
   removeTag,
-} = patientPersonalDataSlice.actions
+} = patientPersonalDataSlice.actions;
 
-export default patientPersonalDataSlice.reducer
+export default patientPersonalDataSlice.reducer;

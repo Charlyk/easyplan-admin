@@ -1,10 +1,10 @@
-import axios from "axios";
-import { authorized } from "../authorized";
+import axios from 'axios';
 import cookie from 'cookie';
-import { handler } from "../handler";
-import getSubdomain from "../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { authorized } from '../authorized';
+import { handler } from '../handler';
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -32,7 +32,7 @@ export default authorized(async (req, res) => {
     default:
       res.setHeader('Allow', ['POST', 'PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
-      break
+      break;
   }
 });
 
@@ -42,7 +42,7 @@ async function createClinic(req) {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.contentType]: 'application/json',
-    }
+    },
   });
 }
 
@@ -55,7 +55,7 @@ async function updateClinicInfo(req) {
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
       [HeaderKeys.contentType]: 'application/json',
-    }
+    },
   });
 }
 
@@ -66,6 +66,6 @@ async function deleteClinic(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
-    }
+    },
   });
 }

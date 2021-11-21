@@ -1,11 +1,11 @@
-import axios from "axios";
-import updatedServerUrl from "../../app/utils/updateServerUrl";
+import axios from 'axios';
+import updatedServerUrl from 'app/utils/updateServerUrl';
 
 export const config = {
   api: {
     externalResolver: true,
   },
-}
+};
 
 export default async (req, res) => {
   switch (req.method) {
@@ -28,5 +28,7 @@ export default async (req, res) => {
 
 function fetchImages(req) {
   const { fileName } = req.query;
-  return axios.get(`${updatedServerUrl(req)}/files/${fileName}`, { responseType: 'arraybuffer' });
+  return axios.get(`${updatedServerUrl(req)}/files/${fileName}`, {
+    responseType: 'arraybuffer',
+  });
 }

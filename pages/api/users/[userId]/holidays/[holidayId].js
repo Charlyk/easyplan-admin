@@ -1,10 +1,10 @@
-import axios from "axios";
-import { authorized } from "../../../authorized";
+import axios from 'axios';
 import cookie from 'cookie';
-import { handler } from "../../../handler";
-import getSubdomain from "../../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { authorized } from '../../../authorized';
+import { handler } from '../../../handler';
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -25,11 +25,14 @@ export default authorized(async (req, res) => {
 function deleteHoliday(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
   const { userId, holidayId } = req.query;
-  return axios.delete(`${updatedServerUrl(req)}/users/${userId}/holidays/${holidayId}`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
+  return axios.delete(
+    `${updatedServerUrl(req)}/users/${userId}/holidays/${holidayId}`,
+    {
+      headers: {
+        [HeaderKeys.authorization]: auth_token,
+        [HeaderKeys.clinicId]: clinic_id,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+      },
+    },
+  );
 }

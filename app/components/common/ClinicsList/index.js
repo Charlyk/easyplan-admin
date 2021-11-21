@@ -1,1 +1,1 @@
-export { default } from './ClinicsList'
+export { default } from './ClinicsList';

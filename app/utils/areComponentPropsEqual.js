@@ -1,5 +1,5 @@
-import pickBy from 'lodash/pickBy';
 import isEqual from 'lodash/isEqual';
+import pickBy from 'lodash/pickBy';
 
 export default function areComponentPropsEqual(prevProps, nextProps) {
   const notFuncDelegator = (value) => typeof value !== 'function';

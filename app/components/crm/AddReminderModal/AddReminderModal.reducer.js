@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import moment from "moment-timezone";
-import { textForKey } from "../../../utils/localization";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
+
+import { textForKey } from '../../../utils/localization';
 
 const tomorrow = moment().add(1, 'day');
 
@@ -16,15 +17,15 @@ export const reminderTypes = [
 ];
 
 export const initialState = {
-  startTime:tomorrow.format('HH:mm'),
-  endTime: tomorrow.add(15, "minutes").format('HH:mm'),
+  startTime: tomorrow.format('HH:mm'),
+  endTime: tomorrow.add(15, 'minutes').format('HH:mm'),
   patient: null,
   date: tomorrow.toDate(),
   user: null,
   type: reminderTypes[0],
   note: '',
   isLoading: false,
-}
+};
 
 const addReminderModalSlice = createSlice({
   name: 'addReminderModal',

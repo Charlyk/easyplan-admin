@@ -1,7 +1,7 @@
 import React from 'react';
-import { wrapper } from "../store";
-import RegistrationWrapper from "../app/components/common/RegistrationWrapper";
-import checkIsMobileDevice from "../app/utils/checkIsMobileDevice";
+import RegistrationWrapper from 'app/components/common/RegistrationWrapper';
+import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
+import { wrapper } from 'store';
 
 const Register = ({ isMobile }) => {
   return <RegistrationWrapper isMobile={isMobile} />;
@@ -12,8 +12,8 @@ export const getServerSideProps = async ({ req }) => {
 
   return {
     props: {
-      isMobile
-    }
+      isMobile,
+    },
   };
 };
 

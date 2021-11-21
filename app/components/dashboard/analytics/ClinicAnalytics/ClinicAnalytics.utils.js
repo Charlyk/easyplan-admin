@@ -1,5 +1,6 @@
-import moment from "moment-timezone";
-import { textForKey } from "../../../../utils/localization";
+import moment from 'moment-timezone';
+
+import { textForKey } from 'app/utils/localization';
 
 export const noLegendOptions = {
   maintainAspectRatio: false,
@@ -12,7 +13,7 @@ export const noLegendOptions = {
       boxWidth: 6,
     },
   },
-}
+};
 
 export const barChartOptions = {
   responsive: true,
@@ -24,7 +25,7 @@ export const barChartOptions = {
       boxWidth: 6,
     },
   },
-}
+};
 
 export const horizontalBarOptions = {
   maintainAspectRatio: false,
@@ -38,7 +39,7 @@ export const horizontalBarOptions = {
       boxWidth: 6,
     },
   },
-}
+};
 
 export const rightLegendOptions = {
   maintainAspectRatio: true,
@@ -81,8 +82,8 @@ export const getServicesChartData = (services) => {
  * @param {string[]} dates
  */
 const formatDates = (dates) => {
-  return dates.map(date => moment(date).format('DD MMM'))
-}
+  return dates.map((date) => moment(date).format('DD MMM'));
+};
 
 export const getBarchartTestData = () => {
   return {
@@ -100,7 +101,20 @@ export const getBarchartTestData = () => {
 
 export const getHorizontalBarTestData = () => {
   return {
-    labels: ['Facebook', 'Instagram', 'Twitter', 'TV', 'Radio', 'Other', 'Facebook', 'Instagram', 'Twitter', 'TV', 'Radio', 'Other'],
+    labels: [
+      'Facebook',
+      'Instagram',
+      'Twitter',
+      'TV',
+      'Radio',
+      'Other',
+      'Facebook',
+      'Instagram',
+      'Twitter',
+      'TV',
+      'Radio',
+      'Other',
+    ],
     datasets: [
       {
         label: 'Sursa pacientilor',
@@ -110,8 +124,8 @@ export const getHorizontalBarTestData = () => {
         borderWidth: 1,
       },
     ],
-  }
-}
+  };
+};
 
 export const getDoctorIncomeChartData = () => {
   return {
@@ -131,8 +145,8 @@ export const getDoctorIncomeChartData = () => {
         borderWidth: 1,
       },
     ],
-  }
-}
+  };
+};
 
 export const getDoctorVisitsData = () => {
   return {
@@ -152,5 +166,5 @@ export const getDoctorVisitsData = () => {
         borderWidth: 1,
       },
     ],
-  }
-}
+  };
+};

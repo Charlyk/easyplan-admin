@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 import cookie from 'cookie';
-import getSubdomain from "../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../app/utils/constants";
-import { authorized } from "../authorized";
-import { handler } from "../handler";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { authorized } from '../authorized';
+import { handler } from '../handler';
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -46,19 +46,19 @@ async function createNewTag(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
-    }
+    },
   });
 }
 
 async function deleteTag(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { tagId } = req.query
+  const { tagId } = req.query;
   return axios.delete(`${updatedServerUrl(req)}/tags/${tagId}`, {
     headers: {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
-    }
+    },
   });
 }
 
@@ -69,6 +69,6 @@ async function fetchAllTags(req) {
       [HeaderKeys.authorization]: auth_token,
       [HeaderKeys.clinicId]: clinic_id,
       [HeaderKeys.subdomain]: getSubdomain(req),
-    }
+    },
   });
 }

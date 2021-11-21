@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
-import moment from 'moment-timezone';
-import { useRouter } from "next/router";
-import Head from "next/head";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import moment from 'moment-timezone';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-
-import AppLogoBlue from '../../app/components/icons/appLogoBlue';
-import LoadingButton from '../../app/components/common/LoadingButton';
-import urlToLambda from '../../app/utils/urlToLambda';
-import { textForKey } from '../../app/utils/localization';
+import EASImage from 'app/components/common/EASImage';
+import LoadingButton from 'app/components/common/LoadingButton';
+import AppLogoBlue from 'app/components/icons/appLogoBlue';
+import styles from 'app/styles/ScheduleConfirmation.module.scss';
+import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
+import urlToLambda from 'app/utils/urlToLambda';
 import {
   fetchScheduleConfirmationInfo,
-  requestConfirmSchedule
-} from "../../middleware/api/schedules";
-import styles from '../../app/styles/ScheduleConfirmation.module.scss';
-import checkIsMobileDevice from "../../app/utils/checkIsMobileDevice";
-import EASImage from "../../app/components/common/EASImage";
+  requestConfirmSchedule,
+} from 'middleware/api/schedules';
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();
@@ -29,7 +28,8 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const [isCanceling, setIsCanceling] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const isPending = schedule.status === 'Pending' || schedule.status === 'WaitingForPatient';
+  const isPending =
+    schedule.status === 'Pending' || schedule.status === 'WaitingForPatient';
 
   const confirmSchedule = async () => {
     if (schedule.status === 'Confirmed') {
@@ -51,7 +51,12 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const cancelSchedule = async () => {
     setIsCanceling(true);
     try {
-      await requestConfirmSchedule(scheduleId, patientId, 'Canceled', textForKey('canceled_by_patient'));
+      await requestConfirmSchedule(
+        scheduleId,
+        patientId,
+        'Canceled',
+        textForKey('canceled_by_patient'),
+      );
       setIsError(false);
       await router.reload();
     } catch (error) {
@@ -80,11 +85,9 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
     <div className={styles.scheduleConfirmationRoot}>
       <Head>
         <title>
-          {
-            schedule?.clinicName != null
-              ? `${schedule.clinicName} - ${textForKey('Confirmation')}`
-              : `EasyPlan.pro - ${textForKey('Confirmation')}`
-          }
+          {schedule?.clinicName != null
+            ? `${schedule.clinicName} - ${textForKey('Confirmation')}`
+            : `EasyPlan.pro - ${textForKey('Confirmation')}`}
         </title>
       </Head>
       {!schedule && (
@@ -92,9 +95,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
           {textForKey('Schedule info not found')}
         </Typography>
       )}
-      {logoSrc && (
-        <EASImage className={styles['logo-image']}  src={logoSrc}/>
-      )}
+      {logoSrc && <EASImage className={styles['logo-image']} src={logoSrc} />}
       {schedule && !isError && (
         <TableContainer className={styles.tableContainer}>
           <Table>
@@ -216,7 +217,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
         <div className={styles.label}>
           powered by{' '}
           <a href='https://easyplan.md' target='_blank' rel='noreferrer'>
-            <AppLogoBlue/>
+            <AppLogoBlue />
           </a>
         </div>
       </div>
@@ -227,21 +228,25 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
 export const getServerSideProps = async ({ req, query }) => {
   try {
     const isMobile = checkIsMobileDevice(req);
-    const { patient } = query
+    const { patient } = query;
     const [scheduleId, patientId] = patient;
-    const { data: schedule } = await fetchScheduleConfirmationInfo(scheduleId, patientId, req.headers);
+    const { data: schedule } = await fetchScheduleConfirmationInfo(
+      scheduleId,
+      patientId,
+      req.headers,
+    );
     return {
       props: {
         isMobile,
         patient,
         schedule,
         scheduleId,
-        patientId
+        patientId,
       },
     };
   } catch (error) {
     throw error;
   }
-}
+};
 
 export default Confirmation;

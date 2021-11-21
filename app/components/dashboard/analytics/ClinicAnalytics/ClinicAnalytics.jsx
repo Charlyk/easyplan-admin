@@ -1,44 +1,35 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from 'react';
+import Grid from '@material-ui/core/Grid';
+import moment from 'moment-timezone';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import moment from "moment-timezone";
-import Grid from "@material-ui/core/Grid";
-import { textForKey } from "../../../../utils/localization";
-import EasyDateRangePicker from "../../../common/EasyDateRangePicker";
-import EASTextField from "../../../common/EASTextField";
-import StatisticFilter from "../StatisticFilter";
-import ServicesChart from "./ServicesChart";
-import DoctorVisitsChart from "./DoctorVisitsChart";
-import DoctorsIncomeChart from "./DoctorsIncomeChart";
-import DoctorsConversionChart from "./DoctorsConversionChart";
-import TotalVisitsChart from "./TotalVisistsChart";
-import SentMessagesChart from "./SentMessagesChart";
-import TreatedPatientsChart from './TreatedPatientsChart';
-import AmountsChart from "./AmountsChart";
-import ClientsChart from "./ClientsChart";
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import { textForKey } from 'app/utils/localization';
+import StatisticFilter from '../StatisticFilter';
+import AmountsChart from './AmountsChart';
+import ClientsChart from './ClientsChart';
+import styles from './ClinicAnalytics.module.scss';
 import reducer, {
   initialState,
-  setSelectedDoctor,
-  setInitialQuery,
   setSelectedRange,
-  setDoctors,
-  setShowRangePicker
+  setShowRangePicker,
 } from './ClinicAnalytics.reducer';
-import styles from './ClinicAnalytics.module.scss';
-import PatientsSourceChart from "./PatientsSourceChart";
-import { useRouter } from "next/router";
+import DoctorsConversionChart from './DoctorsConversionChart';
+import DoctorsIncomeChart from './DoctorsIncomeChart';
+import DoctorVisitsChart from './DoctorVisitsChart';
+import PatientsSourceChart from './PatientsSourceChart';
+import SentMessagesChart from './SentMessagesChart';
+import ServicesChart from './ServicesChart';
+import TotalVisitsChart from './TotalVisistsChart';
+import TreatedPatientsChart from './TreatedPatientsChart';
 
-const ClinicAnalytics = ({ currentUser, query, currentClinic, analytics }) => {
+const ClinicAnalytics = ({ query, currentClinic, analytics }) => {
   const router = useRouter();
   const pickerRef = useRef(null);
-  const [
-    {
-      selectedDoctor,
-      showRangePicker,
-      selectedRange
-    },
-    localDispatch
-  ] = useReducer(reducer, initialState);
-  const [startDate, endDate] = selectedRange
+  const [{ selectedDoctor, showRangePicker, selectedRange }, localDispatch] =
+    useReducer(reducer, initialState);
+  const [startDate, endDate] = selectedRange;
 
   useEffect(() => {
     if (query == null) {
@@ -66,14 +57,14 @@ const ClinicAnalytics = ({ currentUser, query, currentClinic, analytics }) => {
     const params = {
       startDate: moment(startDate).format('YYYY-MM-DD'),
       endDate: moment(endDate).format('YYYY-MM-DD'),
-    }
+    };
     if (selectedDoctor.id !== -1) {
-      params.doctorId = selectedDoctor.id
+      params.doctorId = selectedDoctor.id;
     }
     await router.replace({
       pathname: '/analytics/general',
-      query: params
-    })
+      query: params,
+    });
   };
 
   return (
@@ -94,8 +85,8 @@ const ClinicAnalytics = ({ currentUser, query, currentClinic, analytics }) => {
         <Grid
           container
           spacing={1}
-          direction="row"
-          alignItems="stretch"
+          direction='row'
+          alignItems='stretch'
           className={styles.gridContainer}
         >
           <ServicesChart services={analytics.services} />

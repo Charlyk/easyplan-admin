@@ -1,5 +1,5 @@
-import moment from "moment-timezone";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
 
 export const initialState = {
   doctors: [],
@@ -34,7 +34,7 @@ const clinicAnalyticsSlice = createSlice({
         moment(fromDate).toDate(),
         moment(toDate).toDate(),
       ];
-    }
+    },
   },
 });
 

@@ -1,18 +1,18 @@
 import React, { useEffect, useReducer } from 'react';
+import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
-import Typography from "@material-ui/core/Typography";
 import { useRouter } from 'next/router';
-import { toast } from "react-toastify";
-
-import getRedirectUrlForUser from "../../../utils/getRedirectUrlForUser";
-import getClinicUrl from '../../../utils/getClinicUrl'
-import { textForKey } from "../../../utils/localization";
-import { loginUser, resetUserPassword, signOut } from "../../../../middleware/api/auth";
-import { appBaseUrl, environment, isDev } from "../../../../eas.config";
-import { RestrictedSubdomains } from "../../../utils/constants";
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import ConfirmationModal from "../modals/ConfirmationModal";
-import EASImage from "../EASImage";
+import { toast } from 'react-toastify';
+import EASImage from 'app/components/common/EASImage';
+import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
+import { RestrictedSubdomains } from 'app/utils/constants';
+import getClinicUrl from 'app/utils/getClinicUrl';
+import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
+import { appBaseUrl, environment, isDev } from 'eas.config';
+import { loginUser, resetUserPassword, signOut } from 'middleware/api/auth';
+import styles from './LoginWrapper.module.scss';
 import reducer, {
   initialState,
   setCurrentForm,
@@ -20,21 +20,23 @@ import reducer, {
   setIsLoading,
   setShowBlockedAccess,
   FormType,
-} from './loginWrapperSlice'
-import styles from './LoginWrapper.module.scss';
+} from './loginWrapperSlice';
 
 const ResetPassword = dynamic(() => import('./ResetPassword'));
 const LoginForm = dynamic(() => import('./LoginForm'));
 
-export default function LoginWrapper({ currentUser, currentClinic, authToken, isMobile }) {
+export default function LoginWrapper({
+  currentUser,
+  currentClinic,
+  authToken,
+  isMobile,
+}) {
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
-  const [{
-    currentForm,
-    isLoading,
-    errorMessage,
-    showBlockedAccess,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    { currentForm, isLoading, errorMessage, showBlockedAccess },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
   const isMobileDevice = isMobile || isOnPhone;
 
   useEffect(() => {
@@ -56,14 +58,14 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
     } else {
       await router.replace('/analytics/general');
     }
-  }
+  };
 
   const handleFormChange = (newForm) => {
     localDispatch(setCurrentForm(newForm));
-  }
+  };
 
   const handleOpenLogin = () => {
-    handleFormChange(FormType.login)
+    handleFormChange(FormType.login);
   };
 
   const handleGoToResetPassword = () => {
@@ -98,7 +100,9 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       if (data.error) {
         localDispatch(setErrorMessage(data.message));
       } else {
-        toast.success(textForKey("We've sent an email with further instructions."))
+        toast.success(
+          textForKey("We've sent an email with further instructions."),
+        );
         localDispatch(setErrorMessage(null));
         handleFormChange(FormType.login);
       }
@@ -107,7 +111,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
     } finally {
       localDispatch(setIsLoading(false));
     }
-  }
+  };
 
   /**
    * Called when user is authenticated successfully
@@ -119,7 +123,8 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
     localDispatch(setErrorMessage(null));
     localDispatch(setIsLoading(false));
     const [subdomainPart] = window.location.host.split('.');
-    const subdomain = environment === 'local' ? process.env.DEFAULT_CLINIC : subdomainPart
+    const subdomain =
+      environment === 'local' ? process.env.DEFAULT_CLINIC : subdomainPart;
     if (RestrictedSubdomains.includes(subdomain)) {
       if (user.clinics.length > 1) {
         // user has more than one clinic so we need to allow to select a clinic
@@ -135,7 +140,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       // user is on clinic page so we need to open selected clinic
       await handleSuccessResponse(user, subdomain);
     }
-  }
+  };
 
   /**
    * Called when an action is received from server. Used to redirect user to create a clinic or to select one
@@ -151,25 +156,25 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
         await router.replace('/clinics');
         break;
       case 'AccessBlocked':
-        localDispatch(setShowBlockedAccess(true))
+        localDispatch(setShowBlockedAccess(true));
         await signOut();
-        break
+        break;
       default:
         localDispatch(setIsLoading(false));
         break;
     }
-  }
+  };
 
   const handleCloseAccessBlocked = () => {
     localDispatch(setShowBlockedAccess(false));
-  }
+  };
 
   /**
    * Called when login crash is caught
    * @param {any} error
    */
   const handleLoginError = (error) => {
-    const { response, message } = error
+    const { response, message } = error;
     if (response != null) {
       toast.error(textForKey(response.data.message ?? message));
       localDispatch(setErrorMessage(response.data.message));
@@ -177,7 +182,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       toast.error(message);
       localDispatch(setErrorMessage(message));
     }
-  }
+  };
 
   /**
    * Authenticate user
@@ -206,7 +211,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
     } finally {
       localDispatch(setIsLoading(false));
     }
-  }
+  };
 
   return (
     <div className={styles.loginFormRoot}>
@@ -219,7 +224,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <EASImage
-          src="settings/easyplan-logo.svg"
+          src='settings/easyplan-logo.svg'
           classes={{
             root: styles.logoContainer,
             image: styles.logoImage,
@@ -235,7 +240,7 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       >
         {isMobileDevice && (
           <EASImage
-            src="settings/easyplan-logo.svg"
+            src='settings/easyplan-logo.svg'
             className={styles.logoImage}
           />
         )}
@@ -262,4 +267,4 @@ export default function LoginWrapper({ currentUser, currentClinic, authToken, is
       </div>
     </div>
   );
-};
+}

@@ -1,14 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
-import { textForKey } from "../../../utils/localization";
-import moment from "moment-timezone";
+import moment from 'moment-timezone';
+
+import { textForKey } from '../../../utils/localization';
 
 export const sheetActions = [
   {
     name: textForKey('Rename column'),
     key: 'renameColumn',
     icon: null,
-    type: 'default'
+    type: 'default',
   },
   {
     name: textForKey('Change column color'),
@@ -40,7 +41,7 @@ export const sheetActions = [
     icon: null,
     type: 'destructive',
   },
-]
+];
 
 export const STATUS_LOADING = 1;
 export const STATUS_LOADED = 2;
@@ -98,7 +99,7 @@ const dealsColumnSlice = createSlice({
       state.totalElements = action.payload.total;
       const currentItems = state.items;
       for (let item of action.payload.data) {
-        if (!currentItems.some(deal => deal.id === item.id)) {
+        if (!currentItems.some((deal) => deal.id === item.id)) {
           currentItems.push(item);
         }
       }
@@ -112,26 +113,40 @@ const dealsColumnSlice = createSlice({
       state.isFetching = action.payload;
     },
     addNewDeal(state, action) {
-      const dealExists = state.items.some(item => item.id === action.payload.id);
+      const dealExists = state.items.some(
+        (item) => item.id === action.payload.id,
+      );
       if (!dealExists) {
         const newDeal = {
           ...action.payload,
-          lastUpdated: moment(action.payload.lastUpdated).format('YYYY-MM-DD HH:mm:ss')
+          lastUpdated: moment(action.payload.lastUpdated).format(
+            'YYYY-MM-DD HH:mm:ss',
+          ),
         };
         console.log(newDeal);
-        state.items = orderBy([...state.items, newDeal], ['lastUpdated'], ['desc']);
+        state.items = orderBy(
+          [...state.items, newDeal],
+          ['lastUpdated'],
+          ['desc'],
+        );
         state.totalElements = state.totalElements + 1;
       }
     },
     removeDeal(state, action) {
-      const dealExists = state.items.some(item => item.id === action.payload.id);
-      state.items = state.items.filter(item => item.id !== action.payload.id);
-      state.totalElements = dealExists ? state.totalElements - 1 : state.totalElements;
+      const dealExists = state.items.some(
+        (item) => item.id === action.payload.id,
+      );
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+      state.totalElements = dealExists
+        ? state.totalElements - 1
+        : state.totalElements;
     },
     setUpdatedDeal(state, action) {
       const newDeal = {
         ...action.payload,
-        lastUpdated: moment(action.payload.lastUpdated).format('YYYY-MM-DD HH:mm:ss')
+        lastUpdated: moment(action.payload.lastUpdated).format(
+          'YYYY-MM-DD HH:mm:ss',
+        ),
       };
       const { state: itemState } = newDeal;
       const { dealState: columnState } = state;
@@ -151,7 +166,11 @@ const dealsColumnSlice = createSlice({
             return newDeal;
           });
         } else {
-          state.items = orderBy([...state.items, newDeal], ['lastUpdated'], ['desc']);
+          state.items = orderBy(
+            [...state.items, newDeal],
+            ['lastUpdated'],
+            ['desc'],
+          );
           state.totalElements = state.totalElements + 1;
         }
       }
@@ -171,13 +190,13 @@ const dealsColumnSlice = createSlice({
       state.loadedRowsMap = { ...state.loadedRowsMap, [row]: loadingState };
     },
     setRowsLoading(state, action) {
-      const { rows, state: loadingState} = action.payload;
-      const newState = {}
+      const { rows, state: loadingState } = action.payload;
+      const newState = {};
       for (let row of rows) {
         newState[row] = loadingState;
       }
       state.loadedRowsMap = { ...state.loadedRowsMap, ...newState };
-    }
+    },
   },
 });
 

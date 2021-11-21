@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   isLoading: false,
@@ -26,7 +26,7 @@ const acceptClinicInvitationSlice = createSlice({
       state.lastName = action.payload;
     },
     setPhoneNumber(state, action) {
-      const { number, isValid, country } = action.payload;
+      const { number, isValid } = action.payload;
       state.phoneNumber = number;
       state.isPhoneValid = isValid;
     },
@@ -53,7 +53,6 @@ export const {
   setFirstName,
   setPassword,
   setIsLoading,
-  setIsPhoneValid,
   setLastName,
   setPhoneNumber,
   setAvatarFile,

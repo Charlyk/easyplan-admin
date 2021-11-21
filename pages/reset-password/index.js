@@ -1,7 +1,7 @@
 import React from 'react';
-import { JwtRegex } from '../../app/utils/constants';
-import { wrapper } from "../../store";
-import ResetPasswordPage from "../../app/components/common/ResetPasswordPage";
+import ResetPasswordPage from 'app/components/common/ResetPasswordPage';
+import { JwtRegex } from 'app/utils/constants';
+import { wrapper } from 'store';
 
 const ResetPasswordForm = ({ token }) => {
   return <ResetPasswordPage token={token} />;
@@ -21,9 +21,9 @@ export const getServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      token: token ?? ""
-    }
-  }
-}
+      token: token ?? '',
+    },
+  };
+};
 
 export default wrapper.withRedux(ResetPasswordForm);

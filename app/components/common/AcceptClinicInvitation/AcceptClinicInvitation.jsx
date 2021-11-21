@@ -1,21 +1,21 @@
 import React, { useReducer } from 'react';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import IconButton from "@material-ui/core/IconButton";
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
-import { requestAcceptInvitation } from "../../../../middleware/api/users";
-import { textForKey } from '../../../utils/localization';
-import { PasswordRegex, Role } from '../../../utils/constants';
-import isPhoneNumberValid from "../../../utils/isPhoneNumberValid";
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
+import { PasswordRegex, Role } from 'app/utils/constants';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import { requestAcceptInvitation } from 'middleware/api/users';
+import EASImage from '../EASImage';
+import EASPhoneInput from '../EASPhoneInput';
+import EASTextField from '../EASTextField';
 import LoadingButton from '../LoadingButton';
-import UploadAvatar from "../UploadAvatar";
-import EASTextField from "../EASTextField";
-import EASPhoneInput from "../EASPhoneInput";
-import EASImage from "../EASImage";
+import UploadAvatar from '../UploadAvatar';
 import reducer, {
   initialState,
   setFirstName,
@@ -31,7 +31,7 @@ import styles from './AcceptInvitation.module.scss';
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
-  const isMobileDevice = isMobile || isOnPhone
+  const isMobileDevice = isMobile || isOnPhone;
   const isNewUser = isNew === '1';
   const [
     {
@@ -55,7 +55,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
     localDispatch(setLastName(newValue));
   };
 
-  const handleAvatarChange = file => {
+  const handleAvatarChange = (file) => {
     if (file != null) {
       localDispatch(setAvatarFile(file));
     }
@@ -65,7 +65,9 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
     localDispatch(
       setPhoneNumber({
         number: `+${value}`,
-        isValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+        isValid:
+          isPhoneNumberValid(value, country) &&
+          !event.target?.classList.value.includes('invalid-number'),
         country,
       }),
     );
@@ -89,7 +91,8 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
   };
 
   const handleSuccessResponse = async (user) => {
-    const selectedClinic = user.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
+    const selectedClinic =
+      user.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
     if (selectedClinic != null) {
       switch (selectedClinic.roleInClinic) {
         case Role.reception:
@@ -106,7 +109,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
     } else {
       await router.replace('/login');
     }
-  }
+  };
 
   const handleAcceptInvitation = async () => {
     if (isNewUser && !isFormValid()) {
@@ -121,11 +124,15 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
         phoneNumber,
         invitationToken: token,
       };
-      const { data: user } = await requestAcceptInvitation(requestBody, avatarFile, {
-        [HeaderKeys.clinicId]: -1,
-      });
+      const { data: user } = await requestAcceptInvitation(
+        requestBody,
+        avatarFile,
+        {
+          [HeaderKeys.clinicId]: -1,
+        },
+      );
       toast.success(textForKey('invitation_accepted_success'));
-      await handleSuccessResponse(user)
+      await handleSuccessResponse(user);
     } catch (error) {
       console.error(error);
       if (error.response != null) {
@@ -141,14 +148,13 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
 
   return (
     <div
-      className={clsx(
-        styles.generalPage,
-        { [styles.mobileDevice]: isMobileDevice }
-      )}
+      className={clsx(styles.generalPage, {
+        [styles.mobileDevice]: isMobileDevice,
+      })}
     >
       {!isMobileDevice && (
         <EASImage
-          src="settings/easyplan-logo.svg"
+          src='settings/easyplan-logo.svg'
           classes={{
             root: styles.logoContainer,
             image: styles.logoImage,
@@ -156,34 +162,31 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
         />
       )}
       <div
-        className={clsx(
-          styles.formContainer,
-          { [styles.mobileDevice]: isMobileDevice }
-        )}
+        className={clsx(styles.formContainer, {
+          [styles.mobileDevice]: isMobileDevice,
+        })}
       >
         {isMobileDevice && (
           <EASImage
-            src="settings/easyplan-logo.svg"
+            src='settings/easyplan-logo.svg'
             className={styles.logoImage}
           />
         )}
         <form
-          className={clsx(
-            styles.formRoot,
-            styles.acceptInvitation,
-            { [styles.mobileDevice]: isMobileDevice }
-          )}
+          className={clsx(styles.formRoot, styles.acceptInvitation, {
+            [styles.mobileDevice]: isMobileDevice,
+          })}
         >
           <div className={styles.fieldsWrapper}>
             {isNewUser ? (
               <div className={styles.formWrapper}>
-                  <span className={styles.formTitle}>
-                    {textForKey('Accept invitation')}
-                  </span>
+                <span className={styles.formTitle}>
+                  {textForKey('Accept invitation')}
+                </span>
 
                 <span className={styles.welcomeText}>
-                    {textForKey('accept invitation message')}
-                  </span>
+                  {textForKey('accept invitation message')}
+                </span>
 
                 <UploadAvatar
                   className={styles.uploadAvatar}
@@ -192,7 +195,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
                 />
 
                 <EASTextField
-                  type="text"
+                  type='text'
                   containerClass={styles.textField}
                   fieldLabel={textForKey('Last name')}
                   value={lastName}
@@ -200,7 +203,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
                 />
 
                 <EASTextField
-                  type="text"
+                  type='text'
                   containerClass={styles.textField}
                   fieldLabel={textForKey('First name')}
                   value={firstName}
@@ -229,14 +232,16 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
                       onClick={togglePasswordVisibility}
                       className={styles.visibilityToggleBtn}
                     >
-                      {isPasswordVisible ? <VisibilityOff/> : <VisibilityOn/>}
+                      {isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}
                     </IconButton>
                   }
                 />
               </div>
             ) : (
               <div>
-                <Typography className={styles.formTitle}>{textForKey('Accept invitation')}</Typography>
+                <Typography className={styles.formTitle}>
+                  {textForKey('Accept invitation')}
+                </Typography>
                 <Typography className={styles.welcomeText}>
                   {textForKey('Click on button below to accept the invitation')}
                 </Typography>
@@ -244,13 +249,10 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
             )}
           </div>
           <div
-            className={clsx(
-              styles.footer,
-              {
-                [styles.isNew]: isNewUser,
-                [styles.mobileDevice]: isMobileDevice,
-              },
-            )}
+            className={clsx(styles.footer, {
+              [styles.isNew]: isNewUser,
+              [styles.mobileDevice]: isMobileDevice,
+            })}
           >
             <LoadingButton
               isLoading={isLoading}

@@ -1,14 +1,14 @@
-import React from "react";
-import moment from "moment-timezone";
-import { SWRConfig } from "swr";
-import CalendarContainer from "../../../app/components/dashboard/calendar/CalendarContainer";
-import CalendarMonthView from "../../../app/components/dashboard/calendar/CalendarMonthView";
-import redirectToUrl from '../../../app/utils/redirectToUrl';
-import { fetchAppData } from "../../../middleware/api/initialization";
-import { APP_DATA_API, JwtRegex, Role } from "../../../app/utils/constants";
-import parseCookies from "../../../app/utils/parseCookies";
-import handleRequestError from "../../../app/utils/handleRequestError";
-import { wrapper } from "../../../store";
+import React from 'react';
+import moment from 'moment-timezone';
+import { SWRConfig } from 'swr';
+import CalendarContainer from 'app/components/dashboard/calendar/CalendarContainer';
+import CalendarMonthView from 'app/components/dashboard/calendar/CalendarMonthView';
+import { APP_DATA_API, JwtRegex, Role } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAppData } from 'middleware/api/initialization';
+import { wrapper } from 'store';
 
 const Month = ({ fallback, doctorId, date, doctors, authToken }) => {
   const viewDate = moment(date).toDate();
@@ -21,13 +21,10 @@ const Month = ({ fallback, doctorId, date, doctors, authToken }) => {
         viewMode='month'
         authToken={authToken}
       >
-        <CalendarMonthView
-          doctorId={doctorId}
-          viewDate={viewDate}
-        />
+        <CalendarMonthView doctorId={doctorId} viewDate={viewDate} />
       </CalendarContainer>
     </SWRConfig>
-  )
+  );
 };
 
 export default wrapper.withRedux(Month);
@@ -49,7 +46,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
 
     const appData = await fetchAppData(req.headers);
     const { currentUser, currentClinic } = appData.data;
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/calendar/month');
+    const redirectTo = redirectToUrl(
+      currentUser,
+      currentClinic,
+      '/calendar/month',
+    );
     if (redirectTo != null) {
       return {
         redirect: {
@@ -59,9 +60,10 @@ export const getServerSideProps = async ({ req, res, query }) => {
       };
     }
     // filter clinic doctors
-    const doctors = currentClinic?.users?.filter((item) =>
-      item.roleInClinic === Role.doctor && item.showInCalendar
-    ) || [];
+    const doctors =
+      currentClinic?.users?.filter(
+        (item) => item.roleInClinic === Role.doctor && item.showInCalendar,
+      ) || [];
 
     // check if doctor id is present in query
     let doctorId = query.doctorId;
@@ -77,11 +79,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
         authToken,
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
-          }
+            ...appData.data,
+          },
         },
-      }
-    }
+      },
+    };
   } catch (error) {
     return handleRequestError(error);
   }

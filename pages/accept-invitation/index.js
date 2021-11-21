@@ -1,7 +1,7 @@
 import React from 'react';
-import AcceptClinicInvitation from "../../app/components/common/AcceptClinicInvitation";
-import { JwtRegex } from "../../app/utils/constants";
-import checkIsMobileDevice from "../../app/utils/checkIsMobileDevice";
+import AcceptClinicInvitation from 'app/components/common/AcceptClinicInvitation';
+import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
+import { JwtRegex } from 'app/utils/constants';
 
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
   return (
@@ -21,8 +21,8 @@ export const getServerSideProps = ({ query, req }) => {
     };
   }
   return {
-    props: { token, isNew, isMobile }
-  }
-}
+    props: { token, isNew, isMobile },
+  };
+};
 
 export default AcceptInvitation;

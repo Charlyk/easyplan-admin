@@ -1,33 +1,19 @@
 import React from 'react';
-import { SWRConfig } from "swr";
-import redirectToUrl from '../../app/utils/redirectToUrl';
-import MainComponent from "../../app/components/common/MainComponent/MainComponent";
-import { getPatients } from "../../middleware/api/patients";
-import { fetchAppData } from "../../middleware/api/initialization";
-import parseCookies from "../../app/utils/parseCookies";
-import PatientsList from "../../app/components/dashboard/patients/PatientsList";
-import { APP_DATA_API, JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../app/utils/handleRequestError";
+import { SWRConfig } from 'swr';
+import MainComponent from 'app/components/common/MainComponent/MainComponent';
+import PatientsList from 'app/components/dashboard/patients/PatientsList';
+import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAppData } from 'middleware/api/initialization';
+import { getPatients } from 'middleware/api/patients';
 
-const NewPatients = (
-  {
-    fallback,
-    data,
-    query: initialQuery,
-    authToken
-  }
-) => {
+const NewPatients = ({ fallback, data, query: initialQuery, authToken }) => {
   return (
     <SWRConfig value={{ fallback }}>
-      <MainComponent
-        currentPath='/patients'
-        authToken={authToken}
-      >
-        <PatientsList
-          authToken={authToken}
-          query={initialQuery}
-          data={data}
-        />
+      <MainComponent currentPath='/patients' authToken={authToken}>
+        <PatientsList authToken={authToken} query={initialQuery} data={data} />
       </MainComponent>
     </SWRConfig>
   );
@@ -72,14 +58,14 @@ export const getServerSideProps = async ({ req, query }) => {
         data,
         fallback: {
           [APP_DATA_API]: {
-            ...appData.data
-          }
+            ...appData.data,
+          },
         },
       },
     };
   } catch (error) {
     return handleRequestError(error);
   }
-}
+};
 
 export default NewPatients;

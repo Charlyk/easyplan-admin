@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   currentTab: '0',
   patientData: null,
   isLoading: false,
-}
+};
 
 const linkPatientModalSlice = createSlice({
   name: 'linkPatientModal',
@@ -21,15 +21,11 @@ const linkPatientModalSlice = createSlice({
     },
     resetState() {
       return initialState;
-    }
+    },
   },
 });
 
-export const {
-  setIsLoading,
-  setPatientData,
-  setCurrentTab,
-  resetState,
-} = linkPatientModalSlice.actions;
+export const { setIsLoading, setPatientData, setCurrentTab, resetState } =
+  linkPatientModalSlice.actions;
 
 export default linkPatientModalSlice.reducer;

@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import moment from "moment-timezone";
-import { availableHours } from "../CreateMessageDialog.constants";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
+
+import { availableHours } from '../CreateMessageDialog.constants';
 
 export const initialState = {
   isLoading: false,
@@ -48,7 +49,7 @@ const holidayMessageSlice = createSlice({
       state.message = JSON.parse(message.messageText);
       state.hourToSend = message.hourToSendAt;
       state.messageDate = moment(message.dateToSend).toDate();
-    }
+    },
   },
 });
 
@@ -65,4 +66,3 @@ export const {
 } = holidayMessageSlice.actions;
 
 export default holidayMessageSlice.reducer;
-

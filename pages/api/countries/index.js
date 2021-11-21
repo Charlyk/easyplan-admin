@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 import cookie from 'cookie';
-import { handler } from "../handler";
-import getSubdomain from "../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import { handler } from '../handler';
 
 export default async function countries(req, res) {
   switch (req.method) {
@@ -19,7 +19,7 @@ export default async function countries(req, res) {
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
-};
+}
 
 async function fetchCountries(req) {
   const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);

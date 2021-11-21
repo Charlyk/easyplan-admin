@@ -14,6 +14,6 @@ const getClinicExchangeRates = (currentClinic) => {
     });
   }
   return currencies;
-}
+};
 
 export default getClinicExchangeRates;

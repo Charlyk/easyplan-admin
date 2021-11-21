@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { parsePhoneNumber } from "libphonenumber-js";
-import { textForKey } from "../../../../utils/localization";
+import { createSlice } from '@reduxjs/toolkit';
+import { parsePhoneNumber } from 'libphonenumber-js';
+
+import { textForKey } from '../../../../utils/localization';
 
 export const initialState = {
   firstName: '',
@@ -12,7 +13,7 @@ export const initialState = {
   phoneCountry: { countryCode: 'md', dialCode: '373' },
   email: '',
   birthday: null,
-}
+};
 
 const newPatientFormSlice = createSlice({
   name: 'newPatientForm',
@@ -38,12 +39,14 @@ const newPatientFormSlice = createSlice({
     },
     setContact(state, action) {
       try {
-        state.email = action.payload.email ?? ''
+        state.email = action.payload.email ?? '';
         const phoneWithPlus = action.payload.phoneNumber.startsWith('+')
           ? action.payload.phoneNumber.trim()
-          : `+${action.payload.phoneNumber.trim()}`
+          : `+${action.payload.phoneNumber.trim()}`;
         const phoneNumber = parsePhoneNumber(phoneWithPlus);
-        state.phoneNumber = action.payload.phoneNumber ? phoneNumber.nationalNumber : ''
+        state.phoneNumber = action.payload.phoneNumber
+          ? phoneNumber.nationalNumber
+          : '';
         const [firstName, lastName] = action.payload.name.split(' ');
         state.firstName = firstName;
         state.lastName = lastName;
@@ -52,11 +55,11 @@ const newPatientFormSlice = createSlice({
       }
     },
     setLanguage(state, action) {
-      state.language = action.payload
+      state.language = action.payload;
     },
     setPatientSource(state, action) {
       state.source = action.payload;
-    }
+    },
   },
 });
 
