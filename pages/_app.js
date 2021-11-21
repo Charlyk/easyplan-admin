@@ -202,7 +202,7 @@ const App = ({ Component, pageProps }) => {
               <NextNprogress
                 color='#29D'
                 startPosition={0.3}
-                height='2'
+                height={2}
               />
               <Component {...pageProps} />
             </>
