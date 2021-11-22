@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
@@ -9,6 +9,10 @@ import styles from './DoctorVisitsChart.module.scss';
 import { DoctorVisitsChartProps } from './DoctorVisitsChart.types';
 
 const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({ visits }) => {
+  const data = useMemo(() => {
+    return getDoctorVisitsData(visits);
+  }, [visits]);
+
   return (
     <Grid item xs={3} className={styles.doctorVisitsChart}>
       <div className={clsx(styles.visitsChart, 'chartItem')}>
@@ -16,7 +20,7 @@ const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({ visits }) => {
           {textForKey('analytics_doctor_visits')}
         </Typography>
         <Pie
-          data={getDoctorVisitsData(visits)}
+          data={data}
           height={120}
           options={{
             maintainAspectRatio: true,

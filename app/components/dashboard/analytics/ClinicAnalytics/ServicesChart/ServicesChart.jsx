@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
@@ -7,11 +7,19 @@ import { Line } from 'react-chartjs-2';
 import { textForKey } from 'app/utils/localization';
 import {
   getServicesChartData,
-  noLegendOptions,
+  getChartOptions,
 } from '../ClinicAnalytics.utils';
 import styles from './ServicesChart.module.scss';
 
 const ServicesChart = ({ services }) => {
+  const data = useMemo(() => {
+    return getServicesChartData(services);
+  }, [services]);
+
+  const options = useMemo(() => {
+    return getChartOptions('start', false);
+  }, []);
+
   return (
     <Grid item xs={12} className={styles.servicesChart}>
       <div className={clsx(styles.servicesChart, 'chartItem')}>
@@ -19,12 +27,7 @@ const ServicesChart = ({ services }) => {
           {textForKey('analytics_services_completed_planned')}
         </Typography>
         <div className={styles.chartWrapper}>
-          <Line
-            type='line'
-            height={50}
-            data={getServicesChartData(services)}
-            options={noLegendOptions}
-          />
+          <Line type='line' height={50} data={data} options={options} />
         </div>
       </div>
     </Grid>

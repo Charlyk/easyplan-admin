@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import { PolarArea } from 'react-chartjs-2';
 import { textForKey } from 'app/utils/localization';
-import {
-  getDoctorIncomeChartData,
-  rightLegendOptions,
-} from '../ClinicAnalytics.utils';
+import { getDoctorIncomeChartData } from '../ClinicAnalytics.utils';
 import styles from './DoctorsIncomeChart.module.scss';
 
 const DoctorsIncomeChart = ({ incomes }) => {
+  const data = useMemo(() => {
+    return getDoctorIncomeChartData(incomes);
+  }, [incomes]);
+
   return (
     <Grid item xs={3} className={styles.doctorsIncomeChart}>
       <div className={clsx(styles.incomeChartWrapper, 'chartItem')}>
@@ -19,9 +20,16 @@ const DoctorsIncomeChart = ({ incomes }) => {
         </Typography>
         <PolarArea
           type='polarArea'
-          data={getDoctorIncomeChartData(incomes)}
+          data={data}
           height={120}
-          options={rightLegendOptions}
+          options={{
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: 'bottom',
+              },
+            },
+          }}
         />
       </div>
     </Grid>
