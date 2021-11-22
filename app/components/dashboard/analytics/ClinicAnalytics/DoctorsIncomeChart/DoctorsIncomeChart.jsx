@@ -10,7 +10,7 @@ import {
 } from '../ClinicAnalytics.utils';
 import styles from './DoctorsIncomeChart.module.scss';
 
-const DoctorsIncomeChart = () => {
+const DoctorsIncomeChart = ({ incomes }) => {
   return (
     <Grid item xs={3} className={styles.doctorsIncomeChart}>
       <div className={clsx(styles.incomeChartWrapper, 'chartItem')}>
@@ -19,7 +19,7 @@ const DoctorsIncomeChart = () => {
         </Typography>
         <PolarArea
           type='polarArea'
-          data={getDoctorIncomeChartData()}
+          data={getDoctorIncomeChartData(incomes)}
           height={120}
           options={rightLegendOptions}
         />

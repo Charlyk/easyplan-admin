@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import { colorArray } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 
 export const noLegendOptions = {
@@ -98,26 +99,18 @@ export const getBarchartTestData = () => {
   };
 };
 
-export const getHorizontalBarTestData = () => {
+/**
+ * Get patients source chart data
+ * @param {AnalyticsSourceView[]} sources
+ * @return {ChartData<"bar", number[], string>}
+ */
+export const getHorizontalBarTestData = (sources) => {
   return {
-    labels: [
-      'Facebook',
-      'Instagram',
-      'Twitter',
-      'TV',
-      'Radio',
-      'Other',
-      'Facebook',
-      'Instagram',
-      'Twitter',
-      'TV',
-      'Radio',
-      'Other',
-    ],
+    labels: sources.map((item) => textForKey(item.source)),
     datasets: [
       {
         label: 'Sursa pacientilor',
-        data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+        data: sources.map((item) => item.amount),
         backgroundColor: '#3A83DC',
         borderColor: '#3A83DC',
         borderWidth: 1,
@@ -126,42 +119,39 @@ export const getHorizontalBarTestData = () => {
   };
 };
 
-export const getDoctorIncomeChartData = () => {
+/**
+ * Get chart data for doctor visits
+ * @param {AnalyticsDoctorIncome[]} visits
+ * @return {ChartData<"pie", number[], string>}
+ */
+export const getDoctorIncomeChartData = (incomes) => {
   return {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: incomes.map((item) => item.firstName),
     datasets: [
       {
         label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
+        data: incomes.map((item) => item.amount),
+        backgroundColor: incomes.map((_, index) => colorArray[index]),
         borderWidth: 1,
       },
     ],
   };
 };
 
-export const getDoctorVisitsData = () => {
+/**
+ * Get chart data for doctor visits
+ * @param {AnalyticsDoctorVisits[]} visits
+ * @return {ChartData<"pie", number[], string>}
+ */
+export const getDoctorVisitsData = (visits) => {
   return {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    type: 'pie',
+    labels: visits.map((item) => item.firstName),
     datasets: [
       {
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
+        label: '',
+        data: visits.map((item) => item.visits),
+        backgroundColor: visits.map((_, index) => colorArray[index]),
         borderWidth: 1,
       },
     ],

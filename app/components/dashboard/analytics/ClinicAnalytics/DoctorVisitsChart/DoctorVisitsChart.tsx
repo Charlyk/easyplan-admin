@@ -4,13 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import { Pie } from 'react-chartjs-2';
 import { textForKey } from 'app/utils/localization';
-import {
-  getDoctorVisitsData,
-  rightLegendOptions,
-} from '../ClinicAnalytics.utils';
+import { getDoctorVisitsData } from '../ClinicAnalytics.utils';
 import styles from './DoctorVisitsChart.module.scss';
+import { DoctorVisitsChartProps } from './DoctorVisitsChart.types';
 
-const DoctorVisitsChart = () => {
+const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({ visits }) => {
   return (
     <Grid item xs={3} className={styles.doctorVisitsChart}>
       <div className={clsx(styles.visitsChart, 'chartItem')}>
@@ -18,10 +16,16 @@ const DoctorVisitsChart = () => {
           {textForKey('analytics_doctor_visits')}
         </Typography>
         <Pie
-          type='pie'
-          data={getDoctorVisitsData()}
+          data={getDoctorVisitsData(visits)}
           height={120}
-          options={rightLegendOptions}
+          options={{
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: 'bottom',
+              },
+            },
+          }}
         />
       </div>
     </Grid>

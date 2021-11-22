@@ -2,10 +2,10 @@ import React, { useEffect, useReducer, useRef } from 'react';
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment-timezone';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import { textForKey } from 'app/utils/localization';
+import { API } from 'types/api';
 import StatisticFilter from '../StatisticFilter';
 import AmountsChart from './AmountsChart';
 import ClientsChart from './ClientsChart';
@@ -15,6 +15,7 @@ import reducer, {
   setSelectedRange,
   setShowRangePicker,
 } from './ClinicAnalytics.reducer';
+import { ClinicAnalyticsProps } from './ClinicAnalytics.types';
 import DoctorsConversionChart from './DoctorsConversionChart';
 import DoctorsIncomeChart from './DoctorsIncomeChart';
 import DoctorVisitsChart from './DoctorVisitsChart';
@@ -24,7 +25,11 @@ import ServicesChart from './ServicesChart';
 import TotalVisitsChart from './TotalVisistsChart';
 import TreatedPatientsChart from './TreatedPatientsChart';
 
-const ClinicAnalytics = ({ query, currentClinic, analytics }) => {
+const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
+  query,
+  currentClinic,
+  analytics,
+}) => {
   const router = useRouter();
   const pickerRef = useRef(null);
   const [{ selectedDoctor, showRangePicker, selectedRange }, localDispatch] =
@@ -54,11 +59,11 @@ const ClinicAnalytics = ({ query, currentClinic, analytics }) => {
   };
 
   const handleFilterSubmit = async () => {
-    const params = {
+    const params: API.AnalyticsFilter = {
       startDate: moment(startDate).format('YYYY-MM-DD'),
       endDate: moment(endDate).format('YYYY-MM-DD'),
     };
-    if (selectedDoctor.id !== -1) {
+    if (selectedDoctor != null) {
       params.doctorId = selectedDoctor.id;
     }
     await router.replace({
@@ -71,10 +76,10 @@ const ClinicAnalytics = ({ query, currentClinic, analytics }) => {
     <div className={styles.clinicAnalytics}>
       <StatisticFilter onUpdate={handleFilterSubmit}>
         <EASTextField
+          readOnly
           ref={pickerRef}
           containerClass={styles.filterField}
           fieldLabel={textForKey('Period')}
-          readOnly
           onPointerUp={handleDatePickerOpen}
           value={`${moment(startDate).format('DD MMM YYYY')} - ${moment(
             endDate,
@@ -94,14 +99,14 @@ const ClinicAnalytics = ({ query, currentClinic, analytics }) => {
             currency={currentClinic.currency}
             payments={analytics.payments}
           />
-          <ClientsChart />
+          <ClientsChart clients={analytics.clients} />
           <TotalVisitsChart visits={analytics.visits} />
           <SentMessagesChart messages={analytics.messages} />
           <TreatedPatientsChart patients={analytics.treatedPatients} />
-          <DoctorVisitsChart />
-          <DoctorsIncomeChart />
+          <DoctorVisitsChart visits={analytics.doctorVisits} />
+          <DoctorsIncomeChart incomes={analytics.doctorIncome} />
           <DoctorsConversionChart />
-          <PatientsSourceChart />
+          <PatientsSourceChart sources={analytics.patientsSource} />
         </Grid>
       </div>
       <EasyDateRangePicker
@@ -116,41 +121,3 @@ const ClinicAnalytics = ({ query, currentClinic, analytics }) => {
 };
 
 export default ClinicAnalytics;
-
-ClinicAnalytics.propTypes = {
-  query: PropTypes.shape({
-    startDate: PropTypes.string,
-    endDate: PropTypes.string,
-  }),
-  analytics: PropTypes.shape({
-    services: PropTypes.shape({
-      labels: PropTypes.arrayOf(PropTypes.string),
-      planned: PropTypes.arrayOf(PropTypes.number),
-      completed: PropTypes.arrayOf(PropTypes.number),
-    }),
-    payments: PropTypes.shape({
-      paidAmount: PropTypes.number,
-      debtAmount: PropTypes.number,
-    }),
-    visits: PropTypes.number,
-    messages: PropTypes.number,
-    treatedPatients: PropTypes.number,
-  }),
-};
-
-ClinicAnalytics.defaultProps = {
-  analytics: {
-    services: {
-      labels: [],
-      planned: [],
-      completed: [],
-    },
-    payments: {
-      paidAmount: 0,
-      debtAmount: 0,
-    },
-    visits: 0,
-    messages: 0,
-    treatedPatients: 0,
-  },
-};

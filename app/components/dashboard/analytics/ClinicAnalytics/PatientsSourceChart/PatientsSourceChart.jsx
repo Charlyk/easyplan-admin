@@ -9,7 +9,7 @@ import {
 } from '../ClinicAnalytics.utils';
 import styles from './PatientsSourceChart.module.scss';
 
-const PatientsSourceChart = () => {
+const PatientsSourceChart = ({ sources }) => {
   return (
     <Grid item xs={12} className={styles.patientsSourceChart}>
       <div className='chartItem'>
@@ -20,7 +20,7 @@ const PatientsSourceChart = () => {
           <Bar
             type='bar'
             height={400}
-            data={getHorizontalBarTestData()}
+            data={getHorizontalBarTestData(sources)}
             options={horizontalBarOptions}
           />
         </div>

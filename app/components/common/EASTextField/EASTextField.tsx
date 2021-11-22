@@ -3,8 +3,9 @@ import { TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import styles from './EASTextField.module.scss';
+import { EASTextFieldProps } from './EASTextField.types';
 
-const EASTextField = React.forwardRef(
+const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
   (
     {
       fieldLabel,
@@ -22,7 +23,7 @@ const EASTextField = React.forwardRef(
       type,
       autoFocus,
       variant = 'outlined',
-      ...rest
+      ...props
     },
     ref,
   ) => {
@@ -58,9 +59,9 @@ const EASTextField = React.forwardRef(
           </Typography>
         )}
         <TextField
-          {...rest}
+          {...props}
           type={type}
-          variant={variant}
+          variant={variant as any}
           error={error}
           autoFocus={autoFocus}
           helperText={helperText}
