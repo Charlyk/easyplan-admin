@@ -18,6 +18,14 @@ const DoctorsConversionChart = ({ conversions = [] }) => {
     return getChartOptions('start', true, 'x', false);
   }, []);
 
+  const getLabelText = (context) => {
+    let label = context.label || '';
+    if (label) {
+      label += `: ${context.raw} ${textForKey('patients')}`;
+    }
+    return label;
+  };
+
   return (
     <Grid item xs={6} className={styles.doctorsConversionChart}>
       <div className='chartItem'>
@@ -25,7 +33,21 @@ const DoctorsConversionChart = ({ conversions = [] }) => {
           {textForKey('analytics_doctor_conversion')}
         </Typography>
         <div className={styles.chartWrapper}>
-          <Bar type='bar' data={data} options={options} />
+          <Bar
+            type='bar'
+            data={data}
+            options={{
+              ...options,
+              plugins: {
+                ...options.plugins,
+                tooltip: {
+                  callbacks: {
+                    label: getLabelText,
+                  },
+                },
+              },
+            }}
+          />
         </div>
       </div>
     </Grid>

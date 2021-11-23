@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { TooltipItem } from 'chart.js';
 import clsx from 'clsx';
 import { Pie } from 'react-chartjs-2';
 import { textForKey } from 'app/utils/localization';
@@ -12,6 +13,14 @@ const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({ visits }) => {
   const data = useMemo(() => {
     return getDoctorVisitsData(visits);
   }, [visits]);
+
+  const getLabelText = (context: TooltipItem<'pie'>): string => {
+    let label = context.label || '';
+    if (label) {
+      label += `: ${context.raw} ${textForKey('visits')}`;
+    }
+    return label;
+  };
 
   return (
     <Grid item xs={3} className={styles.doctorVisitsChart}>
@@ -27,6 +36,11 @@ const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({ visits }) => {
             plugins: {
               legend: {
                 position: 'bottom',
+              },
+              tooltip: {
+                callbacks: {
+                  label: getLabelText,
+                },
               },
             },
           }}

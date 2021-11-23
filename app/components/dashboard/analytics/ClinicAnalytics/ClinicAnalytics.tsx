@@ -104,7 +104,10 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           <SentMessagesChart messages={analytics.messages} />
           <TreatedPatientsChart patients={analytics.treatedPatients} />
           <DoctorVisitsChart visits={analytics.doctorVisits} />
-          <DoctorsIncomeChart incomes={analytics.doctorIncome} />
+          <DoctorsIncomeChart
+            incomes={analytics.doctorIncome}
+            currency={currentClinic.currency}
+          />
           <DoctorsConversionChart conversions={analytics.conversion} />
           <PatientsSourceChart sources={analytics.patientsSource} />
         </Grid>

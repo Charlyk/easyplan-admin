@@ -139,7 +139,7 @@
     ],
     "import/prefer-default-export": "off",
     "no-console": [
-      "error",
+      "warn",
       {
         "allow": [
           "warn",

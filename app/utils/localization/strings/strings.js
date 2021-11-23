@@ -706,6 +706,7 @@ export default {
     analytics_treated_patients: 'Patients with treatment plan',
     analytics_executed: 'Executed',
     analytics_planned: 'Planned',
+    visits: 'Visits',
   },
   ro: {
     analytics: 'Analitică',
@@ -1423,6 +1424,7 @@ export default {
     analytics_treated_patients: 'Pacienți cu plan de tratament',
     analytics_executed: 'Efectuate',
     analytics_planned: 'Planificate',
+    visits: 'Vizite',
   },
   ru: {
     analytics: 'Analytics',
@@ -2128,5 +2130,6 @@ export default {
     analytics_treated_patients: 'Patients with treatment plan',
     analytics_executed: 'Executed',
     analytics_planned: 'Planned',
+    visits: 'Visits',
   },
 };

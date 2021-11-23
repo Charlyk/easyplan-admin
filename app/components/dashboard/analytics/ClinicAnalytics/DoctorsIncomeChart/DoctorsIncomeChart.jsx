@@ -3,14 +3,23 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import { PolarArea } from 'react-chartjs-2';
+import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import { getDoctorIncomeChartData } from '../ClinicAnalytics.utils';
 import styles from './DoctorsIncomeChart.module.scss';
 
-const DoctorsIncomeChart = ({ incomes }) => {
+const DoctorsIncomeChart = ({ incomes, currency }) => {
   const data = useMemo(() => {
     return getDoctorIncomeChartData(incomes);
   }, [incomes]);
+
+  const getLabelText = (context) => {
+    let label = context.label || '';
+    if (label) {
+      label += `: ${formattedAmount(context.raw, currency)}`;
+    }
+    return label;
+  };
 
   return (
     <Grid item xs={3} className={styles.doctorsIncomeChart}>
@@ -27,6 +36,11 @@ const DoctorsIncomeChart = ({ incomes }) => {
             plugins: {
               legend: {
                 position: 'bottom',
+              },
+              tooltip: {
+                callbacks: {
+                  label: getLabelText,
+                },
               },
             },
           }}
