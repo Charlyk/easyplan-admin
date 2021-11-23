@@ -17,7 +17,7 @@ const ServicesChart = ({ services }) => {
   }, [services]);
 
   const options = useMemo(() => {
-    return getChartOptions('start', false);
+    return getChartOptions('center', false);
   }, []);
 
   return (

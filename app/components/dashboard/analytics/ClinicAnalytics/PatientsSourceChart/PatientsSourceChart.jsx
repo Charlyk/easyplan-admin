@@ -15,7 +15,7 @@ const PatientsSourceChart = ({ sources }) => {
   }, [sources]);
 
   const options = useMemo(() => {
-    return getChartOptions('start', false, 'y');
+    return getChartOptions('center', false, 'y', false);
   }, []);
 
   return (

@@ -20,6 +20,7 @@ export type Analytics = {
   doctorIncome: AnalyticsDoctorIncome[];
   patientsSource: AnalyticsSourceView[];
   clients: AnalyticsClients;
+  conversion: AnalyticsConversion[];
 };
 
 export type AnalyticsServices = {
@@ -55,6 +56,13 @@ export type AnalyticsSourceView = {
 export type AnalyticsClients = {
   new: number;
   repeated: number;
+};
+
+export type AnalyticsConversion = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  converted: number;
 };
 
 export type ClinicAnalyticsState = {

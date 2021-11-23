@@ -1,8 +1,9 @@
 import { ChartData, ChartOptions } from 'chart.js';
 import moment from 'moment-timezone';
-import { colorArray } from 'app/utils/constants';
+import { colorArray, PatientSources } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {
+  AnalyticsConversion,
   AnalyticsDoctorIncome,
   AnalyticsDoctorVisits,
   AnalyticsServices,
@@ -17,6 +18,7 @@ export const getChartOptions = (
   align: 'start' | 'center' | 'end',
   maintainAspectRatio: boolean,
   indexAxis: 'x' | 'y' = null,
+  displayLabel = true,
 ): ChartOptions => ({
   maintainAspectRatio,
   responsive: true,
@@ -24,7 +26,8 @@ export const getChartOptions = (
   plugins: {
     legend: {
       align: align,
-      display: true,
+      display: displayLabel,
+      position: 'bottom',
     },
   },
 });
@@ -53,15 +56,16 @@ export const getServicesChartData = (
   };
 };
 
-export const getBarchartTestData = (): ChartData<'bar'> => {
+export const getConversionsChartData = (
+  conversions: AnalyticsConversion[],
+): ChartData<'bar'> => {
   return {
-    labels: ['Vasile', 'Gheorge', 'Ion', 'Grigore', 'Petrica', 'Eugen'],
+    labels: conversions.map((item) => item.firstName),
     datasets: [
       {
-        label: 'Doctors conversion',
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: '#3A83DC',
-        borderColor: '#3A83DC',
+        label: '',
+        data: conversions.map((item) => item.converted),
+        backgroundColor: conversions.map((_, index) => colorArray[index]),
       },
     ],
   };
@@ -76,8 +80,9 @@ export const getPatientsSourceData = (
       {
         label: textForKey('analytics_clients_source'),
         data: sources.map((item) => item.amount),
-        backgroundColor: '#3A83DC',
-        borderColor: '#3A83DC',
+        backgroundColor: sources.map(
+          (item) => PatientSources.find((src) => src.id === item.source)?.color,
+        ),
         borderWidth: 1,
       },
     ],

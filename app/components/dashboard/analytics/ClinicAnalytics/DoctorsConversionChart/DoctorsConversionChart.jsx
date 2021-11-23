@@ -3,16 +3,19 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { Bar } from 'react-chartjs-2';
 import { textForKey } from 'app/utils/localization';
-import { getBarchartTestData, getChartOptions } from '../ClinicAnalytics.utils';
+import {
+  getConversionsChartData,
+  getChartOptions,
+} from '../ClinicAnalytics.utils';
 import styles from './DoctorsConversionChart.module.scss';
 
-const DoctorsConversionChart = () => {
+const DoctorsConversionChart = ({ conversions = [] }) => {
   const data = useMemo(() => {
-    return getBarchartTestData();
-  }, []);
+    return getConversionsChartData(conversions);
+  }, [conversions]);
 
   const options = useMemo(() => {
-    return getChartOptions('start', true);
+    return getChartOptions('start', true, 'x', false);
   }, []);
 
   return (

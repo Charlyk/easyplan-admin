@@ -105,7 +105,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           <TreatedPatientsChart patients={analytics.treatedPatients} />
           <DoctorVisitsChart visits={analytics.doctorVisits} />
           <DoctorsIncomeChart incomes={analytics.doctorIncome} />
-          <DoctorsConversionChart />
+          <DoctorsConversionChart conversions={analytics.conversion} />
           <PatientsSourceChart sources={analytics.patientsSource} />
         </Grid>
       </div>
