@@ -125,7 +125,7 @@ const App = ({ Component, pageProps }) => {
         window.Tawk_API.addTags([currentClinic.clinicName]);
       }
     } catch (error) {
-      console.error('Error setting user info', error);
+      console.error('Error', error?.message);
     }
   };
 

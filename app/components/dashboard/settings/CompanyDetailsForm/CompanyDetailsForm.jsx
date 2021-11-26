@@ -16,12 +16,12 @@ import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex, HeaderKeys } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import {
   clinicTimeZones,
   deleteClinic,
   updateClinic,
 } from 'middleware/api/clinic';
+import onRequestError from '../../../../utils/onRequestError';
 import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,

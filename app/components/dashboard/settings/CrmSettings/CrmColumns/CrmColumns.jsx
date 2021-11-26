@@ -3,11 +3,11 @@ import { Tooltip } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import SwitchButton from 'app/components/common/SwitchButton';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import {
   requestFetchAllDealStates,
   requestUpdateDealStateVisibility,
 } from 'middleware/api/crm';
+import onRequestError from '../../../../../utils/onRequestError';
 import styles from './CrmColumns.module.scss';
 
 const CrmColumns = () => {

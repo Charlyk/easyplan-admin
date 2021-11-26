@@ -6,12 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import ShareIcon from '@material-ui/icons/Share';
 import EASTextField from 'app/components/common/EASTextField';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import {
   requestCreateTag,
   requestDeleteTag,
   requestFetchTags,
 } from 'middleware/api/tags';
+import onRequestError from '../../../../../utils/onRequestError';
 import styles from './ClinicTags.module.scss';
 
 const ClinicTags = ({ onShare }) => {

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -49,6 +49,7 @@ const PageHeader = ({
 }) => {
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
 
@@ -63,6 +64,13 @@ const PageHeader = ({
   const currentTime = useMemo(() => {
     return moment().format('HH:mm').split(':');
   }, [updateHourIndicator]);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   const handleActionsClose = () => setIsActionsOpen(false);
 
@@ -123,16 +131,18 @@ const PageHeader = ({
         <IconButton className={styles.notifications}>
           <IconNotifications />
         </IconButton>
-        <div className={styles.timeWrapper}>
-          <Typography className={styles.dateLabel}>
-            {moment().format('DD MMM YYYY')}
-          </Typography>
-          <Typography className={styles.timeLabel}>
-            {currentTime[0]}
-            <span className={styles.timeSeparator}>:</span>
-            {currentTime[1]}
-          </Typography>
-        </div>
+        {isMounted && (
+          <div className={styles.timeWrapper}>
+            <Typography className={styles.dateLabel}>
+              {moment().format('DD MMM YYYY')}
+            </Typography>
+            <Typography className={styles.timeLabel}>
+              {currentTime[0]}
+              <span className={styles.timeSeparator}>:</span>
+              {currentTime[1]}
+            </Typography>
+          </div>
+        )}
         <div className={styles.avatarContainer}>
           <EASImage
             enableLoading

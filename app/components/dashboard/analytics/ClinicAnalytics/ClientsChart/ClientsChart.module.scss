@@ -1,4 +1,7 @@
 .clientsChart {
+  max-width: unset !important;
+  flex-grow: 1 !important;
+
   :global(.chartTitle) {
     width: 100%;
     text-align: center;
@@ -8,6 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1;
 
     .counterLabel {
       font-family: Inter, sans-serif !important;

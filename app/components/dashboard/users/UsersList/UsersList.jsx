@@ -11,7 +11,6 @@ import dynamic from 'next/dynamic';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import { deleteInvitation } from 'middleware/api/clinic';
 import {
   deleteUser,
@@ -22,6 +21,7 @@ import {
   restoreUser,
   updateUserCashierStatus,
 } from 'middleware/api/users';
+import onRequestError from '../../../../utils/onRequestError';
 import styles from './UsersList.module.scss';
 import reducer, {
   initialState,

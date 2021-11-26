@@ -15,7 +15,6 @@ import IconClose from 'app/components/icons/iconClose';
 import IconEdit from 'app/components/icons/iconEdit';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import {
   getPatientDetails,
   requestUpdatePatient,
@@ -26,6 +25,7 @@ import {
 } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
 import { HeaderKeys } from '../../../../utils/constants';
+import onRequestError from '../../../../utils/onRequestError';
 import AppointmentNotes from './AppointmentNotes';
 import OrthodonticPlan from './OrthodonticPlan';
 import PatientAppointments from './PatientAppointments';

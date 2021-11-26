@@ -51,6 +51,8 @@ const ActionsSheet = (props) => {
 export default ActionsSheet;
 
 ActionsSheet.propTypes = {
+  open: PropTypes.bool,
+  anchorEl: PropTypes.any,
   actions: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
@@ -59,7 +61,20 @@ ActionsSheet.propTypes = {
       type: PropTypes.oneOf(['default', 'destructive']),
     }),
   ).isRequired,
-  placement: PropTypes.oneOf(['bottom', 'bottom-end', 'bottom-start']),
+  placement: PropTypes.oneOf([
+    'bottom-end',
+    'bottom-start',
+    'bottom',
+    'left-end',
+    'left-start',
+    'left',
+    'right-end',
+    'right-start',
+    'right',
+    'top-end',
+    'top-start',
+    'top',
+  ]),
   onSelect: PropTypes.func,
   onClose: PropTypes.func.isRequired,
 };

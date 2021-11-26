@@ -1,15 +1,18 @@
 import React, { useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { Bar } from 'react-chartjs-2';
+import IconClose from 'app/components/icons/iconClose';
 import { textForKey } from 'app/utils/localization';
+import { ChartType } from 'types/ChartType.type';
 import {
   getChartOptions,
   getPatientsSourceData,
 } from '../ClinicAnalytics.utils';
 import styles from './PatientsSourceChart.module.scss';
 
-const PatientsSourceChart = ({ sources }) => {
+const PatientsSourceChart = ({ sources, onClose, visible = true }) => {
   const data = useMemo(() => {
     return getPatientsSourceData(sources);
   }, [sources]);
@@ -18,9 +21,22 @@ const PatientsSourceChart = ({ sources }) => {
     return getChartOptions('center', false, 'y', false);
   }, []);
 
+  if (!visible || sources == null) {
+    return null;
+  }
+
+  const handleClose = () => {
+    onClose?.(ChartType.ClientsSource);
+  };
+
   return (
     <Grid item xs={12} className={styles.patientsSourceChart}>
       <div className='chartItem'>
+        <div className='buttonContainer'>
+          <IconButton onClick={handleClose}>
+            <IconClose />
+          </IconButton>
+        </div>
         <Typography className='chartTitle'>
           {textForKey('analytics_clients_source')}
         </Typography>

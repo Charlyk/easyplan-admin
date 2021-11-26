@@ -31,13 +31,13 @@ import { textForKey } from 'app/utils/localization';
 import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
-import onRequestError from 'app/utils/onRequestError';
 import { environment } from 'eas.config';
 import { requestFetchRemindersCount } from 'middleware/api/crm';
 import {
   newReminderSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
+import onRequestError from '../../../../utils/onRequestError';
 import ExchangeRates from '../ExchageRates';
 import styles from './MainMenu.module.scss';
 

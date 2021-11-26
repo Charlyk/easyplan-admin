@@ -28,7 +28,6 @@ import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import extractCookieByName from 'app/utils/extractCookieByName';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import setDocCookies from 'app/utils/setDocCookies';
 import {
   fetchAllDealStates,
@@ -43,6 +42,7 @@ import {
   updatedDealSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
+import onRequestError from '../../../utils/onRequestError';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';
