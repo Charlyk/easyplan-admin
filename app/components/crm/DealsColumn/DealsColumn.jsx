@@ -35,7 +35,7 @@ import {
   newDealSelector,
   updatedDealSelector,
 } from 'redux/selectors/crmSelector';
-import onRequestError from '../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import ActionsSheet from '../../common/ActionsSheet';
 import AddColumnModal from '../AddColumnModal';
 import { ItemTypes } from './constants';

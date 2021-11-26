@@ -14,7 +14,7 @@ import { textForKey } from 'app/utils/localization';
 import setDocCookies from 'app/utils/setDocCookies';
 import { requestFetchUserReminders } from 'middleware/api/crm';
 import { updatedReminderSelector } from 'redux/selectors/crmSelector';
-import onRequestError from '../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import HeaderItem from './HeaderItem';
 import ReminderItem from './ReminderItem';
 import styles from './RemindersModal.module.scss';

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import EASModal from 'app/components/common/modals/EASModal';
 import { textForKey } from 'app/utils/localization';
 import { requestLinkPatient } from 'middleware/api/crm';
-import onRequestError from '../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import ExistentPatientForm from './ExistentPatientForm';
 import styles from './LinkPatientModal.module.scss';
 import reducer, {

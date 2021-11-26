@@ -42,7 +42,7 @@ import { savePatientGeneralTreatmentPlan } from 'middleware/api/patients';
 import { setPatientDetails } from 'redux/actions/actions';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
-import onRequestError from '../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import TeethModal from '../TeethModal';
 import styles from './CheckoutModal.module.scss';
 import { actions, initialState, reducer } from './CheckoutModal.reducer';

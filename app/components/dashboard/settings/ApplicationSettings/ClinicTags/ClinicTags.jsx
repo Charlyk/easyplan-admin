@@ -11,7 +11,7 @@ import {
   requestDeleteTag,
   requestFetchTags,
 } from 'middleware/api/tags';
-import onRequestError from '../../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './ClinicTags.module.scss';
 
 const ClinicTags = ({ onShare }) => {

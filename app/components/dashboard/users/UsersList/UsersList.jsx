@@ -21,7 +21,7 @@ import {
   restoreUser,
   updateUserCashierStatus,
 } from 'middleware/api/users';
-import onRequestError from '../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './UsersList.module.scss';
 import reducer, {
   initialState,

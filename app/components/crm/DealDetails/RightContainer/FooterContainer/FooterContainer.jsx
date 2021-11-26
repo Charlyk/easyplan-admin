@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { textForKey } from 'app/utils/localization';
 import { requestCreateDealNote } from 'middleware/api/crm';
 import { requestSendSms } from 'middleware/api/patients';
-import onRequestError from '../../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import AddNoteForm from './AddNoteForm';
 import AddSmsForm from './AddSmsForm/AddSmsForm';
 import styles from './FooterContainer.module.scss';

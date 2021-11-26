@@ -12,7 +12,7 @@ import {
   requestFetchSmsMessages,
   requestSendSms,
 } from 'middleware/api/patients';
-import onRequestError from '../../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import PatientMessage from './PatientMessage';
 import styles from './PatientMessages.module.scss';
 import {

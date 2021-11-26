@@ -21,7 +21,7 @@ import {
   deleteClinic,
   updateClinic,
 } from 'middleware/api/clinic';
-import onRequestError from '../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,

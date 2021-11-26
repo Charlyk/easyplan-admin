@@ -15,8 +15,8 @@ import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getPatientName from 'app/utils/getPatientName';
 import { textForKey } from 'app/utils/localization';
 import { requestChangeDealClinic } from 'middleware/api/crm';
-import onRequestError from '../../../../utils/onRequestError';
-import ActionsSheet from '../../../common/ActionsSheet';
+import onRequestError from 'app/utils/onRequestError';
+import ActionsSheet from 'app/components/common/ActionsSheet';
 import styles from './UnsortedDealItem.module.scss';
 
 const actions = [

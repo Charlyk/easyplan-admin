@@ -42,7 +42,7 @@ import {
   updatedDealSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
-import onRequestError from '../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';

@@ -8,7 +8,7 @@ import LoadingButton from 'app/components/common/LoadingButton';
 import getReminderTexts from 'app/utils/getReminderTexts';
 import { textForKey } from 'app/utils/localization';
 import { requestCompleteReminder } from 'middleware/api/crm';
-import onRequestError from '../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './ReminderItem.module.scss';
 
 const ReminderItem = ({ reminder }) => {

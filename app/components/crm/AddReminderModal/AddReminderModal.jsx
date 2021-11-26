@@ -9,7 +9,7 @@ import PatientsSearchField from 'app/components/common/PatientsSearchField/Patie
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { requestCreateDealReminder } from 'middleware/api/crm';
-import onRequestError from '../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './AddReminderModal.module.scss';
 import reducer, {
   initialState,

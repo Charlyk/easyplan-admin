@@ -14,7 +14,7 @@ import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import { requestFetchReminders } from 'middleware/api/crm';
 import { updatedReminderSelector } from 'redux/selectors/crmSelector';
-import onRequestError from '../../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import Reminder from './Reminder';
 import styles from './RemindersContainer.module.scss';
 

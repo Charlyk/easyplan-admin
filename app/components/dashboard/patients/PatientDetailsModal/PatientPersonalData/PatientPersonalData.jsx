@@ -26,7 +26,7 @@ import {
   requestFetchTags,
   requestUnassignTag,
 } from 'middleware/api/tags';
-import onRequestError from '../../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,

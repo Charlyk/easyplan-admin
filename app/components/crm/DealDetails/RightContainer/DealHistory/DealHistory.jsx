@@ -14,7 +14,7 @@ import {
   updatedDealSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
-import onRequestError from '../../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './DealHistory.module.scss';
 import reducer, {
   initialState,

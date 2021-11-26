@@ -7,7 +7,7 @@ import {
   requestFetchAllDealStates,
   requestUpdateDealStateVisibility,
 } from 'middleware/api/crm';
-import onRequestError from '../../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './CrmColumns.module.scss';
 
 const CrmColumns = () => {

@@ -10,7 +10,7 @@ import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { updateClinic } from 'middleware/api/clinic';
 import { requestShareTags } from 'middleware/api/tags';
-import onRequestError from '../../../../utils/onRequestError';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './ApplicationSettings.module.scss';
 import ClinicTags from './ClinicTags';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
