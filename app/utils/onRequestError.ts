@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import NotificationsContext from 'app/context/notificationsContext';
 
-const onRequestError = (error) => {
+const onRequestError = (error: any) => {
   const toast = useContext(NotificationsContext);
   if (error.response != null) {
     const { data } = error.response;

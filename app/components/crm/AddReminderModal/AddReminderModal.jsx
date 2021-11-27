@@ -8,8 +8,8 @@ import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import { requestCreateDealReminder } from 'middleware/api/crm';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './AddReminderModal.module.scss';
 import reducer, {
   initialState,

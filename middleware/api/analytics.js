@@ -38,7 +38,7 @@ export async function getServicesStatistics(query, headers = null) {
  * @param {string} startDate
  * @param {string} endDate
  * @param {*} headers
- * @return {Promise<AxiosResponse<*>>}
+ * @return {Promise<AxiosResponse<Analytics>>}
  */
 export async function requestFetchClinicAnalytics(
   startDate,

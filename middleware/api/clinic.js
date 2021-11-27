@@ -27,17 +27,6 @@ export async function getClinicDetails(date, headers = null) {
 }
 
 /**
- * Change selected clinic for user
- * @param {string|number} clinicId
- * @param {Object|null} headers
- * @return {Promise<AxiosResponse<*>>}
- */
-export async function changeCurrentClinic(clinicId, headers = null) {
-  const query = new URLSearchParams({ clinicId }).toString();
-  return get(`/api/clinic/change?${query}`, headers);
-}
-
-/**
  * Fetch available timezones
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}

@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function IconClose({ className }) {
+const IconClose = ({ className = null }) => {
   return (
     <svg
       className={className}
@@ -16,6 +17,10 @@ function IconClose({ className }) {
       />
     </svg>
   );
-}
+};
 
 export default React.memo(IconClose);
+
+IconClose.propTypes = {
+  className: PropTypes.string,
+};

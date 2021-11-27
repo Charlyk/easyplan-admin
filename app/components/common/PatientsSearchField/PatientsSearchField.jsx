@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import { getPatients } from 'middleware/api/patients';
+import onRequestError from 'app/utils/onRequestError';
 import EASAutocomplete from '../EASAutocomplete';
 
 const PatientsSearchField = ({

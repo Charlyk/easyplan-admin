@@ -12,9 +12,9 @@ import IconPlus from 'app/components/icons/iconPlus';
 import { textForKey } from 'app/utils/localization';
 import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
-import onRequestError from 'app/utils/onRequestError';
 import { requestFetchReminders } from 'middleware/api/crm';
 import { updatedReminderSelector } from 'redux/selectors/crmSelector';
+import onRequestError from 'app/utils/onRequestError';
 import Reminder from './Reminder';
 import styles from './RemindersContainer.module.scss';
 

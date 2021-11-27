@@ -13,7 +13,7 @@ import { APP_DATA_API } from 'app/utils/constants';
 import paths from 'app/utils/paths';
 import { handleRemoteMessage } from 'app/utils/pubnubUtils';
 import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
-import { environment, isDev } from 'eas.config';
+import { isDev, pubNubEnv } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setAppointmentModal,
@@ -106,12 +106,12 @@ const MainComponent = ({
       const { id } = currentClinic;
       dispatch(setClinic(currentClinic));
       pubnub.subscribe({
-        channels: [`${id}-${environment}-clinic-pubnub-channel`],
+        channels: [`${id}-${pubNubEnv}-clinic-pubnub-channel`],
       });
       pubnub.addListener({ message: handlePubnubMessageReceived });
       return () => {
         pubnub.unsubscribe({
-          channels: [`${id}-${environment}-clinic-pubnub-channel`],
+          channels: [`${id}-${pubNubEnv}-clinic-pubnub-channel`],
         });
       };
     } else {

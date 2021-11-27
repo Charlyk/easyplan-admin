@@ -1,7 +1,8 @@
+import { ChartType } from 'types/ChartType.type';
+
 export type ClinicAnalyticsProps = {
   query: ClinicAnalyticsQuery;
-  analytics: Analytics;
-  currentClinic: Easyplan.CurrentClinic;
+  currentClinic: CurrentClinic;
 };
 
 export type ClinicAnalyticsQuery = {
@@ -66,8 +67,19 @@ export type AnalyticsConversion = {
 };
 
 export type ClinicAnalyticsState = {
-  doctors: Easyplan.ClinicUser[];
-  selectedDoctor?: Easyplan.ClinicUser;
+  doctors: ClinicUser[];
+  selectedDoctor?: ClinicUser;
   showRangePicker: boolean;
   selectedRange: [Date, Date];
+  isFetching: boolean;
+  analytics?: Analytics;
+  selectedCharts: ChartType[];
+  actions: ChartAction[];
+  showActions: boolean;
+};
+
+export type ChartAction = {
+  key: ChartType;
+  name: string;
+  type: 'default' | 'destructive';
 };
