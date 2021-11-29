@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
 import IconClock from 'app/components/icons/iconClock';
@@ -13,7 +14,6 @@ import IconSuccess from 'app/components/icons/iconSuccess';
 import IconXPerson from 'app/components/icons/iconXPerson';
 import { Role, Statuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import EASSelect from '../../../common/EASSelect';
 import styles from './GeneralAnalytics.module.scss';
 import { reducer, actions, initialState } from './GeneralAnalytics.reducer';
 

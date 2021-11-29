@@ -7,13 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import IconClose from 'app/components/icons/iconClose';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import EASSelect from '../../../common/EASSelect';
 import styles from './CrmFilters.module.scss';
 import reducer, {
   defaultRange,

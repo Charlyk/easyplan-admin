@@ -13,12 +13,12 @@ import sum from 'lodash/sum';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import IconList from 'app/components/icons/iconList';
 import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
-import EASSelect from '../../../common/EASSelect';
 import styles from './DoctorsAnalytics.module.scss';
 import reducer, {
   initialState,

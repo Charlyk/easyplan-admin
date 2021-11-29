@@ -2,10 +2,10 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import { textForKey } from 'app/utils/localization';
-import EASSelect from '../../../../common/EASSelect';
 import {
   getRealMessageLength,
   languages,
