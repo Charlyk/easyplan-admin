@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import { EmailRegex, Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import EASSelect from '../../EASSelect';
 import styles from './InviteUserModal.module.scss';
 
 const selectOptions = [

@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import { requestCreateDealReminder } from 'middleware/api/crm';
 import onRequestError from 'app/utils/onRequestError';
+import { requestCreateDealReminder } from 'middleware/api/crm';
+import EASSelect from '../../common/EASSelect';
 import styles from './AddReminderModal.module.scss';
 import reducer, {
   initialState,

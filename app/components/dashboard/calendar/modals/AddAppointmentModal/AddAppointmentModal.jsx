@@ -15,7 +15,6 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
@@ -37,6 +36,7 @@ import {
   postSchedule,
 } from 'middleware/api/schedules';
 import { toggleAppointmentsUpdate } from 'redux/actions/actions';
+import EASSelect from '../../../../common/EASSelect';
 import styles from './AddAppointment.module.scss';
 import { reducer, initialState, actions } from './AddAppointmentModal.reducer';
 

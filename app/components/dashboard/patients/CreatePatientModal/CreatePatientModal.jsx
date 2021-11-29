@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -18,6 +17,7 @@ import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { requestCreatePatient } from 'middleware/api/patients';
 import { togglePatientsListUpdate } from 'redux/actions/actions';
+import EASSelect from '../../../common/EASSelect';
 import styles from './CreatePatientModal.module.scss';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 

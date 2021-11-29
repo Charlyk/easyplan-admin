@@ -4,10 +4,10 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-import EASSelect from 'app/components/common/EASSelect';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { getAppLanguage, textForKey } from 'app/utils/localization';
+import EASSelect from '../../EASSelect';
 import EASModal from '../EASModal';
 
 const EasyDatePickerModal = ({

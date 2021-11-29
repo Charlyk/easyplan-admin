@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import moment from 'moment-timezone';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import { EmailRegex, Languages, PatientSources } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
+import EASSelect from '../../../common/EASSelect';
 import styles from './NewPatientForm.module.scss';
 import reducer, {
   initialState,

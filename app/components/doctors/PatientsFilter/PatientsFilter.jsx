@@ -7,12 +7,12 @@ import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
 import { getAppLanguage, textForKey } from 'app/utils/localization';
 import { clinicServicesSelector } from 'redux/selectors/clinicSelector';
+import EASSelect from '../../common/EASSelect';
 import styles from './PatientsFilter.module.scss';
 
 const PatientsFilter = ({

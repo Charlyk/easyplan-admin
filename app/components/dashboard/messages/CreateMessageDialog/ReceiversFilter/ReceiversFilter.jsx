@@ -10,12 +10,12 @@ import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import NotificationsContext from 'app/context/notificationsContext';
 import { ScheduleStatuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { fetchAllServices } from 'middleware/api/services';
+import EASSelect from '../../../../common/EASSelect';
 import styles from './ReceiversFilter.module.scss';
 import reducer, {
   initialState,

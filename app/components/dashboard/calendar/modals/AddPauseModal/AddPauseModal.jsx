@@ -3,7 +3,6 @@ import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
@@ -16,6 +15,7 @@ import {
   deletePauseRecord,
   fetchPausesAvailableTime,
 } from 'middleware/api/pauses';
+import EASSelect from '../../../../common/EASSelect';
 import styles from './AddPauseModal.module.scss';
 import reducer, {
   initialState,

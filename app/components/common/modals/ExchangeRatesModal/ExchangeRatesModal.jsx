@@ -14,7 +14,6 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import IconTrash from 'app/components/icons/iconTrash';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -26,6 +25,7 @@ import {
 } from 'middleware/api/clinic';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
 import { updateExchangeRatesSelector } from 'redux/selectors/rootSelector';
+import EASSelect from '../../EASSelect';
 import EASModal from '../EASModal';
 import styles from './ExchangeRates.module.scss';
 import { reducer, initialState, actions } from './ExchangeRatesModal.reducer';

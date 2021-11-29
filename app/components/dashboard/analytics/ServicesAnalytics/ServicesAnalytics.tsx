@@ -19,6 +19,8 @@ import EASTextField from 'app/components/common/EASTextField';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { setPatientDetails } from 'redux/actions/actions';
+import ScheduleStatus from 'types/scheduleStatus';
+import { ServicesStatisticResponse } from 'types/ServiceStatistic.type';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
   initialState,
@@ -34,12 +36,28 @@ import reducer, {
   setShowRangePicker,
 } from './ServicesAnalytics.reducer';
 
-const EasyDateRangePicker = dynamic(() =>
-  import('app/components/common/EasyDateRangePicker'),
+const EasyDateRangePicker = dynamic(
+  () => import('app/components/common/EasyDateRangePicker'),
 );
 const StatisticFilter = dynamic(() => import('../StatisticFilter'));
 
-const ServicesAnalytics = ({
+interface ServicesAnalyticsQuery {
+  page: string | number;
+  rowsPerPage: string | number;
+  statuses?: ScheduleStatus[];
+  doctorsId?: string[] | number[];
+  servicesId?: string[] | number[];
+  fromDate: string;
+  toDate: string;
+}
+
+interface ServicesAnalyticsProps {
+  currentClinic: CurrentClinic;
+  statistics: ServicesStatisticResponse;
+  query: ServicesAnalyticsQuery;
+}
+
+const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
   currentClinic,
   statistics: { data: statistics, total: totalItems },
   query: initialQuery,
@@ -90,21 +108,23 @@ const ServicesAnalytics = ({
     localDispatch(setServices(currentClinic.services));
   }, [currentClinic]);
 
-  const handleFilterUpdated = (p = page, rp = rowsPerPage) => {
-    const query = {
-      page: p,
-      rowsPerPage: rp,
+  const handleFilterUpdated = async (p = page, rp = rowsPerPage) => {
+    const query: Record<string, string> = {
+      page: String(p),
+      rowsPerPage: String(rp),
       fromDate: moment(startDate).format('YYYY-MM-DD'),
       toDate: moment(endDate).format('YYYY-MM-DD'),
-      statuses: selectedStatuses.map((status) => status.id),
+      statuses: selectedStatuses.map((status) => status.id).join(','),
     };
 
     if (!selectedDoctors.some((doctor) => doctor.id === -1)) {
-      query.doctorsId = selectedDoctors.map((doctor) => doctor.id);
+      query.doctorsId = selectedDoctors.map((doctor) => doctor.id).join(',');
     }
 
     if (!selectedServices.some((services) => services.id === -1)) {
-      query.servicesId = selectedServices.map((service) => service.id);
+      query.servicesId = selectedServices
+        .map((service) => service.id)
+        .join(',');
     }
 
     if (isEqual(query, initialQuery)) {
@@ -112,11 +132,11 @@ const ServicesAnalytics = ({
     }
 
     const queryString = new URLSearchParams(query).toString();
-    router.replace(`/analytics/services?${queryString}`);
+    await router.replace(`/analytics/services?${queryString}`);
   };
 
-  const handleFilterSubmit = () => {
-    handleFilterUpdated(0);
+  const handleFilterSubmit = async () => {
+    await handleFilterUpdated(0);
   };
 
   const handleDatePickerOpen = () => {
@@ -189,15 +209,15 @@ const ServicesAnalytics = ({
     return data?.color;
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = async (event, newPage) => {
     localDispatch(setPage(newPage));
-    handleFilterUpdated(newPage);
+    await handleFilterUpdated(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = async (event) => {
     const rows = parseInt(event.target.value);
     localDispatch(setRowsPerPage(rows));
-    handleFilterUpdated(page, rows);
+    await handleFilterUpdated(page, rows);
   };
 
   const handlePatientClick = (patientId) => () => {
@@ -286,6 +306,7 @@ const ServicesAnalytics = ({
                   <TableCell>{textForKey('Doctor')}</TableCell>
                   <TableCell>{textForKey('Service')}</TableCell>
                   <TableCell>{textForKey('Patient')}</TableCell>
+                  <TableCell>{textForKey('Phone number')}</TableCell>
                   <TableCell>{textForKey('Status')}</TableCell>
                 </TableRow>
               </TableHead>
@@ -302,6 +323,16 @@ const ServicesAnalytics = ({
                       onClick={handlePatientClick(item.patientId)}
                     >
                       {item.patient}
+                    </TableCell>
+                    <TableCell
+                      className={styles['patient-name-label']}
+                      onClick={handlePatientClick(item.patientId)}
+                    >
+                      <a
+                        href={`tel:${item.patientPhoneNumber.replace('+', '')}`}
+                      >
+                        {item.patientPhoneNumber}
+                      </a>
                     </TableCell>
                     <TableCell>
                       <span
@@ -326,9 +357,9 @@ const ServicesAnalytics = ({
         rowsPerPageOptions={[25, 50, 100]}
         colSpan={4}
         count={totalItems}
-        rowsPerPage={parseInt(rowsPerPage)}
+        rowsPerPage={parseInt(String(rowsPerPage))}
         labelRowsPerPage={textForKey('Rows per page')}
-        page={parseInt(page)}
+        page={parseInt(String(page))}
         component='div'
         SelectProps={{
           inputProps: { 'aria-label': 'rows per page' },
