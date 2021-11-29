@@ -7,7 +7,7 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import IconFree from '@material-ui/icons/MoneyOff';
 import moment from 'moment-timezone';
 
-import { environment } from '../../eas.config';
+import { environment } from 'eas.config';
 import IconAppointmentCalendar from '../components/icons/iconAppointmentCalendar';
 import IconCheckMark from '../components/icons/iconCheckMark';
 import IconClock from '../components/icons/iconClock';

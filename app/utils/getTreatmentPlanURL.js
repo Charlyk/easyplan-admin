@@ -1,4 +1,4 @@
-import { baseUrl } from '../../eas.config';
+import { baseUrl } from 'eas.config';
 
 /**
  * Build an url for treatment plan printing

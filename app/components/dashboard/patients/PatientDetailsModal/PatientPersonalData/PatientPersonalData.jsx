@@ -20,13 +20,13 @@ import {
 } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import { requestUpdatePatient } from 'middleware/api/patients';
 import {
   requestAssignTag,
   requestFetchTags,
   requestUnassignTag,
 } from 'middleware/api/tags';
-import onRequestError from 'app/utils/onRequestError';
 import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,

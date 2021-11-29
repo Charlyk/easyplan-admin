@@ -1,6 +1,6 @@
 import cookie from 'cookie';
 
-import { environment } from '../../eas.config';
+import { environment } from 'eas.config';
 
 export default function setCookies(res, authToken, clinicId) {
   const cookieOpts = {
