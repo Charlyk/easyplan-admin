@@ -1,4 +1,4 @@
-import { environment } from '../../eas.config';
+import { environment } from 'eas.config';
 
 export default function getSubdomain(req) {
   if (environment === 'local') {

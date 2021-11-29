@@ -19,10 +19,12 @@ import { useColor } from 'react-color-palette';
 import { useDrop } from 'react-dnd';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useSelector } from 'react-redux';
+import ActionsSheet from 'app/components/common/ActionsSheet';
 import EASColorPicker from 'app/components/common/EASColorPicker';
 import NotificationsContext from 'app/context/notificationsContext';
 import extractCookieByName from 'app/utils/extractCookieByName';
 import usePrevious from 'app/utils/hooks/usePrevious';
+import onRequestError from 'app/utils/onRequestError';
 import {
   createNewDealState,
   deleteDealState,
@@ -35,8 +37,6 @@ import {
   newDealSelector,
   updatedDealSelector,
 } from 'redux/selectors/crmSelector';
-import onRequestError from 'app/utils/onRequestError';
-import ActionsSheet from '../../common/ActionsSheet';
 import AddColumnModal from '../AddColumnModal';
 import { ItemTypes } from './constants';
 import DealItem from './DealItem';
