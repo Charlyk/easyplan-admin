@@ -1,4 +1,4 @@
-enum ScheduleStatus {
+export enum ScheduleStatus {
   Pending = 'Pending',
   Confirmed = 'Confirmed',
   WaitingForPatient = 'WaitingForPatient',
@@ -12,5 +12,3 @@ enum ScheduleStatus {
   Rescheduled = 'Rescheduled',
   CompletedFree = 'CompletedFree',
 }
-
-export default ScheduleStatus;

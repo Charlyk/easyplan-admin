@@ -3,3 +3,4 @@ export * from './clinicUser';
 export * from './cabinet';
 export * from './ChartType.type';
 export * from './ServiceStatistic.type';
+export * from './scheduleStatus';
