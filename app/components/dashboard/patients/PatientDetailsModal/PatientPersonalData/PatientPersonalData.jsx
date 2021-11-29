@@ -6,6 +6,7 @@ import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
@@ -26,7 +27,6 @@ import {
   requestFetchTags,
   requestUnassignTag,
 } from 'middleware/api/tags';
-import EASSelect from '../../../../common/EASSelect';
 import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,

@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import IconMinus from 'app/components/icons/iconMinus';
@@ -14,7 +15,6 @@ import formattedAmount from 'app/utils/formattedAmount';
 import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
 import getServiceName from 'app/utils/getServiceName';
 import { textForKey } from 'app/utils/localization';
-import EASSelect from '../../common/EASSelect';
 import styles from './FinalizeTreatmentModal.module.scss';
 
 const FinalizeTreatmentModal = ({

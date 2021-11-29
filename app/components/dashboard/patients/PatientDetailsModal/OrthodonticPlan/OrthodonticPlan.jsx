@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EasyTab from 'app/components/common/EasyTab';
 import LoadingButton from 'app/components/common/LoadingButton';
@@ -18,7 +19,6 @@ import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
 } from 'redux/selectors/clinicSelector';
-import EASSelect from '../../../../common/EASSelect';
 import styles from './OrthodonticPlan.module.scss';
 import {
   reducer,

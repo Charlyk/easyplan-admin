@@ -2,13 +2,13 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { SWRConfig } from 'swr';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
+import ServicesAnalytics from 'app/components/dashboard/analytics/ServicesAnalytics';
 import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
 import { getServicesStatistics } from 'middleware/api/analytics';
 import { fetchAppData } from 'middleware/api/initialization';
-import ServicesAnalytics from '../../../app/components/dashboard/analytics/ServicesAnalytics';
 
 const Services = ({ fallback, statistics, query, authToken }) => {
   return (

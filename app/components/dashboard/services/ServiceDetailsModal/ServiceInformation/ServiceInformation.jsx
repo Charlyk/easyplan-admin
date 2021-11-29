@@ -6,12 +6,12 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useColor } from 'react-color-palette';
 import EASColorPicker from 'app/components/common/EASColorPicker/EASColorPicker';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import IconPalette from 'app/components/icons/iconPalette';
 import { textForKey } from 'app/utils/localization';
 import { availableCurrenciesSelector } from 'redux/selectors/clinicSelector';
-import EASSelect from '../../../../common/EASSelect';
 import styles from './ServiceInformation.module.scss';
 
 const availableColors = [

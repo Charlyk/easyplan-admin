@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
 
-import { Role } from '../../../../utils/constants';
+import { Role } from 'app/utils/constants';
 
 export const initialState = {
   selectedFilter: Role.all,
