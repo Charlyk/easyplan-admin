@@ -89,6 +89,7 @@ EasyCalendar.propTypes = {
       name: PropTypes.string,
       date: PropTypes.instanceOf(Date),
       disabled: PropTypes.bool,
+      hint: PropTypes.string,
     }),
   ).isRequired,
   animatedStatuses: PropTypes.arrayOf(

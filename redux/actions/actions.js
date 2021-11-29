@@ -105,6 +105,7 @@ export function toggleForceLogoutUser(logout) {
  * @param {Object?} modalData.patient
  * @param {string?} modalData.startHour
  * @param {string?} modalData.endHour
+ * @param {Object?} modalData.cabinet
  * @return {{payload: *, type: string}}
  */
 export function setAppointmentModal(modalData) {

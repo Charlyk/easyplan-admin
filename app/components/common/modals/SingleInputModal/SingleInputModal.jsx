@@ -24,7 +24,7 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
 
   return (
     <EASModal
-      size='sm'
+      size='small'
       open={open}
       title={title}
       onClose={onClose}

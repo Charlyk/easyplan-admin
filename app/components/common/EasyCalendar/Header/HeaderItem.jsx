@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tooltip } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
@@ -22,7 +23,13 @@ const HeaderItem = ({ item, onItemClick }) => {
       onClick={handleItemClick}
     >
       {item.disabled && <IconUmbrella />}
-      <Typography className={styles.itemName}>{item.name}</Typography>
+      {item.hint ? (
+        <Tooltip title={item.hint}>
+          <Typography className={styles.itemName}>{item.name}</Typography>
+        </Tooltip>
+      ) : (
+        <Typography className={styles.itemName}>{item.name}</Typography>
+      )}
     </Box>
   );
 };
@@ -36,6 +43,7 @@ HeaderItem.propTypes = {
     date: PropTypes.instanceOf(Date),
     name: PropTypes.string,
     disabled: PropTypes.bool,
+    hint: PropTypes.string,
   }).isRequired,
   onItemClick: PropTypes.func,
 };

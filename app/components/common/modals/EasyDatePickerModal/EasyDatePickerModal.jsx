@@ -74,7 +74,7 @@ const EasyDatePickerModal = ({
     <EASModal
       open={open}
       onClose={onClose}
-      size='sm'
+      size='small'
       onPrimaryClick={handleConfirmed}
       primaryBtnText={textForKey('Save')}
       isPositiveLoading={isLoading}

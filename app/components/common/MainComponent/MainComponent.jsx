@@ -280,6 +280,7 @@ const MainComponent = ({
           patient={appointmentModal?.patient}
           startHour={appointmentModal?.startHour}
           endHour={appointmentModal?.endHour}
+          cabinet={appointmentModal?.cabinet}
         />
       )}
       {paymentModal.open && (

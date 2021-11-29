@@ -11,13 +11,21 @@ import { fetchAppData } from 'middleware/api/initialization';
 import { fetchDaySchedules } from 'middleware/api/schedules';
 import { wrapper } from 'store';
 
-const Day = ({ fallback, date, schedules, dayHours, doctors, authToken }) => {
+const Day = ({
+  fallback,
+  date,
+  schedules,
+  dayHours,
+  doctors,
+  cabinets,
+  authToken,
+}) => {
   const viewDate = moment(date).toDate();
 
   const updatedSchedules = useMemo(() => {
     return schedules.map((schedule) => ({
       ...schedule,
-      id: schedule.doctorId,
+      id: schedule.groupId,
     }));
   }, [schedules]);
 
@@ -30,6 +38,7 @@ const Day = ({ fallback, date, schedules, dayHours, doctors, authToken }) => {
         date={viewDate}
       >
         <CalendarDayView
+          cabinets={cabinets}
           schedules={updatedSchedules}
           dayHours={dayHours}
           viewDate={viewDate}
@@ -86,6 +95,7 @@ export const getServerSideProps = async ({ query, req }) => {
     return {
       props: {
         date: queryDate,
+        cabinets: currentClinic.cabinets,
         doctors,
         schedules,
         dayHours,

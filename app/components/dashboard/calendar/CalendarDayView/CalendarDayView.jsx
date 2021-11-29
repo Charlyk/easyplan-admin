@@ -5,6 +5,7 @@ import React, {
   useReducer,
   useRef,
 } from 'react';
+import orderBy from 'lodash/orderBy';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
@@ -32,6 +33,7 @@ const moment = extendMoment(Moment);
 const CalendarDayView = ({
   schedules: initialSchedules,
   showHourIndicator,
+  cabinets,
   doctors,
   viewDate,
   dayHours,
@@ -151,11 +153,19 @@ const CalendarDayView = ({
    * @param {string} startHour
    * @param {string} endHour
    * @param {Date} selectedDate
+   * @param {number?} cabinetId
    * @return {function(*=, *=): void}
    */
-  const handleAddSchedule = (startHour, endHour, doctorId, selectedDate) => {
+  const handleAddSchedule = (
+    startHour,
+    endHour,
+    doctorId,
+    selectedDate,
+    cabinetId,
+  ) => {
     const doctor = doctors.find((item) => item.id === doctorId);
-    onCreateSchedule(doctor, startHour, endHour, selectedDate);
+    const cabinet = cabinets.find((item) => item.id === cabinetId);
+    onCreateSchedule(doctor, startHour, endHour, selectedDate, null, cabinet);
   };
 
   /**
@@ -215,14 +225,33 @@ const CalendarDayView = ({
   };
 
   const mappedDoctors = useMemo(() => {
-    return doctors.map((doctor) => ({
+    // get doctors that are not assigned to any cabinet
+    const doctorsWithoutCabinets = doctors.filter(
+      (doctor) => doctor.cabinets.length === 0,
+    );
+    // map cabinets to column structure
+    const mappedCabinets = cabinets.map((cabinet) => {
+      const doctorsInCabinet = doctors.filter((doctor) =>
+        doctor.cabinets.some((cab) => cab.id === cabinet.id),
+      );
+      // add a hint to show doctors names on hover
+      const hint = doctorsInCabinet.map((doctor) => doctor.fullName).join(', ');
+      return {
+        id: cabinet.id,
+        name: cabinet.name,
+        hint,
+      };
+    });
+    // map independent doctors to column structure
+    const mappedDoctors = doctorsWithoutCabinets.map((doctor) => ({
       id: doctor.id,
       doctorId: doctor.id,
       name: `${doctor.firstName} ${doctor.lastName}`,
       disabled: doctor.isInVacation,
       date: viewDate,
     }));
-  }, [doctors, viewDate]);
+    return orderBy([...mappedDoctors, ...mappedCabinets], 'name', 'asc');
+  }, [doctors, cabinets, viewDate]);
 
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>

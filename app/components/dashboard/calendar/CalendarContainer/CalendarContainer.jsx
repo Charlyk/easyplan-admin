@@ -217,6 +217,7 @@ const CalendarContainer = ({
     endHour,
     selectedDate = null,
     patient,
+    cabinet,
   ) => {
     if (doctor?.isHidden) {
       toast.warn(textForKey('doctor_is_fired'));
@@ -230,6 +231,7 @@ const CalendarContainer = ({
         endHour,
         date: selectedDate ?? viewDate,
         patient,
+        cabinet,
       }),
     );
   };
