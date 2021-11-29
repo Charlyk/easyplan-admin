@@ -4,6 +4,7 @@ const initialState = Object.freeze({
   smsMessages: {
     updateMessageStatus: null,
   },
+  updatedPatient: null,
 });
 
 export default function patient(state = initialState, { type, payload } = {}) {
@@ -16,6 +17,8 @@ export default function patient(state = initialState, { type, payload } = {}) {
           updateMessageStatus: payload,
         },
       };
+    case types.updatePatient:
+      return { ...state, updatedPatient: payload };
     default:
       return state;
   }

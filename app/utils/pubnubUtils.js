@@ -16,6 +16,7 @@ import {
   setShouldUpdateClinicData,
   setUserClinicAccessChange,
 } from '../../redux/slices/clinicDataSlice';
+import { updateSchedule } from '../../redux/slices/clinicDataSlice';
 import {
   setUpdatedDeal,
   setNewDeal,
@@ -41,6 +42,7 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       break;
     case MessageAction.PauseRecordUpdatedOrCreated:
     case MessageAction.ScheduleUpdatedOrCreated:
+      dispatch(updateSchedule(payload));
       dispatch(toggleUpdateSchedule(payload));
       setTimeout(() => dispatch(toggleUpdateSchedule(null)), 600);
       break;

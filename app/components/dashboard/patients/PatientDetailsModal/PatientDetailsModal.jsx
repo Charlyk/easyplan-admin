@@ -25,6 +25,7 @@ import {
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
+import { updatePatientRecords } from 'redux/slices/scheduleData';
 import { HeaderKeys } from '../../../../utils/constants';
 import AppointmentNotes from './AppointmentNotes';
 import OrthodonticPlan from './OrthodonticPlan';
@@ -115,6 +116,11 @@ const PatientDetailsModal = ({
       onRequestError(error);
     } finally {
       localDispatch(setIsFetching(false));
+      if (patient) {
+        dispatch(
+          updatePatientRecords({ patientId, fullName: patient.fullName }),
+        );
+      }
       if (updateList) {
         dispatch(togglePatientsListUpdate(true));
       }

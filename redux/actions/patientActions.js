@@ -11,3 +11,10 @@ export function setSMSMessageStatus(payload) {
     payload,
   };
 }
+
+export function toggleUpdatedPatient(payload) {
+  return {
+    type: types.updatePatient,
+    payload,
+  };
+}

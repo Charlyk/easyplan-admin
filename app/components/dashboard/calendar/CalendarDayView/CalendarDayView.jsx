@@ -9,7 +9,7 @@ import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import isOutOfBounds from 'app/utils/isOutOfBounds';
@@ -19,6 +19,7 @@ import {
   deleteScheduleSelector,
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
+import { setSchedules } from 'redux/slices/scheduleData';
 import styles from './CalendarDayView.module.scss';
 import { actions, reducer, initialState } from './CalendarDayView.reducer';
 
@@ -38,6 +39,7 @@ const CalendarDayView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
@@ -63,6 +65,7 @@ const CalendarDayView = ({
   }, [schedulesRef.current]);
 
   useEffect(() => {
+    dispatch(setSchedules(initialSchedules));
     localDispatch(actions.setSchedules(initialSchedules));
   }, [initialSchedules]);
 
