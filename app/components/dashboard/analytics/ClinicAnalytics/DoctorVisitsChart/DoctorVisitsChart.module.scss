@@ -1,4 +1,7 @@
 .doctorVisitsChart {
+  max-width: unset !important;
+  flex-grow: 1 !important;
+
   .visitsChart {
     flex-direction: column;
     overflow: hidden;

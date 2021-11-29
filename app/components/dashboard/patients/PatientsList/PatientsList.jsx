@@ -331,7 +331,7 @@ const PatientsList = ({
           count={patients.total}
           rowsPerPage={parseInt(rowsPerPage)}
           labelRowsPerPage={textForKey('Patients per page')}
-          page={page}
+          page={parseInt(page)}
           component='div'
           SelectProps={{
             inputProps: { 'aria-label': 'rows per page' },

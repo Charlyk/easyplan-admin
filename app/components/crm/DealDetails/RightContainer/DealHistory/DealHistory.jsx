@@ -9,12 +9,12 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import { requestFetchDealDetails } from 'middleware/api/crm';
 import {
   updatedDealSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './DealHistory.module.scss';
 import reducer, {
   initialState,

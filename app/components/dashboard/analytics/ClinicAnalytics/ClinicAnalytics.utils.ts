@@ -60,12 +60,13 @@ export const getConversionsChartData = (
   conversions: AnalyticsConversion[],
 ): ChartData<'bar'> => {
   return {
-    labels: conversions.map((item) => item.firstName),
+    labels: conversions?.map((item) => item.firstName) ?? [],
     datasets: [
       {
         label: '',
-        data: conversions.map((item) => item.converted),
-        backgroundColor: conversions.map((_, index) => colorArray[index]),
+        data: conversions?.map((item) => item.converted) ?? [],
+        backgroundColor:
+          conversions?.map((_, index) => colorArray[index]) ?? [],
       },
     ],
   };
@@ -75,14 +76,16 @@ export const getPatientsSourceData = (
   sources: AnalyticsSourceView[],
 ): ChartData<'bar'> => {
   return {
-    labels: sources.map((item) => textForKey(item.source)),
+    labels: sources?.map((item) => textForKey(item.source)) ?? [],
     datasets: [
       {
         label: textForKey('analytics_clients_source'),
-        data: sources.map((item) => item.amount),
-        backgroundColor: sources.map(
-          (item) => PatientSources.find((src) => src.id === item.source)?.color,
-        ),
+        data: sources?.map((item) => item.amount) ?? [],
+        backgroundColor:
+          sources?.map(
+            (item) =>
+              PatientSources.find((src) => src.id === item.source)?.color,
+          ) ?? [],
         borderWidth: 1,
       },
     ],
@@ -93,12 +96,12 @@ export const getDoctorIncomeChartData = (
   incomes: AnalyticsDoctorIncome[],
 ): ChartData<'polarArea'> => {
   return {
-    labels: incomes.map((item) => item.firstName),
+    labels: incomes?.map((item) => item.firstName) ?? [],
     datasets: [
       {
         label: '',
-        data: incomes.map((item) => item.amount),
-        backgroundColor: incomes.map((_, index) => colorArray[index]),
+        data: incomes?.map((item) => item.amount) ?? [],
+        backgroundColor: incomes?.map((_, index) => colorArray[index]) ?? [],
         borderWidth: 1,
       },
     ],
@@ -109,12 +112,12 @@ export const getDoctorVisitsData = (
   visits: AnalyticsDoctorVisits[],
 ): ChartData<'pie'> => {
   return {
-    labels: visits.map((item) => item.firstName),
+    labels: visits?.map((item) => item.firstName) ?? [],
     datasets: [
       {
         label: '',
-        data: visits.map((item) => item.visits),
-        backgroundColor: visits.map((_, index) => colorArray[index]),
+        data: visits?.map((item) => item.visits) ?? [],
+        backgroundColor: visits?.map((_, index) => colorArray[index]) ?? [],
         borderWidth: 1,
       },
     ],

@@ -7,14 +7,13 @@ import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
 import { fetchAppData } from 'middleware/api/initialization';
 
-const General = ({ fallback, query, authToken, analytics }) => {
+const General = ({ fallback, query, authToken }) => {
   return (
     <SWRConfig value={{ fallback }}>
       <MainComponent currentPath='/analytics/general' authToken={authToken}>
-        <ClinicAnalytics query={query} analytics={analytics} />
+        <ClinicAnalytics query={query} />
       </MainComponent>
     </SWRConfig>
   );
@@ -57,15 +56,8 @@ export const getServerSideProps = async ({ req, query }) => {
       };
     }
 
-    // const { data } = await getGeneralStatistics(query, req.headers);
-    const { data: analytics } = await requestFetchClinicAnalytics(
-      query.startDate,
-      query.endDate,
-      req.headers,
-    );
     return {
       props: {
-        analytics,
         authToken,
         query,
         fallback: {

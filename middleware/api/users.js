@@ -150,3 +150,22 @@ export async function requestToggleUserAccessToClinic(
 ) {
   return put('/api/users/toggle-access', headers, { userId, accessBlocked });
 }
+
+/**
+ * Fetch current user selected charts
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<Easyplan.ChartType[]>>}
+ */
+export async function requestFetchSelectedCharts(headers = null) {
+  return get('/api/users/preferences/charts', headers);
+}
+
+/**
+ * Update user selected charts
+ * @param {ChartType[]} charts
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<ChartType[]>>}
+ */
+export async function requestUpdateSelectedCharts(charts, headers = null) {
+  return put('/api/users/preferences/charts', headers, { charts });
+}

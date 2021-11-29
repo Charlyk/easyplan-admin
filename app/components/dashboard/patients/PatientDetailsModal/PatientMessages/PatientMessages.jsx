@@ -8,11 +8,11 @@ import LoadingButton from 'app/components/common/LoadingButton';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import {
   requestFetchSmsMessages,
   requestSendSms,
 } from 'middleware/api/patients';
+import onRequestError from 'app/utils/onRequestError';
 import PatientMessage from './PatientMessage';
 import styles from './PatientMessages.module.scss';
 import {

@@ -1,5 +1,5 @@
 export const environment = process.env.APP_ENV;
-export const pubNub = 'testing' ?? environment;
+export const pubNubEnv = process.env.PUBNUB_ENV ?? environment;
 export const isDev = environment === 'local' || environment === 'testing';
 
 export const appBaseUrl =

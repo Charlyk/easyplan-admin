@@ -4,8 +4,8 @@ import MenuList from '@material-ui/core/MenuList';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
 import { requestFetchAllOwnerClinics } from 'middleware/api/clinic';
+import onRequestError from 'app/utils/onRequestError';
 import EASModal from '../EASModal';
 import styles from './ClinicsModal.module.scss';
 
