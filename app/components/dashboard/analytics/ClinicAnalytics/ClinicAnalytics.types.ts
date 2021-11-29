@@ -1,4 +1,4 @@
-import { ChartType } from 'types/ChartType.type';
+import { CurrentClinic, ClinicUser, ChartType } from 'types';
 
 export type ClinicAnalyticsProps = {
   query: ClinicAnalyticsQuery;

@@ -19,8 +19,11 @@ import EASTextField from 'app/components/common/EASTextField';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { setPatientDetails } from 'redux/actions/actions';
-import ScheduleStatus from 'types/scheduleStatus';
-import { ServicesStatisticResponse } from 'types/ServiceStatistic.type';
+import {
+  CurrentClinic,
+  ServicesStatisticResponse,
+  ScheduleStatus,
+} from 'types';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
   initialState,

@@ -1,4 +1,6 @@
-declare type ClinicService = {
+import { ClinicServiceType } from 'types';
+
+export interface ClinicService {
   id: number;
   name: string;
   color: string;
@@ -9,4 +11,4 @@ declare type ClinicService = {
   categoryId: number;
   serviceType: ClinicServiceType;
   currency: string;
-};
+}

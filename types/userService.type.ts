@@ -1,4 +1,4 @@
-declare type UserService = {
+export interface UserService {
   id: number;
   serviceId: number;
   name: string;
@@ -8,4 +8,4 @@ declare type UserService = {
   serviceType: 'All' | 'Single' | 'Braces' | 'System';
   duration: number;
   selected: boolean;
-};
+}

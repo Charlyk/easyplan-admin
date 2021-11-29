@@ -1,4 +1,14 @@
-declare type CurrentClinic = {
+import {
+  ClinicBraces,
+  ClinicService,
+  ClinicUser,
+  ClinicWorkday,
+  Currency,
+  ExchangeRate,
+  FacebookPage,
+} from 'types';
+
+export interface CurrentClinic {
   id: number;
   clinicName: string;
   logoUrl?: string;
@@ -26,4 +36,4 @@ declare type CurrentClinic = {
   allCurrencies: Currency[];
   facebookPages: FacebookPage[];
   users: ClinicUser[];
-};
+}
