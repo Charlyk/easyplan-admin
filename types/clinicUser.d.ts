@@ -1,5 +1,8 @@
-declare type ClinicUser = {
+import Cabinet from './cabinet';
+
+export interface ClinicUser {
   id: number;
+  cabinets: Cabinet[];
   accessBlocked: boolean;
   firstName: string;
   lastName: string;
@@ -14,4 +17,4 @@ declare type ClinicUser = {
   isInVacation: boolean;
   isHidden: boolean;
   showInCalendar: boolean;
-};
+}
