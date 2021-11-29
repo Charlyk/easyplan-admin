@@ -1,4 +1,12 @@
-import ClinicUser from './clinicUser';
+import {
+  ClinicBraces,
+  ClinicService,
+  ClinicUser,
+  ClinicWorkday,
+  Currency,
+  ExchangeRate,
+  FacebookPage,
+} from 'types';
 
 export interface CurrentClinic {
   id: number;

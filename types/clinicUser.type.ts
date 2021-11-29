@@ -1,4 +1,4 @@
-import Cabinet from './cabinet';
+import { Cabinet, UserService } from 'types';
 
 export interface ClinicUser {
   id: number;
