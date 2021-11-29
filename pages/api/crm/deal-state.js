@@ -12,8 +12,8 @@ async function fetchDealStates(req) {
   );
   return axios.get(`${updatedServerUrl(req)}/crm/deal-state`, {
     headers: {
-      [HeaderKeys.authorization]: clinicId,
-      [HeaderKeys.clinicId]: authToken,
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
       [HeaderKeys.subdomain]: getSubdomain(req),
     },
   });
