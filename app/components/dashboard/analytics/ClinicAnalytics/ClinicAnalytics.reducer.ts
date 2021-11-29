@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
 import { textForKey } from 'app/utils/localization';
-import { ChartType } from 'types/ChartType.type';
+import { ChartType, ClinicUser } from 'types';
 import {
   Analytics,
   ClinicAnalyticsQuery,
