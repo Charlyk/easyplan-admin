@@ -1,4 +1,4 @@
-import ScheduleStatus from './scheduleStatus';
+import { ScheduleStatus } from 'types';
 
 export interface ServicesStatisticResponse {
   data: ServiceStatistic[];
