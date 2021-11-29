@@ -143,7 +143,7 @@ EASSelect.defaultProps = {
   rootClass: null,
   checkable: false,
   multiple: false,
-  updateText: '',
+  updateText: false,
   selectClass: null,
   defaultOption: null,
   value: '',
