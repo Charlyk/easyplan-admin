@@ -9,25 +9,25 @@ import {
   togglePatientsListUpdate,
   toggleUpdateInvoices,
   triggerUsersUpdate,
-} from '../../redux/actions/actions';
-import { setClinicExchangeRatesUpdateRequired } from '../../redux/actions/clinicActions';
-import { toggleUpdateInvoice } from '../../redux/actions/invoiceActions';
-import { setSMSMessageStatus } from '../../redux/actions/patientActions';
+} from 'redux/actions/actions';
+import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
+import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
+import { setSMSMessageStatus } from 'redux/actions/patientActions';
 import {
   toggleDeleteSchedule,
   toggleUpdateSchedule,
-} from '../../redux/actions/scheduleActions';
+} from 'redux/actions/scheduleActions';
 import {
   setShouldUpdateClinicData,
   setUserClinicAccessChange,
-} from '../../redux/slices/clinicDataSlice';
+} from 'redux/slices/clinicDataSlice';
 import {
   setUpdatedDeal,
   setNewDeal,
   setDeletedDeal,
   setUpdatedReminder,
   setNewReminder,
-} from '../../redux/slices/crmSlice';
+} from 'redux/slices/crmSlice';
 
 export const handleRemoteMessage = (message) => (dispatch) => {
   const { action, payload: messagePayload } = message;

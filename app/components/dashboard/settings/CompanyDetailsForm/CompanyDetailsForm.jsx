@@ -4,7 +4,6 @@ import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
-import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
@@ -16,12 +15,13 @@ import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex, HeaderKeys } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   clinicTimeZones,
   deleteClinic,
   updateClinic,
 } from 'middleware/api/clinic';
-import onRequestError from 'app/utils/onRequestError';
+import EASSelect from '../../../common/EASSelect';
 import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,

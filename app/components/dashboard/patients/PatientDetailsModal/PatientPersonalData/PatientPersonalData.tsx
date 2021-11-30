@@ -4,7 +4,6 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -21,7 +20,6 @@ import {
 } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
-
 import onRequestError from 'app/utils/onRequestError';
 import { requestUpdatePatient } from 'middleware/api/patients';
 import {
@@ -34,6 +32,7 @@ import {
   updateSchedulePatientRecords,
   updateDetailsPatientRecords,
 } from 'redux/slices/calendarData';
+import { CurrentClinic } from 'types/currentClinic.type';
 import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,
@@ -260,6 +259,8 @@ const PatientPersonalData: React.FC<Props> = ({
           selectedDate={birthday || new Date()}
           onClose={handleCloseDatePicker}
           onChange={handleBirthdayChange}
+          disablePortal={true}
+          minDate={null}
         />
       )}
       <Typography classes={{ root: 'title-label' }}>
@@ -392,22 +393,3 @@ const PatientPersonalData: React.FC<Props> = ({
 };
 
 export default PatientPersonalData;
-
-PatientPersonalData.propTypes = {
-  onPatientUpdated: PropTypes.func,
-  patient: PropTypes.shape({
-    id: PropTypes.number,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    birthday: PropTypes.string,
-    email: PropTypes.string,
-    phoneNumber: PropTypes.string,
-    discount: PropTypes.number,
-    tags: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        title: PropTypes.string,
-      }),
-    ),
-  }),
-};

@@ -114,12 +114,14 @@ const EASSelect = ({
 export default EASSelect;
 
 EASSelect.propTypes = {
+  disabled: PropTypes.bool,
   variant: PropTypes.oneOf(['outlined', 'text']),
   label: PropTypes.string,
   rootClass: PropTypes.any,
   checkable: PropTypes.bool,
   multiple: PropTypes.bool,
   updateText: PropTypes.bool,
+  selectClass: PropTypes.any,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.any,
@@ -132,4 +134,18 @@ EASSelect.propTypes = {
   }),
   value: PropTypes.any,
   onChange: PropTypes.func,
+};
+
+EASSelect.defaultProps = {
+  disabled: false,
+  variant: 'outlined',
+  label: '',
+  rootClass: null,
+  checkable: false,
+  multiple: false,
+  updateText: false,
+  selectClass: null,
+  defaultOption: null,
+  value: '',
+  onChange: () => null,
 };

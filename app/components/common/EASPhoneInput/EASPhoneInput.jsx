@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import PhoneInput from 'react-phone-input-2';
 import isPhoneInputValid from 'app/utils/isPhoneInputValid';
 import { textForKey } from 'app/utils/localization';
@@ -66,3 +67,23 @@ const EASPhoneInput = ({
 };
 
 export default EASPhoneInput;
+
+EASPhoneInput.propTypes = {
+  value: PropTypes.any,
+  fieldLabel: PropTypes.any,
+  country: PropTypes.string,
+  placeholder: PropTypes.string,
+  helperText: PropTypes.string,
+  rootClass: PropTypes.any,
+  onChange: PropTypes.func,
+};
+
+EASPhoneInput.defaultProps = {
+  value: null,
+  fieldLabel: null,
+  country: 'md',
+  placeholder: null,
+  helperText: null,
+  rootClass: null,
+  onChange: () => null,
+};
