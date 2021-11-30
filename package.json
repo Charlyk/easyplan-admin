@@ -63,6 +63,7 @@
     "react-validation": "^3.0.7",
     "react-virtualized": "^9.22.3",
     "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.0",
     "redux-timer-middleware": "^1.0.0",

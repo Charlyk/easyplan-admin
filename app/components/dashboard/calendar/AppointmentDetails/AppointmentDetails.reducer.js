@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Statuses } from 'app/utils/constants';
 
 export const initialState = {
-  details: null,
   isLoading: false,
   showStatuses: false,
   isCanceledReasonRequired: false,
@@ -15,12 +14,6 @@ const appointmentDetailsSlice = createSlice({
   name: 'appointmentDetails',
   initialState,
   reducers: {
-    setDetails(state, action) {
-      state.details = action.payload;
-      state.scheduleStatus = Statuses.find(
-        (item) => item.id === action.payload.scheduleStatus,
-      );
-    },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
     },
@@ -52,7 +45,6 @@ const appointmentDetailsSlice = createSlice({
 });
 
 export const {
-  setDetails,
   setIsLoading,
   setShowStatuses,
   setIsCanceledReasonRequired,

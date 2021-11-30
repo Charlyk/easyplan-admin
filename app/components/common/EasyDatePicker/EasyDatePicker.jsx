@@ -63,4 +63,8 @@ EasyDatePicker.defaultProps = {
   selectedDate: new Date(),
   placement: 'bottom',
   disablePortal: true,
+  onClose: () => null,
+  onChange: () => null,
+  pickerAnchor: null,
+  open: false,
 };

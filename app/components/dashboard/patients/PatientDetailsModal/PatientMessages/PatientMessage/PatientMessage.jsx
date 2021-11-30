@@ -3,24 +3,21 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import IconError from 'app/components/icons/iconError';
 import IconPending from 'app/components/icons/IconPending';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import { textForKey } from 'app/utils/localization';
-import { setSMSMessageStatus } from 'redux/actions/patientActions';
 import { updateSMSMessageStatusSelector } from 'redux/selectors/patientSelector';
 import styles from './PatientMessage.module.scss';
 
 const PatientMessage = ({ message }) => {
-  const dispatch = useDispatch();
   const updateMessage = useSelector(updateSMSMessageStatusSelector);
   const [messageStatus, setMessageStatus] = useState(message.status);
 
   useEffect(() => {
     if (updateMessage != null && updateMessage.id === message.id) {
       setMessageStatus(updateMessage.status);
-      dispatch(setSMSMessageStatus(null));
     }
   }, [updateMessage]);
 
