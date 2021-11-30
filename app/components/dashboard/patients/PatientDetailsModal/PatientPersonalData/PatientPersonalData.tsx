@@ -54,18 +54,25 @@ import reducer, {
   addPatientTag,
 } from './PatientPersonalData.reducer';
 
-const EasyDatePicker = dynamic(() =>
-  import('app/components/common/EasyDatePicker'),
+const EasyDatePicker = dynamic(
+  () => import('app/components/common/EasyDatePicker'),
 );
 
-const PatientPersonalData = ({
+interface Props {
+  patient: Patient;
+  currentClinic: CurrentClinic;
+  authToken: string;
+  onPatientUpdated: (val: boolean) => void;
+}
+
+const PatientPersonalData: React.FC<Props> = ({
   patient,
   currentClinic,
   authToken,
   onPatientUpdated,
 }) => {
   const dispatch = useDispatch();
-  const didInitialRenderHappen = useRef(false);
+  const didInitialRenderHappen = useRef<boolean>(false);
   const details = useSelector(calendarDetailsSelector);
   const datePickerRef = useRef();
   const toast = useContext(NotificationsContext);
@@ -215,7 +222,7 @@ const PatientPersonalData = ({
       euroDebt,
       birthday: birthday ? moment(birthday).format('YYYY-MM-DD') : null,
       countryCode: country.dialCode,
-      discount: discount ? parseInt(discount) : 0,
+      discount: discount ? parseInt(`${discount}`) : 0,
     };
 
     try {

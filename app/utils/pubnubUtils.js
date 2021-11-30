@@ -1,4 +1,9 @@
 import {
+  updateSchedule,
+  deleteSchedule,
+  addNewSchedule,
+} from 'redux/slices/calendarData';
+import {
   toggleAppointmentsUpdate,
   toggleExchangeRateUpdate,
   togglePatientsListUpdate,
@@ -12,11 +17,6 @@ import {
   toggleDeleteSchedule,
   toggleUpdateSchedule,
 } from '../../redux/actions/scheduleActions';
-import {
-  updateSchedule,
-  deleteSchedule,
-  addNewSchedule,
-} from '../../redux/slices/calendarData';
 import {
   setShouldUpdateClinicData,
   setUserClinicAccessChange,
