@@ -59,10 +59,7 @@ const calendarData = createSlice({
           ),
         };
       });
-      return {
-        ...state,
-        schedules: updatedSchedules,
-      };
+      state.schedules = updatedSchedules;
     },
     updateSchedule(state, action) {
       const scheduleToUpdate = action.payload;
@@ -86,10 +83,8 @@ const calendarData = createSlice({
           ),
         };
       });
-      return {
-        ...state,
-        schedules: updatedSchedules,
-      };
+
+      state.schedules = updatedSchedules;
     },
     deleteSchedule(state, action) {
       const scheduleToDelete = action.payload;
@@ -103,7 +98,7 @@ const calendarData = createSlice({
           ),
         };
       });
-      return { ...state, schedules: updatedSchedules };
+      state.schedules = updatedSchedules;
     },
     updateSchedulePatientRecords(state, action) {
       const updatedPatient = action.payload;
@@ -120,7 +115,7 @@ const calendarData = createSlice({
         return { ...item, schedules: updatedSchedules };
       });
 
-      return { ...state, schedules: stateWithUpdatedPatients };
+      state.schedules = stateWithUpdatedPatients;
     },
     setAppointmentDetails(state, action) {
       state.details = action.payload;

@@ -12,3 +12,7 @@ export * from './currency.type';
 export * from './facebookPage.type';
 export * from './clinicServiceType.type';
 export * from './userService.type';
+export * from './scheduleDetails.type';
+export * from './doctor.type';
+export * from './schedule.type';
+export * from './patient.type';

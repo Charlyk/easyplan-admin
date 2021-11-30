@@ -1,9 +1,4 @@
 import {
-  updateSchedule,
-  deleteSchedule,
-  addNewSchedule,
-} from 'redux/slices/calendarData';
-import {
   toggleAppointmentsUpdate,
   toggleExchangeRateUpdate,
   togglePatientsListUpdate,
@@ -12,11 +7,15 @@ import {
 } from 'redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
-import { setSMSMessageStatus } from 'redux/actions/patientActions';
 import {
   toggleDeleteSchedule,
   toggleUpdateSchedule,
 } from 'redux/actions/scheduleActions';
+import {
+  updateSchedule,
+  deleteSchedule,
+  addNewSchedule,
+} from 'redux/slices/calendarData';
 import {
   setShouldUpdateClinicData,
   setUserClinicAccessChange,
@@ -88,7 +87,6 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       if (payload == null) {
         return;
       }
-      dispatch(setSMSMessageStatus({ id: payload.id, status: payload.status }));
       break;
     }
     case MessageAction.NewDealCreated: {
