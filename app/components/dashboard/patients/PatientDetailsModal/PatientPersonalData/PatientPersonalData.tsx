@@ -32,7 +32,9 @@ import {
   updateSchedulePatientRecords,
   updateDetailsPatientRecords,
 } from 'redux/slices/calendarData';
+import { ReduxDispatch } from 'store';
 import { CurrentClinic } from 'types/currentClinic.type';
+import { Patient } from 'types/patient.type';
 import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,
@@ -70,10 +72,10 @@ const PatientPersonalData: React.FC<Props> = ({
   authToken,
   onPatientUpdated,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ReduxDispatch>();
   const didInitialRenderHappen = useRef<boolean>(false);
   const details = useSelector(calendarDetailsSelector);
-  const datePickerRef = useRef();
+  const datePickerRef = useRef<HTMLDivElement | null>();
   const toast = useContext(NotificationsContext);
   const [
     {
@@ -242,7 +244,7 @@ const PatientPersonalData: React.FC<Props> = ({
   const formattedBirthday =
     birthday == null ? '' : moment(birthday).format('DD MMM YYYY');
 
-  const isFormValid = () => {
+  const isFormValid = (): boolean => {
     return (
       (email == null || email?.length === 0 || email?.match(EmailRegex)) &&
       isPhoneValid

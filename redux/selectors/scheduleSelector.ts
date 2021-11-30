@@ -1,7 +1,9 @@
 import { createSelector } from 'reselect';
+import { ReduxStateType } from 'store';
 
-export const scheduleSelector = (state) => state.schedule;
-export const calendarDataSelector = (state) => state.calendarData;
+export const scheduleSelector = (state: ReduxStateType) => state.schedule;
+export const calendarDataSelector = (state: ReduxStateType) =>
+  state.calendarData;
 
 export const updateScheduleSelector = createSelector(
   scheduleSelector,

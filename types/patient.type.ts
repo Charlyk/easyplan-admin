@@ -1,9 +1,9 @@
-interface Tag {
+export interface Tag {
   id: number;
   title: string;
 }
 
-declare type Patient = {
+export type Patient = {
   id: number;
   avatar: string | null;
   firstName: string;

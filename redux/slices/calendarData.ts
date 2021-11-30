@@ -1,10 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
 import initialState from 'redux/initialState';
+import { ScheduleItem } from 'types/schedule.type';
+import { ScheduleDetails } from 'types/scheduleDetails.type';
+
+interface SliceState {
+  schedules: ScheduleItem[];
+  details: ScheduleDetails;
+}
 
 const calendarData = createSlice({
   name: 'calendarData',
-  initialState: initialState.calendarData,
+  initialState: initialState.calendarData as SliceState,
   reducers: {
     setSchedules(state, action) {
       state.schedules = action.payload.map((item) => {
