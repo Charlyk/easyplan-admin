@@ -7,10 +7,7 @@ import {
 } from 'redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
-import {
-  toggleDeleteSchedule,
-  toggleUpdateSchedule,
-} from 'redux/actions/scheduleActions';
+import { toggleDeleteSchedule } from 'redux/actions/scheduleActions';
 import {
   updateSchedule,
   deleteSchedule,
@@ -46,17 +43,17 @@ export const handleRemoteMessage = (message) => (dispatch) => {
     case MessageAction.PauseRecordUpdatedOrCreated:
     case MessageAction.ScheduleUpdated:
       dispatch(updateSchedule(payload));
-      dispatch(toggleUpdateSchedule(payload));
-      setTimeout(() => {
-        dispatch(toggleUpdateSchedule(null));
-      }, 600);
+      // dispatch(toggleUpdateSchedule(payload));
+      // setTimeout(() => {
+      //   dispatch(toggleUpdateSchedule(null));
+      // }, 600);
       break;
     case MessageAction.ScheduleCreated:
       dispatch(addNewSchedule(payload));
-      dispatch(toggleUpdateSchedule(payload));
-      setTimeout(() => {
-        dispatch(toggleUpdateSchedule(null));
-      }, 600);
+      // dispatch(toggleUpdateSchedule(payload));
+      // setTimeout(() => {
+      //   dispatch(toggleUpdateSchedule(null));
+      // }, 600);
       break;
     case MessageAction.UserCalendarVisibilityChanged:
     case MessageAction.UserRestoredInClinic:

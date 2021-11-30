@@ -1,4 +1,4 @@
-import types from 'redux/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   updateInvoice: null,

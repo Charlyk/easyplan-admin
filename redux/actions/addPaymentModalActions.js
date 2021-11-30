@@ -1,4 +1,4 @@
-import types from 'redux/types';
+import types from '../types';
 
 /**
  * Toggle add payment modal

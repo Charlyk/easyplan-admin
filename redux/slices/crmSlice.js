@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import initialState from 'redux/initialState';
+import initialState from '../initialState';
 
 const crmSlice = createSlice({
   name: 'crm',

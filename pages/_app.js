@@ -21,7 +21,7 @@ import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
-import types from 'redux/types';
+import types from '../redux/types';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
 import 'app/styles/base/base.scss';

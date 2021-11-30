@@ -1,22 +1,4 @@
-import types from 'redux/types';
-
-/**
- * Trigger categories list update
- * @return {{payload: string, type: string}}
- */
-export function triggerCategoriesUpdate() {
-  return {
-    type: types.updateCategoriesList,
-    payload: '',
-  };
-}
-
-export function triggerServicesUpdate(update) {
-  return {
-    type: types.updateServicesList,
-    payload: update,
-  };
-}
+import types from '../types';
 
 /**
  * Trigger users list update
@@ -53,30 +35,6 @@ export function triggerUpdateXRay() {
 }
 
 /**
- * Save current user to store
- * @param user
- * @return {{payload: *, type: string}}
- */
-export function setCurrentUser(user) {
-  return {
-    type: types.setUser,
-    payload: user,
-  };
-}
-
-/**
- * Toggle clinic change
- * @param {string} clinicId
- * @return {{payload: *, type: string}}
- */
-export function changeSelectedClinic(clinicId) {
-  return {
-    type: types.changeCurrentClinic,
-    payload: clinicId,
-  };
-}
-
-/**
  * Trigger user logout modal
  * @param {boolean} logout
  * @return {{payload: *, type: string}}
@@ -84,13 +42,6 @@ export function changeSelectedClinic(clinicId) {
 export function triggerUserLogout(logout) {
   return {
     type: types.triggerUserLogOut,
-    payload: logout,
-  };
-}
-
-export function toggleForceLogoutUser(logout) {
-  return {
-    type: types.forceUserLogout,
     payload: logout,
   };
 }
@@ -164,13 +115,6 @@ export function setPaymentModal(payload) {
   };
 }
 
-export function toggleUpdateCalendarDoctorHeight() {
-  return {
-    type: types.updateCalendarDoctorHeight,
-    payload: '',
-  };
-}
-
 export function toggleUpdateInvoices() {
   return {
     type: types.updateInvoices,
@@ -200,27 +144,6 @@ export function togglePatientsListUpdate(update) {
   };
 }
 
-export function togglePatientPaymentsUpdate() {
-  return {
-    type: types.toggleUpdatePatientPayments,
-    payload: '',
-  };
-}
-
-export function toggleCheckDoctorAppointments() {
-  return {
-    type: types.checkDoctorAppointments,
-    payload: '',
-  };
-}
-
-export function setUpdateCurrentUser(update = true) {
-  return {
-    type: types.setUpdateCurrentUser,
-    payload: update,
-  };
-}
-
 export function toggleImportModal(open = false) {
   return {
     type: types.toggleImportModal,
@@ -231,13 +154,6 @@ export function toggleImportModal(open = false) {
 export function toggleExchangeRateUpdate() {
   return {
     type: types.toggleExchangeRateUpdate,
-    payload: '',
-  };
-}
-
-export function toggleUpdateDoctorAppointment() {
-  return {
-    type: types.updateDoctorAppointment,
     payload: '',
   };
 }

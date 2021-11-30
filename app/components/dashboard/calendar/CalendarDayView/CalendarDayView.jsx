@@ -64,7 +64,6 @@ const CalendarDayView = ({
 
   useEffect(() => {
     dispatch(setSchedules(initialSchedules));
-    localDispatch(actions.setSchedules(initialSchedules));
   }, [initialSchedules]);
 
   useEffect(() => {

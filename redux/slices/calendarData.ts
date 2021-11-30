@@ -1,70 +1,69 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
-import initialState from 'redux/initialState';
-import { ScheduleItem } from 'types/schedule.type';
-import { ScheduleDetails } from 'types/scheduleDetails.type';
-
-interface SliceState {
-  schedules: ScheduleItem[];
-  details: ScheduleDetails;
-}
+import { ScheduleItem, ScheduleDetails, Schedule } from 'types';
+import initialState from '../initialState';
 
 const calendarData = createSlice({
   name: 'calendarData',
-  initialState: initialState.calendarData as SliceState,
+  initialState: initialState.calendarData,
   reducers: {
-    setSchedules(state, action) {
-      state.schedules = action.payload.map((item) => {
-        return {
-          ...item,
-          schedules: orderBy(
-            item.schedules,
-            ['rescheduled', 'startTime'],
-            ['desc', 'asc'],
-          ),
-        };
-      });
+    setSchedules(state, action: PayloadAction<ScheduleItem[]>) {
+      state.schedules = action.payload.map((item) => ({
+        ...item,
+        schedules: orderBy(
+          item.schedules,
+          ['rescheduled', 'startTime'],
+          ['desc', 'asc'],
+        ),
+      }));
     },
-    addNewSchedule(state, action) {
+    addNewSchedule(state, action: PayloadAction<Schedule>) {
       const newSchedule = action.payload;
       const hasSchedules = state.schedules.some(
-        (item) => item.doctorId === newSchedule.doctorId,
+        (item) =>
+          item.groupId === newSchedule.doctorId ||
+          item.groupId === newSchedule.cabinetId,
       );
       if (!hasSchedules) {
-        return {
-          ...state,
-          schedules: [
-            ...state.schedules,
-            {
-              id: newSchedule.doctorId,
-              doctorId: newSchedule.doctorId,
-              schedules: [newSchedule],
-            },
-          ],
-        };
+        state.schedules = [
+          ...state.schedules,
+          {
+            id: newSchedule.cabinetId ?? newSchedule.doctorId,
+            groupId: newSchedule.cabinetId ?? newSchedule.doctorId,
+            schedules: [newSchedule],
+          },
+        ];
+      } else {
+        state.schedules = state.schedules.map((item) => {
+          if (
+            item.groupId !== newSchedule.doctorId &&
+            item.groupId !== newSchedule.cabinetId
+          ) {
+            return item;
+          }
+
+          const newSchedules = [...item.schedules, newSchedule];
+
+          return {
+            ...item,
+            schedules: orderBy(
+              newSchedules,
+              ['rescheduled', 'startTime'],
+              ['desc', 'asc'],
+            ),
+          };
+        });
       }
-      const updatedSchedules = state.schedules.map((item) => {
-        if (item.doctorId !== newSchedule.doctorId) {
+    },
+    updateSchedule(state, action: PayloadAction<Schedule>) {
+      const scheduleToUpdate = action.payload;
+      state.schedules = state.schedules.map((item) => {
+        if (
+          item.groupId !== scheduleToUpdate.doctorId &&
+          item.groupId !== scheduleToUpdate.cabinetId
+        ) {
           return item;
         }
-
-        const newSchedules = [...item.schedules, newSchedule];
-
-        return {
-          ...item,
-          schedules: orderBy(
-            newSchedules,
-            ['rescheduled', 'startTime'],
-            ['desc', 'asc'],
-          ),
-        };
-      });
-      state.schedules = updatedSchedules;
-    },
-    updateSchedule(state, action) {
-      const scheduleToUpdate = action.payload;
-      const updatedSchedules = state.schedules.map((item) => {
-        if (item.doctorId !== scheduleToUpdate.doctorId) return item;
 
         const newSchedules = item.schedules.map((schedule) => {
           if (schedule.id !== scheduleToUpdate.id) return schedule;
@@ -83,13 +82,12 @@ const calendarData = createSlice({
           ),
         };
       });
-
-      state.schedules = updatedSchedules;
     },
-    deleteSchedule(state, action) {
+    deleteSchedule(state, action: PayloadAction<Schedule>) {
       const scheduleToDelete = action.payload;
-      const updatedSchedules = state.schedules.map((item) => {
-        if (item.doctorId !== scheduleToDelete.doctorId) return item;
+      console.log(state);
+      state.schedules = state.schedules.map((item) => {
+        if (item.groupId !== scheduleToDelete.doctorId) return item;
 
         return {
           ...item,
@@ -98,11 +96,10 @@ const calendarData = createSlice({
           ),
         };
       });
-      state.schedules = updatedSchedules;
     },
     updateSchedulePatientRecords(state, action) {
       const updatedPatient = action.payload;
-      const stateWithUpdatedPatients = state.schedules.map((item) => {
+      state.schedules = state.schedules.map((item) => {
         const { schedules } = item;
 
         const updatedSchedules = schedules.map((schedule) => {
@@ -114,20 +111,16 @@ const calendarData = createSlice({
 
         return { ...item, schedules: updatedSchedules };
       });
-
-      state.schedules = stateWithUpdatedPatients;
     },
-    setAppointmentDetails(state, action) {
+    setAppointmentDetails(state, action: PayloadAction<ScheduleDetails>) {
       state.details = action.payload;
     },
     updateDetailsPatientRecords(state, action) {
       const updatedPatient = action.payload;
-      const newPatientObj = {
+      state.details.patient = {
         ...state.details.patient,
         ...updatedPatient,
       };
-
-      state.details.patient = newPatientObj;
     },
   },
 });

@@ -1,4 +1,6 @@
-export default Object.freeze({
+import { ReduxState } from 'redux/types';
+
+const initialState: ReduxState = Object.freeze({
   updateCategories: false,
   updateServices: false,
   updateUsers: false,
@@ -19,17 +21,15 @@ export default Object.freeze({
     patientId: null,
     onDelete: null,
     menuItem: null,
+    smsMessages: {
+      updateMessageStatus: null,
+    },
   },
   updatePatients: false,
   updatePatientPayments: false,
   isImportModalOpen: false,
   updateExchangeRates: false,
   updateDoctorAppointments: false,
-  patient: {
-    smsMessages: {
-      updateMessageStatus: null,
-    },
-  },
   updateHourIndicatorTop: false,
   crm: {
     newDeal: null,
@@ -47,3 +47,5 @@ export default Object.freeze({
     details: null,
   },
 });
+
+export default initialState;
