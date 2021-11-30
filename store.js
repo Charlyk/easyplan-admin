@@ -3,6 +3,7 @@ import { createWrapper } from 'next-redux-wrapper';
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import timerMiddleware from 'redux-timer-middleware';
+// import { Logger } from 'redux/middleware/Logger';
 import rootReducer from 'redux/reducers/rootReducer';
 
 const composeEnhancers =

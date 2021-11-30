@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
@@ -20,13 +21,19 @@ import {
 } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
+
+import onRequestError from 'app/utils/onRequestError';
 import { requestUpdatePatient } from 'middleware/api/patients';
 import {
   requestAssignTag,
   requestFetchTags,
   requestUnassignTag,
 } from 'middleware/api/tags';
-import onRequestError from 'app/utils/onRequestError';
+import { calendarDetailsSelector } from 'redux/selectors/scheduleSelector';
+import {
+  updateSchedulePatientRecords,
+  updateDetailsPatientRecords,
+} from 'redux/slices/calendarData';
 import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,
@@ -57,6 +64,9 @@ const PatientPersonalData = ({
   authToken,
   onPatientUpdated,
 }) => {
+  const dispatch = useDispatch();
+  const didInitialRenderHappen = useRef(false);
+  const details = useSelector(calendarDetailsSelector);
   const datePickerRef = useRef();
   const toast = useContext(NotificationsContext);
   const [
@@ -87,6 +97,19 @@ const PatientPersonalData = ({
   useEffect(() => {
     if (patient != null) {
       localDispatch(setPatient(patient));
+      if (didInitialRenderHappen.current) {
+        dispatch(
+          updateSchedulePatientRecords({
+            id: patient.id,
+            fullName: patient.fullName,
+          }),
+        );
+
+        if (patient.id === details.patient.id) {
+          dispatch(updateDetailsPatientRecords(patient));
+        }
+      }
+      didInitialRenderHappen.current = true;
     }
   }, [patient]);
 

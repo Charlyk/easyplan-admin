@@ -14,7 +14,9 @@ import IconAvatar from 'app/components/icons/iconAvatar';
 import IconClose from 'app/components/icons/iconClose';
 import IconEdit from 'app/components/icons/iconEdit';
 import NotificationsContext from 'app/context/notificationsContext';
+import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   getPatientDetails,
   requestUpdatePatient,
@@ -24,8 +26,6 @@ import {
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
-import { HeaderKeys } from 'app/utils/constants';
-import onRequestError from 'app/utils/onRequestError';
 import AppointmentNotes from './AppointmentNotes';
 import OrthodonticPlan from './OrthodonticPlan';
 import PatientAppointments from './PatientAppointments';
@@ -115,11 +115,6 @@ const PatientDetailsModal = ({
       onRequestError(error);
     } finally {
       localDispatch(setIsFetching(false));
-      if (patient) {
-        dispatch(
-          updatePatientRecords({ patientId, fullName: patient.fullName }),
-        );
-      }
       if (updateList) {
         dispatch(togglePatientsListUpdate(true));
       }

@@ -42,7 +42,8 @@ export default Object.freeze({
     updateClinicData: false,
     userClinicAccessChange: null,
   },
-  scheduleData: {
+  calendarData: {
     schedules: [],
+    details: null,
   },
 });

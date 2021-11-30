@@ -16,10 +16,10 @@ import isOutOfBounds from 'app/utils/isOutOfBounds';
 import { textForKey } from 'app/utils/localization';
 import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
-  deleteScheduleSelector,
   updateScheduleSelector,
+  calendarScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
-import { setSchedules } from 'redux/slices/scheduleData';
+import { setSchedules } from 'redux/slices/calendarData';
 import styles from './CalendarDayView.module.scss';
 import { actions, reducer, initialState } from './CalendarDayView.reducer';
 
@@ -42,9 +42,9 @@ const CalendarDayView = ({
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
-  const deleteSchedule = useSelector(deleteScheduleSelector);
+  const schedules = useSelector(calendarScheduleSelector);
   const schedulesRef = useRef(null);
-  const [{ hours, pauseModal, schedules }, localDispatch] = useReducer(
+  const [{ hours, pauseModal }, localDispatch] = useReducer(
     reducer,
     initialState,
   );
@@ -52,10 +52,6 @@ const CalendarDayView = ({
   useEffect(() => {
     handleScheduleUpdate();
   }, [updateSchedule]);
-
-  useEffect(() => {
-    handleScheduleDelete();
-  }, [deleteSchedule]);
 
   useEffect(() => {
     if (schedulesRef.current != null) {
@@ -87,26 +83,6 @@ const CalendarDayView = ({
     if (isOutOfBounds(updateSchedule.endTime, hours, viewDate)) {
       await fetchDayHours(scheduleDate.toDate());
     }
-
-    const scheduleExists = schedules.some(
-      (item) =>
-        item.id === updateSchedule.doctorId &&
-        item.schedules.some((schedule) => schedule.id === updateSchedule.id),
-    );
-
-    if (scheduleExists) {
-      localDispatch(actions.updateSchedule(updateSchedule));
-    } else {
-      localDispatch(actions.addSchedule(updateSchedule));
-    }
-  }
-
-  function handleScheduleDelete() {
-    if (deleteSchedule == null) {
-      return;
-    }
-
-    localDispatch(actions.deleteSchedule(deleteSchedule));
   }
 
   const fetchDayHours = async (date) => {

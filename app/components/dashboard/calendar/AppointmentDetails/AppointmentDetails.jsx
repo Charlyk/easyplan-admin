@@ -40,12 +40,13 @@ import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
+  calendarDetailsSelector,
 } from 'redux/selectors/scheduleSelector';
+import { setAppointmentDetails } from 'redux/slices/calendarData';
 import styles from './AppointmentDetails.module.scss';
 import reducer, {
   initialState,
   setIsLoading,
-  setDetails,
   setIsCanceledReasonRequired,
   setIsNewDateRequired,
   setIsDelayTimeRequired,
@@ -76,7 +77,6 @@ const AppointmentDetails = ({
   const statusesAnchor = useRef(null);
   const [
     {
-      details,
       isLoading,
       showStatuses,
       isCanceledReasonRequired,
@@ -86,6 +86,7 @@ const AppointmentDetails = ({
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
+  const details = useSelector(calendarDetailsSelector);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const updateInvoice = useSelector(updateInvoiceSelector);
@@ -94,6 +95,7 @@ const AppointmentDetails = ({
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      dispatch(setAppointmentDetails(null));
     };
   }, []);
 
@@ -117,7 +119,6 @@ const AppointmentDetails = ({
 
   useEffect(() => {
     if (deleteSchedule != null && deleteSchedule.id === schedule.id) {
-      // close details fi current schedule was deleted
       onClose();
     }
   }, [deleteSchedule]);
@@ -136,8 +137,8 @@ const AppointmentDetails = ({
             return updateInvoice;
           })
         : details.patient.debts.filter((item) => item.id !== updateInvoice.id);
-    localDispatch(
-      setDetails({
+    dispatch(
+      setAppointmentDetails({
         ...details,
         patient: {
           ...details.patient,
@@ -161,7 +162,7 @@ const AppointmentDetails = ({
     try {
       const response = await getScheduleDetails(schedule.id);
       const { data: details } = response;
-      localDispatch(setDetails(details));
+      dispatch(setAppointmentDetails(details));
     } catch (error) {
       toast?.error(error.message);
     } finally {
@@ -307,9 +308,9 @@ const AppointmentDetails = ({
     scheduleStatus.id === 'PartialPaid' ||
     scheduleStatus.id === 'CompletedFree';
 
-  const patientName = details?.patient.fullName || schedule.patient.fullName;
-  const serviceName = details?.service.name || schedule.serviceName;
-  const serviceColor = details?.service.color || schedule.serviceColor;
+  const patientName = details?.patient?.fullName || schedule.patient.fullName;
+  const serviceName = details?.service?.name || schedule.serviceName;
+  const serviceColor = details?.service?.color || schedule.serviceColor;
 
   const statusesList = (
     <Popper
