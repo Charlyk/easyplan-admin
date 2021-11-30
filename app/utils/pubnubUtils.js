@@ -7,11 +7,15 @@ import {
 } from 'redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
-import { setSMSMessageStatus } from 'redux/actions/patientActions';
 import {
   toggleDeleteSchedule,
   toggleUpdateSchedule,
 } from 'redux/actions/scheduleActions';
+import {
+  updateSchedule,
+  deleteSchedule,
+  addNewSchedule,
+} from 'redux/slices/calendarData';
 import {
   setShouldUpdateClinicData,
   setUserClinicAccessChange,
@@ -40,9 +44,19 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       dispatch(toggleUpdateInvoices());
       break;
     case MessageAction.PauseRecordUpdatedOrCreated:
-    case MessageAction.ScheduleUpdatedOrCreated:
+    case MessageAction.ScheduleUpdated:
+      dispatch(updateSchedule(payload));
       dispatch(toggleUpdateSchedule(payload));
-      setTimeout(() => dispatch(toggleUpdateSchedule(null)), 600);
+      setTimeout(() => {
+        dispatch(toggleUpdateSchedule(null));
+      }, 600);
+      break;
+    case MessageAction.ScheduleCreated:
+      dispatch(addNewSchedule(payload));
+      dispatch(toggleUpdateSchedule(payload));
+      setTimeout(() => {
+        dispatch(toggleUpdateSchedule(null));
+      }, 600);
       break;
     case MessageAction.UserCalendarVisibilityChanged:
     case MessageAction.UserRestoredInClinic:
@@ -61,6 +75,7 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       dispatch(setClinicExchangeRatesUpdateRequired(true));
       break;
     case MessageAction.ScheduleDeleted:
+      dispatch(deleteSchedule(payload));
       dispatch(toggleDeleteSchedule(payload));
       setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
       break;
@@ -72,7 +87,6 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       if (payload == null) {
         return;
       }
-      dispatch(setSMSMessageStatus({ id: payload.id, status: payload.status }));
       break;
     }
     case MessageAction.NewDealCreated: {
@@ -132,7 +146,7 @@ const MessageAction = {
   ClinicInvitationAccepted: 'ClinicInvitationAccepted',
   CreatedNewInvoice: 'CreatedNewInvoice',
   NewPatientOnSite: 'NewPatientOnSite',
-  ScheduleUpdatedOrCreated: 'ScheduleUpdatedOrCreated',
+  ScheduleUpdated: 'ScheduleUpdated',
   PauseRecordUpdatedOrCreated: 'PauseRecordUpdatedOrCreated',
   NewUserInvited: 'NewUserInvited',
   InvitationRemoved: 'InvitationRemoved',
@@ -149,6 +163,7 @@ const MessageAction = {
   ExchangeRatesUpdateRequired: 'ExchangeRatesUpdateRequired',
   UpdateMessageStatus: 'UpdateMessageStatus',
   ScheduleDeleted: 'ScheduleDeleted',
+  ScheduleCreated: 'ScheduleCreated',
   NewDealCreated: 'NewDealCreated',
   DealDataUpdated: 'DealDataUpdated',
   DealRemoved: 'DealRemoved',

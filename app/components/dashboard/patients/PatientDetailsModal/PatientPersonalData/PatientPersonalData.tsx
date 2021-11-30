@@ -4,7 +4,7 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
@@ -27,6 +27,14 @@ import {
   requestFetchTags,
   requestUnassignTag,
 } from 'middleware/api/tags';
+import { calendarDetailsSelector } from 'redux/selectors/scheduleSelector';
+import {
+  updateSchedulePatientRecords,
+  updateDetailsPatientRecords,
+} from 'redux/slices/calendarData';
+import { ReduxDispatch } from 'store';
+import { CurrentClinic } from 'types/currentClinic.type';
+import { Patient } from 'types/patient.type';
 import styles from './PatientPersonalData.module.scss';
 import reducer, {
   initialState,
@@ -47,17 +55,27 @@ import reducer, {
   addPatientTag,
 } from './PatientPersonalData.reducer';
 
-const EasyDatePicker = dynamic(() =>
-  import('app/components/common/EasyDatePicker'),
+const EasyDatePicker = dynamic(
+  () => import('app/components/common/EasyDatePicker'),
 );
 
-const PatientPersonalData = ({
+interface Props {
+  patient: Patient;
+  currentClinic: CurrentClinic;
+  authToken: string;
+  onPatientUpdated: (val: boolean) => void;
+}
+
+const PatientPersonalData: React.FC<Props> = ({
   patient,
   currentClinic,
   authToken,
   onPatientUpdated,
 }) => {
-  const datePickerRef = useRef();
+  const dispatch = useDispatch<ReduxDispatch>();
+  const didInitialRenderHappen = useRef<boolean>(false);
+  const details = useSelector(calendarDetailsSelector);
+  const datePickerRef = useRef<HTMLDivElement | null>();
   const toast = useContext(NotificationsContext);
   const [
     {
@@ -87,6 +105,19 @@ const PatientPersonalData = ({
   useEffect(() => {
     if (patient != null) {
       localDispatch(setPatient(patient));
+      if (didInitialRenderHappen.current) {
+        dispatch(
+          updateSchedulePatientRecords({
+            id: patient.id,
+            fullName: patient.fullName,
+          }),
+        );
+
+        if (patient.id === details.patient.id) {
+          dispatch(updateDetailsPatientRecords(patient));
+        }
+      }
+      didInitialRenderHappen.current = true;
     }
   }, [patient]);
 
@@ -192,7 +223,7 @@ const PatientPersonalData = ({
       euroDebt,
       birthday: birthday ? moment(birthday).format('YYYY-MM-DD') : null,
       countryCode: country.dialCode,
-      discount: discount ? parseInt(discount) : 0,
+      discount: discount ? parseInt(`${discount}`) : 0,
     };
 
     try {
@@ -213,7 +244,7 @@ const PatientPersonalData = ({
   const formattedBirthday =
     birthday == null ? '' : moment(birthday).format('DD MMM YYYY');
 
-  const isFormValid = () => {
+  const isFormValid = (): boolean => {
     return (
       (email == null || email?.length === 0 || email?.match(EmailRegex)) &&
       isPhoneValid
@@ -230,6 +261,8 @@ const PatientPersonalData = ({
           selectedDate={birthday || new Date()}
           onClose={handleCloseDatePicker}
           onChange={handleBirthdayChange}
+          disablePortal={true}
+          minDate={null}
         />
       )}
       <Typography classes={{ root: 'title-label' }}>
@@ -362,22 +395,3 @@ const PatientPersonalData = ({
 };
 
 export default PatientPersonalData;
-
-PatientPersonalData.propTypes = {
-  onPatientUpdated: PropTypes.func,
-  patient: PropTypes.shape({
-    id: PropTypes.number,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    birthday: PropTypes.string,
-    email: PropTypes.string,
-    phoneNumber: PropTypes.string,
-    discount: PropTypes.number,
-    tags: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        title: PropTypes.string,
-      }),
-    ),
-  }),
-};

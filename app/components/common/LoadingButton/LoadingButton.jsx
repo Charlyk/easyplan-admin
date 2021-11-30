@@ -42,12 +42,20 @@ LoadingButton.propTypes = {
   onClick: PropTypes.func,
   isLoading: PropTypes.bool,
   children: PropTypes.any,
-  spinnerVariant: PropTypes.oneOf(['light']),
   className: PropTypes.string,
   disabled: PropTypes.bool,
   variant: PropTypes.string,
+  style: PropTypes.any,
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
 };
 
 LoadingButton.defaultProps = {
   variant: 'primary',
+  disabled: false,
+  onClick: () => null,
+  isLoading: false,
+  children: null,
+  className: null,
+  style: null,
+  type: 'button',
 };
