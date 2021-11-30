@@ -716,6 +716,10 @@ export default {
     chart_treatedclients: 'Patients with treatment plan',
     analytics_executed: 'Executed',
     analytics_planned: 'Planned',
+    clinic_cabinets: "This clinic's cabinets",
+    clinic_cabinets_tag_field: 'Add cabinet',
+    clinic_cabinets_tag_helper:
+      'Please type the name of your cabinet and press Enter to save',
     visits: 'Visits',
   },
   ro: {
@@ -1444,6 +1448,10 @@ export default {
     chart_services: 'Servicii efectuate / planificate',
     chart_visits: 'Total vizite',
     chart_treatedclients: 'Pacienți cu plan de tratament',
+    clinic_cabinets: 'Cabinetele clinicii',
+    clinic_cabinets_tag_field: 'Adaugă cabinet nou',
+    clinic_cabinets_tag_helper:
+      'Introdu numele cabinetului si tastează Enter pentru a salva',
     visits: 'Vizite',
   },
   ru: {
@@ -2160,6 +2168,10 @@ export default {
     chart_services: 'Services completed / planned',
     chart_visits: 'Total visits',
     chart_treatedclients: 'Patients with treatment plan',
+    clinic_cabinets: 'Кабинеты данной клиники',
+    clinic_cabinets_tag_field: 'Введите название нового кабинета',
+    clinic_cabinets_tag_helper:
+      'введите название нового кабинета и нажмите кнопку Enter  чтобы сохранить',
     visits: 'Visits',
   },
 };

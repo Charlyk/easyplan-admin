@@ -46,4 +46,7 @@ export default Object.freeze({
     schedules: [],
     details: null,
   },
+  cabinetsData: {
+    cabinets: [],
+  },
 });
