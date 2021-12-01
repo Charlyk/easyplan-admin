@@ -723,6 +723,8 @@ export default {
     clinic_current_cabinets: 'CurrentCabinets',
     clinic_cabinet_confirmation_request:
       'Are you sure you want to delete this cabinet',
+    clinic_cabinet_doctor_deletion_confirmation:
+      'Are you sure you want to remove this doctor',
     visits: 'Visits',
   },
   ro: {
@@ -1458,6 +1460,8 @@ export default {
     clinic_current_cabinets: 'Cabinete curente',
     clinic_cabinet_confirmation_request:
       'Sunteti sigur ca doriti sa stergeti acest cabinet',
+    clinic_cabinet_doctor_deletion_confirmation:
+      'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Vizite',
   },
   ru: {
@@ -2181,6 +2185,8 @@ export default {
     clinic_current_cabinets: 'Cabinete curente',
     clinic_cabinet_confirmation_request:
       'Sunteti sigur ca doriti sa stergeti acest cabinet',
+    clinic_cabinet_doctor_deletion_confirmation:
+      'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Visits',
   },
 };

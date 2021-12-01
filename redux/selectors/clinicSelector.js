@@ -1,5 +1,14 @@
 import moment from 'moment-timezone';
+import { createSelector } from 'reselect';
 import { Role } from 'app/utils/constants';
+
+export const getCurrentClinic = (state) => state.clinic;
+
+export const currentClinicDoctorsSelector = createSelector(
+  getCurrentClinic,
+  (clinic) =>
+    clinic?.clinic?.users?.filter((user) => user.roleInClinic === Role.doctor),
+);
 
 export const clinicTimeZoneSelector = (clinic) =>
   clinic?.timeZone || moment.tz.guess(true);

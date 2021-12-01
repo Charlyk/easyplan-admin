@@ -15,9 +15,7 @@
     margin-top: 5px !important;
     margin-bottom: 5px;
     display: grid;
-    grid-template-columns: max-content 1fr;
-    // border: 1px solid #3a83dc;
-    // border-radius: 0.8rem;
+    grid-template-columns: 220px 1fr;
     &:not(:last-child) {
       margin-bottom: 1.5rem;
     }
@@ -53,6 +51,30 @@
         font-style: normal;
         font-weight: normal;
         font-size: 14px;
+      }
+
+      .iconPlus {
+        padding: 5px;
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-weight: bold !important;
+        font-size: 14px !important;
+        background-color: #3a83dc;
+
+        &:hover {
+          background-color: hsl(213, 70%, 50%);
+        }
+
+        svg {
+          margin-left: 8px;
+        }
+        .label {
+          padding-left: 0;
+          color: #fff;
+        }
+      }
+      .outlined {
+        position: relative;
       }
     }
   }
