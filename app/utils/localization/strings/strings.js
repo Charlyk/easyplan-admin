@@ -720,6 +720,9 @@ export default {
     clinic_cabinets_tag_field: 'Add cabinet',
     clinic_cabinets_tag_helper:
       'Please type the name of your cabinet and press Enter to save',
+    clinic_current_cabinets: 'CurrentCabinets',
+    clinic_cabinet_confirmation_request:
+      'Are you sure you want to delete this cabinet',
     visits: 'Visits',
   },
   ro: {
@@ -1452,6 +1455,9 @@ export default {
     clinic_cabinets_tag_field: 'Adaugă cabinet nou',
     clinic_cabinets_tag_helper:
       'Introdu numele cabinetului si tastează Enter pentru a salva',
+    clinic_current_cabinets: 'Cabinete curente',
+    clinic_cabinet_confirmation_request:
+      'Sunteti sigur ca doriti sa stergeti acest cabinet',
     visits: 'Vizite',
   },
   ru: {
@@ -2172,6 +2178,9 @@ export default {
     clinic_cabinets_tag_field: 'Введите название нового кабинета',
     clinic_cabinets_tag_helper:
       'введите название нового кабинета и нажмите кнопку Enter  чтобы сохранить',
+    clinic_current_cabinets: 'Cabinete curente',
+    clinic_cabinet_confirmation_request:
+      'Sunteti sigur ca doriti sa stergeti acest cabinet',
     visits: 'Visits',
   },
 };

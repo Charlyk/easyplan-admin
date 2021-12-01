@@ -2,11 +2,11 @@
 import { createWrapper } from 'next-redux-wrapper';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
+// import createSagaMiddleware from 'redux-saga';
 import timerMiddleware from 'redux-timer-middleware';
 import rootReducer from 'redux/reducers/rootReducer';
 
-const middlewares = [thunk, timerMiddleware];
+const middlewares = [timerMiddleware];
 export const ReduxStore = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(...middlewares)),

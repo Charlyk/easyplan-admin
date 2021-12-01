@@ -1,0 +1,59 @@
+.clinicCabinets {
+  .cabinetsTitle {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 12px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px;
+  }
+  .cabinet {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: 550 !important;
+    font-size: 16px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    // border: 1px solid #3a83dc;
+    // border-radius: 0.8rem;
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+
+    &TitleWrapper {
+      display: flex;
+      align-items: center;
+      border-right: 1px solid #3a83dc;
+      padding-right: 1rem;
+    }
+    &Title {
+      margin: 0;
+      margin-left: 0.3rem;
+    }
+
+    &DoctorsContainer {
+      margin-left: 1rem;
+
+      .doctor {
+        margin: 0.3rem;
+
+        &.outlined {
+          border-color: #3a83dc;
+        }
+      }
+
+      .deleteIcon {
+        color: #ec3276;
+      }
+
+      .outline .label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+      }
+    }
+  }
+}
