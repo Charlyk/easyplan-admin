@@ -2,7 +2,7 @@ import { ScheduleStatus } from 'types';
 
 export interface Schedule {
   id: number;
-  doctorId?: number;
+  doctorId: number;
   cabinetId?: number;
   type: string;
   delayTime: number;

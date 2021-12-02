@@ -29,6 +29,7 @@ import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
 import NotificationsProvider from '../app/context/NotificationsProvider/NotificationsProvider';
+import { fetchAppData } from '../middleware/api/initialization';
 
 const FullScreenImageModal = dynamic(() =>
   import('../app/components/common/modals/FullScreenImageModal'),
@@ -223,5 +224,20 @@ const App = ({ Component, pageProps }) => {
     </>
   );
 };
+
+App.getInitialProps = wrapper.getInitialAppProps(
+  (store) =>
+    async ({ Component, ctx }) => {
+      const response = await fetchAppData(ctx.req.headers);
+      return {
+        pageProps: {
+          ...(Component.getInitialProps
+            ? await Component.getInitialProps({ ...ctx, store })
+            : {}),
+          pathname: ctx.pathname,
+        },
+      };
+    },
+);
 
 export default wrapper.withRedux(App);
