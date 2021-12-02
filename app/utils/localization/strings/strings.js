@@ -395,6 +395,7 @@ export default {
     'schedule time': 'Schedule time',
     'no options': 'No options',
     'select doctor': 'Select doctor',
+    'select doctor from the list': 'Выберите врачa со списка',
     'select patient': 'Select patient',
     schedulenotificationdesc:
       'This message will be sent one day before upcoming appointment.',
@@ -1128,6 +1129,7 @@ export default {
     'schedule time': 'Ora programării',
     'no options': 'Nu sunt rezultate',
     'select doctor': 'Alege doctor',
+    'select doctor from the list': 'Alege doctori din listă',
     'select patient': 'Alege pacient',
     schedulenotificationdesc:
       'Acest mesaj va fi transmis pacienților cu o zi înainte de programare.',
@@ -1857,6 +1859,7 @@ export default {
     'schedule time': 'Schedule time',
     'no options': 'No options',
     'select doctor': 'Select doctor',
+    'select doctor from the list': 'Select doctors from the list',
     'select patient': 'Select patient',
     schedulenotificationdesc:
       'This message will be sent a day before the upcoming appointment.',

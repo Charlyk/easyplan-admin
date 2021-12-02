@@ -1,0 +1,118 @@
+import React, { KeyboardEvent, useState, useRef, memo } from 'react';
+import { IconButton } from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
+import EASTextField from 'app/components/common/EASTextField';
+import IconCheckMark from 'app/components/icons/iconCheckMark';
+import IconDelete from 'app/components/icons/iconDelete';
+import IconEdit from 'app/components/icons/iconEdit';
+import IconPlus from 'app/components/icons/iconPlus';
+import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
+import { textForKey } from 'app/utils/localization';
+import { updateCabinet } from 'redux/slices/cabinetsData';
+import { ClinicCabinet } from 'types';
+import styles from './CabinetItem.module.scss';
+
+interface Props {
+  cabinet: ClinicCabinet;
+  handleDeleteCabinet?: (cabinet: number) => void;
+  handleAddDoctor?: (id: number) => void;
+  handleDeleteDoctor?: (cabinetId: number, doctorId: number) => void;
+}
+
+const CabinetItem: React.FC<Props> = ({
+  cabinet,
+  handleDeleteCabinet,
+  handleAddDoctor,
+  handleDeleteDoctor,
+}) => {
+  const [isBeingEdited, setIsBeingEdited] = useState(false);
+  const [inputValue, setInputValue] = useState(cabinet.name);
+  const inputRef = useRef(null);
+  const dispatch = useDispatch();
+
+  const handleKeyDown = (evt: KeyboardEvent): void => {
+    if (evt.key === 'Enter') {
+      handleEditCompleted();
+    }
+  };
+
+  const handleIsBeingEditedClick = (): void => {
+    setIsBeingEdited((prevState) => !prevState);
+    setTimeout(() => {
+      inputRef.current?.querySelector('input').focus();
+    }, 0);
+  };
+
+  const handleEditCompleted = (): void => {
+    const updatedCabinet = { id: cabinet.id, name: inputValue };
+    dispatch(updateCabinet(updatedCabinet));
+    handleIsBeingEditedClick();
+  };
+
+  return (
+    <div className={styles.cabinet}>
+      <div className={styles.cabinetTitleWrapper}>
+        {!isBeingEdited ? (
+          <IconButton
+            className={styles.editBtn}
+            onClick={handleIsBeingEditedClick}
+          >
+            <IconEdit fill='#3A83DC' />
+          </IconButton>
+        ) : (
+          <IconButton className={styles.editBtn} onClick={handleEditCompleted}>
+            <IconCheckMark fill='#ec3276' />
+          </IconButton>
+        )}
+        {!isBeingEdited && (
+          <IconButton onClick={() => handleDeleteCabinet(cabinet.id)}>
+            <IconDelete fill='#ec3276' />
+          </IconButton>
+        )}
+        <div className={styles.divContainer}>
+          {isBeingEdited ? (
+            <EASTextField
+              ref={inputRef}
+              value={inputValue}
+              onKeyDown={handleKeyDown}
+              onChange={(data: string) => setInputValue(data)}
+            />
+          ) : (
+            <h4 className={styles.cabinetTitle}>{cabinet.name}</h4>
+          )}
+        </div>
+      </div>
+      <div className={styles.cabinetDoctorsContainer}>
+        <Chip
+          variant='default'
+          onClick={() => handleAddDoctor(cabinet.id)}
+          label={textForKey('add doctor')}
+          icon={<IconPlus />}
+          classes={{
+            root: styles.iconPlus,
+            outlined: styles.outlined,
+            label: styles.label,
+          }}
+        />
+        {cabinet.users.map((user) => {
+          return (
+            <Chip
+              key={user.id}
+              label={user.fullName}
+              classes={{
+                root: styles.doctor,
+                outlined: styles.outlined,
+                label: styles.label,
+                deleteIcon: styles.deleteIcon,
+              }}
+              variant='outlined'
+              onDelete={() => handleDeleteDoctor(cabinet.id, user.id)}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default memo(CabinetItem);

@@ -14,6 +14,7 @@ const ConfirmationModal = ({
   primaryBtnText = textForKey('Confirm'),
   onConfirm,
   onClose,
+  secondaryBtnText = textForKey('cancel_schedule'),
 }) => {
   return (
     <EASModal
@@ -27,6 +28,7 @@ const ConfirmationModal = ({
       isPositiveLoading={isLoading}
       className={styles['confirmation-modal']}
       primaryBtnText={primaryBtnText}
+      secondaryBtnText={secondaryBtnText}
       size='small'
     >
       <Box padding='16px'>
@@ -45,4 +47,8 @@ ConfirmationModal.propTypes = {
   isLoading: PropTypes.bool,
   onConfirm: PropTypes.func,
   onClose: PropTypes.func,
+};
+
+ConfirmationModal.defaultProps = {
+  secondaryBtnText: textForKey('cancel_schedule'),
 };

@@ -1,13 +1,8 @@
 import React, { KeyboardEvent, useState, useEffect, useRef } from 'react';
-import { IconButton } from '@material-ui/core';
-import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import EASTextField from 'app/components/common/EASTextField';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import OptionsSelectionModal from 'app/components/common/modals/OptionsSelectionModal';
-import IconDelete from 'app/components/icons/iconDelete';
-import IconEdit from 'app/components/icons/iconEdit';
-import IconPlus from 'app/components/icons/iconPlus';
 import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { useSelector } from 'app/utils/hooks/useTypedSelector';
 import { textForKey } from 'app/utils/localization';
@@ -18,7 +13,9 @@ import {
   setCabinets,
   deleteCabinet,
   deleteDoctorFromCabinet,
+  addDoctorToCabinet,
 } from 'redux/slices/cabinetsData';
+import CabinetItem from '../CabinetItem';
 import styles from './ClinicCabinets.module.scss';
 import DemoData from './demoData';
 
@@ -32,7 +29,7 @@ const ClinicCabinets: React.FC<Props> = () => {
   const cabinets = useSelector(cabinetsSelector);
   const currentClinicDoctors = useSelector(currentClinicDoctorsSelector);
   const [inputValue, setInputValue] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [showCabinetDeleteModal, setShowCabinetDeleteModal] = useState(false);
   const [showDoctorDeleteModal, setShowDoctorDeleteModal] = useState(false);
   const [cabinetId, setCabinetId] = useState<number>(null);
   const [showAddDoctorModal, setShowAddDoctorModal] = useState(false);
@@ -48,7 +45,7 @@ const ClinicCabinets: React.FC<Props> = () => {
   const handleKeyDown = (evt: KeyboardEvent): void => {
     if (evt.key === 'Enter') {
       dispatch(
-        addNewCabinet({ name: inputValue, id: cabinets.length, users: [] }),
+        addNewCabinet({ name: inputValue, id: cabinets.length + 1, users: [] }),
       );
       setInputValue('');
       inputRef.current.querySelector('input').blur();
@@ -68,16 +65,30 @@ const ClinicCabinets: React.FC<Props> = () => {
 
   const handleDeleteCabinet = (id: number): void => {
     setCabinetId(id);
-    setShowModal(true);
+    setShowCabinetDeleteModal(true);
   };
 
   const handleOnCabinetDeleteConfirm = () => {
     dispatch(deleteCabinet(cabinetId));
-    setShowModal(false);
+    setShowCabinetDeleteModal(false);
   };
 
-  const handleAddDoctor = () => {
+  const handleAddDoctor = (id: number) => {
     setShowAddDoctorModal(true);
+    setCabinetId(id);
+  };
+
+  const handleOnConfirmAddDoctors = (selectedItemsArr) => {
+    setShowAddDoctorModal(false);
+    dispatch(addDoctorToCabinet({ cabinetId, selectedItemsArr }));
+    setCabinetId(null);
+  };
+
+  const isDoctorAlreadyInCabinet = (doctor, cabinetId) => {
+    const requiredCabinet = cabinets.find(
+      (cabinet) => cabinet.id === cabinetId,
+    );
+    return requiredCabinet.users.some((user) => user.id === doctor.id);
   };
 
   return (
@@ -95,55 +106,22 @@ const ClinicCabinets: React.FC<Props> = () => {
       </Typography>
       <div className={styles.cabinetsContainer}>
         {cabinets.map((cabinet) => (
-          <div key={cabinet.id} className={styles.cabinet}>
-            <div className={styles.cabinetTitleWrapper}>
-              <IconButton>
-                <IconEdit fill='#3A83DC' />
-              </IconButton>
-              <IconButton onClick={() => handleDeleteCabinet(cabinet.id)}>
-                <IconDelete fill='#ec3276' />
-              </IconButton>
-              <h4 className={styles.cabinetTitle}>{cabinet.name}</h4>
-            </div>
-            <div className={styles.cabinetDoctorsContainer}>
-              <Chip
-                variant='default'
-                onClick={handleAddDoctor}
-                label={textForKey('add doctor')}
-                icon={<IconPlus />}
-                classes={{
-                  root: styles.iconPlus,
-                  outlined: styles.outlined,
-                  label: styles.label,
-                }}
-              />
-              {cabinet.users.map((user) => {
-                return (
-                  <Chip
-                    key={user.id}
-                    label={user.fullName}
-                    classes={{
-                      root: styles.doctor,
-                      outlined: styles.outlined,
-                      label: styles.label,
-                      deleteIcon: styles.deleteIcon,
-                    }}
-                    variant='outlined'
-                    onDelete={() => handleDeleteDoctor(cabinet.id, user.id)}
-                  />
-                );
-              })}
-            </div>
-          </div>
+          <CabinetItem
+            key={cabinet.id}
+            cabinet={cabinet}
+            handleDeleteDoctor={handleDeleteDoctor}
+            handleAddDoctor={handleAddDoctor}
+            handleDeleteCabinet={handleDeleteCabinet}
+          />
         ))}
       </div>
-      {showModal && (
+      {showCabinetDeleteModal && (
         <ConfirmationModal
-          show={showModal}
+          show={showCabinetDeleteModal}
           title={textForKey('confirm')}
           message={`${textForKey('clinic_cabinet_confirmation_request')} ?`}
           onConfirm={handleOnCabinetDeleteConfirm}
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowCabinetDeleteModal(false)}
         />
       )}
       {showDoctorDeleteModal && (
@@ -159,8 +137,17 @@ const ClinicCabinets: React.FC<Props> = () => {
       )}
       {showAddDoctorModal && (
         <OptionsSelectionModal
-          doctors={currentClinicDoctors}
-          open={showAddDoctorModal}
+          iterable={currentClinicDoctors.map((item) => ({
+            ...item,
+            name: item.fullName,
+            disabled: isDoctorAlreadyInCabinet(item, cabinetId),
+          }))}
+          show={showAddDoctorModal}
+          title={textForKey('select doctor from the list')}
+          onClose={() => setShowAddDoctorModal(false)}
+          onConfirm={handleOnConfirmAddDoctors}
+          destroyBtnText={textForKey('cancel_schedule')}
+          primaryBtnText={textForKey('confirm')}
         />
       )}
     </div>

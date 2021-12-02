@@ -1,7 +1,7 @@
 export default [
   {
     users: [
-      { id: 1, fullName: 'Blanaru Veaceslav' },
+      { id: 7, fullName: 'Blanaru Veaceslav' },
       { id: 2, fullName: 'Postolache Grigore' },
       { id: 3, fullName: 'Veniamin Untila' },
       { id: 4, fullName: 'Onofrei Constantin' },
@@ -13,7 +13,7 @@ export default [
   },
   {
     users: [
-      { id: 1, fullName: 'Puscas Grigore' },
+      { id: 3, fullName: 'Puscas Grigore' },
       { id: 2, fullName: 'Eleonora Sava' },
     ],
     id: 2,
@@ -21,7 +21,7 @@ export default [
   },
   {
     users: [
-      { id: 1, fullName: 'Onofrei Constantin' },
+      { id: 3, fullName: 'Onofrei Constantin' },
       { id: 2, fullName: 'Galchin Dumitru' },
     ],
     id: 3,
