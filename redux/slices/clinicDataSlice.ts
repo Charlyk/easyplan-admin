@@ -1,14 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import initialState from '../initialState';
 
 const clinicDataSlice = createSlice({
   name: 'clinicData',
   initialState: initialState.clinicData,
   reducers: {
-    setShouldUpdateClinicData(state, action) {
+    setShouldUpdateClinicData(state, action: PayloadAction<boolean>) {
       state.updateClinicData = action.payload;
     },
-    setUserClinicAccessChange(state, action) {
+    setUserClinicAccessChange(state, action: PayloadAction<any>) {
       state.userClinicAccessChange = action.payload;
     },
   },

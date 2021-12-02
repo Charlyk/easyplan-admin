@@ -2,11 +2,13 @@ import React, { useContext, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';
+import { setCurrentUser } from '../../../../redux/slices/appDataSlice';
 import EASImage from '../EASImage';
 import styles from './RegistrationWrapper.module.scss';
 import reducer, {
@@ -18,10 +20,11 @@ const RegisterForm = dynamic(() => import('./RegisterForm'));
 
 export default function RegistrationWrapper({ isMobile }) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;
-  const [{ errorMessage, isLoading }, dispatch] = useReducer(
+  const [{ errorMessage, isLoading }, localDispatch] = useReducer(
     reducer,
     initialState,
   );
@@ -31,11 +34,13 @@ export default function RegistrationWrapper({ isMobile }) {
   };
 
   const handleCreateAccount = async (accountData) => {
-    dispatch(setIsLoading(true));
+    localDispatch(setIsLoading(true));
     try {
       const requestBody = { ...accountData };
       delete requestBody.avatarFile;
-      await registerUser(accountData, accountData.avatarFile);
+      const response = await registerUser(accountData, accountData.avatarFile);
+      const { user } = response.data;
+      dispatch(setCurrentUser(user));
       toast.success(textForKey('account_created_success'));
       await router.replace('/create-clinic?login=1');
     } catch (error) {
@@ -46,7 +51,7 @@ export default function RegistrationWrapper({ isMobile }) {
         toast.error(error.message);
       }
     } finally {
-      dispatch(setIsLoading(false));
+      localDispatch(setIsLoading(false));
     }
   };
 

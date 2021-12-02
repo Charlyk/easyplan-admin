@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
-import generateReducerActions from 'app/utils/generateReducerActions';
 
 /**
  * Filter available time based on start time and service duration
@@ -96,7 +95,6 @@ const addAppointmentModalSlice = createSlice({
     setDoctor(state, action) {
       state.doctor = action.payload;
       state.service = null;
-      state.cabinet = null;
       state.isDoctorValid = action.payload != null;
     },
     setService(state, action) {

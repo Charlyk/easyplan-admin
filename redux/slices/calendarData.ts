@@ -85,9 +85,13 @@ const calendarData = createSlice({
     },
     deleteSchedule(state, action: PayloadAction<Schedule>) {
       const scheduleToDelete = action.payload;
-      console.log(state);
       state.schedules = state.schedules.map((item) => {
-        if (item.groupId !== scheduleToDelete.doctorId) return item;
+        if (
+          item.groupId !== scheduleToDelete.doctorId &&
+          item.groupId !== scheduleToDelete.cabinetId
+        ) {
+          return item;
+        }
 
         return {
           ...item,

@@ -38,6 +38,10 @@ const initialState: ReduxState = Object.freeze({
     updatedReminder: null,
     newReminder: null,
   },
+  appData: {
+    currentClinic: null,
+    currentUser: null,
+  },
   clinicData: {
     updateClinicData: false,
     userClinicAccessChange: null,

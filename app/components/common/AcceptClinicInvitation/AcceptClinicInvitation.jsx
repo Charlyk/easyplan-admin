@@ -5,12 +5,14 @@ import VisibilityOn from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys, PasswordRegex, Role } from 'app/utils/constants';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { requestAcceptInvitation } from 'middleware/api/users';
+import { setCurrentUser } from 'redux/slices/appDataSlice';
 import EASImage from '../EASImage';
 import EASPhoneInput from '../EASPhoneInput';
 import EASTextField from '../EASTextField';
@@ -31,6 +33,7 @@ import styles from './AcceptInvitation.module.scss';
 const AcceptInvitation = ({ token, isNew, isMobile }) => {
   const toast = useContext(NotificationsContext);
   const router = useRouter();
+  const dispatch = useDispatch();
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;
   const isNewUser = isNew === '1';
@@ -132,6 +135,7 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
           [HeaderKeys.clinicId]: -1,
         },
       );
+      dispatch(setCurrentUser(user));
       toast.success(textForKey('invitation_accepted_success'));
       await handleSuccessResponse(user);
     } catch (error) {

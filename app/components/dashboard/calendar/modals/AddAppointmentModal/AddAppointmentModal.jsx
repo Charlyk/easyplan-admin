@@ -13,7 +13,7 @@ import debounce from 'lodash/debounce';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -23,12 +23,7 @@ import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import {
-  EmailRegex,
-  Languages,
-  PatientSources,
-  Role,
-} from 'app/utils/constants';
+import { EmailRegex, Languages, PatientSources } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { getPatients } from 'middleware/api/patients';
@@ -38,7 +33,10 @@ import {
   postSchedule,
 } from 'middleware/api/schedules';
 import { toggleAppointmentsUpdate } from 'redux/actions/actions';
-import onRequestError from '../../../../../utils/onRequestError';
+import {
+  clinicCabinetsSelector,
+  clinicDoctorsSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
@@ -73,7 +71,6 @@ import reducer, {
 
 const AddAppointmentModal = ({
   open,
-  currentClinic,
   doctor: selectedDoctor,
   patient: selectedPatient,
   startHour: selectedStartTime,
@@ -87,35 +84,8 @@ const AddAppointmentModal = ({
   const dispatch = useDispatch();
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
-
-  const clinicDoctors = useMemo(() => {
-    return currentClinic.users.filter(
-      (item) =>
-        item.roleInClinic === Role.doctor &&
-        !item.isHidden &&
-        !item.isInVacation,
-    );
-  }, [currentClinic]);
-
-  const doctors = useMemo(() => {
-    const mappedDoctors = clinicDoctors.map((item) => {
-      const { phoneNumber, fullName } = item;
-      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
-      return {
-        ...item,
-        name: name,
-        label: item.fullName,
-        isCabinet: false,
-      };
-    });
-    const mappedCabinets = currentClinic.cabinets.map((cabinet) => ({
-      ...cabinet,
-      label: cabinet.name,
-      isCabinet: true,
-    }));
-    return orderBy([...mappedDoctors, ...mappedCabinets], 'name', 'asc');
-  }, [currentClinic, clinicDoctors]);
-
+  const clinicCabinets = useSelector(clinicCabinetsSelector);
+  const clinicDoctors = useSelector(clinicDoctorsSelector);
   const [
     {
       patient,
@@ -154,17 +124,33 @@ const AddAppointmentModal = ({
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  const getLabelKey = useCallback((option) => {
-    if (option.firstName && option.lastName) {
-      return `${option.lastName} ${option.firstName}`;
-    } else if (option.firstName) {
-      return option.firstName;
-    } else if (option.lastName) {
-      return option.lastName;
-    } else {
-      return `+${option.countryCode}${option.phoneNumber}`;
-    }
-  }, []);
+  const hasCabinets = clinicCabinets.length > 0;
+
+  const doctors = useMemo(() => {
+    const mappedDoctors = clinicDoctors
+      .filter((item) => {
+        const isInCabinet = item.cabinets.some((cab) => cab.id === cabinet?.id);
+        return cabinet == null || isInCabinet;
+      })
+      .map((item) => {
+        const { phoneNumber, fullName } = item;
+        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+        return {
+          ...item,
+          name: name,
+          label: item.fullName,
+        };
+      });
+    return orderBy(mappedDoctors, 'name', 'asc');
+  }, [cabinet, clinicDoctors]);
+
+  const cabinets = useMemo(() => {
+    const mappedCabinets = clinicCabinets.map((cabinet) => ({
+      ...cabinet,
+      label: cabinet.name,
+    }));
+    return orderBy(mappedCabinets, 'name', 'asc');
+  }, [clinicCabinets]);
 
   const suggestionPatients = useMemo(() => {
     if (patients.length === 0 && patient != null) {
@@ -203,6 +189,18 @@ const AddAppointmentModal = ({
       label: service.name,
     }));
   }, [doctor, cabinet, clinicDoctors]);
+
+  const getLabelKey = useCallback((option) => {
+    if (option.firstName && option.lastName) {
+      return `${option.lastName} ${option.firstName}`;
+    } else if (option.firstName) {
+      return option.firstName;
+    } else if (option.lastName) {
+      return option.lastName;
+    } else {
+      return `+${option.countryCode}${option.phoneNumber}`;
+    }
+  }, []);
 
   const handlePatientSearch = useCallback(
     debounce(async (query) => {
@@ -383,6 +381,10 @@ const AddAppointmentModal = ({
 
   const handleDoctorChange = (event, selectedDoctor) => {
     localDispatch(setDoctor(selectedDoctor));
+  };
+
+  const handleCabinetChange = (event, selectedCabinet) => {
+    localDispatch(setSelectedCabinet(selectedCabinet));
   };
 
   const handleServiceChange = (event, selectedService) => {
@@ -706,10 +708,22 @@ const AddAppointmentModal = ({
           </div>
         </div>
 
+        {hasCabinets && (
+          <EASAutocomplete
+            filterLocally
+            options={cabinets}
+            value={cabinet}
+            fieldLabel={textForKey('add_appointment_cabinet')}
+            placeholder={textForKey('type_to_search')}
+            onChange={handleCabinetChange}
+          />
+        )}
+
         <EASAutocomplete
           filterLocally
+          containerClass={styles.simpleField}
           options={doctors}
-          value={doctor || cabinet}
+          value={doctor}
           fieldLabel={textForKey('Doctor')}
           placeholder={textForKey('Enter doctor name or phone')}
           onChange={handleDoctorChange}

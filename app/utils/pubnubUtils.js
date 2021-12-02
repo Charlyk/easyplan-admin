@@ -14,16 +14,16 @@ import {
   addNewSchedule,
 } from 'redux/slices/calendarData';
 import {
-  setShouldUpdateClinicData,
-  setUserClinicAccessChange,
-} from 'redux/slices/clinicDataSlice';
-import {
   setUpdatedDeal,
   setNewDeal,
   setDeletedDeal,
   setUpdatedReminder,
   setNewReminder,
 } from 'redux/slices/crmSlice';
+import {
+  setShouldUpdateClinicData,
+  setUserClinicAccessChange,
+} from '../../redux/slices/clinicDataSlice';
 
 export const handleRemoteMessage = (message) => (dispatch) => {
   const { action, payload: messagePayload } = message;

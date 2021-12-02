@@ -717,6 +717,8 @@ export default {
     analytics_executed: 'Executed',
     analytics_planned: 'Planned',
     visits: 'Visits',
+    type_to_search: 'Type to search...',
+    add_appointment_cabinet: 'Cabinet (Optional)',
   },
   ro: {
     analytics: 'Analitică',
@@ -1445,6 +1447,8 @@ export default {
     chart_visits: 'Total vizite',
     chart_treatedclients: 'Pacienți cu plan de tratament',
     visits: 'Vizite',
+    type_to_search: 'Tapează pentru a căuta...',
+    add_appointment_cabinet: 'Cabinet (Opțional)',
   },
   ru: {
     analytics: 'Analytics',
@@ -2161,5 +2165,7 @@ export default {
     chart_visits: 'Total visits',
     chart_treatedclients: 'Patients with treatment plan',
     visits: 'Visits',
+    type_to_search: 'Type to search...',
+    add_appointment_cabinet: 'Cabinets (Optional)',
   },
 };

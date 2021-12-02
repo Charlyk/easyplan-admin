@@ -1,4 +1,5 @@
-import { ScheduleDetails, ScheduleItem } from 'types';
+import { CurrentClinic, ScheduleDetails, ScheduleItem } from 'types';
+import { CurrentUser } from '../../types/currentUser.type';
 
 export interface CalendarDataState {
   schedules: ScheduleItem[];
@@ -30,6 +31,11 @@ export interface ClinicDataState {
   userClinicAccessChange: any;
 }
 
+export interface AppDataState {
+  currentClinic: CurrentClinic | null;
+  currentUser: CurrentUser | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -55,5 +61,6 @@ export interface ReduxState {
   patientDetails: PatientDetailsState;
   calendarData: CalendarDataState;
   clinicData: ClinicDataState;
+  appData: AppDataState;
   crm: CrmState;
 }

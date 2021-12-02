@@ -21,6 +21,7 @@ import {
   calendarScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
 import { setSchedules } from 'redux/slices/calendarData';
+import { clinicCabinetsSelector } from '../../../../../redux/selectors/appDataSelector';
 import styles from './CalendarDayView.module.scss';
 import { actions, reducer, initialState } from './CalendarDayView.reducer';
 
@@ -34,7 +35,6 @@ const moment = extendMoment(Moment);
 const CalendarDayView = ({
   schedules: initialSchedules,
   showHourIndicator,
-  cabinets,
   doctors,
   viewDate,
   dayHours,
@@ -45,6 +45,7 @@ const CalendarDayView = ({
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const schedules = useSelector(calendarScheduleSelector);
+  const cabinets = useSelector(clinicCabinetsSelector);
   const schedulesRef = useRef(null);
   const [{ hours, pauseModal }, localDispatch] = useReducer(
     reducer,

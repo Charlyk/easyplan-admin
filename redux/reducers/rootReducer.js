@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 
+import initialState from 'redux/initialState';
+import appData from 'redux/slices/appDataSlice';
 import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
 import crm from 'redux/slices/crmSlice';
-import initialState from '../initialState';
-import types from '../types';
+import types from 'redux/types';
 import addPaymentModal from './addPaymentModal';
 import appointmentModal from './appointmentModal';
 import calendar from './calendar';
@@ -41,6 +42,7 @@ export default combineReducers({
   crm,
   clinicData,
   calendarData,
+  appData,
 });
 
 function main(state = initialState, { type, payload } = {}) {

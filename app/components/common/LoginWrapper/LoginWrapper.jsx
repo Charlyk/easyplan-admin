@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useReducer } from 'react';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -12,6 +13,7 @@ import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { appBaseUrl, environment, isDev } from 'eas.config';
 import { loginUser, resetUserPassword, signOut } from 'middleware/api/auth';
+import { setCurrentUser } from 'redux/slices/appDataSlice';
 import styles from './LoginWrapper.module.scss';
 import reducer, {
   initialState,
@@ -32,6 +34,7 @@ export default function LoginWrapper({
   isMobile,
 }) {
   const toast = useContext(NotificationsContext);
+  const dispatch = useDispatch();
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
   const [
@@ -126,6 +129,7 @@ export default function LoginWrapper({
     const [subdomainPart] = window.location.host.split('.');
     const subdomain =
       environment === 'local' ? process.env.DEFAULT_CLINIC : subdomainPart;
+    dispatch(setCurrentUser(user));
     if (RestrictedSubdomains.includes(subdomain)) {
       if (user.clinics.length > 1) {
         // user has more than one clinic so we need to allow to select a clinic
