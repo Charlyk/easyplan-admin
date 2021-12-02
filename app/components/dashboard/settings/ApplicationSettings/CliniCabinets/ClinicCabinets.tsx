@@ -6,6 +6,11 @@ import OptionsSelectionModal from 'app/components/common/modals/OptionsSelection
 import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { useSelector } from 'app/utils/hooks/useTypedSelector';
 import { textForKey } from 'app/utils/localization';
+import {
+  getAllCabinetsInfo,
+  createCabinet,
+  deleteCabinet as middlewareDeleteCabinet,
+} from 'middleware/api/cabinets';
 import { cabinetsSelector } from 'redux/selectors/cabinetSelector';
 import { currentClinicDoctorsSelector } from 'redux/selectors/clinicSelector';
 import {
@@ -42,11 +47,16 @@ const ClinicCabinets: React.FC<Props> = () => {
     dispatch(setCabinets(DemoData));
   }, []);
 
-  const handleKeyDown = (evt: KeyboardEvent): void => {
+  const handleKeyDown = async (evt: KeyboardEvent): Promise<void> => {
     if (evt.key === 'Enter') {
-      dispatch(
-        addNewCabinet({ name: inputValue, id: cabinets.length + 1, users: [] }),
-      );
+      const body = {
+        name: inputValue,
+        users: null,
+      };
+
+      const { data } = await createCabinet(body);
+
+      dispatch(addNewCabinet(data));
       setInputValue('');
       inputRef.current.querySelector('input').blur();
     }
@@ -68,8 +78,10 @@ const ClinicCabinets: React.FC<Props> = () => {
     setShowCabinetDeleteModal(true);
   };
 
-  const handleOnCabinetDeleteConfirm = () => {
-    dispatch(deleteCabinet(cabinetId));
+  const handleOnCabinetDeleteConfirm = async (): Promise<void> => {
+    const { data } = await middlewareDeleteCabinet({ id: cabinetId });
+    dispatch(deleteCabinet(data.id));
+    console.log(data);
     setShowCabinetDeleteModal(false);
   };
 
@@ -91,8 +103,15 @@ const ClinicCabinets: React.FC<Props> = () => {
     return requiredCabinet.users.some((user) => user.id === doctor.id);
   };
 
+  const fetchData = async () => {
+    const data = await getAllCabinetsInfo();
+    console.log(data);
+  };
+
   return (
     <div className={styles.clinicCabinets}>
+      <button onClick={fetchData}>Fetch Data</button>
+      <button>Create Cabinet</button>
       <EASTextField
         fieldLabel={textForKey('clinic_cabinets_tag_field')}
         helperText={textForKey('clinic_cabinets_tag_helper')}

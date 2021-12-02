@@ -8,6 +8,7 @@ import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
 import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { textForKey } from 'app/utils/localization';
+import { updateCabinet as middlewareUpdateCabinet } from 'middleware/api/cabinets';
 import { updateCabinet } from 'redux/slices/cabinetsData';
 import { ClinicCabinet } from 'types';
 import styles from './CabinetItem.module.scss';
@@ -43,9 +44,11 @@ const CabinetItem: React.FC<Props> = ({
     }, 0);
   };
 
-  const handleEditCompleted = (): void => {
-    const updatedCabinet = { id: cabinet.id, name: inputValue };
-    dispatch(updateCabinet(updatedCabinet));
+  const handleEditCompleted = async (): Promise<void> => {
+    const body = { id: cabinet.id, name: inputValue };
+
+    const { data } = await middlewareUpdateCabinet(body);
+    dispatch(updateCabinet(data));
     handleIsBeingEditedClick();
   };
 
