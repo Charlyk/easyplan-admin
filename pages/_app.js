@@ -10,6 +10,7 @@ import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
+import NotificationsProvider from 'app/context/NotificationsProvider/NotificationsProvider';
 import theme from 'app/styles/theme';
 import { APP_DATA_API, UnauthorizedPaths } from 'app/utils/constants';
 import useWindowFocused from 'app/utils/hooks/useWindowFocused';
@@ -28,13 +29,12 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
-import NotificationsProvider from '../app/context/NotificationsProvider/NotificationsProvider';
 
 const FullScreenImageModal = dynamic(() =>
-  import('../app/components/common/modals/FullScreenImageModal'),
+  import('app/components/common/modals/FullScreenImageModal'),
 );
 const ConfirmationModal = dynamic(() =>
-  import('../app/components/common/modals/ConfirmationModal'),
+  import('app/components/common/modals/ConfirmationModal'),
 );
 
 const pubnub = new PubNub({
@@ -130,7 +130,14 @@ const App = ({ Component, pageProps }) => {
   };
 
   const checkUserIsAuthenticated = async () => {
-    if (router.asPath.includes('integrations') || isChecking) {
+    const path = router.asPath;
+    if (
+      path.includes('integrations') ||
+      path.includes('register') ||
+      path.includes('accept-invitation') ||
+      path.includes('confirmation') ||
+      isChecking
+    ) {
       // no need to check auth status on integrations page
       return;
     }
@@ -189,7 +196,7 @@ const App = ({ Component, pageProps }) => {
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
         {!currentPage.includes('confirmation') ? (
-          <Script type='text/javascript' src='/tawkto.js' />
+          <Script type='text/javascript' src={'/tawkto.js'} />
         ) : null}
       </Head>
       <ThemeProvider theme={theme}>
