@@ -6,6 +6,8 @@ import updatedServerUrl from 'app/utils/updateServerUrl';
 import authorized from '../authorized';
 import handler from '../handler';
 
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
+
 async function createClinic(req) {
   const { auth_token: authToken } = cookie.parse(req.headers.cookie);
   return axios.post(`${updatedServerUrl(req)}/clinics`, req.body, {

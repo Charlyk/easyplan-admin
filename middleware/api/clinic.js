@@ -1,6 +1,6 @@
 import axios from 'axios';
 import imageToBase64 from 'app/utils/imageToBase64';
-import { del, get, put } from './request';
+import { del, get, put, post } from './request';
 
 /**
  * Delete clinic invitation
@@ -71,7 +71,7 @@ export async function createNewClinic(body, logo, headers = null) {
   if (logo != null) {
     updatedBody.logo = await imageToBase64(logo);
   }
-  return axios.post('/api/clinic', updatedBody, { headers });
+  return post('/api/clinic', headers, updatedBody);
 }
 
 /**

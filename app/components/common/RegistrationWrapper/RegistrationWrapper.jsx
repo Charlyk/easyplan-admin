@@ -7,6 +7,7 @@ import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';
+import { HeaderKeys } from '../../../utils/constants';
 import EASImage from '../EASImage';
 import styles from './RegistrationWrapper.module.scss';
 import reducer, {

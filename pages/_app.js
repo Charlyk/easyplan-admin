@@ -136,6 +136,7 @@ const App = ({ Component, pageProps }) => {
       path.includes('register') ||
       path.includes('accept-invitation') ||
       path.includes('confirmation') ||
+      path.includes('create-clinic') ||
       isChecking
     ) {
       // no need to check auth status on integrations page

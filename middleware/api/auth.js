@@ -1,5 +1,6 @@
 import axios from 'axios';
 import imageToBase64 from 'app/utils/imageToBase64';
+import { baseApiUrl } from '../../eas.config';
 import { del, get, post, put } from './request';
 
 /**
@@ -30,7 +31,7 @@ export async function registerUser(body, avatar, headers = null) {
   if (avatar != null) {
     updatedBody.avatar = await imageToBase64(avatar);
   }
-  return axios.post('/api/auth/register', updatedBody, { headers });
+  return post('/api/auth/register', headers, updatedBody);
 }
 
 /**

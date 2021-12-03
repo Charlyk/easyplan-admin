@@ -12,7 +12,6 @@ function createNewAccount(req) {
     req.body,
     {
       headers: {
-        ...req.headers,
         [HeaderKeys.clinicId]: -1,
         [HeaderKeys.subdomain]: getSubdomain(req),
         [HeaderKeys.contentType]: 'application/json',
