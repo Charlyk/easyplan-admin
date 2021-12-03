@@ -36,18 +36,18 @@ const cabinetsData = createSlice({
         if (cabinet.id !== cabinetId) return cabinet;
 
         const filteredUsers = cabinet.users.filter(
-          (doctor) => doctor.id !== doctorId,
+          (user) => user.user.id !== doctorId,
         );
 
         return { ...cabinet, users: filteredUsers };
       });
     },
     addDoctorToCabinet(state, action) {
-      const { cabinetId, selectedItemsArr } = action.payload;
+      const { cabinetId, users } = action.payload;
       state.cabinets = state.cabinets.map((cabinet) => {
         if (cabinet.id !== cabinetId) return cabinet;
 
-        const updatedUsers = [...cabinet.users, ...selectedItemsArr];
+        const updatedUsers = [...cabinet.users, ...users];
         return { ...cabinet, users: updatedUsers };
       });
     },

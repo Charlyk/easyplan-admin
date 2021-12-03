@@ -6,10 +6,13 @@ import OptionsSelectionModal from 'app/components/common/modals/OptionsSelection
 import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { useSelector } from 'app/utils/hooks/useTypedSelector';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   getAllCabinetsInfo,
   createCabinet,
   deleteCabinet as middlewareDeleteCabinet,
+  addDoctor as middlewareAddDoctor,
+  deleteDoctor as middlewareDeleteDoctor,
 } from 'middleware/api/cabinets';
 import { cabinetsSelector } from 'redux/selectors/cabinetSelector';
 import { currentClinicDoctorsSelector } from 'redux/selectors/clinicSelector';
@@ -17,12 +20,10 @@ import {
   addNewCabinet,
   setCabinets,
   deleteCabinet,
-  deleteDoctorFromCabinet,
-  addDoctorToCabinet,
+  updateCabinet,
 } from 'redux/slices/cabinetsData';
 import CabinetItem from '../CabinetItem';
 import styles from './ClinicCabinets.module.scss';
-import DemoData from './demoData';
 
 interface Props {
   id: number;
@@ -43,22 +44,35 @@ const ClinicCabinets: React.FC<Props> = () => {
     null,
   ]);
 
+  const fetchData = async () => {
+    try {
+      const { data } = await getAllCabinetsInfo();
+      return data;
+    } catch (err) {
+      onRequestError(err);
+    }
+  };
+
   useEffect(() => {
-    dispatch(setCabinets(DemoData));
+    fetchData().then((data) => dispatch(setCabinets(data)));
   }, []);
 
   const handleKeyDown = async (evt: KeyboardEvent): Promise<void> => {
-    if (evt.key === 'Enter') {
-      const body = {
-        name: inputValue,
-        users: null,
-      };
+    try {
+      if (evt.key === 'Enter') {
+        const body = {
+          name: inputValue,
+          users: null,
+        };
 
-      const { data } = await createCabinet(body);
+        const { data } = await createCabinet(body);
 
-      dispatch(addNewCabinet(data));
-      setInputValue('');
-      inputRef.current.querySelector('input').blur();
+        dispatch(addNewCabinet(data));
+        setInputValue('');
+        inputRef.current.querySelector('input').blur();
+      }
+    } catch (err) {
+      onRequestError(err);
     }
   };
 
@@ -67,10 +81,19 @@ const ClinicCabinets: React.FC<Props> = () => {
     setDoctorDeleteData([cabinetId, doctorId]);
   };
 
-  const handleOnDoctorDeleteConfirm = (): void => {
-    setShowDoctorDeleteModal(false);
-    const [cabinetId, doctorId] = doctorDeleteData;
-    dispatch(deleteDoctorFromCabinet({ cabinetId, doctorId }));
+  const handleOnDoctorDeleteConfirm = async (): Promise<void> => {
+    try {
+      const [cabinetId, doctorId] = doctorDeleteData;
+      const params = {
+        id: [doctorId],
+        cabinet: cabinetId,
+      };
+      const { data } = await middlewareDeleteDoctor(params);
+      dispatch(updateCabinet(data));
+      setShowDoctorDeleteModal(false);
+    } catch (err) {
+      onRequestError(err);
+    }
   };
 
   const handleDeleteCabinet = (id: number): void => {
@@ -79,10 +102,13 @@ const ClinicCabinets: React.FC<Props> = () => {
   };
 
   const handleOnCabinetDeleteConfirm = async (): Promise<void> => {
-    const { data } = await middlewareDeleteCabinet({ id: cabinetId });
-    dispatch(deleteCabinet(data.id));
-    console.log(data);
-    setShowCabinetDeleteModal(false);
+    try {
+      const { data } = await middlewareDeleteCabinet({ id: cabinetId });
+      dispatch(deleteCabinet(data.id));
+      setShowCabinetDeleteModal(false);
+    } catch (err) {
+      onRequestError(err);
+    }
   };
 
   const handleAddDoctor = (id: number) => {
@@ -90,28 +116,31 @@ const ClinicCabinets: React.FC<Props> = () => {
     setCabinetId(id);
   };
 
-  const handleOnConfirmAddDoctors = (selectedItemsArr) => {
-    setShowAddDoctorModal(false);
-    dispatch(addDoctorToCabinet({ cabinetId, selectedItemsArr }));
-    setCabinetId(null);
+  const handleOnConfirmAddDoctors = async (selectedItemsArr) => {
+    try {
+      const params = {
+        id: selectedItemsArr.map((doctor) => doctor.id),
+        cabinet: cabinetId,
+      };
+
+      const { data } = await middlewareAddDoctor(params);
+      dispatch(updateCabinet(data));
+      setCabinetId(null);
+      setShowAddDoctorModal(false);
+    } catch (err) {
+      onRequestError(err);
+    }
   };
 
   const isDoctorAlreadyInCabinet = (doctor, cabinetId) => {
     const requiredCabinet = cabinets.find(
       (cabinet) => cabinet.id === cabinetId,
     );
-    return requiredCabinet.users.some((user) => user.id === doctor.id);
-  };
-
-  const fetchData = async () => {
-    const data = await getAllCabinetsInfo();
-    console.log(data);
+    return requiredCabinet?.users?.some((user) => user.user.id === doctor?.id);
   };
 
   return (
     <div className={styles.clinicCabinets}>
-      <button onClick={fetchData}>Fetch Data</button>
-      <button>Create Cabinet</button>
       <EASTextField
         fieldLabel={textForKey('clinic_cabinets_tag_field')}
         helperText={textForKey('clinic_cabinets_tag_helper')}

@@ -28,7 +28,7 @@ export const deleteCabinet = async (
 };
 
 interface DoctorCRUDParams {
-  id: [number];
+  id: [number] | number[];
   cabinet: number;
 }
 
@@ -47,19 +47,22 @@ export const updateCabinet = async (
   return put(`/api/cabinets/${reqBody.id}`, headers, body);
 };
 
-export const addDoctor = async (body: DoctorCRUDParams, headers = null) => {
-  const reqBody = {
-    id: body.id,
+export const addDoctor = async (params: DoctorCRUDParams, headers = null) => {
+  const body = {
+    users: params.id,
     add: true,
   };
-  return put(`/api/cabinets/${body.cabinet}`, headers, reqBody);
+  return put(`/api/cabinets/${params.cabinet}/doctors`, headers, body);
 };
 
-export const deleteDoctor = async (body: DoctorCRUDParams, headers = null) => {
-  const reqBody = {
-    id: body.id,
+export const deleteDoctor = async (
+  params: DoctorCRUDParams,
+  headers = null,
+) => {
+  const body = {
+    users: params.id,
     add: false,
   };
 
-  return put(`/api/cabinets/${body.cabinet}`, headers, reqBody);
+  return put(`/api/cabinets/${params.cabinet}/doctors`, headers, body);
 };

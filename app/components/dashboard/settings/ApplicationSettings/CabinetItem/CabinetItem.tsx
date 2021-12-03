@@ -8,6 +8,7 @@ import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
 import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import { updateCabinet as middlewareUpdateCabinet } from 'middleware/api/cabinets';
 import { updateCabinet } from 'redux/slices/cabinetsData';
 import { ClinicCabinet } from 'types';
@@ -45,11 +46,15 @@ const CabinetItem: React.FC<Props> = ({
   };
 
   const handleEditCompleted = async (): Promise<void> => {
-    const body = { id: cabinet.id, name: inputValue };
+    try {
+      const body = { id: cabinet.id, name: inputValue };
 
-    const { data } = await middlewareUpdateCabinet(body);
-    dispatch(updateCabinet(data));
-    handleIsBeingEditedClick();
+      const { data } = await middlewareUpdateCabinet(body);
+      dispatch(updateCabinet(data));
+      handleIsBeingEditedClick();
+    } catch (err) {
+      onRequestError(err);
+    }
   };
 
   return (
@@ -97,11 +102,11 @@ const CabinetItem: React.FC<Props> = ({
             label: styles.label,
           }}
         />
-        {cabinet.users.map((user) => {
+        {cabinet.users?.map((user) => {
           return (
             <Chip
               key={user.id}
-              label={user.fullName}
+              label={`${user.user.firstName} ${user.user.lastName}`}
               classes={{
                 root: styles.doctor,
                 outlined: styles.outlined,
@@ -109,7 +114,7 @@ const CabinetItem: React.FC<Props> = ({
                 deleteIcon: styles.deleteIcon,
               }}
               variant='outlined'
-              onDelete={() => handleDeleteDoctor(cabinet.id, user.id)}
+              onDelete={() => handleDeleteDoctor(cabinet.id, user.user.id)}
             />
           );
         })}
