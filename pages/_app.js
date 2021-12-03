@@ -132,7 +132,14 @@ const App = ({ Component, pageProps }) => {
   };
 
   const checkUserIsAuthenticated = async () => {
-    if (router.asPath.includes('integrations') || isChecking) {
+    const path = router.asPath;
+    if (
+      path.includes('integrations') ||
+      path.includes('register') ||
+      path.includes('accept-invitation') ||
+      path.includes('confirmation') ||
+      isChecking
+    ) {
       // no need to check auth status on integrations page
       return;
     }
@@ -192,7 +199,7 @@ const App = ({ Component, pageProps }) => {
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
         {!currentPage.includes('confirmation') ? (
-          <Script type='text/javascript' src='/tawkto.js' />
+          <Script type='text/javascript' src={'/tawkto.js'} />
         ) : null}
       </Head>
       <ThemeProvider theme={theme}>
