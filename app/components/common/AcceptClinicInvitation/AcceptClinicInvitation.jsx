@@ -139,7 +139,6 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
       toast.success(textForKey('invitation_accepted_success'));
       await handleSuccessResponse(user);
     } catch (error) {
-      console.error(error);
       if (error.response != null) {
         const { data } = error.response;
         toast.error(data.message);

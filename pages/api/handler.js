@@ -28,7 +28,6 @@ const handler = async (apiCall, req, res) => {
     }
     return data;
   } catch (error) {
-    console.error(error);
     res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
     if (error?.response != null) {
       const { status, statusText, data } = error.response;
