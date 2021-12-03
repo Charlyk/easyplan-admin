@@ -11,6 +11,7 @@ import DoctorWorkHours from '../DoctorWorkHours';
 import styles from './DoctorForm.module.scss';
 
 const DoctorForm = ({
+  user,
   data,
   currentClinic,
   onChange,
@@ -73,7 +74,7 @@ const DoctorForm = ({
             {textForKey('clinic_cabinets')}
           </div>
         </div>
-        <DoctorCabinets clinicCabinets={clinicCabinets} />
+        <DoctorCabinets clinicCabinets={clinicCabinets} user={user} />
       </div>
 
       <div className={styles.group}>
