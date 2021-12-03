@@ -46,9 +46,7 @@ export default function CreateClinicWrapper({
     try {
       const requestBody = { ...clinicData };
       delete requestBody.logoFile;
-      const response = await createNewClinic(clinicData, clinicData.logoFile, {
-        [HeaderKeys.authorization]: token,
-      });
+      const response = await createNewClinic(clinicData, clinicData.logoFile);
       if (shouldLogin) {
         await router.replace('/login');
       } else if (redirect) {
