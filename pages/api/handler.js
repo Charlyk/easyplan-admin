@@ -1,6 +1,6 @@
 /**
  *
- * @param {function(any): Promise<AxiosResponse<*>>} apiCall
+ * @param {function(req?, res?): Promise<AxiosResponse<*>>} apiCall
  * @param req
  * @param res
  * @return {Promise<null|*>}

@@ -395,6 +395,7 @@ export default {
     'schedule time': 'Schedule time',
     'no options': 'No options',
     'select doctor': 'Select doctor',
+    'select doctor from the list': 'Выберите врачa со списка',
     'select patient': 'Select patient',
     schedulenotificationdesc:
       'This message will be sent one day before upcoming appointment.',
@@ -716,6 +717,15 @@ export default {
     chart_treatedclients: 'Patients with treatment plan',
     analytics_executed: 'Executed',
     analytics_planned: 'Planned',
+    clinic_cabinets: "This clinic's cabinets",
+    clinic_cabinets_tag_field: 'Add cabinet',
+    clinic_cabinets_tag_helper:
+      'Please type the name of your cabinet and press Enter to save',
+    clinic_current_cabinets: 'CurrentCabinets',
+    clinic_cabinet_confirmation_request:
+      'Are you sure you want to delete this cabinet',
+    clinic_cabinet_doctor_deletion_confirmation:
+      'Are you sure you want to remove this doctor',
     visits: 'Visits',
     type_to_search: 'Type to search...',
     add_appointment_cabinet: 'Cabinet (Optional)',
@@ -1121,6 +1131,7 @@ export default {
     'schedule time': 'Ora programării',
     'no options': 'Nu sunt rezultate',
     'select doctor': 'Alege doctor',
+    'select doctor from the list': 'Alege doctori din listă',
     'select patient': 'Alege pacient',
     schedulenotificationdesc:
       'Acest mesaj va fi transmis pacienților cu o zi înainte de programare.',
@@ -1446,6 +1457,15 @@ export default {
     chart_services: 'Servicii efectuate / planificate',
     chart_visits: 'Total vizite',
     chart_treatedclients: 'Pacienți cu plan de tratament',
+    clinic_cabinets: 'Cabinetele clinicii',
+    clinic_cabinets_tag_field: 'Adaugă cabinet nou',
+    clinic_cabinets_tag_helper:
+      'Introdu numele cabinetului si tastează Enter pentru a salva',
+    clinic_current_cabinets: 'Cabinete curente',
+    clinic_cabinet_confirmation_request:
+      'Sunteti sigur ca doriti sa stergeti acest cabinet',
+    clinic_cabinet_doctor_deletion_confirmation:
+      'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Vizite',
     type_to_search: 'Tapează pentru a căuta...',
     add_appointment_cabinet: 'Cabinet (Opțional)',
@@ -1843,6 +1863,7 @@ export default {
     'schedule time': 'Schedule time',
     'no options': 'No options',
     'select doctor': 'Select doctor',
+    'select doctor from the list': 'Select doctors from the list',
     'select patient': 'Select patient',
     schedulenotificationdesc:
       'This message will be sent a day before the upcoming appointment.',
@@ -2164,6 +2185,15 @@ export default {
     chart_services: 'Services completed / planned',
     chart_visits: 'Total visits',
     chart_treatedclients: 'Patients with treatment plan',
+    clinic_cabinets: 'Кабинеты данной клиники',
+    clinic_cabinets_tag_field: 'Введите название нового кабинета',
+    clinic_cabinets_tag_helper:
+      'введите название нового кабинета и нажмите кнопку Enter  чтобы сохранить',
+    clinic_current_cabinets: 'Cabinete curente',
+    clinic_cabinet_confirmation_request:
+      'Sunteti sigur ca doriti sa stergeti acest cabinet',
+    clinic_cabinet_doctor_deletion_confirmation:
+      'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Visits',
     type_to_search: 'Type to search...',
     add_appointment_cabinet: 'Cabinets (Optional)',

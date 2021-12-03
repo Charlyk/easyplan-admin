@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import DoctorBracesSettings from '../DoctorBracesSettings';
+import DoctorCabinets from '../DoctorCabinets';
 import DoctorHolidays from '../DoctorHolidays';
 import DoctorServices from '../DoctorServices';
 import DoctorWorkHours from '../DoctorWorkHours';
@@ -27,6 +28,10 @@ const DoctorForm = ({
   const handleWorkDaysChange = (workdays) => {
     onChange({ workdays });
   };
+
+  const clinicCabinets = useMemo(() => {
+    return currentClinic.cabinets;
+  }, [currentClinic]);
 
   const clinicServices = useMemo(() => {
     const activeServices = currentClinic.services.filter(
@@ -60,6 +65,15 @@ const DoctorForm = ({
           onCreateOrUpdate={onCreateHoliday}
           onDeleteHoliday={onDeleteHoliday}
         />
+      </div>
+
+      <div className={styles.group}>
+        <div className={styles.groupHeader}>
+          <div className={styles.titleContainer}>
+            {textForKey('clinic_cabinets')}
+          </div>
+        </div>
+        <DoctorCabinets clinicCabinets={clinicCabinets} />
       </div>
 
       <div className={styles.group}>

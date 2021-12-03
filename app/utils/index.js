@@ -2,6 +2,9 @@ import Axios from 'axios';
 import moment from 'moment-timezone';
 
 Axios.interceptors.request.use(function (config) {
+  if (config?.headers == null) {
+    return config;
+  }
   const timeZone =
     moment.tz.guess(true) ??
     Intl.DateTimeFormat().resolvedOptions().timeZone ??

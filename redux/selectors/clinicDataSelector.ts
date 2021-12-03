@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
+import { ReduxStateType } from 'store';
 
-export const clinicDataSelector = (state) => state.clinicData;
+export const clinicDataSelector = (state: ReduxStateType) => state.clinicData;
 
 export const updateClinicDataSelector = createSelector(
   clinicDataSelector,

@@ -50,6 +50,9 @@ const initialState: ReduxState = Object.freeze({
     schedules: [],
     details: null,
   },
+  cabinetsData: {
+    cabinets: [],
+  },
 });
 
 export default initialState;

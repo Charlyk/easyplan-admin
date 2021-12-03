@@ -8,7 +8,7 @@ import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';
-import { setCurrentUser } from '../../../../redux/slices/appDataSlice';
+import { setCurrentUser } from 'redux/slices/appDataSlice';
 import EASImage from '../EASImage';
 import styles from './RegistrationWrapper.module.scss';
 import reducer, {
