@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useState,
   useContext,
   useEffect,
   useMemo,
@@ -33,6 +34,7 @@ import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   createNewInvoice,
   fetchDetailsForInvoice,
@@ -42,7 +44,7 @@ import { savePatientGeneralTreatmentPlan } from 'middleware/api/patients';
 import { setPatientDetails } from 'redux/actions/actions';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
-import onRequestError from 'app/utils/onRequestError';
+import EASTextarea from '../../EASTextarea';
 import TeethModal from '../TeethModal';
 import styles from './CheckoutModal.module.scss';
 import { actions, initialState, reducer } from './CheckoutModal.reducer';
@@ -85,6 +87,7 @@ const CheckoutModal = ({
   const updateInvoice = useSelector(updateInvoiceSelector);
   const updateInvoices = useSelector(updateInvoicesSelector);
   const exchangeRates = getClinicExchangeRates(currentClinic);
+  const [commentValue, setCommentValue] = useState('');
   const userClinic = useMemo(() => {
     return currentUser.clinics.find(
       (clinic) => clinic.clinicId === currentClinic.id,
@@ -362,6 +365,7 @@ const CheckoutModal = ({
     const requestBody = {
       paidAmount: payAmount,
       discount: discount,
+      comment: commentValue || null,
       totalAmount: servicesPrice,
       services: services.map((item) => ({
         id: item.id,
@@ -388,6 +392,10 @@ const CheckoutModal = ({
     } else {
       onClose();
     }
+  };
+
+  const handleCommentInsertion = (value) => {
+    setCommentValue(value);
   };
 
   const handleSubmit = async () => {
@@ -591,8 +599,21 @@ const CheckoutModal = ({
           {!isFetching && invoiceDetails != null && (
             <div
               className='flexContainer'
-              style={{ width: '100%', justifyContent: 'center' }}
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
             >
+              <EASTextarea
+                containerClass={styles.textArea}
+                placeholder={textForKey('add a comment')}
+                value={commentValue}
+                rows={2}
+                maxRows={2}
+                onChange={handleCommentInsertion}
+              />
               {!isLoading ? (
                 <Button
                   disabled={!canPay}
