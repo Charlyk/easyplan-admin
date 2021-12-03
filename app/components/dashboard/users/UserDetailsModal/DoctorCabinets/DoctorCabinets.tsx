@@ -2,9 +2,11 @@ import React, { useEffect, useContext } from 'react';
 import { Typography } from '@material-ui/core';
 import { Box } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
+import Link from 'next/link';
 import NotificationsContext from 'app/context/notificationsContext';
 import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { useSelector } from 'app/utils/hooks/useTypedSelector';
+import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
 import {
   getAllCabinetsInfo,
@@ -63,25 +65,38 @@ const DoctorCabinets: React.FC<Props> = ({ user }) => {
 
   return (
     <div className={styles.wrapper}>
-      {clinicCabinets.map((cabinet) => {
-        const isCabinetChecked = cabinet.users.some(
-          (cabinetUser) => cabinetUser.user.id === user.id,
-        );
-        return (
-          <Box key={cabinet.id} display='flex' alignItems='center'>
-            <Checkbox
-              checked={isCabinetChecked}
-              className={styles.serviceCheckBox}
-              onChange={() =>
-                handleOnCheckboxChange(user.id, cabinet.id, isCabinetChecked)
-              }
-            />
-            <Typography className={styles.cabinetName}>
-              {cabinet.name}
-            </Typography>
-          </Box>
-        );
-      })}
+      {clinicCabinets.length ? (
+        clinicCabinets.map((cabinet) => {
+          const isCabinetChecked = cabinet.users.some(
+            (cabinetUser) => cabinetUser.user.id === user.id,
+          );
+          return (
+            <Box key={cabinet.id} display='flex' alignItems='center'>
+              <Checkbox
+                checked={isCabinetChecked}
+                className={styles.serviceCheckBox}
+                onChange={() =>
+                  handleOnCheckboxChange(user.id, cabinet.id, isCabinetChecked)
+                }
+              />
+              <Typography className={styles.cabinetName}>
+                {cabinet.name}
+              </Typography>
+            </Box>
+          );
+        })
+      ) : (
+        <div className={styles.cabinetEmpty}>
+          <Typography className={styles.cabinetEmptyText}>
+            {`${textForKey('no results')} ...`}
+          </Typography>
+          <Link href='/settings?menu=appSettings'>
+            <a className={styles.cabinetEmptyLink}>
+              {textForKey('add_cabinet')}
+            </a>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
