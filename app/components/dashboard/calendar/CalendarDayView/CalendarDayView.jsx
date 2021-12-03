@@ -17,11 +17,14 @@ import isOutOfBounds from 'app/utils/isOutOfBounds';
 import { textForKey } from 'app/utils/localization';
 import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
+  clinicCabinetsSelector,
+  clinicDoctorsSelector,
+} from 'redux/selectors/appDataSelector';
+import {
   updateScheduleSelector,
   calendarScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
 import { setSchedules } from 'redux/slices/calendarData';
-import { clinicCabinetsSelector } from '../../../../../redux/selectors/appDataSelector';
 import styles from './CalendarDayView.module.scss';
 import { actions, reducer, initialState } from './CalendarDayView.reducer';
 
@@ -35,7 +38,6 @@ const moment = extendMoment(Moment);
 const CalendarDayView = ({
   schedules: initialSchedules,
   showHourIndicator,
-  doctors,
   viewDate,
   dayHours,
   onScheduleSelect,
@@ -46,6 +48,7 @@ const CalendarDayView = ({
   const updateSchedule = useSelector(updateScheduleSelector);
   const schedules = useSelector(calendarScheduleSelector);
   const cabinets = useSelector(clinicCabinetsSelector);
+  const doctors = useSelector(clinicDoctorsSelector);
   const schedulesRef = useRef(null);
   const [{ hours, pauseModal }, localDispatch] = useReducer(
     reducer,
@@ -100,23 +103,31 @@ const CalendarDayView = ({
   /**
    * Open pause details modal
    * @param {Object} doctor
+   * @param {(ClinicCabinet | null)?} cabinet
    * @param {Date|null} startTime
    * @param {Date|null} endTime
    * @param {number|null} id
    * @param {string|null} comment
    */
-  const handleOpenPauseModal = (doctor, startTime, endTime, id, comment) => {
-    localDispatch(
-      actions.setPauseModal({
-        open: true,
-        doctor,
-        startTime,
-        endTime,
-        id,
-        comment,
-        viewDate: moment(viewDate),
-      }),
-    );
+  const handleOpenPauseModal = (
+    doctor,
+    cabinet,
+    startTime,
+    endTime,
+    id,
+    comment,
+  ) => {
+    const pauseModal = {
+      open: true,
+      doctor,
+      cabinet,
+      startTime,
+      endTime,
+      id,
+      comment,
+      viewDate: moment(viewDate),
+    };
+    localDispatch(actions.setPauseModal(pauseModal));
   };
 
   /**
@@ -156,9 +167,11 @@ const CalendarDayView = ({
       onScheduleSelect(schedule);
     } else {
       const doctor = doctors.find((item) => item.id === schedule.doctorId);
+      const cabinet = cabinets.find((item) => item.id === schedule.cabinetId);
       if (doctor != null) {
         handleCreatePause(
           doctor,
+          cabinet,
           schedule.startTime,
           schedule.endTime,
           schedule.id,
@@ -171,6 +184,7 @@ const CalendarDayView = ({
   /**
    * Create a pause record
    * @param {Object} doctor
+   * @param {(ClinicCabinet | null)?} cabinet
    * @param {Date|null} startHour
    * @param {Date|null} endHour
    * @param {number|null} id
@@ -178,6 +192,7 @@ const CalendarDayView = ({
    */
   const handleCreatePause = (
     doctor,
+    cabinet = null,
     startHour = null,
     endHour = null,
     id = null,
@@ -187,7 +202,7 @@ const CalendarDayView = ({
       toast.warn(textForKey('doctor_is_fired'));
       return;
     }
-    handleOpenPauseModal(doctor, startHour, endHour, id, comment);
+    handleOpenPauseModal(doctor, cabinet, startHour, endHour, id, comment);
   };
 
   /**
@@ -199,8 +214,9 @@ const CalendarDayView = ({
    * }} item
    */
   const handleHeaderItemClick = (item) => {
+    const cabinet = cabinets.find((cabinet) => cabinet.id === item.id);
     const doctor = doctors.find((doctor) => doctor.id === item.id);
-    handleCreatePause(doctor);
+    handleCreatePause(doctor, cabinet);
   };
 
   const mappedDoctors = useMemo(() => {

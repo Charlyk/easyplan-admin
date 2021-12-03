@@ -1,14 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import initialState from 'redux/initialState';
-import { ClinicCabinet } from 'types';
-
-interface StateSlice {
-  cabinets: ClinicCabinet[];
-}
 
 const cabinetsData = createSlice({
   name: 'cabinetsData',
-  initialState: initialState.cabinetsData as StateSlice,
+  initialState: initialState.cabinetsData,
   reducers: {
     addNewCabinet(state, action) {
       state.cabinets.push(action.payload);

@@ -115,9 +115,7 @@ const MainComponent = ({
         });
       };
     } else {
-      return () => {
-        pubnub.unsubscribeAll();
-      };
+      pubnub.unsubscribeAll();
     }
   }, [currentUser, currentClinic]);
 

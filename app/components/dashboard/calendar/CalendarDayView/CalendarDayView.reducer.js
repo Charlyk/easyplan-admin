@@ -14,6 +14,7 @@ export const initialState = {
     open: false,
     viewDate: Date(),
     doctor: null,
+    cabinet: null,
     startTime: null,
     endTime: null,
     id: null,

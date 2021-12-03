@@ -7,7 +7,6 @@ import {
 } from 'redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
-import { toggleDeleteSchedule } from 'redux/actions/scheduleActions';
 import {
   updateSchedule,
   deleteSchedule,
@@ -28,6 +27,7 @@ import {
 export const handleRemoteMessage = (message) => (dispatch) => {
   const { action, payload: messagePayload } = message;
   const payload = messagePayload != null ? JSON.parse(messagePayload) : null;
+  console.log(action, payload);
   switch (action) {
     case MessageAction.NewUserInvited:
     case MessageAction.InvitationRemoved:
@@ -40,20 +40,13 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       // update invoices
       dispatch(toggleUpdateInvoices());
       break;
-    case MessageAction.PauseRecordUpdatedOrCreated:
+    case MessageAction.PauseUpdated:
     case MessageAction.ScheduleUpdated:
       dispatch(updateSchedule(payload));
-      // dispatch(toggleUpdateSchedule(payload));
-      // setTimeout(() => {
-      //   dispatch(toggleUpdateSchedule(null));
-      // }, 600);
       break;
+    case MessageAction.PauseCreated:
     case MessageAction.ScheduleCreated:
       dispatch(addNewSchedule(payload));
-      // dispatch(toggleUpdateSchedule(payload));
-      // setTimeout(() => {
-      //   dispatch(toggleUpdateSchedule(null));
-      // }, 600);
       break;
     case MessageAction.UserCalendarVisibilityChanged:
     case MessageAction.UserRestoredInClinic:
@@ -73,8 +66,8 @@ export const handleRemoteMessage = (message) => (dispatch) => {
       break;
     case MessageAction.ScheduleDeleted:
       dispatch(deleteSchedule(payload));
-      dispatch(toggleDeleteSchedule(payload));
-      setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
+      // dispatch(toggleDeleteSchedule(payload));
+      // setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
       break;
     case MessageAction.NewPaymentRegistered:
       dispatch(toggleUpdateInvoice(payload));
@@ -144,7 +137,8 @@ const MessageAction = {
   CreatedNewInvoice: 'CreatedNewInvoice',
   NewPatientOnSite: 'NewPatientOnSite',
   ScheduleUpdated: 'ScheduleUpdated',
-  PauseRecordUpdatedOrCreated: 'PauseRecordUpdatedOrCreated',
+  PauseUpdated: 'PauseUpdated',
+  PauseCreated: 'PauseCreated',
   NewUserInvited: 'NewUserInvited',
   InvitationRemoved: 'InvitationRemoved',
   UserRemovedFromClinic: 'UserRemovedFromClinic',
