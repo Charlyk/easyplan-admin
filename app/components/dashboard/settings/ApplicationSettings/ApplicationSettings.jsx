@@ -8,10 +8,11 @@ import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import { updateClinic } from 'middleware/api/clinic';
 import { requestShareTags } from 'middleware/api/tags';
-import onRequestError from 'app/utils/onRequestError';
 import styles from './ApplicationSettings.module.scss';
+import ClinicCabinets from './CliniCabinets';
 import ClinicTags from './ClinicTags';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
 
@@ -93,6 +94,11 @@ const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
         </Typography>
         <ClinicTags onShare={handleShareTags} />
         <Divider className={styles.divider} />
+        <Typography className={styles.titleLabel}>
+          {textForKey('clinic_cabinets')}
+        </Typography>
+        <ClinicCabinets />
+        <Divider />
       </div>
       <div className={styles.footer}>
         <LoadingButton

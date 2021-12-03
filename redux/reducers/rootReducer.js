@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import initialState from 'redux/initialState';
+import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
 import crm from 'redux/slices/crmSlice';
@@ -41,6 +42,7 @@ export default combineReducers({
   crm,
   clinicData,
   calendarData,
+  cabinetsData,
 });
 
 function main(state = initialState, { type, payload } = {}) {

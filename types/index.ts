@@ -16,3 +16,4 @@ export * from './scheduleDetails.type';
 export * from './doctor.type';
 export * from './schedule.type';
 export * from './patient.type';
+export * from './clinicCabinet.type';

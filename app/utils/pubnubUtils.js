@@ -31,6 +31,7 @@ import {
 export const handleRemoteMessage = (message) => (dispatch) => {
   const { action, payload: messagePayload } = message;
   const payload = messagePayload != null ? JSON.parse(messagePayload) : null;
+  console.log(action);
   switch (action) {
     case MessageAction.NewUserInvited:
     case MessageAction.InvitationRemoved:

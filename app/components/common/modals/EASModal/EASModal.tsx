@@ -6,13 +6,35 @@ import Modal from '@material-ui/core/Modal';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import IconClose from 'app/components/icons/iconClose';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import styles from './EASModal.module.scss';
 
-const EASModal = ({
+interface Props {
+  open: boolean;
+  title: string;
+  size: 'small' | 'medium' | 'large' | 'unset';
+  destroyBtnText?: string;
+  primaryBtnText?: string;
+  secondaryBtnText?: string;
+  hidePositiveBtn?: boolean;
+  isDestroyLoading?: boolean;
+  isPositiveLoading?: boolean;
+  className?: string;
+  bodyStyle?: any;
+  paperClass?: string;
+  children?: any;
+  isPositiveDisabled?: any;
+  note?: boolean | string;
+  onClose: () => void;
+  onDestroyClick?: () => void;
+  onPrimaryClick?: () => void;
+  onSecondaryClick?: () => void;
+  onBackdropClick?: () => void;
+}
+
+const EASModal: React.FC<Props> = ({
   open,
   title,
   size,
@@ -151,31 +173,3 @@ const EASModal = ({
 };
 
 export default React.memo(EASModal, areComponentPropsEqual);
-
-EASModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  title: PropTypes.string,
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'unset']),
-  destroyBtnText: PropTypes.string,
-  primaryBtnText: PropTypes.string,
-  secondaryBtnText: PropTypes.string,
-  hidePositiveBtn: PropTypes.bool,
-  isDestroyLoading: PropTypes.bool,
-  isPositiveLoading: PropTypes.bool,
-  className: PropTypes.any,
-  bodyStyle: PropTypes.any,
-  children: PropTypes.any,
-  note: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  onClose: PropTypes.func.isRequired,
-  onDestroyClick: PropTypes.any,
-  onPrimaryClick: PropTypes.func,
-  onSecondaryClick: PropTypes.func,
-  onBackdropClick: PropTypes.func,
-};
-
-EASModal.defaultProps = {
-  title: '',
-  primaryBtnText: textForKey('OK'),
-  secondaryBtnText: textForKey('Close'),
-  size: 'unset',
-};
