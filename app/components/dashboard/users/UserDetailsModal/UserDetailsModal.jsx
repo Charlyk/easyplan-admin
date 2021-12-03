@@ -209,6 +209,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
                   onChange={handleFormChange}
                   data={userData}
                   showSteps={user == null}
+                  user={user}
                 />
               )}
               {isLoading && (
