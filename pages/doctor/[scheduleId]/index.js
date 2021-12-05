@@ -1,82 +1,70 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { SWRConfig } from 'swr';
 import DoctorPatientDetails from 'app/components/doctors/DoctorPatientDetails';
 import DoctorsMain from 'app/components/doctors/DoctorsMain';
-import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
-import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { fetchAppData } from 'middleware/api/initialization';
 import { fetchDoctorScheduleDetails } from 'middleware/api/schedules';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { setScheduleDetailsData } from 'redux/slices/doctorScheduleDetailsSlice';
+import { wrapper } from 'store';
 
-const DoctorScheduleDetails = ({
-  fallback,
-  schedule: initialSchedule,
-  scheduleId,
-  authToken,
-}) => {
+const DoctorScheduleDetails = () => {
   return (
-    <SWRConfig value={{ fallback }}>
-      <DoctorsMain
-        authToken={authToken}
-        pageTitle={initialSchedule?.patient?.fullName}
-      >
-        <DoctorPatientDetails
-          schedule={initialSchedule}
-          scheduleId={scheduleId}
-          authToken={authToken}
-        />
-      </DoctorsMain>
-    </SWRConfig>
+    <DoctorsMain>
+      <DoctorPatientDetails />
+    </DoctorsMain>
   );
 };
 
 export default connect((state) => state)(DoctorScheduleDetails);
 
-export const getServerSideProps = async ({ req, query }) => {
-  try {
-    const { auth_token: authToken } = parseCookies(req);
-    if (!authToken || !authToken.match(JwtRegex)) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      };
-    }
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req, query }) => {
+      try {
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-    const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData.data;
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
-    if (redirectTo != null) {
-      return {
-        redirect: {
-          destination: redirectTo,
-          permanent: true,
-        },
-      };
-    }
+        const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
 
-    const { scheduleId } = query;
-    const response = await fetchDoctorScheduleDetails(
-      scheduleId,
-      null,
-      req.headers,
-    );
-    return {
-      props: {
-        scheduleId,
-        authToken,
-        schedule: response.data,
-        fallback: {
-          [APP_DATA_API]: {
-            ...appData.data,
-          },
-        },
-      },
-    };
-  } catch (error) {
-    return handleRequestError(error);
-  }
-};
+        const { scheduleId } = query;
+        const response = await fetchDoctorScheduleDetails(
+          scheduleId,
+          null,
+          req.headers,
+        );
+        store.dispatch(
+          setScheduleDetailsData({ schedule: response.data, scheduleId }),
+        );
+        return {
+          props: {},
+        };
+      } catch (error) {
+        return handleRequestError(error);
+      }
+    },
+);

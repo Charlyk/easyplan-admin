@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
@@ -10,15 +11,23 @@ import { EmailRegex, HeaderKeys } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { updateUserAccount } from 'middleware/api/auth';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from '../../../../../redux/selectors/appDataSelector';
 import styles from './AccountSettings.module.scss';
 
-const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
+const AccountSettings = () => {
   const router = useRouter();
   const toast = useContext(NotificationsContext);
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({
-    avatarUrl: currentUser.avatar,
+    avatarUrl: currentUser?.avatar,
     avatarFile: null,
     firstName: currentUser.firstName,
     lastName: currentUser.lastName,

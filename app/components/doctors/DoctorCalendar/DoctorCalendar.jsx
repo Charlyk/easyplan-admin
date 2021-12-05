@@ -18,8 +18,11 @@ import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
 import { getSchedulesForInterval } from 'middleware/api/schedules';
+import { currentUserSelector } from 'redux/selectors/appDataSelector';
 import {
+  dayHoursSelector,
   deleteScheduleSelector,
+  schedulesSelector,
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
 import DoctorsCalendarDay from '../DoctorsCalendarDay';
@@ -27,24 +30,23 @@ import PatientsFilter from '../PatientsFilter';
 import styles from './DoctorCalendar.module.scss';
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 
-const DoctorCalendar = ({
-  currentUser,
-  currentClinic,
-  schedules: initialData,
-  viewMode,
-  date,
-}) => {
+const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const schedules = useSelector(schedulesSelector);
+  const hours = useSelector(dayHoursSelector);
   const viewDate = moment(date).toDate();
   const router = useRouter();
   const week = getCurrentWeek(viewDate);
   const previousDate = usePrevious(date);
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
-  const [{ schedules, hours, filterData, isLoading }, localDispatch] =
-    useReducer(reducer, initialState);
+  const [{ filterData, isLoading }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
@@ -202,7 +204,7 @@ const DoctorCalendar = ({
     const day = schedules.find((item) => item.id === dayId);
     return {
       id: dayId,
-      doctorId: currentUser.id,
+      doctorId: currentUser?.id,
       name: moment(date).format('DD dddd'),
       disabled: day?.holiday,
       date: date.toDate(),

@@ -5,7 +5,6 @@ import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { CalendarDataState } from 'redux/types';
 import { ScheduleItem, ScheduleDetails, Schedule } from 'types';
-import { getScheduleDetails } from '../../middleware/api/schedules';
 
 const isScheduleInGroup = (group: ScheduleItem, schedule: Schedule) => {
   const scheduleDate = moment(schedule.startTime).format('YYYY-MM-DD');
@@ -158,6 +157,13 @@ const calendarData = createSlice({
     fetchScheduleDetails(state, _action: PayloadAction<number>) {
       state.isFetchingDetails = true;
     },
+    setSchedulesData(
+      state,
+      action: PayloadAction<{ schedules: ScheduleItem[]; hours: string[] }>,
+    ) {
+      state.schedules = mapSchedules(action.payload.schedules);
+      state.dayHours = action.payload.hours;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -180,6 +186,7 @@ export const {
   setCalendarData,
   closeScheduleDetails,
   fetchScheduleDetails,
+  setSchedulesData,
 } = calendarData.actions;
 
 export default calendarData.reducer;

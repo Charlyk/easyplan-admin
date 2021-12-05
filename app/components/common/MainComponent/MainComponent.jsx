@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
@@ -192,92 +191,95 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     <div className={styles.mainPage} id='main-page'>
       <Head>
         <title>
-          {currentClinic.clinicName} - {pageTitle}
+          {currentClinic?.clinicName} - {pageTitle}
         </title>
         <meta
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
       </Head>
-      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      {patientNoteModal.open && (
-        <AddNote {...patientNoteModal} onClose={handleClosePatientNoteModal} />
-      )}
-      {patientXRayModal.open && (
-        <AddXRay
-          {...patientXRayModal}
-          currentClinic={currentClinic}
-          authToken={authToken}
-          onClose={handleClosePatientXRayModal}
-        />
-      )}
-      {isExchangeRatesModalOpen && (
-        <ExchangeRatesModal
-          currentClinic={currentClinic}
-          currentUser={currentUser}
-          open={isExchangeRatesModalOpen}
-          onClose={handleCloseExchangeRateModal}
-        />
-      )}
-      {patientDetails.patientId != null && (
-        <PatientDetailsModal
-          {...patientDetails}
-          currentClinic={currentClinic}
-          currentUser={currentUser}
-          authToken={authToken}
-          onClose={handleClosePatientDetails}
-        />
-      )}
-      {isImportModalOpen && (
-        <DataMigrationModal
-          authToken={authToken}
-          currentClinic={currentClinic}
-          show={isImportModalOpen}
-          onClose={handleCloseImportModal}
-        />
-      )}
-      {appointmentModal?.open && (
-        <AddAppointmentModal
-          currentClinic={currentClinic}
-          onClose={handleAppointmentModalClose}
-          schedule={appointmentModal?.schedule}
-          open={appointmentModal?.open}
-          doctor={appointmentModal?.doctor}
-          date={appointmentModal?.date}
-          patient={appointmentModal?.patient}
-          startHour={appointmentModal?.startHour}
-          endHour={appointmentModal?.endHour}
-          cabinet={appointmentModal?.cabinet}
-        />
-      )}
-      {paymentModal.open && (
-        <CheckoutModal
-          {...paymentModal}
-          currentUser={currentUser}
-          currentClinic={currentClinic}
-          onClose={handleClosePaymentModal}
-        />
-      )}
-      {currentUser != null && (
-        <MainMenu
-          currentClinic={currentClinic}
-          currentUser={currentUser}
-          currentPath={currentPath}
-          onCreateClinic={handleCreateClinic}
-        />
-      )}
-      {currentUser != null && (
-        <div className={styles.dataContainer}>
-          <PageHeader
+      {currentUser != null && currentClinic != null && (
+        <>
+          {isDev && <Typography className='develop-indicator'>Dev</Typography>}
+          {patientNoteModal.open && (
+            <AddNote
+              {...patientNoteModal}
+              onClose={handleClosePatientNoteModal}
+            />
+          )}
+          {patientXRayModal.open && (
+            <AddXRay
+              {...patientXRayModal}
+              currentClinic={currentClinic}
+              authToken={authToken}
+              onClose={handleClosePatientXRayModal}
+            />
+          )}
+          {isExchangeRatesModalOpen && (
+            <ExchangeRatesModal
+              currentClinic={currentClinic}
+              currentUser={currentUser}
+              open={isExchangeRatesModalOpen}
+              onClose={handleCloseExchangeRateModal}
+            />
+          )}
+          {patientDetails.patientId != null && (
+            <PatientDetailsModal
+              {...patientDetails}
+              currentClinic={currentClinic}
+              currentUser={currentUser}
+              authToken={authToken}
+              onClose={handleClosePatientDetails}
+            />
+          )}
+          {isImportModalOpen && (
+            <DataMigrationModal
+              authToken={authToken}
+              currentClinic={currentClinic}
+              show={isImportModalOpen}
+              onClose={handleCloseImportModal}
+            />
+          )}
+          {appointmentModal?.open && (
+            <AddAppointmentModal
+              currentClinic={currentClinic}
+              onClose={handleAppointmentModalClose}
+              schedule={appointmentModal?.schedule}
+              open={appointmentModal?.open}
+              doctor={appointmentModal?.doctor}
+              date={appointmentModal?.date}
+              patient={appointmentModal?.patient}
+              startHour={appointmentModal?.startHour}
+              endHour={appointmentModal?.endHour}
+              cabinet={appointmentModal?.cabinet}
+            />
+          )}
+          {paymentModal.open && (
+            <CheckoutModal
+              {...paymentModal}
+              currentUser={currentUser}
+              currentClinic={currentClinic}
+              onClose={handleClosePaymentModal}
+            />
+          )}
+          <MainMenu
             currentClinic={currentClinic}
-            title={pageTitle}
-            user={currentUser}
-            onLogout={handleStartLogout}
+            currentUser={currentUser}
+            currentPath={currentPath}
+            onCreateClinic={handleCreateClinic}
           />
-          <div className={styles.data}>
-            {React.cloneElement(children, childrenProps)}
+          <div className={styles.dataContainer}>
+            <PageHeader
+              currentClinic={currentClinic}
+              title={pageTitle}
+              user={currentUser}
+              onLogout={handleStartLogout}
+            />
+            <div className={styles.data}>
+              {React.cloneElement(children, childrenProps)}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

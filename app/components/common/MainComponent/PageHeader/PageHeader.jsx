@@ -18,6 +18,10 @@ import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { setPaymentModal } from 'redux/actions/actions';
+import {
+  currentClinicSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import { updateHourIndicatorPositionSelector } from 'redux/selectors/rootSelector';
 import styles from './PageHeader.module.scss';
 
@@ -45,20 +49,17 @@ const PageHeader = ({
   onLogout,
   onEditProfile,
   user,
-  currentClinic,
 }) => {
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
+  const currentClinic = useSelector(currentClinicSelector);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
-
-  const userClinic = useMemo(() => {
-    return user.clinics.find((item) => item.clinicId === currentClinic.id);
-  }, [user, currentClinic]);
+  const userClinic = useSelector(userClinicSelector);
 
   const canRegisterPayments = useMemo(() => {
-    return userClinic.canRegisterPayments;
+    return userClinic?.canRegisterPayments;
   }, [userClinic]);
 
   const currentTime = useMemo(() => {
@@ -146,7 +147,7 @@ const PageHeader = ({
         <div className={styles.avatarContainer}>
           <EASImage
             enableLoading
-            src={user.avatar}
+            src={user?.avatar}
             className={styles.avatarImage}
             placeholder={<IconAvatar />}
           />

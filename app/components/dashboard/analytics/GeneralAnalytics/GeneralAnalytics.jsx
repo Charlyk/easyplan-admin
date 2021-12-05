@@ -35,7 +35,7 @@ const General = ({
   const userClinic = currentUser.clinics.find(
     (item) => item.clinicId === currentClinic.id,
   );
-  const isAdmin = userClinic.roleInClinic === Role.admin;
+  const isAdmin = userClinic?.roleInClinic === Role.admin;
   const doctors = useMemo(() => {
     return sortBy(
       currentClinic?.users?.filter(

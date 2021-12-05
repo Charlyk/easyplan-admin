@@ -25,7 +25,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
   useEffect(() => {
     if (user?.clinics.length === 1) {
       const userClinic = user.clinics[0];
-      if (userClinic.accessBlocked) {
+      if (userClinic?.accessBlocked) {
         handleAccessBlocked();
         return;
       }

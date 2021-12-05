@@ -7,6 +7,7 @@ import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
 import appointmentModal from 'redux/slices/createAppointmentModalSlice';
 import crm from 'redux/slices/crmSlice';
+import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
 import types from 'redux/types';
@@ -49,6 +50,7 @@ export default combineReducers({
   cabinetsData,
   usersList,
   servicesList,
+  doctorScheduleDetails,
 });
 
 function main(state = initialState, { type, payload } = {}) {

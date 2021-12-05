@@ -1,4 +1,4 @@
-import { awsBaseUrl } from '../../eas.config';
+import { awsBaseUrl } from 'eas.config';
 import isValidUrl from './isValidUrl';
 
 /**

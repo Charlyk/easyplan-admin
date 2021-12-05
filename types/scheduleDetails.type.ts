@@ -22,3 +22,29 @@ export interface ScheduleDetails extends Schedule {
   isUrgent: boolean;
   delayTime: number;
 }
+
+export interface DoctorScheduleDetails {
+  id: number;
+  startTime: string;
+  endTime: string;
+  scheduleStatus: ScheduleStatus;
+  patient: DoctorSchedulePatient;
+  treatmentPlan: DoctorTreatmentPlan;
+  invoice?: any;
+}
+
+export interface DoctorTreatmentPlan {
+  id: number;
+  services: any[];
+  braces: any[];
+}
+
+export interface DoctorSchedulePatient {
+  id: number;
+  avatar?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  fullName: string;
+  phoneNumber: string;
+  email?: string | null;
+}

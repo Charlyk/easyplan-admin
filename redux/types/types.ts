@@ -10,6 +10,7 @@ import {
   ClinicService,
   ClinicServiceDetails,
   ClinicServiceCategory,
+  DoctorScheduleDetails,
 } from 'types';
 
 export interface CalendarDataState {
@@ -91,6 +92,13 @@ export interface ServicesListState {
   categories: any[];
 }
 
+export interface DoctorScheduleDetailsState {
+  schedule: DoctorScheduleDetails | null;
+  scheduleId: number | null;
+  isFetching: boolean;
+  error?: string | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -122,4 +130,5 @@ export interface ReduxState {
   appointmentModal: CreateAppointmentModalState;
   usersList: UsersListState;
   servicesList: ServicesListState;
+  doctorScheduleDetails: DoctorScheduleDetailsState;
 }

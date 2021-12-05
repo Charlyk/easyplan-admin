@@ -84,7 +84,7 @@ export const clinicBracesSelector = createSelector(
 export const userClinicSelector = createSelector(
   currentUserSelector,
   currentClinicSelector,
-  (user, clinic) => user.clinics.find((it) => it.clinicId === clinic.id),
+  (user, clinic) => user?.clinics.find((it) => it.clinicId === clinic.id),
 );
 
 export const activeClinicDoctorsSelector = createSelector(

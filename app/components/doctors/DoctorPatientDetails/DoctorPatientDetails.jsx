@@ -1,17 +1,11 @@
-import React, {
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react';
+import React, { useContext, useMemo, useReducer, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EASPersistentModal from 'app/components/common/modals/EASPersistentModal';
 import PatientTreatmentPlan from 'app/components/common/PatientTreatmentPlan';
@@ -28,13 +22,23 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from 'redux/actions/actions';
+import {
+  authTokenSelector,
+  clinicCurrencySelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import {
+  scheduleDetailsSelector,
+  scheduleIdSelector,
+  schedulePatientSelector,
+} from 'redux/selectors/doctorScheduleDetailsSelector';
 import PatientDetails from '../PatientDetails';
 import styles from './DoctorPatientDetails.module.scss';
 import reducer, {
   initialState,
   setShowFinalizeTreatment,
   setIsFinalizing,
-  setInitialData,
 } from './DoctorPatientDetails.reducer';
 
 const FinalizeTreatmentModal = dynamic(() =>
@@ -50,21 +54,22 @@ const TabId = {
   orthodonticPlan: 'OrthodonticPlan',
 };
 
-const DoctorPatientDetails = ({
-  currentUser,
-  currentClinic,
-  schedule: initialSchedule,
-  scheduleId,
-  authToken,
-}) => {
+const DoctorPatientDetails = () => {
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const router = useRouter();
-  const clinicCurrency = currentClinic.currency;
+  const scheduleId = useSelector(scheduleIdSelector);
+  const schedule = useSelector(scheduleDetailsSelector);
+  const patient = useSelector(schedulePatientSelector);
+  const authToken = useSelector(authTokenSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const [
-    { patient, schedule, showFinalizeTreatment, isFinalizing, finalServices },
+    { showFinalizeTreatment, isFinalizing, finalServices },
     localDispatch,
   ] = useReducer(reducer, initialState);
+
   const [guideName, setGuideName] = useState(
     `${currentUser.firstName} ${currentUser.lastName}`,
   );
@@ -72,11 +77,6 @@ const DoctorPatientDetails = ({
   const canFinalize =
     schedule?.scheduleStatus === 'OnSite' ||
     schedule?.scheduleStatus === 'CompletedNotPaid';
-
-  useEffect(() => {
-    // filter clinic services to get only provided by current user services
-    localDispatch(setInitialData({ schedule: initialSchedule }));
-  }, []);
 
   /**
    * Handle start adding x-ray image
@@ -289,7 +289,7 @@ const DoctorPatientDetails = ({
           <PatientTreatmentPlan
             currentClinic={currentClinic}
             currentUser={currentUser}
-            scheduleData={initialSchedule}
+            scheduleData={schedule}
             scheduleId={scheduleId}
             onFinalize={handleFinalizeTreatment}
           />

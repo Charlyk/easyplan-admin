@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EasyTab from 'app/components/common/EasyTab';
 import AppointmentNotes from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes';
 import OrthodonticPlan from 'app/components/dashboard/patients/PatientDetailsModal/OrthodonticPlan';
@@ -10,6 +10,7 @@ import PatientXRay from 'app/components/dashboard/patients/PatientDetailsModal/P
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { requestFetchPatientNotes } from 'middleware/api/patients';
+import { setPatientXRayModal } from 'redux/actions/actions';
 import {
   clinicEnabledBracesSelector,
   currentUserSelector,
@@ -26,7 +27,6 @@ const TabId = {
 };
 
 const PatientDetails = ({
-  onAddXRay,
   onEditAppointmentNote,
   onSaveOrthodonticPlan,
   showTabs,
@@ -35,6 +35,7 @@ const PatientDetails = ({
   scheduleId,
   isDoctor,
 }) => {
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const braces = useSelector(clinicEnabledBracesSelector);
   const currentUser = useSelector(currentUserSelector);
@@ -64,6 +65,10 @@ const PatientDetails = ({
 
   const handleTabClick = (selectedTab) => {
     setSelectedTab(selectedTab);
+  };
+
+  const handleAddXRay = () => {
+    dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
 
   return (
@@ -131,7 +136,7 @@ const PatientDetails = ({
         )}
         {selectedTab === TabId.notes && <PatientNotes patient={patient} />}
         {selectedTab === TabId.xRay && (
-          <PatientXRay onAddXRay={onAddXRay} patient={patient} />
+          <PatientXRay onAddXRay={handleAddXRay} patient={patient} />
         )}
         {selectedTab === TabId.orthodonticPlan && braces.length > 0 && (
           <OrthodonticPlan

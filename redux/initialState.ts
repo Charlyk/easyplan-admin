@@ -86,6 +86,12 @@ const initialState: ReduxState = Object.freeze({
     },
     error: null,
   },
+  doctorScheduleDetails: {
+    schedule: null,
+    scheduleId: null,
+    isFetching: false,
+    error: null,
+  },
 });
 
 export default initialState;

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
 import UploadAvatar from 'app/components/common/UploadAvatar';
@@ -10,17 +11,19 @@ import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import urlToLambda from 'app/utils/urlToLambda';
 import { updateUserAccount } from 'middleware/api/auth';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
 import EASModal from '../EASModal';
 import styles from './EditProfileModal.module.scss';
 
-const EditProfileModal = ({
-  open,
-  currentUser,
-  currentClinic,
-  authToken,
-  onClose,
-}) => {
+const EditProfileModal = ({ open, onClose }) => {
   const router = useRouter();
+  const authToken = useSelector(authTokenSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);

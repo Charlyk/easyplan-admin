@@ -41,7 +41,11 @@ import {
 } from 'middleware/api/invoices';
 import { savePatientGeneralTreatmentPlan } from 'middleware/api/patients';
 import { setPatientDetails } from 'redux/actions/actions';
-import { clinicExchangeRatesSelector } from 'redux/selectors/appDataSelector';
+import {
+  clinicExchangeRatesSelector,
+  currentClinicSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
 import EASTextarea from '../../EASTextarea';
@@ -63,8 +67,6 @@ const CheckoutModal = ({
   isNew,
   openPatientDetailsOnClose,
   onClose,
-  currentUser,
-  currentClinic,
 }) => {
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
@@ -87,12 +89,9 @@ const CheckoutModal = ({
   const updateInvoice = useSelector(updateInvoiceSelector);
   const updateInvoices = useSelector(updateInvoicesSelector);
   const exchangeRates = useSelector(clinicExchangeRatesSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const [commentValue, setCommentValue] = useState('');
-  const userClinic = useMemo(() => {
-    return currentUser.clinics.find(
-      (clinic) => clinic.clinicId === currentClinic.id,
-    );
-  }, [currentClinic]);
+  const userClinic = useSelector(userClinicSelector);
   const { canRegisterPayments } = userClinic;
   const clinicCurrency = currentClinic.currency;
   const clinicBraces = currentClinic.braces ?? [];

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import imageToBase64 from 'app/utils/imageToBase64';
-import { baseApiUrl } from '../../eas.config';
 import { del, get, post, put } from './request';
 
 /**

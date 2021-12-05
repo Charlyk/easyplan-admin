@@ -1,4 +1,4 @@
-import { textForKey } from '../../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 
 export const charactersRegex = /[а-яА-ЯЁёĂăÎîȘșȚțÂâ]/;
 

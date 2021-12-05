@@ -10,7 +10,7 @@ const getRedirectUrlForUser = (user, subdomain) => {
   );
   if (userClinic != null) {
     try {
-      switch (userClinic.roleInClinic) {
+      switch (userClinic?.roleInClinic) {
         case Role.reception:
           return '/calendar/day';
         case Role.admin:
