@@ -79,9 +79,11 @@ const PubnubContextProvider: React.FC = ({ children }) => {
   const handleUpdateSchedules = useCallback(
     (schedule: Schedule) => {
       dispatch(updateSchedule(schedule));
-      if (scheduleDetails != null && schedule.id === scheduleDetails.id) {
-        dispatch(fetchScheduleDetails(schedule.id));
-      }
+      setTimeout(() => {
+        if (scheduleDetails != null && schedule.id === scheduleDetails.id) {
+          dispatch(fetchScheduleDetails(schedule.id));
+        }
+      });
     },
     [scheduleDetails],
   );

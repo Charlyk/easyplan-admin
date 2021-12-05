@@ -40,7 +40,7 @@ const ServiceDoctors = ({
           <ServiceDoctor
             clinic={clinic}
             onChange={onDoctorChange}
-            key={doctor.doctorId}
+            key={doctor.id}
             serviceId={serviceId}
             serviceData={doctor}
           />
@@ -57,10 +57,10 @@ ServiceDoctors.propTypes = {
   serviceId: PropTypes.number,
   doctors: PropTypes.arrayOf(
     PropTypes.shape({
-      doctorName: PropTypes.string,
-      doctorId: PropTypes.number,
-      percentage: PropTypes.number,
-      price: PropTypes.number,
+      fullName: PropTypes.string,
+      id: PropTypes.number,
+      percentage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       selected: PropTypes.bool,
     }),
   ),

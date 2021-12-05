@@ -13,17 +13,14 @@ import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { setPatientDetails } from 'redux/actions/actions';
-import {
-  CurrentClinic,
-  ServicesStatisticResponse,
-  ScheduleStatus,
-} from 'types';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { ServicesStatisticResponse, ScheduleStatus } from 'types';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
   initialState,
@@ -55,19 +52,18 @@ interface ServicesAnalyticsQuery {
 }
 
 interface ServicesAnalyticsProps {
-  currentClinic: CurrentClinic;
   statistics: ServicesStatisticResponse;
   query: ServicesAnalyticsQuery;
 }
 
 const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
-  currentClinic,
   statistics: { data: statistics, total: totalItems },
   query: initialQuery,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const pickerRef = useRef(null);
+  const currentClinic = useSelector(currentClinicSelector);
   const doctors = useMemo(() => {
     return orderBy(
       currentClinic.users.filter((user) => user.roleInClinic === Role.doctor),
@@ -228,7 +224,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
       setPatientDetails({
         show: true,
         patientId,
-        onDelete: null,
+        canDelete: false,
       }),
     );
   };

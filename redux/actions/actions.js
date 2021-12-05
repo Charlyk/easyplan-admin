@@ -107,7 +107,7 @@ export function toggleUpdateInvoices() {
  * @param {Object} payload
  * @param {boolean} payload.show
  * @param {(number|null)?} payload.patientId
- * @param {function|null} payload.onDelete
+ * @param {boolean} payload.canDelete
  * @return {{payload: *, type: string}}
  */
 export function setPatientDetails(payload) {

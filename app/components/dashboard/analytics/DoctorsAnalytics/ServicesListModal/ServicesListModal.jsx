@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,7 +17,7 @@ import styles from './ServicesListModal.module.scss';
 const ServicesListModal = ({ open, currency, onClose, statistic }) => {
   const doctor = statistic?.doctor;
 
-  const getDoctorAmount = useCallback((service) => {
+  function getDoctorAmount(service) {
     let doctorAmount = 0;
     if (service.doctorPrice != null) {
       doctorAmount = service.doctorPrice;
@@ -25,7 +25,7 @@ const ServicesListModal = ({ open, currency, onClose, statistic }) => {
       doctorAmount = (service.price * service.doctorPercentage) / 100;
     }
     return doctorAmount;
-  }, []);
+  }
 
   const totalPrice = useMemo(() => {
     if (statistic == null) {
@@ -41,7 +41,7 @@ const ServicesListModal = ({ open, currency, onClose, statistic }) => {
     }
 
     return sumBy(statistic.services, getDoctorAmount);
-  }, [statistic, getDoctorAmount]);
+  }, [statistic]);
 
   const renderServiceRow = (service, index) => {
     let doctorAmount = getDoctorAmount(service);

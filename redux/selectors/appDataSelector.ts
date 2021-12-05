@@ -49,7 +49,10 @@ export const availableCurrenciesSelector = createSelector(
   currentClinicSelector,
   (clinic) =>
     clinic?.availableCurrencies != null
-      ? [...clinic.availableCurrencies.map((item) => item.currency)]
+      ? [
+          ...clinic.availableCurrencies.map((item) => item.currency),
+          clinic.currency,
+        ]
       : [],
 );
 

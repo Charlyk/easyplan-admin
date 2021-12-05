@@ -14,7 +14,7 @@ import {
 } from '../ClinicAnalytics.utils';
 import styles from './ServicesChart.module.scss';
 
-const ServicesChart = ({ services, onClose, visible = true }) => {
+const ServicesChart = ({ services, removeable, onClose, visible = true }) => {
   const data = useMemo(() => {
     return getServicesChartData(services);
   }, [services]);
@@ -34,11 +34,13 @@ const ServicesChart = ({ services, onClose, visible = true }) => {
   return (
     <Grid item xs={12} className={styles.servicesChart}>
       <div className={clsx(styles.servicesChart, 'chartItem')}>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_services_completed_planned')}
         </Typography>
@@ -54,6 +56,7 @@ export default ServicesChart;
 
 ServicesChart.propTypes = {
   visible: PropTypes.bool,
+  removeable: PropTypes.bool,
   services: PropTypes.shape({
     labels: PropTypes.arrayOf(PropTypes.string),
     planned: PropTypes.arrayOf(PropTypes.number),

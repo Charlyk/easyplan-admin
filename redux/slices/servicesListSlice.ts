@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import sortBy from 'lodash/sortBy';
-import { ClinicService } from 'types';
+import { HYDRATE } from 'next-redux-wrapper';
+import { ClinicService, ClinicServiceDetails } from 'types';
 import initialState from '../initialState';
+import { ServiceDetailsModalState } from '../types';
 
 const servicesListSlice = createSlice({
   name: 'servicesList',
@@ -9,6 +11,9 @@ const servicesListSlice = createSlice({
   reducers: {
     fetchServicesList(state) {
       state.isFetching = true;
+    },
+    fetchServiceDetails(state, _action: PayloadAction<number>) {
+      state.isFetchingDetails = true;
     },
     setServicesData(
       state,
@@ -21,6 +26,15 @@ const servicesListSlice = createSlice({
         item.name.toLowerCase(),
       );
       state.isFetching = false;
+      state.error = null;
+    },
+    setServiceDetails(
+      state,
+      action: PayloadAction<ClinicServiceDetails | null>,
+    ) {
+      state.details = action.payload;
+      state.isFetchingDetails = false;
+      state.error = null;
     },
     setCategories(state, action: PayloadAction<any[]>) {
       state.categories = action.payload;
@@ -33,16 +47,36 @@ const servicesListSlice = createSlice({
     setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
       state.isFetching = false;
+      state.isFetchingDetails = false;
+    },
+    openDetailsModal(state, action: PayloadAction<ServiceDetailsModalState>) {
+      state.detailsModal = action.payload;
+    },
+    closeDetailsModal(state) {
+      state.detailsModal = initialState.servicesList.detailsModal;
+      state.details = null;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.servicesList,
+      };
     },
   },
 });
 
 export const {
   fetchServicesList,
+  fetchServiceDetails,
   setError,
   setServices,
   setCategories,
   setServicesData,
+  setServiceDetails,
+  openDetailsModal,
+  closeDetailsModal,
 } = servicesListSlice.actions;
 
 export default servicesListSlice.reducer;

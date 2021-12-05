@@ -75,8 +75,15 @@ const initialState: ReduxState = Object.freeze({
   },
   servicesList: {
     services: [],
+    details: null,
     categories: [],
     isFetching: false,
+    isFetchingDetails: false,
+    detailsModal: {
+      open: false,
+      service: null,
+      category: null,
+    },
     error: null,
   },
 });

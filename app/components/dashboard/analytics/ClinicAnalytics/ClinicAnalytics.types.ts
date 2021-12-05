@@ -83,3 +83,9 @@ export type ChartAction = {
   name: string;
   type: 'default' | 'destructive';
 };
+
+export interface ChartProps {
+  visible: boolean;
+  removeable: boolean;
+  onClose: (chart: ChartType) => void;
+}

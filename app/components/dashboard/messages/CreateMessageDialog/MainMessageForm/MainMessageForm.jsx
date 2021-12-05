@@ -66,22 +66,18 @@ const MainMessageForm = ({
         fieldLabel={textForKey('Message text')}
         onChange={onMessageChange}
         helperText={
-          <Box
-            display='flex'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            <Typography className={styles.descriptionHelper}>
+          <span className={styles.helperText}>
+            <span className={styles.descriptionHelper}>
               {textForKey('languagedesc')}
-            </Typography>
-            <Typography
+            </span>
+            <span
               className={clsx(styles.messageLength, {
                 [styles.exceeded]: isLengthExceeded,
               })}
             >
               {getMessageLength(language)}/{maxLength}
-            </Typography>
-          </Box>
+            </span>
+          </span>
         }
       />
 

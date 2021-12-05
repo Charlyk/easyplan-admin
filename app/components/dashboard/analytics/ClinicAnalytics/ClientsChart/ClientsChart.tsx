@@ -5,9 +5,19 @@ import Typography from '@material-ui/core/Typography';
 import IconClose from 'app/components/icons/iconClose';
 import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
+import { AnalyticsClients, ChartProps } from '../ClinicAnalytics.types';
 import styles from './ClientsChart.module.scss';
 
-const ClientsChart = ({ clients, onClose, visible = true }) => {
+interface ClientsChartProps extends ChartProps {
+  clients: AnalyticsClients;
+}
+
+const ClientsChart: React.FC<ClientsChartProps> = ({
+  clients,
+  onClose,
+  removeable = false,
+  visible = true,
+}) => {
   if (!visible || clients == null) {
     return null;
   }
@@ -18,11 +28,13 @@ const ClientsChart = ({ clients, onClose, visible = true }) => {
   return (
     <Grid item xs={6} className={styles.clientsChart}>
       <div className='chartItem'>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_clients_new_old')}
         </Typography>

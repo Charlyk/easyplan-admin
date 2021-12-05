@@ -92,11 +92,6 @@ function main(state = initialState, { type, payload } = {}) {
         ...state,
         user: payload,
       };
-    case types.setUpdateCurrentUser:
-      return {
-        ...state,
-        updateCurrentUser: payload,
-      };
     case types.changeCurrentClinic:
       return {
         ...state,

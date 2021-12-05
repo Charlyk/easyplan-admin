@@ -19,6 +19,16 @@ export async function deleteService(serviceId, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function restoreService(serviceId, headers = null) {
+  return post(`/api/services/${serviceId}`, headers, {});
+}
+
+/**
+ * Fetch details for a service
+ * @param {number} serviceId
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<ClinicServiceDetails>>}
+ */
+export async function requestServiceDetails(serviceId, headers = null) {
   return get(`/api/services/${serviceId}`, headers);
 }
 
@@ -33,22 +43,7 @@ export async function fetchAllServices(headers = null) {
 
 /**
  * Create new service
- * @param {{
- *   name: string,
- *   price: number|string,
- *   duration: number|string,
- *   color: string,
- *   doctors: {
- *     doctorId: number,
- *     doctorName: string,
- *     selected: boolean,
- *     price: number|null,
- *     percentage: number|null
- *   },
- *   categoryId: number,
- *   serviceType: 'All'|'Single'|'Braces'
- *   currency: string,
- * }} body
+ * @param {Object} body
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
@@ -59,22 +54,7 @@ export async function createService(body, headers = null) {
 /**
  * Update a service
  * @param {number} serviceId
- * @param {{
- *   name: string,
- *   price: number|string,
- *   duration: number|string,
- *   color: string,
- *   doctors: {
- *     doctorId: number,
- *     doctorName: string,
- *     selected: boolean,
- *     price: number|null,
- *     percentage: number|null
- *   },
- *   categoryId: number,
- *   serviceType: 'All'|'Single'|'Braces'
- *   currency: string,
- * }} body
+ * @param {Object} body
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */

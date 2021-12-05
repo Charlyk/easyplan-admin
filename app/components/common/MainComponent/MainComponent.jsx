@@ -156,7 +156,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
 
   const handleClosePatientDetails = () => {
     dispatch(
-      setPatientDetails({ show: false, patientId: null, onDelete: () => null }),
+      setPatientDetails({ show: false, patientId: null, canDelete: false }),
     );
   };
 

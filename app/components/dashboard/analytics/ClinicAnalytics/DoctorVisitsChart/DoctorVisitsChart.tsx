@@ -14,6 +14,7 @@ import { DoctorVisitsChartProps } from './DoctorVisitsChart.types';
 
 const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({
   visits = [],
+  removeable,
   onClose,
   visible = true,
 }) => {
@@ -40,11 +41,13 @@ const DoctorVisitsChart: React.FC<DoctorVisitsChartProps> = ({
   return (
     <Grid item xs={3} className={styles.doctorVisitsChart}>
       <div className={clsx(styles.visitsChart, 'chartItem')}>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_doctor_visits')}
         </Typography>

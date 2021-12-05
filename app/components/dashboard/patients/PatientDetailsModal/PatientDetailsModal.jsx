@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
+import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconClose from 'app/components/icons/iconClose';
 import IconEdit from 'app/components/icons/iconEdit';
@@ -18,14 +19,20 @@ import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
+  deletePatient as requestDeletePatient,
   getPatientDetails,
   requestUpdatePatient,
 } from 'middleware/api/patients';
 import {
+  setPatientDetails,
   setPatientXRayModal,
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
+import {
+  setIsDeleting,
+  setPatientToDelete,
+} from '../PatientsList/PatientsList.reducer';
 import AppointmentNotes from './AppointmentNotes';
 import OrthodonticPlan from './OrthodonticPlan';
 import PatientAppointments from './PatientAppointments';
@@ -40,6 +47,8 @@ import reducer, {
   setIsFetching,
   MenuItem,
   MenuItems,
+  openDeleteConfirmation,
+  closeDeleteConfirmation,
 } from './PatientDetailsModal.reducer';
 import PatientHistory from './PatientHistory';
 import PatientMessages from './PatientMessages';
@@ -57,14 +66,22 @@ const PatientDetailsModal = ({
   patientId,
   menuItem,
   authToken,
+  canDelete,
   onClose,
-  onDelete,
 }) => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const inputRef = useRef(null);
   const [
-    { currentMenu, isFetching, patient, viewInvoice, avatarFile },
+    {
+      currentMenu,
+      isFetching,
+      patient,
+      viewInvoice,
+      avatarFile,
+      showDeleteConfirmation,
+      isDeleting,
+    },
     localDispatch,
   ] = useReducer(reducer, initialState);
   const patientAvatar = avatarFile ?? patient?.avatar;
@@ -122,8 +139,21 @@ const PatientDetailsModal = ({
   };
 
   const handleStartDeletePatient = () => {
-    if (typeof onDelete === 'function') {
-      onDelete(patient);
+    localDispatch(openDeleteConfirmation());
+  };
+
+  const deletePatient = async () => {
+    localDispatch(setIsDeleting(true));
+    try {
+      await requestDeletePatient(patient.id);
+      localDispatch(setPatientToDelete(null));
+      dispatch(
+        setPatientDetails({ show: false, patientId: null, canDelete: false }),
+      );
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      localDispatch(setIsDeleting(false));
     }
   };
 
@@ -225,6 +255,14 @@ const PatientDetailsModal = ({
       className={styles.patientDetailsModal}
     >
       <Paper className={styles.modalPaper}>
+        <ConfirmationModal
+          isLoading={isDeleting}
+          show={showDeleteConfirmation}
+          title={textForKey('Delete patient')}
+          message={textForKey('delete_patient_message')}
+          onConfirm={deletePatient}
+          onClose={() => localDispatch(closeDeleteConfirmation())}
+        />
         <input
           ref={inputRef}
           className='custom-file-button'
@@ -277,19 +315,24 @@ const PatientDetailsModal = ({
                 </Typography>
               </div>
               <MenuList className={styles.menuList}>
-                {MenuItems.map((item) => (
-                  <MuiMenuItem
-                    key={item.id}
-                    selected={currentMenu === item.id}
-                    onPointerUp={() => handleMenuClick(item)}
-                    classes={{
-                      root: clsx(styles.menuItem, styles[item.type]),
-                      selected: styles.selectedItem,
-                    }}
-                  >
-                    {item.name}
-                  </MuiMenuItem>
-                ))}
+                {MenuItems.map((item) => {
+                  if (item.id === MenuItem.delete && !canDelete) {
+                    return null;
+                  }
+                  return (
+                    <MuiMenuItem
+                      key={item.id}
+                      selected={currentMenu === item.id}
+                      onPointerUp={() => handleMenuClick(item)}
+                      classes={{
+                        root: clsx(styles.menuItem, styles[item.type]),
+                        selected: styles.selectedItem,
+                      }}
+                    >
+                      {item.name}
+                    </MuiMenuItem>
+                  );
+                })}
               </MenuList>
             </div>
           )}

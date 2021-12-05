@@ -8,6 +8,8 @@ import {
   Patient,
   ClinicUser,
   ClinicService,
+  ClinicServiceDetails,
+  ClinicServiceCategory,
 } from 'types';
 
 export interface CalendarDataState {
@@ -73,9 +75,18 @@ export interface UsersListState {
   error?: string | null;
 }
 
+export interface ServiceDetailsModalState {
+  open: boolean;
+  service?: ClinicService | null;
+  category: ClinicServiceCategory | null;
+}
+
 export interface ServicesListState {
   services: ClinicService[];
+  details?: ClinicServiceDetails | null;
+  detailsModal: ServiceDetailsModalState | null;
   isFetching: boolean;
+  isFetchingDetails: boolean;
   error?: string | null;
   categories: any[];
 }

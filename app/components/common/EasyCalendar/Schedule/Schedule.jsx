@@ -5,9 +5,11 @@ import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import styles from './Schedule.module.scss';
 
 const offsetDistance = 20;
@@ -23,6 +25,7 @@ const Schedule = ({
 }) => {
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
+  const clinicDoctors = useSelector(clinicDoctorsSelector);
   const [isHighlighted, setIsHighlighted] = useState(false);
   const startTime = moment(schedule.startTime);
   const endTime = moment(schedule.endTime);
@@ -32,6 +35,13 @@ const Schedule = ({
     (item) => item.id === schedule.scheduleStatus,
   );
   const shouldAnimate = animatedStatuses.includes(scheduleStatus?.id);
+  const doctor = useMemo(() => {
+    const item = clinicDoctors.find(
+      (doctor) => doctor.id === schedule.doctorId,
+    );
+    if (item == null) return null;
+    return item.fullName;
+  }, [clinicDoctors, schedule]);
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -152,32 +162,60 @@ const Schedule = ({
         </div>
         <div className={styles.info}>
           {schedule.type === 'Schedule' ? (
-            <div className={styles.infoWrapper}>
-              <div className={styles.infoRow}>
-                <Typography className={styles.infoTitle}>
-                  {textForKey('Service')}:
-                </Typography>
-                <Typography noWrap className={styles.infoLabel}>
-                  {schedule.serviceName}
-                </Typography>
-              </div>
-              <div className={styles.infoRow}>
-                <Typography className={styles.infoTitle}>
-                  {textForKey('Patient')}:
-                </Typography>
-                <Typography noWrap className={styles.infoLabel}>
-                  {schedule.patient.fullName}
-                </Typography>
-              </div>
-              <div className={styles.infoRow}>
-                <Typography className={styles.infoTitle}>
-                  {textForKey('Status')}:
-                </Typography>
-                <Typography noWrap className={styles.infoLabel}>
-                  {scheduleStatus?.name}
-                </Typography>
-              </div>
-            </div>
+            <table className={styles.infoWrapper}>
+              <tbody>
+                {doctor && (
+                  <tr className={styles.infoRow}>
+                    <td>
+                      <Typography className={styles.infoTitle}>
+                        {textForKey('Doctor')}:
+                      </Typography>
+                    </td>
+                    <td>
+                      <Typography noWrap className={styles.infoLabel}>
+                        {doctor}
+                      </Typography>
+                    </td>
+                  </tr>
+                )}
+                <tr className={styles.infoRow}>
+                  <td>
+                    <Typography className={styles.infoTitle}>
+                      {textForKey('Service')}:
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography noWrap className={styles.infoLabel}>
+                      {schedule.serviceName}
+                    </Typography>
+                  </td>
+                </tr>
+                <tr className={styles.infoRow}>
+                  <td>
+                    <Typography className={styles.infoTitle}>
+                      {textForKey('Patient')}:
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography noWrap className={styles.infoLabel}>
+                      {schedule.patient.fullName}
+                    </Typography>
+                  </td>
+                </tr>
+                <tr className={styles.infoRow}>
+                  <td>
+                    <Typography className={styles.infoTitle}>
+                      {textForKey('Status')}:
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography noWrap className={styles.infoLabel}>
+                      {scheduleStatus?.name}
+                    </Typography>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           ) : (
             <div className={styles.pauseWrapper}>
               <Typography className={styles.pauseLabel}>

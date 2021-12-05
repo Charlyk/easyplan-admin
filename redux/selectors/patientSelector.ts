@@ -5,5 +5,5 @@ export const patientSelector = (state: ReduxState) => state.patientDetails;
 
 export const updateSMSMessageStatusSelector = createSelector(
   patientSelector,
-  (patient) => patient.smsMessages.updateMessageStatus,
+  (patient) => patient?.smsMessages.updateMessageStatus,
 );

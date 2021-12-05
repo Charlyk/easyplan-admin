@@ -144,7 +144,7 @@ const CheckoutModal = ({
         setPatientDetails({
           show: false,
           patientId: null,
-          onDelete: null,
+          canDelete: false,
         }),
       );
     }
@@ -435,7 +435,7 @@ const CheckoutModal = ({
       setPatientDetails({
         show: true,
         patientId: invoiceDetails.patient.id,
-        onDelete: null,
+        canDelete: false,
         menuItem: 'debts',
       }),
     );

@@ -6,24 +6,23 @@ import { Bar } from 'react-chartjs-2';
 import IconClose from 'app/components/icons/iconClose';
 import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
-import {
-  getConversionsChartData,
-  getChartOptions,
-} from '../ClinicAnalytics.utils';
+import { AnalyticsConversion, ChartProps } from '../ClinicAnalytics.types';
+import { getConversionsChartData } from '../ClinicAnalytics.utils';
 import styles from './DoctorsConversionChart.module.scss';
 
-const DoctorsConversionChart = ({
+interface DoctorsConversionChartProps extends ChartProps {
+  conversions: AnalyticsConversion[];
+}
+
+const DoctorsConversionChart: React.FC<DoctorsConversionChartProps> = ({
   onClose,
+  removeable = false,
   conversions = [],
   visible = true,
 }) => {
   const data = useMemo(() => {
     return getConversionsChartData(conversions);
   }, [conversions]);
-
-  const options = useMemo(() => {
-    return getChartOptions('start', true, 'x', false);
-  }, []);
 
   if (!visible) {
     return null;
@@ -44,22 +43,29 @@ const DoctorsConversionChart = ({
   return (
     <Grid item xs={6} className={styles.doctorsConversionChart}>
       <div className='chartItem'>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_doctor_conversion')}
         </Typography>
         <div className={styles.chartWrapper}>
           <Bar
-            type='bar'
             data={data}
             options={{
-              ...options,
+              maintainAspectRatio: true,
+              responsive: true,
+              indexAxis: 'x',
               plugins: {
-                ...options.plugins,
+                legend: {
+                  align: 'start',
+                  display: false,
+                  position: 'bottom',
+                },
                 tooltip: {
                   callbacks: {
                     label: getLabelText,

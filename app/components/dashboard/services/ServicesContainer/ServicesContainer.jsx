@@ -23,11 +23,7 @@ import {
   importServicesFromFile,
   restoreService,
 } from 'middleware/api/services';
-import {
-  setServiceDetailsModal,
-  setServiceModalCategory,
-  setServiceModalService,
-} from 'redux/actions/serviceDetailsActions';
+import { setServiceModalCategory } from 'redux/actions/serviceDetailsActions';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -38,7 +34,10 @@ import {
   servicesErrorSelector,
   servicesSelector,
 } from 'redux/selectors/servicesSelector';
-import { fetchServicesList } from '../../../../../redux/slices/servicesListSlice';
+import {
+  fetchServicesList,
+  openDetailsModal,
+} from 'redux/slices/servicesListSlice';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesContainer.module.scss';
 import reducer, {
@@ -116,16 +115,18 @@ const ServicesContainer = () => {
 
   const handleAddOrEditService = (event, service) => {
     dispatch(
-      setServiceDetailsModal({
+      openDetailsModal({
         open: true,
         service,
-        category: category.data,
+        category: service?.category ?? category.data,
       }),
     );
   };
 
   const handleEditService = (service) => {
-    dispatch(setServiceModalService(service));
+    dispatch(
+      openDetailsModal({ open: true, service, category: service.category }),
+    );
   };
 
   const handleDeleteService = (service) => {
@@ -279,14 +280,14 @@ const ServicesContainer = () => {
       return clinicServices.length;
     }
     return (
-      clinicServices?.filter((item) => item.categoryId === category.id)
+      clinicServices?.filter((item) => item.category.id === category.id)
         .length ?? 0
     );
   };
 
   const filteredServices = sortBy(
     category.data != null && category.data.id !== 'all-services'
-      ? clinicServices.filter((item) => item.categoryId === category.data.id)
+      ? clinicServices.filter((item) => item.category.id === category.data.id)
       : clinicServices,
     (service) => service.name.toLowerCase(),
   );

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
+import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { CreateAppointmentModalState } from 'redux/types';
 
@@ -21,6 +22,14 @@ const createAppointmentModalSlice = createSlice({
     },
     closeAppointmentModal(_state) {
       return initialState.appointmentModal;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.appointmentModal,
+      };
     },
   },
 });

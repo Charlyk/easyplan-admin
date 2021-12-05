@@ -9,7 +9,12 @@ import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import styles from './SentMessagesChart.module.scss';
 
-const SentMessagesChart = ({ messages, onClose, visible = true }) => {
+const SentMessagesChart = ({
+  messages,
+  removeable,
+  onClose,
+  visible = true,
+}) => {
   if (!visible || messages == null) {
     return null;
   }
@@ -21,11 +26,13 @@ const SentMessagesChart = ({ messages, onClose, visible = true }) => {
   return (
     <Grid item xs={4} className={styles.sentMessagesChart}>
       <div className='chartItem'>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_total_messages')}
         </Typography>
@@ -44,4 +51,5 @@ export default SentMessagesChart;
 SentMessagesChart.propTypes = {
   visible: PropTypes.bool,
   messages: PropTypes.number,
+  removeable: PropTypes.bool,
 };

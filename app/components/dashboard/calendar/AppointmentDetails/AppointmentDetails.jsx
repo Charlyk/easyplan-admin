@@ -95,6 +95,18 @@ const AppointmentDetails = ({
   }, []);
 
   useEffect(() => {
+    if (details == null) {
+      return;
+    }
+
+    localDispatch(
+      setScheduleStatus(
+        Statuses.find((item) => item.id === details.scheduleStatus),
+      ),
+    );
+  }, [details]);
+
+  useEffect(() => {
     if (closeDetails) {
       onClose();
     }
@@ -241,7 +253,7 @@ const AppointmentDetails = ({
       setPatientDetails({
         show: true,
         patientId: schedule.patient.id,
-        onDelete: null,
+        canDelete: false,
       }),
     );
   };

@@ -1,10 +1,9 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
-import { SWRConfig } from 'swr';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import ServicesAnalytics from 'app/components/dashboard/analytics/ServicesAnalytics';
-import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
@@ -15,13 +14,11 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { wrapper } from 'store';
 
-const Services = ({ fallback, statistics, query, authToken }) => {
+const Services = ({ statistics, query }) => {
   return (
-    <SWRConfig value={{ fallback }}>
-      <MainComponent currentPath='/analytics/services' authToken={authToken}>
-        <ServicesAnalytics query={query} statistics={statistics} />
-      </MainComponent>
-    </SWRConfig>
+    <MainComponent currentPath='/analytics/services'>
+      <ServicesAnalytics query={query} statistics={statistics} />
+    </MainComponent>
   );
 };
 
@@ -84,14 +81,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         );
         return {
           props: {
-            authToken,
             statistics,
             query,
-            fallback: {
-              [APP_DATA_API]: {
-                ...appData.data,
-              },
-            },
           },
         };
       } catch (error) {

@@ -5,4 +5,5 @@ export interface DoctorVisitsChartProps {
   visits: AnalyticsDoctorVisits[];
   visible?: boolean;
   onClose?: (chart: ChartType) => void;
+  removeable?: boolean;
 }

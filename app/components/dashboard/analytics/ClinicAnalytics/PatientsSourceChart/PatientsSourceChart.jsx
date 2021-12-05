@@ -12,7 +12,12 @@ import {
 } from '../ClinicAnalytics.utils';
 import styles from './PatientsSourceChart.module.scss';
 
-const PatientsSourceChart = ({ sources, onClose, visible = true }) => {
+const PatientsSourceChart = ({
+  sources,
+  removeable,
+  onClose,
+  visible = true,
+}) => {
   const data = useMemo(() => {
     return getPatientsSourceData(sources);
   }, [sources]);
@@ -32,11 +37,13 @@ const PatientsSourceChart = ({ sources, onClose, visible = true }) => {
   return (
     <Grid item xs={12} className={styles.patientsSourceChart}>
       <div className='chartItem'>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_clients_source')}
         </Typography>
