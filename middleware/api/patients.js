@@ -373,3 +373,13 @@ export async function requestCreatePatient(requestBody, photo, headers = null) {
   }
   return axios.post('/api/patients', requestBody, { headers });
 }
+
+/**
+ * Fetch all purchases for a patient
+ * @param patientId
+ * @param headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function requestFetchPatientPurchases(patientId, headers = null) {
+  return get(`/api/patients/${patientId}/purchases`, headers);
+}

@@ -7,7 +7,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import axios from 'axios';
 import clsx from 'clsx';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
@@ -18,6 +17,7 @@ import NotificationsContext from 'app/context/notificationsContext';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
+import { requestFetchPatientPurchases } from 'middleware/api/patients';
 import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import styles from './PatientPurchasesList.module.scss';
@@ -48,7 +48,7 @@ const PatientPurchasesList = ({ patient }) => {
   const fetchPurchases = async () => {
     localDispatch(actions.setIsLoading(true));
     try {
-      const response = await axios.get(`/api/patients/${patient.id}/purchases`);
+      const response = await requestFetchPatientPurchases(patient.id);
       localDispatch(actions.setPayments(response.data));
     } catch (error) {
       toast.error(error.message);
@@ -87,6 +87,7 @@ const PatientPurchasesList = ({ patient }) => {
                 <TableCell>{textForKey('Received by')}</TableCell>
                 <TableCell>{textForKey('Date')}</TableCell>
                 <TableCell>{textForKey('Paid for')}</TableCell>
+                <TableCell>{textForKey('Comment')}</TableCell>
                 <TableCell align='right'>{textForKey('Amount')}</TableCell>
               </TableRow>
             </TableHead>
@@ -100,6 +101,7 @@ const PatientPurchasesList = ({ patient }) => {
                   <TableCell>
                     {payment.comment || textForKey('Appointment')}
                   </TableCell>
+                  <TableCell>{payment.userComment ?? '-'}</TableCell>
                   <TableCell align='right' classes={{ root: 'amount-cell' }}>
                     <div
                       className='flexContainer'
