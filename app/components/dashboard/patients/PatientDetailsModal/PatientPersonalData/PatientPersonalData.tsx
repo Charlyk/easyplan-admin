@@ -74,7 +74,7 @@ const PatientPersonalData: React.FC<Props> = ({
 }) => {
   const dispatch = useDispatch<ReduxDispatch>();
   const didInitialRenderHappen = useRef<boolean>(false);
-  const details = useSelector(calendarScheduleDetailsSelector);
+  const scheduleDetails = useSelector(calendarScheduleDetailsSelector);
   const datePickerRef = useRef<HTMLDivElement | null>();
   const toast = useContext(NotificationsContext);
   const [
@@ -113,7 +113,7 @@ const PatientPersonalData: React.FC<Props> = ({
           }),
         );
 
-        if (patient.id === details.patient.id) {
+        if (patient.id === scheduleDetails?.patient.id) {
           dispatch(updateDetailsPatientRecords(patient));
         }
       }
