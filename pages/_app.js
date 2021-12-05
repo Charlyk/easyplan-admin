@@ -12,8 +12,9 @@ import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 import NotificationsProvider from 'app/context/NotificationsProvider';
+import PubnubContextProvider from 'app/context/PubnubContextProvider';
 import theme from 'app/styles/theme';
-import { APP_DATA_API, UnauthorizedPaths } from 'app/utils/constants';
+import { UnauthorizedPaths } from 'app/utils/constants';
 import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
@@ -33,7 +34,10 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
-import PubnubContextProvider from '../app/context/PubnubContextProvider';
+import {
+  currentClinicSelector,
+  currentUserSelector,
+} from '../redux/selectors/appDataSelector';
 
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
@@ -51,6 +55,8 @@ const pubnub = new PubNub({
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const [isChecking, setIsChecking] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
@@ -85,18 +91,9 @@ const App = ({ Component, pageProps }) => {
   }, []);
 
   useEffect(() => {
-    if (pageProps.fallback == null) {
-      updatePageTitle(null);
-      return;
-    }
-    const { currentClinic, currentUser } = pageProps.fallback[APP_DATA_API];
     setChatVisitor(currentUser);
-    if (currentClinic == null) {
-      return;
-    }
-
     updatePageTitle(currentClinic);
-  }, [pageProps]);
+  }, [currentUser, currentClinic]);
 
   useEffect(() => {
     if (isWindowFocused) {
@@ -115,20 +112,23 @@ const App = ({ Component, pageProps }) => {
     };
   };
 
-  const setChatUserData = (currentUser, currentClinic) => {
+  const setChatUserData = () => {
     try {
       if (currentUser == null) {
         return;
       }
-      window.Tawk_API.setAttributes({
-        id: currentUser.id,
-        clinicId: currentClinic?.id,
-        name: `${currentUser.firstName} ${currentUser.lastName}`,
-        email: currentUser.email,
-      });
-      if (currentClinic != null) {
-        window.Tawk_API.addTags([currentClinic.clinicName]);
-      }
+      window.Tawk_API = window.Tawk_API || {};
+      window.Tawk_API.onLoad = () => {
+        window.Tawk_API.setAttributes({
+          id: currentUser.id,
+          clinicId: currentClinic?.id,
+          name: `${currentUser.firstName} ${currentUser.lastName}`,
+          email: currentUser.email,
+        });
+        if (currentClinic != null) {
+          window.Tawk_API.addTags([currentClinic.clinicName]);
+        }
+      };
     } catch (error) {
       console.error('Error', error?.message);
     }
@@ -150,8 +150,7 @@ const App = ({ Component, pageProps }) => {
     try {
       setIsChecking(true);
       await requestCheckIsAuthenticated();
-      const { currentClinic, currentUser } = pageProps.fallback[APP_DATA_API];
-      setChatUserData(currentUser, currentClinic);
+      setChatUserData();
       if (router.asPath === '/login') {
         await router.reload();
       }
@@ -203,7 +202,7 @@ const App = ({ Component, pageProps }) => {
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
         {!currentPage.includes('confirmation') ? (
-          <Script type='text/javascript' src={'/tawkto.js'} />
+          <Script type='text/javascript' src='/tawkto.js' />
         ) : null}
       </Head>
       <ThemeProvider theme={theme}>
