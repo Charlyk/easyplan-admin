@@ -127,3 +127,32 @@ export type PaymentPayload = {
   clinicName: string;
   patientId: number;
 };
+
+export type InvoicePayload = {
+  id: number;
+  patient: InvoicePatient;
+  doctor: InvoiceDoctor;
+  schedule: InvoiceSchedule;
+  status: string;
+  paidAmount: number;
+  totalAmount: number;
+  discount: number;
+  services: any[];
+};
+
+export type InvoiceSchedule = {
+  id: number;
+  startTime: string | number;
+  endTime: string | number;
+};
+
+export type InvoiceDoctor = {
+  id: number;
+  name: string;
+};
+
+export type InvoicePatient = {
+  id: number;
+  name: string;
+  discount: number;
+};

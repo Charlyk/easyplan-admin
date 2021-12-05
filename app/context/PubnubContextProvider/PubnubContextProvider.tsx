@@ -43,6 +43,7 @@ import {
   RemoteMessage,
   DealPayload,
   PaymentPayload,
+  InvoicePayload,
 } from './PubnubContextProvider.types';
 
 const PubnubContextProvider: React.FC = ({ children }) => {
@@ -66,15 +67,25 @@ const PubnubContextProvider: React.FC = ({ children }) => {
     dispatch(triggerUsersUpdate(true));
   }, []);
 
-  const handleUpdateInvoices = useCallback(() => {
-    // update appointments list
-    dispatch(toggleAppointmentsUpdate());
-    // update invoices
-    dispatch(toggleUpdateInvoices());
-    if (scheduleDetails != null) {
-      dispatch(fetchScheduleDetails(scheduleDetails.id));
-    }
-  }, []);
+  const handleUpdateInvoices = useCallback(
+    (invoice: InvoicePayload) => {
+      setTimeout(() => {
+        const { patient } = invoice;
+        if (
+          scheduleDetails != null &&
+          patient.id === scheduleDetails.patient.id
+        ) {
+          dispatch(fetchScheduleDetails(scheduleDetails.id));
+        }
+      }, 100);
+
+      // update appointments list
+      dispatch(toggleAppointmentsUpdate());
+      // update invoices
+      dispatch(toggleUpdateInvoices());
+    },
+    [scheduleDetails],
+  );
 
   const handleUpdateSchedules = useCallback(
     (schedule: Schedule) => {
@@ -94,8 +105,6 @@ const PubnubContextProvider: React.FC = ({ children }) => {
 
   const handleDeleteSchedule = useCallback((schedule: Schedule) => {
     dispatch(deleteSchedule(schedule));
-    // dispatch(toggleDeleteSchedule(payload));
-    // setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
   }, []);
 
   const handleUpdateCurrentClinic = useCallback(async () => {
@@ -121,10 +130,20 @@ const PubnubContextProvider: React.FC = ({ children }) => {
     dispatch(setClinicExchangeRatesUpdateRequired(true));
   }, []);
 
-  const handleNewPaymentRegistered = useCallback((message: PaymentPayload) => {
-    dispatch(toggleUpdateInvoice(message));
-    setTimeout(() => dispatch(toggleUpdateInvoice(null)), 600);
-  }, []);
+  const handleNewPaymentRegistered = useCallback(
+    (message: PaymentPayload) => {
+      dispatch(toggleUpdateInvoice(message));
+      setTimeout(() => {
+        if (
+          scheduleDetails != null &&
+          message.patientId === scheduleDetails.patient.id
+        ) {
+          dispatch(fetchScheduleDetails(scheduleDetails.id));
+        }
+      }, 100);
+    },
+    [scheduleDetails],
+  );
 
   const handleUpdateMessageStatus = useCallback((payload: any) => {
     console.warn('handleUpdateMessageStatus', 'Not handled', payload);
@@ -190,7 +209,7 @@ const PubnubContextProvider: React.FC = ({ children }) => {
           handleUpdateClinicUsers();
           break;
         case MessageAction.CreatedNewInvoice:
-          handleUpdateInvoices();
+          handleUpdateInvoices(payload);
           break;
         case MessageAction.PauseUpdated:
         case MessageAction.ScheduleUpdated:

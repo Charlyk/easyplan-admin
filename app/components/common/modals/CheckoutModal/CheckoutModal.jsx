@@ -443,7 +443,7 @@ const CheckoutModal = ({
   return (
     <Modal
       open={open}
-      onBackdropClick={handleCloseModal}
+      onClose={handleCloseModal}
       className={styles.checkoutModalRoot}
     >
       <Paper classes={{ root: styles.paper }}>
