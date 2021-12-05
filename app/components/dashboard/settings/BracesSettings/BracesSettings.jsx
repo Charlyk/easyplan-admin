@@ -10,13 +10,17 @@ import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { updateClinicBraces } from 'middleware/api/clinic';
-import { clinicBracesSelector } from 'redux/selectors/appDataSelector';
+import {
+  clinicBracesSelector,
+  clinicCurrencySelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './BracesSettings.module.scss';
 
 const BracesSettings = () => {
   const router = useRouter();
   const toast = useContext(NotificationsContext);
   const braces = useSelector(clinicBracesSelector);
+  const currency = useSelector(clinicCurrencySelector);
   const [isSaving, setIsSaving] = useState(false);
   const [clinicBraces, setClinicBraces] = useState(braces);
 
@@ -109,7 +113,7 @@ const BracesSettings = () => {
                     onChange={(value) => handlePriceChange(value, item.id)}
                     endAdornment={
                       <Typography className={styles.adornment}>
-                        {clinic.currency}
+                        {currency}
                       </Typography>
                     }
                   />
