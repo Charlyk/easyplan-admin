@@ -37,6 +37,7 @@ import { requestFetchRemindersCount } from 'middleware/api/crm';
 import {
   currentClinicSelector,
   currentUserSelector,
+  userClinicSelector,
 } from 'redux/selectors/appDataSelector';
 import {
   newReminderSelector,
@@ -151,9 +152,7 @@ const menuItems = [
 
 const MainMenu = ({ currentPath, onCreateClinic }) => {
   const buttonRef = useRef(null);
-  const selectedClinic = currentUser?.clinics?.find(
-    (item) => item.clinicId === currentClinic.id,
-  );
+  const selectedClinic = useSelector(userClinicSelector);
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
