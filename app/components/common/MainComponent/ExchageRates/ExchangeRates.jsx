@@ -12,42 +12,47 @@ import sortBy from 'lodash/sortBy';
 import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import { fetchClinicExchangeRates } from 'middleware/api/clinic';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
+import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import { updateExchangeRatesSelector } from 'redux/selectors/rootSelector';
 import styles from './ExchangeRates.module.scss';
 
-const ExchangeRates = ({ currentClinic, currentUser, canEdit }) => {
+const ExchangeRates = ({ canEdit }) => {
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
-  const selectedClinic = currentUser.clinics.find(
-    (item) => item.clinicId === currentClinic.id,
-  );
-  const clinicCurrency = currentClinic.currency;
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const updateRates = useSelector(updateExchangeRatesSelector);
+  const [isMounted, setIsMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [rates, setRates] = useState([]);
 
   useEffect(() => {
-    fetchExchangeRates();
-  }, [selectedClinic, updateRates]);
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
-  const fetchExchangeRates = async () => {
-    if (selectedClinic == null || selectedClinic.roleInClinic === Role.doctor) {
+  useEffect(() => {
+    if (!isMounted) {
       return;
     }
-    setIsLoading(true);
+    fetchExchangeRates();
+  }, [updateRates, isMounted]);
+
+  const fetchExchangeRates = async () => {
     try {
+      if (isMounted) setIsLoading(true);
       const response = await fetchClinicExchangeRates();
       const sortedItems = sortBy(response.data, (item) => item.created);
-      setRates(sortedItems);
+      if (isMounted) setRates(sortedItems);
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setIsLoading(false);
+      if (isMounted) setIsLoading(false);
     }
   };
 

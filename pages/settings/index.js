@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { SWRConfig } from 'swr';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import SettingsWrapper from 'app/components/dashboard/settings/SettingsWrapper';
@@ -61,4 +62,4 @@ export const getServerSideProps = async ({ req, query }) => {
   }
 };
 
-export default Settings;
+export default connect((state) => state)(Settings);

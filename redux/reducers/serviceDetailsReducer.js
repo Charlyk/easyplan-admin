@@ -1,4 +1,4 @@
-import types from 'redux/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   open: false,
@@ -16,7 +16,11 @@ export default function serviceDetailsModal(
     case types.setServiceModalCategory:
       return { ...state, category: payload };
     case types.setServiceModalService:
-      return { ...state, service: payload };
+      return {
+        ...state,
+        service: payload,
+        open: payload != null ? true : state.open,
+      };
     case types.setServiceModal:
       return {
         ...state,

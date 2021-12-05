@@ -1,11 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import LoginWrapper from 'app/components/common/LoginWrapper';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import parseCookies from 'app/utils/parseCookies';
 import setCookies from 'app/utils/setCookies';
 import { getCurrentUser } from 'middleware/api/auth';
 import { getClinicDetails } from 'middleware/api/clinic';
-import { wrapper } from 'store';
 
 const Login = ({ currentUser, currentClinic, authToken, isMobile }) => {
   return (
@@ -17,6 +17,8 @@ const Login = ({ currentUser, currentClinic, authToken, isMobile }) => {
     />
   );
 };
+
+export default connect((state) => state)(Login);
 
 export const getServerSideProps = async ({ req, res }) => {
   const isMobile = checkIsMobileDevice(req);
@@ -44,5 +46,3 @@ export const getServerSideProps = async ({ req, res }) => {
 
   return { props };
 };
-
-export default wrapper.withRedux(Login);

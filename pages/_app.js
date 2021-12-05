@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -10,18 +11,21 @@ import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
-import NotificationsProvider from 'app/context/NotificationsProvider/NotificationsProvider';
+import NotificationsProvider from 'app/context/NotificationsProvider';
 import theme from 'app/styles/theme';
 import { APP_DATA_API, UnauthorizedPaths } from 'app/utils/constants';
 import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
+import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
 import { appBaseUrl } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
+import { fetchAppData } from 'middleware/api/initialization';
 import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
+import { setAppData } from 'redux/slices/appDataSlice';
 import types from 'redux/types';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
@@ -29,6 +33,7 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
+import PubnubContextProvider from '../app/context/PubnubContextProvider';
 
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
@@ -181,6 +186,7 @@ const App = ({ Component, pageProps }) => {
 
   const handleUserLogout = async () => {
     await signOut();
+    dispatch(setAppData({ currentUser: null, currentClinic: null }));
     window.location = appBaseUrl;
   };
 
@@ -204,32 +210,66 @@ const App = ({ Component, pageProps }) => {
         <>
           <CssBaseline />
           <PubNubProvider client={pubnub}>
-            <NotificationsProvider>
-              <>
-                {logout && (
-                  <ConfirmationModal
-                    title={textForKey('Logout')}
-                    message={textForKey('logout message')}
-                    onConfirm={handleUserLogout}
-                    onClose={handleCancelLogout}
-                    show={logout}
-                  />
-                )}
-                {imageModal.open && (
-                  <FullScreenImageModal
-                    {...imageModal}
-                    onClose={handleCloseImageModal}
-                  />
-                )}
-                <NextNprogress color='#29D' startPosition={0.3} height={2} />
-                <Component {...pageProps} />
-              </>
-            </NotificationsProvider>
+            <PubnubContextProvider>
+              <NotificationsProvider>
+                <>
+                  {logout && (
+                    <ConfirmationModal
+                      title={textForKey('Logout')}
+                      message={textForKey('logout message')}
+                      onConfirm={handleUserLogout}
+                      onClose={handleCancelLogout}
+                      show={logout}
+                    />
+                  )}
+                  {imageModal.open && (
+                    <FullScreenImageModal
+                      {...imageModal}
+                      onClose={handleCloseImageModal}
+                    />
+                  )}
+                  <NextNprogress color='#29D' startPosition={0.3} height={2} />
+                  <Component {...pageProps} />
+                </>
+              </NotificationsProvider>
+            </PubnubContextProvider>
           </PubNubProvider>
         </>
       </ThemeProvider>
     </>
   );
 };
+
+App.getInitialProps = wrapper.getInitialAppProps(
+  (store) =>
+    async ({ Component, ctx }) => {
+      try {
+        const { auth_token: authToken } = parseCookies(ctx.req);
+        const { date: queryDate } = ctx.query;
+        const { data } = await fetchAppData(
+          ctx.req.headers,
+          queryDate ?? moment().format('YYYY-MM-DD'),
+        );
+        const { currentUser, currentClinic } = data;
+        store.dispatch(
+          setAppData({
+            currentClinic,
+            currentUser,
+            authToken,
+          }),
+        );
+      } catch (e) {
+        console.error(e.message);
+      }
+      return {
+        pageProps: {
+          ...(Component.getInitialProps
+            ? await Component.getInitialProps({ ...ctx, store })
+            : {}),
+          pathname: ctx.pathname,
+        },
+      };
+    },
+);
 
 export default wrapper.withRedux(App);

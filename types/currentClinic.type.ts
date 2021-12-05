@@ -1,4 +1,5 @@
 import {
+  Cabinet,
   ClinicBraces,
   ClinicService,
   ClinicUser,
@@ -36,4 +37,5 @@ export interface CurrentClinic {
   allCurrencies: Currency[];
   facebookPages: FacebookPage[];
   users: ClinicUser[];
+  cabinets: Cabinet[];
 }

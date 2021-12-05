@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
+import { connect } from 'react-redux';
 import { SWRConfig } from 'swr';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import ClinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics';
@@ -19,7 +20,7 @@ const General = ({ fallback, query, authToken }) => {
   );
 };
 
-export default General;
+export default connect((state) => state)(General);
 
 export const getServerSideProps = async ({ req, query }) => {
   try {

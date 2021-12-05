@@ -9,7 +9,7 @@ import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import styles from './TreatedPatientsChart.module.scss';
 
-const TreatedPatients = ({ patients, onClose, visible = true }) => {
+const TreatedPatients = ({ patients, removeable, onClose, visible = true }) => {
   if (!visible || patients == null) {
     return null;
   }
@@ -21,11 +21,13 @@ const TreatedPatients = ({ patients, onClose, visible = true }) => {
   return (
     <Grid item xs={4} className={styles.treatedPatientsChart}>
       <div className='chartItem'>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_treated_patients')}
         </Typography>
@@ -44,4 +46,5 @@ export default TreatedPatients;
 TreatedPatients.propTypes = {
   visible: PropTypes.bool,
   patients: PropTypes.number,
+  removeable: PropTypes.bool,
 };

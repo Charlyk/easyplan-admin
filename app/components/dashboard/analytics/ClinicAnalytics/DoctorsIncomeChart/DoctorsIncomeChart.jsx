@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import { PolarArea } from 'react-chartjs-2';
 import IconClose from 'app/components/icons/iconClose';
 import formattedAmount from 'app/utils/formattedAmount';
@@ -11,7 +12,13 @@ import { ChartType } from 'types/ChartType.type';
 import { getDoctorIncomeChartData } from '../ClinicAnalytics.utils';
 import styles from './DoctorsIncomeChart.module.scss';
 
-const DoctorsIncomeChart = ({ incomes, currency, onClose, visible = true }) => {
+const DoctorsIncomeChart = ({
+  incomes,
+  removeable,
+  currency,
+  onClose,
+  visible = true,
+}) => {
   const data = useMemo(() => {
     return getDoctorIncomeChartData(incomes);
   }, [incomes]);
@@ -35,11 +42,13 @@ const DoctorsIncomeChart = ({ incomes, currency, onClose, visible = true }) => {
   return (
     <Grid item xs={3} className={styles.doctorsIncomeChart}>
       <div className={clsx(styles.incomeChartWrapper, 'chartItem')}>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_doctor_income')}
         </Typography>
@@ -67,3 +76,10 @@ const DoctorsIncomeChart = ({ incomes, currency, onClose, visible = true }) => {
 };
 
 export default DoctorsIncomeChart;
+
+DoctorsIncomeChart.propTypes = {
+  removeable: PropTypes.bool,
+  onClose: PropTypes.func,
+  incomes: PropTypes.any,
+  visible: PropTypes.bool,
+};

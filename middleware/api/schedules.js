@@ -112,7 +112,7 @@ export async function getScheduleDetails(scheduleId, headers = null) {
 
 /**
  * Fetch available hours to create or edit a schedule
- * @param {{doctorId: string|number, serviceId: string|number, date: string, scheduleId: (string|number)?}} query
+ * @param {{doctorId: string|number, serviceId: string|number, date: string, scheduleId: (string|number)?, cabinetId?: string|number}} query
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */

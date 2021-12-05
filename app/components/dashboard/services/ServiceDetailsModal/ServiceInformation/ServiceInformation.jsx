@@ -5,13 +5,15 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useColor } from 'react-color-palette';
+import { useSelector } from 'react-redux';
 import EASColorPicker from 'app/components/common/EASColorPicker/EASColorPicker';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import IconPalette from 'app/components/icons/iconPalette';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
-import { availableCurrenciesSelector } from 'redux/selectors/clinicSelector';
+import { availableCurrenciesSelector } from 'redux/selectors/appDataSelector';
 import styles from './ServiceInformation.module.scss';
 
 const availableColors = [
@@ -42,27 +44,33 @@ const serviceTypes = [
   },
 ];
 
-const ServiceInformation = ({
-  currentClinic,
-  isExpanded,
-  showStep,
-  data,
-  onChange,
-}) => {
-  const currencies = availableCurrenciesSelector(currentClinic);
+const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
+  const currencies = useSelector(availableCurrenciesSelector);
   const paletteRef = useRef(null);
   const [colors, setColors] = useState(availableColors);
   const [showPicker, setShowPicker] = useState(false);
   const [color, setColor] = useColor('hex', '#3A83DC');
+  const [service, setService] = useState(data);
 
   useEffect(() => {
-    if (data == null) {
+    if (data?.color == null) {
       return;
     }
     if (!colors.includes(data.color) && data.color.length > 0) {
       setColors([...colors, data.color]);
     }
-  }, [data.color, colors]);
+  }, [data?.color, colors]);
+
+  useEffect(() => {
+    if (data == null) {
+      return;
+    }
+    setService(data);
+  }, [data]);
+
+  useEffect(() => {
+    onChange?.(service);
+  }, [service]);
 
   const mappedCurrencies = useMemo(() => {
     return currencies.map((item) => ({
@@ -72,8 +80,8 @@ const ServiceInformation = ({
   }, [currencies]);
 
   const handleFormChange = (fieldId, value) => {
-    onChange({
-      ...data,
+    setService({
+      ...service,
       [fieldId]: value,
     });
   };
@@ -127,7 +135,7 @@ const ServiceInformation = ({
             type='text'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Service name')}
-            value={data.name}
+            value={service.name}
             onChange={(value) => handleFormChange('name', value)}
           />
 
@@ -136,7 +144,7 @@ const ServiceInformation = ({
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Required time')}
             min='0'
-            value={data.duration}
+            value={service.duration}
             onChange={(value) => handleFormChange('duration', value)}
             endAdornment={
               <Typography className={styles.adornment}>min</Typography>
@@ -147,14 +155,14 @@ const ServiceInformation = ({
             type='number'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Service price')}
-            value={data.price}
+            value={service.price}
             min='0'
             onChange={(value) => handleFormChange('price', value)}
             endAdornment={
               <EASSelect
                 rootClass={styles.currencyField}
                 options={mappedCurrencies}
-                value={data.currency}
+                value={service.currency}
                 onChange={(event) =>
                   handleFormChange('currency', event.target.value)
                 }
@@ -169,7 +177,7 @@ const ServiceInformation = ({
             onChange={(event) =>
               handleFormChange('serviceType', event.target.value)
             }
-            value={data.serviceType}
+            value={service.serviceType}
             options={serviceTypes}
           />
 
@@ -178,7 +186,7 @@ const ServiceInformation = ({
             fieldLabel={textForKey('Description')}
             rows={4}
             maxRows={4}
-            value={data.description || ''}
+            value={service.description || ''}
             onChange={(value) => handleFormChange('description', value)}
           />
         </form>
@@ -191,7 +199,7 @@ const ServiceInformation = ({
             onChange={(event, value) => handleFormChange('color', value)}
             className={styles.colors}
             type='radio'
-            value={data.color}
+            value={service.color}
             name='serviceColors'
           >
             {colors.map((color) => (
@@ -228,7 +236,7 @@ const ServiceInformation = ({
   );
 };
 
-export default ServiceInformation;
+export default React.memo(ServiceInformation, areComponentPropsEqual);
 
 ServiceInformation.propTypes = {
   isExpanded: PropTypes.bool.isRequired,

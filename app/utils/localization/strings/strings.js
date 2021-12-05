@@ -728,6 +728,8 @@ export default {
     clinic_cabinet_doctor_deletion_confirmation:
       'Are you sure you want to remove this doctor',
     visits: 'Visits',
+    type_to_search: 'Type to search...',
+    add_appointment_cabinet: 'Cabinet (Optional)',
   },
   ro: {
     analytics: 'Analitică',
@@ -1467,6 +1469,8 @@ export default {
     clinic_cabinet_doctor_deletion_confirmation:
       'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Vizite',
+    type_to_search: 'Tapează pentru a căuta...',
+    add_appointment_cabinet: 'Cabinet (Opțional)',
   },
   ru: {
     analytics: 'Analytics',
@@ -2194,5 +2198,7 @@ export default {
     clinic_cabinet_doctor_deletion_confirmation:
       'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Visits',
+    type_to_search: 'Type to search...',
+    add_appointment_cabinet: 'Cabinets (Optional)',
   },
 };

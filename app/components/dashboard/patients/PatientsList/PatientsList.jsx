@@ -181,10 +181,6 @@ const PatientsList = ({
     localDispatch(setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
-  const handleDeletePatient = (patient) => {
-    localDispatch(setPatientToDelete(patient));
-  };
-
   const handleCloseDelete = () => {
     localDispatch(setPatientToDelete(null));
   };
@@ -197,7 +193,7 @@ const PatientsList = ({
       localDispatch(setPatientToDelete(null));
       await fetchPatients();
       dispatch(
-        setPatientDetails({ show: false, patientId: null, onDelete: null }),
+        setPatientDetails({ show: false, patientId: null, canDelete: false }),
       );
     } catch (error) {
       toast.error(error.message);
@@ -223,7 +219,7 @@ const PatientsList = ({
       setPatientDetails({
         show: true,
         patientId: patient.id,
-        onDelete: handleDeletePatient,
+        canDelete: true,
       }),
     );
   };

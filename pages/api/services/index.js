@@ -41,7 +41,6 @@ function createService(req) {
       [HeaderKeys.authorization]: authToken,
       [HeaderKeys.clinicId]: clinicId,
       [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
     },
   });
 }

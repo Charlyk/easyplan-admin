@@ -2,19 +2,21 @@ import React from 'react';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './ServiceDoctors.module.scss';
 
 const ServiceDoctor = dynamic(() => import('../ServiceDoctor'));
 
 const ServiceDoctors = ({
-  clinic,
   isExpanded,
   showStep,
   doctors,
   serviceId,
   onDoctorChange,
 }) => {
+  const clinic = useSelector(currentClinicSelector);
   const contentClasses = clsx(
     styles.content,
     isExpanded ? styles.expanded : styles.collapsed,
@@ -38,7 +40,7 @@ const ServiceDoctors = ({
           <ServiceDoctor
             clinic={clinic}
             onChange={onDoctorChange}
-            key={doctor.doctorId}
+            key={doctor.id}
             serviceId={serviceId}
             serviceData={doctor}
           />
@@ -55,10 +57,10 @@ ServiceDoctors.propTypes = {
   serviceId: PropTypes.number,
   doctors: PropTypes.arrayOf(
     PropTypes.shape({
-      doctorName: PropTypes.string,
-      doctorId: PropTypes.number,
-      percentage: PropTypes.number,
-      price: PropTypes.number,
+      fullName: PropTypes.string,
+      id: PropTypes.number,
+      percentage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       selected: PropTypes.bool,
     }),
   ),

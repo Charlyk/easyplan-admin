@@ -28,7 +28,6 @@ const EASImage = ({ src, classes, className, placeholder, enableLoading }) => {
       if (!isAttached) return;
       localDispatch(setImageContent(imageData));
     } catch (error) {
-      console.error(error);
       if (!isAttached) return;
       localDispatch(setIsError(true));
     }

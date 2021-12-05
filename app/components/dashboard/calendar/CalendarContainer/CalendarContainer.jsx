@@ -4,11 +4,10 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import useSWR from 'swr';
 import MainComponent from 'app/components/common/MainComponent';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { APP_DATA_API, HeaderKeys } from 'app/utils/constants';
+import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
 import {
@@ -16,11 +15,17 @@ import {
   requestDeleteSchedule,
 } from 'middleware/api/schedules';
 import {
-  setAppointmentModal,
   setPaymentModal,
   toggleAppointmentsUpdate,
 } from 'redux/actions/actions';
+import {
+  activeClinicDoctorsSelector,
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
 import { updateClinicDataSelector } from 'redux/selectors/clinicDataSelector';
+import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import styles from './CalendarContainer.module.scss';
 import reducer, {
   initialState,
@@ -98,19 +103,13 @@ const importFields = [
   },
 ];
 
-const CalendarContainer = ({
-  date,
-  doctorId,
-  doctors,
-  viewMode,
-  children,
-  authToken,
-}) => {
+const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
   const toast = useContext(NotificationsContext);
-  const { data } = useSWR(APP_DATA_API);
-  const { currentUser, currentClinic } = data;
   const updateClinicData = useSelector(updateClinicDataSelector);
-
+  const doctors = useSelector(activeClinicDoctorsSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
@@ -217,19 +216,21 @@ const CalendarContainer = ({
     endHour,
     selectedDate = null,
     patient,
+    cabinet,
   ) => {
     if (doctor?.isHidden) {
       toast.warn(textForKey('doctor_is_fired'));
       return;
     }
     dispatch(
-      setAppointmentModal({
+      openAppointmentModal({
         open: true,
         doctor: doctor ?? selectedDoctor,
         startHour,
         endHour,
-        date: selectedDate ?? viewDate,
+        date: moment(selectedDate ?? viewDate).format('YYYY-MM-DD'),
         patient,
+        cabinet,
       }),
     );
   };
@@ -315,7 +316,7 @@ const CalendarContainer = ({
 
   const handleEditSchedule = (schedule) => {
     dispatch(
-      setAppointmentModal({
+      openAppointmentModal({
         open: true,
         schedule,
       }),

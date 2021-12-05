@@ -8,7 +8,7 @@ import IconError from 'app/components/icons/iconError';
 import IconPending from 'app/components/icons/IconPending';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import { textForKey } from 'app/utils/localization';
-import { updateSMSMessageStatusSelector } from 'redux/selectors/patientSelector';
+import { updateSMSMessageStatusSelector } from '../../../../../../../redux/selectors/patientSelector';
 import styles from './PatientMessage.module.scss';
 
 const PatientMessage = ({ message }) => {

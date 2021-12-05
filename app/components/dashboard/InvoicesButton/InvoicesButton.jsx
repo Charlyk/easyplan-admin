@@ -9,11 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import formattedAmount from 'app/utils/formattedAmount';
-import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
 import { textForKey } from 'app/utils/localization';
 import { fetchPendingInvoices } from 'middleware/api/invoices';
 import { setPaymentModal } from 'redux/actions/actions';
 import { setTotalInvoices } from 'redux/actions/invoiceActions';
+import { clinicExchangeRatesSelector } from 'redux/selectors/appDataSelector';
 import {
   totalInvoicesSelector,
   updateInvoiceSelector,
@@ -32,22 +32,32 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
   const userClinic = currentUser.clinics.find(
     (clinic) => clinic.clinicId === currentClinic.id,
   );
-  const exchangeRates = getClinicExchangeRates(currentClinic);
+  const exchangeRates = useSelector(clinicExchangeRatesSelector);
+  const [isMounted, setIsMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [showInvoices, setShowInvoices] = useState(false);
 
   useEffect(() => {
-    if (userClinic?.canRegisterPayments) {
-      fetchInvoices();
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || !userClinic?.canRegisterPayments) {
+      return;
     }
-  }, [updateInvoices, updateInvoice, exchangeRates]);
+
+    fetchInvoices();
+  }, [updateInvoices, updateInvoice, exchangeRates, isMounted]);
 
   const fetchInvoices = async () => {
     if (exchangeRates.length === 0 || isLoading) {
       return;
     }
-    setIsLoading(true);
+    if (isMounted) setIsLoading(true);
     try {
       const response = await fetchPendingInvoices();
       const { data: newInvoices } = response;
@@ -55,21 +65,21 @@ const InvoicesButton = ({ currentUser, currentClinic }) => {
         toast.success(textForKey('invoice_created'));
         dispatch(setTotalInvoices(newInvoices.length));
       }
-      setInvoices(newInvoices);
+      if (isMounted) setInvoices(newInvoices);
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setIsLoading(false);
+      if (isMounted) setIsLoading(false);
     }
   };
 
   const handleToggleInvoices = () => {
     if (invoices.length === 0 || isLoading) return;
-    setShowInvoices(!showInvoices);
+    if (isMounted) setShowInvoices(!showInvoices);
   };
 
   const handleCloseInvoices = () => {
-    setShowInvoices(false);
+    if (isMounted) setShowInvoices(false);
   };
 
   const handlePayInvoice = (invoice) => {

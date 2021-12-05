@@ -215,7 +215,6 @@ const DoctorCalendar = ({
         <PatientsFilter
           filterData={filterData}
           viewMode={viewMode}
-          currentClinic={currentClinic}
           selectedDate={viewDate}
           onViewModeChange={handleViewModeChange}
           onDateChange={handleDateChange}

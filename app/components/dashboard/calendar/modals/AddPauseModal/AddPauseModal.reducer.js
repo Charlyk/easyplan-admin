@@ -32,6 +32,8 @@ export const initialState = {
   availableEndTime: [],
   isFetchingHours: false,
   isDeleting: false,
+  doctor: null,
+  cabinet: null,
 };
 
 const addPauseModalSlice = createSlice({
@@ -95,6 +97,25 @@ const addPauseModalSlice = createSlice({
     setIsDeleting(state, action) {
       state.isDeleting = action.payload;
     },
+    setInitialData(state, action) {
+      const { doctor, cabinet } = action.payload;
+      if (cabinet != null) {
+        state.cabinet = { ...cabinet, label: cabinet.name };
+      }
+
+      if (doctor != null) {
+        const { phoneNumber, fullName } = doctor;
+        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+        state.doctor = { ...doctor, name: name, label: fullName };
+      }
+    },
+    setDoctor(state, action) {
+      state.doctor = action.payload;
+    },
+    setCabinet(state, action) {
+      state.cabinet = action.payload;
+      state.doctor = null;
+    },
     resetState() {
       return initialState;
     },
@@ -113,6 +134,9 @@ export const {
   setStartHour,
   setAvailableAllTime,
   setAvailableEndTime,
+  setInitialData,
+  setDoctor,
+  setCabinet,
   resetState,
 } = addPauseModalSlice.actions;
 

@@ -1,19 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { ClinicCabinet } from 'types';
 
-interface StateSlice {
-  cabinets: ClinicCabinet[];
-}
-
 const cabinetsData = createSlice({
   name: 'cabinetsData',
-  initialState: initialState.cabinetsData as StateSlice,
+  initialState: initialState.cabinetsData,
   reducers: {
-    addNewCabinet(state, action) {
-      state.cabinets.push(action.payload);
+    addNewCabinet(state, action: PayloadAction<ClinicCabinet>) {
+      state.cabinets = [...state.cabinets, action.payload];
     },
-    setCabinets(state, action) {
+    setCabinets(state, action: PayloadAction<ClinicCabinet[]>) {
       state.cabinets = action.payload;
     },
     deleteCabinet(state, action) {
@@ -50,6 +47,14 @@ const cabinetsData = createSlice({
         const updatedUsers = [...cabinet.users, ...users];
         return { ...cabinet, users: updatedUsers };
       });
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.cabinetsData,
+      };
     },
   },
 });

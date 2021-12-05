@@ -407,11 +407,7 @@ const MainMenu = ({
           </Typography>
         </Box>
       )}
-      <ExchangeRates
-        currentUser={currentUser}
-        currentClinic={currentClinic}
-        canEdit={canRegisterPayments}
-      />
+      <ExchangeRates canEdit={canRegisterPayments} />
       <EASHelpView
         placement='right'
         onClose={handleNotificationClose}

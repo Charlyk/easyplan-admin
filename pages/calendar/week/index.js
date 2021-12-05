@@ -1,119 +1,114 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import { SWRConfig } from 'swr';
+import { connect } from 'react-redux';
 import CalendarContainer from 'app/components/dashboard/calendar/CalendarContainer';
 import CalendarWeekView from 'app/components/dashboard/calendar/CalendarWeekView';
-import { APP_DATA_API, JwtRegex, Role } from 'app/utils/constants';
+import { JwtRegex, Role } from 'app/utils/constants';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
 import handleRequestError from 'app/utils/handleRequestError';
-import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { fetchAppData } from 'middleware/api/initialization';
 import { getSchedulesForInterval } from 'middleware/api/schedules';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { setCalendarData } from 'redux/slices/calendarData';
 import { wrapper } from 'store';
 
-const Week = ({ fallback, doctors, date, doctorId, schedules, authToken }) => {
+const Week = ({ date, doctorId }) => {
   const viewDate = moment(date).toDate();
   return (
-    <SWRConfig value={{ fallback }}>
-      <CalendarContainer
-        doctors={doctors}
-        doctorId={doctorId}
-        authToken={authToken}
-        date={viewDate}
-        viewMode='week'
-      >
-        <CalendarWeekView
-          viewDate={viewDate}
-          doctors={doctors}
-          schedules={schedules}
-          doctorId={doctorId}
-        />
-      </CalendarContainer>
-    </SWRConfig>
+    <CalendarContainer doctorId={doctorId} date={viewDate} viewMode='week'>
+      <CalendarWeekView viewDate={viewDate} doctorId={doctorId} />
+    </CalendarContainer>
   );
 };
 
-export default wrapper.withRedux(Week);
+export default connect((state) => state)(Week);
 
-export const getServerSideProps = async ({ req, query }) => {
-  try {
-    if (query.date == null) {
-      query.date = moment().format('YYYY-MM-DD');
-    }
-    const { date: queryDate, doctorId: queryDoctorId } = query;
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req, query }) => {
+      try {
+        if (query.date == null) {
+          query.date = moment().format('YYYY-MM-DD');
+        }
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        const { date: queryDate, doctorId: queryDoctorId } = query;
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-    const { auth_token: authToken } = parseCookies(req);
-    if (!authToken || !authToken.match(JwtRegex)) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      };
-    }
+        // check if user is on the allowed page
+        const redirectTo = redirectToUrl(
+          currentUser,
+          currentClinic,
+          '/calendar/week',
+        );
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
 
-    const appData = await fetchAppData(req.headers, queryDate);
-    const { currentUser, currentClinic } = appData.data;
+        // fetch schedules for current week
+        const currentDate = moment(queryDate);
 
-    // check if user is on the allowed page
-    const redirectTo = redirectToUrl(
-      currentUser,
-      currentClinic,
-      '/calendar/week',
-    );
-    if (redirectTo != null) {
-      return {
-        redirect: {
-          destination: redirectTo,
-          permanent: true,
-        },
-      };
-    }
+        // filter clinic doctors
+        const doctors =
+          currentClinic?.users?.filter(
+            (item) => item.roleInClinic === Role.doctor && item.showInCalendar,
+          ) || [];
 
-    // fetch schedules for current week
-    const currentDate = moment(queryDate);
+        // check if doctor id is present in query
+        let doctorId = queryDoctorId;
+        if (doctorId == null) {
+          doctorId = doctors[0]?.id ?? 0;
+        }
 
-    // filter clinic doctors
-    const doctors =
-      currentClinic?.users?.filter(
-        (item) => item.roleInClinic === Role.doctor && item.showInCalendar,
-      ) || [];
+        // fetch schedules for specified period of time
+        const week = getCurrentWeek(currentDate.toDate()).map((item) =>
+          item.toDate(),
+        );
+        const firstDay = week[0];
+        const lastDay = week[week.length - 1];
+        const response = await getSchedulesForInterval(
+          firstDay,
+          lastDay,
+          doctorId,
+          req.headers,
+        );
 
-    // check if doctor id is present in query
-    let doctorId = queryDoctorId;
-    if (doctorId == null) {
-      doctorId = doctors[0]?.id ?? 0;
-    }
+        const { schedules, hours } = response.data;
 
-    // fetch schedules for specified period of time
-    const week = getCurrentWeek(currentDate.toDate()).map((item) =>
-      item.toDate(),
-    );
-    const firstDay = week[0];
-    const lastDay = week[week.length - 1];
-    const response = await getSchedulesForInterval(
-      firstDay,
-      lastDay,
-      doctorId,
-      req.headers,
-    );
+        store.dispatch(
+          setCalendarData({
+            dayHours: hours,
+            details: null,
+            schedules,
+          }),
+        );
 
-    return {
-      props: {
-        doctorId: parseInt(doctorId, 10),
-        doctors,
-        date: query.date,
-        schedules: response.data,
-        authToken,
-        fallback: {
-          [APP_DATA_API]: {
-            ...appData.data,
+        return {
+          props: {
+            doctorId: parseInt(doctorId, 10),
+            date: query.date,
           },
-        },
-      },
-    };
-  } catch (error) {
-    return handleRequestError(error);
-  }
-};
+        };
+      } catch (error) {
+        return handleRequestError(error);
+      }
+    },
+);

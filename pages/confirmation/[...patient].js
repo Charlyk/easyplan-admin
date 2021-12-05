@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { connect } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
 import LoadingButton from 'app/components/common/LoadingButton';
 import AppLogoBlue from 'app/components/icons/appLogoBlue';
@@ -228,6 +229,8 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   );
 };
 
+export default connect((state) => state)(Confirmation);
+
 export const getServerSideProps = async ({ req, query }) => {
   try {
     const isMobile = checkIsMobileDevice(req);
@@ -254,5 +257,3 @@ export const getServerSideProps = async ({ req, query }) => {
     };
   }
 };
-
-export default Confirmation;

@@ -56,6 +56,7 @@ ColumnsWrapper.propTypes = {
       name: PropTypes.string,
       disabled: PropTypes.bool,
       date: PropTypes.instanceOf(Date),
+      hint: PropTypes.string,
     }),
   ),
   schedules: PropTypes.arrayOf(

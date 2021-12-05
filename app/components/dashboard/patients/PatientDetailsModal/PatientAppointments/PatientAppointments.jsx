@@ -8,11 +8,11 @@ import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { getPatientSchedules } from 'middleware/api/patients';
-import { setAppointmentModal } from 'redux/actions/actions';
 import {
   deleteScheduleSelector,
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
+import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import Appointment from './Appointment';
 import styles from './PatientAppointments.module.scss';
 import { reducer, initialState, actions } from './PatientAppointments.reducer';
@@ -58,7 +58,7 @@ const PatientAppointments = ({ patient, isDoctor }) => {
   };
 
   const handleAddAppointment = () => {
-    dispatch(setAppointmentModal({ open: true, patient }));
+    dispatch(openAppointmentModal({ open: true, patient }));
   };
 
   return (

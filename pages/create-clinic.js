@@ -1,11 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import CreateClinicWrapper from 'app/components/common/CreateClinicWrapper';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import { fetchAllCountries } from 'middleware/api/countries';
-import { wrapper } from 'store';
 
 const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
   return (
@@ -18,6 +18,8 @@ const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
     />
   );
 };
+
+export default connect((state) => state)(CreateClinic);
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
@@ -47,5 +49,3 @@ export const getServerSideProps = async ({ req, query }) => {
     return handleRequestError(e);
   }
 };
-
-export default wrapper.withRedux(CreateClinic);

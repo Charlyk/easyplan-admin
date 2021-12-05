@@ -28,7 +28,6 @@ import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
 import {
   getAvailableHours,
-  getScheduleDetails,
   updateScheduleStatus,
 } from 'middleware/api/schedules';
 import {
@@ -36,17 +35,17 @@ import {
   setPaymentModal,
   toggleAppointmentsUpdate,
 } from 'redux/actions/actions';
-import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import {
-  deleteScheduleSelector,
-  updateScheduleSelector,
-  calendarDetailsSelector,
+  calendarScheduleDetailsSelector,
+  closeDetailsSelector,
 } from 'redux/selectors/scheduleSelector';
-import { setAppointmentDetails } from 'redux/slices/calendarData';
+import {
+  closeScheduleDetails,
+  fetchScheduleDetails,
+} from 'redux/slices/calendarData';
 import styles from './AppointmentDetails.module.scss';
 import reducer, {
   initialState,
-  setIsLoading,
   setIsCanceledReasonRequired,
   setIsNewDateRequired,
   setIsDelayTimeRequired,
@@ -86,24 +85,38 @@ const AppointmentDetails = ({
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
-  const details = useSelector(calendarDetailsSelector);
-  const updateSchedule = useSelector(updateScheduleSelector);
-  const deleteSchedule = useSelector(deleteScheduleSelector);
-  const updateInvoice = useSelector(updateInvoiceSelector);
+  const details = useSelector(calendarScheduleDetailsSelector);
+  const closeDetails = useSelector(closeDetailsSelector);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      dispatch(setAppointmentDetails(null));
+      dispatch(closeScheduleDetails(false));
     };
   }, []);
+
+  useEffect(() => {
+    if (details == null) {
+      return;
+    }
+
+    localDispatch(
+      setScheduleStatus(
+        Statuses.find((item) => item.id === details.scheduleStatus),
+      ),
+    );
+  }, [details]);
+
+  useEffect(() => {
+    if (closeDetails) {
+      onClose();
+    }
+  }, [closeDetails]);
 
   useEffect(() => {
     if (schedule == null) {
       return;
     }
-    fetchAppointmentDetails(schedule);
+    dispatch(fetchScheduleDetails(schedule.id));
     localDispatch(
       setScheduleStatus(
         Statuses.find((item) => item.id === schedule.scheduleStatus),
@@ -111,62 +124,9 @@ const AppointmentDetails = ({
     );
   }, [schedule]);
 
-  useEffect(() => {
-    if (updateSchedule != null && schedule.id === updateSchedule.id) {
-      fetchAppointmentDetails(updateSchedule);
-    }
-  }, [updateSchedule]);
-
-  useEffect(() => {
-    if (deleteSchedule != null && deleteSchedule.id === schedule.id) {
-      onClose();
-    }
-  }, [deleteSchedule]);
-
-  useEffect(() => {
-    if (updateInvoice == null) {
-      return;
-    }
-
-    const newDebts =
-      updateInvoice.remainedAmount > 0
-        ? details.patient.debts.map((item) => {
-            if (item.id !== updateInvoice.id) {
-              return item;
-            }
-            return updateInvoice;
-          })
-        : details.patient.debts.filter((item) => item.id !== updateInvoice.id);
-    dispatch(
-      setAppointmentDetails({
-        ...details,
-        patient: {
-          ...details.patient,
-          debts: newDebts,
-        },
-      }),
-    );
-  }, [updateInvoice]);
-
   const handleKeyDown = (event) => {
     if (event?.keyCode === 27 && !isLoading) {
       onClose?.();
-    }
-  };
-
-  const fetchAppointmentDetails = async (schedule) => {
-    if (schedule == null) {
-      return;
-    }
-    localDispatch(setIsLoading(true));
-    try {
-      const response = await getScheduleDetails(schedule.id);
-      const { data: details } = response;
-      dispatch(setAppointmentDetails(details));
-    } catch (error) {
-      toast?.error(error.message);
-    } finally {
-      localDispatch(setIsLoading(false));
     }
   };
 
@@ -293,13 +253,17 @@ const AppointmentDetails = ({
       setPatientDetails({
         show: true,
         patientId: schedule.patient.id,
-        onDelete: null,
+        canDelete: false,
       }),
     );
   };
 
   const handleAddSchedule = () => {
     onAddSchedule?.(null, null, null, null, details.patient);
+  };
+
+  const handleCloseDetails = () => {
+    dispatch(closeScheduleDetails(true));
   };
 
   const isFinished =
@@ -352,10 +316,11 @@ const AppointmentDetails = ({
   );
 
   return (
-    <div
+    <Box
       className={clsx(styles.appointmentDetailsRoot, {
         [styles.urgent]: details?.isUrgent || details?.urgent,
       })}
+      onKeyDown={handleKeyDown}
     >
       <DelayTimeModal
         open={isDelayTimeRequired}
@@ -383,7 +348,7 @@ const AppointmentDetails = ({
       {statusesList}
       <div className={styles.headerWrapper}>
         <Box display='flex' alignItems='center'>
-          <Box onClick={onClose} className={styles.closeButton}>
+          <Box onClick={handleCloseDetails} className={styles.closeButton}>
             <IconClose />
           </Box>
           <span className={styles.scheduleTitle}>
@@ -685,7 +650,7 @@ const AppointmentDetails = ({
           </a>
         )}
       </div>
-    </div>
+    </Box>
   );
 };
 
@@ -719,5 +684,4 @@ AppointmentDetails.defaultProps = {
   onClose: () => null,
   onEdit: () => null,
   onDelete: () => null,
-  onPayDebt: () => null,
 };

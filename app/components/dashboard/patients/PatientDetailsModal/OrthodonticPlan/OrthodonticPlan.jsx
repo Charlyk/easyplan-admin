@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EasyTab from 'app/components/common/EasyTab';
@@ -18,7 +19,8 @@ import { textForKey } from 'app/utils/localization';
 import {
   clinicBracesServicesSelector,
   clinicEnabledBracesSelector,
-} from 'redux/selectors/clinicSelector';
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './OrthodonticPlan.module.scss';
 import {
   reducer,
@@ -61,19 +63,11 @@ const caninOptions = [
   },
 ];
 
-const OrthodonticPlan = ({
-  currentUser,
-  currentClinic: clinic,
-  patient,
-  scheduleId,
-  onSave,
-}) => {
+const OrthodonticPlan = ({ patient, scheduleId, onSave }) => {
   const toast = useContext(NotificationsContext);
-  const services = clinicBracesServicesSelector(clinic);
-  const braces = clinicEnabledBracesSelector(clinic);
-  const currentClinic = currentUser.clinics.find(
-    (it) => it.clinicId === clinic.id,
-  );
+  const services = useSelector(clinicBracesServicesSelector);
+  const braces = useSelector(clinicEnabledBracesSelector);
+  const currentClinic = useSelector(userClinicSelector);
   const isDoctor = currentClinic.roleInClinic === Role.doctor;
   const [{ planType, bracketsPlan, isLoading, isSaving }, localDispatch] =
     useReducer(reducer, initialState);
@@ -559,7 +553,6 @@ const OrthodonticPlan = ({
 export default OrthodonticPlan;
 
 OrthodonticPlan.propTypes = {
-  currentUser: PropTypes.object.isRequired,
   scheduleId: PropTypes.number,
   patient: PropTypes.object,
   onSave: PropTypes.func,

@@ -8,10 +8,6 @@ import {
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
 import {
-  toggleDeleteSchedule,
-  toggleUpdateSchedule,
-} from 'redux/actions/scheduleActions';
-import {
   updateSchedule,
   deleteSchedule,
   addNewSchedule,
@@ -37,52 +33,54 @@ export const handleRemoteMessage = (message) => (dispatch) => {
     case MessageAction.ClinicInvitationAccepted:
       dispatch(triggerUsersUpdate(true));
       break;
-    case MessageAction.CreatedNewInvoice:
+    case MessageAction.CreatedNewInvoice: {
       // update appointments list
       dispatch(toggleAppointmentsUpdate());
       // update invoices
       dispatch(toggleUpdateInvoices());
       break;
-    case MessageAction.PauseRecordUpdatedOrCreated:
-    case MessageAction.ScheduleUpdated:
+    }
+    case MessageAction.PauseUpdated:
+    case MessageAction.ScheduleUpdated: {
       dispatch(updateSchedule(payload));
-      dispatch(toggleUpdateSchedule(payload));
-      setTimeout(() => {
-        dispatch(toggleUpdateSchedule(null));
-      }, 600);
       break;
-    case MessageAction.ScheduleCreated:
+    }
+    case MessageAction.PauseCreated:
+    case MessageAction.ScheduleCreated: {
       dispatch(addNewSchedule(payload));
-      dispatch(toggleUpdateSchedule(payload));
-      setTimeout(() => {
-        dispatch(toggleUpdateSchedule(null));
-      }, 600);
       break;
+    }
+    case MessageAction.ScheduleDeleted: {
+      dispatch(deleteSchedule(payload));
+      // dispatch(toggleDeleteSchedule(payload));
+      // setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
+      break;
+    }
     case MessageAction.UserCalendarVisibilityChanged:
     case MessageAction.UserRestoredInClinic:
-    case MessageAction.UserRemovedFromClinic:
+    case MessageAction.UserRemovedFromClinic: {
       dispatch(setShouldUpdateClinicData(true));
       setTimeout(() => dispatch(setShouldUpdateClinicData(false)), 600);
       break;
+    }
     case MessageAction.ClinicDataImportStarted:
-    case MessageAction.ClinicDataImported:
+    case MessageAction.ClinicDataImported: {
       dispatch(togglePatientsListUpdate());
       break;
-    case MessageAction.ExchangeRatesUpdated:
+    }
+    case MessageAction.ExchangeRatesUpdated: {
       dispatch(toggleExchangeRateUpdate());
       break;
-    case MessageAction.ExchangeRatesUpdateRequired:
+    }
+    case MessageAction.ExchangeRatesUpdateRequired: {
       dispatch(setClinicExchangeRatesUpdateRequired(true));
       break;
-    case MessageAction.ScheduleDeleted:
-      dispatch(deleteSchedule(payload));
-      dispatch(toggleDeleteSchedule(payload));
-      setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
-      break;
-    case MessageAction.NewPaymentRegistered:
+    }
+    case MessageAction.NewPaymentRegistered: {
       dispatch(toggleUpdateInvoice(payload));
       setTimeout(() => dispatch(toggleUpdateInvoice(null)), 600);
       break;
+    }
     case MessageAction.UpdateMessageStatus: {
       if (payload == null) {
         return;
@@ -147,7 +145,8 @@ const MessageAction = {
   CreatedNewInvoice: 'CreatedNewInvoice',
   NewPatientOnSite: 'NewPatientOnSite',
   ScheduleUpdated: 'ScheduleUpdated',
-  PauseRecordUpdatedOrCreated: 'PauseRecordUpdatedOrCreated',
+  PauseUpdated: 'PauseUpdated',
+  PauseCreated: 'PauseCreated',
   NewUserInvited: 'NewUserInvited',
   InvitationRemoved: 'InvitationRemoved',
   UserRemovedFromClinic: 'UserRemovedFromClinic',

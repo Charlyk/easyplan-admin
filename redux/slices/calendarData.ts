@@ -1,70 +1,79 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
+import moment from 'moment-timezone';
+import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
-import { ScheduleItem } from 'types/schedule.type';
-import { ScheduleDetails } from 'types/scheduleDetails.type';
+import { CalendarDataState } from 'redux/types';
+import { ScheduleItem, ScheduleDetails, Schedule } from 'types';
+import { getScheduleDetails } from '../../middleware/api/schedules';
 
-interface SliceState {
-  schedules: ScheduleItem[];
-  details: ScheduleDetails;
-}
+const isScheduleInGroup = (group: ScheduleItem, schedule: Schedule) => {
+  const scheduleDate = moment(schedule.startTime).format('YYYY-MM-DD');
+  return (
+    (schedule.cabinetId != null && schedule.cabinetId === group.groupId) ||
+    schedule.doctorId === group.groupId ||
+    scheduleDate === group.groupId
+  );
+};
+
+const mapSchedules = (schedules: ScheduleItem[]) => {
+  return schedules.map((item) => ({
+    ...item,
+    id: item.groupId,
+    schedules: orderBy(
+      item.schedules,
+      ['rescheduled', 'startTime'],
+      ['desc', 'asc'],
+    ),
+  }));
+};
 
 const calendarData = createSlice({
   name: 'calendarData',
-  initialState: initialState.calendarData as SliceState,
+  initialState: initialState.calendarData,
   reducers: {
-    setSchedules(state, action) {
-      state.schedules = action.payload.map((item) => {
-        return {
-          ...item,
-          schedules: orderBy(
-            item.schedules,
-            ['rescheduled', 'startTime'],
-            ['desc', 'asc'],
-          ),
-        };
-      });
+    setSchedules(state, action: PayloadAction<ScheduleItem[]>) {
+      state.schedules = mapSchedules(action.payload);
     },
-    addNewSchedule(state, action) {
+    addNewSchedule(state, action: PayloadAction<Schedule>) {
       const newSchedule = action.payload;
-      const hasSchedules = state.schedules.some(
-        (item) => item.doctorId === newSchedule.doctorId,
-      );
+      const hasSchedules = state.schedules.some((item) => {
+        return isScheduleInGroup(item, newSchedule);
+      });
       if (!hasSchedules) {
-        return {
-          ...state,
-          schedules: [
-            ...state.schedules,
-            {
-              id: newSchedule.doctorId,
-              doctorId: newSchedule.doctorId,
-              schedules: [newSchedule],
-            },
-          ],
-        };
+        state.schedules = [
+          ...state.schedules,
+          {
+            id: newSchedule.cabinetId ?? newSchedule.doctorId,
+            groupId: newSchedule.cabinetId ?? newSchedule.doctorId,
+            schedules: [newSchedule],
+          },
+        ];
+      } else {
+        state.schedules = state.schedules.map((item) => {
+          if (!isScheduleInGroup(item, newSchedule)) {
+            return item;
+          }
+
+          const newSchedules = [...item.schedules, newSchedule];
+
+          return {
+            ...item,
+            schedules: orderBy(
+              newSchedules,
+              ['rescheduled', 'startTime'],
+              ['desc', 'asc'],
+            ),
+          };
+        });
       }
-      const updatedSchedules = state.schedules.map((item) => {
-        if (item.doctorId !== newSchedule.doctorId) {
+    },
+    updateSchedule(state, action: PayloadAction<Schedule>) {
+      const scheduleToUpdate = action.payload;
+      state.schedules = state.schedules.map((item) => {
+        if (!isScheduleInGroup(item, scheduleToUpdate)) {
           return item;
         }
-
-        const newSchedules = [...item.schedules, newSchedule];
-
-        return {
-          ...item,
-          schedules: orderBy(
-            newSchedules,
-            ['rescheduled', 'startTime'],
-            ['desc', 'asc'],
-          ),
-        };
-      });
-      state.schedules = updatedSchedules;
-    },
-    updateSchedule(state, action) {
-      const scheduleToUpdate = action.payload;
-      const updatedSchedules = state.schedules.map((item) => {
-        if (item.doctorId !== scheduleToUpdate.doctorId) return item;
 
         const newSchedules = item.schedules.map((schedule) => {
           if (schedule.id !== scheduleToUpdate.id) return schedule;
@@ -83,13 +92,13 @@ const calendarData = createSlice({
           ),
         };
       });
-
-      state.schedules = updatedSchedules;
     },
-    deleteSchedule(state, action) {
+    deleteSchedule(state, action: PayloadAction<Schedule>) {
       const scheduleToDelete = action.payload;
-      const updatedSchedules = state.schedules.map((item) => {
-        if (item.doctorId !== scheduleToDelete.doctorId) return item;
+      state.schedules = state.schedules.map((item) => {
+        if (!isScheduleInGroup(item, scheduleToDelete)) {
+          return item;
+        }
 
         return {
           ...item,
@@ -98,11 +107,14 @@ const calendarData = createSlice({
           ),
         };
       });
-      state.schedules = updatedSchedules;
+      if (state.details != null && state.details.id === scheduleToDelete.id) {
+        state.closeDetails = true;
+        state.details = null;
+      }
     },
     updateSchedulePatientRecords(state, action) {
       const updatedPatient = action.payload;
-      const stateWithUpdatedPatients = state.schedules.map((item) => {
+      state.schedules = state.schedules.map((item) => {
         const { schedules } = item;
 
         const updatedSchedules = schedules.map((schedule) => {
@@ -114,20 +126,45 @@ const calendarData = createSlice({
 
         return { ...item, schedules: updatedSchedules };
       });
-
-      state.schedules = stateWithUpdatedPatients;
     },
-    setAppointmentDetails(state, action) {
+    setAppointmentDetails(state, action: PayloadAction<ScheduleDetails>) {
       state.details = action.payload;
+      state.isFetchingDetails = false;
+      if (action.payload == null) {
+        state.deleteSchedule = null;
+      }
     },
     updateDetailsPatientRecords(state, action) {
       const updatedPatient = action.payload;
-      const newPatientObj = {
+      state.details.patient = {
         ...state.details.patient,
         ...updatedPatient,
       };
-
-      state.details.patient = newPatientObj;
+    },
+    setDayHours(state, action: PayloadAction<string[]>) {
+      state.dayHours = action.payload;
+    },
+    setCalendarData(state, action: PayloadAction<CalendarDataState>) {
+      state.schedules = mapSchedules(action.payload.schedules ?? []);
+      state.dayHours = action.payload.dayHours ?? [];
+      state.details = action.payload.details;
+    },
+    closeScheduleDetails(state, action: PayloadAction<boolean>) {
+      state.closeDetails = action.payload;
+      if (action.payload) {
+        state.details = null;
+      }
+    },
+    fetchScheduleDetails(state, _action: PayloadAction<number>) {
+      state.isFetchingDetails = true;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.calendarData,
+      };
     },
   },
 });
@@ -140,6 +177,9 @@ export const {
   updateSchedulePatientRecords,
   setAppointmentDetails,
   updateDetailsPatientRecords,
+  setCalendarData,
+  closeScheduleDetails,
+  fetchScheduleDetails,
 } = calendarData.actions;
 
 export default calendarData.reducer;

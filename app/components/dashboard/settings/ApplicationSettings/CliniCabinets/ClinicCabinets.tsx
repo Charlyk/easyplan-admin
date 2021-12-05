@@ -14,8 +14,8 @@ import {
   addDoctor as middlewareAddDoctor,
   deleteDoctor as middlewareDeleteDoctor,
 } from 'middleware/api/cabinets';
+import { activeClinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import { cabinetsSelector } from 'redux/selectors/cabinetSelector';
-import { currentClinicDoctorsSelector } from 'redux/selectors/clinicSelector';
 import {
   addNewCabinet,
   setCabinets,
@@ -33,7 +33,7 @@ const ClinicCabinets: React.FC<Props> = () => {
   const dispatch = useDispatch();
   const inputRef = useRef(null);
   const cabinets = useSelector(cabinetsSelector);
-  const currentClinicDoctors = useSelector(currentClinicDoctorsSelector);
+  const currentClinicDoctors = useSelector(activeClinicDoctorsSelector);
   const [inputValue, setInputValue] = useState('');
   const [showCabinetDeleteModal, setShowCabinetDeleteModal] = useState(false);
   const [showDoctorDeleteModal, setShowDoctorDeleteModal] = useState(false);

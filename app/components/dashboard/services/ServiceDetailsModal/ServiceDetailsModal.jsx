@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,110 +9,118 @@ import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { createService, updateService } from 'middleware/api/services';
-import { closeServiceDetailsModal } from 'redux/actions/serviceDetailsActions';
-import { setUpdatedService } from 'redux/actions/servicesActions';
-import { clinicActiveDoctorsSelector } from 'redux/selectors/clinicSelector';
-import { serviceDetailsModalSelector } from 'redux/selectors/serviceDetailsSelector';
+import {
+  activeClinicDoctorsSelector,
+  clinicCurrencySelector,
+} from 'redux/selectors/appDataSelector';
+import {
+  detailsModalSelector,
+  isFetchingDetailsSelector,
+  serviceDetailsSelector,
+} from 'redux/selectors/servicesSelector';
+import {
+  fetchServiceDetails,
+  fetchServicesList,
+  closeDetailsModal,
+} from 'redux/slices/servicesListSlice';
+import { ClinicServiceType } from 'types';
 import styles from './ServiceDetailsModal.module.scss';
 
 const ServiceDoctors = dynamic(() => import('./ServiceDoctors'));
 const ServiceInformation = dynamic(() => import('./ServiceInformation'));
 
-const initialService = {
-  name: '',
-  price: '',
-  duration: '',
-  description: '',
-  color: '',
-  doctors: [],
-  categoryId: null,
-  serviceType: 'All',
-  currency: 'MDL',
+const getInitialService = (doctors, categoryId, currency) => {
+  return {
+    id: null,
+    name: '',
+    color: '',
+    description: '',
+    deleted: false,
+    price: '',
+    duration: '',
+    serviceType: ClinicServiceType.All,
+    doctors: doctors.map((item) => ({
+      id: item.id,
+      fullName: item.fullName,
+      price: null,
+      percentage: null,
+      selected: false,
+    })),
+    categoryId,
+    currency,
+  };
 };
 
-const ServiceDetailsModal = ({ currentClinic }) => {
+const ServiceDetailsModal = () => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
-  const { category, service, open } = useSelector(serviceDetailsModalSelector);
-  const modalData = useSelector(serviceDetailsModalSelector);
-  const clinicDoctors = clinicActiveDoctorsSelector(currentClinic);
-  const clinicCurrency = currentClinic?.currency;
+  const { category, service, open } = useSelector(detailsModalSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
+  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
+  const serviceInfo = useSelector(serviceDetailsSelector);
+  const isLoading = useSelector(isFetchingDetailsSelector);
+  const initialService = getInitialService(
+    clinicDoctors,
+    category?.id,
+    clinicCurrency,
+  );
+  const [serviceDetails, setServiceDetails] = useState(
+    serviceInfo ?? initialService,
+  );
   const [expandedMenu, setExpandedMenu] = useState('info');
-  const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [serviceInfo, setServiceInfo] = useState({
-    ...initialService,
-    currency: clinicCurrency,
-  });
 
   useEffect(() => {
-    const { category, service, open } = modalData;
+    if (service == null) {
+      return;
+    }
+    dispatch(fetchServiceDetails(service.id));
+  }, [service]);
 
+  useEffect(() => {
     if (!open) {
-      // modal is closed so we need to reset the expanded component
-      setExpandedMenu('info');
+      setServiceDetails(initialService);
     }
-
-    if (service != null) {
-      // update service data with specified service
-      setServiceInfo({ ...service, doctors: mappedServices });
-    } else {
-      // update category id na doctors
-      setServiceInfo({
-        ...initialService,
-        categoryId: category?.id,
-        doctors: mappedServices,
-      });
-    }
-  }, [modalData]);
+  }, [open]);
 
   useEffect(() => {
-    setIsFormValid(
-      serviceInfo.name.length > 0 &&
-        serviceInfo.color.length > 0 &&
-        parseInt(serviceInfo.duration) > 0,
-    );
+    if (serviceInfo != null) {
+      setServiceDetails(serviceInfo);
+    }
   }, [serviceInfo]);
 
-  const mappedServices = useMemo(() => {
-    return clinicDoctors.map((item) => {
-      const itemService = item.services.find(
-        (it) => it.serviceId === service?.id,
-      );
-      return {
-        doctorId: item.id,
-        doctorName: item.fullName,
-        selected: itemService != null,
-        price: itemService?.price,
-        percentage: itemService?.percentage,
-      };
-    });
-  }, [clinicDoctors]);
+  useEffect(() => {
+    if (serviceDetails == null) {
+      return;
+    }
+    setIsFormValid(
+      serviceDetails.name.length > 0 &&
+        serviceDetails.color.length > 0 &&
+        parseInt(serviceDetails.duration) > 0,
+    );
+  }, [serviceDetails]);
 
   const handleSaveService = async () => {
-    setIsLoading(true);
-    if (serviceInfo.price.length === 0) serviceInfo.price = '0';
-    serviceInfo.doctors = serviceInfo.doctors.map((item) => {
+    // setIsLoading(true);
+    if (serviceDetails.price.length === 0) serviceDetails.price = '0';
+    serviceDetails.doctors = serviceDetails.doctors.map((item) => {
       if (item.selected && item.price == null && !item.percentage == null) {
         item.price = 0;
       }
       return item;
     });
-    let responseData;
     if (service != null) {
-      responseData = await handleEditService(serviceInfo);
+      await handleEditService({ ...serviceDetails, categoryId: category.id });
     } else {
-      responseData = await handleCreateService(serviceInfo);
+      await handleCreateService({ ...serviceDetails, categoryId: category.id });
     }
-    dispatch(setUpdatedService(responseData));
-    setIsLoading(false);
+    dispatch(fetchServicesList());
     handleCloseModal();
   };
 
   const handleCreateService = async (serviceInfo) => {
     try {
-      const response = await createService(serviceInfo);
-      return response.data;
+      await createService(serviceInfo);
     } catch (error) {
       toast.error(error.message);
     }
@@ -120,8 +128,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
 
   const handleEditService = async (serviceInfo) => {
     try {
-      const response = await updateService(service.id, serviceInfo);
-      return response.data;
+      await updateService(service.id, serviceInfo);
     } catch (error) {
       toast.error(error.message);
     }
@@ -145,25 +152,25 @@ const ServiceDetailsModal = ({ currentClinic }) => {
 
   const handleCloseModal = () => {
     if (isLoading) return;
-    dispatch(closeServiceDetailsModal(true));
+    dispatch(closeDetailsModal());
   };
 
   const handleDoctorChange = (doctorService) => {
-    const newServices = serviceInfo.doctors.map((item) => {
-      if (item.doctorId !== doctorService.doctorId) {
+    const newServices = serviceDetails.doctors.map((item) => {
+      if (item.id !== doctorService.id) {
         return item;
       }
 
       return doctorService;
     });
-    setServiceInfo({
-      ...serviceInfo,
+    setServiceDetails({
+      ...serviceDetails,
       doctors: newServices,
     });
   };
 
   const handleInfoChanged = (newInfo) => {
-    setServiceInfo(newInfo);
+    setServiceDetails({ ...serviceDetails, ...newInfo });
   };
 
   return (
@@ -182,29 +189,29 @@ const ServiceDetailsModal = ({ currentClinic }) => {
       }
     >
       <div className={styles.serviceDetailsModal}>
-        {open && (
-          <div className={styles.content}>
-            <ServiceInformation
-              isExpanded
-              currentClinic={currentClinic}
-              clinicCurrency={clinicCurrency}
-              onChange={handleInfoChanged}
-              data={serviceInfo}
-              onToggle={handleInfoToggle}
-              showStep={service == null}
-            />
+        <div className={styles.content}>
+          {open && !isLoading && (
+            <>
+              <ServiceInformation
+                isExpanded
+                clinicCurrency={clinicCurrency}
+                onChange={handleInfoChanged}
+                data={serviceDetails}
+                onToggle={handleInfoToggle}
+                showStep={service == null}
+              />
 
-            <ServiceDoctors
-              isExpanded
-              clinic={currentClinic}
-              onDoctorChange={handleDoctorChange}
-              serviceId={service?.id}
-              doctors={serviceInfo.doctors}
-              onToggle={handleDoctorsToggle}
-              showStep={!service}
-            />
-          </div>
-        )}
+              <ServiceDoctors
+                isExpanded
+                onDoctorChange={handleDoctorChange}
+                serviceId={service?.id}
+                doctors={serviceDetails.doctors}
+                onToggle={handleDoctorsToggle}
+                showStep={!service}
+              />
+            </>
+          )}
+        </div>
 
         <div className={styles.footer}>
           <Button

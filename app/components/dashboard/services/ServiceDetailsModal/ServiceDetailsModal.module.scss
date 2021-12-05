@@ -5,6 +5,7 @@
 
   .content {
     width: 100%;
+    flex: 1;
     overflow-y: auto;
     padding: 1rem;
     position: relative;
@@ -19,7 +20,7 @@
 
     .saveButton {
       flex: 1;
-      background-color: #3A83DC !important;
+      background-color: #3A83DC;
       color: white !important;
 
       &:hover {

@@ -1,4 +1,4 @@
-import { NotificationsProviderValue } from 'app/context/NotificationsProvider/NotificationsProvider.types';
+import { NotificationsProviderValue } from 'app/context/NotificationsProvider';
 
 const onRequestError = (error: any, toast: NotificationsProviderValue) => {
   if (error.response != null) {

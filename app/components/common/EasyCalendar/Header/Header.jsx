@@ -24,6 +24,7 @@ Header.propTypes = {
       date: PropTypes.instanceOf(Date),
       name: PropTypes.string,
       disabled: PropTypes.bool,
+      hint: PropTypes.string,
     }),
   ),
   onItemClick: PropTypes.func,

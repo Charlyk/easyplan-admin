@@ -9,7 +9,7 @@ import { textForKey } from 'app/utils/localization';
 import { ChartType } from 'types/ChartType.type';
 import styles from './TotalVisitsChart.module.scss';
 
-const TotalVisitsChart = ({ visits, onClose, visible = true }) => {
+const TotalVisitsChart = ({ visits, removeable, onClose, visible = true }) => {
   if (!visible || visits == null) {
     return null;
   }
@@ -21,11 +21,13 @@ const TotalVisitsChart = ({ visits, onClose, visible = true }) => {
   return (
     <Grid item xs={4} className={styles.totalVisitsChart}>
       <div className='chartItem'>
-        <div className='buttonContainer'>
-          <IconButton onClick={handleClose}>
-            <IconClose />
-          </IconButton>
-        </div>
+        {removeable && (
+          <div className='buttonContainer'>
+            <IconButton onClick={handleClose}>
+              <IconClose />
+            </IconButton>
+          </div>
+        )}
         <Typography className='chartTitle'>
           {textForKey('analytics_total_visits')}
         </Typography>
@@ -44,4 +46,5 @@ export default TotalVisitsChart;
 TotalVisitsChart.propTypes = {
   visible: PropTypes.bool,
   visits: PropTypes.number,
+  removeable: PropTypes.bool,
 };

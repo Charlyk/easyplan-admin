@@ -39,7 +39,7 @@ async function fetchDaySchedules(req) {
     req.headers.cookie,
   );
   const queryString = new URLSearchParams(req.query).toString();
-  return axios.get(`${updatedServerUrl(req)}/schedules/v2/day?${queryString}`, {
+  return axios.get(`${updatedServerUrl(req)}/schedules/v3/day?${queryString}`, {
     headers: {
       [HeaderKeys.authorization]: authToken,
       [HeaderKeys.clinicId]: clinicId,

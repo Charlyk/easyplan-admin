@@ -3,6 +3,7 @@ import { ScheduleStatus } from 'types';
 export interface Schedule {
   id: number;
   doctorId: number;
+  cabinetId?: number;
   type: string;
   delayTime: number;
   scheduleStatus: ScheduleStatus;
@@ -24,7 +25,7 @@ export interface Schedule {
 }
 
 export interface ScheduleItem {
-  id: number;
-  doctorId: number;
+  id: number | string;
+  groupId: number | string;
   schedules: Schedule[];
 }

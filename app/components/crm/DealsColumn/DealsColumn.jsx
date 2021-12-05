@@ -387,7 +387,7 @@ const DealsColumn = ({
             </div>
           }
         >
-          <div className={styles.itemsContainer}>
+          <div className={styles.itemsContainer} key='deal-items'>
             {items.map((item) => (
               <DealItem
                 key={item.id}

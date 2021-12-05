@@ -1,4 +1,4 @@
-import types from 'redux/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   open: false,
@@ -21,6 +21,7 @@ export default function appointmentModal(
         doctor: payload.open ? payload.doctor : null,
         patient: payload.open ? payload.patient : null,
         schedule: payload.open ? payload.schedule : null,
+        cabinet: payload.open ? payload.cabinet : null,
       };
     default:
       return state;

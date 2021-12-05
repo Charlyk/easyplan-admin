@@ -20,13 +20,28 @@ function deleteService(req) {
   });
 }
 
+function fetchServiceDetails(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { serviceId } = req.query;
+  return axios.get(`${updatedServerUrl(req)}/services/${serviceId}`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
+
 function restoreService(req) {
   const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
     req.headers.cookie,
   );
   const { serviceId } = req.query;
-  return axios.get(
+  return axios.post(
     `${updatedServerUrl(req)}/services/v1/${serviceId}/restore`,
+    {},
     {
       headers: {
         [HeaderKeys.authorization]: authToken,
@@ -59,6 +74,14 @@ function editService(req) {
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
+      const response = await handler(fetchServiceDetails, req, res);
+      if (response == null) {
+        return;
+      }
+      res.json(response);
+      break;
+    }
+    case 'POST': {
       const response = await handler(restoreService, req, res);
       if (response == null) {
         return;
@@ -83,7 +106,7 @@ export default authorized(async (req, res) => {
       break;
     }
     default:
-      res.setHeader('Allow', ['PUT', 'DELETE', 'POST']);
+      res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }

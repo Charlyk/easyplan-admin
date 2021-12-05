@@ -9,6 +9,8 @@ import seriveDetailsModalTypes from './seriveDetailsModalTypes';
 import servicesTypes from './servicesTypes';
 import usersTypes from './usersTypes';
 
+export * from './types';
+
 export default {
   setIsAuthenticated: 'setIsAuthenticated',
   updateCategoriesList: 'updateCategoriesList',
@@ -16,11 +18,9 @@ export default {
   updateUsersList: 'updateUsersList',
   updateXRay: 'updateXRay',
   updateNotes: 'updateNotes',
-  setUpdateCurrentUser: 'setUpdateCurrentUser',
   setUser: 'setUser',
   changeCurrentClinic: 'changeCurrentClinic',
   triggerUserLogOut: 'triggerUserLogOut',
-  setAppointmentModal: 'setAppointmentModal',
   updateAppointmentsList: 'updateAppointmentsList',
   setAddPatientNote: 'setAddPatientNote',
   setAddPatientXRay: 'setAddPatientXRay',

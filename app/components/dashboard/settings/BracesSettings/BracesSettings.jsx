@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import isEqual from 'lodash/isEqual';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import SwitchButton from 'app/components/common/SwitchButton';
@@ -9,13 +10,13 @@ import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { updateClinicBraces } from 'middleware/api/clinic';
-import { clinicBracesSelector } from 'redux/selectors/clinicSelector';
+import { clinicBracesSelector } from 'redux/selectors/appDataSelector';
 import styles from './BracesSettings.module.scss';
 
-const BracesSettings = ({ currentClinic: clinic }) => {
+const BracesSettings = () => {
   const router = useRouter();
   const toast = useContext(NotificationsContext);
-  const braces = clinicBracesSelector(clinic);
+  const braces = useSelector(clinicBracesSelector);
   const [isSaving, setIsSaving] = useState(false);
   const [clinicBraces, setClinicBraces] = useState(braces);
 

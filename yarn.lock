@@ -934,6 +934,11 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.4.tgz"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
 
+"@types/pubnub@^4.29.5":
+  version "4.29.5"
+  resolved "https://registry.yarnpkg.com/@types/pubnub/-/pubnub-4.29.5.tgz#911dc415e8d65b7a4881c3f10eaca6c177f0475e"
+  integrity sha512-cA9YWWCuMpY8prYgkosI9UXu6PlIQkqXyHpGo4fJ5egr7ZhlRyBRVLwT3dn6bqRl5aeYsLMW5F8KoOuCI8oUJg==
+
 "@types/react-redux@^7.1.20":
   version "7.1.20"
   resolved "https://registry.npmjs.org/@types/react-redux/-/react-redux-7.1.20.tgz"
@@ -4135,6 +4140,16 @@ jest-worker@^27.0.6:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
+js-md5@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/js-md5/-/js-md5-0.7.3.tgz#b4f2fbb0b327455f598d6727e38ec272cd09c3f2"
+  integrity sha512-ZC41vPSTLKGwIRjqDh8DfXoCrdQIyBgspJVPXHBGu4nZlAEvG3nf+jO9avM9RmLiGakg7vz974ms99nEV0tmTQ==
+
+js-sha1@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/js-sha1/-/js-sha1-0.6.0.tgz#adbee10f0e8e18aa07cdea807cf08e9183dbc7f9"
+  integrity sha512-01gwBFreYydzmU9BmZxpVk6svJJHrVxEN3IOiGl6VO93bVKYETJ0sIth6DASI6mIFdt7NmfX9UiByRzsYHGU9w==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
@@ -7210,6 +7225,14 @@ util@0.12.4, util@^0.12.0:
     is-typed-array "^1.1.3"
     safe-buffer "^5.1.2"
     which-typed-array "^1.1.2"
+
+uuid-by-string@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/uuid-by-string/-/uuid-by-string-3.0.4.tgz#761cf7f6e4314f841bfc014a8f517daa61080bc1"
+  integrity sha512-kkzMtWXvFLYEV2ycn2RalaA61BbNboBaSxFQugZl3djr2ZLpEc9BRWBVQTibJWdjGtBKwrKiFm3+D8n8kv2eUw==
+  dependencies:
+    js-md5 "^0.7.3"
+    js-sha1 "^0.6.0"
 
 uuid@^3.1.0, uuid@^3.3.2:
   version "3.4.0"

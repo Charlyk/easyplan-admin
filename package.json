@@ -13,6 +13,7 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "@types/pubnub": "^4.29.5",
     "@use-gesture/react": "^10.1.5",
     "autoprefixer": "^10.4.0",
     "axios": "^0.24.0",
@@ -72,7 +73,8 @@
     "rxjs": "^7.4.0",
     "sass": "^1.43.4",
     "swr": "^1.0.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "uuid-by-string": "^3.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

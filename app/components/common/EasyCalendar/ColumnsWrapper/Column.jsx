@@ -27,7 +27,7 @@ const Column = ({
   const hoursContainers = createContainerHours(hours);
 
   const handleAddSchedule = (startHour, endHour) => {
-    onAddSchedule(startHour, endHour, column.doctorId, column.date);
+    onAddSchedule(startHour, endHour, column.doctorId, column.date, column.id);
   };
 
   const schedulesWithOffset = useMemo(() => {
@@ -146,6 +146,7 @@ Column.propTypes = {
     name: PropTypes.string,
     disabled: PropTypes.bool,
     date: PropTypes.instanceOf(Date),
+    hint: PropTypes.string,
   }),
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
