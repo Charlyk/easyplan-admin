@@ -37,7 +37,7 @@ import 'app/utils';
 import {
   currentClinicSelector,
   currentUserSelector,
-} from '../redux/selectors/appDataSelector';
+} from 'redux/selectors/appDataSelector';
 
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
