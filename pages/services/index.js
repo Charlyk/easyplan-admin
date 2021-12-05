@@ -5,7 +5,6 @@ import ServicesContainer from 'app/components/dashboard/services/ServicesContain
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { fetchAllServices } from 'middleware/api/services';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -24,42 +23,37 @@ const Services = ({ categories: clinicCategories, services }) => {
 export default connect((state) => state)(Services);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ req }) => {
-      try {
-        const appState = store.getState();
-        const authToken = authTokenSelector(appState);
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
+  (store) => async () => {
+    try {
+      const appState = store.getState();
+      const authToken = authTokenSelector(appState);
+      const currentUser = currentUserSelector(appState);
+      const currentClinic = currentClinicSelector(appState);
 
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        const redirectTo = redirectToUrl(
-          currentUser,
-          currentClinic,
-          '/services',
-        );
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: redirectTo,
-              permanent: true,
-            },
-          };
-        }
-
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {},
+          redirect: {
+            destination: '/login',
+            permanent: true,
+          },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+
+      const redirectTo = redirectToUrl(currentUser, currentClinic, '/services');
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: redirectTo,
+            permanent: true,
+          },
+        };
+      }
+
+      return {
+        props: {},
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );
