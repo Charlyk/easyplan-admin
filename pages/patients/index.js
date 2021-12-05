@@ -1,72 +1,75 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { SWRConfig } from 'swr';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import PatientsList from 'app/components/dashboard/patients/PatientsList';
-import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
-import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { fetchAppData } from 'middleware/api/initialization';
 import { getPatients } from 'middleware/api/patients';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { wrapper } from 'store';
 
-const NewPatients = ({ fallback, data, query: initialQuery, authToken }) => {
+const NewPatients = ({ data, query: initialQuery }) => {
   return (
-    <SWRConfig value={{ fallback }}>
-      <MainComponent currentPath='/patients' authToken={authToken}>
-        <PatientsList authToken={authToken} query={initialQuery} data={data} />
-      </MainComponent>
-    </SWRConfig>
+    <MainComponent currentPath='/patients'>
+      <PatientsList query={initialQuery} data={data} />
+    </MainComponent>
   );
 };
 
 export default connect((state) => state)(NewPatients);
 
-export const getServerSideProps = async ({ req, query }) => {
-  try {
-    if (query.page == null) {
-      query.page = 0;
-    }
-    if (query.rowsPerPage == null) {
-      query.rowsPerPage = 25;
-    }
-    const { auth_token: authToken } = parseCookies(req);
-    if (!authToken || !authToken.match(JwtRegex)) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      };
-    }
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req, query }) => {
+      try {
+        if (query.page == null) {
+          query.page = '0';
+        }
+        if (query.rowsPerPage == null) {
+          query.rowsPerPage = '25';
+        }
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-    const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData.data;
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/patients');
-    if (redirectTo != null) {
-      return {
-        redirect: {
-          destination: redirectTo,
-          permanent: true,
-        },
-      };
-    }
+        const redirectTo = redirectToUrl(
+          currentUser,
+          currentClinic,
+          '/patients',
+        );
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
 
-    const response = await getPatients(query, req.headers);
-    const { data } = response;
-    return {
-      props: {
-        authToken,
-        query,
-        data,
-        fallback: {
-          [APP_DATA_API]: {
-            ...appData.data,
+        const response = await getPatients(query, req.headers);
+        const { data } = response;
+        return {
+          props: {
+            query,
+            data,
           },
-        },
-      },
-    };
-  } catch (error) {
-    return handleRequestError(error);
-  }
-};
+        };
+      } catch (error) {
+        return handleRequestError(error);
+      }
+    },
+);

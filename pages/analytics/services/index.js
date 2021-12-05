@@ -5,10 +5,10 @@ import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import ServicesAnalytics from 'app/components/dashboard/analytics/ServicesAnalytics';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
-import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
 import { getServicesStatistics } from 'middleware/api/analytics';
 import {
+  authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
@@ -29,11 +29,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ req, query }) => {
       try {
         if (query.page == null) {
-          query.page = 0;
+          query.page = '0';
         }
 
         if (query.rowsPerPage == null) {
-          query.rowsPerPage = 25;
+          query.rowsPerPage = '25';
         }
 
         if (query.fromDate == null) {
@@ -48,7 +48,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
           query.status = 'All';
         }
 
-        const { auth_token: authToken } = parseCookies(req);
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
@@ -58,9 +61,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           };
         }
 
-        const appState = store.getState();
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
         const redirectTo = redirectToUrl(
           currentUser,
           currentClinic,
