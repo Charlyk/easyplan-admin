@@ -35,6 +35,10 @@ import onRequestError from 'app/utils/onRequestError';
 import { environment } from 'eas.config';
 import { requestFetchRemindersCount } from 'middleware/api/crm';
 import {
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import {
   newReminderSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
@@ -145,16 +149,13 @@ const menuItems = [
   },
 ];
 
-const MainMenu = ({
-  currentPath,
-  currentUser,
-  currentClinic,
-  onCreateClinic,
-}) => {
+const MainMenu = ({ currentPath, onCreateClinic }) => {
   const buttonRef = useRef(null);
   const selectedClinic = currentUser?.clinics?.find(
     (item) => item.clinicId === currentClinic.id,
   );
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
   const remoteReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
