@@ -12,12 +12,20 @@ const usersListSlice = createSlice({
       state,
       action: PayloadAction<{ users: ClinicUser[]; invitations: any[] }>,
     ) {
-      state.users = orderBy(action.payload.users, ['fullName'], ['asc']);
+      state.users = orderBy(
+        action.payload.users,
+        ['isHidden', 'fullName'],
+        ['asc', 'asc'],
+      );
       state.invitations = action.payload.invitations;
       state.isFetching = false;
     },
     setUsers(state, action: PayloadAction<ClinicUser[]>) {
-      state.users = orderBy(action.payload, ['fullName'], ['asc']);
+      state.users = orderBy(
+        action.payload,
+        ['isHidden', 'fullName'],
+        ['asc', 'asc'],
+      );
       state.isFetching = false;
     },
     setInvitations(state, action: PayloadAction<any[]>) {
