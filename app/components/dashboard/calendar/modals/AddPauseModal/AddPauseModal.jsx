@@ -25,6 +25,7 @@ import {
   fetchPausesAvailableTime,
 } from 'middleware/api/pauses';
 import {
+  activeClinicDoctorsSelector,
   clinicCabinetsSelector,
   clinicDoctorsSelector,
 } from 'redux/selectors/appDataSelector';
@@ -59,7 +60,7 @@ const AddPauseModal = ({
 }) => {
   const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
-  const clinicDoctors = useSelector(clinicDoctorsSelector);
+  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const hasCabinets = clinicCabinets.length > 0;
   const [

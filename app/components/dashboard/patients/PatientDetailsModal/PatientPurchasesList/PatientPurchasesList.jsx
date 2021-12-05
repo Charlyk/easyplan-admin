@@ -18,15 +18,15 @@ import NotificationsContext from 'app/context/notificationsContext';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
-import { clinicCurrencySelector } from 'redux/selectors/clinicSelector';
+import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import styles from './PatientPurchasesList.module.scss';
 import { reducer, initialState, actions } from './PatientPurchasesList.reducer';
 
-const PatientPurchasesList = ({ patient, currentClinic }) => {
+const PatientPurchasesList = ({ patient }) => {
   const toast = useContext(NotificationsContext);
   const updateInvoice = useSelector(updateInvoiceSelector);
-  const clinicCurrency = clinicCurrencySelector(currentClinic);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const [{ isLoading, payments }, localDispatch] = useReducer(
     reducer,
     initialState,

@@ -46,26 +46,6 @@ export function triggerUserLogout(logout) {
   };
 }
 
-/**
- * Toggle appointment creation modal
- * @param {Object} modalData
- * @param {boolean} modalData.open
- * @param {Object?} modalData.doctor
- * @param {Date?} modalData.date
- * @param {Object?} modalData.schedule
- * @param {Object?} modalData.patient
- * @param {string?} modalData.startHour
- * @param {string?} modalData.endHour
- * @param {Object?} modalData.cabinet
- * @return {{payload: *, type: string}}
- */
-export function setAppointmentModal(modalData) {
-  return {
-    type: types.setAppointmentModal,
-    payload: modalData,
-  };
-}
-
 export function toggleAppointmentsUpdate() {
   return {
     type: types.updateAppointmentsList,

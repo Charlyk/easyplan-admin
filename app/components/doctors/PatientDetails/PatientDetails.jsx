@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import EasyTab from 'app/components/common/EasyTab';
 import AppointmentNotes from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes';
 import OrthodonticPlan from 'app/components/dashboard/patients/PatientDetailsModal/OrthodonticPlan';
@@ -9,7 +10,10 @@ import PatientXRay from 'app/components/dashboard/patients/PatientDetailsModal/P
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { requestFetchPatientNotes } from 'middleware/api/patients';
-import { clinicEnabledBracesSelector } from 'redux/selectors/clinicSelector';
+import {
+  clinicEnabledBracesSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './PatientDetails.module.scss';
 
 const TabId = {
@@ -22,8 +26,6 @@ const TabId = {
 };
 
 const PatientDetails = ({
-  currentUser,
-  currentClinic,
   onAddXRay,
   onEditAppointmentNote,
   onSaveOrthodonticPlan,
@@ -34,7 +36,8 @@ const PatientDetails = ({
   isDoctor,
 }) => {
   const toast = useContext(NotificationsContext);
-  const braces = clinicEnabledBracesSelector(currentClinic);
+  const braces = useSelector(clinicEnabledBracesSelector);
+  const currentUser = useSelector(currentUserSelector);
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   const [hasNotes, setHasNotes] = useState(false);
 
@@ -132,8 +135,6 @@ const PatientDetails = ({
         )}
         {selectedTab === TabId.orthodonticPlan && braces.length > 0 && (
           <OrthodonticPlan
-            currentClinic={currentClinic}
-            currentUser={currentUser}
             patient={patient}
             scheduleId={scheduleId}
             onSave={onSaveOrthodonticPlan}

@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -8,24 +14,30 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
+import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import { deleteInvitation } from 'middleware/api/clinic';
 import {
   deleteUser,
-  getUsers,
   inviteUser,
   requestToggleUserAccessToClinic,
   requestToggleUserCalendarVisibility,
   restoreUser,
   updateUserCashierStatus,
 } from 'middleware/api/users';
-import onRequestError from 'app/utils/onRequestError';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import {
+  invitationsSelector,
+  isFetchingUsersSelector,
+  usersSelector,
+} from 'redux/selectors/usersListSelector';
+import { fetchClinicUsers } from 'redux/slices/usersListSlice';
 import styles from './UsersList.module.scss';
 import reducer, {
   initialState,
-  setPageData,
   setInvitationToDelete,
   setIsInvitingExistent,
   setShowInvitationSent,
@@ -48,18 +60,18 @@ const InviteUserModal = dynamic(() =>
   import('app/components/common/modals/InviteUserModal'),
 );
 
-const UsersList = ({
-  currentClinic,
-  users: initialUsers,
-  invitations: initialInvitations,
-}) => {
+const UsersList = () => {
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
+  const currentClinic = useSelector(currentClinicSelector);
+  const users = useSelector(usersSelector);
+  const invitations = useSelector(invitationsSelector);
+  const isLoading = useSelector(isFetchingUsersSelector);
   const [
     {
       selectedFilter,
       isInviting,
       showInvitationSent,
-      isLoading,
       isInvitingExistent,
       invitingExistentError,
       userToDelete,
@@ -67,41 +79,40 @@ const UsersList = ({
       showInviteModal,
       isUserModalOpen,
       isDeleting,
-      users,
-      invitations,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localDispatch(
-      setPageData({ users: initialUsers, invitations: initialInvitations }),
-    );
-  }, [initialUsers]);
+    fetchUsers();
+  }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await getUsers();
-      localDispatch(setPageData(response.data));
-    } catch (error) {
-      toast.error(error.message);
-    }
+  const fetchUsers = () => {
+    dispatch(fetchClinicUsers());
   };
 
   const handleFilterChange = (newFilter) => {
     localDispatch(setSelectedFilter(newFilter));
   };
 
-  const doctors = users.filter((item) => item.roleInClinic === Role.doctor);
+  const doctors = useMemo(() => {
+    if (users == null) return [];
+    return users.filter((item) => item?.roleInClinic === Role.doctor);
+  }, [users]);
 
-  const admins = users.filter(
-    (item) =>
-      item.roleInClinic === Role.admin || item.roleInClinic === Role.manager,
-  );
+  const admins = useMemo(() => {
+    if (users == null) return [];
+    return users.filter(
+      (item) =>
+        item?.roleInClinic === Role.admin ||
+        item?.roleInClinic === Role.manager,
+    );
+  }, [users]);
 
-  const reception = users.filter(
-    (item) => item.roleInClinic === Role.reception,
-  );
+  const reception = useMemo(() => {
+    if (users == null) return [];
+    return users.filter((item) => item?.roleInClinic === Role.reception);
+  }, [users]);
 
   const handleUserModalClose = () => {
     localDispatch(setIsUserModalOpen({ ...isUserModalOpen, open: false }));
@@ -172,65 +183,69 @@ const UsersList = ({
     }
   };
 
-  const renderNoData = (type) => {
-    let message = '';
-    let buttonText = '';
-    switch (type) {
-      case Role.admin:
-      case Role.manager:
-        if (users.some((item) => item.roleInClinic === type) || isLoading)
+  const renderNoData = useCallback(
+    (type) => {
+      if (users == null) return null;
+      let message = '';
+      let buttonText = '';
+      switch (type) {
+        case Role.admin:
+        case Role.manager:
+          if (users.some((item) => item?.roleInClinic === type) || isLoading)
+            return null;
+          if (admins.length > 0) return null;
+          message = textForKey('No managers yet.');
+          buttonText = textForKey('Add manager');
+          break;
+        case Role.doctor:
+          if (users.some((item) => item?.roleInClinic === type) || isLoading)
+            return null;
+          message = textForKey('No doctors yet.');
+          buttonText = textForKey('Add doctor');
+          break;
+        case Role.reception:
+          if (users.some((item) => item?.roleInClinic === type) || isLoading)
+            return null;
+          message = textForKey('No receptionists yet.');
+          buttonText = textForKey('Add receptionist');
+          break;
+        case Role.invitations:
+          if (invitations.length > 0 || isLoading) return null;
+          message = `${textForKey('No pending invitations')}.`;
+          buttonText = textForKey('Invite user');
+          break;
+        default:
           return null;
-        if (admins.length > 0) return null;
-        message = textForKey('No managers yet.');
-        buttonText = textForKey('Add manager');
-        break;
-      case Role.doctor:
-        if (users.some((item) => item.roleInClinic === type) || isLoading)
-          return null;
-        message = textForKey('No doctors yet.');
-        buttonText = textForKey('Add doctor');
-        break;
-      case Role.reception:
-        if (users.some((item) => item.roleInClinic === type) || isLoading)
-          return null;
-        message = textForKey('No receptionists yet.');
-        buttonText = textForKey('Add receptionist');
-        break;
-      case Role.invitations:
-        if (invitations.length > 0 || isLoading) return null;
-        message = `${textForKey('No pending invitations')}.`;
-        buttonText = textForKey('Invite user');
-        break;
-      default:
-        return null;
-    }
+      }
 
-    const role = type === Role.admin ? Role.manager : type;
+      const role = type === Role.admin ? Role.manager : type;
 
-    return (
-      <TableRow classes={{ root: styles.noData }}>
-        <TableCell colSpan={5} className={styles.tableCell}>
-          <div
-            className={styles.flexContainer}
-            style={{
-              width: '100%',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography classes={{ root: styles.noDataLabel }}>
-              {message}
-            </Typography>
-            <Box
-              className={styles.addDataBtn}
-              onClick={(event) => handleInviteUserStart(event, role)}
+      return (
+        <TableRow classes={{ root: styles.noData }}>
+          <TableCell colSpan={5} className={styles.tableCell}>
+            <div
+              className={styles.flexContainer}
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+              }}
             >
-              {buttonText}
-            </Box>
-          </div>
-        </TableCell>
-      </TableRow>
-    );
-  };
+              <Typography classes={{ root: styles.noDataLabel }}>
+                {message}
+              </Typography>
+              <Box
+                className={styles.addDataBtn}
+                onClick={(event) => handleInviteUserStart(event, role)}
+              >
+                {buttonText}
+              </Box>
+            </div>
+          </TableCell>
+        </TableRow>
+      );
+    },
+    [users],
+  );
 
   const startUserDelete = (event, user, isInvitation) => {
     if (isInvitation) {

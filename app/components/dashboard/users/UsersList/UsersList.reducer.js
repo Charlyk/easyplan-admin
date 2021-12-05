@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
-
 import { Role } from 'app/utils/constants';
 
 export const initialState = {

@@ -10,21 +10,21 @@ import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import isOutOfBounds from 'app/utils/isOutOfBounds';
 import { textForKey } from 'app/utils/localization';
 import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
+  activeClinicDoctorsSelector,
   clinicCabinetsSelector,
-  clinicDoctorsSelector,
 } from 'redux/selectors/appDataSelector';
 import {
   updateScheduleSelector,
-  calendarScheduleSelector,
+  schedulesSelector,
+  dayHoursSelector,
 } from 'redux/selectors/scheduleSelector';
-import { setSchedules } from 'redux/slices/calendarData';
 import styles from './CalendarDayView.module.scss';
 import { actions, reducer, initialState } from './CalendarDayView.reducer';
 
@@ -36,24 +36,19 @@ const AddPauseModal = dynamic(() => import('../modals/AddPauseModal'));
 const moment = extendMoment(Moment);
 
 const CalendarDayView = ({
-  schedules: initialSchedules,
   showHourIndicator,
   viewDate,
-  dayHours,
   onScheduleSelect,
   onCreateSchedule,
 }) => {
-  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
-  const schedules = useSelector(calendarScheduleSelector);
+  const schedules = useSelector(schedulesSelector);
+  const hours = useSelector(dayHoursSelector);
   const cabinets = useSelector(clinicCabinetsSelector);
-  const doctors = useSelector(clinicDoctorsSelector);
+  const doctors = useSelector(activeClinicDoctorsSelector);
   const schedulesRef = useRef(null);
-  const [{ hours, pauseModal }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [{ pauseModal }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     handleScheduleUpdate();
@@ -65,14 +60,6 @@ const CalendarDayView = ({
       localDispatch(actions.setParentTop(schedulesRect.top));
     }
   }, [schedulesRef.current]);
-
-  useEffect(() => {
-    dispatch(setSchedules(initialSchedules));
-  }, [initialSchedules]);
-
-  useEffect(() => {
-    localDispatch(actions.setHours(dayHours));
-  }, [dayHours]);
 
   async function handleScheduleUpdate() {
     if (updateSchedule == null) {

@@ -299,8 +299,6 @@ const DoctorPatientDetails = ({
         {patient && (
           <PatientDetails
             isDoctor
-            currentClinic={currentClinic}
-            currentUser={currentUser}
             scheduleId={schedule.id}
             onAddXRay={handleAddXRay}
             onSaveOrthodonticPlan={handleSaveTreatmentPlan}

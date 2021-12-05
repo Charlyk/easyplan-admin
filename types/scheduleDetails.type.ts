@@ -1,9 +1,12 @@
-import { ClinicService } from 'types/clinicService.type';
-import { Doctor } from 'types/doctor.type';
-import { Patient } from 'types/patient.type';
-import { ScheduleStatus } from 'types/scheduleStatus.type';
+import {
+  Schedule,
+  Patient,
+  Doctor,
+  ScheduleStatus,
+  ClinicService,
+} from 'types';
 
-export interface ScheduleDetails {
+export interface ScheduleDetails extends Schedule {
   clinicId: number;
   id: number;
   service: ClinicService;

@@ -6,13 +6,12 @@ import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { requestResetUserPassword } from 'middleware/api/auth';
-import { wrapper } from 'store';
 import EASImage from '../EASImage';
 import EASTextField from '../EASTextField';
 import LoadingButton from '../LoadingButton';
 import styles from './ResetPasswordForm.module.scss';
 
-const ResetPasswordForm = ({ token }) => {
+const ResetPasswordPage = ({ token }) => {
   const toast = useContext(NotificationsContext);
   const isMobileDevice = useIsMobileDevice();
   const [state, setState] = useState({
@@ -141,4 +140,4 @@ const ResetPasswordForm = ({ token }) => {
   );
 };
 
-export default wrapper.withRedux(ResetPasswordForm);
+export default ResetPasswordPage;

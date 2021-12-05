@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
@@ -12,22 +13,19 @@ import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
 import formattedAmount from 'app/utils/formattedAmount';
-import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
 import getServiceName from 'app/utils/getServiceName';
 import { textForKey } from 'app/utils/localization';
+import {
+  clinicCurrencySelector,
+  clinicExchangeRatesSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './FinalizeTreatmentModal.module.scss';
 
-const FinalizeTreatmentModal = ({
-  open,
-  services,
-  currentClinic,
-  onClose,
-  onSave,
-}) => {
+const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
   const toast = useContext(NotificationsContext);
   const [planServices, setPlanServices] = useState([]);
-  const rates = getClinicExchangeRates(currentClinic);
-  const clinicCurrency = currentClinic.currentUser;
+  const rates = useSelector(clinicExchangeRatesSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
 
   const mappedCurrencies = useMemo(() => {
     return rates.map((item) => ({

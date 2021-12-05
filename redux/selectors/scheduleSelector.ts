@@ -1,21 +1,29 @@
 import { createSelector } from 'reselect';
-import { ReduxStateType } from 'store';
+import { ReduxState } from 'redux/types';
 
-export const scheduleSelector = (state: ReduxStateType) => state.schedule;
-export const calendarDataSelector = (state: ReduxStateType) =>
-  state.calendarData;
+export const calendarDataSelector = (state: ReduxState) => state.calendarData;
+
+export const schedulesSelector = createSelector(
+  calendarDataSelector,
+  (calendar) => calendar.schedules,
+);
+
+export const dayHoursSelector = createSelector(
+  calendarDataSelector,
+  (calendar) => calendar.dayHours,
+);
 
 export const updateScheduleSelector = createSelector(
-  scheduleSelector,
-  (schedule) => schedule.updateSchedule,
+  calendarDataSelector,
+  (calendar) => calendar.updateSchedule,
 );
 
 export const deleteScheduleSelector = createSelector(
-  scheduleSelector,
-  (schedule) => schedule.deleteSchedule,
+  calendarDataSelector,
+  (calendar) => calendar.deleteSchedule,
 );
 
-export const calendarDetailsSelector = createSelector(
+export const calendarScheduleDetailsSelector = createSelector(
   calendarDataSelector,
   (calendarData) => calendarData.details,
 );
@@ -23,4 +31,9 @@ export const calendarDetailsSelector = createSelector(
 export const calendarScheduleSelector = createSelector(
   calendarDataSelector,
   (calendarData) => calendarData.schedules,
+);
+
+export const closeDetailsSelector = createSelector(
+  calendarDataSelector,
+  (calendarData) => calendarData.closeDetails,
 );

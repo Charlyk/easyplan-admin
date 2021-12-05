@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
+import initialState from 'redux/initialState';
+import { AppDataState } from 'redux/types';
 import { CurrentClinic } from 'types';
 import { CurrentUser } from 'types/currentUser.type';
-import initialState from '../initialState';
-import { AppDataState } from '../types';
 
 const appDataSlice = createSlice({
   name: 'appData',
@@ -18,6 +18,7 @@ const appDataSlice = createSlice({
     setAppData(state, action: PayloadAction<AppDataState>) {
       state.currentClinic = action.payload.currentClinic;
       state.currentUser = action.payload.currentUser;
+      state.authToken = action.payload.authToken;
     },
   },
   extraReducers: {

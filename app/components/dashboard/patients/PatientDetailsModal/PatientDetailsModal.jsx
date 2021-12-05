@@ -198,12 +198,7 @@ const PatientDetailsModal = ({
           />
         );
       case MenuItem.purchases:
-        return (
-          <PatientPurchasesList
-            currentClinic={currentClinic}
-            patient={patient}
-          />
-        );
+        return <PatientPurchasesList patient={patient} />;
       case MenuItem.messages:
         return <PatientMessages patient={patient} />;
       case MenuItem.history:

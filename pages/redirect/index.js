@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
+import { connect } from 'react-redux';
 import { JwtRegex } from 'app/utils/constants';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
@@ -49,6 +50,8 @@ const Redirect = () => {
   );
 };
 
+export default connect((state) => state)(Redirect);
+
 export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
@@ -72,5 +75,3 @@ export const getServerSideProps = async ({ res, query }) => {
     return handleRequestError(error);
   }
 };
-
-export default Redirect;

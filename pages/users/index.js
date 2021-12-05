@@ -1,68 +1,58 @@
 import React from 'react';
-import { SWRConfig } from 'swr';
+import { connect } from 'react-redux';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import UsersList from 'app/components/dashboard/users/UsersList';
-import { APP_DATA_API, JwtRegex } from 'app/utils/constants';
+import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
-import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { fetchAppData } from 'middleware/api/initialization';
-import { getUsers } from 'middleware/api/users';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { wrapper } from 'store';
 
-const Users = ({
-  fallback,
-  users: initialUsers,
-  invitations: initialInvitations,
-  authToken,
-}) => {
+const Users = () => {
   return (
-    <SWRConfig value={{ fallback }}>
-      <MainComponent currentPath='/users' authToken={authToken}>
-        <UsersList users={initialUsers} invitations={initialInvitations} />
-      </MainComponent>
-    </SWRConfig>
+    <MainComponent currentPath='/users'>
+      <UsersList />
+    </MainComponent>
   );
 };
 
-export const getServerSideProps = async ({ req }) => {
-  try {
-    const { auth_token: authToken } = parseCookies(req);
-    if (!authToken || !authToken.match(JwtRegex)) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      };
-    }
+export default connect((state) => state)(Users);
 
-    const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData.data;
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
-    if (redirectTo != null) {
-      return {
-        redirect: {
-          destination: redirectTo,
-          permanent: true,
-        },
-      };
-    }
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async () => {
+    try {
+      const appState = store.getState();
+      const authToken = authTokenSelector(appState);
+      const currentUser = currentUserSelector(appState);
+      const currentClinic = currentClinicSelector(appState);
 
-    const response = await getUsers(req.headers);
-    return {
-      props: {
-        ...response.data,
-        fallback: {
-          [APP_DATA_API]: {
-            ...appData.data,
+      if (!authToken || !authToken.match(JwtRegex)) {
+        return {
+          redirect: {
+            destination: '/login',
+            permanent: true,
           },
-        },
-        authToken,
-      },
-    };
-  } catch (error) {
-    return handleRequestError(error);
-  }
-};
+        };
+      }
 
-export default Users;
+      const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: redirectTo,
+            permanent: true,
+          },
+        };
+      }
+      return {
+        props: {},
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
+);

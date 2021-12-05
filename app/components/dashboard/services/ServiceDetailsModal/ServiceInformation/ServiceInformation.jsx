@@ -5,13 +5,14 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useColor } from 'react-color-palette';
+import { useSelector } from 'react-redux';
 import EASColorPicker from 'app/components/common/EASColorPicker/EASColorPicker';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import IconPalette from 'app/components/icons/iconPalette';
 import { textForKey } from 'app/utils/localization';
-import { availableCurrenciesSelector } from 'redux/selectors/clinicSelector';
+import { availableCurrenciesSelector } from 'redux/selectors/appDataSelector';
 import styles from './ServiceInformation.module.scss';
 
 const availableColors = [
@@ -42,14 +43,8 @@ const serviceTypes = [
   },
 ];
 
-const ServiceInformation = ({
-  currentClinic,
-  isExpanded,
-  showStep,
-  data,
-  onChange,
-}) => {
-  const currencies = availableCurrenciesSelector(currentClinic);
+const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
+  const currencies = useSelector(availableCurrenciesSelector);
   const paletteRef = useRef(null);
   const [colors, setColors] = useState(availableColors);
   const [showPicker, setShowPicker] = useState(false);

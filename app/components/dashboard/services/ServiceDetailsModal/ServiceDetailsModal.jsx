@@ -11,7 +11,10 @@ import { textForKey } from 'app/utils/localization';
 import { createService, updateService } from 'middleware/api/services';
 import { closeServiceDetailsModal } from 'redux/actions/serviceDetailsActions';
 import { setUpdatedService } from 'redux/actions/servicesActions';
-import { clinicActiveDoctorsSelector } from 'redux/selectors/clinicSelector';
+import {
+  activeClinicDoctorsSelector,
+  clinicCurrencySelector,
+} from 'redux/selectors/appDataSelector';
 import { serviceDetailsModalSelector } from 'redux/selectors/serviceDetailsSelector';
 import styles from './ServiceDetailsModal.module.scss';
 
@@ -30,13 +33,12 @@ const initialService = {
   currency: 'MDL',
 };
 
-const ServiceDetailsModal = ({ currentClinic }) => {
+const ServiceDetailsModal = () => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const { category, service, open } = useSelector(serviceDetailsModalSelector);
-  const modalData = useSelector(serviceDetailsModalSelector);
-  const clinicDoctors = clinicActiveDoctorsSelector(currentClinic);
-  const clinicCurrency = currentClinic?.currency;
+  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const [expandedMenu, setExpandedMenu] = useState('info');
   const [isLoading, setIsLoading] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -46,8 +48,6 @@ const ServiceDetailsModal = ({ currentClinic }) => {
   });
 
   useEffect(() => {
-    const { category, service, open } = modalData;
-
     if (!open) {
       // modal is closed so we need to reset the expanded component
       setExpandedMenu('info');
@@ -64,7 +64,7 @@ const ServiceDetailsModal = ({ currentClinic }) => {
         doctors: mappedServices,
       });
     }
-  }, [modalData]);
+  }, [open, category, service]);
 
   useEffect(() => {
     setIsFormValid(
@@ -186,7 +186,6 @@ const ServiceDetailsModal = ({ currentClinic }) => {
           <div className={styles.content}>
             <ServiceInformation
               isExpanded
-              currentClinic={currentClinic}
               clinicCurrency={clinicCurrency}
               onChange={handleInfoChanged}
               data={serviceInfo}
@@ -196,7 +195,6 @@ const ServiceDetailsModal = ({ currentClinic }) => {
 
             <ServiceDoctors
               isExpanded
-              clinic={currentClinic}
               onDoctorChange={handleDoctorChange}
               serviceId={service?.id}
               doctors={serviceInfo.doctors}

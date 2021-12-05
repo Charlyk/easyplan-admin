@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { SWRConfig } from 'swr';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import SMSMessages from 'app/components/dashboard/messages/SMSMessages';
@@ -18,6 +19,8 @@ const Messages = ({ fallback, messages: initialMessages, authToken }) => {
     </SWRConfig>
   );
 };
+
+export default connect((state) => state)(Messages);
 
 export const getServerSideProps = async ({ req }) => {
   try {
@@ -60,5 +63,3 @@ export const getServerSideProps = async ({ req }) => {
     return handleRequestError(error);
   }
 };
-
-export default Messages;

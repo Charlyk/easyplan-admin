@@ -2,19 +2,21 @@ import React from 'react';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './ServiceDoctors.module.scss';
 
 const ServiceDoctor = dynamic(() => import('../ServiceDoctor'));
 
 const ServiceDoctors = ({
-  clinic,
   isExpanded,
   showStep,
   doctors,
   serviceId,
   onDoctorChange,
 }) => {
+  const clinic = useSelector(currentClinicSelector);
   const contentClasses = clsx(
     styles.content,
     isExpanded ? styles.expanded : styles.collapsed,

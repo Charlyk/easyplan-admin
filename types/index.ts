@@ -1,4 +1,5 @@
 export * from './currentClinic.type';
+export * from './currentUser.type';
 export * from './clinicUser.type';
 export * from './cabinet.type';
 export * from './ChartType.type';
@@ -17,3 +18,4 @@ export * from './doctor.type';
 export * from './schedule.type';
 export * from './patient.type';
 export * from './clinicCabinet.type';
+export * from './serverResponse.type';

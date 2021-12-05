@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
-import { ReduxStateType } from 'store';
+import { ReduxState } from 'redux/types';
 
-export const cabinetsDataSelector = (state: ReduxStateType) =>
-  state.cabinetsData;
+export const cabinetsDataSelector = (state: ReduxState) => state.cabinetsData;
 
 export const cabinetsSelector = createSelector(
   cabinetsDataSelector,

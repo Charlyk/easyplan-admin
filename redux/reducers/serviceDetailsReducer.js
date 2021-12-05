@@ -16,7 +16,11 @@ export default function serviceDetailsModal(
     case types.setServiceModalCategory:
       return { ...state, category: payload };
     case types.setServiceModalService:
-      return { ...state, service: payload };
+      return {
+        ...state,
+        service: payload,
+        open: payload != null ? true : state.open,
+      };
     case types.setServiceModal:
       return {
         ...state,

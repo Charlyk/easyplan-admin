@@ -21,7 +21,6 @@ export default {
   setUser: 'setUser',
   changeCurrentClinic: 'changeCurrentClinic',
   triggerUserLogOut: 'triggerUserLogOut',
-  setAppointmentModal: 'setAppointmentModal',
   updateAppointmentsList: 'updateAppointmentsList',
   setAddPatientNote: 'setAddPatientNote',
   setAddPatientXRay: 'setAddPatientXRay',

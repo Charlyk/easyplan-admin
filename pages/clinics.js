@@ -1,15 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ClinicsList from 'app/components/common/ClinicsList';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import { getCurrentUser } from 'middleware/api/auth';
-import { wrapper } from 'store';
 
 const Clinics = ({ user, authToken, isMobile }) => {
   return <ClinicsList authToken={authToken} user={user} isMobile={isMobile} />;
 };
+
+export default connect((state) => state)(Clinics);
 
 export const getServerSideProps = async ({ req }) => {
   try {
@@ -36,5 +38,3 @@ export const getServerSideProps = async ({ req }) => {
     return handleRequestError(error);
   }
 };
-
-export default wrapper.withRedux(Clinics);

@@ -4,16 +4,17 @@ import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import IconArrowNext from 'app/components/icons/iconArrowNext';
 import IconDelete from 'app/components/icons/iconDelete';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
 import { textForKey } from 'app/utils/localization';
-import { clinicTimeZoneSelector } from 'redux/selectors/clinicSelector';
+import { clinicTimeZoneSelector } from 'redux/selectors/appDataSelector';
 import styles from './HistoryItem.module.scss';
 
-const Field = ({ field, clinic }) => {
-  const timeZone = clinicTimeZoneSelector(clinic);
+const Field = ({ field }) => {
+  const timeZone = useSelector(clinicTimeZoneSelector);
 
   const isDate = (value) => {
     const regex = /\d{4}-\d{2}-\d{2}(\s|T)\d{2}:\d{2}:\d{2}.\d{3}/;
@@ -87,7 +88,7 @@ const HistoryItem = ({ item, clinic }) => {
       <table>
         <tbody>
           {sortBy(item.fields, (it) => it.fieldName).map((field) => (
-            <Field key={field.fieldName} clinic={clinic} field={field} />
+            <Field key={field.fieldName} field={field} />
           ))}
         </tbody>
       </table>

@@ -9,7 +9,7 @@
 .cabinet {
   font-family: Inter, sans-serif !important;
   font-style: normal !important;
-  font-weight: 550 !important;
+  font-weight: normal;
   font-size: 16px !important;
   margin-top: 5px !important;
   margin-bottom: 5px;
@@ -31,21 +31,23 @@
     }
   }
   &Title {
-    margin: 0;
-    margin-left: 0.3rem;
+    margin: 0 0 0 0.3rem;
+    line-height: 1;
   }
 
   .divContainer {
-    height: 48px;
     display: flex;
     align-items: center;
   }
 
   &DoctorsContainer {
     margin-left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 
     .doctor {
-      margin: 0.3rem;
+      margin-left: .3rem;
 
       &.outlined {
         border-color: #3a83dc;

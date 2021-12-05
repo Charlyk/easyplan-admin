@@ -25,7 +25,7 @@ export interface Schedule {
 }
 
 export interface ScheduleItem {
-  id: number;
-  groupId: number;
+  id: number | string;
+  groupId: number | string;
   schedules: Schedule[];
 }

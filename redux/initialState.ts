@@ -41,6 +41,7 @@ const initialState: ReduxState = Object.freeze({
   appData: {
     currentClinic: null,
     currentUser: null,
+    authToken: null,
   },
   clinicData: {
     updateClinicData: false,
@@ -49,9 +50,34 @@ const initialState: ReduxState = Object.freeze({
   calendarData: {
     schedules: [],
     details: null,
+    dayHours: [],
+    closeDetails: false,
+    isFetchingDetails: false,
+  },
+  appointmentModal: {
+    open: false,
+    doctor: null,
+    date: null,
+    schedule: null,
+    patient: null,
+    startHour: null,
+    endHour: null,
+    cabinet: null,
   },
   cabinetsData: {
     cabinets: [],
+  },
+  usersList: {
+    users: [],
+    invitations: [],
+    isFetching: false,
+    error: null,
+  },
+  servicesList: {
+    services: [],
+    categories: [],
+    isFetching: false,
+    error: null,
   },
 });
 

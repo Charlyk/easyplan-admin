@@ -6,17 +6,13 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import useSWR from 'swr';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { APP_DATA_API } from 'app/utils/constants';
 import paths from 'app/utils/paths';
-import { handleRemoteMessage } from 'app/utils/pubnubUtils';
 import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
-import { isDev, pubNubEnv } from 'eas.config';
+import { isDev } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
-  setAppointmentModal,
   setPatientDetails,
   setPatientNoteModal,
   setPatientXRayModal,
@@ -24,8 +20,13 @@ import {
   toggleImportModal,
   triggerUserLogout,
 } from 'redux/actions/actions';
-import { setClinic } from 'redux/actions/clinicActions';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
 import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
 import {
   newReminderSelector,
@@ -33,7 +34,6 @@ import {
 } from 'redux/selectors/crmSelector';
 import { isExchangeRateModalOpenSelector } from 'redux/selectors/exchangeRatesModalSelector';
 import {
-  appointmentModalSelector,
   patientNoteModalSelector,
   patientXRayModalSelector,
   paymentModalSelector,
@@ -42,6 +42,7 @@ import {
   isImportModalOpenSelector,
   patientDetailsSelector,
 } from 'redux/selectors/rootSelector';
+import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';
 
@@ -65,22 +66,13 @@ const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 const MainMenu = dynamic(() => import('./MainMenu'));
 const PageHeader = dynamic(() => import('./PageHeader'));
 
-const MainComponent = ({
-  children,
-  currentPath,
-  provideAppData = true,
-  authToken,
-}) => {
+const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const toast = useContext(NotificationsContext);
-  const { data, error } = useSWR(APP_DATA_API);
-  const { currentUser, currentClinic } = data;
-
-  if (error) return 'An error has occurred';
-  if (!data) return 'Loading...';
-
-  const pubnub = usePubNub();
   const router = useRouter();
   const dispatch = useDispatch();
+  const currentClinic = useSelector(currentClinicSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const authToken = useSelector(authTokenSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
   const paymentModal = useSelector(paymentModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
@@ -98,26 +90,7 @@ const MainComponent = ({
 
   useEffect(() => {
     redirectIfOnGeneralHost(currentUser, router);
-    if (currentUser != null) {
-      pubnub.setUUID(currentUser.id);
-    }
-
-    if (currentClinic != null) {
-      const { id } = currentClinic;
-      dispatch(setClinic(currentClinic));
-      pubnub.subscribe({
-        channels: [`${id}-${pubNubEnv}-clinic-pubnub-channel`],
-      });
-      pubnub.addListener({ message: handlePubnubMessageReceived });
-      return () => {
-        pubnub.unsubscribe({
-          channels: [`${id}-${pubNubEnv}-clinic-pubnub-channel`],
-        });
-      };
-    } else {
-      pubnub.unsubscribeAll();
-    }
-  }, [currentUser, currentClinic]);
+  }, [currentUser, router]);
 
   useEffect(() => {
     if (newReminder == null || newReminder.assignee.id !== currentUser.id) {
@@ -165,10 +138,6 @@ const MainComponent = ({
     }
   };
 
-  const handlePubnubMessageReceived = ({ message }) => {
-    dispatch(handleRemoteMessage(message));
-  };
-
   const pageTitle = useMemo(() => {
     return paths[currentPath];
   }, [currentPath]);
@@ -182,7 +151,7 @@ const MainComponent = ({
   };
 
   const handleAppointmentModalClose = () => {
-    dispatch(setAppointmentModal({ open: false }));
+    dispatch(closeAppointmentModal());
   };
 
   const handleClosePatientDetails = () => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
+import { connect } from 'react-redux';
 import { SWRConfig } from 'swr';
 import DoctorCalendar from 'app/components/doctors/DoctorCalendar';
 import DoctorsMain from 'app/components/doctors/DoctorsMain';
@@ -11,7 +12,6 @@ import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
 import { fetchAppData } from 'middleware/api/initialization';
 import { getSchedulesForInterval } from 'middleware/api/schedules';
-import { wrapper } from 'store';
 
 const Doctor = ({ fallback, schedules, date, authToken, viewMode }) => {
   return (
@@ -22,6 +22,8 @@ const Doctor = ({ fallback, schedules, date, authToken, viewMode }) => {
     </SWRConfig>
   );
 };
+
+export default connect((state) => state)(Doctor);
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
@@ -79,5 +81,3 @@ export const getServerSideProps = async ({ req, query }) => {
     return handleRequestError(error);
   }
 };
-
-export default wrapper.withRedux(Doctor);

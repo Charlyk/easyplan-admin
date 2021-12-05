@@ -27,7 +27,7 @@ import {
   requestFetchTags,
   requestUnassignTag,
 } from 'middleware/api/tags';
-import { calendarDetailsSelector } from 'redux/selectors/scheduleSelector';
+import { calendarScheduleDetailsSelector } from 'redux/selectors/scheduleSelector';
 import {
   updateSchedulePatientRecords,
   updateDetailsPatientRecords,
@@ -74,7 +74,7 @@ const PatientPersonalData: React.FC<Props> = ({
 }) => {
   const dispatch = useDispatch<ReduxDispatch>();
   const didInitialRenderHappen = useRef<boolean>(false);
-  const details = useSelector(calendarDetailsSelector);
+  const details = useSelector(calendarScheduleDetailsSelector);
   const datePickerRef = useRef<HTMLDivElement | null>();
   const toast = useContext(NotificationsContext);
   const [

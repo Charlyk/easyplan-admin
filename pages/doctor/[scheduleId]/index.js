@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { SWRConfig } from 'swr';
 import DoctorPatientDetails from 'app/components/doctors/DoctorPatientDetails';
 import DoctorsMain from 'app/components/doctors/DoctorsMain';
@@ -30,6 +31,8 @@ const DoctorScheduleDetails = ({
     </SWRConfig>
   );
 };
+
+export default connect((state) => state)(DoctorScheduleDetails);
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
@@ -77,5 +80,3 @@ export const getServerSideProps = async ({ req, query }) => {
     return handleRequestError(error);
   }
 };
-
-export default DoctorScheduleDetails;

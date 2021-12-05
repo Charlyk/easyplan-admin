@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { SWRConfig } from 'swr';
 import MainComponent from 'app/components/common/MainComponent';
 import CrmMain from 'app/components/crm/CrmMain';
@@ -9,7 +10,6 @@ import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
 import { fetchAllDealStates } from 'middleware/api/crm';
 import { fetchAppData } from 'middleware/api/initialization';
-import { wrapper } from 'store';
 
 const Crm = ({ fallback, authToken, states }) => {
   return (
@@ -20,6 +20,8 @@ const Crm = ({ fallback, authToken, states }) => {
     </SWRConfig>
   );
 };
+
+export default connect((state) => state)(Crm);
 
 export const getServerSideProps = async ({ req }) => {
   try {
@@ -61,8 +63,6 @@ export const getServerSideProps = async ({ req }) => {
     return handleRequestError(error);
   }
 };
-
-export default wrapper.withRedux(Crm);
 
 Crm.propTypes = {
   authToken: PropTypes.string,

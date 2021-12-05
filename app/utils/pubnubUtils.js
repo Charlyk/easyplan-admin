@@ -27,52 +27,60 @@ import {
 export const handleRemoteMessage = (message) => (dispatch) => {
   const { action, payload: messagePayload } = message;
   const payload = messagePayload != null ? JSON.parse(messagePayload) : null;
-  console.log(action, payload);
   switch (action) {
     case MessageAction.NewUserInvited:
     case MessageAction.InvitationRemoved:
     case MessageAction.ClinicInvitationAccepted:
       dispatch(triggerUsersUpdate(true));
       break;
-    case MessageAction.CreatedNewInvoice:
+    case MessageAction.CreatedNewInvoice: {
       // update appointments list
       dispatch(toggleAppointmentsUpdate());
       // update invoices
       dispatch(toggleUpdateInvoices());
       break;
+    }
     case MessageAction.PauseUpdated:
-    case MessageAction.ScheduleUpdated:
+    case MessageAction.ScheduleUpdated: {
       dispatch(updateSchedule(payload));
       break;
+    }
     case MessageAction.PauseCreated:
-    case MessageAction.ScheduleCreated:
+    case MessageAction.ScheduleCreated: {
       dispatch(addNewSchedule(payload));
       break;
-    case MessageAction.UserCalendarVisibilityChanged:
-    case MessageAction.UserRestoredInClinic:
-    case MessageAction.UserRemovedFromClinic:
-      dispatch(setShouldUpdateClinicData(true));
-      setTimeout(() => dispatch(setShouldUpdateClinicData(false)), 600);
-      break;
-    case MessageAction.ClinicDataImportStarted:
-    case MessageAction.ClinicDataImported:
-      dispatch(togglePatientsListUpdate());
-      break;
-    case MessageAction.ExchangeRatesUpdated:
-      dispatch(toggleExchangeRateUpdate());
-      break;
-    case MessageAction.ExchangeRatesUpdateRequired:
-      dispatch(setClinicExchangeRatesUpdateRequired(true));
-      break;
-    case MessageAction.ScheduleDeleted:
+    }
+    case MessageAction.ScheduleDeleted: {
       dispatch(deleteSchedule(payload));
       // dispatch(toggleDeleteSchedule(payload));
       // setTimeout(() => dispatch(toggleDeleteSchedule(null)), 600);
       break;
-    case MessageAction.NewPaymentRegistered:
+    }
+    case MessageAction.UserCalendarVisibilityChanged:
+    case MessageAction.UserRestoredInClinic:
+    case MessageAction.UserRemovedFromClinic: {
+      dispatch(setShouldUpdateClinicData(true));
+      setTimeout(() => dispatch(setShouldUpdateClinicData(false)), 600);
+      break;
+    }
+    case MessageAction.ClinicDataImportStarted:
+    case MessageAction.ClinicDataImported: {
+      dispatch(togglePatientsListUpdate());
+      break;
+    }
+    case MessageAction.ExchangeRatesUpdated: {
+      dispatch(toggleExchangeRateUpdate());
+      break;
+    }
+    case MessageAction.ExchangeRatesUpdateRequired: {
+      dispatch(setClinicExchangeRatesUpdateRequired(true));
+      break;
+    }
+    case MessageAction.NewPaymentRegistered: {
       dispatch(toggleUpdateInvoice(payload));
       setTimeout(() => dispatch(toggleUpdateInvoice(null)), 600);
       break;
+    }
     case MessageAction.UpdateMessageStatus: {
       if (payload == null) {
         return;

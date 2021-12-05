@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import FacebookLogin from 'react-facebook-login';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { FacebookAppId } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 
@@ -30,4 +31,4 @@ export const getServerSideProps = ({ query }) => {
   };
 };
 
-export default React.memo(Facebook);
+export default React.memo(Facebook, areComponentPropsEqual);

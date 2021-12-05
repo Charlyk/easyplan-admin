@@ -9,11 +9,19 @@ import styles from './HourIndicator.module.scss';
 
 const HourIndicator = ({ dayHours, viewDate, disabled }) => {
   const [hideIndicator, setHideIndicator] = useState(disabled);
+  const [isMounted, setIsMounted] = useState(false);
   const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
   const initialHourIndicatorTop = getHourIndicatorTop();
   const [{ hourTop }, set] = useSpring(() => ({
     hourTop: initialHourIndicatorTop || 0,
   }));
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   useEffect(() => {
     if (disabled) {
@@ -99,7 +107,7 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
     return `${newTop}px`;
   };
 
-  if (hideIndicator || disabled) {
+  if (hideIndicator || disabled || !isMounted) {
     return null;
   }
 

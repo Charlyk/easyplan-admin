@@ -34,8 +34,8 @@ import {
 } from 'middleware/api/schedules';
 import { toggleAppointmentsUpdate } from 'redux/actions/actions';
 import {
+  activeClinicDoctorsSelector,
   clinicCabinetsSelector,
-  clinicDoctorsSelector,
 } from 'redux/selectors/appDataSelector';
 import styles from './AddAppointment.module.scss';
 import reducer, {
@@ -85,7 +85,7 @@ const AddAppointmentModal = ({
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
-  const clinicDoctors = useSelector(clinicDoctorsSelector);
+  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
   const [
     {
       patient,
@@ -315,28 +315,19 @@ const AddAppointmentModal = ({
   };
 
   const fetchAvailableHours = async () => {
-    if (
-      (doctor == null && cabinet == null) ||
-      service == null ||
-      appointmentDate == null
-    ) {
+    if (doctor == null || service == null || appointmentDate == null) {
       return;
     }
     localDispatch(setIsFetchingHours(true));
     try {
       const query = {
         serviceId: service.serviceId || service.id,
+        doctorId: doctor.id,
         date: moment(appointmentDate).format('YYYY-MM-DD'),
       };
 
       if (schedule != null) {
         query.scheduleId = schedule.id;
-      }
-
-      if (cabinet != null) {
-        query.cabinetId = cabinet.id;
-      } else {
-        query.doctorId = doctor.id;
       }
 
       const response = await getAvailableHours(query);

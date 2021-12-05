@@ -1,14 +1,34 @@
 import {
   ClinicCabinet,
   CurrentClinic,
+  Schedule,
   ScheduleDetails,
   ScheduleItem,
+  CurrentUser,
+  Patient,
+  ClinicUser,
+  ClinicService,
 } from 'types';
-import { CurrentUser } from '../../types/currentUser.type';
 
 export interface CalendarDataState {
   schedules: ScheduleItem[];
   details: ScheduleDetails;
+  dayHours: string[];
+  updateSchedule?: Schedule | null;
+  deleteSchedule?: Schedule | null;
+  closeDetails: boolean;
+  isFetchingDetails: boolean;
+}
+
+export interface CreateAppointmentModalState {
+  open: boolean;
+  doctor?: any | null;
+  date?: string | null;
+  schedule?: Schedule | null;
+  patient?: Patient | null;
+  startHour?: string | null;
+  endHour?: string | null;
+  cabinet?: ClinicCabinet | null;
 }
 
 export interface PatientSmsMessageState {
@@ -39,10 +59,25 @@ export interface ClinicDataState {
 export interface AppDataState {
   currentClinic: CurrentClinic | null;
   currentUser: CurrentUser | null;
+  authToken: string | null;
 }
 
 export interface CabinetsDataState {
   cabinets: ClinicCabinet[];
+}
+
+export interface UsersListState {
+  users: ClinicUser[];
+  invitations: any[];
+  isFetching: boolean;
+  error?: string | null;
+}
+
+export interface ServicesListState {
+  services: ClinicService[];
+  isFetching: boolean;
+  error?: string | null;
+  categories: any[];
 }
 
 export interface ReduxState {
@@ -73,4 +108,7 @@ export interface ReduxState {
   appData: AppDataState;
   crm: CrmState;
   cabinetsData: CabinetsDataState;
+  appointmentModal: CreateAppointmentModalState;
+  usersList: UsersListState;
+  servicesList: ServicesListState;
 }

@@ -37,12 +37,12 @@ import {
   requestFetchRemindersCount,
   updateDealState,
 } from 'middleware/api/crm';
-import { setAppointmentModal } from 'redux/actions/actions';
 import {
   newReminderSelector,
   updatedDealSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
+import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';
@@ -260,12 +260,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     if (deal.patient == null) {
       return;
     }
-    dispatch(
-      setAppointmentModal({
-        open: true,
-        patient: deal.patient,
-      }),
-    );
+    dispatch(openAppointmentModal({ open: true, patient: deal.patient }));
   };
 
   const handleOpenFilter = () => {

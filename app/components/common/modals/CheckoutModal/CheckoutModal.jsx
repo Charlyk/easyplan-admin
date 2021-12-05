@@ -32,7 +32,6 @@ import NotificationsContext from 'app/context/notificationsContext';
 import adjustValueToNumber from 'app/utils/adjustValueToNumber';
 import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
-import getClinicExchangeRates from 'app/utils/getClinicExchangeRates';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
@@ -42,6 +41,7 @@ import {
 } from 'middleware/api/invoices';
 import { savePatientGeneralTreatmentPlan } from 'middleware/api/patients';
 import { setPatientDetails } from 'redux/actions/actions';
+import { clinicExchangeRatesSelector } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
 import EASTextarea from '../../EASTextarea';
@@ -86,7 +86,7 @@ const CheckoutModal = ({
   ] = useReducer(reducer, initialState);
   const updateInvoice = useSelector(updateInvoiceSelector);
   const updateInvoices = useSelector(updateInvoicesSelector);
-  const exchangeRates = getClinicExchangeRates(currentClinic);
+  const exchangeRates = useSelector(clinicExchangeRatesSelector);
   const [commentValue, setCommentValue] = useState('');
   const userClinic = useMemo(() => {
     return currentUser.clinics.find(

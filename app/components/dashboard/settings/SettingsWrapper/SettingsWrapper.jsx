@@ -91,12 +91,7 @@ const SettingsWrapper = ({
             currentClinic={currentClinic}
           />
         )}
-        {currentForm === SettingsForm.bracesSettings && (
-          <BracesSettings
-            currentUser={currentUser}
-            currentClinic={currentClinic}
-          />
-        )}
+        {currentForm === SettingsForm.bracesSettings && <BracesSettings />}
         {currentForm === SettingsForm.crmSettings && (
           <CrmSettings
             currentUser={currentUser}

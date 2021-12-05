@@ -1,5 +1,5 @@
 import React from 'react';
-import { NotificationsProviderValue } from './NotificationsProvider/NotificationsProvider.types';
+import { NotificationsProviderValue } from './NotificationsProvider';
 
 const NotificationsContext = React.createContext<NotificationsProviderValue>({
   show: (message) => message,
