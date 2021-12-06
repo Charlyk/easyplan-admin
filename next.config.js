@@ -7,5 +7,6 @@ module.exports = withTM({
     DEFAULT_CLINIC: process.env.DEFAULT_CLINIC,
     API_URL: process.env.API_URL,
     PUBNUB_ENV: process.env.PUBNUB_ENV,
+    APP_URL: process.env.APP_URL,
   },
 });
