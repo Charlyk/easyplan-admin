@@ -157,12 +157,14 @@ const DoctorsMain = ({ children, pageTitle }) => {
       {currentUser != null && currentClinic != null && (
         <>
           {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-          <EditProfileModal
-            open={isEditingProfile}
-            currentClinic={currentClinic}
-            currentUser={currentUser}
-            onClose={handleCloseEditProfile}
-          />
+          {isEditingProfile && (
+            <EditProfileModal
+              open={isEditingProfile}
+              currentClinic={currentClinic}
+              currentUser={currentUser}
+              onClose={handleCloseEditProfile}
+            />
+          )}
           {patientXRayModal.open && (
             <AddXRay
               {...patientXRayModal}
