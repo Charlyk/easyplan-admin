@@ -194,7 +194,7 @@ const App = ({ Component, pageProps }) => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Head>
         <title>EasyPlan.pro</title>
         <meta
@@ -211,7 +211,7 @@ const App = ({ Component, pageProps }) => {
           <PubNubProvider client={pubnub}>
             <PubnubContextProvider>
               <NotificationsProvider>
-                <>
+                <React.Fragment>
                   {logout && (
                     <ConfirmationModal
                       title={textForKey('Logout')}
@@ -229,13 +229,13 @@ const App = ({ Component, pageProps }) => {
                   )}
                   <NextNprogress color='#29D' startPosition={0.3} height={2} />
                   <Component {...pageProps} />
-                </>
+                </React.Fragment>
               </NotificationsProvider>
             </PubnubContextProvider>
           </PubNubProvider>
         </>
       </ThemeProvider>
-    </>
+    </React.Fragment>
   );
 };
 

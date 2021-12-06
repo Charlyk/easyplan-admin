@@ -1,12 +1,10 @@
 import React from 'react';
 import { ServerStyleSheets } from '@material-ui/core/styles';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { fetchAppData } from 'middleware/api/initialization';
 
 class AppDocument extends Document {
   static async getInitialProps(ctx) {
     // Render app and page and get the context of the page with collected side effects.
-    const { req } = ctx;
     const sheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
@@ -17,16 +15,8 @@ class AppDocument extends Document {
 
     const initialProps = await Document.getInitialProps(ctx);
 
-    let appData = {};
-    try {
-      const response = await fetchAppData(req.headers);
-      appData = response.data;
-    } catch (error) {
-      console.error(error.message);
-    }
     return {
       ...initialProps,
-      ...appData,
       // Styles fragment is rendered after the app and page rendering finish.
       styles: [
         ...React.Children.toArray(initialProps.styles),
