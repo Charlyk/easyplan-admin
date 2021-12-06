@@ -68,6 +68,20 @@ const UserItem = ({
     user.isHidden ? styles.fired : styles.active,
   );
 
+  const conditionalButtonForDeleteRestore = user.isHidden ? (
+    <Tooltip title={textForKey('Restore')}>
+      <IconButton className={styles.iconButton} onClick={handleRestoreUser}>
+        <IconRefresh fill='#00E987' />
+      </IconButton>
+    </Tooltip>
+  ) : (
+    <Tooltip title={textForKey('Delete')}>
+      <IconButton className={styles.iconButton} onClick={handleDeleteUser}>
+        <IconDelete fill='#ec3276' />
+      </IconButton>
+    </Tooltip>
+  );
+
   return (
     <TableRow className={rootClasses}>
       {!isInvitation && (
@@ -193,25 +207,8 @@ const UserItem = ({
               </IconButton>
             </Tooltip>
           )}
-          {user.isHidden ? (
-            <Tooltip title={textForKey('Restore')}>
-              <IconButton
-                className={styles.iconButton}
-                onClick={handleRestoreUser}
-              >
-                <IconRefresh fill='#00E987' />
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <Tooltip title={textForKey('Delete')}>
-              <IconButton
-                className={styles.iconButton}
-                onClick={handleDeleteUser}
-              >
-                <IconDelete fill='#ec3276' />
-              </IconButton>
-            </Tooltip>
-          )}
+          {user.roleInClinic !== Role.admin &&
+            conditionalButtonForDeleteRestore}
         </div>
       </TableCell>
     </TableRow>
