@@ -90,7 +90,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <ServicesChart
               key={chart}
-              removeable={false}
+              removeable={true}
               services={analytics.services}
               visible={isVisible(ChartType.Services)}
               onClose={handleHideChart}
@@ -100,7 +100,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <AmountsChart
               key={chart}
-              removeable={false}
+              removeable={true}
               currency={currentClinic.currency}
               payments={analytics.payments}
               visible={isVisible(ChartType.Income)}
@@ -111,7 +111,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <ClientsChart
               key={chart}
-              removeable={false}
+              removeable={true}
               clients={analytics.clients}
               visible={isVisible(ChartType.ClientsNewReturn)}
               onClose={handleHideChart}
@@ -121,7 +121,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <TotalVisitsChart
               key={chart}
-              removeable={false}
+              removeable={true}
               visits={analytics.visits}
               visible={isVisible(ChartType.Visits)}
               onClose={handleHideChart}
@@ -131,7 +131,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <SentMessagesChart
               key={chart}
-              removeable={false}
+              removeable={true}
               messages={analytics.messages}
               visible={isVisible(ChartType.Messages)}
               onClose={handleHideChart}
@@ -141,7 +141,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <TreatedPatientsChart
               key={chart}
-              removeable={false}
+              removeable={true}
               patients={analytics.treatedPatients}
               visible={isVisible(ChartType.TreatedClients)}
               onClose={handleHideChart}
@@ -151,7 +151,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <DoctorsIncomeChart
               key={chart}
-              removeable={false}
+              removeable={true}
               incomes={analytics.doctorIncome}
               currency={currentClinic.currency}
               visible={isVisible(ChartType.DoctorsIncome)}
@@ -162,7 +162,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <DoctorVisitsChart
               key={chart}
-              removeable={false}
+              removeable={true}
               visits={analytics.doctorVisits}
               visible={isVisible(ChartType.DoctorsVisits)}
               onClose={handleHideChart}
@@ -172,7 +172,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <DoctorsConversionChart
               key={chart}
-              removeable={false}
+              removeable={true}
               conversions={analytics.conversion}
               visible={isVisible(ChartType.DoctorsConversion)}
               onClose={handleHideChart}
@@ -182,7 +182,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           return (
             <PatientsSourceChart
               key={chart}
-              removeable={false}
+              removeable={true}
               sources={analytics.patientsSource}
               visible={isVisible(ChartType.ClientsSource)}
               onClose={handleHideChart}
