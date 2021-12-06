@@ -1,5 +1,5 @@
 import React from 'react';
-import { ServerStyleSheets } from '@material-ui/core/styles';
+import { ServerStyleSheets } from '@material-ui/styles';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class AppDocument extends Document {
@@ -8,26 +8,29 @@ class AppDocument extends Document {
     const sheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
-    ctx.renderPage = () =>
-      originalRenderPage({
+    ctx.renderPage = () => {
+      return originalRenderPage({
         enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
       });
+    };
 
     const initialProps = await Document.getInitialProps(ctx);
 
     return {
       ...initialProps,
       // Styles fragment is rendered after the app and page rendering finish.
-      styles: [
-        ...React.Children.toArray(initialProps.styles),
-        sheets.getStyleElement(),
-      ],
+      styles: (
+        <>
+          {initialProps.styles}
+          {sheets.getStyleElement()}
+        </>
+      ),
     };
   }
 
   render() {
     return (
-      <Html>
+      <Html lang={this.props.locale}>
         <Head>
           <link
             rel='stylesheet'
@@ -37,7 +40,7 @@ class AppDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <div id='modal-root'></div>
+          <div id='modal-root' />
         </body>
       </Html>
     );

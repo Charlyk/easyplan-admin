@@ -84,10 +84,7 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
+    document.querySelector('#jss-server-side')?.remove();
   }, []);
 
   useEffect(() => {
@@ -206,7 +203,7 @@ const App = ({ Component, pageProps }) => {
         ) : null}
       </Head>
       <ThemeProvider theme={theme}>
-        <>
+        <React.Fragment>
           <CssBaseline />
           <PubNubProvider client={pubnub}>
             <PubnubContextProvider>
@@ -233,7 +230,7 @@ const App = ({ Component, pageProps }) => {
               </NotificationsProvider>
             </PubnubContextProvider>
           </PubNubProvider>
-        </>
+        </React.Fragment>
       </ThemeProvider>
     </React.Fragment>
   );
