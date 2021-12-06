@@ -231,6 +231,6 @@ yarn-error.log
 
 # End of https://www.toptal.com/developers/gitignore/api/yarn,macos,webstorm,jetbrains,nextjs
 
-.env.local
+environment/.env.local
 node_modules
 redux/middleware

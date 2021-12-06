@@ -89,6 +89,7 @@
     "@zeit/next-sass": "^1.0.1",
     "babel-eslint": "^11.0.0-beta.2",
     "cross-env": "^7.0.3",
+    "env-cmd": "^10.1.0",
     "eslint": "<8.0.0",
     "eslint-config-next": "^12.0.4",
     "eslint-config-prettier": "^8.3.0",
@@ -110,10 +111,18 @@
     "webpack-bundle-analyzer": "^4.5.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint ./ --ext js,jsx,ts,tsx"
+    "dev:local": "env-cmd -f environment/.env.local next dev",
+    "build:local": "env-cmd -f environment/.env.local next build",
+    "start:local": "env-cmd -f environment/.env.local next start",
+    "dev:testing": "env-cmd -f environment/.env.testing next dev",
+    "build:testing": "env-cmd -f environment/.env.testing next build",
+    "start:testing": "env-cmd -f environment/.env.testing next start",
+    "dev:stage": "env-cmd -f environment/.env.stage next dev",
+    "build:stage": "env-cmd -f environment/.env.stage next build",
+    "start:stage": "env-cmd -f environment/.env.stage next start",
+    "dev:production": "env-cmd -f environment/.env.production next dev",
+    "build:production": "env-cmd -f environment/.env.production next build",
+    "start:production": "env-cmd -f environment/.env.production next start"
   },
   "next-unused": {
     "include": [
