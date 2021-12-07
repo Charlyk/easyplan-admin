@@ -7,7 +7,7 @@
 
   .paper {
     width: 80%;
-    height: 60%;
+    height: 70%;
     min-width: 800px;
     outline: none;
     position: absolute;
@@ -23,6 +23,7 @@
       height: 100%;
       position: relative;
       padding: 1rem;
+      overflow-y: auto;
 
       .closeButton {
         outline: none;
@@ -81,8 +82,8 @@
           .row {
             .cell {
               border-bottom: #ededed 1px solid;
-              padding-top: 0.1rem;
-              padding-bottom: 0.1rem;
+              padding-top: 0.4rem;
+              padding-bottom: 0.4rem;
 
               &:first-child {
                 padding-left: 0;
