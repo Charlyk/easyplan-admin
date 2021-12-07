@@ -1,14 +1,14 @@
 import React, { useContext, useReducer } from 'react';
 import { Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import { useRouter } from 'next/router';
+import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
-import { HeaderKeys } from 'app/utils/constants';
 import getClinicUrl from 'app/utils/getClinicUrl';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { isDev } from 'eas.config';
 import { createNewClinic } from 'middleware/api/clinic';
 import CreateClinicForm from '../CreateClinicForm';
-import EASImage from '../EASImage';
 import styles from './CreateClinic.module.scss';
 import reducer, {
   setIsLoading,
@@ -70,13 +70,9 @@ export default function CreateClinicWrapper({
     <div className={styles.createClinicRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <EASImage
-          src='settings/easyplan-logo.svg'
-          classes={{
-            root: styles.logoContainer,
-            image: styles.logoImage,
-          }}
-        />
+        <Box className={styles.logoContainer}>
+          <AppLogoWhite className={styles.logoImage} />
+        </Box>
       )}
       <div
         className={styles.formContainer}
@@ -85,12 +81,7 @@ export default function CreateClinicWrapper({
           backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
         }}
       >
-        {isMobileDevice && (
-          <EASImage
-            src='settings/easyplan-logo.svg'
-            className={styles.logoImage}
-          />
-        )}
+        {isMobileDevice && <AppLogoWhite className={styles.logoImage} />}
         <CreateClinicForm
           isMobile={isMobileDevice}
           countries={countries}

@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useReducer } from 'react';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import EASImage from 'app/components/common/EASImage';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
+import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import { RestrictedSubdomains } from 'app/utils/constants';
 import getClinicUrl from 'app/utils/getClinicUrl';
@@ -228,13 +229,9 @@ export default function LoginWrapper({
       />
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <EASImage
-          src='settings/easyplan-logo.svg'
-          classes={{
-            root: styles.logoContainer,
-            image: styles.logoImage,
-          }}
-        />
+        <Box className={styles.logoContainer}>
+          <AppLogoWhite className={styles.logoImage} />
+        </Box>
       )}
       <div
         className={styles.formContainer}
@@ -243,12 +240,7 @@ export default function LoginWrapper({
           backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
         }}
       >
-        {isMobileDevice && (
-          <EASImage
-            src='settings/easyplan-logo.svg'
-            className={styles.logoImage}
-          />
-        )}
+        {isMobileDevice && <AppLogoWhite className={styles.logoImage} />}
         {currentForm === FormType.login && (
           <LoginForm
             isMobile={isMobileDevice}

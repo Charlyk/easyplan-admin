@@ -1,4 +1,5 @@
 import React, { useContext, useReducer } from 'react';
+import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import VisibilityOn from '@material-ui/icons/Visibility';
@@ -6,6 +7,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys, PasswordRegex, Role } from 'app/utils/constants';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
@@ -13,7 +15,6 @@ import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { requestAcceptInvitation } from 'middleware/api/users';
 import { setCurrentUser } from 'redux/slices/appDataSlice';
-import EASImage from '../EASImage';
 import EASPhoneInput from '../EASPhoneInput';
 import EASTextField from '../EASTextField';
 import LoadingButton from '../LoadingButton';
@@ -157,25 +158,16 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
       })}
     >
       {!isMobileDevice && (
-        <EASImage
-          src='settings/easyplan-logo.svg'
-          classes={{
-            root: styles.logoContainer,
-            image: styles.logoImage,
-          }}
-        />
+        <Box className={styles.logoContainer}>
+          <AppLogoWhite className={styles.logoImage} />
+        </Box>
       )}
       <div
         className={clsx(styles.formContainer, {
           [styles.mobileDevice]: isMobileDevice,
         })}
       >
-        {isMobileDevice && (
-          <EASImage
-            src='settings/easyplan-logo.svg'
-            className={styles.logoImage}
-          />
-        )}
+        {isMobileDevice && <AppLogoWhite className={styles.logoImage} />}
         <form
           className={clsx(styles.formRoot, styles.acceptInvitation, {
             [styles.mobileDevice]: isMobileDevice,
