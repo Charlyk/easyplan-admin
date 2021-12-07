@@ -72,7 +72,6 @@
       }
 
       .detailsTableContainer {
-        // height: calc(100% - 90px);
         width: 100%;
         margin-top: 1.5rem;
 
@@ -82,8 +81,8 @@
           .row {
             .cell {
               border-bottom: #ededed 1px solid;
-              padding-top: 0.4rem;
-              padding-bottom: 0.4rem;
+              padding-top: 0.1rem;
+              padding-bottom: 0.1rem;
 
               &:first-child {
                 padding-left: 0;
