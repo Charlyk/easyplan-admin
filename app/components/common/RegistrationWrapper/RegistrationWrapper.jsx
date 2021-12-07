@@ -1,15 +1,16 @@
 import React, { useContext, useReducer } from 'react';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';
 import { setCurrentUser } from 'redux/slices/appDataSlice';
-import EASImage from '../EASImage';
 import styles from './RegistrationWrapper.module.scss';
 import reducer, {
   initialState,
@@ -59,13 +60,9 @@ export default function RegistrationWrapper({ isMobile }) {
     <div className={styles.registerFormRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <EASImage
-          src='settings/easyplan-logo.svg'
-          classes={{
-            root: styles.logoContainer,
-            image: styles.logoImage,
-          }}
-        />
+        <Box className={styles.logoContainer}>
+          <AppLogoWhite className={styles.logoImage} />
+        </Box>
       )}
       <div
         className={styles.formContainer}
@@ -74,12 +71,7 @@ export default function RegistrationWrapper({ isMobile }) {
           backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
         }}
       >
-        {isMobileDevice && (
-          <EASImage
-            src='settings/easyplan-logo.svg'
-            className={styles.logoImage}
-          />
-        )}
+        {isMobileDevice && <AppLogoWhite className={styles.logoImage} />}
         <RegisterForm
           isMobile={isMobileDevice}
           onSubmit={handleCreateAccount}

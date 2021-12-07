@@ -19,7 +19,7 @@ import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
-import { appBaseUrl } from 'eas.config';
+import { appBaseUrl, isDev } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
 import { triggerUserLogout } from 'redux/actions/actions';
@@ -38,6 +38,7 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
+import Typography from '@material-ui/core/Typography';
 
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
@@ -84,10 +85,7 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
+    document.querySelector('#jss-server-side')?.remove();
   }, []);
 
   useEffect(() => {
@@ -194,7 +192,7 @@ const App = ({ Component, pageProps }) => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Head>
         <title>EasyPlan.pro</title>
         <meta
@@ -206,12 +204,15 @@ const App = ({ Component, pageProps }) => {
         ) : null}
       </Head>
       <ThemeProvider theme={theme}>
-        <>
+        <React.Fragment>
           <CssBaseline />
           <PubNubProvider client={pubnub}>
             <PubnubContextProvider>
               <NotificationsProvider>
-                <>
+                <React.Fragment>
+                  {isDev && (
+                    <Typography className='develop-indicator'>Dev</Typography>
+                  )}
                   {logout && (
                     <ConfirmationModal
                       title={textForKey('Logout')}
@@ -229,13 +230,13 @@ const App = ({ Component, pageProps }) => {
                   )}
                   <NextNprogress color='#29D' startPosition={0.3} height={2} />
                   <Component {...pageProps} />
-                </>
+                </React.Fragment>
               </NotificationsProvider>
             </PubnubContextProvider>
           </PubNubProvider>
-        </>
+        </React.Fragment>
       </ThemeProvider>
-    </>
+    </React.Fragment>
   );
 };
 
