@@ -19,7 +19,7 @@ import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
-import { appBaseUrl } from 'eas.config';
+import { appBaseUrl, isDev } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
 import { triggerUserLogout } from 'redux/actions/actions';
@@ -38,6 +38,7 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
+import Typography from '@material-ui/core/Typography';
 
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
@@ -209,6 +210,9 @@ const App = ({ Component, pageProps }) => {
             <PubnubContextProvider>
               <NotificationsProvider>
                 <React.Fragment>
+                  {isDev && (
+                    <Typography className='develop-indicator'>Dev</Typography>
+                  )}
                   {logout && (
                     <ConfirmationModal
                       title={textForKey('Logout')}

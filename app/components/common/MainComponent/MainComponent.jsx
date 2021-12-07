@@ -200,7 +200,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
       </Head>
       {currentUser != null && currentClinic != null && (
         <>
-          {isDev && <Typography className='develop-indicator'>Dev</Typography>}
           {patientNoteModal.open && (
             <AddNote
               {...patientNoteModal}
