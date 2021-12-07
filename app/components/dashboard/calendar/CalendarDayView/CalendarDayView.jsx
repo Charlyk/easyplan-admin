@@ -235,6 +235,8 @@ const CalendarDayView = ({
     return orderBy([...mappedDoctors, ...mappedCabinets], 'name', 'asc');
   }, [doctors, cabinets, viewDate]);
 
+  console.log(mappedDoctors);
+
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>
       <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />

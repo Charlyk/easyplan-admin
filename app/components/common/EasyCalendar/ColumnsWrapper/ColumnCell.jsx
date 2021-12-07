@@ -48,7 +48,7 @@ const ColumnCell = ({
   };
 
   const getBorderTop = () => {
-    if (startHour == null || disabled) {
+    if (startHour == null) {
       return 'none';
     }
 
@@ -63,9 +63,7 @@ const ColumnCell = ({
   return (
     <div
       id={`container-${startHour}`}
-      className={clsx(styles.columnCell, {
-        [styles.disabled]: disabled,
-      })}
+      className={clsx(styles.columnCell)}
       style={{ borderTop: getBorderTop() }}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
