@@ -15,6 +15,9 @@ const servicesListSlice = createSlice({
     fetchServiceDetails(state, _action: PayloadAction<number>) {
       state.isFetchingDetails = true;
     },
+    fetchDeletedCategory(state, _action: PayloadAction<number>) {
+      state;
+    },
     setServicesData(
       state,
       action: PayloadAction<{ services: ClinicService[]; categories: any[] }>,
@@ -39,6 +42,15 @@ const servicesListSlice = createSlice({
     setCategories(state, action: PayloadAction<any[]>) {
       state.categories = action.payload;
       state.isFetching = false;
+    },
+    addCategory(state, action: PayloadAction<any>) {
+      state.categories.push(action.payload);
+    },
+    deleteCategory(state, action: PayloadAction<any>) {
+      const categoryToDelete = action.payload;
+      state.categories = state.categories.filter(
+        (category) => category.id !== categoryToDelete.id,
+      );
     },
     setServices(state, action: PayloadAction<ClinicService[]>) {
       state.services = action.payload;
@@ -71,7 +83,10 @@ export const {
   fetchServicesList,
   fetchServiceDetails,
   setError,
+  fetchDeletedCategory,
+  addCategory,
   setServices,
+  deleteCategory,
   setCategories,
   setServicesData,
   setServiceDetails,

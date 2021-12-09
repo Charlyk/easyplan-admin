@@ -12,7 +12,7 @@ import styles from './CreateCategoryModal.module.scss';
 
 const CreateCategoryModal = (props) => {
   const toast = useContext(NotificationsContext);
-  const { show, onClose, onSaved, category } = props;
+  const { show, onClose, onSaved, category, onDelete, destroyBtnText } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [categoryName, setCategoryName] = useState(
     category ? category.name : '',
@@ -72,6 +72,11 @@ const CreateCategoryModal = (props) => {
       : textForKey('Add category');
   };
 
+  const handleOnDelete = () => {
+    onDelete(category);
+    onClose();
+  };
+
   const handleModalClose = () => {
     setCategoryName('');
     onClose();
@@ -85,7 +90,9 @@ const CreateCategoryModal = (props) => {
       className={styles['create-category-modal']}
       onPrimaryClick={handleCategorySave}
       isPositiveLoading={isLoading}
+      destroyBtnText={destroyBtnText}
       isPositiveDisabled={isLoading}
+      onDestroyClick={category === null ? null : handleOnDelete}
     >
       <form style={{ padding: '16px' }} onSubmit={handleCategorySave}>
         <EASTextField
