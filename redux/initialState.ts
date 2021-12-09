@@ -92,6 +92,10 @@ const initialState: ReduxState = Object.freeze({
     isFetching: false,
     error: null,
   },
+  globalNotifications: {
+    message: null,
+    severity: null,
+  },
 });
 
 export default initialState;

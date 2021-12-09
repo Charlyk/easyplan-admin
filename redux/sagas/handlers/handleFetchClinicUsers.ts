@@ -1,10 +1,7 @@
 import { SagaReturnType } from '@redux-saga/core/effects';
 import { call, put, takeLatest } from 'redux-saga/effects';
-import {
-  setError,
-  setUsersData,
-  fetchClinicUsers,
-} from 'redux/slices/usersListSlice';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
+import { setUsersData, fetchClinicUsers } from 'redux/slices/usersListSlice';
 import { fetchClinicUsers as requestFetchClinicUsers } from '../requests';
 
 export function* handleFetchClinicUsers() {
@@ -17,9 +14,9 @@ export function* handleFetchClinicUsers() {
   } catch (error) {
     if (error.response != null) {
       const data = error.response?.data;
-      yield put(setError(data?.message ?? error.message));
+      yield put(showErrorNotification(data?.message ?? error.message));
     } else {
-      yield put(setError(error.message));
+      yield put(showErrorNotification(error.message));
     }
   }
 }
