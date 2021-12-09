@@ -7,6 +7,7 @@ import {
   setAuthToken,
   setIsUpdatingProfile,
 } from 'redux/slices/appDataSlice';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import { UpdateProfileRequest } from 'types/api';
 import { requestUpdateUserProfile } from '../requests';
 
@@ -19,7 +20,12 @@ export function* handleUpdateUserProfile(
     yield put(setCurrentUser(data.user));
     yield put(setAuthToken(data.token));
   } catch (error) {
-    console.error(error);
+    if (error.response != null) {
+      const data = error.response?.data;
+      yield put(showErrorNotification(data?.message ?? error.message));
+    } else {
+      yield put(showErrorNotification(error.message));
+    }
   } finally {
     yield put(setIsUpdatingProfile(false));
   }
