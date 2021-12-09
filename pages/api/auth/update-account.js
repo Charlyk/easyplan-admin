@@ -14,7 +14,7 @@ function updateUserAccount(req) {
   );
   const requestBody = req.body;
   return axios.put(
-    `${updatedServerUrl(req)}/authentication/v1/update-account`,
+    `${updatedServerUrl(req)}/users/v1/update-account`,
     requestBody,
     {
       headers: {
