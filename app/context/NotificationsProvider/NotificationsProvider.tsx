@@ -1,59 +1,56 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import { useDispatch, useSelector } from 'react-redux';
+import { globalNotificationsSelector } from 'redux/selectors/globalNotificationsSelector';
+import {
+  hideNotification,
+  showNotification,
+} from 'redux/slices/globalNotificationsSlice';
+import { NotificationSeverity } from 'types';
 import NotificationsContext from '../notificationsContext';
-import reducer, {
-  initialState,
-  closeNotification,
-  setNotification,
-} from './NotificationsProvider.slice';
 
 const NotificationsProvider: React.FC = ({ children }) => {
-  const [{ isVisible, message, severity }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const dispatch = useDispatch();
+  const { message, severity } = useSelector(globalNotificationsSelector);
+  const isVisible = message != null;
 
   const handleCloseNotification = () => {
-    localDispatch(closeNotification());
+    dispatch(hideNotification());
   };
 
-  const handleNotify = (message: any) => {
-    localDispatch(
-      setNotification({
-        show: true,
-        message: message,
-        severity: 'info',
+  const handleNotify = (message: string) => {
+    dispatch(
+      showNotification({
+        message,
+        severity: NotificationSeverity.info,
       }),
     );
   };
 
-  const handleNotifyError = (message: any) => {
-    localDispatch(
-      setNotification({
-        show: true,
-        message: message,
-        severity: 'error',
+  const handleNotifyError = (message: string) => {
+    dispatch(
+      showNotification({
+        message,
+        severity: NotificationSeverity.error,
       }),
     );
   };
 
-  const handleNotifySuccess = (message: any) => {
-    localDispatch(
-      setNotification({
-        show: true,
-        message: message,
-        severity: 'success',
+  const handleNotifySuccess = (message: string) => {
+    dispatch(
+      showNotification({
+        message,
+        severity: NotificationSeverity.success,
       }),
     );
   };
 
-  const handleNotifyWarn = (message: any) => {
-    localDispatch(
-      setNotification({
-        show: true,
-        message: message,
-        severity: 'warning',
+  const handleNotifyWarn = (message: string) => {
+    dispatch(
+      showNotification({
+        message,
+        severity: NotificationSeverity.warning,
       }),
     );
   };
