@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
@@ -26,7 +27,6 @@ import {
   authTokenSelector,
   currentClinicSelector,
 } from 'redux/selectors/appDataSelector';
-import EASSelect from '../../../common/EASSelect';
 import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,
