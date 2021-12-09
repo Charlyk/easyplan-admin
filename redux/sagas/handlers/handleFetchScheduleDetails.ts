@@ -5,6 +5,7 @@ import {
   fetchScheduleDetails,
   setAppointmentDetails,
 } from 'redux/slices/calendarData';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import { fetchScheduleDetails as requestScheduleDetails } from '../requests';
 
 export function* handleFetchScheduleDetails(action: PayloadAction<number>) {
@@ -15,7 +16,12 @@ export function* handleFetchScheduleDetails(action: PayloadAction<number>) {
     );
     yield put(setAppointmentDetails(response.data));
   } catch (error) {
-    console.error(error);
+    if (error.response != null) {
+      const data = error.response?.data;
+      yield put(showErrorNotification(data?.message ?? error.message));
+    } else {
+      yield put(showErrorNotification(error.message));
+    }
   }
 }
 

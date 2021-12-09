@@ -10,15 +10,23 @@ export default function setCookies(res, authToken, clinicId) {
     maxAge: 86400 * 30,
     path: '/',
   };
-  const tokenCookie = cookie.serialize(
-    'auth_token',
-    String(authToken),
-    cookieOpts,
-  );
-  const clinicCookie = cookie.serialize(
-    'clinic_id',
-    String(clinicId) || '-1',
-    cookieOpts,
-  );
-  res.setHeader('set-cookie', [tokenCookie, clinicCookie]);
+  const cookies = [];
+  if (authToken != null) {
+    const tokenCookie = cookie.serialize(
+      'auth_token',
+      String(authToken),
+      cookieOpts,
+    );
+    cookies.push(tokenCookie);
+  }
+
+  if (clinicId != null) {
+    const clinicCookie = cookie.serialize(
+      'clinic_id',
+      String(clinicId) || '-1',
+      cookieOpts,
+    );
+    cookies.push(clinicCookie);
+  }
+  res.setHeader('set-cookie', cookies);
 }

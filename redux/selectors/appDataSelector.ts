@@ -121,3 +121,8 @@ export const clinicExchangeRatesSelector = createSelector(
     return currencies;
   },
 );
+
+export const isUpdatingProfileSelector = createSelector(
+  appDataSelector,
+  (data) => data.isUpdatingProfile,
+);

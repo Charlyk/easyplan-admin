@@ -1,7 +1,7 @@
 import { SagaReturnType } from '@redux-saga/core/effects';
 import { call, put, takeLatest } from 'redux-saga/effects';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
-  setError,
   setServicesData,
   fetchServicesList,
 } from 'redux/slices/servicesListSlice';
@@ -15,9 +15,9 @@ export function* handleFetchClinicServices() {
   } catch (error) {
     if (error.response != null) {
       const data = error.response?.data;
-      yield put(setError(data?.message ?? error.message));
+      yield put(showErrorNotification(data?.message ?? error.message));
     } else {
-      yield put(setError(error.message));
+      yield put(showErrorNotification(error.message));
     }
   }
 }

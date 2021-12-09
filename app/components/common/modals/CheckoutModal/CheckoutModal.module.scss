@@ -7,7 +7,7 @@
 
   .paper {
     width: 80%;
-    height: 60%;
+    height: 70%;
     min-width: 800px;
     outline: none;
     position: absolute;
@@ -23,6 +23,7 @@
       height: 100%;
       position: relative;
       padding: 1rem;
+      overflow-y: auto;
 
       .closeButton {
         outline: none;
@@ -72,7 +73,6 @@
       }
 
       .detailsTableContainer {
-        // height: calc(100% - 90px);
         width: 100%;
         margin-top: 1.5rem;
 

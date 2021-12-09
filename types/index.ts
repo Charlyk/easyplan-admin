@@ -19,3 +19,4 @@ export * from './schedule.type';
 export * from './patient.type';
 export * from './clinicCabinet.type';
 export * from './serverResponse.type';
+export * from './notificationSeverity.type';
