@@ -64,6 +64,7 @@ export interface AppDataState {
   currentClinic: CurrentClinic | null;
   currentUser: CurrentUser | null;
   authToken: string | null;
+  isUpdatingProfile: boolean;
 }
 
 export interface CabinetsDataState {
@@ -101,7 +102,7 @@ export interface DoctorScheduleDetailsState {
 }
 
 export interface GlobalNotificationsState {
-  message: string | Node | null;
+  message: string | null;
   severity?: NotificationSeverity | null;
 }
 
