@@ -18,7 +18,6 @@ const globalNotificationsSlice = createSlice({
     },
     hideNotification(state) {
       state.message = null;
-      state.severity = null;
     },
     showInfoNotification(state, action: PayloadAction<string>) {
       state.message = action.payload;

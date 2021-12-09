@@ -102,7 +102,7 @@ export interface DoctorScheduleDetailsState {
 }
 
 export interface GlobalNotificationsState {
-  message: string | Node | null;
+  message: string | null;
   severity?: NotificationSeverity | null;
 }
 

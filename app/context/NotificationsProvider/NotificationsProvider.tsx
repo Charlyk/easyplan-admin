@@ -13,7 +13,7 @@ import NotificationsContext from '../notificationsContext';
 const NotificationsProvider: React.FC = ({ children }) => {
   const dispatch = useDispatch();
   const { message, severity } = useSelector(globalNotificationsSelector);
-  const isVisible = message != null;
+  const isVisible = message != null && message.length > 0;
 
   const handleCloseNotification = () => {
     dispatch(hideNotification());
@@ -71,7 +71,7 @@ const NotificationsProvider: React.FC = ({ children }) => {
         onClose={handleCloseNotification}
       >
         <Alert severity={severity} style={{ width: '100%' }}>
-          {message}
+          {message ?? ''}
         </Alert>
       </Snackbar>
       {children}
