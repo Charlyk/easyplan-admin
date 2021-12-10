@@ -63,7 +63,7 @@ const DetailsRow = ({
     );
   };
 
-  const getOptionLabel = (option) => option.name;
+  const getOptionLabel = (option) => option.label;
 
   const filterValues = (options, params) => {
     if (filterLocally) {

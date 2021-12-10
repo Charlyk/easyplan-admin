@@ -129,11 +129,15 @@ const CheckoutModal = ({
   }, [currentClinic.services, invoiceDetails]);
 
   const doctors = useMemo(() => {
-    return clinicDoctors.map((item) => ({
-      ...item,
-      name: `${item.firstName} ${item.lastName}`,
-      fullName: `${item.firstName} ${item.lastName}`,
-    }));
+    return clinicDoctors.map((item) => {
+      const fullName = `${item.firstName} ${item.lastName}`;
+      return {
+        ...item,
+        name: fullName,
+        label: fullName,
+        fullName,
+      };
+    });
   }, [clinicDoctors]);
 
   useEffect(() => {
