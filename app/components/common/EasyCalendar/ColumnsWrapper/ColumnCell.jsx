@@ -65,8 +65,8 @@ const ColumnCell = ({
       id={`container-${startHour}`}
       className={clsx(styles.columnCell)}
       style={{ borderTop: getBorderTop() }}
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
+      onPointerEnter={disabled ? () => null : handlePointerEnter}
+      onPointerLeave={disabled ? () => null : handlePointerLeave}
       onPointerUp={isMobile ? handleAddSchedule : () => null}
     >
       {content}
