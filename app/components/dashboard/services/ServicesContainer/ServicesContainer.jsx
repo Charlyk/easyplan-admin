@@ -39,6 +39,7 @@ import {
   openDetailsModal,
   setCategories as globalSetCategories,
   fetchDeletedCategory as deleteCategory,
+  toggleServiceDeletion,
 } from 'redux/slices/servicesListSlice';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesContainer.module.scss';
@@ -177,6 +178,7 @@ const ServicesContainer = () => {
           };
         });
         localDispatch(setClinicServices(updatedServices));
+        dispatch(toggleServiceDeletion(deleteServiceModal.service.id));
       }, 300);
     }
   };

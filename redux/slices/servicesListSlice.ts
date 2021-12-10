@@ -56,6 +56,13 @@ const servicesListSlice = createSlice({
       state.services = action.payload;
       state.isFetching = false;
     },
+    toggleServiceDeletion(state, action: PayloadAction<number>) {
+      state.services = state.services.map((service) =>
+        service.id === action.payload
+          ? { ...service, deleted: !service.deleted }
+          : service,
+      );
+    },
     setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
       state.isFetching = false;
@@ -86,6 +93,7 @@ export const {
   fetchDeletedCategory,
   addCategory,
   setServices,
+  toggleServiceDeletion,
   deleteCategory,
   setCategories,
   setServicesData,
