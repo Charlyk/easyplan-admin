@@ -37,6 +37,7 @@ import {
   activeClinicDoctorsSelector,
   clinicCabinetsSelector,
 } from 'redux/selectors/appDataSelector';
+import { activeServicesFromRoot } from 'redux/selectors/servicesSelector';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
@@ -82,6 +83,7 @@ const AddAppointmentModal = ({
 }) => {
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
+  const activeServices = useSelector(activeServicesFromRoot);
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
@@ -176,12 +178,23 @@ const AddAppointmentModal = ({
 
     let services;
     if (doctor != null) {
-      services = doctor.services;
+      services = doctor.services.filter((service) =>
+        activeServices.some(
+          (activeService) => activeService.id === service.serviceId,
+        ),
+      );
     } else {
       const cabinetDoctors = clinicDoctors.filter((doctor) =>
         doctor.cabinets.some((item) => item.id === cabinet.id),
       );
-      services = cabinetDoctors.map((doctor) => doctor.services).flat();
+      const allCabinetServices = cabinetDoctors
+        .map((doctor) => doctor.services)
+        .flat();
+      services = allCabinetServices.filter((service) =>
+        activeServices.some(
+          (activeService) => activeService.id === service.serviceId,
+        ),
+      );
     }
 
     return services.map((service) => ({
