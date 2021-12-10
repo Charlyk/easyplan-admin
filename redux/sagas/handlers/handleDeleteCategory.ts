@@ -1,6 +1,7 @@
 import { SagaReturnType } from '@redux-saga/core/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, takeLatest } from 'redux-saga/effects';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
   deleteCategory,
   fetchDeletedCategory,
@@ -15,8 +16,13 @@ export function* handleDeleteCategories(action: PayloadAction<number>) {
     );
 
     yield put(deleteCategory(response.data));
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    if (error.response != null) {
+      const data = error.response?.data;
+      yield put(showErrorNotification(data?.message ?? error.message));
+    } else {
+      yield put(showErrorNotification(error.message));
+    }
   }
 }
 
