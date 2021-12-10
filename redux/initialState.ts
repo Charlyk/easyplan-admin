@@ -42,6 +42,7 @@ const initialState: ReduxState = Object.freeze({
     currentClinic: null,
     currentUser: null,
     authToken: null,
+    isUpdatingProfile: false,
   },
   clinicData: {
     updateClinicData: false,
@@ -91,6 +92,10 @@ const initialState: ReduxState = Object.freeze({
     scheduleId: null,
     isFetching: false,
     error: null,
+  },
+  globalNotifications: {
+    message: null,
+    severity: null,
   },
 });
 
