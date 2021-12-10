@@ -280,14 +280,16 @@ const ServicesContainer = () => {
       return clinicServices.length;
     }
     return (
-      clinicServices?.filter((item) => item.category.id === category.id)
+      clinicServices?.filter((item) => item?.category?.id === category?.id)
         .length ?? 0
     );
   };
 
   const filteredServices = sortBy(
     category.data != null && category.data.id !== 'all-services'
-      ? clinicServices.filter((item) => item.category.id === category.data.id)
+      ? clinicServices.filter(
+          (item) => item.category?.id === category?.data?.id,
+        )
       : clinicServices,
     (service) => service.name.toLowerCase(),
   );
