@@ -17,7 +17,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import axios from 'axios';
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
@@ -27,10 +26,10 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
+import EASTextarea from 'app/components/common/EASTextarea';
 import IconClose from 'app/components/icons/iconClose';
 import NotificationsContext from 'app/context/notificationsContext';
 import adjustValueToNumber from 'app/utils/adjustValueToNumber';
-import { Role } from 'app/utils/constants';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
@@ -39,16 +38,19 @@ import {
   fetchDetailsForInvoice,
   registerInvoicePayment,
 } from 'middleware/api/invoices';
-import { savePatientGeneralTreatmentPlan } from 'middleware/api/patients';
+import {
+  savePatientGeneralTreatmentPlan,
+  searchPatients,
+} from 'middleware/api/patients';
 import { setPatientDetails } from 'redux/actions/actions';
 import {
+  activeClinicDoctorsSelector,
   clinicExchangeRatesSelector,
   currentClinicSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
-import EASTextarea from '../../EASTextarea';
 import TeethModal from '../TeethModal';
 import styles from './CheckoutModal.module.scss';
 import { actions, initialState, reducer } from './CheckoutModal.reducer';
@@ -90,6 +92,7 @@ const CheckoutModal = ({
   const updateInvoices = useSelector(updateInvoicesSelector);
   const exchangeRates = useSelector(clinicExchangeRatesSelector);
   const currentClinic = useSelector(currentClinicSelector);
+  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
   const [commentValue, setCommentValue] = useState('');
   const userClinic = useSelector(userClinicSelector);
   const { canRegisterPayments } = userClinic;
@@ -126,14 +129,16 @@ const CheckoutModal = ({
   }, [currentClinic.services, invoiceDetails]);
 
   const doctors = useMemo(() => {
-    return currentClinic.users
-      .filter((item) => item.roleInClinic === Role.doctor && !item.isHidden)
-      .map((item) => ({
+    return clinicDoctors.map((item) => {
+      const fullName = `${item.firstName} ${item.lastName}`;
+      return {
         ...item,
-        name: `${item.firstName} ${item.lastName}`,
-        fullName: `${item.firstName} ${item.lastName}`,
-      }));
-  }, [currentClinic.users]);
+        name: fullName,
+        label: fullName,
+        fullName,
+      };
+    });
+  }, [clinicDoctors]);
 
   useEffect(() => {
     if (!open) {
@@ -209,18 +214,18 @@ const CheckoutModal = ({
     localDispatch(actions.setIsSearchingPatient(true));
     try {
       const updatedQuery = newValue.replace('+', '');
-      const queryParams = {
-        query: updatedQuery,
-      };
-      const queryString = new URLSearchParams(queryParams).toString();
-      const response = await axios.get(`/api/patients/search?${queryString}`);
-      const { data } = response;
+      const response = await searchPatients(updatedQuery);
+      const { data: patients } = response.data;
       localDispatch(
         actions.setSearchResults(
-          data.map((item) => ({
-            ...item,
-            name: `${item.fullName} (${item.phoneNumber})`,
-          })),
+          patients.map((item) => {
+            const phoneNumber = `(+${item.countryCode}${item.phoneNumber})`;
+            return {
+              ...item,
+              name: `${item.fullName} ${phoneNumber}`,
+              label: item.fullName,
+            };
+          }),
         ),
       );
     } catch (error) {
@@ -485,6 +490,7 @@ const CheckoutModal = ({
                 <TableBody>
                   {invoiceDetails.doctor != null && (
                     <DetailsRow
+                      filterLocally
                       isValueInput={isNew && schedule == null}
                       onValueSelected={handleDoctorSelected}
                       valuePlaceholder={`${textForKey(

@@ -22,6 +22,7 @@ const PatientTreatmentPlanContainer = ({
   const [guideName, setGuideName] = useState(
     `${currentUser.firstName} ${currentUser.lastName}`,
   );
+  const canPrint = scheduleData?.treatmentPlan?.services?.length > 0;
 
   useEffect(() => {
     fetchScheduleData();
@@ -34,6 +35,7 @@ const PatientTreatmentPlanContainer = ({
         null,
         patientId,
       );
+      console.log(initialSchedule);
       setScheduleData(initialSchedule);
     } catch (error) {
       toast.error(error.message);
@@ -43,6 +45,10 @@ const PatientTreatmentPlanContainer = ({
   };
 
   const handlePrintTreatmentPlan = () => {
+    const { treatmentPlan } = scheduleData;
+    if (treatmentPlan.services.length === 0) {
+      return;
+    }
     const planUrl = getTreatmentPlanURL(
       currentClinic,
       authToken,
@@ -77,7 +83,7 @@ const PatientTreatmentPlanContainer = ({
           />
         )}
       </div>
-      {!isLoading && (
+      {!isLoading && canPrint && (
         <div className={styles.footer}>
           <EASTextField
             fieldLabel={textForKey('Enter guide name')}
