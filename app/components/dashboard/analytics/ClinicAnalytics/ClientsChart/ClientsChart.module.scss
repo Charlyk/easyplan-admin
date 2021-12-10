@@ -1,6 +1,6 @@
 .clientsChart {
-  max-width: unset !important;
-  flex-grow: 1 !important;
+  // max-width: unset !important;
+  // flex-grow: 1 !important;
 
   :global(.chartTitle) {
     width: 100%;
@@ -21,11 +21,11 @@
       color: #00ac00 !important;
 
       .divider {
-        color: #34354C;
+        color: #34354c;
       }
 
       .debt {
-        color: #3A83DC;
+        color: #3a83dc;
       }
     }
   }
