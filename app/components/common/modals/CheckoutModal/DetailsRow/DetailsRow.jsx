@@ -19,6 +19,7 @@ const DetailsRow = ({
   clickableValue,
   isLoading,
   searchable,
+  filterLocally,
   onValueClick,
   onSearch,
   onValueSelected,
@@ -65,14 +66,17 @@ const DetailsRow = ({
   const getOptionLabel = (option) => option.name;
 
   const filterValues = (options, params) => {
-    return options.filter((item) => {
-      const [firstName, lastName] = item.name.toLowerCase().split(' ');
-      return (
-        params.inputValue.length === 0 ||
-        params.inputValue.toLowerCase().includes(firstName) ||
-        params.inputValue.toLowerCase().includes(lastName)
-      );
-    });
+    if (filterLocally) {
+      return options.filter((item) => {
+        const [firstName, lastName] = item.name.toLowerCase().split(' ');
+        return (
+          params.inputValue.length === 0 ||
+          params.inputValue.toLowerCase().includes(firstName) ||
+          params.inputValue.toLowerCase().includes(lastName)
+        );
+      });
+    }
+    return options;
   };
 
   const getOptionSelected = (option, value) => {
