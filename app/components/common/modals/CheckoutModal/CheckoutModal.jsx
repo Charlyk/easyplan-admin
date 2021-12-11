@@ -15,6 +15,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
@@ -417,7 +418,6 @@ const CheckoutModal = ({
         : isNew
         ? await createNewInvoice(requestBody)
         : await registerInvoicePayment(invoiceDetails.id, requestBody);
-      // await router.replace(router.asPath);
       if (openPatientDetailsOnClose) {
         handlePatientClick();
       } else {
@@ -487,7 +487,7 @@ const CheckoutModal = ({
           {!isFetching && (
             <TableContainer classes={{ root: styles.detailsTableContainer }}>
               <Table classes={{ root: styles.detailsTable }}>
-                <TableBody>
+                <TableHead classes={{ root: styles.detailsTableHead }}>
                   {invoiceDetails.doctor != null && (
                     <DetailsRow
                       filterLocally
@@ -517,6 +517,13 @@ const CheckoutModal = ({
                     value={invoiceDetails.patient}
                     onValueClick={handlePatientClick}
                   />
+                </TableHead>
+                <TableBody
+                  classes={{
+                    root:
+                      window.innerHeight > 720 ? styles.detailsTableBody : '',
+                  }}
+                >
                   {(!isNew || schedule != null) &&
                     invoiceDetails.schedule != null && (
                       <DetailsRow
