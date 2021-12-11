@@ -26,6 +26,22 @@ export async function getPatients(query, headers = null) {
 }
 
 /**
+ * Search patients by specified query
+ * @param {string} query
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<*>>}
+ */
+export async function searchPatients(query, headers = null) {
+  const requestQuery = {
+    query,
+    page: '0',
+    rowsPerPage: '10',
+    short: '1',
+  };
+  return getPatients(requestQuery, headers);
+}
+
+/**
  * Fetch all details for a patient
  * @param {string|number} patientId
  * @param {Object|null} headers
