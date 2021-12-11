@@ -11,6 +11,7 @@ import {
   ClinicServiceDetails,
   ClinicServiceCategory,
   DoctorScheduleDetails,
+  NotificationSeverity,
 } from 'types';
 
 export interface CalendarDataState {
@@ -63,6 +64,7 @@ export interface AppDataState {
   currentClinic: CurrentClinic | null;
   currentUser: CurrentUser | null;
   authToken: string | null;
+  isUpdatingProfile: boolean;
 }
 
 export interface CabinetsDataState {
@@ -99,6 +101,11 @@ export interface DoctorScheduleDetailsState {
   error?: string | null;
 }
 
+export interface GlobalNotificationsState {
+  message: string | null;
+  severity?: NotificationSeverity | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -131,4 +138,5 @@ export interface ReduxState {
   usersList: UsersListState;
   servicesList: ServicesListState;
   doctorScheduleDetails: DoctorScheduleDetailsState;
+  globalNotifications: GlobalNotificationsState;
 }
