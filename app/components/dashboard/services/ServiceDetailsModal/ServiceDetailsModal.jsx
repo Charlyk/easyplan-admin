@@ -101,7 +101,6 @@ const ServiceDetailsModal = () => {
   }, [serviceDetails]);
 
   const handleSaveService = async () => {
-    // setIsLoading(true);
     if (serviceDetails.price.length === 0) serviceDetails.price = '0';
     serviceDetails.doctors = serviceDetails.doctors.map((item) => {
       if (item.selected && item.price == null && !item.percentage == null) {
@@ -110,7 +109,10 @@ const ServiceDetailsModal = () => {
       return item;
     });
     if (service != null) {
-      await handleEditService({ ...serviceDetails, categoryId: category.id });
+      await handleEditService({
+        ...serviceDetails,
+        categoryId: serviceDetails.category.id,
+      });
     } else {
       await handleCreateService({ ...serviceDetails, categoryId: category.id });
     }
