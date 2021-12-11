@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
-import { CircularProgress, Zoom } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
+import { CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
 import { useRouter } from 'next/router';
-import ActionsSheet from 'app/components/common/ActionsSheet';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
-import IconPlus from 'app/components/icons/iconPlus';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import usePrevious from 'app/utils/hooks/usePrevious';
 import { textForKey } from 'app/utils/localization';
@@ -30,12 +27,10 @@ import reducer, {
   setIsFetching,
   setSelectedCharts,
   setSelectedRange,
-  setShowActions,
   setShowRangePicker,
-  showChart,
   setInitialData,
 } from './ClinicAnalytics.reducer';
-import { ChartAction, ClinicAnalyticsProps } from './ClinicAnalytics.types';
+import { ClinicAnalyticsProps } from './ClinicAnalytics.types';
 import DoctorsConversionChart from './DoctorsConversionChart';
 import DoctorsIncomeChart from './DoctorsIncomeChart';
 import DoctorVisitsChart from './DoctorVisitsChart';
@@ -50,18 +45,9 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
   currentClinic,
 }) => {
   const router = useRouter();
-  const fabRef = useRef(null);
   const pickerRef = useRef(null);
   const [
-    {
-      isFetching,
-      showRangePicker,
-      selectedRange,
-      analytics,
-      selectedCharts,
-      actions,
-      showActions,
-    },
+    { isFetching, showRangePicker, selectedRange, analytics, selectedCharts },
     localDispatch,
   ] = useReducer(reducer, initialState);
   const previousCharts = usePrevious(selectedCharts);
@@ -229,19 +215,6 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
     [selectedCharts],
   );
 
-  const handleActionSelected = useCallback(
-    async (action: ChartAction) => {
-      handleCloseActions();
-      try {
-        await requestUpdateSelectedCharts([...selectedCharts, action.key]);
-        localDispatch(showChart(action.key));
-      } catch (error) {
-        onRequestError(error);
-      }
-    },
-    [selectedCharts],
-  );
-
   const fetchClinicAnalytics = async (start = startDate, end = endDate) => {
     try {
       localDispatch(setIsFetching(true));
@@ -278,14 +251,6 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
     localDispatch(setSelectedRange([startDate, endDate]));
-  };
-
-  const handleCloseActions = () => {
-    localDispatch(setShowActions(false));
-  };
-
-  const handleOpenActions = () => {
-    localDispatch(setShowActions(true));
   };
 
   const handleFilterSubmit = async () => {
@@ -325,25 +290,6 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
           </Grid>
         )}
       </div>
-      <Zoom unmountOnExit in={actions.length > 0} timeout={300}>
-        <Fab
-          ref={fabRef}
-          size='medium'
-          aria-label='charts'
-          className={styles.chartsFab}
-          onClick={handleOpenActions}
-        >
-          <IconPlus />
-        </Fab>
-      </Zoom>
-      <ActionsSheet
-        open={showActions}
-        anchorEl={fabRef.current}
-        placement='top-end'
-        actions={actions}
-        onClose={handleCloseActions}
-        onSelect={handleActionSelected}
-      />
       <EasyDateRangePicker
         open={showRangePicker}
         onChange={handleDateChange}
