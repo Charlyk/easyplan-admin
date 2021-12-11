@@ -15,6 +15,7 @@ export default {
     list: 'List',
     'delete category': 'Delete category',
     'edit category': 'Edit category',
+    'select category': 'Select category',
     'add category': 'Add category',
     'enter category name': 'Enter category name',
     'are you sure you want to delete this category?':
@@ -748,6 +749,7 @@ export default {
     list: 'Lista',
     'delete category': 'Șterge categorie',
     'edit category': 'Editează categorie',
+    'select category': 'Alege o categorie',
     'add category': 'Adaugă categorie',
     'enter category name': 'Introduceți denumirea categoriei',
     'are you sure you want to delete this category?':
@@ -1488,6 +1490,7 @@ export default {
     list: 'List',
     'delete category': 'Delete category',
     'edit category': 'Edit category',
+    'select category': 'Выберите категорию',
     'add category': 'Add category',
     'enter category name': 'Enter category name',
     'are you sure you want to delete this category?':
