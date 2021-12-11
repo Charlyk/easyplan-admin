@@ -26,6 +26,21 @@ function updateCategory(req) {
   );
 }
 
+function deleteCategory(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+
+  const { categoryId } = req.query;
+
+  return axios.delete(`${updatedServerUrl()}/categories/${categoryId}`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+    },
+  });
+}
+
 export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
@@ -36,8 +51,14 @@ export default authorized(async (req, res) => {
       res.json(response);
       break;
     }
+    case 'DELETE': {
+      const response = await handler(deleteCategory, req, res);
+      if (response === null) return;
+      res.json(response);
+      break;
+    }
     default:
-      res.setHeader('Allow', ['PUT']);
+      res.setHeader('Allow', ['PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
