@@ -3,7 +3,9 @@ import sortBy from 'lodash/sortBy';
 import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
@@ -21,7 +23,10 @@ import {
   deleteClinic,
   updateClinic,
 } from 'middleware/api/clinic';
-import EASSelect from '../../../common/EASSelect';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,
@@ -39,9 +44,11 @@ const ConfirmationModal = dynamic(() =>
   import('app/components/common/modals/ConfirmationModal'),
 );
 
-const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
+const CompanyDetailsForm = ({ countries }) => {
   const router = useRouter();
   const toast = useContext(NotificationsContext);
+  const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const [
     {
       isSaving,

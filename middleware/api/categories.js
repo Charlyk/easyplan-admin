@@ -1,4 +1,4 @@
-import { post, put } from './request';
+import { post, put, del } from './request';
 
 /**
  * Change name for a category
@@ -13,6 +13,10 @@ export async function requestEditCategory(
   headers = null,
 ) {
   return put(`/api/categories/${categoryId}`, headers, { categoryName });
+}
+
+export async function requestDeleteCategory(categoryId, headers = null) {
+  return del(`/api/categories/${categoryId}`, headers);
 }
 
 /**

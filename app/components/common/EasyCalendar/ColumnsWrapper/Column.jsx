@@ -31,9 +31,6 @@ const Column = ({
   };
 
   const schedulesWithOffset = useMemo(() => {
-    if (column.disabled) {
-      return [];
-    }
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
     for (let schedule of schedules) {

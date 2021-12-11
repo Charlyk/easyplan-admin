@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import ClinicsModal from 'app/components/common/modals/ClinicsModal';
 import IconSuccess from 'app/components/icons/iconSuccess';
@@ -11,13 +12,19 @@ import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { updateClinic } from 'middleware/api/clinic';
 import { requestShareTags } from 'middleware/api/tags';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './ApplicationSettings.module.scss';
 import ClinicCabinets from './CliniCabinets';
 import ClinicTags from './ClinicTags';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
 
-const ApplicationSettings = ({ currentClinic: clinic, authToken }) => {
+const ApplicationSettings = () => {
   const router = useRouter();
+  const clinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(String(clinic.timeBeforeOnSite));

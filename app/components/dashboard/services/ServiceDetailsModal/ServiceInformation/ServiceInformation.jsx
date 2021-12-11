@@ -14,6 +14,7 @@ import IconPalette from 'app/components/icons/iconPalette';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import { availableCurrenciesSelector } from 'redux/selectors/appDataSelector';
+import { categoriesSelector } from 'redux/selectors/servicesSelector';
 import styles from './ServiceInformation.module.scss';
 
 const availableColors = [
@@ -46,6 +47,7 @@ const serviceTypes = [
 
 const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
   const currencies = useSelector(availableCurrenciesSelector);
+  const categories = useSelector(categoriesSelector);
   const paletteRef = useRef(null);
   const [colors, setColors] = useState(availableColors);
   const [showPicker, setShowPicker] = useState(false);
@@ -84,6 +86,14 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
       ...service,
       [fieldId]: value,
     });
+  };
+
+  const handleChangeCategory = (id) => {
+    const selectedCategory = categories.find((cat) => cat.id === id);
+    setService((prevState) => ({
+      ...prevState,
+      category: { ...selectedCategory },
+    }));
   };
 
   const handleSaveColor = (event) => {
@@ -169,6 +179,19 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
               />
             }
           />
+
+          <EASSelect
+            type='text'
+            rootClass={styles.simpleField}
+            label={textForKey('select category')}
+            labelId='category-select'
+            onChange={(event) => {
+              handleChangeCategory(event.target.value);
+            }}
+            value={service?.category?.id}
+            options={categories}
+          />
+
           <EASSelect
             type='text'
             rootClass={styles.simpleField}

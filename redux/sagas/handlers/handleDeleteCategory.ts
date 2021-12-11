@@ -3,16 +3,17 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
-  setServiceDetails,
-  fetchServiceDetails,
+  deleteCategory,
+  requestDeleteCategory,
 } from 'redux/slices/servicesListSlice';
-import { requestFetchServiceDetails } from '../requests';
+import { requestDeleteCategory as requestsRequestDeleteCategory } from '../requests';
 
-export function* handleFetchServiceDetails(action: PayloadAction<number>) {
+export function* handleDeleteCategory(action: PayloadAction<number>) {
   try {
-    const response: SagaReturnType<typeof requestFetchServiceDetails> =
-      yield call(requestFetchServiceDetails, action.payload);
-    yield put(setServiceDetails(response.data));
+    const response: SagaReturnType<typeof requestsRequestDeleteCategory> =
+      yield call(requestsRequestDeleteCategory, action.payload);
+
+    yield put(deleteCategory(response.data));
   } catch (error) {
     if (error.response != null) {
       const data = error.response?.data;
@@ -23,6 +24,6 @@ export function* handleFetchServiceDetails(action: PayloadAction<number>) {
   }
 }
 
-export function* serviceDetailsWatcher() {
-  yield takeLatest(fetchServiceDetails.type, handleFetchServiceDetails);
+export function* deleteCategoryWatcher() {
+  yield takeLatest(requestDeleteCategory.type, handleDeleteCategory);
 }
