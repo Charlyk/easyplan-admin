@@ -2,8 +2,6 @@ import { createSelector } from 'reselect';
 import { ReduxState } from '../types';
 
 export const servicesListSelector = (state: ReduxState) => state.servicesList;
-export const servicesListFromRoot = (state: ReduxState) =>
-  state.appData.currentClinic.services;
 
 export const isFetchingServicesSelector = createSelector(
   servicesListSelector,
@@ -38,9 +36,4 @@ export const isFetchingDetailsSelector = createSelector(
 export const detailsModalSelector = createSelector(
   servicesListSelector,
   (data) => data.detailsModal,
-);
-
-export const activeServicesFromRoot = createSelector(
-  servicesListFromRoot,
-  (data) => data.filter((service) => !service.deleted),
 );

@@ -37,7 +37,7 @@ import {
   activeClinicDoctorsSelector,
   clinicCabinetsSelector,
 } from 'redux/selectors/appDataSelector';
-import { activeServicesFromRoot } from 'redux/selectors/servicesSelector';
+import { clinicServicesSelector } from 'redux/selectors/appDataSelector';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
@@ -83,7 +83,7 @@ const AddAppointmentModal = ({
 }) => {
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
-  const activeServices = useSelector(activeServicesFromRoot);
+  const activeServices = useSelector(clinicServicesSelector);
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
