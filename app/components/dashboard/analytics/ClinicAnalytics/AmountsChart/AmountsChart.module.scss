@@ -1,7 +1,4 @@
 .amountsChartRoot {
-  max-width: unset !important;
-  flex-grow: 1 !important;
-
   :global(.chartTitle) {
     width: 100%;
     text-align: center;
@@ -18,10 +15,10 @@
       font-style: normal !important;
       font-weight: bold !important;
       font-size: 32px !important;
-      color: #3A83DC !important;
+      color: #3a83dc !important;
 
       .divider {
-        color: #34354C;
+        color: #34354c;
       }
 
       .debt {
