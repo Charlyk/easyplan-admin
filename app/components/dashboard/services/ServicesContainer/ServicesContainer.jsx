@@ -37,6 +37,9 @@ import {
 import {
   fetchServicesList,
   openDetailsModal,
+  setCategories as globalSetCategories,
+  requestDeleteCategory,
+  toggleServiceDeletion,
 } from 'redux/slices/servicesListSlice';
 import ServiceRow from '../ServiceRow';
 import styles from './ServicesContainer.module.scss';
@@ -175,8 +178,14 @@ const ServicesContainer = () => {
           };
         });
         localDispatch(setClinicServices(updatedServices));
+        dispatch(toggleServiceDeletion(deleteServiceModal.service.id));
       }, 300);
     }
+  };
+
+  const handleDeleteCategory = (category) => {
+    dispatch(requestDeleteCategory(category.id));
+    localDispatch(setCategory({ data: null, index: -1 }));
   };
 
   const handleCreateCategory = () => {
@@ -245,6 +254,7 @@ const ServicesContainer = () => {
         category.name.toLowerCase(),
       );
       localDispatch(setCategories(newCategories));
+      dispatch(globalSetCategories(newCategories));
       localDispatch(
         setCategory({
           data: data,
@@ -280,14 +290,16 @@ const ServicesContainer = () => {
       return clinicServices.length;
     }
     return (
-      clinicServices?.filter((item) => item.category.id === category.id)
+      clinicServices?.filter((item) => item?.category?.id === category?.id)
         .length ?? 0
     );
   };
 
   const filteredServices = sortBy(
     category.data != null && category.data.id !== 'all-services'
-      ? clinicServices.filter((item) => item.category.id === category.data.id)
+      ? clinicServices.filter(
+          (item) => item?.category?.id === category?.data?.id,
+        )
       : clinicServices,
     (service) => service.name.toLowerCase(),
   );
@@ -332,6 +344,8 @@ const ServicesContainer = () => {
           show={categoryModal.state !== categoryModalState.closed}
           onClose={handleCloseCategoryModal}
           onSaved={handleCategorySave}
+          destroyBtnText={textForKey('delete category')}
+          onDelete={handleDeleteCategory}
         />
       )}
       <div className={styles['services-root__content-wrapper']}>
