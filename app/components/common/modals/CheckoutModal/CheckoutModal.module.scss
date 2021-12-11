@@ -73,12 +73,24 @@
       }
 
       .detailsTableContainer {
+        height: calc(100% - 165px);
         width: 100%;
         margin-top: 1.5rem;
+        position: relative;
 
         .detailsTable {
           width: calc(100% - 0.25rem);
 
+          &Head {
+            width: 100%;
+          }
+
+          &Body {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
           .row {
             .cell {
               border-bottom: #ededed 1px solid;
