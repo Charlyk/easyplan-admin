@@ -1,18 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
-import NotificationsContext from 'app/context/notificationsContext';
-import { HeaderKeys, PasswordRegex } from 'app/utils/constants';
+import { PasswordRegex } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import { updateUserAccount } from 'middleware/api/auth';
+import { isUpdatingProfileSelector } from 'redux/selectors/appDataSelector';
+import { updateUserProfile } from 'redux/slices/appDataSlice';
 import styles from './SecuritySettings.module.scss';
 
-const SecuritySettings = ({ currentClinic, authToken }) => {
-  const router = useRouter();
-  const toast = useContext(NotificationsContext);
-  const [isLoading, setIsLoading] = useState(false);
+const SecuritySettings = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(isUpdatingProfileSelector);
   const [data, setData] = useState({
     oldPassword: '',
     password: '',
@@ -41,21 +40,7 @@ const SecuritySettings = ({ currentClinic, authToken }) => {
 
   const submitForm = async () => {
     if (!isFormValid()) return;
-
-    setIsLoading(true);
-    try {
-      await updateUserAccount(data, null, {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: currentClinic.id,
-        [HeaderKeys.subdomain]: currentClinic.domainName,
-      });
-      await router.replace(router.asPath);
-      toast.success(textForKey('Saved successfully'));
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    dispatch(updateUserProfile(data));
   };
 
   return (

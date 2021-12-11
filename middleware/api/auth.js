@@ -1,4 +1,3 @@
-import axios from 'axios';
 import imageToBase64 from 'app/utils/imageToBase64';
 import { del, get, post, put } from './request';
 
@@ -72,17 +71,12 @@ export async function getCurrentUser(headers = null) {
 
 /**
  * Update current user account
- * @param {Object} body
- * @param {File?} avatar
+ * @param {UpdateProfileRequest} body
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updateUserAccount(body, avatar, headers = null) {
-  const updatedBody = { ...body };
-  if (avatar != null) {
-    updatedBody.avatar = await imageToBase64(avatar);
-  }
-  return axios.put('/api/auth/update-account', updatedBody, { headers });
+export async function updateUserAccount(body, headers = null) {
+  return put('/api/auth/update-account', headers, body);
 }
 
 /**

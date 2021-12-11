@@ -1,31 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
 import UploadAvatar from 'app/components/common/UploadAvatar';
 import NotificationsContext from 'app/context/notificationsContext';
-import { EmailRegex, HeaderKeys, PasswordRegex } from 'app/utils/constants';
+import { EmailRegex, PasswordRegex } from 'app/utils/constants';
+import imageToBase64 from 'app/utils/imageToBase64';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import urlToLambda from 'app/utils/urlToLambda';
-import { updateUserAccount } from 'middleware/api/auth';
 import {
-  authTokenSelector,
-  currentClinicSelector,
   currentUserSelector,
+  isUpdatingProfileSelector,
 } from 'redux/selectors/appDataSelector';
+import { updateUserProfile } from 'redux/slices/appDataSlice';
 import EASModal from '../EASModal';
 import styles from './EditProfileModal.module.scss';
 
 const EditProfileModal = ({ open, onClose }) => {
-  const router = useRouter();
-  const authToken = useSelector(authTokenSelector);
+  const dispatch = useDispatch();
+  const isLoading = useSelector(isUpdatingProfileSelector);
   const currentUser = useSelector(currentUserSelector);
-  const currentClinic = useSelector(currentClinicSelector);
   const toast = useContext(NotificationsContext);
-  const [isLoading, setIsLoading] = useState(false);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({
     avatarUrl: currentUser?.avatar,
@@ -87,30 +84,22 @@ const EditProfileModal = ({ open, onClose }) => {
 
   const submitForm = async (event) => {
     event?.preventDefault();
-    setIsLoading(true);
-    try {
-      const requestBody = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        username: data.email,
-        oldPassword: data.oldPassword,
-        phoneNumber: data.phoneNumber,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      };
-      await updateUserAccount(requestBody, data.avatarUrl, {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: currentClinic.id,
-        [HeaderKeys.subdomain]: currentClinic.domainName,
-      });
-      toast.success(textForKey('Saved successfully'));
-      onClose();
-      await router.replace(router.asPath);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    const avatar =
+      data.avatarFile != null ? await imageToBase64(data.avatarFile) : null;
+
+    const requestBody = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.email,
+      oldPassword: data.oldPassword,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+      avatar,
+    };
+    dispatch(updateUserProfile(requestBody));
+    toast.success(textForKey('Saved successfully'));
+    onClose();
   };
 
   const isFormValid = () => {

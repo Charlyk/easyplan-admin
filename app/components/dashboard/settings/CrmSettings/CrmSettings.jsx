@@ -4,12 +4,19 @@ import Tab from '@material-ui/core/Tab';
 import TabContext from '@material-ui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
+import { useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
+import {
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
 import CrmColumns from './CrmColumns';
 import styles from './CrmSettings.module.scss';
 import Integrations from './Integrations';
 
-const CrmSettings = ({ currentUser, currentClinic }) => {
+const CrmSettings = () => {
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const [currentTab, setCurrentTab] = useState('0');
 
   const handleTabChange = (event, newValue) => {
