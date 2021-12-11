@@ -15,7 +15,7 @@ const servicesListSlice = createSlice({
     fetchServiceDetails(state, _action: PayloadAction<number>) {
       state.isFetchingDetails = true;
     },
-    fetchDeletedCategory(state, _action: PayloadAction<number>) {
+    requestDeleteCategory(state, _action: PayloadAction<number>) {
       state;
     },
     setServicesData(
@@ -90,7 +90,7 @@ export const {
   fetchServicesList,
   fetchServiceDetails,
   setError,
-  fetchDeletedCategory,
+  requestDeleteCategory,
   addCategory,
   setServices,
   toggleServiceDeletion,

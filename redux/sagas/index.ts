@@ -4,7 +4,7 @@ import {
   scheduleDetailsWatcher,
   clinicServicesWatcher,
   serviceDetailsWatcher,
-  deleteCategoriesWatcher,
+  deleteCategoryWatcher,
   updateProfileWatcher,
 } from './handlers';
 
@@ -14,7 +14,7 @@ export default function* rootSaga() {
     clinicUsersWatcher(),
     clinicServicesWatcher(),
     serviceDetailsWatcher(),
-    deleteCategoriesWatcher(),
+    deleteCategoryWatcher(),
     updateProfileWatcher(),
   ]);
 }

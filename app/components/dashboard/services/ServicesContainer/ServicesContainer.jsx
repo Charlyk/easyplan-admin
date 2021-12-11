@@ -38,7 +38,7 @@ import {
   fetchServicesList,
   openDetailsModal,
   setCategories as globalSetCategories,
-  fetchDeletedCategory as deleteCategory,
+  requestDeleteCategory,
   toggleServiceDeletion,
 } from 'redux/slices/servicesListSlice';
 import ServiceRow from '../ServiceRow';
@@ -184,7 +184,7 @@ const ServicesContainer = () => {
   };
 
   const handleDeleteCategory = (category) => {
-    dispatch(deleteCategory(category.id));
+    dispatch(requestDeleteCategory(category.id));
     localDispatch(setCategory({ data: null, index: -1 }));
   };
 

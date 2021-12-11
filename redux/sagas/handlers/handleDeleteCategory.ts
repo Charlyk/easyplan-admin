@@ -4,16 +4,14 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
   deleteCategory,
-  fetchDeletedCategory,
+  requestDeleteCategory,
 } from 'redux/slices/servicesListSlice';
-import { requestDeleteCategory } from '../requests';
+import { requestDeleteCategory as requestsRequestDeleteCategory } from '../requests';
 
-export function* handleDeleteCategories(action: PayloadAction<number>) {
+export function* handleDeleteCategory(action: PayloadAction<number>) {
   try {
-    const response: SagaReturnType<typeof requestDeleteCategory> = yield call(
-      requestDeleteCategory,
-      action.payload,
-    );
+    const response: SagaReturnType<typeof requestsRequestDeleteCategory> =
+      yield call(requestsRequestDeleteCategory, action.payload);
 
     yield put(deleteCategory(response.data));
   } catch (error) {
@@ -26,6 +24,6 @@ export function* handleDeleteCategories(action: PayloadAction<number>) {
   }
 }
 
-export function* deleteCategoriesWatcher() {
-  yield takeLatest(fetchDeletedCategory.type, handleDeleteCategories);
+export function* deleteCategoryWatcher() {
+  yield takeLatest(requestDeleteCategory.type, handleDeleteCategory);
 }
