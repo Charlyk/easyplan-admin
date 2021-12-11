@@ -87,10 +87,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     childrenProps = { ...childrenProps, currentUser, currentClinic, authToken };
   }
 
-  console.log('The current user is:', currentUser);
-
-  console.log('The current clinic is:', currentClinic);
-
   useEffect(() => {
     redirectIfOnGeneralHost(currentUser, router);
   }, [currentUser, router]);
