@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import PropTypes from 'prop-types';
-import moment from "moment-timezone";
+import React, { useMemo } from 'react';
+import Typography from '@material-ui/core/Typography';
 import SmsIcon from '@material-ui/icons/Sms';
-import Typography from "@material-ui/core/Typography";
-import { textForKey } from "../../../../../../utils/localization";
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import { textForKey } from 'app/utils/localization';
 import styles from './SMSMessageItem.module.scss';
 
 const SMSMessageItem = ({ message }) => {
@@ -12,7 +12,7 @@ const SMSMessageItem = ({ message }) => {
     if (sentBy != null) {
       return `${sentBy.firstName} ${sentBy.lastName}`;
     }
-    return textForKey('System')
+    return textForKey('System');
   }, [sentBy]);
 
   return (
@@ -20,8 +20,7 @@ const SMSMessageItem = ({ message }) => {
       <SmsIcon />
       <div className={styles.dataWrapper}>
         <Typography className={styles.dateText}>
-          {moment(created).format('DD.MM.YYYY HH:mm')}{' '}
-          {sentByName}
+          {moment(created).format('DD.MM.YYYY HH:mm')} {sentByName}
         </Typography>
         <Typography className={styles.messageText}>
           {smsMessage.messageText}

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   isLoading: false,
@@ -77,8 +77,6 @@ export const {
   setRowsPerPage,
   setSearchQuery,
   setShowImportModal,
-  setIsUploading,
-  setShowUploadModal,
   setShowCreateModal,
 } = patientsListSlice.actions;
 

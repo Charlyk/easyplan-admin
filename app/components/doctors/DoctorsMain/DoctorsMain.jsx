@@ -1,32 +1,54 @@
 import React, { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
+import Box from '@material-ui/core/Box';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from "next/router";
-import { usePubNub } from "pubnub-react";
-import useSWR from "swr";
-import Head from "next/head";
-import { signOut } from "../../../../middleware/api/auth";
-import { environment, isDev } from "../../../../eas.config";
-import { triggerUserLogout } from '../../../../redux/actions/actions';
-import { userClinicAccessChangeSelector } from "../../../../redux/selectors/clinicDataSelector";
-import { setClinic } from "../../../../redux/actions/clinicActions";
-import { APP_DATA_API } from "../../../utils/constants";
-import { textForKey } from '../../../utils/localization';
-import { handleRemoteMessage } from "../../../utils/pubnubUtils";
-import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
-import IconArrowDown from '../../icons/iconArrowDown';
-import PageHeader from '../../common/MainComponent/PageHeader/PageHeader';
+import PageHeader from 'app/components/common/MainComponent/PageHeader/PageHeader';
+import IconArrowDown from 'app/components/icons/iconArrowDown';
+import { textForKey } from 'app/utils/localization';
+import { handleRemoteMessage } from 'app/utils/pubnubUtils';
+import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
+import { environment, isDev } from 'eas.config';
+import { signOut } from 'middleware/api/auth';
+import {
+  setPatientNoteModal,
+  setPatientXRayModal,
+  triggerUserLogout,
+} from 'redux/actions/actions';
+import { setClinic } from 'redux/actions/clinicActions';
+import {
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
+import {
+  patientNoteModalSelector,
+  patientXRayModalSelector,
+} from 'redux/selectors/modalsSelector';
 import styles from './DoctorsMain.module.scss';
 
-const ClinicSelector = dynamic(() => import('../../common/ClinicSelector'));
-const EditProfileModal = dynamic(() => import('../../common/modals/EditProfileModal'));
+const AddXRay = dynamic(() =>
+  import('app/components/dashboard/patients/AddXRay'),
+);
+const AddNote = dynamic(() => import('app/components/common/modals/AddNote'));
 
-const DoctorsMain = ({ children, pageTitle, authToken }) => {
-  const { data } = useSWR(APP_DATA_API);
-  const { currentUser, currentClinic } = data;
+const ClinicSelector = dynamic(() =>
+  import('app/components/common/ClinicSelector'),
+);
+const EditProfileModal = dynamic(() =>
+  import('app/components/common/modals/EditProfileModal'),
+);
+
+const DoctorsMain = ({ children, pageTitle }) => {
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
+  const patientXRayModal = useSelector(patientXRayModalSelector);
+  const patientNoteModal = useSelector(patientNoteModalSelector);
   const dispatch = useDispatch();
   const pubnub = usePubNub();
   const router = useRouter();
@@ -38,7 +60,7 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
   );
 
   useEffect(() => {
-    redirectIfOnGeneralHost(currentUser, router)
+    redirectIfOnGeneralHost(currentUser, router);
     if (currentUser != null) {
       pubnub.setUUID(currentUser.id);
     }
@@ -75,9 +97,9 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
     }
     try {
       await signOut();
-      await router.replace(router.asPath)
+      await router.replace(router.asPath);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -97,7 +119,7 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
     const [_, domain, location] = window.location.host.split('.');
     const { protocol } = window.location;
     const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}`;
-    window.open(clinicUrl, '_blank')
+    window.open(clinicUrl, '_blank');
     handleCompanyClose();
   };
 
@@ -117,6 +139,14 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
     setIsEditingProfile(false);
   };
 
+  const handleClosePatientXRayModal = () => {
+    dispatch(setPatientXRayModal({ open: false, patientId: null }));
+  };
+
+  const handleClosePatientNoteModal = () => {
+    dispatch(setPatientNoteModal({ open: false }));
+  };
+
   return (
     <div className={styles.doctorsMainRoot}>
       <Head>
@@ -124,58 +154,72 @@ const DoctorsMain = ({ children, pageTitle, authToken }) => {
           {currentClinic?.clinicName || 'EasyPlan.pro'} - {pageTitle || ''}
         </title>
       </Head>
-      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      <EditProfileModal
-        open={isEditingProfile}
-        currentClinic={currentClinic}
-        authToken={authToken}
-        currentUser={currentUser}
-        onClose={handleCloseEditProfile}
-      />
-      <div className={styles.doctorPageHeaderRoot}>
-        <PageHeader
-          isDoctor
-          showLogo
-          user={currentUser}
-          currentClinic={currentClinic}
-          onEditProfile={handleEditProfileClick}
-          onLogout={handleStartLogout}
-          titleComponent={
-            <ClickAwayListener onClickAway={handleCompanyClose}>
-              <div
-                role='button'
-                tabIndex={0}
-                className={styles.companySelectorContainer}
-                ref={buttonRef}
-                onClick={handleCompanyOpen}
-              >
-                <span className={styles.clinicName}>
-                  {selectedClinic?.clinicName || textForKey('Create clinic')}
-                </span>
-                <IconArrowDown fill='#34344E'/>
-                <ClinicSelector
-                  open={isSelectorOpen}
-                  anchorEl={buttonRef}
-                  currentUser={currentUser}
-                  onCreate={handleCreateClinic}
-                  onClose={handleCompanyClose}
-                  onChange={handleCompanyChange}
-                />
-              </div>
-            </ClickAwayListener>
-          }
-        />
-      </div>
-      <div className={styles.doctorDataContainer}>
-        {React.cloneElement(
-          children,
-          {
-            ...children.props,
-            currentUser,
-            currentClinic,
-          }
-        )}
-      </div>
+      {currentUser != null && currentClinic != null && (
+        <>
+          {isDev && <Typography className='develop-indicator'>Dev</Typography>}
+          {isEditingProfile && (
+            <EditProfileModal
+              open={isEditingProfile}
+              currentClinic={currentClinic}
+              currentUser={currentUser}
+              onClose={handleCloseEditProfile}
+            />
+          )}
+          {patientXRayModal.open && (
+            <AddXRay
+              {...patientXRayModal}
+              currentClinic={currentClinic}
+              onClose={handleClosePatientXRayModal}
+            />
+          )}
+          {patientNoteModal.open && (
+            <AddNote
+              {...patientNoteModal}
+              onClose={handleClosePatientNoteModal}
+            />
+          )}
+          <div className={styles.doctorPageHeaderRoot}>
+            <PageHeader
+              isDoctor
+              showLogo
+              user={currentUser}
+              currentClinic={currentClinic}
+              onEditProfile={handleEditProfileClick}
+              onLogout={handleStartLogout}
+              titleComponent={
+                <ClickAwayListener onClickAway={handleCompanyClose}>
+                  <Box
+                    className={styles.companySelectorContainer}
+                    ref={buttonRef}
+                    onClick={handleCompanyOpen}
+                  >
+                    <span className={styles.clinicName}>
+                      {selectedClinic?.clinicName ||
+                        textForKey('Create clinic')}
+                    </span>
+                    <IconArrowDown fill='#34344E' />
+                    <ClinicSelector
+                      open={isSelectorOpen}
+                      anchorEl={buttonRef}
+                      currentUser={currentUser}
+                      onCreate={handleCreateClinic}
+                      onClose={handleCompanyClose}
+                      onChange={handleCompanyChange}
+                    />
+                  </Box>
+                </ClickAwayListener>
+              }
+            />
+          </div>
+          <div className={styles.doctorDataContainer}>
+            {React.cloneElement(children, {
+              ...children.props,
+              currentUser,
+              currentClinic,
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 };

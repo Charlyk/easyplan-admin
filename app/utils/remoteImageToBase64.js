@@ -1,25 +1,34 @@
-import axios from "axios";
+import axios from 'axios';
 
 const remoteImageToBase64 = (imageUrl) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      const parts = imageUrl.split('.')
+      const parts = imageUrl.split('.');
       let extension = parts[parts.length - 1];
-      if (extension === 'svg') extension = `${extension}+xml`
-      const response = await axios.get(`/api/files?fileName=${encodeURI(imageUrl)}`, { responseType: "arraybuffer" });
-      const buffer = response.data;
-      const bytes = new Uint8Array(buffer);
-      const imageData = `data:image/${extension};base64,` + encode(bytes);
-      resolve(imageData);
+      if (extension === 'svg') extension = `${extension}+xml`;
+      axios
+        .get(`/api/files?fileName=${encodeURI(imageUrl)}`, {
+          responseType: 'arraybuffer',
+        })
+        .then((response) => {
+          const buffer = response.data;
+          const bytes = new Uint8Array(buffer);
+          const imageData = `data:image/${extension};base64,` + encode(bytes);
+          resolve(imageData);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     } catch (error) {
       reject(error);
     }
   });
-}
+};
 
-function encode (input) {
-  const keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  let output = "";
+function encode(input) {
+  const keyStr =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  let output = '';
   let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
   let i = 0;
 
@@ -38,8 +47,11 @@ function encode (input) {
     } else if (isNaN(chr3)) {
       enc4 = 64;
     }
-    output += keyStr.charAt(enc1) + keyStr.charAt(enc2) +
-      keyStr.charAt(enc3) + keyStr.charAt(enc4);
+    output +=
+      keyStr.charAt(enc1) +
+      keyStr.charAt(enc2) +
+      keyStr.charAt(enc3) +
+      keyStr.charAt(enc4);
   }
   return output;
 }

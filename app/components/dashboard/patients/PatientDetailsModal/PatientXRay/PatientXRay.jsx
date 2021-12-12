@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useContext, useEffect, useState } from 'react';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import sortBy from 'lodash/sortBy';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import { toast } from "react-toastify";
+import Lightbox from 'react-awesome-lightbox';
 import { useSelector } from 'react-redux';
-import Lightbox from "react-awesome-lightbox";
-import IconPlus from '../../../../icons/iconPlus';
-import { updateXRaySelector } from '../../../../../../redux/selectors/rootSelector';
-import { textForKey } from '../../../../../utils/localization';
-import urlToAWS from "../../../../../utils/urlToAWS";
+import IconPlus from 'app/components/icons/iconPlus';
+import NotificationsContext from 'app/context/notificationsContext';
+import { textForKey } from 'app/utils/localization';
+import urlToAWS from 'app/utils/urlToAWS';
 import {
   deletePatientXRayImage,
-  getPatientXRayImages
-} from "../../../../../../middleware/api/patients";
+  getPatientXRayImages,
+} from 'middleware/api/patients';
+import { updateXRaySelector } from 'redux/selectors/rootSelector';
+import styles from './PatientXRay.module.scss';
 import XRayPhase from './XRayPhase';
-import styles from './PatientXRay.module.scss'
 
-const ConfirmationModal = dynamic(() => import("../../../../common/modals/ConfirmationModal"));
+const ConfirmationModal = dynamic(() =>
+  import('app/components/common/modals/ConfirmationModal'),
+);
 
 const ExpandedPhase = {
   initial: 'Initial',
@@ -28,6 +30,7 @@ const ExpandedPhase = {
 };
 
 const PatientXRay = ({ patient, onAddXRay }) => {
+  const toast = useContext(NotificationsContext);
   const updateXRay = useSelector(updateXRaySelector);
   const [isDeleting, setIsDeleting] = useState(false);
   const [imageToView, setImageToView] = useState(null);
@@ -43,8 +46,8 @@ const PatientXRay = ({ patient, onAddXRay }) => {
 
   const getItemsOfType = (items, type) => {
     return sortBy(
-      items?.filter(item => item.imageType === type) || [],
-      item => item.created,
+      items?.filter((item) => item.imageType === type) || [],
+      (item) => item.created,
     ).reverse();
   };
 
@@ -69,11 +72,11 @@ const PatientXRay = ({ patient, onAddXRay }) => {
 
   const handleDeleteXRayImage = (image) => {
     setDeleteModal({ show: true, image });
-  }
+  };
 
   const closeConfirmation = () => {
     setDeleteModal({ show: false, image: null });
-  }
+  };
 
   const handleImageClick = (image) => {
     setImageToView(image);
@@ -81,7 +84,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
 
   const handleCloseImageView = () => {
     setImageToView(null);
-  }
+  };
 
   const deleteXRayImage = async () => {
     if (deleteModal.image == null) {
@@ -103,7 +106,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
     } finally {
       setIsDeleting(false);
     }
-  }
+  };
 
   return (
     <div className={styles.patientXRay}>
@@ -158,7 +161,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
         )}
         {isFetching && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
       </div>
@@ -174,7 +177,7 @@ const PatientXRay = ({ patient, onAddXRay }) => {
           onClick={onAddXRay}
         >
           {textForKey('Add image')}
-          <IconPlus fill={null}/>
+          <IconPlus fill={null} />
         </Button>
       </div>
     </div>

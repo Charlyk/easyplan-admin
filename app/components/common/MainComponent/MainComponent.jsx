@@ -1,73 +1,77 @@
-import React, { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useMemo } from 'react';
+import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
-import Typography from "@material-ui/core/Typography";
-import { usePubNub } from 'pubnub-react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { toast } from "react-toastify";
+import NotificationsContext from 'app/context/notificationsContext';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import paths from 'app/utils/paths';
+import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
+import { isDev } from 'eas.config';
+import { signOut } from 'middleware/api/auth';
 import {
-  setAppointmentModal,
   setPatientDetails,
   setPatientNoteModal,
   setPatientXRayModal,
   setPaymentModal,
   toggleImportModal,
   triggerUserLogout,
-} from '../../../../redux/actions/actions';
+} from 'redux/actions/actions';
+import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
 import {
-  appointmentModalSelector,
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
+import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
+import {
+  newReminderSelector,
+  updatedReminderSelector,
+} from 'redux/selectors/crmSelector';
+import { isExchangeRateModalOpenSelector } from 'redux/selectors/exchangeRatesModalSelector';
+import {
   patientNoteModalSelector,
   patientXRayModalSelector,
-  paymentModalSelector
-} from '../../../../redux/selectors/modalsSelector';
+  paymentModalSelector,
+} from 'redux/selectors/modalsSelector';
 import {
   isImportModalOpenSelector,
   patientDetailsSelector,
-} from '../../../../redux/selectors/rootSelector';
-import paths from '../../../utils/paths';
-import { signOut } from "../../../../middleware/api/auth";
-import { isExchangeRateModalOpenSelector } from "../../../../redux/selectors/exchangeRatesModalSelector";
-import { setIsExchangeRatesModalOpen } from "../../../../redux/actions/exchangeRatesActions";
-import { newReminderSelector, updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
-import { userClinicAccessChangeSelector } from "../../../../redux/selectors/clinicDataSelector";
-import { setClinic } from "../../../../redux/actions/clinicActions";
-import { handleRemoteMessage } from "../../../utils/pubnubUtils";
-import { environment, isDev } from "../../../../eas.config";
-import redirectIfOnGeneralHost from "../../../utils/redirectIfOnGeneralHost";
-import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
-import { APP_DATA_API } from "../../../utils/constants";
-import ReminderNotification from "../ReminderNotification";
+} from 'redux/selectors/rootSelector';
+import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';
 
-const AddAppointmentModal = dynamic(() => import('../../dashboard/calendar/modals/AddAppointmentModal'));
-const PatientDetailsModal = dynamic(() => import('../../dashboard/patients/PatientDetailsModal'));
-const AddXRay = dynamic(() => import("../../dashboard/patients/AddXRay"));
-const AddNote = dynamic(() => import("../modals/AddNote"));
-const DataMigrationModal = dynamic(() => import('../modals/DataMigrationModal'));
-const ExchangeRatesModal = dynamic(() => import('../modals/ExchangeRatesModal'));
+const AddAppointmentModal = dynamic(() =>
+  import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
+);
+const PatientDetailsModal = dynamic(() =>
+  import('app/components/dashboard/patients/PatientDetailsModal'),
+);
+const AddXRay = dynamic(() =>
+  import('app/components/dashboard/patients/AddXRay'),
+);
+const AddNote = dynamic(() => import('../modals/AddNote'));
+const DataMigrationModal = dynamic(() =>
+  import('../modals/DataMigrationModal'),
+);
+const ExchangeRatesModal = dynamic(() =>
+  import('../modals/ExchangeRatesModal'),
+);
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 const MainMenu = dynamic(() => import('./MainMenu'));
 const PageHeader = dynamic(() => import('./PageHeader'));
 
-const MainComponent = (
-  {
-    children,
-    currentPath,
-    provideAppData = true,
-    authToken
-  }
-) => {
-  const { data, error } = useSWR(APP_DATA_API);
-  const { currentUser, currentClinic } = data;
-
-  if (error) return 'An error has occurred';
-  if (!data) return 'Loading...';
-
-  const pubnub = usePubNub();
+const MainComponent = ({ children, currentPath, provideAppData = true }) => {
+  const toast = useContext(NotificationsContext);
   const router = useRouter();
   const dispatch = useDispatch();
+  const currentClinic = useSelector(currentClinicSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const authToken = useSelector(authTokenSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
   const paymentModal = useSelector(paymentModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
@@ -85,35 +89,16 @@ const MainComponent = (
 
   useEffect(() => {
     redirectIfOnGeneralHost(currentUser, router);
-    if (currentUser != null) {
-      pubnub.setUUID(currentUser.id);
-    }
-
-    if (currentClinic != null) {
-      const { id } = currentClinic;
-      dispatch(setClinic(currentClinic));
-      pubnub.subscribe({
-        channels: [`${id}-${environment}-clinic-pubnub-channel`],
-      });
-      pubnub.addListener({ message: handlePubnubMessageReceived });
-      return () => {
-        pubnub.unsubscribe({
-          channels: [`${id}-${environment}-clinic-pubnub-channel`],
-        });
-      };
-    } else {
-      return () => {
-        pubnub.unsubscribeAll();
-      }
-    }
-  }, [currentUser, currentClinic]);
+  }, [currentUser, router]);
 
   useEffect(() => {
     if (newReminder == null || newReminder.assignee.id !== currentUser.id) {
       return;
     }
 
-    toast(<ReminderNotification reminder={newReminder}/>, { toastId: newReminder.id });
+    toast.show(<ReminderNotification reminder={newReminder} />, {
+      toastId: newReminder.id,
+    });
   }, [newReminder, currentUser]);
 
   useEffect(() => {
@@ -124,7 +109,9 @@ const MainComponent = (
     ) {
       return;
     }
-    toast(<ReminderNotification isUpdate reminder={updatedReminder}/>, { toastId: updatedReminder.id });
+    toast.show(<ReminderNotification isUpdate reminder={updatedReminder} />, {
+      toastId: updatedReminder.id,
+    });
   }, [updatedReminder, currentUser]);
 
   useEffect(() => {
@@ -144,14 +131,10 @@ const MainComponent = (
     }
     try {
       await signOut();
-      await router.replace(router.asPath)
+      await router.replace(router.asPath);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  };
-
-  const handlePubnubMessageReceived = ({ message }) => {
-    dispatch(handleRemoteMessage(message));
   };
 
   const pageTitle = useMemo(() => {
@@ -163,16 +146,16 @@ const MainComponent = (
   };
 
   const handleCreateClinic = async () => {
-    await router.push('/create-clinic?redirect=0')
+    await router.push('/create-clinic?redirect=0');
   };
 
   const handleAppointmentModalClose = () => {
-    dispatch(setAppointmentModal({ open: false }));
+    dispatch(closeAppointmentModal());
   };
 
   const handleClosePatientDetails = () => {
     dispatch(
-      setPatientDetails({ show: false, patientId: null, onDelete: () => null }),
+      setPatientDetails({ show: false, patientId: null, canDelete: false }),
     );
   };
 
@@ -206,92 +189,96 @@ const MainComponent = (
 
   return (
     <div className={styles.mainPage} id='main-page'>
-      {isDev && <Typography className='develop-indicator'>Dev</Typography>}
-      {patientNoteModal.open && (
-        <AddNote
-          {...patientNoteModal}
-          onClose={handleClosePatientNoteModal}
+      <Head>
+        <title>
+          {currentClinic?.clinicName} - {pageTitle}
+        </title>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width'
         />
-      )}
-      {patientXRayModal.open && (
-        <AddXRay
-          {...patientXRayModal}
-          currentClinic={currentClinic}
-          authToken={authToken}
-          onClose={handleClosePatientXRayModal}
-        />
-      )}
-      {isExchangeRatesModalOpen && (
-        <ExchangeRatesModal
-          currentClinic={currentClinic}
-          currentUser={currentUser}
-          open={isExchangeRatesModalOpen}
-          onClose={handleCloseExchangeRateModal}
-        />
-      )}
-      {patientDetails.patientId != null && (
-        <PatientDetailsModal
-          {...patientDetails}
-          currentClinic={currentClinic}
-          currentUser={currentUser}
-          authToken={authToken}
-          onClose={handleClosePatientDetails}
-        />
-      )}
-      {isImportModalOpen && (
-        <DataMigrationModal
-          authToken={authToken}
-          currentClinic={currentClinic}
-          show={isImportModalOpen}
-          onClose={handleCloseImportModal}
-        />
-      )}
-      {appointmentModal?.open && (
-        <AddAppointmentModal
-          currentClinic={currentClinic}
-          onClose={handleAppointmentModalClose}
-          schedule={appointmentModal?.schedule}
-          open={appointmentModal?.open}
-          doctor={appointmentModal?.doctor}
-          date={appointmentModal?.date}
-          patient={appointmentModal?.patient}
-          startHour={appointmentModal?.startHour}
-          endHour={appointmentModal?.endHour}
-        />
-      )}
-      {paymentModal.open && (
-        <CheckoutModal
-          {...paymentModal}
-          currentUser={currentUser}
-          currentClinic={currentClinic}
-          onClose={handleClosePaymentModal}
-        />
-      )}
+      </Head>
       {currentUser != null && currentClinic != null && (
-        <MainMenu
-          currentClinic={currentClinic}
-          currentUser={currentUser}
-          currentPath={currentPath}
-          onCreateClinic={handleCreateClinic}
-        />
-      )}
-      {currentUser != null && (
-        <div className={styles.dataContainer}>
-          <PageHeader
+        <>
+          {patientNoteModal.open && (
+            <AddNote
+              {...patientNoteModal}
+              onClose={handleClosePatientNoteModal}
+            />
+          )}
+          {patientXRayModal.open && (
+            <AddXRay
+              {...patientXRayModal}
+              currentClinic={currentClinic}
+              authToken={authToken}
+              onClose={handleClosePatientXRayModal}
+            />
+          )}
+          {isExchangeRatesModalOpen && (
+            <ExchangeRatesModal
+              currentClinic={currentClinic}
+              currentUser={currentUser}
+              open={isExchangeRatesModalOpen}
+              onClose={handleCloseExchangeRateModal}
+            />
+          )}
+          {patientDetails.patientId != null && (
+            <PatientDetailsModal
+              {...patientDetails}
+              currentClinic={currentClinic}
+              currentUser={currentUser}
+              authToken={authToken}
+              onClose={handleClosePatientDetails}
+            />
+          )}
+          {isImportModalOpen && (
+            <DataMigrationModal
+              authToken={authToken}
+              currentClinic={currentClinic}
+              show={isImportModalOpen}
+              onClose={handleCloseImportModal}
+            />
+          )}
+          {appointmentModal?.open && (
+            <AddAppointmentModal
+              currentClinic={currentClinic}
+              onClose={handleAppointmentModalClose}
+              schedule={appointmentModal?.schedule}
+              open={appointmentModal?.open}
+              doctor={appointmentModal?.doctor}
+              date={appointmentModal?.date}
+              patient={appointmentModal?.patient}
+              startHour={appointmentModal?.startHour}
+              endHour={appointmentModal?.endHour}
+              cabinet={appointmentModal?.cabinet}
+            />
+          )}
+          {paymentModal.open && (
+            <CheckoutModal
+              {...paymentModal}
+              currentUser={currentUser}
+              currentClinic={currentClinic}
+              onClose={handleClosePaymentModal}
+            />
+          )}
+          <MainMenu
             currentClinic={currentClinic}
-            title={pageTitle}
-            user={currentUser}
-            onLogout={handleStartLogout}
+            currentUser={currentUser}
+            currentPath={currentPath}
+            onCreateClinic={handleCreateClinic}
           />
-          <div className={styles.data}>
-            {currentClinic != null && (
-              React.cloneElement(
-                children,
-                childrenProps,
-              )
-            )}
+          <div className={styles.dataContainer}>
+            <PageHeader
+              currentClinic={currentClinic}
+              title={pageTitle}
+              user={currentUser}
+              onLogout={handleStartLogout}
+            />
+            <div className={styles.data}>
+              {React.cloneElement(children, childrenProps)}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

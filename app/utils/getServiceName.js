@@ -1,4 +1,4 @@
-import { textForKey } from "./localization";
+import { textForKey } from './localization';
 
 const getServiceName = (service) => {
   let name = service.name;

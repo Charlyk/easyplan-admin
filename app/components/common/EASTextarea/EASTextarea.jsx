@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { TextField } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import styles from './EASTextarea.module.scss';
-import { TextField } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import clsx from "clsx";
 
-const EASTextarea = ({ fieldLabel, disabled, containerClass, placeholder, value, error, type, helperText, maxRows, rows, onChange }) => {
+const EASTextarea = ({
+  fieldLabel,
+  disabled,
+  containerClass,
+  placeholder,
+  value,
+  error,
+  type,
+  helperText,
+  maxRows,
+  rows,
+  onChange,
+}) => {
   const [focused, setFocused] = useState(false);
 
   const handleFocusChange = (isFocused) => {
@@ -13,12 +25,14 @@ const EASTextarea = ({ fieldLabel, disabled, containerClass, placeholder, value,
 
   const handleValueChange = (event) => {
     onChange?.(event.target.value);
-  }
+  };
 
   return (
     <div className={clsx(styles.textareaRoot, containerClass)}>
       {fieldLabel && (
-        <Typography className={clsx(styles.formLabel, { [styles.focused]: focused })}>
+        <Typography
+          className={clsx(styles.formLabel, { [styles.focused]: focused })}
+        >
           {fieldLabel}
         </Typography>
       )}
@@ -29,18 +43,18 @@ const EASTextarea = ({ fieldLabel, disabled, containerClass, placeholder, value,
         error={error}
         type={type}
         value={value}
-        rowsMax={maxRows}
-        rows={rows}
+        maxRows={maxRows}
+        minRows={rows}
         helperText={helperText}
         onFocus={() => handleFocusChange(true)}
         onBlur={() => handleFocusChange(false)}
-        variant="outlined"
+        variant='outlined'
         onChange={handleValueChange}
         FormHelperTextProps={{
           classes: {
             root: styles.helperText,
             error: clsx(styles.helperText, styles.error),
-          }
+          },
         }}
         InputProps={{
           classes: {
@@ -49,14 +63,14 @@ const EASTextarea = ({ fieldLabel, disabled, containerClass, placeholder, value,
             notchedOutline: styles.focusedInput,
             focused: styles.focusedField,
             inputMultiline: styles.multilineInput,
-          }
+          },
         }}
         classes={{
           root: styles.fieldRoot,
         }}
       />
     </div>
-  )
+  );
 };
 
 export default EASTextarea;

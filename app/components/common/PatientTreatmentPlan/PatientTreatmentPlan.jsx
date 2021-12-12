@@ -1,35 +1,34 @@
-import React, { useEffect, useMemo, useReducer } from "react";
+import React, { useContext, useEffect, useMemo, useReducer } from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import isEqualWith from 'lodash/isEqualWith';
+import remove from 'lodash/remove';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import cloneDeep from "lodash/cloneDeep";
-import remove from "lodash/remove";
-import isEqualWith from 'lodash/isEqualWith';
-import { toast } from "react-toastify";
-import { textForKey } from "../../../utils/localization";
-import { Statuses } from "../../../utils/constants";
-import { deletePatientPlanService } from "../../../../middleware/api/patients";
+import NotificationsContext from 'app/context/notificationsContext';
+import { Statuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import { deletePatientPlanService } from 'middleware/api/patients';
+import styles from './PatientTreatmentPlan.module.scss';
 import reducer, {
   initialState,
   setInitialData,
   setSelectedServices,
   setTeethModal,
-} from "./PatientTreatmentPlan.reducer";
-import styles from './PatientTreatmentPlan.module.scss';
+} from './PatientTreatmentPlan.reducer';
 
 const TeethContainer = dynamic(() => import('./TeethContainer'));
-const TeethModal = dynamic(() => import("../modals/TeethModal"));
-const ServicesWrapper = dynamic(() => import("./ServicesWrapper"));
+const TeethModal = dynamic(() => import('../modals/TeethModal'));
+const ServicesWrapper = dynamic(() => import('./ServicesWrapper'));
 
-const PatientTreatmentPlan = (
-  {
-    scheduleData,
-    currentUser,
-    currentClinic,
-    servicesClasses,
-    readOnly,
-    onFinalize
-  }
-) => {
+const PatientTreatmentPlan = ({
+  scheduleData,
+  currentUser,
+  currentClinic,
+  servicesClasses,
+  readOnly,
+  onFinalize,
+}) => {
+  const toast = useContext(NotificationsContext);
   const [
     {
       toothServices,
@@ -42,7 +41,8 @@ const PatientTreatmentPlan = (
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
-  const clinicServices = currentClinic.services?.filter((item) => !item.deleted) || [];
+  const clinicServices =
+    currentClinic.services?.filter((item) => !item.deleted) || [];
   const clinicCurrency = currentClinic.currency;
   const isScheduleFinished =
     schedule?.scheduleStatus === 'CompletedNotPaid' ||
@@ -69,7 +69,7 @@ const PatientTreatmentPlan = (
   const finalServicesList = useMemo(() => {
     return selectedServices.filter((service) => {
       return !service.completed || service.scheduleId === schedule.id;
-    })
+    });
   }, [selectedServices, schedule]);
 
   /**
@@ -89,15 +89,16 @@ const PatientTreatmentPlan = (
       item.id === service.id &&
       item.toothId === service.toothId &&
       item.destination === service.destination &&
-      (item.scheduleId === service.scheduleId || item.completed === service.completed)
-    )
-  }
+      (item.scheduleId === service.scheduleId ||
+        item.completed === service.completed)
+    );
+  };
 
   const doesServiceExists = (service) => {
-    return selectedServices.some(
-      (item) => isEqualWith(item, service, equalityCustomizer)
+    return selectedServices.some((item) =>
+      isEqualWith(item, service, equalityCustomizer),
     );
-  }
+  };
 
   const mappedService = (service, toothId = null) => {
     return {
@@ -107,24 +108,25 @@ const PatientTreatmentPlan = (
       canRemove: true,
       count: 1,
       isExistent: false,
-    }
-  }
+    };
+  };
 
   const setupInitialSchedule = (initialSchedule) => {
     const userServicesIds = (
-      currentUser.clinics.find(
-        (item) => item.clinicId === currentClinic.id,
-      )?.services || []
+      currentUser.clinics.find((item) => item.clinicId === currentClinic.id)
+        ?.services || []
     ).map((it) => it.serviceId);
     // filter clinic services to get only provided by current user services
     localDispatch(
       setInitialData({
         schedule: initialSchedule,
         currency: clinicCurrency,
-        services: clinicServices.filter((item) => userServicesIds.includes(item.id))
-      })
+        services: clinicServices.filter((item) =>
+          userServicesIds.includes(item.id),
+        ),
+      }),
     );
-  }
+  };
 
   /**
    * Handle tooth services list changed
@@ -139,7 +141,9 @@ const PatientTreatmentPlan = (
       if (!serviceExists && service.selected) {
         newServices.unshift(updatedService);
       } else if (!service.selected) {
-        remove(newServices, (item) => isEqualWith(item, service, equalityCustomizer));
+        remove(newServices, (item) =>
+          isEqualWith(item, service, equalityCustomizer),
+        );
       }
     }
     localDispatch(setSelectedServices({ services: newServices }));
@@ -155,12 +159,11 @@ const PatientTreatmentPlan = (
     }
     const updatedService = mappedService(newService);
     const newServices = cloneDeep(selectedServices);
-    const serviceExists = doesServiceExists(updatedService)
+    const serviceExists = doesServiceExists(updatedService);
     if (!serviceExists) {
       newServices.unshift(updatedService);
       localDispatch(setSelectedServices({ services: newServices }));
     } else {
-      console.log('exists');
       toast.warn(textForKey('service_already_exists_on_schedule'));
     }
   };
@@ -171,7 +174,7 @@ const PatientTreatmentPlan = (
    * @param {string[]} teeth
    */
   const handleSaveTeethService = (service, teeth) => {
-    const updatedServices = []
+    const updatedServices = [];
     for (const toothId of teeth) {
       updatedServices.push(mappedService(service, toothId));
     }
@@ -181,11 +184,11 @@ const PatientTreatmentPlan = (
       if (doesServiceExists(newService)) {
         toast.warn(textForKey('service_already_exists_on_schedule'));
       } else {
-        newServices.unshift(newService)
+        newServices.unshift(newService);
       }
     }
     localDispatch(setSelectedServices({ services: newServices }));
-  }
+  };
 
   const handleCloseTeethModal = () => {
     localDispatch(setTeethModal({ open: false }));
@@ -208,16 +211,20 @@ const PatientTreatmentPlan = (
    * @param {Object} service
    */
   const handleRemoveSelectedService = async (service) => {
-    let newServices = selectedServices.filter((item) => (
-      item.id !== service.id ||
-      item.toothId !== service.toothId ||
-      item.destination !== service.destination ||
-      item.scheduleId !== service.scheduleId ||
-      item.completed !== service.completed
-    ));
+    let newServices = selectedServices.filter(
+      (item) =>
+        item.id !== service.id ||
+        item.toothId !== service.toothId ||
+        item.destination !== service.destination ||
+        item.scheduleId !== service.scheduleId ||
+        item.completed !== service.completed,
+    );
     if (service.isExistent && service.planServiceId != null) {
       // delete service from server
-      await deletePatientPlanService(scheduleData.patient.id, service.planServiceId);
+      await deletePatientPlanService(
+        scheduleData.patient.id,
+        service.planServiceId,
+      );
     }
     localDispatch(setSelectedServices({ services: newServices }));
   };
@@ -229,10 +236,17 @@ const PatientTreatmentPlan = (
   const buttonText = () => {
     const newServices = selectedServices.filter((item) => !item.isExistent);
     let text = textForKey('Finalize');
-    if ((!canFinalizeSchedule && newServices.length > 0) || isScheduleFinished) {
+    if (
+      (!canFinalizeSchedule && newServices.length > 0) ||
+      isScheduleFinished
+    ) {
       text = textForKey('Edit');
     }
-    if (!canFinalizeSchedule && newServices.length === 0 && isScheduleFinished) {
+    if (
+      !canFinalizeSchedule &&
+      newServices.length === 0 &&
+      isScheduleFinished
+    ) {
       text = scheduleStatus?.name;
     }
     return text;
@@ -266,8 +280,8 @@ const PatientTreatmentPlan = (
         onFinalize={handleFinalizeTreatment}
       />
     </div>
-  )
-}
+  );
+};
 
 export default PatientTreatmentPlan;
 
@@ -276,9 +290,9 @@ PatientTreatmentPlan.propTypes = {
   currentClinic: PropTypes.object.isRequired,
   servicesClasses: PropTypes.any,
   onFinalize: PropTypes.func,
-  readOnly: PropTypes.bool
-}
+  readOnly: PropTypes.bool,
+};
 
 PatientTreatmentPlan.defaultProps = {
   readOnly: false,
-}
+};

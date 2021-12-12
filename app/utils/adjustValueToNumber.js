@@ -1,8 +1,10 @@
-import roundToTwo from "./roundToTwo";
+import roundToTwo from './roundToTwo';
 
-const adjustValueToNumber = (newValue, maxAmount) => {
+const adjustValueToNumber = (value, maxAmount) => {
+  let newValue = value;
+
   if (newValue == null) {
-    newValue = 0
+    newValue = 0;
   }
   if (typeof newValue === 'string') {
     if (newValue.length === 0) {

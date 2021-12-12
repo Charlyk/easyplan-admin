@@ -1,38 +1,47 @@
-import React, { useReducer } from 'react';
+import React, { useContext, useReducer } from 'react';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
-import { useRouter } from "next/router";
-import Typography from "@material-ui/core/Typography";
-import { toast } from "react-toastify";
-import { registerUser } from "../../../../middleware/api/auth";
-import { textForKey } from "../../../utils/localization";
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import { HeaderKeys } from "../../../utils/constants";
-import { isDev } from "../../../../eas.config";
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import AppLogoWhite from 'app/components/icons/AppLogoWhite';
+import NotificationsContext from 'app/context/notificationsContext';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
+import { isDev } from 'eas.config';
+import { registerUser } from 'middleware/api/auth';
+import { setCurrentUser } from 'redux/slices/appDataSlice';
+import styles from './RegistrationWrapper.module.scss';
 import reducer, {
   initialState,
-  setIsLoading
-} from './registrationWrapperSlice'
-import styles from './RegistrationWrapper.module.scss';
-import EASImage from "../EASImage";
+  setIsLoading,
+} from './registrationWrapperSlice';
 
 const RegisterForm = dynamic(() => import('./RegisterForm'));
 
 export default function RegistrationWrapper({ isMobile }) {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;
-  const [{ errorMessage, isLoading }, dispatch] = useReducer(reducer, initialState);
+  const [{ errorMessage, isLoading }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   const handleOpenLogin = () => {
     router.back();
   };
 
   const handleCreateAccount = async (accountData) => {
-    dispatch(setIsLoading(true));
+    localDispatch(setIsLoading(true));
     try {
       const requestBody = { ...accountData };
       delete requestBody.avatarFile;
-      await registerUser(accountData, accountData.avatarFile);
+      const response = await registerUser(accountData, accountData.avatarFile);
+      const { user } = response.data;
+      dispatch(setCurrentUser(user));
       toast.success(textForKey('account_created_success'));
       await router.replace('/create-clinic?login=1');
     } catch (error) {
@@ -43,21 +52,17 @@ export default function RegistrationWrapper({ isMobile }) {
         toast.error(error.message);
       }
     } finally {
-      dispatch(setIsLoading(false));
+      localDispatch(setIsLoading(false));
     }
-  }
+  };
 
   return (
     <div className={styles.registerFormRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <EASImage
-          src="settings/easyplan-logo.svg"
-          classes={{
-            root: styles.logoContainer,
-            image: styles.logoImage,
-          }}
-        />
+        <Box className={styles.logoContainer}>
+          <AppLogoWhite className={styles.logoImage} />
+        </Box>
       )}
       <div
         className={styles.formContainer}
@@ -66,9 +71,7 @@ export default function RegistrationWrapper({ isMobile }) {
           backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
         }}
       >
-        {isMobileDevice && (
-          <EASImage src="settings/easyplan-logo.svg" className={styles.logoImage}/>
-        )}
+        {isMobileDevice && <AppLogoWhite className={styles.logoImage} />}
         <RegisterForm
           isMobile={isMobileDevice}
           onSubmit={handleCreateAccount}
@@ -79,4 +82,4 @@ export default function RegistrationWrapper({ isMobile }) {
       </div>
     </div>
   );
-};
+}

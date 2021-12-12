@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
-import EASTextField from "../../EASTextField";
-import EASModal from "../EASModal";
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from '../EASModal';
 import styles from './SingleInputModal.module.scss';
 
 const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
@@ -24,7 +24,7 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
 
   return (
     <EASModal
-      size='sm'
+      size='small'
       open={open}
       title={title}
       onClose={onClose}
@@ -33,7 +33,7 @@ const SingleInputModal = ({ open, title, label, onSubmit, onClose }) => {
     >
       <Box padding='16px'>
         <EASTextField
-          type="text"
+          type='text'
           fieldLabel={label}
           value={value}
           onChange={handleFieldChange}

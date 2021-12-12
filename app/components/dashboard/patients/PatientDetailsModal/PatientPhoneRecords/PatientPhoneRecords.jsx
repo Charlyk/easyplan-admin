@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
-import { toast } from "react-toastify";
-import CloudDownload from "@material-ui/icons/CloudDownload";
+import React, { useContext, useEffect, useState } from 'react';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import moment from "moment-timezone";
-import Button from "@material-ui/core/Button";
-
-import { getPatientPhoneRecords } from "../../../../../../middleware/api/patients";
-import { textForKey } from "../../../../../utils/localization";
-import IconIncomeCall from "../../../../icons/iconIncomeCall";
-import IconOutCall from "../../../../icons/IconOutCall";
+import CloudDownload from '@material-ui/icons/CloudDownload';
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import IconIncomeCall from 'app/components/icons/iconIncomeCall';
+import IconOutCall from 'app/components/icons/IconOutCall';
+import NotificationsContext from 'app/context/notificationsContext';
+import { textForKey } from 'app/utils/localization';
+import { getPatientPhoneRecords } from 'middleware/api/patients';
 import styles from './PatientPhoneRecords.module.scss';
 
 const RecordItem = ({ record, onDownload }) => {
@@ -22,12 +21,8 @@ const RecordItem = ({ record, onDownload }) => {
 
   return (
     <div className={styles.recordItem}>
-      <Box display='flex' alignItems="center">
-        {record.type === 'Income' ? (
-          <IconIncomeCall />
-        ) : (
-          <IconOutCall />
-        )}
+      <Box display='flex' alignItems='center'>
+        {record.type === 'Income' ? <IconIncomeCall /> : <IconOutCall />}
         <Box>
           <Typography classes={{ root: styles.dateLabel }}>
             {record.date}
@@ -45,14 +40,18 @@ const RecordItem = ({ record, onDownload }) => {
           </Box>
         </Box>
       </Box>
-      <IconButton classes={{ root: styles.downloadButton }} onClick={handleRecordDownload}>
-        <CloudDownload style={{ fill: '#3A83DC' }}/>
+      <IconButton
+        classes={{ root: styles.downloadButton }}
+        onClick={handleRecordDownload}
+      >
+        <CloudDownload style={{ fill: '#3A83DC' }} />
       </IconButton>
     </div>
-  )
-}
+  );
+};
 
 const PatientPhoneRecords = ({ patient }) => {
+  const toast = useContext(NotificationsContext);
   const [page, setPage] = useState(0);
   const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +70,7 @@ const PatientPhoneRecords = ({ patient }) => {
       setRecords([]);
       const response = await getPatientPhoneRecords(patient.id, page);
       const { data } = response;
-      setRecords(data)
+      setRecords(data);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -84,31 +83,32 @@ const PatientPhoneRecords = ({ patient }) => {
       return;
     }
     setPage(page + 1);
-  }
+  };
 
   const handlePrevClick = () => {
     if (page === 0) {
       return;
     }
     setPage(page - 1);
-  }
+  };
 
   const handleRecordDownload = (record) => {
     const recordDate = moment(record.date);
-    const year = recordDate.format('YYYY')
-    const month = recordDate.format('MM')
-    const date = recordDate.format('DD')
-    const recordUrl =
-      `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${record.recordingFile}`
+    const year = recordDate.format('YYYY');
+    const month = recordDate.format('MM');
+    const date = recordDate.format('DD');
+    const recordUrl = `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${record.recordingFile}`;
     window.open(recordUrl, '_blank');
-  }
+  };
 
   return (
     <div className={styles.phoneRecordsRoot}>
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Phone records')}
       </Typography>
-      {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }}/>}
+      {isLoading && (
+        <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+      )}
       {records.length === 0 && !isLoading && (
         <Typography classes={{ root: 'no-data-label' }}>
           {textForKey('No data here yet')} :(
@@ -125,7 +125,7 @@ const PatientPhoneRecords = ({ patient }) => {
       </div>
       <div className={styles.footer}>
         <Button
-          variant="outlined"
+          variant='outlined'
           disabled={page === 0}
           classes={{
             root: styles.navButtons,
@@ -138,7 +138,7 @@ const PatientPhoneRecords = ({ patient }) => {
           {textForKey('Previous')}
         </Button>
         <Button
-          variant="outlined"
+          variant='outlined'
           disabled={records.length < 30}
           classes={{
             root: styles.navButtons,
@@ -152,8 +152,8 @@ const PatientPhoneRecords = ({ patient }) => {
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default PatientPhoneRecords;
 
@@ -169,4 +169,4 @@ RecordItem.propTypes = {
     type: PropTypes.oneOf(['Incoming', 'Outgoing']),
   }),
   onDownload: PropTypes.func,
-}
+};

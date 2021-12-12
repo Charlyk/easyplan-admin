@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
-
-import SwitchButton from '../../../../common/SwitchButton';
-import EASTextField from "../../../../common/EASTextField";
+import EASTextField from 'app/components/common/EASTextField';
+import SwitchButton from 'app/components/common/SwitchButton';
 import styles from './ServiceDoctor.module.scss';
 
 const ServiceDoctor = ({ serviceData, clinic, onChange }) => {
   const [doctorService, setDoctorService] = useState({
     selected: false,
-    doctorName: '',
-    doctorId: null,
+    fullName: '',
+    id: null,
     price: '',
     percentage: '',
   });
@@ -32,7 +31,7 @@ const ServiceDoctor = ({ serviceData, clinic, onChange }) => {
     onChange({
       ...doctorService,
       price: null,
-      percentage: parseInt(newValue),
+      percentage: newValue,
     });
   };
 
@@ -71,27 +70,25 @@ const ServiceDoctor = ({ serviceData, clinic, onChange }) => {
           isChecked={doctorService.selected}
           onChange={handleDoctorToggle}
         />
-        <div className={textClasses}>{doctorService.doctorName}</div>
+        <div className={textClasses}>{doctorService.fullName}</div>
       </div>
       <div className={styles.fields}>
         <EASTextField
-          type="number"
+          type='number'
           containerClass={styles.field}
           readOnly={isPercentageDisabled}
           value={String(doctorService.percentage)}
-          placeholder="0"
-          endAdornment={
-            <Typography className={styles.adornment}>%</Typography>
-          }
+          placeholder='0'
+          endAdornment={<Typography className={styles.adornment}>%</Typography>}
           onChange={handlePercentageChange}
         />
 
         <EASTextField
-          type="number"
+          type='number'
           containerClass={styles.field}
           readOnly={isPriceDisabled}
           value={String(doctorService.price)}
-          placeholder="0"
+          placeholder='0'
           endAdornment={
             <Typography className={styles.adornment}>
               {clinic?.currency || 'MDL'}
@@ -108,10 +105,10 @@ export default ServiceDoctor;
 
 ServiceDoctor.propTypes = {
   serviceData: PropTypes.shape({
-    doctorName: PropTypes.string,
-    doctorId: PropTypes.number,
-    percentage: PropTypes.number,
-    price: PropTypes.number,
+    fullName: PropTypes.string,
+    id: PropTypes.number,
+    percentage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     selected: PropTypes.bool,
   }),
   onChange: PropTypes.func,

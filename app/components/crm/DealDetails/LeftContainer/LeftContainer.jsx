@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from 'prop-types'
-import Header from "./Header";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
+import IconPlus from 'app/components/icons/iconPlus';
+import { textForKey } from 'app/utils/localization';
+import Header from './Header';
 import styles from './LeftContainer.module.scss';
-import PatientInfo from "./PatientInfo";
-import ScheduleInfo from "./ScheduleInfo";
-import Button from "@material-ui/core/Button";
-import { textForKey } from "../../../../utils/localization";
-import IconPlus from "../../../icons/iconPlus";
+import PatientInfo from './PatientInfo';
+import ScheduleInfo from './ScheduleInfo';
 
 const LeftContainer = ({ deal, states, onLink, onAddSchedule }) => {
   return (
@@ -17,12 +17,12 @@ const LeftContainer = ({ deal, states, onLink, onAddSchedule }) => {
         <ScheduleInfo deal={deal} />
       ) : deal?.patient != null ? (
         <Button className={styles.addScheduleBtn} onPointerUp={onAddSchedule}>
-          <IconPlus fill="#3A83DC"/>
+          <IconPlus fill='#3A83DC' />
           {textForKey('Add appointment')}
         </Button>
       ) : null}
     </div>
-  )
+  );
 };
 
 export default LeftContainer;
@@ -40,7 +40,7 @@ LeftContainer.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
@@ -83,4 +83,4 @@ LeftContainer.propTypes = {
   states: PropTypes.any,
   onAddSchedule: PropTypes.func,
   onLink: PropTypes.func,
-}
+};

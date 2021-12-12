@@ -1,23 +1,22 @@
-import React from "react";
-import clsx from "clsx";
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
+import IconAvatar from 'app/components/icons/iconAvatar';
+import { textForKey } from 'app/utils/localization';
 import styles from './MessageItem.module.scss';
-import IconAvatar from "../../../../../icons/iconAvatar";
-import { textForKey } from "../../../../../../utils/localization";
-import moment from "moment-timezone";
 
-const MessageItem = (
-  {
-    message,
-    isFirstOfType,
-    isLastOfType,
-    isFirstMessage,
-    isLastMessage,
-    messageType
-  }
-) => {
-  const containerClass = messageType === 'income' ? styles.incomeMessage : styles.outgoingMessage;
+const MessageItem = ({
+  message,
+  isFirstOfType,
+  isLastOfType,
+  isFirstMessage,
+  isLastMessage,
+  messageType,
+}) => {
+  const containerClass =
+    messageType === 'income' ? styles.incomeMessage : styles.outgoingMessage;
 
   return (
     <div
@@ -40,31 +39,34 @@ const MessageItem = (
     >
       <div className={containerClass}>
         {messageType === 'income' ? (
-          <div className={clsx(
-            styles.avatarContainer,
-            {
-              [styles.hidden]: !isLastOfType
-            }
-          )}>
-            <IconAvatar/>
+          <div
+            className={clsx(styles.avatarContainer, {
+              [styles.hidden]: !isLastOfType,
+            })}
+          >
+            <IconAvatar />
           </div>
         ) : null}
         <div className={styles.textContainer}>
           <Typography className={styles.messageDate}>
             {moment(message.messageDate).format('DD MMM YYYY HH:mm')}
           </Typography>
-          <Typography className={clsx(styles.messageText, !message.messageText && styles.noText)}>
+          <Typography
+            className={clsx(
+              styles.messageText,
+              !message.messageText && styles.noText,
+            )}
+          >
             {message.messageText || textForKey('No text')}
           </Typography>
         </div>
         {messageType === 'outgoing' ? (
-          <div className={clsx(
-            styles.avatarContainer,
-            {
-              [styles.hidden]: !isLastOfType
-            }
-          )}>
-            <IconAvatar/>
+          <div
+            className={clsx(styles.avatarContainer, {
+              [styles.hidden]: !isLastOfType,
+            })}
+          >
+            <IconAvatar />
           </div>
         ) : null}
       </div>
@@ -93,4 +95,4 @@ MessageItem.propTypes = {
     senderName: PropTypes.string,
     source: PropTypes.string,
   }),
-}
+};

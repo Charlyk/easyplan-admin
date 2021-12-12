@@ -1,4 +1,4 @@
-import { get } from "./request";
+import { get } from './request';
 
 /**
  * Get clinic general statistics
@@ -34,12 +34,17 @@ export async function getServicesStatistics(query, headers = null) {
 }
 
 /**
- * get clinic doctors statistics
- * @param {Record<string, string>} query
- * @param {Object|null} headers
- * @return {Promise<AxiosResponse<*>>}
+ * Fetch clinic analytics
+ * @param {string} startDate
+ * @param {string} endDate
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<Analytics>>}
  */
-export async function getActivityJournal(query, headers = null) {
-  const queryString = new URLSearchParams(query).toString();
-  return get(`/api/analytics/activity-logs?${queryString}`, headers);
+export async function requestFetchClinicAnalytics(
+  startDate,
+  endDate,
+  headers = null,
+) {
+  const queryString = new URLSearchParams({ startDate, endDate }).toString();
+  return get(`/api/analytics?${queryString}`, headers);
 }

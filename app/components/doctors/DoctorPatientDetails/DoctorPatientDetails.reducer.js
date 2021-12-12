@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   patient: null,
@@ -42,6 +42,6 @@ export const {
   setPatient,
   setInitialData,
   setIsFinalizing,
-} = doctorPatientDetailsSlice.actions
+} = doctorPatientDetailsSlice.actions;
 
-export default doctorPatientDetailsSlice.reducer
+export default doctorPatientDetailsSlice.reducer;

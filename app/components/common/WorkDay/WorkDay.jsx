@@ -1,23 +1,26 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-
-import { createHoursList, days } from '../../../utils/constants';
-import { textForKey } from '../../../utils/localization';
+import { createHoursList, days } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import EASSelect from '../EASSelect';
 import SwitchButton from '../SwitchButton';
-import EASSelect from "../EASSelect";
 import styles from './WorkDay.module.scss';
 
 const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   const hours = createHoursList();
-  const titleClasses = clsx(styles.dayTitle, day.selected ? styles.selected : styles.default);
+  const titleClasses = clsx(
+    styles.dayTitle,
+    day.selected ? styles.selected : styles.default,
+  );
 
   const handleDayToggle = () => {
     onChange(day, day.startHour, day.endHour, !day.selected);
   };
 
-  const handleStartHourChange = event => {
+  const handleStartHourChange = (event) => {
     const newValue = event.target.value;
     onChange(
       day,
@@ -27,7 +30,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
     );
   };
 
-  const handleEndHourChange = event => {
+  const handleEndHourChange = (event) => {
     const newValue = event.target.value;
     onChange(
       day,
@@ -42,7 +45,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   };
 
   const getMappedHours = (hours) => {
-    return hours.map(item => ({
+    return hours.map((item) => ({
       id: item,
       name: item,
     }));
@@ -51,7 +54,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
   return (
     <tr className={styles.workDay}>
       <td>
-        <SwitchButton isChecked={day.selected} onChange={handleDayToggle}/>
+        <SwitchButton isChecked={day.selected} onChange={handleDayToggle} />
       </td>
       <td style={{ width: '20%' }}>
         <div className={titleClasses}>{days[day.day - 1]}</div>
@@ -98,9 +101,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
       )}
       {day.selected && (
         <td style={{ paddingLeft: '.5rem' }}>
-          <div
-            role='button'
-            tabIndex={0}
+          <Box
             onClick={handleApplyToAll}
             className={clsx(
               styles.applyToAllBtn,
@@ -109,7 +110,7 @@ const WorkDay = ({ day, isFirst, onChange, onApplyToAll }) => {
             )}
           >
             {textForKey('Apply to all')}
-          </div>
+          </Box>
         </td>
       )}
     </tr>

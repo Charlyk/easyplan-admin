@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import Pagination from "@material-ui/lab/Pagination";
+import Pagination from '@material-ui/lab/Pagination';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-
-import { textForKey } from '../../../../../utils/localization';
-import { getPatientHistory } from "../../../../../../middleware/api/patients";
+import NotificationsContext from 'app/context/notificationsContext';
+import { textForKey } from 'app/utils/localization';
+import { getPatientHistory } from 'middleware/api/patients';
 import HistoryItem from './HistoryItem';
 import styles from './PatientHistory.module.scss';
 
 const PatientHistory = ({ patient, clinic }) => {
+  const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [pageData, setPageData] = useState({ page: 1, itemsPerPage: 10 });
   const [historyData, setHistoryData] = useState({ data: [], total: 0 });
@@ -24,7 +24,11 @@ const PatientHistory = ({ patient, clinic }) => {
   const fetchHistories = async () => {
     setIsLoading(true);
     try {
-      const response = await getPatientHistory(patient.id, pageData.page, pageData.itemsPerPage);
+      const response = await getPatientHistory(
+        patient.id,
+        pageData.page,
+        pageData.itemsPerPage,
+      );
       setHistoryData(response.data);
     } catch (error) {
       toast.error(error.message);
@@ -35,7 +39,7 @@ const PatientHistory = ({ patient, clinic }) => {
 
   const handlePageChange = (event, page) => {
     setPageData({ ...pageData, page });
-  }
+  };
 
   return (
     <div className={styles['patient-history']}>
@@ -47,7 +51,9 @@ const PatientHistory = ({ patient, clinic }) => {
           {textForKey('No data here yet')} :(
         </Typography>
       )}
-      {isLoading && <CircularProgress classes={{ root: 'circular-progress-bar' }} />}
+      {isLoading && (
+        <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+      )}
       <div className={styles['patient-history__history-data']}>
         {historyData.data.map((item) => (
           <HistoryItem key={item.id} clinic={clinic} item={item} />

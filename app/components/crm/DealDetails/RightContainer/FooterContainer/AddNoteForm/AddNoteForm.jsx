@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
-import { textForKey } from "../../../../../../utils/localization";
-import LoadingButton from "../../../../../common/LoadingButton";
-import EASTextarea from "../../../../../common/EASTextarea";
+import EASTextarea from 'app/components/common/EASTextarea';
+import LoadingButton from 'app/components/common/LoadingButton';
+import { textForKey } from 'app/utils/localization';
 import styles from './AddNoteForm.module.scss';
 
 const AddNoteForm = ({ isLoading, onSubmit }) => {
@@ -20,8 +20,8 @@ const AddNoteForm = ({ isLoading, onSubmit }) => {
     if (noteText.length === 0) {
       return;
     }
-    onSubmit?.(noteText)
-  }
+    onSubmit?.(noteText);
+  };
 
   return (
     <form className={styles.addNoteForm} onSubmit={handleSubmit}>
@@ -33,18 +33,18 @@ const AddNoteForm = ({ isLoading, onSubmit }) => {
         placeholder={textForKey('Enter new note')}
         onChange={setNoteText}
       />
-      <Box marginTop={.5}>
+      <Box marginTop={0.5}>
         <LoadingButton
           isLoading={isLoading}
           disabled={isLoading || noteText.length === 0}
-          className="positive-button"
+          className='positive-button'
           onClick={handleSubmit}
         >
           {textForKey('Add note')}
         </LoadingButton>
       </Box>
     </form>
-  )
+  );
 };
 
 export default AddNoteForm;

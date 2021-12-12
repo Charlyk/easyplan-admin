@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
-import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../common/LoadingButton';
-import { EmailRegex, HeaderKeys } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import { updateUserAccount } from "../../../../../middleware/api/auth";
-import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import UploadAvatar from "../../../common/UploadAvatar";
-import EASTextField from "../../../common/EASTextField";
-import EASPhoneInput from "../../../common/EASPhoneInput";
-import styles from './AccountSettings.module.scss'
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import UploadAvatar from 'app/components/common/UploadAvatar';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import NotificationsContext from 'app/context/notificationsContext';
+import { EmailRegex } from 'app/utils/constants';
+import imageToBase64 from 'app/utils/imageToBase64';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import {
+  currentUserSelector,
+  isUpdatingProfileSelector,
+} from 'redux/selectors/appDataSelector';
+import { updateUserProfile } from 'redux/slices/appDataSlice';
+import styles from './AccountSettings.module.scss';
 
-const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+const AccountSettings = () => {
+  const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
+  const currentUser = useSelector(currentUserSelector);
+  const isLoading = useSelector(isUpdatingProfileSelector);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({
-    avatarUrl: currentUser.avatar,
+    avatarUrl: currentUser?.avatar,
     avatarFile: null,
     firstName: currentUser.firstName,
     lastName: currentUser.lastName,
@@ -60,33 +67,26 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+      isPhoneValid:
+        isPhoneNumberValid(value, country) &&
+        !event.target?.classList.value.includes('invalid-number'),
     });
   };
 
   const submitForm = async () => {
-    setIsLoading(true);
-    try {
-      const requestBody = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        username: data.email,
-        oldPassword: data.oldPassword,
-        phoneNumber: data.phoneNumber,
-      };
+    const avatar =
+      data.avatarFile != null ? await imageToBase64(data.avatarFile) : null;
 
-      await updateUserAccount(requestBody, data.avatarFile, {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: currentClinic.id,
-        [HeaderKeys.subdomain]: currentClinic.domainName,
-      });
-      await router.replace(router.asPath);
-      toast.success(textForKey('Saved successfully'));
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    const requestBody = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.email,
+      oldPassword: data.oldPassword,
+      phoneNumber: data.phoneNumber,
+      avatar,
+    };
+    dispatch(updateUserProfile(requestBody));
+    toast.success(textForKey('Saved successfully'));
   };
 
   const isFormValid = () => {
@@ -103,13 +103,15 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
 
   return (
     <div className={styles['account-settings']}>
-      <span className={styles['form-title']}>{textForKey('Account settings')}</span>
+      <span className={styles['form-title']}>
+        {textForKey('Account settings')}
+      </span>
       <UploadAvatar
         currentAvatar={data.avatarFile || data.avatarUrl}
         onChange={handleLogoChange}
       />
       <EASTextField
-        type="text"
+        type='text'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Last name')}
         value={data.lastName || ''}
@@ -117,7 +119,7 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
       />
 
       <EASTextField
-        type="text"
+        type='text'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('First name')}
         value={data.firstName || ''}
@@ -125,7 +127,7 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
       />
 
       <EASTextField
-        type="email"
+        type='email'
         containerClass={styles.simpleField}
         error={!isEmailValid}
         helperText={isEmailValid ? null : textForKey('email_invalid_message')}
@@ -136,7 +138,7 @@ const AccountSettings = ({ currentUser, currentClinic, authToken }) => {
 
       {isEmailChanged && (
         <EASTextField
-          type="password"
+          type='password'
           autoComplete='new-password'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Current password')}

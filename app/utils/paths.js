@@ -21,5 +21,5 @@ export default {
   '/clinics': textForKey('Select a clinic'),
   '/create-clinic': textForKey('Create clinic'),
   '/register': textForKey('Create new account'),
-  '/error': textForKey('Error')
+  '/error': textForKey('Error'),
 };

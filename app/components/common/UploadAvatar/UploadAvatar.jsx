@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
-import clsx from "clsx";
-import IconEdit from "../../icons/iconEdit";
-import IconPlus from "../../icons/iconPlus";
+import React, { useRef } from 'react';
+import clsx from 'clsx';
+import IconEdit from 'app/components/icons/iconEdit';
+import IconPlus from 'app/components/icons/iconPlus';
+import EASImage from '../EASImage';
 import styles from './UploadAvatar.module.scss';
-import EASImage from "../EASImage";
 
 const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
   const inputRef = useRef(null);
@@ -14,14 +14,11 @@ const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
 
   const handleIconClick = () => {
     inputRef.current?.click();
-  }
+  };
 
   return (
     <div className={clsx(styles.uploadAvatar, className)}>
-      <div
-        className={styles.avatarWrapper}
-        onPointerUp={handleIconClick}
-      >
+      <div className={styles.avatarWrapper} onPointerUp={handleIconClick}>
         <EASImage
           enableLoading
           src={currentAvatar}
@@ -30,11 +27,7 @@ const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
         />
 
         <div className={styles.iconContainer}>
-          {currentAvatar ? (
-            <IconEdit fill='#fff'/>
-          ) : (
-            <IconPlus fill='#fff'/>
-          )}
+          {currentAvatar ? <IconEdit fill='#fff' /> : <IconPlus fill='#fff' />}
         </div>
       </div>
       <input
@@ -47,7 +40,7 @@ const UploadAvatar = ({ currentAvatar, className, placeholder, onChange }) => {
         onChange={handleAvatarChange}
       />
     </div>
-  )
-}
+  );
+};
 
 export default UploadAvatar;

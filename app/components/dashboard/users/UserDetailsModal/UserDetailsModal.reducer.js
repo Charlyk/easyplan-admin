@@ -1,5 +1,6 @@
-import { Role } from "../../../../utils/constants";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+
+import { Role } from 'app/utils/constants';
 
 export const initialData = {
   services: [],
@@ -60,7 +61,7 @@ export const initialState = {
   isCreatingHoliday: {
     open: false,
     holiday: null,
-  }
+  },
 };
 
 const userDetailsModalSlice = createSlice({
@@ -90,7 +91,7 @@ const userDetailsModalSlice = createSlice({
     },
     resetState() {
       return initialState;
-    }
+    },
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,27 +7,24 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
-import { extendMoment } from "moment-range";
-import Moment from "moment-timezone";
-
-import ScheduleItem from "./ScheduleItem";
-import { reducer, actions, initialState } from "./DoctorsCalendarDay.reducer";
+import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
+import PropTypes from 'prop-types';
 import styles from './DoctorsCalendarDay.module.scss';
+import { reducer, actions, initialState } from './DoctorsCalendarDay.reducer';
+import ScheduleItem from './ScheduleItem';
 
 const moment = extendMoment(Moment);
 
-const DoctorsCalendarDay = (
-  {
-    schedules: {
-      hours: initialHours,
-      schedules: initialSchedules
-    },
-    onScheduleSelected,
-  }
-) => {
-  const [{ schedules, hours }, localDispatch] = useReducer(reducer, initialState);
+const DoctorsCalendarDay = ({
+  schedules: { hours: initialHours, schedules: initialSchedules },
+  onScheduleSelected,
+}) => {
+  const [{ schedules, hours }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     const schedules = initialSchedules[0]?.schedules ?? [];
@@ -45,18 +42,22 @@ const DoctorsCalendarDay = (
     });
   }, [hours]);
 
-  const getSchedulesForHour = useCallback((hour) => {
-    if (schedules.length === 0) {
-      return [];
-    }
-    const filteredSchedules = schedules.filter((schedule) => {
-      const startTime = moment(schedule.startTime).format('HH:mm');
-      const [startHour] = startTime.split(':');
-      const [selectedHour] = hour.split(':');
-      return startHour === selectedHour;
-    }) ?? [];
-    return orderBy(filteredSchedules, ['startTime'], ['asc'])
-  }, [schedules]);
+  const getSchedulesForHour = useCallback(
+    (hour) => {
+      if (schedules.length === 0) {
+        return [];
+      }
+      const filteredSchedules =
+        schedules.filter((schedule) => {
+          const startTime = moment(schedule.startTime).format('HH:mm');
+          const [startHour] = startTime.split(':');
+          const [selectedHour] = hour.split(':');
+          return startHour === selectedHour;
+        }) ?? [];
+      return orderBy(filteredSchedules, ['startTime'], ['asc']);
+    },
+    [schedules],
+  );
 
   return (
     <div className={styles.doctorsCalendarDay}>
@@ -123,11 +124,11 @@ DoctorsCalendarDay.propTypes = {
   }),
   schedules: PropTypes.shape({
     hours: PropTypes.arrayOf(PropTypes.string),
-    schedules: PropTypes.any
+    schedules: PropTypes.any,
   }),
   onScheduleSelected: PropTypes.func,
 };
 
 DoctorsCalendarDay.defaultProps = {
   onScheduleSelected: () => null,
-}
+};

@@ -1,31 +1,29 @@
 import React from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
-import { textForKey } from '../../../../../utils/localization';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { textForKey } from 'app/utils/localization';
 import styles from './DetailsRow.module.scss';
 
-const DetailsRow = (
-  {
-    title,
-    value,
-    isValueInput,
-    options,
-    valuePlaceholder,
-    clickableValue,
-    isLoading,
-    searchable,
-    onValueClick,
-    onSearch,
-    onValueSelected,
-  }
-) => {
+const DetailsRow = ({
+  title,
+  value,
+  isValueInput,
+  options,
+  valuePlaceholder,
+  clickableValue,
+  isLoading,
+  searchable,
+  filterLocally,
+  onValueClick,
+  onSearch,
+  onValueSelected,
+}) => {
   const handleValueClick = () => {
     if (!clickableValue) {
       return;
@@ -33,7 +31,7 @@ const DetailsRow = (
     onValueClick();
   };
 
-  const autocompleteInput = params => {
+  const autocompleteInput = (params) => {
     return (
       <TextField
         {...params}
@@ -44,9 +42,7 @@ const DetailsRow = (
           endAdornment: (
             <React.Fragment>
               {isLoading && (
-                <CircularProgress
-                  classes={{ root: 'circular-progress-bar' }}
-                />
+                <CircularProgress classes={{ root: 'circular-progress-bar' }} />
               )}
               {params.InputProps.endAdornment}
             </React.Fragment>
@@ -56,7 +52,7 @@ const DetailsRow = (
     );
   };
 
-  const autocompleteOption = option => {
+  const autocompleteOption = (option) => {
     return (
       <Typography
         id={option.id}
@@ -67,17 +63,20 @@ const DetailsRow = (
     );
   };
 
-  const getOptionLabel = option => option.name;
+  const getOptionLabel = (option) => option.label;
 
   const filterValues = (options, params) => {
-    return options.filter(item => {
-      const [firstName, lastName] = item.name.toLowerCase().split(' ');
-      return (
-        params.inputValue.length === 0 ||
-        params.inputValue.toLowerCase().includes(firstName) ||
-        params.inputValue.toLowerCase().includes(lastName)
-      );
-    });
+    if (filterLocally) {
+      return options.filter((item) => {
+        const [firstName, lastName] = item.name.toLowerCase().split(' ');
+        return (
+          params.inputValue.length === 0 ||
+          params.inputValue.toLowerCase().includes(firstName) ||
+          params.inputValue.toLowerCase().includes(lastName)
+        );
+      });
+    }
+    return options;
   };
 
   const getOptionSelected = (option, value) => {

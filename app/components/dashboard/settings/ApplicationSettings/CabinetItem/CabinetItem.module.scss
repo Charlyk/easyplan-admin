@@ -1,0 +1,99 @@
+.cabinetsTitle {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: bold !important;
+  font-size: 12px !important;
+  margin-top: 5px !important;
+  margin-bottom: 5px;
+}
+.cabinet {
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal;
+  font-size: 16px !important;
+  margin-top: 5px !important;
+  margin-bottom: 5px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+
+  &TitleWrapper {
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #3a83dc;
+    padding-right: 1rem;
+
+    .editBtn {
+      max-width: 48px;
+      max-height: 48px;
+    }
+  }
+  &Title {
+    margin: 0 0 0 0.3rem;
+    line-height: 1;
+  }
+
+  .divContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  &DoctorsContainer {
+    margin-left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .doctor {
+      margin-left: .3rem;
+
+      &.outlined {
+        border-color: #3a83dc;
+      }
+    }
+
+    .deleteIcon {
+      color: hsl(338, 83%, 56%);
+
+      &:hover {
+        color: hsl(338, 83%, 76%);
+      }
+    }
+
+    .outline .label {
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+    }
+
+    .iconPlus {
+      padding: 5px;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: bold !important;
+      font-size: 14px !important;
+      background-color: #3a83dc;
+
+      &:focus {
+        background-color: #3a83dc !important;
+      }
+      &:hover {
+        background-color: hsl(213, 70%, 50%);
+      }
+
+      svg {
+        margin-left: 8px;
+      }
+      .label {
+        padding-left: 0;
+        color: #fff;
+      }
+    }
+    .outlined {
+      position: relative;
+    }
+  }
+}

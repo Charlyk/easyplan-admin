@@ -1,8 +1,8 @@
-import setCookies from "../../../app/utils/setCookies";
+import setCookies from 'app/utils/setCookies';
 
 export default async (req, res) => {
   if (req.method !== 'GET') {
-    return
+    return;
   }
   const { clinicId, token } = req.query;
   setCookies(res, token, clinicId);

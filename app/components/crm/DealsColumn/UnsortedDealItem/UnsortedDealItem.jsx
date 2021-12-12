@@ -1,75 +1,70 @@
-import React, { useMemo, useRef, useState } from "react";
-import PropTypes from 'prop-types';
-import moment from "moment-timezone";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import IconButton from "@material-ui/core/IconButton";
+import React, { useMemo, useRef, useState } from 'react';
+import Box from '@material-ui/core/Box';
+import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import IconPhone from '@material-ui/icons/PhoneCallback';
-import { requestChangeDealClinic } from "../../../../../middleware/api/crm";
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import onRequestError from "../../../../utils/onRequestError";
-import { textForKey } from "../../../../utils/localization";
-import getPatientName from "../../../../utils/getPatientName";
-import ClinicsModal from "../../../common/modals/ClinicsModal";
-import ActionsSheet from "../../../common/ActionsSheet";
-import IconFacebookSm from "../../../icons/iconFacebookSm";
-import IconAvatar from "../../../icons/iconAvatar";
-import IconLink from "../../../icons/iconLink";
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import ClinicsModal from 'app/components/common/modals/ClinicsModal';
+import IconAvatar from 'app/components/icons/iconAvatar';
+import IconFacebookSm from 'app/components/icons/iconFacebookSm';
+import IconLink from 'app/components/icons/iconLink';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import getPatientName from 'app/utils/getPatientName';
+import { textForKey } from 'app/utils/localization';
+import { requestChangeDealClinic } from 'middleware/api/crm';
+import onRequestError from 'app/utils/onRequestError';
+import ActionsSheet from 'app/components/common/ActionsSheet';
 import styles from './UnsortedDealItem.module.scss';
-
 
 const actions = [
   {
     name: textForKey('link_patient'),
     key: 'linkPatient',
     icon: null,
-    type: 'default'
+    type: 'default',
   },
   {
     name: textForKey('crm_move_to_clinic'),
     key: 'changeClinic',
     icon: null,
-    type: 'default'
+    type: 'default',
   },
   {
     name: textForKey('complete_deal'),
     key: 'confirmContact',
     icon: null,
-    type: 'default'
+    type: 'default',
   },
   {
     name: textForKey('delete'),
     key: 'deleteDeal',
     icon: null,
-    type: 'destructive'
+    type: 'destructive',
   },
-]
+];
 
-const UnsortedDealItem = (
-  {
-    deal,
-    currentClinic,
-    onLinkPatient,
-    onDeleteDeal,
-    onConfirmFirstContact,
-    onDealClick,
-  }
-) => {
+const UnsortedDealItem = ({
+  deal,
+  currentClinic,
+  onLinkPatient,
+  onDeleteDeal,
+  onConfirmFirstContact,
+  onDealClick,
+}) => {
   const moreBtnRef = useRef(null);
   const [showActions, setShowActions] = useState(false);
   const [clinicsModal, setClinicsModal] = useState(false);
+  const hasTags = deal.patient?.tags?.length > 0;
 
   const sourceIcon = useMemo(() => {
     switch (deal.source) {
       case 'PhoneCall':
-        return (
-          <IconPhone className={styles.iconFill}/>
-        )
+        return <IconPhone className={styles.iconFill} />;
       default:
-        return (
-          <IconFacebookSm/>
-        );
+        return <IconFacebookSm />;
     }
   }, [deal]);
 
@@ -83,7 +78,7 @@ const UnsortedDealItem = (
 
   const contactName = useMemo(() => {
     if (deal == null || deal?.contact == null) {
-      return '-'
+      return '-';
     }
     return deal.source === 'PhoneCall'
       ? deal?.contact?.name.startsWith('+')
@@ -93,11 +88,9 @@ const UnsortedDealItem = (
   }, [deal]);
 
   const filteredActions = useMemo(() => {
-    return actions.filter(action => {
-      return (
-        deal?.patient == null || action.key !== 'linkPatient'
-      )
-    })
+    return actions.filter((action) => {
+      return deal?.patient == null || action.key !== 'linkPatient';
+    });
   }, [deal]);
 
   const handleActionsSelected = (action) => {
@@ -176,23 +169,43 @@ const UnsortedDealItem = (
         onClose={handleCloseActions}
       />
       <div className={styles.avatarContainer}>
-        <IconAvatar/>
-        <div className={styles.sourceIconContainer}>
-          {sourceIcon}
-        </div>
+        <IconAvatar />
+        <div className={styles.sourceIconContainer}>{sourceIcon}</div>
       </div>
       <div className={styles.content}>
         <Typography className={styles.sourceLabel}>
           {textForKey('from')}: {textForKey(deal.source)}
         </Typography>
         <Typography className={styles.contactName}>
-          {contactName} {deal?.patient != null && <><IconLink fill="#3A83DC" /> {personName}</>}
+          {contactName}{' '}
+          {deal?.patient != null && (
+            <>
+              <IconLink fill='#3A83DC' /> {personName}
+            </>
+          )}
         </Typography>
         {deal.messageSnippet && (
           <div className={styles.lastMessageContainer}>
             <Typography noWrap className={styles.snippetLabel}>
               {deal.messageSnippet}
             </Typography>
+          </div>
+        )}
+        {hasTags && (
+          <div className={styles.tagsContainer}>
+            {deal.patient.tags.map((tag) => (
+              <Chip
+                size='small'
+                variant='outlined'
+                label={tag.title}
+                key={tag.id}
+                classes={{
+                  root: styles.tagItem,
+                  label: styles.label,
+                  outlined: styles.outlined,
+                }}
+              />
+            ))}
           </div>
         )}
       </div>
@@ -205,11 +218,11 @@ const UnsortedDealItem = (
           className={styles.moreBtn}
           onClick={handleMoreClick}
         >
-          <MoreHorizIcon/>
+          <MoreHorizIcon />
         </IconButton>
       </div>
     </Box>
-  )
+  );
 };
 
 export default React.memo(UnsortedDealItem, areComponentPropsEqual);
@@ -228,13 +241,19 @@ UnsortedDealItem.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
       firstName: PropTypes.string,
       lastName: PropTypes.string,
       phoneWithCode: PropTypes.string,
+      tags: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          title: PropTypes.string,
+        }),
+      ),
     }),
     state: PropTypes.shape({
       id: PropTypes.number,

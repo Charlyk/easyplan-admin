@@ -1,13 +1,16 @@
-import types from '../types/types';
+import types from '../types';
 
 const initialState = Object.freeze({ isCalendarLoading: false });
 
-export default function createClinicModal(state = initialState, action) {
-  switch (action.type) {
+export default function createClinicModal(
+  state = initialState,
+  { type, payload } = {},
+) {
+  switch (type) {
     case types.setIsCalendarLoading:
       return {
         ...state,
-        isCalendarLoading: action.payload,
+        isCalendarLoading: payload,
       };
     default:
       return state;

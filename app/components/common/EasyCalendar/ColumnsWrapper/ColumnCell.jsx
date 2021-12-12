@@ -1,20 +1,18 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import CreateScheduleView from "./CreateScheduleView";
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import styles from './ColumnsWrapper.module.scss';
-import clsx from "clsx";
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import useIsMobileDevice from "../../../../utils/hooks/useIsMobileDevice";
+import CreateScheduleView from './CreateScheduleView';
 
-const ColumnCell = (
-  {
-    startHour,
-    endHour,
-    disabled,
-    hideCreateIndicator,
-    onAddSchedule
-  }
-) => {
+const ColumnCell = ({
+  startHour,
+  endHour,
+  disabled,
+  hideCreateIndicator,
+  onAddSchedule,
+}) => {
   const [showCreateView, setShowCreateView] = useState(false);
   const isMobile = useIsMobileDevice();
 
@@ -31,15 +29,15 @@ const ColumnCell = (
           endHour={endHour}
           onAddSchedule={onAddSchedule}
         />
-      )
+      );
     } else {
-      return null
+      return null;
     }
   }, [startHour, endHour, showCreateView, hideCreateIndicator]);
 
   const handleAddSchedule = () => {
-    onAddSchedule?.(startHour, endHour)
-  }
+    onAddSchedule?.(startHour, endHour);
+  };
 
   const handlePointerEnter = () => {
     setShowCreateView(true);
@@ -50,7 +48,7 @@ const ColumnCell = (
   };
 
   const getBorderTop = () => {
-    if (startHour == null || disabled) {
+    if (startHour == null) {
       return 'none';
     }
 
@@ -65,17 +63,15 @@ const ColumnCell = (
   return (
     <div
       id={`container-${startHour}`}
-      className={clsx(styles.columnCell, {
-        [styles.disabled]: disabled,
-      })}
+      className={clsx(styles.columnCell)}
       style={{ borderTop: getBorderTop() }}
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
+      onPointerEnter={disabled ? () => null : handlePointerEnter}
+      onPointerLeave={disabled ? () => null : handlePointerLeave}
       onPointerUp={isMobile ? handleAddSchedule : () => null}
     >
       {content}
     </div>
-  )
+  );
 };
 
 export default React.memo(ColumnCell, areComponentPropsEqual);
@@ -86,4 +82,4 @@ ColumnCell.propTypes = {
   endHour: PropTypes.string,
   hideCreateIndicator: PropTypes.bool,
   onAddSchedule: PropTypes.func,
-}
+};

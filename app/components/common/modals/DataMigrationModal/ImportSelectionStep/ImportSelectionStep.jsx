@@ -1,26 +1,27 @@
-import React, { useEffect, useReducer, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import Box from '@material-ui/core/Box';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Typography from '@material-ui/core/Typography';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-
-import IconArrowDown from '../../../../icons/iconArrowDown';
-import { YClientAPIUrl } from '../../../../../utils/constants';
-import generateReducerActions from '../../../../../utils/generateReducerActions';
-import { textForKey } from '../../../../../utils/localization';
-import LoadingButton from '../../../LoadingButton';
-import EASTextField from "../../../EASTextField";
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconArrowDown from 'app/components/icons/iconArrowDown';
+import NotificationsContext from 'app/context/notificationsContext';
+import { YClientAPIUrl } from 'app/utils/constants';
+import generateReducerActions from 'app/utils/generateReducerActions';
+import { textForKey } from 'app/utils/localization';
 import styles from './ImportSelectionStep.module.scss';
 
-const EasyDatePicker = dynamic(() => import('../../../EasyDatePicker'));
+const EasyDatePicker = dynamic(() =>
+  import('app/components/common/EasyDatePicker'),
+);
 
 const initialState = {
   isLoading: false,
@@ -82,6 +83,7 @@ const reducer = (state, action) => {
 };
 
 const ImportSelectionStep = ({ userData, onImport }) => {
+  const toast = useContext(NotificationsContext);
   const companiesRef = useRef(null);
   const datePickerRef = useRef(null);
   const [
@@ -283,16 +285,14 @@ const ImportSelectionStep = ({ userData, onImport }) => {
           onPointerUp={handleDateFieldClick('end')}
         />
       </Box>
-      <div
+      <Box
         onClick={handleOpenCompanies}
-        role='button'
-        tabIndex={0}
         ref={companiesRef}
         className={styles['company-button']}
       >
         {selectedCompany ? selectedCompany.title : textForKey('Select company')}
         <IconArrowDown fill='#3A83DC' />
-      </div>
+      </Box>
       <Menu
         disablePortal
         classes={{ paper: styles['companies-menu-paper'] }}

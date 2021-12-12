@@ -1,37 +1,46 @@
-import React, { useEffect, useMemo, useReducer, useRef } from "react";
-import clsx from "clsx";
-import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
-import { useColor } from "react-color-palette";
-import InfiniteScroll from 'react-infinite-scroller';
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import TextField from "@material-ui/core/TextField";
-import Box from "@material-ui/core/Box";
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
+import { CircularProgress } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import DoneIcon from '@material-ui/icons/Done';
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import clsx from 'clsx';
+import isEqual from 'lodash/isEqual';
+import PropTypes from 'prop-types';
+import { useColor } from 'react-color-palette';
 import { useDrop } from 'react-dnd';
-import {
-  deletedDealSelector,
-  newDealSelector,
-  updatedDealSelector
-} from "../../../../redux/selectors/crmSelector";
+import InfiniteScroll from 'react-infinite-scroller';
+import { useSelector } from 'react-redux';
+import ActionsSheet from 'app/components/common/ActionsSheet';
+import EASColorPicker from 'app/components/common/EASColorPicker';
+import NotificationsContext from 'app/context/notificationsContext';
+import extractCookieByName from 'app/utils/extractCookieByName';
+import usePrevious from 'app/utils/hooks/usePrevious';
+import onRequestError from 'app/utils/onRequestError';
 import {
   createNewDealState,
   deleteDealState,
   requestChangeDealColumn,
   requestFetchDeals,
-  updateDealState
-} from "../../../../middleware/api/crm";
-import extractCookieByName from "../../../utils/extractCookieByName";
-import onRequestError from "../../../utils/onRequestError";
-import ActionsSheet from "../../common/ActionsSheet";
-import EASColorPicker from "../../common/EASColorPicker";
-import AddColumnModal from "../AddColumnModal";
-import DealItem from "./DealItem";
-import { ItemTypes } from "./constants";
+  updateDealState,
+} from 'middleware/api/crm';
+import {
+  deletedDealSelector,
+  newDealSelector,
+  updatedDealSelector,
+} from 'redux/selectors/crmSelector';
+import AddColumnModal from '../AddColumnModal';
+import { ItemTypes } from './constants';
+import DealItem from './DealItem';
+import styles from './DealsColumn.module.scss';
 import reducer, {
   sheetActions,
   initialState,
@@ -49,30 +58,26 @@ import reducer, {
   removeDeal,
   setPage,
 } from './DealsColumn.reducer';
-import styles from './DealsColumn.module.scss';
-import { CircularProgress } from "@material-ui/core";
-import usePrevious from "../../../utils/hooks/usePrevious";
 
 const COOKIES_KEY = 'crm_filter';
 
-const DealsColumn = (
-  {
-    dealState,
-    width,
-    isFirst,
-    isLast,
-    updatedDeal,
-    filterData,
-    currentClinic,
-    onMove,
-    onUpdate,
-    onLinkPatient,
-    onDeleteDeal,
-    onAddSchedule,
-    onConfirmFirstContact,
-    onDealClick,
-  }
-) => {
+const DealsColumn = ({
+  dealState,
+  width,
+  isFirst,
+  isLast,
+  updatedDeal,
+  filterData,
+  currentClinic,
+  onMove,
+  onUpdate,
+  onLinkPatient,
+  onDeleteDeal,
+  onAddSchedule,
+  onConfirmFirstContact,
+  onDealClick,
+}) => {
+  const toast = useContext(NotificationsContext);
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
   const createdDeal = useSelector(newDealSelector);
@@ -80,43 +85,52 @@ const DealsColumn = (
   const deletedDeal = useSelector(deletedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
   const previousFilter = usePrevious(filterData);
-  const [{
-    isFetching,
-    showActions,
-    isEditingName,
-    columnName,
-    columnColor,
-    showColorPicker,
-    showCreateColumn,
-    totalElements,
-    items,
-    page,
-    itemsPerPage,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    {
+      isFetching,
+      showActions,
+      isEditingName,
+      columnName,
+      columnColor,
+      showColorPicker,
+      showCreateColumn,
+      totalElements,
+      items,
+      page,
+      itemsPerPage,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   const filteredActions = useMemo(() => {
-    return sheetActions.filter(action => {
+    return sheetActions.filter((action) => {
       return (
         (dealState.deleteable || action.key !== 'deleteColumn') &&
         (!isFirst || action.key !== 'moveToLeft') &&
         (!isLast || action.key !== 'moveToRight')
-      )
-    })
+      );
+    });
   }, [dealState, isFirst, isLast]);
 
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: dealState.type === 'Unsorted' || dealState.type === 'Rescheduled' || dealState.type === 'Completed'
-      ? ItemTypes.NONE
-      : dealState.type === 'Custom'
-        ? [ItemTypes.ALL, ItemTypes.SCHEDULED, ItemTypes.UNSCHEDULED]
-        : dealState.type === 'FirstContact'
+  const [{ isOver }, drop] = useDrop(
+    () => ({
+      accept:
+        dealState.type === 'Unsorted' ||
+        dealState.type === 'Rescheduled' ||
+        dealState.type === 'Completed'
+          ? ItemTypes.NONE
+          : dealState.type === 'Custom'
+          ? [ItemTypes.ALL, ItemTypes.SCHEDULED, ItemTypes.UNSCHEDULED]
+          : dealState.type === 'FirstContact'
           ? [ItemTypes.UNSCHEDULED, ItemTypes.ALL]
           : [ItemTypes.SCHEDULED, ItemTypes.UNSCHEDULED],
-    drop: (item) => handleDealDrop(item),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
+      drop: (item) => handleDealDrop(item),
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
     }),
-  }), [dealState]);
+    [dealState],
+  );
 
   useEffect(() => {
     if (isEqual(filterData, previousFilter)) {
@@ -146,7 +160,7 @@ const DealsColumn = (
     localDispatch(setColumnData(dealState));
     return () => {
       localDispatch(setPage(0));
-    }
+    };
   }, [dealState]);
 
   useEffect(() => {
@@ -164,7 +178,12 @@ const DealsColumn = (
       }
       localDispatch(setIsFetching(true));
       const filterParams = extractCookieByName(COOKIES_KEY);
-      const response = await requestFetchDeals(dealState.id, page, itemsPerPage, filterParams);
+      const response = await requestFetchDeals(
+        dealState.id,
+        page,
+        itemsPerPage,
+        filterParams,
+      );
       localDispatch(setData(response.data));
     } catch (error) {
       onRequestError(error);
@@ -176,8 +195,9 @@ const DealsColumn = (
     try {
       if (
         deal.state.id === dealState.id ||
-        (dealState.type !== 'Custom' && dealState.orderId < deal.state.orderId) ||
-        deal.state.type === 'Completed' && dealState.type === 'Failed'
+        (dealState.type !== 'Custom' &&
+          dealState.orderId < deal.state.orderId) ||
+        (deal.state.type === 'Completed' && dealState.type === 'Failed')
       ) {
         // no need to change deal state
         return;
@@ -187,7 +207,9 @@ const DealsColumn = (
         return;
       }
       if (
-        (dealState.type === 'Scheduled' || dealState.type === 'Completed' || dealState.type === 'Failed') &&
+        (dealState.type === 'Scheduled' ||
+          dealState.type === 'Completed' ||
+          dealState.type === 'Failed') &&
         deal.schedule == null
       ) {
         onAddSchedule?.(deal);
@@ -197,7 +219,7 @@ const DealsColumn = (
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const handleNameChange = (event) => {
     const newName = event.target.value;
@@ -206,18 +228,21 @@ const DealsColumn = (
 
   const handleCreateColumn = async (columnName) => {
     try {
-      const response = await createNewDealState({ name: columnName, orderId: dealState.orderId + 1 });
+      const response = await createNewDealState({
+        name: columnName,
+        orderId: dealState.orderId + 1,
+      });
       await onUpdate(response.data);
     } catch (error) {
       onRequestError(error);
     } finally {
       localDispatch(setShowCreateColumn(false));
     }
-  }
+  };
 
   const handleCloseCreateColumn = () => {
     localDispatch(setShowCreateColumn(false));
-  }
+  };
 
   const handleSaveColumnName = async () => {
     try {
@@ -230,7 +255,7 @@ const DealsColumn = (
   };
 
   const handleEditColumn = () => {
-    localDispatch(setShowActions(true))
+    localDispatch(setShowActions(true));
   };
 
   const handleCloseActions = () => {
@@ -248,7 +273,7 @@ const DealsColumn = (
     } catch (error) {
       localDispatch(setColumnColor(dealState.color));
     } finally {
-      handleCloseColorPicker()
+      handleCloseColorPicker();
     }
   };
 
@@ -280,7 +305,7 @@ const DealsColumn = (
         break;
       case 'deleteColumn':
         handleDeleteColumn();
-        break
+        break;
     }
     handleCloseActions();
   };
@@ -306,7 +331,7 @@ const DealsColumn = (
       <EASColorPicker
         open={showColorPicker}
         anchorEl={colorPickerRef.current}
-        placement="bottom"
+        placement='bottom'
         color={color}
         setColor={setColor}
         onSave={handleSaveColor}
@@ -314,11 +339,11 @@ const DealsColumn = (
       />
       <div className={styles.titleContainer} style={{ width }}>
         {isEditingName ? (
-          <Box display="flex">
+          <Box display='flex'>
             <TextField
               value={columnName}
               InputProps={{
-                className: styles.titleLabel
+                className: styles.titleLabel,
               }}
               onChange={handleNameChange}
             />
@@ -326,14 +351,12 @@ const DealsColumn = (
               className={styles.saveButton}
               onPointerUp={handleSaveColumnName}
             >
-              <DoneIcon/>
+              <DoneIcon />
             </IconButton>
           </Box>
         ) : (
-          <Box display="flex">
-            <Typography className={styles.titleLabel}>
-              {columnName}
-            </Typography>
+          <Box display='flex'>
+            <Typography className={styles.titleLabel}>{columnName}</Typography>
             <Typography className={styles.countLabel}>
               {totalElements}
             </Typography>
@@ -346,11 +369,11 @@ const DealsColumn = (
         />
         <div className={styles.editBtnContainer} ref={actionsBtnRef}>
           <IconButton onPointerUp={handleEditColumn}>
-            <MoreHorizIcon/>
+            <MoreHorizIcon />
           </IconButton>
         </div>
       </div>
-      <div id="scrollableDiv" className={styles.dataContainer}>
+      <div id='scrollableDiv' className={styles.dataContainer}>
         <InfiniteScroll
           initialLoad
           pageStart={0}
@@ -360,11 +383,11 @@ const DealsColumn = (
           hasMore={items.length < totalElements}
           loader={
             <div className={styles.progressWrapper}>
-              <CircularProgress className="circular-progress-bar"/>
+              <CircularProgress className='circular-progress-bar' />
             </div>
           }
         >
-          <div className={styles.itemsContainer}>
+          <div className={styles.itemsContainer} key='deal-items'>
             {items.map((item) => (
               <DealItem
                 key={item.id}
@@ -381,7 +404,7 @@ const DealsColumn = (
         </InfiniteScroll>
       </div>
     </div>
-  )
+  );
 };
 
 export default DealsColumn;

@@ -1,19 +1,18 @@
-import React, { useCallback, useState } from 'react';
-import { toast } from 'react-toastify';
-import Typography from "@material-ui/core/Typography";
-
-import { textForKey } from '../../../utils/localization';
-import { isDev } from "../../../../eas.config";
-import { wrapper } from "../../../../store";
-import { requestResetUserPassword } from "../../../../middleware/api/auth";
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import { PasswordRegex } from '../../../utils/constants';
+import React, { useCallback, useContext, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
+import NotificationsContext from 'app/context/notificationsContext';
+import { PasswordRegex } from 'app/utils/constants';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
+import { isDev } from 'eas.config';
+import { requestResetUserPassword } from 'middleware/api/auth';
+import EASImage from '../EASImage';
+import EASTextField from '../EASTextField';
 import LoadingButton from '../LoadingButton';
-import EASTextField from "../EASTextField";
-import EASImage from "../EASImage";
 import styles from './ResetPasswordForm.module.scss';
 
-const ResetPasswordForm = ({ token }) => {
+const ResetPasswordPage = ({ token }) => {
+  const toast = useContext(NotificationsContext);
   const isMobileDevice = useIsMobileDevice();
   const [state, setState] = useState({
     newPassword: '',
@@ -25,11 +24,11 @@ const ResetPasswordForm = ({ token }) => {
 
   const handleNewPasswordChange = (newValue) => {
     setState({ ...state, newPassword: newValue });
-  }
+  };
 
   const handleConfirmPasswordChange = (newValue) => {
     setState({ ...state, confirmPassword: newValue });
-  }
+  };
 
   const handleSavePassword = useCallback(async () => {
     if (!isFormValid()) {
@@ -40,9 +39,9 @@ const ResetPasswordForm = ({ token }) => {
       await requestResetUserPassword({
         newPassword: state.newPassword,
         resetToken: token,
-      })
+      });
       toast.success(textForKey('Saved successfully'));
-      window.location = `/login`;
+      window.location = '/login';
     } catch (error) {
       toast.error(error.message);
       setState({ ...state, errorMessage: error.message, isLoading: false });
@@ -56,16 +55,16 @@ const ResetPasswordForm = ({ token }) => {
     );
   };
 
-  const isConfirmError = state.confirmPassword.length > 0 && state.confirmPassword !== state.newPassword;
+  const isConfirmError =
+    state.confirmPassword.length > 0 &&
+    state.confirmPassword !== state.newPassword;
 
   return (
-    <div
-      className={styles.generalPage}
-    >
+    <div className={styles.generalPage}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <EASImage
-          src="settings/easyplan-logo.svg"
+          src='settings/easyplan-logo.svg'
           classes={{
             root: styles.logoContainer,
             image: styles.logoImage,
@@ -80,7 +79,10 @@ const ResetPasswordForm = ({ token }) => {
         }}
       >
         {isMobileDevice && (
-          <EASImage src="settings/easyplan-logo.svg" className={styles.logoImage} />
+          <EASImage
+            src='settings/easyplan-logo.svg'
+            className={styles.logoImage}
+          />
         )}
         <div
           className={styles.formRoot}
@@ -96,9 +98,9 @@ const ResetPasswordForm = ({ token }) => {
             <Typography className={styles.welcomeText}>
               {textForKey('change password message')}
             </Typography>
-            <form autoComplete="off" onSubmit={handleSavePassword}>
+            <form autoComplete='off' onSubmit={handleSavePassword}>
               <EASTextField
-                type="password"
+                type='password'
                 containerClass={styles.passwordField}
                 value={state.newPassword}
                 onChange={handleNewPasswordChange}
@@ -110,12 +112,14 @@ const ResetPasswordForm = ({ token }) => {
                 }
               />
               <EASTextField
-                type="password"
+                type='password'
                 containerClass={styles.passwordField}
                 fieldLabel={textForKey('Confirm password')}
                 onChange={handleConfirmPasswordChange}
                 value={state.confirmPassword}
-                helperText={isConfirmError ? textForKey('passwords_not_equal') : null}
+                helperText={
+                  isConfirmError ? textForKey('passwords_not_equal') : null
+                }
                 error={isConfirmError}
               />
             </form>
@@ -136,4 +140,4 @@ const ResetPasswordForm = ({ token }) => {
   );
 };
 
-export default wrapper.withRedux(ResetPasswordForm);
+export default ResetPasswordPage;

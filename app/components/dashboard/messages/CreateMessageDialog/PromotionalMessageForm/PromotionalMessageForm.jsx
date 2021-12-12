@@ -1,19 +1,27 @@
-import React, { useCallback, useEffect, useReducer, useRef } from "react";
-import dynamic from 'next/dynamic';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
+import Typography from '@material-ui/core/Typography';
 import debounce from 'lodash/debounce';
-import Typography from "@material-ui/core/Typography";
-import { toast } from "react-toastify";
-import moment from "moment-timezone";
-
-import { countMessageRecipients } from "../../../../../../middleware/api/messages";
-import { textForKey } from "../../../../../utils/localization";
+import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
+import EASTextField from 'app/components/common/EASTextField';
+import NotificationsContext from 'app/context/notificationsContext';
+import { textForKey } from 'app/utils/localization';
+import { countMessageRecipients } from 'middleware/api/messages';
 import {
   availableHours,
   charactersRegex,
   messageTypeEnum,
-  tags
-} from "../CreateMessageDialog.constants";
-import ReceiversFilter from "../ReceiversFilter";
+  tags,
+} from '../CreateMessageDialog.constants';
+import MainMessageForm from '../MainMessageForm';
+import ReceiversFilter from '../ReceiversFilter';
+import styles from './PromotionalMessageForm.module.scss';
 import reducer, {
   initialState,
   setHourToSend,
@@ -27,71 +35,81 @@ import reducer, {
   setFilterData,
   setRecipientsCount,
 } from './promotionalMessageSlice';
-import styles from './PromotionalMessageForm.module.scss';
-import MainMessageForm from "../MainMessageForm";
-import EASTextField from "../../../../common/EASTextField";
 
-const EasyDatePicker = dynamic(() => import("../../../../common/EasyDatePicker"));
+const EasyDatePicker = dynamic(() =>
+  import('app/components/common/EasyDatePicker'),
+);
 
-const PromotionalMessageForm = (
-  {
-    currentClinic,
-    initialMessage,
-    isLoading,
-    onMessageChange,
-    onLanguageChange,
-    onSubmit,
-  }
-) => {
+const PromotionalMessageForm = ({
+  currentClinic,
+  initialMessage,
+  isLoading,
+  onMessageChange,
+  onLanguageChange,
+  onSubmit,
+}) => {
+  const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
   const availableTags = tags.filter((item) =>
     item.availableFor.includes(messageTypeEnum.PromotionalMessage),
   );
-  const [{
-    messageTitle,
-    language,
-    message,
-    maxLength,
-    hourToSend,
-    showDatePicker,
-    messageDate,
-    filterData,
-    recipientsCount,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    {
+      messageTitle,
+      language,
+      message,
+      maxLength,
+      hourToSend,
+      showDatePicker,
+      messageDate,
+      filterData,
+      recipientsCount,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
-  const updateRecipientsCount = useCallback(debounce(async () => {
-    try {
-      const [startDate, endDate] = filterData.range;
-      const requestBody = {
-        statuses: filterData.statuses.filter(it => it.id !== 'All').map(it => it.id),
-        categories: filterData.categories.filter(it => it.id !== -1).map(it => it.id),
-        services: filterData.services.filter(it => it.id !== -1).map(it => it.id),
-        startDate: startDate,
-        endDate: endDate,
-      };
-      const response = await countMessageRecipients(requestBody);
-      const { data } = response;
-      if (data.isError) {
-        toast.error(data.message);
-        return;
+  const updateRecipientsCount = useCallback(
+    debounce(async () => {
+      try {
+        const [startDate, endDate] = filterData.range;
+        const requestBody = {
+          statuses: filterData.statuses
+            .filter((it) => it.id !== 'All')
+            .map((it) => it.id),
+          categories: filterData.categories
+            .filter((it) => it.id !== -1)
+            .map((it) => it.id),
+          services: filterData.services
+            .filter((it) => it.id !== -1)
+            .map((it) => it.id),
+          startDate: startDate,
+          endDate: endDate,
+        };
+        const response = await countMessageRecipients(requestBody);
+        const { data } = response;
+        if (data.isError) {
+          toast.error(data.message);
+          return;
+        }
+        localDispatch(setRecipientsCount(data));
+      } catch (error) {
+        if (error.response != null) {
+          const { data } = error.response;
+          toast.error(data.message || textForKey('something_went_wrong'));
+        } else {
+          toast.error(error.message || textForKey('something_went_wrong'));
+        }
       }
-      localDispatch(setRecipientsCount(data));
-    } catch (error) {
-      if (error.response != null) {
-        const { data } = error.response;
-        toast.error(data.message || textForKey("something_went_wrong"));
-      } else {
-        toast.error(error.message || textForKey("something_went_wrong"));
-      }
-    }
-  }, 500), [filterData])
+    }, 500),
+    [filterData],
+  );
 
   useEffect(() => {
     if (initialMessage == null) {
       return;
     }
     localDispatch(setMessageData(initialMessage));
-  }, [initialMessage])
+  }, [initialMessage]);
 
   useEffect(() => {
     const messageValue = message[language];
@@ -125,7 +143,7 @@ const PromotionalMessageForm = (
   const handleSubmit = (event) => {
     event?.preventDefault();
     onSubmit?.();
-  }
+  };
 
   const handleMessageChange = (newValue) => {
     localDispatch(setMessage({ [language]: newValue }));
@@ -145,9 +163,7 @@ const PromotionalMessageForm = (
 
   const handleTagClick = (tag) => () => {
     const currentMessage = message[language];
-    localDispatch(
-      setMessage({ [language]: `${currentMessage}${tag.id}` }),
-    );
+    localDispatch(setMessage({ [language]: `${currentMessage}${tag.id}` }));
   };
 
   const handleDateChange = (newDate) => {
@@ -173,9 +189,12 @@ const PromotionalMessageForm = (
     return messageValue.length;
   };
 
-  const handleFilterChange = useCallback((filterData) => {
-    localDispatch(setFilterData(filterData));
-  }, [localDispatch]);
+  const handleFilterChange = useCallback(
+    (filterData) => {
+      localDispatch(setFilterData(filterData));
+    },
+    [localDispatch],
+  );
 
   const isLengthExceeded = getRealMessageLength(language) > maxLength;
 

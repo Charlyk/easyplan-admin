@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Role } from "../../../../utils/constants";
+import { useSelector } from 'react-redux';
+import { Role } from 'app/utils/constants';
+import {
+  currentClinicSelector,
+  currentUserSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './SettingsWrapper.module.scss';
-
 const AccountSettings = dynamic(() => import('../AccountSettings'));
 const ApplicationSettings = dynamic(() => import('../ApplicationSettings'));
 const BracesSettings = dynamic(() => import('../BracesSettings'));
@@ -10,7 +15,7 @@ const ClinicWorkingHours = dynamic(() => import('../ClinicWorkingHours'));
 const CompanyDetailsForm = dynamic(() => import('../CompanyDetailsForm'));
 const SecuritySettings = dynamic(() => import('../SecuritySettings'));
 const SettingsMenu = dynamic(() => import('../SettingsMenu'));
-const CrmSettings = dynamic(() => import("../CrmSettings"));
+const CrmSettings = dynamic(() => import('../CrmSettings'));
 
 const SettingsForm = {
   companyDetails: 'companyDetails',
@@ -22,10 +27,10 @@ const SettingsForm = {
   crmSettings: 'crmSettings',
 };
 
-const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu, authToken }) => {
-  const selectedClinic = currentUser?.clinics.find(
-    item => item.clinicId === currentClinic.id,
-  );
+const SettingsWrapper = ({ countries, selectedMenu }) => {
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const selectedClinic = useSelector(userClinicSelector);
   const [currentForm, setCurrentForm] = useState(
     [Role.admin, Role.manager].includes(selectedClinic?.roleInClinic)
       ? SettingsForm.companyDetails
@@ -39,67 +44,29 @@ const SettingsWrapper = ({ currentUser, currentClinic, countries, selectedMenu, 
     setCurrentForm(selectedMenu);
   }, [selectedMenu]);
 
-  const handleFormChange = newForm => setCurrentForm(newForm);
+  const handleFormChange = (newForm) => setCurrentForm(newForm);
 
   return (
-      <div className={styles['settings-root']}>
-        <div className={styles['settings-root__menu']}>
-          <SettingsMenu
-            currentOption={currentForm}
-            onSelect={handleFormChange}
-            selectedClinic={selectedClinic}
-          />
-        </div>
-        <div className={styles['settings-root__form']}>
-          {currentForm === SettingsForm.companyDetails && (
-            <CompanyDetailsForm
-              countries={countries}
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-              authToken={authToken}
-            />
-          )}
-          {currentForm === SettingsForm.workingHours && (
-            <ClinicWorkingHours
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.accountSettings && (
-            <AccountSettings
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-              authToken={authToken}
-            />
-          )}
-          {currentForm === SettingsForm.securitySettings && (
-            <SecuritySettings
-              authToken={authToken}
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.appSettings && (
-            <ApplicationSettings
-              authToke={authToken}
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.bracesSettings && (
-            <BracesSettings
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-          {currentForm === SettingsForm.crmSettings && (
-            <CrmSettings
-              currentUser={currentUser}
-              currentClinic={currentClinic}
-            />
-          )}
-        </div>
+    <div className={styles['settings-root']}>
+      <div className={styles['settings-root__menu']}>
+        <SettingsMenu
+          currentOption={currentForm}
+          onSelect={handleFormChange}
+          selectedClinic={selectedClinic}
+        />
       </div>
+      <div className={styles['settings-root__form']}>
+        {currentForm === SettingsForm.companyDetails && (
+          <CompanyDetailsForm countries={countries} />
+        )}
+        {currentForm === SettingsForm.workingHours && <ClinicWorkingHours />}
+        {currentForm === SettingsForm.accountSettings && <AccountSettings />}
+        {currentForm === SettingsForm.securitySettings && <SecuritySettings />}
+        {currentForm === SettingsForm.appSettings && <ApplicationSettings />}
+        {currentForm === SettingsForm.bracesSettings && <BracesSettings />}
+        {currentForm === SettingsForm.crmSettings && <CrmSettings />}
+      </div>
+    </div>
   );
 };
 

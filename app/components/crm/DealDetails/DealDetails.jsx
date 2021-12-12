@@ -1,27 +1,25 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { textForKey } from "../../../utils/localization";
-import BottomSheetDialog from "../../common/BottomSheetDialog";
-import LeftContainer from "./LeftContainer";
+import BottomSheetDialog from 'app/components/common/BottomSheetDialog';
+import { textForKey } from 'app/utils/localization';
+import notifications from 'app/utils/notifications/notifications';
+import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
 import styles from './DealDetails.module.scss';
-import RightContainer from "./RightContainer";
-import wasNotificationShown from "../../../utils/notifications/wasNotificationShown";
-import notifications from "../../../utils/notifications/notifications";
+import LeftContainer from './LeftContainer';
+import RightContainer from './RightContainer';
 
-const DealDetails = (
-  {
-    open,
-    deal,
-    states,
-    currentClinic,
-    currentUser,
-    onClose,
-    onLink,
-    onAddSchedule,
-    onAddReminder,
-    onPlayAudio,
-  }
-) => {
+const DealDetails = ({
+  open,
+  deal,
+  states,
+  currentClinic,
+  currentUser,
+  onClose,
+  onLink,
+  onAddSchedule,
+  onAddReminder,
+  onPlayAudio,
+}) => {
   const isOpen = open && deal != null;
   const [showAddReminderHelp, setShowAddReminderHelp] = useState(false);
   const dialogTitle = useMemo(() => {
@@ -36,7 +34,9 @@ const DealDetails = (
   useEffect(() => {
     setTimeout(() => {
       if (isOpen) {
-        setShowAddReminderHelp(!wasNotificationShown(notifications.crmAddReminder.id));
+        setShowAddReminderHelp(
+          !wasNotificationShown(notifications.crmAddReminder.id),
+        );
       } else {
         setShowAddReminderHelp(false);
       }
@@ -45,11 +45,11 @@ const DealDetails = (
 
   const handleLinkPatient = () => {
     onLink?.(deal);
-  }
+  };
 
   const handleAddSchedule = () => {
     onAddSchedule?.(deal);
-  }
+  };
 
   return (
     <BottomSheetDialog
@@ -75,7 +75,7 @@ const DealDetails = (
         />
       </div>
     </BottomSheetDialog>
-  )
+  );
 };
 
 export default DealDetails;
@@ -100,7 +100,7 @@ DealDetails.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
@@ -145,4 +145,4 @@ DealDetails.propTypes = {
   onClose: PropTypes.func,
   onAddReminder: PropTypes.func,
   onPlayAudio: PropTypes.func,
-}
+};

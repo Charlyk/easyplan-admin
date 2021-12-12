@@ -1,5 +1,5 @@
-import { textForKey } from "../../../../utils/localization";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import { textForKey } from 'app/utils/localization';
 
 export const MenuItem = {
   personalInfo: 'personal-info',
@@ -92,6 +92,8 @@ export const initialState = {
   patient: null,
   viewInvoice: null,
   avatarFile: null,
+  showDeleteConfirmation: false,
+  isDeleting: false,
 };
 
 const patientDetailsModalSlice = createSlice({
@@ -116,6 +118,15 @@ const patientDetailsModalSlice = createSlice({
     setAvatarFile(state, action) {
       state.avatarFile = action.payload;
     },
+    openDeleteConfirmation(state) {
+      state.showDeleteConfirmation = true;
+    },
+    closeDeleteConfirmation(state) {
+      state.showDeleteConfirmation = false;
+    },
+    setIsDeleting(state, action) {
+      state.isDeleting = action.payload;
+    },
   },
 });
 
@@ -125,6 +136,9 @@ export const {
   setViewInvoice,
   setPatient,
   setIsFetching,
+  openDeleteConfirmation,
+  closeDeleteConfirmation,
+  setIsDeleting,
 } = patientDetailsModalSlice.actions;
 
 export default patientDetailsModalSlice.reducer;

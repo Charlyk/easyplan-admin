@@ -1,9 +1,10 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Statuses } from '../../../../../utils/constants';
+import { Statuses } from 'app/utils/constants';
 import styles from './ScheduleItem.module.scss';
 
 const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
@@ -24,9 +25,7 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
   const endTime = moment(appointment.endTime);
 
   return (
-    <div
-      role='button'
-      tabIndex={0}
+    <Box
       id={`${appointment.id}-${startTime.format('HH:mm')}>${endTime.format(
         'HH:mm',
       )}`}
@@ -53,7 +52,7 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
               styles.statusIcon,
               (scheduleStatus.id === 'DidNotCome' ||
                 scheduleStatus.id === 'Canceled') &&
-              styles.negative,
+                styles.negative,
             )}
           >
             {scheduleStatus.statusIcon}
@@ -65,7 +64,7 @@ const ScheduleItem = ({ appointment, hidden, showHour, onSelect }) => {
           {startTime.format('HH:mm')} - {endTime.format('HH:mm')}
         </Typography>
       )}
-    </div>
+    </Box>
   );
 };
 

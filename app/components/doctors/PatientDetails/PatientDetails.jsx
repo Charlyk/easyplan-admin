@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from "axios";
-import { toast } from "react-toastify";
-
-import { clinicEnabledBracesSelector } from '../../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../utils/localization';
-import EasyTab from '../../common/EasyTab';
-import AppointmentNotes from '../../dashboard/patients/PatientDetailsModal/AppointmentNotes';
-import PatientAppointments from '../../dashboard/patients/PatientDetailsModal/PatientAppointments';
-import PatientNotes from '../../dashboard/patients/PatientDetailsModal/PatientNotes';
-import OrthodonticPlan from '../../dashboard/patients/PatientDetailsModal/OrthodonticPlan';
-import PatientXRay from '../../dashboard/patients/PatientDetailsModal/PatientXRay';
+import { useDispatch, useSelector } from 'react-redux';
+import EasyTab from 'app/components/common/EasyTab';
+import AppointmentNotes from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes';
+import OrthodonticPlan from 'app/components/dashboard/patients/PatientDetailsModal/OrthodonticPlan';
+import PatientAppointments from 'app/components/dashboard/patients/PatientDetailsModal/PatientAppointments';
+import PatientNotes from 'app/components/dashboard/patients/PatientDetailsModal/PatientNotes';
+import PatientXRay from 'app/components/dashboard/patients/PatientDetailsModal/PatientXRay';
+import NotificationsContext from 'app/context/notificationsContext';
+import { textForKey } from 'app/utils/localization';
+import { requestFetchPatientNotes } from 'middleware/api/patients';
+import { setPatientXRayModal } from 'redux/actions/actions';
+import {
+  clinicEnabledBracesSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './PatientDetails.module.scss';
 
 const TabId = {
@@ -22,21 +26,19 @@ const TabId = {
   orthodonticPlan: 'OrthodonticPlan',
 };
 
-const PatientDetails = (
-  {
-    currentUser,
-    currentClinic,
-    onAddXRay,
-    onEditAppointmentNote,
-    onSaveOrthodonticPlan,
-    showTabs,
-    defaultTab,
-    patient,
-    scheduleId,
-    isDoctor,
-  }
-) => {
-  const braces = clinicEnabledBracesSelector(currentClinic);
+const PatientDetails = ({
+  onEditAppointmentNote,
+  onSaveOrthodonticPlan,
+  showTabs,
+  defaultTab,
+  patient,
+  scheduleId,
+  isDoctor,
+}) => {
+  const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
+  const braces = useSelector(clinicEnabledBracesSelector);
+  const currentUser = useSelector(currentUserSelector);
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   const [hasNotes, setHasNotes] = useState(false);
 
@@ -52,7 +54,7 @@ const PatientDetails = (
     }
 
     try {
-      const response = await axios.get(`/api/patients/${patient.id}/notes`);
+      const response = await requestFetchPatientNotes(patient.id);
       setHasNotes(response.data.length > 0);
     } catch (error) {
       toast.error(error.message);
@@ -63,6 +65,10 @@ const PatientDetails = (
 
   const handleTabClick = (selectedTab) => {
     setSelectedTab(selectedTab);
+  };
+
+  const handleAddXRay = () => {
+    dispatch(setPatientXRayModal({ open: true, patientId: patient.id }));
   };
 
   return (
@@ -126,18 +132,14 @@ const PatientDetails = (
           />
         )}
         {selectedTab === TabId.appointments && (
-          <PatientAppointments patient={patient} isDoctor={isDoctor}/>
+          <PatientAppointments patient={patient} isDoctor={isDoctor} />
         )}
-        {selectedTab === TabId.notes && (
-          <PatientNotes patient={patient}/>
-        )}
+        {selectedTab === TabId.notes && <PatientNotes patient={patient} />}
         {selectedTab === TabId.xRay && (
-          <PatientXRay onAddXRay={onAddXRay} patient={patient}/>
+          <PatientXRay onAddXRay={handleAddXRay} patient={patient} />
         )}
         {selectedTab === TabId.orthodonticPlan && braces.length > 0 && (
           <OrthodonticPlan
-            currentClinic={currentClinic}
-            currentUser={currentUser}
             patient={patient}
             scheduleId={scheduleId}
             onSave={onSaveOrthodonticPlan}

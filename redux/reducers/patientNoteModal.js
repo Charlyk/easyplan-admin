@@ -1,4 +1,4 @@
-import types from '../types/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   open: false,
@@ -8,16 +8,19 @@ const initialState = Object.freeze({
   visit: null,
 });
 
-export default function patientModal(state = initialState, action) {
-  switch (action.type) {
+export default function patientModal(
+  state = initialState,
+  { type, payload } = {},
+) {
+  switch (type) {
     case types.setAddPatientNote: {
-      const { open } = action.payload;
+      const { open } = payload;
       if (!open) {
         return initialState;
       }
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       };
     }
     default:

@@ -1,22 +1,20 @@
-import React from "react";
+import React from 'react';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Column from "./Column";
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import Column from './Column';
 import styles from './ColumnsWrapper.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import moment from "moment-timezone";
 
-const ColumnsWrapper = (
-  {
-    viewDate,
-    schedules,
-    hours,
-    columns,
-    hideCreateIndicator,
-    animatedStatuses,
-    onAddSchedule,
-    onScheduleSelected
-  }
-) => {
+const ColumnsWrapper = ({
+  viewDate,
+  schedules,
+  hours,
+  columns,
+  hideCreateIndicator,
+  animatedStatuses,
+  onAddSchedule,
+  onScheduleSelected,
+}) => {
   const isSingleMode = columns.length === 1;
 
   function getSchedulesForColumn(column) {
@@ -27,7 +25,9 @@ const ColumnsWrapper = (
     <div className={styles.columnsWrapperRoot}>
       {columns.map((column) => (
         <Column
-          key={`${column.id}-${moment(viewDate).format('YYYY-MM-DD')}-${column.doctorId}`}
+          key={`${column.id}-${moment(viewDate).format('YYYY-MM-DD')}-${
+            column.doctorId
+          }`}
           viewDate={viewDate}
           isSingleMode={isSingleMode}
           animatedStatuses={animatedStatuses}
@@ -40,8 +40,8 @@ const ColumnsWrapper = (
         />
       ))}
     </div>
-  )
-}
+  );
+};
 
 export default React.memo(ColumnsWrapper, areComponentPropsEqual);
 
@@ -49,13 +49,16 @@ ColumnsWrapper.propTypes = {
   viewDate: PropTypes.instanceOf(Date),
   hours: PropTypes.arrayOf(PropTypes.string),
   hideCreateIndicator: PropTypes.bool,
-  columns: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    doctorId: PropTypes.number,
-    name: PropTypes.string,
-    disabled: PropTypes.bool,
-    date: PropTypes.instanceOf(Date),
-  })),
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      doctorId: PropTypes.number,
+      name: PropTypes.string,
+      disabled: PropTypes.bool,
+      date: PropTypes.instanceOf(Date),
+      hint: PropTypes.string,
+    }),
+  ),
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -97,13 +100,13 @@ ColumnsWrapper.propTypes = {
       'PartialPaid',
       'Paid',
       'Rescheduled',
-    ])
+    ]),
   ),
   onAddSchedule: PropTypes.func,
   onScheduleSelected: PropTypes.func,
-}
+};
 
 ColumnsWrapper.defaultProps = {
   onAddSchedule: () => null,
   onScheduleSelected: () => null,
-}
+};

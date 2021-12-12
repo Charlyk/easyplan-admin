@@ -1,21 +1,35 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
+import Box from '@material-ui/core/Box';
+import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-
-import { textForKey } from '../../../../../utils/localization';
-import EasyDatePicker from '../../../../common/EasyDatePicker';
+import { useSelector } from 'react-redux';
+import EASAutocomplete from 'app/components/common/EASAutocomplete';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDatePicker from 'app/components/common/EasyDatePicker';
+import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { textForKey } from 'app/utils/localization';
 import {
   createPauseRecord,
   deletePauseRecord,
-  fetchPausesAvailableTime
-} from "../../../../../../middleware/api/pauses";
-import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
-import Box from "@material-ui/core/Box";
-import EASModal from "../../../../common/modals/EASModal";
-import EASTextField from "../../../../common/EASTextField";
-import EASSelect from "../../../../common/EASSelect";
-import EASTextarea from "../../../../common/EASTextarea";
+  fetchPausesAvailableTime,
+} from 'middleware/api/pauses';
+import {
+  activeClinicDoctorsSelector,
+  clinicCabinetsSelector,
+  clinicDoctorsSelector,
+} from 'redux/selectors/appDataSelector';
+import styles from './AddPauseModal.module.scss';
 import reducer, {
   initialState,
   setShowDatePicker,
@@ -27,24 +41,28 @@ import reducer, {
   setStartHour,
   setIsDeleting,
   setIsLoading,
+  setDoctor,
+  setCabinet,
   resetState,
+  setInitialData,
 } from './AddPauseModal.reducer';
-import styles from './AddPauseModal.module.scss';
-import { CircularProgress } from "@material-ui/core";
 
-const AddPauseModal = (
-  {
-    open,
-    viewDate,
-    doctor,
-    id,
-    startTime,
-    endTime,
-    comment: defaultComment,
-    onClose,
-  }
-) => {
+const AddPauseModal = ({
+  open,
+  viewDate,
+  doctor: initialDoctor,
+  cabinet: initialCabinet,
+  id,
+  startTime,
+  endTime,
+  comment: defaultComment,
+  onClose,
+}) => {
+  const toast = useContext(NotificationsContext);
   const datePickerAnchor = useRef(null);
+  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
+  const clinicCabinets = useSelector(clinicCabinetsSelector);
+  const hasCabinets = clinicCabinets.length > 0;
   const [
     {
       isLoading,
@@ -56,16 +74,50 @@ const AddPauseModal = (
       startHour,
       endHour,
       comment,
+      doctor,
+      cabinet,
       isDeleting,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
+  const cabinets = useMemo(() => {
+    const mappedCabinets = clinicCabinets.map((cabinet) => ({
+      ...cabinet,
+      label: cabinet.name,
+    }));
+    return orderBy(mappedCabinets, 'name', 'asc');
+  }, [clinicCabinets]);
+
+  const doctors = useMemo(() => {
+    const mappedDoctors = clinicDoctors
+      .filter((item) => {
+        const isInCabinet = item.cabinets.some((cab) => cab.id === cabinet?.id);
+        return cabinet == null || isInCabinet;
+      })
+      .map((item) => {
+        const { phoneNumber, fullName } = item;
+        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+        return {
+          ...item,
+          name: name,
+          label: item.fullName,
+        };
+      });
+    return orderBy(mappedDoctors, 'name', 'asc');
+  }, [clinicDoctors, cabinet]);
+
   useEffect(() => {
     if (!open) {
       localDispatch(resetState());
     }
-  }, [open])
+  }, [open]);
+
+  useEffect(() => {
+    localDispatch(
+      setInitialData({ cabinet: initialCabinet, doctor: initialDoctor }),
+    );
+  }, [initialCabinet, initialDoctor]);
 
   useEffect(() => {
     if (doctor != null) {
@@ -94,7 +146,7 @@ const AddPauseModal = (
   }, [defaultComment]);
 
   const getMappedTime = (hours) => {
-    return hours.map(item => ({
+    return hours.map((item) => ({
       id: item,
       name: item,
     }));
@@ -103,7 +155,7 @@ const AddPauseModal = (
   const fetchPauseAvailableTime = async () => {
     localDispatch(setIsFetchingHours(true));
     try {
-      const date = moment(pauseDate | viewDate).format('YYYY-MM-DD')
+      const date = moment(pauseDate | viewDate).format('YYYY-MM-DD');
       const response = await fetchPausesAvailableTime(date, doctor.id);
       const { data: availableTime } = response;
       localDispatch(setAvailableAllTime(availableTime));
@@ -159,6 +211,7 @@ const AddPauseModal = (
       const requestBody = {
         pauseId: id,
         doctorId: doctor.id,
+        cabinetId: cabinet?.id,
         startTime: moment(pauseDate)
           .set({
             hour: parseInt(startHourParts[0]),
@@ -177,7 +230,7 @@ const AddPauseModal = (
       };
 
       await createPauseRecord(requestBody);
-      onClose()
+      onClose();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -195,7 +248,7 @@ const AddPauseModal = (
     } finally {
       localDispatch(setIsDeleting(false));
     }
-  }
+  };
 
   const handleDateFieldClick = () => {
     localDispatch(setShowDatePicker(true));
@@ -211,6 +264,14 @@ const AddPauseModal = (
 
   const handleEndHourChange = (event) => {
     localDispatch(setEndHour(event.target.value));
+  };
+
+  const handleDoctorChange = (event, selectedDoctor) => {
+    localDispatch(setDoctor(selectedDoctor));
+  };
+
+  const handleCabinetChange = (event, selectedCabinet) => {
+    localDispatch(setCabinet(selectedCabinet));
   };
 
   const datePicker = (
@@ -240,63 +301,74 @@ const AddPauseModal = (
       open={open}
       paperClass={styles.modalPaper}
       className={styles['add-pause-root']}
-      title={`${textForKey('Add pause')}: ${doctor?.firstName} ${
-        doctor?.lastName
-      }`}
+      title={textForKey('Add pause')}
       onNegativeClick={handleDeletePause}
+      primaryBtnText={textForKey('Save')}
+      secondaryBtnText={textForKey('Close')}
       isPositiveDisabled={!isFormValid() || isLoading || isDeleting}
       onDestroyClick={id != null && handleDeletePause}
       onPrimaryClick={handleCreateSchedule}
-      isPositiveLoading={isLoading || isDeleting}
+      isPositiveLoading={isLoading || isDeleting || isFetchingHours}
     >
       <Box display='flex' flexDirection='column' padding='16px'>
-        {isFetchingHours ? (
-          <div className='progress-bar-wrapper'>
-            <CircularProgress className='circular-progress-bar'/>
+        <form onSubmit={handleCreateSchedule}>
+          {hasCabinets && (
+            <EASAutocomplete
+              filterLocally
+              options={cabinets}
+              value={cabinet}
+              fieldLabel={textForKey('add_appointment_cabinet')}
+              placeholder={textForKey('type_to_search')}
+              onChange={handleCabinetChange}
+            />
+          )}
+          <EASAutocomplete
+            filterLocally
+            containerClass={styles.simpleField}
+            options={doctors}
+            value={doctor}
+            fieldLabel={textForKey('Doctor')}
+            placeholder={textForKey('Enter doctor name or phone')}
+            onChange={handleDoctorChange}
+          />
+          <EASTextField
+            readOnly
+            containerClass={styles.simpleField}
+            ref={datePickerAnchor}
+            fieldLabel={textForKey('Date')}
+            value={moment(pauseDate).format('DD MMMM YYYY')}
+            onPointerUp={handleDateFieldClick}
+          />
+          <div className={styles.timePickerContainer}>
+            <EASSelect
+              id='startTime'
+              rootClass={styles.timeSelect}
+              label={textForKey('Start time')}
+              labelId='start-time-select'
+              onChange={handleStartHourChange}
+              value={startHour}
+              options={getMappedTime(availableStartTime)}
+              disabled={isFetchingHours || availableStartTime.length === 0}
+            />
+            <EASSelect
+              id='endTime'
+              rootClass={styles.timeSelect}
+              label={textForKey('Ent time')}
+              labelId='end-time-select'
+              onChange={handleEndHourChange}
+              value={endHour}
+              options={getMappedTime(availableEndTime)}
+              disabled={isFetchingHours || availableEndTime.length === 0}
+            />
           </div>
-        ) : (
-          <>
-            <form onSubmit={handleCreateSchedule}>
-              <EASTextField
-                readOnly
-                containerClass={styles.simpleField}
-                ref={datePickerAnchor}
-                fieldLabel={textForKey('Date')}
-                value={moment(pauseDate).format('DD MMMM YYYY')}
-                onPointerUp={handleDateFieldClick}
-              />
-              <div className={styles.timePickerContainer}>
-                <EASSelect
-                  id="startTime"
-                  rootClass={styles.timeSelect}
-                  label={textForKey('Start time')}
-                  labelId="start-time-select"
-                  onChange={handleStartHourChange}
-                  value={startHour}
-                  options={getMappedTime(availableStartTime)}
-                  disabled={isFetchingHours || availableStartTime.length === 0}
-                />
-                <EASSelect
-                  id="endTime"
-                  rootClass={styles.timeSelect}
-                  label={textForKey('Ent time')}
-                  labelId="end-time-select"
-                  onChange={handleEndHourChange}
-                  value={endHour}
-                  options={getMappedTime(availableEndTime)}
-                  disabled={isFetchingHours || availableEndTime.length === 0}
-                />
-              </div>
 
-              <EASTextarea
-                fieldLabel={textForKey('Notes')}
-                value={comment || ''}
-                onChange={handleCommentChange}
-              />
-            </form>
-            {datePicker}
-          </>
-        )}
+          <EASTextarea
+            fieldLabel={textForKey('Notes')}
+            value={comment || ''}
+            onChange={handleCommentChange}
+          />
+        </form>
+        {datePicker}
       </Box>
     </EASModal>
   );
@@ -314,8 +386,8 @@ AddPauseModal.propTypes = {
     lastName: PropTypes.string,
   }),
   id: PropTypes.number,
-  startTime: PropTypes.instanceOf(Date),
-  endTime: PropTypes.instanceOf(Date),
+  startTime: PropTypes.string,
+  endTime: PropTypes.string,
   comment: PropTypes.string,
 };
 

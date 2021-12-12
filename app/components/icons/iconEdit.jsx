@@ -23,8 +23,8 @@ export default React.memo(IconEdit);
 
 IconEdit.propTypes = {
   fill: PropTypes.string,
-}
+};
 
 IconEdit.defaultProps = {
-  fill: '#000'
-}
+  fill: '#000',
+};

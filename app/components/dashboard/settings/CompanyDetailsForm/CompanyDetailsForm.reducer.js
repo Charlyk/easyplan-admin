@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import moment from "moment-timezone";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
 
 export const initialState = {
   isSaving: false,
@@ -30,8 +30,8 @@ export const initialState = {
     isValidTelegramNumber: true,
     isValidWhatsappNumber: true,
     hasBrackets: false,
-  }
-}
+  },
+};
 
 const companyDetailsFormSlice = createSlice({
   name: 'companyDetailsForm',
@@ -63,7 +63,7 @@ const companyDetailsFormSlice = createSlice({
       state.isSaving = false;
     },
     setData(state, action) {
-      state.data = action.payload
+      state.data = action.payload;
     },
   },
 });

@@ -1,37 +1,37 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
-import areComponentPropsEqual from "../../../utils/areComponentPropsEqual";
-import Header from "./Header";
-import Hours from "./Hours";
-import ColumnsWrapper from "./ColumnsWrapper";
-import HourIndicator from "./HourIndicator";
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import ColumnsWrapper from './ColumnsWrapper';
 import styles from './EasyCalendar.module.scss';
+import Header from './Header';
+import HourIndicator from './HourIndicator';
+import Hours from './Hours';
 
-const EasyCalendar = (
-  {
-    dayHours,
-    columns,
-    schedules,
-    viewDate,
-    hourIndicator,
-    showHourIndicator,
-    animatedStatuses,
-    hideCreateIndicator,
-    onAddSchedule,
-    onScheduleSelected,
-    onHeaderItemClick,
-  }
-) => {
+const EasyCalendar = ({
+  dayHours,
+  columns,
+  schedules,
+  viewDate,
+  hourIndicator,
+  showHourIndicator,
+  animatedStatuses,
+  hideCreateIndicator,
+  onAddSchedule,
+  onScheduleSelected,
+  onHeaderItemClick,
+}) => {
   return (
     <div className={styles.calendarRoot}>
-      <Header items={columns} onItemClick={onHeaderItemClick}/>
+      <Header items={columns} onItemClick={onHeaderItemClick} />
       <div className={styles.calendarContainer}>
         <HourIndicator
-          disabled={!hourIndicator || dayHours.length === 0 || !showHourIndicator}
+          disabled={
+            !hourIndicator || dayHours.length === 0 || !showHourIndicator
+          }
           dayHours={dayHours}
           viewDate={viewDate}
         />
-        <Hours hours={dayHours}/>
+        <Hours hours={dayHours} />
         <ColumnsWrapper
           viewDate={viewDate}
           schedules={schedules}
@@ -44,7 +44,7 @@ const EasyCalendar = (
         />
       </div>
     </div>
-  )
+  );
 };
 
 export default React.memo(EasyCalendar, areComponentPropsEqual);
@@ -89,7 +89,8 @@ EasyCalendar.propTypes = {
       name: PropTypes.string,
       date: PropTypes.instanceOf(Date),
       disabled: PropTypes.bool,
-    })
+      hint: PropTypes.string,
+    }),
   ).isRequired,
   animatedStatuses: PropTypes.arrayOf(
     PropTypes.oneOf([
@@ -105,12 +106,12 @@ EasyCalendar.propTypes = {
       'PartialPaid',
       'Paid',
       'Rescheduled',
-    ])
+    ]),
   ),
   onAddSchedule: PropTypes.func,
   onScheduleSelected: PropTypes.func,
   onHeaderItemClick: PropTypes.func,
-}
+};
 
 EasyCalendar.defaultProps = {
   hourIndicator: true,
@@ -121,4 +122,4 @@ EasyCalendar.defaultProps = {
   onAddSchedule: () => null,
   onScheduleSelected: () => null,
   onHeaderItemClick: () => null,
-}
+};

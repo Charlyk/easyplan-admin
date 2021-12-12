@@ -1,9 +1,13 @@
 .checkoutModalRoot {
   user-select: none;
 
+  .textArea {
+    width: 70%;
+  }
+
   .paper {
     width: 80%;
-    height: 60%;
+    height: 70%;
     min-width: 800px;
     outline: none;
     position: absolute;
@@ -19,6 +23,7 @@
       height: 100%;
       position: relative;
       padding: 1rem;
+      overflow-y: auto;
 
       .closeButton {
         outline: none;
@@ -39,18 +44,19 @@
         font-style: normal;
         font-weight: bold;
         font-size: 16px;
-        color: #34344E;
+        color: #34344e;
       }
 
       .paying {
-        color: #3A83DC;
+        color: #3a83dc;
         width: 30px !important;
         height: 30px !important;
       }
 
       .payBtn {
+        margin-top: 15px;
         outline: none;
-        background-color: #3A83DC;
+        background-color: #3a83dc;
         color: white;
         font-family: Inter, sans-serif;
         font-style: normal;
@@ -58,7 +64,7 @@
         font-size: 16px;
 
         &:disabled {
-          background-color: #A1A2C6;
+          background-color: #a1a2c6;
         }
 
         &:hover {
@@ -67,18 +73,29 @@
       }
 
       .detailsTableContainer {
-        height: calc(100% - 90px);
+        height: calc(100% - 165px);
         width: 100%;
         margin-top: 1.5rem;
+        position: relative;
 
         .detailsTable {
-          width: calc(100% - .25rem);
+          width: calc(100% - 0.25rem);
 
+          &Head {
+            width: 100%;
+          }
+
+          &Body {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
           .row {
             .cell {
               border-bottom: #ededed 1px solid;
-              padding-top: .5rem;
-              padding-bottom: .5rem;
+              padding-top: 0.4rem;
+              padding-bottom: 0.4rem;
 
               &:first-child {
                 padding-left: 0;
@@ -94,7 +111,7 @@
                   font-style: normal;
                   font-weight: normal;
                   font-size: 13px;
-                  color: #34344E;
+                  color: #34344e;
 
                   &::before {
                     border-bottom: none;
@@ -111,10 +128,10 @@
                 font-style: normal;
                 font-weight: normal;
                 font-size: 13px;
-                color: #34344E;
+                color: #34344e;
 
                 &.clickable-value {
-                  color: #3A83DC;
+                  color: #3a83dc;
                   cursor: pointer;
 
                   &:hover {
@@ -132,16 +149,12 @@
                 }
               }
 
-              &.value {
-
-              }
-
               &.field {
                 padding-top: 0;
                 padding-bottom: 0;
 
                 .searching-progress {
-                  color: #3A83DC;
+                  color: #3a83dc;
                 }
               }
 
@@ -154,7 +167,7 @@
                   font-style: normal;
                   font-weight: bold;
                   font-size: 20px;
-                  color: #34344E;
+                  color: #34344e;
                 }
               }
 
@@ -164,7 +177,7 @@
                 input {
                   background-color: white;
                   margin-top: 0;
-                  margin-bottom: 1rem;
+                  margin-bottom: 0;
                   border: none;
                   outline: none;
                   font-family: Inter, sans-serif;
@@ -172,7 +185,7 @@
                   font-weight: bold;
                   font-size: 50px;
                   width: 100%;
-                  color: #3A83DC;
+                  color: #3a83dc;
                   text-align: center;
 
                   &::placeholder {
@@ -180,7 +193,7 @@
                     font-style: normal;
                     font-weight: bold;
                     font-size: 50px;
-                    color: #3A83DC;
+                    color: #3a83dc;
                   }
                 }
               }
@@ -193,7 +206,7 @@
                   font-style: normal;
                   font-weight: bold;
                   font-size: 16px;
-                  color: #34344E;
+                  color: #34344e;
                 }
               }
 
@@ -205,7 +218,7 @@
                   font-style: normal;
                   font-weight: bold;
                   font-size: 16px;
-                  color: #34344E;
+                  color: #34344e;
                 }
 
                 input {
@@ -217,7 +230,7 @@
                   font-weight: bold;
                   font-size: 24px;
                   width: 100px;
-                  color: #3A83DC;
+                  color: #3a83dc;
                   text-align: center;
 
                   &::placeholder {
@@ -225,7 +238,7 @@
                     font-style: normal;
                     font-weight: bold;
                     font-size: 24px;
-                    color: #3A83DC;
+                    color: #3a83dc;
                   }
                 }
               }

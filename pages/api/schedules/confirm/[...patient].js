@@ -1,8 +1,21 @@
-import axios from "axios";
-import { handler } from "../../handler";
-import getSubdomain from "../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../../app/utils/constants";
+import axios from 'axios';
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import handler from '../../handler';
+
+function fetchScheduleInfo(req) {
+  const { patient } = req.query;
+  const [scheduleId, patientId] = patient;
+  return axios.get(
+    `${updatedServerUrl(req)}/confirmation/schedule/${scheduleId}/${patientId}`,
+    {
+      headers: {
+        [HeaderKeys.subdomain]: getSubdomain(req),
+      },
+    },
+  );
+}
 
 export default async (req, res) => {
   switch (req.method) {
@@ -19,13 +32,3 @@ export default async (req, res) => {
       break;
   }
 };
-
-function fetchScheduleInfo(req) {
-  const { patient } = req.query;
-  const [scheduleId, patientId] = patient;
-  return axios.get(`${updatedServerUrl(req)}/confirmation/schedule/${scheduleId}/${patientId}`, {
-    headers: {
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
-}

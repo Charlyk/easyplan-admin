@@ -1,19 +1,26 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-
-import IconPlus from '../../icons/iconPlus';
-import IconSuccess from '../../icons/iconSuccess';
-import { textForKey } from '../../../utils/localization';
+import IconPlus from 'app/components/icons/iconPlus';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import { textForKey } from 'app/utils/localization';
 import styles from './ClinicSelector.module.scss';
 
-const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange, currentUser }) => {
+const ClinicSelector = ({
+  open,
+  anchorEl,
+  onClose,
+  onCreate,
+  onChange,
+  currentUser,
+}) => {
   if (!currentUser) return null;
 
-  const handleCompanySelected = company => {
+  const handleCompanySelected = (company) => {
     onChange(company);
     onClose();
   };
@@ -31,10 +38,8 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange, currentUs
         <Fade {...TransitionProps} timeout={350}>
           <Paper className={styles.companiesPaper}>
             <div className={styles.optionsWrapper}>
-              {currentUser?.clinics.map(clinic => (
-                <div
-                  role='button'
-                  tabIndex={0}
+              {currentUser?.clinics.map((clinic) => (
+                <Box
                   onClick={() => handleCompanySelected(clinic)}
                   key={clinic.id}
                   className={clsx(
@@ -44,17 +49,12 @@ const ClinicSelector = ({ open, anchorEl, onClose, onCreate, onChange, currentUs
                   )}
                 >
                   {clinic.clinicName} <IconSuccess fill='#3A83DC' />
-                </div>
+                </Box>
               ))}
-              <div
-                role='button'
-                tabIndex={0}
-                className={styles.option}
-                onClick={onCreate}
-              >
+              <Box className={styles.option} onClick={onCreate}>
                 <IconPlus fill='#34344E' />
                 {textForKey('Create clinic')}
-              </div>
+              </Box>
             </div>
           </Paper>
         </Fade>

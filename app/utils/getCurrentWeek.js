@@ -1,4 +1,4 @@
-import moment from "moment-timezone";
+import moment from 'moment-timezone';
 
 /**
  * Get current week days

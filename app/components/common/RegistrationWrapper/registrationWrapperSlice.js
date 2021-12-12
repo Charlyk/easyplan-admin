@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const RegistrationStep = {
   Account: 0,
-  Clinic: 1
-}
+  Clinic: 1,
+};
 
 export const initialState = {
   step: RegistrationStep.Account,
@@ -23,9 +23,7 @@ const registrationWrapperSlice = createSlice({
     },
     setAccountCompleted(state) {
       state.step = RegistrationStep.Clinic;
-      state.completedSteps = [
-        RegistrationStep.Account,
-      ];
+      state.completedSteps = [RegistrationStep.Account];
     },
     setIsLoading(state, action) {
       state.isLoading = action.payload;
@@ -46,13 +44,10 @@ const registrationWrapperSlice = createSlice({
 });
 
 export const {
-  setStep,
-  setAccountCompleted,
   setIsLoading,
   setErrorMessage,
   setCompletedSteps,
   setAccountData,
-  setClinicData,
 } = registrationWrapperSlice.actions;
 
 export default registrationWrapperSlice.reducer;

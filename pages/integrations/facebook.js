@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
-import FacebookLogin from "react-facebook-login";
-import { textForKey } from "../../app/utils/localization";
-import { FacebookAppId } from "../../app/utils/constants";
+import FacebookLogin from 'react-facebook-login';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { FacebookAppId } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 
 const Facebook = ({ redirect }) => {
   const handleFacebookResponse = useCallback((response) => {
-    parent.postMessage(response, redirect)
+    parent.postMessage(response, redirect);
   }, []);
 
   return (
@@ -13,9 +14,9 @@ const Facebook = ({ redirect }) => {
       <FacebookLogin
         autoLoad={false}
         appId={FacebookAppId}
-        fields="name,email,picture,accounts"
-        scope="public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement"
-        size="small"
+        fields='name,email,picture,accounts'
+        scope='public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement'
+        size='small'
         textButton={textForKey('Connect Facebook')}
         callback={handleFacebookResponse}
       />
@@ -26,8 +27,8 @@ const Facebook = ({ redirect }) => {
 export const getServerSideProps = ({ query }) => {
   const { redirect } = query;
   return {
-    props: { redirect }
-  }
-}
+    props: { redirect },
+  };
+};
 
-export default React.memo(Facebook);
+export default React.memo(Facebook, areComponentPropsEqual);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 const useWindowWidth = () => {
   const [width, setWidth] = useState(0);
@@ -15,6 +15,6 @@ const useWindowWidth = () => {
   }, []);
 
   return width;
-}
+};
 
 export default useWindowWidth;

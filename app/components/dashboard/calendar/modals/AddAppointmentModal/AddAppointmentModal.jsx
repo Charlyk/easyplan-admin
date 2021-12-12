@@ -1,71 +1,99 @@
-import React, { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+} from 'react';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
+import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-
-import { toggleAppointmentsUpdate } from '../../../../../../redux/actions/actions';
-import { EmailRegex, Languages, PatientSources, Role } from '../../../../../utils/constants';
-import { textForKey } from '../../../../../utils/localization';
-import EasyDatePicker from '../../../../common/EasyDatePicker';
+import { useDispatch, useSelector } from 'react-redux';
+import EASAutocomplete from 'app/components/common/EASAutocomplete';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDatePicker from 'app/components/common/EasyDatePicker';
+import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { EmailRegex, Languages, PatientSources } from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import { getPatients } from 'middleware/api/patients';
 import {
   getAvailableHours,
   getScheduleDetails,
-  postSchedule
-} from "../../../../../../middleware/api/schedules";
-import { getPatients } from "../../../../../../middleware/api/patients";
-import { reducer, initialState, actions } from "./AddAppointmentModal.reducer";
-import isPhoneNumberValid from "../../../../../utils/isPhoneNumberValid";
-import areComponentPropsEqual from "../../../../../utils/areComponentPropsEqual";
-import EASModal from "../../../../common/modals/EASModal";
+  postSchedule,
+} from 'middleware/api/schedules';
+import { toggleAppointmentsUpdate } from 'redux/actions/actions';
+import {
+  activeClinicDoctorsSelector,
+  clinicCabinetsSelector,
+} from 'redux/selectors/appDataSelector';
+import { clinicServicesSelector } from 'redux/selectors/appDataSelector';
 import styles from './AddAppointment.module.scss';
-import EASPhoneInput from "../../../../common/EASPhoneInput";
-import EASTextField from "../../../../common/EASTextField";
-import EASAutocomplete from "../../../../common/EASAutocomplete";
-import EASSelect from "../../../../common/EASSelect";
-import EASTextarea from "../../../../common/EASTextarea";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import reducer, {
+  initialState,
+  setPatients,
+  setPatientBirthday,
+  setSchedule,
+  setPatientSource,
+  setPatientsLoading,
+  setEndTime,
+  setStartTime,
+  setAppointmentDate,
+  setIsCreatingSchedule,
+  setAppointmentNote,
+  setDoctor,
+  setPatient,
+  setAvailableTime,
+  setIsFetchingHours,
+  setShowBirthdayPicker,
+  setPatientPhoneNumber,
+  setIsNewPatient,
+  setIsPatientValid,
+  setIsUrgent,
+  setPatientEmail,
+  setPatientFirstName,
+  setPatientLanguage,
+  setPatientLastName,
+  setService,
+  setShowDatePicker,
+  setSelectedCabinet,
+  resetState,
+} from './AddAppointmentModal.reducer';
 
-const AddAppointmentModal = (
-  {
-    open,
-    currentClinic,
-    doctor: selectedDoctor,
-    patient: selectedPatient,
-    startHour: selectedStartTime,
-    endHour: selectedEndTime,
-    date,
-    schedule,
-    onClose,
-  }
-) => {
+const AddAppointmentModal = ({
+  open,
+  doctor: selectedDoctor,
+  patient: selectedPatient,
+  startHour: selectedStartTime,
+  endHour: selectedEndTime,
+  cabinet: selectedCabinet,
+  date,
+  schedule,
+  onClose,
+}) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
+  const activeServices = useSelector(clinicServicesSelector);
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
-  const doctors = useMemo(() => {
-    return currentClinic.users.filter((item) =>
-      item.roleInClinic === Role.doctor &&
-      !item.isHidden &&
-      !item.isInVacation
-    ).map(item => {
-      const { phoneNumber, fullName } = item;
-      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
-      return {
-        ...item,
-        name: name,
-        label: item.fullName,
-      }
-    });
-  }, [currentClinic]);
-
+  const clinicCabinets = useSelector(clinicCabinetsSelector);
+  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
   const [
     {
       patient,
       patients,
       doctor,
+      cabinet,
       service,
       loading,
       scheduleId,
@@ -98,43 +126,120 @@ const AddAppointmentModal = (
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  const getLabelKey = useCallback((option) => {
-    if (option.firstName && option.lastName) {
-      return `${option.lastName} ${option.firstName}`
-    } else if (option.firstName) {
-      return option.firstName
-    } else if (option.lastName) {
-      return option.lastName
-    } else {
-      return `+${option.countryCode}${option.phoneNumber}`
-    }
-  }, []);
+  const hasCabinets = clinicCabinets.length > 0;
+
+  const doctors = useMemo(() => {
+    const mappedDoctors = clinicDoctors
+      .filter((item) => {
+        const isInCabinet = item.cabinets.some((cab) => cab.id === cabinet?.id);
+        return cabinet == null || isInCabinet;
+      })
+      .map((item) => {
+        const { phoneNumber, fullName } = item;
+        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+        return {
+          ...item,
+          name: name,
+          label: item.fullName,
+        };
+      });
+    return orderBy(mappedDoctors, 'name', 'asc');
+  }, [cabinet, clinicDoctors]);
+
+  const cabinets = useMemo(() => {
+    const mappedCabinets = clinicCabinets.map((cabinet) => ({
+      ...cabinet,
+      label: cabinet.name,
+    }));
+    return orderBy(mappedCabinets, 'name', 'asc');
+  }, [clinicCabinets]);
 
   const suggestionPatients = useMemo(() => {
     if (patients.length === 0 && patient != null) {
-      return [{
-        ...patient,
-        name: `${patient.fullName} +${patient.countryCode}${patient.phoneNumber}`,
-        label: patients.fullName,
-      }]
+      return [
+        {
+          ...patient,
+          name: `${patient.fullName} +${patient.countryCode}${patient.phoneNumber}`,
+          label: patients.fullName,
+        },
+      ];
     }
-    return patients.map(item => ({
+    return patients.map((item) => ({
       ...item,
       name: `${item.fullName} +${item.countryCode}${item.phoneNumber}`,
       label: item.fullName,
-    }))
+    }));
   }, [patients, patient]);
 
   const mappedServices = useMemo(() => {
-    if (doctor?.services == null) {
+    if (doctor?.services == null && cabinet == null) {
       return [];
     }
 
-    return doctor.services.map((service) => ({
+    let services;
+    if (doctor != null) {
+      services = doctor.services.filter((service) =>
+        activeServices.some(
+          (activeService) => activeService.id === service.serviceId,
+        ),
+      );
+    } else {
+      const cabinetDoctors = clinicDoctors.filter((doctor) =>
+        doctor.cabinets.some((item) => item.id === cabinet.id),
+      );
+      const allCabinetServices = cabinetDoctors
+        .map((doctor) => doctor.services)
+        .flat();
+      services = allCabinetServices.filter((service) =>
+        activeServices.some(
+          (activeService) => activeService.id === service.serviceId,
+        ),
+      );
+    }
+
+    return services.map((service) => ({
       ...service,
       label: service.name,
     }));
-  }, [doctor]);
+  }, [doctor, cabinet, clinicDoctors]);
+
+  const getLabelKey = useCallback((option) => {
+    if (option.firstName && option.lastName) {
+      return `${option.lastName} ${option.firstName}`;
+    } else if (option.firstName) {
+      return option.firstName;
+    } else if (option.lastName) {
+      return option.lastName;
+    } else {
+      return `+${option.countryCode}${option.phoneNumber}`;
+    }
+  }, []);
+
+  const handlePatientSearch = useCallback(
+    debounce(async (query) => {
+      localDispatch(setPatientsLoading(true));
+      try {
+        const updatedQuery = query.replace('+', '');
+        const requestQuery = {
+          query: updatedQuery,
+          page: '0',
+          rowsPerPage: '10',
+          short: '1',
+        };
+        const { data: response } = await getPatients(requestQuery);
+        const patients = response.data.map((item) => ({
+          ...item,
+          fullName: getLabelKey(item),
+        }));
+        localDispatch(setPatients(patients));
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        localDispatch(setPatientsLoading(false));
+      }
+    }, 700),
+    [],
+  );
 
   useEffect(() => {
     if (schedule != null) {
@@ -144,17 +249,17 @@ const AddAppointmentModal = (
 
   useEffect(() => {
     if (!open) {
-      localDispatch(actions.resetState());
+      localDispatch(resetState());
     }
   }, [open]);
 
   useEffect(() => {
     if (selectedDoctor != null) {
-      const fullName = `${selectedDoctor.firstName} ${selectedDoctor.lastName}`
+      const fullName = `${selectedDoctor.firstName} ${selectedDoctor.lastName}`;
       const { phoneNumber } = selectedDoctor;
       const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
       localDispatch(
-        actions.setDoctor({
+        setDoctor({
           ...selectedDoctor,
           label: fullName,
           fullName,
@@ -164,14 +269,14 @@ const AddAppointmentModal = (
     }
 
     if (date != null) {
-      localDispatch(actions.setAppointmentDate(date));
+      localDispatch(setAppointmentDate(date));
     }
 
     if (selectedPatient != null) {
       const fullName = getLabelKey(selectedPatient);
       const { countryCode, phoneNumber } = selectedPatient;
       localDispatch(
-        actions.setPatient({
+        setPatient({
           ...selectedPatient,
           fullName,
           name: `${fullName} +${countryCode}${phoneNumber}`,
@@ -179,26 +284,30 @@ const AddAppointmentModal = (
         }),
       );
     }
-  }, [selectedDoctor, date, selectedPatient]);
+
+    if (selectedCabinet != null) {
+      localDispatch(setSelectedCabinet(selectedCabinet));
+    }
+  }, [selectedDoctor, date, selectedPatient, selectedCabinet]);
 
   useEffect(() => {
     fetchAvailableHours();
-  }, [doctor, service, appointmentDate]);
+  }, [doctor, cabinet, service, appointmentDate]);
 
   useEffect(() => {
     if (schedule == null) {
-      localDispatch(actions.setStartTime(selectedStartTime || ''));
-      localDispatch(actions.setEndTime(selectedEndTime || ''));
+      localDispatch(setStartTime(selectedStartTime || ''));
+      localDispatch(setEndTime(selectedEndTime || ''));
     }
   }, [selectedStartTime, selectedEndTime]);
 
   const mappedTime = (timeList) => {
-    return timeList.map(item => ({
+    return timeList.map((item) => ({
       id: item,
       label: item,
       name: item,
     }));
-  }
+  };
 
   const fetchScheduleDetails = async () => {
     if (schedule == null) {
@@ -208,7 +317,7 @@ const AddAppointmentModal = (
       const response = await getScheduleDetails(schedule.id);
       const { data: scheduleDetails } = response;
       localDispatch(
-        actions.setSchedule({
+        setSchedule({
           ...scheduleDetails,
           doctor: doctors.find((it) => it.id === scheduleDetails.doctor.id),
         }),
@@ -222,27 +331,29 @@ const AddAppointmentModal = (
     if (doctor == null || service == null || appointmentDate == null) {
       return;
     }
-    localDispatch(actions.setIsFetchingHours(true));
+    localDispatch(setIsFetchingHours(true));
     try {
       const query = {
-        doctorId: doctor.id,
         serviceId: service.serviceId || service.id,
+        doctorId: doctor.id,
         date: moment(appointmentDate).format('YYYY-MM-DD'),
       };
+
       if (schedule != null) {
         query.scheduleId = schedule.id;
       }
+
       const response = await getAvailableHours(query);
       const { data: availableTime } = response;
-      localDispatch(actions.setAvailableTime(availableTime));
+      localDispatch(setAvailableTime(availableTime));
       if (startTime.length === 0) {
-        localDispatch(actions.setStartTime(availableTime[0]));
+        localDispatch(setStartTime(availableTime[0]));
       }
       updateEndTimeBasedOnService(availableTime);
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localDispatch(actions.setIsFetchingHours(false));
+      localDispatch(setIsFetchingHours(false));
     }
   };
 
@@ -264,51 +375,34 @@ const AddAppointmentModal = (
         })
         .add(service.duration, 'minutes')
         .format('HH:mm');
-      localDispatch(actions.setEndTime(end));
+      localDispatch(setEndTime(end));
     }, 300);
   };
 
   const handlePatientChange = (event, selectedPatient) => {
-    localDispatch(actions.setPatient(selectedPatient));
+    localDispatch(setPatient(selectedPatient));
   };
 
   const handleDoctorChange = (event, selectedDoctor) => {
-    localDispatch(actions.setDoctor(selectedDoctor));
+    localDispatch(setDoctor(selectedDoctor));
+  };
+
+  const handleCabinetChange = (event, selectedCabinet) => {
+    localDispatch(setSelectedCabinet(selectedCabinet));
   };
 
   const handleServiceChange = (event, selectedService) => {
-    localDispatch(actions.setService(selectedService));
+    localDispatch(setService(selectedService));
   };
-
-  const handlePatientSearch = useCallback(
-    debounce(async (query) => {
-      localDispatch(actions.setPatientsLoading(true));
-      try {
-        const updatedQuery = query.replace('+', '');
-        const requestQuery = { query: updatedQuery, page: '0', rowsPerPage: '10', short: '1' };
-        const { data: response } = await getPatients(requestQuery);
-        const patients = response.data.map((item) => ({
-          ...item,
-          fullName: getLabelKey(item),
-        }));
-        localDispatch(actions.setPatients(patients));
-      } catch (error) {
-        toast.error(error.message);
-      } finally {
-        localDispatch(actions.setPatientsLoading(false));
-      }
-    }, 700),
-    [],
-  );
 
   const handleSearchQueryChange = (event) => {
     const query = event.target.value;
     if (query.length < 3) {
-      localDispatch(actions.setPatients([]))
-      localDispatch(actions.setPatientsLoading(false));
+      localDispatch(setPatients([]));
+      localDispatch(setPatientsLoading(false));
       return;
     }
-    localDispatch(actions.setPatientsLoading(true));
+    localDispatch(setPatientsLoading(true));
     handlePatientSearch(query);
   };
 
@@ -316,47 +410,47 @@ const AddAppointmentModal = (
     if (isFinished) {
       return;
     }
-    localDispatch(actions.setShowDatePicker(true));
+    localDispatch(setShowDatePicker(true));
   };
 
   const handleCloseDatePicker = () => {
-    localDispatch(actions.setShowDatePicker(false));
+    localDispatch(setShowDatePicker(false));
   };
 
   const handleDateChange = (newDate) => {
-    localDispatch(actions.setAppointmentDate(newDate));
+    localDispatch(setAppointmentDate(newDate));
   };
 
   const handleBirthdayChange = (newDate) => {
-    localDispatch(actions.setPatientBirthday(newDate));
+    localDispatch(setPatientBirthday(newDate));
   };
 
   const handleEmailChange = (newValue) => {
-    localDispatch(actions.setPatientEmail(newValue));
+    localDispatch(setPatientEmail(newValue));
   };
 
   const handleCloseBirthdayPicker = () => {
-    localDispatch(actions.setShowBirthdayPicker(false));
+    localDispatch(setShowBirthdayPicker(false));
   };
 
   const handleOpenBirthdayPicker = () => {
-    localDispatch(actions.setShowBirthdayPicker(true));
+    localDispatch(setShowBirthdayPicker(true));
   };
 
   const handleStartHourChange = (event) => {
-    localDispatch(actions.setStartTime(event.target.value));
+    localDispatch(setStartTime(event.target.value));
   };
 
   const handleEndHourChange = (event) => {
-    localDispatch(actions.setEndTime(event.target.value));
-  }
+    localDispatch(setEndTime(event.target.value));
+  };
 
   const handleNoteChange = (newValue) => {
-    localDispatch(actions.setAppointmentNote(newValue));
+    localDispatch(setAppointmentNote(newValue));
   };
 
   const handleIsUrgentChange = (event, checked) => {
-    localDispatch(actions.setIsUrgent(checked));
+    localDispatch(setIsUrgent(checked));
   };
 
   const changePatientMode = () => {
@@ -364,27 +458,27 @@ const AddAppointmentModal = (
       return;
     }
     const isNew = !isNewPatient;
-    localDispatch(actions.setIsNewPatient(isNew));
+    localDispatch(setIsNewPatient(isNew));
     if (isNew) {
-      localDispatch(actions.setPatient(null));
-      localDispatch(actions.setIsPatientValid(false));
+      localDispatch(setPatient(null));
+      localDispatch(setIsPatientValid(false));
     }
   };
 
   const handlePatientFirstNameChange = (newValue) => {
-    localDispatch(actions.setPatientFirstName(newValue));
-  }
+    localDispatch(setPatientFirstName(newValue));
+  };
 
   const handlePatientLastNameChange = (newValue) => {
-    localDispatch(actions.setPatientLastName(newValue));
-  }
+    localDispatch(setPatientLastName(newValue));
+  };
 
   const handlePatientLanguageChange = (event) => {
-    localDispatch(actions.setPatientLanguage(event.target.value));
+    localDispatch(setPatientLanguage(event.target.value));
   };
 
   const handlePatientSourceChange = (event) => {
-    localDispatch(actions.setPatientSource(event.target.value));
+    localDispatch(setPatientSource(event.target.value));
   };
 
   const isFormValid = () => {
@@ -402,12 +496,15 @@ const AddAppointmentModal = (
     if (!isFormValid()) {
       return;
     }
-    localDispatch(actions.setIsCreatingSchedule(true));
+    localDispatch(setIsCreatingSchedule(true));
     try {
       // set start date
       const [startHour, startMinute] = startTime.split(':');
       const startDate = moment(appointmentDate);
-      startDate.set({ hour: parseInt(startHour), minute: parseInt(startMinute) });
+      startDate.set({
+        hour: parseInt(startHour),
+        minute: parseInt(startMinute),
+      });
 
       // set end date
       const [endHour, endMinute] = endTime.split(':');
@@ -426,7 +523,8 @@ const AddAppointmentModal = (
         isUrgent,
         patientCountryCode: phoneCountry.dialCode,
         patientId: patient?.id,
-        doctorId: doctor.id,
+        doctorId: doctor?.id,
+        cabinetId: cabinet?.id,
         serviceId: service.serviceId || service.id,
         startDate: startDate.toDate(),
         endDate: endDate.toDate(),
@@ -439,17 +537,24 @@ const AddAppointmentModal = (
       onClose();
       dispatch(toggleAppointmentsUpdate());
     } catch (error) {
-      toast.error(error.messages);
+      if (error.response != null) {
+        const { data } = error.response;
+        toast?.error(data.message || error.message);
+      } else {
+        toast?.error(error.message);
+      }
     } finally {
-      localDispatch(actions.setIsCreatingSchedule(false));
+      localDispatch(setIsCreatingSchedule(false));
     }
   };
 
   const handlePhoneChange = (value, country, event) => {
     localDispatch(
-      actions.setPatientPhoneNumber({
+      setPatientPhoneNumber({
         phoneNumber: value.replace(country.dialCode, ''),
-        isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+        isPhoneValid:
+          isPhoneNumberValid(value, country) &&
+          !event.target?.classList.value.includes('invalid-number'),
         country,
       }),
     );
@@ -505,14 +610,14 @@ const AddAppointmentModal = (
         {isNewPatient && (
           <div className={styles.patientNameContainer}>
             <EASTextField
-              type="text"
+              type='text'
               value={patientLastName}
               containerClass={styles.nameField}
               fieldLabel={textForKey('Last name')}
               onChange={handlePatientLastNameChange}
             />
             <EASTextField
-              type="text"
+              type='text'
               value={patientFirstName}
               containerClass={styles.nameField}
               fieldLabel={textForKey('First name')}
@@ -533,7 +638,7 @@ const AddAppointmentModal = (
 
         {isNewPatient && (
           <EASTextField
-            type="email"
+            type='email'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Email')}
             value={patientEmail}
@@ -548,7 +653,11 @@ const AddAppointmentModal = (
             containerClass={styles.simpleField}
             ref={birthdayPickerAnchor}
             fieldLabel={textForKey('Birthday')}
-            value={patientBirthday ? moment(patientBirthday).format('DD MMM YYYY') : ''}
+            value={
+              patientBirthday
+                ? moment(patientBirthday).format('DD MMM YYYY')
+                : ''
+            }
             onPointerUp={handleOpenBirthdayPicker}
           />
         )}
@@ -556,7 +665,7 @@ const AddAppointmentModal = (
         {isNewPatient && (
           <EASSelect
             label={textForKey('spoken_language')}
-            labelId="spoken-language-select"
+            labelId='spoken-language-select'
             options={Languages}
             value={patientLanguage}
             rootClass={styles.simpleField}
@@ -567,7 +676,7 @@ const AddAppointmentModal = (
         {isNewPatient && (
           <EASSelect
             label={textForKey('patient_source')}
-            labelId="patient-source-select"
+            labelId='patient-source-select'
             options={PatientSources}
             value={patientSource}
             rootClass={styles.simpleField}
@@ -590,26 +699,33 @@ const AddAppointmentModal = (
 
         <div className={styles.modeWrapper}>
           <div
-            className={
-              clsx(
-                styles.patientModeButton,
-                {
-                  [styles.disabled]: isFinished,
-                },
-              )
-            }
+            className={clsx(styles.patientModeButton, {
+              [styles.disabled]: isFinished,
+            })}
             role='button'
             tabIndex={0}
             onPointerUp={changePatientMode}
           >
-          <span>
-            {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
-          </span>
+            <span>
+              {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
+            </span>
           </div>
         </div>
 
+        {hasCabinets && (
+          <EASAutocomplete
+            filterLocally
+            options={cabinets}
+            value={cabinet}
+            fieldLabel={textForKey('add_appointment_cabinet')}
+            placeholder={textForKey('type_to_search')}
+            onChange={handleCabinetChange}
+          />
+        )}
+
         <EASAutocomplete
           filterLocally
+          containerClass={styles.simpleField}
           options={doctors}
           value={doctor}
           fieldLabel={textForKey('Doctor')}
@@ -619,7 +735,7 @@ const AddAppointmentModal = (
 
         <EASAutocomplete
           filterLocally
-          disabled={doctor == null}
+          disabled={mappedServices.length === 0}
           containerClass={styles.simpleField}
           options={mappedServices}
           value={service}
@@ -643,7 +759,7 @@ const AddAppointmentModal = (
             rootClass={styles.timeSelect}
             value={startTime || ''}
             label={textForKey('Start time')}
-            labelId="start-time-select"
+            labelId='start-time-select'
             options={mappedTime(availableStartTime)}
             onChange={handleStartHourChange}
           />
@@ -652,7 +768,7 @@ const AddAppointmentModal = (
             rootClass={styles.timeSelect}
             value={endTime || ''}
             label={textForKey('End time')}
-            labelId="start-time-select"
+            labelId='start-time-select'
             options={mappedTime(availableEndTime)}
             onChange={handleEndHourChange}
           />

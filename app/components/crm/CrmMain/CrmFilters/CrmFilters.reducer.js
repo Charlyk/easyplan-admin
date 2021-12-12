@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { textForKey } from "../../../../utils/localization";
-import moment from "moment-timezone";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
+import { textForKey } from 'app/utils/localization';
 
 export const Shortcuts = [
   {
@@ -63,8 +63,8 @@ export const reminderOptions = [
   },
   {
     id: 5,
-    name: textForKey('crm_filter_expired_tasks')
-  }
+    name: textForKey('crm_filter_expired_tasks'),
+  },
 ];
 
 export const initialState = {
@@ -121,7 +121,7 @@ const crmFiltersSlice = createSlice({
     },
     resetState() {
       return initialState;
-    }
+    },
   },
 });
 
@@ -136,7 +136,7 @@ export const {
   setShowRangePicker,
   setSelectedStates,
   setSelectedShortcut,
-  resetState
+  resetState,
 } = crmFiltersSlice.actions;
 
 export default crmFiltersSlice.reducer;

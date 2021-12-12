@@ -16,6 +16,32 @@
     border: #ec3276 1px solid;
   }
 
+  .tagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+
+    .tagItem {
+      margin-right: 5px;
+      margin-bottom: 5px;
+
+      :last-child {
+        margin-right: 0;
+      }
+
+      .label {
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        color: #3A83DC;
+      }
+
+      &.outlined {
+        border-color: #3A83DC;
+      }
+    }
+  }
+
   .patientLink {
     color: #3A83DC;
     text-decoration: none;

@@ -1,5 +1,5 @@
-import axios from "axios";
-import { environment } from "../../eas.config";
+import axios from 'axios';
+
 const host = 'http://localhost';
 const port = 3000;
 
@@ -13,7 +13,7 @@ const port = 3000;
  */
 export async function request(path, method, headers = null, body = null) {
   switch (method) {
-    case "get":
+    case 'get':
       return headers
         ? axios.get(`${host}:${port}${path}`, { headers })
         : axios.get(path);
@@ -41,7 +41,7 @@ export async function request(path, method, headers = null, body = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function get(path, headers) {
-  return request(path, 'get', headers)
+  return request(path, 'get', headers);
 }
 
 /**
@@ -73,5 +73,5 @@ export async function put(path, headers, body) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function del(path, headers) {
-  return request(path, 'delete', headers)
+  return request(path, 'delete', headers);
 }

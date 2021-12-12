@@ -1,81 +1,79 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
-import { SWRConfig } from "swr";
-import MainComponent from "../app/components/common/MainComponent";
-import parseCookies from '../app/utils/parseCookies';
-import redirectToUrl from "../app/utils/redirectToUrl";
-import { fetchAppData } from "../middleware/api/initialization";
-import { fetchAllDealStates } from "../middleware/api/crm";
-import CrmMain from "../app/components/crm/CrmMain";
-import { APP_DATA_API, JwtRegex } from "../app/utils/constants";
-import handleRequestError from "../app/utils/handleRequestError";
-import { wrapper } from "../store";
+import { connect } from 'react-redux';
+import MainComponent from 'app/components/common/MainComponent';
+import CrmMain from 'app/components/crm/CrmMain';
+import { JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAllDealStates } from 'middleware/api/crm';
 
-const Crm = ({ fallback, authToken, states }) => {
+import {
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { wrapper } from 'store';
+
+const Crm = ({ states }) => {
   return (
-    <SWRConfig value={{ fallback }}>
-      <MainComponent
-        currentPath='/crm'
-        authToken={authToken}
-      >
-        <CrmMain states={states} />
-      </MainComponent>
-    </SWRConfig>
+    <MainComponent currentPath='/crm'>
+      <CrmMain states={states} />
+    </MainComponent>
   );
 };
 
-export const getServerSideProps = async ({ req }) => {
-  try {
-    const { auth_token: authToken } = parseCookies(req);
-    if (!authToken || !authToken.match(JwtRegex)) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      };
-    }
-    const appData = await fetchAppData(req.headers);
-    const { currentUser, currentClinic } = appData.data;
-    const redirectTo = redirectToUrl(currentUser, currentClinic, '/crm');
-    if (redirectTo != null) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      };
-    }
+export default connect((state) => state)(Crm);
 
-    const response = await fetchAllDealStates(req.headers);
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req }) => {
+      try {
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-    return {
-      props: {
-        fallback: {
-          [APP_DATA_API]: {
-            ...appData.data
-          }
-        },
-        states: response.data,
-        authToken,
+        const redirectTo = redirectToUrl(currentUser, currentClinic, '/crm');
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
+
+        const response = await fetchAllDealStates(req.headers);
+
+        return {
+          props: {
+            states: response.data,
+          },
+        };
+      } catch (error) {
+        return handleRequestError(error);
       }
-    }
-  } catch (error) {
-    return handleRequestError(error);
-  }
-}
-
-export default wrapper.withRedux(Crm);
+    },
+);
 
 Crm.propTypes = {
-  currentUser: PropTypes.object,
-  currentClinic: PropTypes.object,
   authToken: PropTypes.string,
-  states: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    color: PropTypes.string,
-    orderId: PropTypes.number,
-    deleteable: PropTypes.bool,
-  })),
+  states: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      color: PropTypes.string,
+      orderId: PropTypes.number,
+      deleteable: PropTypes.bool,
+    }),
+  ),
 };

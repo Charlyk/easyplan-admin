@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const categoryModalState = {
   closed: 'closed',
@@ -52,15 +52,13 @@ const servicesContainerSlice = createSlice({
     },
     setShowImportModal(state, action) {
       state.showImportModal = action.payload;
-    }
+    },
   },
 });
 
 export const {
-  setIsUploading,
   setCategories,
   setCategoryModal,
-  setSetupExcelModal,
   setCategory,
   setDeleteServiceModal,
   setIsLoading,

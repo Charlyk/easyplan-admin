@@ -1,16 +1,16 @@
-import { Role } from "./constants";
+import { Role } from './constants';
 
 const getRedirectUrlForUser = (user, subdomain) => {
   if (user == null) {
     return '/login';
   }
   const { clinics } = user;
-  const userClinic = clinics.find((item) =>
-    item.clinicDomain.toLowerCase() === subdomain?.toLowerCase()
+  const userClinic = clinics.find(
+    (item) => item.clinicDomain.toLowerCase() === subdomain?.toLowerCase(),
   );
   if (userClinic != null) {
     try {
-      switch (userClinic.roleInClinic) {
+      switch (userClinic?.roleInClinic) {
         case Role.reception:
           return '/calendar/day';
         case Role.admin:
@@ -22,11 +22,11 @@ const getRedirectUrlForUser = (user, subdomain) => {
           return '/login';
       }
     } catch (error) {
-      return '/login'
+      return '/login';
     }
   } else {
     return '/login';
   }
-}
+};
 
 export default getRedirectUrlForUser;

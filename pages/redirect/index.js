@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography'
-import { useRouter } from "next/router";
-import getRedirectUrlForUser from '../../app/utils/getRedirectUrlForUser';
-import { getCurrentUser } from "../../middleware/api/auth";
-import { textForKey } from "../../app/utils/localization";
-import setCookies from '../../app/utils/setCookies';
-import { JwtRegex } from "../../app/utils/constants";
-import handleRequestError from "../../app/utils/handleRequestError";
+import Typography from '@material-ui/core/Typography';
+import { useRouter } from 'next/router';
+import { connect } from 'react-redux';
+import { JwtRegex } from 'app/utils/constants';
+import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
+import handleRequestError from 'app/utils/handleRequestError';
+import { textForKey } from 'app/utils/localization';
+import setCookies from 'app/utils/setCookies';
+import { getCurrentUser } from 'middleware/api/auth';
 
 const Redirect = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ const Redirect = () => {
     } catch (error) {
       await router.replace('/login');
     }
-  }
+  };
 
   return (
     <div
@@ -41,19 +42,21 @@ const Redirect = () => {
         justifyContent: 'center',
       }}
     >
-      <CircularProgress className='circular-progress-bar'/>
+      <CircularProgress className='circular-progress-bar' />
       <Typography className='typography' style={{ marginTop: '1rem' }}>
         {textForKey('Redirecting to clinic')}...
       </Typography>
     </div>
-  )
-}
+  );
+};
+
+export default connect((state) => state)(Redirect);
 
 export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
     // try to check if clinic id is a number
-    parseInt(clinicId);
+    parseInt(clinicId, 10);
 
     // check if token is valid
     if (!token.match(JwtRegex) || !clinicId) {
@@ -67,10 +70,8 @@ export const getServerSideProps = async ({ res, query }) => {
 
     // set cookies
     setCookies(res, token, clinicId);
-    return { props: {} }
+    return { props: {} };
   } catch (error) {
     return handleRequestError(error);
   }
-}
-
-export default Redirect;
+};

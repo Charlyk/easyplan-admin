@@ -2,49 +2,56 @@ import React, { useEffect, useRef, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Typography from '@material-ui/core/Typography';
-import IconMessages from '@material-ui/icons/Message';
-import IconLiveHelp from '@material-ui/icons/LiveHelp';
+import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AssessmentIcon from '@material-ui/icons/Assessment'
-import Collapse from "@material-ui/core/Collapse";
+import Typography from '@material-ui/core/Typography';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import IconLiveHelp from '@material-ui/icons/LiveHelp';
+import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { useSelector } from "react-redux";
-
-import { requestFetchRemindersCount } from "../../../../../middleware/api/crm";
-import { newReminderSelector, updatedReminderSelector } from "../../../../../redux/selectors/crmSelector";
-import { textForKey } from '../../../../utils/localization';
-import onRequestError from "../../../../utils/onRequestError";
-import { Role, TECH_SUPPORT_URL } from "../../../../utils/constants";
-import notifications from "../../../../utils/notifications/notifications";
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import wasNotificationShown from "../../../../utils/notifications/wasNotificationShown";
-import updateNotificationState from "../../../../utils/notifications/updateNotificationState";
-import IconArrowDown from '../../../icons/iconArrowDown';
-import MenuAnalytics from '../../../icons/menuAnalytics';
-import MenuCalendar from '../../../icons/menuCalendar';
-import MenuCategories from '../../../icons/menuCategories';
-import MenuEllipse from '../../../icons/menuEllipse';
-import MenuPatients from '../../../icons/menuPatients';
-import MenuSettings from '../../../icons/menuSettings';
-import MenuUsers from '../../../icons/menuUsers';
-import ClinicSelector from '../../ClinicSelector';
-import EASHelpView from "../../EASHelpView";
-import ExchangeRates from "../ExchageRates";
+import { useSelector } from 'react-redux';
+import ClinicSelector from 'app/components/common/ClinicSelector';
+import EASHelpView from 'app/components/common/EASHelpView';
+import IconArrowDown from 'app/components/icons/iconArrowDown';
+import MenuAnalytics from 'app/components/icons/menuAnalytics';
+import MenuCalendar from 'app/components/icons/menuCalendar';
+import MenuCategories from 'app/components/icons/menuCategories';
+import MenuEllipse from 'app/components/icons/menuEllipse';
+import MenuPatients from 'app/components/icons/menuPatients';
+import MenuSettings from 'app/components/icons/menuSettings';
+import MenuUsers from 'app/components/icons/menuUsers';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { Role, TECH_SUPPORT_URL } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import notifications from 'app/utils/notifications/notifications';
+import updateNotificationState from 'app/utils/notifications/updateNotificationState';
+import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
+import onRequestError from 'app/utils/onRequestError';
+import { environment } from 'eas.config';
+import { requestFetchRemindersCount } from 'middleware/api/crm';
+import {
+  currentClinicSelector,
+  currentUserSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
+import {
+  newReminderSelector,
+  updatedReminderSelector,
+} from 'redux/selectors/crmSelector';
+import ExchangeRates from '../ExchageRates';
 import styles from './MainMenu.module.scss';
-import { environment } from "../../../../../eas.config";
 
 const menuItems = [
   {
     id: 'analytics',
     type: 'group',
     text: textForKey('Analytics'),
-    icon: <MenuAnalytics/>,
+    icon: <MenuAnalytics />,
     roles: [Role.admin, Role.manager, Role.reception],
     children: [
       {
@@ -74,7 +81,7 @@ const menuItems = [
     type: 'link',
     roles: [Role.admin, Role.manager],
     text: textForKey('Services'),
-    icon: <MenuCategories/>,
+    icon: <MenuCategories />,
     href: '/services',
     hasCounter: false,
   },
@@ -83,7 +90,7 @@ const menuItems = [
     type: 'link',
     roles: [Role.admin, Role.manager],
     text: textForKey('Users'),
-    icon: <MenuUsers/>,
+    icon: <MenuUsers />,
     href: '/users',
     hasCounter: false,
   },
@@ -92,7 +99,7 @@ const menuItems = [
     type: 'link',
     roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
     text: textForKey('CRM Board'),
-    icon: <AssessmentIcon/>,
+    icon: <AssessmentIcon />,
     href: '/crm',
     hasCounter: true,
   },
@@ -101,7 +108,7 @@ const menuItems = [
     type: 'link',
     roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('Calendar'),
-    icon: <MenuCalendar/>,
+    icon: <MenuCalendar />,
     href: '/calendar/day',
     hasCounter: false,
   },
@@ -110,7 +117,7 @@ const menuItems = [
     type: 'link',
     roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('Patients'),
-    icon: <MenuPatients/>,
+    icon: <MenuPatients />,
     href: '/patients',
     hasCounter: false,
   },
@@ -119,7 +126,7 @@ const menuItems = [
     type: 'link',
     roles: [Role.admin, Role.manager],
     text: textForKey('Messages'),
-    icon: <IconMessages/>,
+    icon: <IconMessages />,
     href: '/messages',
     hasCounter: false,
   },
@@ -128,7 +135,7 @@ const menuItems = [
     type: 'link',
     roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('Settings'),
-    icon: <MenuSettings/>,
+    icon: <MenuSettings />,
     href: '/settings',
     hasCounter: false,
   },
@@ -137,15 +144,17 @@ const menuItems = [
     type: 'button',
     roles: [Role.admin, Role.manager, Role.reception],
     text: textForKey('tech_support'),
-    icon: <IconLiveHelp/>,
+    icon: <IconLiveHelp />,
     href: TECH_SUPPORT_URL,
     hasCounter: false,
-  }
+  },
 ];
 
-const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) => {
+const MainMenu = ({ currentPath, onCreateClinic }) => {
   const buttonRef = useRef(null);
-  const selectedClinic = currentUser?.clinics?.find((item) => item.clinicId === currentClinic.id);
+  const selectedClinic = useSelector(userClinicSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
   const remoteReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
@@ -178,7 +187,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
     }
     setShowCrmHelp(
       !wasNotificationShown(notifications.menuCRMImplementation.id) &&
-      !showTechSupportHelp,
+        !showTechSupportHelp,
     );
   }, [showTechSupportHelp, canShowCrm]);
 
@@ -189,11 +198,11 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   const fetchRemindersCount = async () => {
     try {
       const response = await requestFetchRemindersCount();
-      setRemindersCount(response.data)
+      setRemindersCount(response.data);
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);
@@ -227,8 +236,10 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   const handleCompanySelected = async (company) => {
     const [_, domain, location, suffix] = window.location.host.split('.');
     const { protocol } = window.location;
-    const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}${environment === 'testing' ? `.${suffix}` : ''}`;
-    window.open(clinicUrl, '_blank')
+    const clinicUrl = `${protocol}//${
+      company.clinicDomain
+    }.${domain}.${location}${environment === 'testing' ? `.${suffix}` : ''}`;
+    window.open(clinicUrl, '_blank');
     handleCompanyClose();
   };
 
@@ -247,8 +258,8 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   };
 
   const handleHelpClick = () => {
-    window.open(TECH_SUPPORT_URL, '_blank')
-  }
+    window.open(TECH_SUPPORT_URL, '_blank');
+  };
 
   const userClinic = currentUser.clinics.find(
     (item) => item.clinicId === currentClinic.id,
@@ -257,9 +268,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
   return (
     <div className={styles.mainMenu}>
       <ClickAwayListener onClickAway={handleCompanyClose}>
-        <div
-          role='button'
-          tabIndex={0}
+        <Box
           ref={buttonRef}
           className={styles.logoContainer}
           onClick={handleCompanyClick}
@@ -267,7 +276,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
           <span className={styles.clinicName}>
             {userClinic?.clinicName || textForKey('Create clinic')}
           </span>
-          <IconArrowDown/>
+          <IconArrowDown />
           <ClinicSelector
             currentUser={currentUser}
             anchorEl={buttonRef}
@@ -276,7 +285,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
             onChange={handleCompanySelected}
             onCreate={handleCreateClinic}
           />
-        </div>
+        </Box>
       </ClickAwayListener>
 
       <List className={styles.menuList}>
@@ -301,34 +310,42 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                 <Collapse in={isAnalyticsExpanded}>
                   <List>
                     {item.children.map((child) => {
-                      if (!child.roles.includes(userClinic?.roleInClinic)) return null
+                      if (!child.roles.includes(userClinic?.roleInClinic))
+                        return null;
                       return (
-                        <Link href={child.href} key={child.href}>
+                        <Link passHref href={child.href} key={child.href}>
                           <ListItem
-                            classes={{ root: clsx(styles.listItem, styles.child), selected: styles.selected }}
+                            classes={{
+                              root: clsx(styles.listItem, styles.child),
+                              selected: styles.selected,
+                            }}
                             selected={isActive(child.href)}
                           >
-                            <ListItemIcon className={clsx(styles.itemIcon, styles.child)}>
-                              <MenuEllipse/>
+                            <ListItemIcon
+                              className={clsx(styles.itemIcon, styles.child)}
+                            >
+                              <MenuEllipse />
                             </ListItemIcon>
                             <ListItemText
                               primary={child.text}
-                              classes={{ primary: clsx(styles.itemText, styles.child) }}
+                              classes={{
+                                primary: clsx(styles.itemText, styles.child),
+                              }}
                             />
                           </ListItem>
                         </Link>
-                      )
+                      );
                     })}
                   </List>
                 </Collapse>
               </React.Fragment>
-            )
+            );
           } else if (item.type === 'link') {
             if (item.id === 'crm' && !canShowCrm) {
               return null;
             }
             return (
-              <Link href={item.href} key={item.id}>
+              <Link passHref href={item.href} key={item.id}>
                 <ListItem
                   ref={item.id === 'crm' ? setCrmDashboardRef : null}
                   classes={{ root: styles.listItem, selected: styles.selected }}
@@ -342,15 +359,17 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                     primary={
                       <Typography className={styles.itemText}>
                         {item.text}
-                        {(item.hasCounter && getCounterValue(item) > 0) && (
-                          <span className={styles.counterLabel}>{getCounterValue(item)}</span>
+                        {item.hasCounter && getCounterValue(item) > 0 && (
+                          <span className={styles.counterLabel}>
+                            {getCounterValue(item)}
+                          </span>
                         )}
                       </Typography>
                     }
                   />
                 </ListItem>
               </Link>
-            )
+            );
           } else {
             return (
               <ListItem
@@ -368,7 +387,7 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
                   classes={{ primary: styles.itemText }}
                 />
               </ListItem>
-            )
+            );
           }
         })}
       </List>
@@ -382,26 +401,22 @@ const MainMenu = ({ currentPath, currentUser, currentClinic, onCreateClinic }) =
           display='flex'
           alignItems='center'
         >
-          <CircularProgress classes={{ root: styles.importProgressBar }}/>
+          <CircularProgress classes={{ root: styles.importProgressBar }} />
           <Typography classes={{ root: styles.importDataLabel }}>
             {textForKey('Importing data in progress')}
           </Typography>
         </Box>
       )}
-      <ExchangeRates
-        currentUser={currentUser}
-        currentClinic={currentClinic}
-        canEdit={canRegisterPayments}
-      />
+      <ExchangeRates canEdit={canRegisterPayments} />
       <EASHelpView
-        placement="right"
+        placement='right'
         onClose={handleNotificationClose}
         notification={notifications.techSupport}
         anchorEl={techSupportRef}
         open={showTechSupportHelp}
       />
       <EASHelpView
-        placement="right"
+        placement='right'
         onClose={handleNotificationClose}
         notification={notifications.menuCRMImplementation}
         anchorEl={crmDashboardRef}

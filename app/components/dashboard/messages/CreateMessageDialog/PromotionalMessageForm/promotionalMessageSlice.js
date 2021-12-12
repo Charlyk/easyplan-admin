@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { availableHours } from "../CreateMessageDialog.constants";
-import moment from "moment-timezone";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
+import { availableHours } from '../CreateMessageDialog.constants';
 
 export const initialState = {
   isLoading: false,
@@ -80,4 +80,3 @@ export const {
 } = promotionalMessageSlice.actions;
 
 export default promotionalMessageSlice.reducer;
-

@@ -1,4 +1,4 @@
-import { textForKey } from "../localization";
+import { textForKey } from '../localization';
 
 const notifications = {
   techSupport: {
@@ -15,7 +15,7 @@ const notifications = {
     id: 'MENU_CRM_IMPL',
     message: textForKey('menu_crm_help_message'),
     title: textForKey('menu_crm_help_title'),
-  }
+  },
 };
 
 export default notifications;

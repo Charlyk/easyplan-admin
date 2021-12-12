@@ -1,12 +1,12 @@
-import { useMemo } from "react";
-import moment from "moment-timezone";
-import { textForKey } from "./localization";
+import moment from 'moment-timezone';
+
+import { textForKey } from './localization';
 
 const getReminderTexts = (reminder) => {
   if (reminder == null) {
     return null;
   }
-  const { assignee, createdBy } = reminder
+  const { assignee, createdBy } = reminder;
   const dueDate = moment(reminder.dueDate);
   const endDate = moment(reminder.endDate);
   const isExpired = dueDate.isBefore(moment(), 'minutes');
@@ -18,7 +18,9 @@ const getReminderTexts = (reminder) => {
     : `${stringDate} ${textForKey('crm_reminder_at')} ${stringTime}`;
   const assigneeName = `${assignee.firstName} ${assignee.lastName}`;
   const createdByName = `${createdBy.firstName} ${createdBy.lastName}`;
-  const headerText = `${timeText} ${textForKey('crm_reminder_for').toLowerCase()} ${assigneeName}`
+  const headerText = `${timeText} ${textForKey(
+    'crm_reminder_for',
+  ).toLowerCase()} ${assigneeName}`;
   return {
     isExpired,
     isToday,
@@ -28,7 +30,7 @@ const getReminderTexts = (reminder) => {
     stringTime,
     stringDate,
     createdByName,
-  }
+  };
 };
 
 export default getReminderTexts;

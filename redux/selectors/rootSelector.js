@@ -1,60 +1,60 @@
 import { createSelector } from 'reselect';
 
-export const mainSelector = state => state.main;
+export const mainSelector = (state) => state.main;
 
 export const updateInvoicesSelector = createSelector(
   mainSelector,
-  state => state.updateInvoices,
+  (state) => state.updateInvoices,
 );
 
 export const updateNotesSelector = createSelector(
   mainSelector,
-  state => state.updateNotes,
+  (state) => state.updateNotes,
 );
 
 export const updateXRaySelector = createSelector(
   mainSelector,
-  state => state.updateXRay,
+  (state) => state.updateXRay,
 );
 
 export const updateServicesSelector = createSelector(
   mainSelector,
-  state => state.updateServices,
+  (state) => state.updateServices,
 );
 
 export const updateAppointmentsSelector = createSelector(
   mainSelector,
-  state => state.updateAppointments,
+  (state) => state.updateAppointments,
 );
 
 export const logoutSelector = createSelector(
   mainSelector,
-  state => state.logout,
+  (state) => state.logout,
 );
 
-export const userSelector = createSelector(mainSelector, state => state.user);
+export const userSelector = createSelector(mainSelector, (state) => state.user);
 
 export const patientDetailsSelector = createSelector(
   mainSelector,
-  state => state.patientDetails,
+  (state) => state.patientDetails,
 );
 
 export const updatePatientsListSelector = createSelector(
   mainSelector,
-  state => state.updatePatients,
+  (state) => state.updatePatients,
 );
 
 export const isImportModalOpenSelector = createSelector(
   mainSelector,
-  state => state.isImportModalOpen,
+  (state) => state.isImportModalOpen,
 );
 
 export const updateExchangeRatesSelector = createSelector(
   mainSelector,
-  state => state.updateExchangeRates,
+  (state) => state.updateExchangeRates,
 );
 
 export const updateHourIndicatorPositionSelector = createSelector(
   mainSelector,
-  state => state.updateHourIndicatorTop
-)
+  (state) => state.updateHourIndicatorTop,
+);

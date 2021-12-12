@@ -1,10 +1,62 @@
-import axios from "axios";
+import axios from 'axios';
 import cookie from 'cookie';
-import getSubdomain from "../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../app/utils/updateServerUrl";
-import { authorized } from "../../authorized";
-import { handler } from "../../handler";
-import { HeaderKeys } from "../../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import authorized from '../../authorized';
+import handler from '../../handler';
+
+export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
+
+function fetchPatientXRayImages(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { patientId } = req.query;
+  return axios.get(`${updatedServerUrl(req)}/patients/${patientId}/x-ray`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+      [HeaderKeys.contentType]: 'application/json',
+    },
+  });
+}
+
+function addXRayImage(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { patientId } = req.query;
+  return axios.post(
+    `${updatedServerUrl(req)}/patients/${patientId}/x-ray`,
+    req.body,
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+      },
+    },
+  );
+}
+
+function deleteXRayImage(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const { patientId, imageId } = req.query;
+  return axios.delete(
+    `${updatedServerUrl(req)}/patients/${patientId}/x-ray/${imageId}`,
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+      },
+    },
+  );
+}
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -35,42 +87,3 @@ export default authorized(async (req, res) => {
       break;
   }
 });
-
-export const config = { api: { bodyParser: { sizeLimit: '100mb' } } };
-
-function fetchPatientXRayImages(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { patientId } = req.query;
-  return axios.get(`${updatedServerUrl(req)}/patients/${patientId}/x-ray`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
-    }
-  });
-}
-
-function addXRayImage(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { patientId } = req.query;
-  return axios.post(`${updatedServerUrl(req)}/patients/${patientId}/x-ray`, req.body, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
-}
-
-function deleteXRayImage(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const { patientId, imageId } = req.query;
-  return axios.delete(`${updatedServerUrl(req)}/patients/${patientId}/x-ray/${imageId}`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
-}

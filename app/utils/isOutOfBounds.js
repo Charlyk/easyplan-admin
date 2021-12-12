@@ -1,6 +1,7 @@
-import { extendMoment } from "moment-range";
-import Moment from "moment-timezone";
-import getLastHourDate from "./getLastHourDate";
+import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
+
+import getLastHourDate from './getLastHourDate';
 
 const moment = extendMoment(Moment);
 
@@ -18,6 +19,6 @@ const isOutOfBounds = (time, hours, date) => {
   }
   const scheduleTime = moment(time);
   return scheduleTime.isAfter(lastHourDate);
-}
+};
 
 export default isOutOfBounds;

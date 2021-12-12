@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   isLoading: false,
@@ -14,8 +14,6 @@ const createClinicWrapperSlice = createSlice({
   },
 });
 
-export const {
-  setIsLoading
-} = createClinicWrapperSlice.actions;
+export const { setIsLoading } = createClinicWrapperSlice.actions;
 
 export default createClinicWrapperSlice.reducer;

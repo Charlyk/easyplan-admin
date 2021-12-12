@@ -1,27 +1,33 @@
-import React, { useEffect, useMemo, useReducer } from 'react';
-import dynamic from 'next/dynamic';
-import upperFirst from 'lodash/upperFirst';
+import React, { useContext, useEffect, useMemo, useReducer } from 'react';
 import sortBy from 'lodash/sortBy';
-import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
-import IconLogoPlaceholder from '../../../icons/iconLogoPlaceholder';
-import IconSuccess from '../../../icons/iconSuccess';
-import IconTrash from '../../../icons/iconTrash';
-import LoadingButton from '../../../common/LoadingButton';
-import { EmailRegex, HeaderKeys } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import onRequestError from "../../../../utils/onRequestError";
+import upperFirst from 'lodash/upperFirst';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import UploadAvatar from 'app/components/common/UploadAvatar';
+import IconLogoPlaceholder from 'app/components/icons/iconLogoPlaceholder';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import IconTrash from 'app/components/icons/iconTrash';
+import NotificationsContext from 'app/context/notificationsContext';
+import { EmailRegex, HeaderKeys } from 'app/utils/constants';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import {
   clinicTimeZones,
   deleteClinic,
-  updateClinic
-} from "../../../../../middleware/api/clinic";
-import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import EASTextField from "../../../common/EASTextField";
-import EASPhoneInput from "../../../common/EASPhoneInput";
-import EASSelect from "../../../common/EASSelect";
-import EASTextarea from "../../../common/EASTextarea";
-import UploadAvatar from "../../../common/UploadAvatar";
+  updateClinic,
+} from 'middleware/api/clinic';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
+import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,
   setIsSaving,
@@ -33,33 +39,43 @@ import reducer, {
   openDeleteRequestSent,
   openDeleteConfirmation,
 } from './CompanyDetailsForm.reducer';
-import styles from './CompanyDetailsForm.module.scss';
 
-const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const ConfirmationModal = dynamic(() =>
+  import('app/components/common/modals/ConfirmationModal'),
+);
 
-const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
+const CompanyDetailsForm = ({ countries }) => {
   const router = useRouter();
-  const [{
-    isSaving,
-    isDeleting,
-    showDeleteRequestSent,
-    deleteModal,
-    timeZones,
-    data,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const toast = useContext(NotificationsContext);
+  const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
+  const [
+    {
+      isSaving,
+      isDeleting,
+      showDeleteRequestSent,
+      deleteModal,
+      timeZones,
+      data,
+    },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
 
   const mappedCountries = useMemo(() => {
-    return countries.map(item => ({
+    return countries.map((item) => ({
       ...item,
       id: item.iso,
     }));
   }, [countries]);
 
   const mappedTimeZones = useMemo(() => {
-    return sortBy(timeZones.map(item => ({
-      id: item,
-      name: item,
-    })), item => item.name);
+    return sortBy(
+      timeZones.map((item) => ({
+        id: item,
+        name: item,
+      })),
+      (item) => item.name,
+    );
   }, [timeZones]);
 
   useEffect(() => {
@@ -67,14 +83,16 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
   }, []);
 
   useEffect(() => {
-    localDispatch(setData({
-      ...data,
-      ...currentClinic,
-      allCurrencies: currentClinic.allCurrencies.map(item => ({
-        ...item,
-        name: `${item.id} - ${item.name}`,
-      }))
-    }));
+    localDispatch(
+      setData({
+        ...data,
+        ...currentClinic,
+        allCurrencies: currentClinic.allCurrencies.map((item) => ({
+          ...item,
+          name: `${item.id} - ${item.name}`,
+        })),
+      }),
+    );
   }, [currentClinic]);
 
   const fetchTimeZones = async () => {
@@ -97,10 +115,12 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
 
   const handleFormChange = (fieldId, value) => {
     if (isSaving) return;
-    localDispatch(setData({
-      ...data,
-      [fieldId]: value,
-    }));
+    localDispatch(
+      setData({
+        ...data,
+        [fieldId]: value,
+      }),
+    );
   };
 
   const handleTimeZoneChange = (event) => {
@@ -113,7 +133,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
 
   const handleCurrencyChange = (event) => {
     handleFormChange('currency', event.target.value);
-  }
+  };
 
   const handleClinicNameChange = (newValue) => {
     handleFormChange('clinicName', newValue);
@@ -125,22 +145,24 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
 
   const handleWebsiteChange = (newValue) => {
     handleFormChange('website', newValue);
-  }
+  };
 
   const handleCountryChange = (event) => {
     handleFormChange('country', event.target.value);
-  }
+  };
 
   const handlePhoneChange = (phoneType) => (value, country, event) => {
     const validationFieldName = `isValid${upperFirst(phoneType)}`;
     if (isSaving) return;
-    localDispatch(setData({
-      ...data,
-      [phoneType]: `+${value}`,
-      [validationFieldName]: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes(
-        'invalid-number',
-      ),
-    }));
+    localDispatch(
+      setData({
+        ...data,
+        [phoneType]: `+${value}`,
+        [validationFieldName]:
+          isPhoneNumberValid(value, country) &&
+          !event.target?.classList.value.includes('invalid-number'),
+      }),
+    );
   };
 
   const handleStartDelete = () => {
@@ -165,7 +187,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
 
   const handleCloseDeleteRequestSent = () => {
     localDispatch(closeDeleteRequestSent());
-  }
+  };
 
   const isFormValid = () => {
     return (
@@ -215,7 +237,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
       toast.success(textForKey('Saved successfully'));
       await router.replace(router.asPath);
     } catch (error) {
-      onRequestError(error)
+      onRequestError(error);
     } finally {
       localDispatch(setIsSaving(false));
     }
@@ -241,19 +263,17 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
         onClose={handleCloseDelete}
         onConfirm={handleConfirmDelete}
       />
-      <span className={styles.formTitle}>
-        {textForKey('Company details')}
-      </span>
+      <span className={styles.formTitle}>{textForKey('Company details')}</span>
       <UploadAvatar
         currentAvatar={data.logoFile || logoSrc}
-        placeholder={<IconLogoPlaceholder/>}
+        placeholder={<IconLogoPlaceholder />}
         onChange={handleLogoChange}
       />
 
       <div className={styles.dataWrapper}>
         <div className={styles.left}>
           <EASTextField
-            type="text"
+            type='text'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Clinic name')}
             value={data.clinicName}
@@ -261,7 +281,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
           />
 
           <EASTextField
-            type="email"
+            type='email'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Email')}
             value={data.email}
@@ -298,7 +318,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
         </div>
         <div className={styles.right}>
           <EASTextField
-            type="text"
+            type='text'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Website')}
             value={data.website || ''}
@@ -307,7 +327,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
 
           <EASSelect
             label={textForKey('Default currency')}
-            labelId="currency-select-label"
+            labelId='currency-select-label'
             rootClass={styles.simpleField}
             options={data.allCurrencies}
             value={data.currency}
@@ -316,7 +336,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
 
           <EASSelect
             label={textForKey('Country')}
-            labelId="country-select-label"
+            labelId='country-select-label'
             rootClass={styles.simpleField}
             options={mappedCountries}
             value={data.country}
@@ -325,7 +345,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
 
           <EASSelect
             label={textForKey('Time zone')}
-            labelId="time-zone-select-label"
+            labelId='time-zone-select-label'
             rootClass={styles.simpleField}
             options={mappedTimeZones}
             value={data.timeZone}
@@ -333,7 +353,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
           />
 
           <EASTextarea
-            type="text"
+            type='text'
             maxRows={4}
             rows={4}
             containerClass={styles.descriptionTextArea}
@@ -351,7 +371,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
           disabled={isDeleting || isSaving}
         >
           {textForKey('Delete')}
-          <IconTrash/>
+          <IconTrash />
         </LoadingButton>
         <LoadingButton
           onClick={submitForm}
@@ -360,7 +380,7 @@ const CompanyDetailsForm = ({ currentClinic, countries, authToken }) => {
           disabled={isSaving || !isFormValid()}
         >
           {textForKey('Save')}
-          <IconSuccess/>
+          <IconSuccess />
         </LoadingButton>
       </div>
     </div>

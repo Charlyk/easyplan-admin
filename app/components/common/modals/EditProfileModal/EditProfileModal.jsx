@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
-import { EmailRegex, HeaderKeys, PasswordRegex } from '../../../../utils/constants';
-import urlToLambda from '../../../../utils/urlToLambda';
-import { textForKey } from '../../../../utils/localization';
-import isPhoneNumberValid from "../../../../utils/isPhoneNumberValid";
-import UploadAvatar from "../../UploadAvatar";
-import EASTextField from "../../EASTextField";
-import EASPhoneInput from "../../EASPhoneInput";
-import EASModal from "../EASModal";
+import { useDispatch, useSelector } from 'react-redux';
+import EASPhoneInput from 'app/components/common/EASPhoneInput';
+import EASTextField from 'app/components/common/EASTextField';
+import UploadAvatar from 'app/components/common/UploadAvatar';
+import NotificationsContext from 'app/context/notificationsContext';
+import { EmailRegex, PasswordRegex } from 'app/utils/constants';
+import imageToBase64 from 'app/utils/imageToBase64';
+import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
+import { textForKey } from 'app/utils/localization';
+import urlToLambda from 'app/utils/urlToLambda';
+import {
+  currentUserSelector,
+  isUpdatingProfileSelector,
+} from 'redux/selectors/appDataSelector';
+import { updateUserProfile } from 'redux/slices/appDataSlice';
+import EASModal from '../EASModal';
 import styles from './EditProfileModal.module.scss';
-import { updateUserAccount } from "../../../../../middleware/api/auth";
 
-const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+const EditProfileModal = ({ open, onClose }) => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(isUpdatingProfileSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const toast = useContext(NotificationsContext);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({
     avatarUrl: currentUser?.avatar,
@@ -31,8 +38,10 @@ const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose
   });
   const avatarSrc = data.avatarUrl ? urlToLambda(data.avatarUrl, 64) : null;
 
-  const isPasswordValid = data.password.length === 0 || data.password.match(PasswordRegex);
-  const isConfirmPasswordValid = data.password.length === 0 || data.confirmPassword === data.password;
+  const isPasswordValid =
+    data.password.length === 0 || data.password.match(PasswordRegex);
+  const isConfirmPasswordValid =
+    data.password.length === 0 || data.confirmPassword === data.password;
   const isEmailValid = data.email.length === 0 || data.email.match(EmailRegex);
 
   useEffect(() => {
@@ -67,36 +76,30 @@ const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose
     setData({
       ...data,
       phoneNumber: `+${value}`,
-      isPhoneValid: isPhoneNumberValid(value, country) && !event.target?.classList.value.includes('invalid-number'),
+      isPhoneValid:
+        isPhoneNumberValid(value, country) &&
+        !event.target?.classList.value.includes('invalid-number'),
     });
   };
 
   const submitForm = async (event) => {
     event?.preventDefault();
-    setIsLoading(true);
-    try {
-      const requestBody = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        username: data.email,
-        oldPassword: data.oldPassword,
-        phoneNumber: data.phoneNumber,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      };
-      await updateUserAccount(requestBody, data.avatarUrl, {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: currentClinic.id,
-        [HeaderKeys.subdomain]: currentClinic.domainName,
-      });
-      toast.success(textForKey('Saved successfully'));
-      onClose();
-      await router.replace(router.asPath);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    const avatar =
+      data.avatarFile != null ? await imageToBase64(data.avatarFile) : null;
+
+    const requestBody = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.email,
+      oldPassword: data.oldPassword,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+      avatar,
+    };
+    dispatch(updateUserProfile(requestBody));
+    toast.success(textForKey('Saved successfully'));
+    onClose();
   };
 
   const isFormValid = () => {
@@ -136,7 +139,7 @@ const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose
         />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Last name')}
           value={data.lastName ?? ''}
@@ -144,7 +147,7 @@ const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose
         />
 
         <EASTextField
-          type="text"
+          type='text'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('First name')}
           value={data.firstName ?? ''}
@@ -152,7 +155,7 @@ const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose
         />
 
         <EASTextField
-          type="email"
+          type='email'
           error={!isEmailValid}
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.simpleField}
@@ -170,32 +173,38 @@ const EditProfileModal = ({ open, currentUser, currentClinic, authToken, onClose
         />
 
         <EASTextField
-          type="password"
+          type='password'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Current password')}
           value={data.oldPassword ?? ''}
           onChange={handleFormChange('oldPassword')}
-          helperText={isEmailChanged ? textForKey('Current password is required') : null}
+          helperText={
+            isEmailChanged ? textForKey('Current password is required') : null
+          }
         />
 
         <EASTextField
-          type="password"
+          type='password'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('new password')}
           value={data.password ?? ''}
           error={!isPasswordValid}
           onChange={handleFormChange('password')}
-          helperText={!isPasswordValid ? textForKey('passwordvalidationmessage') : null}
+          helperText={
+            !isPasswordValid ? textForKey('passwordvalidationmessage') : null
+          }
         />
 
         <EASTextField
-          type="password"
+          type='password'
           containerClass={styles.simpleField}
           fieldLabel={textForKey('Confirm new password')}
           value={data.confirmPassword ?? ''}
           error={!isConfirmPasswordValid}
           onChange={handleFormChange('confirmPassword')}
-          helperText={!isConfirmPasswordValid ? textForKey('passwords_not_equal') : null}
+          helperText={
+            !isConfirmPasswordValid ? textForKey('passwords_not_equal') : null
+          }
         />
       </form>
     </EASModal>

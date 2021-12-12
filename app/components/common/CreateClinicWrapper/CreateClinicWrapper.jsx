@@ -1,21 +1,28 @@
-import React, { useReducer } from 'react';
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import { Typography } from "@material-ui/core";
-import getClinicUrl from "../../../utils/getClinicUrl";
-import { createNewClinic } from "../../../../middleware/api/clinic";
-import { isDev } from "../../../../eas.config";
-import CreateClinicForm from "../CreateClinicForm";
+import React, { useContext, useReducer } from 'react';
+import { Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import { useRouter } from 'next/router';
+import AppLogoWhite from 'app/components/icons/AppLogoWhite';
+import NotificationsContext from 'app/context/notificationsContext';
+import getClinicUrl from 'app/utils/getClinicUrl';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { isDev } from 'eas.config';
+import { createNewClinic } from 'middleware/api/clinic';
+import CreateClinicForm from '../CreateClinicForm';
+import styles from './CreateClinic.module.scss';
 import reducer, {
   setIsLoading,
-  initialState
+  initialState,
 } from './createClinicWrapperSlice';
-import styles from './CreateClinic.module.scss';
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import { HeaderKeys } from "../../../utils/constants";
-import EASImage from "../EASImage";
 
-export default function CreateClinicWrapper({ token, redirect, countries, shouldLogin, isMobile }) {
+export default function CreateClinicWrapper({
+  token,
+  redirect,
+  countries,
+  shouldLogin,
+  isMobile,
+}) {
+  const toast = useContext(NotificationsContext);
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
   const isMobileDevice = isMobile || isOnPhone;
@@ -32,18 +39,16 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
   const redirectToDashboard = async (clinic) => {
     const clinicUrl = getClinicUrl(clinic, token);
     await router.replace(clinicUrl);
-  }
+  };
 
   const handleCreateClinic = async (clinicData) => {
     dispatch(setIsLoading(true));
     try {
       const requestBody = { ...clinicData };
       delete requestBody.logoFile;
-      const response = await createNewClinic(clinicData, clinicData.logoFile, {
-        [HeaderKeys.authorization]: token,
-      });
+      const response = await createNewClinic(clinicData, clinicData.logoFile);
       if (shouldLogin) {
-        await router.replace('/login')
+        await router.replace('/login');
       } else if (redirect) {
         await redirectToDashboard(response.data);
       } else {
@@ -59,19 +64,15 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
     } finally {
       dispatch(setIsLoading(false));
     }
-  }
+  };
 
   return (
     <div className={styles.createClinicRoot}>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
-        <EASImage
-          src="settings/easyplan-logo.svg"
-          classes={{
-            root: styles.logoContainer,
-            image: styles.logoImage,
-          }}
-        />
+        <Box className={styles.logoContainer}>
+          <AppLogoWhite className={styles.logoImage} />
+        </Box>
       )}
       <div
         className={styles.formContainer}
@@ -80,12 +81,7 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
           backgroundColor: isMobileDevice ? '#34344E' : '#E5E5E5',
         }}
       >
-        {isMobileDevice && (
-          <EASImage
-            src="settings/easyplan-logo.svg"
-            className={styles.logoImage}
-          />
-        )}
+        {isMobileDevice && <AppLogoWhite className={styles.logoImage} />}
         <CreateClinicForm
           isMobile={isMobileDevice}
           countries={countries}
@@ -97,4 +93,4 @@ export default function CreateClinicWrapper({ token, redirect, countries, should
       </div>
     </div>
   );
-};
+}

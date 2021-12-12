@@ -5,6 +5,6 @@ const getErrorMessage = (error) => {
   } else {
     return error.message;
   }
-}
+};
 
-export default getErrorMessage
+export default getErrorMessage;

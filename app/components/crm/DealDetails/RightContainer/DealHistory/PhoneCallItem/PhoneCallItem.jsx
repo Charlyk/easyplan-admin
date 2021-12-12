@@ -1,84 +1,91 @@
-import React, { useMemo } from "react";
-import PropTypes from 'prop-types';
-import moment from "moment-timezone";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import React, { useMemo } from 'react';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import PhoneIcon from '@material-ui/icons/Call';
 import OutgoingCallIcon from '@material-ui/icons/CallMade';
 import FailedCallIcon from '@material-ui/icons/CallMissed';
 import IncomeCallIcon from '@material-ui/icons/CallReceived';
-import { textForKey } from "../../../../../../utils/localization";
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import formatSeconds from 'app/utils/formatSeconds';
+import { textForKey } from 'app/utils/localization';
 import styles from './PhoneCallItem.module.scss';
-import formatSeconds from "../../../../../../utils/formatSeconds";
 
-const PhoneCallItem = ({ call, onPlayAudio, }) => {
+const PhoneCallItem = ({ call, onPlayAudio }) => {
   const dateText = useMemo(() => {
     if (call == null) {
-      return '-'
+      return '-';
     }
-    const callDate = moment(call.created).format('DD.MM.YYYY HH:mm')
+    const callDate = moment(call.created).format('DD.MM.YYYY HH:mm');
     return textForKey('deal_phone_call_date')
       .replace('{1}', callDate)
       .replace('{2}', textForKey(`call_${call.direction}`))
-      .replace('{3}', textForKey(call.direction === 'Incoming' ? 'call_from' : 'call_to'))
-      .replace('{4}', call.direction === 'Incoming' ? call.sourcePhone : call.targetPhone)
+      .replace(
+        '{3}',
+        textForKey(call.direction === 'Incoming' ? 'call_from' : 'call_to'),
+      )
+      .replace(
+        '{4}',
+        call.direction === 'Incoming' ? call.sourcePhone : call.targetPhone,
+      );
   }, [call]);
 
   const directionAndTime = useMemo(() => {
     if (call == null) {
-      return '-'
+      return '-';
     }
     return textForKey('call_direction_with_time')
       .replace('{1}', textForKey(`call_${call.direction}`))
-      .replace('{2}', formatSeconds(call.duration))
+      .replace('{2}', formatSeconds(call.duration));
   }, [call]);
 
   const callIcon = useMemo(() => {
     switch (call.direction) {
-      case "Incoming":
-        return <IncomeCallIcon className={styles.arrowIcon}/>
-      case "Outgoing":
-        return <OutgoingCallIcon className={styles.arrowIcon}/>
+      case 'Incoming':
+        return <IncomeCallIcon className={styles.arrowIcon} />;
+      case 'Outgoing':
+        return <OutgoingCallIcon className={styles.arrowIcon} />;
       default:
-        return <FailedCallIcon className={styles.arrowIcon}/>
+        return <FailedCallIcon className={styles.arrowIcon} />;
     }
   }, [call]);
 
   const handlePlayAudio = () => {
     onPlayAudio?.(call);
-  }
+  };
 
   const handleDownloadRecord = () => {
     if (call.fileUrl == null) {
       return;
     }
     const recordDate = moment(call.created);
-    const year = recordDate.format('YYYY')
-    const month = recordDate.format('MM')
-    const date = recordDate.format('DD')
+    const year = recordDate.format('YYYY');
+    const month = recordDate.format('MM');
+    const date = recordDate.format('DD');
     const recordUrl = call.callId
       ? `https://sip6215.iphost.md/amocrm/router.php?route=record/get&call_id=${call.callId}`
-      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(' ', '+')}`
+      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(
+          ' ',
+          '+',
+        )}`;
     window.open(recordUrl, '_blank');
-  }
+  };
 
   return (
     <div className={styles.phoneCall}>
       <div className={styles.iconWrapper}>
-        <PhoneIcon/>
+        <PhoneIcon />
         {callIcon}
       </div>
       <div className={styles.dataContainer}>
-        <Typography className={styles.dateLabel}>
-          {dateText}
-        </Typography>
+        <Typography className={styles.dateLabel}>{dateText}</Typography>
         <div className={styles.detailsWrapper}>
           <Typography className={styles.detailsLabel}>
             {directionAndTime}
           </Typography>
           <Button
             disabled={call?.fileUrl == null || call.status !== 'Answered'}
-            variant="outlined"
+            variant='outlined'
             onClick={handlePlayAudio}
             classes={{
               root: styles.listenBtn,
@@ -91,7 +98,7 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
           </Button>
           <Button
             disabled={call?.fileUrl == null || call.status !== 'Answered'}
-            variant="text"
+            variant='text'
             onClick={handleDownloadRecord}
             classes={{
               root: styles.downloadBtn,
@@ -107,8 +114,8 @@ const PhoneCallItem = ({ call, onPlayAudio, }) => {
         </Typography>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default PhoneCallItem;
 
@@ -121,9 +128,15 @@ PhoneCallItem.propTypes = {
     sourcePhone: PropTypes.string,
     targetPhone: PropTypes.string,
     fileUrl: PropTypes.string,
-    status: PropTypes.oneOf(['Answered', 'Failed', 'Busy', 'NoAnswer', 'Unknown']),
+    status: PropTypes.oneOf([
+      'Answered',
+      'Failed',
+      'Busy',
+      'NoAnswer',
+      'Unknown',
+    ]),
     duration: PropTypes.number,
     callId: PropTypes.string,
   }),
   onPlayAudio: PropTypes.func,
-}
+};

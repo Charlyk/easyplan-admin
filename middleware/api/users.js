@@ -1,6 +1,6 @@
-import { del, get, post, put } from "./request";
-import imageToBase64 from "../../app/utils/imageToBase64";
-import axios from "axios";
+import axios from 'axios';
+import imageToBase64 from 'app/utils/imageToBase64';
+import { del, get, put } from './request';
 
 /**
  * Fetch users list
@@ -80,8 +80,12 @@ export async function deleteUserHoliday(userId, holidayId, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updateUserCashierStatus(userId, isCashier, headers = null) {
-  return put(`/api/users/${userId}/cashier`, headers, { isCashier })
+export async function updateUserCashierStatus(
+  userId,
+  isCashier,
+  headers = null,
+) {
+  return put(`/api/users/${userId}/cashier`, headers, { isCashier });
 }
 
 /**
@@ -122,8 +126,14 @@ export async function saveFacebookToken(token, headers = null) {
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestToggleUserCalendarVisibility(userId, visible, headers = null) {
-  return put(`/api/users/${userId}/calendar`, headers, { showInCalendar: visible });
+export async function requestToggleUserCalendarVisibility(
+  userId,
+  visible,
+  headers = null,
+) {
+  return put(`/api/users/${userId}/calendar`, headers, {
+    showInCalendar: visible,
+  });
 }
 
 /**
@@ -133,6 +143,29 @@ export async function requestToggleUserCalendarVisibility(userId, visible, heade
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestToggleUserAccessToClinic(userId, accessBlocked, headers = null) {
+export async function requestToggleUserAccessToClinic(
+  userId,
+  accessBlocked,
+  headers = null,
+) {
   return put('/api/users/toggle-access', headers, { userId, accessBlocked });
+}
+
+/**
+ * Fetch current user selected charts
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<Easyplan.ChartType[]>>}
+ */
+export async function requestFetchSelectedCharts(headers = null) {
+  return get('/api/users/preferences/charts', headers);
+}
+
+/**
+ * Update user selected charts
+ * @param {ChartType[]} charts
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<ChartType[]>>}
+ */
+export async function requestUpdateSelectedCharts(charts, headers = null) {
+  return put('/api/users/preferences/charts', headers, { charts });
 }

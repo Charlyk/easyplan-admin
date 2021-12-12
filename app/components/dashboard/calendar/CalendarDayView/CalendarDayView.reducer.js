@@ -1,6 +1,6 @@
 import orderBy from 'lodash/orderBy';
-import generateReducerActions from "../../../../utils/generateReducerActions";
-import createContainerHours from "../../../../utils/createContainerHours";
+import createContainerHours from 'app/utils/createContainerHours';
+import generateReducerActions from 'app/utils/generateReducerActions';
 
 export const initialState = {
   hours: [],
@@ -9,12 +9,12 @@ export const initialState = {
   isFetching: false,
   createIndicator: { visible: false, top: 0, doctorId: -1 },
   parentTop: 0,
-  schedules: [],
   hasSchedules: false,
   pauseModal: {
     open: false,
     viewDate: Date(),
     doctor: null,
+    cabinet: null,
     startTime: null,
     endTime: null,
     id: null,
@@ -32,9 +32,6 @@ const reducerTypes = {
   setPauseModal: 'setPauseModal',
   setHoursContainers: 'setHoursContainers',
   setSchedulesData: 'setSchedulesData',
-  addSchedule: 'addSchedule',
-  deleteSchedule: 'deleteSchedule',
-  updateSchedule: 'updateSchedule',
 };
 
 export const actions = generateReducerActions(reducerTypes);
@@ -58,10 +55,14 @@ export const reducer = (state, action) => {
     case reducerTypes.setSchedules:
       return {
         ...state,
-        schedules: action.payload.map(item => {
+        schedules: action.payload.map((item) => {
           return {
             ...item,
-            schedules: orderBy(item.schedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
+            schedules: orderBy(
+              item.schedules,
+              ['rescheduled', 'startTime'],
+              ['desc', 'asc'],
+            ),
           };
         }),
       };
@@ -83,85 +84,6 @@ export const reducer = (state, action) => {
         hours: dayHours,
         hoursContainers: updateHours,
       };
-    }
-    case reducerTypes.addSchedule: {
-      const newSchedule = action.payload;
-      const hasSchedules = state.schedules.some(item => item.doctorId === newSchedule.doctorId);
-      if (!hasSchedules) {
-        return {
-          ...state,
-          schedules: [
-            ...state.schedules,
-            {
-              id: newSchedule.doctorId,
-              doctorId: newSchedule.doctorId,
-              schedules: [newSchedule]
-            },
-          ]
-        }
-      }
-      const updatedSchedules = state.schedules.map(item => {
-        if (item.doctorId !== newSchedule.doctorId) {
-          return item;
-        }
-
-        const newSchedules = [...item.schedules, newSchedule]
-
-        return {
-          ...item,
-          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
-        }
-      });
-      return {
-        ...state,
-        schedules: updatedSchedules,
-      };
-    }
-    case reducerTypes.deleteSchedule: {
-      const scheduleToDelete = action.payload;
-      const updatedSchedules = state.schedules.map(item => {
-        if (item.doctorId !== scheduleToDelete.doctorId) {
-          return item;
-        }
-
-        return {
-          ...item,
-          schedules: item.schedules.filter((schedule) =>
-            schedule.id !== scheduleToDelete.id
-          ),
-        }
-      })
-      return {
-        ...state,
-        schedules: updatedSchedules
-      }
-    }
-    case reducerTypes.updateSchedule: {
-      const scheduleToUpdate = action.payload;
-      const updatedSchedules = state.schedules.map(item => {
-        if (item.doctorId !== scheduleToUpdate.doctorId) {
-          return item;
-        }
-
-        const newSchedules = item.schedules.map((schedule) => {
-          if (schedule.id !== scheduleToUpdate.id) {
-            return schedule;
-          }
-          return {
-            ...schedule,
-            ...scheduleToUpdate,
-          };
-        })
-
-        return {
-          ...item,
-          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
-        }
-      })
-      return {
-        ...state,
-        schedules: updatedSchedules
-      }
     }
     default:
       return state;

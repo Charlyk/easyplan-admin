@@ -1,4 +1,4 @@
-import moment from "moment-timezone";
+import moment from 'moment-timezone';
 
 export const firstDayOfMonth = (viewDate) => {
   return moment(viewDate).startOf('month').weekday();

@@ -3,6 +3,6 @@ const redirectIfOnGeneralHost = async (currentUser, router) => {
   if (['app', 'app-dev'].includes(subdomain)) {
     await router.replace('/clinics');
   }
-}
+};
 
 export default redirectIfOnGeneralHost;

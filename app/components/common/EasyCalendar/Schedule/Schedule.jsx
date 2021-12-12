@@ -1,30 +1,31 @@
 import React, { useMemo, useRef, useState } from 'react';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
-import Typography from '@material-ui/core/Typography';
-
-import { Statuses } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { Statuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import styles from './Schedule.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const offsetDistance = 20;
 const minScheduleHeight = 32;
 const entireMinHeight = 100;
 
-const Schedule = (
-  {
-    schedule,
-    index,
-    firstHour,
-    animatedStatuses,
-    onScheduleSelect,
-  }
-) => {
+const Schedule = ({
+  schedule,
+  index,
+  firstHour,
+  animatedStatuses,
+  onScheduleSelect,
+}) => {
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
+  const clinicDoctors = useSelector(clinicDoctorsSelector);
   const [isHighlighted, setIsHighlighted] = useState(false);
   const startTime = moment(schedule.startTime);
   const endTime = moment(schedule.endTime);
@@ -34,6 +35,13 @@ const Schedule = (
     (item) => item.id === schedule.scheduleStatus,
   );
   const shouldAnimate = animatedStatuses.includes(scheduleStatus?.id);
+  const doctor = useMemo(() => {
+    const item = clinicDoctors.find(
+      (doctor) => doctor.id === schedule.doctorId,
+    );
+    if (item == null) return null;
+    return item.fullName;
+  }, [clinicDoctors, schedule]);
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -50,7 +58,7 @@ const Schedule = (
 
   const topPosition = useMemo(() => {
     if (firstHour == null) {
-      return 0
+      return 0;
     }
     const startTime = moment(schedule.startTime);
     const [hours, minutes] = firstHour.split(':');
@@ -82,21 +90,16 @@ const Schedule = (
   };
 
   const height = getScheduleHeight();
-  const itemRect = { height, top: topPosition }
+  const itemRect = { height, top: topPosition };
 
   return (
-    <div
-      role='button'
-      tabIndex={0}
+    <Box
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
-      className={clsx(
-        styles.dayViewSchedule,
-        {
-          [styles.upcoming]: shouldAnimate,
-          [styles.urgent]: schedule.isUrgent || schedule.urgent,
-        },
-      )}
+      className={clsx(styles.dayViewSchedule, {
+        [styles.upcoming]: shouldAnimate,
+        [styles.urgent]: schedule.isUrgent || schedule.urgent,
+      })}
       onClick={handleScheduleClick}
       style={{
         left: isHighlighted
@@ -126,7 +129,9 @@ const Schedule = (
           <div className='flexContainer'>
             <Typography
               noWrap
-              classes={{ root: clsx(styles.hourLabel, isPause && styles.pause) }}
+              classes={{
+                root: clsx(styles.hourLabel, isPause && styles.pause),
+              }}
             >
               {startHour} - {endHour}
             </Typography>
@@ -134,7 +139,9 @@ const Schedule = (
               <Typography
                 noWrap
                 style={{ marginLeft: 3 }}
-                classes={{ root: clsx(styles.hourLabel, isPause && styles.pause) }}
+                classes={{
+                  root: clsx(styles.hourLabel, isPause && styles.pause),
+                }}
               >
                 (+{schedule.delayTime} min)
               </Typography>
@@ -145,7 +152,7 @@ const Schedule = (
                   styles.statusIcon,
                   (scheduleStatus?.id === 'DidNotCome' ||
                     scheduleStatus?.id === 'Canceled') &&
-                  styles.negative,
+                    styles.negative,
                 )}
               >
                 {scheduleStatus?.statusIcon}
@@ -155,32 +162,60 @@ const Schedule = (
         </div>
         <div className={styles.info}>
           {schedule.type === 'Schedule' ? (
-            <div className={styles.infoWrapper}>
-              <div className={styles.infoRow}>
-                <Typography className={styles.infoTitle}>
-                  {textForKey('Service')}:
-                </Typography>
-                <Typography noWrap className={styles.infoLabel}>
-                  {schedule.serviceName}
-                </Typography>
-              </div>
-              <div className={styles.infoRow}>
-                <Typography className={styles.infoTitle}>
-                  {textForKey('Patient')}:
-                </Typography>
-                <Typography noWrap className={styles.infoLabel}>
-                  {schedule.patient.fullName}
-                </Typography>
-              </div>
-              <div className={styles.infoRow}>
-                <Typography className={styles.infoTitle}>
-                  {textForKey('Status')}:
-                </Typography>
-                <Typography noWrap className={styles.infoLabel}>
-                  {scheduleStatus?.name}
-                </Typography>
-              </div>
-            </div>
+            <table className={styles.infoWrapper}>
+              <tbody>
+                {doctor && (
+                  <tr className={styles.infoRow}>
+                    <td>
+                      <Typography className={styles.infoTitle}>
+                        {textForKey('Doctor')}:
+                      </Typography>
+                    </td>
+                    <td>
+                      <Typography noWrap className={styles.infoLabel}>
+                        {doctor}
+                      </Typography>
+                    </td>
+                  </tr>
+                )}
+                <tr className={styles.infoRow}>
+                  <td>
+                    <Typography className={styles.infoTitle}>
+                      {textForKey('Service')}:
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography noWrap className={styles.infoLabel}>
+                      {schedule.serviceName}
+                    </Typography>
+                  </td>
+                </tr>
+                <tr className={styles.infoRow}>
+                  <td>
+                    <Typography className={styles.infoTitle}>
+                      {textForKey('Patient')}:
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography noWrap className={styles.infoLabel}>
+                      {schedule.patient.fullName}
+                    </Typography>
+                  </td>
+                </tr>
+                <tr className={styles.infoRow}>
+                  <td>
+                    <Typography className={styles.infoTitle}>
+                      {textForKey('Status')}:
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography noWrap className={styles.infoLabel}>
+                      {scheduleStatus?.name}
+                    </Typography>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           ) : (
             <div className={styles.pauseWrapper}>
               <Typography className={styles.pauseLabel}>
@@ -196,7 +231,7 @@ const Schedule = (
           )}
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 
@@ -236,7 +271,7 @@ Schedule.propTypes = {
       'PartialPaid',
       'Paid',
       'Rescheduled',
-    ])
+    ]),
   ),
   startHour: PropTypes.string,
   endHour: PropTypes.string,

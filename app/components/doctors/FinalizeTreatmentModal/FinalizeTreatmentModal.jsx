@@ -1,33 +1,38 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import sum from 'lodash/sum';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
-import getClinicExchangeRates from '../../../utils/getClinicExchangeRates';
-import formattedAmount from '../../../utils/formattedAmount';
-import getServiceName from '../../../utils/getServiceName';
-import { textForKey } from '../../../utils/localization';
-import EASTextField from "../../common/EASTextField";
-import EASModal from "../../common/modals/EASModal";
-import EASSelect from "../../common/EASSelect";
-import IconMinus from '../../icons/iconMinus';
-import IconPlus from '../../icons/iconPlus';
+import { useSelector } from 'react-redux';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import IconMinus from 'app/components/icons/iconMinus';
+import IconPlus from 'app/components/icons/iconPlus';
+import NotificationsContext from 'app/context/notificationsContext';
+import formattedAmount from 'app/utils/formattedAmount';
+import getServiceName from 'app/utils/getServiceName';
+import { textForKey } from 'app/utils/localization';
+import {
+  clinicCurrencySelector,
+  clinicExchangeRatesSelector,
+} from 'redux/selectors/appDataSelector';
 import styles from './FinalizeTreatmentModal.module.scss';
 
-const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave }) => {
+const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {
+  const toast = useContext(NotificationsContext);
   const [planServices, setPlanServices] = useState([]);
-  const rates = getClinicExchangeRates(currentClinic);
-  const clinicCurrency = currentClinic.currentUser;
+  const rates = useSelector(clinicExchangeRatesSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
 
   const mappedCurrencies = useMemo(() => {
     return rates.map((item) => ({
       id: item.currency,
       name: item.currency,
       currency: item.currency,
-    }))
+    }));
   }, [rates]);
 
   useEffect(() => {
@@ -69,7 +74,7 @@ const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave
 
   const handleSaveTreatment = () => {
     if (!planServices.some((it) => it.isSelected)) {
-      toast(textForKey('Please select at least one service'));
+      toast.show(textForKey('Please select at least one service'));
       return;
     }
     onSave(
@@ -147,7 +152,7 @@ const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave
   };
 
   const handleCurrencySelected = (serviceToChange) => (event) => {
-    const rate = rates.find(item => item.currency === event.target.value);
+    const rate = rates.find((item) => item.currency === event.target.value);
     if (rate == null) return;
     const newServices = planServices.map((item) => {
       if (
@@ -222,7 +227,7 @@ const FinalizeTreatmentModal = ({ open, services, currentClinic, onClose, onSave
                 <IconPlus fill='#3A83DC' />
               </IconButton>
               <EASTextField
-                type="number"
+                type='number'
                 containerClass={styles.priceField}
                 value={String(item.price)}
                 endAdornment={

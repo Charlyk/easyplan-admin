@@ -1,7 +1,7 @@
-import cloneDeep from "lodash/cloneDeep";
-import remove from "lodash/remove";
-import orderBy from "lodash/orderBy";
-import sortBy from "lodash/sortBy";
+import cloneDeep from 'lodash/cloneDeep';
+import orderBy from 'lodash/orderBy';
+import remove from 'lodash/remove';
+import sortBy from 'lodash/sortBy';
 
 export const areSameServices = (first, second) => {
   return (
@@ -57,8 +57,7 @@ export const getScheduleDetails = (data, clinicCurrency, state) => {
 
   // add new services to selected
   const diffsToAdd = newSelectedServices.filter(
-    (item) =>
-      !existentSelectedServices.some((it) => areSameServices(it, item)),
+    (item) => !existentSelectedServices.some((it) => areSameServices(it, item)),
   );
   diffsToAdd.forEach((item) => existentSelectedServices.push(item));
 

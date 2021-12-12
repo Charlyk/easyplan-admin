@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import IconNext from '../../../../icons/iconNext';
-import { textForKey } from '../../../../../utils/localization';
+import IconNext from 'app/components/icons/iconNext';
+import { textForKey } from 'app/utils/localization';
 import styles from '../GeneralAnalytics.module.scss';
 
 const IncomeStatisticItem = ({ title, icon, persons, amount }) => {
@@ -14,9 +13,7 @@ const IncomeStatisticItem = ({ title, icon, persons, amount }) => {
         <span className={styles['amount-label']}>
           {persons} {textForKey('persons')}
         </span>
-        <span className={styles['amount-label']}>
-          {Math.round(amount)} MDL
-        </span>
+        <span className={styles['amount-label']}>{Math.round(amount)} MDL</span>
       </div>
       <div className={styles['next-button']}>
         <IconNext />

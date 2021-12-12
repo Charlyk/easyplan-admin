@@ -1,4 +1,4 @@
-import { get, post, put } from "./request";
+import { get, post, put } from './request';
 
 /**
  * Fetch clinic invoices by status
@@ -39,7 +39,7 @@ export async function fetchPendingInvoices(headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function createNewInvoice(requestBody, headers = null) {
-  return post(`/api/invoices`, headers, requestBody);
+  return post('/api/invoices', headers, requestBody);
 }
 
 /**
@@ -60,7 +60,11 @@ export async function createNewInvoice(requestBody, headers = null) {
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function registerInvoicePayment(invoiceId, requestBody, headers = null) {
+export async function registerInvoicePayment(
+  invoiceId,
+  requestBody,
+  headers = null,
+) {
   return put(`/api/invoices/${invoiceId}`, headers, requestBody);
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import ErrorPage from "../app/components/error/ErrorPage";
-import { textForKey } from "../app/utils/localization";
+import ErrorPage from 'app/components/error/ErrorPage';
+import { textForKey } from 'app/utils/localization';
 
 const Error404 = () => {
   return (

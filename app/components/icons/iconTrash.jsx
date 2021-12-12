@@ -26,5 +26,5 @@ IconTrash.propTypes = {
 };
 
 IconTrash.defaultProps = {
-  fill: '#000000'
-}
+  fill: '#000000',
+};

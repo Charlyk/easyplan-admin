@@ -1,24 +1,23 @@
 import React from 'react';
-import clsx from "clsx";
-import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-
-import { textForKey } from "../../../../../utils/localization";
-import IconAvatar from '../../../../icons/iconAvatar';
-import IconEmail from '../../../../icons/iconEmail';
-import IconPhone from '../../../../icons/iconPhone';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import EASImage from 'app/components/common/EASImage';
+import IconAvatar from 'app/components/icons/iconAvatar';
+import IconEmail from 'app/components/icons/iconEmail';
+import IconPhone from 'app/components/icons/iconPhone';
+import { textForKey } from 'app/utils/localization';
 import styles from './PatientRow.module.scss';
-import EASImage from "../../../../common/EASImage";
 
 const PatientRow = ({ patient, onSelect }) => {
   const handlePatientNameClick = () => {
     onSelect(patient);
   };
 
-  const stopPropagation = event => {
+  const stopPropagation = (event) => {
     event.stopPropagation();
   };
 
@@ -33,7 +32,7 @@ const PatientRow = ({ patient, onSelect }) => {
           <EASImage
             enableLoading
             src={patient.avatar}
-            placeholder={<IconAvatar/>}
+            placeholder={<IconAvatar />}
             className={styles.avatarRoot}
           />
           <Typography

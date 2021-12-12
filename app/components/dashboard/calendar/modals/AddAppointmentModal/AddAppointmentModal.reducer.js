@@ -1,5 +1,5 @@
-import moment from "moment-timezone";
-import generateReducerActions from "../../../../../utils/generateReducerActions";
+import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
 
 /**
  * Filter available time based on start time and service duration
@@ -8,7 +8,11 @@ import generateReducerActions from "../../../../../utils/generateReducerActions"
  * @param {{ duration: number}|null} service
  * @return {Array.<string>}
  */
-export const filterAvailableTime = (availableTime, startTime, service = null) => {
+export const filterAvailableTime = (
+  availableTime,
+  startTime,
+  service = null,
+) => {
   return availableTime.filter((item) => {
     const [startH, startM] = startTime.split(':');
     const [h, m] = item.split(':');
@@ -74,74 +78,142 @@ export const initialState = {
   appointmentStatus: 'Pending',
   isUrgent: false,
   loading: { patients: false, services: false, doctors: false },
+  cabinet: null,
 };
 
-const reducerTypes = {
-  setPatient: 'setPatient',
-  setPatients: 'setPatients',
-  setDoctor: 'setDoctor',
-  setService: 'setService',
-  setServices: 'setServices',
-  setHours: 'setHours',
-  setPatientFirstName: 'setPatientFirstName',
-  setPatientLastName: 'setPatientLastName',
-  setPatientPhoneNumber: 'setPatientPhoneNumber',
-  setIsPhoneValid: 'SetIsPhoneValid',
-  setIsNewPatient: 'setIsNewPatient',
-  setPatientsLoading: 'setPatientsLoading',
-  setServicesLoading: 'setServicesLoading',
-  setDoctorsLoading: 'setDoctorsLoading',
-  setIsPatientValid: 'setIsPatientValid',
-  setIsDoctorValid: 'setIsDoctorValid',
-  setIsServiceValid: 'setIsServiceValid',
-  setIsFetchingHours: 'setIsFetchingHours',
-  setShowDatePicker: 'setShowDatePicker',
-  setShowBirthdayPicker: 'setShowBirthdayPicker',
-  setAppointmentDate: 'setAppointmentDate',
-  setAppointmentHour: 'setAppointmentHour',
-  setAppointmentNote: 'setAppointmentNote',
-  setAppointmentStatus: 'setAppointmentStatus',
-  setIsCreatingSchedule: 'setIsCreatingSchedule',
-  setSchedule: 'setSchedule',
-  setPatientBirthday: 'setPatientBirthday',
-  setPatientEmail: 'setPatientEmail',
-  setIsUrgent: 'setIsUrgent',
-  setStartTime: 'setStartTime',
-  setEndTime: 'setEndTime',
-  resetState: 'resetState',
-  setAvailableTime: 'setAvailableTime',
-  setAvailableStartTime: 'setAvailableStartTime',
-  setAvailableEndTime: 'setAvailableEndTime',
-  setPatientLanguage: 'setPatientLanguage',
-  setPatientSource: 'setPatientSource',
-};
+const addAppointmentModalSlice = createSlice({
+  name: 'addAppointmentModal',
+  initialState,
+  reducers: {
+    setPatient(state, action) {
+      state.patient = action.payload;
+      state.isPatientValid = action.payload != null;
+    },
+    setPatients(state, acton) {
+      state.patients = acton.payload;
+    },
+    setDoctor(state, action) {
+      state.doctor = action.payload;
+      state.service = null;
+      state.isDoctorValid = action.payload != null;
+    },
+    setService(state, action) {
+      state.service = action.payload;
+      state.isServiceValid = action.payload != null;
+    },
+    setServices(state, action) {
+      state.services = action.payload;
+    },
+    setHours(state, action) {
+      state.hours = action.payload;
+    },
+    setPatientFirstName(state, action) {
+      state.patientFirstName = action.payload;
+    },
+    setPatientLastName(state, action) {
+      state.patientLastName = action.payload;
+    },
+    setPatientPhoneNumber(state, action) {
+      state.patientPhoneNumber = action.payload.phoneNumber;
+      state.isPhoneValid = action.payload.isPhoneValid;
+      state.phoneCountry = action.payload.country;
+    },
+    setIsNewPatient(state, action) {
+      state.isNewPatient = action.payload;
+      state.patientBirthday = null;
+      state.patientEmail = '';
+      state.patientFirstName = '';
+      state.patientLastName = '';
+      state.patientPhoneNumber = '';
+    },
+    setPatientsLoading(state, action) {
+      state.loading = { ...state.loading, patients: action.payload };
+    },
+    setServicesLoading(state, action) {
+      state.loading = { ...state.loading, services: action.payload };
+    },
+    setDoctorsLoading(state, action) {
+      state.loading = { ...state.loading, doctors: action.payload };
+    },
+    setIsPatientValid(state, action) {
+      state.isPatientValid = action.payload;
+    },
+    setIsDoctorValid(state, action) {
+      state.isDoctorValid = action.payload;
+    },
+    setIsServiceValid(state, action) {
+      state.isServiceValid = action.payload;
+    },
+    setIsFetchingHours(state, action) {
+      state.isFetchingHours = action.payload;
+    },
+    setShowDatePicker(state, action) {
+      state.showDatePicker = action.payload;
+    },
+    setShowBirthdayPicker(state, action) {
+      state.showBirthdayPicker = action.payload;
+    },
+    setAppointmentDate(state, action) {
+      state.appointmentDate = action.payload;
+      state.showDatePicker = false;
+    },
+    setAppointmentHour(state, action) {
+      state.appointmentHour = action.payload;
+    },
+    setAppointmentNote(state, action) {
+      state.appointmentNote = action.payload;
+    },
+    setAppointmentStatus(state, action) {
+      state.appointmentStatus = action.payload;
+    },
+    setIsCreatingSchedule(state, action) {
+      state.isCreatingSchedule = action.payload;
+    },
+    setSchedule(state, action) {
+      const schedule = action.payload;
+      const scheduleStartDate = moment(schedule.startTime);
+      const scheduleEndDate = moment(schedule.endTime);
+      const {
+        patient,
+        doctor,
+        service,
+        noteText,
+        scheduleStatus,
+        isUrgent,
+        cabinet,
+      } = schedule;
 
-export const actions = generateReducerActions(reducerTypes);
-
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case reducerTypes.setPatient:
-      return {
-        ...state,
-        patient: action.payload,
-        isPatientValid: action.payload != null,
+      state.scheduleId = schedule.id;
+      state.patient = {
+        ...patient,
+        name: patient.fullName,
+        label: patient.fullName,
       };
-    case reducerTypes.setServices:
-      return { ...state, services: action.payload };
-    case reducerTypes.setDoctor:
-      return {
-        ...state,
-        doctor: action.payload,
-        service: null,
-        isDoctorValid: action.payload != null,
-      };
-    case reducerTypes.setPatients:
-      return { ...state, patients: action.payload };
-    case reducerTypes.setIsPatientValid:
-      return { ...state, isPatientValid: action.payload };
-    case reducerTypes.setIsUrgent:
-      return { ...state, isUrgent: action.payload };
-    case reducerTypes.setStartTime: {
+      state.cabinet = cabinet;
+      state.doctor = doctor;
+      state.service = { ...service, label: service.name };
+      state.appointmentNote = noteText;
+      state.appointmentDate = scheduleStartDate.toDate();
+      state.startTime = scheduleStartDate.format('HH:mm');
+      state.endTime = scheduleEndDate.format('HH:mm');
+      state.appointmentStatus = scheduleStatus;
+      state.isUrgent = isUrgent;
+      state.isPatientValid = true;
+      state.isDoctorValid = true;
+      state.isServiceValid = true;
+      state.isEditing = true;
+    },
+    setPatientBirthday(state, action) {
+      state.patientBirthday = action.payload;
+      state.showBirthdayPicker = false;
+    },
+    setPatientEmail(state, action) {
+      state.patientEmail = action.payload;
+    },
+    setIsUrgent(state, action) {
+      state.isUrgent = action.payload;
+    },
+    setStartTime(state, action) {
       const startTime = action.payload;
       const endTime = getEndTimeBasedOnService(
         state.availableTime,
@@ -152,134 +224,22 @@ export const reducer = (state, action) => {
         state.availableTime,
         startTime,
       );
-      return {
-        ...state,
-        startTime,
-        availableEndTime,
-        endTime: availableEndTime.includes(endTime)
-          ? endTime
-          : availableEndTime.length > 0
-            ? availableEndTime[0]
-            : '',
-      };
-    }
-    case reducerTypes.setEndTime: {
-      const endTime = action.payload;
-      return { ...state, endTime };
-    }
-    case reducerTypes.setDoctorsLoading:
-      return {
-        ...state,
-        loading: { ...state.loading, doctors: action.payload },
-      };
-    case reducerTypes.setServicesLoading:
-      return {
-        ...state,
-        loading: { ...state.loading, services: action.payload },
-      };
-    case reducerTypes.setPatientsLoading:
-      return {
-        ...state,
-        loading: { ...state.loading, patients: action.payload },
-      };
-    case reducerTypes.setIsDoctorValid:
-      return { ...state, isDoctorValid: action.payload };
-    case reducerTypes.setService: {
-      return {
-        ...state,
-        service: action.payload,
-        isServiceValid: action.payload != null,
-      };
-    }
-    case reducerTypes.setIsServiceValid:
-      return { ...state, isServiceValid: action.payload };
-    case reducerTypes.setShowDatePicker:
-      return { ...state, showDatePicker: action.payload };
-    case reducerTypes.setAppointmentDate:
-      return {
-        ...state,
-        appointmentDate: action.payload,
-        showDatePicker: false,
-      };
-    case reducerTypes.setHours:
-      return { ...state, hours: action.payload };
-    case reducerTypes.setIsFetchingHours:
-      return { ...state, isFetchingHours: action.payload };
-    case reducerTypes.setAppointmentHour:
-      return { ...state, appointmentHour: action.payload };
-    case reducerTypes.setAppointmentNote:
-      return { ...state, appointmentNote: action.payload };
-    case reducerTypes.setAppointmentStatus:
-      return { ...state, appointmentStatus: action.payload };
-    case reducerTypes.setIsCreatingSchedule:
-      return { ...state, isCreatingSchedule: action.payload };
-    case reducerTypes.setSchedule: {
-      const schedule = action.payload;
-      const scheduleStartDate = moment(schedule.startTime);
-      const scheduleEndDate = moment(schedule.endTime);
-      const { patient, doctor, service, noteText, scheduleStatus, isUrgent } = schedule;
-      return {
-        ...state,
-        scheduleId: schedule.id,
-        patient: {
-          ...patient,
-          name: patient.fullName,
-          label: patient.fullName,
-        },
-        doctor: doctor,
-        service: { ...service, label: service.name },
-        appointmentNote: noteText,
-        appointmentDate: scheduleStartDate.toDate(),
-        startTime: scheduleStartDate.format('HH:mm'),
-        endTime: scheduleEndDate.format('HH:mm'),
-        appointmentStatus: scheduleStatus,
-        isUrgent: isUrgent,
-        isPatientValid: true,
-        isDoctorValid: true,
-        isServiceValid: true,
-        isEditing: true,
-      };
-    }
-    case reducerTypes.setIsNewPatient: {
-      const isNewPatient = action.payload;
-      return {
-        ...state,
-        isNewPatient,
-        patientBirthday: null,
-        patientEmail: '',
-        patientFirstName: '',
-        patientLastName: '',
-        patientPhoneNumber: '',
-      };
-    }
-    case reducerTypes.setPatientFirstName:
-      return { ...state, patientFirstName: action.payload };
-    case reducerTypes.setPatientLastName:
-      return { ...state, patientLastName: action.payload };
-    case reducerTypes.setPatientPhoneNumber:
-      return {
-        ...state,
-        patientPhoneNumber: action.payload.phoneNumber,
-        isPhoneValid: action.payload.isPhoneValid,
-        phoneCountry: action.payload.country,
-      };
-    case reducerTypes.setPatientBirthday:
-      return {
-        ...state,
-        patientBirthday: action.payload,
-        showBirthdayPicker: false,
-      };
-    case reducerTypes.setPatientEmail:
-      return {
-        ...state,
-        patientEmail: action.payload,
-      };
-    case reducerTypes.setShowBirthdayPicker:
-      return {
-        ...state,
-        showBirthdayPicker: action.payload,
-      };
-    case reducerTypes.setAvailableTime: {
+
+      state.startTime = startTime;
+      state.availableEndTime = availableEndTime;
+      state.endTime = availableEndTime.includes(endTime)
+        ? endTime
+        : availableEndTime.length > 0
+        ? availableEndTime[0]
+        : '';
+    },
+    setEndTime(state, action) {
+      state.endTime = action.payload;
+    },
+    resetState() {
+      return initialState;
+    },
+    setAvailableTime(state, action) {
       const availableTime = action.payload;
       const startTime =
         availableTime?.length > 0 && state.startTime.length === 0
@@ -292,26 +252,73 @@ export const reducer = (state, action) => {
 
       const availableStartTime = availableTime;
       const availableEndTime = filterAvailableTime(availableTime, startTime);
-      return {
-        ...state,
-        availableTime,
-        availableStartTime,
-        availableEndTime,
-        startTime,
-        endTime,
-      };
-    }
-    case reducerTypes.setAvailableStartTime:
-      return { ...state, availableStartTime: action.payload };
-    case reducerTypes.setAvailableEndTime:
-      return { ...state, availableEndTime: action.payload };
-    case reducerTypes.resetState:
-      return initialState;
-    case reducerTypes.setPatientLanguage:
-      return { ...state, patientLanguage: action.payload };
-    case reducerTypes.setPatientSource:
-      return { ...state, patientSource: action.payload };
-    default:
-      return state;
-  }
-};
+      state.availableTime = availableTime;
+      state.availableStartTime = availableStartTime;
+      state.availableEndTime = availableEndTime;
+      state.startTime = startTime;
+      state.endTime = endTime;
+    },
+    setAvailableStartTime(state, action) {
+      state.availableStartTime = action.payload;
+    },
+    setAvailableEndTime(state, action) {
+      state.availableEndTime = action.payload;
+    },
+    setPatientLanguage(state, action) {
+      state.patientLanguage = action.payload;
+    },
+    setPatientSource(state, action) {
+      state.patientSource = action.payload;
+    },
+    setSelectedCabinet(state, action) {
+      if (action.payload == null) {
+        state.cabinet = null;
+      } else {
+        state.cabinet = {
+          ...action.payload,
+          label: action.payload.name,
+        };
+      }
+      state.doctor = null;
+      state.isDoctorValid = action.payload != null;
+    },
+  },
+});
+
+export const {
+  setPatient,
+  setPatients,
+  setPatientSource,
+  setPatientLanguage,
+  setShowDatePicker,
+  setSchedule,
+  setAppointmentHour,
+  setAppointmentStatus,
+  setEndTime,
+  setDoctor,
+  setAppointmentDate,
+  setIsCreatingSchedule,
+  setAppointmentNote,
+  setHours,
+  setIsDoctorValid,
+  setServices,
+  setAvailableTime,
+  setIsFetchingHours,
+  setIsNewPatient,
+  setIsPatientValid,
+  setIsUrgent,
+  setPatientBirthday,
+  setPatientPhoneNumber,
+  setPatientEmail,
+  setPatientFirstName,
+  setService,
+  setShowBirthdayPicker,
+  setServicesLoading,
+  setPatientLastName,
+  setPatientsLoading,
+  setStartTime,
+  setSelectedCabinet,
+  resetState,
+} = addAppointmentModalSlice.actions;
+
+export default addAppointmentModalSlice.reducer;

@@ -1,15 +1,15 @@
 import addDays from 'date-fns/addDays';
-import endOfDay from 'date-fns/endOfDay';
-import startOfDay from 'date-fns/startOfDay';
-import startOfMonth from 'date-fns/startOfMonth';
-import endOfMonth from 'date-fns/endOfMonth';
 import addMonths from 'date-fns/addMonths';
-import startOfWeek from 'date-fns/startOfWeek';
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+import endOfDay from 'date-fns/endOfDay';
+import endOfMonth from 'date-fns/endOfMonth';
 import endOfWeek from 'date-fns/endOfWeek';
 import isSameDay from 'date-fns/isSameDay';
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+import startOfDay from 'date-fns/startOfDay';
+import startOfMonth from 'date-fns/startOfMonth';
+import startOfWeek from 'date-fns/startOfWeek';
 
-import { textForKey } from '../../../utils/localization';
+import { textForKey } from 'app/utils/localization';
 
 const defineds = {
   startOfWeek: startOfWeek(new Date(), { weekStartsOn: 1 }),
@@ -38,7 +38,7 @@ const staticRangeHandler = {
 };
 
 export function createStaticRanges(ranges) {
-  return ranges.map(range => ({ ...staticRangeHandler, ...range }));
+  return ranges.map((range) => ({ ...staticRangeHandler, ...range }));
 }
 
 export const localizedStaticRanges = createStaticRanges([

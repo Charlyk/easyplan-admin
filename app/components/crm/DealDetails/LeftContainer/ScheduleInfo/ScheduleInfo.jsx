@@ -1,24 +1,25 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import moment from "moment-timezone";
-import Table from "@material-ui/core/Table";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableBody from "@material-ui/core/TableBody";
-import Typography from "@material-ui/core/Typography";
-import TableContainer from "@material-ui/core/TableContainer";
-
-import { ScheduleStatuses } from "../../../../../utils/constants";
-import { textForKey } from "../../../../../utils/localization";
-import styles from "./ScheduleInfo.module.scss";
+import { ScheduleStatuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import styles from './ScheduleInfo.module.scss';
 
 const ScheduleInfo = ({ deal }) => {
   const { schedule } = deal;
-  const scheduleStatus = ScheduleStatuses.find(item => item.id === schedule.status)
+  const scheduleStatus = ScheduleStatuses.find(
+    (item) => item.id === schedule.status,
+  );
 
   const doctorName = useMemo(() => {
     const { doctor } = schedule;
-    return `${doctor.firstName} ${doctor.lastName}`
+    return `${doctor.firstName} ${doctor.lastName}`;
   }, [schedule.doctor]);
 
   return (
@@ -106,7 +107,7 @@ const ScheduleInfo = ({ deal }) => {
         </Table>
       </TableContainer>
     </div>
-  )
+  );
 };
 
 export default ScheduleInfo;
@@ -118,7 +119,7 @@ ScheduleInfo.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
@@ -140,4 +141,4 @@ ScheduleInfo.propTypes = {
       }),
     }),
   }),
-}
+};

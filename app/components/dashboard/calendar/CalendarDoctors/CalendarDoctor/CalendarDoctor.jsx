@@ -1,21 +1,20 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import IconAvatar from '../../../../icons/iconAvatar';
+import IconAvatar from 'app/components/icons/iconAvatar';
 import styles from './CalendarDoctor.module.scss';
 
 const CalendarDoctor = ({ doctor, isSelected, onSelect }) => {
-  const services = doctor.services.map(item => item.name).join(', ');
+  const services = doctor.services.map((item) => item.name).join(', ');
 
   const handleDoctorClick = () => {
     onSelect(doctor);
   };
 
   return (
-    <div
-      role='button'
-      tabIndex={0}
+    <Box
       className={clsx(styles.doctorItem, isSelected && styles.selected)}
       onClick={handleDoctorClick}
     >
@@ -30,7 +29,7 @@ const CalendarDoctor = ({ doctor, isSelected, onSelect }) => {
           {services}
         </Typography>
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -1,22 +1,19 @@
 import React from 'react';
-import clsx from "clsx";
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import styles from './LoadingButton.module.scss';
 
-const LoadingButton = (
-  {
-    children,
-    className,
-    onClick,
-    disabled,
-    isLoading,
-    variant,
-    style,
-    type,
-  }
-) => {
+const LoadingButton = ({
+  children,
+  className,
+  onClick,
+  disabled,
+  isLoading,
+  style,
+  type,
+}) => {
   return (
     <Button
       type={type}
@@ -32,7 +29,7 @@ const LoadingButton = (
       {!isLoading && children}
       {isLoading && (
         <div className={styles.spinnerWrapper}>
-          <CircularProgress classes={{ root: styles.loadingButtonSpinner }}/>
+          <CircularProgress classes={{ root: styles.loadingButtonSpinner }} />
         </div>
       )}
     </Button>
@@ -45,12 +42,20 @@ LoadingButton.propTypes = {
   onClick: PropTypes.func,
   isLoading: PropTypes.bool,
   children: PropTypes.any,
-  spinnerVariant: PropTypes.oneOf(['light']),
   className: PropTypes.string,
   disabled: PropTypes.bool,
   variant: PropTypes.string,
+  style: PropTypes.any,
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
 };
 
 LoadingButton.defaultProps = {
   variant: 'primary',
+  disabled: false,
+  onClick: () => null,
+  isLoading: false,
+  children: null,
+  className: null,
+  style: null,
+  type: 'button',
 };

@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import Typography from "@material-ui/core/Typography";
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-
-import getClinicUrl from "../../../utils/getClinicUrl";
-import { textForKey } from "../../../utils/localization";
-import useIsMobileDevice from "../../../utils/hooks/useIsMobileDevice";
-import { triggerUserLogout } from "../../../../redux/actions/actions";
-import { signOut } from "../../../../middleware/api/auth";
-import { isDev } from "../../../../eas.config";
-import ConfirmationModal from "../modals/ConfirmationModal";
-import ClinicItem from "./ClinicItem";
+import Typography from '@material-ui/core/Typography';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import getClinicUrl from 'app/utils/getClinicUrl';
+import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
+import { isDev } from 'eas.config';
+import { signOut } from 'middleware/api/auth';
+import { triggerUserLogout } from 'redux/actions/actions';
+import EASImage from '../EASImage';
+import ConfirmationModal from '../modals/ConfirmationModal';
+import ClinicItem from './ClinicItem';
 import styles from './ClnicsList.module.scss';
-import EASImage from "../EASImage";
 
 export default function ClinicsList({ user, authToken, isMobile }) {
   const router = useRouter();
@@ -26,7 +25,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
   useEffect(() => {
     if (user?.clinics.length === 1) {
       const userClinic = user.clinics[0];
-      if (userClinic.accessBlocked) {
+      if (userClinic?.accessBlocked) {
         handleAccessBlocked();
         return;
       }
@@ -40,17 +39,17 @@ export default function ClinicsList({ user, authToken, isMobile }) {
     setShowBlockedAccess(true);
     await signOut();
     await router.reload();
-  }
+  };
 
   const handleClinicSelected = async (clinic) => {
     if (clinic.accessBlocked) {
       setShowBlockedAccess(true);
       return;
     }
-    await signOut()
+    await signOut();
     const clinicUrl = getClinicUrl(clinic, authToken);
     await router.replace(clinicUrl);
-  }
+  };
 
   const handleLogout = () => {
     dispatch(triggerUserLogout(true));
@@ -58,7 +57,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
 
   const handleCloseAccessBlocked = () => {
     setShowBlockedAccess(false);
-  }
+  };
 
   return (
     <div className={styles.clinicsListRoot}>
@@ -71,10 +70,10 @@ export default function ClinicsList({ user, authToken, isMobile }) {
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <EASImage
-          src="settings/easyplan-logo.svg"
+          src='settings/easyplan-logo.svg'
           classes={{
             root: styles.logoContainer,
-            image: styles.logoImage
+            image: styles.logoImage,
           }}
         />
       )}
@@ -86,7 +85,10 @@ export default function ClinicsList({ user, authToken, isMobile }) {
         }}
       >
         {isMobileDevice && (
-          <EASImage src="settings/easyplan-logo.svg" className={styles.logoImage} />
+          <EASImage
+            src='settings/easyplan-logo.svg'
+            className={styles.logoImage}
+          />
         )}
         <div
           className={styles.clinicsWrapper}
@@ -98,7 +100,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
           <Typography className={styles.formTitle}>
             {textForKey('Select a clinic')}
           </Typography>
-          {user?.clinics?.map(clinic => (
+          {user?.clinics?.map((clinic) => (
             <ClinicItem
               key={clinic.id}
               clinic={clinic}
@@ -114,4 +116,4 @@ export default function ClinicsList({ user, authToken, isMobile }) {
       </div>
     </div>
   );
-};
+}

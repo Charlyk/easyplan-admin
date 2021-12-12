@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-
-import IconPlus from '../../../../icons/iconPlus';
-import { textForKey } from '../../../../../utils/localization';
-import styles from './SMSMessagesHeader.module.scss'
+import PropTypes from 'prop-types';
+import IconPlus from 'app/components/icons/iconPlus';
+import { textForKey } from 'app/utils/localization';
+import styles from './SMSMessagesHeader.module.scss';
 
 const SMSMessagesHeader = ({ canCreate, onCreate }) => {
   return (

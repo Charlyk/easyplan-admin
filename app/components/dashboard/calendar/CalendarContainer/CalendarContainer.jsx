@@ -1,26 +1,32 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
+import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from "moment-timezone";
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import useSWR from "swr";
-
-import {
-  setAppointmentModal,
-  setPaymentModal,
-  toggleAppointmentsUpdate,
-} from '../../../../../redux/actions/actions';
+import MainComponent from 'app/components/common/MainComponent';
+import NotificationsContext from 'app/context/notificationsContext';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { HeaderKeys } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
 import {
   importSchedulesFromFile,
-  requestDeleteSchedule
-} from "../../../../../middleware/api/schedules";
-import redirectIfOnGeneralHost from '../../../../utils/redirectIfOnGeneralHost';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { textForKey } from '../../../../utils/localization';
-import { APP_DATA_API, HeaderKeys } from "../../../../utils/constants";
-import MainComponent from '../../../common/MainComponent';
+  requestDeleteSchedule,
+} from 'middleware/api/schedules';
+import {
+  setPaymentModal,
+  toggleAppointmentsUpdate,
+} from 'redux/actions/actions';
+import {
+  activeClinicDoctorsSelector,
+  authTokenSelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import { updateClinicDataSelector } from 'redux/selectors/clinicDataSelector';
+import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import styles from './CalendarContainer.module.scss';
 import reducer, {
   initialState,
   setParsedValue,
@@ -34,11 +40,13 @@ import reducer, {
   setViewMode,
   setShowImportModal,
 } from './CalendarContainer.reducer';
-import styles from './CalendarContainer.module.scss';
-import { updateClinicDataSelector } from "../../../../../redux/selectors/clinicDataSelector";
 
-const CSVImportModal = dynamic(() => import("../../../common/CSVImportModal"));
-const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
+const CSVImportModal = dynamic(() =>
+  import('app/components/common/CSVImportModal'),
+);
+const ConfirmationModal = dynamic(() =>
+  import('app/components/common/modals/ConfirmationModal'),
+);
 const CalendarDoctors = dynamic(() => import('../CalendarDoctors'));
 const AppointmentsCalendar = dynamic(() => import('../AppointmentsCalendar'));
 
@@ -95,24 +103,18 @@ const importFields = [
   },
 ];
 
-const CalendarContainer = (
-  {
-    date,
-    doctorId,
-    doctors,
-    viewMode,
-    children,
-    authToken
-  }
-) => {
-  const { data } = useSWR(APP_DATA_API);
-  const { currentUser, currentClinic } = data;
+const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
+  const toast = useContext(NotificationsContext);
   const updateClinicData = useSelector(updateClinicDataSelector);
-
+  const doctors = useSelector(activeClinicDoctorsSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const router = useRouter();
   const pubnub = usePubNub();
   const dispatch = useDispatch();
-  const services = currentClinic?.services?.filter((item) => !item.deleted) || [];
+  const services =
+    currentClinic?.services?.filter((item) => !item.deleted) || [];
   const viewDate = moment(date).toDate();
   const [
     {
@@ -133,7 +135,7 @@ const CalendarContainer = (
     filters: {
       ...initialState.filters,
       doctors,
-    }
+    },
   });
 
   useEffect(() => {
@@ -141,11 +143,11 @@ const CalendarContainer = (
       return;
     }
     router.replace(router.asPath);
-  }, [updateClinicData])
+  }, [updateClinicData]);
 
   useEffect(() => {
     if (currentUser == null) {
-      return
+      return;
     }
     redirectIfOnGeneralHost(currentUser, router);
 
@@ -161,15 +163,16 @@ const CalendarContainer = (
   }, []);
 
   useEffect(() => {
-    const newDoctors = doctors?.map((item) => {
-      const servicesIds = item.services.map((service) => service.seviceId);
-      return {
-        ...item,
-        services: services.filter((service) =>
-          servicesIds.includes(service.serviceId),
-        ),
-      };
-    }) ?? [];
+    const newDoctors =
+      doctors?.map((item) => {
+        const servicesIds = item.services.map((service) => service.seviceId);
+        return {
+          ...item,
+          services: services.filter((service) =>
+            servicesIds.includes(service.serviceId),
+          ),
+        };
+      }) ?? [];
     localDispatch(setFilters({ doctors: newDoctors, services }));
   }, [currentClinic]);
 
@@ -184,7 +187,7 @@ const CalendarContainer = (
     } else {
       localDispatch(setSelectedDoctor(doctors[0]));
     }
-  }
+  };
 
   const handlePubnubMessageReceived = (remoteMessage) => {
     const { message, channel } = remoteMessage;
@@ -207,32 +210,40 @@ const CalendarContainer = (
     }
   };
 
-  const handleAppointmentModalOpen = (doctor, startHour, endHour, selectedDate = null, patient) => {
+  const handleAppointmentModalOpen = (
+    doctor,
+    startHour,
+    endHour,
+    selectedDate = null,
+    patient,
+    cabinet,
+  ) => {
     if (doctor?.isHidden) {
-      toast.warn(textForKey('doctor_is_fired'))
+      toast.warn(textForKey('doctor_is_fired'));
       return;
     }
     dispatch(
-      setAppointmentModal({
+      openAppointmentModal({
         open: true,
         doctor: doctor ?? selectedDoctor,
         startHour,
         endHour,
-        date: selectedDate ?? viewDate,
+        date: moment(selectedDate ?? viewDate).format('YYYY-MM-DD'),
         patient,
+        cabinet,
       }),
     );
   };
 
   const handleDoctorSelected = async (doctor) => {
-    const dateString = moment(viewDate).format('YYYY-MM-DD')
+    const dateString = moment(viewDate).format('YYYY-MM-DD');
     updateSelectedDoctor(doctor.id);
     await router.replace({
       pathname: `/calendar/${viewMode}`,
       query: {
         date: dateString,
-        doctorId: doctor.id
-      }
+        doctorId: doctor.id,
+      },
     });
   };
 
@@ -241,27 +252,34 @@ const CalendarContainer = (
     const query = {
       date: stringDate,
       doctorId: doctorId,
-    }
+    };
 
     if (query.doctorId == null || viewMode === 'day' || moveToDay) {
       delete query.doctorId;
     }
 
-    await router.replace({
-      pathname: `/calendar/${moveToDay ? 'day' : viewMode}`,
-      query,
-    }, null, { scroll: true });
+    await router.replace(
+      {
+        pathname: `/calendar/${moveToDay ? 'day' : viewMode}`,
+        query,
+      },
+      null,
+      { scroll: true },
+    );
   };
 
   const handleCloseImportModal = () => {
     localDispatch(setShowImportModal(false));
-  }
+  };
 
   const handleImportSchedules = async (file, fields) => {
     try {
       localDispatch(setIsUploading(true));
-      const mappedFields = fields.map(item => ({ fieldId: item.id, index: item.index }));
-      await importSchedulesFromFile(file, mappedFields, 'MMM dd yyyy',{
+      const mappedFields = fields.map((item) => ({
+        fieldId: item.id,
+        index: item.index,
+      }));
+      await importSchedulesFromFile(file, mappedFields, 'MMM dd yyyy', {
         [HeaderKeys.authorization]: authToken,
         [HeaderKeys.clinicId]: currentClinic.id,
         [HeaderKeys.subdomain]: currentClinic.domainName,
@@ -273,7 +291,7 @@ const CalendarContainer = (
     } finally {
       localDispatch(setIsUploading(false));
     }
-  }
+  };
 
   const handleScheduleSelected = (schedule) => {
     localDispatch(setSelectedSchedule(schedule));
@@ -288,8 +306,8 @@ const CalendarContainer = (
     }
     await router.replace({
       pathname: `/calendar/${newMode}`,
-      query: query
-    })
+      query: query,
+    });
   };
 
   const handlePayDebt = (debt) => {
@@ -298,7 +316,7 @@ const CalendarContainer = (
 
   const handleEditSchedule = (schedule) => {
     dispatch(
-      setAppointmentModal({
+      openAppointmentModal({
         open: true,
         schedule,
       }),
@@ -315,10 +333,8 @@ const CalendarContainer = (
     }
     localDispatch(setIsDeleting(true));
     try {
-      await requestDeleteSchedule(deleteSchedule.schedule.id)
-      localDispatch(
-        setDeleteSchedule({ open: false, schedule: null }),
-      );
+      await requestDeleteSchedule(deleteSchedule.schedule.id);
+      localDispatch(setDeleteSchedule({ open: false, schedule: null }));
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -330,9 +346,7 @@ const CalendarContainer = (
   };
 
   const handleCloseDeleteSchedule = () => {
-    localDispatch(
-      setDeleteSchedule({ open: false, schedule: null }),
-    );
+    localDispatch(setDeleteSchedule({ open: false, schedule: null }));
   };
 
   const handleOpenImportModal = () => {

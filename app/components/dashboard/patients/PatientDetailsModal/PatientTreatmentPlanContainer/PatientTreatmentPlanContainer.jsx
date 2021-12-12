@@ -1,19 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import { textForKey } from "../../../../../utils/localization";
-import { fetchDoctorScheduleDetails } from "../../../../../../middleware/api/schedules";
-import getTreatmentPlanURL from "../../../../../utils/getTreatmentPlanURL";
-import PatientTreatmentPlan from "../../../../common/PatientTreatmentPlan";
+import EASTextField from 'app/components/common/EASTextField';
+import PatientTreatmentPlan from 'app/components/common/PatientTreatmentPlan';
+import NotificationsContext from 'app/context/notificationsContext';
+import getTreatmentPlanURL from 'app/utils/getTreatmentPlanURL';
+import { textForKey } from 'app/utils/localization';
+import { fetchDoctorScheduleDetails } from 'middleware/api/schedules';
 import styles from './PatientTreatmentPlanContainer.module.scss';
-import EASTextField from "../../../../common/EASTextField";
 
-const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, patientId }) => {
+const PatientTreatmentPlanContainer = ({
+  currentUser,
+  currentClinic,
+  authToken,
+  patientId,
+}) => {
+  const toast = useContext(NotificationsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [scheduleData, setScheduleData] = useState(null);
-  const [guideName, setGuideName] = useState(`${currentUser.firstName} ${currentUser.lastName}`);
+  const [guideName, setGuideName] = useState(
+    `${currentUser.firstName} ${currentUser.lastName}`,
+  );
+  const canPrint = scheduleData?.treatmentPlan?.services?.length > 0;
 
   useEffect(() => {
     fetchScheduleData();
@@ -22,7 +31,11 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
   const fetchScheduleData = async () => {
     setIsLoading(true);
     try {
-      const { data: initialSchedule } = await fetchDoctorScheduleDetails(null, patientId);
+      const { data: initialSchedule } = await fetchDoctorScheduleDetails(
+        null,
+        patientId,
+      );
+      console.log(initialSchedule);
       setScheduleData(initialSchedule);
     } catch (error) {
       toast.error(error.message);
@@ -32,13 +45,22 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
   };
 
   const handlePrintTreatmentPlan = () => {
-    const planUrl = getTreatmentPlanURL(currentClinic, authToken, patientId, guideName);
+    const { treatmentPlan } = scheduleData;
+    if (treatmentPlan.services.length === 0) {
+      return;
+    }
+    const planUrl = getTreatmentPlanURL(
+      currentClinic,
+      authToken,
+      patientId,
+      guideName,
+    );
     window.open(planUrl, '_blank');
-  }
+  };
 
   const handleGuideNameChange = (newValue) => {
     setGuideName(newValue);
-  }
+  };
 
   return (
     <div className={styles.patientTreatmentPlanContainer}>
@@ -48,7 +70,7 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
       <div className={styles.planWrapper}>
         {isLoading && (
           <div className='progress-bar-wrapper'>
-            <CircularProgress className='circular-progress-bar'/>
+            <CircularProgress className='circular-progress-bar' />
           </div>
         )}
         {!isLoading && scheduleData != null && (
@@ -61,7 +83,7 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
           />
         )}
       </div>
-      {!isLoading && (
+      {!isLoading && canPrint && (
         <div className={styles.footer}>
           <EASTextField
             fieldLabel={textForKey('Enter guide name')}
@@ -72,7 +94,7 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
           <Button
             classes={{
               root: styles.printBtn,
-              label: styles.label
+              label: styles.label,
             }}
             onPointerUp={handlePrintTreatmentPlan}
           >
@@ -81,7 +103,7 @@ const PatientTreatmentPlanContainer = ({ currentUser, currentClinic, authToken, 
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 export default PatientTreatmentPlanContainer;

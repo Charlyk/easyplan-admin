@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -9,26 +7,34 @@ import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-
-import IconMinus from '../../../../icons/iconMinus';
-import IconPlus from '../../../../icons/iconPlus';
-import IconTrash from '../../../../icons/iconTrash';
-import adjustValueToNumber from '../../../../../utils/adjustValueToNumber';
-import { textForKey } from "../../../../../utils/localization";
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import IconMinus from 'app/components/icons/iconMinus';
+import IconPlus from 'app/components/icons/iconPlus';
+import IconTrash from 'app/components/icons/iconTrash';
+import adjustValueToNumber from 'app/utils/adjustValueToNumber';
+import { textForKey } from 'app/utils/localization';
 import styles from './ServiceRow.module.scss';
 
-const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelete }) => {
+const ServiceRow = ({
+  service,
+  currencies,
+  canEdit,
+  canDelete,
+  onChange,
+  onDelete,
+}) => {
   const [currency, setCurrency] = useState(service.currency);
   const [price, setPrice] = useState(service.amount);
   const [count, setCount] = useState(service.count);
 
-  const handleCurrencyChange = event => {
+  const handleCurrencyChange = (event) => {
     const newCurrency = event.target.value;
     setCurrency(newCurrency);
     onChange({ ...service, currency: newCurrency });
   };
 
-  const handlePriceChange = event => {
+  const handlePriceChange = (event) => {
     const newPrice = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
     onChange({ ...service, amount: newPrice });
     setPrice(newPrice);
@@ -38,7 +44,7 @@ const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelet
     onDelete(service);
   };
 
-  const handleServiceCountChange = buttonId => () => {
+  const handleServiceCountChange = (buttonId) => () => {
     switch (buttonId) {
       case 'plus': {
         const newCount = count + 1;
@@ -71,9 +77,7 @@ const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelet
 
   return (
     <TableRow classes={{ root: styles.serviceRow }}>
-      <TableCell
-        classes={{ root: clsx(styles.cell, styles.name) }}
-      >
+      <TableCell classes={{ root: clsx(styles.cell, styles.name) }}>
         <Tooltip title={serviceTitle()}>
           <Typography noWrap classes={{ root: styles['service-name'] }}>
             {serviceTitle()}
@@ -92,7 +96,9 @@ const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelet
           >
             <IconMinus fill='#3A83DC' />
           </IconButton>
-          <Typography classes={{ root: styles['counter-label'] }}>{count}</Typography>
+          <Typography classes={{ root: styles['counter-label'] }}>
+            {count}
+          </Typography>
           <IconButton
             disabled={!canEdit}
             classes={{ root: styles['action-button'] }}
@@ -131,7 +137,7 @@ const ServiceRow = ({ service, currencies, canEdit, canDelete, onChange, onDelet
           onChange={handleCurrencyChange}
           variant='outlined'
         >
-          {currencies.map(option => (
+          {currencies.map((option) => (
             <MenuItem
               classes={{ root: 'checkout-modal-currency-item' }}
               key={option.currency}

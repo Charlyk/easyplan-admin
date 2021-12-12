@@ -1,11 +1,11 @@
 import React from 'react';
-import parseCookies from "../app/utils/parseCookies";
-import CreateClinicWrapper from "../app/components/common/CreateClinicWrapper";
-import { wrapper } from "../store";
-import { fetchAllCountries } from "../middleware/api/countries";
-import { JwtRegex } from "../app/utils/constants";
-import handleRequestError from "../app/utils/handleRequestError";
-import checkIsMobileDevice from "../app/utils/checkIsMobileDevice";
+import { connect } from 'react-redux';
+import CreateClinicWrapper from 'app/components/common/CreateClinicWrapper';
+import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
+import { JwtRegex } from 'app/utils/constants';
+import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
+import { fetchAllCountries } from 'middleware/api/countries';
 
 const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
   return (
@@ -19,11 +19,13 @@ const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
   );
 };
 
+export default connect((state) => state)(CreateClinic);
+
 export const getServerSideProps = async ({ req, query }) => {
   try {
     const isMobile = checkIsMobileDevice(req);
-    const { auth_token } = parseCookies(req);
-    if (!auth_token || !auth_token.match(JwtRegex)) {
+    const { auth_token: authToken } = parseCookies(req);
+    if (!authToken || !authToken.match(JwtRegex)) {
       return {
         redirect: {
           destination: '/login',
@@ -37,15 +39,13 @@ export const getServerSideProps = async ({ req, query }) => {
     return {
       props: {
         isMobile,
-        token: auth_token,
+        token: authToken,
         redirect: redirect === '1',
         shouldLogin: login === '1',
-        countries
+        countries,
       },
-    }
+    };
   } catch (e) {
     return handleRequestError(e);
   }
 };
-
-export default wrapper.withRedux(CreateClinic);

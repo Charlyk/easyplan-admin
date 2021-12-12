@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
-
-import SwitchButton from '../../../../common/SwitchButton';
-import EASTextField from "../../../../common/EASTextField";
+import EASTextField from 'app/components/common/EASTextField';
+import SwitchButton from 'app/components/common/SwitchButton';
 import styles from './DoctorServiceItem.module.scss';
 
-const DoctorServiceItem = props => {
+const DoctorServiceItem = (props) => {
   const { service, selected, onSelected, doctorService, clinic } = props;
   const [price, setPrice] = useState('');
   const [percentage, setPercentage] = useState('');
@@ -38,7 +37,10 @@ const DoctorServiceItem = props => {
     onSelected(service, parseFloat(newValue), null, selected);
   };
 
-  const titleClasses = clsx(styles.serviceTitle, selected ? styles.selected : styles.default);
+  const titleClasses = clsx(
+    styles.serviceTitle,
+    selected ? styles.selected : styles.default,
+  );
 
   return (
     <div className={styles.doctorService}>
@@ -46,20 +48,18 @@ const DoctorServiceItem = props => {
       <div className={titleClasses}>{service.name}</div>
       <div className={styles.fields}>
         <EASTextField
-          type="number"
-          placeholder="0"
+          type='number'
+          placeholder='0'
           value={percentage}
           containerClass={styles.field}
           readOnly={!selected || price.length > 0}
           onChange={handlePercentageChange}
-          endAdornment={
-            <Typography className={styles.adornment}>%</Typography>
-          }
+          endAdornment={<Typography className={styles.adornment}>%</Typography>}
         />
 
         <EASTextField
-          type="number"
-          placeholder="0"
+          type='number'
+          placeholder='0'
           value={price}
           readOnly={!selected || percentage.length > 0}
           onChange={handlePriceChange}

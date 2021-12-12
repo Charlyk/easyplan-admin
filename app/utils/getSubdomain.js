@@ -1,4 +1,4 @@
-import { environment } from "../../eas.config";
+import { environment } from 'eas.config';
 
 export default function getSubdomain(req) {
   if (environment === 'local') {
@@ -6,5 +6,5 @@ export default function getSubdomain(req) {
   }
   const { host } = req.headers;
   const [clinicDomain] = host.split('.');
-  return clinicDomain
+  return clinicDomain;
 }

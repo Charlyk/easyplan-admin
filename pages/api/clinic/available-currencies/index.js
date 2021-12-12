@@ -1,8 +1,16 @@
-import axios from "axios";
-import { handler } from "../../handler";
-import getSubdomain from "../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../../app/utils/constants";
+import axios from 'axios';
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import handler from '../../handler';
+
+async function fetchAvailableCurrencies(req) {
+  return axios.get(`${updatedServerUrl(req)}/clinics/available-currencies`, {
+    headers: {
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
 
 export default async function clinicDetails(req, res) {
   switch (req.method) {
@@ -18,12 +26,4 @@ export default async function clinicDetails(req, res) {
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
-};
-
-async function fetchAvailableCurrencies(req) {
-  return axios.get(`${updatedServerUrl(req)}/clinics/available-currencies`, {
-    headers: {
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
 }

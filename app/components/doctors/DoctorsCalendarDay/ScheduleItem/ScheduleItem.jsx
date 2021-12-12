@@ -1,11 +1,10 @@
-import React, { useMemo } from "react";
-import Typography from "@material-ui/core/Typography";
+import React, { useMemo } from 'react';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import moment from "moment-timezone";
-import clsx from "clsx";
-
-import { textForKey } from "../../../../utils/localization";
-import { Statuses } from "../../../../utils/constants";
+import { Statuses } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import styles from './ScheduleItem.module.scss';
 
 const ScheduleItem = ({ schedule, onSelected }) => {
@@ -20,41 +19,49 @@ const ScheduleItem = ({ schedule, onSelected }) => {
       return;
     }
     onSelected(schedule);
-  }
+  };
 
   return (
     <div
       onPointerUp={handleScheduleSelected}
-      className={
-        clsx(
-          styles.scheduleItem,
-          {
-            [styles.urgent]: schedule.isUrgent || schedule.urgent,
-            [styles.upcoming]: schedule.scheduleStatus === 'OnSite',
-          }
-        )
-      }
+      className={clsx(styles.scheduleItem, {
+        [styles.urgent]: schedule.isUrgent || schedule.urgent,
+        [styles.upcoming]: schedule.scheduleStatus === 'OnSite',
+      })}
       style={{
-        backgroundColor: isPause ? '#FDC534' : '#f3f3f3'
+        backgroundColor: isPause ? '#FDC534' : '#f3f3f3',
       }}
     >
       <div
         className={styles.statusIndicator}
         style={{
-          backgroundColor: isPause ? 'white' : status.color
+          backgroundColor: isPause ? 'white' : status.color,
         }}
       />
-      <Typography noWrap className={clsx(styles.patientNameLabel, isPause && styles.pause)}>
+      <Typography
+        noWrap
+        className={clsx(styles.patientNameLabel, isPause && styles.pause)}
+      >
         {isPause ? textForKey('Pause') : schedule.patient.fullName}
       </Typography>
-      <Typography noWrap className={clsx(styles.timeLabel, isPause && styles.pause)}>
+      <Typography
+        noWrap
+        className={clsx(styles.timeLabel, isPause && styles.pause)}
+      >
         {moment(schedule.startTime).format('HH:mm')} -{' '}
         {moment(schedule.endTime).format('HH:mm')}
       </Typography>
-      <Typography noWrap={!isPause} className={clsx(styles.timeLabel, isPause && styles.pause)}>
+      <Typography
+        noWrap={!isPause}
+        className={clsx(styles.timeLabel, isPause && styles.pause)}
+      >
         {isPause ? schedule.comment : schedule.serviceName}
       </Typography>
-      <Typography noWrap className={styles.timeLabel} style={{ color: status?.color ?? 'white' }}>
+      <Typography
+        noWrap
+        className={styles.timeLabel}
+        style={{ color: status?.color ?? 'white' }}
+      >
         {status?.name ?? ''}
       </Typography>
     </div>
@@ -74,7 +81,7 @@ ScheduleItem.propTypes = {
       id: PropTypes.number,
       fullName: PropTypes.string,
     }),
-    scheduleStatus: PropTypes.oneOf(Statuses.map(item => item.id)),
+    scheduleStatus: PropTypes.oneOf(Statuses.map((item) => item.id)),
     serviceColor: PropTypes.string,
     serviceCurrency: PropTypes.string,
     serviceId: PropTypes.number,
@@ -88,4 +95,4 @@ ScheduleItem.propTypes = {
 
 ScheduleItem.defaultProps = {
   onSelected: () => null,
-}
+};

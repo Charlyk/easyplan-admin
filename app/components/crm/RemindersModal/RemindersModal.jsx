@@ -1,21 +1,23 @@
-import React, { useEffect, useMemo, useReducer, useRef } from "react";
-import clsx from "clsx";
-import moment from "moment-timezone";
-import { useSelector } from "react-redux";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import { requestFetchUserReminders } from "../../../../middleware/api/crm";
-import { updatedReminderSelector } from "../../../../redux/selectors/crmSelector";
-import extractCookieByName from "../../../utils/extractCookieByName";
-import onRequestError from "../../../utils/onRequestError";
-import { textForKey } from "../../../utils/localization";
-import setDocCookies from "../../../utils/setDocCookies";
-import EasyDateRangePicker from "../../common/EasyDateRangePicker";
-import BottomSheetDialog from "../../common/BottomSheetDialog";
-import EASTextField from "../../common/EASTextField";
-import IconClose from "../../icons/iconClose";
-import HeaderItem from "./HeaderItem";
-import ReminderItem from "./ReminderItem";
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import moment from 'moment-timezone';
+import { useSelector } from 'react-redux';
+import BottomSheetDialog from 'app/components/common/BottomSheetDialog';
+import EASTextField from 'app/components/common/EASTextField';
+import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
+import IconClose from 'app/components/icons/iconClose';
+import extractCookieByName from 'app/utils/extractCookieByName';
+import { textForKey } from 'app/utils/localization';
+import setDocCookies from 'app/utils/setDocCookies';
+import { requestFetchUserReminders } from 'middleware/api/crm';
+import { updatedReminderSelector } from 'redux/selectors/crmSelector';
+import onRequestError from 'app/utils/onRequestError';
+import HeaderItem from './HeaderItem';
+import ReminderItem from './ReminderItem';
+import styles from './RemindersModal.module.scss';
 import reducer, {
   filterOptions,
   initialState,
@@ -23,8 +25,7 @@ import reducer, {
   setIsLoading,
   setShowDateRangePicker,
   setFilters,
-} from "./RemindersModal.reducer";
-import styles from "./RemindersModal.module.scss";
+} from './RemindersModal.reducer';
 
 const COOKIES_KEY = 'reminders_filter';
 const defaultRange = {
@@ -32,31 +33,32 @@ const defaultRange = {
   endDate: moment().add(7, 'days').toDate(),
 };
 
-const RemindersModal = ({ open, onClose, onAddReminder }) => {
+const RemindersModal = ({ open, onClose }) => {
   const pickerRef = useRef(null);
   const remoteReminder = useSelector(updatedReminderSelector);
-  const [{
-    filters,
-    reminders,
-    showDateRange,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [{ filters, reminders, showDateRange }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   const dateRange = useMemo(() => {
     if (filters?.dateRange == null) {
-      return null
+      return null;
     }
     const [startDate, endDate] = filters.dateRange;
     return {
       startDate: moment(startDate, 'YYYY-MM-DD').toDate(),
-      endDate: moment(endDate, 'YYYY-MM-DD').toDate()
-    }
+      endDate: moment(endDate, 'YYYY-MM-DD').toDate(),
+    };
   }, [filters.dateRange]);
 
   const stringRange = useMemo(() => {
     if (dateRange == null) {
-      return ''
+      return '';
     }
-    return `${moment(dateRange.startDate).format('DD.MM.YYYY')} - ${moment(dateRange.endDate).format('DD.MM.YYYY')}`
+    return `${moment(dateRange.startDate).format('DD.MM.YYYY')} - ${moment(
+      dateRange.endDate,
+    ).format('DD.MM.YYYY')}`;
   }, [dateRange]);
 
   useEffect(() => {
@@ -97,13 +99,13 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
     event.stopPropagation();
     updateParams({
       ...filters,
-      dateRange: initialState.filters.dateRange
-    })
+      dateRange: initialState.filters.dateRange,
+    });
   };
 
   const updateParams = (newParams) => {
     const stringQuery = JSON.stringify(newParams);
-    const encoded = btoa(unescape(encodeURIComponent(stringQuery)))
+    const encoded = btoa(unescape(encodeURIComponent(stringQuery)));
     setDocCookies(COOKIES_KEY, encoded);
     localDispatch(setFilters(newParams));
     fetchReminders();
@@ -131,10 +133,10 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
       ...filters,
       dateRange: [
         moment(startDate).format('YYYY-MM-DD'),
-        moment(endDate).format('YYYY-MM-DD')
-      ]
+        moment(endDate).format('YYYY-MM-DD'),
+      ],
     });
-  }
+  };
 
   return (
     <BottomSheetDialog
@@ -146,23 +148,27 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
       <div className={styles.remindersModal}>
         <div className={styles.filterContainer}>
           <div className={styles.titleContainer}>
-            <Typography className={styles.title}>{textForKey('Filter')}</Typography>
+            <Typography className={styles.title}>
+              {textForKey('Filter')}
+            </Typography>
           </div>
           <div className={styles.filterOptionsContainer}>
-            {filterOptions.map(item => (
-              <div
+            {filterOptions.map((item) => (
+              <Box
                 key={item.id}
-                className={clsx(styles.filterOption, { [styles.selected]: isShortcutSelected(item.id) })}
+                className={clsx(styles.filterOption, {
+                  [styles.selected]: isShortcutSelected(item.id),
+                })}
                 onClick={() => handleShortcutSelected(item)}
               >
                 <Typography className={styles.label}>{item.name}</Typography>
-              </div>
+              </Box>
             ))}
             <div className={styles.dateRangeFieldContainer}>
               <EASTextField
                 readOnly
                 fieldLabel={textForKey('Period')}
-                placeholder="DD.MM.YYYY - DD.MM.YYYY"
+                placeholder='DD.MM.YYYY - DD.MM.YYYY'
                 value={stringRange}
                 ref={pickerRef}
                 onClick={handleShowRangePicker}
@@ -172,7 +178,7 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
                       className={styles.clearBtn}
                       onClick={handleClearDateRange}
                     >
-                      <IconClose/>
+                      <IconClose />
                     </IconButton>
                   ) : null
                 }
@@ -181,22 +187,22 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
           </div>
         </div>
         <div className={styles.remindersContainer}>
-          {Object.keys(reminders).map(value => {
+          {Object.keys(reminders).map((value) => {
             const items = reminders[value];
             return (
               <React.Fragment key={value}>
-                <HeaderItem date={moment(value).toDate()}/>
-                {items.map(reminder => (
-                  <ReminderItem key={reminder.id} reminder={reminder}/>
+                <HeaderItem date={moment(value).toDate()} />
+                {items.map((reminder) => (
+                  <ReminderItem key={reminder.id} reminder={reminder} />
                 ))}
               </React.Fragment>
-            )
+            );
           })}
         </div>
 
         <EasyDateRangePicker
           open={showDateRange}
-          placement="right"
+          placement='right'
           pickerAnchor={pickerRef.current}
           dateRange={dateRange || defaultRange}
           onClose={handleCloseRangePicker}
@@ -204,7 +210,7 @@ const RemindersModal = ({ open, onClose, onAddReminder }) => {
         />
       </div>
     </BottomSheetDialog>
-  )
+  );
 };
 
 export default RemindersModal;

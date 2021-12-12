@@ -6,22 +6,19 @@ import Popper from '@material-ui/core/Popper';
 import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-
-import { getAppLanguage } from '../../../utils/localization';
+import { getAppLanguage } from 'app/utils/localization';
 import styles from './EasyDatePicker.module.scss';
 
-const EasyDatePicker = (
-  {
-    open,
-    pickerAnchor,
-    placement,
-    minDate,
-    onClose,
-    onChange,
-    selectedDate,
-    disablePortal,
-  }
-) => {
+const EasyDatePicker = ({
+  open,
+  pickerAnchor,
+  placement,
+  minDate,
+  onClose,
+  onChange,
+  selectedDate,
+  disablePortal,
+}) => {
   return (
     <Popper
       className={styles.easyDatePicker}
@@ -66,4 +63,8 @@ EasyDatePicker.defaultProps = {
   selectedDate: new Date(),
   placement: 'bottom',
   disablePortal: true,
+  onClose: () => null,
+  onChange: () => null,
+  pickerAnchor: null,
+  open: false,
 };

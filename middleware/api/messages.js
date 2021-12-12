@@ -1,4 +1,4 @@
-import { del, get, post, put } from "./request";
+import { del, get, post, put } from './request';
 
 /**
  * Fetch all clinic messages
@@ -16,7 +16,7 @@ export async function getMessages(headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function deleteMessage(messageId, headers = null) {
-  return del(`/api/sms/${messageId}`, headers)
+  return del(`/api/sms/${messageId}`, headers);
 }
 
 /**

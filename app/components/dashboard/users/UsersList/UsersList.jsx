@@ -1,5 +1,11 @@
-import React, { useEffect, useReducer } from 'react';
-import dynamic from 'next/dynamic';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
+import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,21 +13,31 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { toast } from 'react-toastify';
-
-import { Role } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
+import dynamic from 'next/dynamic';
+import { useDispatch, useSelector } from 'react-redux';
+import NotificationsContext from 'app/context/notificationsContext';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import { deleteInvitation } from 'middleware/api/clinic';
 import {
   deleteUser,
-  getUsers,
-  inviteUser, requestToggleUserAccessToClinic, requestToggleUserCalendarVisibility,
+  inviteUser,
+  requestToggleUserAccessToClinic,
+  requestToggleUserCalendarVisibility,
   restoreUser,
-  updateUserCashierStatus
-} from "../../../../../middleware/api/users";
-import { deleteInvitation } from "../../../../../middleware/api/clinic";
+  updateUserCashierStatus,
+} from 'middleware/api/users';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import {
+  invitationsSelector,
+  isFetchingUsersSelector,
+  usersSelector,
+} from 'redux/selectors/usersListSelector';
+import { fetchClinicUsers } from 'redux/slices/usersListSlice';
+import styles from './UsersList.module.scss';
 import reducer, {
   initialState,
-  setPageData,
   setInvitationToDelete,
   setIsInvitingExistent,
   setShowInvitationSent,
@@ -33,28 +49,29 @@ import reducer, {
   setIsDeleting,
   setIsInvitingExistentError,
 } from './UsersList.reducer';
-import styles from './UsersList.module.scss';
-import onRequestError from "../../../../utils/onRequestError";
 
 const UserItem = dynamic(() => import('../UserItem'));
 const UsersHeader = dynamic(() => import('../UserHeader'));
 const UserDetailsModal = dynamic(() => import('../UserDetailsModal'));
-const ConfirmationModal = dynamic(() => import('../../../common/modals/ConfirmationModal'));
-const InviteUserModal = dynamic(() => import('../../../common/modals/InviteUserModal'));
+const ConfirmationModal = dynamic(() =>
+  import('app/components/common/modals/ConfirmationModal'),
+);
+const InviteUserModal = dynamic(() =>
+  import('app/components/common/modals/InviteUserModal'),
+);
 
-const UsersList = (
-  {
-    currentClinic,
-    users: initialUsers,
-    invitations: initialInvitations,
-  }
-) => {
+const UsersList = () => {
+  const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
+  const currentClinic = useSelector(currentClinicSelector);
+  const users = useSelector(usersSelector);
+  const invitations = useSelector(invitationsSelector);
+  const isLoading = useSelector(isFetchingUsersSelector);
   const [
     {
       selectedFilter,
       isInviting,
       showInvitationSent,
-      isLoading,
       isInvitingExistent,
       invitingExistentError,
       userToDelete,
@@ -62,39 +79,40 @@ const UsersList = (
       showInviteModal,
       isUserModalOpen,
       isDeleting,
-      users,
-      invitations,
     },
-    localDispatch
+    localDispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localDispatch(setPageData({ users: initialUsers, invitations: initialInvitations }));
-  }, [initialUsers]);
+    fetchUsers();
+  }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await getUsers();
-      localDispatch(setPageData(response.data));
-    } catch (error) {
-      toast.error(error.message);
-    }
+  const fetchUsers = () => {
+    dispatch(fetchClinicUsers());
   };
 
-  const handleFilterChange = newFilter => {
+  const handleFilterChange = (newFilter) => {
     localDispatch(setSelectedFilter(newFilter));
   };
 
-  const doctors = users.filter(item => item.roleInClinic === Role.doctor);
+  const doctors = useMemo(() => {
+    if (users == null) return [];
+    return users.filter((item) => item?.roleInClinic === Role.doctor);
+  }, [users]);
 
-  const admins = users.filter(
-    item =>
-      item.roleInClinic === Role.admin || item.roleInClinic === Role.manager,
-  );
+  const admins = useMemo(() => {
+    if (users == null) return [];
+    return users.filter(
+      (item) =>
+        item?.roleInClinic === Role.admin ||
+        item?.roleInClinic === Role.manager,
+    );
+  }, [users]);
 
-  const reception = users.filter(
-    item => item.roleInClinic === Role.reception,
-  );
+  const reception = useMemo(() => {
+    if (users == null) return [];
+    return users.filter((item) => item?.roleInClinic === Role.reception);
+  }, [users]);
 
   const handleUserModalClose = () => {
     localDispatch(setIsUserModalOpen({ ...isUserModalOpen, open: false }));
@@ -112,8 +130,8 @@ const UsersList = (
   };
 
   const sendInvitation = async (email, role) => {
-    return inviteUser({ emailAddress: email, role })
-  }
+    return inviteUser({ emailAddress: email, role });
+  };
 
   const handleInviteUser = async (email, role) => {
     localDispatch(setIsInvitingExistent(true));
@@ -143,7 +161,7 @@ const UsersList = (
     localDispatch(setShowInviteModal({ open: false, type: Role.reception }));
   };
 
-  const canShowType = type => {
+  const canShowType = (type) => {
     return selectedFilter === Role.all || selectedFilter === type;
   };
 
@@ -152,80 +170,82 @@ const UsersList = (
       await updateUserCashierStatus(user.id, isCashier);
       await fetchUsers();
     } catch (error) {
-      onRequestError(error)
+      onRequestError(error);
     }
-  }
+  };
 
   const handleUserCalendarChange = async (user) => {
     try {
       await requestToggleUserCalendarVisibility(user.id, !user.showInCalendar);
       await fetchUsers();
     } catch (error) {
-      onRequestError(error)
+      onRequestError(error);
     }
-  }
-
-  const renderNoData = type => {
-    let message = '';
-    let buttonText = '';
-    switch (type) {
-      case Role.admin:
-      case Role.manager:
-        if (users.some(item => item.roleInClinic === type) || isLoading)
-          return null;
-        if (admins.length > 0) return null;
-        message = textForKey('No managers yet.');
-        buttonText = textForKey('Add manager');
-        break;
-      case Role.doctor:
-        if (users.some(item => item.roleInClinic === type) || isLoading)
-          return null;
-        message = textForKey('No doctors yet.');
-        buttonText = textForKey('Add doctor');
-        break;
-      case Role.reception:
-        if (users.some(item => item.roleInClinic === type) || isLoading)
-          return null;
-        message = textForKey('No receptionists yet.');
-        buttonText = textForKey('Add receptionist');
-        break;
-      case Role.invitations:
-        if (invitations.length > 0 || isLoading) return null;
-        message = `${textForKey('No pending invitations')}.`;
-        buttonText = textForKey('Invite user');
-        break;
-      default:
-        return null;
-    }
-
-    const role = type === Role.admin ? Role.manager : type;
-
-    return (
-      <TableRow classes={{ root: styles.noData }}>
-        <TableCell colSpan={5} className={styles.tableCell}>
-          <div
-            className={styles.flexContainer}
-            style={{
-              width: '100%',
-              justifyContent: 'center'
-            }}
-          >
-            <Typography classes={{ root: styles.noDataLabel }}>
-              {message}
-            </Typography>
-            <div
-              role='button'
-              className={styles.addDataBtn}
-              tabIndex={0}
-              onClick={event => handleInviteUserStart(event, role)}
-            >
-              {buttonText}
-            </div>
-          </div>
-        </TableCell>
-      </TableRow>
-    );
   };
+
+  const renderNoData = useCallback(
+    (type) => {
+      if (users == null) return null;
+      let message = '';
+      let buttonText = '';
+      switch (type) {
+        case Role.admin:
+        case Role.manager:
+          if (users.some((item) => item?.roleInClinic === type) || isLoading)
+            return null;
+          if (admins.length > 0) return null;
+          message = textForKey('No managers yet.');
+          buttonText = textForKey('Add manager');
+          break;
+        case Role.doctor:
+          if (users.some((item) => item?.roleInClinic === type) || isLoading)
+            return null;
+          message = textForKey('No doctors yet.');
+          buttonText = textForKey('Add doctor');
+          break;
+        case Role.reception:
+          if (users.some((item) => item?.roleInClinic === type) || isLoading)
+            return null;
+          message = textForKey('No receptionists yet.');
+          buttonText = textForKey('Add receptionist');
+          break;
+        case Role.invitations:
+          if (invitations.length > 0 || isLoading) return null;
+          message = `${textForKey('No pending invitations')}.`;
+          buttonText = textForKey('Invite user');
+          break;
+        default:
+          return null;
+      }
+
+      const role = type === Role.admin ? Role.manager : type;
+
+      return (
+        <TableRow classes={{ root: styles.noData }}>
+          <TableCell colSpan={5} className={styles.tableCell}>
+            <div
+              className={styles.flexContainer}
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography classes={{ root: styles.noDataLabel }}>
+                {message}
+              </Typography>
+              <Box
+                className={styles.addDataBtn}
+                onClick={(event) => handleInviteUserStart(event, role)}
+              >
+                {buttonText}
+              </Box>
+            </div>
+          </TableCell>
+        </TableRow>
+      );
+    },
+    [users],
+  );
 
   const startUserDelete = (event, user, isInvitation) => {
     if (isInvitation) {
@@ -278,7 +298,7 @@ const UsersList = (
 
   const handleDeleteInvitationConfirm = async () => {
     if (!invitationToDelete) return;
-    localDispatch(setIsDeleting(true))
+    localDispatch(setIsDeleting(true));
     try {
       await deleteInvitation(invitationToDelete.id);
       await fetchUsers();
@@ -296,7 +316,7 @@ const UsersList = (
     } catch (error) {
       onRequestError(error);
     }
-  }
+  };
 
   return (
     <div className={styles.usersRoot}>
@@ -350,7 +370,7 @@ const UsersList = (
 
       {isLoading && (
         <div className='progress-bar-wrapper'>
-          <CircularProgress classes={{ root: 'circular-progress-bar' }}/>
+          <CircularProgress classes={{ root: 'circular-progress-bar' }} />
         </div>
       )}
 
@@ -362,104 +382,105 @@ const UsersList = (
                 {canShowType(Role.invitations) && (
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles.groupTitle}>
-                      {textForKey('Invitations')}
-                    </span>
+                      <span className={styles.groupTitle}>
+                        {textForKey('Invitations')}
+                      </span>
                     </TableCell>
                   </TableRow>
                 )}
                 {canShowType(Role.invitations) &&
-                invitations.map(item => (
-                  <UserItem
-                    isInvitation={true}
-                    isInviting={
-                      isInviting.userId === item.id && isInviting.loading
-                    }
-                    onResend={handleResendInvitation}
-                    user={item}
-                    key={`invitation-${item.id}`}
-                    onDelete={startUserDelete}
-                    onEdit={handleUserModalOpen}
-                    onAccessToggle={handleUserAccessChange}
-                  />
-                ))}
-                {canShowType(Role.invitations) && renderNoData(Role.invitations)}
+                  invitations.map((item) => (
+                    <UserItem
+                      isInvitation={true}
+                      isInviting={
+                        isInviting.userId === item.id && isInviting.loading
+                      }
+                      onResend={handleResendInvitation}
+                      user={item}
+                      key={`invitation-${item.id}`}
+                      onDelete={startUserDelete}
+                      onEdit={handleUserModalOpen}
+                      onAccessToggle={handleUserAccessChange}
+                    />
+                  ))}
+                {canShowType(Role.invitations) &&
+                  renderNoData(Role.invitations)}
                 {canShowType(Role.doctor) && (
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles.groupTitle}>
-                      {textForKey('Doctors')}
-                    </span>
+                      <span className={styles.groupTitle}>
+                        {textForKey('Doctors')}
+                      </span>
                     </TableCell>
                   </TableRow>
                 )}
                 {canShowType(Role.doctor) &&
-                doctors.map(item => (
-                  <UserItem
-                    isInviting={
-                      isInviting.userId === item.id && isInviting.loading
-                    }
-                    onResend={handleResendInvitation}
-                    user={item}
-                    key={`user-${item.id}`}
-                    onDelete={startUserDelete}
-                    onEdit={handleUserModalOpen}
-                    onRestore={handleRestoreUser}
-                    onCalendarChange={handleUserCalendarChange}
-                    onAccessToggle={handleUserAccessChange}
-                  />
-                ))}
+                  doctors.map((item) => (
+                    <UserItem
+                      isInviting={
+                        isInviting.userId === item.id && isInviting.loading
+                      }
+                      onResend={handleResendInvitation}
+                      user={item}
+                      key={`user-${item.id}`}
+                      onDelete={startUserDelete}
+                      onEdit={handleUserModalOpen}
+                      onRestore={handleRestoreUser}
+                      onCalendarChange={handleUserCalendarChange}
+                      onAccessToggle={handleUserAccessChange}
+                    />
+                  ))}
                 {canShowType(Role.doctor) && renderNoData(Role.doctor)}
                 {canShowType(Role.reception) && (
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles.groupTitle}>
-                      {textForKey('Receptionists')}
-                    </span>
+                      <span className={styles.groupTitle}>
+                        {textForKey('Receptionists')}
+                      </span>
                     </TableCell>
                   </TableRow>
                 )}
                 {canShowType(Role.reception) &&
-                reception.map(item => (
-                  <UserItem
-                    isInviting={
-                      isInviting.userId === item.id && isInviting.loading
-                    }
-                    onResend={handleResendInvitation}
-                    user={item}
-                    key={`user-${item.id}`}
-                    onDelete={startUserDelete}
-                    onEdit={handleUserModalOpen}
-                    onRestore={handleRestoreUser}
-                    onCashierChange={handleUserCashierStatusChange}
-                    onAccessToggle={handleUserAccessChange}
-                  />
-                ))}
+                  reception.map((item) => (
+                    <UserItem
+                      isInviting={
+                        isInviting.userId === item.id && isInviting.loading
+                      }
+                      onResend={handleResendInvitation}
+                      user={item}
+                      key={`user-${item.id}`}
+                      onDelete={startUserDelete}
+                      onEdit={handleUserModalOpen}
+                      onRestore={handleRestoreUser}
+                      onCashierChange={handleUserCashierStatusChange}
+                      onAccessToggle={handleUserAccessChange}
+                    />
+                  ))}
                 {canShowType(Role.reception) && renderNoData(Role.reception)}
                 {canShowType(Role.admin) && (
                   <TableRow className={styles.tableRow}>
                     <TableCell colSpan={5}>
-                    <span className={styles.groupTitle}>
-                      {textForKey('Administrators')}
-                    </span>
+                      <span className={styles.groupTitle}>
+                        {textForKey('Administrators')}
+                      </span>
                     </TableCell>
                   </TableRow>
                 )}
                 {canShowType(Role.admin) &&
-                admins.map(item => (
-                  <UserItem
-                    isInviting={
-                      isInviting.userId === item.id && isInviting.loading
-                    }
-                    onResend={handleResendInvitation}
-                    user={item}
-                    key={`user-${item.id}`}
-                    onDelete={startUserDelete}
-                    onEdit={handleUserModalOpen}
-                    onRestore={handleRestoreUser}
-                    onAccessToggle={handleUserAccessChange}
-                  />
-                ))}
+                  admins.map((item) => (
+                    <UserItem
+                      isInviting={
+                        isInviting.userId === item.id && isInviting.loading
+                      }
+                      onResend={handleResendInvitation}
+                      user={item}
+                      key={`user-${item.id}`}
+                      onDelete={startUserDelete}
+                      onEdit={handleUserModalOpen}
+                      onRestore={handleRestoreUser}
+                      onAccessToggle={handleUserAccessChange}
+                    />
+                  ))}
                 {canShowType(Role.admin) && renderNoData(Role.admin)}
               </TableBody>
             </Table>

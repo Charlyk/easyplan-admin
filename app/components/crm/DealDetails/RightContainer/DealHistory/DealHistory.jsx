@@ -1,39 +1,42 @@
-import React, { useEffect, useReducer, useRef } from "react";
-import moment from "moment-timezone";
-import PropTypes from 'prop-types';
-import last from 'lodash/last';
+import React, { useEffect, useReducer, useRef } from 'react';
+import { CircularProgress } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import first from 'lodash/first';
+import last from 'lodash/last';
 import orderBy from 'lodash/orderBy';
-import { useSelector } from "react-redux";
-import { CircularProgress } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import { textForKey } from "../../../../../utils/localization";
-import onRequestError from "../../../../../utils/onRequestError";
-import { requestFetchDealDetails } from "../../../../../../middleware/api/crm";
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { textForKey } from 'app/utils/localization';
+import { requestFetchDealDetails } from 'middleware/api/crm';
 import {
   updatedDealSelector,
-  updatedReminderSelector
-} from "../../../../../../redux/selectors/crmSelector";
-import MessageItem from "./MessageItem";
-import NoteItem from "./NoteItem";
+  updatedReminderSelector,
+} from 'redux/selectors/crmSelector';
+import onRequestError from 'app/utils/onRequestError';
+import styles from './DealHistory.module.scss';
 import reducer, {
   initialState,
   ItemType,
   setHistory,
   setIsFetching,
 } from './DealHistory.reducer';
-import styles from './DealHistory.module.scss';
-import ReminderItem from "./ReminderItem";
-import LogItem from "./LogItem";
-import SMSMessageItem from "./SMSMessageItem";
-import PhoneCallItem from "./PhoneCallItem";
+import LogItem from './LogItem';
+import MessageItem from './MessageItem';
+import NoteItem from './NoteItem';
+import PhoneCallItem from './PhoneCallItem';
+import ReminderItem from './ReminderItem';
+import SMSMessageItem from './SMSMessageItem';
 
-const DealHistory = ({ deal, onPlayAudio, }) => {
+const DealHistory = ({ deal, onPlayAudio }) => {
   const containerRef = useRef(null);
   const updatedDeal = useSelector(updatedDealSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
-  const [{ items, isFetching }, localDispatch] = useReducer(reducer, initialState);
+  const [{ items, isFetching }, localDispatch] = useReducer(
+    reducer,
+    initialState,
+  );
 
   useEffect(() => {
     if (updatedReminder == null || updatedReminder.deal.id !== deal.id) {
@@ -67,7 +70,7 @@ const DealHistory = ({ deal, onPlayAudio, }) => {
     } finally {
       localDispatch(setIsFetching(false));
       if (containerRef.current != null) {
-        containerRef.current.scrollTop = containerRef.current.scrollHeight
+        containerRef.current.scrollTop = containerRef.current.scrollHeight;
       }
     }
   };
@@ -79,11 +82,22 @@ const DealHistory = ({ deal, onPlayAudio, }) => {
     switch (historyItem.itemType) {
       case ItemType.message: {
         const { contact } = deal;
-        const messages = items.filter((item) => (item.itemType === ItemType.message));
-        const incomeItems = messages.filter((item) => (item.senderId === contact.identificator));
-        const outgoingItems = messages.filter((item) => (item.senderId !== contact.identificator));
-        const messageType = contact.identificator === historyItem.senderId ? 'income' : 'outgoing';
-        const lastItem = last(messageType === 'income' ? incomeItems : outgoingItems);
+        const messages = items.filter(
+          (item) => item.itemType === ItemType.message,
+        );
+        const incomeItems = messages.filter(
+          (item) => item.senderId === contact.identificator,
+        );
+        const outgoingItems = messages.filter(
+          (item) => item.senderId !== contact.identificator,
+        );
+        const messageType =
+          contact.identificator === historyItem.senderId
+            ? 'income'
+            : 'outgoing';
+        const lastItem = last(
+          messageType === 'income' ? incomeItems : outgoingItems,
+        );
         const isLastOfType = lastItem.id === historyItem.id;
         const firstItem = first(messages);
         const isFirstOfType = firstItem.id === historyItem.id;
@@ -104,17 +118,13 @@ const DealHistory = ({ deal, onPlayAudio, }) => {
         );
       }
       case ItemType.note: {
-        return (
-          <NoteItem key={historyItem.id} note={historyItem}/>
-        )
+        return <NoteItem key={historyItem.id} note={historyItem} />;
       }
       case ItemType.reminder: {
-        return (
-          <ReminderItem key={historyItem.id} reminder={historyItem} />
-        )
+        return <ReminderItem key={historyItem.id} reminder={historyItem} />;
       }
       case ItemType.log: {
-        const logItems = items.filter((item) => (item.itemType === ItemType.log));
+        const logItems = items.filter((item) => item.itemType === ItemType.log);
         const lastItem = last(logItems);
         const isLast = lastItem.id === historyItem.id;
         const firstItem = first(logItems);
@@ -126,15 +136,10 @@ const DealHistory = ({ deal, onPlayAudio, }) => {
             isFirst={isFirst}
             log={historyItem}
           />
-        )
+        );
       }
       case ItemType.sms: {
-        return (
-          <SMSMessageItem
-            key={historyItem.id}
-            message={historyItem}
-          />
-        )
+        return <SMSMessageItem key={historyItem.id} message={historyItem} />;
       }
       case ItemType.phoneCall: {
         return (
@@ -143,41 +148,49 @@ const DealHistory = ({ deal, onPlayAudio, }) => {
             call={historyItem}
             onPlayAudio={onPlayAudio}
           />
-        )
+        );
       }
       default:
-        return null
+        return null;
     }
   };
 
   return (
     <div ref={containerRef} className={styles.dealHistory}>
       {isFetching && (
-        <div className="progress-bar-wrapper">
-          <CircularProgress className="circular-progress-bar"/>
+        <div className='progress-bar-wrapper'>
+          <CircularProgress className='circular-progress-bar' />
         </div>
       )}
       <Box padding={1}>
-        {Object.keys(items).sort().map((value) => {
-          const data = orderBy(items[value], (item) => item.messageDate ?? item.created, ['asc']);
-          const groupDate = moment(value);
-          const isToday = groupDate.isSame(moment(), 'date')
-          return (
-            <Box key={value}>
-              <div className={styles.groupItem}>
-                <div className={styles.divider}/>
-                <Typography className={styles.groupTitle}>
-                  {isToday ? textForKey('Today') : groupDate.format('DD MMMM YYYY')}
-                </Typography>
-                <div className={styles.divider}/>
-              </div>
-              {data.map(renderItem)}
-            </Box>
-          )
-        })}
+        {Object.keys(items)
+          .sort()
+          .map((value) => {
+            const data = orderBy(
+              items[value],
+              (item) => item.messageDate ?? item.created,
+              ['asc'],
+            );
+            const groupDate = moment(value);
+            const isToday = groupDate.isSame(moment(), 'date');
+            return (
+              <Box key={value}>
+                <div className={styles.groupItem}>
+                  <div className={styles.divider} />
+                  <Typography className={styles.groupTitle}>
+                    {isToday
+                      ? textForKey('Today')
+                      : groupDate.format('DD MMMM YYYY')}
+                  </Typography>
+                  <div className={styles.divider} />
+                </div>
+                {data.map(renderItem)}
+              </Box>
+            );
+          })}
       </Box>
     </div>
-  )
+  );
 };
 
 export default DealHistory;
@@ -236,5 +249,5 @@ DealHistory.propTypes = {
       }),
     }),
   }),
-  onPlayAudio: PropTypes.func
-}
+  onPlayAudio: PropTypes.func,
+};

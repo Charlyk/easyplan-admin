@@ -1,15 +1,16 @@
-import React, { useEffect, useMemo, useReducer } from "react";
-import moment from "moment-timezone";
+import React, { useEffect, useMemo, useReducer } from 'react';
 import upperFirst from 'lodash/upperFirst';
-
-import { requestCreateDealReminder } from "../../../../middleware/api/crm";
-import { Role } from "../../../utils/constants";
-import { textForKey } from "../../../utils/localization";
-import onRequestError from "../../../utils/onRequestError";
-import EASModal from "../../common/modals/EASModal";
-import EASSelect from "../../common/EASSelect";
-import EASTextarea from "../../common/EASTextarea";
-import EASTextField from "../../common/EASTextField";
+import moment from 'moment-timezone';
+import EASSelect from 'app/components/common/EASSelect';
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
+import { Role } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
+import { requestCreateDealReminder } from 'middleware/api/crm';
+import styles from './AddReminderModal.module.scss';
 import reducer, {
   initialState,
   reminderTypes,
@@ -23,34 +24,28 @@ import reducer, {
   setPatient,
   resetState,
 } from './AddReminderModal.reducer';
-import styles from './AddReminderModal.module.scss';
-import PatientsSearchField from "../../common/PatientsSearchField/PatientsSearchField";
 
 const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
-  const [{
-    startTime,
-    endTime,
-    date,
-    user,
-    type,
-    note,
-    patient,
-    isLoading,
-  }, localDispatch] = useReducer(reducer, initialState);
+  const [
+    { startTime, endTime, date, user, type, note, patient, isLoading },
+    localDispatch,
+  ] = useReducer(reducer, initialState);
   const stringDate = moment(date).format('YYYY-MM-DD');
-  const isFormValid = !moment(date).isBefore(moment(), 'date') && startTime < endTime;
+  const isFormValid =
+    !moment(date).isBefore(moment(), 'date') && startTime < endTime;
 
   const receptionUsers = useMemo(() => {
     if (currentClinic == null) {
       return [];
     }
     return currentClinic.users
-      .filter((user) => (
-        (user.roleInClinic === Role.reception ||
-          user.roleInClinic === Role.manager ||
-          user.roleInClinic === Role.admin) &&
-        !user.isHidden
-      ))
+      .filter(
+        (user) =>
+          (user.roleInClinic === Role.reception ||
+            user.roleInClinic === Role.manager ||
+            user.roleInClinic === Role.admin) &&
+          !user.isHidden,
+      )
       .map((user) => ({
         ...user,
         name: user.fullName,
@@ -70,20 +65,22 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
 
   const handleUserChange = (event) => {
     const newValue = event.target.value;
-    const newUser = receptionUsers.find(user => user.id === parseInt(newValue));
+    const newUser = receptionUsers.find(
+      (user) => user.id === parseInt(newValue),
+    );
     localDispatch(setUser(newUser));
-  }
+  };
 
   const handleTypeChange = (event) => {
     const newValue = event.target.value;
-    const newType = reminderTypes.find(item => item.id === newValue);
+    const newType = reminderTypes.find((item) => item.id === newValue);
     localDispatch(setType(newType));
-  }
+  };
 
   const handleDateChange = (newDate) => {
     const date = moment(newDate).toDate();
     localDispatch(setDate(date));
-  }
+  };
 
   const handleStartTimeChange = (newTime) => {
     localDispatch(setStartTime(newTime));
@@ -95,11 +92,11 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
 
   const handlePatientSelected = (patient) => {
     localDispatch(setPatient(patient));
-  }
+  };
 
   const handleNoteChange = (newText) => {
     localDispatch(setNote(newText));
-  }
+  };
 
   const handleSubmit = async (event) => {
     event?.preventDefault();
@@ -115,7 +112,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
         userId: user.id,
         type: type.id,
         comment: note,
-      }
+      };
       await requestCreateDealReminder(deal.id, requestBody);
       onClose?.();
     } catch (error) {
@@ -123,7 +120,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
     } finally {
       localDispatch(setIsLoading(false));
     }
-  }
+  };
 
   return (
     <EASModal
@@ -139,7 +136,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
       <form className={styles.formRoot} onSubmit={handleSubmit}>
         <div className={styles.header}>
           <EASTextField
-            type="date"
+            type='date'
             fieldLabel={textForKey('Date')}
             inputClass={styles.fieldText}
             fieldClass={styles.fieldRoot}
@@ -149,7 +146,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
             onChange={handleDateChange}
           />
           <EASTextField
-            type="time"
+            type='time'
             fieldLabel={textForKey('Start time')}
             inputClass={styles.fieldText}
             fieldClass={styles.fieldRoot}
@@ -160,7 +157,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
             onChange={handleStartTimeChange}
           />
           <EASTextField
-            type="time"
+            type='time'
             fieldLabel={textForKey('End time')}
             inputClass={styles.fieldText}
             fieldClass={styles.fieldRoot}
@@ -175,7 +172,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
           <EASSelect
             rootClass={styles.selectRoot}
             label={upperFirst(textForKey('crm_reminder_user'))}
-            labelId="user-id-select"
+            labelId='user-id-select'
             value={user?.id ?? '0'}
             options={receptionUsers}
             onChange={handleUserChange}
@@ -183,7 +180,7 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
           <EASSelect
             rootClass={styles.selectRoot}
             label={textForKey('crm_reminder_type')}
-            labelId="reminder_type"
+            labelId='reminder_type'
             value={type.id}
             options={reminderTypes}
             onChange={handleTypeChange}

@@ -1,16 +1,16 @@
-import types from '../types/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   updateInvoice: null,
   totalInvoices: 0,
 });
 
-export default function invoices(state = initialState, action) {
-  switch (action.type) {
+export default function invoices(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case types.toggleUpdateInvoice:
-      return { ...state, updateInvoice: action.payload };
+      return { ...state, updateInvoice: payload };
     case types.setTotalInvoices:
-      return { ...state, totalInvoices: action.payload };
+      return { ...state, totalInvoices: payload };
     default:
       return state;
   }

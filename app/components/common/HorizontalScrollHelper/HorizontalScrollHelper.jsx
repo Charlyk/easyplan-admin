@@ -1,13 +1,20 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import clsx from "clsx";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useGesture } from '@use-gesture/react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useGesture } from "@use-gesture/react";
-import { animated, useSpring } from "react-spring";
+import { animated, useSpring } from 'react-spring';
 import styles from './HorizontalScrollHelper.module.scss';
 
 const HELPER_WIDTH = 130;
 
-const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing, columnsCount, onScrollUpdate }) => {
+const HorizontalScrollHelper = ({
+  position,
+  columnWidth,
+  parentEl,
+  columnSpacing,
+  columnsCount,
+  onScrollUpdate,
+}) => {
   const [helperRef, setHelperRef] = useState(null);
   const activityTimeout = useRef(-1);
   const helperRect = helperRef?.getBoundingClientRect();
@@ -20,7 +27,7 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
     parentEl?.addEventListener('scroll', handleParentScroll);
     return () => {
       parentEl?.removeEventListener('scroll', handleParentScroll);
-    }
+    };
   }, [parentEl]);
 
   const maxOffset = useMemo(() => {
@@ -32,23 +39,23 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
 
   const columnWidthPercentage = useMemo(() => {
     if (parentRect == null) {
-      return 0
+      return 0;
     }
-    return (columnWidth + columnSpacing) / parentRect.width * 100
+    return ((columnWidth + columnSpacing) / parentRect.width) * 100;
   }, [columnWidth, parentRect, columnSpacing]);
 
   const spacingPercentage = useMemo(() => {
     if (parentRect == null) {
-      return 0
+      return 0;
     }
-    return columnSpacing / parentRect.width * 100
-  }, [parentRect, columnSpacing])
+    return (columnSpacing / parentRect.width) * 100;
+  }, [parentRect, columnSpacing]);
 
   const helperWidthPercentage = useMemo(() => {
     if (parentRect == null || parentEl == null) {
       return 0;
     }
-    return parentRect.width / parentEl.scrollWidth * 100;
+    return (parentRect.width / parentEl.scrollWidth) * 100;
   }, [parentRect, parentEl]);
 
   const columns = useMemo(() => {
@@ -63,8 +70,8 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
             marginLeft: `${spacingPercentage}%`,
             marginRight: `${spacingPercentage}%`,
           }}
-        />
-      )
+        />,
+      );
     }
     return items;
   }, [columnsCount, columnWidthPercentage, spacingPercentage]);
@@ -80,7 +87,7 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
 
   const handleDragStart = () => {
     setIsMoving(true);
-  }
+  };
 
   const handleDrag = ({ delta: [dx], movement: [mx], memo = x.get() }) => {
     let newOffset = mx + memo;
@@ -94,9 +101,11 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
 
     handleMouseEnter();
     const direction = dx > 0 ? 'right' : dx < 0 ? 'left' : 'none';
-    if (direction !== "none") {
+    if (direction !== 'none') {
       const percentage = newOffset / HELPER_WIDTH;
-      const scrollOffset = (percentage) * parentEl.scrollWidth + (direction === 'right' ? (columnSpacing / 2) * columnsCount : 0);
+      const scrollOffset =
+        percentage * parentEl.scrollWidth +
+        (direction === 'right' ? (columnSpacing / 2) * columnsCount : 0);
       onScrollUpdate?.(scrollOffset, direction);
     }
 
@@ -106,7 +115,7 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
 
   const handleDragEnd = () => {
     setIsMoving(false);
-  }
+  };
 
   const handleMouseEnter = () => {
     clearTimeout(activityTimeout.current);
@@ -117,7 +126,7 @@ const HorizontalScrollHelper = ({ position, columnWidth, parentEl, columnSpacing
     activityTimeout.current = setTimeout(() => {
       if (isActive) setIsActive(false);
     }, 1500);
-  }
+  };
 
   const bindGesture = useGesture({
     onDragStart: handleDragStart,
@@ -168,5 +177,5 @@ HorizontalScrollHelper.propTypes = {
 };
 
 HorizontalScrollHelper.defaultProps = {
-  columnsCount: 0
-}
+  columnsCount: 0,
+};

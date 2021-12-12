@@ -1,13 +1,13 @@
-import types from '../types/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   updatedUser: null,
 });
 
-export default function users(state = initialState, action) {
-  switch (action.type) {
+export default function users(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case types.setUpdatedUser:
-      return { ...state, updatedUser: action.payload };
+      return { ...state, updatedUser: payload };
     default:
       return state;
   }

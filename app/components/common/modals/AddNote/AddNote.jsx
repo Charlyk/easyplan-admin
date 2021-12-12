@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-
-import { triggerUpdateNotes } from '../../../../../redux/actions/actions';
-import { textForKey } from '../../../../utils/localization';
-import { createPatientNote, updateVisitNote } from "../../../../../middleware/api/patients";
-import EASTextarea from "../../EASTextarea";
-import EASModal from "../EASModal";
+import EASTextarea from 'app/components/common/EASTextarea';
+import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
+import { textForKey } from 'app/utils/localization';
+import { createPatientNote, updateVisitNote } from 'middleware/api/patients';
+import { triggerUpdateNotes } from 'redux/actions/actions';
 import styles from './AddNote.module.scss';
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
   const dispatch = useDispatch();
+  const toast = useContext(NotificationsContext);
   const [noteText, setNoteText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 

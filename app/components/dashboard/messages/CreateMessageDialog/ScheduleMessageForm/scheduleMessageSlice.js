@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { availableHours } from "../CreateMessageDialog.constants";
+import { createSlice } from '@reduxjs/toolkit';
+import { availableHours } from '../CreateMessageDialog.constants';
 
 export const initialState = {
   isLoading: false,
@@ -37,7 +37,7 @@ const scheduleMessageSlice = createSlice({
       state.messageTitle = message.messageTitle;
       state.message = JSON.parse(message.messageText);
       state.hourToSend = message.hourToSendAt;
-    }
+    },
   },
 });
 
@@ -52,4 +52,3 @@ export const {
 } = scheduleMessageSlice.actions;
 
 export default scheduleMessageSlice.reducer;
-

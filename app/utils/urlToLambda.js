@@ -1,5 +1,4 @@
-import { awsBaseUrl, baseApiUrl } from "../../eas.config";
-import isValidUrl from "./isValidUrl";
+import isValidUrl from './isValidUrl';
 
 /**
  * convert image url to lambda url

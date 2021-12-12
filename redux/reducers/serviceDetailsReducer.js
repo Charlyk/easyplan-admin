@@ -1,4 +1,4 @@
-import types from '../types/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   open: false,
@@ -6,18 +6,25 @@ const initialState = Object.freeze({
   category: null,
 });
 
-export default function serviceDetailsModal(state = initialState, action) {
-  switch (action.type) {
+export default function serviceDetailsModal(
+  state = initialState,
+  { type, payload } = {},
+) {
+  switch (type) {
     case types.closeServiceDetailsModal:
-      return { ...state, open: !action.payload };
+      return { ...state, open: !payload };
     case types.setServiceModalCategory:
-      return { ...state, category: action.payload };
+      return { ...state, category: payload };
     case types.setServiceModalService:
-      return { ...state, service: action.payload };
+      return {
+        ...state,
+        service: payload,
+        open: payload != null ? true : state.open,
+      };
     case types.setServiceModal:
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       };
     default:
       return state;

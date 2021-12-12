@@ -1,4 +1,5 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import styles from './EasyTab.module.scss';
@@ -10,10 +11,10 @@ const EasyTab = ({ title, selected, highlighted, onClick }) => {
     highlighted && styles.highlighted,
   );
   return (
-    <div tabIndex={0} onClick={onClick} className={tabClass}>
+    <Box onClick={onClick} className={tabClass}>
       {title}
       <div className={styles.tabIndicator} />
-    </div>
+    </Box>
   );
 };
 

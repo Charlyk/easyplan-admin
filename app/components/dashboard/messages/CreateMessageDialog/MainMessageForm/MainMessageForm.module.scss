@@ -10,6 +10,12 @@
     margin-bottom: 16px;
   }
 
+  .helperText {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .simpleField {
     width: 100%;
     margin-bottom: 5px;

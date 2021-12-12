@@ -1,16 +1,16 @@
-import types from '../types/types';
+import types from '../types';
 
 const initialState = Object.freeze({
   updateSchedule: null,
   deleteSchedule: null,
 });
 
-export default function schedule(state = initialState, action) {
-  switch (action.type) {
+export default function schedule(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case types.toggleUpdateSchedule:
-      return { ...state, updateSchedule: action.payload };
+      return { ...state, updateSchedule: payload };
     case types.toggleDeleteSchedule:
-      return { ...state, deleteSchedule: action.payload };
+      return { ...state, deleteSchedule: payload };
     default:
       return state;
   }

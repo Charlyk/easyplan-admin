@@ -1,30 +1,22 @@
 import React from 'react';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-
-import IconMinus from '../../../../icons/iconMinus';
-import IconPlusBig from '../../../../icons/iconPlusBig';
-import { textForKey } from '../../../../../utils/localization';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { textForKey } from 'app/utils/localization';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './ServiceDoctors.module.scss';
 
-const ServiceDoctor = dynamic(() => import('../ServiceDoctor'))
+const ServiceDoctor = dynamic(() => import('../ServiceDoctor'));
 
-const ServiceDoctors = (
-  {
-    clinic,
-    isExpanded,
-    showStep,
-    onToggle,
-    doctors,
-    serviceId,
-    onDoctorChange,
-  }
-) => {
-  const handleInfoExpand = () => {
-    onToggle();
-  };
-
+const ServiceDoctors = ({
+  isExpanded,
+  showStep,
+  doctors,
+  serviceId,
+  onDoctorChange,
+}) => {
+  const clinic = useSelector(currentClinicSelector);
   const contentClasses = clsx(
     styles.content,
     isExpanded ? styles.expanded : styles.collapsed,
@@ -35,24 +27,20 @@ const ServiceDoctors = (
       <div className={styles.header}>
         <div className={styles.title}>
           {showStep && (
-            <div className={styles.step}>
-              {textForKey('Step 2.')}
-            </div>
+            <div className={styles.step}>{textForKey('Step 2.')}</div>
           )}
           {textForKey('Doctors who provide this service')}
         </div>
       </div>
       <div className={contentClasses}>
         {doctors?.length === 0 && (
-          <div className={styles.noData}>
-            {textForKey('No doctors yet.')}
-          </div>
+          <div className={styles.noData}>{textForKey('No doctors yet.')}</div>
         )}
         {doctors?.map((doctor) => (
           <ServiceDoctor
             clinic={clinic}
             onChange={onDoctorChange}
-            key={doctor.doctorId}
+            key={doctor.id}
             serviceId={serviceId}
             serviceData={doctor}
           />
@@ -69,10 +57,10 @@ ServiceDoctors.propTypes = {
   serviceId: PropTypes.number,
   doctors: PropTypes.arrayOf(
     PropTypes.shape({
-      doctorName: PropTypes.string,
-      doctorId: PropTypes.number,
-      percentage: PropTypes.number,
-      price: PropTypes.number,
+      fullName: PropTypes.string,
+      id: PropTypes.number,
+      percentage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       selected: PropTypes.bool,
     }),
   ),

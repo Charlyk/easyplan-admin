@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
-import { Role } from "../../../../utils/constants";
+import { Role } from 'app/utils/constants';
 
 export const initialState = {
   selectedFilter: Role.all,
@@ -15,7 +15,7 @@ export const initialState = {
   invitationToDelete: null,
   showInviteModal: {
     open: false,
-    type: Role.reception
+    type: Role.reception,
   },
   isUserModalOpen: {
     open: false,
@@ -45,7 +45,9 @@ const usersListSlice = createSlice({
     },
     setIsInvitingExistent(state, action) {
       state.isInvitingExistent = action.payload;
-      state.invitingExistentError = action.payload ? null : state.invitingExistentError
+      state.invitingExistentError = action.payload
+        ? null
+        : state.invitingExistentError;
     },
     setIsInvitingExistentError(state, action) {
       state.invitingExistentError = action.payload;
@@ -65,7 +67,9 @@ const usersListSlice = createSlice({
     setIsDeleting(state, action) {
       state.isDeleting = action.payload;
       state.userToDelete = !action.payload ? null : state.userToDelete;
-      state.invitationToDelete = !action.payload ? null : state.invitationToDelete
+      state.invitationToDelete = !action.payload
+        ? null
+        : state.invitationToDelete;
     },
     setUsers(state, action) {
       state.users = action.payload;
@@ -74,7 +78,11 @@ const usersListSlice = createSlice({
       state.invitations = action.payload;
     },
     setPageData(state, action) {
-      state.users = orderBy(action.payload.users, ['isHidden', 'fullName'], ['asc', 'asc']);
+      state.users = orderBy(
+        action.payload.users,
+        ['isHidden', 'fullName'],
+        ['asc', 'asc'],
+      );
       state.invitations = action.payload.invitations;
     },
   },
@@ -93,7 +101,7 @@ export const {
   setIsDeleting,
   setIsUserModalOpen,
   setUserToDelete,
-  setIsInvitingExistentError
+  setIsInvitingExistentError,
 } = usersListSlice.actions;
 
 export default usersListSlice.reducer;

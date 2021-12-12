@@ -1,28 +1,25 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-
-import IconArrowNext from '../../../icons/iconArrowNext';
-import IconClose from '../../../icons/iconClose';
+import IconArrowNext from 'app/components/icons/iconArrowNext';
+import IconClose from 'app/components/icons/iconClose';
 import styles from './ModalHeader.module.scss';
 
-const ModalHeader = props => {
+const ModalHeader = (props) => {
   const { onClose, title, steps } = props;
   return (
     <div className={styles.header}>
       <div className={styles.closeContainer}>
-        <div className={styles.closeBtn} role='button' tabIndex={0} onClick={onClose}>
+        <Box className={styles.closeBtn} onClick={onClose}>
           <IconClose />
-        </div>
+        </Box>
       </div>
       <div className={styles.title}>{title}</div>
       <div className={styles.breadcrumbContainer}>
         {steps?.map((step, index) => {
           const isLast = index === steps.length - 1;
-          const classes = clsx(
-            styles.breadcrumb,
-            !isLast && styles.current,
-          );
+          const classes = clsx(styles.breadcrumb, !isLast && styles.current);
           return (
             <div key={`${step}-${index}`} className={classes}>
               {step}

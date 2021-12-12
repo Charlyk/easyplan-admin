@@ -1,29 +1,27 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import Box from '@material-ui/core/Box';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Box from "@material-ui/core/Box";
-import * as locales from "react-date-range/dist/locale";
-import { Calendar } from "react-date-range";
-import { toast } from "react-toastify";
-import moment from "moment-timezone";
+import { Calendar } from 'react-date-range';
+import * as locales from 'react-date-range/dist/locale';
+import EASSelect from 'app/components/common/EASSelect';
+import NotificationsContext from 'app/context/notificationsContext';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { getAppLanguage, textForKey } from 'app/utils/localization';
+import EASModal from '../EASModal';
 
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { getAppLanguage, textForKey } from "../../../../utils/localization";
-import EASModal from "../EASModal";
-import EASSelect from "../../EASSelect";
-
-const EasyDatePickerModal = (
-  {
-    open,
-    selectedDate,
-    minDate,
-    isHourRequired,
-    onSelected,
-    onClose,
-    fetchHours
-  }
-) => {
+const EasyDatePickerModal = ({
+  open,
+  selectedDate,
+  minDate,
+  isHourRequired,
+  onSelected,
+  onClose,
+  fetchHours,
+}) => {
+  const toast = useContext(NotificationsContext);
   const [date, setDate] = useState(selectedDate);
-  const [hour, setHour] = useState(moment(selectedDate).format('HH:mm'))
+  const [hour, setHour] = useState(moment(selectedDate).format('HH:mm'));
   const [isLoading, setIsLoading] = useState(false);
   const [hours, setHours] = useState([]);
 
@@ -46,28 +44,27 @@ const EasyDatePickerModal = (
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
-  }
+  };
 
   const handleConfirmed = () => {
     const momentDate = moment(date);
     if (isHourRequired) {
       const [h, m] = hour.split(':');
-      momentDate.set('hour', parseInt(h))
-        .set('minute', parseInt(m));
+      momentDate.set('hour', parseInt(h)).set('minute', parseInt(m));
     }
     onSelected(momentDate.toDate());
-  }
+  };
 
   const handleHourChange = (event) => {
     setHour(event.target.value);
-  }
+  };
 
   const mappedHours = useMemo(() => {
-    return hours.map(item => ({
+    return hours.map((item) => ({
       id: item,
       name: item,
     }));
@@ -77,7 +74,7 @@ const EasyDatePickerModal = (
     <EASModal
       open={open}
       onClose={onClose}
-      size='sm'
+      size='small'
       onPrimaryClick={handleConfirmed}
       primaryBtnText={textForKey('Save')}
       isPositiveLoading={isLoading}
@@ -85,25 +82,25 @@ const EasyDatePickerModal = (
       title={textForKey('Select new date')}
     >
       <Box padding='16px' display='flex' flexDirection='column'>
-      <Calendar
-        minDate={minDate}
-        locale={locales[getAppLanguage()]}
-        onChange={handleDateChange}
-        date={date}
-      />
-      {isHourRequired && (
-        <EASSelect
-          label={textForKey('Hour')}
-          labelId="hour-select-label"
-          value={hour}
-          options={mappedHours}
-          onChange={handleHourChange}
+        <Calendar
+          minDate={minDate}
+          locale={locales[getAppLanguage()]}
+          onChange={handleDateChange}
+          date={date}
         />
-      )}
+        {isHourRequired && (
+          <EASSelect
+            label={textForKey('Hour')}
+            labelId='hour-select-label'
+            value={hour}
+            options={mappedHours}
+            onChange={handleHourChange}
+          />
+        )}
       </Box>
     </EASModal>
-  )
-}
+  );
+};
 
 export default React.memo(EasyDatePickerModal, areComponentPropsEqual);
 
@@ -124,4 +121,4 @@ EasyDatePickerModal.defaultProps = {
   isHourRequired: false,
   onSelected: () => null,
   onClose: () => null,
-}
+};

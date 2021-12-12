@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import Box from '@material-ui/core/Box';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import clsx from "clsx";
-
-import LoadingButton from '../../LoadingButton';
-import { EmailRegex } from '../../../../utils/constants';
-import { textForKey } from '../../../../utils/localization';
-import EASTextField from "../../EASTextField";
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import { EmailRegex } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
 import styles from './ResetPassword.module.scss';
 
 const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
@@ -41,7 +41,7 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
       </span>
       <form onSubmit={handleResetPassword}>
         <EASTextField
-          type="email"
+          type='email'
           error={!isEmailValid}
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           fieldLabel={textForKey('Email')}
@@ -49,16 +49,16 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
           onChange={handleFormChange}
         />
         <div className='footer'>
-          <div
+          <Box
             role='button'
             tabIndex={0}
             className='back-button'
             onClick={onGoBack}
           >
             {textForKey('Go back')}
-          </div>
+          </Box>
           <LoadingButton
-            type="submit"
+            type='submit'
             isLoading={isLoading}
             onClick={handleResetPassword}
             className='positive-button'

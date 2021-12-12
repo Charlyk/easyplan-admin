@@ -1,4 +1,4 @@
-const expirationTime = 3155695200000 // 100 years
+const expirationTime = 3155695200000; // 100 years
 
 export default function setDocCookies(name, value, options = {}) {
   const cookieValue = value;

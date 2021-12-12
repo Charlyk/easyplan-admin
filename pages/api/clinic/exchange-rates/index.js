@@ -1,12 +1,44 @@
-import axios from "axios";
-import { authorized } from "../../authorized";
+import axios from 'axios';
 import cookie from 'cookie';
-import { handler } from "../../handler";
-import getSubdomain from "../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import authorized from '../../authorized';
+import handler from '../../handler';
 
-export default authorized(async function clinicDetails(req, res) {
+async function getClinicExchangeRates(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  return axios.get(`${updatedServerUrl(req)}/clinics/exchange-rates`, {
+    headers: {
+      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.clinicId]: clinicId,
+      [HeaderKeys.subdomain]: getSubdomain(req),
+    },
+  });
+}
+
+async function saveExchangeRates(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const requestBody = req.body;
+  return axios.put(
+    `${updatedServerUrl(req)}/clinics/exchange-rates`,
+    requestBody,
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
+}
+
+export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(getClinicExchangeRates, req, res);
@@ -28,27 +60,3 @@ export default authorized(async function clinicDetails(req, res) {
       break;
   }
 });
-
-async function getClinicExchangeRates(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  return axios.get(`${updatedServerUrl(req)}/clinics/exchange-rates`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
-}
-
-async function saveExchangeRates(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const requestBody = req.body;
-  return axios.put(`${updatedServerUrl(req)}/clinics/exchange-rates`, requestBody, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
-    }
-  });
-}

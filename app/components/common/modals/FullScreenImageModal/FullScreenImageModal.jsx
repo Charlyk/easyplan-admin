@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import EASModal from "../EASModal";
-import styles from './FullScreenImageModal.module.scss'
-import EASImage from "../../EASImage";
+import EASImage from 'app/components/common/EASImage';
+import EASModal from 'app/components/common/modals/EASModal';
+import styles from './FullScreenImageModal.module.scss';
 
 const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
   return (
@@ -13,9 +13,7 @@ const FullScreenImageModal = ({ open, imageUrl, onClose }) => {
       paperClass={styles.modalPaper}
     >
       <div className={styles.modalContent}>
-        <EASImage
-          src={imageUrl}
-        />
+        <EASImage src={imageUrl} />
       </div>
     </EASModal>
   );

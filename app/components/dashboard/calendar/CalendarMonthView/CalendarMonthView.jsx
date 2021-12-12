@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
-import dynamic from 'next/dynamic';
 import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-
-import { setIsCalendarLoading } from '../../../../../redux/actions/calendar';
-import { updateAppointmentsSelector } from '../../../../../redux/selectors/rootSelector';
-import getDays from '../../../../utils/getDays';
-import { textForKey } from '../../../../utils/localization';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import { getPeriodSchedules } from "../../../../../middleware/api/schedules";
+import NotificationsContext from 'app/context/notificationsContext';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import getDays from 'app/utils/getDays';
+import { textForKey } from 'app/utils/localization';
+import { getPeriodSchedules } from 'middleware/api/schedules';
+import { setIsCalendarLoading } from 'redux/actions/calendar';
+import { updateAppointmentsSelector } from 'redux/selectors/rootSelector';
 import styles from './CalendarMonthView.module.scss';
 
 const ScheduleItem = dynamic(() => import('./ScheduleItem'));
 
 const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const updateAppointments = useSelector(updateAppointmentsSelector);
   const [schedules, setSchedules] = useState([]);
@@ -36,8 +37,8 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
     }
     dispatch(setIsCalendarLoading(true));
     try {
-      const date = moment(viewDate).format('YYYY-MM-DD')
-      const response = await getPeriodSchedules(doctorId, date, 'month')
+      const date = moment(viewDate).format('YYYY-MM-DD');
+      const response = await getPeriodSchedules(doctorId, date, 'month');
       const newSchedules = [];
       for (let prop in response.data) {
         const date = moment(`${prop}`, 'YYYY-MM-DD').format('DD');
@@ -52,9 +53,10 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   };
 
   const rowsCount = monthDays.length / 7;
-  const calendarRect = typeof document !== 'undefined' ? document
-    .getElementById('calendar-content')
-    ?.getBoundingClientRect() : { height: 1 };
+  const calendarRect =
+    typeof document !== 'undefined'
+      ? document.getElementById('calendar-content')?.getBoundingClientRect()
+      : { height: 1 };
 
   const handleDayClick = (day) => {
     const date = moment(day.fullDate, 'YYYY-DD-MM').toDate();
@@ -79,11 +81,12 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
   const renderDayItem = (day) => {
     const daySchedules = getSchedules(day);
     return (
-      <div
-        role='button'
-        tabIndex={0}
+      <Box
         onClick={() => handleDayClick(day)}
-        className={clsx(styles.itemDataContainer, day.isSameDay && styles.currentDate)}
+        className={clsx(
+          styles.itemDataContainer,
+          day.isSameDay && styles.currentDate,
+        )}
         style={{ height: calendarRect?.height / rowsCount - 3 }}
         key={`${day.date}-${day.isCurrent}-${day.month}`}
       >
@@ -108,7 +111,7 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
             )}
           </div>
         )}
-      </div>
+      </Box>
     );
   };
 

@@ -1,42 +1,36 @@
-import React, { useEffect, useMemo, useState } from "react";
-import clsx from "clsx";
+import React, { useMemo } from 'react';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
+import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import Moment from "moment-timezone";
-import { extendMoment } from "moment-range";
-import Typography from "@material-ui/core/Typography";
-
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
-import createContainerHours from "../../../../utils/createContainerHours";
-import { textForKey } from "../../../../utils/localization";
-import IconUmbrella from "../../../icons/iconUmbrella";
-import Schedule from "../Schedule";
-import ColumnCell from "./ColumnCell";
+import IconUmbrella from 'app/components/icons/iconUmbrella';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import createContainerHours from 'app/utils/createContainerHours';
+import { textForKey } from 'app/utils/localization';
+import Schedule from '../Schedule';
+import ColumnCell from './ColumnCell';
 import styles from './ColumnsWrapper.module.scss';
 
 const moment = extendMoment(Moment);
 const maxOffset = 6;
 
-const Column = (
-  {
-    schedules,
-    hours,
-    column,
-    animatedStatuses,
-    hideCreateIndicator,
-    onAddSchedule,
-    onScheduleSelected
-  }
-) => {
+const Column = ({
+  schedules,
+  hours,
+  column,
+  animatedStatuses,
+  hideCreateIndicator,
+  onAddSchedule,
+  onScheduleSelected,
+}) => {
   const hoursContainers = createContainerHours(hours);
 
   const handleAddSchedule = (startHour, endHour) => {
-    onAddSchedule(startHour, endHour, column.doctorId, column.date);
+    onAddSchedule(startHour, endHour, column.doctorId, column.date, column.id);
   };
 
   const schedulesWithOffset = useMemo(() => {
-    if (column.disabled) {
-      return [];
-    }
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
     for (let schedule of schedules) {
@@ -60,12 +54,12 @@ const Column = (
         }
       }
       // add the new schedules to array to check the next one against it
-      if (!newSchedules.some(item => item.id === schedule.id)) {
+      if (!newSchedules.some((item) => item.id === schedule.id)) {
         newSchedules.push({ ...schedule, offset });
       }
     }
     return newSchedules;
-  }, [schedules, column])
+  }, [schedules, column]);
 
   function renderHoursContainers() {
     return hoursContainers.map((hour, index) => {
@@ -103,16 +97,18 @@ const Column = (
           />
         );
       }
-    })
+    });
   }
 
   return (
-    <div className={clsx(styles.columnRoot, {
-      [styles.disabled]: column.disabled,
-    })}>
+    <div
+      className={clsx(styles.columnRoot, {
+        [styles.disabled]: column.disabled,
+      })}
+    >
       {column.disabled && (
         <div className={styles.disabledWrapper}>
-          <IconUmbrella/>
+          <IconUmbrella />
           <Typography className={styles.disabledLabel}>
             {textForKey('doctor_vacation_message')}
           </Typography>
@@ -130,7 +126,7 @@ const Column = (
         />
       ))}
     </div>
-  )
+  );
 };
 
 export default React.memo(Column, areComponentPropsEqual);
@@ -147,6 +143,7 @@ Column.propTypes = {
     name: PropTypes.string,
     disabled: PropTypes.bool,
     date: PropTypes.instanceOf(Date),
+    hint: PropTypes.string,
   }),
   schedules: PropTypes.arrayOf(
     PropTypes.shape({
@@ -168,7 +165,7 @@ Column.propTypes = {
       serviceName: PropTypes.string,
       servicePrice: PropTypes.number,
       type: PropTypes.string,
-    })
+    }),
   ),
   animatedStatuses: PropTypes.arrayOf(
     PropTypes.oneOf([
@@ -184,7 +181,7 @@ Column.propTypes = {
       'PartialPaid',
       'Paid',
       'Rescheduled',
-    ])
+    ]),
   ),
   onAddSchedule: PropTypes.func,
   onScheduleSelected: PropTypes.func,
@@ -194,4 +191,4 @@ Column.defaultProps = {
   hours: [],
   schedules: [],
   onAddSchedule: () => null,
-}
+};

@@ -1,37 +1,49 @@
-import React, { useEffect, useMemo, useReducer, useState } from 'react';
-import dynamic from 'next/dynamic';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import moment from 'moment-timezone';
+import React, { useContext, useMemo, useReducer, useState } from 'react';
 import Button from '@material-ui/core/Button';
-import Typography from "@material-ui/core/Typography";
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-import { useRouter } from "next/router";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment-timezone';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import EASTextField from 'app/components/common/EASTextField';
+import EASPersistentModal from 'app/components/common/modals/EASPersistentModal';
+import PatientTreatmentPlan from 'app/components/common/PatientTreatmentPlan';
+import IconAvatar from 'app/components/icons/iconAvatar';
+import NotificationsContext from 'app/context/notificationsContext';
+import getErrorMessage from 'app/utils/getErrorMessage';
+import getTreatmentPlanURL from 'app/utils/getTreatmentPlanURL';
+import { textForKey } from 'app/utils/localization';
 import {
   savePatientGeneralTreatmentPlan,
-  updatePatientGeneralTreatmentPlan
-} from "../../../../middleware/api/patients";
+  updatePatientGeneralTreatmentPlan,
+} from 'middleware/api/patients';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
-} from '../../../../redux/actions/actions';
-import PatientTreatmentPlan from "../../../../app/components/common/PatientTreatmentPlan";
-import getTreatmentPlanURL from "../../../../app/utils/getTreatmentPlanURL";
-import getErrorMessage from "../../../../app/utils/getErrorMessage";
-import { textForKey } from '../../../utils/localization';
-import EASPersistentModal from "../../common/modals/EASPersistentModal";
-import EASTextField from "../../common/EASTextField";
-import IconAvatar from '../../icons/iconAvatar';
+} from 'redux/actions/actions';
+import {
+  authTokenSelector,
+  clinicCurrencySelector,
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
+import {
+  scheduleDetailsSelector,
+  scheduleIdSelector,
+  schedulePatientSelector,
+} from 'redux/selectors/doctorScheduleDetailsSelector';
 import PatientDetails from '../PatientDetails';
+import styles from './DoctorPatientDetails.module.scss';
 import reducer, {
   initialState,
   setShowFinalizeTreatment,
   setIsFinalizing,
-  setInitialData,
 } from './DoctorPatientDetails.reducer';
-import styles from './DoctorPatientDetails.module.scss';
 
-const FinalizeTreatmentModal = dynamic(() => import('../../../../app/components/doctors/FinalizeTreatmentModal'));
+const FinalizeTreatmentModal = dynamic(() =>
+  import('app/components/doctors/FinalizeTreatmentModal'),
+);
 
 const TabId = {
   appointmentsNotes: 'AppointmentsNotes',
@@ -42,38 +54,29 @@ const TabId = {
   orthodonticPlan: 'OrthodonticPlan',
 };
 
-const DoctorPatientDetails = (
-  {
-    currentUser,
-    currentClinic,
-    schedule: initialSchedule,
-    scheduleId,
-    authToken,
-  }
-) => {
+const DoctorPatientDetails = () => {
+  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const router = useRouter();
-  const clinicCurrency = currentClinic.currency;
+  const scheduleId = useSelector(scheduleIdSelector);
+  const schedule = useSelector(scheduleDetailsSelector);
+  const patient = useSelector(schedulePatientSelector);
+  const authToken = useSelector(authTokenSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const clinicCurrency = useSelector(clinicCurrencySelector);
   const [
-    {
-      patient,
-      schedule,
-      showFinalizeTreatment,
-      isFinalizing,
-      finalServices,
-    },
+    { showFinalizeTreatment, isFinalizing, finalServices },
     localDispatch,
   ] = useReducer(reducer, initialState);
-  const [guideName, setGuideName] = useState(`${currentUser.firstName} ${currentUser.lastName}`);
+
+  const [guideName, setGuideName] = useState(
+    `${currentUser.firstName} ${currentUser.lastName}`,
+  );
 
   const canFinalize =
     schedule?.scheduleStatus === 'OnSite' ||
     schedule?.scheduleStatus === 'CompletedNotPaid';
-
-  useEffect(() => {
-    // filter clinic services to get only provided by current user services
-    localDispatch(setInitialData({ schedule: initialSchedule }));
-  }, []);
 
   /**
    * Handle start adding x-ray image
@@ -118,7 +121,7 @@ const DoctorPatientDetails = (
    * Handle orthodontic plan saved
    */
   const handleSaveTreatmentPlan = async () => {
-    await router.replace(router.asPath)
+    await router.replace(router.asPath);
   };
 
   /**
@@ -130,7 +133,7 @@ const DoctorPatientDetails = (
         setShowFinalizeTreatment({
           open: true,
           finalServices,
-          selectedServices
+          selectedServices,
         }),
       );
     } else {
@@ -148,16 +151,16 @@ const DoctorPatientDetails = (
   const saveTreatmentPlan = async (requestBody, update) => {
     return update
       ? updatePatientGeneralTreatmentPlan(requestBody)
-      : savePatientGeneralTreatmentPlan(requestBody)
-  }
+      : savePatientGeneralTreatmentPlan(requestBody);
+  };
 
   const updatePatientTreatmentPlan = async (requestBody) => {
     return saveTreatmentPlan(requestBody, true);
-  }
+  };
 
   const savePatientTreatmentPlan = async (requestBody) => {
     return saveTreatmentPlan(requestBody, false);
-  }
+  };
 
   /**
    * Save patient treatment plan services
@@ -197,29 +200,34 @@ const DoctorPatientDetails = (
       if (!canFinalize) {
         toast.success(textForKey('Saved successfully'));
       }
-      router.back()
+      router.back();
     } catch (error) {
       toast.error(getErrorMessage(error));
     } finally {
-      localDispatch(setIsFinalizing(false))
+      localDispatch(setIsFinalizing(false));
     }
   };
 
   const handleGuideNameChange = (newValue) => {
     setGuideName(newValue);
-  }
+  };
 
   const handlePrintTreatmentPlan = () => {
-    const planUrl = getTreatmentPlanURL(currentClinic, authToken, patient.id, guideName);
+    const planUrl = getTreatmentPlanURL(
+      currentClinic,
+      authToken,
+      patient.id,
+      guideName,
+    );
     window.open(planUrl, '_blank');
-  }
+  };
 
   const formattedTime = useMemo(() => {
     if (schedule == null) {
       return '';
     }
     const startTime = moment(schedule.startTime).format('DD.MM.YYYY HH:mm');
-    const endTime = moment(schedule.endTime).format('HH:mm')
+    const endTime = moment(schedule.endTime).format('HH:mm');
     return `${startTime} - ${endTime}`;
   }, [schedule]);
 
@@ -234,7 +242,7 @@ const DoctorPatientDetails = (
       />
       <EASPersistentModal open={isFinalizing}>
         <div className={styles.progressBar}>
-          <CircularProgress className='circular-progress-bar'/>
+          <CircularProgress className='circular-progress-bar' />
         </div>
         {isFinalizing && (
           <Typography className={styles.loadingLabel}>
@@ -244,20 +252,22 @@ const DoctorPatientDetails = (
       </EASPersistentModal>
       <div className={styles.leftContainer}>
         <div className={styles.patientInfo}>
-          <IconAvatar/>
+          <IconAvatar />
           <div className={styles.personalDataContainer}>
             <span className={styles.patientName}>{getPatientName()}</span>
             <div className={styles.patientInfoRow}>
-              <span className={styles.patientInfoTitle}>{textForKey('Date')}:</span>
-              <span className={styles.patientInfoValue}>
-                {formattedTime}
+              <span className={styles.patientInfoTitle}>
+                {textForKey('Date')}:
               </span>
+              <span className={styles.patientInfoValue}>{formattedTime}</span>
             </div>
             <div className={styles.patientInfoRow}>
               <span className={styles.patientInfoTitle}>
                 {textForKey('Doctor')}:
               </span>
-              <span className={styles.patientInfoValue}>{currentUser.fullName}</span>
+              <span className={styles.patientInfoValue}>
+                {currentUser.fullName}
+              </span>
             </div>
           </div>
           <div className={styles.printableWrapper}>
@@ -267,7 +277,10 @@ const DoctorPatientDetails = (
               fieldLabel={textForKey('Enter guide name')}
               onChange={handleGuideNameChange}
             />
-            <Button className='positive-button' onPointerUp={handlePrintTreatmentPlan}>
+            <Button
+              className='positive-button'
+              onPointerUp={handlePrintTreatmentPlan}
+            >
               {textForKey('Print plan')}
             </Button>
           </div>
@@ -276,7 +289,7 @@ const DoctorPatientDetails = (
           <PatientTreatmentPlan
             currentClinic={currentClinic}
             currentUser={currentUser}
-            scheduleData={initialSchedule}
+            scheduleData={schedule}
             scheduleId={scheduleId}
             onFinalize={handleFinalizeTreatment}
           />
@@ -286,8 +299,6 @@ const DoctorPatientDetails = (
         {patient && (
           <PatientDetails
             isDoctor
-            currentClinic={currentClinic}
-            currentUser={currentUser}
             scheduleId={schedule.id}
             onAddXRay={handleAddXRay}
             onSaveOrthodonticPlan={handleSaveTreatmentPlan}

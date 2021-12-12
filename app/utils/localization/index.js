@@ -5,7 +5,8 @@ import strings from './strings/strings';
  * @param {'en'|'ro'|'ru'} newLanguage
  */
 export function setAppLanguage(newLanguage) {
-  typeof localStorage !== 'undefined' && localStorage.setItem('appLanguage', newLanguage);
+  typeof localStorage !== 'undefined' &&
+    localStorage.setItem('appLanguage', newLanguage);
 }
 
 /**
@@ -13,14 +14,18 @@ export function setAppLanguage(newLanguage) {
  * @return {string}
  */
 export function getAppLanguage() {
-  const lang = typeof localStorage !== "undefined" ? localStorage.getItem('appLanguage') : null;
+  const lang =
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('appLanguage')
+      : null;
   return lang ? lang : 'ro';
 }
 
 /**
  * Get translated text by key
  * @param {string} key
- * @param {strings} params
+ * @param {strings|numbers} params
+ * @return string
  * @return {string}
  */
 export function textForKey(key, ...params) {

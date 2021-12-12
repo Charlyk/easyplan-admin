@@ -1,22 +1,21 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
-
-import IconLink from "../../../../icons/iconLink";
-import { textForKey } from "../../../../../utils/localization";
-import getPatientName from "../../../../../utils/getPatientName";
+import IconLink from 'app/components/icons/iconLink';
+import getPatientName from 'app/utils/getPatientName';
+import { textForKey } from 'app/utils/localization';
 import styles from './PatientInfo.module.scss';
 
 const PatientInfo = ({ deal, onLink }) => {
   const patientName = useMemo(() => {
     if (deal == null) {
-      return ''
+      return '';
     }
     if (deal?.patient == null) {
       return deal?.contact.name;
@@ -28,9 +27,11 @@ const PatientInfo = ({ deal, onLink }) => {
   const patientPhone = useMemo(() => {
     if (deal?.patient == null) {
       if (deal?.contact?.phoneNumber?.startsWith('+')) {
-        return deal?.contact?.phoneNumber || '-'
+        return deal?.contact?.phoneNumber || '-';
       } else {
-        return deal?.contact?.phoneNumber ? `+${deal?.contact?.phoneNumber}` : '-';
+        return deal?.contact?.phoneNumber
+          ? `+${deal?.contact?.phoneNumber}`
+          : '-';
       }
     }
     const { patient } = deal;
@@ -76,12 +77,12 @@ const PatientInfo = ({ deal, onLink }) => {
       </TableContainer>
       {deal?.patient == null && (
         <Button className={styles.linkPatientBtn} onPointerUp={onLink}>
-          <IconLink fill="#3A83DC" />
+          <IconLink fill='#3A83DC' />
           {textForKey('link_patient')}
         </Button>
       )}
     </div>
-  )
+  );
 };
 
 export default PatientInfo;
@@ -93,7 +94,7 @@ PatientInfo.propTypes = {
       email: PropTypes.string,
       name: PropTypes.string,
       phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string
+      photoUrl: PropTypes.string,
     }),
     patient: PropTypes.shape({
       id: PropTypes.number,
@@ -115,4 +116,4 @@ PatientInfo.propTypes = {
     }),
   }),
   onLink: PropTypes.func,
-}
+};

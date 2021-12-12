@@ -1,6 +1,5 @@
-import { del, get, post, put } from "./request";
-import imageToBase64 from "../../app/utils/imageToBase64";
-import axios from "axios";
+import imageToBase64 from 'app/utils/imageToBase64';
+import { del, get, post, put } from './request';
 
 /**
  * Perform login request
@@ -28,9 +27,9 @@ export async function loginUser(body, headers = null) {
 export async function registerUser(body, avatar, headers = null) {
   const updatedBody = { ...body };
   if (avatar != null) {
-    updatedBody.avatar = await imageToBase64(avatar)
+    updatedBody.avatar = await imageToBase64(avatar);
   }
-  return axios.post('/api/auth/register', updatedBody, { headers });
+  return post('/api/auth/register', headers, updatedBody);
 }
 
 /**
@@ -40,7 +39,7 @@ export async function registerUser(body, avatar, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function resetUserPassword(body, headers = null) {
-  return post('/api/auth/reset-password', headers, body)
+  return post('/api/auth/reset-password', headers, body);
 }
 
 /**
@@ -50,7 +49,7 @@ export async function resetUserPassword(body, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function requestResetUserPassword(body, headers = null) {
-  return put('/api/auth/reset-password', headers, body)
+  return put('/api/auth/reset-password', headers, body);
 }
 
 /**
@@ -72,17 +71,12 @@ export async function getCurrentUser(headers = null) {
 
 /**
  * Update current user account
- * @param {Object} body
- * @param {File?} avatar
+ * @param {UpdateProfileRequest} body
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function updateUserAccount(body, avatar, headers = null) {
-  const updatedBody = { ...body };
-  if (avatar != null) {
-    updatedBody.avatar = await imageToBase64(avatar)
-  }
-  return axios.put('/api/auth/update-account', updatedBody, { headers });
+export async function updateUserAccount(body, headers = null) {
+  return put('/api/auth/update-account', headers, body);
 }
 
 /**

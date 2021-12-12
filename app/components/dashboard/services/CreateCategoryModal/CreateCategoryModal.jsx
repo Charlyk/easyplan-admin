@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { toast } from "react-toastify";
+import EASTextField from 'app/components/common/EASTextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import NotificationsContext from 'app/context/notificationsContext';
+import { textForKey } from 'app/utils/localization';
 import {
   requestCreateCategory,
-  requestEditCategory
-} from "../../../../../middleware/api/categories";
-import { textForKey } from '../../../../utils/localization';
-import EASModal from "../../../common/modals/EASModal";
-import EASTextField from "../../../common/EASTextField";
+  requestEditCategory,
+} from 'middleware/api/categories';
 import styles from './CreateCategoryModal.module.scss';
 
-const CreateCategoryModal = props => {
-  const { show, onClose, onSaved, category } = props;
+const CreateCategoryModal = (props) => {
+  const toast = useContext(NotificationsContext);
+  const { show, onClose, onSaved, category, onDelete, destroyBtnText } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [categoryName, setCategoryName] = useState(
     category ? category.name : '',
@@ -51,7 +52,7 @@ const CreateCategoryModal = props => {
 
   const createNewCategory = async () => {
     try {
-      const response = await requestCreateCategory(categoryName)
+      const response = await requestCreateCategory(categoryName);
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {
@@ -71,6 +72,11 @@ const CreateCategoryModal = props => {
       : textForKey('Add category');
   };
 
+  const handleOnDelete = () => {
+    onDelete(category);
+    onClose();
+  };
+
   const handleModalClose = () => {
     setCategoryName('');
     onClose();
@@ -84,7 +90,9 @@ const CreateCategoryModal = props => {
       className={styles['create-category-modal']}
       onPrimaryClick={handleCategorySave}
       isPositiveLoading={isLoading}
+      destroyBtnText={destroyBtnText}
       isPositiveDisabled={isLoading}
+      onDestroyClick={category === null ? null : handleOnDelete}
     >
       <form style={{ padding: '16px' }} onSubmit={handleCategorySave}>
         <EASTextField

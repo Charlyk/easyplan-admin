@@ -1,10 +1,12 @@
-import React from "react";
-import clsx from "clsx";
+import React from 'react';
+import { Tooltip } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
-import IconUmbrella from "../../../icons/iconUmbrella";
+import IconUmbrella from 'app/components/icons/iconUmbrella';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import styles from './Header.module.scss';
-import areComponentPropsEqual from "../../../../utils/areComponentPropsEqual";
 
 const HeaderItem = ({ item, onItemClick }) => {
   const handleItemClick = () => {
@@ -12,25 +14,25 @@ const HeaderItem = ({ item, onItemClick }) => {
       return;
     }
     onItemClick(item);
-  }
+  };
   return (
-    <div
-      role='button'
-      tabIndex={0}
-      className={
-        clsx(styles.headerItem, {
-          [styles.disabled]: item.disabled,
-        })
-      }
+    <Box
+      className={clsx(styles.headerItem, {
+        [styles.disabled]: item.disabled,
+      })}
       onClick={handleItemClick}
     >
-      {item.disabled && <IconUmbrella/>}
-      <Typography className={styles.itemName}>
-        {item.name}
-      </Typography>
-    </div>
-  )
-}
+      {item.disabled && <IconUmbrella />}
+      {item.hint ? (
+        <Tooltip title={item.hint}>
+          <Typography className={styles.itemName}>{item.name}</Typography>
+        </Tooltip>
+      ) : (
+        <Typography className={styles.itemName}>{item.name}</Typography>
+      )}
+    </Box>
+  );
+};
 
 export default React.memo(HeaderItem, areComponentPropsEqual);
 
@@ -41,6 +43,7 @@ HeaderItem.propTypes = {
     date: PropTypes.instanceOf(Date),
     name: PropTypes.string,
     disabled: PropTypes.bool,
+    hint: PropTypes.string,
   }).isRequired,
   onItemClick: PropTypes.func,
-}
+};

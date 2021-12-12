@@ -1,21 +1,20 @@
 import React from 'react';
-
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import sortBy from 'lodash/sortBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import clsx from "clsx";
+import { useSelector } from 'react-redux';
+import IconArrowNext from 'app/components/icons/iconArrowNext';
+import IconDelete from 'app/components/icons/iconDelete';
+import IconEdit from 'app/components/icons/iconEdit';
+import IconPlus from 'app/components/icons/iconPlus';
+import { textForKey } from 'app/utils/localization';
+import { clinicTimeZoneSelector } from 'redux/selectors/appDataSelector';
+import styles from './HistoryItem.module.scss';
 
-import IconArrowNext from '../../../../../icons/iconArrowNext';
-import IconEdit from '../../../../../icons/iconEdit';
-import IconPlus from '../../../../../icons/iconPlus';
-import { clinicTimeZoneSelector } from '../../../../../../../redux/selectors/clinicSelector';
-import { textForKey } from '../../../../../../utils/localization';
-import styles from './HistoryItem.module.scss'
-import IconDelete from "../../../../../icons/iconDelete";
-
-const Field = ({ field, clinic }) => {
-  const timeZone = clinicTimeZoneSelector(clinic);
+const Field = ({ field }) => {
+  const timeZone = useSelector(clinicTimeZoneSelector);
 
   const isDate = (value) => {
     const regex = /\d{4}-\d{2}-\d{2}(\s|T)\d{2}:\d{2}:\d{2}.\d{3}/;
@@ -76,7 +75,9 @@ const HistoryItem = ({ item, clinic }) => {
     <div className={styles.historyItem}>
       <div className={styles['history-title-container']}>
         <div className={styles['action-icon']}>{itemIcon()}</div>
-        <Typography classes={{ root: clsx(styles['history-title-label'], styles.user) }}>
+        <Typography
+          classes={{ root: clsx(styles['history-title-label'], styles.user) }}
+        >
           {item.user.fullName}
         </Typography>
         <Typography classes={{ root: styles['history-title-label'] }}>
@@ -86,9 +87,9 @@ const HistoryItem = ({ item, clinic }) => {
       </div>
       <table>
         <tbody>
-        {sortBy(item.fields, (it) => it.fieldName).map((field) => (
-          <Field key={field.fieldName} clinic={clinic} field={field} />
-        ))}
+          {sortBy(item.fields, (it) => it.fieldName).map((field) => (
+            <Field key={field.fieldName} field={field} />
+          ))}
         </tbody>
       </table>
     </div>

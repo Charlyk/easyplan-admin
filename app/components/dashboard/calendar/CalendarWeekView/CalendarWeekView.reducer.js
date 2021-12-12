@@ -1,6 +1,6 @@
-import orderBy from "lodash/orderBy";
-import moment from "moment-timezone";
-import generateReducerActions from "../../../../utils/generateReducerActions";
+import orderBy from 'lodash/orderBy';
+import moment from 'moment-timezone';
+import generateReducerActions from 'app/utils/generateReducerActions';
 
 export const initialState = {
   hours: [],
@@ -35,10 +35,14 @@ export const reducer = (state, action) => {
     case reducerTypes.setSchedules:
       return {
         ...state,
-        schedules: action.payload.map(item => {
+        schedules: action.payload.map((item) => {
           return {
             ...item,
-            schedules: orderBy(item.schedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
+            schedules: orderBy(
+              item.schedules,
+              ['rescheduled', 'startTime'],
+              ['desc', 'asc'],
+            ),
           };
         }),
       };
@@ -47,7 +51,9 @@ export const reducer = (state, action) => {
     case reducerTypes.addSchedule: {
       const newSchedule = action.payload;
       const scheduleDate = moment(newSchedule.startTime).format('YYYY-MM-DD');
-      const hasSchedules = state.schedules.some(item => item.id === scheduleDate);
+      const hasSchedules = state.schedules.some(
+        (item) => item.id === scheduleDate,
+      );
       if (!hasSchedules) {
         return {
           ...state,
@@ -55,22 +61,26 @@ export const reducer = (state, action) => {
             ...state.schedules,
             {
               id: scheduleDate,
-              schedules: [newSchedule]
+              schedules: [newSchedule],
             },
-          ]
-        }
+          ],
+        };
       }
-      const updatedSchedules = state.schedules.map(item => {
+      const updatedSchedules = state.schedules.map((item) => {
         if (item.id !== scheduleDate) {
           return item;
         }
 
-        const newSchedules = [...item.schedules, newSchedule]
+        const newSchedules = [...item.schedules, newSchedule];
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
-        }
+          schedules: orderBy(
+            newSchedules,
+            ['rescheduled', 'startTime'],
+            ['desc', 'asc'],
+          ),
+        };
       });
       return {
         ...state,
@@ -79,29 +89,32 @@ export const reducer = (state, action) => {
     }
     case reducerTypes.deleteSchedule: {
       const scheduleToDelete = action.payload;
-      const scheduleDate = moment(scheduleToDelete.startTime).format('YYYY-MM-DD');
-      const updatedSchedules = state.schedules.map(item => {
+      const scheduleDate = moment(scheduleToDelete.startTime).format(
+        'YYYY-MM-DD',
+      );
+      const updatedSchedules = state.schedules.map((item) => {
         if (item.id !== scheduleDate) {
           return item;
         }
 
         return {
           ...item,
-          schedules: item.schedules.filter((schedule) =>
-            schedule.id !== scheduleToDelete.id
+          schedules: item.schedules.filter(
+            (schedule) => schedule.id !== scheduleToDelete.id,
           ),
-        }
-      })
+        };
+      });
       return {
         ...state,
-        schedules: updatedSchedules
-      }
+        schedules: updatedSchedules,
+      };
     }
     case reducerTypes.updateSchedule: {
       const scheduleToUpdate = action.payload;
-      const updatedSchedules = state.schedules.map(item => {
-        const scheduleDate = moment(scheduleToUpdate.startTime)
-          .format('YYYY-MM-DD');
+      const updatedSchedules = state.schedules.map((item) => {
+        const scheduleDate = moment(scheduleToUpdate.startTime).format(
+          'YYYY-MM-DD',
+        );
         if (item.id !== scheduleDate) {
           return item;
         }
@@ -114,17 +127,21 @@ export const reducer = (state, action) => {
             ...schedule,
             ...scheduleToUpdate,
           };
-        })
+        });
 
         return {
           ...item,
-          schedules: orderBy(newSchedules, ['rescheduled', 'startTime'], ['desc', 'asc']),
-        }
-      })
+          schedules: orderBy(
+            newSchedules,
+            ['rescheduled', 'startTime'],
+            ['desc', 'asc'],
+          ),
+        };
+      });
       return {
         ...state,
-        schedules: updatedSchedules
-      }
+        schedules: updatedSchedules,
+      };
     }
     default:
       return state;

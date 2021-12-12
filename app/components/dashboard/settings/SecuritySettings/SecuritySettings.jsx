@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import { useRouter } from "next/router";
-import { toast } from 'react-toastify';
-
-import IconSuccess from '../../../icons/iconSuccess';
-import LoadingButton from '../../../common/LoadingButton';
-import { textForKey } from '../../../../utils/localization';
-import { updateUserAccount } from "../../../../../middleware/api/auth";
-import EASTextField from "../../../common/EASTextField";
+import { useDispatch, useSelector } from 'react-redux';
+import EASTextField from 'app/components/common/EASTextField';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconSuccess from 'app/components/icons/iconSuccess';
+import { PasswordRegex } from 'app/utils/constants';
+import { textForKey } from 'app/utils/localization';
+import { isUpdatingProfileSelector } from 'redux/selectors/appDataSelector';
+import { updateUserProfile } from 'redux/slices/appDataSlice';
 import styles from './SecuritySettings.module.scss';
-import { HeaderKeys, PasswordRegex } from "../../../../utils/constants";
 
-const SecuritySettings = ({ currentClinic, authToken }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+const SecuritySettings = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(isUpdatingProfileSelector);
   const [data, setData] = useState({
     oldPassword: '',
     password: '',
     confirmPassword: '',
   });
 
-  const isNewPasswordValid = data.password.length === 0 || data.password.match(PasswordRegex);
-  const isConfirmPasswordValid = data.confirmPassword.length === 0 || data.confirmPassword === data.password;
+  const isNewPasswordValid =
+    data.password.length === 0 || data.password.match(PasswordRegex);
+  const isConfirmPasswordValid =
+    data.confirmPassword.length === 0 || data.confirmPassword === data.password;
 
   const handleFormChange = (fieldId, newValue) => {
     setData({
@@ -39,28 +40,16 @@ const SecuritySettings = ({ currentClinic, authToken }) => {
 
   const submitForm = async () => {
     if (!isFormValid()) return;
-
-    setIsLoading(true);
-    try {
-      await updateUserAccount(data, null, {
-        [HeaderKeys.authorization]: authToken,
-        [HeaderKeys.clinicId]: currentClinic.id,
-        [HeaderKeys.subdomain]: currentClinic.domainName,
-      });
-      await router.replace(router.asPath);
-      toast.success(textForKey('Saved successfully'));
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    dispatch(updateUserProfile(data));
   };
 
   return (
     <div className={styles['security-settings']}>
-      <span className={styles['form-title']}>{textForKey('Security settings')}</span>
+      <span className={styles['form-title']}>
+        {textForKey('Security settings')}
+      </span>
       <EASTextField
-        type="password"
+        type='password'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Current password')}
         value={data.oldPassword || ''}
@@ -68,7 +57,7 @@ const SecuritySettings = ({ currentClinic, authToken }) => {
       />
 
       <EASTextField
-        type="password"
+        type='password'
         containerClass={styles.simpleField}
         error={!isNewPasswordValid}
         helperText={textForKey('passwordvalidationmessage')}
@@ -78,12 +67,14 @@ const SecuritySettings = ({ currentClinic, authToken }) => {
       />
 
       <EASTextField
-        type="password"
+        type='password'
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Confirm new password')}
         value={data.confirmPassword || ''}
         error={!isConfirmPasswordValid}
-        helperText={isConfirmPasswordValid ? null : textForKey('passwords_not_equal')}
+        helperText={
+          isConfirmPasswordValid ? null : textForKey('passwords_not_equal')
+        }
         onChange={(value) => handleFormChange('confirmPassword', value)}
       />
 

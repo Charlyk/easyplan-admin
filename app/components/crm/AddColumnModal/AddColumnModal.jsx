@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
-import Box from "@material-ui/core/Box";
-
-import { textForKey } from "../../../utils/localization";
-import EASModal from "../../common/modals/EASModal";
+import React, { useState } from 'react';
+import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
+import EASModal from 'app/components/common/modals/EASModal';
+import { textForKey } from 'app/utils/localization';
 import styles from './AddColumnModal.module.scss';
 
 const AddColumnModal = ({ open, onClose, onSave }) => {
@@ -18,7 +17,7 @@ const AddColumnModal = ({ open, onClose, onSave }) => {
       return;
     }
     onSave?.(name);
-  }
+  };
 
   return (
     <EASModal
@@ -29,7 +28,7 @@ const AddColumnModal = ({ open, onClose, onSave }) => {
       onBackdropClick={onClose}
       onClose={onClose}
     >
-      <Box width="100%" display="flex" padding="16px">
+      <Box width='100%' display='flex' padding='16px'>
         <TextField
           label={textForKey('Column name')}
           className={styles.textField}
@@ -43,7 +42,7 @@ const AddColumnModal = ({ open, onClose, onSave }) => {
         />
       </Box>
     </EASModal>
-  )
-}
+  );
+};
 
 export default AddColumnModal;

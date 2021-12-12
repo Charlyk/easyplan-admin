@@ -1,10 +1,27 @@
-import axios from "axios";
-import { authorized } from "../../authorized";
+import axios from 'axios';
 import cookie from 'cookie';
-import { handler } from "../../handler";
-import getSubdomain from "../../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../../app/utils/constants";
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import authorized from '../../authorized';
+import handler from '../../handler';
+
+function fetchClinicWorkHours(req) {
+  const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
+    req.headers.cookie,
+  );
+  const queryString = new URLSearchParams(req.query).toString();
+  return axios.get(
+    `${updatedServerUrl(req)}/schedules/v2/clinic-workhours?${queryString}`,
+    {
+      headers: {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinicId,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+      },
+    },
+  );
+}
 
 export default authorized(async (req, res) => {
   switch (req.method) {
@@ -13,23 +30,11 @@ export default authorized(async (req, res) => {
       if (data != null) {
         res.json(data);
       }
-      break
+      break;
     }
     default:
       res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
-      break
+      break;
   }
 });
-
-function fetchClinicWorkHours(req) {
-  const { clinic_id, auth_token } = cookie.parse(req.headers.cookie);
-  const queryString = new URLSearchParams(req.query).toString();
-  return axios.get(`${updatedServerUrl(req)}/schedules/v2/clinic-workhours?${queryString}`, {
-    headers: {
-      [HeaderKeys.authorization]: auth_token,
-      [HeaderKeys.clinicId]: clinic_id,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-    }
-  });
-}

@@ -1,9 +1,18 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from '@reduxjs/toolkit';
 
-import initialState from '../initialState';
-import types from '../types/types';
+import initialState from 'redux/initialState';
+import appData from 'redux/slices/appDataSlice';
+import cabinetsData from 'redux/slices/cabinetsData';
+import calendarData from 'redux/slices/calendarData';
+import clinicData from 'redux/slices/clinicDataSlice';
+import appointmentModal from 'redux/slices/createAppointmentModalSlice';
+import globalNotifications from 'redux/slices/globalNotificationsSlice';
+import crm from 'redux/slices/crmSlice';
+import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
+import servicesList from 'redux/slices/servicesListSlice';
+import usersList from 'redux/slices/usersListSlice';
+import types from 'redux/types';
 import addPaymentModal from './addPaymentModal';
-import appointmentModal from './appointmentModal';
 import calendar from './calendar';
 import clinic from './clinic';
 import exchangeRatesModal from './exchangeRatesModal';
@@ -16,9 +25,7 @@ import paymentModal from './paymentModal';
 import schedule from './scheduleReducer';
 import serviceDetailsModal from './serviceDetailsReducer';
 import services from './servicesReducer';
-import users from "./usersReducer";
-import crm from '../slices/crmSlice';
-import clinicData from '../slices/clinicDataSlice';
+import users from './usersReducer';
 
 export default combineReducers({
   main,
@@ -39,10 +46,17 @@ export default combineReducers({
   users,
   crm,
   clinicData,
+  calendarData,
+  appData,
+  cabinetsData,
+  usersList,
+  servicesList,
+  doctorScheduleDetails,
+  globalNotifications,
 });
 
-function main(state = initialState, action) {
-  switch (action.type) {
+function main(state = initialState, { type, payload } = {}) {
+  switch (type) {
     case types.checkAppointments:
       return { ...state, checkAppointments: !state.checkAppointments };
     case types.updateInvoices:
@@ -60,12 +74,12 @@ function main(state = initialState, action) {
     case types.updateServicesList:
       return {
         ...state,
-        updateServices: action.payload,
+        updateServices: payload,
       };
     case types.updateUsersList:
       return {
         ...state,
-        updateUsers: action.payload,
+        updateUsers: payload,
       };
     case types.updateXRay:
       return {
@@ -80,27 +94,22 @@ function main(state = initialState, action) {
     case types.setUser:
       return {
         ...state,
-        user: action.payload,
-      };
-    case types.setUpdateCurrentUser:
-      return {
-        ...state,
-        updateCurrentUser: action.payload,
+        user: payload,
       };
     case types.changeCurrentClinic:
       return {
         ...state,
-        newClinicId: action.payload,
+        newClinicId: payload,
       };
     case types.triggerUserLogOut:
       return {
         ...state,
-        logout: action.payload,
+        logout: payload,
       };
     case types.forceUserLogout:
       return {
         ...state,
-        forceLogout: action.payload,
+        forceLogout: payload,
       };
     case types.updateAppointmentsList:
       return {
@@ -115,12 +124,12 @@ function main(state = initialState, action) {
     case types.setPatientDetails:
       return {
         ...state,
-        patientDetails: action.payload,
+        patientDetails: payload,
       };
     case types.toggleUpdatePatients:
       return {
         ...state,
-        updatePatients: action.payload,
+        updatePatients: payload,
       };
     case types.toggleUpdatePatientPayments:
       return {
@@ -130,7 +139,7 @@ function main(state = initialState, action) {
     case types.toggleImportModal:
       return {
         ...state,
-        isImportModalOpen: action.payload,
+        isImportModalOpen: payload,
       };
     case types.toggleExchangeRateUpdate:
       return {
@@ -146,7 +155,7 @@ function main(state = initialState, action) {
       return {
         ...state,
         updateHourIndicatorTop: !state.updateHourIndicatorTop,
-      }
+      };
     default:
       return state;
   }

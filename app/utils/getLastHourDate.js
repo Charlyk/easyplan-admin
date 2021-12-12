@@ -1,5 +1,5 @@
-import { extendMoment } from "moment-range";
-import Moment from "moment-timezone";
+import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
 
 const moment = extendMoment(Moment);
 

@@ -1,28 +1,26 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
+import Paper from '@material-ui/core/Paper';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Paper from "@material-ui/core/Paper";
-import clsx from "clsx";
-import { textForKey } from "../../../../utils/localization";
-import getServiceName from "../../../../utils/getServiceName";
-import FinalServiceItem from "../../../doctors/FinalServiceItem";
-import LoadingButton from "../../LoadingButton";
-import EASAutocomplete from "../../EASAutocomplete";
+import EASAutocomplete from 'app/components/common/EASAutocomplete';
+import LoadingButton from 'app/components/common/LoadingButton';
+import FinalServiceItem from 'app/components/doctors/FinalServiceItem';
+import getServiceName from 'app/utils/getServiceName';
+import { textForKey } from 'app/utils/localization';
 import styles from './ServicesWrapper.module.scss';
 
-const ServicesWrapper = (
-  {
-    readOnly,
-    allServices,
-    selectedServices,
-    isLoading,
-    isButtonDisabled,
-    buttonText,
-    paperClasses,
-    onItemSelected,
-    onItemRemove,
-    onFinalize
-  }
-) => {
+const ServicesWrapper = ({
+  readOnly,
+  allServices,
+  selectedServices,
+  isLoading,
+  isButtonDisabled,
+  buttonText,
+  paperClasses,
+  onItemSelected,
+  onItemRemove,
+  onFinalize,
+}) => {
   /**
    * Get unique html key for a service item
    * @param {Object} service
@@ -37,7 +35,7 @@ const ServicesWrapper = (
       ...item,
       name: getServiceName(item),
     }));
-  }, [allServices])
+  }, [allServices]);
 
   return (
     <Paper className={styles.servicesWrapper} elevation={0}>
@@ -57,14 +55,14 @@ const ServicesWrapper = (
       <div className={clsx(styles.selectedServicesWrapper, paperClasses)}>
         <table style={{ width: '100%' }}>
           <tbody>
-          {selectedServices.map((service, index) => (
-            <FinalServiceItem
-              canRemove={!service.completed}
-              onRemove={onItemRemove}
-              key={`${keyForService(service)}#${index}`}
-              service={service}
-            />
-          ))}
+            {selectedServices.map((service, index) => (
+              <FinalServiceItem
+                canRemove={!service.completed}
+                onRemove={onItemRemove}
+                key={`${keyForService(service)}#${index}`}
+                service={service}
+              />
+            ))}
           </tbody>
         </table>
       </div>
@@ -82,8 +80,8 @@ const ServicesWrapper = (
         </div>
       )}
     </Paper>
-  )
-}
+  );
+};
 
 export default ServicesWrapper;
 
@@ -98,4 +96,4 @@ ServicesWrapper.propTypes = {
   onItemRemove: PropTypes.func,
   onFinalize: PropTypes.func,
   paperClasses: PropTypes.any,
-}
+};

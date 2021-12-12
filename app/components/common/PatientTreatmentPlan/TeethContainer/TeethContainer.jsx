@@ -1,18 +1,15 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
+import TeethBlock from './TeethBlock';
+import styles from './TeethContainer.module.scss';
 
-import TeethBlock from "./TeethBlock";
-import styles from "./TeethContainer.module.scss";
-
-const TeethContainer = (
-  {
-    readOnly,
-    toothServices,
-    selectedServices,
-    completedServices,
-    onServicesChange,
-  }
-) => {
+const TeethContainer = ({
+  readOnly,
+  toothServices,
+  selectedServices,
+  completedServices,
+  onServicesChange,
+}) => {
   return (
     <div className={styles.teethContainer}>
       <div className={styles.teethColumn}>
@@ -52,8 +49,8 @@ const TeethContainer = (
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default TeethContainer;
 
@@ -63,4 +60,4 @@ TeethContainer.propTypes = {
   selectedServices: PropTypes.arrayOf(PropTypes.object),
   completedServices: PropTypes.arrayOf(PropTypes.object),
   onServicesChange: PropTypes.func,
-}
+};

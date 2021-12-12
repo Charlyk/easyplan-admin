@@ -1,8 +1,36 @@
-import { handler } from "../handler";
-import axios from "axios";
-import getSubdomain from "../../../app/utils/getSubdomain";
-import updatedServerUrl from "../../../app/utils/updateServerUrl";
-import { HeaderKeys } from "../../../app/utils/constants";
+import axios from 'axios';
+import { HeaderKeys } from 'app/utils/constants';
+import getSubdomain from 'app/utils/getSubdomain';
+import updatedServerUrl from 'app/utils/updateServerUrl';
+import handler from '../handler';
+
+async function updateUserPassword(req) {
+  return axios.put(
+    `${updatedServerUrl(req)}/authentication/v1/reset-password`,
+    req.body,
+    {
+      headers: {
+        [HeaderKeys.clinicId]: -1,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
+}
+
+function resetUserPassword(req) {
+  return axios.post(
+    `${updatedServerUrl(req)}/authentication/v1/reset-password`,
+    req.body,
+    {
+      headers: {
+        [HeaderKeys.clinicId]: -1,
+        [HeaderKeys.subdomain]: getSubdomain(req),
+        [HeaderKeys.contentType]: 'application/json',
+      },
+    },
+  );
+}
 
 export default async function resetPassword(req, res) {
   switch (req.method) {
@@ -18,9 +46,8 @@ export default async function resetPassword(req, res) {
       try {
         await handler(updateUserPassword, req, res);
         res.json({ message: 'success' });
-      } catch (error) {
-        return null;
-      }
+        // eslint-disable-next-line no-empty
+      } catch (error) {}
       break;
     }
     default: {
@@ -29,24 +56,4 @@ export default async function resetPassword(req, res) {
       break;
     }
   }
-}
-
-async function updateUserPassword(req) {
-  return axios.put(`${updatedServerUrl(req)}/authentication/v1/reset-password`, req.body, {
-    headers: {
-      [HeaderKeys.clinicId]: -1,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
-    }
-  });
-}
-
-function resetUserPassword(req) {
-  return axios.post(`${updatedServerUrl(req)}/authentication/v1/reset-password`, req.body, {
-    headers: {
-      [HeaderKeys.clinicId]: -1,
-      [HeaderKeys.subdomain]: getSubdomain(req),
-      [HeaderKeys.contentType]: 'application/json',
-    }
-  });
 }

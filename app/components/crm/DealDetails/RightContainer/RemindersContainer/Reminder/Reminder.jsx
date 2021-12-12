@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import clsx from "clsx";
-import PropTypes from 'prop-types';
-import Typography from "@material-ui/core/Typography";
+import React, { useState } from 'react';
+import Typography from '@material-ui/core/Typography';
 import ReminderIcon from '@material-ui/icons/AccessTime';
-
-import { requestCompleteReminder } from "../../../../../../../middleware/api/crm";
-import { textForKey } from "../../../../../../utils/localization";
-import onRequestError from "../../../../../../utils/onRequestError";
-import getReminderTexts from "../../../../../../utils/getReminderTexts";
-import LoadingButton from "../../../../../common/LoadingButton";
-import EASTextarea from "../../../../../common/EASTextarea";
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import EASTextarea from 'app/components/common/EASTextarea';
+import LoadingButton from 'app/components/common/LoadingButton';
+import getReminderTexts from 'app/utils/getReminderTexts';
+import { textForKey } from 'app/utils/localization';
+import { requestCompleteReminder } from 'middleware/api/crm';
+import onRequestError from 'app/utils/onRequestError';
 import styles from './Reminder.module.scss';
 
 const Reminder = ({ reminder }) => {
@@ -32,16 +31,15 @@ const Reminder = ({ reminder }) => {
   };
 
   return (
-    <div className={clsx(
-      styles.reminder,
-      {
+    <div
+      className={clsx(styles.reminder, {
         [styles.active]: isToday,
         [styles.expired]: reminder.active,
         [styles.pending]: !isToday && !reminder.active,
-      }
-    )}>
+      })}
+    >
       <Typography className={styles.reminderDate}>
-        <ReminderIcon/>
+        <ReminderIcon />
         {timeText}
       </Typography>
       <Typography className={styles.detailsRow}>

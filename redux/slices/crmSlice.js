@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import initialState from "../initialState";
+import { createSlice } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
+import initialState from 'redux/initialState';
 
 const crmSlice = createSlice({
   name: 'crm',
@@ -19,7 +20,15 @@ const crmSlice = createSlice({
     },
     setNewReminder(state, action) {
       state.newReminder = action.payload;
-    }
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.crm,
+      };
+    },
   },
 });
 
@@ -31,4 +40,4 @@ export const {
   setNewReminder,
 } = crmSlice.actions;
 
-export default crmSlice.reducer
+export default crmSlice.reducer;

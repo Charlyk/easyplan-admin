@@ -3,5 +3,5 @@ export const ItemTypes = {
   NONE: 'no_deals',
   SCHEDULED: 'scheduled_deal',
   UNSORTED: 'unsorted_deal',
-  UNSCHEDULED: 'unscheduled_deal'
-}
+  UNSCHEDULED: 'unscheduled_deal',
+};

@@ -1,7 +1,7 @@
-import moment from "moment-timezone";
-import roundToTwo from "../../../../utils/roundToTwo";
-import generateReducerActions from '../../../../utils/generateReducerActions';
-import sumBy from "lodash/sumBy";
+import sumBy from 'lodash/sumBy';
+import moment from 'moment-timezone';
+import generateReducerActions from 'app/utils/generateReducerActions';
+import roundToTwo from 'app/utils/roundToTwo';
 
 export const computeServicePrice = (services, exchangeRates) => {
   return services.map((service) => {
@@ -213,8 +213,8 @@ export const reducer = (state, action) => {
             ...patient,
             name: patient.fullName,
           },
-        }
-      }
+        },
+      };
     }
     case reducerTypes.setTeethModal:
       return { ...state, teethModal: action.payload };

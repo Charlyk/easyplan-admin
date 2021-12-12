@@ -22,9 +22,9 @@ function IconClock({ fill }) {
 export default React.memo(IconClock);
 
 IconClock.propTypes = {
-  fill: PropTypes.string
-}
+  fill: PropTypes.string,
+};
 
 IconClock.defaultProps = {
-  fill: '#fff'
-}
+  fill: '#fff',
+};
