@@ -30,6 +30,10 @@ import {
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
 import { updatePatientsListSelector } from 'redux/selectors/rootSelector';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from '../../../../../redux/selectors/appDataSelector';
 import styles from './PatientsList.module.scss';
 import reducer, {
   initialState,
@@ -87,14 +91,11 @@ const importFields = [
   },
 ];
 
-const PatientsList = ({
-  currentClinic,
-  authToken,
-  data,
-  query: initialQuery,
-}) => {
+const PatientsList = ({ data, query: initialQuery }) => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
+  const authToken = useSelector(authTokenSelector);
+  const currentClinic = useSelector(currentClinicSelector);
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
     {
