@@ -22,6 +22,7 @@ import {
   deleteCabinet,
   updateCabinet,
 } from 'redux/slices/cabinetsData';
+import { showWarningNotification } from '../../../../../../redux/slices/globalNotificationsSlice';
 import CabinetItem from '../CabinetItem';
 import styles from './ClinicCabinets.module.scss';
 
@@ -58,19 +59,28 @@ const ClinicCabinets: React.FC<Props> = () => {
   }, []);
 
   const handleKeyDown = async (evt: KeyboardEvent): Promise<void> => {
+    if (evt.key !== 'Enter') {
+      return;
+    }
     try {
-      if (evt.key === 'Enter') {
-        const body = {
-          name: inputValue,
-          users: null,
-        };
-
-        const { data } = await createCabinet(body);
-
-        dispatch(addNewCabinet(data));
-        setInputValue('');
-        inputRef.current.querySelector('input').blur();
+      const cabinetExists = cabinets.some(
+        (item) => item.name.toLowerCase() === inputValue.toLowerCase(),
+      );
+      if (cabinetExists) {
+        dispatch(showWarningNotification(textForKey('cabinet_name_exists')));
+        return;
       }
+
+      const body = {
+        name: inputValue,
+        users: null,
+      };
+
+      const { data } = await createCabinet(body);
+
+      dispatch(addNewCabinet(data));
+      setInputValue('');
+      inputRef.current.querySelector('input').blur();
     } catch (err) {
       onRequestError(err);
     }
