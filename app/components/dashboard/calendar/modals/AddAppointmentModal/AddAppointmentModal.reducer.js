@@ -271,10 +271,14 @@ const addAppointmentModalSlice = createSlice({
       state.patientSource = action.payload;
     },
     setSelectedCabinet(state, action) {
-      state.cabinet = {
-        ...action.payload,
-        label: action.payload.name,
-      };
+      if (action.payload == null) {
+        state.cabinet = null;
+      } else {
+        state.cabinet = {
+          ...action.payload,
+          label: action.payload.name,
+        };
+      }
       state.doctor = null;
       state.isDoctorValid = action.payload != null;
     },

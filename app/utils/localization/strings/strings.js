@@ -731,6 +731,7 @@ export default {
     visits: 'Visits',
     type_to_search: 'Type to search...',
     add_appointment_cabinet: 'Cabinet (Optional)',
+    cabinet_name_exists: 'A cabinet with this name already exists',
   },
   ro: {
     analytics: 'Analitică',
@@ -1473,6 +1474,7 @@ export default {
     visits: 'Vizite',
     type_to_search: 'Tapează pentru a căuta...',
     add_appointment_cabinet: 'Cabinet (Opțional)',
+    cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
   },
   ru: {
     analytics: 'Analytics',
@@ -2203,5 +2205,6 @@ export default {
     visits: 'Visits',
     type_to_search: 'Type to search...',
     add_appointment_cabinet: 'Cabinets (Optional)',
+    cabinet_name_exists: 'Кабинет с таким названием уже существует.',
   },
 };
