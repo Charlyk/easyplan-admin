@@ -301,9 +301,7 @@ const AddPauseModal = ({
       open={open}
       paperClass={styles.modalPaper}
       className={styles['add-pause-root']}
-      title={`${textForKey('Add pause')}: ${doctor?.firstName} ${
-        doctor?.lastName
-      }`}
+      title={textForKey('Add pause')}
       onNegativeClick={handleDeletePause}
       primaryBtnText={textForKey('Save')}
       secondaryBtnText={textForKey('Close')}
