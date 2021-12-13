@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import NextNprogress from 'nextjs-progressbar';
-import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 import NotificationsProvider from 'app/context/NotificationsProvider';
-import PubnubContextProvider from 'app/context/PubnubContextProvider';
 import theme from 'app/styles/theme';
 import { UnauthorizedPaths } from 'app/utils/constants';
 import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
-import { appBaseUrl, isDev } from 'eas.config';
+import { appBaseUrl, isDev, pubNubEnv } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
+import { handlePubnubMessage, pubnubClient } from 'pubnubUtils';
 import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import {
@@ -38,7 +38,6 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
-import Typography from '@material-ui/core/Typography';
 
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
@@ -46,12 +45,6 @@ const FullScreenImageModal = dynamic(() =>
 const ConfirmationModal = dynamic(() =>
   import('app/components/common/modals/ConfirmationModal'),
 );
-
-const pubnub = new PubNub({
-  publishKey: 'pub-c-feea66ec-303f-476d-87ec-0ed7f6379565',
-  subscribeKey: 'sub-c-6cdb4ab0-32f2-11eb-8e02-129fdf4b0d84',
-  uuid: PubNub.generateUUID(),
-});
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -63,6 +56,11 @@ const App = ({ Component, pageProps }) => {
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
   const currentPage = router.asPath;
+
+  const clinicRoom = useMemo(() => {
+    const id = currentClinic.id ?? -1;
+    return `${id}-${pubNubEnv}-clinic-pubnub-channel`;
+  }, [currentClinic]);
 
   useEffect(() => {
     dispatch({
@@ -89,6 +87,15 @@ const App = ({ Component, pageProps }) => {
   }, []);
 
   useEffect(() => {
+    pubnubClient.subscribe({ channels: [clinicRoom] });
+    pubnubClient.addListener({ message: handlePubnubMessageReceived });
+    return () => {
+      pubnubClient.removeListener({ message: handlePubnubMessageReceived });
+      pubnubClient.unsubscribe({ channels: [clinicRoom] });
+    };
+  }, [clinicRoom]);
+
+  useEffect(() => {
     setChatVisitor(currentUser);
     updatePageTitle(currentClinic);
   }, [currentUser, currentClinic]);
@@ -98,6 +105,10 @@ const App = ({ Component, pageProps }) => {
       checkUserIsAuthenticated();
     }
   }, [isWindowFocused]);
+
+  const handlePubnubMessageReceived = (message) => {
+    handlePubnubMessage(message);
+  };
 
   const setChatVisitor = (currentUser) => {
     if (currentUser == null) {
@@ -206,33 +217,31 @@ const App = ({ Component, pageProps }) => {
       <ThemeProvider theme={theme}>
         <React.Fragment>
           <CssBaseline />
-          <PubNubProvider client={pubnub}>
-            <PubnubContextProvider>
-              <NotificationsProvider>
-                <React.Fragment>
-                  {isDev && (
-                    <Typography className='develop-indicator'>Dev</Typography>
-                  )}
-                  {logout && (
-                    <ConfirmationModal
-                      title={textForKey('Logout')}
-                      message={textForKey('logout message')}
-                      onConfirm={handleUserLogout}
-                      onClose={handleCancelLogout}
-                      show={logout}
-                    />
-                  )}
-                  {imageModal.open && (
-                    <FullScreenImageModal
-                      {...imageModal}
-                      onClose={handleCloseImageModal}
-                    />
-                  )}
-                  <NextNprogress color='#29D' startPosition={0.3} height={2} />
-                  <Component {...pageProps} />
-                </React.Fragment>
-              </NotificationsProvider>
-            </PubnubContextProvider>
+          <PubNubProvider client={pubnubClient}>
+            <NotificationsProvider>
+              <React.Fragment>
+                {isDev && (
+                  <Typography className='develop-indicator'>Dev</Typography>
+                )}
+                {logout && (
+                  <ConfirmationModal
+                    title={textForKey('Logout')}
+                    message={textForKey('logout message')}
+                    onConfirm={handleUserLogout}
+                    onClose={handleCancelLogout}
+                    show={logout}
+                  />
+                )}
+                {imageModal.open && (
+                  <FullScreenImageModal
+                    {...imageModal}
+                    onClose={handleCloseImageModal}
+                  />
+                )}
+                <NextNprogress color='#29D' startPosition={0.3} height={2} />
+                <Component {...pageProps} />
+              </React.Fragment>
+            </NotificationsProvider>
           </PubNubProvider>
         </React.Fragment>
       </ThemeProvider>

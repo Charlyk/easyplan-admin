@@ -2,40 +2,32 @@ import React, { useContext, useEffect, useReducer } from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import MainComponent from 'app/components/common/MainComponent';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
 import {
   importSchedulesFromFile,
   requestDeleteSchedule,
 } from 'middleware/api/schedules';
-import {
-  setPaymentModal,
-  toggleAppointmentsUpdate,
-} from 'redux/actions/actions';
+import { setPaymentModal } from 'redux/actions/actions';
 import {
   activeClinicDoctorsSelector,
   authTokenSelector,
   currentClinicSelector,
-  currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { updateClinicDataSelector } from 'redux/selectors/clinicDataSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import styles from './CalendarContainer.module.scss';
 import reducer, {
   initialState,
-  setParsedValue,
   setIsDeleting,
   setSelectedDoctor,
   setDeleteSchedule,
   setIsUploading,
   setFilters,
-  setIsParsing,
   setSelectedSchedule,
   setViewMode,
   setShowImportModal,
@@ -107,11 +99,9 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
   const toast = useContext(NotificationsContext);
   const updateClinicData = useSelector(updateClinicDataSelector);
   const doctors = useSelector(activeClinicDoctorsSelector);
-  const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const router = useRouter();
-  const pubnub = usePubNub();
   const dispatch = useDispatch();
   const services =
     currentClinic?.services?.filter((item) => !item.deleted) || [];
@@ -127,7 +117,6 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       showImportModal,
       isDeleting,
       isUploading,
-      isParsing,
     },
     localDispatch,
   ] = useReducer(reducer, {
@@ -144,23 +133,6 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
     }
     router.replace(router.asPath);
   }, [updateClinicData]);
-
-  useEffect(() => {
-    if (currentUser == null) {
-      return;
-    }
-    redirectIfOnGeneralHost(currentUser, router);
-
-    pubnub.subscribe({
-      channels: [`${currentUser.id}-import_schedules_channel`],
-    });
-    pubnub.addListener({ message: handlePubnubMessageReceived });
-    return () => {
-      pubnub.unsubscribe({
-        channels: [`${currentUser.id}-import_schedules_channel`],
-      });
-    };
-  }, []);
 
   useEffect(() => {
     const newDoctors =
@@ -186,27 +158,6 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       localDispatch(setSelectedDoctor(doctor ?? doctors[0]));
     } else {
       localDispatch(setSelectedDoctor(doctors[0]));
-    }
-  };
-
-  const handlePubnubMessageReceived = (remoteMessage) => {
-    const { message, channel } = remoteMessage;
-    if (channel !== `${currentUser.id}-import_schedules_channel`) {
-      return;
-    }
-    const { count, total, done } = message;
-    if (done) {
-      localDispatch(setParsedValue(100));
-      setTimeout(() => {
-        localDispatch(setIsParsing(false));
-        dispatch(toggleAppointmentsUpdate());
-      }, 3500);
-    } else {
-      if (!isParsing) {
-        localDispatch(setIsParsing(true));
-      }
-      const percentage = (count / total) * 100;
-      localDispatch(setParsedValue(Math.round(percentage)));
     }
   };
 

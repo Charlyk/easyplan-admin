@@ -10,9 +10,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import remove from 'lodash/remove';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { usePubNub } from 'pubnub-react';
 import IconClose from 'app/components/icons/iconClose';
-import { env } from 'app/utils/constants';
 import generateReducerActions from 'app/utils/generateReducerActions';
 import { textForKey } from 'app/utils/localization';
 import AuthenticationStep from './AuthenticationStep';
@@ -107,18 +105,9 @@ const reducer = (state, action) => {
   }
 };
 
-const DataMigrationModal = ({ show, currentClinic, authToken, onClose }) => {
-  const pubnub = usePubNub();
+const DataMigrationModal = ({ show, onClose }) => {
   const [
-    {
-      activeStep,
-      completedSteps,
-      yClientsUser,
-      dataTypes,
-      company,
-      startDate,
-      endDate,
-    },
+    { activeStep, completedSteps, yClientsUser, dataTypes, company },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -147,20 +136,6 @@ const DataMigrationModal = ({ show, currentClinic, authToken, onClose }) => {
     const isDataValid =
       dataTypes.length > 0 && yClientsUser != null && company != null;
     if (!isDataValid) return;
-    const environment = env === '' ? 'prod' : env;
-    const message = {
-      user: yClientsUser,
-      dataTypes,
-      company,
-      clinicId: currentClinic.id,
-      authToken: authToken,
-      startDate,
-      endDate,
-    };
-    pubnub.publish({
-      channel: `${environment}-migrate-data-from-another-app-channel`,
-      message,
-    });
     handleModalClose();
   };
 

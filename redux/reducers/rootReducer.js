@@ -1,14 +1,13 @@
 import { combineReducers } from '@reduxjs/toolkit';
-
 import initialState from 'redux/initialState';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
 import appointmentModal from 'redux/slices/createAppointmentModalSlice';
-import globalNotifications from 'redux/slices/globalNotificationsSlice';
 import crm from 'redux/slices/crmSlice';
 import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
+import globalNotifications from 'redux/slices/globalNotificationsSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
 import types from 'redux/types';

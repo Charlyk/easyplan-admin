@@ -20,3 +20,4 @@ export * from './patient.type';
 export * from './clinicCabinet.type';
 export * from './serverResponse.type';
 export * from './notificationSeverity.type';
+export * from './pubnubMessage.types';
