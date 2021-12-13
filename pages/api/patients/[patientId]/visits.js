@@ -30,7 +30,7 @@ function fetchPatientVisits(req) {
     req.headers.cookie,
   );
   const { patientId } = req.query;
-  return axios.get(`${updatedServerUrl(req)}/patients/${patientId}/visits`, {
+  return axios.get(`${updatedServerUrl(req)}/visits?patientId=${patientId}`, {
     headers: {
       [HeaderKeys.authorization]: authToken,
       [HeaderKeys.clinicId]: clinicId,
