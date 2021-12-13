@@ -58,7 +58,7 @@ const App = ({ Component, pageProps }) => {
   const currentPage = router.asPath;
 
   const clinicRoom = useMemo(() => {
-    const id = currentClinic.id ?? -1;
+    const id = currentClinic?.id ?? -1;
     return `${id}-${pubNubEnv}-clinic-pubnub-channel`;
   }, [currentClinic]);
 
