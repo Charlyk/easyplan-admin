@@ -97,6 +97,12 @@ const initialState: ReduxState = Object.freeze({
     message: null,
     severity: null,
   },
+  patientList: {
+    patients: {
+      data: [],
+      total: 0,
+    },
+  },
 });
 
 export default initialState;

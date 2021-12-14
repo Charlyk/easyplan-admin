@@ -106,6 +106,13 @@ export interface GlobalNotificationsState {
   severity?: NotificationSeverity | null;
 }
 
+export interface PatientListState {
+  patients: {
+    data: Patient[];
+    total: number;
+  };
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -139,4 +146,5 @@ export interface ReduxState {
   servicesList: ServicesListState;
   doctorScheduleDetails: DoctorScheduleDetailsState;
   globalNotifications: GlobalNotificationsState;
+  patientList: PatientListState;
 }

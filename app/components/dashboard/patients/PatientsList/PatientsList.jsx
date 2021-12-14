@@ -29,7 +29,9 @@ import {
   setPatientDetails,
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
+import { globalPatientListSelector } from 'redux/selectors/patientSelector';
 import { updatePatientsListSelector } from 'redux/selectors/rootSelector';
+import { setPatients } from 'redux/slices/patientsListSlice';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -40,7 +42,6 @@ import reducer, {
   setPage,
   setInitialQuery,
   setIsDeleting,
-  setPatients,
   setPatientToDelete,
   setRowsPerPage,
   setSearchQuery,
@@ -94,13 +95,13 @@ const importFields = [
 const PatientsList = ({ data, query: initialQuery }) => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
+  const patients = useSelector(globalPatientListSelector);
   const authToken = useSelector(authTokenSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
     {
       isLoading,
-      patients,
       rowsPerPage,
       page,
       showCreateModal,
@@ -114,7 +115,7 @@ const PatientsList = ({ data, query: initialQuery }) => {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localDispatch(setPatients(data));
+    dispatch(setPatients(data));
     localDispatch(setInitialQuery(initialQuery));
   }, []);
 
@@ -144,7 +145,7 @@ const PatientsList = ({ data, query: initialQuery }) => {
       const updatedQuery = searchQuery.replace('+', '');
       const query = { page, rowsPerPage, query: updatedQuery };
       const response = await getPatients(query);
-      localDispatch(setPatients(response.data));
+      dispatch(setPatients(response.data));
     } catch (error) {
       toast.error(error.message);
     } finally {

@@ -29,6 +29,7 @@ import {
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
+import { deletePatient as actionDeletePatient } from 'redux/slices/patientsListSlice';
 import {
   setIsDeleting,
   setPatientToDelete,
@@ -146,6 +147,7 @@ const PatientDetailsModal = ({
     localDispatch(setIsDeleting(true));
     try {
       await requestDeletePatient(patient.id);
+      dispatch(actionDeletePatient(patient.id));
       localDispatch(setPatientToDelete(null));
       dispatch(
         setPatientDetails({ show: false, patientId: null, canDelete: false }),
