@@ -16,6 +16,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
       error,
       max,
       min,
+      maxLength = 60,
       step,
       endAdornment,
       onChange,
@@ -61,6 +62,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
         <TextField
           {...props}
           type={type}
+          inputProps={{ length: 5 }}
           variant={variant as any}
           error={error}
           autoFocus={autoFocus}
@@ -84,6 +86,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
               max,
               min,
               step,
+              maxlength: maxLength,
             },
             classes: {
               root: clsx(styles.searchField, fieldClass),

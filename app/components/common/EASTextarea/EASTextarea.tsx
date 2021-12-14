@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { EASTextFieldProps } from '../EASTextField/EASTextField.types';
 import styles from './EASTextarea.module.scss';
 
-const EASTextarea = ({
+const EASTextarea: React.FC<EASTextFieldProps> = ({
   fieldLabel,
   disabled,
   containerClass,
@@ -14,16 +15,17 @@ const EASTextarea = ({
   type,
   helperText,
   maxRows,
+  maxLength = 250,
   rows,
   onChange,
 }) => {
   const [focused, setFocused] = useState(false);
 
-  const handleFocusChange = (isFocused) => {
+  const handleFocusChange = (isFocused: boolean): void => {
     setFocused(isFocused);
   };
 
-  const handleValueChange = (event) => {
+  const handleValueChange = (event): void => {
     onChange?.(event.target.value);
   };
 
@@ -57,6 +59,9 @@ const EASTextarea = ({
           },
         }}
         InputProps={{
+          inputProps: {
+            maxlength: maxLength,
+          },
           classes: {
             root: styles.textInput,
             multiline: styles.multilineRoot,
