@@ -28,7 +28,7 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
         onChange={() => handleOnSwitchChange()}
       />
       <Typography className={styles.switchStatus}>
-        {isChecked ? textForKey('can') : textForKey('cannot')}
+        {textForKey('can manage own schedules')}
       </Typography>
     </div>
   );

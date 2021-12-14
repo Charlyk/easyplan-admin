@@ -81,11 +81,6 @@ const DoctorForm = ({
 
       {user.roleInClinic === Role.doctor && (
         <div className={styles.group}>
-          <div className={styles.groupHeader}>
-            <div className={styles.titleContainer}>
-              {textForKey('can manage own schedules')}
-            </div>
-          </div>
           <DoctorScheduleCreation user={user} />
         </div>
       )}
