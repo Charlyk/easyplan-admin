@@ -2,10 +2,12 @@ import React, { useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import DoctorBracesSettings from '../DoctorBracesSettings';
 import DoctorCabinets from '../DoctorCabinets';
 import DoctorHolidays from '../DoctorHolidays';
+import DoctorScheduleCreation from '../DoctorSchedulesCreation';
 import DoctorServices from '../DoctorServices';
 import DoctorWorkHours from '../DoctorWorkHours';
 import styles from './DoctorForm.module.scss';
@@ -76,6 +78,17 @@ const DoctorForm = ({
         </div>
         <DoctorCabinets clinicCabinets={clinicCabinets} user={user} />
       </div>
+
+      {user.roleInClinic === Role.doctor && (
+        <div className={styles.group}>
+          <div className={styles.groupHeader}>
+            <div className={styles.titleContainer}>
+              {textForKey('can manage own schedules')}
+            </div>
+          </div>
+          <DoctorScheduleCreation user={user} />
+        </div>
+      )}
 
       <div className={styles.group}>
         <div className={styles.groupHeader}>
