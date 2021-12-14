@@ -1,6 +1,6 @@
 import React from 'react';
 
-function IconArrowNext() {
+function IconArrowNext({ fill }) {
   return (
     <svg
       width='11'
@@ -11,7 +11,7 @@ function IconArrowNext() {
     >
       <path
         d='M6.52699 9L10.9815 4.54545L6.52699 0.0909092L5.76136 0.856534L8.91335 3.99858H0.75V5.09233H8.91335L5.76136 8.24432L6.52699 9Z'
-        fill='#A1A2C6'
+        fill={`${fill}`}
       />
     </svg>
   );
