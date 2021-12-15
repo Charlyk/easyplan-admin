@@ -63,7 +63,6 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
         <TextField
           {...props}
           type={type}
-          inputProps={{ length: 5 }}
           variant={variant as any}
           error={error}
           autoFocus={autoFocus}
