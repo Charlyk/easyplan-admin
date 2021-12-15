@@ -100,7 +100,6 @@ const PatientsList = ({ query: initialQuery }) => {
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
     {
-      // isLoading,
       rowsPerPage,
       page,
       showCreateModal,
