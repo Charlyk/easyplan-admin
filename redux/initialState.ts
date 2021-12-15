@@ -97,6 +97,10 @@ const initialState: ReduxState = Object.freeze({
     message: null,
     severity: null,
   },
+  invoicesButton: {
+    invoices: [],
+    isLoading: false,
+  },
 });
 
 export default initialState;

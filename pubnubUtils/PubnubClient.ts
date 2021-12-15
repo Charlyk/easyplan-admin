@@ -1,11 +1,16 @@
+import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PubNub from 'pubnub';
+import {
+  addInvoice,
+  removeInvoice,
+  updateInvoice,
+} from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
+import { textForKey } from 'app/utils/localization';
 import { getClinicDetails } from 'middleware/api/clinic';
 import {
-  toggleAppointmentsUpdate,
   toggleExchangeRateUpdate,
   togglePatientsListUpdate,
-  toggleUpdateInvoices,
   triggerUsersUpdate,
 } from 'redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
@@ -27,13 +32,9 @@ import {
   setUpdatedDeal,
   setUpdatedReminder,
 } from 'redux/slices/crmSlice';
+import { showSuccessNotification } from 'redux/slices/globalNotificationsSlice';
 import { ReduxStore as store } from 'store';
-import {
-  DealPayload,
-  InvoicePayload,
-  MessageAction,
-  PaymentPayload,
-} from 'types';
+import { DealPayload, MessageAction, PatientDebt, ShortInvoice } from 'types';
 import { PubnubMessage, Schedule } from 'types';
 
 const pubnubUUID = PubNub.generateUUID();
@@ -53,9 +54,6 @@ export const handlePubnubMessage = (event: PubnubMessage) => {
       case MessageAction.InvitationRemoved:
       case MessageAction.ClinicInvitationAccepted:
         handleUpdateClinicUsers();
-        break;
-      case MessageAction.CreatedNewInvoice:
-        handleUpdateInvoices(payload);
         break;
       case MessageAction.PauseUpdated:
       case MessageAction.ScheduleUpdated:
@@ -109,41 +107,33 @@ export const handlePubnubMessage = (event: PubnubMessage) => {
       case MessageAction.UserAccessBlocked:
         handleUserAccessChanged(payload);
         break;
+      case MessageAction.InvoiceCreated:
+        handleInvoiceCreated(payload);
+        break;
+      case MessageAction.InvoiceUpdated:
+        handleInvoiceUpdated(payload);
+        break;
     }
   } catch (error) {
     console.error('error receiving message', error);
   }
 };
 
+const updateScheduleDetails = debounce((detailsId: number) => {
+  store.dispatch(fetchScheduleDetails(detailsId));
+}, 100);
+
 const handleUpdateClinicUsers = () => {
   store.dispatch(triggerUsersUpdate(true));
-};
-
-const handleUpdateInvoices = (invoice: InvoicePayload) => {
-  const appState = store.getState();
-  const scheduleDetails = scheduleDetailsSelector(appState);
-  setTimeout(() => {
-    const { patient } = invoice;
-    if (scheduleDetails != null && patient.id === scheduleDetails.patient.id) {
-      store.dispatch(fetchScheduleDetails(scheduleDetails.id));
-    }
-  }, 100);
-
-  // update appointments list
-  store.dispatch(toggleAppointmentsUpdate());
-  // update invoices
-  store.dispatch(toggleUpdateInvoices());
 };
 
 const handleUpdateSchedules = (schedule: Schedule) => {
   const appState = store.getState();
   const scheduleDetails = calendarScheduleDetailsSelector(appState);
   store.dispatch(updateSchedule(schedule));
-  setTimeout(() => {
-    if (scheduleDetails != null && schedule.id === scheduleDetails.id) {
-      store.dispatch(fetchScheduleDetails(schedule.id));
-    }
-  });
+  if (scheduleDetails != null && schedule.id === scheduleDetails.id) {
+    updateScheduleDetails(schedule.id);
+  }
 };
 
 const handleAddNewSchedule = (schedule: Schedule) => {
@@ -176,18 +166,17 @@ const handleUpdateExchangeRatesRequired = () => {
   store.dispatch(setClinicExchangeRatesUpdateRequired(true));
 };
 
-const handleNewPaymentRegistered = (message: PaymentPayload) => {
+const handleNewPaymentRegistered = (message: PatientDebt) => {
   const appState = store.getState();
   const scheduleDetails = scheduleDetailsSelector(appState);
+  store.dispatch(removeInvoice(message));
   store.dispatch(toggleUpdateInvoice(message));
-  setTimeout(() => {
-    if (
-      scheduleDetails != null &&
-      message.patientId === scheduleDetails.patient.id
-    ) {
-      store.dispatch(fetchScheduleDetails(scheduleDetails.id));
-    }
-  }, 100);
+  if (
+    scheduleDetails != null &&
+    message.patientId === scheduleDetails.patient.id
+  ) {
+    updateScheduleDetails(scheduleDetails.id);
+  }
 };
 
 const handleUpdateMessageStatus = (payload: any) => {
@@ -240,4 +229,18 @@ const handleUserAccessChanged = (payload: any) => {
   }
   store.dispatch(setUserClinicAccessChange(payload));
   setTimeout(() => store.dispatch(setUserClinicAccessChange(null)), 600);
+};
+
+const handleInvoiceCreated = (payload: ShortInvoice) => {
+  store.dispatch(addInvoice(payload));
+  store.dispatch(showSuccessNotification(textForKey('invoice_created')));
+};
+
+const handleInvoiceUpdated = (payload: ShortInvoice) => {
+  const appState = store.getState();
+  const scheduleDetails = scheduleDetailsSelector(appState);
+  store.dispatch(updateInvoice(payload));
+  if (scheduleDetails != null && payload.scheduleId === scheduleDetails.id) {
+    updateScheduleDetails(payload.scheduleId);
+  }
 };

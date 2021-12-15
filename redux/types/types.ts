@@ -12,6 +12,7 @@ import {
   ClinicServiceCategory,
   DoctorScheduleDetails,
   NotificationSeverity,
+  ShortInvoice,
 } from 'types';
 
 export interface CalendarDataState {
@@ -106,6 +107,11 @@ export interface GlobalNotificationsState {
   severity?: NotificationSeverity | null;
 }
 
+export interface InvoicesButtonState {
+  invoices: ShortInvoice[];
+  isLoading: boolean;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -139,4 +145,5 @@ export interface ReduxState {
   servicesList: ServicesListState;
   doctorScheduleDetails: DoctorScheduleDetailsState;
   globalNotifications: GlobalNotificationsState;
+  invoicesButton: InvoicesButtonState;
 }

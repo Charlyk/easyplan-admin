@@ -1,4 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
+import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import initialState from 'redux/initialState';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
@@ -52,6 +53,7 @@ export default combineReducers({
   servicesList,
   doctorScheduleDetails,
   globalNotifications,
+  invoicesButton,
 });
 
 function main(state = initialState, { type, payload } = {}) {
