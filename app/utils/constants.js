@@ -64,6 +64,9 @@ export const Role = {
   invitations: 'INVITATIONS',
 };
 
+export const singleLineMaxCharLength = 60;
+export const textAreaMaxCharLength = 250;
+
 export const EmailRegex = /.+@.+\.[A-Za-z]+$/;
 export const PasswordRegex =
   /(?=^.{6,}$)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9]).*/;

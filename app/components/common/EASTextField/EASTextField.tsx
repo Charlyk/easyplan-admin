@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { singleLineMaxCharLength } from 'app/utils/constants';
 import styles from './EASTextField.module.scss';
 import { EASTextFieldProps } from './EASTextField.types';
 
@@ -16,6 +17,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
       error,
       max,
       min,
+      maxLength = singleLineMaxCharLength,
       step,
       endAdornment,
       onChange,
@@ -84,6 +86,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
               max,
               min,
               step,
+              maxlength: maxLength,
             },
             classes: {
               root: clsx(styles.searchField, fieldClass),
