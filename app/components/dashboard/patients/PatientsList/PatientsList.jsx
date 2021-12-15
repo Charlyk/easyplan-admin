@@ -28,13 +28,9 @@ import {
 import {
   globalPatientListSelector,
   arePatientsLoadingSelector,
-  isPatientBeingDeletedSelector,
 } from 'redux/selectors/patientSelector';
 import { updatePatientsListSelector } from 'redux/selectors/rootSelector';
-import {
-  fetchPatientList,
-  requestDeletePatient,
-} from 'redux/slices/patientsListSlice';
+import { fetchPatientList } from 'redux/slices/patientsListSlice';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -44,7 +40,6 @@ import reducer, {
   initialState,
   setPage,
   setInitialQuery,
-  setPatientToDelete,
   setRowsPerPage,
   setSearchQuery,
   setShowCreateModal,
@@ -52,9 +47,7 @@ import reducer, {
 } from './PatientsList.reducer';
 
 const PatientRow = dynamic(() => import('./PatientRow'));
-const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
-);
+
 const CSVImportModal = dynamic(() =>
   import('app/components/common/CSVImportModal'),
 );
@@ -98,20 +91,11 @@ const PatientsList = ({ query: initialQuery }) => {
   const toast = useContext(NotificationsContext);
   const patients = useSelector(globalPatientListSelector);
   const isLoading = useSelector(arePatientsLoadingSelector);
-  const isDeleting = useSelector(isPatientBeingDeletedSelector);
   const authToken = useSelector(authTokenSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
-    {
-      rowsPerPage,
-      page,
-      showCreateModal,
-      searchQuery,
-      showDeleteDialog,
-      patientToDelete,
-      showImportModal,
-    },
+    { rowsPerPage, page, showCreateModal, searchQuery, showImportModal },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
@@ -172,17 +156,6 @@ const PatientsList = ({ query: initialQuery }) => {
     localDispatch(setRowsPerPage(parseInt(event.target.value, 10)));
   };
 
-  const handleCloseDelete = () => {
-    localDispatch(setPatientToDelete(null));
-  };
-
-  const handleDeleteConfirmed = async () => {
-    dispatch(
-      setPatientDetails({ show: false, patientId: null, canDelete: false }),
-    );
-    dispatch(requestDeletePatient(patientToDelete.id));
-  };
-
   const handleStartUploadPatients = () => {
     localDispatch(setShowImportModal(true));
   };
@@ -235,14 +208,6 @@ const PatientsList = ({ query: initialQuery }) => {
         fields={importFields}
         onImport={handleImportPatients}
         onClose={handleCloseImportModal}
-      />
-      <ConfirmationModal
-        isLoading={isDeleting}
-        show={showDeleteDialog}
-        title={textForKey('Delete patient')}
-        message={textForKey('delete_patient_message')}
-        onConfirm={handleDeleteConfirmed}
-        onClose={handleCloseDelete}
       />
       <CreatePatientModal
         open={showCreateModal}
