@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -113,7 +114,7 @@ const PageHeader = ({
         placement='bottom-end'
       />
       <div
-        className={`${styles.title} ${isDoctor && styles.flex}`}
+        className={clsx(styles.title, { [styles.flex]: isDoctor })}
         style={{ marginTop: titleComponent != null ? 0 : '0.5rem' }}
       >
         {isDoctor &&
