@@ -28,7 +28,7 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
         onChange={() => handleOnSwitchChange()}
       />
       <Typography className={styles.switchStatus}>
-        {textForKey('can manage own schedules')}
+        {textForKey('can_manage_own_schedules')}
       </Typography>
     </div>
   );
