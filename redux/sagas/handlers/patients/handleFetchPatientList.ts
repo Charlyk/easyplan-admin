@@ -2,18 +2,17 @@ import { SagaReturnType, call, put, takeLatest } from 'redux-saga/effects';
 import { requestFetchPatientList } from 'redux/sagas/requests/patients/patientListRequest';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import { setPatients, fetchPatientList } from 'redux/slices/patientsListSlice';
+import { PayloadAction } from '@reduxjs/toolkit';
 
-export function* handleFetchPatientList({
-  payload: { query },
-}: {
-  payload: {
+export function* handleFetchPatientList(
+  action: PayloadAction<{
     query: Record<string, string>;
-  };
-}) {
+  }>,
+) {
   try {
     const response: SagaReturnType<typeof requestFetchPatientList> = yield call(
       requestFetchPatientList,
-      query,
+      action.payload.query,
     );
 
     yield put(setPatients(response.data));
