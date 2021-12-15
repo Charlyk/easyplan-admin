@@ -13,6 +13,7 @@ import {
   DoctorScheduleDetails,
   NotificationSeverity,
   ShortInvoice,
+  ExchangeRate,
 } from 'types';
 
 export interface CalendarDataState {
@@ -66,6 +67,7 @@ export interface AppDataState {
   currentUser: CurrentUser | null;
   authToken: string | null;
   isUpdatingProfile: boolean;
+  isUpdatingClinic: boolean;
 }
 
 export interface CabinetsDataState {
@@ -112,6 +114,11 @@ export interface InvoicesButtonState {
   isLoading: boolean;
 }
 
+export interface ExchangeRatesState {
+  rates: ExchangeRate[];
+  isFetching: boolean;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -146,4 +153,5 @@ export interface ReduxState {
   doctorScheduleDetails: DoctorScheduleDetailsState;
   globalNotifications: GlobalNotificationsState;
   invoicesButton: InvoicesButtonState;
+  exchangeRates: ExchangeRatesState;
 }

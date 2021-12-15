@@ -1,15 +1,14 @@
 import debounce from 'lodash/debounce';
 import moment from 'moment-timezone';
 import PubNub from 'pubnub';
+import { fetchExchangeRatesList } from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
 import {
   addInvoice,
   removeInvoice,
   updateInvoice,
 } from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import { textForKey } from 'app/utils/localization';
-import { getClinicDetails } from 'middleware/api/clinic';
 import {
-  toggleExchangeRateUpdate,
   togglePatientsListUpdate,
   triggerUsersUpdate,
 } from 'redux/actions/actions';
@@ -17,7 +16,7 @@ import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicAction
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
 import { scheduleDetailsSelector } from 'redux/selectors/doctorScheduleDetailsSelector';
 import { calendarScheduleDetailsSelector } from 'redux/selectors/scheduleSelector';
-import { setCurrentClinic } from 'redux/slices/appDataSlice';
+import { requestUpdateCurrentClinic } from 'redux/slices/appDataSlice';
 import {
   addNewSchedule,
   deleteSchedule,
@@ -145,13 +144,8 @@ const handleDeleteSchedule = (schedule: Schedule) => {
 };
 
 const handleUpdateCurrentClinic = async () => {
-  try {
-    const date = String(moment().format('YYYY-MM-DD'));
-    const response = await getClinicDetails(date);
-    store.dispatch(setCurrentClinic(response.data));
-  } catch (error) {
-    console.error(error);
-  }
+  const date = String(moment().format('YYYY-MM-DD'));
+  store.dispatch(requestUpdateCurrentClinic(date));
 };
 
 const handleUpdatePatients = () => {
@@ -159,7 +153,7 @@ const handleUpdatePatients = () => {
 };
 
 const handleUpdateExchangeRates = () => {
-  store.dispatch(toggleExchangeRateUpdate());
+  store.dispatch(fetchExchangeRatesList());
 };
 
 const handleUpdateExchangeRatesRequired = () => {

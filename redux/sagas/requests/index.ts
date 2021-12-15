@@ -5,3 +5,5 @@ export * from './serviceDetailsRequest';
 export * from './categoryDeleteRequest';
 export * from './updateUserProfileRequest';
 export * from './pendingInvoicesRequest';
+export * from './clinicExchangeRatesRequest';
+export * from './fetchClinicDetailsRequest';
