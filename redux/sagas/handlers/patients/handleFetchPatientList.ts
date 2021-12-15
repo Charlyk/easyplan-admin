@@ -1,22 +1,19 @@
-import { IncomingHttpHeaders } from 'http';
 import { SagaReturnType, call, put, takeLatest } from 'redux-saga/effects';
 import { requestFetchPatientList } from 'redux/sagas/requests/patients/patientListRequest';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import { setPatients, fetchPatientList } from 'redux/slices/patientsListSlice';
 
 export function* handleFetchPatientList({
-  payload,
+  payload: { query },
 }: {
   payload: {
     query: Record<string, string>;
-    headers: IncomingHttpHeaders;
   };
 }) {
   try {
     const response: SagaReturnType<typeof requestFetchPatientList> = yield call(
       requestFetchPatientList,
-      payload.query,
-      payload.headers,
+      query,
     );
 
     yield put(setPatients(response.data));
@@ -31,6 +28,5 @@ export function* handleFetchPatientList({
 }
 
 export function* patientListWatcher() {
-  // @ts-ignore:next-line
   yield takeLatest(fetchPatientList.type, handleFetchPatientList);
 }
