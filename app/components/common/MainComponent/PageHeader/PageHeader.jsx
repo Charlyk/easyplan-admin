@@ -2,12 +2,15 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
 import InvoicesButton from 'app/components/dashboard/InvoicesButton';
+import IconArrowBack from 'app/components/icons/iconArrowBack';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconMore from 'app/components/icons/iconMore';
@@ -50,6 +53,7 @@ const PageHeader = ({
   onEditProfile,
   user,
 }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -110,9 +114,21 @@ const PageHeader = ({
         placement='bottom-end'
       />
       <div
-        className={styles.title}
+        className={clsx(styles.title, { [styles.flex]: isDoctor })}
         style={{ marginTop: titleComponent != null ? 0 : '0.5rem' }}
       >
+        {isDoctor &&
+          Object.prototype.hasOwnProperty.call(router.query, 'scheduleId') && (
+            <IconButton
+              className={styles.goBackBtn}
+              onClick={() => router.back()}
+            >
+              <IconArrowBack
+                style={{ transform: 'rotate(180deg)' }}
+                fill='#3A83DC'
+              />
+            </IconButton>
+          )}
         {titleComponent || title}
       </div>
       {!isDoctor && canRegisterPayments && (
