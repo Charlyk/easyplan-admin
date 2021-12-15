@@ -134,9 +134,6 @@ const PatientsList = ({ query: initialQuery }) => {
   }, [page, rowsPerPage]);
 
   const fetchPatients = async () => {
-    if (currentClinic == null) {
-      return;
-    }
     const updatedQuery = searchQuery.replace('+', '');
     const query = { page, rowsPerPage, query: updatedQuery };
     dispatch(fetchPatientList({ query }));
