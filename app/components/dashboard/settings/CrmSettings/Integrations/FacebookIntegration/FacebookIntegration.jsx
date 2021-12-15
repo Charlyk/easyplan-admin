@@ -52,16 +52,18 @@ const FacebookIntegration = ({ currentClinic }) => {
     setPagesModal({ open: false, pages: [] });
   };
 
-  const handlePageSelected = async (pages) => {
+  const handlePageSelected = async (page) => {
     try {
-      const requestBody = pages.map((page) => ({
-        accessToken: page.access_token,
-        category: page.category,
-        name: page.name,
-        pageId: page.id,
-      }));
+      const requestBody = [
+        {
+          accessToken: page.access_token,
+          category: page.category,
+          name: page.name,
+          pageId: page.id,
+        },
+      ];
       await saveClinicFacebookPage(requestBody);
-      setFacebookPages(pages);
+      setFacebookPages([page]);
     } catch (error) {
       toast.error(error.message);
     }

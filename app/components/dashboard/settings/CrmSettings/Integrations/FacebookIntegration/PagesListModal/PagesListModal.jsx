@@ -29,6 +29,8 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
     }
   };
 
+  console.log(pages);
+
   return (
     <EASModal
       open={open}
