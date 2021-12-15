@@ -111,6 +111,7 @@ export interface PatientListState {
     data: Patient[];
     total: number;
   };
+  isLoading: boolean;
 }
 
 export interface ReduxState {

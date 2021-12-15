@@ -13,3 +13,8 @@ export const globalPatientListSelector = createSelector(
   patientListSelector,
   (patientList) => patientList.patients,
 );
+
+export const patientIsLoadingSelector = createSelector(
+  patientListSelector,
+  (patientList) => patientList.isLoading,
+);

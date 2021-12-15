@@ -5,12 +5,12 @@ import PatientsList from 'app/components/dashboard/patients/PatientsList';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { getPatients } from 'middleware/api/patients';
 import {
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { fetchPatientList } from 'redux/slices/patientsListSlice';
 import { wrapper } from 'store';
 
 const NewPatients = ({ data, query: initialQuery }) => {
@@ -60,12 +60,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
           };
         }
 
-        const response = await getPatients(query, req.headers);
-        const { data } = response;
+        store.dispatch(fetchPatientList({ query, headers: req.headers }));
         return {
           props: {
             query,
-            data,
           },
         };
       } catch (error) {
