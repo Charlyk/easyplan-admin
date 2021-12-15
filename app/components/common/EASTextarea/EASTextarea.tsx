@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { textAreaMaxCharLength } from 'app/utils/constants';
 import { EASTextFieldProps } from '../EASTextField/EASTextField.types';
 import styles from './EASTextarea.module.scss';
 
@@ -15,7 +16,7 @@ const EASTextarea: React.FC<EASTextFieldProps> = ({
   type,
   helperText,
   maxRows,
-  maxLength = 250,
+  maxLength = textAreaMaxCharLength,
   rows,
   onChange,
 }) => {
