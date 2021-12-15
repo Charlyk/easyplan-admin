@@ -1,4 +1,4 @@
-import { Cabinet, UserService } from 'types';
+import { Cabinet, UserRole, UserService } from 'types';
 
 export interface ClinicUser {
   id: number;
@@ -10,7 +10,7 @@ export interface ClinicUser {
   phoneNumber?: string;
   email: string;
   avatar?: string;
-  roleInClinic: 'ADMIN' | 'MANAGER' | 'DOCTOR' | 'RECEPTION' | 'NONE';
+  roleInClinic: UserRole;
   canRegisterPayments: boolean;
   created: string;
   services: UserService[];

@@ -43,6 +43,7 @@ export enum MessageAction {
   UserCalendarVisibilityChanged = 'UserCalendarVisibilityChanged',
   UserAccessBlocked = 'UserAccessBlocked',
   UserAccessRestored = 'UserAccessRestored',
+  UserCanCreateScheduleChanged = 'UserCanCreateScheduleChanged',
 }
 
 export type DealPayload = {

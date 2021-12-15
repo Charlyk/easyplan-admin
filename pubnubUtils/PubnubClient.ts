@@ -12,7 +12,7 @@ import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicAction
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
 import { scheduleDetailsSelector } from 'redux/selectors/doctorScheduleDetailsSelector';
 import { calendarScheduleDetailsSelector } from 'redux/selectors/scheduleSelector';
-import { setCurrentClinic } from 'redux/slices/appDataSlice';
+import { setCurrentClinic, setCurrentUser } from 'redux/slices/appDataSlice';
 import {
   addNewSchedule,
   deleteSchedule,
@@ -29,12 +29,14 @@ import {
 } from 'redux/slices/crmSlice';
 import { ReduxStore as store } from 'store';
 import {
+  CurrentUser,
   DealPayload,
   InvoicePayload,
   MessageAction,
   PaymentPayload,
 } from 'types';
 import { PubnubMessage, Schedule } from 'types';
+import { currentUserSelector } from '../redux/selectors/appDataSelector';
 
 const pubnubUUID = PubNub.generateUUID();
 const initializationParams = {
@@ -108,6 +110,9 @@ export const handlePubnubMessage = (event: PubnubMessage) => {
       case MessageAction.UserAccessRestored:
       case MessageAction.UserAccessBlocked:
         handleUserAccessChanged(payload);
+        break;
+      case MessageAction.UserCanCreateScheduleChanged:
+        handleUserCanCreateScheduleChanged(payload);
         break;
     }
   } catch (error) {
@@ -240,4 +245,14 @@ const handleUserAccessChanged = (payload: any) => {
   }
   store.dispatch(setUserClinicAccessChange(payload));
   setTimeout(() => store.dispatch(setUserClinicAccessChange(null)), 600);
+};
+
+const handleUserCanCreateScheduleChanged = (payload: CurrentUser) => {
+  const appState = store.getState();
+  const currentUser = currentUserSelector(appState);
+  if (currentUser.id !== payload.id) {
+    // no need to handle if the received user is not same as current user
+    return;
+  }
+  store.dispatch(setCurrentUser(payload));
 };
