@@ -1,4 +1,3 @@
-import { IncomingHttpHeaders } from 'http';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
@@ -12,10 +11,12 @@ const patientsListSlice = createSlice({
       state,
       _action: PayloadAction<{
         query: Record<string, string>;
-        headers: IncomingHttpHeaders;
       }>,
     ) {
       state.isLoading = true;
+    },
+    requestDeletePatient(state, _action: PayloadAction<number>) {
+      state.isDeleting = true;
     },
     setPatients(
       state,
@@ -29,6 +30,7 @@ const patientsListSlice = createSlice({
         (patient) => patient.id !== action.payload,
       );
       state.patients.total = state.patients.data.length;
+      state.isDeleting = false;
     },
   },
   extraReducers: {
@@ -41,7 +43,11 @@ const patientsListSlice = createSlice({
   },
 });
 
-export const { fetchPatientList, setPatients, deletePatient } =
-  patientsListSlice.actions;
+export const {
+  fetchPatientList,
+  setPatients,
+  requestDeletePatient,
+  deletePatient,
+} = patientsListSlice.actions;
 
 export default patientsListSlice.reducer;

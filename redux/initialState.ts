@@ -103,6 +103,7 @@ const initialState: ReduxState = Object.freeze({
       total: 0,
     },
     isLoading: false,
+    isDeleting: false,
   },
 });
 

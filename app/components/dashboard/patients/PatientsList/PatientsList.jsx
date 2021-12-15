@@ -20,17 +20,21 @@ import IconSearch from 'app/components/icons/iconSearch';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import { deletePatient, importPatientsFromFile } from 'middleware/api/patients';
+import { importPatientsFromFile } from 'middleware/api/patients';
 import {
   setPatientDetails,
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
 import {
   globalPatientListSelector,
-  patientIsLoadingSelector,
+  arePatientsLoadingSelector,
+  isPatientBeingDeletedSelector,
 } from 'redux/selectors/patientSelector';
 import { updatePatientsListSelector } from 'redux/selectors/rootSelector';
-import { fetchPatientList } from 'redux/slices/patientsListSlice';
+import {
+  fetchPatientList,
+  requestDeletePatient,
+} from 'redux/slices/patientsListSlice';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -40,7 +44,6 @@ import reducer, {
   initialState,
   setPage,
   setInitialQuery,
-  setIsDeleting,
   setPatientToDelete,
   setRowsPerPage,
   setSearchQuery,
@@ -94,7 +97,8 @@ const PatientsList = ({ query: initialQuery }) => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const patients = useSelector(globalPatientListSelector);
-  const isLoading = useSelector(patientIsLoadingSelector);
+  const isLoading = useSelector(arePatientsLoadingSelector);
+  const isDeleting = useSelector(isPatientBeingDeletedSelector);
   const authToken = useSelector(authTokenSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const updatePatients = useSelector(updatePatientsListSelector);
@@ -106,7 +110,6 @@ const PatientsList = ({ query: initialQuery }) => {
       searchQuery,
       showDeleteDialog,
       patientToDelete,
-      isDeleting,
       showImportModal,
     },
     localDispatch,
@@ -174,20 +177,10 @@ const PatientsList = ({ query: initialQuery }) => {
   };
 
   const handleDeleteConfirmed = async () => {
-    if (patientToDelete == null) return;
-    localDispatch(setIsDeleting(true));
-    try {
-      await deletePatient(patientToDelete.id);
-      localDispatch(setPatientToDelete(null));
-      await fetchPatients();
-      dispatch(
-        setPatientDetails({ show: false, patientId: null, canDelete: false }),
-      );
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(setIsDeleting(false));
-    }
+    dispatch(
+      setPatientDetails({ show: false, patientId: null, canDelete: false }),
+    );
+    dispatch(requestDeletePatient(patientToDelete.id));
   };
 
   const handleStartUploadPatients = () => {

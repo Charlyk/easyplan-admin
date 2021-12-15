@@ -112,6 +112,7 @@ export interface PatientListState {
     total: number;
   };
   isLoading: boolean;
+  isDeleting: boolean;
 }
 
 export interface ReduxState {

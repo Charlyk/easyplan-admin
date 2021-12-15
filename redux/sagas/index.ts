@@ -7,6 +7,7 @@ import {
   deleteCategoryWatcher,
   updateProfileWatcher,
   patientListWatcher,
+  deletePatientWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -18,5 +19,6 @@ export default function* rootSaga() {
     deleteCategoryWatcher(),
     updateProfileWatcher(),
     patientListWatcher(),
+    deletePatientWatcher(),
   ]);
 }
