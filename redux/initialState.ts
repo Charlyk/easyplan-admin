@@ -43,6 +43,7 @@ const initialState: ReduxState = Object.freeze({
     currentUser: null,
     authToken: null,
     isUpdatingProfile: false,
+    isUpdatingClinic: false,
   },
   clinicData: {
     updateClinicData: false,
@@ -104,6 +105,14 @@ const initialState: ReduxState = Object.freeze({
     },
     isLoading: false,
     isDeleting: false,
+  },
+  invoicesButton: {
+    invoices: [],
+    isLoading: false,
+  },
+  exchangeRates: {
+    rates: [],
+    isFetching: false,
   },
 });
 

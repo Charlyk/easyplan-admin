@@ -86,7 +86,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
               max,
               min,
               step,
-              maxlength: maxLength,
+              maxLength,
             },
             classes: {
               root: clsx(styles.searchField, fieldClass),

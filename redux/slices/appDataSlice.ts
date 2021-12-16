@@ -10,8 +10,12 @@ const appDataSlice = createSlice({
   name: 'appData',
   initialState: initialState.appData,
   reducers: {
+    requestUpdateCurrentClinic(state, _action: PayloadAction<string>) {
+      state.isUpdatingClinic = true;
+    },
     setCurrentClinic(state, action: PayloadAction<CurrentClinic>) {
       state.currentClinic = action.payload;
+      state.isUpdatingClinic = false;
     },
     setCurrentUser(state, action: PayloadAction<CurrentUser>) {
       state.currentUser = action.payload;
@@ -23,9 +27,14 @@ const appDataSlice = createSlice({
       state.currentClinic = action.payload.currentClinic;
       state.currentUser = action.payload.currentUser;
       state.authToken = action.payload.authToken;
+      state.isUpdatingClinic = false;
+      state.isUpdatingProfile = false;
     },
     setIsUpdatingProfile(state, action: PayloadAction<boolean>) {
       state.isUpdatingProfile = action.payload;
+    },
+    setIsUpdatingClinic(state, action: PayloadAction<boolean>) {
+      state.isUpdatingClinic = action.payload;
     },
     updateUserProfile(state, _action: PayloadAction<UpdateProfileRequest>) {
       state.isUpdatingProfile = true;
@@ -48,6 +57,8 @@ export const {
   setAuthToken,
   setIsUpdatingProfile,
   updateUserProfile,
+  requestUpdateCurrentClinic,
+  setIsUpdatingClinic,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;

@@ -61,7 +61,7 @@ const EASTextarea: React.FC<EASTextFieldProps> = ({
         }}
         InputProps={{
           inputProps: {
-            maxlength: maxLength,
+            maxLength: maxLength,
           },
           classes: {
             root: styles.textInput,

@@ -1,4 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
+import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
+import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import initialState from 'redux/initialState';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
@@ -54,6 +56,8 @@ export default combineReducers({
   doctorScheduleDetails,
   globalNotifications,
   patientList,
+  invoicesButton,
+  exchangeRates,
 });
 
 function main(state = initialState, { type, payload } = {}) {
