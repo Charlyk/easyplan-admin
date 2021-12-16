@@ -17,6 +17,7 @@ import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
 import { scheduleDetailsSelector } from 'redux/selectors/doctorScheduleDetailsSelector';
 import { calendarScheduleDetailsSelector } from 'redux/selectors/scheduleSelector';
 import { requestUpdateCurrentClinic } from 'redux/slices/appDataSlice';
+import { setCurrentUser } from 'redux/slices/appDataSlice';
 import {
   addNewSchedule,
   deleteSchedule,
@@ -35,6 +36,7 @@ import { showSuccessNotification } from 'redux/slices/globalNotificationsSlice';
 import { ReduxStore as store } from 'store';
 import { DealPayload, MessageAction, PatientDebt, ShortInvoice } from 'types';
 import { PubnubMessage, Schedule } from 'types';
+import { currentUserSelector } from '../redux/selectors/appDataSelector';
 
 const pubnubUUID = PubNub.generateUUID();
 const initializationParams = {
@@ -111,6 +113,9 @@ export const handlePubnubMessage = (event: PubnubMessage) => {
         break;
       case MessageAction.InvoiceUpdated:
         handleInvoiceUpdated(payload);
+        break;
+      case MessageAction.UserCanCreateScheduleChanged:
+        handleUserCanCreateScheduleChanged(payload);
         break;
     }
   } catch (error) {
@@ -237,4 +242,14 @@ const handleInvoiceUpdated = (payload: ShortInvoice) => {
   if (scheduleDetails != null && payload.scheduleId === scheduleDetails.id) {
     updateScheduleDetails(payload.scheduleId);
   }
+};
+
+const handleUserCanCreateScheduleChanged = (payload) => {
+  const appState = store.getState();
+  const currentUser = currentUserSelector(appState);
+  if (currentUser.id !== payload.id) {
+    // no need to handle if the received user is not same as current user
+    return;
+  }
+  store.dispatch(setCurrentUser(payload));
 };
