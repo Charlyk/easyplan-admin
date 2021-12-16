@@ -35,8 +35,12 @@ export default authorized(async (req, res) => {
         await handler(toggleDoctorCreateShcedulesPermission, req, res);
       if (response !== null) {
         res.json(response);
-        break;
       }
+      break;
     }
+    default:
+      res.setHeader('Allow', ['PUT']);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
+      break;
   }
 });
