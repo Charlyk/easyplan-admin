@@ -11,6 +11,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { setPatients } from 'redux/slices/patientsListSlice';
 import { wrapper } from 'store';
 
 const NewPatients = ({ data, query: initialQuery }) => {
@@ -59,13 +60,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
             },
           };
         }
-
         const response = await getPatients(query, req.headers);
         const { data } = response;
+        store.dispatch(setPatients(data));
         return {
           props: {
             query,
-            data,
           },
         };
       } catch (error) {

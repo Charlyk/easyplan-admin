@@ -98,6 +98,14 @@ const initialState: ReduxState = Object.freeze({
     message: null,
     severity: null,
   },
+  patientList: {
+    patients: {
+      data: [],
+      total: 0,
+    },
+    isLoading: false,
+    isDeleting: false,
+  },
   invoicesButton: {
     invoices: [],
     isLoading: false,
