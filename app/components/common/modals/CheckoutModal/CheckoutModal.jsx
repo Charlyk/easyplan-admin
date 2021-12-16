@@ -517,13 +517,6 @@ const CheckoutModal = ({
                     value={invoiceDetails.patient}
                     onValueClick={handlePatientClick}
                   />
-                </TableHead>
-                <TableBody
-                  classes={{
-                    root:
-                      window.innerHeight > 720 ? styles.detailsTableBody : '',
-                  }}
-                >
                   {(!isNew || schedule != null) &&
                     invoiceDetails.schedule != null && (
                       <DetailsRow
@@ -531,6 +524,13 @@ const CheckoutModal = ({
                         value={{ name: scheduleTime }}
                       />
                     )}
+                </TableHead>
+                <TableBody
+                  classes={{
+                    root:
+                      window.innerHeight > 720 ? styles.detailsTableBody : '',
+                  }}
+                >
                   <TableRow className={styles.row}>
                     <TableCell
                       align='center'
