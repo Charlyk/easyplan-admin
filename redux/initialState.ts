@@ -65,6 +65,7 @@ const initialState: ReduxState = Object.freeze({
     startHour: null,
     endHour: null,
     cabinet: null,
+    isDoctorMode: false,
   },
   cabinetsData: {
     cabinets: [],

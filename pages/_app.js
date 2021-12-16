@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
+
 import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,9 +29,11 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
 import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
+import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import types from 'redux/types';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
@@ -38,6 +41,10 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
+
+const AddAppointmentModal = dynamic(() =>
+  import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
+);
 
 const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
@@ -51,6 +58,7 @@ const App = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
+  const appointmentModal = useSelector(appointmentModalSelector);
   const [isChecking, setIsChecking] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
@@ -108,6 +116,10 @@ const App = ({ Component, pageProps }) => {
 
   const handlePubnubMessageReceived = (message) => {
     handlePubnubMessage(message);
+  };
+
+  const handleAppointmentModalClose = () => {
+    dispatch(closeAppointmentModal());
   };
 
   const setChatVisitor = (currentUser) => {
@@ -231,6 +243,21 @@ const App = ({ Component, pageProps }) => {
                     onConfirm={handleUserLogout}
                     onClose={handleCancelLogout}
                     show={logout}
+                  />
+                )}
+                {appointmentModal?.open && (
+                  <AddAppointmentModal
+                    currentClinic={currentClinic}
+                    onClose={handleAppointmentModalClose}
+                    schedule={appointmentModal?.schedule}
+                    open={appointmentModal?.open}
+                    doctor={appointmentModal?.doctor}
+                    date={appointmentModal?.date}
+                    patient={appointmentModal?.patient}
+                    startHour={appointmentModal?.startHour}
+                    endHour={appointmentModal?.endHour}
+                    cabinet={appointmentModal?.cabinet}
+                    isDoctorMode={appointmentModal?.isDoctorMode}
                   />
                 )}
                 {imageModal.open && (
