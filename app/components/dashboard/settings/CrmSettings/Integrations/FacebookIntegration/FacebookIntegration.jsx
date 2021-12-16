@@ -52,18 +52,16 @@ const FacebookIntegration = ({ currentClinic }) => {
     setPagesModal({ open: false, pages: [] });
   };
 
-  const handlePageSelected = async (page) => {
+  const handlePageSelected = async (pages) => {
     try {
-      const requestBody = [
-        {
-          accessToken: page.access_token,
-          category: page.category,
-          name: page.name,
-          pageId: page.id,
-        },
-      ];
+      const requestBody = pages.map((page) => ({
+        accessToken: page.access_token,
+        category: page.category,
+        name: page.name,
+        pageId: page.id,
+      }));
       await saveClinicFacebookPage(requestBody);
-      setFacebookPages([page]);
+      setFacebookPages(pages);
     } catch (error) {
       toast.error(error.message);
     }
@@ -90,7 +88,7 @@ const FacebookIntegration = ({ currentClinic }) => {
         if (pages.length > 1) {
           handleShowPagesList(pages);
         } else {
-          await handlePageSelected(pages[0]);
+          await handlePageSelected(pages);
         }
       }
     } catch (error) {

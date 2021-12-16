@@ -210,8 +210,8 @@ const App = ({ Component, pageProps }) => {
           name='viewport'
           content='minimum-scale=1, initial-scale=1, width=device-width'
         />
-        {!currentPage.includes('confirmation') ||
-        currentPage.includes('integrations') ? (
+        {!currentPage.includes('confirmation') &&
+        !currentPage.includes('facebook') ? (
           <Script type='text/javascript' src='/tawkto.js' />
         ) : null}
       </Head>
