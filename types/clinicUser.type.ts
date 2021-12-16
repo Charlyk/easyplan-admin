@@ -17,4 +17,5 @@ export interface ClinicUser {
   isInVacation: boolean;
   isHidden: boolean;
   showInCalendar: boolean;
+  canCreateSchedules: boolean;
 }

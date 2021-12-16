@@ -21,5 +21,7 @@ export * from './clinicCabinet.type';
 export * from './serverResponse.type';
 export * from './notificationSeverity.type';
 export * from './pubnubMessage.types';
+export * from './shortInvoice.type';
+export * from './patientDebt.type';
 export * from './userRole.type';
 export * from './userClinic.type';

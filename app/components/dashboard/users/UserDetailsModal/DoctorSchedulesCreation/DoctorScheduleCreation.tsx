@@ -2,29 +2,39 @@ import React, { useState } from 'react';
 import { Typography } from '@material-ui/core';
 import SwitchButton from 'app/components/common/SwitchButton';
 import { textForKey } from 'app/utils/localization';
-import { Doctor } from 'types';
+import {
+  requestAllowDoctorCreateSchedules,
+  requestForbidDoctorCreateSchedules,
+} from 'middleware/api/userPreferences';
+import { UserClinic } from 'types';
+
 import styles from './DoctorScheduleCreation.module.scss';
 
-interface DoctorWithCanManage extends Doctor {
-  canManageOwnSchedules: boolean;
-}
-
-interface Props extends Doctor {
-  user: DoctorWithCanManage;
+interface Props {
+  user: UserClinic;
 }
 
 const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
-  const [isChecked, setIsChecked] = useState(
-    user?.canManageOwnSchedules ?? false,
-  );
+  const [stateUser, setStateUser] = useState(user);
 
-  const handleOnSwitchChange = () => {
-    setIsChecked((prevState) => !prevState);
+  const handleOnSwitchChange = async () => {
+    let response;
+
+    if (stateUser.canCreateSchedules) {
+      response = await requestForbidDoctorCreateSchedules(user.id);
+    } else {
+      response = await requestAllowDoctorCreateSchedules(user.id);
+    }
+
+    setStateUser((prevState) => ({
+      ...prevState,
+      canCreateSchedules: response.data.canCreateSchedules,
+    }));
   };
   return (
     <div className={styles.wrapper}>
       <SwitchButton
-        isChecked={isChecked}
+        isChecked={stateUser?.canCreateSchedules || false}
         onChange={() => handleOnSwitchChange()}
       />
       <Typography className={styles.switchStatus}>

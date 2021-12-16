@@ -19,20 +19,15 @@ import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
-  deletePatient as requestDeletePatient,
   getPatientDetails,
   requestUpdatePatient,
 } from 'middleware/api/patients';
 import {
-  setPatientDetails,
   setPatientXRayModal,
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
-import {
-  setIsDeleting,
-  setPatientToDelete,
-} from '../PatientsList/PatientsList.reducer';
+import { requestDeletePatient } from 'redux/slices/patientsListSlice';
 import AppointmentNotes from './AppointmentNotes';
 import OrthodonticPlan from './OrthodonticPlan';
 import PatientAppointments from './PatientAppointments';
@@ -142,19 +137,9 @@ const PatientDetailsModal = ({
     localDispatch(openDeleteConfirmation());
   };
 
-  const deletePatient = async () => {
-    localDispatch(setIsDeleting(true));
-    try {
-      await requestDeletePatient(patient.id);
-      localDispatch(setPatientToDelete(null));
-      dispatch(
-        setPatientDetails({ show: false, patientId: null, canDelete: false }),
-      );
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(setIsDeleting(false));
-    }
+  const deletePatient = () => {
+    dispatch(requestDeletePatient(patient.id));
+    onClose?.();
   };
 
   const handleMenuClick = (menuItem) => {

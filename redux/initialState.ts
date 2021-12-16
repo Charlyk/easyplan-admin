@@ -43,6 +43,7 @@ const initialState: ReduxState = Object.freeze({
     currentUser: null,
     authToken: null,
     isUpdatingProfile: false,
+    isUpdatingClinic: false,
   },
   clinicData: {
     updateClinicData: false,
@@ -64,6 +65,7 @@ const initialState: ReduxState = Object.freeze({
     startHour: null,
     endHour: null,
     cabinet: null,
+    isDoctorMode: false,
   },
   cabinetsData: {
     cabinets: [],
@@ -96,6 +98,22 @@ const initialState: ReduxState = Object.freeze({
   globalNotifications: {
     message: null,
     severity: null,
+  },
+  patientList: {
+    patients: {
+      data: [],
+      total: 0,
+    },
+    isLoading: false,
+    isDeleting: false,
+  },
+  invoicesButton: {
+    invoices: [],
+    isLoading: false,
+  },
+  exchangeRates: {
+    rates: [],
+    isFetching: false,
   },
 });
 

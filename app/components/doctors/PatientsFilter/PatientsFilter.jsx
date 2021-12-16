@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -6,13 +7,18 @@ import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
 import { Calendar } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
 import { getAppLanguage, textForKey } from 'app/utils/localization';
-import { clinicServicesSelector } from 'redux/selectors/appDataSelector';
+import {
+  clinicServicesSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
+import { currentUserSelector } from 'redux/selectors/appDataSelector';
+import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import styles from './PatientsFilter.module.scss';
 
 const PatientsFilter = ({
@@ -26,10 +32,23 @@ const PatientsFilter = ({
   onViewModeChange,
 }) => {
   const services = useSelector(clinicServicesSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const userClinic = useSelector(userClinicSelector);
+  const dispatch = useDispatch();
 
   const sortedServices = useMemo(() => {
     return sortBy(services, (item) => item.name.toLowerCase());
   }, [services]);
+
+  const handleOnClick = () => {
+    dispatch(
+      openAppointmentModal({
+        open: true,
+        isDoctorMode: true,
+        doctor: currentUser,
+      }),
+    );
+  };
 
   return (
     <div className={styles.patientsFilter}>
@@ -56,6 +75,17 @@ const PatientsFilter = ({
           </Typography>
         </ToggleButton>
       </ToggleButtonGroup>
+
+      {userClinic.canCreateSchedules && (
+        <Button
+          variant='outlined'
+          className={styles.schedulesBtn}
+          onClick={handleOnClick}
+        >
+          {textForKey('add appointment')}
+        </Button>
+      )}
+
       <EASTextField
         type='text'
         value={filterData?.patientName || ''}
