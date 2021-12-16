@@ -109,6 +109,15 @@ export interface GlobalNotificationsState {
   severity?: NotificationSeverity | null;
 }
 
+export interface PatientListState {
+  patients: {
+    data: Patient[];
+    total: number;
+  };
+  isLoading: boolean;
+  isDeleting: boolean;
+}
+
 export interface InvoicesButtonState {
   invoices: ShortInvoice[];
   isLoading: boolean;
@@ -152,6 +161,7 @@ export interface ReduxState {
   servicesList: ServicesListState;
   doctorScheduleDetails: DoctorScheduleDetailsState;
   globalNotifications: GlobalNotificationsState;
+  patientList: PatientListState;
   invoicesButton: InvoicesButtonState;
   exchangeRates: ExchangeRatesState;
 }

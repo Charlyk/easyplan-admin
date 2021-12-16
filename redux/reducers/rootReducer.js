@@ -10,6 +10,7 @@ import appointmentModal from 'redux/slices/createAppointmentModalSlice';
 import crm from 'redux/slices/crmSlice';
 import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
 import globalNotifications from 'redux/slices/globalNotificationsSlice';
+import patientList from 'redux/slices/patientsListSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
 import types from 'redux/types';
@@ -54,6 +55,7 @@ export default combineReducers({
   servicesList,
   doctorScheduleDetails,
   globalNotifications,
+  patientList,
   invoicesButton,
   exchangeRates,
 });

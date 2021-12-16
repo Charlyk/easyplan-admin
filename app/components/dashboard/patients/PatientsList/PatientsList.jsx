@@ -20,16 +20,17 @@ import IconSearch from 'app/components/icons/iconSearch';
 import NotificationsContext from 'app/context/notificationsContext';
 import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import {
-  deletePatient,
-  getPatients,
-  importPatientsFromFile,
-} from 'middleware/api/patients';
+import { importPatientsFromFile } from 'middleware/api/patients';
 import {
   setPatientDetails,
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
+import {
+  globalPatientListSelector,
+  arePatientsLoadingSelector,
+} from 'redux/selectors/patientSelector';
 import { updatePatientsListSelector } from 'redux/selectors/rootSelector';
+import { fetchPatientList } from 'redux/slices/patientsListSlice';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -39,20 +40,14 @@ import reducer, {
   initialState,
   setPage,
   setInitialQuery,
-  setIsDeleting,
-  setPatients,
-  setPatientToDelete,
   setRowsPerPage,
   setSearchQuery,
   setShowCreateModal,
   setShowImportModal,
-  setIsLoading,
 } from './PatientsList.reducer';
 
 const PatientRow = dynamic(() => import('./PatientRow'));
-const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
-);
+
 const CSVImportModal = dynamic(() =>
   import('app/components/common/CSVImportModal'),
 );
@@ -91,30 +86,20 @@ const importFields = [
   },
 ];
 
-const PatientsList = ({ data, query: initialQuery }) => {
+const PatientsList = ({ query: initialQuery }) => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
+  const patients = useSelector(globalPatientListSelector);
+  const isLoading = useSelector(arePatientsLoadingSelector);
   const authToken = useSelector(authTokenSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const updatePatients = useSelector(updatePatientsListSelector);
   const [
-    {
-      isLoading,
-      patients,
-      rowsPerPage,
-      page,
-      showCreateModal,
-      searchQuery,
-      showDeleteDialog,
-      patientToDelete,
-      isDeleting,
-      showImportModal,
-    },
+    { rowsPerPage, page, showCreateModal, searchQuery, showImportModal },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    localDispatch(setPatients(data));
     localDispatch(setInitialQuery(initialQuery));
   }, []);
 
@@ -136,20 +121,9 @@ const PatientsList = ({ data, query: initialQuery }) => {
   }, [page, rowsPerPage]);
 
   const fetchPatients = async () => {
-    if (currentClinic == null) {
-      return;
-    }
-    localDispatch(setIsLoading(true));
-    try {
-      const updatedQuery = searchQuery.replace('+', '');
-      const query = { page, rowsPerPage, query: updatedQuery };
-      const response = await getPatients(query);
-      localDispatch(setPatients(response.data));
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(setIsLoading(false));
-    }
+    const updatedQuery = searchQuery.replace('+', '');
+    const query = { page, rowsPerPage, query: updatedQuery };
+    dispatch(fetchPatientList({ query }));
   };
 
   const handleSearchQueryChange = (newValue) => {
@@ -180,27 +154,6 @@ const PatientsList = ({ data, query: initialQuery }) => {
 
   const handleChangeRowsPerPage = (event) => {
     localDispatch(setRowsPerPage(parseInt(event.target.value, 10)));
-  };
-
-  const handleCloseDelete = () => {
-    localDispatch(setPatientToDelete(null));
-  };
-
-  const handleDeleteConfirmed = async () => {
-    if (patientToDelete == null) return;
-    localDispatch(setIsDeleting(true));
-    try {
-      await deletePatient(patientToDelete.id);
-      localDispatch(setPatientToDelete(null));
-      await fetchPatients();
-      dispatch(
-        setPatientDetails({ show: false, patientId: null, canDelete: false }),
-      );
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(setIsDeleting(false));
-    }
   };
 
   const handleStartUploadPatients = () => {
@@ -255,14 +208,6 @@ const PatientsList = ({ data, query: initialQuery }) => {
         fields={importFields}
         onImport={handleImportPatients}
         onClose={handleCloseImportModal}
-      />
-      <ConfirmationModal
-        isLoading={isDeleting}
-        show={showDeleteDialog}
-        title={textForKey('Delete patient')}
-        message={textForKey('delete_patient_message')}
-        onConfirm={handleDeleteConfirmed}
-        onClose={handleCloseDelete}
       />
       <CreatePatientModal
         open={showCreateModal}
@@ -390,6 +335,5 @@ export default PatientsList;
 
 PatientsList.propTypes = {
   currentClinic: PropTypes.object,
-  data: PropTypes.object.isRequired,
   query: PropTypes.object.isRequired,
 };
