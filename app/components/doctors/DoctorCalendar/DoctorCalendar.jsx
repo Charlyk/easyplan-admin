@@ -19,6 +19,7 @@ import updateNotificationState from 'app/utils/notifications/updateNotificationS
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
 import { getSchedulesForInterval } from 'middleware/api/schedules';
 import { currentUserSelector } from 'redux/selectors/appDataSelector';
+import { userClinicSelector } from 'redux/selectors/appDataSelector';
 import {
   dayHoursSelector,
   deleteScheduleSelector,
@@ -45,6 +46,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
   const previousDate = usePrevious(date);
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
+  const userClinic = useSelector(userClinicSelector);
   const [{ filterData, isLoading }, localDispatch] = useReducer(
     reducer,
     initialState,
@@ -257,6 +259,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
         )}
         {viewMode === 'week' ? (
           <EasyCalendar
+            hideCreateIndicator={!userClinic.canCreateSchedules}
             showHourIndicator
             dayHours={hours}
             columns={mappedWeek}
@@ -265,7 +268,9 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
             animatedStatuses={['OnSite']}
             onScheduleSelected={handleScheduleSelected}
             onHeaderItemClick={handleDateClick}
-            onAddSchedule={handleAddSchedule}
+            onAddSchedule={
+              userClinic.canCreateSchedules ? handleAddSchedule : () => null
+            }
           />
         ) : (
           <DoctorsCalendarDay
