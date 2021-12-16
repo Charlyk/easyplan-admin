@@ -13,7 +13,10 @@ import EASTextField from 'app/components/common/EASTextField';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
 import { getAppLanguage, textForKey } from 'app/utils/localization';
-import { clinicServicesSelector } from 'redux/selectors/appDataSelector';
+import {
+  clinicServicesSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import { currentUserSelector } from 'redux/selectors/appDataSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import styles from './PatientsFilter.module.scss';
@@ -30,6 +33,7 @@ const PatientsFilter = ({
 }) => {
   const services = useSelector(clinicServicesSelector);
   const currentUser = useSelector(currentUserSelector);
+  const userClinic = useSelector(userClinicSelector);
   const dispatch = useDispatch();
 
   const sortedServices = useMemo(() => {
@@ -72,7 +76,7 @@ const PatientsFilter = ({
         </ToggleButton>
       </ToggleButtonGroup>
 
-      {
+      {userClinic.canCreateSchedules && (
         <Button
           variant='outlined'
           className={styles.schedulesBtn}
@@ -80,7 +84,7 @@ const PatientsFilter = ({
         >
           {textForKey('add appointment')}
         </Button>
-      }
+      )}
 
       <EASTextField
         type='text'
