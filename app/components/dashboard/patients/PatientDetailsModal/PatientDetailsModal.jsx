@@ -23,7 +23,6 @@ import {
   requestUpdatePatient,
 } from 'middleware/api/patients';
 import {
-  setPatientDetails,
   setPatientXRayModal,
   togglePatientsListUpdate,
 } from 'redux/actions/actions';
@@ -140,9 +139,7 @@ const PatientDetailsModal = ({
 
   const deletePatient = () => {
     dispatch(requestDeletePatient(patient.id));
-    dispatch(
-      setPatientDetails({ show: false, patientId: null, canDelete: false }),
-    );
+    onClose?.();
   };
 
   const handleMenuClick = (menuItem) => {
