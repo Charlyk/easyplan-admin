@@ -6,7 +6,7 @@ import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import EASHelpView from 'app/components/common/EASHelpView';
 import EasyCalendar from 'app/components/common/EasyCalendar';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -25,12 +25,14 @@ import {
   schedulesSelector,
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
+import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import DoctorsCalendarDay from '../DoctorsCalendarDay';
 import PatientsFilter from '../PatientsFilter';
 import styles from './DoctorCalendar.module.scss';
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 
 const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
@@ -211,6 +213,19 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
     };
   });
 
+  const handleAddSchedule = (startHour, endHour, _, selectedDate) => {
+    dispatch(
+      openAppointmentModal({
+        open: true,
+        startHour,
+        endHour,
+        date: moment(selectedDate ?? viewDate).format('YYYY-MM-DD'),
+        doctor: currentUser,
+        isDoctorMode: true,
+      }),
+    );
+  };
+
   return (
     <div className={styles.doctorCalendarRoot}>
       <div className={styles.filterWrapper}>
@@ -243,7 +258,6 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
         {viewMode === 'week' ? (
           <EasyCalendar
             showHourIndicator
-            hideCreateIndicator
             dayHours={hours}
             columns={mappedWeek}
             schedules={schedules}
@@ -251,6 +265,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
             animatedStatuses={['OnSite']}
             onScheduleSelected={handleScheduleSelected}
             onHeaderItemClick={handleDateClick}
+            onAddSchedule={handleAddSchedule}
           />
         ) : (
           <DoctorsCalendarDay
