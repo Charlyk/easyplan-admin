@@ -39,13 +39,16 @@ const newPatientFormSlice = createSlice({
     setContact(state, action) {
       try {
         state.email = action.payload.email ?? '';
-        const phoneWithPlus = action.payload.phoneNumber.startsWith('+')
-          ? action.payload.phoneNumber.trim()
-          : `+${action.payload.phoneNumber.trim()}`;
-        const phoneNumber = parsePhoneNumber(phoneWithPlus);
-        state.phoneNumber = action.payload.phoneNumber
-          ? phoneNumber.nationalNumber
-          : '';
+        const payloadNumber = action.payload.phoneNumber;
+        if (payloadNumber != null) {
+          const phoneWithPlus = action.payload.phoneNumber.startsWith('+')
+            ? action.payload.phoneNumber.trim()
+            : `+${action.payload.phoneNumber.trim()}`;
+          const phoneNumber = parsePhoneNumber(phoneWithPlus);
+          state.phoneNumber = action.payload.phoneNumber
+            ? phoneNumber.nationalNumber
+            : '';
+        }
         const [firstName, lastName] = action.payload.name.split(' ');
         state.firstName = firstName;
         state.lastName = lastName;

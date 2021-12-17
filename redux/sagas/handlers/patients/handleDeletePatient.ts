@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { SagaReturnType, call, put, takeLatest } from 'redux-saga/effects';
-import { requestDeletePatient as sagaRequestDeletePatient } from 'redux/sagas/requests/patients/requestDeletePatient';
+import { requestDeletePatient as sagaRequestDeletePatient } from 'redux/sagas/requests';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import {
   deletePatient,

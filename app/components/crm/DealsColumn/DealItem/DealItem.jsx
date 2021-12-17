@@ -60,8 +60,8 @@ DealItem.propTypes = {
   currentClinic: PropTypes.any,
   dealItem: PropTypes.shape({
     id: PropTypes.number,
-    created: PropTypes.string,
-    lastUpdated: PropTypes.string,
+    created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    lastUpdated: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     messageSnippet: PropTypes.string,
     source: PropTypes.string,
     sourceDescription: PropTypes.string,
@@ -109,9 +109,9 @@ DealItem.propTypes = {
     }),
     schedule: PropTypes.shape({
       id: PropTypes.number,
-      created: PropTypes.string,
-      dateAndTime: PropTypes.string,
-      endTime: PropTypes.string,
+      created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      dateAndTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       canceledReason: PropTypes.string,
       doctor: PropTypes.shape({
         id: PropTypes.number,

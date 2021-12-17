@@ -8,3 +8,4 @@ export * from './patients';
 export * from './handleFetchPendingInvoices';
 export * from './handleFetchExchangeRates';
 export * from './handleFetchClinicDetails';
+export * from './crm';

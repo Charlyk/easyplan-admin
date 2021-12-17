@@ -42,9 +42,6 @@ export const sheetActions = [
   },
 ];
 
-export const STATUS_LOADING = 1;
-export const STATUS_LOADED = 2;
-
 export const initialState = {
   isFetching: false,
   showActions: false,
@@ -183,18 +180,6 @@ const dealsColumnSlice = createSlice({
     setItemsPerPage(state, action) {
       state.itemsPerPage = action.payload;
     },
-    setIsRowLoading(state, action) {
-      const { row, state: loadingState } = action.payload;
-      state.loadedRowsMap = { ...state.loadedRowsMap, [row]: loadingState };
-    },
-    setRowsLoading(state, action) {
-      const { rows, state: loadingState } = action.payload;
-      const newState = {};
-      for (let row of rows) {
-        newState[row] = loadingState;
-      }
-      state.loadedRowsMap = { ...state.loadedRowsMap, ...newState };
-    },
   },
 });
 
@@ -212,8 +197,6 @@ export const {
   addNewDeal,
   removeDeal,
   setPage,
-  setIsRowLoading,
-  setRowsLoading,
 } = dealsColumnSlice.actions;
 
 export default dealsColumnSlice.reducer;
