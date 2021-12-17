@@ -1,3 +1,4 @@
+import { ClinicAnalyticsState } from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.types';
 import {
   ClinicCabinet,
   CurrentClinic,
@@ -189,6 +190,7 @@ export interface ReduxState {
   patientList: PatientListState;
   invoicesButton: InvoicesButtonState;
   exchangeRates: ExchangeRatesState;
+  clinicAnalytics: ClinicAnalyticsState;
   crmBoard: CrmBoardState;
   dealsColumn: DealsColumnState;
 }

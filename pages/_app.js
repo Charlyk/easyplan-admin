@@ -71,6 +71,12 @@ const App = ({ Component, pageProps }) => {
   }, [currentClinic]);
 
   useEffect(() => {
+    if (router.asPath !== '/analytics/general') {
+      localStorage.removeItem('dateRange');
+    }
+  }, [router.asPath]);
+
+  useEffect(() => {
     dispatch({
       type: START_TIMER,
       payload: {

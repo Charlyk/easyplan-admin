@@ -1,4 +1,10 @@
+import moment from 'moment-timezone';
 import { ReduxState } from 'redux/types';
+
+const defaultRange: [string, string] = [
+  moment().startOf('week').toDate().toString(),
+  moment().endOf('week').toDate().toString(),
+];
 
 const initialState: ReduxState = Object.freeze({
   updateCategories: false,
@@ -114,6 +120,16 @@ const initialState: ReduxState = Object.freeze({
   exchangeRates: {
     rates: [],
     isFetching: false,
+  },
+  clinicAnalytics: {
+    doctors: [],
+    selectedCharts: [],
+    actions: [],
+    showRangePicker: false,
+    selectedRange: defaultRange,
+    isFetching: false,
+    analytics: null,
+    showActions: false,
   },
   crmBoard: {
     states: [],
