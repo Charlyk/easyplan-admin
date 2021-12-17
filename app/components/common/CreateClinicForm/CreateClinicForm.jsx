@@ -215,6 +215,7 @@ const CreateClinicForm = ({
           fieldLabel={textForKey('Clinic name')}
           value={clinicName}
           onChange={handleNameChange}
+          helperText={textForKey('insert_at_least_3_characters')}
         />
 
         <EASTextField

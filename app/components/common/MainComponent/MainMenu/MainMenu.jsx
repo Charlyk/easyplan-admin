@@ -14,7 +14,7 @@ import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ClinicSelector from 'app/components/common/ClinicSelector';
 import EASHelpView from 'app/components/common/EASHelpView';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
@@ -39,10 +39,12 @@ import {
   currentUserSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
+import { remindersCountSelector } from 'redux/selectors/crmBoardSelector';
 import {
   newReminderSelector,
   updatedReminderSelector,
 } from 'redux/selectors/crmSelector';
+import { dispatchFetchRemindersCount } from 'redux/slices/crmBoardSlice';
 import ExchangeRates from '../ExchageRates';
 import styles from './MainMenu.module.scss';
 
@@ -152,18 +154,19 @@ const menuItems = [
 
 const MainMenu = ({ currentPath, onCreateClinic }) => {
   const buttonRef = useRef(null);
+  const dispatch = useDispatch();
   const selectedClinic = useSelector(userClinicSelector);
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
   const remoteReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
+  const remindersCount = useSelector(remindersCountSelector);
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [crmDashboardRef, setCrmDashboardRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
   const [showCrmHelp, setShowCrmHelp] = useState(false);
-  const [remindersCount, setRemindersCount] = useState(0);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
@@ -192,17 +195,8 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   }, [showTechSupportHelp, canShowCrm]);
 
   useEffect(() => {
-    fetchRemindersCount();
+    dispatch(dispatchFetchRemindersCount());
   }, [remoteReminder, updatedReminder]);
-
-  const fetchRemindersCount = async () => {
-    try {
-      const response = await requestFetchRemindersCount();
-      setRemindersCount(response.data);
-    } catch (error) {
-      onRequestError(error);
-    }
-  };
 
   const handleAnalyticsClick = () => {
     setIsAnalyticsExpanded(!isAnalyticsExpanded);

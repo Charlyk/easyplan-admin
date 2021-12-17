@@ -130,6 +130,27 @@ const initialState: ReduxState = Object.freeze({
     analytics: null,
     showActions: false,
   },
+  crmBoard: {
+    states: [],
+    remindersCount: 0,
+    isFetchingStates: false,
+    isFetchingRemindersCount: false,
+  },
+  dealsColumn: {
+    isFetching: false,
+    showActions: false,
+    isEditingName: false,
+    showColorPicker: false,
+    showCreateColumn: false,
+    columnName: '',
+    columnColor: '',
+    totalElements: 0,
+    page: 0,
+    itemsPerPage: 25,
+    items: [],
+    dealState: null,
+    loadedRowsMap: {},
+  },
 });
 
 export default initialState;

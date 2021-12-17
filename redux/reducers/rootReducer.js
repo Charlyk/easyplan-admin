@@ -8,6 +8,7 @@ import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
 import appointmentModal from 'redux/slices/createAppointmentModalSlice';
+import crmBoard from 'redux/slices/crmBoardSlice';
 import crm from 'redux/slices/crmSlice';
 import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
 import globalNotifications from 'redux/slices/globalNotificationsSlice';
@@ -60,6 +61,7 @@ export default combineReducers({
   invoicesButton,
   exchangeRates,
   clinicAnalytics,
+  crmBoard,
 });
 
 function main(state = initialState, { type, payload } = {}) {

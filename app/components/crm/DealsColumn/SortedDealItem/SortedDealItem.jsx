@@ -67,13 +67,15 @@ const SortedDealItem = ({ deal, onDealClick }) => {
       <div className={styles.content}>
         <Typography className={styles.sourceLabel}>
           {personName},
-          <a
-            href={`tel:${deal.patient.phoneWithCode.replace('+', '')}`}
-            onPointerUp={(e) => e.stopPropagation()}
-            style={{ marginLeft: '3px' }}
-          >
-            {deal.patient.phoneWithCode}
-          </a>
+          {deal.patient?.phoneWithCode && (
+            <a
+              href={`tel:${deal.patient.phoneWithCode.replace('+', '')}`}
+              onPointerUp={(e) => e.stopPropagation()}
+              style={{ marginLeft: '3px' }}
+            >
+              {deal.patient.phoneWithCode}
+            </a>
+          )}
         </Typography>
         <Typography noWrap className={styles.contactName}>
           {itemTitle}
@@ -154,8 +156,8 @@ export default SortedDealItem;
 SortedDealItem.propTypes = {
   deal: PropTypes.shape({
     id: PropTypes.number,
-    created: PropTypes.string,
-    lastUpdated: PropTypes.string,
+    created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    lastUpdated: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     messageSnippet: PropTypes.string,
     source: PropTypes.string,
     sourceDescription: PropTypes.string,
@@ -203,9 +205,9 @@ SortedDealItem.propTypes = {
     }),
     schedule: PropTypes.shape({
       id: PropTypes.number,
-      created: PropTypes.string,
-      dateAndTime: PropTypes.string,
-      endTime: PropTypes.string,
+      created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      dateAndTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       canceledReason: PropTypes.string,
       doctor: PropTypes.shape({
         id: PropTypes.number,
