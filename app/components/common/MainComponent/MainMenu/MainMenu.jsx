@@ -273,9 +273,9 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
           className={styles.logoContainer}
           onClick={handleCompanyClick}
         >
-          <span className={styles.clinicName}>
+          <Typography className={styles.clinicName} noWrap>
             {userClinic?.clinicName || textForKey('Create clinic')}
-          </span>
+          </Typography>
           <IconArrowDown />
           <ClinicSelector
             currentUser={currentUser}

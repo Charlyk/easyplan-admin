@@ -3,6 +3,7 @@ import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import IconPlus from 'app/components/icons/iconPlus';
@@ -48,7 +49,10 @@ const ClinicSelector = ({
                     clinic.isSelected && styles.selected,
                   )}
                 >
-                  {clinic.clinicName} <IconSuccess fill='#3A83DC' />
+                  <Typography noWrap className={styles.clinicNameText}>
+                    {clinic.clinicName}
+                  </Typography>
+                  <IconSuccess fill='#3A83DC' />
                 </Box>
               ))}
               <Box className={styles.option} onClick={onCreate}>
