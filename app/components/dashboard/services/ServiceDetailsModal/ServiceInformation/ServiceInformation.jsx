@@ -153,7 +153,9 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             type='number'
             containerClass={styles.simpleField}
             fieldLabel={textForKey('Required time')}
-            min='0'
+            min='15'
+            max='360'
+            error={service.duration > 360}
             value={service.duration}
             onChange={(value) => handleFormChange('duration', value)}
             endAdornment={
