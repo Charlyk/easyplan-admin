@@ -14,6 +14,8 @@ import {
   NotificationSeverity,
   ShortInvoice,
   ExchangeRate,
+  DealView,
+  DealStateView,
 } from 'types';
 
 export interface CalendarDataState {
@@ -128,6 +130,28 @@ export interface ExchangeRatesState {
   isFetching: boolean;
 }
 
+export interface CrmBoardState {
+  states: DealStateView[];
+  remindersCount: number;
+  isFetchingStates: boolean;
+  isFetchingRemindersCount: boolean;
+}
+
+export interface DealsColumnState {
+  isFetching: boolean;
+  showActions: boolean;
+  isEditingName: boolean;
+  showColorPicker: boolean;
+  showCreateColumn: boolean;
+  columnName: string;
+  columnColor: string;
+  totalElements: number;
+  page: number;
+  itemsPerPage: number;
+  items: DealView[];
+  dealState: DealStateView | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -164,4 +188,6 @@ export interface ReduxState {
   patientList: PatientListState;
   invoicesButton: InvoicesButtonState;
   exchangeRates: ExchangeRatesState;
+  crmBoard: CrmBoardState;
+  dealsColumn: DealsColumnState;
 }
