@@ -70,7 +70,7 @@ export type ClinicAnalyticsState = {
   doctors: ClinicUser[];
   selectedDoctor?: ClinicUser;
   showRangePicker: boolean;
-  selectedRange: [Date, Date];
+  selectedRange: [string, string];
   isFetching: boolean;
   analytics?: Analytics;
   selectedCharts: ChartType[];

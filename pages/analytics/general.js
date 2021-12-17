@@ -3,9 +3,15 @@ import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import ClinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics';
+import {
+  setInitialData,
+  setAnalytics,
+} from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
+import { requestFetchSelectedCharts } from 'middleware/api/users';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -25,7 +31,7 @@ export default connect((state) => state)(General);
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
-    async ({ query }) => {
+    async ({ query, req }) => {
       try {
         if (query.startDate == null) {
           query.startDate = moment().startOf('week').format('YYYY-MM-DD');
@@ -46,6 +52,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
             },
           };
         }
+
+        const chartResponse = await requestFetchSelectedCharts(req.headers);
+        store.dispatch(
+          setInitialData([
+            [query.startDate.toString(), query.endDate.toString()],
+            chartResponse.data,
+          ]),
+        );
+
+        const analyticResponse = await requestFetchClinicAnalytics(
+          query.startDate,
+          query.endDate,
+          req.headers,
+        );
+        store.dispatch(setAnalytics(analyticResponse.data));
 
         const redirectTo = redirectToUrl(
           currentUser,

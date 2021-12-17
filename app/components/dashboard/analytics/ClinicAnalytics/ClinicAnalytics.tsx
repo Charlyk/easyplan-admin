@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useReducer, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
-import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
@@ -11,25 +11,20 @@ import usePrevious from 'app/utils/hooks/usePrevious';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
-import {
-  requestFetchSelectedCharts,
-  requestUpdateSelectedCharts,
-} from 'middleware/api/users';
+import { requestUpdateSelectedCharts } from 'middleware/api/users';
 import { ChartType } from 'types/ChartType.type';
 import StatisticFilter from '../StatisticFilter';
 import AmountsChart from './AmountsChart';
 import ClientsChart from './ClientsChart';
 import styles from './ClinicAnalytics.module.scss';
-import reducer, {
+import {
   hideChart,
-  initialState,
   setAnalytics,
   setIsFetching,
-  setSelectedCharts,
   setSelectedRange,
   setShowRangePicker,
-  setInitialData,
 } from './ClinicAnalytics.reducer';
+import { clinicAnalyticsSelector } from './ClinicAnalytics.selectors';
 import { ClinicAnalyticsProps } from './ClinicAnalytics.types';
 import DoctorsConversionChart from './DoctorsConversionChart';
 import DoctorsIncomeChart from './DoctorsIncomeChart';
@@ -40,27 +35,26 @@ import ServicesChart from './ServicesChart';
 import TotalVisitsChart from './TotalVisistsChart';
 import TreatedPatientsChart from './TreatedPatientsChart';
 
-const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
-  query,
-  currentClinic,
-}) => {
-  const router = useRouter();
+const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({ currentClinic }) => {
+  const dispatch = useDispatch();
   const pickerRef = useRef(null);
-  const [
-    { isFetching, showRangePicker, selectedRange, analytics, selectedCharts },
-    localDispatch,
-  ] = useReducer(reducer, initialState);
+  const didInitialRenderHappen = useRef(false);
+  const {
+    isFetching,
+    showRangePicker,
+    selectedRange,
+    analytics,
+    selectedCharts,
+  } = useSelector(clinicAnalyticsSelector);
   const previousCharts = usePrevious(selectedCharts);
-  const [startDate, endDate] = selectedRange;
+  const [startDate, endDate] = selectedRange.map((item) => new Date(item));
 
   useEffect(() => {
-    initializeComponentData();
-  }, []);
-
-  useEffect(() => {
+    if (!didInitialRenderHappen.current) return;
+    didInitialRenderHappen.current = true;
     if (
-      selectedCharts.length === 0 ||
-      selectedCharts.length < previousCharts.length ||
+      selectedCharts?.length === 0 ||
+      selectedCharts?.length < previousCharts?.length ||
       isEqual(selectedCharts, previousCharts)
     ) {
       return;
@@ -179,20 +173,16 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
     [analytics],
   );
 
-  const initializeComponentData = useCallback(async () => {
-    try {
-      localDispatch(setIsFetching(true));
-      const response = await requestFetchSelectedCharts();
-      if (query == null) {
-        localDispatch(setSelectedCharts(response.data));
-        return;
-      }
-      const startDate = moment(query.startDate).toDate();
-      const endDate = moment(query.endDate).toDate();
-      localDispatch(setInitialData([[startDate, endDate], response.data]));
-    } catch (error) {
-      onRequestError(error);
-      localDispatch(setIsFetching(true));
+  useEffect(() => {
+    const savedDate = JSON.parse(localStorage.getItem('dateRange'));
+    if (savedDate !== null) {
+      dispatch(
+        setSelectedRange([
+          savedDate.startDate.toString(),
+          savedDate.endDate.toString(),
+        ]),
+      );
+      fetchClinicAnalytics(savedDate.startDate, savedDate.endDate);
     }
   }, []);
 
@@ -207,7 +197,7 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
         await requestUpdateSelectedCharts(
           selectedCharts.filter((item) => item !== chart),
         );
-        localDispatch(hideChart(chart));
+        dispatch(hideChart(chart));
       } catch (error) {
         onRequestError(error);
       }
@@ -217,40 +207,33 @@ const ClinicAnalytics: React.FC<ClinicAnalyticsProps> = ({
 
   const fetchClinicAnalytics = async (start = startDate, end = endDate) => {
     try {
-      localDispatch(setIsFetching(true));
+      dispatch(setIsFetching(true));
       const stringStartDate = moment(start).format('YYYY-MM-DD');
       const stringEndDate = moment(end).format('YYYY-MM-DD');
       const response = await requestFetchClinicAnalytics(
         stringStartDate,
         stringEndDate,
       );
-      localDispatch(setAnalytics(response.data));
-      // update query params
-      await router.push({
-        pathname: '/analytics/general',
-        query: {
-          startDate: stringStartDate,
-          endDate: stringEndDate,
-        },
-      });
+      dispatch(setAnalytics(response.data));
     } catch (error) {
       onRequestError(error);
     } finally {
-      localDispatch(setIsFetching(false));
+      dispatch(setIsFetching(false));
     }
   };
 
   const handleDatePickerClose = () => {
-    localDispatch(setShowRangePicker(false));
+    dispatch(setShowRangePicker(false));
   };
 
   const handleDatePickerOpen = () => {
-    localDispatch(setShowRangePicker(true));
+    dispatch(setShowRangePicker(true));
   };
 
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
-    localDispatch(setSelectedRange([startDate, endDate]));
+    dispatch(setSelectedRange([startDate.toString(), endDate.toString()]));
+    localStorage.setItem('dateRange', JSON.stringify({ startDate, endDate }));
   };
 
   const handleFilterSubmit = async () => {
