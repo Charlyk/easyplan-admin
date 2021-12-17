@@ -7,7 +7,7 @@
 
   .companiesPaper {
     width: 100%;
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 4px !important;
 
     .optionsWrapper {
@@ -25,16 +25,16 @@
       line-height: 24px;
       cursor: pointer;
       width: 100%;
-      padding: .5rem;
+      padding: 0.5rem;
       display: flex;
       align-items: center;
-      color: #34344E;
+      color: #34344e;
 
       &.clinic {
         justify-content: space-between;
 
         &.selected {
-          color: #3A83DC;
+          color: #3a83dc;
 
           svg {
             visibility: visible;
@@ -50,7 +50,7 @@
       svg {
         width: 1rem;
         height: 1rem;
-        margin-right: .5rem;
+        margin-right: 0.5rem;
       }
 
       &:hover {
@@ -58,4 +58,20 @@
       }
     }
   }
+}
+
+.clinicNameText {
+  max-width: 130px !important;
+  outline: none !important;
+  font-family: Inter, sans-serif !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 12px !important;
+  line-height: 24px !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  padding: 0 !important;
+  display: block;
+  align-items: center;
+  color: #34344e;
 }

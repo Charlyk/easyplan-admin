@@ -1,5 +1,5 @@
 .mainMenu {
-  background-color: #34344E;
+  background-color: #34344e;
   width: 180px;
   padding: 2rem 0;
   overflow-y: auto;
@@ -44,12 +44,12 @@
       }
 
       &:hover {
-        color: #3E83DC;
+        color: #3e83dc;
       }
 
       &.selected {
         background-color: transparent;
-        color: #3E83DC;
+        color: #3e83dc;
 
         .itemText {
           font-weight: bold;
@@ -105,18 +105,18 @@
   .importDataWrapper {
     background: white;
     width: 85%;
-    padding: .7rem;
+    padding: 0.7rem;
     border-radius: 3px;
 
     .importProgressBar {
-      color: #3A83DC;
+      color: #3a83dc;
       width: 1.2rem !important;
       height: 1.2rem !important;
     }
 
     .importDataLabel {
       flex: 1;
-      color: #3A83DC;
+      color: #3a83dc;
       font-weight: normal;
       margin-left: 1rem;
       font-family: Inter, sans-serif;
@@ -135,11 +135,12 @@
 
   .clinicName {
     flex: 1;
-    color: #FAFAFD;
+    color: #fafafd;
     font-weight: 600;
     font-family: Inter, sans-serif;
     font-style: normal;
     font-size: 12px;
+    max-width: 100%;
   }
 
   .logoContainer {
@@ -152,9 +153,9 @@
     justify-content: center;
     margin-bottom: 1rem;
     cursor: pointer;
-    background-color: #6F7091;
-    padding: .5rem;
-    border-radius: .3rem;
+    background-color: #6f7091;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
 
     &:hover {
       background-color: #7b7ca0;
@@ -186,13 +187,13 @@
   padding-bottom: 2rem;
   .item {
     outline: none;
-    color: #FAFAFD;
+    color: #fafafd;
     min-height: 3rem;
     width: 100%;
     margin-bottom: 0;
 
     svg {
-      fill: #FAFAFD;
+      fill: #fafafd;
       margin-right: 1rem;
       width: 16px;
       height: 16px;
@@ -218,10 +219,10 @@
       }
 
       &:hover {
-        color: #7DD7C8;
+        color: #7dd7c8;
 
         svg {
-          fill: #7DD7C8;
+          fill: #7dd7c8;
         }
       }
     }
@@ -246,18 +247,18 @@
 
         &.active {
           font-weight: 600;
-          color: #7DD7C8;
+          color: #7dd7c8;
 
           svg {
-            fill: #7DD7C8;
+            fill: #7dd7c8;
           }
         }
 
         &:hover {
-          color: #7DD7C8;
+          color: #7dd7c8;
 
           svg {
-            fill: #7DD7C8;
+            fill: #7dd7c8;
           }
         }
       }
@@ -272,7 +273,7 @@
 
         &.expanded {
           height: unset;
-          margin-top: .5rem;
+          margin-top: 0.5rem;
         }
 
         a {
@@ -281,33 +282,33 @@
           justify-content: flex-start;
           cursor: pointer;
           font-size: 11px;
-          color: #FAFAFD;
+          color: #fafafd;
           user-select: none;
           text-decoration: none;
-          padding: .5rem .5rem;
+          padding: 0.5rem 0.5rem;
           font-weight: 300;
 
           &.active {
-            color: #7DD7C8;
+            color: #7dd7c8;
             font-weight: 600;
 
             svg {
-              fill: #7DD7C8;
+              fill: #7dd7c8;
             }
           }
 
           svg {
             width: 0.5rem;
             height: 0.5rem;
-            margin-right: 0.6rem;;
-            fill: #FAFAFD;
+            margin-right: 0.6rem;
+            fill: #fafafd;
           }
 
           &:hover {
-            color: #7DD7C8;
+            color: #7dd7c8;
 
             svg {
-              fill: #7DD7C8;
+              fill: #7dd7c8;
             }
           }
         }
@@ -317,10 +318,10 @@
 
   .active {
     font-weight: 600;
-    color: #7DD7C8;
+    color: #7dd7c8;
 
     svg {
-      fill: #7DD7C8;
+      fill: #7dd7c8;
     }
   }
 }
