@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
+import clinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import initialState from 'redux/initialState';
 import appData from 'redux/slices/appDataSlice';
@@ -58,6 +59,7 @@ export default combineReducers({
   patientList,
   invoicesButton,
   exchangeRates,
+  clinicAnalytics,
 });
 
 function main(state = initialState, { type, payload } = {}) {
