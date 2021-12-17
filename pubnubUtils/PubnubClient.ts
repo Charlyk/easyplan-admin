@@ -34,7 +34,7 @@ import {
 } from 'redux/slices/crmSlice';
 import { showSuccessNotification } from 'redux/slices/globalNotificationsSlice';
 import { ReduxStore as store } from 'store';
-import { DealPayload, MessageAction, PatientDebt, ShortInvoice } from 'types';
+import { DealView, MessageAction, PatientDebt, ShortInvoice } from 'types';
 import { PubnubMessage, Schedule } from 'types';
 import { currentUserSelector } from '../redux/selectors/appDataSelector';
 
@@ -182,28 +182,25 @@ const handleUpdateMessageStatus = (payload: any) => {
   console.warn('handleUpdateMessageStatus', 'Not handled', payload);
 };
 
-const handleNewDealCreated = (payload: DealPayload) => {
+const handleNewDealCreated = (payload: DealView) => {
   if (payload == null) {
     return;
   }
   store.dispatch(setNewDeal(payload));
-  setTimeout(() => store.dispatch(setNewDeal(null)), 600);
 };
 
-const handleDealUpdated = (payload: DealPayload) => {
+const handleDealUpdated = (payload: DealView) => {
   if (payload == null) {
     return;
   }
   store.dispatch(setUpdatedDeal(payload));
-  setTimeout(() => store.dispatch(setUpdatedDeal(null)), 600);
 };
 
-const handleDealDeleted = (payload: DealPayload) => {
+const handleDealDeleted = (payload: DealView) => {
   if (payload == null) {
     return;
   }
   store.dispatch(setDeletedDeal(payload));
-  setTimeout(() => store.dispatch(setDeletedDeal(null)), 600);
 };
 
 const handleReminderCreated = (payload: any) => {

@@ -48,7 +48,7 @@ const ExistentPatientForm = ({ deal, onChange }) => {
   );
 
   useEffect(() => {
-    if (deal == null || deal.source !== 'PhoneCall') {
+    if (deal == null) {
       return;
     }
     localDispatch(setSearchQuery(deal.contact.name.trim()));
@@ -63,6 +63,7 @@ const ExistentPatientForm = ({ deal, onChange }) => {
 
   useEffect(() => {
     if (selectedPatient == null) {
+      onChange?.(null);
       return;
     }
     onChange?.({ patientId: selectedPatient.id });

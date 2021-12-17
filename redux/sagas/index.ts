@@ -11,6 +11,8 @@ import {
   pendingInvoicesWatcher,
   fetchExchangeRatesWatcher,
   fetchClinicDetailsWatcher,
+  remindersCountWatcher,
+  dealsStatesWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -26,5 +28,7 @@ export default function* rootSaga() {
     pendingInvoicesWatcher(),
     fetchExchangeRatesWatcher(),
     fetchClinicDetailsWatcher(),
+    remindersCountWatcher(),
+    dealsStatesWatcher(),
   ]);
 }
