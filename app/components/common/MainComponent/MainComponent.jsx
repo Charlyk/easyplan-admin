@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -9,7 +8,6 @@ import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import paths from 'app/utils/paths';
 import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
-import { isDev } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setPatientDetails,
@@ -25,7 +23,6 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
-import { appointmentModalSelector } from 'redux/selectors/appointmentModalSelector';
 import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
 import {
   newReminderSelector,
@@ -41,13 +38,9 @@ import {
   isImportModalOpenSelector,
   patientDetailsSelector,
 } from 'redux/selectors/rootSelector';
-import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';
 
-const AddAppointmentModal = dynamic(() =>
-  import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
-);
 const PatientDetailsModal = dynamic(() =>
   import('app/components/dashboard/patients/PatientDetailsModal'),
 );
@@ -72,7 +65,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const currentClinic = useSelector(currentClinicSelector);
   const currentUser = useSelector(currentUserSelector);
   const authToken = useSelector(authTokenSelector);
-  const appointmentModal = useSelector(appointmentModalSelector);
   const paymentModal = useSelector(paymentModalSelector);
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
@@ -147,10 +139,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
 
   const handleCreateClinic = async () => {
     await router.push('/create-clinic?redirect=0');
-  };
-
-  const handleAppointmentModalClose = () => {
-    dispatch(closeAppointmentModal());
   };
 
   const handleClosePatientDetails = () => {
@@ -237,20 +225,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
               currentClinic={currentClinic}
               show={isImportModalOpen}
               onClose={handleCloseImportModal}
-            />
-          )}
-          {appointmentModal?.open && (
-            <AddAppointmentModal
-              currentClinic={currentClinic}
-              onClose={handleAppointmentModalClose}
-              schedule={appointmentModal?.schedule}
-              open={appointmentModal?.open}
-              doctor={appointmentModal?.doctor}
-              date={appointmentModal?.date}
-              patient={appointmentModal?.patient}
-              startHour={appointmentModal?.startHour}
-              endHour={appointmentModal?.endHour}
-              cabinet={appointmentModal?.cabinet}
             />
           )}
           {paymentModal.open && (

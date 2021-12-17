@@ -38,6 +38,7 @@ export interface CreateAppointmentModalState {
   startHour?: string | null;
   endHour?: string | null;
   cabinet?: ClinicCabinet | null;
+  isDoctorMode?: boolean;
 }
 
 export interface PatientSmsMessageState {

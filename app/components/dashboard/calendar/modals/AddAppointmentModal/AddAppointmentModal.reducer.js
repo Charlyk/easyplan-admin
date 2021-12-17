@@ -282,6 +282,9 @@ const addAppointmentModalSlice = createSlice({
       state.doctor = null;
       state.isDoctorValid = action.payload != null;
     },
+    setSelectedCabinetInDoctorMode(state, action) {
+      state.cabinet = { ...action.payload, label: action.payload.name };
+    },
   },
 });
 
@@ -318,6 +321,7 @@ export const {
   setPatientsLoading,
   setStartTime,
   setSelectedCabinet,
+  setSelectedCabinetInDoctorMode,
   resetState,
 } = addAppointmentModalSlice.actions;
 
