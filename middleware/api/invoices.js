@@ -1,3 +1,4 @@
+import { InvoiceStatus } from 'types';
 import { get, post, put } from './request';
 
 /**
@@ -16,7 +17,7 @@ export async function fetchClinicInvoices(status, headers = null) {
  * @return {Promise<AxiosResponse<*>>}
  */
 export async function fetchPendingInvoices(headers = null) {
-  return fetchClinicInvoices('PendingPayment', headers);
+  return fetchClinicInvoices(InvoiceStatus.PendingPayment, headers);
 }
 
 /**

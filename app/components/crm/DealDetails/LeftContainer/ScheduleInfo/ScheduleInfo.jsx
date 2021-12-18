@@ -129,9 +129,9 @@ ScheduleInfo.propTypes = {
     }),
     schedule: PropTypes.shape({
       id: PropTypes.number,
-      created: PropTypes.string,
-      dateAndTime: PropTypes.string,
-      endTime: PropTypes.string,
+      created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      dateAndTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       canceledReason: PropTypes.string,
       status: PropTypes.string,
       doctor: PropTypes.shape({

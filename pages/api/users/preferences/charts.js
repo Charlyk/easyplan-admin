@@ -10,6 +10,7 @@ function fetchSelectedChart(req) {
   const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
     req.headers.cookie,
   );
+
   return axios.get(`${updatedServerUrl(req)}/user-preferences/charts`, {
     headers: {
       [HeaderKeys.authorization]: authToken,

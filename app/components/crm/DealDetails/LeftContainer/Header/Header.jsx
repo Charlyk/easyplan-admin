@@ -59,6 +59,12 @@ const Header = ({ deal, states }) => {
           </Typography>
         )}
 
+        {deal?.sourceDescription && (
+          <Typography className={styles.responsibleName}>
+            {textForKey(deal.sourceDescription)}
+          </Typography>
+        )}
+
         {doctorName && (
           <Typography className={styles.responsibleName}>
             {textForKey('Doctor')}: {doctorName}

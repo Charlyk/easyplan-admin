@@ -1,25 +1,45 @@
 @keyframes shake {
-  10%, 90% {
+  10%,
+  90% {
     transform: translate3d(-1px, 0, 0);
   }
 
-  20%, 80% {
+  20%,
+  80% {
     transform: translate3d(2px, 0, 0);
   }
 
-  30%, 50%, 70% {
+  30%,
+  50%,
+  70% {
     transform: translate3d(-4px, 0, 0);
   }
 
-  40%, 60% {
+  40%,
+  60% {
     transform: translate3d(4px, 0, 0);
   }
 }
 
 @keyframes flickering {
-  0%   { opacity:1; }
-  50%  { opacity:0; }
-  100% { opacity:1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.goBackBtn {
+  margin-right: 0.6rem !important;
+  padding: 10px !important;
+  svg {
+    height: 1rem;
+    width: 1rem;
+  }
 }
 
 .pageHeader {
@@ -27,8 +47,13 @@
   padding: 1rem 1.8rem 1.8rem;
   align-items: flex-start;
   height: 10rem;
-  background: rgb(255,255,255);
-  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 57%, rgba(255,255,255,0) 100%);
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 57%,
+    rgba(255, 255, 255, 0) 100%
+  );
   display: flex;
   justify-content: space-between;
 
@@ -45,7 +70,7 @@
       font-family: Inter, sans-serif !important;
       font-style: normal !important;
       font-weight: bold !important;
-      color: #3A83DC !important;
+      color: #3a83dc !important;
       line-height: 1;
     }
 
@@ -54,7 +79,7 @@
       font-family: Inter, sans-serif !important;
       font-style: normal !important;
       font-weight: bold !important;
-      color: #3A83DC !important;
+      color: #3a83dc !important;
       display: flex;
       align-items: center;
       line-height: 1;
@@ -71,7 +96,7 @@
   }
 
   .helpButton {
-    color: #3A83DC;
+    color: #3a83dc;
     font-weight: bold;
     font-size: 16px;
   }
@@ -86,7 +111,7 @@
     margin-right: 1rem;
 
     &.upcoming {
-      animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+      animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
       animation-iteration-count: infinite;
     }
   }
@@ -100,15 +125,21 @@
     font-style: normal;
   }
 
+  .title.flex {
+    display: flex;
+    align-items: flex-start;
+  }
+
   .avatarContainer {
     margin-left: 1rem;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
 
     .avatarImage {
       border-radius: 25px;
-      border: #3A83DC 2px solid;
+      border: #3a83dc 2px solid;
     }
-    .avatarImage, svg {
+    .avatarImage,
+    svg {
       object-fit: cover;
       width: 50px;
       height: 50px;
@@ -125,8 +156,8 @@
     position: absolute;
     left: 50%;
     width: 20%;
-    margin-top: .25rem;
-    border: 1px solid #E5E5F5;
+    margin-top: 0.25rem;
+    border: 1px solid #e5e5f5;
     box-sizing: border-box;
     box-shadow: 0 15px 70px -10px rgba(239, 242, 251, 0.6);
     border-radius: 4px;
@@ -137,16 +168,16 @@
   }
 
   .MuiOutlinedInput-input {
-    padding: .8rem;
+    padding: 0.8rem;
 
     &::placeholder {
-      color: #CDCEEA;
+      color: #cdceea;
     }
   }
 
   .MuiOutlinedInput-root.Mui-focused {
     .MuiOutlinedInput-notchedOutline {
-      border: 2px solid #3A83DC;
+      border: 2px solid #3a83dc;
     }
   }
 
@@ -154,7 +185,7 @@
     outline: none;
     width: 45px;
     height: 45px;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
 
     svg {
       width: 40px;
@@ -164,25 +195,25 @@
 
   .search {
     position: absolute;
-    top: .25rem;
+    top: 0.25rem;
     left: 50%;
     transform: translateX(-50%);
   }
 
   &__search {
     width: 30%;
-    margin-top: .25rem;
-    padding-left: .8rem;
-    padding-right: .8rem;
+    margin-top: 0.25rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
     background: rgba(255, 255, 255, 0.4);
     /* Grayscale / Gray 05 */
-    border: 1px solid #E5E5F5;
+    border: 1px solid #e5e5f5;
     box-sizing: border-box;
     box-shadow: 0 15px 70px -10px rgba(239, 242, 251, 0.6);
     border-radius: 4px;
 
     &::placeholder {
-      color: #CDCEEA;
+      color: #cdceea;
       font-size: 0.9rem;
     }
   }

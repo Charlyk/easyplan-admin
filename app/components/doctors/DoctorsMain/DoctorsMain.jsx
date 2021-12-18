@@ -5,21 +5,17 @@ import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { usePubNub } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import PageHeader from 'app/components/common/MainComponent/PageHeader/PageHeader';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
 import { textForKey } from 'app/utils/localization';
-import { handleRemoteMessage } from 'app/utils/pubnubUtils';
-import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
-import { environment, isDev } from 'eas.config';
+import { isDev } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
   triggerUserLogout,
 } from 'redux/actions/actions';
-import { setClinic } from 'redux/actions/clinicActions';
 import {
   currentClinicSelector,
   currentUserSelector,
@@ -50,7 +46,6 @@ const DoctorsMain = ({ children, pageTitle }) => {
   const patientXRayModal = useSelector(patientXRayModalSelector);
   const patientNoteModal = useSelector(patientNoteModalSelector);
   const dispatch = useDispatch();
-  const pubnub = usePubNub();
   const router = useRouter();
   const buttonRef = useRef(null);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
@@ -58,27 +53,6 @@ const DoctorsMain = ({ children, pageTitle }) => {
   const selectedClinic = currentUser?.clinics?.find(
     (item) => item.clinicId === currentClinic.id,
   );
-
-  useEffect(() => {
-    redirectIfOnGeneralHost(currentUser, router);
-    if (currentUser != null) {
-      pubnub.setUUID(currentUser.id);
-    }
-
-    if (currentClinic != null) {
-      const { id } = currentClinic;
-      dispatch(setClinic(currentClinic));
-      pubnub.subscribe({
-        channels: [`${id}-${environment}-clinic-pubnub-channel`],
-      });
-      pubnub.addListener({ message: handlePubnubMessageReceived });
-      return () => {
-        pubnub.unsubscribe({
-          channels: [`${id}-${environment}-clinic-pubnub-channel`],
-        });
-      };
-    }
-  }, [currentUser, currentClinic]);
 
   useEffect(() => {
     handleUserAccessChange();
@@ -101,10 +75,6 @@ const DoctorsMain = ({ children, pageTitle }) => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handlePubnubMessageReceived = ({ message }) => {
-    dispatch(handleRemoteMessage(message));
   };
 
   const handleCompanyClose = () => {

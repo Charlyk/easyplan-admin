@@ -1,3 +1,4 @@
+import { ClinicAnalyticsState } from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.types';
 import {
   ClinicCabinet,
   CurrentClinic,
@@ -12,6 +13,10 @@ import {
   ClinicServiceCategory,
   DoctorScheduleDetails,
   NotificationSeverity,
+  ShortInvoice,
+  ExchangeRate,
+  DealView,
+  DealStateView,
 } from 'types';
 
 export interface CalendarDataState {
@@ -33,6 +38,7 @@ export interface CreateAppointmentModalState {
   startHour?: string | null;
   endHour?: string | null;
   cabinet?: ClinicCabinet | null;
+  isDoctorMode?: boolean;
 }
 
 export interface PatientSmsMessageState {
@@ -65,6 +71,7 @@ export interface AppDataState {
   currentUser: CurrentUser | null;
   authToken: string | null;
   isUpdatingProfile: boolean;
+  isUpdatingClinic: boolean;
 }
 
 export interface CabinetsDataState {
@@ -106,6 +113,47 @@ export interface GlobalNotificationsState {
   severity?: NotificationSeverity | null;
 }
 
+export interface PatientListState {
+  patients: {
+    data: Patient[];
+    total: number;
+  };
+  isLoading: boolean;
+  isDeleting: boolean;
+}
+
+export interface InvoicesButtonState {
+  invoices: ShortInvoice[];
+  isLoading: boolean;
+}
+
+export interface ExchangeRatesState {
+  rates: ExchangeRate[];
+  isFetching: boolean;
+}
+
+export interface CrmBoardState {
+  states: DealStateView[];
+  remindersCount: number;
+  isFetchingStates: boolean;
+  isFetchingRemindersCount: boolean;
+}
+
+export interface DealsColumnState {
+  isFetching: boolean;
+  showActions: boolean;
+  isEditingName: boolean;
+  showColorPicker: boolean;
+  showCreateColumn: boolean;
+  columnName: string;
+  columnColor: string;
+  totalElements: number;
+  page: number;
+  itemsPerPage: number;
+  items: DealView[];
+  dealState: DealStateView | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -139,4 +187,10 @@ export interface ReduxState {
   servicesList: ServicesListState;
   doctorScheduleDetails: DoctorScheduleDetailsState;
   globalNotifications: GlobalNotificationsState;
+  patientList: PatientListState;
+  invoicesButton: InvoicesButtonState;
+  exchangeRates: ExchangeRatesState;
+  clinicAnalytics: ClinicAnalyticsState;
+  crmBoard: CrmBoardState;
+  dealsColumn: DealsColumnState;
 }

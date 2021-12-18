@@ -67,8 +67,10 @@ export default authorized(async (req, res) => {
       break;
     }
     case 'DELETE': {
-      await handler(deletePatient, req, res);
-      res.json({ message: 'OK' });
+      const data = await handler(deletePatient, req, res);
+      if (data !== null) {
+        res.json(data);
+      }
       break;
     }
     default:

@@ -36,8 +36,8 @@ import { toggleAppointmentsUpdate } from 'redux/actions/actions';
 import {
   activeClinicDoctorsSelector,
   clinicCabinetsSelector,
+  clinicServicesSelector,
 } from 'redux/selectors/appDataSelector';
-import { clinicServicesSelector } from 'redux/selectors/appDataSelector';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
@@ -67,6 +67,7 @@ import reducer, {
   setService,
   setShowDatePicker,
   setSelectedCabinet,
+  setSelectedCabinetInDoctorMode,
   resetState,
 } from './AddAppointmentModal.reducer';
 
@@ -78,6 +79,7 @@ const AddAppointmentModal = ({
   endHour: selectedEndTime,
   cabinet: selectedCabinet,
   date,
+  isDoctorMode = false,
   schedule,
   onClose,
 }) => {
@@ -147,10 +149,21 @@ const AddAppointmentModal = ({
   }, [cabinet, clinicDoctors]);
 
   const cabinets = useMemo(() => {
-    const mappedCabinets = clinicCabinets.map((cabinet) => ({
-      ...cabinet,
-      label: cabinet.name,
-    }));
+    let mappedCabinets;
+    if (isDoctorMode) {
+      const neededDoctor = clinicDoctors.find(
+        (doctor) => doctor.id === selectedDoctor.id,
+      );
+      mappedCabinets = neededDoctor.cabinets.map((cabinet) => ({
+        ...cabinet,
+        label: cabinet.name,
+      }));
+    } else {
+      mappedCabinets = clinicCabinets.map((cabinet) => ({
+        ...cabinet,
+        label: cabinet.name,
+      }));
+    }
     return orderBy(mappedCabinets, 'name', 'asc');
   }, [clinicCabinets]);
 
@@ -172,6 +185,14 @@ const AddAppointmentModal = ({
   }, [patients, patient]);
 
   const mappedServices = useMemo(() => {
+    if (isDoctorMode) {
+      doctor?.services.filter((service) =>
+        activeServices.some(
+          (activeService) => activeService.id === service.serviceId,
+        ),
+      );
+    }
+
     if (doctor?.services == null && cabinet == null) {
       return [];
     }
@@ -254,13 +275,31 @@ const AddAppointmentModal = ({
   }, [open]);
 
   useEffect(() => {
-    if (selectedDoctor != null) {
+    if (selectedDoctor != null && !isDoctorMode) {
       const fullName = `${selectedDoctor.firstName} ${selectedDoctor.lastName}`;
       const { phoneNumber } = selectedDoctor;
       const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
       localDispatch(
         setDoctor({
           ...selectedDoctor,
+          label: fullName,
+          fullName,
+          name,
+        }),
+      );
+    }
+
+    if (selectedDoctor != null && isDoctorMode) {
+      const neededDoctor = clinicDoctors.find(
+        (doctor) => doctor.id === selectedDoctor.id,
+      );
+      const fullName = `${neededDoctor.firstName} ${neededDoctor.lastName}`;
+      const { phoneNumber } = neededDoctor;
+      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+
+      localDispatch(
+        setDoctor({
+          ...neededDoctor,
           label: fullName,
           fullName,
           name,
@@ -285,7 +324,7 @@ const AddAppointmentModal = ({
       );
     }
 
-    if (selectedCabinet != null) {
+    if (selectedCabinet != null && !isDoctorMode) {
       localDispatch(setSelectedCabinet(selectedCabinet));
     }
   }, [selectedDoctor, date, selectedPatient, selectedCabinet]);
@@ -388,7 +427,11 @@ const AddAppointmentModal = ({
   };
 
   const handleCabinetChange = (event, selectedCabinet) => {
-    localDispatch(setSelectedCabinet(selectedCabinet));
+    if (isDoctorMode) {
+      localDispatch(setSelectedCabinetInDoctorMode(selectedCabinet));
+    } else {
+      localDispatch(setSelectedCabinet(selectedCabinet));
+    }
   };
 
   const handleServiceChange = (event, selectedService) => {
@@ -723,15 +766,17 @@ const AddAppointmentModal = ({
           />
         )}
 
-        <EASAutocomplete
-          filterLocally
-          containerClass={styles.simpleField}
-          options={doctors}
-          value={doctor}
-          fieldLabel={textForKey('Doctor')}
-          placeholder={textForKey('Enter doctor name or phone')}
-          onChange={handleDoctorChange}
-        />
+        {!isDoctorMode && (
+          <EASAutocomplete
+            filterLocally
+            containerClass={styles.simpleField}
+            options={doctors}
+            value={doctor}
+            fieldLabel={textForKey('Doctor')}
+            placeholder={textForKey('Enter doctor name or phone')}
+            onChange={handleDoctorChange}
+          />
+        )}
 
         <EASAutocomplete
           filterLocally
