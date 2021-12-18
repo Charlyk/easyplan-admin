@@ -15,7 +15,7 @@ const createAppointmentModalSlice = createSlice({
       return {
         ...action.payload,
         date:
-          action.payload.date != null
+          action?.payload?.date != null
             ? moment(action.payload.date).format('YYYY-MM-DD')
             : null,
       };

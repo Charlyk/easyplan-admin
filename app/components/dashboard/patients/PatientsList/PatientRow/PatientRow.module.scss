@@ -14,11 +14,11 @@
     }
 
     .avatarRoot {
-      margin-right: .8rem !important;
+      margin-right: 0.8rem !important;
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      border: #3A83DC 1px solid;
+      border: #3a83dc 1px solid;
     }
   }
 
@@ -33,30 +33,33 @@
 
     &.name {
       outline: none;
-      color: #34344E;
+      color: #34344e;
       font-weight: 500;
+      max-width: 400px;
+      display: block;
     }
 
-    &.email, &.phone {
-      color: #3A83DC !important;
+    &.email,
+    &.phone {
+      color: #3a83dc !important;
 
       a {
-        color: #3A83DC !important;
+        color: #3a83dc !important;
 
         &:hover {
-          color: #3A83DC !important;
+          color: #3a83dc !important;
         }
       }
     }
 
     svg {
-      fill: #3A83DC;
-      margin-right: .5rem;
+      fill: #3a83dc;
+      margin-right: 0.5rem;
     }
   }
 
   td {
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     border-bottom-color: #ededed;
   }
 }

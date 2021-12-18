@@ -38,6 +38,7 @@ const PatientRow = ({ patient, onSelect }) => {
           <Typography
             classes={{ root: clsx(styles['row-label'], styles.name) }}
             onClick={handlePatientNameClick}
+            noWrap
           >
             {patient.fullName}
           </Typography>

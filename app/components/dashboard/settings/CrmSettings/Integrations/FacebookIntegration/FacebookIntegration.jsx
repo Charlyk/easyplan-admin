@@ -88,7 +88,7 @@ const FacebookIntegration = ({ currentClinic }) => {
         if (pages.length > 1) {
           handleShowPagesList(pages);
         } else {
-          await handlePageSelected(pages[0]);
+          await handlePageSelected(pages);
         }
       }
     } catch (error) {

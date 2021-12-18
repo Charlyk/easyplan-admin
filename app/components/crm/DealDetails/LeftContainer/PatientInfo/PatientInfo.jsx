@@ -13,6 +13,10 @@ import { textForKey } from 'app/utils/localization';
 import styles from './PatientInfo.module.scss';
 
 const PatientInfo = ({ deal, onLink }) => {
+  const patientImage = useMemo(() => {
+    return deal?.contact?.photoUrl ?? deal?.patient?.photo ?? '';
+  }, [deal]);
+
   const patientName = useMemo(() => {
     if (deal == null) {
       return '';
@@ -40,12 +44,21 @@ const PatientInfo = ({ deal, onLink }) => {
 
   return (
     <div className={styles.patientInfo}>
-      <Typography className={styles.titleLabel}>
-        {textForKey('Patient')}
-      </Typography>
+      {!patientImage && (
+        <Typography className={styles.titleLabel}>
+          {textForKey('Patient')}
+        </Typography>
+      )}
       <TableContainer>
         <Table>
           <TableBody>
+            <TableRow>
+              <TableCell colSpan={2} align='center' valign='center'>
+                <div className={styles.avatarContainer}>
+                  {patientImage && <img src={patientImage} alt={patientName} />}
+                </div>
+              </TableCell>
+            </TableRow>
             <TableRow>
               <TableCell>
                 <Typography className={styles.rowTitle}>
@@ -104,9 +117,9 @@ PatientInfo.propTypes = {
     }),
     schedule: PropTypes.shape({
       id: PropTypes.number,
-      created: PropTypes.string,
-      dateAndTime: PropTypes.string,
-      endTime: PropTypes.string,
+      created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      dateAndTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       canceledReason: PropTypes.string,
       doctor: PropTypes.shape({
         id: PropTypes.number,

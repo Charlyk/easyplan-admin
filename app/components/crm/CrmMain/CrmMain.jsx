@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import Zoom from '@material-ui/core/Zoom';
 import IconFilter from '@material-ui/icons/FilterList';
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
-import orderBy from 'lodash/orderBy';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
@@ -31,24 +30,27 @@ import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import setDocCookies from 'app/utils/setDocCookies';
 import {
-  fetchAllDealStates,
   requestChangeDealColumn,
   requestConfirmFirstContact,
-  requestFetchRemindersCount,
   updateDealState,
 } from 'middleware/api/crm';
 import {
-  newReminderSelector,
-  updatedDealSelector,
-  updatedReminderSelector,
-} from 'redux/selectors/crmSelector';
+  currentClinicSelector,
+  currentUserSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
+import {
+  crmDealsStatesSelector,
+  remindersCountSelector,
+} from 'redux/selectors/crmBoardSelector';
+import { updatedDealSelector } from 'redux/selectors/crmSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';
 import reducer, {
   initialState,
-  setColumns,
   openLinkModal,
   closeLinkModal,
   openDeleteModal,
@@ -64,7 +66,6 @@ import reducer, {
   setShowReminders,
   setCallToPlay,
   setShowPageConnectModal,
-  setActiveRemindersCount,
 } from './CrmMain.reducer';
 
 const ConfirmationModal = dynamic(() =>
@@ -78,20 +79,19 @@ const CrmFilters = dynamic(() => import('./CrmFilters'));
 const COOKIES_KEY = 'crm_filter';
 const COLUMN_WIDTH = 350;
 
-const CrmMain = ({ states, currentUser, currentClinic }) => {
+const CrmMain = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
-  const remoteReminder = useSelector(newReminderSelector);
-  const updateReminder = useSelector(updatedReminderSelector);
+  const currentUser = useSelector(currentUserSelector);
+  const currentClinic = useSelector(currentClinicSelector);
+  const activeRemindersCount = useSelector(remindersCountSelector);
+  const columns = useSelector(crmDealsStatesSelector);
   const remoteDeal = useSelector(updatedDealSelector);
   const columnsContainerRef = useRef(null);
-  const userClinic = currentUser.clinics.find(
-    (item) => item.clinicId === currentClinic.id,
-  );
+  const userClinic = useSelector(userClinicSelector);
   const [
     {
-      columns,
       linkModal,
       deleteModal,
       updatedDeal,
@@ -99,7 +99,6 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       reminderModal,
       showFilters,
       queryParams,
-      activeRemindersCount,
       showReminders,
       callToPlay,
       showPageConnectModal,
@@ -128,12 +127,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     }
     const params = JSON.parse(atob(queryParams));
     localDispatch(setQueryParams(params));
-    fetchRemindersCount();
   }, []);
-
-  useEffect(() => {
-    fetchRemindersCount();
-  }, [remoteReminder, updateReminder]);
 
   useEffect(() => {
     if (remoteDeal == null) {
@@ -142,37 +136,8 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
     localDispatch(setUpdatedDeal(remoteDeal));
   }, [remoteDeal]);
 
-  useEffect(() => {
-    localDispatch(setColumns(states));
-  }, [states]);
-
-  const fetchRemindersCount = async () => {
-    try {
-      const response = await requestFetchRemindersCount();
-      localDispatch(setActiveRemindersCount(response.data));
-    } catch (error) {
-      onRequestError(error);
-    }
-  };
-
-  const updateColumns = async (newState) => {
-    try {
-      const response = await fetchAllDealStates();
-      localDispatch(setColumns(orderBy(response.data, ['orderId'], ['asc'])));
-
-      if (queryParams.states && newState != null) {
-        updateParams({
-          ...queryParams,
-          states: orderBy(
-            [...queryParams.states, newState],
-            ['orderId'],
-            ['asc'],
-          ),
-        });
-      }
-    } catch (error) {
-      onRequestError(error);
-    }
+  const updateColumns = () => {
+    dispatch(dispatchFetchDealStates());
   };
 
   const handleCloseLinkModal = () => {
@@ -213,7 +178,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
       return;
     }
     try {
-      const column = states.find((item) => item.type === 'ClosedNotRealized');
+      const column = columns.find((item) => item.type === 'ClosedNotRealized');
       if (column == null) {
         return;
       }
@@ -377,7 +342,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
         deal={detailsModal.deal}
         currentUser={currentUser}
         currentClinic={currentClinic}
-        states={states}
+        states={columns}
         onLink={handleLinkPatient}
         onClose={handleCloseDetails}
         onAddSchedule={handleAddSchedule}
@@ -457,7 +422,7 @@ const CrmMain = ({ states, currentUser, currentClinic }) => {
               width={COLUMN_WIDTH}
               filterData={queryParams}
               isFirst={index === 0}
-              isLast={index === states.length - 1}
+              isLast={index === columns.length - 1}
               updatedDeal={updatedDeal}
               currentClinic={currentClinic}
               dealState={dealState}

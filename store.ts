@@ -2,8 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import createSagaMiddleware from 'redux-saga';
 import timerMiddleware from 'redux-timer-middleware';
-import rootReducer from 'redux/reducers/rootReducer';
 import rootSaga from 'redux/sagas';
+import rootReducer from './redux/reducers/rootReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -8,26 +8,23 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import sortBy from 'lodash/sortBy';
 import { useDispatch, useSelector } from 'react-redux';
-import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
-import { fetchClinicExchangeRates } from 'middleware/api/clinic';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
 import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
 import { updateExchangeRatesSelector } from 'redux/selectors/rootSelector';
 import styles from './ExchangeRates.module.scss';
+import { exchangeRatesSelector } from './ExchangeRates.selector';
+import { fetchExchangeRatesList } from './ExchangeRates.slice';
 
 const ExchangeRates = ({ canEdit }) => {
-  const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
+  const { rates, isFetching: isLoading } = useSelector(exchangeRatesSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
   const updateRates = useSelector(updateExchangeRatesSelector);
   const [isMounted, setIsMounted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [rates, setRates] = useState([]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -40,21 +37,8 @@ const ExchangeRates = ({ canEdit }) => {
     if (!isMounted) {
       return;
     }
-    fetchExchangeRates();
+    dispatch(fetchExchangeRatesList());
   }, [updateRates, isMounted]);
-
-  const fetchExchangeRates = async () => {
-    try {
-      if (isMounted) setIsLoading(true);
-      const response = await fetchClinicExchangeRates();
-      const sortedItems = sortBy(response.data, (item) => item.created);
-      if (isMounted) setRates(sortedItems);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      if (isMounted) setIsLoading(false);
-    }
-  };
 
   const handleOpenExchangeRatesModal = () => {
     dispatch(setIsExchangeRatesModalOpen(true));
