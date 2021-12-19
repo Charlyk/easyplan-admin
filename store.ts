@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import createSagaMiddleware from 'redux-saga';
-import timerMiddleware from 'redux-timer-middleware';
 import rootSaga from 'redux/sagas';
 import rootReducer from './redux/reducers/rootReducer';
 
@@ -10,7 +9,7 @@ const sagaMiddleware = createSagaMiddleware();
 export const ReduxStore = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([sagaMiddleware, timerMiddleware]),
+    getDefaultMiddleware().concat([sagaMiddleware]),
 });
 
 // create a makeStore function

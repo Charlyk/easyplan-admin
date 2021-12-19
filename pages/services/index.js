@@ -10,6 +10,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
 
 const Services = ({ categories: clinicCategories, services }) => {
@@ -23,37 +24,44 @@ const Services = ({ categories: clinicCategories, services }) => {
 export default connect((state) => state)(Services);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    try {
-      const appState = store.getState();
-      const authToken = authTokenSelector(appState);
-      const currentUser = currentUserSelector(appState);
-      const currentClinic = currentClinicSelector(appState);
+  (store) =>
+    async ({ req }) => {
+      try {
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        const cookies = req?.headers?.cookie ?? '';
+        store.dispatch(setCookies(cookies));
 
-      if (!authToken || !authToken.match(JwtRegex)) {
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
+
+        const redirectTo = redirectToUrl(
+          currentUser,
+          currentClinic,
+          '/services',
+        );
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
+
         return {
-          redirect: {
-            destination: '/login',
-            permanent: true,
-          },
+          props: {},
         };
+      } catch (error) {
+        return handleRequestError(error);
       }
-
-      const redirectTo = redirectToUrl(currentUser, currentClinic, '/services');
-      if (redirectTo != null) {
-        return {
-          redirect: {
-            destination: redirectTo,
-            permanent: true,
-          },
-        };
-      }
-
-      return {
-        props: {},
-      };
-    } catch (error) {
-      return handleRequestError(error);
-    }
-  },
+    },
 );

@@ -11,6 +11,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
 
 const Settings = ({ countries, menu }) => {
@@ -29,6 +30,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const authToken = authTokenSelector(appState);
         const currentUser = currentUserSelector(appState);
         const currentClinic = currentClinicSelector(appState);
+        const cookies = req?.headers?.cookie ?? '';
+        store.dispatch(setCookies(cookies));
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {

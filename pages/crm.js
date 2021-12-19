@@ -13,6 +13,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { setDealStates } from 'redux/slices/crmBoardSlice';
 import { wrapper } from 'store';
+import { setCookies } from '../redux/slices/appDataSlice';
 
 const Crm = () => {
   return (
@@ -28,6 +29,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req }) => {
       try {
+        const cookies = req?.headers?.cookie ?? '';
         const appState = store.getState();
         const authToken = authTokenSelector(appState);
         const currentUser = currentUserSelector(appState);
@@ -53,6 +55,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         const response = await fetchAllDealStates(req.headers);
         store.dispatch(setDealStates(response.data));
+        store.dispatch(setCookies(cookies));
 
         return {
           props: {},
