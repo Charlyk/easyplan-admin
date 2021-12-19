@@ -265,18 +265,13 @@ App.getInitialProps = wrapper.getInitialAppProps(
   (store) =>
     async ({ Component, ctx }) => {
       try {
-        const { auth_token: authToken, clinic_id: clinicId } = parseCookies(
-          ctx.req,
-        );
+        const { auth_token: authToken } = parseCookies(ctx.req);
         const { date: queryDate } = ctx.query;
         const { data } = await fetchAppData(
-          {
-            [HeaderKeys.authorization]: authToken,
-            [HeaderKeys.clinicId]: clinicId,
-          },
+          ctx.req?.headers,
           queryDate ?? moment().format('YYYY-MM-DD'),
         );
-        const { currentUser, currentClinic } = data.data;
+        const { currentUser, currentClinic } = data;
         moment.tz.setDefault(currentClinic.timeZone);
         const cookies = ctx.req?.headers?.cookie ?? '';
         store.dispatch(
