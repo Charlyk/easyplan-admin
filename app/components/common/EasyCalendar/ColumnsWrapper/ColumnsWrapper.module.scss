@@ -2,6 +2,7 @@
   width: calc(100% - 2.8rem);
   height: fit-content;
   display: flex;
+  position: relative;
 
   .columnRoot {
     flex: 1;
