@@ -23,10 +23,14 @@ const appDataSlice = createSlice({
     setAuthToken(state, action: PayloadAction<string>) {
       state.authToken = action.payload;
     },
+    setCookies(state, action: PayloadAction<string>) {
+      state.cookies = action.payload;
+    },
     setAppData(state, action: PayloadAction<AppDataState>) {
       state.currentClinic = action.payload.currentClinic;
       state.currentUser = action.payload.currentUser;
       state.authToken = action.payload.authToken;
+      state.cookies = action.payload.cookies;
       state.isUpdatingClinic = false;
       state.isUpdatingProfile = false;
     },
@@ -54,6 +58,7 @@ export const {
   setCurrentClinic,
   setCurrentUser,
   setAppData,
+  setCookies,
   setAuthToken,
   setIsUpdatingProfile,
   updateUserProfile,

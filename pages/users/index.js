@@ -10,6 +10,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
 
 const Users = () => {
@@ -23,36 +24,39 @@ const Users = () => {
 export default connect((state) => state)(Users);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    try {
-      const appState = store.getState();
-      const authToken = authTokenSelector(appState);
-      const currentUser = currentUserSelector(appState);
-      const currentClinic = currentClinicSelector(appState);
+  (store) =>
+    async ({ req }) => {
+      try {
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        const cookies = req?.headers?.cookie ?? '';
+        store.dispatch(setCookies(cookies));
 
-      if (!authToken || !authToken.match(JwtRegex)) {
-        return {
-          redirect: {
-            destination: '/login',
-            permanent: true,
-          },
-        };
-      }
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-      const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
-      if (redirectTo != null) {
+        const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
         return {
-          redirect: {
-            destination: redirectTo,
-            permanent: true,
-          },
+          props: {},
         };
+      } catch (error) {
+        return handleRequestError(error);
       }
-      return {
-        props: {},
-      };
-    } catch (error) {
-      return handleRequestError(error);
-    }
-  },
+    },
 );

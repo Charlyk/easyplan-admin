@@ -1,25 +1,33 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { animated, useSpring } from 'react-spring';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { updateHourIndicatorPositionSelector } from 'redux/selectors/rootSelector';
 import styles from './HourIndicator.module.scss';
 
 const HourIndicator = ({ dayHours, viewDate, disabled }) => {
   const [hideIndicator, setHideIndicator] = useState(disabled);
   const [isMounted, setIsMounted] = useState(false);
-  const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
   const initialHourIndicatorTop = getHourIndicatorTop();
+  const currentTimeRef = useRef('');
+  const timerIntervalRef = useRef(-1);
+  const [currentTime, setCurrentTime] = useState('');
   const [{ hourTop }, set] = useSpring(() => ({
     hourTop: initialHourIndicatorTop || 0,
   }));
 
   useEffect(() => {
     setIsMounted(true);
+    timerIntervalRef.current = setInterval(() => {
+      const newTime = moment().format('HH:mm');
+      if (newTime !== currentTimeRef.current) {
+        setCurrentTime(newTime);
+        currentTimeRef.current = newTime;
+      }
+    }, 1000);
     return () => {
       setIsMounted(false);
+      clearInterval(timerIntervalRef.current);
     };
   }, []);
 
@@ -44,7 +52,7 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
       return;
     }
     updateHourIndicatorTop();
-  }, [updateHourIndicator, disabled]);
+  }, [currentTime, disabled]);
 
   const lastHourDate = useMemo(() => {
     const lastHour = dayHours[dayHours.length - 1];
@@ -118,7 +126,7 @@ const HourIndicator = ({ dayHours, viewDate, disabled }) => {
         top: hourTop.to(hourTopInterpolator),
       }}
     >
-      <div className={styles.hourLabel}>{moment().format('HH:mm')}</div>
+      <div className={styles.hourLabel}>{currentTime}</div>
       <div className={styles.line} />
     </animated.div>
   );

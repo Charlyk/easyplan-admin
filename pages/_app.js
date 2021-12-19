@@ -7,11 +7,9 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
-
 import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import theme from 'app/styles/theme';
 import { HeaderKeys, UnauthorizedPaths } from 'app/utils/constants';
@@ -34,7 +32,6 @@ import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
 import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
-import types from 'redux/types';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
 import 'app/styles/base/base.scss';
@@ -75,25 +72,6 @@ const App = ({ Component, pageProps }) => {
       localStorage.removeItem('dateRange');
     }
   }, [router.asPath]);
-
-  useEffect(() => {
-    dispatch({
-      type: START_TIMER,
-      payload: {
-        actionName: types.setUpdateHourIndicatorPosition,
-        timerName: 'hourIndicatorTimer',
-        timerInterval: 1000,
-      },
-    });
-    return () => {
-      dispatch({
-        type: STOP_TIMER,
-        payload: {
-          timerName: 'hourIndicatorTimer',
-        },
-      });
-    };
-  }, []);
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -300,11 +278,13 @@ App.getInitialProps = wrapper.getInitialAppProps(
         );
         const { currentUser, currentClinic } = data.data;
         moment.tz.setDefault(currentClinic.timeZone);
+        const cookies = ctx.req?.headers?.cookie ?? '';
         store.dispatch(
           setAppData({
             currentClinic,
             currentUser,
             authToken,
+            cookies,
           }),
         );
       } catch (e) {
