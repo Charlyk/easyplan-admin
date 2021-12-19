@@ -48,6 +48,7 @@ const initialState: ReduxState = Object.freeze({
     currentClinic: null,
     currentUser: null,
     authToken: null,
+    cookies: '',
     isUpdatingProfile: false,
     isUpdatingClinic: false,
   },

@@ -12,6 +12,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCookies } from 'redux/slices/appDataSlice';
 import { setCalendarData } from 'redux/slices/calendarData';
 import { wrapper } from 'store';
 
@@ -39,6 +40,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const authToken = authTokenSelector(appState);
       const currentUser = currentUserSelector(appState);
       const currentClinic = currentClinicSelector(appState);
+      const cookies = req?.headers?.cookie ?? '';
+      store.dispatch(setCookies(cookies));
       try {
         if (!authToken || !authToken.match(JwtRegex)) {
           return {

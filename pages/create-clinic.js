@@ -6,6 +6,8 @@ import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import { fetchAllCountries } from 'middleware/api/countries';
+import { setCookies } from 'redux/slices/appDataSlice';
+import { wrapper } from 'store';
 
 const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
   return (
@@ -21,31 +23,36 @@ const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
 
 export default connect((state) => state)(CreateClinic);
 
-export const getServerSideProps = async ({ req, query }) => {
-  try {
-    const isMobile = checkIsMobileDevice(req);
-    const { auth_token: authToken } = parseCookies(req);
-    if (!authToken || !authToken.match(JwtRegex)) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: true,
-        },
-      };
-    }
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req, query }) => {
+      try {
+        const isMobile = checkIsMobileDevice(req);
+        const { auth_token: authToken } = parseCookies(req);
+        const cookies = req?.headers?.cookie ?? '';
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-    const { data: countries } = await fetchAllCountries(req.headers);
-    const { redirect, login } = query;
-    return {
-      props: {
-        isMobile,
-        token: authToken,
-        redirect: redirect === '1',
-        shouldLogin: login === '1',
-        countries,
-      },
-    };
-  } catch (e) {
-    return handleRequestError(e);
-  }
-};
+        store.dispatch(setCookies(cookies));
+        const { data: countries } = await fetchAllCountries(req.headers);
+        const { redirect, login } = query;
+        return {
+          props: {
+            isMobile,
+            token: authToken,
+            redirect: redirect === '1',
+            shouldLogin: login === '1',
+            countries,
+          },
+        };
+      } catch (e) {
+        return handleRequestError(e);
+      }
+    },
+);
