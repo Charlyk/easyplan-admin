@@ -67,7 +67,6 @@ const Schedule = ({
       minute: parseInt(minutes),
       second: 0,
     });
-    console.log(schedule, startTime, clinicStartTime, hours, minutes);
     const scheduleDayDuration = moment
       .duration(startTime.diff(clinicStartTime))
       .asMinutes();
