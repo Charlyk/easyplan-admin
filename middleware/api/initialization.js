@@ -1,4 +1,5 @@
-import { get } from './request';
+import axios from 'axios';
+import { baseApiUrl } from 'eas.config';
 
 /**
  * Fetch clinic details and current user
@@ -9,9 +10,13 @@ import { get } from './request';
 export async function fetchAppData(headers = null, date = null) {
   try {
     if (date == null) {
-      return get('/api/analytics/app-data', headers);
+      return axios.get(`${baseApiUrl}/app/app-data`, {
+        headers,
+      });
     }
-    return get(`/api/analytics/app-data?date=${date}`, headers);
+    return axios.get(`${baseApiUrl}/app/app-data?date=${date}`, {
+      headers,
+    });
   } catch (error) {
     throw new Error(error.message);
   }

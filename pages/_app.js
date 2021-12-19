@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { START_TIMER, STOP_TIMER } from 'redux-timer-middleware';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import theme from 'app/styles/theme';
-import { UnauthorizedPaths } from 'app/utils/constants';
+import { HeaderKeys, UnauthorizedPaths } from 'app/utils/constants';
 import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
@@ -287,13 +287,18 @@ App.getInitialProps = wrapper.getInitialAppProps(
   (store) =>
     async ({ Component, ctx }) => {
       try {
-        const { auth_token: authToken } = parseCookies(ctx.req);
+        const { auth_token: authToken, clinic_id: clinicId } = parseCookies(
+          ctx.req,
+        );
         const { date: queryDate } = ctx.query;
         const { data } = await fetchAppData(
-          ctx.req.headers,
+          {
+            [HeaderKeys.authorization]: authToken,
+            [HeaderKeys.clinicId]: clinicId,
+          },
           queryDate ?? moment().format('YYYY-MM-DD'),
         );
-        const { currentUser, currentClinic } = data;
+        const { currentUser, currentClinic } = data.data;
         moment.tz.setDefault(currentClinic.timeZone);
         store.dispatch(
           setAppData({
