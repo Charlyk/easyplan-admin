@@ -294,6 +294,7 @@ App.getInitialProps = wrapper.getInitialAppProps(
           queryDate ?? moment().format('YYYY-MM-DD'),
         );
         const { currentUser, currentClinic } = data;
+        moment.tz.setDefault(currentClinic.timeZone);
         store.dispatch(
           setAppData({
             currentClinic,

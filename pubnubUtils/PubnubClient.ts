@@ -36,7 +36,11 @@ import { showSuccessNotification } from 'redux/slices/globalNotificationsSlice';
 import { ReduxStore as store } from 'store';
 import { DealView, MessageAction, PatientDebt, ShortInvoice } from 'types';
 import { PubnubMessage, Schedule } from 'types';
-import { currentUserSelector } from '../redux/selectors/appDataSelector';
+import { Role } from '../app/utils/constants';
+import {
+  currentUserSelector,
+  userClinicSelector,
+} from '../redux/selectors/appDataSelector';
 
 const pubnubUUID = PubNub.generateUUID();
 const initializationParams = {
@@ -141,7 +145,15 @@ const handleUpdateSchedules = (schedule: Schedule) => {
 };
 
 const handleAddNewSchedule = (schedule: Schedule) => {
-  store.dispatch(addNewSchedule(schedule));
+  const appState = store.getState();
+  const currentUser = currentUserSelector(appState);
+  const userClinic = userClinicSelector(appState);
+  if (
+    userClinic.roleInClinic !== Role.doctor ||
+    currentUser.id === schedule.doctorId
+  ) {
+    store.dispatch(addNewSchedule(schedule));
+  }
 };
 
 const handleDeleteSchedule = (schedule: Schedule) => {
