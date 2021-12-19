@@ -241,8 +241,8 @@ export default React.memo(Schedule, areComponentPropsEqual);
 Schedule.propTypes = {
   schedule: PropTypes.shape({
     id: PropTypes.number,
-    startTime: PropTypes.string,
-    endTime: PropTypes.string,
+    startTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     scheduleStatus: PropTypes.string,
     serviceColor: PropTypes.string,
     serviceName: PropTypes.string,

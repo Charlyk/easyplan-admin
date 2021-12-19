@@ -63,8 +63,8 @@ EasyCalendar.propTypes = {
           id: PropTypes.number,
           comment: PropTypes.string,
           doctorId: PropTypes.number,
-          startTime: PropTypes.string,
-          endTime: PropTypes.string,
+          startTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+          endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
           isUrgent: PropTypes.bool,
           urgent: PropTypes.bool,
           patient: PropTypes.shape({
