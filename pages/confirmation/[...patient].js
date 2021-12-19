@@ -9,7 +9,6 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
 import LoadingButton from 'app/components/common/LoadingButton';
 import AppLogoBlue from 'app/components/icons/appLogoBlue';
@@ -121,7 +120,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                   <Typography className={styles.dataLabel}>
                     {moment(schedule.startTime)
                       .tz(schedule.timeZone)
-                      .format('DD.MM.YYYY')}
+                      ?.format('DD.MM.YYYY')}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -135,7 +134,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                   <Typography className={styles.dataLabel}>
                     {moment(schedule.startTime)
                       .tz(schedule.timeZone)
-                      .format('HH:mm')}
+                      ?.format('HH:mm')}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -229,7 +228,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   );
 };
 
-export default connect((state) => state)(Confirmation);
+export default Confirmation;
 
 export const getServerSideProps = async ({ req, query }) => {
   try {
