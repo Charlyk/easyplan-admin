@@ -63,6 +63,10 @@ const EasyApp = ({ Component, pageProps }) => {
   const logout = useSelector(logoutSelector);
   const currentPage = router.asPath;
 
+  useEffect(() => {
+    dispatch(setAppData(pageProps.appData));
+  }, []);
+
   const clinicRoom = useMemo(() => {
     const id = currentClinic?.id ?? -1;
     return `${id}-${pubNubEnv}-clinic-pubnub-channel`;
@@ -282,6 +286,13 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
         cookies,
       };
       store.dispatch(setAppData(appData));
+      return {
+        pageProps: {
+          ...(await App.getInitialProps(context)).pageProps,
+          pathname: ctx.pathname,
+          appData,
+        },
+      };
     } catch (e) {
       console.error(e.message);
     }
