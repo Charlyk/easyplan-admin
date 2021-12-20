@@ -155,9 +155,14 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             fieldLabel={textForKey('Required time')}
             min='15'
             max='360'
+            inputClass='test-input-class'
             error={service.duration > 360}
             value={service.duration}
-            onChange={(value) => handleFormChange('duration', value)}
+            onChange={(value) => {
+              value < 361
+                ? handleFormChange('duration', value)
+                : handleFormChange('duration', 360);
+            }}
             endAdornment={
               <Typography className={styles.adornment}>min</Typography>
             }
