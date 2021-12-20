@@ -7,6 +7,7 @@ import { JwtRegex, Role } from 'app/utils/constants';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import withClinicAndUser from 'hocs/withClinicAndUser';
 import { getSchedulesForInterval } from 'middleware/api/schedules';
 import {
   authTokenSelector,
@@ -29,89 +30,90 @@ const Week = ({ date, doctorId }) => {
 export default connect((state) => state)(Week);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ req, query }) => {
-      try {
-        if (query.date == null) {
-          query.date = moment().format('YYYY-MM-DD');
-        }
-        const appState = store.getState();
-        const authToken = authTokenSelector(appState);
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
-        const cookies = req?.headers?.cookie ?? '';
-        store.dispatch(setCookies(cookies));
-        const { date: queryDate, doctorId: queryDoctorId } = query;
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        // check if user is on the allowed page
-        const redirectTo = redirectToUrl(
-          currentUser,
-          currentClinic,
-          '/calendar/week',
-        );
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: redirectTo,
-              permanent: true,
-            },
-          };
-        }
-
-        // fetch schedules for current week
-        const currentDate = moment(queryDate);
-
-        // filter clinic doctors
-        const doctors =
-          currentClinic?.users?.filter(
-            (item) => item.roleInClinic === Role.doctor && item.showInCalendar,
-          ) || [];
-
-        // check if doctor id is present in query
-        let doctorId = queryDoctorId;
-        if (doctorId == null) {
-          doctorId = doctors[0]?.id ?? 0;
-        }
-
-        // fetch schedules for specified period of time
-        const week = getCurrentWeek(currentDate.toDate()).map((item) =>
-          item.toDate(),
-        );
-        const firstDay = week[0];
-        const lastDay = week[week.length - 1];
-        const response = await getSchedulesForInterval(
-          firstDay,
-          lastDay,
-          doctorId,
-          req.headers,
-        );
-
-        const { schedules, hours } = response.data;
-
-        store.dispatch(
-          setCalendarData({
-            dayHours: hours,
-            details: null,
-            schedules,
-          }),
-        );
-
+  (store) => async (context) => {
+    try {
+      await withClinicAndUser(store, context);
+      const { req, query } = context;
+      if (query.date == null) {
+        query.date = moment().format('YYYY-MM-DD');
+      }
+      const appState = store.getState();
+      const authToken = authTokenSelector(appState);
+      const currentUser = currentUserSelector(appState);
+      const currentClinic = currentClinicSelector(appState);
+      const cookies = req?.headers?.cookie ?? '';
+      store.dispatch(setCookies(cookies));
+      const { date: queryDate, doctorId: queryDoctorId } = query;
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {
-            doctorId: parseInt(doctorId, 10),
-            date: query.date,
+          redirect: {
+            destination: '/login',
+            permanent: true,
           },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+
+      // check if user is on the allowed page
+      const redirectTo = redirectToUrl(
+        currentUser,
+        currentClinic,
+        '/calendar/week',
+      );
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: redirectTo,
+            permanent: true,
+          },
+        };
+      }
+
+      // fetch schedules for current week
+      const currentDate = moment(queryDate);
+
+      // filter clinic doctors
+      const doctors =
+        currentClinic?.users?.filter(
+          (item) => item.roleInClinic === Role.doctor && item.showInCalendar,
+        ) || [];
+
+      // check if doctor id is present in query
+      let doctorId = queryDoctorId;
+      if (doctorId == null) {
+        doctorId = doctors[0]?.id ?? 0;
+      }
+
+      // fetch schedules for specified period of time
+      const week = getCurrentWeek(currentDate.toDate()).map((item) =>
+        item.toDate(),
+      );
+      const firstDay = week[0];
+      const lastDay = week[week.length - 1];
+      const response = await getSchedulesForInterval(
+        firstDay,
+        lastDay,
+        doctorId,
+        req.headers,
+      );
+
+      const { schedules, hours } = response.data;
+
+      store.dispatch(
+        setCalendarData({
+          dayHours: hours,
+          details: null,
+          schedules,
+        }),
+      );
+
+      return {
+        props: {
+          doctorId: parseInt(doctorId, 10),
+          date: query.date,
+        },
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );

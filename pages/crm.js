@@ -5,15 +5,16 @@ import CrmMain from 'app/components/crm/CrmMain';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import withClinicAndUser from 'hocs/withClinicAndUser';
 import { fetchAllDealStates } from 'middleware/api/crm';
 import {
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCookies } from 'redux/slices/appDataSlice';
 import { setDealStates } from 'redux/slices/crmBoardSlice';
 import { wrapper } from 'store';
-import { setCookies } from '../redux/slices/appDataSlice';
 
 const Crm = () => {
   return (
@@ -26,42 +27,43 @@ const Crm = () => {
 export default connect((state) => state)(Crm);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ req }) => {
-      try {
-        const cookies = req?.headers?.cookie ?? '';
-        const appState = store.getState();
-        const authToken = authTokenSelector(appState);
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        const redirectTo = redirectToUrl(currentUser, currentClinic, '/crm');
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        const response = await fetchAllDealStates(req.headers);
-        store.dispatch(setDealStates(response.data));
-        store.dispatch(setCookies(cookies));
-
+  (store) => async (context) => {
+    try {
+      await withClinicAndUser(store, context);
+      const { req } = context;
+      const cookies = req?.headers?.cookie ?? '';
+      const appState = store.getState();
+      const authToken = authTokenSelector(appState);
+      const currentUser = currentUserSelector(appState);
+      const currentClinic = currentClinicSelector(appState);
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {},
+          redirect: {
+            destination: '/login',
+            permanent: true,
+          },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+
+      const redirectTo = redirectToUrl(currentUser, currentClinic, '/crm');
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: '/login',
+            permanent: true,
+          },
+        };
+      }
+
+      const response = await fetchAllDealStates(req.headers);
+      store.dispatch(setDealStates(response.data));
+      store.dispatch(setCookies(cookies));
+
+      return {
+        props: {},
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );

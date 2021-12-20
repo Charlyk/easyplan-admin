@@ -5,6 +5,7 @@ import DoctorsMain from 'app/components/doctors/DoctorsMain';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import withClinicAndUser from 'hocs/withClinicAndUser';
 import { fetchDoctorScheduleDetails } from 'middleware/api/schedules';
 import {
   authTokenSelector,
@@ -26,48 +27,49 @@ const DoctorScheduleDetails = () => {
 export default connect((state) => state)(DoctorScheduleDetails);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ req, query }) => {
-      try {
-        const appState = store.getState();
-        const authToken = authTokenSelector(appState);
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
-        const cookies = req?.headers?.cookie ?? '';
-        store.dispatch(setCookies(cookies));
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: redirectTo,
-              permanent: true,
-            },
-          };
-        }
-
-        const { scheduleId } = query;
-        const response = await fetchDoctorScheduleDetails(
-          scheduleId,
-          null,
-          req.headers,
-        );
-        store.dispatch(
-          setScheduleDetailsData({ schedule: response.data, scheduleId }),
-        );
+  (store) => async (context) => {
+    try {
+      await withClinicAndUser(store, context);
+      const { req, query } = context;
+      const appState = store.getState();
+      const authToken = authTokenSelector(appState);
+      const currentUser = currentUserSelector(appState);
+      const currentClinic = currentClinicSelector(appState);
+      const cookies = req?.headers?.cookie ?? '';
+      store.dispatch(setCookies(cookies));
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {},
+          redirect: {
+            destination: '/login',
+            permanent: true,
+          },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+
+      const redirectTo = redirectToUrl(currentUser, currentClinic, '/doctor');
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: redirectTo,
+            permanent: true,
+          },
+        };
+      }
+
+      const { scheduleId } = query;
+      const response = await fetchDoctorScheduleDetails(
+        scheduleId,
+        null,
+        req.headers,
+      );
+      store.dispatch(
+        setScheduleDetailsData({ schedule: response.data, scheduleId }),
+      );
+      return {
+        props: {},
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );

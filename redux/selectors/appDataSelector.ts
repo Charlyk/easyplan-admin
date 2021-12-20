@@ -61,6 +61,11 @@ export const clinicServicesSelector = createSelector(
   (clinic) => clinic.services?.filter((item) => !item.deleted) || [],
 );
 
+export const isAppInitializedSelector = createSelector(
+  appDataSelector,
+  (data) => data.isAppInitialized,
+);
+
 export const clinicTimeZoneSelector = createSelector(
   currentClinicSelector,
   (clinic) => clinic?.timeZone || moment.tz.guess(true),
