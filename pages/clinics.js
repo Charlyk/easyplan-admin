@@ -8,6 +8,7 @@ import parseCookies from 'app/utils/parseCookies';
 import { getCurrentUser } from 'middleware/api/auth';
 import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
+import withClinicAndUser from '../hocs/withClinicAndUser';
 
 const Clinics = ({ user, authToken, isMobile }) => {
   return <ClinicsList authToken={authToken} user={user} isMobile={isMobile} />;
@@ -16,31 +17,32 @@ const Clinics = ({ user, authToken, isMobile }) => {
 export default connect((state) => state)(Clinics);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ req }) => {
-      try {
-        const isMobile = checkIsMobileDevice(req);
-        const cookies = req?.headers?.cookie ?? '';
-        const { auth_token: authToken } = parseCookies(req);
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-        const response = await getCurrentUser(req.headers);
-        store.dispatch(setCookies(cookies));
+  (store) => async (context) => {
+    try {
+      await withClinicAndUser(store, context);
+      const { req } = context;
+      const isMobile = checkIsMobileDevice(req);
+      const cookies = req?.headers?.cookie ?? '';
+      const { auth_token: authToken } = parseCookies(req);
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {
-            isMobile,
-            authToken,
-            user: response.data,
+          redirect: {
+            destination: '/login',
+            permanent: true,
           },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+      const response = await getCurrentUser(req.headers);
+      store.dispatch(setCookies(cookies));
+      return {
+        props: {
+          isMobile,
+          authToken,
+          user: response.data,
+        },
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );

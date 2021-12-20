@@ -13,6 +13,7 @@ import {
   fetchClinicDetailsWatcher,
   remindersCountWatcher,
   dealsStatesWatcher,
+  appDataWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -30,5 +31,6 @@ export default function* rootSaga() {
     fetchClinicDetailsWatcher(),
     remindersCountWatcher(),
     dealsStatesWatcher(),
+    appDataWatcher(),
   ]);
 }

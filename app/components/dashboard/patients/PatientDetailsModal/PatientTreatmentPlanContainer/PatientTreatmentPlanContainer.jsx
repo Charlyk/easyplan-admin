@@ -35,7 +35,6 @@ const PatientTreatmentPlanContainer = ({
         null,
         patientId,
       );
-      console.log(initialSchedule);
       setScheduleData(initialSchedule);
     } catch (error) {
       toast.error(error.message);

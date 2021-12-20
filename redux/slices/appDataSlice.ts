@@ -10,6 +10,9 @@ const appDataSlice = createSlice({
   name: 'appData',
   initialState: initialState.appData,
   reducers: {
+    dispatchFetchAppData(state, _action: PayloadAction<any>) {
+      state.isAppInitialized = false;
+    },
     requestUpdateCurrentClinic(state, _action: PayloadAction<string>) {
       state.isUpdatingClinic = true;
     },
@@ -22,6 +25,17 @@ const appDataSlice = createSlice({
     },
     setAuthToken(state, action: PayloadAction<string>) {
       state.authToken = action.payload;
+    },
+    setCurrentEntities(
+      state,
+      action: PayloadAction<{
+        currentUser: CurrentUser;
+        currentClinic: CurrentClinic;
+      }>,
+    ) {
+      state.currentUser = action.payload.currentUser;
+      state.currentClinic = action.payload.currentClinic;
+      state.isAppInitialized = true;
     },
     setAuthenticationData(
       state,
@@ -67,6 +81,8 @@ export const {
   requestUpdateCurrentClinic,
   setIsUpdatingClinic,
   setAuthenticationData,
+  setCurrentEntities,
+  dispatchFetchAppData,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;
