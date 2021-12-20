@@ -28,12 +28,12 @@ export default connect((state) => state)(Month);
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-    if (query.date == null) {
-      query.date = moment().format('YYYY-MM-DD');
-    }
     try {
       await withClinicAndUser(store, context);
       const { query, req } = context;
+      if (query.date == null) {
+        query.date = moment().format('YYYY-MM-DD');
+      }
       const appState = store.getState();
       const authToken = authTokenSelector(appState);
       const currentUser = currentUserSelector(appState);
