@@ -33,14 +33,6 @@ const doctorScheduleDetailsSlice = createSlice({
       state.error = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.doctorScheduleDetails,
-      };
-    },
-  },
 });
 
 export const {

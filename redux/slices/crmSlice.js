@@ -22,14 +22,6 @@ const crmSlice = createSlice({
       state.newReminder = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.crm,
-      };
-    },
-  },
 });
 
 export const {

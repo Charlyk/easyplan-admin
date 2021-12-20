@@ -44,14 +44,6 @@ const appDataSlice = createSlice({
       state.isUpdatingProfile = true;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.appData,
-      };
-    },
-  },
 });
 
 export const {

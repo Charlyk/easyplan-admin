@@ -165,14 +165,6 @@ const calendarData = createSlice({
       state.dayHours = action.payload.hours;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.calendarData,
-      };
-    },
-  },
 });
 
 export const {

@@ -76,14 +76,6 @@ const servicesListSlice = createSlice({
       state.details = null;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.servicesList,
-      };
-    },
-  },
 });
 
 export const {

@@ -13,14 +13,6 @@ const clinicDataSlice = createSlice({
       state.userClinicAccessChange = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.clinicData,
-      };
-    },
-  },
 });
 
 export const { setShouldUpdateClinicData, setUserClinicAccessChange } =

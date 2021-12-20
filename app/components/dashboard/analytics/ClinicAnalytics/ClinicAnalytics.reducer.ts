@@ -111,12 +111,6 @@ const clinicAnalyticsSlice = createSlice({
       state.isFetching = false;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => ({
-      ...state,
-      ...action.payload.clinicAnalytics,
-    }),
-  },
 });
 
 export const {

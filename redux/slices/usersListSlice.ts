@@ -39,14 +39,6 @@ const usersListSlice = createSlice({
       state.error = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.usersList,
-      };
-    },
-  },
 });
 
 export const {

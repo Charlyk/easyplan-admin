@@ -29,14 +29,6 @@ const crmBoardSlice = createSlice({
       state.isFetchingRemindersCount = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.crmBoard,
-      };
-    },
-  },
 });
 
 export const {

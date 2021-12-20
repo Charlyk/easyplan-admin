@@ -18,14 +18,6 @@ const exchangeRatesSlice = createSlice({
       state.isFetching = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.exchangeRates,
-      };
-    },
-  },
 });
 
 export const { fetchExchangeRatesList, setExchangeRates, setIsFetching } =

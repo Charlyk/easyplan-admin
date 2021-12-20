@@ -49,14 +49,6 @@ const cabinetsData = createSlice({
       });
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.cabinetsData,
-      };
-    },
-  },
 });
 
 export const {

@@ -33,14 +33,6 @@ const patientsListSlice = createSlice({
       state.isDeleting = false;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.patientsList,
-      };
-    },
-  },
 });
 
 export const {

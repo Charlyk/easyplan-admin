@@ -24,14 +24,6 @@ const createAppointmentModalSlice = createSlice({
       return initialState.appointmentModal;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.appointmentModal,
-      };
-    },
-  },
 });
 
 export const { openAppointmentModal, closeAppointmentModal } =

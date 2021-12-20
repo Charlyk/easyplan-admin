@@ -42,14 +42,6 @@ const invoicesButtonSlice = createSlice({
       state.isLoading = action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.invoicesButton,
-      };
-    },
-  },
 });
 
 export const {
