@@ -99,6 +99,11 @@ export const activeClinicDoctorsSelector = createSelector(
     ),
 );
 
+export const doctorsForScheduleSelector = createSelector(
+  activeClinicDoctorsSelector,
+  (users) => users.filter((user) => !user.isInVacation),
+);
+
 export const clinicExchangeRatesSelector = createSelector(
   currentClinicSelector,
   (currentClinic) => {
