@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from '../initialState';
 
 const clinicDataSlice = createSlice({
@@ -11,14 +10,6 @@ const clinicDataSlice = createSlice({
     },
     setUserClinicAccessChange(state, action: PayloadAction<any>) {
       state.userClinicAccessChange = action.payload;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.clinicData,
-      };
     },
   },
 });

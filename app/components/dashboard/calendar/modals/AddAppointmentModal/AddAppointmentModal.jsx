@@ -34,9 +34,9 @@ import {
 } from 'middleware/api/schedules';
 import { toggleAppointmentsUpdate } from 'redux/actions/actions';
 import {
-  activeClinicDoctorsSelector,
   clinicCabinetsSelector,
   clinicServicesSelector,
+  doctorsForScheduleSelector,
 } from 'redux/selectors/appDataSelector';
 import styles from './AddAppointment.module.scss';
 import reducer, {
@@ -89,7 +89,7 @@ const AddAppointmentModal = ({
   const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
-  const clinicDoctors = useSelector(activeClinicDoctorsSelector);
+  const clinicDoctors = useSelector(doctorsForScheduleSelector);
   const [
     {
       patient,

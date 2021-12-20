@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { DealStateView } from 'types';
 
@@ -27,14 +26,6 @@ const crmBoardSlice = createSlice({
     },
     setIsFetchingRemindersCount(state, action: PayloadAction<boolean>) {
       state.isFetchingRemindersCount = action.payload;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.crmBoard,
-      };
     },
   },
 });

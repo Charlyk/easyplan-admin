@@ -25,10 +25,11 @@ import {
   currentClinicSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
-import { updateHourIndicatorPositionSelector } from 'redux/selectors/rootSelector';
 import styles from './PageHeader.module.scss';
 
-const ActionsSheet = dynamic(() => import('../../ActionsSheet'));
+const ActionsSheet = dynamic(() =>
+  import('app/components/common/ActionsSheet'),
+);
 
 const actions = [
   {
@@ -56,24 +57,32 @@ const PageHeader = ({
   const router = useRouter();
   const dispatch = useDispatch();
   const actionsAnchor = useRef(null);
+  const timerIntervalRef = useRef(-1);
+  const currentTimeRef = useRef('');
   const [isMounted, setIsMounted] = useState(false);
   const currentClinic = useSelector(currentClinicSelector);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
-  const updateHourIndicator = useSelector(updateHourIndicatorPositionSelector);
+  const [currentTime, setCurrentTime] = useState(['', '']);
   const userClinic = useSelector(userClinicSelector);
 
   const canRegisterPayments = useMemo(() => {
     return userClinic?.canRegisterPayments;
   }, [userClinic]);
 
-  const currentTime = useMemo(() => {
-    return moment().format('HH:mm').split(':');
-  }, [updateHourIndicator]);
-
   useEffect(() => {
     setIsMounted(true);
+    // start update clock interval
+    timerIntervalRef.current = setInterval(() => {
+      const newTime = moment().format('HH:mm');
+      if (newTime !== currentTimeRef.current) {
+        setCurrentTime(newTime.split(':'));
+        currentTimeRef.current = newTime;
+      }
+    }, 1000);
     return () => {
       setIsMounted(false);
+      // stop update clock interval
+      clearInterval(timerIntervalRef.current);
     };
   }, []);
 

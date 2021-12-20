@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { AppDataState } from 'redux/types';
 import { CurrentClinic } from 'types';
@@ -23,10 +22,14 @@ const appDataSlice = createSlice({
     setAuthToken(state, action: PayloadAction<string>) {
       state.authToken = action.payload;
     },
+    setCookies(state, action: PayloadAction<string>) {
+      state.cookies = action.payload;
+    },
     setAppData(state, action: PayloadAction<AppDataState>) {
       state.currentClinic = action.payload.currentClinic;
       state.currentUser = action.payload.currentUser;
       state.authToken = action.payload.authToken;
+      state.cookies = action.payload.cookies;
       state.isUpdatingClinic = false;
       state.isUpdatingProfile = false;
     },
@@ -40,20 +43,13 @@ const appDataSlice = createSlice({
       state.isUpdatingProfile = true;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.appData,
-      };
-    },
-  },
 });
 
 export const {
   setCurrentClinic,
   setCurrentUser,
   setAppData,
+  setCookies,
   setAuthToken,
   setIsUpdatingProfile,
   updateUserProfile,

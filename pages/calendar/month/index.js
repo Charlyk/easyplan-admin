@@ -11,6 +11,7 @@ import {
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
 
 const Month = ({ doctorId, date }) => {
@@ -26,7 +27,7 @@ export default connect((state) => state)(Month);
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
-    async ({ query }) => {
+    async ({ query, req }) => {
       if (query.date == null) {
         query.date = moment().format('YYYY-MM-DD');
       }
@@ -35,6 +36,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const authToken = authTokenSelector(appState);
         const currentUser = currentUserSelector(appState);
         const currentClinic = currentClinicSelector(appState);
+        const cookies = req?.headers?.cookie ?? '';
+        store.dispatch(setCookies(cookies));
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
