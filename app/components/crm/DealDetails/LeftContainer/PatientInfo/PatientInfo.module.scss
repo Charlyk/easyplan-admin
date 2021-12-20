@@ -16,6 +16,20 @@
     }
   }
 
+  .avatarContainer {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    img, svg {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+
   .titleLabel {
     font-family: Inter, sans-serif !important;
     font-style: normal !important;

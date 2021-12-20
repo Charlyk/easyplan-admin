@@ -275,6 +275,7 @@ const PatientPersonalData: React.FC<Props> = ({
           fieldLabel={textForKey('Last name')}
           value={lastName}
           onChange={(value) => handleFormChange('lastName', value)}
+          maxLength={25}
         />
 
         <EASTextField
@@ -283,6 +284,7 @@ const PatientPersonalData: React.FC<Props> = ({
           fieldLabel={textForKey('First name')}
           value={firstName}
           onChange={(value) => handleFormChange('firstName', value)}
+          maxLength={25}
         />
 
         <EASTextField
@@ -301,6 +303,7 @@ const PatientPersonalData: React.FC<Props> = ({
           error={email?.length > 0 && !email.match(EmailRegex)}
           fieldLabel={textForKey('Email')}
           onChange={(value) => handleFormChange('email', value)}
+          maxLength={40}
         />
 
         <EASTextField

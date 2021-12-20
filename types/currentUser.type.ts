@@ -1,3 +1,5 @@
+import { UserClinic } from 'types';
+
 export interface CurrentUser {
   id: number;
   firstName: string;
@@ -8,5 +10,5 @@ export interface CurrentUser {
   phoneNumber?: string | null;
   language: string;
   userClinic: any;
-  clinics: any[];
+  clinics: UserClinic[];
 }

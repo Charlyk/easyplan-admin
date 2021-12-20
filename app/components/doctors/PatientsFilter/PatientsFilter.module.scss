@@ -5,7 +5,7 @@
   margin-left: 8px;
   flex-direction: column;
   align-items: center;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
   border-radius: 4px;
 
@@ -24,14 +24,20 @@
 
   .tabRoot {
     background-color: white !important;
-    color: #3A83DC !important;
+    color: #3a83dc !important;
     width: 50%;
-    border-color: #3A83DC;
+    border-color: #3a83dc;
     padding: 8px;
   }
 
+  .schedulesBtn {
+    color: #3a83dc;
+    border-color: #3a83dc;
+    margin: 0.5rem 0;
+  }
+
   .tabSelected {
-    background-color: #3A83DC !important;
+    background-color: #3a83dc !important;
     color: white !important;
   }
 

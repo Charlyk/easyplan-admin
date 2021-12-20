@@ -1,12 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
+import { HYDRATE } from 'next-redux-wrapper';
 import { textForKey } from 'app/utils/localization';
+import initialState from 'redux/initialState';
 import { ChartType, ClinicUser } from 'types';
-import {
-  Analytics,
-  ClinicAnalyticsQuery,
-  ClinicAnalyticsState,
-} from './ClinicAnalytics.types';
+import { Analytics, ClinicAnalyticsQuery } from './ClinicAnalytics.types';
 
 const allCharts = [
   ChartType.Services,
@@ -21,25 +19,14 @@ const allCharts = [
   ChartType.ClientsSource,
 ];
 
-const defaultRange: [Date, Date] = [
-  moment().startOf('week').toDate(),
-  moment().endOf('week').toDate(),
+const defaultRange: [string, string] = [
+  moment().startOf('week').toDate().toString(),
+  moment().endOf('week').toDate().toString(),
 ];
-
-export const initialState: ClinicAnalyticsState = {
-  doctors: [],
-  selectedCharts: [],
-  actions: [],
-  showRangePicker: false,
-  selectedRange: defaultRange,
-  isFetching: false,
-  analytics: null,
-  showActions: false,
-};
 
 const clinicAnalyticsSlice = createSlice({
   name: 'clinicAnalytics',
-  initialState,
+  initialState: initialState.clinicAnalytics,
   reducers: {
     setSelectedCharts(state, action: PayloadAction<ChartType[]>) {
       state.selectedCharts = action.payload;
@@ -64,7 +51,7 @@ const clinicAnalyticsSlice = createSlice({
     setShowRangePicker(state, action: PayloadAction<boolean>) {
       state.showRangePicker = action.payload;
     },
-    setSelectedRange(state, action: PayloadAction<[Date, Date]>) {
+    setSelectedRange(state, action: PayloadAction<[string, string]>) {
       state.selectedRange = action.payload;
     },
     setAnalytics(state, action: PayloadAction<Analytics>) {
@@ -76,8 +63,8 @@ const clinicAnalyticsSlice = createSlice({
         (doctor) => doctor.id === parseInt(doctorId),
       );
       state.selectedRange = [
-        moment(startDate).toDate(),
-        moment(endDate).toDate(),
+        moment(startDate).toDate().toString(),
+        moment(endDate).toDate().toString(),
       ];
     },
     hideChart(state, action: PayloadAction<ChartType>) {
@@ -107,7 +94,10 @@ const clinicAnalyticsSlice = createSlice({
     setShowActions(state, action: PayloadAction<boolean>) {
       state.showActions = action.payload;
     },
-    setInitialData(state, action: PayloadAction<[[Date, Date], ChartType[]]>) {
+    setInitialData(
+      state,
+      action: PayloadAction<[[string, string], ChartType[]]>,
+    ) {
       const [range, charts] = action.payload;
       state.selectedRange = range ?? defaultRange;
       state.selectedCharts = charts;
@@ -120,6 +110,12 @@ const clinicAnalyticsSlice = createSlice({
         }));
       state.isFetching = false;
     },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => ({
+      ...state,
+      ...action.payload.clinicAnalytics,
+    }),
   },
 });
 

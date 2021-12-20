@@ -7,6 +7,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import IconPhone from '@material-ui/icons/PhoneCallback';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import ActionsSheet from 'app/components/common/ActionsSheet';
 import ClinicsModal from 'app/components/common/modals/ClinicsModal';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconFacebookSm from 'app/components/icons/iconFacebookSm';
@@ -14,9 +15,8 @@ import IconLink from 'app/components/icons/iconLink';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getPatientName from 'app/utils/getPatientName';
 import { textForKey } from 'app/utils/localization';
-import { requestChangeDealClinic } from 'middleware/api/crm';
 import onRequestError from 'app/utils/onRequestError';
-import ActionsSheet from 'app/components/common/ActionsSheet';
+import { requestChangeDealClinic } from 'middleware/api/crm';
 import styles from './UnsortedDealItem.module.scss';
 
 const actions = [
@@ -169,12 +169,17 @@ const UnsortedDealItem = ({
         onClose={handleCloseActions}
       />
       <div className={styles.avatarContainer}>
-        <IconAvatar />
+        {deal.contact?.photoUrl ? (
+          <img src={deal.contact.photoUrl} alt={deal.contact.name} />
+        ) : (
+          <IconAvatar />
+        )}
         <div className={styles.sourceIconContainer}>{sourceIcon}</div>
       </div>
       <div className={styles.content}>
         <Typography className={styles.sourceLabel}>
-          {textForKey('from')}: {textForKey(deal.source)}
+          {textForKey('from')}: {textForKey(deal.source)} -{' '}
+          {textForKey(deal.sourceDescription)}
         </Typography>
         <Typography className={styles.contactName}>
           {contactName}{' '}
@@ -276,9 +281,9 @@ UnsortedDealItem.propTypes = {
     }),
     schedule: PropTypes.shape({
       id: PropTypes.number,
-      created: PropTypes.string,
-      dateAndTime: PropTypes.string,
-      endTime: PropTypes.string,
+      created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      dateAndTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       canceledReason: PropTypes.string,
       doctor: PropTypes.shape({
         id: PropTypes.number,
