@@ -4,6 +4,7 @@ import { AppDataState } from 'redux/types';
 import { CurrentClinic } from 'types';
 import { UpdateProfileRequest } from 'types/api';
 import { CurrentUser } from 'types/currentUser.type';
+import { AuthenticationResponse } from '../../types/api/response';
 
 const appDataSlice = createSlice({
   name: 'appData',
@@ -22,10 +23,20 @@ const appDataSlice = createSlice({
     setAuthToken(state, action: PayloadAction<string>) {
       state.authToken = action.payload;
     },
+    setAuthenticationData(
+      state,
+      action: PayloadAction<AuthenticationResponse>,
+    ) {
+      state.currentUser = action.payload.user;
+      state.authToken = action.payload.token;
+    },
     setCookies(state, action: PayloadAction<string>) {
       state.cookies = action.payload;
     },
     setAppData(state, action: PayloadAction<AppDataState>) {
+      if (action.payload == null) {
+        return;
+      }
       state.currentClinic = action.payload.currentClinic;
       state.currentUser = action.payload.currentUser;
       state.authToken = action.payload.authToken;
@@ -55,6 +66,7 @@ export const {
   updateUserProfile,
   requestUpdateCurrentClinic,
   setIsUpdatingClinic,
+  setAuthenticationData,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;
