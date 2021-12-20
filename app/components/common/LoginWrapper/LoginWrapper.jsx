@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
@@ -221,6 +222,9 @@ export default function LoginWrapper({
 
   return (
     <div className={styles.loginFormRoot}>
+      <Head>
+        <title>EasyPlan.pro - {textForKey('Authentication')}</title>
+      </Head>
       <ConfirmationModal
         show={showBlockedAccess}
         title={textForKey('access_blocked')}
