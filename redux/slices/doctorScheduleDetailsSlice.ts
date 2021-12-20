@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import { DoctorScheduleDetails } from 'types';
 import initialState from '../initialState';
 
@@ -31,14 +30,6 @@ const doctorScheduleDetailsSlice = createSlice({
     setError(state, action: PayloadAction<string | null>) {
       state.isFetching = false;
       state.error = action.payload;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.doctorScheduleDetails,
-      };
     },
   },
 });

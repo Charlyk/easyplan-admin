@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { ShortInvoice } from 'types';
 
@@ -40,14 +39,6 @@ const invoicesButtonSlice = createSlice({
     },
     setIsLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.invoicesButton,
-      };
     },
   },
 });

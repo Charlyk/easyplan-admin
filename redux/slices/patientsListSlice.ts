@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { Patient } from 'types';
 
@@ -31,14 +30,6 @@ const patientsListSlice = createSlice({
       );
       state.patients.total = state.patients.data.length;
       state.isDeleting = false;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.patientsList,
-      };
     },
   },
 });

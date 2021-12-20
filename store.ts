@@ -1,13 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { createWrapper } from 'next-redux-wrapper';
+import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from 'redux/sagas';
 import rootReducer from './redux/reducers/rootReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
+const hydratedReducer = (state, action) => {
+  if (action.type === HYDRATE) {
+    return {
+      ...state,
+      ...action.payload,
+    };
+  } else {
+    return rootReducer(state, action);
+  }
+};
+
 export const ReduxStore = configureStore({
-  reducer: rootReducer,
+  reducer: hydratedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([sagaMiddleware]),
 });

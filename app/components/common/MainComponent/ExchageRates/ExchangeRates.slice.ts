@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { ExchangeRate } from 'types';
 
@@ -16,14 +15,6 @@ const exchangeRatesSlice = createSlice({
     },
     setIsFetching(state, action: PayloadAction<boolean>) {
       state.isFetching = action.payload;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.exchangeRates,
-      };
     },
   },
 });
