@@ -39,6 +39,7 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
+import { END } from 'redux-saga';
 
 const AddAppointmentModal = dynamic(() =>
   import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
@@ -269,7 +270,19 @@ const EasyApp = ({ Component, pageProps }) => {
 EasyApp.getInitialProps = wrapper.getInitialAppProps(
   (store) => async (context) => {
     const { ctx } = context;
+    // wait for all page actions to dispatch
+    const pageProps = {
+      ...(await App.getInitialProps(context)).pageProps,
+    };
+
+    // stop the saga if on server
+    if (context.ctx.req) {
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
+
     try {
+      // fetch app global data
       const { auth_token: authToken } = parseCookies(ctx.req);
       const { date: queryDate } = ctx.query;
       const { data } = await fetchAppData(
@@ -277,7 +290,11 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
         queryDate ?? moment().format('YYYY-MM-DD'),
       );
       const { currentUser, currentClinic } = data;
+
+      // update moment default timezone
       moment.tz.setDefault(currentClinic.timeZone);
+
+      // store global data in redux
       const cookies = ctx.req?.headers?.cookie ?? '';
       const appData = {
         currentClinic,
@@ -286,22 +303,12 @@ EasyApp.getInitialProps = wrapper.getInitialAppProps(
         cookies,
       };
       store.dispatch(setAppData(appData));
-      return {
-        pageProps: {
-          ...(await App.getInitialProps(context)).pageProps,
-          pathname: ctx.pathname,
-          appData,
-        },
-      };
     } catch (e) {
-      console.error(e.message);
+      console.error('App', e.message);
     }
-    return {
-      pageProps: {
-        ...(await App.getInitialProps(context)).pageProps,
-        pathname: ctx.pathname,
-      },
-    };
+
+    // return props
+    return { pageProps };
   },
 );
 

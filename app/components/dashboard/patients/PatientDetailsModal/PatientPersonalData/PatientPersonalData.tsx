@@ -32,7 +32,6 @@ import {
   updateSchedulePatientRecords,
   updateDetailsPatientRecords,
 } from 'redux/slices/calendarData';
-import { ReduxDispatch } from 'store';
 import { CurrentClinic } from 'types/currentClinic.type';
 import { Patient } from 'types/patient.type';
 import styles from './PatientPersonalData.module.scss';
@@ -72,7 +71,7 @@ const PatientPersonalData: React.FC<Props> = ({
   authToken,
   onPatientUpdated,
 }) => {
-  const dispatch = useDispatch<ReduxDispatch>();
+  const dispatch = useDispatch();
   const didInitialRenderHappen = useRef<boolean>(false);
   const scheduleDetails = useSelector(calendarScheduleDetailsSelector);
   const datePickerRef = useRef<HTMLDivElement | null>();
