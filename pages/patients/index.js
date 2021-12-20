@@ -5,6 +5,7 @@ import PatientsList from 'app/components/dashboard/patients/PatientsList';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import withClinicAndUser from 'hocs/withClinicAndUser';
 import { getPatients } from 'middleware/api/patients';
 import {
   authTokenSelector,
@@ -26,53 +27,50 @@ const NewPatients = ({ data, query: initialQuery }) => {
 export default connect((state) => state)(NewPatients);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ req, query }) => {
-      try {
-        if (query.page == null) {
-          query.page = '0';
-        }
-        if (query.rowsPerPage == null) {
-          query.rowsPerPage = '25';
-        }
-        const appState = store.getState();
-        const authToken = authTokenSelector(appState);
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
-        const cookies = req?.headers?.cookie ?? '';
-        store.dispatch(setCookies(cookies));
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        const redirectTo = redirectToUrl(
-          currentUser,
-          currentClinic,
-          '/patients',
-        );
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: redirectTo,
-              permanent: true,
-            },
-          };
-        }
-        const response = await getPatients(query, req.headers);
-        const { data } = response;
-        store.dispatch(setPatients(data));
+  (store) => async (context) => {
+    try {
+      await withClinicAndUser(store, context);
+      const { req, query } = context;
+      if (query.page == null) {
+        query.page = '0';
+      }
+      if (query.rowsPerPage == null) {
+        query.rowsPerPage = '25';
+      }
+      const appState = store.getState();
+      const authToken = authTokenSelector(appState);
+      const currentUser = currentUserSelector(appState);
+      const currentClinic = currentClinicSelector(appState);
+      const cookies = req?.headers?.cookie ?? '';
+      store.dispatch(setCookies(cookies));
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {
-            query,
+          redirect: {
+            destination: '/login',
+            permanent: true,
           },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+
+      const redirectTo = redirectToUrl(currentUser, currentClinic, '/patients');
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: redirectTo,
+            permanent: true,
+          },
+        };
+      }
+      const response = await getPatients(query, req.headers);
+      const { data } = response;
+      store.dispatch(setPatients(data));
+      return {
+        props: {
+          query,
+        },
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );

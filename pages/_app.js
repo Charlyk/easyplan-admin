@@ -2,25 +2,21 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import moment from 'moment-timezone';
-import App from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import theme from 'app/styles/theme';
 import { UnauthorizedPaths } from 'app/utils/constants';
 import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
-import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
 import { appBaseUrl, isDev, pubNubEnv } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
-import { fetchAppData } from 'middleware/api/initialization';
 import { handlePubnubMessage, pubnubClient } from 'pubnubUtils';
 import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
@@ -33,7 +29,7 @@ import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
 import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
-import { wrapper } from 'store';
+import { ReduxStore, wrapper } from 'store';
 import 'moment/locale/ro';
 import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
@@ -62,10 +58,6 @@ const EasyApp = ({ Component, pageProps }) => {
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
   const currentPage = router.asPath;
-
-  useEffect(() => {
-    dispatch(setAppData(pageProps.appData));
-  }, []);
 
   const clinicRoom = useMemo(() => {
     const id = currentClinic?.id ?? -1;
@@ -216,93 +208,56 @@ const EasyApp = ({ Component, pageProps }) => {
           <Script type='text/javascript' src='/tawkto.js' />
         ) : null}
       </Head>
-      <ThemeProvider theme={theme}>
-        <React.Fragment>
-          <CssBaseline />
-          <PubNubProvider client={pubnubClient}>
-            <NotificationsProvider>
-              <React.Fragment>
-                {isDev && (
-                  <Typography className='develop-indicator'>Dev</Typography>
-                )}
-                {logout && (
-                  <ConfirmationModal
-                    title={textForKey('Logout')}
-                    message={textForKey('logout message')}
-                    onConfirm={handleUserLogout}
-                    onClose={handleCancelLogout}
-                    show={logout}
-                  />
-                )}
-                {appointmentModal?.open && (
-                  <AddAppointmentModal
-                    currentClinic={currentClinic}
-                    onClose={handleAppointmentModalClose}
-                    schedule={appointmentModal?.schedule}
-                    open={appointmentModal?.open}
-                    doctor={appointmentModal?.doctor}
-                    date={appointmentModal?.date}
-                    patient={appointmentModal?.patient}
-                    startHour={appointmentModal?.startHour}
-                    endHour={appointmentModal?.endHour}
-                    cabinet={appointmentModal?.cabinet}
-                    isDoctorMode={appointmentModal?.isDoctorMode}
-                  />
-                )}
-                {imageModal.open && (
-                  <FullScreenImageModal
-                    {...imageModal}
-                    onClose={handleCloseImageModal}
-                  />
-                )}
-                <NextNprogress color='#29D' startPosition={0.3} height={2} />
-                <Component {...pageProps} />
-              </React.Fragment>
-            </NotificationsProvider>
-          </PubNubProvider>
-        </React.Fragment>
-      </ThemeProvider>
+      <Provider store={ReduxStore}>
+        <ThemeProvider theme={theme}>
+          <React.Fragment>
+            <CssBaseline />
+            <PubNubProvider client={pubnubClient}>
+              <NotificationsProvider>
+                <React.Fragment>
+                  {isDev && (
+                    <Typography className='develop-indicator'>Dev</Typography>
+                  )}
+                  {logout && (
+                    <ConfirmationModal
+                      title={textForKey('Logout')}
+                      message={textForKey('logout message')}
+                      onConfirm={handleUserLogout}
+                      onClose={handleCancelLogout}
+                      show={logout}
+                    />
+                  )}
+                  {appointmentModal?.open && (
+                    <AddAppointmentModal
+                      currentClinic={currentClinic}
+                      onClose={handleAppointmentModalClose}
+                      schedule={appointmentModal?.schedule}
+                      open={appointmentModal?.open}
+                      doctor={appointmentModal?.doctor}
+                      date={appointmentModal?.date}
+                      patient={appointmentModal?.patient}
+                      startHour={appointmentModal?.startHour}
+                      endHour={appointmentModal?.endHour}
+                      cabinet={appointmentModal?.cabinet}
+                      isDoctorMode={appointmentModal?.isDoctorMode}
+                    />
+                  )}
+                  {imageModal.open && (
+                    <FullScreenImageModal
+                      {...imageModal}
+                      onClose={handleCloseImageModal}
+                    />
+                  )}
+                  <NextNprogress color='#29D' startPosition={0.3} height={2} />
+                  <Component {...pageProps} />
+                </React.Fragment>
+              </NotificationsProvider>
+            </PubNubProvider>
+          </React.Fragment>
+        </ThemeProvider>
+      </Provider>
     </React.Fragment>
   );
 };
-
-EasyApp.getInitialProps = wrapper.getInitialAppProps(
-  (store) => async (context) => {
-    const { ctx } = context;
-    try {
-      const { auth_token: authToken } = parseCookies(ctx.req);
-      const { date: queryDate } = ctx.query;
-      const { data } = await fetchAppData(
-        ctx.req?.headers,
-        queryDate ?? moment().format('YYYY-MM-DD'),
-      );
-      const { currentUser, currentClinic } = data;
-      moment.tz.setDefault(currentClinic.timeZone);
-      const cookies = ctx.req?.headers?.cookie ?? '';
-      const appData = {
-        currentClinic,
-        currentUser,
-        authToken,
-        cookies,
-      };
-      store.dispatch(setAppData(appData));
-      return {
-        pageProps: {
-          ...(await App.getInitialProps(context)).pageProps,
-          pathname: ctx.pathname,
-          appData,
-        },
-      };
-    } catch (e) {
-      console.error(e.message);
-    }
-    return {
-      pageProps: {
-        ...(await App.getInitialProps(context)).pageProps,
-        pathname: ctx.pathname,
-      },
-    };
-  },
-);
 
 export default wrapper.withRedux(EasyApp);
