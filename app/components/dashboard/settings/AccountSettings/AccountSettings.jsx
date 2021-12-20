@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import UploadAvatar from 'app/components/common/UploadAvatar';
 import IconSuccess from 'app/components/icons/iconSuccess';
-import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex } from 'app/utils/constants';
 import imageToBase64 from 'app/utils/imageToBase64';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
@@ -19,7 +18,6 @@ import styles from './AccountSettings.module.scss';
 
 const AccountSettings = () => {
   const dispatch = useDispatch();
-  const toast = useContext(NotificationsContext);
   const currentUser = useSelector(currentUserSelector);
   const isLoading = useSelector(isUpdatingProfileSelector);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
@@ -86,7 +84,6 @@ const AccountSettings = () => {
       avatar,
     };
     dispatch(updateUserProfile(requestBody));
-    toast.success(textForKey('Saved successfully'));
   };
 
   const isFormValid = () => {
