@@ -111,10 +111,13 @@ const ServiceDetailsModal = () => {
     if (service != null) {
       await handleEditService({
         ...serviceDetails,
-        categoryId: serviceDetails.category.id,
+        categoryId: serviceDetails?.category?.id,
       });
     } else {
-      await handleCreateService({ ...serviceDetails, categoryId: category.id });
+      await handleCreateService({
+        ...serviceDetails,
+        categoryId: category?.id,
+      });
     }
     dispatch(fetchServicesList());
     handleCloseModal();
