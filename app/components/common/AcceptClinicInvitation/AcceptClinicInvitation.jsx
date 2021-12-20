@@ -14,7 +14,11 @@ import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { requestAcceptInvitation } from 'middleware/api/users';
-import { setCurrentUser } from 'redux/slices/appDataSlice';
+import {
+  setAuthenticationData,
+  setAuthToken,
+  setCurrentUser,
+} from 'redux/slices/appDataSlice';
 import EASPhoneInput from '../EASPhoneInput';
 import EASTextField from '../EASTextField';
 import LoadingButton from '../LoadingButton';
@@ -129,14 +133,15 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
         phoneNumber,
         invitationToken: token,
       };
-      const { data: user } = await requestAcceptInvitation(
+      const { data: authResponse } = await requestAcceptInvitation(
         requestBody,
         avatarFile,
         {
           [HeaderKeys.clinicId]: -1,
         },
       );
-      dispatch(setCurrentUser(user));
+      const { user } = authResponse;
+      dispatch(setAuthenticationData(authResponse));
       toast.success(textForKey('invitation_accepted_success'));
       await handleSuccessResponse(user);
     } catch (error) {

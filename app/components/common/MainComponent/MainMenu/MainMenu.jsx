@@ -31,9 +31,7 @@ import { textForKey } from 'app/utils/localization';
 import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
-import onRequestError from 'app/utils/onRequestError';
 import { environment } from 'eas.config';
-import { requestFetchRemindersCount } from 'middleware/api/crm';
 import {
   currentClinicSelector,
   currentUserSelector,
