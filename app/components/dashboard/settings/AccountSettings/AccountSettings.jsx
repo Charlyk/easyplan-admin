@@ -87,23 +87,27 @@ const AccountSettings = () => {
   };
 
   const isFormValid = () => {
+    const isFirstNameValid = data.firstName?.length > 3;
+
+    const isPhoneNumberValid =
+      data.phoneNumber == null ||
+      data.phoneNumber.length === 0 ||
+      data.isPhoneValid;
+
+    const isEmailValid =
+      data.email == null ||
+      data.email.length === 0 ||
+      data.email.match(EmailRegex);
+
+    const isPasswordValid =
+      data.oldPassword?.length > 0 && data.oldPassword !== null;
+
     return isEmailChanged
-      ? (data.firstName?.length > 3 &&
-          (data.phoneNumber == null ||
-            data.phoneNumber.length === 0 ||
-            data.isPhoneValid) &&
-          (data.email == null ||
-            data.email.length === 0 ||
-            data.email.match(EmailRegex)) &&
-          data.oldPassword?.length > 0) ||
-          data.oldPassword !== null
-      : data.firstName?.length > 3 &&
-          (data.phoneNumber == null ||
-            data.phoneNumber.length === 0 ||
-            data.isPhoneValid) &&
-          (data.email == null ||
-            data.email.length === 0 ||
-            data.email.match(EmailRegex));
+      ? isFirstNameValid &&
+          isPhoneNumberValid &&
+          isEmailValid &&
+          isPasswordValid
+      : isFirstNameValid && isPhoneNumberValid && isEmailValid;
   };
 
   return (
