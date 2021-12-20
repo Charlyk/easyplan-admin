@@ -3,6 +3,7 @@ import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
+import App from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -50,7 +51,7 @@ const ConfirmationModal = dynamic(() =>
   import('app/components/common/modals/ConfirmationModal'),
 );
 
-const App = ({ Component, pageProps }) => {
+const EasyApp = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
@@ -61,6 +62,10 @@ const App = ({ Component, pageProps }) => {
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
   const currentPage = router.asPath;
+
+  useEffect(() => {
+    dispatch(setAppData(pageProps.appData));
+  }, []);
 
   const clinicRoom = useMemo(() => {
     const id = currentClinic?.id ?? -1;
@@ -261,39 +266,43 @@ const App = ({ Component, pageProps }) => {
   );
 };
 
-App.getInitialProps = wrapper.getInitialAppProps(
-  (store) =>
-    async ({ Component, ctx }) => {
-      try {
-        const { auth_token: authToken } = parseCookies(ctx.req);
-        const { date: queryDate } = ctx.query;
-        const { data } = await fetchAppData(
-          ctx.req?.headers,
-          queryDate ?? moment().format('YYYY-MM-DD'),
-        );
-        const { currentUser, currentClinic } = data;
-        moment.tz.setDefault(currentClinic.timeZone);
-        const cookies = ctx.req?.headers?.cookie ?? '';
-        store.dispatch(
-          setAppData({
-            currentClinic,
-            currentUser,
-            authToken,
-            cookies,
-          }),
-        );
-      } catch (e) {
-        console.error(e.message);
-      }
+EasyApp.getInitialProps = wrapper.getInitialAppProps(
+  (store) => async (context) => {
+    const { ctx } = context;
+    try {
+      const { auth_token: authToken } = parseCookies(ctx.req);
+      const { date: queryDate } = ctx.query;
+      const { data } = await fetchAppData(
+        ctx.req?.headers,
+        queryDate ?? moment().format('YYYY-MM-DD'),
+      );
+      const { currentUser, currentClinic } = data;
+      moment.tz.setDefault(currentClinic.timeZone);
+      const cookies = ctx.req?.headers?.cookie ?? '';
+      const appData = {
+        currentClinic,
+        currentUser,
+        authToken,
+        cookies,
+      };
+      store.dispatch(setAppData(appData));
       return {
         pageProps: {
-          ...(Component.getInitialProps
-            ? await Component.getInitialProps({ ...ctx, store })
-            : {}),
+          ...(await App.getInitialProps(context)).pageProps,
           pathname: ctx.pathname,
+          appData,
         },
       };
-    },
+    } catch (e) {
+      console.error(e.message);
+    }
+    return {
+      pageProps: {
+        ...(await App.getInitialProps(context)).pageProps,
+        pathname: ctx.pathname,
+      },
+    };
+  },
 );
 
-export default wrapper.withRedux(App);
+export default wrapper.withRedux(EasyApp);

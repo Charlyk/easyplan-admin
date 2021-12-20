@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { CalendarDataState } from 'redux/types';
 import { ScheduleItem, ScheduleDetails, Schedule } from 'types';
@@ -163,14 +162,6 @@ const calendarData = createSlice({
     ) {
       state.schedules = mapSchedules(action.payload.schedules);
       state.dayHours = action.payload.hours;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.calendarData,
-      };
     },
   },
 });

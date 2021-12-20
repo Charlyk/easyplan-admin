@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import sortBy from 'lodash/sortBy';
-import { HYDRATE } from 'next-redux-wrapper';
 import { ClinicService, ClinicServiceDetails } from 'types';
 import initialState from '../initialState';
 import { ServiceDetailsModalState } from '../types';
@@ -74,14 +73,6 @@ const servicesListSlice = createSlice({
     closeDetailsModal(state) {
       state.detailsModal = initialState.servicesList.detailsModal;
       state.details = null;
-    },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.servicesList,
-      };
     },
   },
 });
