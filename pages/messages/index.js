@@ -5,6 +5,7 @@ import SMSMessages from 'app/components/dashboard/messages/SMSMessages';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import withClinicAndUser from 'hocs/withClinicAndUser';
 import { getMessages } from 'middleware/api/messages';
 import {
   authTokenSelector,
@@ -25,47 +26,44 @@ const Messages = ({ messages: initialMessages }) => {
 export default connect((state) => state)(Messages);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ req }) => {
-      try {
-        const appState = store.getState();
-        const authToken = authTokenSelector(appState);
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
-        const cookies = req?.headers?.cookie ?? '';
-        store.dispatch(setCookies(cookies));
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        const redirectTo = redirectToUrl(
-          currentUser,
-          currentClinic,
-          '/messages',
-        );
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: redirectTo,
-              permanent: true,
-            },
-          };
-        }
-
-        const response = await getMessages(req.headers);
-        const { data } = response;
+  (store) => async (context) => {
+    try {
+      await withClinicAndUser(store, context);
+      const { req } = context;
+      const appState = store.getState();
+      const authToken = authTokenSelector(appState);
+      const currentUser = currentUserSelector(appState);
+      const currentClinic = currentClinicSelector(appState);
+      const cookies = req?.headers?.cookie ?? '';
+      store.dispatch(setCookies(cookies));
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {
-            messages: data,
+          redirect: {
+            destination: '/login',
+            permanent: true,
           },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+
+      const redirectTo = redirectToUrl(currentUser, currentClinic, '/messages');
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: redirectTo,
+            permanent: true,
+          },
+        };
+      }
+
+      const response = await getMessages(req.headers);
+      const { data } = response;
+      return {
+        props: {
+          messages: data,
+        },
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );
