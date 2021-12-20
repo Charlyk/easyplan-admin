@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
-import { HYDRATE } from 'next-redux-wrapper';
 import { ClinicUser } from 'types';
 import initialState from '../initialState';
 

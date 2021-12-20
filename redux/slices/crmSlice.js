@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 
 const crmSlice = createSlice({

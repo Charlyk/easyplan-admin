@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
 import { DoctorScheduleDetails } from 'types';
 import initialState from '../initialState';
 

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import sortBy from 'lodash/sortBy';
-import { HYDRATE } from 'next-redux-wrapper';
 import { ClinicService, ClinicServiceDetails } from 'types';
 import initialState from '../initialState';
 import { ServiceDetailsModalState } from '../types';
