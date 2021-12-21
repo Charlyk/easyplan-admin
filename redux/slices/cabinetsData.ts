@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { ClinicCabinet } from 'types';
 
@@ -46,6 +47,14 @@ const cabinetsData = createSlice({
         const updatedUsers = [...cabinet.users, ...users];
         return { ...cabinet, users: updatedUsers };
       });
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.cabinetsData,
+      };
     },
   },
 });
