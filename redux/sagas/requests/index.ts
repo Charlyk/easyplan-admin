@@ -9,3 +9,4 @@ export * from './clinicExchangeRatesRequest';
 export * from './fetchClinicDetailsRequest';
 export * from './patients';
 export * from './crm';
+export * from './fetchAppDataRequest';

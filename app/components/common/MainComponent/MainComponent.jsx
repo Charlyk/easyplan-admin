@@ -181,10 +181,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
         <title>
           {currentClinic?.clinicName} - {pageTitle}
         </title>
-        <meta
-          name='viewport'
-          content='minimum-scale=1, initial-scale=1, width=device-width'
-        />
       </Head>
       {currentUser != null && currentClinic != null && (
         <>

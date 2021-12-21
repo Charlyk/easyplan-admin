@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import ClinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics';
 import {
@@ -34,6 +35,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ query, req }) => {
       try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
+
+        // fetch page data
         if (query.startDate == null) {
           query.startDate = moment().startOf('week').format('YYYY-MM-DD');
         }

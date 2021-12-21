@@ -73,6 +73,7 @@ export interface AppDataState {
   cookies: string;
   isUpdatingProfile: boolean;
   isUpdatingClinic: boolean;
+  isAppInitialized?: boolean;
 }
 
 export interface CabinetsDataState {

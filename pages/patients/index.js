@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import PatientsList from 'app/components/dashboard/patients/PatientsList';
 import { JwtRegex } from 'app/utils/constants';
@@ -29,6 +30,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req, query }) => {
       try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
+
+        // fetch page data
         if (query.page == null) {
           query.page = '0';
         }

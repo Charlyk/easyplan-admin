@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import ServicesContainer from 'app/components/dashboard/services/ServicesContainer';
 import { JwtRegex } from 'app/utils/constants';
@@ -27,6 +28,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req }) => {
       try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
+
+        // fetch page data
         const appState = store.getState();
         const authToken = authTokenSelector(appState);
         const currentUser = currentUserSelector(appState);

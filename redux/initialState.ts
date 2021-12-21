@@ -51,6 +51,7 @@ const initialState: ReduxState = {
     cookies: '',
     isUpdatingProfile: false,
     isUpdatingClinic: false,
+    isAppInitialized: false,
   },
   clinicData: {
     updateClinicData: false,
