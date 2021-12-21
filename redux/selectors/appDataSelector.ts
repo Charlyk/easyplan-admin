@@ -7,11 +7,6 @@ import { ExchangeRate } from '../../types';
 
 export const appDataSelector = (state: ReduxState) => state.appData;
 
-export const isAppInitializedSelector = createSelector(
-  appDataSelector,
-  (data) => data.isAppInitialized,
-);
-
 export const currentClinicSelector = createSelector(
   appDataSelector,
   (appData) => appData.currentClinic,
