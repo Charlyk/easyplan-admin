@@ -69,6 +69,8 @@ const NotificationsProvider: React.FC = ({ children }) => {
         autoHideDuration={1500}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         onClose={handleCloseNotification}
+        onClick={handleCloseNotification}
+        style={{ userSelect: 'none', cursor: 'pointer' }}
       >
         <Alert severity={severity} style={{ width: '100%' }}>
           {message ?? ''}
