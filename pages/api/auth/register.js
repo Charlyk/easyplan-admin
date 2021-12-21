@@ -21,9 +21,18 @@ function createNewAccount(req) {
 }
 
 export default async function register(req, res) {
-  const data = await handler(createNewAccount, req, res);
-  if (data != null) {
-    const { user } = data;
-    res.status(200).json(user);
+  switch (req.method) {
+    case 'POST': {
+      const data = await handler(createNewAccount, req, res);
+      if (data != null) {
+        res.json(data);
+      }
+      break;
+    }
+    default: {
+      res.setHeader('Allow', ['POST']);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
+      break;
+    }
   }
 }
