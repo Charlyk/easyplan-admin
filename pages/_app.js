@@ -152,6 +152,7 @@ const EasyApp = ({ Component, pageProps }) => {
       path.includes('register') ||
       path.includes('accept-invitation') ||
       path.includes('confirmation') ||
+      path.includes('reset-password') ||
       path.includes('create-clinic') ||
       isChecking
     ) {
