@@ -11,6 +11,7 @@ import Script from 'next/script';
 import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { END } from 'redux-saga';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import theme from 'app/styles/theme';
 import { UnauthorizedPaths } from 'app/utils/constants';
@@ -39,7 +40,6 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
-import { END } from 'redux-saga';
 
 const AddAppointmentModal = dynamic(() =>
   import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
