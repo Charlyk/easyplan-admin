@@ -241,7 +241,14 @@ const handleUserAccessChanged = (payload: any) => {
 
 const handleInvoiceCreated = (payload: ShortInvoice) => {
   store.dispatch(addInvoice(payload));
-  store.dispatch(showSuccessNotification(textForKey('invoice_created')));
+  const appState = store.getState();
+  const userClinic = userClinicSelector(appState);
+  if (
+    userClinic.roleInClinic !== Role.doctor &&
+    userClinic.canRegisterPayments
+  ) {
+    store.dispatch(showSuccessNotification(textForKey('invoice_created')));
+  }
 };
 
 const handleInvoiceUpdated = (payload: ShortInvoice) => {
