@@ -1,6 +1,7 @@
 import React, { useContext, useReducer } from 'react';
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -8,6 +9,7 @@ import getClinicUrl from 'app/utils/getClinicUrl';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { isDev } from 'eas.config';
 import { createNewClinic } from 'middleware/api/clinic';
+import { textForKey } from '../../../utils/localization';
 import CreateClinicForm from '../CreateClinicForm';
 import styles from './CreateClinic.module.scss';
 import reducer, {
@@ -68,6 +70,9 @@ export default function CreateClinicWrapper({
 
   return (
     <div className={styles.createClinicRoot}>
+      <Head>
+        <title>EasyPlan.pro - {textForKey('Create clinic')}</title>
+      </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <Box className={styles.logoContainer}>

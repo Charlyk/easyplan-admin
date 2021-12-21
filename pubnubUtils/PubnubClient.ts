@@ -7,6 +7,7 @@ import {
   removeInvoice,
   updateInvoice,
 } from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
+import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {
   togglePatientsListUpdate,
@@ -14,6 +15,10 @@ import {
 } from 'redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
+import {
+  currentUserSelector,
+  userClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import { scheduleDetailsSelector } from 'redux/selectors/doctorScheduleDetailsSelector';
 import { calendarScheduleDetailsSelector } from 'redux/selectors/scheduleSelector';
 import { requestUpdateCurrentClinic } from 'redux/slices/appDataSlice';
@@ -36,11 +41,6 @@ import { showSuccessNotification } from 'redux/slices/globalNotificationsSlice';
 import { ReduxStore as store } from 'store';
 import { DealView, MessageAction, PatientDebt, ShortInvoice } from 'types';
 import { PubnubMessage, Schedule } from 'types';
-import { Role } from '../app/utils/constants';
-import {
-  currentUserSelector,
-  userClinicSelector,
-} from '../redux/selectors/appDataSelector';
 
 const pubnubUUID = PubNub.generateUUID();
 const initializationParams = {

@@ -1,11 +1,9 @@
 import { AxiosResponse } from 'axios';
 import { fetchAppData } from 'middleware/api/initialization';
-import { CurrentClinic, CurrentUser } from 'types';
+import { AppDataRequest, AppDataResponse } from 'types/api';
 
 export async function requestFetchAppData(
-  headers: any,
-): Promise<
-  AxiosResponse<{ currentUser: CurrentUser; currentClinic: CurrentClinic }>
-> {
-  return fetchAppData(headers);
+  request: AppDataRequest,
+): Promise<AxiosResponse<AppDataResponse>> {
+  return fetchAppData(request.headers, request.date);
 }

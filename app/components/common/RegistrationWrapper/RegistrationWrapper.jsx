@@ -2,6 +2,7 @@ import React, { useContext, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
@@ -58,6 +59,9 @@ export default function RegistrationWrapper({ isMobile }) {
 
   return (
     <div className={styles.registerFormRoot}>
+      <Head>
+        <title>EasyPlan.pro - {textForKey('Create new account')}</title>
+      </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <Box className={styles.logoContainer}>

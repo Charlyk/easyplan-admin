@@ -71,8 +71,8 @@ export interface AppDataState {
   currentUser: CurrentUser | null;
   authToken: string | null;
   cookies: string;
-  isUpdatingProfile?: boolean;
-  isUpdatingClinic?: boolean;
+  isUpdatingProfile: boolean;
+  isUpdatingClinic: boolean;
   isAppInitialized?: boolean;
 }
 
