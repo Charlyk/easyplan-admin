@@ -44,7 +44,7 @@ const ResetPasswordPage = ({ token }) => {
       toast.success(textForKey('Saved successfully'));
       window.location = '/login';
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
       setState({ ...state, errorMessage: error.message, isLoading: false });
     }
   }, [token, state]);

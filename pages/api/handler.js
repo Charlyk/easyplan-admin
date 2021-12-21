@@ -31,9 +31,11 @@ const handler = async (apiCall, req, res) => {
     res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
     if (error?.response != null) {
       const { status, statusText, data } = error.response;
-      res
-        .status(status)
-        .json({ error: true, message: data?.message || statusText });
+      const jsonResponse = {
+        error: true,
+        message: data?.message || statusText,
+      };
+      res.status(status).json(jsonResponse);
     } else {
       res.status(400).json({ error: true, message: error.message });
     }
