@@ -27,6 +27,15 @@ const appDataSlice = createSlice({
       state.isUpdatingClinic = true;
     },
     setCurrentClinic(state, action: PayloadAction<CurrentClinic>) {
+      state.currentUser.clinics = state.currentUser.clinics.map((clinic) => {
+        if (clinic.clinicId !== action.payload.id) {
+          return clinic;
+        }
+        return {
+          ...clinic,
+          clinicName: action.payload.clinicName,
+        };
+      });
       state.currentClinic = action.payload;
       state.isUpdatingClinic = false;
     },
