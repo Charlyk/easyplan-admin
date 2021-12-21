@@ -3,13 +3,14 @@ import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
+import App from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
 import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { END } from 'redux-saga';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import theme from 'app/styles/theme';
 import { UnauthorizedPaths } from 'app/utils/constants';
@@ -23,6 +24,7 @@ import { fetchAppData } from 'middleware/api/initialization';
 import { handlePubnubMessage, pubnubClient } from 'pubnubUtils';
 import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
+import initialState from 'redux/initialState';
 import {
   currentClinicSelector,
   currentUserSelector,
@@ -50,7 +52,7 @@ const ConfirmationModal = dynamic(() =>
   import('app/components/common/modals/ConfirmationModal'),
 );
 
-const App = ({ Component, pageProps }) => {
+const EasyApp = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
@@ -61,6 +63,10 @@ const App = ({ Component, pageProps }) => {
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
   const currentPage = router.asPath;
+
+  useEffect(() => {
+    dispatch(setAppData(pageProps.appData));
+  }, []);
 
   const clinicRoom = useMemo(() => {
     const id = currentClinic?.id ?? -1;
@@ -146,6 +152,7 @@ const App = ({ Component, pageProps }) => {
       path.includes('register') ||
       path.includes('accept-invitation') ||
       path.includes('confirmation') ||
+      path.includes('reset-password') ||
       path.includes('create-clinic') ||
       isChecking
     ) {
@@ -190,8 +197,10 @@ const App = ({ Component, pageProps }) => {
 
   const handleUserLogout = async () => {
     await signOut();
-    dispatch(setAppData({ currentUser: null, currentClinic: null }));
-    window.location = appBaseUrl;
+    router.replace(appBaseUrl).then(() => {
+      dispatch(triggerUserLogout(false));
+      dispatch(setAppData(initialState.appData));
+    });
   };
 
   const handleCancelLogout = () => {
@@ -208,7 +217,7 @@ const App = ({ Component, pageProps }) => {
         />
         {!currentPage.includes('confirmation') &&
         !currentPage.includes('facebook') ? (
-          <Script type='text/javascript' src='/tawkto.js' />
+          <script type='text/javascript' src='/tawkto.js' />
         ) : null}
       </Head>
       <ThemeProvider theme={theme}>
@@ -261,39 +270,49 @@ const App = ({ Component, pageProps }) => {
   );
 };
 
-App.getInitialProps = wrapper.getInitialAppProps(
-  (store) =>
-    async ({ Component, ctx }) => {
-      try {
-        const { auth_token: authToken } = parseCookies(ctx.req);
-        const { date: queryDate } = ctx.query;
-        const { data } = await fetchAppData(
-          ctx.req?.headers,
-          queryDate ?? moment().format('YYYY-MM-DD'),
-        );
-        const { currentUser, currentClinic } = data;
-        moment.tz.setDefault(currentClinic.timeZone);
-        const cookies = ctx.req?.headers?.cookie ?? '';
-        store.dispatch(
-          setAppData({
-            currentClinic,
-            currentUser,
-            authToken,
-            cookies,
-          }),
-        );
-      } catch (e) {
-        console.error(e.message);
-      }
-      return {
-        pageProps: {
-          ...(Component.getInitialProps
-            ? await Component.getInitialProps({ ...ctx, store })
-            : {}),
-          pathname: ctx.pathname,
-        },
+EasyApp.getInitialProps = wrapper.getInitialAppProps(
+  (store) => async (context) => {
+    const { ctx } = context;
+    // wait for all page actions to dispatch
+    const pageProps = {
+      ...(await App.getInitialProps(context)).pageProps,
+    };
+
+    // stop the saga if on server
+    if (context.ctx.req) {
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
+
+    try {
+      // fetch app global data
+      const { auth_token: authToken } = parseCookies(ctx.req);
+      const { date: queryDate } = ctx.query;
+      const { data } = await fetchAppData(
+        ctx.req?.headers,
+        queryDate ?? moment().format('YYYY-MM-DD'),
+      );
+      const { currentUser, currentClinic } = data;
+
+      // update moment default timezone
+      moment.tz.setDefault(currentClinic.timeZone);
+
+      // store global data in redux
+      const cookies = ctx.req?.headers?.cookie ?? '';
+      const appData = {
+        currentClinic,
+        currentUser,
+        authToken,
+        cookies,
       };
-    },
+      store.dispatch(setAppData(appData));
+    } catch (e) {
+      console.error('App', e.message);
+    }
+
+    // return props
+    return { pageProps };
+  },
 );
 
-export default wrapper.withRedux(App);
+export default wrapper.withRedux(EasyApp);

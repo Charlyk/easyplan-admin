@@ -3,17 +3,39 @@ import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { AppDataState } from 'redux/types';
 import { CurrentClinic } from 'types';
-import { UpdateProfileRequest } from 'types/api';
+import {
+  AppDataRequest,
+  AppDataResponse,
+  UpdateProfileRequest,
+} from 'types/api';
+import { AuthenticationResponse } from 'types/api/response';
 import { CurrentUser } from 'types/currentUser.type';
 
 const appDataSlice = createSlice({
   name: 'appData',
   initialState: initialState.appData,
   reducers: {
+    dispatchFetchAppData(state, _action: PayloadAction<AppDataRequest>) {
+      state.isAppInitialized = false;
+    },
+    setCurrentEntities(state, action: PayloadAction<AppDataResponse>) {
+      state.currentUser = action.payload.currentUser;
+      state.currentClinic = action.payload.currentClinic;
+      state.isAppInitialized = true;
+    },
     requestUpdateCurrentClinic(state, _action: PayloadAction<string>) {
       state.isUpdatingClinic = true;
     },
     setCurrentClinic(state, action: PayloadAction<CurrentClinic>) {
+      state.currentUser.clinics = state.currentUser.clinics.map((clinic) => {
+        if (clinic.clinicId !== action.payload.id) {
+          return clinic;
+        }
+        return {
+          ...clinic,
+          clinicName: action.payload.clinicName,
+        };
+      });
       state.currentClinic = action.payload;
       state.isUpdatingClinic = false;
     },
@@ -23,10 +45,20 @@ const appDataSlice = createSlice({
     setAuthToken(state, action: PayloadAction<string>) {
       state.authToken = action.payload;
     },
+    setAuthenticationData(
+      state,
+      action: PayloadAction<AuthenticationResponse>,
+    ) {
+      state.currentUser = action.payload.user;
+      state.authToken = action.payload.token;
+    },
     setCookies(state, action: PayloadAction<string>) {
       state.cookies = action.payload;
     },
     setAppData(state, action: PayloadAction<AppDataState>) {
+      if (action.payload == null) {
+        return;
+      }
       state.currentClinic = action.payload.currentClinic;
       state.currentUser = action.payload.currentUser;
       state.authToken = action.payload.authToken;
@@ -64,6 +96,9 @@ export const {
   updateUserProfile,
   requestUpdateCurrentClinic,
   setIsUpdatingClinic,
+  setAuthenticationData,
+  dispatchFetchAppData,
+  setCurrentEntities,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;

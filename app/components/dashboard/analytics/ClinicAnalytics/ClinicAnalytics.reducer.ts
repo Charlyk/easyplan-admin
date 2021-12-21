@@ -112,10 +112,12 @@ const clinicAnalyticsSlice = createSlice({
     },
   },
   extraReducers: {
-    [HYDRATE]: (state, action) => ({
-      ...state,
-      ...action.payload.clinicAnalytics,
-    }),
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.clinicAnalytics,
+      };
+    },
   },
 });
 

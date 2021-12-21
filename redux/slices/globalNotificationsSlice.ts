@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { NotificationSeverity } from 'types';
 
@@ -34,6 +35,14 @@ const globalNotificationsSlice = createSlice({
     showWarningNotification(state, action: PayloadAction<string>) {
       state.message = action.payload;
       state.severity = NotificationSeverity.warning;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.globalNotifications,
+      };
     },
   },
 });

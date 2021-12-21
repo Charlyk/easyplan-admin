@@ -9,3 +9,4 @@ export * from './handleFetchPendingInvoices';
 export * from './handleFetchExchangeRates';
 export * from './handleFetchClinicDetails';
 export * from './crm';
+export * from './handleFetchAppData';

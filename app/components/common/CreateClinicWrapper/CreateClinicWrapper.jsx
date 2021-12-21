@@ -1,13 +1,19 @@
 import React, { useContext, useReducer } from 'react';
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import getClinicUrl from 'app/utils/getClinicUrl';
+import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { createNewClinic } from 'middleware/api/clinic';
+import { currentUserSelector } from 'redux/selectors/appDataSelector';
+import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import CreateClinicForm from '../CreateClinicForm';
 import styles from './CreateClinic.module.scss';
 import reducer, {
@@ -25,6 +31,7 @@ export default function CreateClinicWrapper({
   const toast = useContext(NotificationsContext);
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
+  const currentUser = useSelector(currentUserSelector);
   const isMobileDevice = isMobile || isOnPhone;
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
@@ -47,8 +54,13 @@ export default function CreateClinicWrapper({
       const requestBody = { ...clinicData };
       delete requestBody.logoFile;
       const response = await createNewClinic(clinicData, clinicData.logoFile);
+      dispatch(setCurrentClinic(response.data));
       if (shouldLogin) {
-        await router.replace('/login');
+        const redirectUrl = getRedirectUrlForUser(
+          currentUser,
+          response.data.domainName,
+        );
+        await router.replace(redirectUrl);
       } else if (redirect) {
         await redirectToDashboard(response.data);
       } else {
@@ -68,6 +80,9 @@ export default function CreateClinicWrapper({
 
   return (
     <div className={styles.createClinicRoot}>
+      <Head>
+        <title>EasyPlan.pro - {textForKey('Create clinic')}</title>
+      </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <Box className={styles.logoContainer}>

@@ -1,9 +1,9 @@
 import React, { KeyboardEvent, useState, useEffect, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
+import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import OptionsSelectionModal from 'app/components/common/modals/OptionsSelectionModal';
-import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { useSelector } from 'app/utils/hooks/useTypedSelector';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
@@ -22,7 +22,7 @@ import {
   deleteCabinet,
   updateCabinet,
 } from 'redux/slices/cabinetsData';
-import { showWarningNotification } from '../../../../../../redux/slices/globalNotificationsSlice';
+import { showWarningNotification } from 'redux/slices/globalNotificationsSlice';
 import CabinetItem from '../CabinetItem';
 import styles from './ClinicCabinets.module.scss';
 

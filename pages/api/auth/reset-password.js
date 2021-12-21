@@ -43,11 +43,10 @@ export default async function resetPassword(req, res) {
       break;
     }
     case 'PUT': {
-      try {
-        await handler(updateUserPassword, req, res);
+      const data = await handler(updateUserPassword, req, res);
+      if (data !== null) {
         res.json({ message: 'success' });
-        // eslint-disable-next-line no-empty
-      } catch (error) {}
+      }
       break;
     }
     default: {

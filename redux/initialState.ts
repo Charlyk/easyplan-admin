@@ -6,7 +6,7 @@ const defaultRange: [string, string] = [
   moment().endOf('week').toDate().toString(),
 ];
 
-const initialState: ReduxState = Object.freeze({
+const initialState: ReduxState = {
   updateCategories: false,
   updateServices: false,
   updateUsers: false,
@@ -51,6 +51,7 @@ const initialState: ReduxState = Object.freeze({
     cookies: '',
     isUpdatingProfile: false,
     isUpdatingClinic: false,
+    isAppInitialized: false,
   },
   clinicData: {
     updateClinicData: false,
@@ -151,8 +152,7 @@ const initialState: ReduxState = Object.freeze({
     itemsPerPage: 25,
     items: [],
     dealState: null,
-    loadedRowsMap: {},
   },
-});
+};
 
 export default initialState;

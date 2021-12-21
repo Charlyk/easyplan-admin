@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASTextField from 'app/components/common/EASTextField';
 import UploadAvatar from 'app/components/common/UploadAvatar';
-import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex, PasswordRegex } from 'app/utils/constants';
 import imageToBase64 from 'app/utils/imageToBase64';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
@@ -22,7 +21,6 @@ const EditProfileModal = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(isUpdatingProfileSelector);
   const currentUser = useSelector(currentUserSelector);
-  const toast = useContext(NotificationsContext);
   const [isEmailChanged, setIsEmailChanged] = useState(false);
   const [data, setData] = useState({
     avatarUrl: currentUser?.avatar,
@@ -98,7 +96,6 @@ const EditProfileModal = ({ open, onClose }) => {
       avatar,
     };
     dispatch(updateUserProfile(requestBody));
-    toast.success(textForKey('Saved successfully'));
     onClose();
   };
 

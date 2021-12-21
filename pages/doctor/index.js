@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import DoctorCalendar from 'app/components/doctors/DoctorCalendar';
 import DoctorsMain from 'app/components/doctors/DoctorsMain';
 import { JwtRegex } from 'app/utils/constants';
@@ -32,6 +33,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req, query }) => {
       try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
+
+        // fetch page data
         let date = moment().toDate();
         if (query.date != null) {
           date = moment(query.date).toDate();
