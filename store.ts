@@ -1,13 +1,13 @@
-import { applyMiddleware, createStore, Store } from '@reduxjs/toolkit';
+import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import { Context, createWrapper, HYDRATE } from 'next-redux-wrapper';
 import createSagaMiddleware, { Task } from 'redux-saga';
+import rootReducer from 'redux/reducers/rootReducer';
 import rootSaga from 'redux/sagas';
-import rootReducer from './redux/reducers/rootReducer';
-import { ReduxState } from './redux/types';
+import { ReduxState } from 'redux/types';
 
 export const RESTATE = { type: '___RESET_REDUX_STATE___' };
 
-export interface SagaStore<T extends ReduxState> extends Store<T> {
+export interface SagaStore<T extends ReduxState> extends EnhancedStore<T> {
   sagaTask?: Task;
 }
 
@@ -31,10 +31,13 @@ export let ReduxStore: SagaStore<ReduxState>;
 export const makeStore = (_context: Context) => {
   const sagaMiddleware = createSagaMiddleware();
 
-  const store: SagaStore<ReduxState> = createStore(
-    hydratedReducer,
-    applyMiddleware(sagaMiddleware),
-  );
+  const store: SagaStore<ReduxState> = configureStore({
+    reducer: hydratedReducer,
+    devTools: process.env.APP_ENV !== 'production',
+    middleware: (getDefaultMiddleware) => {
+      return getDefaultMiddleware().concat(sagaMiddleware);
+    },
+  });
 
   store.sagaTask = sagaMiddleware.run(rootSaga);
   ReduxStore = store;
