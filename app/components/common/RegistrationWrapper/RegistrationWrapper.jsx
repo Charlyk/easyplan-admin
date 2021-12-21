@@ -11,7 +11,7 @@ import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';
-import { setCurrentUser } from 'redux/slices/appDataSlice';
+import { setAuthenticationData } from 'redux/slices/appDataSlice';
 import styles from './RegistrationWrapper.module.scss';
 import reducer, {
   initialState,
@@ -41,9 +41,7 @@ export default function RegistrationWrapper({ isMobile }) {
       const requestBody = { ...accountData };
       delete requestBody.avatarFile;
       const response = await registerUser(accountData, accountData.avatarFile);
-      const { user } = response.data;
-      dispatch(setCurrentUser(user));
-      toast.success(textForKey('account_created_success'));
+      dispatch(setAuthenticationData(response.data));
       await router.replace('/create-clinic?login=1');
     } catch (error) {
       if (error.response != null) {
