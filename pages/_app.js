@@ -7,7 +7,6 @@ import App from 'next/app';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
 import NextNprogress from 'nextjs-progressbar';
 import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -215,7 +214,7 @@ const EasyApp = ({ Component, pageProps }) => {
         />
         {!currentPage.includes('confirmation') &&
         !currentPage.includes('facebook') ? (
-          <Script type='text/javascript' src='/tawkto.js' />
+          <script type='text/javascript' src='/tawkto.js' />
         ) : null}
       </Head>
       <ThemeProvider theme={theme}>
