@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import CreateClinicWrapper from 'app/components/common/CreateClinicWrapper';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import { JwtRegex } from 'app/utils/constants';
@@ -27,6 +28,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req, query }) => {
       try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
+
+        // fetch page data
         const isMobile = checkIsMobileDevice(req);
         const { auth_token: authToken } = parseCookies(req);
         const cookies = req?.headers?.cookie ?? '';

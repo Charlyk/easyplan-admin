@@ -129,9 +129,16 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     }
   };
 
-  const pageTitle = useMemo(() => {
+  const headerTitle = useMemo(() => {
     return paths[currentPath];
   }, [currentPath]);
+
+  const pageTitle = useMemo(() => {
+    if (currentClinic == null) {
+      return `EasyPlan.pro - ${headerTitle}`;
+    }
+    return `${currentClinic.clinicName} - ${headerTitle}`;
+  }, [headerTitle, currentClinic]);
 
   const handleStartLogout = () => {
     dispatch(triggerUserLogout(true));
@@ -178,13 +185,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   return (
     <div className={styles.mainPage} id='main-page'>
       <Head>
-        <title>
-          {currentClinic?.clinicName} - {pageTitle}
-        </title>
-        <meta
-          name='viewport'
-          content='minimum-scale=1, initial-scale=1, width=device-width'
-        />
+        <title>{pageTitle}</title>
       </Head>
       {currentUser != null && currentClinic != null && (
         <>
@@ -244,7 +245,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
           <div className={styles.dataContainer}>
             <PageHeader
               currentClinic={currentClinic}
-              title={pageTitle}
+              title={headerTitle}
               user={currentUser}
               onLogout={handleStartLogout}
             />

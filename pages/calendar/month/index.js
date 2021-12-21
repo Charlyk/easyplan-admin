@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import CalendarContainer from 'app/components/dashboard/calendar/CalendarContainer';
 import CalendarMonthView from 'app/components/dashboard/calendar/CalendarMonthView';
 import { JwtRegex, Role } from 'app/utils/constants';
@@ -32,6 +33,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
         query.date = moment().format('YYYY-MM-DD');
       }
       try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
+
+        // fetch page data
         const appState = store.getState();
         const authToken = authTokenSelector(appState);
         const currentUser = currentUserSelector(appState);

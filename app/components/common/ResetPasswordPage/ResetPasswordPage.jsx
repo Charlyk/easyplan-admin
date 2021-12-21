@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
+import Head from 'next/head';
 import NotificationsContext from 'app/context/notificationsContext';
 import { PasswordRegex } from 'app/utils/constants';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
@@ -43,7 +44,7 @@ const ResetPasswordPage = ({ token }) => {
       toast.success(textForKey('Saved successfully'));
       window.location = '/login';
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
       setState({ ...state, errorMessage: error.message, isLoading: false });
     }
   }, [token, state]);
@@ -61,6 +62,9 @@ const ResetPasswordPage = ({ token }) => {
 
   return (
     <div className={styles.generalPage}>
+      <Head>
+        <title>EasyPlan.pro - {textForKey('Create new password')}</title>
+      </Head>
       {isDev && <Typography className='develop-indicator'>Dev</Typography>}
       {!isMobileDevice && (
         <EASImage

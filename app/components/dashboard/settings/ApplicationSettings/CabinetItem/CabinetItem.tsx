@@ -1,12 +1,12 @@
 import React, { KeyboardEvent, useState, useRef, memo } from 'react';
 import { IconButton } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
+import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
 import IconDelete from 'app/components/icons/iconDelete';
 import IconEdit from 'app/components/icons/iconEdit';
 import IconPlus from 'app/components/icons/iconPlus';
-import { useDispatch } from 'app/utils/hooks/useTypedDispatch';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { updateCabinet as middlewareUpdateCabinet } from 'middleware/api/cabinets';

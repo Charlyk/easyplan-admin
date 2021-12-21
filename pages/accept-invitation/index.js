@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import AcceptClinicInvitation from 'app/components/common/AcceptClinicInvitation';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import { JwtRegex } from 'app/utils/constants';
@@ -16,7 +17,12 @@ export default connect((state) => state)(AcceptInvitation);
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
-    ({ query, req }) => {
+    async ({ query, req }) => {
+      // end the saga
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+
+      // fetch page data
       const isMobile = checkIsMobileDevice(req);
       const { token, isNew } = query;
       const cookies = req?.headers?.cookie ?? '';

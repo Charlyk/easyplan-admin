@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { HeaderKeys } from 'app/utils/constants';
 import getSubdomain from 'app/utils/getSubdomain';
-import setCookies from 'app/utils/setCookies';
 import updatedServerUrl from 'app/utils/updateServerUrl';
 import handler from '../../handler';
 
@@ -23,14 +22,7 @@ export default async (req, res) => {
     case 'PUT': {
       const data = await handler(fetchUsers, req, res);
       if (data != null) {
-        const { user, token } = data;
-        let selectedClinic = null;
-        if (user.clinics.length > 0) {
-          selectedClinic =
-            user.clinics.find((clinic) => clinic.isSelected) || user.clinics[0];
-        }
-        setCookies(res, token, selectedClinic?.clinicId);
-        res.status(200).json(user);
+        res.status(200).json(data);
       }
       break;
     }

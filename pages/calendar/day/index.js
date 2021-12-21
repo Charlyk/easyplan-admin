@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import CalendarContainer from 'app/components/dashboard/calendar/CalendarContainer';
 import CalendarDayView from 'app/components/dashboard/calendar/CalendarDayView';
 import { JwtRegex } from 'app/utils/constants';
@@ -29,11 +30,17 @@ const Day = ({ date }) => {
 export default connect((state) => state)(Day);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) =>
-    async ({ query, req }) => {
+  (store) => async (context) => {
+    try {
+      const { query, req } = context;
       if (query.date == null) {
         query.date = moment().format('YYYY-MM-DD');
       }
+      // end the saga
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+
+      // fetch page data
 
       const { date: queryDate } = query;
       const appState = store.getState();
@@ -42,45 +49,44 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const currentClinic = currentClinicSelector(appState);
       const cookies = req?.headers?.cookie ?? '';
       store.dispatch(setCookies(cookies));
-      try {
-        if (!authToken || !authToken.match(JwtRegex)) {
-          return {
-            redirect: {
-              destination: '/login',
-              permanent: true,
-            },
-          };
-        }
-
-        const redirectTo = redirectToUrl(
-          currentUser,
-          currentClinic,
-          '/calendar/day',
-        );
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: redirectTo,
-              permanent: true,
-            },
-          };
-        }
-
-        const response = await fetchDaySchedules(query, req.headers);
-        const { schedules, dayHours } = response.data;
-        const calendarData = {
-          schedules,
-          dayHours,
-          details: null,
-        };
-        store.dispatch(setCalendarData(calendarData));
+      if (!authToken || !authToken.match(JwtRegex)) {
         return {
-          props: {
-            date: queryDate,
+          redirect: {
+            destination: '/login',
+            permanent: true,
           },
         };
-      } catch (error) {
-        return handleRequestError(error);
       }
-    },
+
+      const redirectTo = redirectToUrl(
+        currentUser,
+        currentClinic,
+        '/calendar/day',
+      );
+      if (redirectTo != null) {
+        return {
+          redirect: {
+            destination: redirectTo,
+            permanent: true,
+          },
+        };
+      }
+
+      const response = await fetchDaySchedules(query, req.headers);
+      const { schedules, dayHours } = response.data;
+      const calendarData = {
+        schedules,
+        dayHours,
+        details: null,
+      };
+      store.dispatch(setCalendarData(calendarData));
+      return {
+        props: {
+          date: queryDate,
+        },
+      };
+    } catch (error) {
+      return handleRequestError(error);
+    }
+  },
 );

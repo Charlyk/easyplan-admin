@@ -37,7 +37,7 @@ const patientsListSlice = createSlice({
     [HYDRATE]: (state, action) => {
       return {
         ...state,
-        ...action.payload.patientsList,
+        ...action.payload.patientList,
       };
     },
   },

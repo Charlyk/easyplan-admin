@@ -31,9 +31,7 @@ import { textForKey } from 'app/utils/localization';
 import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
-import onRequestError from 'app/utils/onRequestError';
-import { environment } from 'eas.config';
-import { requestFetchRemindersCount } from 'middleware/api/crm';
+import { appBaseUrl, environment } from 'eas.config';
 import {
   currentClinicSelector,
   currentUserSelector,
@@ -228,12 +226,10 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   };
 
   const handleCompanySelected = async (company) => {
-    const [_, domain, location, suffix] = window.location.host.split('.');
-    const { protocol } = window.location;
-    const clinicUrl = `${protocol}//${
-      company.clinicDomain
-    }.${domain}.${location}${environment === 'testing' ? `.${suffix}` : ''}`;
-    window.open(clinicUrl, '_blank');
+    const { clinicDomain } = company;
+    const redirectUrl = appBaseUrl.replace('app', clinicDomain);
+    // open clinic a new tab
+    window.open(redirectUrl, '_blank');
     handleCompanyClose();
   };
 
