@@ -32,7 +32,7 @@ export default function RegistrationWrapper({ isMobile }) {
   );
 
   const handleOpenLogin = () => {
-    router.back();
+    router.push('/login');
   };
 
   const handleCreateAccount = async (accountData) => {
