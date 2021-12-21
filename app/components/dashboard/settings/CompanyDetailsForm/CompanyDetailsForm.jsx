@@ -3,7 +3,7 @@ import sortBy from 'lodash/sortBy';
 import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
@@ -27,6 +27,7 @@ import {
   authTokenSelector,
   currentClinicSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCurrentClinic } from '../../../../../redux/slices/appDataSlice';
 import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,
@@ -47,6 +48,7 @@ const ConfirmationModal = dynamic(() =>
 const CompanyDetailsForm = ({ countries }) => {
   const router = useRouter();
   const toast = useContext(NotificationsContext);
+  const dispatch = useDispatch();
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const [
@@ -229,13 +231,13 @@ const CompanyDetailsForm = ({ countries }) => {
         workdays: data.workdays,
         hasBrackets: data.hasBrackets,
       };
-      await updateClinic(requestBody, data.logoFile, {
+      const response = await updateClinic(requestBody, data.logoFile, {
         [HeaderKeys.authorization]: authToken,
         [HeaderKeys.clinicId]: currentClinic.id,
         [HeaderKeys.subdomain]: currentClinic.domainName,
       });
+      dispatch(setCurrentClinic(response.data));
       toast.success(textForKey('Saved successfully'));
-      await router.replace(router.asPath);
     } catch (error) {
       onRequestError(error);
     } finally {
