@@ -31,7 +31,7 @@ import serviceDetailsModal from './serviceDetailsReducer';
 import services from './servicesReducer';
 import users from './usersReducer';
 
-export default combineReducers({
+const rootReducer = combineReducers({
   main,
   clinic,
   patientNoteModal,
@@ -169,3 +169,5 @@ function main(state = initialState, { type, payload } = {}) {
       return state;
   }
 }
+
+export default rootReducer;

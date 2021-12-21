@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 
 const crmSlice = createSlice({
@@ -19,6 +20,14 @@ const crmSlice = createSlice({
     },
     setNewReminder(state, action) {
       state.newReminder = action.payload;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.crm,
+      };
     },
   },
 });

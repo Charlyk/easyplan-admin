@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
+import { HYDRATE } from 'next-redux-wrapper';
 import { ClinicUser } from 'types';
 import initialState from '../initialState';
 
@@ -36,6 +37,14 @@ const usersListSlice = createSlice({
     },
     setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.usersList,
+      };
     },
   },
 });
