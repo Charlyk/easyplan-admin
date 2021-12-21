@@ -228,6 +228,7 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   const handleCompanySelected = async (company) => {
     const { clinicDomain } = company;
     const redirectUrl = appBaseUrl.replace('app', clinicDomain);
+    // open clinic a new tab
     window.open(redirectUrl, '_blank');
     handleCompanyClose();
   };
