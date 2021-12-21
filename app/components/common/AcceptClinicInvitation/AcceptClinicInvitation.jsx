@@ -14,11 +14,7 @@ import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { requestAcceptInvitation } from 'middleware/api/users';
-import {
-  setAuthenticationData,
-  setAuthToken,
-  setCurrentUser,
-} from 'redux/slices/appDataSlice';
+import { setAuthenticationData } from 'redux/slices/appDataSlice';
 import EASPhoneInput from '../EASPhoneInput';
 import EASTextField from '../EASTextField';
 import LoadingButton from '../LoadingButton';

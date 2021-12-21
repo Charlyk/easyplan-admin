@@ -197,9 +197,6 @@ const DoctorPatientDetails = () => {
         ? await savePatientTreatmentPlan(requestBody)
         : await updatePatientTreatmentPlan(requestBody);
 
-      if (!canFinalize) {
-        toast.success(textForKey('Saved successfully'));
-      }
       router.back();
     } catch (error) {
       toast.error(getErrorMessage(error));
