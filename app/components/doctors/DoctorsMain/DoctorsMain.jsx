@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PageHeader from 'app/components/common/MainComponent/PageHeader/PageHeader';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
 import { textForKey } from 'app/utils/localization';
-import { isDev } from 'eas.config';
+import { appBaseUrl, isDev } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setPatientNoteModal,
@@ -86,10 +86,9 @@ const DoctorsMain = ({ children, pageTitle }) => {
   };
 
   const handleCompanyChange = async (company) => {
-    const [_, domain, location] = window.location.host.split('.');
-    const { protocol } = window.location;
-    const clinicUrl = `${protocol}//${company.clinicDomain}.${domain}.${location}`;
-    window.open(clinicUrl, '_blank');
+    const { clinicDomain } = company;
+    const redirectUrl = appBaseUrl.replace('app', clinicDomain);
+    window.open(redirectUrl, '_blank');
     handleCompanyClose();
   };
 
