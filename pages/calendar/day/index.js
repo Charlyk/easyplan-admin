@@ -33,7 +33,6 @@ export default connect((state) => state)(Day);
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     try {
-      await withClinicAndUser(store, context);
       const { query, req } = context;
       if (query.date == null) {
         query.date = moment().format('YYYY-MM-DD');
