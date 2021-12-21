@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent';
 import CrmMain from 'app/components/crm/CrmMain';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import withClinicAndUser from 'hocs/withClinicAndUser';
 import { fetchAllDealStates } from 'middleware/api/crm';
 import {
   authTokenSelector,
@@ -27,43 +27,47 @@ const Crm = () => {
 export default connect((state) => state)(Crm);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    try {
-      await withClinicAndUser(store, context);
-      const { req } = context;
-      const cookies = req?.headers?.cookie ?? '';
-      const appState = store.getState();
-      const authToken = authTokenSelector(appState);
-      const currentUser = currentUserSelector(appState);
-      const currentClinic = currentClinicSelector(appState);
-      if (!authToken || !authToken.match(JwtRegex)) {
+  (store) =>
+    async ({ req }) => {
+      try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
+
+        // fetch page data
+        const cookies = req?.headers?.cookie ?? '';
+        store.dispatch(setCookies(cookies));
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
+
+        const redirectTo = redirectToUrl(currentUser, currentClinic, '/crm');
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
+
+        const response = await fetchAllDealStates(req.headers);
+        store.dispatch(setDealStates(response.data));
+
         return {
-          redirect: {
-            destination: '/login',
-            permanent: true,
-          },
+          props: {},
         };
+      } catch (error) {
+        return handleRequestError(error);
       }
-
-      const redirectTo = redirectToUrl(currentUser, currentClinic, '/crm');
-      if (redirectTo != null) {
-        return {
-          redirect: {
-            destination: '/login',
-            permanent: true,
-          },
-        };
-      }
-
-      const response = await fetchAllDealStates(req.headers);
-      store.dispatch(setDealStates(response.data));
-      store.dispatch(setCookies(cookies));
-
-      return {
-        props: {},
-      };
-    } catch (error) {
-      return handleRequestError(error);
-    }
-  },
+    },
 );

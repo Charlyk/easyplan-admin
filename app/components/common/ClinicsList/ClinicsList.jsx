@@ -14,6 +14,7 @@ import EASImage from '../EASImage';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import ClinicItem from './ClinicItem';
 import styles from './ClnicsList.module.scss';
+import Head from 'next/head';
 
 export default function ClinicsList({ user, authToken, isMobile }) {
   const router = useRouter();
@@ -61,6 +62,9 @@ export default function ClinicsList({ user, authToken, isMobile }) {
 
   return (
     <div className={styles.clinicsListRoot}>
+      <Head>
+        <title>EasyPlan.pro - {textForKey('Select a clinic')}</title>
+      </Head>
       <ConfirmationModal
         show={showBlockedAccess}
         title={textForKey('access_blocked')}

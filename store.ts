@@ -1,10 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { createWrapper, HYDRATE } from 'next-redux-wrapper';
-import createSagaMiddleware from 'redux-saga';
+import { applyMiddleware, createStore, Store } from '@reduxjs/toolkit';
+import { Context, createWrapper, HYDRATE } from 'next-redux-wrapper';
+import createSagaMiddleware, { Task } from 'redux-saga';
 import rootSaga from 'redux/sagas';
 import rootReducer from './redux/reducers/rootReducer';
+import { ReduxState } from './redux/types';
 
-const sagaMiddleware = createSagaMiddleware();
+export const RESTATE = { type: '___RESET_REDUX_STATE___' };
+
+export interface SagaStore<T extends ReduxState> extends Store<T> {
+  sagaTask?: Task;
+}
 
 const hydratedReducer = (state, action) => {
   if (action.type === HYDRATE) {
@@ -12,24 +17,31 @@ const hydratedReducer = (state, action) => {
       ...state,
       ...action.payload,
     };
+  } else if (action.type === RESTATE.type) {
+    rootReducer(undefined, action);
   } else {
     return rootReducer(state, action);
   }
 };
 
-export const ReduxStore = configureStore({
-  reducer: hydratedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([sagaMiddleware]),
-});
+// create a variable to get access to the store outside components
+export let ReduxStore: SagaStore<ReduxState>;
 
 // create a makeStore function
-const makeStore = () => ReduxStore;
+export const makeStore = (_context: Context) => {
+  const sagaMiddleware = createSagaMiddleware();
+
+  const store: SagaStore<ReduxState> = createStore(
+    hydratedReducer,
+    applyMiddleware(sagaMiddleware),
+  );
+
+  store.sagaTask = sagaMiddleware.run(rootSaga);
+  ReduxStore = store;
+  return store;
+};
 
 // export an assembled wrapper
-export const wrapper = createWrapper(makeStore, { debug: false });
-
-sagaMiddleware.run(rootSaga);
-
-//obtaining the type of Dispatch function.
-export type ReduxDispatch = typeof ReduxStore.dispatch;
+export const wrapper = createWrapper<SagaStore<ReduxState>>(makeStore, {
+  debug: false,
+});

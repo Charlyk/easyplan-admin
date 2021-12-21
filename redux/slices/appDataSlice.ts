@@ -2,16 +2,25 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import initialState from 'redux/initialState';
 import { AppDataState } from 'redux/types';
 import { CurrentClinic } from 'types';
-import { UpdateProfileRequest } from 'types/api';
+import {
+  AppDataRequest,
+  AppDataResponse,
+  UpdateProfileRequest,
+} from 'types/api';
+import { AuthenticationResponse } from 'types/api/response';
 import { CurrentUser } from 'types/currentUser.type';
-import { AuthenticationResponse } from '../../types/api/response';
 
 const appDataSlice = createSlice({
   name: 'appData',
   initialState: initialState.appData,
   reducers: {
-    dispatchFetchAppData(state, _action: PayloadAction<any>) {
+    dispatchFetchAppData(state, _action: PayloadAction<AppDataRequest>) {
       state.isAppInitialized = false;
+    },
+    setCurrentEntities(state, action: PayloadAction<AppDataResponse>) {
+      state.currentUser = action.payload.currentUser;
+      state.currentClinic = action.payload.currentClinic;
+      state.isAppInitialized = true;
     },
     requestUpdateCurrentClinic(state, _action: PayloadAction<string>) {
       state.isUpdatingClinic = true;
@@ -25,17 +34,6 @@ const appDataSlice = createSlice({
     },
     setAuthToken(state, action: PayloadAction<string>) {
       state.authToken = action.payload;
-    },
-    setCurrentEntities(
-      state,
-      action: PayloadAction<{
-        currentUser: CurrentUser;
-        currentClinic: CurrentClinic;
-      }>,
-    ) {
-      state.currentUser = action.payload.currentUser;
-      state.currentClinic = action.payload.currentClinic;
-      state.isAppInitialized = true;
     },
     setAuthenticationData(
       state,
@@ -81,8 +79,8 @@ export const {
   requestUpdateCurrentClinic,
   setIsUpdatingClinic,
   setAuthenticationData,
-  setCurrentEntities,
   dispatchFetchAppData,
+  setCurrentEntities,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;
