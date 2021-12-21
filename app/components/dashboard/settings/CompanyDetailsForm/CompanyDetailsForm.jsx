@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useMemo, useReducer } from 'react';
 import sortBy from 'lodash/sortBy';
 import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
@@ -27,7 +26,7 @@ import {
   authTokenSelector,
   currentClinicSelector,
 } from 'redux/selectors/appDataSelector';
-import { setCurrentClinic } from '../../../../../redux/slices/appDataSlice';
+import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import styles from './CompanyDetailsForm.module.scss';
 import reducer, {
   initialState,
@@ -46,7 +45,6 @@ const ConfirmationModal = dynamic(() =>
 );
 
 const CompanyDetailsForm = ({ countries }) => {
-  const router = useRouter();
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const currentClinic = useSelector(currentClinicSelector);
