@@ -1,12 +1,12 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import DoctorsAnalytics from 'app/components/dashboard/analytics/DoctorsAnalytics';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import withClinicAndUser from 'hocs/withClinicAndUser';
 import { getDoctorsStatistics } from 'middleware/api/analytics';
 import {
   authTokenSelector,
@@ -27,63 +27,67 @@ const Doctors = ({ statistics, query: initialQuery }) => {
 export default connect((state) => state)(Doctors);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    try {
-      await withClinicAndUser(store, context);
-      const { req, query } = context;
-      if (query.fromDate == null) {
-        query.fromDate = moment().startOf('month').format('YYYY-MM-DD');
-      }
-      if (query.toDate == null) {
-        query.toDate = moment().endOf('month').format('YYYY-MM-DD');
-      }
-      if (query.doctorId == null) {
-        query.doctorId = -1;
-      }
-      if (query.serviceId == null) {
-        query.serviceId = -1;
-      }
-      const appState = store.getState();
-      const authToken = authTokenSelector(appState);
-      const currentUser = currentUserSelector(appState);
-      const currentClinic = currentClinicSelector(appState);
-      const cookies = req?.headers?.cookie ?? '';
-      store.dispatch(setCookies(cookies));
-      if (!authToken || !authToken.match(JwtRegex)) {
-        return {
-          redirect: {
-            destination: '/login',
-            permanent: true,
-          },
-        };
-      }
+  (store) =>
+    async ({ req, query }) => {
+      try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
 
-      const redirectTo = redirectToUrl(
-        currentUser,
-        currentClinic,
-        '/analytics/doctors',
-      );
-      if (redirectTo != null) {
-        return {
-          redirect: {
-            destination: redirectTo,
-            permanent: true,
-          },
-        };
-      }
+        // fetch page data
+        if (query.fromDate == null) {
+          query.fromDate = moment().startOf('month').format('YYYY-MM-DD');
+        }
+        if (query.toDate == null) {
+          query.toDate = moment().endOf('month').format('YYYY-MM-DD');
+        }
+        if (query.doctorId == null) {
+          query.doctorId = -1;
+        }
+        if (query.serviceId == null) {
+          query.serviceId = -1;
+        }
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        const cookies = req?.headers?.cookie ?? '';
+        store.dispatch(setCookies(cookies));
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-      const { data: statistics } = await getDoctorsStatistics(
-        query,
-        req.headers,
-      );
-      return {
-        props: {
-          statistics,
+        const redirectTo = redirectToUrl(
+          currentUser,
+          currentClinic,
+          '/analytics/doctors',
+        );
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
+
+        const { data: statistics } = await getDoctorsStatistics(
           query,
-        },
-      };
-    } catch (error) {
-      return handleRequestError(error);
-    }
-  },
+          req.headers,
+        );
+        return {
+          props: {
+            statistics,
+            query,
+          },
+        };
+      } catch (error) {
+        return handleRequestError(error);
+      }
+    },
 );

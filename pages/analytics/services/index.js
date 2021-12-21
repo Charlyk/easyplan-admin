@@ -1,12 +1,12 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent/MainComponent';
 import ServicesAnalytics from 'app/components/dashboard/analytics/ServicesAnalytics';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import withClinicAndUser from 'hocs/withClinicAndUser';
 import { getServicesStatistics } from 'middleware/api/analytics';
 import {
   authTokenSelector,
@@ -27,71 +27,75 @@ const Services = ({ statistics, query }) => {
 export default connect((state) => state)(Services);
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    try {
-      await withClinicAndUser(store, context);
-      const { req, query } = context;
-      if (query.page == null) {
-        query.page = '0';
-      }
+  (store) =>
+    async ({ req, query }) => {
+      try {
+        // end the saga
+        store.dispatch(END);
+        await store.sagaTask.toPromise();
 
-      if (query.rowsPerPage == null) {
-        query.rowsPerPage = '25';
-      }
+        // fetch page data
+        if (query.page == null) {
+          query.page = '0';
+        }
 
-      if (query.fromDate == null) {
-        query.fromDate = moment().startOf('month').format('YYYY-MM-DD');
-      }
+        if (query.rowsPerPage == null) {
+          query.rowsPerPage = '25';
+        }
 
-      if (query.toDate == null) {
-        query.toDate = moment().endOf('month').format('YYYY-MM-DD');
-      }
+        if (query.fromDate == null) {
+          query.fromDate = moment().startOf('month').format('YYYY-MM-DD');
+        }
 
-      if (query.status == null) {
-        query.status = 'All';
-      }
+        if (query.toDate == null) {
+          query.toDate = moment().endOf('month').format('YYYY-MM-DD');
+        }
 
-      const appState = store.getState();
-      const authToken = authTokenSelector(appState);
-      const currentUser = currentUserSelector(appState);
-      const currentClinic = currentClinicSelector(appState);
-      const cookies = req?.headers?.cookie ?? '';
-      store.dispatch(setCookies(cookies));
-      if (!authToken || !authToken.match(JwtRegex)) {
-        return {
-          redirect: {
-            destination: '/login',
-            permanent: true,
-          },
-        };
-      }
+        if (query.status == null) {
+          query.status = 'All';
+        }
 
-      const redirectTo = redirectToUrl(
-        currentUser,
-        currentClinic,
-        '/analytics/services',
-      );
-      if (redirectTo != null) {
-        return {
-          redirect: {
-            destination: redirectTo,
-            permanent: true,
-          },
-        };
-      }
+        const appState = store.getState();
+        const authToken = authTokenSelector(appState);
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+        const cookies = req?.headers?.cookie ?? '';
+        store.dispatch(setCookies(cookies));
+        if (!authToken || !authToken.match(JwtRegex)) {
+          return {
+            redirect: {
+              destination: '/login',
+              permanent: true,
+            },
+          };
+        }
 
-      const { data: statistics } = await getServicesStatistics(
-        query,
-        req.headers,
-      );
-      return {
-        props: {
-          statistics,
+        const redirectTo = redirectToUrl(
+          currentUser,
+          currentClinic,
+          '/analytics/services',
+        );
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
+
+        const { data: statistics } = await getServicesStatistics(
           query,
-        },
-      };
-    } catch (error) {
-      return handleRequestError(error);
-    }
-  },
+          req.headers,
+        );
+        return {
+          props: {
+            statistics,
+            query,
+          },
+        };
+      } catch (error) {
+        return handleRequestError(error);
+      }
+    },
 );

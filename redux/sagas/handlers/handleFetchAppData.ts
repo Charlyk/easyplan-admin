@@ -1,13 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
 import {
-  setCurrentEntities,
   dispatchFetchAppData,
+  setCurrentEntities,
 } from 'redux/slices/appDataSlice';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
+import { AppDataRequest } from 'types/api';
 import { requestFetchAppData } from '../requests';
 
-export function* handleFetchAppData(action: PayloadAction<any>) {
+export function* handleFetchAppData(action: PayloadAction<AppDataRequest>) {
   try {
     const response: SagaReturnType<typeof requestFetchAppData> = yield call(
       requestFetchAppData,
