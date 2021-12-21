@@ -24,6 +24,7 @@ import { fetchAppData } from 'middleware/api/initialization';
 import { handlePubnubMessage, pubnubClient } from 'pubnubUtils';
 import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
+import initialState from 'redux/initialState';
 import {
   currentClinicSelector,
   currentUserSelector,
@@ -196,8 +197,10 @@ const EasyApp = ({ Component, pageProps }) => {
 
   const handleUserLogout = async () => {
     await signOut();
-    dispatch(setAppData({ currentUser: null, currentClinic: null }));
-    window.location = appBaseUrl;
+    router.replace(appBaseUrl).then(() => {
+      dispatch(triggerUserLogout(false));
+      dispatch(setAppData(initialState.appData));
+    });
   };
 
   const handleCancelLogout = () => {
