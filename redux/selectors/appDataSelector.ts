@@ -7,11 +7,6 @@ import { ExchangeRate } from '../../types';
 
 export const appDataSelector = (state: ReduxState) => state.appData;
 
-export const isAppInitializedSelector = createSelector(
-  appDataSelector,
-  (data) => data.isAppInitialized,
-);
-
 export const currentClinicSelector = createSelector(
   appDataSelector,
   (appData) => appData.currentClinic,
@@ -64,6 +59,11 @@ export const availableCurrenciesSelector = createSelector(
 export const clinicServicesSelector = createSelector(
   currentClinicSelector,
   (clinic) => clinic.services?.filter((item) => !item.deleted) || [],
+);
+
+export const isAppInitializedSelector = createSelector(
+  appDataSelector,
+  (data) => data.isAppInitialized,
 );
 
 export const clinicTimeZoneSelector = createSelector(

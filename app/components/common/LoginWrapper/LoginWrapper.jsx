@@ -131,7 +131,7 @@ export default function LoginWrapper({
     const [subdomainPart] = window.location.host.split('.');
     const subdomain =
       environment === 'local' ? process.env.DEFAULT_CLINIC : subdomainPart;
-    dispatch(setCurrentUser(user));
+    // dispatch(setCurrentUser(user));
     if (RestrictedSubdomains.includes(subdomain)) {
       if (user.clinics.length > 1) {
         // user has more than one clinic so we need to allow to select a clinic
