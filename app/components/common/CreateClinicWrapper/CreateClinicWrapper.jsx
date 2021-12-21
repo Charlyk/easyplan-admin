@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import getClinicUrl from 'app/utils/getClinicUrl';
+import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { createNewClinic } from 'middleware/api/clinic';
-import { currentUserSelector } from '../../../../redux/selectors/appDataSelector';
-import { setCurrentClinic } from '../../../../redux/slices/appDataSlice';
-import getRedirectUrlForUser from '../../../utils/getRedirectUrlForUser';
-import { textForKey } from '../../../utils/localization';
+import { currentUserSelector } from 'redux/selectors/appDataSelector';
+import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import CreateClinicForm from '../CreateClinicForm';
 import styles from './CreateClinic.module.scss';
 import reducer, {
