@@ -7,7 +7,6 @@ import CalendarDayView from 'app/components/dashboard/calendar/CalendarDayView';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import withClinicAndUser from 'hocs/withClinicAndUser';
 import { fetchDaySchedules } from 'middleware/api/schedules';
 import {
   authTokenSelector,
