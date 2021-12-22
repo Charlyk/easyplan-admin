@@ -17,7 +17,7 @@ import isOutOfBounds from 'app/utils/isOutOfBounds';
 import { textForKey } from 'app/utils/localization';
 import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
-  activeClinicDoctorsSelector,
+  calendarDoctorsSelector,
   clinicCabinetsSelector,
 } from 'redux/selectors/appDataSelector';
 import {
@@ -46,7 +46,7 @@ const CalendarDayView = ({
   const schedules = useSelector(schedulesSelector);
   const hours = useSelector(dayHoursSelector);
   const cabinets = useSelector(clinicCabinetsSelector);
-  const doctors = useSelector(activeClinicDoctorsSelector);
+  const doctors = useSelector(calendarDoctorsSelector);
   const schedulesRef = useRef(null);
   const [{ pauseModal }, localDispatch] = useReducer(reducer, initialState);
 
