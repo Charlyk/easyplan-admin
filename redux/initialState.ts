@@ -63,6 +63,8 @@ const initialState: ReduxState = {
     dayHours: [],
     closeDetails: false,
     isFetchingDetails: false,
+    viewDate: null,
+    viewMode: 'day',
   },
   appointmentModal: {
     open: false,

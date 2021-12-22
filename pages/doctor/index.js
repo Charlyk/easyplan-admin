@@ -16,7 +16,11 @@ import {
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
-import { setSchedulesData } from 'redux/slices/calendarData';
+import {
+  setSchedulesData,
+  setViewDate,
+  setViewMode,
+} from 'redux/slices/calendarData';
 import { wrapper } from 'store';
 
 const Doctor = ({ schedules, date, viewMode }) => {
@@ -48,6 +52,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const currentClinic = currentClinicSelector(appState);
         const cookies = req?.headers?.cookie ?? '';
         store.dispatch(setCookies(cookies));
+        store.dispatch(setViewDate(moment(date).format('YYYY-MM-DD')));
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
@@ -79,6 +84,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           req.headers,
         );
         store.dispatch(setSchedulesData(response.data));
+        store.dispatch(setViewMode(viewMode));
         return {
           props: {
             viewMode,
