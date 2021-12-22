@@ -14,8 +14,8 @@ import {
 } from 'middleware/api/schedules';
 import { setPaymentModal } from 'redux/actions/actions';
 import {
-  activeClinicDoctorsSelector,
   authTokenSelector,
+  calendarDoctorsSelector,
   currentClinicSelector,
 } from 'redux/selectors/appDataSelector';
 import { updateClinicDataSelector } from 'redux/selectors/clinicDataSelector';
@@ -98,7 +98,7 @@ const importFields = [
 const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
   const toast = useContext(NotificationsContext);
   const updateClinicData = useSelector(updateClinicDataSelector);
-  const doctors = useSelector(activeClinicDoctorsSelector);
+  const doctors = useSelector(calendarDoctorsSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const router = useRouter();
