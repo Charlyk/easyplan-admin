@@ -27,6 +27,8 @@ export interface CalendarDataState {
   deleteSchedule?: Schedule | null;
   closeDetails: boolean;
   isFetchingDetails: boolean;
+  viewDate: string | null;
+  viewMode: 'day' | 'week' | 'month';
 }
 
 export interface CreateAppointmentModalState {
