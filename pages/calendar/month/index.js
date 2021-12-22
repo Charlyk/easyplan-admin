@@ -14,6 +14,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
+import { setViewDate, setViewMode } from '../../../redux/slices/calendarData';
 
 const Month = ({ doctorId, date }) => {
   const viewDate = moment(date).toDate();
@@ -44,6 +45,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const currentClinic = currentClinicSelector(appState);
         const cookies = req?.headers?.cookie ?? '';
         store.dispatch(setCookies(cookies));
+        store.dispatch(setViewDate(query.date));
+        store.dispatch(setViewMode('month'));
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
