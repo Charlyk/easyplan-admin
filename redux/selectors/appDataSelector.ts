@@ -96,7 +96,6 @@ export const userClinicSelector = createSelector(
 export const activeClinicDoctorsSelector = createSelector(
   clinicDoctorsSelector,
   (doctors) => {
-    console.log(doctors);
     return orderBy(
       (doctors ?? []).filter(
         (user) => user.roleInClinic === Role.doctor && !user.isHidden,

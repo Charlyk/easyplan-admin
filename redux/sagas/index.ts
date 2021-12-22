@@ -14,6 +14,7 @@ import {
   remindersCountWatcher,
   dealsStatesWatcher,
   appDataWatcher,
+  pubnubWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -32,5 +33,6 @@ export default function* rootSaga() {
     remindersCountWatcher(),
     dealsStatesWatcher(),
     appDataWatcher(),
+    pubnubWatcher(),
   ]);
 }
