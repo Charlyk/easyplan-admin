@@ -11,9 +11,6 @@ export interface SagaStore<T extends ReduxState> extends EnhancedStore<T> {
   sagaTask?: Task;
 }
 
-// create a variable to get access to the store outside components
-export let ReduxStore: SagaStore<ReduxState>;
-
 // create a makeStore function
 export const makeStore = (_context: Context): SagaStore<ReduxState> => {
   const sagaMiddleware = createSagaMiddleware();
@@ -28,7 +25,6 @@ export const makeStore = (_context: Context): SagaStore<ReduxState> => {
 
   (store as unknown as SagaStore<ReduxState>).sagaTask =
     sagaMiddleware.run(rootSaga);
-  ReduxStore = store as unknown as SagaStore<ReduxState>;
   return store as unknown as SagaStore<ReduxState>;
 };
 

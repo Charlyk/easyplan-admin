@@ -15,7 +15,11 @@ import {
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
-import { setCalendarData } from 'redux/slices/calendarData';
+import {
+  setCalendarData,
+  setViewDate,
+  setViewMode,
+} from 'redux/slices/calendarData';
 import { wrapper } from 'store';
 
 const Week = ({ date, doctorId }) => {
@@ -47,6 +51,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const currentClinic = currentClinicSelector(appState);
         const cookies = req?.headers?.cookie ?? '';
         store.dispatch(setCookies(cookies));
+        store.dispatch(setViewDate(query.date));
+        store.dispatch(setViewMode('week'));
         const { date: queryDate, doctorId: queryDoctorId } = query;
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
