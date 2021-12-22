@@ -189,7 +189,7 @@ const addAppointmentModalSlice = createSlice({
         name: patient.fullName,
         label: patient.fullName,
       };
-      state.cabinet = cabinet;
+      state.cabinet = { ...cabinet, label: cabinet.name };
       state.doctor = doctor;
       state.service = { ...service, label: service.name };
       state.appointmentNote = noteText;
