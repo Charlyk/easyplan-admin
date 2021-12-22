@@ -21,7 +21,7 @@ import paths from 'app/utils/paths';
 import { appBaseUrl, isDev, pubNubEnv } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
-import { handlePubnubMessage, pubnubClient } from 'pubnubUtils';
+import { pubnubClient } from 'pubnubUtils';
 import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import initialState from 'redux/initialState';
@@ -34,6 +34,7 @@ import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
 import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
 import 'app/styles/base/base.scss';
@@ -105,7 +106,7 @@ const EasyApp = ({ Component, pageProps }) => {
   }, [isWindowFocused]);
 
   const handlePubnubMessageReceived = (message) => {
-    handlePubnubMessage(message);
+    dispatch(handleRemoteMessageReceived(message));
   };
 
   const handleAppointmentModalClose = () => {
