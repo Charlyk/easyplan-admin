@@ -3,6 +3,7 @@ import moment from 'moment-timezone';
 import { createSelector } from 'reselect';
 import { Role } from 'app/utils/constants';
 import { ReduxState } from 'redux/types';
+import doctors from '../../pages/api/analytics/doctors';
 import { ExchangeRate } from '../../types';
 
 export const appDataSelector = (state: ReduxState) => state.appData;
@@ -93,15 +94,22 @@ export const userClinicSelector = createSelector(
 );
 
 export const activeClinicDoctorsSelector = createSelector(
-  currentClinicSelector,
-  (currentClinic) =>
-    orderBy(
-      (currentClinic?.users ?? []).filter(
+  clinicDoctorsSelector,
+  (doctors) => {
+    console.log(doctors);
+    return orderBy(
+      (doctors ?? []).filter(
         (user) => user.roleInClinic === Role.doctor && !user.isHidden,
       ),
       ['fullName'],
       ['asc'],
-    ),
+    );
+  },
+);
+
+export const calendarDoctorsSelector = createSelector(
+  activeClinicDoctorsSelector,
+  (doctors) => (doctors ?? []).filter((item) => item.showInCalendar),
 );
 
 export const doctorsForScheduleSelector = createSelector(
