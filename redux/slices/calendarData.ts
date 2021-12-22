@@ -36,6 +36,19 @@ const calendarData = createSlice({
     },
     addNewSchedule(state, action: PayloadAction<Schedule>) {
       const newSchedule = action.payload;
+      const viewDate = moment(state.viewDate);
+      const viewMode = state.viewMode;
+      const scheduleDate = moment(newSchedule.startTime);
+
+      const canAddSchedule =
+        (viewMode === 'day' && viewDate.isSame(scheduleDate, 'date')) ||
+        (viewMode === 'week' && viewDate.isSame(scheduleDate, 'week')) ||
+        (viewMode === 'month' && viewDate.isSame(scheduleDate, 'month'));
+
+      if (!canAddSchedule) {
+        return state;
+      }
+
       const hasSchedules = state.schedules.some((item) => {
         return isScheduleInGroup(item, newSchedule);
       });
@@ -75,7 +88,10 @@ const calendarData = createSlice({
         }
 
         const newSchedules = item.schedules.map((schedule) => {
-          if (schedule.id !== scheduleToUpdate.id) return schedule;
+          if (schedule.id !== scheduleToUpdate.id) {
+            console.log(scheduleToUpdate, schedule.id);
+            return schedule;
+          }
 
           return {
             ...schedule,
@@ -164,6 +180,12 @@ const calendarData = createSlice({
       state.schedules = mapSchedules(action.payload.schedules);
       state.dayHours = action.payload.hours;
     },
+    setViewDate(state, action: PayloadAction<string>) {
+      state.viewDate = action.payload;
+    },
+    setViewMode(state, action: PayloadAction<'day' | 'week' | 'month'>) {
+      state.viewMode = action.payload;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -187,6 +209,8 @@ export const {
   closeScheduleDetails,
   fetchScheduleDetails,
   setSchedulesData,
+  setViewDate,
+  setViewMode,
 } = calendarData.actions;
 
 export default calendarData.reducer;
