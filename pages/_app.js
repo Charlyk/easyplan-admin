@@ -105,7 +105,7 @@ const EasyApp = ({ Component, pageProps }) => {
   }, [isWindowFocused]);
 
   const handlePubnubMessageReceived = (message) => {
-    handlePubnubMessage(message);
+    dispatch(handlePubnubMessage(message));
   };
 
   const handleAppointmentModalClose = () => {
