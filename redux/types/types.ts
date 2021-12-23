@@ -158,6 +158,11 @@ export interface DealsColumnState {
   dealState: DealStateView | null;
 }
 
+export interface PatientPurchasesState {
+  isLoading: boolean;
+  payments: any[];
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -197,4 +202,5 @@ export interface ReduxState {
   clinicAnalytics: ClinicAnalyticsState;
   crmBoard: CrmBoardState;
   dealsColumn: DealsColumnState;
+  patientPurchases: PatientPurchasesState;
 }

@@ -1,5 +1,7 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Tooltip } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,26 +13,33 @@ import clsx from 'clsx';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import IconPrint from 'app/components/icons/iconPrint';
-import NotificationsContext from 'app/context/notificationsContext';
+import IconRefresh from 'app/components/icons/iconRefresh';
 import formattedAmount from 'app/utils/formattedAmount';
 import { textForKey } from 'app/utils/localization';
 import { baseApiUrl } from 'eas.config';
-import { requestFetchPatientPurchases } from 'middleware/api/patients';
-import { clinicCurrencySelector } from 'redux/selectors/appDataSelector';
+import {
+  clinicCurrencySelector,
+  isManagerSelector,
+} from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
+import ConfirmationModal from '../../../../common/modals/ConfirmationModal';
+import IconTrash from '../../../../icons/iconTrash';
 import styles from './PatientPurchasesList.module.scss';
-import { reducer, initialState, actions } from './PatientPurchasesList.reducer';
+import {
+  dispatchFetchPatientPurchases,
+  dispatchUndoPayment,
+} from './PatientPurchasesList.reducer';
+import { patientPurchasesListSelector } from './PatientPurchasesList.selector';
 
 const PatientPurchasesList = ({ patient }) => {
-  const toast = useContext(NotificationsContext);
+  const dispatch = useDispatch();
   const updateInvoice = useSelector(updateInvoiceSelector);
   const clinicCurrency = useSelector(clinicCurrencySelector);
-  const [{ isLoading, payments }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const { isLoading, payments } = useSelector(patientPurchasesListSelector);
+  const isManager = useSelector(isManagerSelector);
+  const [undoModal, setUndoModal] = useState({ open: false, payment: null });
 
   useEffect(() => {
     if (patient != null) {
@@ -45,16 +54,22 @@ const PatientPurchasesList = ({ patient }) => {
     fetchPurchases();
   }, [updateInvoice]);
 
-  const fetchPurchases = async () => {
-    localDispatch(actions.setIsLoading(true));
-    try {
-      const response = await requestFetchPatientPurchases(patient.id);
-      localDispatch(actions.setPayments(response.data));
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(actions.setIsLoading(false));
-    }
+  const fetchPurchases = () => {
+    dispatch(dispatchFetchPatientPurchases(patient.id));
+  };
+
+  const handleUndoPayment = (payment) => {
+    setUndoModal({ open: true, payment });
+  };
+
+  const handleCancelUndoPayment = () => {
+    setUndoModal({ open: false, payment: null });
+  };
+
+  const handleConfirmUndoPayment = () => {
+    const { payment } = undoModal;
+    dispatch(dispatchUndoPayment(payment.invoiceId));
+    setUndoModal({ open: false, payment: null });
   };
 
   const getAmount = (payment) => {
@@ -68,6 +83,13 @@ const PatientPurchasesList = ({ patient }) => {
 
   return (
     <div className={styles.patientPurchasesList}>
+      <ConfirmationModal
+        show={undoModal.open}
+        title={textForKey('undo_payment')}
+        message={textForKey('undo_payment_confirm_message')}
+        onClose={handleCancelUndoPayment}
+        onConfirm={handleConfirmUndoPayment}
+      />
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Payments')}
       </Typography>
@@ -116,6 +138,21 @@ const PatientPurchasesList = ({ patient }) => {
                       >
                         <IconPrint fill='#3A83DC' />
                       </a>
+                      {isManager && (
+                        <Tooltip title={textForKey('undo_payment')}>
+                          <IconButton
+                            disableRipple
+                            className={styles.undoButton}
+                            onClick={() => handleUndoPayment(payment)}
+                          >
+                            {payment.scheduleId ? (
+                              <IconRefresh fill='#3A83DC' />
+                            ) : (
+                              <IconTrash fill='#ec3276' />
+                            )}
+                          </IconButton>
+                        </Tooltip>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -123,7 +160,7 @@ const PatientPurchasesList = ({ patient }) => {
               <TableRow>
                 <TableCell
                   align='right'
-                  colSpan={4}
+                  colSpan={5}
                   style={{ borderBottom: 'none' }}
                 >
                   <div

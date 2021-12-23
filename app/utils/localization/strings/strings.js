@@ -670,7 +670,7 @@ export default {
     call_failed: 'Call failed',
     call_busy: 'Phone was busy',
     call_noanswer: 'Cal was not answered',
-    call_unkwnon: 'Status unknown',
+    call_unknown: 'Status unknown',
     call_listen: 'Listen',
     call_download: 'Download',
     connect_social_networks: 'Connect social networks',
@@ -733,6 +733,9 @@ export default {
     add_appointment_cabinet: 'Cabinet (Optional)',
     cabinet_name_exists: 'A cabinet with this name already exists',
     insert_at_least_3_characters: 'Insert more than 3 characters',
+    undo_payment: 'Undo this payment',
+    undo_payment_confirm_message:
+      'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
   },
   ro: {
     analytics: 'Analitică',
@@ -1415,7 +1418,7 @@ export default {
     call_answered: 'Discuția a avut loc',
     call_failed: 'Apelul a eșuat',
     call_noanswer: 'Fără răspuns',
-    call_unkwnon: 'Statut necunoscut',
+    call_unknown: 'Statut necunoscut',
     call_busy: 'Ocupat',
     call_listen: 'Ascultă',
     call_download: 'Descarcă',
@@ -1480,6 +1483,9 @@ export default {
     add_appointment_cabinet: 'Cabinet (Opțional)',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    undo_payment: 'Anulează achitarea',
+    undo_payment_confirm_message:
+      'Toate achitările pentru același invoice vor fi anulate. Sunteți sigur(ă) că doriți să anulați achitarea?',
   },
   ru: {
     analytics: 'Analytics',
@@ -2150,7 +2156,7 @@ export default {
     call_failed: 'Call failed',
     call_busy: 'Phone was busy',
     call_noanswer: 'Cal was not answered',
-    call_unkwnon: 'Status unknown',
+    call_unknown: 'Status unknown',
     call_listen: 'Listen',
     call_download: 'Download',
     connect_social_networks: 'Connect social networks',
@@ -2213,5 +2219,8 @@ export default {
     add_appointment_cabinet: 'Cabinets (Optional)',
     cabinet_name_exists: 'Кабинет с таким названием уже существует.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    undo_payment: 'Undo this payment',
+    undo_payment_confirm_message:
+      'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
   },
 };

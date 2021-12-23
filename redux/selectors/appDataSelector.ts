@@ -93,6 +93,13 @@ export const userClinicSelector = createSelector(
   (user, clinic) => user?.clinics.find((it) => it.clinicId === clinic.id),
 );
 
+export const isManagerSelector = createSelector(
+  userClinicSelector,
+  (userClinic) =>
+    userClinic.roleInClinic === Role.manager ||
+    userClinic.roleInClinic === Role.admin,
+);
+
 export const activeClinicDoctorsSelector = createSelector(
   clinicDoctorsSelector,
   (doctors) => {
