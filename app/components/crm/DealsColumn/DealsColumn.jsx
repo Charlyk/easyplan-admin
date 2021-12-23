@@ -22,8 +22,8 @@ import { useSelector } from 'react-redux';
 import ActionsSheet from 'app/components/common/ActionsSheet';
 import EASColorPicker from 'app/components/common/EASColorPicker';
 import NotificationsContext from 'app/context/notificationsContext';
+import usePrevious from 'app/hooks/usePrevious';
 import extractCookieByName from 'app/utils/extractCookieByName';
-import usePrevious from 'app/utils/hooks/usePrevious';
 import onRequestError from 'app/utils/onRequestError';
 import {
   createNewDealState,
