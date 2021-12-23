@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import styles from './ColumnsWrapper.module.scss';
 import CreateScheduleView from './CreateScheduleView';
 
