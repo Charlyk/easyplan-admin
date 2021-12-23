@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
-import { useSelector } from 'app/utils/hooks/useTypedSelector';
+import { useSelector } from 'app/hooks/useTypedSelector';
 import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
 import {

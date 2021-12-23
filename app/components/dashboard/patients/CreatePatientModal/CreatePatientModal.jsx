@@ -17,7 +17,7 @@ import {
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
 import { requestCreatePatient } from 'middleware/api/patients';
-import { togglePatientsListUpdate } from 'redux/actions/actions';
+import { toggleUpdatePatients } from 'redux/slices/mainReduxSlice';
 import styles from './CreatePatientModal.module.scss';
 import { reducer, initialState, actions } from './CreatePatientModal.reducer';
 
@@ -75,7 +75,7 @@ const CreatePatientModal = ({ open, currentClinic, authToken, onClose }) => {
         [HeaderKeys.clinicId]: currentClinic.id,
         [HeaderKeys.subdomain]: currentClinic.domainName,
       });
-      dispatch(togglePatientsListUpdate(true));
+      dispatch(toggleUpdatePatients(true));
       onClose();
     } catch (error) {
       toast.error(error.message);

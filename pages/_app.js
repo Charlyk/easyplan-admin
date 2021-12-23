@@ -12,9 +12,9 @@ import { PubNubProvider } from 'pubnub-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
 import NotificationsProvider from 'app/context/NotificationsProvider';
+import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
 import { UnauthorizedPaths } from 'app/utils/constants';
-import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
@@ -22,7 +22,6 @@ import { appBaseUrl, isDev, pubNubEnv } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
 import { pubnubClient } from 'pubnubUtils';
-import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import initialState from 'redux/initialState';
 import {
@@ -34,6 +33,7 @@ import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
 import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
@@ -199,13 +199,13 @@ const EasyApp = ({ Component, pageProps }) => {
   const handleUserLogout = async () => {
     await signOut();
     router.replace(appBaseUrl).then(() => {
-      dispatch(triggerUserLogout(false));
+      dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
     });
   };
 
   const handleCancelLogout = () => {
-    dispatch(triggerUserLogout(false));
+    dispatch(triggerUserLogOut(false));
   };
 
   return (
