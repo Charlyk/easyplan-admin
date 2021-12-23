@@ -32,12 +32,12 @@ import {
   getScheduleDetails,
   postSchedule,
 } from 'middleware/api/schedules';
-import { toggleAppointmentsUpdate } from 'redux/actions/actions';
 import {
   clinicCabinetsSelector,
   clinicServicesSelector,
   doctorsForScheduleSelector,
 } from 'redux/selectors/appDataSelector';
+import { updateAppointmentsList } from 'redux/slices/mainReduxSlice';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
@@ -587,7 +587,7 @@ const AddAppointmentModal = ({
 
       await postSchedule(requestBody);
       onClose();
-      dispatch(toggleAppointmentsUpdate());
+      dispatch(updateAppointmentsList());
     } catch (error) {
       if (error.response != null) {
         const { data } = error.response;

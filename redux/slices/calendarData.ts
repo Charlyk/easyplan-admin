@@ -89,7 +89,6 @@ const calendarData = createSlice({
 
         const newSchedules = item.schedules.map((schedule) => {
           if (schedule.id !== scheduleToUpdate.id) {
-            console.log(scheduleToUpdate, schedule.id);
             return schedule;
           }
 

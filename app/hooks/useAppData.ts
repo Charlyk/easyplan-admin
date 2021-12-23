@@ -1,14 +1,11 @@
-import { useContext } from 'react';
-import EasyPlanContext from '../context/easyPlanContext';
+import { useSelector } from 'react-redux';
+import { appDataSelector } from 'redux/selectors/appDataSelector';
 
 const useAppData = () => {
-  const easyContext = useContext(EasyPlanContext);
+  const appData = useSelector(appDataSelector);
   return {
-    currentUser: easyContext.currentUser,
-    currentClinic: easyContext.currentClinic,
-    updateCurrentUser: easyContext.updateCurrentUser,
-    updateCurrentClinic: easyContext.updateCurrentClinic,
-    updateAppData: easyContext.updateAppData,
+    currentUser: appData.currentUser,
+    currentClinic: appData.currentClinic,
   };
 };
 

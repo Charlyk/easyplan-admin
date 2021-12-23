@@ -6,7 +6,7 @@ import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { createPatientNote, updateVisitNote } from 'middleware/api/patients';
-import { triggerUpdateNotes } from 'redux/actions/actions';
+import { updateNotes } from 'redux/slices/mainReduxSlice';
 import styles from './AddNote.module.scss';
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
@@ -35,7 +35,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
     try {
       if (mode === 'visits') {
         await updateVisitNote(patientId, visit.id, noteText);
-        dispatch(triggerUpdateNotes());
+        dispatch(updateNotes());
         onClose();
       } else {
         const requestBody = {
@@ -44,7 +44,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
           scheduleId,
         };
         await createPatientNote(patientId, requestBody);
-        dispatch(triggerUpdateNotes());
+        dispatch(updateNotes());
         onClose();
       }
     } catch (error) {

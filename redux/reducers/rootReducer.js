@@ -2,7 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
 import clinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
-import initialState from 'redux/initialState';
+import patientPhoneCalls from 'app/components/dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
@@ -12,11 +12,11 @@ import crmBoard from 'redux/slices/crmBoardSlice';
 import crm from 'redux/slices/crmSlice';
 import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
 import globalNotifications from 'redux/slices/globalNotificationsSlice';
+import main from 'redux/slices/mainReduxSlice';
 import patientList from 'redux/slices/patientsListSlice';
 import pubnubMessages from 'redux/slices/pubnubMessagesSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
-import types from 'redux/types';
 import addPaymentModal from './addPaymentModal';
 import calendar from './calendar';
 import clinic from './clinic';
@@ -64,112 +64,7 @@ const rootReducer = combineReducers({
   clinicAnalytics,
   crmBoard,
   pubnubMessages,
+  patientPhoneCalls,
 });
-
-function main(state = initialState, { type, payload } = {}) {
-  switch (type) {
-    case types.checkAppointments:
-      return { ...state, checkAppointments: !state.checkAppointments };
-    case types.updateInvoices:
-      return { ...state, updateInvoices: !state.updateInvoices };
-    case types.checkDoctorAppointments:
-      return {
-        ...state,
-        checkDoctorAppointments: !state.checkDoctorAppointments,
-      };
-    case types.updateCategoriesList:
-      return {
-        ...state,
-        updateCategories: !state.updateCategories,
-      };
-    case types.updateServicesList:
-      return {
-        ...state,
-        updateServices: payload,
-      };
-    case types.updateUsersList:
-      return {
-        ...state,
-        updateUsers: payload,
-      };
-    case types.updateXRay:
-      return {
-        ...state,
-        updateXRay: !state.updateXRay,
-      };
-    case types.updateNotes:
-      return {
-        ...state,
-        updateNotes: !state.updateNotes,
-      };
-    case types.setUser:
-      return {
-        ...state,
-        user: payload,
-      };
-    case types.changeCurrentClinic:
-      return {
-        ...state,
-        newClinicId: payload,
-      };
-    case types.triggerUserLogOut:
-      return {
-        ...state,
-        logout: payload,
-      };
-    case types.forceUserLogout:
-      return {
-        ...state,
-        forceLogout: payload,
-      };
-    case types.updateAppointmentsList:
-      return {
-        ...state,
-        updateAppointments: !state.updateAppointments,
-      };
-    case types.updateCalendarDoctorHeight:
-      return {
-        ...state,
-        updateCalendarDoctorHeight: !state.updateCalendarDoctorHeight,
-      };
-    case types.setPatientDetails:
-      return {
-        ...state,
-        patientDetails: payload,
-      };
-    case types.toggleUpdatePatients:
-      return {
-        ...state,
-        updatePatients: payload,
-      };
-    case types.toggleUpdatePatientPayments:
-      return {
-        ...state,
-        updatePatientPayments: !state.updatePatientPayments,
-      };
-    case types.toggleImportModal:
-      return {
-        ...state,
-        isImportModalOpen: payload,
-      };
-    case types.toggleExchangeRateUpdate:
-      return {
-        ...state,
-        updateExchangeRates: !state.updateExchangeRates,
-      };
-    case types.updateDoctorAppointment:
-      return {
-        ...state,
-        updateDoctorAppointments: !state.updateDoctorAppointments,
-      };
-    case types.setUpdateHourIndicatorPosition:
-      return {
-        ...state,
-        updateHourIndicatorTop: !state.updateHourIndicatorTop,
-      };
-    default:
-      return state;
-  }
-}
 
 export default rootReducer;
