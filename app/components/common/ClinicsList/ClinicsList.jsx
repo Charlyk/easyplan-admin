@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
+import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import getClinicUrl from 'app/utils/getClinicUrl';
-import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
-import { triggerUserLogout } from 'redux/actions/actions';
+import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import EASImage from '../EASImage';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import ClinicItem from './ClinicItem';
 import styles from './ClnicsList.module.scss';
-import Head from 'next/head';
 
 export default function ClinicsList({ user, authToken, isMobile }) {
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
   };
 
   const handleLogout = () => {
-    dispatch(triggerUserLogout(true));
+    dispatch(triggerUserLogOut(true));
   };
 
   const handleCloseAccessBlocked = () => {

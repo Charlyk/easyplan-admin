@@ -26,3 +26,4 @@ export * from './patientDebt.type';
 export * from './userRole.type';
 export * from './userClinic.type';
 export * from './DealView.types';
+export * from './patientCallRecord.types';
