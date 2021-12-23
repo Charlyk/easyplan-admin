@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
-import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
+import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';

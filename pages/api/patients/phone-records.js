@@ -12,7 +12,7 @@ async function fetchPhoneRecords(req) {
   );
   const queryString = new URLSearchParams(req.query).toString();
   return axios.get(
-    `${updatedServerUrl(req)}/patients/phone-records?${queryString}`,
+    `${updatedServerUrl(req)}/patients/call-records?${queryString}`,
     {
       headers: {
         [HeaderKeys.authorization]: authToken,

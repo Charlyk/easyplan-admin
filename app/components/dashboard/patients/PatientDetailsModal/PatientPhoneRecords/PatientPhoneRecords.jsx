@@ -1,20 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import PhoneIcon from '@material-ui/icons/Call';
+import OutgoingCallIcon from '@material-ui/icons/CallMade';
+import FailedCallIcon from '@material-ui/icons/CallMissed';
+import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import CloudDownload from '@material-ui/icons/CloudDownload';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import IconIncomeCall from 'app/components/icons/iconIncomeCall';
-import IconOutCall from 'app/components/icons/IconOutCall';
-import NotificationsContext from 'app/context/notificationsContext';
+import { useDispatch, useSelector } from 'react-redux';
+import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import { textForKey } from 'app/utils/localization';
-import { getPatientPhoneRecords } from 'middleware/api/patients';
+import { playPhoneCallRecord } from '../../../../../../redux/slices/mainReduxSlice';
+import PhoneCallItem from '../../../../crm/DealDetails/RightContainer/DealHistory/PhoneCallItem';
 import styles from './PatientPhoneRecords.module.scss';
+import { dispatchFetchCallRecords } from './PatientPhoneRecords.reducer';
+import { patientPhoneRecordsSelector } from './PatientPhoneRecords.selector';
 
 const RecordItem = ({ record, onDownload }) => {
+  const callIcon = useMemo(() => {
+    switch (record.direction) {
+      case 'Incoming':
+        return <IncomeCallIcon className={styles.arrowIcon} />;
+      case 'Outgoing':
+        return <OutgoingCallIcon className={styles.arrowIcon} />;
+      default:
+        return <FailedCallIcon className={styles.arrowIcon} />;
+    }
+  }, [record]);
+
   const handleRecordDownload = () => {
     onDownload(record);
   };
@@ -22,7 +38,10 @@ const RecordItem = ({ record, onDownload }) => {
   return (
     <div className={styles.recordItem}>
       <Box display='flex' alignItems='center'>
-        {record.type === 'Income' ? <IconIncomeCall /> : <IconOutCall />}
+        <div className={styles.iconWrapper}>
+          <PhoneIcon />
+          {callIcon}
+        </div>
         <Box>
           <Typography classes={{ root: styles.dateLabel }}>
             {record.date}
@@ -51,10 +70,9 @@ const RecordItem = ({ record, onDownload }) => {
 };
 
 const PatientPhoneRecords = ({ patient }) => {
-  const toast = useContext(NotificationsContext);
+  const dispatch = useDispatch();
+  const { isFetching, records } = useSelector(patientPhoneRecordsSelector);
   const [page, setPage] = useState(0);
-  const [records, setRecords] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (patient == null) {
@@ -64,18 +82,8 @@ const PatientPhoneRecords = ({ patient }) => {
     fetchPhoneRecords();
   }, [patient, page]);
 
-  const fetchPhoneRecords = async () => {
-    setIsLoading(true);
-    try {
-      setRecords([]);
-      const response = await getPatientPhoneRecords(patient.id, page);
-      const { data } = response;
-      setRecords(data);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const fetchPhoneRecords = () => {
+    dispatch(dispatchFetchCallRecords({ patientId: patient.id, page }));
   };
 
   const handleNextClick = () => {
@@ -92,13 +100,11 @@ const PatientPhoneRecords = ({ patient }) => {
     setPage(page - 1);
   };
 
-  const handleRecordDownload = (record) => {
-    const recordDate = moment(record.date);
-    const year = recordDate.format('YYYY');
-    const month = recordDate.format('MM');
-    const date = recordDate.format('DD');
-    const recordUrl = `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${record.recordingFile}`;
-    window.open(recordUrl, '_blank');
+  const handlePlayRecord = (record) => {
+    if (record?.fileUrl == null) {
+      return;
+    }
+    dispatch(playPhoneCallRecord(record));
   };
 
   return (
@@ -106,20 +112,20 @@ const PatientPhoneRecords = ({ patient }) => {
       <Typography classes={{ root: 'title-label' }}>
         {textForKey('Phone records')}
       </Typography>
-      {isLoading && (
+      {isFetching && (
         <CircularProgress classes={{ root: 'circular-progress-bar' }} />
       )}
-      {records.length === 0 && !isLoading && (
+      {records.length === 0 && !isFetching && (
         <Typography classes={{ root: 'no-data-label' }}>
           {textForKey('No data here yet')} :(
         </Typography>
       )}
       <div className={styles.recordsWrapper}>
-        {records.map((item, index) => (
-          <RecordItem
-            key={`${item.id}-${index}`}
-            record={item}
-            onDownload={handleRecordDownload}
+        {records.map((item) => (
+          <PhoneCallItem
+            key={item.id}
+            call={item}
+            onPlayAudio={handlePlayRecord}
           />
         ))}
       </div>

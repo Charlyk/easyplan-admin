@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import OptionsSelectionModal from 'app/components/common/modals/OptionsSelectionModal';
-import { useSelector } from 'app/utils/hooks/useTypedSelector';
+import { useSelector } from 'app/hooks/useTypedSelector';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import {
