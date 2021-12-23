@@ -22,19 +22,19 @@ import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { importPatientsFromFile } from 'middleware/api/patients';
 import {
-  setPatientDetails,
-  togglePatientsListUpdate,
-} from 'redux/actions/actions';
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import {
   globalPatientListSelector,
   arePatientsLoadingSelector,
 } from 'redux/selectors/patientSelector';
 import { updatePatientsListSelector } from 'redux/selectors/rootSelector';
-import { fetchPatientList } from 'redux/slices/patientsListSlice';
 import {
-  authTokenSelector,
-  currentClinicSelector,
-} from '../../../../../redux/selectors/appDataSelector';
+  setPatientDetails,
+  toggleUpdatePatients,
+} from 'redux/slices/mainReduxSlice';
+import { fetchPatientList } from 'redux/slices/patientsListSlice';
 import styles from './PatientsList.module.scss';
 import reducer, {
   initialState,
@@ -106,7 +106,7 @@ const PatientsList = ({ query: initialQuery }) => {
   useEffect(() => {
     if (updatePatients) {
       fetchPatients();
-      dispatch(togglePatientsListUpdate(false));
+      dispatch(toggleUpdatePatients(false));
     }
   }, [updatePatients]);
 

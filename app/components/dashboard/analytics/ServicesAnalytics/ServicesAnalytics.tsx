@@ -18,8 +18,8 @@ import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import { setPatientDetails } from 'redux/actions/actions';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import { ServicesStatisticResponse, ScheduleStatus } from 'types';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
