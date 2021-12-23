@@ -42,7 +42,7 @@ import {
 import { updatedDealSelector } from 'redux/selectors/crmSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
-import { playPhoneCallRecord } from '../../../../redux/slices/mainReduxSlice';
+import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';

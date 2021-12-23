@@ -3,8 +3,7 @@ import moment from 'moment-timezone';
 import { createSelector } from 'reselect';
 import { Role } from 'app/utils/constants';
 import { ReduxState } from 'redux/types';
-import doctors from '../../pages/api/analytics/doctors';
-import { ExchangeRate } from '../../types';
+import { ExchangeRate } from 'types';
 
 export const appDataSelector = (state: ReduxState) => state.appData;
 
