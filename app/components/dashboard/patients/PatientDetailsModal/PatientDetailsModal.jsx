@@ -22,11 +22,9 @@ import {
   getPatientDetails,
   requestUpdatePatient,
 } from 'middleware/api/patients';
-import {
-  setPatientXRayModal,
-  togglePatientsListUpdate,
-} from 'redux/actions/actions';
+import { setPatientXRayModal } from 'redux/actions/actions';
 import { setAddPaymentModal } from 'redux/actions/addPaymentModalActions';
+import { toggleUpdatePatients } from 'redux/slices/mainReduxSlice';
 import { requestDeletePatient } from 'redux/slices/patientsListSlice';
 import AppointmentNotes from './AppointmentNotes';
 import OrthodonticPlan from './OrthodonticPlan';
@@ -128,7 +126,7 @@ const PatientDetailsModal = ({
     } finally {
       localDispatch(setIsFetching(false));
       if (updateList) {
-        dispatch(togglePatientsListUpdate(true));
+        dispatch(toggleUpdatePatients(true));
       }
     }
   };

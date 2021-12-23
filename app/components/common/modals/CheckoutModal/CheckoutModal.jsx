@@ -43,7 +43,6 @@ import {
   savePatientGeneralTreatmentPlan,
   searchPatients,
 } from 'middleware/api/patients';
-import { setPatientDetails } from 'redux/actions/actions';
 import {
   activeClinicDoctorsSelector,
   clinicExchangeRatesSelector,
@@ -52,6 +51,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
 import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
+import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import TeethModal from '../TeethModal';
 import styles from './CheckoutModal.module.scss';
 import { actions, initialState, reducer } from './CheckoutModal.reducer';

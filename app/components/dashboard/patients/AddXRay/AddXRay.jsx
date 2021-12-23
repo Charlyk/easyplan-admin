@@ -7,7 +7,7 @@ import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { addPatientXRayImage } from 'middleware/api/patients';
-import { triggerUpdateXRay } from 'redux/actions/actions';
+import { updateXRay } from 'redux/slices/mainReduxSlice';
 import styles from './AddXRay.module.scss';
 
 const phases = [
@@ -45,7 +45,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
     setIsLoading(true);
     try {
       await addPatientXRayImage(patientId, phase, imageFile);
-      dispatch(triggerUpdateXRay());
+      dispatch(updateXRay());
       onClose();
     } catch (error) {
       toast.error(error.message);
