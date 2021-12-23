@@ -14,7 +14,6 @@ import { signOut } from 'middleware/api/auth';
 import {
   setPatientNoteModal,
   setPatientXRayModal,
-  triggerUserLogout,
 } from 'redux/actions/actions';
 import {
   currentClinicSelector,
@@ -25,6 +24,7 @@ import {
   patientNoteModalSelector,
   patientXRayModalSelector,
 } from 'redux/selectors/modalsSelector';
+import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import styles from './DoctorsMain.module.scss';
 
 const AddXRay = dynamic(() =>
@@ -97,7 +97,7 @@ const DoctorsMain = ({ children, pageTitle }) => {
   };
 
   const handleStartLogout = () => {
-    dispatch(triggerUserLogout(true));
+    dispatch(triggerUserLogOut(true));
   };
 
   const handleEditProfileClick = () => {
