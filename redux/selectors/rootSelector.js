@@ -58,3 +58,8 @@ export const updateHourIndicatorPositionSelector = createSelector(
   mainSelector,
   (state) => state.updateHourIndicatorTop,
 );
+
+export const phoneCallRecordSelector = createSelector(
+  mainSelector,
+  (state) => state.callToPlay,
+);

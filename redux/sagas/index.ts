@@ -14,6 +14,8 @@ import {
   remindersCountWatcher,
   dealsStatesWatcher,
   appDataWatcher,
+  pubnubWatcher,
+  patientCallRecordsWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -32,5 +34,7 @@ export default function* rootSaga() {
     remindersCountWatcher(),
     dealsStatesWatcher(),
     appDataWatcher(),
+    pubnubWatcher(),
+    patientCallRecordsWatcher(),
   ]);
 }

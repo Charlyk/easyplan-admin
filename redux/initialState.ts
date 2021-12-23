@@ -19,7 +19,6 @@ const initialState: ReduxState = {
   user: null,
   updateAppointments: false,
   updateCalendarDoctorHeight: false,
-  checkAppointments: false,
   updateInvoices: false,
   checkDoctorAppointments: false,
   patientDetails: {
@@ -63,6 +62,8 @@ const initialState: ReduxState = {
     dayHours: [],
     closeDetails: false,
     isFetchingDetails: false,
+    viewDate: null,
+    viewMode: 'day',
   },
   appointmentModal: {
     open: false,
@@ -153,6 +154,11 @@ const initialState: ReduxState = {
     items: [],
     dealState: null,
   },
+  patientPhoneCalls: {
+    isFetching: false,
+    records: [],
+  },
+  callToPlay: null,
 };
 
 export default initialState;

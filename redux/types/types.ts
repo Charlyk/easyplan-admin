@@ -17,6 +17,7 @@ import {
   ExchangeRate,
   DealView,
   DealStateView,
+  PatientCallRecord,
 } from 'types';
 
 export interface CalendarDataState {
@@ -27,6 +28,8 @@ export interface CalendarDataState {
   deleteSchedule?: Schedule | null;
   closeDetails: boolean;
   isFetchingDetails: boolean;
+  viewDate: string | null;
+  viewMode: 'day' | 'week' | 'month';
 }
 
 export interface CreateAppointmentModalState {
@@ -156,6 +159,11 @@ export interface DealsColumnState {
   dealState: DealStateView | null;
 }
 
+export interface PatientPhoneCallsState {
+  isFetching: boolean;
+  records: PatientCallRecord[];
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -169,7 +177,6 @@ export interface ReduxState {
   user: null;
   updateAppointments: boolean;
   updateCalendarDoctorHeight: boolean;
-  checkAppointments: boolean;
   updateInvoices: boolean;
   checkDoctorAppointments: boolean;
   updatePatients: boolean;
@@ -195,4 +202,6 @@ export interface ReduxState {
   clinicAnalytics: ClinicAnalyticsState;
   crmBoard: CrmBoardState;
   dealsColumn: DealsColumnState;
+  patientPhoneCalls: PatientPhoneCallsState;
+  callToPlay: PatientCallRecord | null;
 }

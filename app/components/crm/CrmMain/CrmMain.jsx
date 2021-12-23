@@ -6,23 +6,19 @@ import React, {
   useRef,
 } from 'react';
 import Fab from '@material-ui/core/Fab';
-import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Zoom from '@material-ui/core/Zoom';
 import IconFilter from '@material-ui/icons/FilterList';
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
 import upperFirst from 'lodash/upperFirst';
-import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import AudioPlayer from 'react-h5-audio-player';
 import { useDispatch, useSelector } from 'react-redux';
 import HorizontalScrollHelper from 'app/components/common/HorizontalScrollHelper';
-import IconClose from 'app/components/icons/iconClose';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
 import extractCookieByName from 'app/utils/extractCookieByName';
@@ -46,6 +42,7 @@ import {
 import { updatedDealSelector } from 'redux/selectors/crmSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
+import { playPhoneCallRecord } from '../../../../redux/slices/mainReduxSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';
@@ -64,7 +61,6 @@ import reducer, {
   setShowFilters,
   setQueryParams,
   setShowReminders,
-  setCallToPlay,
   setShowPageConnectModal,
 } from './CrmMain.reducer';
 
@@ -100,7 +96,6 @@ const CrmMain = () => {
       showFilters,
       queryParams,
       showReminders,
-      callToPlay,
       showPageConnectModal,
     },
     localDispatch,
@@ -248,26 +243,7 @@ const CrmMain = () => {
     if (call?.fileUrl == null) {
       return;
     }
-    const createdDate = moment(call.created);
-    const year = createdDate.format('YYYY');
-    const month = createdDate.format('MM');
-    const date = createdDate.format('DD');
-    const recordUrl = call.callId
-      ? `https://sip6215.iphost.md/amocrm/router.php?route=record/get&call_id=${call.callId}`
-      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(
-          ' ',
-          '+',
-        )}`;
-    localDispatch(
-      setCallToPlay({
-        ...call,
-        fullUrl: recordUrl,
-      }),
-    );
-  };
-
-  const handleClosePlayer = () => {
-    localDispatch(setCallToPlay(null));
+    dispatch(playPhoneCallRecord(call));
   };
 
   const updateParams = (newParams) => {
@@ -283,10 +259,6 @@ const CrmMain = () => {
 
   const handleFilterSubmit = (filterData) => {
     updateParams(filterData);
-  };
-
-  const handlePlayerError = () => {
-    toast.error('Play error', { toastId: 'play-error' });
   };
 
   const handleScrollUpdate = (scrollOffset) => {
@@ -398,22 +370,6 @@ const CrmMain = () => {
           </Tooltip>
         </Zoom>
       </div>
-      {callToPlay != null && (
-        <div className={styles.playerContainer}>
-          <IconButton className={styles.closeIcon} onClick={handleClosePlayer}>
-            <IconClose />
-          </IconButton>
-          <AudioPlayer
-            autoPlay
-            src={callToPlay.fullUrl}
-            className={styles.player}
-            onError={handlePlayerError}
-            showJumpControls={false}
-            showSkipControls={false}
-            onPlayError={handlePlayerError}
-          />
-        </div>
-      )}
       <DndProvider backend={HTML5Backend}>
         <div ref={columnsContainerRef} className={styles.columnsContainer}>
           {filteredColumns.map((dealState, index) => (

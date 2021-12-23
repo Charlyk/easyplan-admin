@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
-import { activeClinicDoctorsSelector } from 'redux/selectors/appDataSelector';
+import { calendarDoctorsSelector } from 'redux/selectors/appDataSelector';
 import {
   dayHoursSelector,
   schedulesSelector,
@@ -26,7 +26,7 @@ const CalendarWeekView = ({
 }) => {
   const schedules = useSelector(schedulesSelector);
   const hours = useSelector(dayHoursSelector);
-  const doctors = useSelector(activeClinicDoctorsSelector);
+  const doctors = useSelector(calendarDoctorsSelector);
   const week = getCurrentWeek(viewDate);
 
   const handleDayClick = (day) => {
