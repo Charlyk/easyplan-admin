@@ -100,12 +100,6 @@ const ServicesContainer = () => {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  // useEffect(() => {
-  //   console.log('Use Effect runs');
-  //   dispatch(fetchServicesList());
-  //   return () => console.log('Unmounted');
-  // }, []);
-
   useEffect(() => {
     if (error == null) {
       return;
