@@ -35,7 +35,6 @@ import {
   servicesSelector,
 } from 'redux/selectors/servicesSelector';
 import {
-  fetchServicesList,
   openDetailsModal,
   setCategories as globalSetCategories,
   requestDeleteCategory,
@@ -101,9 +100,11 @@ const ServicesContainer = () => {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    dispatch(fetchServicesList());
-  }, []);
+  // useEffect(() => {
+  //   console.log('Use Effect runs');
+  //   dispatch(fetchServicesList());
+  //   return () => console.log('Unmounted');
+  // }, []);
 
   useEffect(() => {
     if (error == null) {
