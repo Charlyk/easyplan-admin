@@ -64,8 +64,6 @@ const OptionsSelectionModal: React.FC<Props> = ({
       title={title}
       onPrimaryClick={onSubmit}
       onClose={onClose}
-      onDestroyClick={onClose}
-      onSecondaryClick={onClose}
       onBackdropClick={onClose}
       destroyBtnText={destroyBtnText}
       size='large'
@@ -84,7 +82,7 @@ const OptionsSelectionModal: React.FC<Props> = ({
             onClick={() => handleItemSelected(item)}
           >
             {item.name}
-            {isItemSelected(item) && <IconCheckMark fill='#ec3276' />}
+            {isItemSelected(item) && <IconCheckMark fill='rgb(75, 186, 1)' />}
           </MenuItem>
         ))}
       </MenuList>

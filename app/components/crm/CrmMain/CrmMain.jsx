@@ -17,8 +17,6 @@ import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import AudioPlayer from 'react-h5-audio-player';
 import { useDispatch, useSelector } from 'react-redux';
 import HorizontalScrollHelper from 'app/components/common/HorizontalScrollHelper';
@@ -414,29 +412,28 @@ const CrmMain = () => {
           />
         </div>
       )}
-      <DndProvider backend={HTML5Backend}>
-        <div ref={columnsContainerRef} className={styles.columnsContainer}>
-          {filteredColumns.map((dealState, index) => (
-            <DealsColumn
-              key={dealState.id}
-              width={COLUMN_WIDTH}
-              filterData={queryParams}
-              isFirst={index === 0}
-              isLast={index === columns.length - 1}
-              updatedDeal={updatedDeal}
-              currentClinic={currentClinic}
-              dealState={dealState}
-              onAddSchedule={handleAddSchedule}
-              onUpdate={updateColumns}
-              onMove={handleColumnMoved}
-              onDealClick={handleDealClick}
-              onLinkPatient={handleLinkPatient}
-              onDeleteDeal={handleDeleteDeal}
-              onConfirmFirstContact={handleConfirmFirstContact}
-            />
-          ))}
-        </div>
-      </DndProvider>
+      <div ref={columnsContainerRef} className={styles.columnsContainer}>
+        {filteredColumns.map((dealState, index) => (
+          <DealsColumn
+            key={dealState.id}
+            width={COLUMN_WIDTH}
+            filterData={queryParams}
+            isFirst={index === 0}
+            isLast={index === columns.length - 1}
+            updatedDeal={updatedDeal}
+            currentClinic={currentClinic}
+            dealState={dealState}
+            onAddSchedule={handleAddSchedule}
+            onUpdate={updateColumns}
+            onMove={handleColumnMoved}
+            onDealClick={handleDealClick}
+            onLinkPatient={handleLinkPatient}
+            onDeleteDeal={handleDeleteDeal}
+            onConfirmFirstContact={handleConfirmFirstContact}
+          />
+        ))}
+      </div>
+
       <HorizontalScrollHelper
         columnsCount={filteredColumns.length}
         columnWidth={COLUMN_WIDTH}

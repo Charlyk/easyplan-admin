@@ -222,6 +222,7 @@ const CalendarDayView = ({
         id: cabinet.id,
         name: cabinet.name,
         hint,
+        date: viewDate,
       };
     });
     // map independent doctors to column structure

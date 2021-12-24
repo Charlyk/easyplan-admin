@@ -31,6 +31,19 @@ const calendarData = createSlice({
   name: 'calendarData',
   initialState: initialState.calendarData,
   reducers: {
+    requestUpdateScheduleDateAndDoctor(
+      state,
+      _action: PayloadAction<{
+        schedule: Schedule;
+        reqBody: {
+          doctorId?: number;
+          startDate?: string;
+          cabinetId?: number;
+        };
+      }>,
+    ) {
+      state;
+    },
     setSchedules(state, action: PayloadAction<ScheduleItem[]>) {
       state.schedules = mapSchedules(action.payload);
     },
@@ -89,7 +102,6 @@ const calendarData = createSlice({
 
         const newSchedules = item.schedules.map((schedule) => {
           if (schedule.id !== scheduleToUpdate.id) {
-            console.log(scheduleToUpdate, schedule.id);
             return schedule;
           }
 
@@ -202,6 +214,7 @@ export const {
   addNewSchedule,
   updateSchedule,
   deleteSchedule,
+  requestUpdateScheduleDateAndDoctor,
   updateSchedulePatientRecords,
   setAppointmentDetails,
   updateDetailsPatientRecords,
