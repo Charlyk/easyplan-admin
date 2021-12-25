@@ -57,6 +57,11 @@ export const availableCurrenciesSelector = createSelector(
       : [],
 );
 
+export const userCalendarOrderSelector = createSelector(
+  currentUserSelector,
+  (user) => user.calendarOrders,
+);
+
 export const clinicServicesSelector = createSelector(
   currentClinicSelector,
   (clinic) => clinic.services?.filter((item) => !item.deleted) || [],

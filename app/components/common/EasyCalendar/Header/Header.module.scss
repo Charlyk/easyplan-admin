@@ -14,12 +14,21 @@
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     overflow: hidden;
-    padding-left: .3rem;
-    padding-right: .3rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
     cursor: pointer;
     color: #34344E;
+
+    .arrowButton {
+      padding: 0;
+      display: none;
+
+      svg {
+        fill: #3A83DC;
+      }
+    }
 
     &.disabled {
       background-color: #EDFDF4;
@@ -45,6 +54,11 @@
 
     &:hover {
       color: #3A83DC;
+
+      .arrowButton {
+        padding: 0;
+        display: initial;
+      }
     }
 
     .itemName {
