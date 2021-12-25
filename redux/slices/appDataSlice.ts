@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { AppDataState } from 'redux/types';
-import { Cabinet, ClinicUser, CurrentClinic } from 'types';
+import { CurrentClinic } from 'types';
 import {
   AppDataRequest,
   AppDataResponse,
@@ -17,12 +17,6 @@ const appDataSlice = createSlice({
   initialState: initialState.appData,
   reducers: {
     dispatchChangeDoctorCalendarOrder(
-      state,
-      _action: PayloadAction<DoctorCalendarOrderRequest>,
-    ) {
-      state.isUpdatingClinic = false;
-    },
-    dispatchChangeCabinetCalendarOrder(
       state,
       _action: PayloadAction<DoctorCalendarOrderRequest>,
     ) {
@@ -79,30 +73,6 @@ const appDataSlice = createSlice({
       state.isUpdatingClinic = false;
       state.isUpdatingProfile = false;
     },
-    updateDoctorCalendarOrder(state, action: PayloadAction<ClinicUser>) {
-      state.currentClinic.users = state.currentClinic.users.map((user) => {
-        if (user.id !== action.payload.id) {
-          return user;
-        }
-        return {
-          ...user,
-          calendarOrderId: action.payload.calendarOrderId,
-        };
-      });
-    },
-    updateCabinetCalendarOrder(state, action: PayloadAction<Cabinet>) {
-      state.currentClinic.cabinets = state.currentClinic.cabinets.map(
-        (cabinet) => {
-          if (cabinet.id !== action.payload.id) {
-            return cabinet;
-          }
-          return {
-            ...cabinet,
-            calendarOrderId: action.payload.calendarOrderId,
-          };
-        },
-      );
-    },
     setIsUpdatingProfile(state, action: PayloadAction<boolean>) {
       state.isUpdatingProfile = action.payload;
     },
@@ -137,9 +107,6 @@ export const {
   dispatchFetchAppData,
   setCurrentEntities,
   dispatchChangeDoctorCalendarOrder,
-  updateDoctorCalendarOrder,
-  dispatchChangeCabinetCalendarOrder,
-  updateCabinetCalendarOrder,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;
