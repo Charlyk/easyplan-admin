@@ -12,7 +12,6 @@ export interface ClinicUser {
   avatar?: string;
   roleInClinic: UserRole;
   canRegisterPayments: boolean;
-  calendarOrderId: number | null;
   created: string;
   services: UserService[];
   isInVacation: boolean;
