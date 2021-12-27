@@ -95,6 +95,7 @@ const addAppointmentModalSlice = createSlice({
     setDoctor(state, action) {
       state.doctor = action.payload;
       state.service = null;
+      state.isServiceValid = false;
       state.isDoctorValid = action.payload != null;
     },
     setService(state, action) {

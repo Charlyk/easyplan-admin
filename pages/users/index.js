@@ -6,12 +6,14 @@ import UsersList from 'app/components/dashboard/users/UsersList';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { getUsers } from 'middleware/api/users';
 import {
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
+import { setUsersData } from 'redux/slices/usersListSlice';
 import { wrapper } from 'store';
 
 const Users = () => {
@@ -48,6 +50,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
             },
           };
         }
+
+        const response = await getUsers(req.headers);
+        const { users, invitations } = response.data;
+        store.dispatch(setUsersData({ users, invitations }));
 
         const redirectTo = redirectToUrl(currentUser, currentClinic, '/users');
         if (redirectTo != null) {
