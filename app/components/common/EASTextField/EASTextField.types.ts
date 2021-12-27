@@ -17,4 +17,5 @@ export interface EASTextFieldProps extends BaseTextFieldProps {
   variant?: 'outlined' | 'standard' | 'filled';
   onChange?: (data: File | string) => void;
   maxLength?: number;
+  disableAutoFill?: boolean;
 }
