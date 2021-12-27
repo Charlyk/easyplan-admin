@@ -6,12 +6,14 @@ import ServicesContainer from 'app/components/dashboard/services/ServicesContain
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { fetchAllServices } from 'middleware/api/services';
 import {
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
+import { setServicesData } from 'redux/slices/servicesListSlice';
 import { wrapper } from 'store';
 
 const Services = ({ categories: clinicCategories, services }) => {
@@ -48,6 +50,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             },
           };
         }
+
+        const response = await fetchAllServices(req.headers);
+        store.dispatch(setServicesData(response.data));
 
         const redirectTo = redirectToUrl(
           currentUser,
