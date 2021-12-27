@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-} from 'react';
+import React, { useCallback, useContext, useMemo, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '@material-ui/core/Table';
@@ -83,10 +77,6 @@ const UsersList = () => {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = () => {
     dispatch(fetchClinicUsers());
   };
@@ -138,7 +128,6 @@ const UsersList = () => {
     try {
       await sendInvitation(email, role);
       await fetchUsers();
-      closeInviteModal();
     } catch (error) {
       if (error.response != null) {
         const { data } = error.response;
@@ -149,6 +138,7 @@ const UsersList = () => {
         localDispatch(setIsInvitingExistentError(error.message));
       }
     } finally {
+      closeInviteModal();
       localDispatch(setIsInvitingExistent(false));
     }
   };
