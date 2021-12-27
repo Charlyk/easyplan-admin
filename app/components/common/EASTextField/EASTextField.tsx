@@ -23,6 +23,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
       onChange,
       helperText,
       type,
+      disableAutoFill,
       autoFocus,
       variant = 'outlined',
       ...props
@@ -83,10 +84,14 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
           InputProps={{
             endAdornment: endAdornment,
             inputProps: {
+              readOnly: disableAutoFill ? 'readonly' : '',
               max,
               min,
               step,
               maxLength,
+              onFocus: disableAutoFill
+                ? (evt) => evt.target.removeAttribute('readonly')
+                : () => null,
             },
             classes: {
               root: clsx(styles.searchField, fieldClass),
