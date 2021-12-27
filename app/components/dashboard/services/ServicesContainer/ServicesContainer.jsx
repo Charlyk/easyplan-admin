@@ -35,7 +35,6 @@ import {
   servicesSelector,
 } from 'redux/selectors/servicesSelector';
 import {
-  fetchServicesList,
   openDetailsModal,
   setCategories as globalSetCategories,
   requestDeleteCategory,
@@ -100,10 +99,6 @@ const ServicesContainer = () => {
     { category, deleteServiceModal, categoryModal, showImportModal },
     localDispatch,
   ] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    dispatch(fetchServicesList());
-  }, []);
 
   useEffect(() => {
     if (error == null) {
