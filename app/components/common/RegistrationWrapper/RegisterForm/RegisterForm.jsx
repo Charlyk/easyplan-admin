@@ -125,6 +125,7 @@ const RegisterForm = ({
         />
 
         <EASTextField
+          disableAutoFill
           type='email'
           error={!isEmailFieldValid}
           helperText={
@@ -137,6 +138,7 @@ const RegisterForm = ({
         />
 
         <EASTextField
+          disableAutoFill
           type={isPasswordVisible ? 'text' : 'password'}
           containerClass={styles.textField}
           value={data.password}
