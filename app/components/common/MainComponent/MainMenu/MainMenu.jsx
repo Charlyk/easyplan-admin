@@ -13,6 +13,7 @@ import IconLiveHelp from '@material-ui/icons/LiveHelp';
 import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import ClinicSelector from 'app/components/common/ClinicSelector';
@@ -151,6 +152,7 @@ const menuItems = [
 ];
 
 const MainMenu = ({ currentPath, onCreateClinic }) => {
+  const router = useRouter();
   const buttonRef = useRef(null);
   const dispatch = useDispatch();
   const selectedClinic = useSelector(userClinicSelector);
@@ -255,6 +257,11 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
     (item) => item.clinicId === currentClinic.id,
   );
 
+  const navigateIfNotAlreadyActive = (path) => {
+    if (currentPath === path) return;
+    router.push(path);
+  };
+
   return (
     <div className={styles.mainMenu}>
       <ClickAwayListener onClickAway={handleCompanyClose}>
@@ -331,13 +338,42 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
               </React.Fragment>
             );
           } else if (item.type === 'link') {
-            if (item.id === 'crm' && !canShowCrm) {
-              return null;
+            if (item.id === 'crm') {
+              if (!canShowCrm) return null;
+              return (
+                <a key={item.id}>
+                  <ListItem
+                    ref={setCrmDashboardRef}
+                    classes={{
+                      root: styles.listItem,
+                      selected: styles.selected,
+                    }}
+                    selected={isActive(item.href)}
+                    onClick={() => navigateIfNotAlreadyActive(item.href)}
+                  >
+                    <ListItemIcon className={styles.itemIcon}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      classes={{ primary: styles.itemText }}
+                      primary={
+                        <Typography className={styles.itemText}>
+                          {item.text}
+                          {item.hasCounter && getCounterValue(item) > 0 && (
+                            <span className={styles.counterLabel}>
+                              {getCounterValue(item)}
+                            </span>
+                          )}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                </a>
+              );
             }
             return (
               <Link passHref href={item.href} key={item.id}>
                 <ListItem
-                  ref={item.id === 'crm' ? setCrmDashboardRef : null}
                   classes={{ root: styles.listItem, selected: styles.selected }}
                   selected={isActive(item.href)}
                 >

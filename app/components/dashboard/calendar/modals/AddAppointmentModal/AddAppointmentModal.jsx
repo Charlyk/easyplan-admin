@@ -340,6 +340,15 @@ const AddAppointmentModal = ({
     if (schedule != null) {
       return;
     }
+    let approximatedDuration;
+    if (service.duration % 5 !== 0) {
+      let remainder = service.duration % 5;
+      approximatedDuration = service.duration - remainder + 5;
+    } else {
+      approximatedDuration = service.duration;
+    }
+
+    console.log(service.duration);
     setTimeout(() => {
       const start =
         availableTime.length > 0 && startTime.length === 0
@@ -352,7 +361,7 @@ const AddAppointmentModal = ({
           minute: parseInt(m),
           second: 0,
         })
-        .add(service.duration, 'minutes')
+        .add(approximatedDuration, 'minutes')
         .format('HH:mm');
       localDispatch(setEndTime(end));
     }, 300);
