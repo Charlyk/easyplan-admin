@@ -420,7 +420,7 @@ const AppointmentDetails = ({
                       >
                         {textForKey('Cabinet')}:
                       </td>
-                      <td>{details.doctor.fullName}</td>
+                      <td>{details.cabinet.name}</td>
                     </tr>
                   )}
                   <tr>
