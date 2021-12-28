@@ -188,6 +188,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
                   </TableCell>
                   <TableCell width='33%'>
                     <NumberFormat
+                      maxLength={4}
                       placeholder='0'
                       className={styles.numberFormatInput}
                       onValueChange={handleRateValueChange(rate)}
