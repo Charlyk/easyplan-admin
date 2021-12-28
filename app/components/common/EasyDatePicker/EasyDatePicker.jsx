@@ -14,6 +14,7 @@ const EasyDatePicker = ({
   pickerAnchor,
   placement,
   minDate,
+  maxDate,
   onClose,
   onChange,
   selectedDate,
@@ -34,6 +35,7 @@ const EasyDatePicker = ({
             <ClickAwayListener onClickAway={onClose}>
               <Calendar
                 minDate={minDate}
+                maxDate={maxDate}
                 locale={locales[getAppLanguage()]}
                 onChange={onChange}
                 date={selectedDate}
@@ -55,6 +57,7 @@ EasyDatePicker.propTypes = {
   onChange: PropTypes.func,
   pickerAnchor: PropTypes.any,
   minDate: PropTypes.instanceOf(Date),
+  maxDate: PropTypes.instanceOf(Date),
   placement: PropTypes.oneOf(['bottom', 'top']),
   disablePortal: PropTypes.bool,
 };

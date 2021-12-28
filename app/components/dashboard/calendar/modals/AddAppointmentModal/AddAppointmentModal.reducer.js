@@ -69,6 +69,17 @@ export const initialState = {
   isUrgent: false,
   loading: { patients: false, services: false, doctors: false },
   cabinet: null,
+  showCreateModal: false,
+  newPatient: {
+    patientFirstName: '',
+    patientLastName: '',
+    patientPhoneNumber: '',
+    patientCountryCode: '373',
+    patientEmail: '',
+    patientBirthday: '',
+    patientSource: 'Unknown',
+    patientLanguage: 'ro',
+  },
 };
 
 const addAppointmentModalSlice = createSlice({
@@ -78,6 +89,13 @@ const addAppointmentModalSlice = createSlice({
     setPatient(state, action) {
       state.patient = action.payload;
       state.isPatientValid = action.payload != null;
+    },
+    setNewPatient(state, action) {
+      state.newPatient = action.payload;
+      const isNewPatientValid =
+        state.newPatient?.patientPhoneNumber?.trim() &&
+        state.newPatient?.patientCountryCode?.trim();
+      state.isPatientValid = isNewPatientValid || state.patient != null;
     },
     setPatients(state, acton) {
       state.patients = acton.payload;
@@ -246,8 +264,6 @@ const addAppointmentModalSlice = createSlice({
 export const {
   setPatient,
   setPatients,
-  setPatientSource,
-  setPatientLanguage,
   setShowDatePicker,
   setSchedule,
   setAppointmentHour,
@@ -262,13 +278,7 @@ export const {
   setServices,
   setAvailableTime,
   setIsFetchingHours,
-  setIsNewPatient,
-  setIsPatientValid,
   setIsUrgent,
-  setPatientBirthday,
-  setPatientPhoneNumber,
-  setPatientEmail,
-  setPatientFirstName,
   setService,
   setShowBirthdayPicker,
   setServicesLoading,

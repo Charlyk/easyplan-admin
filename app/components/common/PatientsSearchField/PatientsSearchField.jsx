@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
+import PropTypes from 'prop-types';
 import { textForKey } from 'app/utils/localization';
-import { getPatients } from 'middleware/api/patients';
 import onRequestError from 'app/utils/onRequestError';
+import { getPatients } from 'middleware/api/patients';
 import EASAutocomplete from '../EASAutocomplete';
 
 const PatientsSearchField = ({
@@ -104,3 +105,21 @@ const PatientsSearchField = ({
 };
 
 export default PatientsSearchField;
+
+PatientsSearchField.propTypes = {
+  selectedPatient: PropTypes.any,
+  fieldLabel: PropTypes.string,
+  disabled: PropTypes.bool,
+  containerClass: PropTypes.any,
+  onSelected: PropTypes.func,
+  onCreatePatient: PropTypes.func,
+};
+
+PatientsSearchField.defaultProps = {
+  containerClass: null,
+  disabled: false,
+  fieldLabel: '',
+  selectedPatient: null,
+  onSelected: () => null,
+  onCreatePatient: () => null,
+};

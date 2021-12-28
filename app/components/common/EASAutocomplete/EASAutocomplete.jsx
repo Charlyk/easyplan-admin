@@ -115,6 +115,13 @@ const EASAutocomplete = ({
     return option.label || '';
   };
 
+  const getOptionSelected = (option, value) => {
+    if (typeof option === 'object') {
+      return option.id === value.id;
+    }
+    return option === value;
+  };
+
   const filterOptions = (options, state) => {
     if (filterLocally) {
       return options.filter((item) =>
@@ -148,6 +155,7 @@ const EASAutocomplete = ({
           renderInput={renderInput}
           renderOption={renderOption}
           getOptionLabel={getOptionLabel}
+          getOptionSelected={getOptionSelected}
           noOptionsText={textForKey('No options')}
           onChange={handleChange}
           onOpen={() => {

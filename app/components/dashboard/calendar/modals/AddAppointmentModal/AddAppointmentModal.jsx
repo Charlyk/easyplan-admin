@@ -5,17 +5,19 @@ import React, {
   useMemo,
   useReducer,
   useRef,
+  useState,
 } from 'react';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import clsx from 'clsx';
-import debounce from 'lodash/debounce';
+import Tab from '@material-ui/core/Tab';
+import TabContext from '@material-ui/lab/TabContext';
+import TabList from '@material-ui/lab/TabList';
+import TabPanel from '@material-ui/lab/TabPanel';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import EASAutocomplete from 'app/components/common/EASAutocomplete';
-import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
@@ -602,82 +604,84 @@ const AddAppointmentModal = ({
             />
           )}
 
-        {!isDoctorMode && (
+          {!isDoctorMode && (
+            <EASAutocomplete
+              filterLocally
+              containerClass={styles.simpleField}
+              options={doctors}
+              value={doctor}
+              fieldLabel={textForKey('Doctor')}
+              placeholder={textForKey('Enter doctor name or phone')}
+              onChange={handleDoctorChange}
+            />
+          )}
+
           <EASAutocomplete
             filterLocally
+            disabled={mappedServices.length === 0}
             containerClass={styles.simpleField}
-            options={doctors}
-            value={doctor}
-            fieldLabel={textForKey('Doctor')}
-            placeholder={textForKey('Enter doctor name or phone')}
-            onChange={handleDoctorChange}
+            options={mappedServices}
+            value={service}
+            fieldLabel={textForKey('Service')}
+            placeholder={textForKey('Enter service name')}
+            onChange={handleServiceChange}
           />
-        )}
 
-        <EASAutocomplete
-          filterLocally
-          disabled={mappedServices.length === 0}
-          containerClass={styles.simpleField}
-          options={mappedServices}
-          value={service}
-          fieldLabel={textForKey('Service')}
-          placeholder={textForKey('Enter service name')}
-          onChange={handleServiceChange}
-        />
-
-        <EASTextField
-          readOnly
-          ref={datePickerAnchor}
-          containerClass={styles.simpleField}
-          fieldLabel={textForKey('Date')}
-          value={moment(appointmentDate).format('DD MMMM YYYY')}
-          onPointerUp={handleDateFieldClick}
-        />
-
-        <div className={styles.timeContainer}>
-          <EASSelect
-            disabled={availableStartTime.length === 0}
-            rootClass={styles.timeSelect}
-            value={startTime || ''}
-            label={textForKey('Start time')}
-            labelId='start-time-select'
-            options={mappedTime(availableStartTime)}
-            onChange={handleStartHourChange}
+          <EASTextField
+            readOnly
+            ref={datePickerAnchor}
+            containerClass={styles.simpleField}
+            fieldLabel={textForKey('Date')}
+            value={moment(appointmentDate).format('DD MMMM YYYY')}
+            onPointerUp={handleDateFieldClick}
           />
-          <EASSelect
-            disabled={availableEndTime.length === 0}
-            rootClass={styles.timeSelect}
-            value={endTime || ''}
-            label={textForKey('End time')}
-            labelId='start-time-select'
-            options={mappedTime(availableEndTime)}
-            onChange={handleEndHourChange}
+
+          <div className={styles.timeContainer}>
+            <EASSelect
+              disabled={availableStartTime.length === 0}
+              rootClass={styles.timeSelect}
+              value={startTime || ''}
+              label={textForKey('Start time')}
+              labelId='start-time-select'
+              options={mappedTime(availableStartTime)}
+              onChange={handleStartHourChange}
+            />
+            <EASSelect
+              disabled={availableEndTime.length === 0}
+              rootClass={styles.timeSelect}
+              value={endTime || ''}
+              label={textForKey('End time')}
+              labelId='start-time-select'
+              options={mappedTime(availableEndTime)}
+              onChange={handleEndHourChange}
+            />
+          </div>
+
+          <div>
+            <FormControlLabel
+              control={<Checkbox checked={isUrgent} />}
+              label={textForKey('Is urgent')}
+              onChange={handleIsUrgentChange}
+              classes={{
+                root: styles.urgentCheck,
+                label: styles.urgentLabel,
+              }}
+            />
+          </div>
+
+          <EASTextarea
+            containerClass={styles.simpleField}
+            value={appointmentNote || ''}
+            rows={4}
+            maxRows={6}
+            onChange={handleNoteChange}
+            fieldLabel={textForKey('Notes')}
           />
-        </div>
-
-        <div>
-          <FormControlLabel
-            control={<Checkbox checked={isUrgent} />}
-            label={textForKey('Is urgent')}
-            onChange={handleIsUrgentChange}
-            classes={{
-              root: styles.urgentCheck,
-              label: styles.urgentLabel,
-            }}
-          />
-        </div>
-
-        <EASTextarea
-          containerClass={styles.simpleField}
-          value={appointmentNote || ''}
-          rows={4}
-          maxRows={6}
-          onChange={handleNoteChange}
-          fieldLabel={textForKey('Notes')}
-        />
-
+        </Box>
+        {/*  </TabPanel>*/}
+        {/*</TabContext>*/}
         {datePicker}
-        {birthdayPicker}
+        {createPatientModal}
       </Box>
     </EASModal>
   );
