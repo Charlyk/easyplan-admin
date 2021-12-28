@@ -11,11 +11,13 @@ const PatientsSearchField = ({
   disabled,
   containerClass,
   onSelected,
+  onCreatePatient,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [patients, setPatients] = useState([]);
   const suggestionPatients = useMemo(() => {
     if (patients.length === 0 && selectedPatient != null) {
+      console.log(selectedPatient, patients);
       return [
         {
           ...selectedPatient,
@@ -86,12 +88,14 @@ const PatientsSearchField = ({
 
   return (
     <EASAutocomplete
+      canCreate
       containerClass={containerClass}
       disabled={disabled}
       fieldLabel={fieldLabel}
       options={suggestionPatients}
       onTextChange={handleSearchQueryChange}
       onChange={handlePatientChange}
+      onCreateOption={onCreatePatient}
       value={selectedPatient || ''}
       loading={isLoading}
       placeholder={textForKey('Enter patient name or phone')}

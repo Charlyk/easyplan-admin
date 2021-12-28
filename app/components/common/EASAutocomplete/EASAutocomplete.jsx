@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import TextField from '@material-ui/core/TextField';
@@ -14,23 +14,59 @@ const EASAutocomplete = ({
   loading,
   disabled,
   placeholder,
+  helperText,
+  error,
   clearOnSelect,
   value,
   fieldLabel,
   containerClass,
   filterLocally,
+  canCreate,
   onTextChange,
   onChange,
+  onCreateOption,
 }) => {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
   const [fieldKey, setFieldKey] = useState(1);
+  const [inputValue, setInputValue] = useState(value?.label ?? '');
+
+  const mappedOptions = useMemo(() => {
+    if (
+      options?.length === 0 &&
+      canCreate &&
+      !filterLocally &&
+      !loading &&
+      inputValue.length > 3
+    ) {
+      return [
+        {
+          id: 'add',
+          name: `${textForKey('create')} ${inputValue}`,
+          label: `${textForKey('create')} ${inputValue}`,
+        },
+      ];
+    }
+    return options;
+  }, [options, canCreate, filterLocally, loading, inputValue]);
 
   const handleFocusChange = (isFocused) => {
     setFocused(isFocused);
   };
 
+  const handleTextChange = (event) => {
+    onTextChange?.(event);
+    setInputValue(event.target.value);
+  };
+
   const handleChange = (event, value) => {
+    if (value?.id === 'add') {
+      onCreateOption?.({ ...value, inputValue });
+      setFieldKey(fieldKey + 1);
+      setInputValue('');
+      return;
+    }
+
     onChange?.(event, value);
     if (clearOnSelect) {
       setFieldKey(fieldKey + 1);
@@ -46,7 +82,9 @@ const EASAutocomplete = ({
         disabled={disabled}
         placeholder={placeholder}
         variant='outlined'
-        onChange={onTextChange}
+        onChange={handleTextChange}
+        helperText={helperText}
+        error={error}
         InputProps={{
           ...params.InputProps,
           classes: {
@@ -103,7 +141,7 @@ const EASAutocomplete = ({
           disabled={disabled}
           open={open}
           value={value}
-          options={options}
+          options={mappedOptions}
           filterOptions={filterOptions}
           loading={loading}
           placeholder={placeholder}
@@ -141,6 +179,7 @@ EASAutocomplete.propTypes = {
   fieldLabel: PropTypes.string,
   containerClass: PropTypes.any,
   filterLocally: PropTypes.bool,
+  canCreate: PropTypes.bool,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.any,
@@ -151,4 +190,5 @@ EASAutocomplete.propTypes = {
   ),
   onChange: PropTypes.func,
   onTextChange: PropTypes.func,
+  onCreateOption: PropTypes.func,
 };

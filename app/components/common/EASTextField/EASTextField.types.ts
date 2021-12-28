@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { BaseTextFieldProps } from '@material-ui/core';
 
 export interface EASTextFieldProps extends BaseTextFieldProps {
@@ -15,6 +16,9 @@ export interface EASTextFieldProps extends BaseTextFieldProps {
   type?: string;
   autoFocus?: boolean;
   variant?: 'outlined' | 'standard' | 'filled';
-  onChange?: (data: File | string) => void;
+  onChange?: (
+    data: FileList | string,
+    event?: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+  ) => void;
   maxLength?: number;
 }

@@ -21,12 +21,10 @@ import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EASModal from 'app/components/common/modals/EASModal';
+import PatientsSearchField from 'app/components/common/PatientsSearchField';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { EmailRegex, Languages, PatientSources } from 'app/utils/constants';
-import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
-import { getPatients } from 'middleware/api/patients';
 import {
   getAvailableHours,
   getScheduleDetails,
@@ -41,11 +39,7 @@ import { updateAppointmentsList } from 'redux/slices/mainReduxSlice';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
-  setPatients,
-  setPatientBirthday,
   setSchedule,
-  setPatientSource,
-  setPatientsLoading,
   setEndTime,
   setStartTime,
   setAppointmentDate,
@@ -55,21 +49,16 @@ import reducer, {
   setPatient,
   setAvailableTime,
   setIsFetchingHours,
-  setShowBirthdayPicker,
-  setPatientPhoneNumber,
-  setIsNewPatient,
-  setIsPatientValid,
   setIsUrgent,
-  setPatientEmail,
-  setPatientFirstName,
-  setPatientLanguage,
-  setPatientLastName,
   setService,
   setShowDatePicker,
   setSelectedCabinet,
   setSelectedCabinetInDoctorMode,
+  setNewPatient,
+  setShowCreateModal,
   resetState,
 } from './AddAppointmentModal.reducer';
+import AppointmentPatient from './AppointmentPatient';
 
 const AddAppointmentModal = ({
   open,
@@ -86,36 +75,24 @@ const AddAppointmentModal = ({
   const toast = useContext(NotificationsContext);
   const dispatch = useDispatch();
   const activeServices = useSelector(clinicServicesSelector);
-  const birthdayPickerAnchor = useRef(null);
   const datePickerAnchor = useRef(null);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const clinicDoctors = useSelector(doctorsForScheduleSelector);
+  const [currentTab, setCurrentTab] = useState('0');
   const [
     {
       patient,
-      patients,
+      newPatient,
       doctor,
       cabinet,
       service,
-      loading,
       scheduleId,
-      patientLastName,
-      patientFirstName,
-      patientPhoneNumber,
-      patientBirthday,
-      patientLanguage,
-      patientSource,
-      patientEmail,
-      phoneCountry,
-      isPhoneValid,
-      isNewPatient,
       appointmentDate,
       appointmentNote,
       appointmentStatus,
       showDatePicker,
-      showBirthdayPicker,
+      showCreateModal,
       isFetchingHours,
-      isPatientValid,
       isDoctorValid,
       isServiceValid,
       isCreatingSchedule,
@@ -129,6 +106,10 @@ const AddAppointmentModal = ({
   ] = useReducer(reducer, initialState);
 
   const hasCabinets = clinicCabinets.length > 0;
+
+  const shouldGoNext = currentTab === '0';
+  const canGoNext =
+    currentTab === '0' && (newPatient.isPhoneValid || patient != null);
 
   const doctors = useMemo(() => {
     const mappedDoctors = clinicDoctors
@@ -166,23 +147,6 @@ const AddAppointmentModal = ({
     }
     return orderBy(mappedCabinets, 'name', 'asc');
   }, [clinicCabinets]);
-
-  const suggestionPatients = useMemo(() => {
-    if (patients.length === 0 && patient != null) {
-      return [
-        {
-          ...patient,
-          name: `${patient.fullName} +${patient.countryCode}${patient.phoneNumber}`,
-          label: patients.fullName,
-        },
-      ];
-    }
-    return patients.map((item) => ({
-      ...item,
-      name: `${item.fullName} +${item.countryCode}${item.phoneNumber}`,
-      label: item.fullName,
-    }));
-  }, [patients, patient]);
 
   const mappedServices = useMemo(() => {
     if (isDoctorMode) {
@@ -235,32 +199,6 @@ const AddAppointmentModal = ({
       return `+${option.countryCode}${option.phoneNumber}`;
     }
   }, []);
-
-  const handlePatientSearch = useCallback(
-    debounce(async (query) => {
-      localDispatch(setPatientsLoading(true));
-      try {
-        const updatedQuery = query.replace('+', '');
-        const requestQuery = {
-          query: updatedQuery,
-          page: '0',
-          rowsPerPage: '10',
-          short: '1',
-        };
-        const { data: response } = await getPatients(requestQuery);
-        const patients = response.data.map((item) => ({
-          ...item,
-          fullName: getLabelKey(item),
-        }));
-        localDispatch(setPatients(patients));
-      } catch (error) {
-        toast.error(error.message);
-      } finally {
-        localDispatch(setPatientsLoading(false));
-      }
-    }, 700),
-    [],
-  );
 
   useEffect(() => {
     if (schedule != null) {
@@ -418,10 +356,6 @@ const AddAppointmentModal = ({
     }, 300);
   };
 
-  const handlePatientChange = (event, selectedPatient) => {
-    localDispatch(setPatient(selectedPatient));
-  };
-
   const handleDoctorChange = (event, selectedDoctor) => {
     localDispatch(setDoctor(selectedDoctor));
   };
@@ -438,17 +372,6 @@ const AddAppointmentModal = ({
     localDispatch(setService(selectedService));
   };
 
-  const handleSearchQueryChange = (event) => {
-    const query = event.target.value;
-    if (query.length < 3) {
-      localDispatch(setPatients([]));
-      localDispatch(setPatientsLoading(false));
-      return;
-    }
-    localDispatch(setPatientsLoading(true));
-    handlePatientSearch(query);
-  };
-
   const handleDateFieldClick = () => {
     if (isFinished) {
       return;
@@ -462,22 +385,6 @@ const AddAppointmentModal = ({
 
   const handleDateChange = (newDate) => {
     localDispatch(setAppointmentDate(newDate));
-  };
-
-  const handleBirthdayChange = (newDate) => {
-    localDispatch(setPatientBirthday(newDate));
-  };
-
-  const handleEmailChange = (newValue) => {
-    localDispatch(setPatientEmail(newValue));
-  };
-
-  const handleCloseBirthdayPicker = () => {
-    localDispatch(setShowBirthdayPicker(false));
-  };
-
-  const handleOpenBirthdayPicker = () => {
-    localDispatch(setShowBirthdayPicker(true));
   };
 
   const handleStartHourChange = (event) => {
@@ -496,46 +403,23 @@ const AddAppointmentModal = ({
     localDispatch(setIsUrgent(checked));
   };
 
-  const changePatientMode = () => {
-    if (schedule != null) {
-      return;
-    }
-    const isNew = !isNewPatient;
-    localDispatch(setIsNewPatient(isNew));
-    if (isNew) {
-      localDispatch(setPatient(null));
-      localDispatch(setIsPatientValid(false));
-    }
-  };
-
-  const handlePatientFirstNameChange = (newValue) => {
-    localDispatch(setPatientFirstName(newValue));
-  };
-
-  const handlePatientLastNameChange = (newValue) => {
-    localDispatch(setPatientLastName(newValue));
-  };
-
-  const handlePatientLanguageChange = (event) => {
-    localDispatch(setPatientLanguage(event.target.value));
-  };
-
-  const handlePatientSourceChange = (event) => {
-    localDispatch(setPatientSource(event.target.value));
-  };
-
   const isFormValid = () => {
     return (
       isDoctorValid &&
-      (isNewPatient || isPatientValid) &&
       isServiceValid &&
       startTime?.length > 0 &&
       endTime?.length > 0 &&
-      (!isNewPatient || isPhoneValid)
+      (patient != null || newPatient?.isPhoneValid)
     );
   };
 
   const handleCreateSchedule = async () => {
+    if (shouldGoNext && canGoNext) {
+      // move to schedule details
+      setCurrentTab('1');
+      return;
+    }
+
     if (!isFormValid()) {
       return;
     }
@@ -556,15 +440,18 @@ const AddAppointmentModal = ({
 
       // build.yml request body
       const requestBody = {
-        patientFirstName,
-        patientLastName,
-        patientPhoneNumber,
-        patientBirthday,
-        patientLanguage,
-        patientSource,
-        patientEmail,
+        patientFirstName: newPatient?.patientFirstName,
+        patientLastName: newPatient?.patientLastName,
+        patientPhoneNumber: newPatient?.patientPhoneNumber?.replace(
+          newPatient?.patientCountryCode,
+          '',
+        ),
+        patientBirthday: newPatient?.patientBirthday,
+        patientLanguage: newPatient?.patientLanguage,
+        patientSource: newPatient?.patientSource,
+        patientEmail: newPatient?.patientEmail,
+        patientCountryCode: newPatient?.patientCountryCode,
         isUrgent,
-        patientCountryCode: phoneCountry.dialCode,
         patientId: patient?.id,
         doctorId: doctor?.id,
         cabinetId: cabinet?.id,
@@ -591,16 +478,27 @@ const AddAppointmentModal = ({
     }
   };
 
-  const handlePhoneChange = (value, country, event) => {
-    localDispatch(
-      setPatientPhoneNumber({
-        phoneNumber: value.replace(country.dialCode, ''),
-        isPhoneValid:
-          isPhoneNumberValid(value, country) &&
-          !event.target?.classList.value.includes('invalid-number'),
-        country,
-      }),
-    );
+  const handleTabChange = (event, newValue) => {
+    setCurrentTab(`${newValue}`);
+  };
+
+  const handleExistentPatientChange = (patient) => {
+    localDispatch(setPatient(patient));
+    if (patient != null) {
+      setCurrentTab('1');
+    }
+  };
+
+  const handleCloseCreateModal = () => {
+    localDispatch(setShowCreateModal(false));
+  };
+
+  const handleOpenCreateModal = (value) => {
+    localDispatch(setShowCreateModal(true));
+  };
+
+  const handleNewPatientChange = (patient) => {
+    localDispatch(setNewPatient(patient));
   };
 
   const datePicker = (
@@ -614,13 +512,13 @@ const AddAppointmentModal = ({
     />
   );
 
-  const birthdayPicker = (
-    <EasyDatePicker
-      open={Boolean(showBirthdayPicker)}
-      pickerAnchor={birthdayPickerAnchor.current}
-      onChange={handleBirthdayChange}
-      onClose={handleCloseBirthdayPicker}
-      selectedDate={patientBirthday || new Date()}
+  const createPatientModal = (
+    <AppointmentPatient
+      open={showCreateModal}
+      onClose={handleCloseCreateModal}
+      onSaved={handleExistentPatientChange}
+      patient={patient}
+      newPatient={newPatient}
     />
   );
 
@@ -645,126 +543,64 @@ const AddAppointmentModal = ({
           : textForKey('Edit appointment')
       }
       onBackdropClick={() => null}
-      isPositiveDisabled={!isFormValid() || isLoading}
+      isPositiveDisabled={
+        shouldGoNext ? !canGoNext : !isFormValid() || isLoading
+      }
+      primaryBtnText={shouldGoNext ? textForKey('Next') : textForKey('Save')}
       onPrimaryClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >
-      <Box padding='16px' display='flex' flexDirection='column'>
-        {isNewPatient && (
-          <div className={styles.patientNameContainer}>
-            <EASTextField
-              type='text'
-              value={patientLastName}
-              containerClass={styles.nameField}
-              fieldLabel={textForKey('Last name')}
-              onChange={handlePatientLastNameChange}
-            />
-            <EASTextField
-              type='text'
-              value={patientFirstName}
-              containerClass={styles.nameField}
-              fieldLabel={textForKey('First name')}
-              onChange={handlePatientFirstNameChange}
-            />
-          </div>
-        )}
-
-        {isNewPatient && (
-          <EASPhoneInput
-            fieldLabel={textForKey('Phone number')}
-            rootClass={styles.phoneInput}
-            value={`${phoneCountry.dialCode}${patientPhoneNumber}`}
-            country={phoneCountry.countryCode || 'md'}
-            onChange={handlePhoneChange}
-          />
-        )}
-
-        {isNewPatient && (
-          <EASTextField
-            type='email'
-            containerClass={styles.simpleField}
-            fieldLabel={textForKey('Email')}
-            value={patientEmail}
-            error={patientEmail.length > 0 && !patientEmail.match(EmailRegex)}
-            onChange={handleEmailChange}
-          />
-        )}
-
-        {isNewPatient && (
-          <EASTextField
-            readOnly
-            containerClass={styles.simpleField}
-            ref={birthdayPickerAnchor}
-            fieldLabel={textForKey('Birthday')}
-            value={
-              patientBirthday
-                ? moment(patientBirthday).format('DD MMM YYYY')
-                : ''
-            }
-            onPointerUp={handleOpenBirthdayPicker}
-          />
-        )}
-
-        {isNewPatient && (
-          <EASSelect
-            label={textForKey('spoken_language')}
-            labelId='spoken-language-select'
-            options={Languages}
-            value={patientLanguage}
-            rootClass={styles.simpleField}
-            onChange={handlePatientLanguageChange}
-          />
-        )}
-
-        {isNewPatient && (
-          <EASSelect
-            label={textForKey('patient_source')}
-            labelId='patient-source-select'
-            options={PatientSources}
-            value={patientSource}
-            rootClass={styles.simpleField}
-            onChange={handlePatientSourceChange}
-          />
-        )}
-
-        {!isNewPatient && (
-          <EASAutocomplete
-            disabled={schedule != null}
+      <Box>
+        {/*<TabContext value={currentTab}>*/}
+        {/*  /!*<Box>*!/*/}
+        {/*  /!*  <TabList*!/*/}
+        {/*  /!*    variant='fullWidth'*!/*/}
+        {/*  /!*    classes={{*!/*/}
+        {/*  /!*      root: styles.tabsRoot,*!/*/}
+        {/*  /!*      indicator: styles.tabsIndicator,*!/*/}
+        {/*  /!*    }}*!/*/}
+        {/*  /!*    onChange={handleTabChange}*!/*/}
+        {/*  /!*  >*!/*/}
+        {/*  /!*    <Tab*!/*/}
+        {/*  /!*      value='0'*!/*/}
+        {/*  /!*      label={textForKey('Patient')}*!/*/}
+        {/*  /!*      classes={{ root: styles.tabItem }}*!/*/}
+        {/*  /!*    />*!/*/}
+        {/*  /!*    <Tab*!/*/}
+        {/*  /!*      value='1'*!/*/}
+        {/*  /!*      disabled={shouldGoNext && !canGoNext}*!/*/}
+        {/*  /!*      label={textForKey('appointment_details')}*!/*/}
+        {/*  /!*      classes={{ root: styles.tabItem }}*!/*/}
+        {/*  /!*    />*!/*/}
+        {/*  /!*  </TabList>*!/*/}
+        {/*  /!*</Box>*!/*/}
+        {/*  /!*<TabPanel value='0' style={{ padding: 0, width: '100%' }}>*!/*/}
+        {/*  /!*  <AppointmentPatient*!/*/}
+        {/*  /!*    patient={patient}*!/*/}
+        {/*  /!*    newPatient={newPatient}*!/*/}
+        {/*  /!*    onPatientChange={handleExistentPatientChange}*!/*/}
+        {/*  /!*    onNewPatientChange={handleNewPatientChange}*!/*/}
+        {/*  /!*  />*!/*/}
+        {/*  /!*</TabPanel>*!/*/}
+        {/*  /!*<TabPanel value='1' style={{ padding: 0, width: '100%' }}>*!/*/}
+        <Box display='flex' flexDirection='column' padding='16px'>
+          <PatientsSearchField
+            onCreatePatient={handleOpenCreateModal}
             fieldLabel={textForKey('Patient')}
-            options={suggestionPatients}
-            onTextChange={handleSearchQueryChange}
-            onChange={handlePatientChange}
-            value={patient}
-            loading={loading.patients}
-            placeholder={textForKey('Enter patient name or phone')}
+            selectedPatient={patient}
+            onSelected={handleExistentPatientChange}
           />
-        )}
-
-        <div className={styles.modeWrapper}>
-          <div
-            className={clsx(styles.patientModeButton, {
-              [styles.disabled]: isFinished,
-            })}
-            role='button'
-            tabIndex={0}
-            onPointerUp={changePatientMode}
-          >
-            <span>
-              {textForKey(isNewPatient ? 'Existent patient' : 'New patient')}?
-            </span>
-          </div>
-        </div>
-
-        {hasCabinets && (
-          <EASAutocomplete
-            filterLocally
-            options={cabinets}
-            value={cabinet}
-            fieldLabel={textForKey('add_appointment_cabinet')}
-            placeholder={textForKey('type_to_search')}
-            onChange={handleCabinetChange}
-          />
-        )}
+          {hasCabinets && (
+            <EASAutocomplete
+              filterLocally
+              containerClass={styles.simpleField}
+              options={cabinets}
+              value={cabinet}
+              fieldLabel={textForKey('add_appointment_cabinet')}
+              placeholder={textForKey('type_to_search')}
+              onChange={handleCabinetChange}
+            />
+          )}
 
         {!isDoctorMode && (
           <EASAutocomplete
