@@ -262,9 +262,9 @@ const DoctorPatientDetails = () => {
               <span className={styles.patientInfoTitle}>
                 {textForKey('Doctor')}:
               </span>
-              <span className={styles.patientInfoValue}>
+              <Typography className={styles.patientInfoValue} noWrap>
                 {currentUser.fullName}
-              </span>
+              </Typography>
             </div>
           </div>
           <div className={styles.printableWrapper}>
