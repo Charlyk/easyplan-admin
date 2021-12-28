@@ -141,6 +141,7 @@ const EditProfileModal = ({ open, onClose }) => {
           fieldLabel={textForKey('Last name')}
           value={data.lastName ?? ''}
           onChange={handleFormChange('lastName')}
+          maxLength={25}
         />
 
         <EASTextField
@@ -149,6 +150,7 @@ const EditProfileModal = ({ open, onClose }) => {
           fieldLabel={textForKey('First name')}
           value={data.firstName ?? ''}
           onChange={handleFormChange('firstName')}
+          maxLength={25}
         />
 
         <EASTextField
@@ -159,6 +161,7 @@ const EditProfileModal = ({ open, onClose }) => {
           fieldLabel={textForKey('Email')}
           value={data.email ?? ''}
           onChange={handleFormChange('email')}
+          maxLength={40}
         />
 
         <EASPhoneInput
