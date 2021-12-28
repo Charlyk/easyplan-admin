@@ -1,7 +1,7 @@
 .exchangeRate {
   width: calc(100% - 1rem);
   margin-top: 1rem;
-  min-height: 35px;
+  min-height: 115px;
   background-color: white;
   position: relative;
   display: flex;
@@ -9,6 +9,10 @@
   align-items: center;
   border-radius: 4px;
   box-shadow: 0 1px 10px 10px #34344e1a;
+<<<<<<< HEAD
+=======
+  margin-bottom: 5rem;
+>>>>>>> develop
 
   .titleLabel {
     width: 100%;
