@@ -49,8 +49,6 @@ const ColumnCell = ({
   }));
 
   const handleOnDrop = (schedule) => {
-    // console.log(schedule);
-    // console.log(startHour);
     handleOnDropCell(startHour, schedule);
   };
 
