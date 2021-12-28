@@ -45,7 +45,12 @@ const ExchangeRates = ({ canEdit }) => {
   };
 
   return (
-    <div className={styles.exchangeRate}>
+    <div
+      className={styles.exchangeRate}
+      style={{
+        minHeight: rates.length > 7 ? '200px' : `${rates.length * 25 + 80}px`,
+      }}
+    >
       {!isLoading && (
         <Typography className={styles.titleLabel}>
           {textForKey('Exchange rate')}
