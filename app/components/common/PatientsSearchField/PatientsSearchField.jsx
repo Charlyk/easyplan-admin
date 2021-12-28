@@ -6,6 +6,18 @@ import onRequestError from 'app/utils/onRequestError';
 import { getPatients } from 'middleware/api/patients';
 import EASAutocomplete from '../EASAutocomplete';
 
+const getPatientLabel = (patient) => {
+  if (patient.firstName && patient.lastName) {
+    return `${patient.lastName} ${patient.firstName}`;
+  } else if (patient.firstName) {
+    return patient.firstName;
+  } else if (patient.lastName) {
+    return patient.lastName;
+  } else {
+    return `+${patient.countryCode}${patient.phoneNumber}`;
+  }
+};
+
 const PatientsSearchField = ({
   selectedPatient,
   fieldLabel,
@@ -18,7 +30,6 @@ const PatientsSearchField = ({
   const [patients, setPatients] = useState([]);
   const suggestionPatients = useMemo(() => {
     if (patients.length === 0 && selectedPatient != null) {
-      console.log(selectedPatient, patients);
       return [
         {
           ...selectedPatient,
@@ -35,22 +46,14 @@ const PatientsSearchField = ({
   }, [patients, selectedPatient]);
 
   const getLabelKey = useCallback((option) => {
-    if (option.firstName && option.lastName) {
-      return `${option.lastName} ${option.firstName}`;
-    } else if (option.firstName) {
-      return option.firstName;
-    } else if (option.lastName) {
-      return option.lastName;
-    } else {
-      return `+${option.countryCode}${option.phoneNumber}`;
-    }
+    return getPatientLabel(option);
   }, []);
 
   const handlePatientSearch = useCallback(
     debounce(async (query) => {
       setIsLoading(true);
       try {
-        const updatedQuery = query.replace('+', '');
+        const updatedQuery = query.replace(/^([+0])/, '');
         const requestQuery = {
           query: updatedQuery,
           page: '0',

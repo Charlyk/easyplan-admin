@@ -69,17 +69,7 @@ export const initialState = {
   isUrgent: false,
   loading: { patients: false, services: false, doctors: false },
   cabinet: null,
-  showCreateModal: false,
-  newPatient: {
-    patientFirstName: '',
-    patientLastName: '',
-    patientPhoneNumber: '',
-    patientCountryCode: '373',
-    patientEmail: '',
-    patientBirthday: '',
-    patientSource: 'Unknown',
-    patientLanguage: 'ro',
-  },
+  createPatientModal: { open: false, value: '' },
 };
 
 const addAppointmentModalSlice = createSlice({
@@ -89,13 +79,6 @@ const addAppointmentModalSlice = createSlice({
     setPatient(state, action) {
       state.patient = action.payload;
       state.isPatientValid = action.payload != null;
-    },
-    setNewPatient(state, action) {
-      state.newPatient = action.payload;
-      const isNewPatientValid =
-        state.newPatient?.patientPhoneNumber?.trim() &&
-        state.newPatient?.patientCountryCode?.trim();
-      state.isPatientValid = isNewPatientValid || state.patient != null;
     },
     setPatients(state, acton) {
       state.patients = acton.payload;
@@ -257,7 +240,7 @@ const addAppointmentModalSlice = createSlice({
       state.cabinet = { ...action.payload, label: action.payload.name };
     },
     setShowCreateModal(state, action) {
-      state.showCreateModal = action.payload;
+      state.createPatientModal = action.payload;
     },
   },
 });
@@ -287,7 +270,6 @@ export const {
   setStartTime,
   setSelectedCabinet,
   setSelectedCabinetInDoctorMode,
-  setNewPatient,
   setShowCreateModal,
   resetState,
 } = addAppointmentModalSlice.actions;

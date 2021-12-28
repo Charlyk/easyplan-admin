@@ -5,14 +5,9 @@ import React, {
   useMemo,
   useReducer,
   useRef,
-  useState,
 } from 'react';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import Tab from '@material-ui/core/Tab';
-import TabContext from '@material-ui/lab/TabContext';
-import TabList from '@material-ui/lab/TabList';
-import TabPanel from '@material-ui/lab/TabPanel';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -56,7 +51,6 @@ import reducer, {
   setShowDatePicker,
   setSelectedCabinet,
   setSelectedCabinetInDoctorMode,
-  setNewPatient,
   setShowCreateModal,
   resetState,
 } from './AddAppointmentModal.reducer';
@@ -80,7 +74,6 @@ const AddAppointmentModal = ({
   const datePickerAnchor = useRef(null);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const clinicDoctors = useSelector(doctorsForScheduleSelector);
-  const [currentTab, setCurrentTab] = useState('0');
   const [
     {
       patient,
@@ -93,7 +86,7 @@ const AddAppointmentModal = ({
       appointmentNote,
       appointmentStatus,
       showDatePicker,
-      showCreateModal,
+      createPatientModal,
       isFetchingHours,
       isDoctorValid,
       isServiceValid,
@@ -108,10 +101,6 @@ const AddAppointmentModal = ({
   ] = useReducer(reducer, initialState);
 
   const hasCabinets = clinicCabinets.length > 0;
-
-  const shouldGoNext = currentTab === '0';
-  const canGoNext =
-    currentTab === '0' && (newPatient.isPhoneValid || patient != null);
 
   const doctors = useMemo(() => {
     const mappedDoctors = clinicDoctors
@@ -348,7 +337,6 @@ const AddAppointmentModal = ({
       approximatedDuration = service.duration;
     }
 
-    console.log(service.duration);
     setTimeout(() => {
       const start =
         availableTime.length > 0 && startTime.length === 0
@@ -420,17 +408,11 @@ const AddAppointmentModal = ({
       isServiceValid &&
       startTime?.length > 0 &&
       endTime?.length > 0 &&
-      (patient != null || newPatient?.isPhoneValid)
+      patient != null
     );
   };
 
   const handleCreateSchedule = async () => {
-    if (shouldGoNext && canGoNext) {
-      // move to schedule details
-      setCurrentTab('1');
-      return;
-    }
-
     if (!isFormValid()) {
       return;
     }
@@ -451,17 +433,6 @@ const AddAppointmentModal = ({
 
       // build.yml request body
       const requestBody = {
-        patientFirstName: newPatient?.patientFirstName,
-        patientLastName: newPatient?.patientLastName,
-        patientPhoneNumber: newPatient?.patientPhoneNumber?.replace(
-          newPatient?.patientCountryCode,
-          '',
-        ),
-        patientBirthday: newPatient?.patientBirthday,
-        patientLanguage: newPatient?.patientLanguage,
-        patientSource: newPatient?.patientSource,
-        patientEmail: newPatient?.patientEmail,
-        patientCountryCode: newPatient?.patientCountryCode,
         isUrgent,
         patientId: patient?.id,
         doctorId: doctor?.id,
@@ -489,27 +460,16 @@ const AddAppointmentModal = ({
     }
   };
 
-  const handleTabChange = (event, newValue) => {
-    setCurrentTab(`${newValue}`);
-  };
-
   const handleExistentPatientChange = (patient) => {
     localDispatch(setPatient(patient));
-    if (patient != null) {
-      setCurrentTab('1');
-    }
   };
 
   const handleCloseCreateModal = () => {
-    localDispatch(setShowCreateModal(false));
+    localDispatch(setShowCreateModal({ open: false, value: '' }));
   };
 
   const handleOpenCreateModal = (value) => {
-    localDispatch(setShowCreateModal(true));
-  };
-
-  const handleNewPatientChange = (patient) => {
-    localDispatch(setNewPatient(patient));
+    localDispatch(setShowCreateModal({ open: true, value: value.label }));
   };
 
   const datePicker = (
@@ -523,9 +483,9 @@ const AddAppointmentModal = ({
     />
   );
 
-  const createPatientModal = (
+  const createPatientModalComponent = (
     <AppointmentPatient
-      open={showCreateModal}
+      {...createPatientModal}
       onClose={handleCloseCreateModal}
       onSaved={handleExistentPatientChange}
       patient={patient}
@@ -554,46 +514,11 @@ const AddAppointmentModal = ({
           : textForKey('Edit appointment')
       }
       onBackdropClick={() => null}
-      isPositiveDisabled={
-        shouldGoNext ? !canGoNext : !isFormValid() || isLoading
-      }
-      primaryBtnText={shouldGoNext ? textForKey('Next') : textForKey('Save')}
+      isPositiveDisabled={!isFormValid() || isLoading}
       onPrimaryClick={handleCreateSchedule}
       isPositiveLoading={isLoading}
     >
       <Box>
-        {/*<TabContext value={currentTab}>*/}
-        {/*  /!*<Box>*!/*/}
-        {/*  /!*  <TabList*!/*/}
-        {/*  /!*    variant='fullWidth'*!/*/}
-        {/*  /!*    classes={{*!/*/}
-        {/*  /!*      root: styles.tabsRoot,*!/*/}
-        {/*  /!*      indicator: styles.tabsIndicator,*!/*/}
-        {/*  /!*    }}*!/*/}
-        {/*  /!*    onChange={handleTabChange}*!/*/}
-        {/*  /!*  >*!/*/}
-        {/*  /!*    <Tab*!/*/}
-        {/*  /!*      value='0'*!/*/}
-        {/*  /!*      label={textForKey('Patient')}*!/*/}
-        {/*  /!*      classes={{ root: styles.tabItem }}*!/*/}
-        {/*  /!*    />*!/*/}
-        {/*  /!*    <Tab*!/*/}
-        {/*  /!*      value='1'*!/*/}
-        {/*  /!*      disabled={shouldGoNext && !canGoNext}*!/*/}
-        {/*  /!*      label={textForKey('appointment_details')}*!/*/}
-        {/*  /!*      classes={{ root: styles.tabItem }}*!/*/}
-        {/*  /!*    />*!/*/}
-        {/*  /!*  </TabList>*!/*/}
-        {/*  /!*</Box>*!/*/}
-        {/*  /!*<TabPanel value='0' style={{ padding: 0, width: '100%' }}>*!/*/}
-        {/*  /!*  <AppointmentPatient*!/*/}
-        {/*  /!*    patient={patient}*!/*/}
-        {/*  /!*    newPatient={newPatient}*!/*/}
-        {/*  /!*    onPatientChange={handleExistentPatientChange}*!/*/}
-        {/*  /!*    onNewPatientChange={handleNewPatientChange}*!/*/}
-        {/*  /!*  />*!/*/}
-        {/*  /!*</TabPanel>*!/*/}
-        {/*  /!*<TabPanel value='1' style={{ padding: 0, width: '100%' }}>*!/*/}
         <Box display='flex' flexDirection='column' padding='16px'>
           <PatientsSearchField
             onCreatePatient={handleOpenCreateModal}
@@ -687,10 +612,8 @@ const AddAppointmentModal = ({
             fieldLabel={textForKey('Notes')}
           />
         </Box>
-        {/*  </TabPanel>*/}
-        {/*</TabContext>*/}
         {datePicker}
-        {createPatientModal}
+        {createPatientModalComponent}
       </Box>
     </EASModal>
   );

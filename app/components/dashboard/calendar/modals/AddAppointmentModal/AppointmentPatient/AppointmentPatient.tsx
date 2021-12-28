@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@material-ui/core/Box';
+import { useDispatch, useSelector } from 'react-redux';
 import EASPhoneInput from 'app/components/common/EASPhoneInput';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
@@ -7,6 +8,16 @@ import EASModal from 'app/components/common/modals/EASModal';
 import { PatientSources } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
+import {
+  arePatientsLoadingSelector,
+  createdPatientSelector,
+} from 'redux/selectors/patientSelector';
+import {
+  dispatchCreatePatient,
+  setCreatedPatient,
+} from 'redux/slices/patientsListSlice';
+import { PatientSource } from 'types';
+import { CreatePatientRequest } from 'types/api';
 import styles from './AppointmentPatient.module.scss';
 import {
   AppointmentPatientProps,
@@ -14,11 +25,10 @@ import {
 } from './AppointmentPatient.types';
 
 const initialState = {
-  firstName: '',
-  lastName: '',
+  fullName: '',
   phoneNumber: '',
   countryCode: '373',
-  source: 'Unknown',
+  source: PatientSource.Unknown,
   isPhoneValid: false,
   country: { dialCode: '373', countryCode: 'md' },
 };
@@ -29,10 +39,39 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
   onClose,
   onSaved,
 }) => {
+  const dispatch = useDispatch();
+  const createdPatient = useSelector(createdPatientSelector);
+  const isLoading = useSelector(arePatientsLoadingSelector);
   const [patientData, setPatientData] = useState({
     ...initialState,
-    firstName: value ?? '',
+    fullName: value ?? '',
   });
+
+  useEffect(() => {
+    if (open) {
+      dispatch(setCreatedPatient(null));
+      setPatientData(initialState);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (createdPatient == null) {
+      return;
+    }
+
+    const phoneNumber = `+${createdPatient.countryCode}${createdPatient.phoneNumber}`;
+    const searchName = `${createdPatient.fullName} ${phoneNumber}`;
+    onSaved?.({
+      ...createdPatient,
+      name: searchName,
+      label: createdPatient.fullName,
+    });
+    onClose?.();
+  }, [createdPatient]);
+
+  useEffect(() => {
+    setPatientData({ ...patientData, fullName: value });
+  }, [value]);
 
   const handlePhoneChange = (value: string, country: CountryData, _event) => {
     setPatientData({
@@ -45,12 +84,9 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
   };
 
   const handleFieldChange = (value: string) => {
-    const firstName = value.substring(0, value.indexOf(' '));
-    const lastName = value.substring(value.indexOf(' ') + 1);
     setPatientData({
       ...patientData,
-      firstName,
-      lastName,
+      fullName: value,
     });
   };
 
@@ -62,15 +98,24 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
   };
 
   const handleSavePatient = () => {
-    onSaved?.({
-      ...patientData,
-      id: 1,
-      avatar: null,
-      fullName: `${patientData.firstName} ${patientData.lastName}`,
-      discount: 0,
-      tags: [],
-    });
-    onClose?.();
+    const phoneNumber = patientData.phoneNumber.replace(
+      patientData.country.dialCode,
+      '',
+    );
+
+    const names = patientData.fullName.split(' ');
+    const firstName = names[0] ?? '';
+    const lastName = names.length > 1 ? names.slice(1).join(' ') : '';
+
+    const requestBody: CreatePatientRequest = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      source: patientData.source,
+      phoneNumber,
+      countryCode: patientData.countryCode,
+    };
+
+    dispatch(dispatchCreatePatient(requestBody));
   };
 
   return (
@@ -79,7 +124,8 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
       size='medium'
       onClose={onClose}
       onPrimaryClick={handleSavePatient}
-      isPositiveDisabled={!patientData.isPhoneValid}
+      isPositiveLoading={isLoading}
+      isPositiveDisabled={!patientData.isPhoneValid || isLoading}
       title={textForKey('Create patient')}
     >
       <div className={styles.appointmentPatient}>
@@ -88,6 +134,7 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
             id='patientFullName'
             type='text'
             placeholder='John Doe'
+            value={patientData.fullName}
             containerClass={styles.nameField}
             fieldLabel={textForKey('first_n_last_name')}
             onChange={handleFieldChange}
@@ -96,8 +143,8 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
           <EASPhoneInput
             fieldLabel={textForKey('Phone number')}
             rootClass={styles.phoneInput}
-            value={''}
-            country={'md'}
+            value={patientData.phoneNumber}
+            country={patientData.country.countryCode}
             onChange={handlePhoneChange}
           />
 

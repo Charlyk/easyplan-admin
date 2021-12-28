@@ -32,18 +32,13 @@ const EASAutocomplete = ({
   const [inputValue, setInputValue] = useState(value?.label ?? '');
 
   const mappedOptions = useMemo(() => {
-    if (
-      options?.length === 0 &&
-      canCreate &&
-      !filterLocally &&
-      !loading &&
-      inputValue.length > 3
-    ) {
+    if (canCreate && inputValue.length > 3) {
       return [
+        ...options,
         {
           id: 'add',
-          name: `${textForKey('create')} ${inputValue}`,
-          label: `${textForKey('create')} ${inputValue}`,
+          name: `${textForKey('create')} "${inputValue}"`,
+          label: inputValue,
         },
       ];
     }
@@ -61,7 +56,7 @@ const EASAutocomplete = ({
 
   const handleChange = (event, value) => {
     if (value?.id === 'add') {
-      onCreateOption?.({ ...value, inputValue });
+      onCreateOption?.(value);
       setFieldKey(fieldKey + 1);
       setInputValue('');
       return;
