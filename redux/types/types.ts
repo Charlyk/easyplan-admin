@@ -18,6 +18,7 @@ import {
   DealView,
   DealStateView,
   PatientCallRecord,
+  PatientVisit,
 } from 'types';
 
 export interface CalendarDataState {
@@ -164,6 +165,11 @@ export interface PatientPhoneCallsState {
   records: PatientCallRecord[];
 }
 
+export interface PatientVisitsState {
+  isFetching: boolean;
+  visits: PatientVisit[];
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -204,4 +210,5 @@ export interface ReduxState {
   dealsColumn: DealsColumnState;
   patientPhoneCalls: PatientPhoneCallsState;
   callToPlay: PatientCallRecord | null;
+  patientVisits: PatientVisitsState;
 }
