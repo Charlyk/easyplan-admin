@@ -51,7 +51,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           query.toDate = moment().endOf('month').format('YYYY-MM-DD');
         }
 
-        if (query.status == null) {
+        if (query.statuses == null) {
           query.status = 'All';
         }
 
