@@ -105,9 +105,7 @@ export default function LoginWrapper({
       if (data.error) {
         localDispatch(setErrorMessage(data.message));
       } else {
-        toast.success(
-          textForKey("We've sent an email with further instructions."),
-        );
+        toast.success(textForKey('email_with_instructions_was_sent'));
         localDispatch(setErrorMessage(null));
         handleFormChange(FormType.login);
       }

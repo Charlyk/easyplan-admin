@@ -39,9 +39,7 @@ const ServicesList = ({
 }) => {
   const [autocompleteClearKey, setAutocompleteClearKey] = useState(false);
   const autocompleteInput = (params) => {
-    return (
-      <TextField {...params} placeholder={textForKey('Select services')} />
-    );
+    return <TextField {...params} placeholder={textForKey('all services')} />;
   };
 
   const autocompleteOption = (option) => {
@@ -78,6 +76,8 @@ const ServicesList = ({
     }
     return sortBy(updatedServices, (item) => item.name.toLowerCase());
   }, [availableServices]);
+
+  console.log(sortedServices);
 
   return (
     <Box className={styles.servicesList}>
@@ -118,7 +118,6 @@ const ServicesList = ({
             root: styles.autocompleteRoot,
             inputRoot: styles.inputRoot,
           }}
-          value={null}
           onChange={handleServiceSelected}
           getOptionLabel={getOptionLabel}
           filterOptions={filterOptions}
