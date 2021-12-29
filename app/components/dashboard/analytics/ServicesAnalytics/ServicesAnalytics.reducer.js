@@ -99,7 +99,7 @@ const servicesAnalyticsSlice = createSlice({
       const {
         page,
         rowsPerPage,
-        status,
+        statuses,
         doctorId,
         serviceId,
         fromDate,
@@ -107,7 +107,7 @@ const servicesAnalyticsSlice = createSlice({
       } = action.payload;
       state.page = page;
       state.rowsPerPage = rowsPerPage;
-      state.selectedStatuses = [{ id: status }];
+      state.selectedStatuses = [{ id: statuses }];
       state.selectedDoctors = [
         {
           id: parseInt(String(doctorId || -1)),
