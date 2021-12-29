@@ -78,3 +78,7 @@ export async function registerInvoicePayment(
 export async function fetchDetailsForInvoice(invoiceId, headers = null) {
   return get(`/api/invoices/${invoiceId}`, headers);
 }
+
+export async function requestUndoPayment(invoiceId, headers = null) {
+  return put(`/api/invoices/${invoiceId}/undo`, headers, {});
+}
