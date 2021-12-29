@@ -14,7 +14,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
-import { setViewDate, setViewMode } from '../../../redux/slices/calendarData';
+import { setViewDate, setViewMode } from 'redux/slices/calendarData';
 
 const Month = ({ doctorId, date }) => {
   const viewDate = moment(date).toDate();

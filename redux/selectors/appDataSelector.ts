@@ -3,8 +3,7 @@ import moment from 'moment-timezone';
 import { createSelector } from 'reselect';
 import { Role } from 'app/utils/constants';
 import { ReduxState } from 'redux/types';
-import doctors from '../../pages/api/analytics/doctors';
-import { ExchangeRate } from '../../types';
+import { ExchangeRate } from 'types';
 
 export const appDataSelector = (state: ReduxState) => state.appData;
 
@@ -91,6 +90,13 @@ export const userClinicSelector = createSelector(
   currentUserSelector,
   currentClinicSelector,
   (user, clinic) => user?.clinics.find((it) => it.clinicId === clinic.id),
+);
+
+export const isManagerSelector = createSelector(
+  userClinicSelector,
+  (userClinic) =>
+    userClinic.roleInClinic === Role.manager ||
+    userClinic.roleInClinic === Role.admin,
 );
 
 export const activeClinicDoctorsSelector = createSelector(
