@@ -163,6 +163,10 @@ const initialState: ReduxState = {
     isFetching: false,
     visits: [],
   },
+  patientPurchases: {
+    isLoading: false,
+    payments: [],
+  },
 };
 
 export default initialState;

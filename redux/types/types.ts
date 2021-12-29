@@ -170,6 +170,11 @@ export interface PatientVisitsState {
   visits: PatientVisit[];
 }
 
+export interface PatientPurchasesState {
+  isLoading: boolean;
+  payments: any[];
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -211,4 +216,5 @@ export interface ReduxState {
   patientPhoneCalls: PatientPhoneCallsState;
   callToPlay: PatientCallRecord | null;
   patientVisits: PatientVisitsState;
+  patientPurchases: PatientPurchasesState;
 }

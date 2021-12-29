@@ -17,6 +17,8 @@ import {
   pubnubWatcher,
   patientCallRecordsWatcher,
   patientVisitsWatcher,
+  patientPurchasesWatcher,
+  undoInvoicePaymentsWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -38,5 +40,7 @@ export default function* rootSaga() {
     pubnubWatcher(),
     patientCallRecordsWatcher(),
     patientVisitsWatcher(),
+    patientPurchasesWatcher(),
+    undoInvoicePaymentsWatcher(),
   ]);
 }
