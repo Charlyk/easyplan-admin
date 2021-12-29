@@ -37,6 +37,11 @@ const AddXRay = ({ open, patientId, onClose }) => {
   }, [open]);
 
   const handleFileChange = (event) => {
+    const allowedExtensionsRegex = /\.(gif|jpe?g|png)$/i;
+    if (!event.target.files[0]?.name.match(allowedExtensionsRegex)) {
+      toast.error(textForKey('selected_file_is_not_an_image'));
+      return;
+    }
     const file = event.target.files[0];
     setImageFile(file);
   };

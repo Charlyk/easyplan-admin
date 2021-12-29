@@ -733,6 +733,7 @@ export default {
     add_appointment_cabinet: 'Cabinet (Optional)',
     cabinet_name_exists: 'A cabinet with this name already exists',
     insert_at_least_3_characters: 'Insert more than 3 characters',
+    selected_file_is_not_an_image: 'Selected file is not an image',
   },
   ro: {
     analytics: 'Analitică',
@@ -1480,6 +1481,7 @@ export default {
     add_appointment_cabinet: 'Cabinet (Opțional)',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    selected_file_is_not_an_image: 'Fisierul selectat nu este o imagine',
   },
   ru: {
     analytics: 'Analytics',
@@ -2213,5 +2215,6 @@ export default {
     add_appointment_cabinet: 'Cabinets (Optional)',
     cabinet_name_exists: 'Кабинет с таким названием уже существует.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    selected_file_is_not_an_image: 'Selected file is not an image',
   },
 };
