@@ -12,6 +12,7 @@ import createContainerHours from 'app/utils/createContainerHours';
 import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
 import { requestUpdateScheduleDateAndDoctor } from 'redux/slices/calendarData';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import { dragItemTypes } from 'types';
 import OptionsSelectionModal from '../../modals/OptionsSelectionModal';
 import Schedule from '../Schedule';
@@ -42,6 +43,7 @@ const Column = ({
     doctorId: null,
     cabinetId: null,
     startDate: null,
+    doctorServices: null,
   });
 
   const isColumnCabinet = !Object.prototype.hasOwnProperty.call(
@@ -64,12 +66,18 @@ const Column = ({
         hour: parseInt(hours),
         minute: parseInt(minutes),
       })
-      .toDate();
+      .toDate()
+      .toString();
     if (!isColumnCabinet) {
+      const selectedDoctor = clinicDoctors.filter(
+        (doctor) => doctor.id === column.doctorId,
+      );
+      const doctorServices = selectedDoctor[0]?.services;
       const body = {
         doctorId: column?.doctorId,
         cabinetId: null,
         startDate,
+        doctorServices,
       };
       dispatch(requestUpdateScheduleDateAndDoctor({ schedule, body }));
     } else {
@@ -77,6 +85,7 @@ const Column = ({
       setBody({
         cabinetId: column.id,
         startDate,
+        doctorServices: null,
         doctorId: null,
       });
       setSelectDoctorsModal(true);
@@ -84,9 +93,18 @@ const Column = ({
   };
 
   const handleModalConfirm = (selectedDoctor) => {
-    const reqBody = { ...body, doctorId: selectedDoctor[0].id };
+    const reqBody = {
+      ...body,
+      doctorId: selectedDoctor[0]?.id,
+      doctorServices: selectedDoctor[0]?.services,
+    };
     dispatch(requestUpdateScheduleDateAndDoctor({ schedule, body: reqBody }));
     setSelectDoctorsModal(false);
+  };
+
+  const handleCloseModal = () => {
+    setSelectDoctorsModal(false);
+    dispatch(showErrorNotification(textForKey('select doctor from the list')));
   };
 
   const isColumnDisabled = () =>
@@ -209,7 +227,7 @@ const Column = ({
       {selectDoctorsModal && (
         <OptionsSelectionModal
           show={selectDoctorsModal}
-          onClose={() => setSelectDoctorsModal(false)}
+          onClose={handleCloseModal}
           title={textForKey('select doctor from the list')}
           onConfirm={handleModalConfirm}
           iterable={cabinetDoctors.map((doctor) => ({

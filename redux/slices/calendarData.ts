@@ -39,6 +39,7 @@ const calendarData = createSlice({
           doctorId?: number;
           startDate?: string;
           cabinetId?: number;
+          doctorServices?: any[];
         };
       }>,
     ) {

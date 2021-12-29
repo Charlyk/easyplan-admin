@@ -65,6 +65,7 @@ const OptionsSelectionModal: React.FC<Props> = ({
       onPrimaryClick={onSubmit}
       onClose={onClose}
       onBackdropClick={onClose}
+      isPositiveDisabled={selectedItems.length === 0}
       destroyBtnText={destroyBtnText}
       size='large'
     >
