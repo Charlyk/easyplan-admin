@@ -44,9 +44,9 @@ const StatisticFilter = dynamic(() => import('../StatisticFilter'));
 interface ServicesAnalyticsQuery {
   page: string | number;
   rowsPerPage: string | number;
-  statuses?: ScheduleStatus[];
-  doctorsId?: string[] | number[];
-  servicesId?: string[] | number[];
+  statuses?: string;
+  doctorsId?: string;
+  servicesId?: string;
   fromDate: string;
   toDate: string;
 }
@@ -94,6 +94,22 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
 
   useEffect(() => {
     localDispatch(setInitialQuery(initialQuery));
+    if (initialQuery?.servicesId) {
+      const serviceArr = initialQuery.servicesId
+        .split(',')
+        .map((serviceId) => Number(serviceId));
+      handleServiceChange(serviceArr);
+    }
+    if (initialQuery?.doctorsId) {
+      const doctorsArr = initialQuery.doctorsId
+        .split(',')
+        .map((doctorId) => Number(doctorId));
+      handleDoctorChange(doctorsArr);
+    }
+    if (initialQuery?.statuses) {
+      const statusesArr = initialQuery.statuses.split(',');
+      handleStatusChange(statusesArr);
+    }
   }, []);
 
   useEffect(() => {
@@ -153,8 +169,8 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
     );
   };
 
-  const handleDoctorChange = (event) => {
-    const newValue = event.target.value;
+  const handleDoctorChange = (doctor) => {
+    const newValue = doctor;
     const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedDoctors([{ id: -1 }]));
@@ -168,8 +184,8 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
     );
   };
 
-  const handleServiceChange = (event) => {
-    const newValue = event.target.value;
+  const handleServiceChange = (service) => {
+    const newValue = service;
     const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
       localDispatch(setSelectedServices([{ id: -1 }]));
@@ -183,8 +199,8 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
     );
   };
 
-  const handleStatusChange = (event) => {
-    const newValue = event.target.value;
+  const handleStatusChange = (status) => {
+    const newValue = status;
     const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === 'All') {
       localDispatch(setSelectedStatuses([{ id: 'All' }]));
@@ -244,7 +260,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
             id: -1,
             name: textForKey('All services'),
           }}
-          onChange={handleServiceChange}
+          onChange={(evt) => handleServiceChange(evt.target.value)}
         />
         <EASSelect
           multiple
@@ -258,7 +274,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
             id: -1,
             name: textForKey('All doctors'),
           }}
-          onChange={handleDoctorChange}
+          onChange={(evt) => handleDoctorChange(evt.target.value)}
         />
         <EASTextField
           ref={pickerRef}
@@ -282,7 +298,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
             id: 'All',
             name: textForKey('All statuses'),
           }}
-          onChange={handleStatusChange}
+          onChange={(evt) => handleStatusChange(evt.target.value)}
         />
       </StatisticFilter>
       <div className={styles['data-container']}>
