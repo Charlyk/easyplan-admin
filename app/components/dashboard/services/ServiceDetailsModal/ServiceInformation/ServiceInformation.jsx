@@ -159,7 +159,7 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             error={service.duration > 360}
             value={service.duration}
             onChange={(value) => {
-              if (value < 15) {
+              if (value < 15 && value > 10) {
                 handleFormChange('duration', 15);
               } else if (value > 360) {
                 handleFormChange('duration', 360);
