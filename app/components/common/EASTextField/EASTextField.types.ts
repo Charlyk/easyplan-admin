@@ -20,6 +20,7 @@ export interface EASTextFieldProps extends BaseTextFieldProps {
     data: FileList | string,
     event?: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
   ) => void;
+  disableAutofill?: boolean;
   maxLength?: number;
   disableAutoFill?: boolean;
 }
