@@ -27,7 +27,6 @@ import {
 import {
   activeClinicDoctorsSelector,
   clinicCabinetsSelector,
-  clinicDoctorsSelector,
 } from 'redux/selectors/appDataSelector';
 import styles from './AddPauseModal.module.scss';
 import reducer, {
@@ -161,7 +160,8 @@ const AddPauseModal = ({
       localDispatch(setAvailableAllTime(availableTime));
       updateEndTimeBasedOnService(availableTime);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error?.response);
+      onClose();
     } finally {
       localDispatch(setIsFetchingHours(false));
     }
