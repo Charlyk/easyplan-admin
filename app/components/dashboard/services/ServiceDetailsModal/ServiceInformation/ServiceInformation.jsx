@@ -159,9 +159,13 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             error={service.duration > 360}
             value={service.duration}
             onChange={(value) => {
-              value < 361
-                ? handleFormChange('duration', value)
-                : handleFormChange('duration', 360);
+              if (value < 15) {
+                handleFormChange('duration', 15);
+              } else if (value > 360) {
+                handleFormChange('duration', 360);
+              } else {
+                handleFormChange('duration', value);
+              }
             }}
             endAdornment={
               <Typography className={styles.adornment}>min</Typography>

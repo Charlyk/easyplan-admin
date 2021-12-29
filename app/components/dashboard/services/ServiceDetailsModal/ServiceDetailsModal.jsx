@@ -37,7 +37,7 @@ const getInitialService = (doctors, categoryId, currency) => {
     description: '',
     deleted: false,
     price: '',
-    duration: '',
+    duration: '15',
     serviceType: ClinicServiceType.All,
     doctors: doctors.map((item) => ({
       id: item.id,
