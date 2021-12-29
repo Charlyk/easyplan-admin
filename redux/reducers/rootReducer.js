@@ -17,6 +17,7 @@ import patientList from 'redux/slices/patientsListSlice';
 import pubnubMessages from 'redux/slices/pubnubMessagesSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
+import patientPurchases from 'app/components/dashboard/patients/PatientDetailsModal/PatientPurchasesList/PatientPurchasesList.reducer';
 import addPaymentModal from './addPaymentModal';
 import calendar from './calendar';
 import clinic from './clinic';
@@ -65,6 +66,7 @@ const rootReducer = combineReducers({
   crmBoard,
   pubnubMessages,
   patientPhoneCalls,
+  patientPurchases,
 });
 
 export default rootReducer;
