@@ -270,6 +270,7 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       openAppointmentModal({
         open: true,
         schedule,
+        cabinet: schedule?.cabinet,
       }),
     );
   };
