@@ -19,4 +19,5 @@ export interface EASTextFieldProps extends BaseTextFieldProps {
   disableAutofill?: boolean;
   maxLength?: number;
   disableAutoFill?: boolean;
+  id?: string;
 }
