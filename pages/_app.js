@@ -239,21 +239,20 @@ const EasyApp = ({ Component, pageProps }) => {
                     show={logout}
                   />
                 )}
-                {appointmentModal?.open && (
-                  <AddAppointmentModal
-                    currentClinic={currentClinic}
-                    onClose={handleAppointmentModalClose}
-                    schedule={appointmentModal?.schedule}
-                    open={appointmentModal?.open}
-                    doctor={appointmentModal?.doctor}
-                    date={appointmentModal?.date}
-                    patient={appointmentModal?.patient}
-                    startHour={appointmentModal?.startHour}
-                    endHour={appointmentModal?.endHour}
-                    cabinet={appointmentModal?.cabinet}
-                    isDoctorMode={appointmentModal?.isDoctorMode}
-                  />
-                )}
+
+                <AddAppointmentModal
+                  currentClinic={currentClinic}
+                  onClose={handleAppointmentModalClose}
+                  schedule={appointmentModal?.schedule}
+                  open={appointmentModal?.open}
+                  doctor={appointmentModal?.doctor}
+                  date={appointmentModal?.date}
+                  patient={appointmentModal?.patient}
+                  startHour={appointmentModal?.startHour}
+                  endHour={appointmentModal?.endHour}
+                  cabinet={appointmentModal?.cabinet}
+                  isDoctorMode={appointmentModal?.isDoctorMode}
+                />
                 {imageModal.open && (
                   <FullScreenImageModal
                     {...imageModal}
