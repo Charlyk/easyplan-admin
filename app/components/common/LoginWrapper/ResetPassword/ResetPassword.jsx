@@ -41,6 +41,7 @@ const ResetPassword = ({ isLoading, isMobile, onSubmit, onGoBack }) => {
       </span>
       <form onSubmit={handleResetPassword}>
         <EASTextField
+          id='emailField'
           type='email'
           error={!isEmailValid}
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
