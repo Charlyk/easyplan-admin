@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
@@ -32,11 +32,11 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
   ) => {
     const [focused, setFocused] = useState(false);
 
-    const handleFieldChange = (event) => {
+    const handleFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
       if (type === 'file') {
-        onChange?.(event);
+        onChange?.(event.target.files, event);
       } else {
-        onChange?.(event.target.value);
+        onChange?.(event.target.value, event);
       }
     };
 
