@@ -409,6 +409,20 @@ const AppointmentDetails = ({
                     </td>
                     <td>{details.doctor.fullName}</td>
                   </tr>
+                  {details.cabinet && (
+                    <tr>
+                      <td
+                        style={{
+                          width: '35%',
+                          paddingRight: '1rem',
+                          userSelect: 'none',
+                        }}
+                      >
+                        {textForKey('Cabinet')}:
+                      </td>
+                      <td>{details.cabinet.name}</td>
+                    </tr>
+                  )}
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
                       {textForKey('Date')}:

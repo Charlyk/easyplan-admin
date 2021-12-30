@@ -39,6 +39,24 @@
     }
   }
 
+  .tabsRoot {
+    min-height: 30px;
+  }
+
+  .tabsIndicator {
+    background-color: #3A83DC;
+  }
+
+  .tabItem {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 11px !important;
+    height: 30px;
+    min-height: 30px;
+    text-transform: none;
+  }
+
   .patientNameContainer {
     display: flex;
 
