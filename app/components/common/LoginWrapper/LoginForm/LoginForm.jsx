@@ -69,6 +69,7 @@ const LoginForm = ({
       </span>
       <form onSubmit={handleLogin}>
         <EASTextField
+          id='emailField'
           value={data.email}
           error={!isEmailValid}
           type='email'
@@ -79,6 +80,7 @@ const LoginForm = ({
 
         <div className={styles.passwordContainer}>
           <EASTextField
+            id='passwordField'
             value={data.password}
             containerClass={clsx(styles.fieldContainer, styles.password)}
             type={isPasswordVisible ? 'text' : 'password'}
