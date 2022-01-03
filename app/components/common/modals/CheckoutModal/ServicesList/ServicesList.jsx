@@ -77,8 +77,6 @@ const ServicesList = ({
     return sortBy(updatedServices, (item) => item.name.toLowerCase());
   }, [availableServices]);
 
-  console.log(sortedServices);
-
   return (
     <Box className={styles.servicesList}>
       <Typography classes={{ root: styles.title }}>
