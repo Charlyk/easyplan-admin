@@ -7,6 +7,7 @@ import MainComponent from 'app/components/common/MainComponent';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { HeaderKeys } from 'app/utils/constants';
+import getCurrentWeek from 'app/utils/getCurrentWeek';
 import { textForKey } from 'app/utils/localization';
 import {
   importSchedulesFromFile,
@@ -187,6 +188,7 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
   };
 
   const handleDoctorSelected = async (doctor) => {
+    if (router.query?.doctorId === doctor.id.toString()) return;
     const dateString = moment(viewDate).format('YYYY-MM-DD');
     updateSelectedDoctor(doctor.id);
     await router.replace({
@@ -204,6 +206,28 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       date: stringDate,
       doctorId: doctorId,
     };
+
+    if (viewMode === 'day') {
+      if (router.query.date === query.date) return;
+    }
+    if (viewMode === 'week') {
+      const week = getCurrentWeek(viewDate);
+      const date = moment(newDate);
+      if (
+        date.isBetween(
+          week[0].toDate(),
+          week[week.length - 1].toDate(),
+          undefined,
+          '[]',
+        )
+      )
+        return;
+    }
+    if (viewMode === 'month') {
+      const newDateMonth = new Date(newDate).getMonth();
+      const viewDateMonth = new Date(viewDate).getMonth();
+      if (newDateMonth === viewDateMonth) return;
+    }
 
     if (query.doctorId == null || viewMode === 'day' || moveToDay) {
       delete query.doctorId;
