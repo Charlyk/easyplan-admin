@@ -731,7 +731,7 @@ export default {
       'Are you sure you want to remove this doctor',
     visits: 'Visits',
     type_to_search: 'Type to search...',
-    add_appointment_cabinet: 'Cabinet (Optional)',
+    add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'A cabinet with this name already exists',
     insert_at_least_3_characters: 'Insert more than 3 characters',
     email_with_instructions_was_sent:
@@ -741,6 +741,9 @@ export default {
     finalizing_treatment: 'Finalizing treatment',
     no_notes: 'No notes',
     enter_the_note: 'Enter the note',
+    appointment_details: 'Appointment details',
+    or: 'or',
+    first_n_last_name: 'First and Last name',
     undo_payment: 'Undo this payment',
     undo_payment_confirm_message:
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
@@ -1489,7 +1492,7 @@ export default {
       'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Vizite',
     type_to_search: 'Tapează pentru a căuta...',
-    add_appointment_cabinet: 'Cabinet (Opțional)',
+    add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
     email_with_instructions_was_sent: 'V-am trimis un email cu instructiuni',
@@ -1501,6 +1504,9 @@ export default {
     undo_payment: 'Anulează achitarea',
     undo_payment_confirm_message:
       'Toate achitările pentru același invoice vor fi anulate. Sunteți sigur(ă) că doriți să anulați achitarea?',
+    appointment_details: 'Detalii programare',
+    or: 'sau',
+    first_n_last_name: 'Nume Prenume',
   },
   ru: {
     analytics: 'Analytics',
@@ -2232,7 +2238,7 @@ export default {
       'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Visits',
     type_to_search: 'Type to search...',
-    add_appointment_cabinet: 'Cabinets (Optional)',
+    add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Кабинет с таким названием уже существует.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
     email_with_instructions_was_sent:
@@ -2245,5 +2251,8 @@ export default {
     undo_payment: 'Undo this payment',
     undo_payment_confirm_message:
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
+    appointment_details: 'Appointment details',
+    or: 'или',
+    first_n_last_name: 'First and Last name',
   },
 };
