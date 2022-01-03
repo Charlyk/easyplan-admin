@@ -740,6 +740,7 @@ export default {
     finalizing_treatment: 'Finalizing treatment',
     no_notes: 'No notes',
     enter_the_note: 'Enter the note',
+    of: 'of',
   },
   ro: {
     analytics: 'Analitică',
@@ -1487,12 +1488,13 @@ export default {
     add_appointment_cabinet: 'Cabinet (Opțional)',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
-    email_with_instructions_was_sent: 'V-am trimis un email cu instructiuni',
+    email_with_instructions_was_sent: 'V-am trimis un email cu instrucțiuni',
     add_xray_image: 'Adaugati imaginea cu raze X',
     view_more: 'Vezi tot',
     finalizing_treatment: 'Se finalizeaza tratamentul',
     no_notes: 'Nu sunt notite',
     enter_the_note: 'Introduceti nota',
+    of: 'din',
   },
   ru: {
     analytics: 'Analytics',
@@ -2233,5 +2235,6 @@ export default {
     finalizing_treatment: 'Finalizing treatment',
     no_notes: 'No notes',
     enter_the_note: 'Enter the note',
+    of: 'of',
   },
 };

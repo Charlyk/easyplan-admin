@@ -196,6 +196,11 @@ const PatientsList = ({ query: initialQuery }) => {
     }
   };
 
+  const translateRowsLabel = ({ from, to, count }) =>
+    `${from}–${to} ${textForKey('of')} ${
+      count !== -1 ? count : `more than ${to}`
+    }`;
+
   return (
     <div className={styles.newPatientsRoot}>
       <CSVImportModal
@@ -273,6 +278,7 @@ const PatientsList = ({ query: initialQuery }) => {
           count={patients.total}
           rowsPerPage={parseInt(rowsPerPage)}
           labelRowsPerPage={textForKey('Patients per page')}
+          labelDisplayedRows={translateRowsLabel}
           page={parseInt(page)}
           component='div'
           SelectProps={{
