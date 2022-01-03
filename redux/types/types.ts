@@ -123,6 +123,7 @@ export interface PatientListState {
     data: Patient[];
     total: number;
   };
+  newPatient?: Patient | null;
   isLoading: boolean;
   isDeleting: boolean;
 }

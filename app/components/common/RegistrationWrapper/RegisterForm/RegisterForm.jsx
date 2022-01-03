@@ -109,6 +109,7 @@ const RegisterForm = ({
         />
 
         <EASTextField
+          id='firstName'
           type='text'
           containerClass={styles.textField}
           value={data.lastName}
@@ -117,6 +118,7 @@ const RegisterForm = ({
         />
 
         <EASTextField
+          id='lastName'
           type='text'
           containerClass={styles.textField}
           value={data.firstName}
@@ -125,6 +127,7 @@ const RegisterForm = ({
         />
 
         <EASTextField
+          id='emailField'
           disableAutoFill
           type='email'
           error={!isEmailFieldValid}
@@ -138,6 +141,7 @@ const RegisterForm = ({
         />
 
         <EASTextField
+          if='passwordField'
           disableAutoFill
           type={isPasswordVisible ? 'text' : 'password'}
           containerClass={styles.textField}

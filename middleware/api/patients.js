@@ -33,7 +33,7 @@ export async function getPatients(query, headers = null) {
  */
 export async function searchPatients(query, headers = null) {
   const requestQuery = {
-    query,
+    query: query.replace(/^([+0])/, ''),
     page: '0',
     rowsPerPage: '10',
     short: '1',

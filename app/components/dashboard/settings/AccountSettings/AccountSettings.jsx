@@ -84,6 +84,7 @@ const AccountSettings = () => {
       avatar,
     };
     dispatch(updateUserProfile(requestBody));
+    setData((prevState) => ({ ...prevState, oldPassword: '' }));
   };
 
   const isFormValid = () => {
