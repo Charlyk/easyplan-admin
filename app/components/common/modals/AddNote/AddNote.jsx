@@ -59,7 +59,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
       open={open}
       className={styles.addNoteRoot}
       paperClass={styles.modalPaper}
-      title={textForKey('Create note')}
+      title={textForKey('add note')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={noteText.length === 0}
       onPrimaryClick={handleSaveNote}
@@ -67,7 +67,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
     >
       <form className={styles.modalContent} onSubmit={handleSaveNote}>
         <EASTextarea
-          fieldLabel={textForKey('Enter note')}
+          fieldLabel={textForKey('enter_the_note')}
           value={noteText}
           rows={4}
           maxRows={5}
