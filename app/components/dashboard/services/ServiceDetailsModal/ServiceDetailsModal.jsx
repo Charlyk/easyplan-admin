@@ -94,10 +94,10 @@ const ServiceDetailsModal = () => {
       return;
     }
     setIsFormValid(
-      serviceDetails.name.length > 0 &&
-        serviceDetails.color.length > 0 &&
-        parseInt(serviceDetails.duration) > 15 &&
-        parseInt(serviceDetails.duration) < 360,
+      serviceDetails.name?.length > 0 &&
+        serviceDetails.color?.length > 0 &&
+        parseInt(serviceDetails?.duration) > 15 &&
+        parseInt(serviceDetails?.duration) < 360,
     );
   }, [serviceDetails]);
 
