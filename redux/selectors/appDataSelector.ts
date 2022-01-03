@@ -63,7 +63,7 @@ export const userCalendarOrderSelector = createSelector(
 
 export const clinicServicesSelector = createSelector(
   currentClinicSelector,
-  (clinic) => clinic.services?.filter((item) => !item.deleted) || [],
+  (clinic) => clinic?.services?.filter((item) => !item.deleted) || [],
 );
 
 export const isAppInitializedSelector = createSelector(
@@ -125,6 +125,12 @@ export const calendarDoctorsSelector = createSelector(
 export const doctorsForScheduleSelector = createSelector(
   activeClinicDoctorsSelector,
   (users) => users.filter((user) => !user.isInVacation),
+);
+
+export const currentDoctorSelector = createSelector(
+  clinicDoctorsSelector,
+  currentUserSelector,
+  (doctors, user) => doctors.find((item) => item.id === user.id),
 );
 
 export const clinicExchangeRatesSelector = createSelector(

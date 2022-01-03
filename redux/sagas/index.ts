@@ -17,6 +17,7 @@ import {
   pubnubWatcher,
   patientCallRecordsWatcher,
   doctorCalendarOrderWatcher,
+  createPatientWatcher,
   patientPurchasesWatcher,
   undoInvoicePaymentsWatcher,
 } from './handlers';
@@ -40,6 +41,7 @@ export default function* rootSaga() {
     pubnubWatcher(),
     patientCallRecordsWatcher(),
     doctorCalendarOrderWatcher(),
+    createPatientWatcher(),
     patientPurchasesWatcher(),
     undoInvoicePaymentsWatcher(),
   ]);
