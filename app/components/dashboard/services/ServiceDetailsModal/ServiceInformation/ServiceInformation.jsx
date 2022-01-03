@@ -158,6 +158,9 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             inputClass='test-input-class'
             error={service.duration > 360}
             value={service.duration}
+            helperText={
+              service.duration < 15 ? `${textForKey('value_more_then')} 15` : ''
+            }
             onChange={(value) => {
               if (value < 15 && value > 10) {
                 handleFormChange('duration', 15);
