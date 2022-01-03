@@ -214,8 +214,7 @@ const CheckoutModal = ({
     }
     localDispatch(actions.setIsSearchingPatient(true));
     try {
-      const updatedQuery = newValue.replace('+', '');
-      const response = await searchPatients(updatedQuery);
+      const response = await searchPatients(newValue);
       const { data: patients } = response.data;
       localDispatch(
         actions.setSearchResults(

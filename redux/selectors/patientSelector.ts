@@ -23,3 +23,8 @@ export const isPatientBeingDeletedSelector = createSelector(
   patientListSelector,
   (patientList) => patientList.isDeleting,
 );
+
+export const createdPatientSelector = createSelector(
+  patientListSelector,
+  (data) => data.newPatient,
+);

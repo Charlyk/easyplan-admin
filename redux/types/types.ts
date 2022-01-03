@@ -123,6 +123,7 @@ export interface PatientListState {
     data: Patient[];
     total: number;
   };
+  newPatient?: Patient | null;
   isLoading: boolean;
   isDeleting: boolean;
 }
@@ -162,6 +163,11 @@ export interface DealsColumnState {
 export interface PatientPhoneCallsState {
   isFetching: boolean;
   records: PatientCallRecord[];
+}
+
+export interface PatientPurchasesState {
+  isLoading: boolean;
+  payments: any[];
 }
 
 export interface ReduxState {
@@ -204,4 +210,5 @@ export interface ReduxState {
   dealsColumn: DealsColumnState;
   patientPhoneCalls: PatientPhoneCallsState;
   callToPlay: PatientCallRecord | null;
+  patientPurchases: PatientPurchasesState;
 }

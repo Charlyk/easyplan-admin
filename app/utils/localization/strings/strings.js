@@ -471,6 +471,7 @@ export default {
     createclinicpaymentaction: 'Registered a payment',
     createvisitaction: 'Created a visit',
     createinvoiceaction: 'Created an invoice',
+    deletedinvoiceaction: 'Removed a payment',
     createinvoiceserviceaction: 'Added an invoice service',
     updateinvoiceaction: 'Updated an invoice',
     updateinvoiceserviceaction: 'Updated an invoice service',
@@ -670,7 +671,7 @@ export default {
     call_failed: 'Call failed',
     call_busy: 'Phone was busy',
     call_noanswer: 'Cal was not answered',
-    call_unkwnon: 'Status unknown',
+    call_unknown: 'Status unknown',
     call_listen: 'Listen',
     call_download: 'Download',
     connect_social_networks: 'Connect social networks',
@@ -730,7 +731,7 @@ export default {
       'Are you sure you want to remove this doctor',
     visits: 'Visits',
     type_to_search: 'Type to search...',
-    add_appointment_cabinet: 'Cabinet (Optional)',
+    add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'A cabinet with this name already exists',
     insert_at_least_3_characters: 'Insert more than 3 characters',
     email_with_instructions_was_sent:
@@ -740,7 +741,16 @@ export default {
     finalizing_treatment: 'Finalizing treatment',
     no_notes: 'No notes',
     enter_the_note: 'Enter the note',
+<<<<<<< HEAD
     of: 'of',
+=======
+    appointment_details: 'Appointment details',
+    or: 'or',
+    first_n_last_name: 'First and Last name',
+    undo_payment: 'Undo this payment',
+    undo_payment_confirm_message:
+      'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
+>>>>>>> d87b8cc2e11a1742b2581328927eb6082634dc36
   },
   ro: {
     analytics: 'Analitică',
@@ -1222,6 +1232,7 @@ export default {
     createclinicpaymentaction: 'A înregistrat o achitare',
     createvisitaction: 'A creat o vizită',
     createinvoiceaction: 'A creat un invoice',
+    deletedinvoiceaction: 'A anulat o achitare',
     createinvoiceserviceaction: 'A adăugat un serviciu la invoice',
     updateinvoiceaction: 'A modificat un invoice',
     updateinvoiceserviceaction: 'A modificat un serviciu la invoice',
@@ -1423,7 +1434,7 @@ export default {
     call_answered: 'Discuția a avut loc',
     call_failed: 'Apelul a eșuat',
     call_noanswer: 'Fără răspuns',
-    call_unkwnon: 'Statut necunoscut',
+    call_unknown: 'Statut necunoscut',
     call_busy: 'Ocupat',
     call_listen: 'Ascultă',
     call_download: 'Descarcă',
@@ -1485,7 +1496,7 @@ export default {
       'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Vizite',
     type_to_search: 'Tapează pentru a căuta...',
-    add_appointment_cabinet: 'Cabinet (Opțional)',
+    add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
     email_with_instructions_was_sent: 'V-am trimis un email cu instrucțiuni',
@@ -1494,7 +1505,16 @@ export default {
     finalizing_treatment: 'Se finalizeaza tratamentul',
     no_notes: 'Nu sunt notite',
     enter_the_note: 'Introduceti nota',
+<<<<<<< HEAD
     of: 'din',
+=======
+    undo_payment: 'Anulează achitarea',
+    undo_payment_confirm_message:
+      'Toate achitările pentru același invoice vor fi anulate. Sunteți sigur(ă) că doriți să anulați achitarea?',
+    appointment_details: 'Detalii programare',
+    or: 'sau',
+    first_n_last_name: 'Nume Prenume',
+>>>>>>> d87b8cc2e11a1742b2581328927eb6082634dc36
   },
   ru: {
     analytics: 'Analytics',
@@ -1966,6 +1986,7 @@ export default {
     createclinicpaymentaction: 'Registered a payment',
     createvisitaction: 'Created a visit',
     createinvoiceaction: 'Created an invoice',
+    deletedinvoiceaction: 'Removed a payment',
     createinvoiceserviceaction: 'Added an invoice service',
     updateinvoiceaction: 'Updated an invoice',
     updateinvoiceserviceaction: 'Updated an invoice service',
@@ -2165,7 +2186,7 @@ export default {
     call_failed: 'Call failed',
     call_busy: 'Phone was busy',
     call_noanswer: 'Cal was not answered',
-    call_unkwnon: 'Status unknown',
+    call_unknown: 'Status unknown',
     call_listen: 'Listen',
     call_download: 'Download',
     connect_social_networks: 'Connect social networks',
@@ -2225,7 +2246,7 @@ export default {
       'Sunteti siguri ca doriti sa elminati acest medic',
     visits: 'Visits',
     type_to_search: 'Type to search...',
-    add_appointment_cabinet: 'Cabinets (Optional)',
+    add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Кабинет с таким названием уже существует.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
     email_with_instructions_was_sent:
@@ -2235,6 +2256,15 @@ export default {
     finalizing_treatment: 'Finalizing treatment',
     no_notes: 'No notes',
     enter_the_note: 'Enter the note',
+<<<<<<< HEAD
     of: 'of',
+=======
+    undo_payment: 'Undo this payment',
+    undo_payment_confirm_message:
+      'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
+    appointment_details: 'Appointment details',
+    or: 'или',
+    first_n_last_name: 'First and Last name',
+>>>>>>> d87b8cc2e11a1742b2581328927eb6082634dc36
   },
 };

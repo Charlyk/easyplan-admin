@@ -159,6 +159,10 @@ const initialState: ReduxState = {
     records: [],
   },
   callToPlay: null,
+  patientPurchases: {
+    isLoading: false,
+    payments: [],
+  },
 };
 
 export default initialState;

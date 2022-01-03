@@ -5,12 +5,30 @@ export interface Tag {
 
 export type Patient = {
   id: number;
-  avatar: string | null;
-  firstName: string;
-  lastName: string;
-  fullName: string;
   phoneNumber: string | null;
   countryCode: string | null;
-  discount: number | null;
-  tags: Tag[];
+  fullName: string;
+  firstName?: string;
+  lastName?: string;
+  avatar?: string | null;
+  discount?: number | null;
+  name?: string | null;
+  label?: string | null;
+  source?: PatientSource | null;
+  tags?: Tag[] | [];
 };
+
+export enum PatientSource {
+  Unknown = 'Unknown',
+  Facebook = 'Facebook',
+  Instagram = 'Instagram',
+  Twitter = 'Twitter',
+  LinkedIn = 'LinkedIn',
+  TV = 'TV',
+  Radio = 'Radio',
+  Friend = 'Friend',
+  Internet = 'Internet',
+  Imported = 'Imported',
+  Google = 'Google',
+  Other = 'Other',
+}
