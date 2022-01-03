@@ -2,8 +2,8 @@
   outline: none;
   width: 15rem;
   height: 34px;
-  background: #F4FAFE;
-  border: 1px solid #3A83DC;
+  background: #f4fafe;
+  border: 1px solid #3a83dc;
   box-sizing: border-box;
   border-radius: 4px;
   display: flex;
@@ -13,7 +13,7 @@
   cursor: pointer;
 
   .loading-spinner {
-    color: #3A83DC;
+    color: #3a83dc;
     width: 1.4rem;
     height: 1.4rem;
   }
@@ -27,30 +27,30 @@
 
     .invoices-paper {
       width: 35rem;
-      border: #3A83DC 1px solid;
+      border: #3a83dc 1px solid;
       border-radius: 4px;
-      background-color: #F4FAFE;
+      background-color: #f4fafe;
       max-height: 25rem;
       overflow-y: auto;
 
       table {
         border-collapse: separate;
-        border-spacing: 0 .5rem;
+        border-spacing: 0 0.5rem;
         padding: 0 1rem 1rem;
         width: 100%;
 
         thead {
-          background-color: #F4FAFE;
+          background-color: #f4fafe;
           height: 30px;
           tr {
-            background-color: #F4FAFE;
+            background-color: #f4fafe;
             height: 30px;
 
             td {
               position: sticky;
               top: 0;
               height: 30px;
-              background-color: #F4FAFE;
+              background-color: #f4fafe;
               padding-left: 1rem;
               padding-right: 1rem;
               font-family: Inter, sans-serif;
@@ -58,24 +58,28 @@
               font-weight: 600;
               font-size: 12px;
               line-height: 24px;
-              color: #3A83DC;
+              color: #3a83dc;
             }
           }
         }
 
         tbody {
           tr {
-            background: #FFFFFF;
+            background: #ffffff;
             box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
             border-radius: 4px;
 
             td {
-              padding: .5rem 1rem;
+              padding: 0.5rem 1rem;
               font-family: Inter, sans-serif;
               font-style: normal;
               font-weight: normal;
               font-size: 12px;
-              color: #34354C;
+              color: #34354c;
+              max-width: 200px;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
 
               :global(.positive-button) {
                 height: 1.5rem;
@@ -99,7 +103,7 @@
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
-    color: #3A83DC;
+    color: #3a83dc;
     text-transform: uppercase;
   }
 
