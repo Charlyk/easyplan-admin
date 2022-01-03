@@ -353,7 +353,7 @@ const AddPauseModal = ({
             <EASSelect
               id='endTime'
               rootClass={styles.timeSelect}
-              label={textForKey('Ent time')}
+              label={textForKey('End time')}
               labelId='end-time-select'
               onChange={handleEndHourChange}
               value={endHour}

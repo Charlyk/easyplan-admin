@@ -248,7 +248,7 @@ const DoctorPatientDetails = () => {
         </div>
         {isFinalizing && (
           <Typography className={styles.loadingLabel}>
-            {textForKey('Finalizing treatment...')}
+            {textForKey('finalizing_treatment')}
           </Typography>
         )}
       </EASPersistentModal>

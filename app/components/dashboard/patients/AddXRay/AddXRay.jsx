@@ -63,7 +63,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
       onClose={onClose}
       open={open}
       className={styles.addXRayRoot}
-      title={textForKey('Add X-Ray image')}
+      title={textForKey('add_xray_image')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={imageFile == null || phase == null}
       onPrimaryClick={handleSaveImage}
