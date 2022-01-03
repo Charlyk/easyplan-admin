@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASModal from 'app/components/common/modals/EASModal';
+import { dispatchUpdateVisit } from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes/AppointmentNotes.reducer';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
-import { createPatientNote, updateVisitNote } from 'middleware/api/patients';
+import { createPatientNote } from 'middleware/api/patients';
 import { updateNotes } from 'redux/slices/mainReduxSlice';
 import styles from './AddNote.module.scss';
 
@@ -29,28 +30,41 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
     setNoteText(newValue);
   };
 
-  const handleSaveNote = async (event) => {
-    event?.preventDefault();
+  const handleUpdateVisitNote = () => {
+    const request = {
+      patientId,
+      visitId: visit.id,
+      note: noteText,
+    };
+    dispatch(dispatchUpdateVisit(request));
+    onClose();
+  };
+
+  const handleCreatePatientNote = async () => {
     setIsLoading(true);
     try {
-      if (mode === 'visits') {
-        await updateVisitNote(patientId, visit.id, noteText);
-        dispatch(updateNotes());
-        onClose();
-      } else {
-        const requestBody = {
-          note: noteText,
-          mode,
-          scheduleId,
-        };
-        await createPatientNote(patientId, requestBody);
-        dispatch(updateNotes());
-        onClose();
-      }
+      const requestBody = {
+        note: noteText,
+        mode,
+        scheduleId,
+      };
+      await createPatientNote(patientId, requestBody);
+      dispatch(updateNotes());
+      onClose();
     } catch (error) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSaveNote = async (event) => {
+    event?.preventDefault();
+
+    if (mode === 'visits') {
+      handleUpdateVisitNote();
+    } else {
+      await handleCreatePatientNote();
     }
   };
 

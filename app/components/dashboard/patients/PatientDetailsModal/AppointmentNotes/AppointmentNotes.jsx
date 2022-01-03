@@ -30,11 +30,6 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
         </Typography>
       )}
       <div className={styles.visitsData}>
-        {isFetching && (
-          <div className='progress-bar-wrapper'>
-            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
-          </div>
-        )}
         {visits.map((visit, index) => {
           const { doctor } = visit;
           return (
@@ -46,6 +41,11 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
             />
           );
         })}
+        {isFetching && (
+          <div className='progress-bar-wrapper'>
+            <CircularProgress classes={{ root: 'circular-progress-bar' }} />
+          </div>
+        )}
       </div>
     </div>
   );

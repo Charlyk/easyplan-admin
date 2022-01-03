@@ -4,3 +4,4 @@ export * from './patientPhoneRecordsRequest';
 export * from './patientVisitsRequest';
 export * from './patientCreateRequest';
 export * from './patientPurchasesRequest';
+export * from './updateVisitNoteRequest';
