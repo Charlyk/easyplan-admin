@@ -13,8 +13,6 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import getNextNumber from 'app/utils/getNextNumber';
-import getPreviousNumber from 'app/utils/getPreviousNumber';
 import isOutOfBounds from 'app/utils/isOutOfBounds';
 import { textForKey } from 'app/utils/localization';
 import { fetchSchedulesHours } from 'middleware/api/schedules';
@@ -29,7 +27,6 @@ import {
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
 import {
-  dispatchChangeCabinetCalendarOrder,
   dispatchChangeDoctorCalendarOrder,
 } from 'redux/slices/appDataSlice';
 import styles from './CalendarDayView.module.scss';
