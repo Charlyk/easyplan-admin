@@ -105,7 +105,7 @@ const CalendarMonthView = ({ viewDate, doctorId, onDateClick }) => {
             {daySchedules.length > 3 && (
               <div className={styles.viewMoreContainer}>
                 <span className={styles.viewMoreButton}>
-                  {textForKey('View more')} ({daySchedules.length - 3})
+                  {textForKey('view_more')} ({daySchedules.length - 3})
                 </span>
               </div>
             )}

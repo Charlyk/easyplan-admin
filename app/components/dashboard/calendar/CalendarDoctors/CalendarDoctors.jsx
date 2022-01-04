@@ -36,7 +36,7 @@ const CalendarDoctors = ({
 
   return (
     <div className={styles.calendarDoctors}>
-      <div className={styles.doctorsHeader}>Doctors</div>
+      <div className={styles.doctorsHeader}>{textForKey('all doctors')}</div>
       <div className={styles.doctorsSearch}>
         <EASTextField
           type='text'
