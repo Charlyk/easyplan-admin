@@ -82,13 +82,6 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
       return;
     }
     setIsModalOpen(true);
-    // const result = prompt(textForKey('cancel_schedule_message'));
-
-    // console.log(result);
-    // if (result === null) {
-    //   return;
-    // }
-    // cancelSchedule(result);
   };
 
   const logoSource = schedule?.clinicLogo
