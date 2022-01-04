@@ -733,6 +733,9 @@ export default {
     add_appointment_cabinet: 'Cabinet (Optional)',
     cabinet_name_exists: 'A cabinet with this name already exists',
     insert_at_least_3_characters: 'Insert more than 3 characters',
+    selected_doctor_does_not_provide_this_service:
+      'Selected doctor does not provide this service',
+    this_cabinet_has_no_doctors: 'This cabinet has no doctors',
   },
   ro: {
     analytics: 'Analitică',
@@ -1480,6 +1483,9 @@ export default {
     add_appointment_cabinet: 'Cabinet (Opțional)',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    selected_doctor_does_not_provide_this_service:
+      'Doctorul selectat nu presteaza acest serviciu',
+    this_cabinet_has_no_doctors: 'Nu sunt doctori in acest cabinet',
   },
   ru: {
     analytics: 'Analytics',
@@ -2213,5 +2219,8 @@ export default {
     add_appointment_cabinet: 'Cabinets (Optional)',
     cabinet_name_exists: 'Кабинет с таким названием уже существует.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    selected_doctor_does_not_provide_this_service:
+      'Doctorul selectat nu presteaza acest serviciu',
+    this_cabinet_has_no_doctors: 'This cabinet has no doctors',
   },
 };

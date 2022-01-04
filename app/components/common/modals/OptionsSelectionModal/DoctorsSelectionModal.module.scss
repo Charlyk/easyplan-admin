@@ -1,0 +1,8 @@
+.menuItem {
+  display: flex;
+  justify-content: space-between;
+
+  &.selected {
+    justify-content: space-between;
+  }
+}
