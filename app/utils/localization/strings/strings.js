@@ -586,7 +586,8 @@ export default {
     cancel_schedule: 'Cancel',
     canceled_by_patient: 'Canceled by patient',
     cancel_schedule_title: 'Cancel schedule',
-    cancel_schedule_message: 'Are you sure you want to cancel this schedule?',
+    cancel_schedule_message:
+      'What is the reason you want to cancel this schedule ?',
     yes: 'Yes',
     delete_deal_title: 'Delete deal',
     delete_deal_message: 'Are you sure you want to delete this deal?',
@@ -1339,8 +1340,7 @@ export default {
     cancel_schedule: 'Anulează',
     canceled_by_patient: 'Anulată de pacient',
     cancel_schedule_title: 'Anulare programare',
-    cancel_schedule_message:
-      'Sunteți sigur(ă) că doriți să anulați vizita la medic?',
+    cancel_schedule_message: 'Din ce motiv doriți să anulați vizita la medic?',
     yes: 'Da',
     delete_deal_title: 'Șterge lead-ul',
     delete_deal_message: 'Sunteți sigur(ă) că doriți să ștergeți acest lead?',
@@ -2082,7 +2082,8 @@ export default {
     cancel_schedule: 'Cancel',
     canceled_by_patient: 'Canceled by patient',
     cancel_schedule_title: 'Cancel schedule',
-    cancel_schedule_message: 'Are you sure you want to cancel this schedule?',
+    cancel_schedule_message:
+      'What is the reason you want to cancel this schedule ?',
     yes: 'Yes',
     delete_deal_title: 'Delete deal',
     delete_deal_message: 'Are you sure you want to delete this deal?',
