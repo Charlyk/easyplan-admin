@@ -25,7 +25,7 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
           <span className={styles.doctorName}>{doctor.fullName}</span>
         </div>
         <div className={styles.noteText}>
-          {visit.note.length === 0 ? textForKey('No notes') : visit.note}
+          {visit.note.length === 0 ? textForKey('no_notes') : visit.note}
         </div>
         <div className={styles.servicesContainer}>
           {visit?.planServices?.map((planService, index) => (
