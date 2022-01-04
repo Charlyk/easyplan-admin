@@ -26,9 +26,7 @@ import {
   schedulesSelector,
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
-import {
-  dispatchChangeDoctorCalendarOrder,
-} from 'redux/slices/appDataSlice';
+import { dispatchChangeDoctorCalendarOrder } from 'redux/slices/appDataSlice';
 import styles from './CalendarDayView.module.scss';
 import { actions, initialState, reducer } from './CalendarDayView.reducer';
 
