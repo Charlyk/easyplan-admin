@@ -735,13 +735,25 @@ export default {
     add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'A cabinet with this name already exists',
     insert_at_least_3_characters: 'Insert more than 3 characters',
+<<<<<<< HEAD
     selected_file_is_not_an_image: 'Selected file is not an image',
+=======
+    email_with_instructions_was_sent:
+      'We have sent an email with further instructions',
+    add_xray_image: 'Add X-Ray image',
+    view_more: 'View More',
+    finalizing_treatment: 'Finalizing treatment',
+    no_notes: 'No notes',
+    enter_the_note: 'Enter the note',
+    of: 'of',
+>>>>>>> 8596f23845867a162446a679841e3b397379db9b
     appointment_details: 'Appointment details',
     or: 'or',
     first_n_last_name: 'First and Last name',
     undo_payment: 'Undo this payment',
     undo_payment_confirm_message:
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
+    value_more_then: 'The value shoud be more than',
   },
   ro: {
     analytics: 'Analitică',
@@ -1489,13 +1501,24 @@ export default {
     add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+<<<<<<< HEAD
     selected_file_is_not_an_image: 'Fisierul selectat nu este o imagine',
+=======
+    email_with_instructions_was_sent: 'V-am trimis un email cu instrucțiuni',
+    add_xray_image: 'Adaugati imaginea cu raze X',
+    view_more: 'Vezi tot',
+    finalizing_treatment: 'Se finalizeaza tratamentul',
+    no_notes: 'Nu sunt notite',
+    enter_the_note: 'Introduceti nota',
+    of: 'din',
+>>>>>>> 8596f23845867a162446a679841e3b397379db9b
     undo_payment: 'Anulează achitarea',
     undo_payment_confirm_message:
       'Toate achitările pentru același invoice vor fi anulate. Sunteți sigur(ă) că doriți să anulați achitarea?',
     appointment_details: 'Detalii programare',
     or: 'sau',
     first_n_last_name: 'Nume Prenume',
+    value_more_then: 'Valoarea trebuie sa fie mai mare de',
   },
   ru: {
     analytics: 'Analytics',
@@ -2231,12 +2254,24 @@ export default {
     add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Кабинет с таким названием уже существует.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+<<<<<<< HEAD
     selected_file_is_not_an_image: 'Selected file is not an image',
+=======
+    email_with_instructions_was_sent:
+      'We have sent an email with further instructions',
+    add_xray_image: 'Add X-Ray image',
+    view_more: 'View More',
+    finalizing_treatment: 'Finalizing treatment',
+    no_notes: 'No notes',
+    enter_the_note: 'Enter the note',
+    of: 'of',
+>>>>>>> 8596f23845867a162446a679841e3b397379db9b
     undo_payment: 'Undo this payment',
     undo_payment_confirm_message:
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
     appointment_details: 'Appointment details',
     or: 'или',
     first_n_last_name: 'First and Last name',
+    value_more_then: 'The value shoud be more than',
   },
 };
