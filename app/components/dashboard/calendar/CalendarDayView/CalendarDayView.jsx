@@ -10,7 +10,7 @@ import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import isOutOfBounds from 'app/utils/isOutOfBounds';
@@ -19,14 +19,16 @@ import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
   calendarDoctorsSelector,
   clinicCabinetsSelector,
+  userCalendarOrderSelector,
 } from 'redux/selectors/appDataSelector';
 import {
-  updateScheduleSelector,
-  schedulesSelector,
   dayHoursSelector,
+  schedulesSelector,
+  updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
+import { dispatchChangeDoctorCalendarOrder } from 'redux/slices/appDataSlice';
 import styles from './CalendarDayView.module.scss';
-import { actions, reducer, initialState } from './CalendarDayView.reducer';
+import { actions, initialState, reducer } from './CalendarDayView.reducer';
 
 const EasyCalendar = dynamic(() =>
   import('app/components/common/EasyCalendar'),
@@ -41,12 +43,14 @@ const CalendarDayView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const schedules = useSelector(schedulesSelector);
   const hours = useSelector(dayHoursSelector);
   const cabinets = useSelector(clinicCabinetsSelector);
   const doctors = useSelector(calendarDoctorsSelector);
+  const calendarOrders = useSelector(userCalendarOrderSelector);
   const schedulesRef = useRef(null);
   const [{ pauseModal }, localDispatch] = useReducer(reducer, initialState);
 
@@ -206,7 +210,47 @@ const CalendarDayView = ({
     handleCreatePause(doctor, cabinet);
   };
 
-  const mappedDoctors = useMemo(() => {
+  const handleUpdateCalendarOrder = (entityId, direction, entityType) => {
+    dispatch(
+      dispatchChangeDoctorCalendarOrder({
+        entityId,
+        type: entityType,
+        direction,
+      }),
+    );
+  };
+
+  const handleUpdateDoctorCalendarOrder = (doctor, direction) => {
+    if (doctor == null) return;
+    handleUpdateCalendarOrder(doctor.id, direction, 'Doctor');
+  };
+
+  const handleUpdateCabinetCalendarOrder = (cabinet, direction) => {
+    if (cabinet == null) return;
+    handleUpdateCalendarOrder(cabinet.id, direction, 'Cabinet');
+  };
+
+  const handleMoveColumnLeft = (column) => {
+    if (column.isCabinet) {
+      const cabinet = cabinets.find((cabinet) => cabinet.id === column.id);
+      handleUpdateCabinetCalendarOrder(cabinet, 'Previous');
+    } else {
+      const doctor = doctors.find((doctor) => doctor.id === column.id);
+      handleUpdateDoctorCalendarOrder(doctor, 'Previous');
+    }
+  };
+
+  const handleMoveColumnRight = (column) => {
+    if (column.isCabinet) {
+      const cabinet = cabinets.find((cabinet) => cabinet.id === column.id);
+      handleUpdateCabinetCalendarOrder(cabinet, 'Next');
+    } else {
+      const doctor = doctors.find((doctor) => doctor.id === column.id);
+      handleUpdateDoctorCalendarOrder(doctor, 'Next');
+    }
+  };
+
+  const mappedColumns = useMemo(() => {
     // get doctors that are not assigned to any cabinet
     const doctorsWithoutCabinets = doctors.filter(
       (doctor) => doctor.cabinets.length === 0,
@@ -218,36 +262,56 @@ const CalendarDayView = ({
       );
       // add a hint to show doctors names on hover
       const hint = doctorsInCabinet.map((doctor) => doctor.fullName).join(', ');
+
+      const calendarOrder = calendarOrders.find(
+        (item) => item.entityId === cabinet.id && item.entityType === 'Cabinet',
+      ) ?? { orderId: 0 };
+
       return {
         id: cabinet.id,
         name: cabinet.name,
         hint,
+        isCabinet: true,
+        orderId: calendarOrder.orderId,
       };
     });
+
     // map independent doctors to column structure
-    const mappedDoctors = doctorsWithoutCabinets.map((doctor) => ({
-      id: doctor.id,
-      doctorId: doctor.id,
-      name: `${doctor.firstName} ${doctor.lastName}`,
-      disabled: doctor.isInVacation,
-      date: viewDate,
-    }));
-    return orderBy([...mappedDoctors, ...mappedCabinets], 'name', 'asc');
-  }, [doctors, cabinets, viewDate]);
+    const mappedDoctors = doctorsWithoutCabinets.map((doctor) => {
+      const calendarOrder = calendarOrders.find(
+        (item) => item.entityId === doctor.id && item.entityType === 'Doctor',
+      ) ?? { orderId: 0 };
+
+      return {
+        id: doctor.id,
+        doctorId: doctor.id,
+        name: `${doctor.firstName} ${doctor.lastName}`,
+        disabled: doctor.isInVacation,
+        isCabinet: false,
+        orderId: calendarOrder.orderId,
+      };
+    });
+    return orderBy([...mappedDoctors, ...mappedCabinets], 'orderId', 'asc');
+  }, [doctors, cabinets, viewDate, calendarOrders]);
+
+  console.log(calendarOrders);
 
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>
       <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
       <EasyCalendar
+        canMoveColumns
         viewDate={viewDate}
         dayHours={hours}
-        columns={mappedDoctors}
+        columns={mappedColumns}
         schedules={schedules}
         showHourIndicator={showHourIndicator}
         animatedStatuses={['WaitingForPatient']}
         onAddSchedule={handleAddSchedule}
         onScheduleSelected={handleScheduleClick}
         onHeaderItemClick={handleHeaderItemClick}
+        onMoveColumnLeft={handleMoveColumnLeft}
+        onMoveColumnRight={handleMoveColumnRight}
       />
     </div>
   );
