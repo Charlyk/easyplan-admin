@@ -11,7 +11,7 @@ import moment from 'moment-timezone';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import EASImage from 'app/components/common/EASImage';
-import EASTextField from 'app/components/common/EASTextField';
+import EASTextarea from 'app/components/common/EASTextarea';
 import LoadingButton from 'app/components/common/LoadingButton';
 import EASModal from 'app/components/common/modals/EASModal';
 import AppLogoBlue from 'app/components/icons/appLogoBlue';
@@ -257,10 +257,12 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
           <Typography className={styles.modalConfirmation}>
             {textForKey('cancel_schedule_message')}
           </Typography>
-          <EASTextField
+          <EASTextarea
+            rows={3}
             type='text'
             value={inputValue}
             onChange={handleInputChange}
+            placeholder={`${textForKey('type_here')} ...`}
           />
         </Box>
       </EASModal>

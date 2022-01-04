@@ -751,6 +751,7 @@ export default {
     undo_payment_confirm_message:
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
     value_more_then: 'The value shoud be more than',
+    type_here: 'Type here',
   },
   ro: {
     analytics: 'Analitică',
@@ -1513,6 +1514,7 @@ export default {
     or: 'sau',
     first_n_last_name: 'Nume Prenume',
     value_more_then: 'Valoarea trebuie sa fie mai mare de',
+    type_here: 'Tapează aici',
   },
   ru: {
     analytics: 'Analytics',
@@ -2264,5 +2266,6 @@ export default {
     or: 'или',
     first_n_last_name: 'First and Last name',
     value_more_then: 'The value shoud be more than',
+    type_here: 'Type here',
   },
 };
