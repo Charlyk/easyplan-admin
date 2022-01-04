@@ -88,23 +88,35 @@ const Column = ({
         doctorServices: null,
         doctorId: null,
       });
+      if (cabinetDoctors.length === 0) {
+        dispatch(
+          showErrorNotification(textForKey('this_cabinet_has_no_doctors')),
+        );
+        return;
+      }
       setSelectDoctorsModal(true);
     }
   };
 
   const handleModalConfirm = (selectedDoctor) => {
+    if (selectedDoctor.length === 0) {
+      dispatch(
+        showErrorNotification(textForKey('select doctor from the list')),
+      );
+      return;
+    }
     const reqBody = {
       ...body,
       doctorId: selectedDoctor[0]?.id,
       doctorServices: selectedDoctor[0]?.services,
     };
+
     dispatch(requestUpdateScheduleDateAndDoctor({ schedule, body: reqBody }));
     setSelectDoctorsModal(false);
   };
 
   const handleCloseModal = () => {
     setSelectDoctorsModal(false);
-    dispatch(showErrorNotification(textForKey('select doctor from the list')));
   };
 
   const isColumnDisabled = () =>

@@ -735,6 +735,7 @@ export default {
     insert_at_least_3_characters: 'Insert more than 3 characters',
     selected_doctor_does_not_provide_this_service:
       'Selected doctor does not provide this service',
+    this_cabinet_has_no_doctors: 'This cabinet has no doctors',
   },
   ro: {
     analytics: 'Analitică',
@@ -1484,6 +1485,7 @@ export default {
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
     selected_doctor_does_not_provide_this_service:
       'Doctorul selectat nu presteaza acest serviciu',
+    this_cabinet_has_no_doctors: 'Nu sunt doctori in acest cabinet',
   },
   ru: {
     analytics: 'Analytics',
@@ -2219,5 +2221,6 @@ export default {
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
     selected_doctor_does_not_provide_this_service:
       'Doctorul selectat nu presteaza acest serviciu',
+    this_cabinet_has_no_doctors: 'This cabinet has no doctors',
   },
 };
