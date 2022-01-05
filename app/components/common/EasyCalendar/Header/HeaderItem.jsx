@@ -47,7 +47,12 @@ const HeaderItem = ({
           <ArrowLeft />
         </IconButton>
       )}
-      <Box display='flex' flex='1' alignItems='center' justifyContent='center'>
+      <Box
+        display='flex'
+        width='100%'
+        alignItems='center'
+        justifyContent='center'
+      >
         {item.disabled && <IconUmbrella />}
         {item.hint ? (
           <Tooltip title={item.hint}>
