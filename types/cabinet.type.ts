@@ -1,6 +1,7 @@
 export interface Cabinet {
   id: number;
   name: string;
+  calendarOrderId: number;
   users: CabinetUser[];
 }
 
