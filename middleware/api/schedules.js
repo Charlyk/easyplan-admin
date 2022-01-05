@@ -3,6 +3,14 @@ import moment from 'moment-timezone';
 import { baseApiUrl } from 'eas.config';
 import { del, get, post, put } from './request';
 
+export async function updateScheduleDoctorAndDate(
+  scheduleId,
+  body,
+  headers = null,
+) {
+  return put(`/api/schedules/update-doctor/${scheduleId}`, headers, body);
+}
+
 /**
  * Fetch calendar day schedules
  * @param {Object} query
