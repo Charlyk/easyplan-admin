@@ -15,7 +15,6 @@ import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import AudioPlayer from 'react-h5-audio-player';
 import { useDispatch, useSelector } from 'react-redux';
 import HorizontalScrollHelper from 'app/components/common/HorizontalScrollHelper';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -369,22 +368,6 @@ const CrmMain = () => {
           </Tooltip>
         </Zoom>
       </div>
-      {/* {callToPlay != null && (
-        <div className={styles.playerContainer}>
-          <IconButton className={styles.closeIcon} onClick={handleClosePlayer}>
-            <IconClose />
-          </IconButton>
-          <AudioPlayer
-            autoPlay
-            src={callToPlay.fullUrl}
-            className={styles.player}
-            onError={handlePlayerError}
-            showJumpControls={false}
-            showSkipControls={false}
-            onPlayError={handlePlayerError}
-          />
-        </div>
-      )} */}
       <div ref={columnsContainerRef} className={styles.columnsContainer}>
         {filteredColumns.map((dealState, index) => (
           <DealsColumn

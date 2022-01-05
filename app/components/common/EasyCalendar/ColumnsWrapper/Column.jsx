@@ -30,6 +30,7 @@ const Column = ({
   hideCreateIndicator,
   onAddSchedule,
   onScheduleSelected,
+  viewDate,
 }) => {
   const dispatch = useDispatch();
   const hoursContainers = createContainerHours(hours);
@@ -61,13 +62,14 @@ const Column = ({
 
   const handleOnDropCell = (startHour, schedule) => {
     const [hours, minutes] = startHour.split(':');
-    const startDate = Moment(column.date)
+    const startDate = Moment(viewDate)
       .set({
         hour: parseInt(hours),
         minute: parseInt(minutes),
       })
       .toDate()
       .toString();
+
     if (!isColumnCabinet) {
       const selectedDoctor = clinicDoctors.filter(
         (doctor) => doctor.id === column.doctorId,
