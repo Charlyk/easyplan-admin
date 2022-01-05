@@ -158,7 +158,6 @@ const AddPauseModal = ({
     localDispatch(setIsFetchingHours(true));
     try {
       const date = moment(pauseDate ?? viewDate).format('YYYY-MM-DD');
-      console.log(pauseDate, viewDate);
       const response = await fetchPausesAvailableTime(date, doctor.id);
       const { data: availableTime } = response;
       localDispatch(setAvailableAllTime(availableTime));
