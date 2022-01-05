@@ -103,20 +103,20 @@ const AddAppointmentModal = ({
 
   // map doctors for autocomplete fields
   const doctors = useMemo(() => {
-    const mappedDoctors = clinicDoctors
-      .filter((item) => {
-        const isInCabinet = item.cabinets.some((cab) => cab.id === cabinet?.id);
-        return cabinet == null || isInCabinet;
-      })
-      .map((item) => {
-        const { phoneNumber, fullName } = item;
-        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
-        return {
-          ...item,
-          name: name,
-          label: item.fullName,
-        };
-      });
+    const filtered = clinicDoctors.filter((item) => {
+      const isInCabinet = item.cabinets.some((cab) => cab.id === cabinet?.id);
+      return cabinet == null || isInCabinet || item.cabinets.length === 0;
+    });
+
+    const mappedDoctors = filtered.map((item) => {
+      const { phoneNumber, fullName } = item;
+      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+      return {
+        ...item,
+        name: name,
+        label: item.fullName,
+      };
+    });
     return orderBy(mappedDoctors, 'name', 'asc');
   }, [cabinet, clinicDoctors]);
 
@@ -190,13 +190,6 @@ const AddAppointmentModal = ({
     }
   }, []);
 
-  // set initial doctor as first item in the list
-  useEffect(() => {
-    if (doctor == null && selectedDoctor == null) {
-      localDispatch(setDoctor(doctors[0]));
-    }
-  }, [doctor, selectedDoctor, doctors]);
-
   // fetch schedule details if initial schedule is not null
   useEffect(() => {
     if (schedule != null) {
@@ -216,21 +209,7 @@ const AddAppointmentModal = ({
     if (selectedDoctor == null) {
       return;
     }
-
-    const firstName = selectedDoctor?.firstName;
-    const lastName = selectedDoctor?.lastName;
-    const fullName = `${firstName} ${lastName}`;
-    const { phoneNumber } = selectedDoctor;
-    const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
-
-    localDispatch(
-      setDoctor({
-        ...selectedDoctor,
-        label: fullName,
-        fullName,
-        name,
-      }),
-    );
+    localDispatch(setDoctor(selectedDoctor));
   }, [selectedDoctor]);
 
   // set initial selected cabinet
