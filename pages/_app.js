@@ -176,7 +176,7 @@ const EasyApp = ({ Component, pageProps }) => {
           if (UnauthorizedPaths.includes(router.asPath)) {
             return;
           }
-          await handleUserLogout();
+          await router.reload();
         }
       }
     } finally {
@@ -200,6 +200,7 @@ const EasyApp = ({ Component, pageProps }) => {
 
   const handleUserLogout = async () => {
     await signOut();
+    console.log('Inside handle User Logout');
     router.replace(appBaseUrl).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
