@@ -199,8 +199,8 @@ const AddPauseModal = ({
           const timeInMinutes = parseInt(hours) * 60 + parseInt(minutes);
           for (const doctorPause of doctorPauses) {
             if (
-              timeInMinutes >= doctorPause.startTimeInMinutes &&
-              timeInMinutes <= doctorPause.endTimeInMinutes
+              timeInMinutes > doctorPause.startTimeInMinutes &&
+              timeInMinutes < doctorPause.endTimeInMinutes
             ) {
               return false;
             }
@@ -354,7 +354,7 @@ const AddPauseModal = ({
       open={open}
       paperClass={styles.modalPaper}
       className={styles['add-pause-root']}
-      title={textForKey('Add pause')}
+      title={id === null ? textForKey('Add pause') : textForKey('edit_pause')}
       onNegativeClick={handleDeletePause}
       primaryBtnText={textForKey('Save')}
       secondaryBtnText={textForKey('Close')}
