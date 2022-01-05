@@ -4,6 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
@@ -69,6 +70,7 @@ const DoctorPatientDetails = () => {
     { showFinalizeTreatment, isFinalizing, finalServices },
     localDispatch,
   ] = useReducer(reducer, initialState);
+  const pageTitle = `${currentClinic.clinicName} - ${patient.fullName}`;
 
   const [guideName, setGuideName] = useState(
     `${currentUser.firstName} ${currentUser.lastName}`,
@@ -230,6 +232,9 @@ const DoctorPatientDetails = () => {
 
   return (
     <div className={styles.doctorPatientRoot}>
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
       <FinalizeTreatmentModal
         currentClinic={currentClinic}
         onSave={finalizeTreatment}
@@ -243,7 +248,7 @@ const DoctorPatientDetails = () => {
         </div>
         {isFinalizing && (
           <Typography className={styles.loadingLabel}>
-            {textForKey('Finalizing treatment...')}
+            {textForKey('finalizing_treatment')}
           </Typography>
         )}
       </EASPersistentModal>
@@ -262,9 +267,9 @@ const DoctorPatientDetails = () => {
               <span className={styles.patientInfoTitle}>
                 {textForKey('Doctor')}:
               </span>
-              <span className={styles.patientInfoValue}>
+              <Typography className={styles.patientInfoValue} noWrap>
                 {currentUser.fullName}
-              </span>
+              </Typography>
             </div>
           </div>
           <div className={styles.printableWrapper}>

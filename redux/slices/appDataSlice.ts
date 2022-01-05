@@ -6,6 +6,7 @@ import { CurrentClinic } from 'types';
 import {
   AppDataRequest,
   AppDataResponse,
+  DoctorCalendarOrderRequest,
   UpdateProfileRequest,
 } from 'types/api';
 import { AuthenticationResponse } from 'types/api/response';
@@ -15,6 +16,12 @@ const appDataSlice = createSlice({
   name: 'appData',
   initialState: initialState.appData,
   reducers: {
+    dispatchChangeDoctorCalendarOrder(
+      state,
+      _action: PayloadAction<DoctorCalendarOrderRequest>,
+    ) {
+      state.isUpdatingClinic = false;
+    },
     dispatchFetchAppData(state, _action: PayloadAction<AppDataRequest>) {
       state.isAppInitialized = false;
     },
@@ -99,6 +106,7 @@ export const {
   setAuthenticationData,
   dispatchFetchAppData,
   setCurrentEntities,
+  dispatchChangeDoctorCalendarOrder,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;

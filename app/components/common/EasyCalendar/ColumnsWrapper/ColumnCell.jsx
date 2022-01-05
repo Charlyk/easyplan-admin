@@ -1,10 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import { useDrop } from 'react-dnd';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { dragItemTypes } from 'types';
+=======
+import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
+import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+>>>>>>> develop
 import styles from './ColumnsWrapper.module.scss';
 import CreateScheduleView from './CreateScheduleView';
 

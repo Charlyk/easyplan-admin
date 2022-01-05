@@ -53,18 +53,8 @@ export const initialState = {
   service: null,
   services: [],
   hours: [],
-  isNewPatient: false,
-  patientFirstName: '',
-  patientLastName: '',
-  patientPhoneNumber: '',
-  patientBirthday: null,
-  patientEmail: '',
-  patientLanguage: 'ro',
-  patientSource: 'Unknown',
-  phoneCountry: { countryCode: 'md', dialCode: '373' },
   isFetchingHours: false,
   isCreatingSchedule: false,
-  isPatientValid: false,
   isDoctorValid: false,
   isServiceValid: false,
   isEditing: false,
@@ -79,6 +69,7 @@ export const initialState = {
   isUrgent: false,
   loading: { patients: false, services: false, doctors: false },
   cabinet: null,
+  createPatientModal: { open: false, value: '' },
 };
 
 const addAppointmentModalSlice = createSlice({
@@ -95,6 +86,7 @@ const addAppointmentModalSlice = createSlice({
     setDoctor(state, action) {
       state.doctor = action.payload;
       state.service = null;
+      state.isServiceValid = false;
       state.isDoctorValid = action.payload != null;
     },
     setService(state, action) {
@@ -107,25 +99,6 @@ const addAppointmentModalSlice = createSlice({
     setHours(state, action) {
       state.hours = action.payload;
     },
-    setPatientFirstName(state, action) {
-      state.patientFirstName = action.payload;
-    },
-    setPatientLastName(state, action) {
-      state.patientLastName = action.payload;
-    },
-    setPatientPhoneNumber(state, action) {
-      state.patientPhoneNumber = action.payload.phoneNumber;
-      state.isPhoneValid = action.payload.isPhoneValid;
-      state.phoneCountry = action.payload.country;
-    },
-    setIsNewPatient(state, action) {
-      state.isNewPatient = action.payload;
-      state.patientBirthday = null;
-      state.patientEmail = '';
-      state.patientFirstName = '';
-      state.patientLastName = '';
-      state.patientPhoneNumber = '';
-    },
     setPatientsLoading(state, action) {
       state.loading = { ...state.loading, patients: action.payload };
     },
@@ -134,9 +107,6 @@ const addAppointmentModalSlice = createSlice({
     },
     setDoctorsLoading(state, action) {
       state.loading = { ...state.loading, doctors: action.payload };
-    },
-    setIsPatientValid(state, action) {
-      state.isPatientValid = action.payload;
     },
     setIsDoctorValid(state, action) {
       state.isDoctorValid = action.payload;
@@ -149,9 +119,6 @@ const addAppointmentModalSlice = createSlice({
     },
     setShowDatePicker(state, action) {
       state.showDatePicker = action.payload;
-    },
-    setShowBirthdayPicker(state, action) {
-      state.showBirthdayPicker = action.payload;
     },
     setAppointmentDate(state, action) {
       state.appointmentDate = action.payload;
@@ -189,7 +156,7 @@ const addAppointmentModalSlice = createSlice({
         name: patient.fullName,
         label: patient.fullName,
       };
-      state.cabinet = cabinet;
+      state.cabinet = { ...cabinet, label: cabinet?.name };
       state.doctor = doctor;
       state.service = { ...service, label: service.name };
       state.appointmentNote = noteText;
@@ -202,13 +169,6 @@ const addAppointmentModalSlice = createSlice({
       state.isDoctorValid = true;
       state.isServiceValid = true;
       state.isEditing = true;
-    },
-    setPatientBirthday(state, action) {
-      state.patientBirthday = action.payload;
-      state.showBirthdayPicker = false;
-    },
-    setPatientEmail(state, action) {
-      state.patientEmail = action.payload;
     },
     setIsUrgent(state, action) {
       state.isUrgent = action.payload;
@@ -264,12 +224,6 @@ const addAppointmentModalSlice = createSlice({
     setAvailableEndTime(state, action) {
       state.availableEndTime = action.payload;
     },
-    setPatientLanguage(state, action) {
-      state.patientLanguage = action.payload;
-    },
-    setPatientSource(state, action) {
-      state.patientSource = action.payload;
-    },
     setSelectedCabinet(state, action) {
       if (action.payload == null) {
         state.cabinet = null;
@@ -279,11 +233,14 @@ const addAppointmentModalSlice = createSlice({
           label: action.payload.name,
         };
       }
-      state.doctor = null;
+      // state.doctor = null;
       state.isDoctorValid = action.payload != null;
     },
     setSelectedCabinetInDoctorMode(state, action) {
       state.cabinet = { ...action.payload, label: action.payload.name };
+    },
+    setShowCreateModal(state, action) {
+      state.createPatientModal = action.payload;
     },
   },
 });
@@ -291,8 +248,6 @@ const addAppointmentModalSlice = createSlice({
 export const {
   setPatient,
   setPatients,
-  setPatientSource,
-  setPatientLanguage,
   setShowDatePicker,
   setSchedule,
   setAppointmentHour,
@@ -307,21 +262,15 @@ export const {
   setServices,
   setAvailableTime,
   setIsFetchingHours,
-  setIsNewPatient,
-  setIsPatientValid,
   setIsUrgent,
-  setPatientBirthday,
-  setPatientPhoneNumber,
-  setPatientEmail,
-  setPatientFirstName,
   setService,
   setShowBirthdayPicker,
   setServicesLoading,
-  setPatientLastName,
   setPatientsLoading,
   setStartTime,
   setSelectedCabinet,
   setSelectedCabinetInDoctorMode,
+  setShowCreateModal,
   resetState,
 } = addAppointmentModalSlice.actions;
 

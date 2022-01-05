@@ -27,3 +27,6 @@ export * from './userRole.type';
 export * from './userClinic.type';
 export * from './DealView.types';
 export * from './dragItemTypes';
+export * from './patientCallRecord.types';
+export * from './patientVisit.types';
+export * from './patientPurchase.types';

@@ -1,4 +1,5 @@
 import { UserClinic } from 'types';
+import { UserCalendarOrder } from './userCalendarOrder.type';
 
 export interface CurrentUser {
   id: number;
@@ -11,4 +12,5 @@ export interface CurrentUser {
   language: string;
   userClinic: any;
   clinics: UserClinic[];
+  calendarOrders: UserCalendarOrder[];
 }

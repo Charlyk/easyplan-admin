@@ -19,7 +19,6 @@ const initialState: ReduxState = {
   user: null,
   updateAppointments: false,
   updateCalendarDoctorHeight: false,
-  checkAppointments: false,
   updateInvoices: false,
   checkDoctorAppointments: false,
   patientDetails: {
@@ -154,6 +153,19 @@ const initialState: ReduxState = {
     itemsPerPage: 25,
     items: [],
     dealState: null,
+  },
+  patientPhoneCalls: {
+    isFetching: false,
+    records: [],
+  },
+  callToPlay: null,
+  patientVisits: {
+    isFetching: false,
+    visits: [],
+  },
+  patientPurchases: {
+    isLoading: false,
+    payments: [],
   },
 };
 

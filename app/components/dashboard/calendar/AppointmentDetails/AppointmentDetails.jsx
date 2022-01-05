@@ -30,11 +30,7 @@ import {
   getAvailableHours,
   updateScheduleStatus,
 } from 'middleware/api/schedules';
-import {
-  setPatientDetails,
-  setPaymentModal,
-  toggleAppointmentsUpdate,
-} from 'redux/actions/actions';
+import { setPaymentModal } from 'redux/actions/actions';
 import {
   calendarScheduleDetailsSelector,
   closeDetailsSelector,
@@ -43,6 +39,10 @@ import {
   closeScheduleDetails,
   fetchScheduleDetails,
 } from 'redux/slices/calendarData';
+import {
+  setPatientDetails,
+  updateAppointmentsList,
+} from 'redux/slices/mainReduxSlice';
 import styles from './AppointmentDetails.module.scss';
 import reducer, {
   initialState,
@@ -192,7 +192,7 @@ const AppointmentDetails = ({
       localDispatch(setIsCanceledReasonRequired(false));
       localDispatch(setIsNewDateRequired(false));
       localDispatch(setIsDelayTimeRequired(false));
-      dispatch(toggleAppointmentsUpdate());
+      dispatch(updateAppointmentsList());
     } catch (error) {
       toast?.error(error.message);
     }
@@ -409,6 +409,20 @@ const AppointmentDetails = ({
                     </td>
                     <td>{details.doctor.fullName}</td>
                   </tr>
+                  {details.cabinet && (
+                    <tr>
+                      <td
+                        style={{
+                          width: '35%',
+                          paddingRight: '1rem',
+                          userSelect: 'none',
+                        }}
+                      >
+                        {textForKey('Cabinet')}:
+                      </td>
+                      <td>{details.cabinet.name}</td>
+                    </tr>
+                  )}
                   <tr>
                     <td style={{ paddingRight: '1rem', userSelect: 'none' }}>
                       {textForKey('Date')}:

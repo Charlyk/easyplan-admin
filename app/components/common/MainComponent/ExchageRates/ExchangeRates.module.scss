@@ -1,20 +1,21 @@
 .exchangeRate {
   width: calc(100% - 1rem);
   margin-top: 1rem;
-  min-height: 35px;
+  min-height: 115px;
   background-color: white;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 4px;
-  box-shadow: 0 1px 10px 10px #34344E1A;
+  box-shadow: 0 1px 10px 10px #34344e1a;
+  margin-bottom: 5rem;
 
   .titleLabel {
     width: 100%;
     font-family: Inter, sans-serif !important;
     font-style: normal !important;
-    color: #34354C;
+    color: #34354c;
     font-weight: bold;
     font-size: 13px !important;
     padding: 8px;
@@ -28,19 +29,21 @@
     width: 100%;
     font-family: Inter, sans-serif !important;
     font-style: normal !important;
-    color: #3A83DC;
+    color: #3a83dc;
     font-size: 12px !important;
   }
 
   .tableContainer {
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     width: 100%;
 
     .table {
       table-layout: fixed;
       width: 100%;
 
-      .tableBody, .tableHead {
+      .tableBody,
+      .tableHead {
         width: 100%;
 
         .tableRow {
@@ -57,12 +60,12 @@
             .label {
               font-family: Inter, sans-serif !important;
               font-style: normal !important;
-              color: #34354C;
+              color: #34354c;
               font-size: 12px !important;
             }
 
             .valueLabel {
-              color: #3A83DC !important;
+              color: #3a83dc !important;
               font-weight: bold !important;
             }
           }

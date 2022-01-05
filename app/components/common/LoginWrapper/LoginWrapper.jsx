@@ -8,14 +8,13 @@ import { useDispatch } from 'react-redux';
 import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
+import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { RestrictedSubdomains } from 'app/utils/constants';
 import getClinicUrl from 'app/utils/getClinicUrl';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
-import useIsMobileDevice from 'app/utils/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import { appBaseUrl, environment, isDev } from 'eas.config';
 import { loginUser, resetUserPassword, signOut } from 'middleware/api/auth';
-import { setCurrentUser } from 'redux/slices/appDataSlice';
 import styles from './LoginWrapper.module.scss';
 import reducer, {
   initialState,
@@ -106,9 +105,7 @@ export default function LoginWrapper({
       if (data.error) {
         localDispatch(setErrorMessage(data.message));
       } else {
-        toast.success(
-          textForKey("We've sent an email with further instructions."),
-        );
+        toast.success(textForKey('email_with_instructions_was_sent'));
         localDispatch(setErrorMessage(null));
         handleFormChange(FormType.login);
       }
