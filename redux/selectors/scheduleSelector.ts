@@ -46,8 +46,6 @@ export const pauseSelector = createSelector(
         (schedule) => schedule.type === 'Pause',
       );
 
-      console.log({ ...item, schedules: filteredPauses });
-
       return { ...item, schedules: filteredPauses };
     }),
 );

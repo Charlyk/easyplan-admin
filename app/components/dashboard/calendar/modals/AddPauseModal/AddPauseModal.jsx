@@ -82,8 +82,6 @@ const AddPauseModal = ({
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  console.log(pauseArr);
-
   const doctorPauses = useMemo(() => {
     let neededItem;
     if (initialCabinet !== null) {
@@ -91,7 +89,7 @@ const AddPauseModal = ({
     } else if (initialDoctor !== null) {
       neededItem = pauseArr.find((item) => item.id === initialDoctor?.id);
     }
-    console.log(neededItem);
+    if (!neededItem) return [];
     let selectedDoctorsPauses = [];
     if (doctor !== null) {
       selectedDoctorsPauses = neededItem?.schedules?.filter(
@@ -116,8 +114,6 @@ const AddPauseModal = ({
     }
     return [];
   }, [doctor, cabinet]);
-
-  console.log(doctorPauses);
 
   const cabinets = useMemo(() => {
     const mappedCabinets = clinicCabinets.map((cabinet) => ({

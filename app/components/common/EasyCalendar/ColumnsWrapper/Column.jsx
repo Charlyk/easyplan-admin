@@ -34,16 +34,14 @@ const Column = ({
     const filteredSchedules = [];
     const filteredPauses = [];
     for (const schedule of schedules) {
-      if (schedule.type !== 'Pause') {
+      if (schedule.type === 'Schedule') {
         filteredSchedules.push(schedule);
-      } else {
+      } else if (schedule.type === 'Pause') {
         filteredPauses.push(schedule);
       }
     }
     return [filteredSchedules, filteredPauses];
   }, [schedules]);
-
-  console.log(filteredPauses);
 
   const schedulesWithOffset = useMemo(() => {
     const newSchedules = [];

@@ -294,8 +294,6 @@ const CalendarDayView = ({
     return orderBy([...mappedDoctors, ...mappedCabinets], 'orderId', 'asc');
   }, [doctors, cabinets, viewDate, calendarOrders]);
 
-  console.log(calendarOrders);
-
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>
       {pauseModal.open && (
