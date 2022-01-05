@@ -1500,7 +1500,7 @@ export default {
     add_xray_image: 'Adaugati imaginea cu raze X',
     view_more: 'Vezi tot',
     finalizing_treatment: 'Se finalizeaza tratamentul',
-    no_notes: 'Nu sunt notite',
+    no_notes: 'Nu sunt notițe',
     enter_the_note: 'Introduceti nota',
     of: 'din',
     undo_payment: 'Anulează achitarea',
