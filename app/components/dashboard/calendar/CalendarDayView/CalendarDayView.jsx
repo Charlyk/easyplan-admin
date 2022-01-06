@@ -297,7 +297,9 @@ const CalendarDayView = ({
 
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>
-      <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
+      {pauseModal.open && (
+        <AddPauseModal {...pauseModal} onClose={handleClosePauseModal} />
+      )}
       <EasyCalendar
         canMoveColumns
         viewDate={viewDate}

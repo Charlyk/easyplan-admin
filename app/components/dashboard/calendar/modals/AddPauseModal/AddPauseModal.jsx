@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import Box from '@material-ui/core/Box';
+import { Alert } from '@material-ui/lab';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -28,6 +29,7 @@ import {
   activeClinicDoctorsSelector,
   clinicCabinetsSelector,
 } from 'redux/selectors/appDataSelector';
+import { pauseSelector } from 'redux/selectors/scheduleSelector';
 import styles from './AddPauseModal.module.scss';
 import reducer, {
   initialState,
@@ -42,8 +44,9 @@ import reducer, {
   setIsLoading,
   setDoctor,
   setCabinet,
-  resetState,
   setInitialData,
+  setHoursError,
+  resetState,
 } from './AddPauseModal.reducer';
 
 const AddPauseModal = ({
@@ -61,6 +64,7 @@ const AddPauseModal = ({
   const datePickerAnchor = useRef(null);
   const clinicDoctors = useSelector(activeClinicDoctorsSelector);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
+  const pauseArr = useSelector(pauseSelector);
   const hasCabinets = clinicCabinets.length > 0;
   const [
     {
@@ -76,9 +80,43 @@ const AddPauseModal = ({
       doctor,
       cabinet,
       isDeleting,
+      hoursError,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
+
+  const doctorPauses = useMemo(() => {
+    let neededItem;
+    if (initialCabinet !== null) {
+      neededItem = pauseArr.find((item) => item.id === initialCabinet?.id);
+    } else if (initialDoctor !== null) {
+      neededItem = pauseArr.find((item) => item.id === initialDoctor?.id);
+    }
+    if (!neededItem) return [];
+    let selectedDoctorsPauses = [];
+    if (doctor !== null) {
+      selectedDoctorsPauses = neededItem?.schedules?.filter(
+        (schedule) => schedule.doctorId === doctor.id,
+      );
+
+      if (selectedDoctorsPauses?.length === 0) return [];
+      return selectedDoctorsPauses.map((pause) => {
+        const startTime = new Date(pause.startTime);
+        const endTime = new Date(pause.endTime);
+
+        const startTimeInMinutes =
+          startTime.getHours() * 60 + startTime.getMinutes();
+        const endTimeInMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+
+        return {
+          ...pause,
+          startTimeInMinutes,
+          endTimeInMinutes,
+        };
+      });
+    }
+    return [];
+  }, [doctor, cabinet]);
 
   const cabinets = useMemo(() => {
     const mappedCabinets = clinicCabinets.map((cabinet) => ({
@@ -154,16 +192,36 @@ const AddPauseModal = ({
   const fetchPauseAvailableTime = async () => {
     localDispatch(setIsFetchingHours(true));
     try {
-      const date = moment(pauseDate | viewDate).format('YYYY-MM-DD');
+      const date = moment(pauseDate ?? viewDate).format('YYYY-MM-DD');
       const response = await fetchPausesAvailableTime(date, doctor.id);
       const { data: availableTime } = response;
-      localDispatch(setAvailableAllTime(availableTime));
-      updateEndTimeBasedOnService(availableTime);
+      let filteredAvailableTime;
+      if (doctorPauses.some((pause) => pause.doctorId === doctor.id)) {
+        filteredAvailableTime = availableTime.filter((time) => {
+          const [hours, minutes] = time.split(':');
+          const timeInMinutes = parseInt(hours) * 60 + parseInt(minutes);
+          for (const doctorPause of doctorPauses) {
+            if (
+              timeInMinutes > doctorPause.startTimeInMinutes &&
+              timeInMinutes < doctorPause.endTimeInMinutes
+            ) {
+              return false;
+            }
+            return true;
+          }
+        });
+      } else {
+        filteredAvailableTime = availableTime;
+      }
+      localDispatch(setAvailableAllTime(filteredAvailableTime));
+      updateEndTimeBasedOnService(filteredAvailableTime);
     } catch (error) {
-      toast.error(error.response?.data?.message || error?.response);
-      onClose();
-    } finally {
-      localDispatch(setIsFetchingHours(false));
+      if (error.response != null) {
+        const { data } = error.response;
+        localDispatch(setHoursError(data.message || error.message));
+      } else {
+        localDispatch(setHoursError(error.message));
+      }
     }
   };
 
@@ -301,7 +359,7 @@ const AddPauseModal = ({
       open={open}
       paperClass={styles.modalPaper}
       className={styles['add-pause-root']}
-      title={textForKey('Add pause')}
+      title={id === null ? textForKey('Add pause') : textForKey('edit_pause')}
       onNegativeClick={handleDeletePause}
       primaryBtnText={textForKey('Save')}
       secondaryBtnText={textForKey('Close')}
@@ -369,6 +427,11 @@ const AddPauseModal = ({
           />
         </form>
         {datePicker}
+        {hoursError && (
+          <Alert severity='warning' style={{ width: '100%', marginTop: 16 }}>
+            {hoursError}
+          </Alert>
+        )}
       </Box>
     </EASModal>
   );

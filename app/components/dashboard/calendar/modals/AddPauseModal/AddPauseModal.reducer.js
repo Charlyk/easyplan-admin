@@ -34,6 +34,7 @@ export const initialState = {
   isDeleting: false,
   doctor: null,
   cabinet: null,
+  hoursError: null,
 };
 
 const addPauseModalSlice = createSlice({
@@ -84,6 +85,8 @@ const addPauseModalSlice = createSlice({
       state.availableStartTime = availableStartTime;
       state.availableEndTime = availableEndTime;
       state.startHour = startHour;
+      state.hoursError = null;
+      state.isFetchingHours = false;
     },
     setAvailableStartTime(state, action) {
       state.availableStartTime = action.payload;
@@ -92,6 +95,12 @@ const addPauseModalSlice = createSlice({
       state.availableEndTime = action.payload;
     },
     setIsFetchingHours(state, action) {
+      state.availableAllTime = [];
+      state.availableStartTime = [];
+      state.availableEndTime = [];
+      state.startHour = '';
+      state.endHour = '';
+      state.hoursError = null;
       state.isFetchingHours = action.payload;
     },
     setIsDeleting(state, action) {
@@ -116,6 +125,10 @@ const addPauseModalSlice = createSlice({
       state.cabinet = action.payload;
       state.doctor = null;
     },
+    setHoursError(state, action) {
+      state.hoursError = action.payload;
+      state.isFetchingHours = false;
+    },
     resetState() {
       return initialState;
     },
@@ -123,7 +136,6 @@ const addPauseModalSlice = createSlice({
 });
 
 export const {
-  setAvailableStartTime,
   setShowDatePicker,
   setComment,
   setIsLoading,
@@ -133,10 +145,10 @@ export const {
   setPauseDate,
   setStartHour,
   setAvailableAllTime,
-  setAvailableEndTime,
   setInitialData,
   setDoctor,
   setCabinet,
+  setHoursError,
   resetState,
 } = addPauseModalSlice.actions;
 
