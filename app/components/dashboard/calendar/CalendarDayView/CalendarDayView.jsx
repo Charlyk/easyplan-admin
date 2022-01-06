@@ -290,6 +290,7 @@ const CalendarDayView = ({
         disabled: doctor.isInVacation,
         isCabinet: false,
         orderId: calendarOrder.orderId,
+        date: viewDate,
       };
     });
     return orderBy([...mappedDoctors, ...mappedCabinets], 'orderId', 'asc');

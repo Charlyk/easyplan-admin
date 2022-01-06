@@ -30,7 +30,6 @@ const Column = ({
   hideCreateIndicator,
   onAddSchedule,
   onScheduleSelected,
-  viewDate,
 }) => {
   const dispatch = useDispatch();
   const hoursContainers = createContainerHours(hours);
@@ -62,7 +61,7 @@ const Column = ({
 
   const handleOnDropCell = (startHour, schedule) => {
     const [hours, minutes] = startHour.split(':');
-    const startDate = Moment(viewDate)
+    const startDate = Moment(column.date)
       .set({
         hour: parseInt(hours),
         minute: parseInt(minutes),
