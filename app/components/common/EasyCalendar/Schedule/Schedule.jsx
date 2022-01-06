@@ -116,7 +116,7 @@ const Schedule = ({
 
   return (
     <Box
-      ref={drag}
+      ref={isPause ? null : drag}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className={clsx(styles.dayViewSchedule, {
