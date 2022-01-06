@@ -165,18 +165,11 @@ const AddPauseModal = ({
     if (startTime == null || endTime == null) {
       return;
     }
-    console.log('Inside useEffect');
-    console.log(startTime);
-    console.log(endTime);
     const startHourInEffect = moment(startTime).format('HH:mm');
     const endHourInEffect = moment(endTime).format('HH:mm');
     localDispatch(setStartHour(startHourInEffect));
     localDispatch(setEndHour(endHourInEffect));
-    console.log(startHour);
-    console.log(endHour);
   }, [startTime, endTime]);
-
-  console.log(state);
 
   useEffect(() => {
     if (viewDate != null && typeof viewDate === 'object') {

@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
 
 export const filterAvailableTime = (availableTime, startTime) => {
@@ -63,13 +63,9 @@ const addPauseModalSlice = createSlice({
         : availableEndTime.length > 0
         ? availableEndTime[0]
         : '';
-      console.log('start hour');
-      console.log(current(state));
     },
     setEndHour(state, action) {
       state.endHour = action.payload;
-      console.log('end hour');
-      console.log(current(state));
     },
     setComment(state, action) {
       state.comment = action.payload;
@@ -85,8 +81,6 @@ const addPauseModalSlice = createSlice({
           : state.startHour;
       const availableStartTime = availableAllTime;
       const availableEndTime = filterAvailableTime(availableAllTime, startHour);
-      console.log('available all time');
-      console.log(availableAllTime?.length > 0 && state.startHour.length === 0);
 
       state.availableAllTime = availableAllTime;
       state.availableStartTime = availableStartTime;
@@ -94,8 +88,6 @@ const addPauseModalSlice = createSlice({
       state.startHour = startHour;
       state.hoursError = null;
       state.isFetchingHours = false;
-
-      console.log(current(state));
     },
     setAvailableStartTime(state, action) {
       state.availableStartTime = action.payload;
