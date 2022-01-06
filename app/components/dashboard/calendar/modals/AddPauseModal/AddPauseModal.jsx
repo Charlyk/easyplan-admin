@@ -66,24 +66,23 @@ const AddPauseModal = ({
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const pauseArr = useSelector(pauseSelector);
   const hasCabinets = clinicCabinets.length > 0;
-  const [
-    {
-      isLoading,
-      showDatePicker,
-      pauseDate,
-      availableStartTime,
-      availableEndTime,
-      isFetchingHours,
-      startHour,
-      endHour,
-      comment,
-      doctor,
-      cabinet,
-      isDeleting,
-      hoursError,
-    },
-    localDispatch,
-  ] = useReducer(reducer, initialState);
+  const [state, localDispatch] = useReducer(reducer, initialState);
+
+  const {
+    isLoading,
+    showDatePicker,
+    pauseDate,
+    availableStartTime,
+    availableEndTime,
+    isFetchingHours,
+    startHour,
+    endHour,
+    comment,
+    doctor,
+    cabinet,
+    isDeleting,
+    hoursError,
+  } = state;
 
   const doctorPauses = useMemo(() => {
     let neededItem;
@@ -166,11 +165,18 @@ const AddPauseModal = ({
     if (startTime == null || endTime == null) {
       return;
     }
-    const startHour = moment(startTime).format('HH:mm');
-    const endHour = moment(endTime).format('HH:mm');
-    localDispatch(setStartHour(startHour));
-    localDispatch(setEndHour(endHour));
+    console.log('Inside useEffect');
+    console.log(startTime);
+    console.log(endTime);
+    const startHourInEffect = moment(startTime).format('HH:mm');
+    const endHourInEffect = moment(endTime).format('HH:mm');
+    localDispatch(setStartHour(startHourInEffect));
+    localDispatch(setEndHour(endHourInEffect));
+    console.log(startHour);
+    console.log(endHour);
   }, [startTime, endTime]);
+
+  console.log(state);
 
   useEffect(() => {
     if (viewDate != null && typeof viewDate === 'object') {
