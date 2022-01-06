@@ -755,6 +755,7 @@ export default {
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
     value_more_then: 'The value shoud be more than',
     type_here: 'Type here',
+    edit_pause: 'Edit the pause',
   },
   ro: {
     analytics: 'Analitică',
@@ -1521,6 +1522,7 @@ export default {
     first_n_last_name: 'Nume Prenume',
     value_more_then: 'Valoarea trebuie sa fie mai mare de',
     type_here: 'Tapează aici',
+    edit_pause: 'Editează pauza',
   },
   ru: {
     analytics: 'Analytics',
@@ -2276,5 +2278,6 @@ export default {
     first_n_last_name: 'First and Last name',
     value_more_then: 'The value shoud be more than',
     type_here: 'Type here',
+    edit_pause: 'Edit the pause',
   },
 };

@@ -99,17 +99,30 @@ const Schedule = ({
     setIsHighlighted(false);
   };
 
+  const getScheduleZIndex = () => {
+    if (isHighlighted) {
+      return 500;
+    }
+    if (!isHighlighted && isPause) {
+      return 0;
+    }
+    if (!isHighlighted && !isPause) {
+      return 100 + index;
+    }
+  };
+
   const height = getScheduleHeight();
   const itemRect = { height, top: topPosition };
 
   return (
     <Box
-      ref={drag}
+      ref={isPause ? null : drag}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className={clsx(styles.dayViewSchedule, {
         [styles.upcoming]: shouldAnimate,
         [styles.urgent]: schedule.isUrgent || schedule.urgent,
+        [styles.pauseStyles]: isPause,
       })}
       onClick={handleScheduleClick}
       style={{
@@ -121,16 +134,18 @@ const Schedule = ({
           ? '100%'
           : `calc(100% - ${schedule.offset} * ${offsetDistance}px)`,
         top: itemRect.top,
-        zIndex: isHighlighted ? 500 : 100 + index,
+        zIndex: getScheduleZIndex(),
         height: itemRect.height,
-        backgroundColor: isPause ? '#FDC534' : '#f3f3f3',
+        backgroundColor: isPause ? '' : '#f3f3f3',
         border: isHighlighted && !isPause ? '#3A83DC 1px solid' : 'none',
       }}
     >
-      <span
-        className={styles.statusIndicator}
-        style={{ backgroundColor: scheduleStatus?.color || 'white' }}
-      />
+      {!isPause && (
+        <span
+          className={styles.statusIndicator}
+          style={{ backgroundColor: scheduleStatus?.color || 'white' }}
+        />
+      )}
       <div className={styles.wrapper}>
         <div className={styles.header}>
           {schedule.type === 'Schedule' && (
