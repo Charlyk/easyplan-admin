@@ -223,7 +223,7 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
       )
         return;
     }
-    if (viewMode === 'month') {
+    if (viewMode === 'month' && !moveToDay) {
       const newDateMonth = new Date(newDate).getMonth();
       const viewDateMonth = new Date(viewDate).getMonth();
       if (newDateMonth === viewDateMonth) return;
