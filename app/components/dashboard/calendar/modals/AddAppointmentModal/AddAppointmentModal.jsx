@@ -512,7 +512,7 @@ const AddAppointmentModal = ({
               filterLocally
               containerClass={styles.simpleField}
               options={doctors}
-              value={doctor || doctors[0]}
+              value={doctor}
               fieldLabel={textForKey('Doctor')}
               placeholder={textForKey('Enter doctor name or phone')}
               onChange={handleDoctorChange}
