@@ -65,8 +65,9 @@ export async function updateVisitNote(
   note,
   headers = null,
 ) {
-  return put(`/api/patients/${patientId}/visits?visitId=${visitId}`, headers, {
+  return put(`/api/visits/${visitId}`, headers, {
     note,
+    patientId,
   });
 }
 
@@ -318,7 +319,7 @@ export async function deletePatientXRayImage(
  * @return {Promise<AxiosResponse>}
  */
 export async function getPatientVisits(patientId, headers = null) {
-  return get(`/api/patients/${patientId}/visits`, headers);
+  return get(`/api/visits?patientId=${patientId}`, headers);
 }
 
 /**

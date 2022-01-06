@@ -9,6 +9,7 @@ import Hours from './Hours';
 
 const EasyCalendar = ({
   dayHours,
+  canMoveColumns,
   columns,
   schedules,
   viewDate,
@@ -19,10 +20,18 @@ const EasyCalendar = ({
   onAddSchedule,
   onScheduleSelected,
   onHeaderItemClick,
+  onMoveColumnLeft,
+  onMoveColumnRight,
 }) => {
   return (
     <div className={styles.calendarRoot}>
-      <Header items={columns} onItemClick={onHeaderItemClick} />
+      <Header
+        items={columns}
+        canMoveColumns={canMoveColumns}
+        onItemClick={onHeaderItemClick}
+        onMoveLeft={onMoveColumnLeft}
+        onMoveRight={onMoveColumnRight}
+      />
       <div className={styles.calendarContainer}>
         <HourIndicator
           disabled={
@@ -51,6 +60,7 @@ export default React.memo(EasyCalendar, areComponentPropsEqual);
 
 EasyCalendar.propTypes = {
   hourIndicator: PropTypes.bool,
+  canMoveColumns: PropTypes.bool,
   dayHours: PropTypes.arrayOf(PropTypes.string).isRequired,
   viewDate: PropTypes.instanceOf(Date).isRequired,
   showHourIndicator: PropTypes.bool,
@@ -90,6 +100,7 @@ EasyCalendar.propTypes = {
       date: PropTypes.instanceOf(Date),
       disabled: PropTypes.bool,
       hint: PropTypes.string,
+      isCabinet: PropTypes.bool,
     }),
   ).isRequired,
   animatedStatuses: PropTypes.arrayOf(
@@ -111,6 +122,8 @@ EasyCalendar.propTypes = {
   onAddSchedule: PropTypes.func,
   onScheduleSelected: PropTypes.func,
   onHeaderItemClick: PropTypes.func,
+  onMoveColumnLeft: PropTypes.func,
+  onMoveColumnRight: PropTypes.func,
 };
 
 EasyCalendar.defaultProps = {

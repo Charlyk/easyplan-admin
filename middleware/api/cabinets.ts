@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+import { Cabinet, ClinicUser } from '../../types';
 import { del, get, put, post } from './request';
 
 export const getAllCabinetsInfo = async (headers = null) => {
@@ -66,3 +68,15 @@ export const deleteDoctor = async (
 
   return put(`/api/cabinets/${params.cabinet}/doctors`, headers, body);
 };
+
+export async function requestChangeCabinetCalendarOrder(
+  cabinetId: number,
+  orderId: number,
+  headers?: Record<string, string> | null,
+): Promise<AxiosResponse<Cabinet>> {
+  return put(
+    `/api/cabinets/${cabinetId}/calendar-order?orderId=${orderId}`,
+    headers,
+    {},
+  );
+}

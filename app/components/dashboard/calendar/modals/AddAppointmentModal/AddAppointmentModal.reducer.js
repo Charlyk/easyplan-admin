@@ -70,6 +70,7 @@ export const initialState = {
   loading: { patients: false, services: false, doctors: false },
   cabinet: null,
   createPatientModal: { open: false, value: '' },
+  hoursError: null,
 };
 
 const addAppointmentModalSlice = createSlice({
@@ -84,7 +85,22 @@ const addAppointmentModalSlice = createSlice({
       state.patients = acton.payload;
     },
     setDoctor(state, action) {
-      state.doctor = action.payload;
+      if (action.payload != null) {
+        const selectedDoctor = action.payload;
+        const firstName = selectedDoctor?.firstName;
+        const lastName = selectedDoctor?.lastName;
+        const fullName = `${firstName} ${lastName}`;
+        const { phoneNumber } = selectedDoctor;
+        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+        state.doctor = {
+          ...selectedDoctor,
+          label: fullName,
+          fullName,
+          name,
+        };
+      } else {
+        state.doctor = action.payload;
+      }
       state.service = null;
       state.isServiceValid = false;
       state.isDoctorValid = action.payload != null;
@@ -98,6 +114,8 @@ const addAppointmentModalSlice = createSlice({
     },
     setHours(state, action) {
       state.hours = action.payload;
+      state.hoursError = null;
+      state.isFetchingHours = false;
     },
     setPatientsLoading(state, action) {
       state.loading = { ...state.loading, patients: action.payload };
@@ -115,6 +133,7 @@ const addAppointmentModalSlice = createSlice({
       state.isServiceValid = action.payload;
     },
     setIsFetchingHours(state, action) {
+      state.hoursError = null;
       state.isFetchingHours = action.payload;
     },
     setShowDatePicker(state, action) {
@@ -217,6 +236,7 @@ const addAppointmentModalSlice = createSlice({
       state.availableEndTime = availableEndTime;
       state.startTime = startTime;
       state.endTime = endTime;
+      state.isFetchingHours = false;
     },
     setAvailableStartTime(state, action) {
       state.availableStartTime = action.payload;
@@ -241,6 +261,10 @@ const addAppointmentModalSlice = createSlice({
     },
     setShowCreateModal(state, action) {
       state.createPatientModal = action.payload;
+    },
+    setHoursError(state, action) {
+      state.hoursError = action.payload;
+      state.isFetchingHours = false;
     },
   },
 });
@@ -271,6 +295,7 @@ export const {
   setSelectedCabinet,
   setSelectedCabinetInDoctorMode,
   setShowCreateModal,
+  setHoursError,
   resetState,
 } = addAppointmentModalSlice.actions;
 
