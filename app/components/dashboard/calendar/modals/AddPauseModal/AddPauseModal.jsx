@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import Box from '@material-ui/core/Box';
+import { Alert } from '@material-ui/lab';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -43,8 +44,9 @@ import reducer, {
   setIsLoading,
   setDoctor,
   setCabinet,
-  resetState,
   setInitialData,
+  setHoursError,
+  resetState,
 } from './AddPauseModal.reducer';
 
 const AddPauseModal = ({
@@ -78,6 +80,7 @@ const AddPauseModal = ({
       doctor,
       cabinet,
       isDeleting,
+      hoursError,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -189,7 +192,7 @@ const AddPauseModal = ({
   const fetchPauseAvailableTime = async () => {
     localDispatch(setIsFetchingHours(true));
     try {
-      const date = moment(pauseDate | viewDate).format('YYYY-MM-DD');
+      const date = moment(pauseDate ?? viewDate).format('YYYY-MM-DD');
       const response = await fetchPausesAvailableTime(date, doctor.id);
       const { data: availableTime } = response;
       let filteredAvailableTime;
@@ -213,10 +216,12 @@ const AddPauseModal = ({
       localDispatch(setAvailableAllTime(filteredAvailableTime));
       updateEndTimeBasedOnService(filteredAvailableTime);
     } catch (error) {
-      toast.error(error.response?.data?.message || error?.response);
-      onClose();
-    } finally {
-      localDispatch(setIsFetchingHours(false));
+      if (error.response != null) {
+        const { data } = error.response;
+        localDispatch(setHoursError(data.message || error.message));
+      } else {
+        localDispatch(setHoursError(error.message));
+      }
     }
   };
 
@@ -422,6 +427,11 @@ const AddPauseModal = ({
           />
         </form>
         {datePicker}
+        {hoursError && (
+          <Alert severity='warning' style={{ width: '100%', marginTop: 16 }}>
+            {hoursError}
+          </Alert>
+        )}
       </Box>
     </EASModal>
   );

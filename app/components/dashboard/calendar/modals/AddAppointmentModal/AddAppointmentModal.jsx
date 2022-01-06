@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import { Alert } from '@material-ui/lab';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -53,6 +54,7 @@ import reducer, {
   setSelectedCabinet,
   setSelectedCabinetInDoctorMode,
   setShowCreateModal,
+  setHoursError,
   resetState,
 } from './AddAppointmentModal.reducer';
 import AppointmentPatient from './AppointmentPatient';
@@ -97,6 +99,7 @@ const AddAppointmentModal = ({
       endTime,
       availableStartTime,
       availableEndTime,
+      hoursError,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -326,9 +329,12 @@ const AddAppointmentModal = ({
       }
       updateEndTimeBasedOnService(availableTime);
     } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(setIsFetchingHours(false));
+      if (error.response != null) {
+        const { data } = error.response;
+        localDispatch(setHoursError(data.message || error.message));
+      } else {
+        localDispatch(setHoursError(error.message));
+      }
     }
   };
 
@@ -607,6 +613,11 @@ const AddAppointmentModal = ({
             onChange={handleNoteChange}
             fieldLabel={textForKey('Notes')}
           />
+          {hoursError && (
+            <Alert severity='warning' style={{ width: '100%', marginTop: 16 }}>
+              {hoursError}
+            </Alert>
+          )}
         </Box>
         {datePicker}
         {createPatientModalComponent}

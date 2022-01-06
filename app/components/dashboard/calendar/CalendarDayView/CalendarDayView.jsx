@@ -271,6 +271,7 @@ const CalendarDayView = ({
         id: cabinet.id,
         name: cabinet.name,
         hint,
+        date: viewDate,
         isCabinet: true,
         orderId: calendarOrder.orderId,
       };

@@ -5,11 +5,13 @@ import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useDrag } from 'react-dnd';
 import { useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
+import { dragItemTypes } from 'types';
 import styles from './Schedule.module.scss';
 
 const offsetDistance = 20;
@@ -42,6 +44,14 @@ const Schedule = ({
     if (item == null) return null;
     return item.fullName;
   }, [clinicDoctors, schedule]);
+
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: dragItemTypes.Schedule,
+    item: schedule,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -106,6 +116,7 @@ const Schedule = ({
 
   return (
     <Box
+      ref={drag}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className={clsx(styles.dayViewSchedule, {
@@ -115,6 +126,7 @@ const Schedule = ({
       })}
       onClick={handleScheduleClick}
       style={{
+        opacity: isDragging ? 0.6 : 1,
         left: isHighlighted
           ? 0
           : `calc(${schedule.offset} * ${offsetDistance}px)`,
