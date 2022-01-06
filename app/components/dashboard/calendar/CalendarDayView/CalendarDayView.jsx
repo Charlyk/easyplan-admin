@@ -271,6 +271,7 @@ const CalendarDayView = ({
         id: cabinet.id,
         name: cabinet.name,
         hint,
+        date: viewDate,
         isCabinet: true,
         orderId: calendarOrder.orderId,
       };
@@ -293,8 +294,6 @@ const CalendarDayView = ({
     });
     return orderBy([...mappedDoctors, ...mappedCabinets], 'orderId', 'asc');
   }, [doctors, cabinets, viewDate, calendarOrders]);
-
-  console.log(calendarOrders);
 
   return (
     <div className={styles.calendarDayView} id='calendar-day-view'>

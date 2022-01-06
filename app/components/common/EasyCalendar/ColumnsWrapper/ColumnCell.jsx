@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useDrop } from 'react-dnd';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import { dragItemTypes } from 'types';
 import styles from './ColumnsWrapper.module.scss';
 import CreateScheduleView from './CreateScheduleView';
 
@@ -12,6 +14,7 @@ const ColumnCell = ({
   disabled,
   hideCreateIndicator,
   onAddSchedule,
+  handleOnDropCell,
 }) => {
   const [showCreateView, setShowCreateView] = useState(false);
   const isMobile = useIsMobileDevice();
@@ -34,6 +37,20 @@ const ColumnCell = ({
       return null;
     }
   }, [startHour, endHour, showCreateView, hideCreateIndicator]);
+
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: dragItemTypes.Schedule,
+    drop: (item) => handleOnDrop(item),
+    collect(monitor) {
+      return {
+        isOver: monitor.isOver(),
+      };
+    },
+  }));
+
+  const handleOnDrop = (schedule) => {
+    handleOnDropCell(startHour, schedule);
+  };
 
   const handleAddSchedule = () => {
     onAddSchedule?.(startHour, endHour);
@@ -62,8 +79,11 @@ const ColumnCell = ({
 
   return (
     <div
+      ref={drop}
       id={`container-${startHour}`}
-      className={clsx(styles.columnCell)}
+      className={clsx(styles.columnCell, {
+        [styles.columnCellHovered]: isOver,
+      })}
       style={{ borderTop: getBorderTop() }}
       onPointerEnter={disabled ? () => null : handlePointerEnter}
       onPointerLeave={disabled ? () => null : handlePointerLeave}

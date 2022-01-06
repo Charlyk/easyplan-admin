@@ -735,6 +735,9 @@ export default {
     add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'A cabinet with this name already exists',
     insert_at_least_3_characters: 'Insert more than 3 characters',
+    selected_doctor_does_not_provide_this_service:
+      'Selected doctor does not provide this service',
+    this_cabinet_has_no_doctors: 'This cabinet has no doctors',
     selected_file_is_not_an_image: 'Selected file is not an image',
     email_with_instructions_was_sent:
       'We have sent an email with further instructions',
@@ -1499,6 +1502,9 @@ export default {
     add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Un cabinet cu așa nume deja există.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    selected_doctor_does_not_provide_this_service:
+      'Doctorul selectat nu presteaza acest serviciu',
+    this_cabinet_has_no_doctors: 'Nu sunt doctori in acest cabinet',
     selected_file_is_not_an_image: 'Fisierul selectat nu este o imagine',
     email_with_instructions_was_sent: 'V-am trimis un email cu instrucțiuni',
     add_xray_image: 'Adaugati imaginea cu raze X',
@@ -2250,6 +2256,9 @@ export default {
     add_appointment_cabinet: 'Cabinet',
     cabinet_name_exists: 'Кабинет с таким названием уже существует.',
     insert_at_least_3_characters: 'Introduceti mai mult de 3 caractere',
+    selected_doctor_does_not_provide_this_service:
+      'Doctorul selectat nu presteaza acest serviciu',
+    this_cabinet_has_no_doctors: 'This cabinet has no doctors',
     selected_file_is_not_an_image: 'Selected file is not an image',
     email_with_instructions_was_sent:
       'We have sent an email with further instructions',
