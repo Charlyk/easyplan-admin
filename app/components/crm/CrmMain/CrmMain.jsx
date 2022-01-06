@@ -15,8 +15,6 @@ import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
 import HorizontalScrollHelper from 'app/components/common/HorizontalScrollHelper';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -42,7 +40,7 @@ import {
 import { updatedDealSelector } from 'redux/selectors/crmSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
-import { playPhoneCallRecord } from '../../../../redux/slices/mainReduxSlice';
+import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';
@@ -370,29 +368,28 @@ const CrmMain = () => {
           </Tooltip>
         </Zoom>
       </div>
-      <DndProvider backend={HTML5Backend}>
-        <div ref={columnsContainerRef} className={styles.columnsContainer}>
-          {filteredColumns.map((dealState, index) => (
-            <DealsColumn
-              key={dealState.id}
-              width={COLUMN_WIDTH}
-              filterData={queryParams}
-              isFirst={index === 0}
-              isLast={index === columns.length - 1}
-              updatedDeal={updatedDeal}
-              currentClinic={currentClinic}
-              dealState={dealState}
-              onAddSchedule={handleAddSchedule}
-              onUpdate={updateColumns}
-              onMove={handleColumnMoved}
-              onDealClick={handleDealClick}
-              onLinkPatient={handleLinkPatient}
-              onDeleteDeal={handleDeleteDeal}
-              onConfirmFirstContact={handleConfirmFirstContact}
-            />
-          ))}
-        </div>
-      </DndProvider>
+      <div ref={columnsContainerRef} className={styles.columnsContainer}>
+        {filteredColumns.map((dealState, index) => (
+          <DealsColumn
+            key={dealState.id}
+            width={COLUMN_WIDTH}
+            filterData={queryParams}
+            isFirst={index === 0}
+            isLast={index === columns.length - 1}
+            updatedDeal={updatedDeal}
+            currentClinic={currentClinic}
+            dealState={dealState}
+            onAddSchedule={handleAddSchedule}
+            onUpdate={updateColumns}
+            onMove={handleColumnMoved}
+            onDealClick={handleDealClick}
+            onLinkPatient={handleLinkPatient}
+            onDeleteDeal={handleDeleteDeal}
+            onConfirmFirstContact={handleConfirmFirstContact}
+          />
+        ))}
+      </div>
+
       <HorizontalScrollHelper
         columnsCount={filteredColumns.length}
         columnWidth={COLUMN_WIDTH}

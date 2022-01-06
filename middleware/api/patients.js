@@ -33,7 +33,7 @@ export async function getPatients(query, headers = null) {
  */
 export async function searchPatients(query, headers = null) {
   const requestQuery = {
-    query,
+    query: query.replace(/^([+0])/, ''),
     page: '0',
     rowsPerPage: '10',
     short: '1',
@@ -65,8 +65,9 @@ export async function updateVisitNote(
   note,
   headers = null,
 ) {
-  return put(`/api/patients/${patientId}/visits?visitId=${visitId}`, headers, {
+  return put(`/api/visits/${visitId}`, headers, {
     note,
+    patientId,
   });
 }
 
@@ -318,7 +319,7 @@ export async function deletePatientXRayImage(
  * @return {Promise<AxiosResponse>}
  */
 export async function getPatientVisits(patientId, headers = null) {
-  return get(`/api/patients/${patientId}/visits`, headers);
+  return get(`/api/visits?patientId=${patientId}`, headers);
 }
 
 /**
