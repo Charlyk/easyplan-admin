@@ -37,3 +37,15 @@ export const closeDetailsSelector = createSelector(
   calendarDataSelector,
   (calendarData) => calendarData.closeDetails,
 );
+
+export const pauseSelector = createSelector(
+  calendarDataSelector,
+  (calendarData) =>
+    calendarData.schedules.map((item) => {
+      const filteredPauses = item.schedules.filter(
+        (schedule) => schedule.type === 'Pause',
+      );
+
+      return { ...item, schedules: filteredPauses };
+    }),
+);

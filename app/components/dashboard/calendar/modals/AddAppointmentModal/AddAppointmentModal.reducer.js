@@ -85,7 +85,22 @@ const addAppointmentModalSlice = createSlice({
       state.patients = acton.payload;
     },
     setDoctor(state, action) {
-      state.doctor = action.payload;
+      if (action.payload != null) {
+        const selectedDoctor = action.payload;
+        const firstName = selectedDoctor?.firstName;
+        const lastName = selectedDoctor?.lastName;
+        const fullName = `${firstName} ${lastName}`;
+        const { phoneNumber } = selectedDoctor;
+        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+        state.doctor = {
+          ...selectedDoctor,
+          label: fullName,
+          fullName,
+          name,
+        };
+      } else {
+        state.doctor = action.payload;
+      }
       state.service = null;
       state.isServiceValid = false;
       state.isDoctorValid = action.payload != null;
