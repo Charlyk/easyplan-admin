@@ -8,12 +8,17 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import EASImage from 'app/components/common/EASImage';
 import LoadingButton from 'app/components/common/LoadingButton';
 import AppLogoBlue from 'app/components/icons/appLogoBlue';
 import NotificationsContext from 'app/context/notificationsContext';
 import styles from 'app/styles/ScheduleConfirmation.module.scss';
+import {
+  generateGoogleCalendarEvent,
+  generateAppleCalendarEvent,
+} from 'app/utils/addToCalendarHelpers';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import urlToLambda from 'app/utils/urlToLambda';
@@ -145,7 +150,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography className={styles.dataLabel}>
+                  <Typography className={styles.dataLabel} noWrap>
                     {schedule.doctorName}
                   </Typography>
                 </TableCell>
@@ -157,7 +162,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography className={styles.dataLabel}>
+                  <Typography className={styles.dataLabel} noWrap>
                     {schedule.service}
                   </Typography>
                 </TableCell>
@@ -207,6 +212,33 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
         </div>
       )}
 
+      {schedule && (
+        <div style={{ marginTop: '.8rem' }}>
+          <Link
+            href={generateGoogleCalendarEvent({
+              text: textForKey('appointment_to_doctor'),
+              start: schedule.startTime,
+              end: schedule.endTime,
+            })}
+          >
+            {textForKey('add_to_google_calendar')}
+          </Link>
+        </div>
+      )}
+
+      {schedule && (
+        <div style={{ marginTop: '.8rem' }}>
+          <a
+            href={generateAppleCalendarEvent({
+              start: schedule.startTime,
+              end: schedule.endTime,
+            })}
+          >
+            {textForKey('add_to_apple_calendar')}
+          </a>
+        </div>
+      )}
+
       <div className={styles.covidNoticeContainer}>
         <Typography align='right' className={styles.covidNoticeTitle}>
           {textForKey('covid_notice_title')}
@@ -219,7 +251,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
       <div className={styles.footer}>
         <div className={styles.label}>
           powered by{' '}
-          <a href='https://easyplan.md' target='_blank' rel='noreferrer'>
+          <a href='https://easyplan.pro' target='_blank' rel='noreferrer'>
             <AppLogoBlue />
           </a>
         </div>

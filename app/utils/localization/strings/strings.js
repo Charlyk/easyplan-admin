@@ -754,6 +754,9 @@ export default {
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
     value_more_then: 'The value shoud be more than',
     edit_pause: 'Edit the pause',
+    add_to_google_calendar: 'Add to Google Calendar',
+    add_to_apple_calendar: 'Add to Apple Calendar',
+    appointment_to_doctor: 'Appointment to doctor',
   },
   ro: {
     analytics: 'Analitică',
@@ -1521,6 +1524,9 @@ export default {
     first_n_last_name: 'Nume Prenume',
     value_more_then: 'Valoarea trebuie sa fie mai mare de',
     edit_pause: 'Editează pauza',
+    add_to_google_calendar: 'Adaugă in Google Calendar',
+    add_to_apple_calendar: 'Adaugă in Apple Calendar',
+    appointment_to_doctor: 'Programare la medic',
   },
   ru: {
     analytics: 'Analytics',
@@ -2275,5 +2281,8 @@ export default {
     first_n_last_name: 'First and Last name',
     value_more_then: 'The value shoud be more than',
     edit_pause: 'Edit the pause',
+    add_to_google_calendar: 'Adauga in Google Calendar',
+    add_to_apple_calendar: 'Adauga in Apple Calendar',
+    appointment_to_doctor: 'Programare la medic',
   },
 };
