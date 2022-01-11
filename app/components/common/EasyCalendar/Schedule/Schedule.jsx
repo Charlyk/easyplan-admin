@@ -5,11 +5,13 @@ import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useDrag } from 'react-dnd';
 import { useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { clinicDoctorsSelector } from 'redux/selectors/appDataSelector';
+import { dragItemTypes } from 'types';
 import styles from './Schedule.module.scss';
 
 const offsetDistance = 20;
@@ -42,6 +44,14 @@ const Schedule = ({
     if (item == null) return null;
     return item.fullName;
   }, [clinicDoctors, schedule]);
+
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: dragItemTypes.Schedule,
+    item: schedule,
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -89,19 +99,34 @@ const Schedule = ({
     setIsHighlighted(false);
   };
 
+  const getScheduleZIndex = () => {
+    if (isHighlighted) {
+      return 500;
+    }
+    if (!isHighlighted && isPause) {
+      return 0;
+    }
+    if (!isHighlighted && !isPause) {
+      return 100 + index;
+    }
+  };
+
   const height = getScheduleHeight();
   const itemRect = { height, top: topPosition };
 
   return (
     <Box
+      ref={isPause ? null : drag}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className={clsx(styles.dayViewSchedule, {
         [styles.upcoming]: shouldAnimate,
         [styles.urgent]: schedule.isUrgent || schedule.urgent,
+        [styles.pauseStyles]: isPause,
       })}
       onClick={handleScheduleClick}
       style={{
+        opacity: isDragging ? 0.6 : 1,
         left: isHighlighted
           ? 0
           : `calc(${schedule.offset} * ${offsetDistance}px)`,
@@ -109,16 +134,18 @@ const Schedule = ({
           ? '100%'
           : `calc(100% - ${schedule.offset} * ${offsetDistance}px)`,
         top: itemRect.top,
-        zIndex: isHighlighted ? 500 : 100 + index,
+        zIndex: getScheduleZIndex(),
         height: itemRect.height,
-        backgroundColor: isPause ? '#FDC534' : '#f3f3f3',
+        backgroundColor: isPause ? '' : '#f3f3f3',
         border: isHighlighted && !isPause ? '#3A83DC 1px solid' : 'none',
       }}
     >
-      <span
-        className={styles.statusIndicator}
-        style={{ backgroundColor: scheduleStatus?.color || 'white' }}
-      />
+      {!isPause && (
+        <span
+          className={styles.statusIndicator}
+          style={{ backgroundColor: scheduleStatus?.color || 'white' }}
+        />
+      )}
       <div className={styles.wrapper}>
         <div className={styles.header}>
           {schedule.type === 'Schedule' && (

@@ -43,6 +43,10 @@
       height: inherit;
     }
 
+    &.isDraggedOver {
+      background-color: hsl(96, 80%, 96%);
+    }
+
     &:last-child {
       border-right: none;
     }
@@ -51,6 +55,12 @@
       width: 100%;
       height: 1.875rem;
       position: relative;
+      transition: all 0.2s;
+
+      &.columnCellHovered {
+        background-color: hsl(96, 80%, 90%);
+        transform: scale(1.05);
+      }
 
       &.disabled {
         background-color: #edfdf4;

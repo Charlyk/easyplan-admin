@@ -4,11 +4,24 @@ import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import styles from './Header.module.scss';
 import HeaderItem from './HeaderItem';
 
-const Header = ({ items, onItemClick }) => {
+const Header = ({
+  items,
+  canMoveColumns,
+  onItemClick,
+  onMoveLeft,
+  onMoveRight,
+}) => {
   return (
     <div className={styles.headerRoot}>
       {items.map((item) => (
-        <HeaderItem key={item.id} item={item} onItemClick={onItemClick} />
+        <HeaderItem
+          canMove={canMoveColumns}
+          key={item.id}
+          item={item}
+          onItemClick={onItemClick}
+          onMoveLeft={onMoveLeft}
+          onMoveRight={onMoveRight}
+        />
       ))}
     </div>
   );
@@ -17,6 +30,7 @@ const Header = ({ items, onItemClick }) => {
 export default React.memo(Header, areComponentPropsEqual);
 
 Header.propTypes = {
+  canMoveColumns: PropTypes.bool,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -25,6 +39,7 @@ Header.propTypes = {
       name: PropTypes.string,
       disabled: PropTypes.bool,
       hint: PropTypes.string,
+      isCabinet: PropTypes.bool,
     }),
   ),
   onItemClick: PropTypes.func,

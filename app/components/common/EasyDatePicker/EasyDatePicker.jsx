@@ -34,8 +34,8 @@ const EasyDatePicker = ({
           <Paper className={styles.calendarPaper}>
             <ClickAwayListener onClickAway={onClose}>
               <Calendar
-                minDate={minDate}
-                maxDate={maxDate}
+                minDate={minDate ?? undefined}
+                maxDate={maxDate ?? undefined}
                 locale={locales[getAppLanguage()]}
                 onChange={onChange}
                 date={selectedDate}

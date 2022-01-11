@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import { Alert } from '@material-ui/lab';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -53,6 +54,7 @@ import reducer, {
   setSelectedCabinet,
   setSelectedCabinetInDoctorMode,
   setShowCreateModal,
+  setHoursError,
   resetState,
 } from './AddAppointmentModal.reducer';
 import AppointmentPatient from './AppointmentPatient';
@@ -97,26 +99,27 @@ const AddAppointmentModal = ({
       endTime,
       availableStartTime,
       availableEndTime,
+      hoursError,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
   // map doctors for autocomplete fields
   const doctors = useMemo(() => {
-    const mappedDoctors = clinicDoctors
-      .filter((item) => {
-        const isInCabinet = item.cabinets.some((cab) => cab.id === cabinet?.id);
-        return cabinet == null || isInCabinet;
-      })
-      .map((item) => {
-        const { phoneNumber, fullName } = item;
-        const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
-        return {
-          ...item,
-          name: name,
-          label: item.fullName,
-        };
-      });
+    const filtered = clinicDoctors.filter((item) => {
+      const isInCabinet = item.cabinets.some((cab) => cab.id === cabinet?.id);
+      return cabinet == null || isInCabinet || item.cabinets.length === 0;
+    });
+
+    const mappedDoctors = filtered.map((item) => {
+      const { phoneNumber, fullName } = item;
+      const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
+      return {
+        ...item,
+        name: name,
+        label: item.fullName,
+      };
+    });
     return orderBy(mappedDoctors, 'name', 'asc');
   }, [cabinet, clinicDoctors]);
 
@@ -190,13 +193,6 @@ const AddAppointmentModal = ({
     }
   }, []);
 
-  // set initial doctor as first item in the list
-  useEffect(() => {
-    if (doctor == null && selectedDoctor == null) {
-      localDispatch(setDoctor(doctors[0]));
-    }
-  }, [doctor, selectedDoctor, doctors]);
-
   // fetch schedule details if initial schedule is not null
   useEffect(() => {
     if (schedule != null) {
@@ -216,21 +212,7 @@ const AddAppointmentModal = ({
     if (selectedDoctor == null) {
       return;
     }
-
-    const firstName = selectedDoctor?.firstName;
-    const lastName = selectedDoctor?.lastName;
-    const fullName = `${firstName} ${lastName}`;
-    const { phoneNumber } = selectedDoctor;
-    const name = phoneNumber ? `${fullName} ${phoneNumber}` : fullName;
-
-    localDispatch(
-      setDoctor({
-        ...selectedDoctor,
-        label: fullName,
-        fullName,
-        name,
-      }),
-    );
+    localDispatch(setDoctor(selectedDoctor));
   }, [selectedDoctor]);
 
   // set initial selected cabinet
@@ -326,9 +308,12 @@ const AddAppointmentModal = ({
       }
       updateEndTimeBasedOnService(availableTime);
     } catch (error) {
-      toast.error(error.message);
-    } finally {
-      localDispatch(setIsFetchingHours(false));
+      if (error.response != null) {
+        const { data } = error.response;
+        localDispatch(setHoursError(data.message || error.message));
+      } else {
+        localDispatch(setHoursError(error.message));
+      }
     }
   };
 
@@ -527,7 +512,7 @@ const AddAppointmentModal = ({
               filterLocally
               containerClass={styles.simpleField}
               options={doctors}
-              value={doctor || doctors[0]}
+              value={doctor}
               fieldLabel={textForKey('Doctor')}
               placeholder={textForKey('Enter doctor name or phone')}
               onChange={handleDoctorChange}
@@ -607,6 +592,11 @@ const AddAppointmentModal = ({
             onChange={handleNoteChange}
             fieldLabel={textForKey('Notes')}
           />
+          {hoursError && (
+            <Alert severity='warning' style={{ width: '100%', marginTop: 16 }}>
+              {hoursError}
+            </Alert>
+          )}
         </Box>
         {datePicker}
         {createPatientModalComponent}

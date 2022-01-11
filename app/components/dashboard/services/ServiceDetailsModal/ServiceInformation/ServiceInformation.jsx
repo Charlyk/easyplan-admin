@@ -158,10 +158,17 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             inputClass='test-input-class'
             error={service.duration > 360}
             value={service.duration}
+            helperText={
+              service.duration < 15 ? `${textForKey('value_more_then')} 15` : ''
+            }
             onChange={(value) => {
-              value < 361
-                ? handleFormChange('duration', value)
-                : handleFormChange('duration', 360);
+              if (value < 15 && value > 10) {
+                handleFormChange('duration', 15);
+              } else if (value > 360) {
+                handleFormChange('duration', 360);
+              } else {
+                handleFormChange('duration', value);
+              }
             }}
             endAdornment={
               <Typography className={styles.adornment}>min</Typography>
