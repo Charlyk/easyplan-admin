@@ -1,0 +1,19 @@
+.accordionDetails {
+  display: block !important;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.cardHeading {
+  font-size: 1.2rem !important;
+}
+
+.cardDescription {
+  font-size: 0.7rem !important;
+}
+
+.cardImage {
+  //   height: 130px;
+  width: 100%;
+}

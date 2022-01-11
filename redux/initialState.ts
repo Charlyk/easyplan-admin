@@ -170,6 +170,7 @@ const initialState: ReduxState = {
   changeLogModal: {
     open: false,
     isLoading: false,
+    changes: [],
   },
 };
 

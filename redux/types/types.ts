@@ -179,6 +179,7 @@ export interface PatientPurchasesState {
 export interface ChangeLogModalState {
   isLoading: boolean;
   open: boolean;
+  changes: [];
 }
 
 export interface ReduxState {

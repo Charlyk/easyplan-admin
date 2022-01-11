@@ -13,6 +13,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
+import { closeChangeLogModal } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
 import { changeLogModalSelector } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.selector';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import useWindowFocused from 'app/hooks/useWindowFocused';
@@ -44,7 +45,6 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
-import { closeChangeLogModal } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
 
 const AddAppointmentModal = dynamic(() =>
   import('app/components/dashboard/calendar/modals/AddAppointmentModal'),

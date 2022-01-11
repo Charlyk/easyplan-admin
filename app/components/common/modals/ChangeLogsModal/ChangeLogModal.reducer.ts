@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
+// import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 
 const changeLogModalSlice = createSlice({
@@ -12,10 +12,22 @@ const changeLogModalSlice = createSlice({
     closeChangeLogModal(state, _action) {
       state.open = false;
     },
+    dispatchFetchChangeLogData(state) {
+      console.log('Inside correct function');
+      state.isLoading = true;
+    },
+    setChangeLogDataToStore(state, action: PayloadAction<any>) {
+      state.changes = action.payload;
+      state.isLoading = false;
+    },
   },
 });
 
-export const { openChangeLogModal, closeChangeLogModal } =
-  changeLogModalSlice.actions;
+export const {
+  openChangeLogModal,
+  closeChangeLogModal,
+  dispatchFetchChangeLogData,
+  setChangeLogDataToStore,
+} = changeLogModalSlice.actions;
 
 export default changeLogModalSlice.reducer;

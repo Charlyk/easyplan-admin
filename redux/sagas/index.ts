@@ -23,7 +23,10 @@ import {
   patientPurchasesWatcher,
   undoInvoicePaymentsWatcher,
   updateVisitNoteWatcher,
+  changeLogWatcher,
 } from './handlers';
+
+console.log(patientVisitsWatcher);
 
 export default function* rootSaga() {
   yield all([
@@ -45,6 +48,7 @@ export default function* rootSaga() {
     updateScheduleDoctorAndDateWatcher(),
     patientCallRecordsWatcher(),
     doctorCalendarOrderWatcher(),
+    changeLogWatcher(),
     patientVisitsWatcher(),
     createPatientWatcher(),
     patientPurchasesWatcher(),

@@ -13,3 +13,4 @@ export * from './handleFetchAppData';
 export * from './pubnub';
 export * from './calendar';
 export * from './invoices';
+export * from './changeLog';
