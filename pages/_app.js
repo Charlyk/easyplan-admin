@@ -43,7 +43,6 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
-import GlobalNotificationView from '../app/components/common/GlobalNotificationView';
 
 const AddAppointmentModal = dynamic(() =>
   import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
@@ -264,7 +263,6 @@ const EasyApp = ({ Component, pageProps }) => {
                       onClose={handleCloseImageModal}
                     />
                   )}
-                  <GlobalNotificationView />
                   <NextNprogress color='#29D' startPosition={0.3} height={2} />
                   <Component {...pageProps} />
                 </React.Fragment>

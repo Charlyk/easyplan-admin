@@ -155,6 +155,10 @@ const initialState: ReduxState = {
     items: [],
     dealState: null,
   },
+  appNotification: {
+    isLoading: false,
+    notification: null,
+  },
 };
 
 export default initialState;

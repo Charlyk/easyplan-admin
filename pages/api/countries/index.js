@@ -21,7 +21,7 @@ export default async function countries(req, res) {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchCountries, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

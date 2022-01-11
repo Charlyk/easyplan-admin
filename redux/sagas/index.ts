@@ -16,6 +16,8 @@ import {
   appDataWatcher,
   pubnubWatcher,
   updateScheduleDoctorAndDateWatcher,
+  unreadAppNotificationWatcher,
+  markNotificationAsReadWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -36,5 +38,7 @@ export default function* rootSaga() {
     appDataWatcher(),
     pubnubWatcher(),
     updateScheduleDoctorAndDateWatcher(),
+    unreadAppNotificationWatcher(),
+    markNotificationAsReadWatcher(),
   ]);
 }

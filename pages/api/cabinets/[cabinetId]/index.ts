@@ -47,7 +47,7 @@ export default authorized(async (req, res) => {
     case 'PUT':
       {
         const data = await handler(updateCabinet, req, res);
-        if (data) {
+        if (data !== false) {
           res.json(data);
         }
       }
@@ -55,7 +55,7 @@ export default authorized(async (req, res) => {
     case 'DELETE':
       {
         const data = await handler(deleteCabinet, req, res);
-        if (data) {
+        if (data !== false) {
           res.json(data);
         }
       }

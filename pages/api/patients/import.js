@@ -25,7 +25,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'POST': {
       const data = await handler(importPatients, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

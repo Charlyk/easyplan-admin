@@ -1,4 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
+import appNotification from 'app/components/common/GlobalNotificationView/GlobalNotificationView.reducer';
 import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
 import clinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
@@ -64,6 +65,7 @@ const rootReducer = combineReducers({
   clinicAnalytics,
   crmBoard,
   pubnubMessages,
+  appNotification,
 });
 
 function main(state = initialState, { type, payload } = {}) {

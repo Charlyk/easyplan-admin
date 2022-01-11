@@ -50,21 +50,21 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'POST': {
       const data = await handler(createClinic, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'PUT': {
       const data = await handler(updateClinicInfo, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'DELETE': {
       const data = await handler(deleteClinic, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

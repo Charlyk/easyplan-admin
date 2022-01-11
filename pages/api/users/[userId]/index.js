@@ -53,21 +53,21 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchUserDetails, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'PUT': {
       const data = await handler(updateUser, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'DELETE': {
       const data = await handler(deleteUser, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
