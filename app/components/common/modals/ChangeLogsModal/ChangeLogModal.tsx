@@ -11,7 +11,10 @@ import { getAppLanguage } from 'app/utils/localization';
 import EASImage from '../../EASImage';
 import LeftSideModal from '../../LeftSideModal';
 import styles from './ChangeLogModal.module.scss';
-import { dispatchFetchChangeLogData } from './ChangeLogModal.reducer';
+import {
+  dispatchFetchChangeLogData,
+  dispatchMarkUpdatesAsRead,
+} from './ChangeLogModal.reducer';
 import { changeLogModalSelector } from './ChangeLogModal.selector';
 
 interface Props {
@@ -32,8 +35,11 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
     setExpanded(`panel${Object.keys(changes).length}`);
   }, [changes]);
 
+  console.log(changes);
+
   useEffect(() => {
     dispatch(dispatchFetchChangeLogData());
+    // dispatch(dispatchMarkUpdatesAsRead());
   }, []);
 
   return (

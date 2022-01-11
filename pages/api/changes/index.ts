@@ -39,7 +39,7 @@ export default authorized(async (req, res) => {
     case 'GET':
       {
         const data = await handler(getAllRecentChanges, req, res);
-
+        console.log(data);
         if (data) {
           res.json(data);
         }

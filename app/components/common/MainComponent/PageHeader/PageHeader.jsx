@@ -160,6 +160,9 @@ const PageHeader = ({
         </div>
       )}
       <div className={styles.actions}>
+        <IconButton className={styles.helpBtn} onClick={handleHelpBtnClick}>
+          <IconHelpQuestion fill='#3a83dc' />
+        </IconButton>
         <IconButton className={styles.notifications}>
           <IconNotifications />
         </IconButton>
@@ -189,9 +192,6 @@ const PageHeader = ({
           onClick={handleActionsOpen}
         >
           <IconMore />
-        </IconButton>
-        <IconButton className={styles.helpBtn} onClick={handleHelpBtnClick}>
-          <IconHelpQuestion fill='#3a83dc' />
         </IconButton>
       </div>
     </div>

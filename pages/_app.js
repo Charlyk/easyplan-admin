@@ -13,11 +13,15 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
-import { closeChangeLogModal } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
+import {
+  closeChangeLogModal,
+  openChangeLogModal,
+} from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
 import { changeLogModalSelector } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.selector';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
+import { checkIfHasUnreadUpdates } from 'app/utils/checkIfHasUnreadUpdates';
 import { UnauthorizedPaths } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
@@ -77,6 +81,15 @@ const EasyApp = ({ Component, pageProps }) => {
   useEffect(() => {
     dispatch(setAppData(pageProps.appData));
   }, []);
+
+  // useEffect(() => {
+  //   if (currentUser === null) return;
+  //   checkIfHasUnreadUpdates().then((response) => {
+  //     if (response) {
+  //       dispatch(openChangeLogModal());
+  //     }
+  //   });
+  // }, [currentUser]);
 
   const clinicRoom = useMemo(() => {
     const id = currentClinic?.id ?? -1;

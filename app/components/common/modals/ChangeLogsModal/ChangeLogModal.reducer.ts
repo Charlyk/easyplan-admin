@@ -14,6 +14,9 @@ const changeLogModalSlice = createSlice({
     dispatchFetchChangeLogData(state) {
       state.isLoading = true;
     },
+    dispatchMarkUpdatesAsRead(state) {
+      state;
+    },
     setChangeLogDataToStore(state, action: PayloadAction<any>) {
       state.changes = action.payload;
       state.isLoading = false;
@@ -26,6 +29,7 @@ export const {
   closeChangeLogModal,
   dispatchFetchChangeLogData,
   setChangeLogDataToStore,
+  dispatchMarkUpdatesAsRead,
 } = changeLogModalSlice.actions;
 
 export default changeLogModalSlice.reducer;
