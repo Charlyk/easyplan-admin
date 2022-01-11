@@ -263,7 +263,7 @@ const CalendarDayView = ({
       // add a hint to show doctors names on hover
       const hint = doctorsInCabinet.map((doctor) => doctor.fullName).join(', ');
 
-      const calendarOrder = calendarOrders.find(
+      const calendarOrder = calendarOrders?.find(
         (item) => item.entityId === cabinet.id && item.entityType === 'Cabinet',
       ) ?? { orderId: 0 };
 
@@ -279,7 +279,7 @@ const CalendarDayView = ({
 
     // map independent doctors to column structure
     const mappedDoctors = doctorsWithoutCabinets.map((doctor) => {
-      const calendarOrder = calendarOrders.find(
+      const calendarOrder = calendarOrders?.find(
         (item) => item.entityId === doctor.id && item.entityType === 'Doctor',
       ) ?? { orderId: 0 };
 

@@ -47,12 +47,7 @@ const HeaderItem = ({
           <ArrowLeft />
         </IconButton>
       )}
-      <Box
-        display='flex'
-        width='100%'
-        alignItems='center'
-        justifyContent='center'
-      >
+      <div className={styles.titleContainer}>
         {item.disabled && <IconUmbrella />}
         {item.hint ? (
           <Tooltip title={item.hint}>
@@ -61,7 +56,7 @@ const HeaderItem = ({
         ) : (
           <Typography className={styles.itemName}>{item.name}</Typography>
         )}
-      </Box>
+      </div>
       {canMove && (
         <IconButton className={styles.arrowButton} onClick={handleMoveRight}>
           <ArrowRight />
