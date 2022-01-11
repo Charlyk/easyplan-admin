@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
+import { getAppLanguage } from 'app/utils/localization';
 import EASImage from '../../EASImage';
 import LeftSideModal from '../../LeftSideModal';
 import styles from './ChangeLogModal.module.scss';
@@ -18,37 +19,18 @@ interface Props {
   onClose: () => void;
 }
 
-const dummyData = [
-  {
-    imgSrc: 'settings/payment_return_1.gif',
-    title: 'Titlul articolului',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita, nemo omnis Eligendi nulla error provident illo accusamus minus',
-  },
-  {
-    imgSrc: 'settings/payment_return_1.gif',
-    title: 'Titlul articolului',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita, nemo omnis Eligendi nulla error provident illo accusamus minus',
-  },
-  {
-    imgSrc: 'settings/payment_return_1.gif',
-    title: 'Titlul articolului',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Expedita, nemo omnis Eligendi nulla error provident illo accusamus minus',
-  },
-];
-
 const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
   const dispatch = useDispatch();
-  const changeLogData = useSelector(changeLogModalSelector);
+  const { changes } = useSelector(changeLogModalSelector);
   const [expanded, setExpanded] = useState('panel1');
 
-  const handleChange = (panel) => (event, isExpanded) => {
+  const handleChange = (panel) => (_, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  console.log(changeLogData);
+  useEffect(() => {
+    setExpanded(`panel${Object.keys(changes).length}`);
+  }, [changes]);
 
   useEffect(() => {
     dispatch(dispatchFetchChangeLogData());
@@ -62,62 +44,54 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
       className={styles.changeLogModal}
     >
       <div style={{ margin: '1rem', overflow: 'auto' }}>
-        <Accordion
-          expanded={expanded === 'panel1'}
-          onChange={handleChange('panel1')}
-        >
-          <AccordionSummary>
-            <Typography>Version 1</Typography>
-          </AccordionSummary>
-          <AccordionDetails classes={{ root: styles.accordionDetails }}>
-            {dummyData.map(renderMediaCard)}
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === 'panel2'}
-          onChange={handleChange('panel2')}
-        >
-          <AccordionSummary>
-            <Typography>Version 2</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate
-            illum a quaerat consequuntur minima magnam. Expedita, nemo omnis!
-            Eligendi nulla error provident illo accusamus minus.
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded === 'panel3'}
-          onChange={handleChange('panel3')}
-        >
-          <AccordionSummary>
-            <Typography>Version 3</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate
-            illum a quaerat consequuntur minima magnam. Expedita, nemo omnis!
-            Eligendi nulla error provident illo accusamus minus.
-          </AccordionDetails>
-        </Accordion>
+        {Object.keys(changes).map((key, idx) => {
+          return (
+            <Accordion
+              key={key}
+              expanded={expanded === `panel${idx + 1}`}
+              onChange={handleChange(`panel${idx + 1}`)}
+            >
+              <AccordionSummary>
+                <Typography>{key}</Typography>
+              </AccordionSummary>
+              <AccordionDetails classes={{ root: styles.accordionDetails }}>
+                {changes[key].map(renderMediaCard)}
+              </AccordionDetails>
+            </Accordion>
+          );
+        })}
       </div>
     </LeftSideModal>
   );
 };
 
-const renderMediaCard = ({ imgSrc, title, description }) => {
-  return (
-    <Card style={{ marginBottom: '1rem' }}>
+const renderMediaCard = ({ imageUrl, title, message, version, id }) => {
+  const parsedTitle = title ? JSON.parse(title) : null;
+  const parsedMessage = message ? JSON.parse(message) : null;
+
+  const cardNotNull = parsedTitle || imageUrl;
+
+  return cardNotNull ? (
+    <Card key={`${version}/${id}`} style={{ marginBottom: '1rem' }}>
       <CardContent>
-        <Typography variant='h5' component='div' className={styles.cardHeading}>
-          {title}
-        </Typography>
-        <Typography className={styles.cardDescription}>
-          {description}
-        </Typography>
+        {parsedTitle && (
+          <Typography
+            variant='h5'
+            component='div'
+            className={styles.cardHeading}
+          >
+            {parsedTitle[getAppLanguage()]}
+          </Typography>
+        )}
+        {parsedMessage && (
+          <Typography className={styles.cardDescription}>
+            {parsedMessage[getAppLanguage()]}
+          </Typography>
+        )}
       </CardContent>
-      <EASImage src={imgSrc} className={styles.cardImage} />
+      {imageUrl && <EASImage src={imageUrl} className={styles.cardImage} />}
     </Card>
-  );
+  ) : null;
 };
 
 export default ChangeLogModal;

@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 
 const changeLogModalSlice = createSlice({
@@ -13,7 +12,6 @@ const changeLogModalSlice = createSlice({
       state.open = false;
     },
     dispatchFetchChangeLogData(state) {
-      console.log('Inside correct function');
       state.isLoading = true;
     },
     setChangeLogDataToStore(state, action: PayloadAction<any>) {

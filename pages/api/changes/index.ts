@@ -17,9 +17,7 @@ async function getAllRecentChanges(req, _) {
     [HeaderKeys.subdomain]: getSubdomain(req),
   };
 
-  console.log('in backend');
-
-  return axios.get(`${updatedServerUrl()}/adad`, { headers });
+  return axios.get(`${updatedServerUrl()}/change-logs`, { headers });
 }
 
 async function markChangesAsRead(req, _) {

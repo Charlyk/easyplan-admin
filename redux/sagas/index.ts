@@ -26,8 +26,6 @@ import {
   changeLogWatcher,
 } from './handlers';
 
-console.log(patientVisitsWatcher);
-
 export default function* rootSaga() {
   yield all([
     scheduleDetailsWatcher(),

@@ -9,7 +9,6 @@ import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 
 export function* handleFetchRecentChanges(_action: PayloadAction) {
   try {
-    console.log('Inside Handler');
     const response: SagaReturnType<typeof requestFetchRecentChanges> =
       yield call(requestFetchRecentChanges);
 
