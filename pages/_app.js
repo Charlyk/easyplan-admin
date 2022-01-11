@@ -13,6 +13,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
+import { changeLogModalSelector } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.selector';
 import NotificationsProvider from 'app/context/NotificationsProvider';
 import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
@@ -43,6 +44,7 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
+import { closeChangeLogModal } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
 
 const AddAppointmentModal = dynamic(() =>
   import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
@@ -55,12 +57,17 @@ const ConfirmationModal = dynamic(() =>
   import('app/components/common/modals/ConfirmationModal'),
 );
 
+const ChangeLogModal = dynamic(() =>
+  import('app/components/common/modals/ChangeLogsModal'),
+);
+
 const EasyApp = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
+  const changeLogModal = useSelector(changeLogModalSelector);
   const [isChecking, setIsChecking] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
@@ -210,6 +217,10 @@ const EasyApp = ({ Component, pageProps }) => {
     dispatch(triggerUserLogOut(false));
   };
 
+  const handleCloseChangeLogModal = () => {
+    dispatch(closeChangeLogModal());
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -240,6 +251,12 @@ const EasyApp = ({ Component, pageProps }) => {
                       onConfirm={handleUserLogout}
                       onClose={handleCancelLogout}
                       show={logout}
+                    />
+                  )}
+                  {changeLogModal.open && (
+                    <ChangeLogModal
+                      {...changeLogModal}
+                      onClose={handleCloseChangeLogModal}
                     />
                   )}
                   {appointmentModal?.open && (
