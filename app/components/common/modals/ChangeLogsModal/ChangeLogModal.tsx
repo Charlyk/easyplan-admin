@@ -5,14 +5,14 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
 import { getAppLanguage } from 'app/utils/localization';
+import placeholderImage from 'public/feature_placeholder.png';
 import EASImage from '../../EASImage';
 import LeftSideModal from '../../LeftSideModal';
 import styles from './ChangeLogModal.module.scss';
-import Image from 'next/image';
-import placeholderImage from 'public/feature_placeholder.png';
 import {
   dispatchFetchChangeLogData,
   dispatchMarkUpdatesAsRead,
