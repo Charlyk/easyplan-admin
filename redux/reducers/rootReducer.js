@@ -1,4 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
+import appNotification from 'app/components/common/GlobalNotificationView/GlobalNotificationView.reducer';
 import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
 import changeLogModal from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
 import clinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
@@ -71,6 +72,7 @@ const rootReducer = combineReducers({
   patientVisits,
   patientPurchases,
   changeLogModal,
+  appNotification,
 });
 
 export default rootReducer;

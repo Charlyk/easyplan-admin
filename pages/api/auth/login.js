@@ -14,7 +14,7 @@ function authenticateWithBackend(req) {
 
 export default async function login(req, res) {
   const data = await handler(authenticateWithBackend, req, res);
-  if (data != null) {
+  if (data) {
     res.status(200).json(data);
   }
 }

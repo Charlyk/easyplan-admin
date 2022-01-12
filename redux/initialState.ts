@@ -172,6 +172,10 @@ const initialState: ReduxState = {
     isLoading: false,
     changes: [],
   },
+  appNotification: {
+    isLoading: false,
+    notification: null,
+  },
 };
 
 export default initialState;
