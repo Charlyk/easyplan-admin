@@ -21,6 +21,22 @@
     cursor: pointer;
     color: #34344E;
 
+    .titleContainer {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .itemName {
+        user-select: none;
+        font-family: Inter, sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px !important;
+        color: inherit;
+      }
+    }
+
     .arrowButton {
       padding: 0;
       display: none;
@@ -45,10 +61,14 @@
         font-size: 12px;
       }
 
-      .itemName {
-        color: #7DD7C8 !important;
-        font-weight: bold;
-        margin-left: 10px;
+      .titleContainer {
+        .itemName {
+          color: #7DD7C8 !important;
+          font-weight: bold;
+          margin-left: 10px;
+          width: 100%;
+          text-align: center;
+        }
       }
     }
 
@@ -61,13 +81,6 @@
       }
     }
 
-    .itemName {
-      user-select: none;
-      font-family: Inter, sans-serif;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 12px !important;
-      color: inherit;
-    }
+
   }
 }
