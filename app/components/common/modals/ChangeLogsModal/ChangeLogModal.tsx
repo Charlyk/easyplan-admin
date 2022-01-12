@@ -63,7 +63,9 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
                     }}
                   >
                     <AccordionSummary>
-                      <Typography>{key}</Typography>
+                      <Typography>{`${textForKey(
+                        'version',
+                      )} ${key}`}</Typography>
                     </AccordionSummary>
                     <AccordionDetails
                       classes={{ root: styles.accordionDetails }}

@@ -759,6 +759,7 @@ export default {
     appointment_to_doctor: 'Appointment to doctor',
     last_changes_list: 'Last changes',
     no_recent_changes: 'No recent changes',
+    version: 'Version',
   },
   ro: {
     analytics: 'Analitică',
@@ -1531,6 +1532,7 @@ export default {
     appointment_to_doctor: 'Programare la medic',
     last_changes_list: 'Ultimile modificări',
     no_recent_changes: 'Nu sunt modificări recente',
+    version: 'Versiunea',
   },
   ru: {
     analytics: 'Analytics',
@@ -2290,5 +2292,6 @@ export default {
     appointment_to_doctor: 'Programare la medic',
     last_changes_list: 'Ultimile modificări',
     no_recent_changes: 'Nu sunt modificări recente',
+    version: 'Version',
   },
 };
