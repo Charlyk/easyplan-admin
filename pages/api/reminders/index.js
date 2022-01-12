@@ -43,14 +43,14 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
       const data = await handler(addReminder, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'GET': {
       const data = await handler(fetchReminders, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

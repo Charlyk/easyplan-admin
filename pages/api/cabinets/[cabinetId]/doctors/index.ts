@@ -35,7 +35,7 @@ export default authorized(async (req, res) => {
     case 'PUT':
       {
         const data = await handler(manipulateDoctorInfo, req, res);
-        if (data) {
+        if (data !== false) {
           res.json(data);
         }
       }

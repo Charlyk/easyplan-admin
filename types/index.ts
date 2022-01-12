@@ -30,3 +30,4 @@ export * from './dragItemTypes';
 export * from './patientCallRecord.types';
 export * from './patientVisit.types';
 export * from './patientPurchase.types';
+export * from './globalNotification.type';

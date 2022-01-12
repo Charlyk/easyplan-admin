@@ -21,7 +21,7 @@ export default async (req, res) => {
   switch (req.method) {
     case 'PUT': {
       const data = await handler(fetchUsers, req, res);
-      if (data != null) {
+      if (data) {
         res.status(200).json(data);
       }
       break;

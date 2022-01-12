@@ -29,7 +29,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
       const data = await handler(moveDealToAnotherBranch, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
