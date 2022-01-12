@@ -39,14 +39,14 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchInvoiceDetails, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'PUT': {
       const data = await handler(registerPayment, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

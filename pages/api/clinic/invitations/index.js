@@ -29,7 +29,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'DELETE': {
       const data = await handler(deleteInvitation, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
