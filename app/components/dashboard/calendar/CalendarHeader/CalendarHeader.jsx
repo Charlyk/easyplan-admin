@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EasyTab from 'app/components/common/EasyTab';
@@ -20,6 +21,7 @@ import IconPlus from 'app/components/icons/iconPlus';
 import IconSearch from 'app/components/icons/iconSearch';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
+import { updateFilterData } from 'redux/slices/calendarData';
 import styles from './CalendarHeader.module.scss';
 
 const CalendarLegend = dynamic(() => import('../CalendarLegend'));
@@ -41,6 +43,7 @@ const CalendarHeader = ({
   onDateChange,
   onAddAppointment,
 }) => {
+  const dispatch = useDispatch();
   const calendarAnchor = useRef(null);
   const legendAnchor = useRef(null);
   const [calendarVisible, setCalendarVisible] = useState(false);
@@ -94,6 +97,10 @@ const CalendarHeader = ({
         }
         break;
     }
+  };
+
+  const handleSearchInputChange = (patientName) => {
+    dispatch(updateFilterData({ patientName }));
   };
 
   const calendarPopper = (
@@ -161,6 +168,7 @@ const CalendarHeader = ({
           <div className={styles.searchGroupWrapper}>
             <IconSearch fill={'#3A83DC'} />
             <EASTextField
+              onChange={handleSearchInputChange}
               fieldClass={styles.searchField}
               placeholder={
                 textForKey('name') +
