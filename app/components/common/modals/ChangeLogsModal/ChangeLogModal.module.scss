@@ -1,27 +1,33 @@
-.accordionDetails {
-  display: block !important;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 0.5rem;
-  overflow-y: auto;
-}
+.changeLogModal {
+  .accordionDetails {
+    display: block !important;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.5rem;
+    overflow-y: auto;
+  }
 
-.cardHeading {
-  font-size: 1.3rem !important;
-}
+  .progressBar {
+    color: #3a83dc;
+  }
 
-.cardDescription {
-  font-size: 0.9rem !important;
-}
+  .cardHeading {
+    font-size: 1.3rem !important;
+  }
 
-.cardImage {
-  width: 100%;
-  min-height: 253px;
-}
+  .cardDescription {
+    font-size: 0.9rem !important;
+  }
 
-.accordionWrapper {
-  box-shadow: none !important;
-}
+  .cardImage {
+    width: 100%;
+    min-height: 253px;
+  }
 
-.modalCard {
-  box-shadow: none !important;
+  .accordionWrapper {
+    box-shadow: none !important;
+  }
+
+  .modalCard {
+    box-shadow: none !important;
+  }
 }

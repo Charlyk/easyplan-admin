@@ -755,6 +755,7 @@ export default {
     value_more_then: 'The value shoud be more than',
     edit_pause: 'Edit the pause',
     last_changes_list: 'Last changes',
+    no_recent_changes: 'No recent changes',
   },
   ro: {
     analytics: 'Analitică',
@@ -1523,6 +1524,7 @@ export default {
     value_more_then: 'Valoarea trebuie sa fie mai mare de',
     edit_pause: 'Editează pauza',
     last_changes_list: 'Ultimile modificări',
+    no_recent_changes: 'Nu sunt modificări recente',
   },
   ru: {
     analytics: 'Analytics',
@@ -2278,5 +2280,6 @@ export default {
     value_more_then: 'The value shoud be more than',
     edit_pause: 'Edit the pause',
     last_changes_list: 'Ultimile modificări',
+    no_recent_changes: 'Nu sunt modificări recente',
   },
 };

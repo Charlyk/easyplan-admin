@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,8 +27,9 @@ interface Props {
 
 const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
   const dispatch = useDispatch();
-  const { changes } = useSelector(changeLogModalSelector);
+  const { changes, isLoading } = useSelector(changeLogModalSelector);
   const [expanded, setExpanded] = useState('panel1');
+  const versionsArr = useMemo(() => Object.keys(changes), [changes]);
 
   const handleChange = (panel) => (_, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -45,26 +47,37 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
       title={textForKey('last_changes_list') + ':'}
       className={styles.changeLogModal}
     >
-      <div style={{ margin: '1rem', overflow: 'auto' }}>
-        {Object.keys(changes).map((key, idx) => {
-          return (
-            <Accordion
-              key={key}
-              expanded={expanded === `panel${idx + 1}`}
-              onChange={handleChange(`panel${idx + 1}`)}
-              classes={{
-                root: styles.accordionWrapper,
-              }}
-            >
-              <AccordionSummary>
-                <Typography>{key}</Typography>
-              </AccordionSummary>
-              <AccordionDetails classes={{ root: styles.accordionDetails }}>
-                {changes[key].map(renderMediaCard)}
-              </AccordionDetails>
-            </Accordion>
-          );
-        })}
+      <div style={{ margin: '1rem', overflow: 'auto', textAlign: 'center' }}>
+        {isLoading && <CircularProgress className={styles.progressBar} />}
+        {!isLoading && (
+          <>
+            {versionsArr.length > 0 ? (
+              versionsArr.map((key, idx) => {
+                return (
+                  <Accordion
+                    key={key}
+                    expanded={expanded === `panel${idx + 1}`}
+                    onChange={handleChange(`panel${idx + 1}`)}
+                    classes={{
+                      root: styles.accordionWrapper,
+                    }}
+                  >
+                    <AccordionSummary>
+                      <Typography>{key}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails
+                      classes={{ root: styles.accordionDetails }}
+                    >
+                      {changes[key].map(renderMediaCard)}
+                    </AccordionDetails>
+                  </Accordion>
+                );
+              })
+            ) : (
+              <Typography>{textForKey('no_recent_changes')}</Typography>
+            )}
+          </>
+        )}
       </div>
     </LeftSideModal>
   );
