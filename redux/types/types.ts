@@ -17,6 +17,7 @@ import {
   ExchangeRate,
   DealView,
   DealStateView,
+  AppNotification,
 } from 'types';
 
 export interface CalendarDataState {
@@ -158,6 +159,11 @@ export interface DealsColumnState {
   dealState: DealStateView | null;
 }
 
+export interface AppNotificationState {
+  isLoading: boolean;
+  notification?: AppNotification | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -197,4 +203,5 @@ export interface ReduxState {
   clinicAnalytics: ClinicAnalyticsState;
   crmBoard: CrmBoardState;
   dealsColumn: DealsColumnState;
+  appNotification: AppNotificationState;
 }

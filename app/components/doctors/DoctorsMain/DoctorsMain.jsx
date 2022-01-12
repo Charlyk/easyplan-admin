@@ -25,6 +25,7 @@ import {
   patientNoteModalSelector,
   patientXRayModalSelector,
 } from 'redux/selectors/modalsSelector';
+import GlobalNotificationView from '../../common/GlobalNotificationView';
 import styles from './DoctorsMain.module.scss';
 
 const AddXRay = dynamic(() =>
@@ -125,6 +126,7 @@ const DoctorsMain = ({ children, pageTitle }) => {
       </Head>
       {currentUser != null && currentClinic != null && (
         <>
+          <GlobalNotificationView />
           {isDev && <Typography className='develop-indicator'>Dev</Typography>}
           {isEditingProfile && (
             <EditProfileModal

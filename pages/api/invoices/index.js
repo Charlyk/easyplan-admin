@@ -38,14 +38,14 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchInvoices, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'POST': {
       const data = await handler(createNewInvoice, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
