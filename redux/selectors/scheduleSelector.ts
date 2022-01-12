@@ -8,6 +8,39 @@ export const schedulesSelector = createSelector(
   (calendar) => calendar.schedules,
 );
 
+export const filteredSchedulesSelector = createSelector(
+  calendarDataSelector,
+  (calendar) => {
+    const { filterData, schedules: initialSchedules } = calendar;
+
+    const filteredSchedules = initialSchedules.map((item) => {
+      const itemSchedules = item.schedules.filter((schedule) => {
+        return (
+          (filterData.patientName.length === 0 ||
+            schedule.patient?.fullName
+              .toLowerCase()
+              .startsWith(filterData.patientName)) &&
+          (filterData.serviceId === '-1' ||
+            schedule.serviceId === parseInt(filterData.serviceId)) &&
+          (filterData.appointmentStatus === 'all' ||
+            schedule.scheduleStatus === filterData.appointmentStatus)
+        );
+      });
+      return {
+        ...item,
+        schedules: itemSchedules,
+      };
+    });
+
+    return filteredSchedules;
+  },
+);
+
+export const filterDataSelector = createSelector(
+  calendarDataSelector,
+  (calendar) => calendar.filterData,
+);
+
 export const dayHoursSelector = createSelector(
   calendarDataSelector,
   (calendar) => calendar.dayHours,

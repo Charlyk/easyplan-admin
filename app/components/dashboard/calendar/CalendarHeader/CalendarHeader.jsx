@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import ArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -10,11 +11,13 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EasyTab from 'app/components/common/EasyTab';
 import IconAppointmentCalendar from 'app/components/icons/iconAppointmentCalendar';
 import IconInfo from 'app/components/icons/iconInfo';
 import IconPlus from 'app/components/icons/iconPlus';
+import IconSearch from 'app/components/icons/iconSearch';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import styles from './CalendarHeader.module.scss';
@@ -154,33 +157,58 @@ const CalendarHeader = ({
         />
       </div>
       <div className={clsx(styles.rightBtnsWrapper, 'flexContainer')}>
+        {currentTab !== 'month' && (
+          <div className={styles.searchGroupWrapper}>
+            <IconSearch fill={'#3A83DC'} />
+            <EASTextField
+              fieldClass={styles.searchField}
+              placeholder={
+                textForKey('name') +
+                ' ' +
+                textForKey('patient').toLowerCase() +
+                '...'
+              }
+            />
+          </div>
+        )}
         <IconButton
-          className={styles.importBtn}
+          className={styles.rightSideBtn}
           onPointerUp={onImportSchedules}
         >
-          <UploadIcon />
+          <UploadIcon style={{ fill: '#3A83DC' }} />
         </IconButton>
         <ClickAwayListener onClickAway={handleCloseLegend}>
           <IconButton
             ref={legendAnchor}
-            className={styles.legendBtn}
+            className={styles.rightSideBtn}
             onPointerUp={handleShowLegend}
           >
             <IconInfo fill='#3A83DC' />
           </IconButton>
         </ClickAwayListener>
-        <Button
-          className={clsx('positive-button', styles.addAppointmentBtn)}
-          disabled={!canAddAppointment}
-          onPointerUp={handleAddAppointment}
+        <Tooltip
+          title={
+            <Typography fontSize={11}>
+              {textForKey('Add appointment')}
+            </Typography>
+          }
+          arrow
+          placement='left'
         >
-          {textForKey('Add appointment')}
-          <IconPlus />
-        </Button>
+          <IconButton
+            className={styles.rightSideBtn}
+            disabled={!canAddAppointment}
+            onPointerUp={handleAddAppointment}
+          >
+            <IconPlus fill={'#3A83DC'} />
+          </IconButton>
+        </Tooltip>
       </div>
     </div>
   );
 };
+
+// {textForKey('Add appointment')}
 
 CalendarHeader.propTypes = {
   dateBtnText: PropTypes.string,

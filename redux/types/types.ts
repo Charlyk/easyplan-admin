@@ -31,6 +31,13 @@ export interface CalendarDataState {
   isFetchingDetails: boolean;
   viewDate: string | null;
   viewMode: 'day' | 'week' | 'month';
+  filterData: FilterData;
+}
+
+export interface FilterData {
+  patientName?: string;
+  serviceId?: string;
+  appointmentStatus?: string;
 }
 
 export interface CreateAppointmentModalState {

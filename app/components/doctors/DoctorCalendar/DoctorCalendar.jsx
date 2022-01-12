@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useReducer, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconLiveHelp from '@material-ui/icons/LiveHelp';
-import isEqual from 'lodash/isEqual';
 import moment from 'moment-timezone';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -26,23 +25,26 @@ import { userClinicSelector } from 'redux/selectors/appDataSelector';
 import {
   dayHoursSelector,
   deleteScheduleSelector,
-  schedulesSelector,
+  filteredSchedulesSelector,
+  filterDataSelector,
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
+import { updateFilterData } from 'redux/slices/calendarData';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import DoctorsCalendarDay from '../DoctorsCalendarDay';
 import PatientsFilter from '../PatientsFilter';
 import styles from './DoctorCalendar.module.scss';
 import { reducer, initialState, actions } from './DoctorCalendar.reducer';
 
-const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
+const DoctorCalendar = ({ viewMode, date }) => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const currentUser = useSelector(currentUserSelector);
   const currentDoctor = useSelector(currentDoctorSelector);
-  const schedules = useSelector(schedulesSelector);
+  const filteredSchedules = useSelector(filteredSchedulesSelector);
+  const filterData = useSelector(filterDataSelector);
   const hours = useSelector(dayHoursSelector);
   const viewDate = moment(date).toDate();
   const router = useRouter();
@@ -51,10 +53,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
   const userClinic = useSelector(userClinicSelector);
-  const [{ filterData, isLoading }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [{ isLoading }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
@@ -65,34 +64,6 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
       handleFetchSchedules();
     }
   }, [date, previousDate]);
-
-  useEffect(() => {
-    if (isEqual(filterData, initialState.filterData)) {
-      localDispatch(actions.setData(initialData));
-      return;
-    }
-
-    const { schedules: initialSchedules } = initialData;
-    const filteredSchedules = initialSchedules.map((item) => {
-      const itemSchedules = item.schedules.filter((schedule) => {
-        return (
-          (filterData.patientName.length === 0 ||
-            schedule.patient?.fullName
-              .toLowerCase()
-              .startsWith(filterData.patientName)) &&
-          (filterData.serviceId === -1 ||
-            schedule.serviceId === parseInt(filterData.serviceId)) &&
-          (filterData.appointmentStatus === 'all' ||
-            schedule.scheduleStatus === filterData.appointmentStatus)
-        );
-      });
-      return {
-        ...item,
-        schedules: itemSchedules,
-      };
-    });
-    localDispatch(actions.setSchedules(filteredSchedules));
-  }, [filterData, initialData]);
 
   useEffect(() => {
     handleScheduleUpdate();
@@ -145,7 +116,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
     }
 
     const formattedDate = scheduleDate.format('YYYY-MM-DD');
-    const scheduleExists = schedules.some(
+    const scheduleExists = filteredSchedules.some(
       (item) =>
         item.id === formattedDate &&
         item.schedules.some((schedule) => schedule.id === updateSchedule.id),
@@ -159,11 +130,11 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
   }
 
   const handlePatientNameChange = (patientName) => {
-    localDispatch(actions.updateFilter({ patientName }));
+    dispatch(updateFilterData({ patientName }));
   };
 
   const handleServiceChange = (event) => {
-    localDispatch(actions.updateFilter({ serviceId: event.target.value }));
+    dispatch(updateFilterData({ serviceId: event.target.value }));
   };
 
   const handleScheduleSelected = async (schedule) => {
@@ -181,9 +152,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
   };
 
   const handleAppointmentStatusChange = (event) => {
-    localDispatch(
-      actions.updateFilter({ appointmentStatus: event.target.value }),
-    );
+    dispatch(updateFilterData({ appointmentStatus: event.target.value }));
   };
 
   const handleDateChange = async (newDate, mode = viewMode) => {
@@ -209,7 +178,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
 
   const mappedWeek = week.map((date) => {
     const dayId = moment(date).format('YYYY-MM-DD');
-    const day = schedules.find((item) => item.id === dayId);
+    const day = filteredSchedules.find((item) => item.id === dayId);
     return {
       id: dayId,
       doctorId: currentUser.id,
@@ -267,7 +236,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
             showHourIndicator
             dayHours={hours}
             columns={mappedWeek}
-            schedules={schedules}
+            schedules={filteredSchedules}
             viewDate={viewDate}
             animatedStatuses={['OnSite']}
             onScheduleSelected={handleScheduleSelected}
@@ -280,7 +249,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
           <DoctorsCalendarDay
             currentUser={currentUser}
             viewDate={viewDate}
-            schedules={{ hours, schedules }}
+            schedules={{ hours, schedules: filteredSchedules }}
             onScheduleSelected={handleScheduleSelected}
           />
         )}

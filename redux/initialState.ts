@@ -64,6 +64,11 @@ const initialState: ReduxState = {
     isFetchingDetails: false,
     viewDate: null,
     viewMode: 'day',
+    filterData: {
+      patientName: '',
+      serviceId: '-1',
+      appointmentStatus: 'all',
+    },
   },
   appointmentModal: {
     open: false,
