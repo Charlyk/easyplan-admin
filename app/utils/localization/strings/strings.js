@@ -756,6 +756,7 @@ export default {
     edit_pause: 'Edit the pause',
     last_changes_list: 'Last changes',
     no_recent_changes: 'No recent changes',
+    version: 'Version',
   },
   ro: {
     analytics: 'Analitică',
@@ -1525,6 +1526,7 @@ export default {
     edit_pause: 'Editează pauza',
     last_changes_list: 'Ultimile modificări',
     no_recent_changes: 'Nu sunt modificări recente',
+    version: 'Versiunea',
   },
   ru: {
     analytics: 'Analytics',
@@ -2281,5 +2283,6 @@ export default {
     edit_pause: 'Edit the pause',
     last_changes_list: 'Ultimile modificări',
     no_recent_changes: 'Nu sunt modificări recente',
+    version: 'Version',
   },
 };
