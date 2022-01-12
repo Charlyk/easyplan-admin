@@ -12,8 +12,6 @@ export function* handleFetchRecentChanges(_action: PayloadAction) {
     const response: SagaReturnType<typeof requestFetchRecentChanges> =
       yield call(requestFetchRecentChanges);
 
-    console.log(response);
-
     yield put(setChangeLogDataToStore(response.data));
   } catch (error) {
     if (error.response !== null) {

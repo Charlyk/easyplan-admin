@@ -11,6 +11,8 @@ import { getAppLanguage } from 'app/utils/localization';
 import EASImage from '../../EASImage';
 import LeftSideModal from '../../LeftSideModal';
 import styles from './ChangeLogModal.module.scss';
+import Image from 'next/image';
+import placeholderImage from 'public/feature_placeholder.png';
 import {
   dispatchFetchChangeLogData,
   dispatchMarkUpdatesAsRead,
@@ -32,14 +34,8 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
   };
 
   useEffect(() => {
-    setExpanded(`panel${Object.keys(changes).length}`);
-  }, [changes]);
-
-  console.log(changes);
-
-  useEffect(() => {
     dispatch(dispatchFetchChangeLogData());
-    // dispatch(dispatchMarkUpdatesAsRead());
+    dispatch(dispatchMarkUpdatesAsRead());
   }, []);
 
   return (
@@ -56,6 +52,9 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
               key={key}
               expanded={expanded === `panel${idx + 1}`}
               onChange={handleChange(`panel${idx + 1}`)}
+              classes={{
+                root: styles.accordionWrapper,
+              }}
             >
               <AccordionSummary>
                 <Typography>{key}</Typography>
@@ -78,7 +77,13 @@ const renderMediaCard = ({ imageUrl, title, message, version, id }) => {
   const cardNotNull = parsedTitle || imageUrl;
 
   return cardNotNull ? (
-    <Card key={`${version}/${id}`} style={{ marginBottom: '1rem' }}>
+    <Card
+      key={`${version}/${id}`}
+      style={{ marginBottom: '1rem' }}
+      classes={{
+        root: styles.modalCard,
+      }}
+    >
       <CardContent>
         {parsedTitle && (
           <Typography
@@ -95,7 +100,14 @@ const renderMediaCard = ({ imageUrl, title, message, version, id }) => {
           </Typography>
         )}
       </CardContent>
-      {imageUrl && <EASImage src={imageUrl} className={styles.cardImage} />}
+      {imageUrl && (
+        <EASImage
+          src={imageUrl}
+          placeholder={<Image src={placeholderImage} />}
+          className={styles.cardImage}
+          enableLoading
+        />
+      )}
     </Card>
   ) : null;
 };

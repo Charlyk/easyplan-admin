@@ -82,14 +82,15 @@ const EasyApp = ({ Component, pageProps }) => {
     dispatch(setAppData(pageProps.appData));
   }, []);
 
-  // useEffect(() => {
-  //   if (currentUser === null) return;
-  //   checkIfHasUnreadUpdates().then((response) => {
-  //     if (response) {
-  //       dispatch(openChangeLogModal());
-  //     }
-  //   });
-  // }, [currentUser]);
+  useEffect(() => {
+    if (currentUser === null) return;
+
+    checkIfHasUnreadUpdates().then((response) => {
+      if (response?.hasUnread) {
+        dispatch(openChangeLogModal());
+      }
+    });
+  }, [currentUser]);
 
   const clinicRoom = useMemo(() => {
     const id = currentClinic?.id ?? -1;
