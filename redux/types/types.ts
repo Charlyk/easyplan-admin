@@ -19,6 +19,7 @@ import {
   DealStateView,
   PatientCallRecord,
   PatientVisit,
+  AppNotification,
 } from 'types';
 
 export interface CalendarDataState {
@@ -176,6 +177,11 @@ export interface PatientPurchasesState {
   payments: any[];
 }
 
+export interface AppNotificationState {
+  isLoading: boolean;
+  notification?: AppNotification | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -218,4 +224,5 @@ export interface ReduxState {
   callToPlay: PatientCallRecord | null;
   patientVisits: PatientVisitsState;
   patientPurchases: PatientPurchasesState;
+  appNotification: AppNotificationState;
 }

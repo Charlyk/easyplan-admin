@@ -167,6 +167,10 @@ const initialState: ReduxState = {
     isLoading: false,
     payments: [],
   },
+  appNotification: {
+    isLoading: false,
+    notification: null,
+  },
 };
 
 export default initialState;
