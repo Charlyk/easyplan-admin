@@ -21,7 +21,7 @@ export default async (req, res) => {
   switch (req.method) {
     case 'POST': {
       const data = await handler(confirmSchedule, req, res);
-      if (data != null) {
+      if (data !== false) {
         res.json(data);
       }
       break;

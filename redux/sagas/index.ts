@@ -25,6 +25,8 @@ import {
   updateVisitNoteWatcher,
   changeLogWatcher,
   markUpdatesAsReadWatcher,
+  unreadAppNotificationWatcher,
+  markNotificationAsReadWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -54,5 +56,7 @@ export default function* rootSaga() {
     undoInvoicePaymentsWatcher(),
     updateVisitNoteWatcher(),
     markUpdatesAsReadWatcher(),
+    unreadAppNotificationWatcher(),
+    markNotificationAsReadWatcher(),
   ]);
 }
