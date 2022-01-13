@@ -1,11 +1,11 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { useDrag } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import { useSelector } from 'react-redux';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
@@ -25,6 +25,7 @@ const Schedule = ({
   animatedStatuses,
   onScheduleSelect,
 }) => {
+  const [shouldMove, setShouldMove] = useState(false);
   const isPause = schedule.type === 'Pause';
   const highlightTimeout = useRef(-1);
   const clinicDoctors = useSelector(clinicDoctorsSelector);
@@ -52,6 +53,26 @@ const Schedule = ({
       isDragging: monitor.isDragging(),
     }),
   }));
+
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: dragItemTypes.Schedule,
+    collect(monitor) {
+      return {
+        isOver: monitor.isOver(),
+      };
+    },
+  }));
+
+  const controlMinimumTransitionTimer = () => {
+    setShouldMove(true);
+    setTimeout(() => {
+      setShouldMove(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    isOver && controlMinimumTransitionTimer();
+  }, [isOver]);
 
   const getScheduleHeight = () => {
     const startTime = moment(schedule.startTime);
@@ -115,150 +136,153 @@ const Schedule = ({
   const itemRect = { height, top: topPosition };
 
   return (
-    <Box
-      ref={isPause ? null : drag}
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
-      className={clsx(styles.dayViewSchedule, {
-        [styles.upcoming]: shouldAnimate,
-        [styles.urgent]: schedule.isUrgent || schedule.urgent,
-        [styles.pauseStyles]: isPause,
-      })}
-      onClick={handleScheduleClick}
-      style={{
-        opacity: isDragging ? 0.6 : 1,
-        left: isHighlighted
-          ? 0
-          : `calc(${schedule.offset} * ${offsetDistance}px)`,
-        width: isHighlighted
-          ? '100%'
-          : `calc(100% - ${schedule.offset} * ${offsetDistance}px)`,
-        top: itemRect.top,
-        zIndex: getScheduleZIndex(),
-        height: itemRect.height,
-        backgroundColor: isPause ? '' : '#f3f3f3',
-        border: isHighlighted && !isPause ? '#3A83DC 1px solid' : 'none',
-      }}
-    >
-      {!isPause && (
-        <span
-          className={styles.statusIndicator}
-          style={{ backgroundColor: scheduleStatus?.color || 'white' }}
-        />
-      )}
-      <div className={styles.wrapper}>
-        <div className={styles.header}>
-          {schedule.type === 'Schedule' && (
-            <Typography noWrap classes={{ root: styles.patientNameLabel }}>
-              {schedule.patient.fullName}
-            </Typography>
-          )}
-          <div className='flexContainer'>
-            <Typography
-              noWrap
-              classes={{
-                root: clsx(styles.hourLabel, isPause && styles.pause),
-              }}
-            >
-              {startHour} - {endHour}
-            </Typography>
-            {scheduleStatus?.id === 'Late' && schedule.delayTime > 0 && (
+    <div ref={isDragging ? null : drop}>
+      <Box
+        ref={isPause ? null : drag}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        className={clsx(styles.dayViewSchedule, {
+          [styles.upcoming]: shouldAnimate,
+          [styles.urgent]: schedule.isUrgent || schedule.urgent,
+          [styles.pauseStyles]: isPause,
+        })}
+        onClick={handleScheduleClick}
+        style={{
+          opacity: isDragging ? 0.6 : 1,
+          left: isHighlighted
+            ? 0
+            : `calc(${schedule.offset} * ${offsetDistance}px)`,
+          width: isHighlighted
+            ? '100%'
+            : `calc(100% - ${schedule.offset} * ${offsetDistance}px)`,
+          top: shouldMove ? itemRect.top + 150 : itemRect.top,
+          zIndex: getScheduleZIndex(),
+          height: itemRect.height,
+          backgroundColor: isPause ? '' : '#f3f3f3',
+          border: isHighlighted && !isPause ? '#3A83DC 1px solid' : 'none',
+        }}
+      >
+        {!isPause && (
+          <span
+            className={styles.statusIndicator}
+            style={{ backgroundColor: scheduleStatus?.color || 'white' }}
+          />
+        )}
+        <div className={styles.wrapper}>
+          <div className={styles.header}>
+            {schedule.type === 'Schedule' && (
+              <Typography noWrap classes={{ root: styles.patientNameLabel }}>
+                {schedule.patient.fullName}
+              </Typography>
+            )}
+            <div className='flexContainer'>
               <Typography
                 noWrap
-                style={{ marginLeft: 3 }}
                 classes={{
                   root: clsx(styles.hourLabel, isPause && styles.pause),
                 }}
               >
-                (+{schedule.delayTime} min)
+                {startHour} - {endHour}
               </Typography>
-            )}
-            {scheduleStatus?.statusIcon != null && (
-              <span
-                className={clsx(
-                  styles.statusIcon,
-                  (scheduleStatus?.id === 'DidNotCome' ||
-                    scheduleStatus?.id === 'Canceled') &&
-                    styles.negative,
-                )}
-              >
-                {scheduleStatus?.statusIcon}
-              </span>
-            )}
+              {scheduleStatus?.id === 'Late' && schedule.delayTime > 0 && (
+                <Typography
+                  noWrap
+                  style={{ marginLeft: 3 }}
+                  classes={{
+                    root: clsx(styles.hourLabel, isPause && styles.pause),
+                  }}
+                >
+                  (+{schedule.delayTime} min)
+                </Typography>
+              )}
+              {scheduleStatus?.statusIcon != null && (
+                <span
+                  className={clsx(
+                    styles.statusIcon,
+                    (scheduleStatus?.id === 'DidNotCome' ||
+                      scheduleStatus?.id === 'Canceled') &&
+                      styles.negative,
+                  )}
+                >
+                  {scheduleStatus?.statusIcon}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        <div className={styles.info}>
-          {schedule.type === 'Schedule' ? (
-            <table className={styles.infoWrapper}>
-              <tbody>
-                {doctor && (
+          <div className={styles.info}>
+            {schedule.type === 'Schedule' ? (
+              <table className={styles.infoWrapper}>
+                <tbody>
+                  {doctor && (
+                    <tr className={styles.infoRow}>
+                      <td>
+                        <Typography className={styles.infoTitle}>
+                          {textForKey('Doctor')}:
+                        </Typography>
+                      </td>
+                      <td>
+                        <Typography noWrap className={styles.infoLabel}>
+                          {doctor}
+                        </Typography>
+                      </td>
+                    </tr>
+                  )}
                   <tr className={styles.infoRow}>
                     <td>
                       <Typography className={styles.infoTitle}>
-                        {textForKey('Doctor')}:
+                        {textForKey('Service')}:
                       </Typography>
                     </td>
                     <td>
                       <Typography noWrap className={styles.infoLabel}>
-                        {doctor}
+                        {schedule.serviceName}
                       </Typography>
                     </td>
                   </tr>
-                )}
-                <tr className={styles.infoRow}>
-                  <td>
-                    <Typography className={styles.infoTitle}>
-                      {textForKey('Service')}:
-                    </Typography>
-                  </td>
-                  <td>
-                    <Typography noWrap className={styles.infoLabel}>
-                      {schedule.serviceName}
-                    </Typography>
-                  </td>
-                </tr>
-                <tr className={styles.infoRow}>
-                  <td>
-                    <Typography className={styles.infoTitle}>
-                      {textForKey('Patient')}:
-                    </Typography>
-                  </td>
-                  <td>
-                    <Typography noWrap className={styles.infoLabel}>
-                      {schedule.patient.fullName}
-                    </Typography>
-                  </td>
-                </tr>
-                <tr className={styles.infoRow}>
-                  <td>
-                    <Typography className={styles.infoTitle}>
-                      {textForKey('Status')}:
-                    </Typography>
-                  </td>
-                  <td>
-                    <Typography noWrap className={styles.infoLabel}>
-                      {scheduleStatus?.name}
-                    </Typography>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          ) : (
-            <div className={styles.pauseWrapper}>
-              <Typography className={styles.pauseLabel}>
-                {textForKey('Pause')}
-              </Typography>
-              <Typography className={styles.commentLabel}>
-                {schedule.comment}
-              </Typography>
-              <Typography className={styles.commentLabel}>
-                {upperFirst(textForKey('Created by'))}: {schedule.createdByName}
-              </Typography>
-            </div>
-          )}
+                  <tr className={styles.infoRow}>
+                    <td>
+                      <Typography className={styles.infoTitle}>
+                        {textForKey('Patient')}:
+                      </Typography>
+                    </td>
+                    <td>
+                      <Typography noWrap className={styles.infoLabel}>
+                        {schedule.patient.fullName}
+                      </Typography>
+                    </td>
+                  </tr>
+                  <tr className={styles.infoRow}>
+                    <td>
+                      <Typography className={styles.infoTitle}>
+                        {textForKey('Status')}:
+                      </Typography>
+                    </td>
+                    <td>
+                      <Typography noWrap className={styles.infoLabel}>
+                        {scheduleStatus?.name}
+                      </Typography>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : (
+              <div className={styles.pauseWrapper}>
+                <Typography className={styles.pauseLabel}>
+                  {textForKey('Pause')}
+                </Typography>
+                <Typography className={styles.commentLabel}>
+                  {schedule.comment}
+                </Typography>
+                <Typography className={styles.commentLabel}>
+                  {upperFirst(textForKey('Created by'))}:{' '}
+                  {schedule.createdByName}
+                </Typography>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </Box>
+      </Box>
+    </div>
   );
 };
 
