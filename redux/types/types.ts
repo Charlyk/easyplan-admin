@@ -20,6 +20,7 @@ import {
   PatientCallRecord,
   PatientVisit,
   AppNotification,
+  ClinicSettings,
 } from 'types';
 
 export interface CalendarDataState {
@@ -188,6 +189,11 @@ export interface AppNotificationState {
   notification?: AppNotification | null;
 }
 
+export interface ClinicSettingsState {
+  isFetching: boolean;
+  settings: ClinicSettings | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -232,4 +238,5 @@ export interface ReduxState {
   patientPurchases: PatientPurchasesState;
   changeLogModal: ChangeLogModalState;
   appNotification: AppNotificationState;
+  clinicSettings: ClinicSettingsState;
 }
