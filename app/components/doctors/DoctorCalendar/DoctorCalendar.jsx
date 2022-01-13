@@ -130,7 +130,8 @@ const DoctorCalendar = ({ viewMode, date }) => {
   }
 
   const handlePatientNameChange = (patientName) => {
-    dispatch(updateFilterData({ patientName }));
+    const lowerCaseName = patientName.toLowerCase();
+    dispatch(updateFilterData({ searchQuery: lowerCaseName }));
   };
 
   const handleServiceChange = (event) => {

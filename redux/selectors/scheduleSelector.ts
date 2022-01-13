@@ -16,14 +16,15 @@ export const filteredSchedulesSelector = createSelector(
     const filteredSchedules = initialSchedules.map((item) => {
       const itemSchedules = item.schedules.filter((schedule) => {
         return (
-          (filterData.patientName.length === 0 ||
-            schedule.patient?.fullName
-              .toLowerCase()
-              .startsWith(filterData.patientName)) &&
-          (filterData.serviceId === '-1' ||
-            schedule.serviceId === parseInt(filterData.serviceId)) &&
-          (filterData.appointmentStatus === 'all' ||
-            schedule.scheduleStatus === filterData.appointmentStatus)
+          filterData.searchQuery.length === 0 ||
+          schedule.patient?.fullName
+            .toLowerCase()
+            .includes(filterData.searchQuery) ||
+          (schedule.patient.phoneNumber.includes(filterData.searchQuery) &&
+            (filterData.serviceId === '-1' ||
+              schedule.serviceId === parseInt(filterData.serviceId)) &&
+            (filterData.appointmentStatus === 'all' ||
+              schedule.scheduleStatus === filterData.appointmentStatus))
         );
       });
       return {

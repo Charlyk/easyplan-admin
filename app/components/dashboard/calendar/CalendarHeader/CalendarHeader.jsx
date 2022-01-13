@@ -100,7 +100,8 @@ const CalendarHeader = ({
   };
 
   const handleSearchInputChange = (patientName) => {
-    dispatch(updateFilterData({ patientName }));
+    const lowerCaseName = patientName.toLowerCase();
+    dispatch(updateFilterData({ searchQuery: lowerCaseName }));
   };
 
   const calendarPopper = (
@@ -170,12 +171,7 @@ const CalendarHeader = ({
             <EASTextField
               onChange={handleSearchInputChange}
               fieldClass={styles.searchField}
-              placeholder={
-                textForKey('name') +
-                ' ' +
-                textForKey('patient').toLowerCase() +
-                '...'
-              }
+              placeholder={textForKey('patient name')}
             />
           </div>
         )}

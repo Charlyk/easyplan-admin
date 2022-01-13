@@ -35,7 +35,7 @@ export interface CalendarDataState {
 }
 
 export interface FilterData {
-  patientName?: string;
+  searchQuery?: string;
   serviceId?: string;
   appointmentStatus?: string;
 }
