@@ -1,0 +1,27 @@
+.globalNotification {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 48px;
+  z-index: 10000;
+  height: 100px;
+
+  .closeIcon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .messageText {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    text-align: center;
+    font-size: 20px !important;
+    color: #ffffff !important;
+  }
+}

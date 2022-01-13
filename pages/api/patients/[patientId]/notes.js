@@ -43,14 +43,14 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchPatientNotes, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'POST': {
       const data = await handler(createPatientNote, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

@@ -18,7 +18,7 @@ function getCurrentUser(req) {
 
 export default authorized(async (req, res) => {
   const data = await handler(getCurrentUser, req, res);
-  if (data != null) {
+  if (data) {
     res.json(data);
   }
 });
