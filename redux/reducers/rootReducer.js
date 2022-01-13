@@ -1,10 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import appNotification from 'app/components/common/GlobalNotificationView/GlobalNotificationView.reducer';
 import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
+import changeLogModal from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
 import clinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import patientVisits from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes/AppointmentNotes.reducer';
 import patientPhoneCalls from 'app/components/dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
+import patientPurchases from 'app/components/dashboard/patients/PatientDetailsModal/PatientPurchasesList/PatientPurchasesList.reducer';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
@@ -19,7 +21,6 @@ import patientList from 'redux/slices/patientsListSlice';
 import pubnubMessages from 'redux/slices/pubnubMessagesSlice';
 import servicesList from 'redux/slices/servicesListSlice';
 import usersList from 'redux/slices/usersListSlice';
-import patientPurchases from 'app/components/dashboard/patients/PatientDetailsModal/PatientPurchasesList/PatientPurchasesList.reducer';
 import addPaymentModal from './addPaymentModal';
 import calendar from './calendar';
 import clinic from './clinic';
@@ -70,6 +71,7 @@ const rootReducer = combineReducers({
   patientPhoneCalls,
   patientVisits,
   patientPurchases,
+  changeLogModal,
   appNotification,
 });
 

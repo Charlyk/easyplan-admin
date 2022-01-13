@@ -167,6 +167,11 @@ const initialState: ReduxState = {
     isLoading: false,
     payments: [],
   },
+  changeLogModal: {
+    open: false,
+    isLoading: false,
+    changes: [],
+  },
   appNotification: {
     isLoading: false,
     notification: null,
