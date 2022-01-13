@@ -15,3 +15,4 @@ export * from './calendar';
 export * from './invoices';
 export * from './changeLog';
 export * from './appNotifications';
+export * from './clinicSettings';

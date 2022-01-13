@@ -14,7 +14,7 @@ function getClinicSettings(
   const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
     req.headers.cookie,
   );
-  return axios.get(`${updatedServerUrl()}/clinics/settings`, {
+  return axios.get(`${updatedServerUrl()}/clinic/settings`, {
     headers: {
       [HeaderKeys.authorization]: authToken,
       [HeaderKeys.clinicId]: clinicId,

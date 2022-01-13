@@ -9,6 +9,9 @@ const clinicSettingsSlice = createSlice({
     dispatchFetchSettings(state) {
       state.isFetching = true;
     },
+    dispatchUpdateConfirmationDoctor(state, _action: PayloadAction<boolean>) {
+      state.isFetching = true;
+    },
     setClinicSettings(state, action: PayloadAction<ClinicSettings>) {
       state.settings = action.payload;
       state.isFetching = false;
@@ -19,7 +22,11 @@ const clinicSettingsSlice = createSlice({
   },
 });
 
-export const { dispatchFetchSettings, setIsFetching, setClinicSettings } =
-  clinicSettingsSlice.actions;
+export const {
+  dispatchFetchSettings,
+  dispatchUpdateConfirmationDoctor,
+  setIsFetching,
+  setClinicSettings,
+} = clinicSettingsSlice.actions;
 
 export default clinicSettingsSlice.reducer;

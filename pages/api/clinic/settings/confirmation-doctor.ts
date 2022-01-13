@@ -15,7 +15,7 @@ function updateDoctorsSettings(
     req.headers.cookie,
   );
   return axios.put(
-    `${updatedServerUrl()}/clinics/settings/confirmation-doctor`,
+    `${updatedServerUrl()}/clinic/settings/confirmation-doctor`,
     req.body,
     {
       headers: {
