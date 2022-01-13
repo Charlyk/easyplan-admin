@@ -88,7 +88,7 @@ const PatientsFilter = ({
 
       <EASTextField
         type='text'
-        value={filterData?.patientName || ''}
+        value={filterData?.searchQuery || ''}
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Patient')}
         onChange={onNameChange}

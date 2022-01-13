@@ -66,7 +66,7 @@ const initialState: ReduxState = {
     viewMode: 'day',
     filterData: {
       searchQuery: '',
-      serviceId: '-1',
+      serviceId: -1,
       appointmentStatus: 'all',
     },
   },
