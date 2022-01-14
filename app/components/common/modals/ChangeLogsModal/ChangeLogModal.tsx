@@ -47,8 +47,19 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
       title={textForKey('last_changes_list') + ':'}
       className={styles.changeLogModal}
     >
-      <div style={{ margin: '1rem', overflow: 'auto', textAlign: 'center' }}>
-        {isLoading && <CircularProgress className={styles.progressBar} />}
+      <div
+        style={{
+          margin: '1rem',
+          overflow: 'auto',
+          textAlign: 'center',
+          flex: 1,
+        }}
+      >
+        {isLoading && (
+          <div className='progressBar'>
+            <CircularProgress className={styles.progressBar} />
+          </div>
+        )}
         {!isLoading && (
           <>
             {versionsArr.length > 0 ? (
@@ -63,9 +74,9 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
                     }}
                   >
                     <AccordionSummary>
-                      <Typography>{`${textForKey(
-                        'version',
-                      )} ${key}`}</Typography>
+                      <Typography
+                        className={styles.versionLabel}
+                      >{`${textForKey('version')} ${key}`}</Typography>
                     </AccordionSummary>
                     <AccordionDetails
                       classes={{ root: styles.accordionDetails }}
@@ -85,13 +96,11 @@ const ChangeLogModal: React.FC<Props> = ({ open, onClose }) => {
   );
 };
 
-const renderMediaCard = ({ imageUrl, title, message, version, id }) => {
+const renderMediaCard = ({ imageUrl, title, message, version, id }, index) => {
   const parsedTitle = title ? JSON.parse(title) : null;
   const parsedMessage = message ? JSON.parse(message) : null;
 
-  const cardNotNull = parsedTitle || imageUrl;
-
-  return cardNotNull ? (
+  return parsedMessage ? (
     <Card
       key={`${version}/${id}`}
       style={{ marginBottom: '1rem' }}
@@ -99,7 +108,7 @@ const renderMediaCard = ({ imageUrl, title, message, version, id }) => {
         root: styles.modalCard,
       }}
     >
-      <CardContent>
+      <CardContent className={styles.cardContent}>
         {parsedTitle && (
           <Typography
             variant='h5'
