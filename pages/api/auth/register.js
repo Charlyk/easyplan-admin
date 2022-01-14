@@ -24,7 +24,7 @@ export default async function register(req, res) {
   switch (req.method) {
     case 'POST': {
       const data = await handler(createNewAccount, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

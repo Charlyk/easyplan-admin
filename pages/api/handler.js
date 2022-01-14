@@ -18,13 +18,13 @@ const handler = async (apiCall, req, res) => {
         error: true,
         message: responseData?.message ?? response.statusText,
       });
-      return null;
+      return false;
     }
     const { isError, message, data } = responseData;
     if (isError) {
       res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
       res.status(400).json({ message, error: true });
-      return null;
+      return false;
     }
     return data;
   } catch (error) {
@@ -39,7 +39,7 @@ const handler = async (apiCall, req, res) => {
     } else {
       res.status(400).json({ error: true, message: error.message });
     }
-    return null;
+    return false;
   }
 };
 

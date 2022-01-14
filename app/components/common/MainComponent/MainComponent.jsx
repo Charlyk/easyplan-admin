@@ -46,6 +46,7 @@ import {
   toggleImportModal,
   triggerUserLogOut,
 } from 'redux/slices/mainReduxSlice';
+import GlobalNotificationView from '../GlobalNotificationView';
 import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';
 
@@ -215,6 +216,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
       </Head>
       {currentUser != null && currentClinic != null && (
         <>
+          <GlobalNotificationView />
           {patientNoteModal.open && (
             <AddNote
               {...patientNoteModal}

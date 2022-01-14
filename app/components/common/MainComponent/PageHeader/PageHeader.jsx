@@ -9,10 +9,12 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import EASImage from 'app/components/common/EASImage';
+import { openChangeLogModal } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
 import InvoicesButton from 'app/components/dashboard/InvoicesButton';
 import IconArrowBack from 'app/components/icons/iconArrowBack';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconEdit from 'app/components/icons/iconEdit';
+import IconHelpQuestion from 'app/components/icons/IconHelpQuestion';
 import IconMore from 'app/components/icons/iconMore';
 import IconNotifications from 'app/components/icons/iconNotifications';
 import IconPlus from 'app/components/icons/iconPlus';
@@ -112,6 +114,10 @@ const PageHeader = ({
     setIsActionsOpen(false);
   };
 
+  const handleHelpBtnClick = () => {
+    dispatch(openChangeLogModal());
+  };
+
   return (
     <div className={styles.pageHeader}>
       <ActionsSheet
@@ -154,6 +160,9 @@ const PageHeader = ({
         </div>
       )}
       <div className={styles.actions}>
+        <IconButton className={styles.helpBtn} onClick={handleHelpBtnClick}>
+          <IconHelpQuestion fill='#3a83dc' />
+        </IconButton>
         <IconButton className={styles.notifications}>
           <IconNotifications />
         </IconButton>
