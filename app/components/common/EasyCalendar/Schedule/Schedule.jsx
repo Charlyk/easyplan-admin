@@ -155,7 +155,8 @@ const Schedule = ({
           width: isHighlighted
             ? '100%'
             : `calc(100% - ${schedule.offset} * ${offsetDistance}px)`,
-          top: shouldMove ? itemRect.top + 150 : itemRect.top,
+          top: itemRect.top,
+          display: shouldMove ? 'none' : '',
           zIndex: getScheduleZIndex(),
           height: itemRect.height,
           backgroundColor: isPause ? '' : '#f3f3f3',
