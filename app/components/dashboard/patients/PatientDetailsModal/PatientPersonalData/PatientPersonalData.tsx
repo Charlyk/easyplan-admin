@@ -256,6 +256,7 @@ const PatientPersonalData: React.FC<Props> = ({
         <EasyDatePicker
           open={showDatePicker}
           placement='bottom'
+          maxDate={new Date()}
           pickerAnchor={datePickerRef.current}
           selectedDate={birthday || new Date()}
           onClose={handleCloseDatePicker}

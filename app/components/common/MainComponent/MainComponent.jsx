@@ -1,21 +1,22 @@
 import React, { useContext, useEffect, useMemo } from 'react';
+import IconButton from '@material-ui/core/IconButton';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import AudioPlayer from 'react-h5-audio-player';
 import { useDispatch, useSelector } from 'react-redux';
+import IconClose from 'app/components/icons/iconClose';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
+import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import paths from 'app/utils/paths';
 import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
 import { signOut } from 'middleware/api/auth';
 import {
-  setPatientDetails,
   setPatientNoteModal,
   setPatientXRayModal,
   setPaymentModal,
-  toggleImportModal,
-  triggerUserLogout,
 } from 'redux/actions/actions';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
 import {
@@ -37,7 +38,14 @@ import {
 import {
   isImportModalOpenSelector,
   patientDetailsSelector,
+  phoneCallRecordSelector,
 } from 'redux/selectors/rootSelector';
+import {
+  playPhoneCallRecord,
+  setPatientDetails,
+  toggleImportModal,
+  triggerUserLogOut,
+} from 'redux/slices/mainReduxSlice';
 import GlobalNotificationView from '../GlobalNotificationView';
 import ReminderNotification from '../ReminderNotification';
 import styles from './MainComponent.module.scss';
@@ -73,6 +81,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const patientDetails = useSelector(patientDetailsSelector);
   const newReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
+  const callToPlay = useSelector(phoneCallRecordSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
   let childrenProps = children.props;
@@ -142,7 +151,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   }, [headerTitle, currentClinic]);
 
   const handleStartLogout = () => {
-    dispatch(triggerUserLogout(true));
+    dispatch(triggerUserLogOut(true));
   };
 
   const handleCreateClinic = async () => {
@@ -169,6 +178,23 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
 
   const handleClosePatientNoteModal = () => {
     dispatch(setPatientNoteModal({ open: false }));
+  };
+
+  const handleClosePlayer = () => {
+    dispatch(playPhoneCallRecord(null));
+  };
+
+  const handlePlayerError = () => {
+    if (callToPlay?.fileUrl?.endsWith('.wav')) {
+      dispatch(
+        playPhoneCallRecord({
+          ...callToPlay,
+          fileUrl: callToPlay.fileUrl.replace('.wav', '.ogg'),
+        }),
+      );
+    } else {
+      toast.error('Play error');
+    }
   };
 
   const handleClosePaymentModal = () => {
@@ -237,6 +263,25 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
               currentClinic={currentClinic}
               onClose={handleClosePaymentModal}
             />
+          )}
+          {callToPlay != null && (
+            <div className={styles.playerContainer}>
+              <IconButton
+                className={styles.closeIcon}
+                onClick={handleClosePlayer}
+              >
+                <IconClose />
+              </IconButton>
+              <AudioPlayer
+                autoPlay
+                src={getCallRecordUrl(callToPlay)}
+                className={styles.player}
+                onError={handlePlayerError}
+                showJumpControls={false}
+                showSkipControls={false}
+                onPlayError={handlePlayerError}
+              />
+            </div>
           )}
           <MainMenu
             currentClinic={currentClinic}

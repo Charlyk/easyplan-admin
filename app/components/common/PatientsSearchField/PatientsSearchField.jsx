@@ -1,9 +1,22 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
+import PropTypes from 'prop-types';
 import { textForKey } from 'app/utils/localization';
-import { getPatients } from 'middleware/api/patients';
 import onRequestError from 'app/utils/onRequestError';
+import { getPatients } from 'middleware/api/patients';
 import EASAutocomplete from '../EASAutocomplete';
+
+const getPatientLabel = (patient) => {
+  if (patient.firstName && patient.lastName) {
+    return `${patient.lastName} ${patient.firstName}`;
+  } else if (patient.firstName) {
+    return patient.firstName;
+  } else if (patient.lastName) {
+    return patient.lastName;
+  } else {
+    return `+${patient.countryCode}${patient.phoneNumber}`;
+  }
+};
 
 const PatientsSearchField = ({
   selectedPatient,
@@ -11,6 +24,7 @@ const PatientsSearchField = ({
   disabled,
   containerClass,
   onSelected,
+  onCreatePatient,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [patients, setPatients] = useState([]);
@@ -32,22 +46,14 @@ const PatientsSearchField = ({
   }, [patients, selectedPatient]);
 
   const getLabelKey = useCallback((option) => {
-    if (option.firstName && option.lastName) {
-      return `${option.lastName} ${option.firstName}`;
-    } else if (option.firstName) {
-      return option.firstName;
-    } else if (option.lastName) {
-      return option.lastName;
-    } else {
-      return `+${option.countryCode}${option.phoneNumber}`;
-    }
+    return getPatientLabel(option);
   }, []);
 
   const handlePatientSearch = useCallback(
     debounce(async (query) => {
       setIsLoading(true);
       try {
-        const updatedQuery = query.replace('+', '');
+        const updatedQuery = query.replace(/^([+0])/, '');
         const requestQuery = {
           query: updatedQuery,
           page: '0',
@@ -86,12 +92,14 @@ const PatientsSearchField = ({
 
   return (
     <EASAutocomplete
+      canCreate
       containerClass={containerClass}
       disabled={disabled}
       fieldLabel={fieldLabel}
       options={suggestionPatients}
       onTextChange={handleSearchQueryChange}
       onChange={handlePatientChange}
+      onCreateOption={onCreatePatient}
       value={selectedPatient || ''}
       loading={isLoading}
       placeholder={textForKey('Enter patient name or phone')}
@@ -100,3 +108,21 @@ const PatientsSearchField = ({
 };
 
 export default PatientsSearchField;
+
+PatientsSearchField.propTypes = {
+  selectedPatient: PropTypes.any,
+  fieldLabel: PropTypes.string,
+  disabled: PropTypes.bool,
+  containerClass: PropTypes.any,
+  onSelected: PropTypes.func,
+  onCreatePatient: PropTypes.func,
+};
+
+PatientsSearchField.defaultProps = {
+  containerClass: null,
+  disabled: false,
+  fieldLabel: '',
+  selectedPatient: null,
+  onSelected: () => null,
+  onCreatePatient: () => null,
+};

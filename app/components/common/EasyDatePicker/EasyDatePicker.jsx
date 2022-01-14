@@ -14,6 +14,7 @@ const EasyDatePicker = ({
   pickerAnchor,
   placement,
   minDate,
+  maxDate,
   onClose,
   onChange,
   selectedDate,
@@ -33,7 +34,8 @@ const EasyDatePicker = ({
           <Paper className={styles.calendarPaper}>
             <ClickAwayListener onClickAway={onClose}>
               <Calendar
-                minDate={minDate}
+                minDate={minDate ?? undefined}
+                maxDate={maxDate ?? undefined}
                 locale={locales[getAppLanguage()]}
                 onChange={onChange}
                 date={selectedDate}
@@ -55,12 +57,14 @@ EasyDatePicker.propTypes = {
   onChange: PropTypes.func,
   pickerAnchor: PropTypes.any,
   minDate: PropTypes.instanceOf(Date),
+  maxDate: PropTypes.instanceOf(Date),
   placement: PropTypes.oneOf(['bottom', 'top']),
   disablePortal: PropTypes.bool,
 };
 
 EasyDatePicker.defaultProps = {
   selectedDate: new Date(),
+  maxDate: null,
   placement: 'bottom',
   disablePortal: true,
   onClose: () => null,

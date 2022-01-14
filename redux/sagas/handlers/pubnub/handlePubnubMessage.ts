@@ -9,10 +9,6 @@ import {
 } from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import {
-  togglePatientsListUpdate,
-  triggerUsersUpdate,
-} from 'redux/actions/actions';
 import { setClinicExchangeRatesUpdateRequired } from 'redux/actions/clinicActions';
 import { toggleUpdateInvoice } from 'redux/actions/invoiceActions';
 import {
@@ -40,6 +36,10 @@ import {
   setUpdatedReminder,
 } from 'redux/slices/crmSlice';
 import { showSuccessNotification } from 'redux/slices/globalNotificationsSlice';
+import {
+  toggleUpdatePatients,
+  updateUsersList,
+} from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import {
   DealView,
@@ -132,7 +132,7 @@ function* updateScheduleDetails(detailsId: number) {
 }
 
 function* handleUpdateClinicUsers() {
-  yield put(triggerUsersUpdate(true));
+  yield put(updateUsersList());
 }
 
 function* handleUpdateSchedules(schedule: Schedule) {
@@ -164,7 +164,7 @@ function* handleUpdateCurrentClinic() {
 }
 
 function* handleUpdatePatients() {
-  yield put(togglePatientsListUpdate());
+  yield put(toggleUpdatePatients());
 }
 
 function* handleUpdateExchangeRates() {

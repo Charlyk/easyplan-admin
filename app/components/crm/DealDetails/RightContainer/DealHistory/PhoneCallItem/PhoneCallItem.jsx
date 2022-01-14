@@ -8,6 +8,7 @@ import IncomeCallIcon from '@material-ui/icons/CallReceived';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import formatSeconds from 'app/utils/formatSeconds';
+import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import { textForKey } from 'app/utils/localization';
 import styles from './PhoneCallItem.module.scss';
 
@@ -54,21 +55,17 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
     onPlayAudio?.(call);
   };
 
-  const handleDownloadRecord = () => {
+  const handleDownloadRecord = async () => {
     if (call.fileUrl == null) {
       return;
     }
-    const recordDate = moment(call.created);
-    const year = recordDate.format('YYYY');
-    const month = recordDate.format('MM');
-    const date = recordDate.format('DD');
-    const recordUrl = call.callId
-      ? `https://sip6215.iphost.md/amocrm/router.php?route=record/get&call_id=${call.callId}`
-      : `https://sip6215.iphost.md/monitor/${year}/${month}/${date}/${call.fileUrl.replace(
-          ' ',
-          '+',
-        )}`;
-    window.open(recordUrl, '_blank');
+    const recordUrl = getCallRecordUrl(call);
+    const result = await fetch(recordUrl, { method: 'HEAD' });
+    if (result.ok) {
+      window.open(recordUrl, '_blank');
+    } else if (recordUrl.endsWith('.wav')) {
+      window.open(recordUrl.replace('.wav', '.ogg'), '_blank');
+    }
   };
 
   return (

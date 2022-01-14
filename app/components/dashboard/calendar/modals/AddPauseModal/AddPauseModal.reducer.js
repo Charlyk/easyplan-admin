@@ -34,6 +34,7 @@ export const initialState = {
   isDeleting: false,
   doctor: null,
   cabinet: null,
+  hoursError: null,
 };
 
 const addPauseModalSlice = createSlice({
@@ -54,6 +55,7 @@ const addPauseModalSlice = createSlice({
         state.availableAllTime,
         startHour,
       );
+
       state.startHour = startHour;
       state.availableEndTime = availableEndTime;
       state.endHour = availableEndTime.includes(endHour)
@@ -75,7 +77,7 @@ const addPauseModalSlice = createSlice({
       const availableAllTime = action.payload;
       const startHour =
         availableAllTime?.length > 0 && state.startHour.length === 0
-          ? availableAllTime[0]
+          ? state.startHour
           : state.startHour;
       const availableStartTime = availableAllTime;
       const availableEndTime = filterAvailableTime(availableAllTime, startHour);
@@ -84,6 +86,8 @@ const addPauseModalSlice = createSlice({
       state.availableStartTime = availableStartTime;
       state.availableEndTime = availableEndTime;
       state.startHour = startHour;
+      state.hoursError = null;
+      state.isFetchingHours = false;
     },
     setAvailableStartTime(state, action) {
       state.availableStartTime = action.payload;
@@ -116,6 +120,18 @@ const addPauseModalSlice = createSlice({
       state.cabinet = action.payload;
       state.doctor = null;
     },
+    setHoursError(state, action) {
+      if (action.payload !== null) {
+        state.availableAllTime = [];
+        state.availableStartTime = [];
+        state.availableEndTime = [];
+        state.startHour = '';
+        state.endHour = '';
+        state.hoursError = null;
+      }
+      state.hoursError = action.payload;
+      state.isFetchingHours = false;
+    },
     resetState() {
       return initialState;
     },
@@ -123,7 +139,6 @@ const addPauseModalSlice = createSlice({
 });
 
 export const {
-  setAvailableStartTime,
   setShowDatePicker,
   setComment,
   setIsLoading,
@@ -133,10 +148,10 @@ export const {
   setPauseDate,
   setStartHour,
   setAvailableAllTime,
-  setAvailableEndTime,
   setInitialData,
   setDoctor,
   setCabinet,
+  setHoursError,
   resetState,
 } = addPauseModalSlice.actions;
 

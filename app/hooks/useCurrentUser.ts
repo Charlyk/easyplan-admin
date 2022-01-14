@@ -2,7 +2,7 @@ import useAppData from './useAppData';
 
 const useCurrentUser = () => {
   const appData = useAppData();
-  return [appData.currentUser, appData.updateCurrentUser];
+  return [appData.currentUser];
 };
 
 export default useCurrentUser;

@@ -19,7 +19,7 @@
 
     .patientInfo {
       width: 100%;
-      background: #FFFFFF;
+      background: #ffffff;
       height: 126px;
       box-shadow: 0 5px 60px -10px rgba(239, 242, 251, 0.8);
       border-radius: 4px;
@@ -51,7 +51,7 @@
 
         .guideNameField {
           width: 56%;
-          margin-bottom: .2rem !important;
+          margin-bottom: 0.2rem !important;
         }
       }
 
@@ -60,11 +60,11 @@
         font-style: normal;
         font-weight: bold;
         font-size: 16px;
-        color: #34354C;
+        color: #34354c;
       }
 
       .personalDataContainer {
-        margin-left: .5rem;
+        margin-left: 0.5rem;
         display: flex;
         flex-direction: column;
       }
@@ -77,15 +77,16 @@
           font-style: normal;
           font-weight: 600;
           font-size: 11px;
-          color: #34354C;
+          color: #34354c;
         }
 
         .patientInfoValue {
-          margin-left: .5rem;
+          margin-left: 0.5rem;
           font-family: Inter, sans-serif;
           font-style: normal;
           font-size: 11px;
-          color: #34354C;
+          color: #34354c;
+          max-width: 200px;
         }
       }
 
@@ -111,7 +112,7 @@
       font-weight: 600;
       font-size: 16px;
       line-height: 16px;
-      color: #34354C;
+      color: #34354c;
     }
 
     :global(.no-data-label) {
@@ -126,7 +127,7 @@
       font-weight: 600;
       font-size: 12px;
       line-height: 16px;
-      color: #34354C;
+      color: #34354c;
     }
 
     :global(.positive-button) {
@@ -154,4 +155,3 @@
   font-weight: normal !important;
   font-size: 15px !important;
 }
-

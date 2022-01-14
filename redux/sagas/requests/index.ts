@@ -11,4 +11,6 @@ export * from './patients';
 export * from './crm';
 export * from './fetchAppDataRequest';
 export * from './calendar';
+export * from './invoices';
+export * from './changeLog';
 export * from './appNotifications';

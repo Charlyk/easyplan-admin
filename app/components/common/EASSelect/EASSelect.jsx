@@ -75,6 +75,7 @@ const EASSelect = ({
         key={option.id}
         value={option.id}
         className={styles.analyticsMenuItemRoot}
+        disabled={option.disabled}
       >
         <ListItemText
           classes={{ primary: styles.analyticsMenuItemText }}

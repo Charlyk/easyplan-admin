@@ -68,6 +68,7 @@ const Column = ({
       })
       .toDate()
       .toString();
+
     if (!isColumnCabinet) {
       const selectedDoctor = clinicDoctors.filter(
         (doctor) => doctor.id === column.doctorId,
@@ -134,27 +135,42 @@ const Column = ({
     },
   }));
 
+  const [filteredSchedules, filteredPauses] = useMemo(() => {
+    const filteredSchedules = [];
+    const filteredPauses = [];
+    for (const schedule of schedules) {
+      if (schedule.type === 'Schedule') {
+        filteredSchedules.push(schedule);
+      } else if (schedule.type === 'Pause') {
+        filteredPauses.push(schedule);
+      }
+    }
+    return [filteredSchedules, filteredPauses];
+  }, [schedules]);
+
   const schedulesWithOffset = useMemo(() => {
     const newSchedules = [];
     // check if schedules intersect other schedules and update their offset
-    for (let schedule of schedules) {
+    for (let schedule of filteredSchedules) {
       const scheduleRange = moment.range(
         moment(schedule.startTime),
         moment(schedule.endTime),
       );
       let offset = 0;
       // update new schedule offset based on already added schedules
-      for (let item of newSchedules) {
-        const itemRange = moment.range(
-          moment(item.startTime),
-          moment(item.endTime),
-        );
-        const hasIntersection = scheduleRange.intersect(itemRange) != null;
-        if (hasIntersection) {
-          offset = (item.offset || 0) + 1;
-        }
-        if (offset > maxOffset) {
-          offset = 0;
+      if (schedule.type !== 'Pause') {
+        for (let item of newSchedules) {
+          const itemRange = moment.range(
+            moment(item.startTime),
+            moment(item.endTime),
+          );
+          const hasIntersection = scheduleRange.intersect(itemRange) != null;
+          if (hasIntersection) {
+            offset = (item.offset || 0) + 1;
+          }
+          if (offset > maxOffset) {
+            offset = 0;
+          }
         }
       }
       // add the new schedules to array to check the next one against it
@@ -225,6 +241,16 @@ const Column = ({
           </div>
         )}
         {renderHoursContainers()}
+        {filteredPauses.map((schedule, index) => (
+          <Schedule
+            key={schedule.id}
+            schedule={schedule}
+            animatedStatuses={animatedStatuses}
+            index={index}
+            firstHour={hours[0]}
+            onScheduleSelect={onScheduleSelected}
+          />
+        ))}
         {schedulesWithOffset.map((schedule, index) => (
           <Schedule
             key={schedule.id}

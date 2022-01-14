@@ -10,15 +10,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import EASHelpView from 'app/components/common/EASHelpView';
 import EasyCalendar from 'app/components/common/EasyCalendar';
 import NotificationsContext from 'app/context/notificationsContext';
+import usePrevious from 'app/hooks/usePrevious';
 import { TECH_SUPPORT_URL } from 'app/utils/constants';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
-import usePrevious from 'app/utils/hooks/usePrevious';
 import { textForKey } from 'app/utils/localization';
 import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
 import { getSchedulesForInterval } from 'middleware/api/schedules';
-import { currentUserSelector } from 'redux/selectors/appDataSelector';
+import {
+  currentDoctorSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
 import { userClinicSelector } from 'redux/selectors/appDataSelector';
 import {
   dayHoursSelector,
@@ -38,6 +41,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
   const updateSchedule = useSelector(updateScheduleSelector);
   const deleteSchedule = useSelector(deleteScheduleSelector);
   const currentUser = useSelector(currentUserSelector);
+  const currentDoctor = useSelector(currentDoctorSelector);
   const schedules = useSelector(schedulesSelector);
   const hours = useSelector(dayHoursSelector);
   const viewDate = moment(date).toDate();
@@ -208,7 +212,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
     const day = schedules.find((item) => item.id === dayId);
     return {
       id: dayId,
-      doctorId: currentUser?.id,
+      doctorId: currentUser.id,
       name: moment(date).format('DD dddd'),
       disabled: day?.holiday,
       date: date.toDate(),
@@ -222,7 +226,7 @@ const DoctorCalendar = ({ schedules: initialData, viewMode, date }) => {
         startHour,
         endHour,
         date: moment(selectedDate ?? viewDate).format('YYYY-MM-DD'),
-        doctor: currentUser,
+        doctor: currentDoctor,
         isDoctorMode: true,
       }),
     );

@@ -13,10 +13,16 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
+import {
+  closeChangeLogModal,
+  openChangeLogModal,
+} from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
+import { changeLogModalSelector } from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.selector';
 import NotificationsProvider from 'app/context/NotificationsProvider';
+import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
+import { checkIfHasUnreadUpdates } from 'app/utils/checkIfHasUnreadUpdates';
 import { UnauthorizedPaths } from 'app/utils/constants';
-import useWindowFocused from 'app/utils/hooks/useWindowFocused';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
@@ -24,7 +30,6 @@ import { appBaseUrl, isDev, pubNubEnv } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
 import { pubnubClient } from 'pubnubUtils';
-import { triggerUserLogout } from 'redux/actions/actions';
 import { setImageModal } from 'redux/actions/imageModalActions';
 import initialState from 'redux/initialState';
 import {
@@ -36,6 +41,7 @@ import { imageModalSelector } from 'redux/selectors/imageModalSelector';
 import { logoutSelector } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
 import { closeAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import { wrapper } from 'store';
 import 'moment/locale/ro';
@@ -55,12 +61,17 @@ const ConfirmationModal = dynamic(() =>
   import('app/components/common/modals/ConfirmationModal'),
 );
 
+const ChangeLogModal = dynamic(() =>
+  import('app/components/common/modals/ChangeLogsModal'),
+);
+
 const EasyApp = ({ Component, pageProps }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const appointmentModal = useSelector(appointmentModalSelector);
+  const changeLogModal = useSelector(changeLogModalSelector);
   const [isChecking, setIsChecking] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
@@ -70,6 +81,16 @@ const EasyApp = ({ Component, pageProps }) => {
   useEffect(() => {
     dispatch(setAppData(pageProps.appData));
   }, []);
+
+  useEffect(() => {
+    if (currentUser === null) return;
+
+    checkIfHasUnreadUpdates().then((response) => {
+      if (response?.hasUnread) {
+        dispatch(openChangeLogModal());
+      }
+    });
+  }, [currentUser]);
 
   const clinicRoom = useMemo(() => {
     const id = currentClinic?.id ?? -1;
@@ -176,7 +197,7 @@ const EasyApp = ({ Component, pageProps }) => {
           if (UnauthorizedPaths.includes(router.asPath)) {
             return;
           }
-          await handleUserLogout();
+          await router.reload();
         }
       }
     } finally {
@@ -201,13 +222,17 @@ const EasyApp = ({ Component, pageProps }) => {
   const handleUserLogout = async () => {
     await signOut();
     router.replace(appBaseUrl).then(() => {
-      dispatch(triggerUserLogout(false));
+      dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
     });
   };
 
   const handleCancelLogout = () => {
-    dispatch(triggerUserLogout(false));
+    dispatch(triggerUserLogOut(false));
+  };
+
+  const handleCloseChangeLogModal = () => {
+    dispatch(closeChangeLogModal());
   };
 
   return (
@@ -240,6 +265,12 @@ const EasyApp = ({ Component, pageProps }) => {
                       onConfirm={handleUserLogout}
                       onClose={handleCancelLogout}
                       show={logout}
+                    />
+                  )}
+                  {changeLogModal.open && (
+                    <ChangeLogModal
+                      {...changeLogModal}
+                      onClose={handleCloseChangeLogModal}
                     />
                   )}
                   {appointmentModal?.open && (

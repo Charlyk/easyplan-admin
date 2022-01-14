@@ -17,6 +17,8 @@ import {
   ExchangeRate,
   DealView,
   DealStateView,
+  PatientCallRecord,
+  PatientVisit,
   AppNotification,
 } from 'types';
 
@@ -123,6 +125,7 @@ export interface PatientListState {
     data: Patient[];
     total: number;
   };
+  newPatient?: Patient | null;
   isLoading: boolean;
   isDeleting: boolean;
 }
@@ -159,6 +162,27 @@ export interface DealsColumnState {
   dealState: DealStateView | null;
 }
 
+export interface PatientPhoneCallsState {
+  isFetching: boolean;
+  records: PatientCallRecord[];
+}
+
+export interface PatientVisitsState {
+  isFetching: boolean;
+  visits: PatientVisit[];
+}
+
+export interface PatientPurchasesState {
+  isLoading: boolean;
+  payments: any[];
+}
+
+export interface ChangeLogModalState {
+  isLoading: boolean;
+  open: boolean;
+  changes: [];
+}
+
 export interface AppNotificationState {
   isLoading: boolean;
   notification?: AppNotification | null;
@@ -177,7 +201,6 @@ export interface ReduxState {
   user: null;
   updateAppointments: boolean;
   updateCalendarDoctorHeight: boolean;
-  checkAppointments: boolean;
   updateInvoices: boolean;
   checkDoctorAppointments: boolean;
   updatePatients: boolean;
@@ -203,5 +226,10 @@ export interface ReduxState {
   clinicAnalytics: ClinicAnalyticsState;
   crmBoard: CrmBoardState;
   dealsColumn: DealsColumnState;
+  patientPhoneCalls: PatientPhoneCallsState;
+  callToPlay: PatientCallRecord | null;
+  patientVisits: PatientVisitsState;
+  patientPurchases: PatientPurchasesState;
+  changeLogModal: ChangeLogModalState;
   appNotification: AppNotificationState;
 }

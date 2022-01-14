@@ -7,7 +7,7 @@ import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { addPatientXRayImage } from 'middleware/api/patients';
-import { triggerUpdateXRay } from 'redux/actions/actions';
+import { updateXRay } from 'redux/slices/mainReduxSlice';
 import styles from './AddXRay.module.scss';
 
 const phases = [
@@ -37,6 +37,11 @@ const AddXRay = ({ open, patientId, onClose }) => {
   }, [open]);
 
   const handleFileChange = (event) => {
+    const allowedExtensionsRegex = /\.(jpe?g|png)$/i;
+    if (!event.target.files[0]?.name.match(allowedExtensionsRegex)) {
+      toast.error(textForKey('selected_file_is_not_an_image'));
+      return;
+    }
     const file = event.target.files[0];
     setImageFile(file);
   };
@@ -45,7 +50,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
     setIsLoading(true);
     try {
       await addPatientXRayImage(patientId, phase, imageFile);
-      dispatch(triggerUpdateXRay());
+      dispatch(updateXRay());
       onClose();
     } catch (error) {
       toast.error(error.message);
@@ -63,7 +68,7 @@ const AddXRay = ({ open, patientId, onClose }) => {
       onClose={onClose}
       open={open}
       className={styles.addXRayRoot}
-      title={textForKey('Add X-Ray image')}
+      title={textForKey('add_xray_image')}
       isPositiveLoading={isLoading}
       isPositiveDisabled={imageFile == null || phase == null}
       onPrimaryClick={handleSaveImage}
