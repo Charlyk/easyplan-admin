@@ -145,3 +145,27 @@ export async function saveClinicFacebookPage(pageData, headers = null) {
 export async function requestFetchAllOwnerClinics(headers = null) {
   return get('/api/clinic/owner', headers);
 }
+
+/**
+ * Fetch clinic settings
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<ClinicSettings>>}
+ */
+export async function fetchClinicSettings(headers = null) {
+  return get('/api/clinic/settings', headers);
+}
+
+/**
+ * Update confirmation doctor settings
+ * @param {boolean} showDoctor
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<ClinicSettings>>}
+ */
+export async function updateConfirmationDoctorSettings(
+  showDoctor,
+  headers = null,
+) {
+  return put('/api/clinic/settings/confirmation-doctor', headers, {
+    showDoctor,
+  });
+}

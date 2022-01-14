@@ -18,6 +18,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import styles from './ApplicationSettings.module.scss';
 import ClinicCabinets from './CliniCabinets';
+import ClinicSettings from './ClinicSettings';
 import ClinicTags from './ClinicTags';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
 
@@ -105,7 +106,11 @@ const ApplicationSettings = () => {
           {textForKey('clinic_cabinets')}
         </Typography>
         <ClinicCabinets />
-        <Divider />
+        <Divider className={styles.divider} />
+        <Typography className={styles.titleLabel}>
+          {textForKey('clinic_settings')}
+        </Typography>
+        <ClinicSettings />
       </div>
       <div className={styles.footer}>
         <LoadingButton
