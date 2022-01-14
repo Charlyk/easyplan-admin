@@ -27,6 +27,8 @@ import {
   markUpdatesAsReadWatcher,
   unreadAppNotificationWatcher,
   markNotificationAsReadWatcher,
+  clinicSettingsWatcher,
+  updateConfirmationDoctorWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -58,5 +60,7 @@ export default function* rootSaga() {
     markUpdatesAsReadWatcher(),
     unreadAppNotificationWatcher(),
     markNotificationAsReadWatcher(),
+    clinicSettingsWatcher(),
+    updateConfirmationDoctorWatcher(),
   ]);
 }
