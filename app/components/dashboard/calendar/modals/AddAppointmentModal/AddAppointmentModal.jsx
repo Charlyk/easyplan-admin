@@ -591,6 +591,7 @@ const AddAppointmentModal = ({
             maxRows={6}
             onChange={handleNoteChange}
             fieldLabel={textForKey('Notes')}
+            maxLength={1000}
           />
           {hoursError && (
             <Alert severity='warning' style={{ width: '100%', marginTop: 16 }}>

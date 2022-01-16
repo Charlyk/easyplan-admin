@@ -32,6 +32,7 @@ const AddNoteForm = ({ isLoading, onSubmit }) => {
         maxRows={4}
         placeholder={textForKey('Enter new note')}
         onChange={setNoteText}
+        maxLength={1000}
       />
       <Box marginTop={0.5}>
         <LoadingButton
