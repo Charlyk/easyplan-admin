@@ -1,0 +1,31 @@
+.clinicSettings {
+  width: 100%;
+
+  .confirmationDoctor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    user-select: none;
+    padding: 16px;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #f8f8f8;
+    }
+
+    .title {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      font-size: 12px !important;
+      margin-top: 5px !important;
+      margin-bottom: 5px;
+    }
+
+    .switch {
+      pointer-events: none;
+    }
+  }
+}

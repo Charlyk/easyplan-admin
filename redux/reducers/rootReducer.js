@@ -7,6 +7,7 @@ import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButt
 import patientVisits from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes/AppointmentNotes.reducer';
 import patientPhoneCalls from 'app/components/dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
 import patientPurchases from 'app/components/dashboard/patients/PatientDetailsModal/PatientPurchasesList/PatientPurchasesList.reducer';
+import clinicSettings from 'app/components/dashboard/settings/ApplicationSettings/ClinicSettings/ClinicSettings.reducer';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
@@ -73,6 +74,7 @@ const rootReducer = combineReducers({
   patientPurchases,
   changeLogModal,
   appNotification,
+  clinicSettings,
 });
 
 export default rootReducer;
