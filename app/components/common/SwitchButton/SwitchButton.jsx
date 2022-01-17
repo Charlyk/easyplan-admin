@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './SwitchButton.module.scss';
 
 const SwitchButton = (props) => {
-  const { isChecked, onChange } = props;
+  const { isChecked, onChange, clickable } = props;
 
   const handleToggle = () => {
     onChange?.(!isChecked);
@@ -14,6 +14,7 @@ const SwitchButton = (props) => {
   const bgClasses = clsx(
     styles['switch-button'],
     isChecked ? styles.selected : styles.default,
+    !clickable && styles.controlled,
   );
 
   const indicatorClasses = clsx(
@@ -37,5 +38,10 @@ export default SwitchButton;
 
 SwitchButton.propTypes = {
   isChecked: PropTypes.bool.isRequired,
+  clickable: PropTypes.bool,
   onChange: PropTypes.func,
+};
+
+SwitchButton.defaultProps = {
+  clickable: true,
 };

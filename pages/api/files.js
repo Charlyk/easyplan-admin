@@ -21,7 +21,7 @@ export default async (req, res) => {
       if (response.status !== 200) {
         res.setHeader('Allow', ['GET']);
         res.status(response.status).send(response.statusText);
-      } else if (response.data != null) {
+      } else if (response.data) {
         res.send(Buffer.from(response.data));
       }
       break;

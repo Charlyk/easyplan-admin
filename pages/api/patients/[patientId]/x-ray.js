@@ -62,21 +62,21 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchPatientXRayImages, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'POST': {
       const data = await handler(addXRayImage, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
     }
     case 'DELETE': {
       const data = await handler(deleteXRayImage, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;

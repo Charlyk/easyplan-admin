@@ -754,6 +754,12 @@ export default {
       'All payments related to same invoice will be removed. Are you sure you want to undo this payment?',
     value_more_then: 'The value shoud be more than',
     edit_pause: 'Edit the pause',
+    last_changes_list: 'Last changes',
+    no_recent_changes: 'No recent changes',
+    version: 'Version',
+    clinic_settings: 'Clinic settings',
+    show_doctor_on_confirmation:
+      'Show doctor name on appointment confirmation page',
   },
   ro: {
     analytics: 'Analitică',
@@ -1521,6 +1527,12 @@ export default {
     first_n_last_name: 'Nume Prenume',
     value_more_then: 'Valoarea trebuie sa fie mai mare de',
     edit_pause: 'Editează pauza',
+    last_changes_list: 'Ultimile modificări',
+    no_recent_changes: 'Nu sunt modificări recente',
+    version: 'Versiunea',
+    clinic_settings: 'Setările clincii',
+    show_doctor_on_confirmation:
+      'Afișea numele doctorului pe pagina de confirmare a programării',
   },
   ru: {
     analytics: 'Analytics',
@@ -2275,5 +2287,11 @@ export default {
     first_n_last_name: 'First and Last name',
     value_more_then: 'The value shoud be more than',
     edit_pause: 'Edit the pause',
+    last_changes_list: 'Ultimile modificări',
+    no_recent_changes: 'Nu sunt modificări recente',
+    version: 'Version',
+    clinic_settings: 'Clinic settings',
+    show_doctor_on_confirmation:
+      'Show doctor name on appointment confirmation page',
   },
 };

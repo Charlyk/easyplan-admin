@@ -1,0 +1,53 @@
+.changeLogModal {
+  .accordionDetails {
+    display: block !important;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.5rem;
+    overflow-y: auto;
+  }
+
+  .versionLabel {
+    font-size: 1.3rem;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    color: #3a83dc !important;
+  }
+
+  .progressBar {
+    color: #3a83dc;
+  }
+
+  .cardHeading {
+    font-size: 1.3rem !important;
+  }
+
+  .cardContent {
+    padding: 0 !important;
+  }
+
+  .cardDescription {
+    font-size: 1rem !important;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 16px !important;
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+  }
+
+  .cardImage {
+    width: 100%;
+    min-height: 253px;
+    margin-bottom: 16px;
+  }
+
+  .accordionWrapper {
+    box-shadow: none !important;
+  }
+
+  .modalCard {
+    box-shadow: none !important;
+    border-bottom: #ededed 1px solid;
+  }
+}

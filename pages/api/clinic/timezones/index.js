@@ -16,7 +16,7 @@ export default async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchAvailableTimeZones, req, res);
-      if (data != null) {
+      if (data) {
         res.json(data);
       }
       break;
