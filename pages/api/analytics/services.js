@@ -25,7 +25,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchServicesStatistics, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
 

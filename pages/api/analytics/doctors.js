@@ -23,7 +23,7 @@ const fetchDoctorsStatistics = async (req) => {
 
 export default authorized(async (req, res) => {
   const data = await handler(fetchDoctorsStatistics, req, res);
-  if (data == null) {
+  if (!data) {
     return;
   }
 
