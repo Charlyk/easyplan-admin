@@ -772,6 +772,8 @@ export default {
     how_to_get_moizvonki_data: 'How to find Moizvonki.ru API data?',
     moizvonki_connect_info: 'Moizvonki.ru API Info',
     article_updated_at: 'Last updated at {1}',
+    username: 'Username',
+    moizvonki_username_help: 'Email address used to login to Moizvonki.ru',
   },
   ro: {
     analytics: 'Analitică',
@@ -1555,6 +1557,9 @@ export default {
     how_to_get_moizvonki_data: 'Cum să obțin datele API pentru Moizvonki.ru?',
     moizvonki_connect_info: 'Moizvonki.ru datele API',
     article_updated_at: 'Actualizat la data {1}',
+    username: 'Nume utilizator',
+    moizvonki_username_help:
+      'Adresa de email folosită la logarea în Moizvonki.ru',
   },
   ru: {
     analytics: 'Analytics',
@@ -2327,5 +2332,7 @@ export default {
     how_to_get_moizvonki_data: 'How to find Moizvonki.ru API data?',
     moizvonki_connect_info: 'Moizvonki.ru API Info',
     article_updated_at: 'Last updated at {1}',
+    username: 'Username',
+    moizvonki_username_help: 'Email address used to login to Moizvonki.ru',
   },
 };

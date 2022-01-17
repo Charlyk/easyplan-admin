@@ -23,10 +23,11 @@ const MoizvonkiTutorial: React.FC = () => {
             <a href='https://moizvonki.ru' target='_blank' rel='noreferrer'>
               Moizvonki.ru
             </a>{' '}
-            allows you to generate leads automatically into CRM, listen phone
-            calls directly in EasyPlan app and monitor what employees are
-            talking with your clients. After integration all calls received on
-            the phone connected to Moizvonki.ru will be displayed in EasyPlan.
+            connection allows you to generate leads automatically into CRM,
+            listen phone calls directly in EasyPlan app and monitor what
+            employees are talking with your clients. After integration all calls
+            received on the phone connected to Moizvonki.ru will be displayed in
+            EasyPlan.
           </Typography>
           <Typography className={styles.dataLabel}>
             To integrate{' '}
