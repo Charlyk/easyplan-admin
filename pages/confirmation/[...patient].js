@@ -143,18 +143,20 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                   </Typography>
                 </TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Typography align='left' className={styles.dataLabel}>
-                    {textForKey('Doctor')}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography className={styles.dataLabel} noWrap>
-                    {schedule.doctorName}
-                  </Typography>
-                </TableCell>
-              </TableRow>
+              {schedule.showDoctor && (
+                <TableRow>
+                  <TableCell>
+                    <Typography align='left' className={styles.dataLabel}>
+                      {textForKey('Doctor')}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography className={styles.dataLabel}>
+                      {schedule.doctorName}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
               <TableRow>
                 <TableCell>
                   <Typography align='left' className={styles.dataLabel}>

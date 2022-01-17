@@ -8,6 +8,10 @@
   border-radius: .5rem;
   outline: none;
 
+  .controlled {
+    pointer-events: none;
+  }
+
   &__selection-indicator {
     position: relative;
     width: .8rem;

@@ -26,11 +26,7 @@ import { showWarningNotification } from 'redux/slices/globalNotificationsSlice';
 import CabinetItem from '../CabinetItem';
 import styles from './ClinicCabinets.module.scss';
 
-interface Props {
-  id: number;
-}
-
-const ClinicCabinets: React.FC<Props> = () => {
+const ClinicCabinets: React.FC = () => {
   const dispatch = useDispatch();
   const inputRef = useRef(null);
   const cabinets = useSelector(cabinetsSelector);

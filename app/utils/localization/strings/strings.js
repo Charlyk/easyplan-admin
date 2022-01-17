@@ -760,6 +760,9 @@ export default {
     last_changes_list: 'Last changes',
     no_recent_changes: 'No recent changes',
     version: 'Version',
+    clinic_settings: 'Clinic settings',
+    show_doctor_on_confirmation:
+      'Show doctor name on appointment confirmation page',
   },
   ro: {
     analytics: 'Analitică',
@@ -1533,6 +1536,9 @@ export default {
     last_changes_list: 'Ultimile modificări',
     no_recent_changes: 'Nu sunt modificări recente',
     version: 'Versiunea',
+    clinic_settings: 'Setările clincii',
+    show_doctor_on_confirmation:
+      'Afișea numele doctorului pe pagina de confirmare a programării',
   },
   ru: {
     analytics: 'Analytics',
@@ -2293,5 +2299,8 @@ export default {
     last_changes_list: 'Ultimile modificări',
     no_recent_changes: 'Nu sunt modificări recente',
     version: 'Version',
+    clinic_settings: 'Clinic settings',
+    show_doctor_on_confirmation:
+      'Show doctor name on appointment confirmation page',
   },
 };
