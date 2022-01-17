@@ -20,7 +20,7 @@ export const filteredSchedulesSelector = createSelector(
           schedule.patient?.fullName
             .toLowerCase()
             .includes(filterData.searchQuery) ||
-          schedule.patient.phoneNumber.includes(filterData.searchQuery);
+          schedule.patient?.phoneNumber.includes(filterData.searchQuery);
 
         const isServiceIdTrue =
           filterData.serviceId === -1 ||
