@@ -93,6 +93,7 @@ const PatientNotes = ({ patient }) => {
           placeholder={`${textForKey('Enter new note')}...`}
           onKeyDown={handleInputKeyDown}
           onChange={handleNewNoteChanged}
+          maxLength={1000}
         />
         <LoadingButton
           isLoading={state.isAddingNote}
