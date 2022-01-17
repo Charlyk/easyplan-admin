@@ -23,7 +23,7 @@ const MoizvonkiIntegration: React.FC = () => {
       <ApiDetailsModal open={showModal} onClose={handleCloseModal} />
       <div className={styles.rowContainer}>
         <Image src={MoizvonkiLogo} width={30} height={30} />
-        <Typography className={styles.rowTitle}>Moizvonki</Typography>
+        <Typography className={styles.rowTitle}>Moizvonki.ru</Typography>
       </div>
       <Button
         variant='contained'
@@ -33,7 +33,6 @@ const MoizvonkiIntegration: React.FC = () => {
       >
         {textForKey('Connect')}
       </Button>
-      <Button>{textForKey('how_to_get_api_info')}</Button>
     </div>
   );
 };
