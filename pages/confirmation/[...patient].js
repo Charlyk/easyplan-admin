@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,12 +9,19 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import EASImage from 'app/components/common/EASImage';
+import EASTextarea from 'app/components/common/EASTextarea';
 import LoadingButton from 'app/components/common/LoadingButton';
+import EASModal from 'app/components/common/modals/EASModal';
 import AppLogoBlue from 'app/components/icons/appLogoBlue';
 import NotificationsContext from 'app/context/notificationsContext';
 import styles from 'app/styles/ScheduleConfirmation.module.scss';
+import {
+  generateGoogleCalendarEvent,
+  generateAppleCalendarEvent,
+} from 'app/utils/addToCalendarHelpers';
 import checkIsMobileDevice from 'app/utils/checkIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
 import urlToLambda from 'app/utils/urlToLambda';
@@ -28,6 +36,8 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   const isPending =
     schedule.status === 'Pending' || schedule.status === 'WaitingForPatient';
@@ -49,14 +59,18 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
     }
   };
 
-  const cancelSchedule = async () => {
+  const cancelSchedule = async (message) => {
+    const sentMessage =
+      message === '' || message === null
+        ? textForKey('canceled_by_patient')
+        : message;
     setIsCanceling(true);
     try {
       await requestConfirmSchedule(
         scheduleId,
         patientId,
         'Canceled',
-        textForKey('canceled_by_patient'),
+        sentMessage,
       );
       setIsError(false);
       await router.reload();
@@ -72,15 +86,25 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
     if (schedule.status === 'Canceled') {
       return;
     }
-    const result = confirm(textForKey('cancel_schedule_message'));
-    if (result) {
-      cancelSchedule();
-    }
+    setIsModalOpen(true);
   };
 
   const logoSource = schedule?.clinicLogo
     ? urlToLambda(schedule.clinicLogo)
     : null;
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalConfirm = () => {
+    cancelSchedule(inputValue);
+    setIsModalOpen(false);
+  };
+
+  const handleInputChange = (value) => {
+    setInputValue(value);
+  };
 
   return (
     <div className={styles.scheduleConfirmationRoot}>
@@ -159,7 +183,7 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography className={styles.dataLabel}>
+                  <Typography className={styles.dataLabel} noWrap>
                     {schedule.service}
                   </Typography>
                 </TableCell>
@@ -209,6 +233,33 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
         </div>
       )}
 
+      {schedule && (
+        <div style={{ marginTop: '.8rem' }}>
+          <Link
+            href={generateGoogleCalendarEvent({
+              text: textForKey('appointment_to_doctor'),
+              start: schedule.startTime,
+              end: schedule.endTime,
+            })}
+          >
+            {textForKey('add_to_google_calendar')}
+          </Link>
+        </div>
+      )}
+
+      {schedule && (
+        <div style={{ marginTop: '.8rem' }}>
+          <a
+            href={generateAppleCalendarEvent({
+              start: schedule.startTime,
+              end: schedule.endTime,
+            })}
+          >
+            {textForKey('add_to_apple_calendar')}
+          </a>
+        </div>
+      )}
+
       <div className={styles.covidNoticeContainer}>
         <Typography align='right' className={styles.covidNoticeTitle}>
           {textForKey('covid_notice_title')}
@@ -221,11 +272,34 @@ const Confirmation = ({ schedule, scheduleId, patientId }) => {
       <div className={styles.footer}>
         <div className={styles.label}>
           powered by{' '}
-          <a href='https://easyplan.md' target='_blank' rel='noreferrer'>
+          <a href='https://easyplan.pro' target='_blank' rel='noreferrer'>
             <AppLogoBlue />
           </a>
         </div>
       </div>
+
+      <EASModal
+        open={isModalOpen}
+        size='small'
+        onClose={handleModalClose}
+        onBackdropClick={handleModalClose}
+        primaryBtnText={textForKey('Confirm')}
+        secondaryBtnText={textForKey('cancel_schedule')}
+        onPrimaryClick={handleModalConfirm}
+      >
+        <Box padding='16px'>
+          <Typography className={styles.modalConfirmation}>
+            {textForKey('cancel_schedule_message')}
+          </Typography>
+          <EASTextarea
+            rows={3}
+            type='text'
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder={`${textForKey('type_here')} ...`}
+          />
+        </Box>
+      </EASModal>
     </div>
   );
 };
