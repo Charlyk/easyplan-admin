@@ -31,7 +31,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
       const data = await handler(updateUserAccount, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);

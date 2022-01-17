@@ -59,7 +59,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'DELETE': {
       const data = await handler(deleteMessage, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
@@ -67,7 +67,7 @@ export default authorized(async (req, res) => {
     }
     case 'PUT': {
       const data = await handler(setMessageDisabled, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
@@ -75,7 +75,7 @@ export default authorized(async (req, res) => {
     }
     case 'POST': {
       const data = await handler(updateMessage, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
