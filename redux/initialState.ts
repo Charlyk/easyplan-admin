@@ -181,6 +181,10 @@ const initialState: ReduxState = {
     isLoading: false,
     notification: null,
   },
+  clinicSettings: {
+    isFetching: false,
+    settings: null,
+  },
 };
 
 export default initialState;

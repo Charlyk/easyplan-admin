@@ -86,6 +86,7 @@ const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {
           rows={4}
           maxRows={5}
           onChange={handleNoteChange}
+          maxLength={1000}
         />
       </form>
     </EASModal>
