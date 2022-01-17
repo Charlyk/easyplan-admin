@@ -765,6 +765,8 @@ export default {
     clinic_settings: 'Clinic settings',
     show_doctor_on_confirmation:
       'Show doctor name on appointment confirmation page',
+    api_address: 'API Address',
+    api_key: 'API Key',
   },
   ro: {
     analytics: 'Analitică',
@@ -1347,7 +1349,7 @@ export default {
     'change column color': 'Modifică culoarea',
     'column name': 'Denumirea coloanei',
     connected_facebook_page: 'Conectat la pagina {1}',
-    'connect facebook': 'Conectați pagina de Facebook',
+    'connect facebook': 'Conectează pagina de Facebook',
     'connect another page': 'Conectați altă pagină',
     integrations: 'Integrări',
     'select a page': 'Selectați o pagină',
@@ -1541,6 +1543,8 @@ export default {
     clinic_settings: 'Setările clincii',
     show_doctor_on_confirmation:
       'Afișea numele doctorului pe pagina de confirmare a programării',
+    api_address: 'Adresa API',
+    api_key: 'Cheia API',
   },
   ru: {
     analytics: 'Analytics',
@@ -2306,5 +2310,7 @@ export default {
     clinic_settings: 'Clinic settings',
     show_doctor_on_confirmation:
       'Show doctor name on appointment confirmation page',
+    api_address: 'Адрес API',
+    api_key: 'Ключ API',
   },
 };

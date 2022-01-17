@@ -1,0 +1,41 @@
+.moizvonkiIntegration {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  padding-top: 16px;
+  border-bottom: #ededed 1px solid;
+
+  .rowContainer {
+    display: flex;
+    align-items: flex-end;
+
+    .rowTitle {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-size: .9rem !important;
+      font-weight: bold !important;
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .connectButton {
+    flex: unset;
+    height: 30px;
+    margin-right: 45px;
+  }
+
+  .titleLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-size: .8rem !important;
+  }
+}
