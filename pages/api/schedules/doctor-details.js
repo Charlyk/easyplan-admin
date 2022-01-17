@@ -27,7 +27,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchDoctorScheduleDetails, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);

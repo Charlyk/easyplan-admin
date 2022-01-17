@@ -36,7 +36,7 @@ export default async function resetPassword(req, res) {
   switch (req.method) {
     case 'POST': {
       const data = await handler(resetUserPassword, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
@@ -44,7 +44,7 @@ export default async function resetPassword(req, res) {
     }
     case 'PUT': {
       const data = await handler(updateUserPassword, req, res);
-      if (data !== null) {
+      if (data) {
         res.json({ message: 'success' });
       }
       break;

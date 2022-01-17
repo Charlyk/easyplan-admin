@@ -37,7 +37,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchMessages, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
@@ -45,7 +45,7 @@ export default authorized(async (req, res) => {
     }
     case 'POST': {
       const data = await handler(createNewMessage, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
