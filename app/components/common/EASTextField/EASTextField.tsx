@@ -25,6 +25,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
       type,
       disableAutoFill,
       autoFocus,
+      placeholder,
       variant = 'outlined',
       id = null,
       ...props
@@ -87,6 +88,7 @@ const EASTextField = React.forwardRef<HTMLDivElement, EASTextFieldProps>(
             inputProps: {
               id,
               readOnly: disableAutoFill ? 'readonly' : '',
+              placeholder,
               max,
               min,
               step,
