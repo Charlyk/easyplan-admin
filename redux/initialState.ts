@@ -64,6 +64,11 @@ const initialState: ReduxState = {
     isFetchingDetails: false,
     viewDate: null,
     viewMode: 'day',
+    filterData: {
+      searchQuery: '',
+      serviceId: -1,
+      appointmentStatus: 'all',
+    },
   },
   appointmentModal: {
     open: false,

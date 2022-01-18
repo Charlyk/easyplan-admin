@@ -23,7 +23,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import {
   dayHoursSelector,
-  schedulesSelector,
+  filteredSchedulesSelector,
   updateScheduleSelector,
 } from 'redux/selectors/scheduleSelector';
 import { dispatchChangeDoctorCalendarOrder } from 'redux/slices/appDataSlice';
@@ -46,7 +46,7 @@ const CalendarDayView = ({
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const updateSchedule = useSelector(updateScheduleSelector);
-  const schedules = useSelector(schedulesSelector);
+  const schedules = useSelector(filteredSchedulesSelector);
   const hours = useSelector(dayHoursSelector);
   const cabinets = useSelector(clinicCabinetsSelector);
   const doctors = useSelector(calendarDoctorsSelector);

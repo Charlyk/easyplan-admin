@@ -8,7 +8,7 @@ import getCurrentWeek from 'app/utils/getCurrentWeek';
 import { calendarDoctorsSelector } from 'redux/selectors/appDataSelector';
 import {
   dayHoursSelector,
-  schedulesSelector,
+  filteredSchedulesSelector,
 } from 'redux/selectors/scheduleSelector';
 import styles from './CalendarWeekView.module.scss';
 
@@ -24,7 +24,7 @@ const CalendarWeekView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
-  const schedules = useSelector(schedulesSelector);
+  const schedules = useSelector(filteredSchedulesSelector);
   const hours = useSelector(dayHoursSelector);
   const doctors = useSelector(calendarDoctorsSelector);
   const week = getCurrentWeek(viewDate);
