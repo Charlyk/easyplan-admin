@@ -5,7 +5,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { CalendarDataState } from 'redux/types';
 import { ScheduleItem, ScheduleDetails, Schedule } from 'types';
-import { FilterData } from '../types/types';
+import { FilterData } from '../types';
 
 const isScheduleInGroup = (group: ScheduleItem, schedule: Schedule) => {
   const scheduleDate = moment(schedule.startTime).format('YYYY-MM-DD');
