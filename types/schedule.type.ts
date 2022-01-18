@@ -18,6 +18,7 @@ export interface Schedule {
   patient: {
     id: number;
     fullName: string;
+    phoneNumber: string;
   };
   startTime: Date;
   endTime: Date;
