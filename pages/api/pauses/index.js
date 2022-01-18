@@ -24,7 +24,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'POST': {
       const data = await handler(createPauseRecord, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);

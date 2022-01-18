@@ -50,7 +50,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchAllTags, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
@@ -58,7 +58,7 @@ export default authorized(async (req, res) => {
     }
     case 'POST': {
       const data = await handler(createNewTag, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
@@ -66,7 +66,7 @@ export default authorized(async (req, res) => {
     }
     case 'DELETE': {
       const data = await handler(deleteTag, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);

@@ -41,7 +41,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchScheduleDetails, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
@@ -49,7 +49,7 @@ export default authorized(async (req, res) => {
     }
     case 'DELETE': {
       const data = await handler(deleteSchedule, req, res);
-      if (data == null) {
+      if (!data) {
         return;
       }
       res.json(data);
