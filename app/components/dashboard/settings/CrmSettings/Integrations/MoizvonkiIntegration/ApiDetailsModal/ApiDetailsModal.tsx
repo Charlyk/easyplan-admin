@@ -1,26 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Link from 'next/link';
 import EASTextField from 'app/components/common/EASTextField';
 import EASModal from 'app/components/common/modals/EASModal';
 import { EmailRegex } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import { MoizvonkiConnection } from 'types';
 import styles from './ApiDetailsModal.module.scss';
 
 interface ApiDetailsModalProps {
   open: boolean;
+  connection?: MoizvonkiConnection | null;
   onClose: () => void;
-  onSubmit?: (apiUrl: string, apiKey: string) => void;
+  onDisconnect?: () => void;
+  onSubmit?: (apiUrl: string, apiKey: string, username: string) => void;
 }
 
 const ApiDetailsModal: React.FC<ApiDetailsModalProps> = ({
   open,
+  connection,
   onClose,
   onSubmit,
+  onDisconnect,
 }) => {
   const [apiUrl, setApiUrl] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    if (connection == null) {
+      return;
+    }
+    setApiUrl(connection.apiUrl);
+    setApiKey(connection.apiKey);
+    setUsername(connection.username);
+  }, [connection]);
 
   const isFormValid =
     apiUrl.includes('.moizvonki.ru') &&
@@ -40,7 +54,12 @@ const ApiDetailsModal: React.FC<ApiDetailsModalProps> = ({
   };
 
   const handleSubmitApiInfo = () => {
-    onSubmit?.(apiUrl, apiKey);
+    onSubmit?.(apiUrl, apiKey, username);
+    onClose?.();
+  };
+
+  const handleDisconnect = () => {
+    onDisconnect?.();
     onClose?.();
   };
 
@@ -51,11 +70,15 @@ const ApiDetailsModal: React.FC<ApiDetailsModalProps> = ({
       size='small'
       className={styles.apiDetailsModal}
       title={textForKey('moizvonki_connect_info')}
+      destroyBtnText={textForKey('disconnect')}
       onPrimaryClick={handleSubmitApiInfo}
+      onDestroyClick={handleDisconnect}
+      isDestroyDisabled={connection == null}
       isPositiveDisabled={!isFormValid}
     >
       <div className={styles.data}>
         <EASTextField
+          value={username}
           onChange={handleUsernameChange}
           containerClass={styles.field}
           fieldLabel={textForKey('username')}
@@ -63,12 +86,14 @@ const ApiDetailsModal: React.FC<ApiDetailsModalProps> = ({
           helperText={textForKey('moizvonki_username_help')}
         />
         <EASTextField
+          value={apiUrl}
           onChange={handleApiUrlChange}
           containerClass={styles.field}
           fieldLabel={textForKey('api_address')}
           placeholder='domain.moizvonki.ru'
         />
         <EASTextField
+          value={apiKey}
           onChange={handleApiKeyChange}
           fieldLabel={textForKey('api_key')}
         />

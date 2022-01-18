@@ -2,8 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
 import { textForKey } from 'app/utils/localization';
+import homeProfile from 'public/howto/moizvonki/home-profile.png';
+import homeSettings from 'public/howto/moizvonki/home-settings.png';
 import homePage from 'public/howto/moizvonki/home.png';
 import integrationsPage from 'public/howto/moizvonki/integrations.png';
+import profile from 'public/howto/moizvonki/profile.png';
 import settingsPage from 'public/howto/moizvonki/settings.png';
 import SupportArticles from '../SupportArticles';
 import styles from './MoizvonkiTutorial.module.scss';
@@ -39,6 +42,31 @@ const MoizvonkiTutorial: React.FC = () => {
               EasyPlan.pro
             </a>{' '}
             application please follow next steps:
+          </Typography>
+          <Typography variant='h5' className={styles.dataLabel}>
+            Find user name
+          </Typography>
+          <Typography className={styles.dataLabel}>
+            1. Login to your account on{' '}
+            <a href='https://moizvonki.ru' target='_blank' rel='noreferrer'>
+              Moizvonki.ru
+            </a>{' '}
+            and open dashboard home page.
+          </Typography>
+          <Typography className={styles.dataLabel}>
+            2. Click on your name from left-side menu
+          </Typography>
+          <Image src={homeProfile} />
+          <Typography className={styles.dataLabel}>
+            2. Under your name click on My profile (Мой профиль)
+          </Typography>
+          <Image src={homeSettings} />
+          <Typography className={styles.dataLabel}>
+            3. Copy email address from Адрес электронной почты field
+          </Typography>
+          <Image src={profile} />
+          <Typography variant='h5' className={styles.dataLabel}>
+            Find API url and API key
           </Typography>
           <Typography className={styles.dataLabel}>
             1. Login into your account on{' '}

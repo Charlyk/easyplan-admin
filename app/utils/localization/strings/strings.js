@@ -774,6 +774,8 @@ export default {
     article_updated_at: 'Last updated at {1}',
     username: 'Username',
     moizvonki_username_help: 'Email address used to login to Moizvonki.ru',
+    disconnect: 'Disconnect',
+    edit_connection: 'Edit connection',
   },
   ro: {
     analytics: 'Analitică',
@@ -1560,6 +1562,8 @@ export default {
     username: 'Nume utilizator',
     moizvonki_username_help:
       'Adresa de email folosită la logarea în Moizvonki.ru',
+    disconnect: 'Deconectează',
+    edit_connection: 'Editează conexiunea',
   },
   ru: {
     analytics: 'Analytics',
@@ -2334,5 +2338,7 @@ export default {
     article_updated_at: 'Last updated at {1}',
     username: 'Username',
     moizvonki_username_help: 'Email address used to login to Moizvonki.ru',
+    disconnect: 'Disconnect',
+    edit_connection: 'Edit connection',
   },
 };

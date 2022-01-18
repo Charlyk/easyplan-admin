@@ -21,6 +21,7 @@ import {
   PatientVisit,
   AppNotification,
   ClinicSettings,
+  MoizvonkiConnection,
 } from 'types';
 
 export interface CalendarDataState {
@@ -194,6 +195,11 @@ export interface ClinicSettingsState {
   settings: ClinicSettings | null;
 }
 
+export interface MoizvonkiConnectionState {
+  isLoading: boolean;
+  connection?: MoizvonkiConnection | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -239,4 +245,5 @@ export interface ReduxState {
   changeLogModal: ChangeLogModalState;
   appNotification: AppNotificationState;
   clinicSettings: ClinicSettingsState;
+  moizvonkiConnection: MoizvonkiConnectionState;
 }

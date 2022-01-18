@@ -180,6 +180,10 @@ const initialState: ReduxState = {
     isFetching: false,
     settings: null,
   },
+  moizvonkiConnection: {
+    isLoading: false,
+    connection: null,
+  },
 };
 
 export default initialState;
