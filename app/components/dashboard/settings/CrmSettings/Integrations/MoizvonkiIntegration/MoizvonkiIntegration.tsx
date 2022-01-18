@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import { textForKey } from 'app/utils/localization';
 import MoizvonkiLogo from 'public/moizvonki_logo.png';
-import ApiDetailsModal from './ApiDetailsModal/ApiDetailsModal';
+import ApiDetailsModal from './ApiDetailsModal';
 import styles from './MoizvonkiIntegration.module.scss';
 import {
   dispatchFetchConnectionInfo,
