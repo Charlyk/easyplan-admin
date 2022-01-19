@@ -44,6 +44,11 @@ export default function CreateClinicWrapper({
     }
   };
 
+  const redirectToDashboard = async (clinic) => {
+    const clinicUrl = getClinicUrl(clinic, token);
+    await router.replace(clinicUrl);
+  };
+
   const handleCreateClinic = async (clinicData) => {
     dispatch(setIsLoading(true));
     try {
@@ -52,11 +57,7 @@ export default function CreateClinicWrapper({
       const response = await createNewClinic(clinicData, clinicData.logoFile);
       dispatch(setCurrentClinic(response.data));
       if (newAccount) {
-        const redirectUrl = getRedirectUrlForUser(
-          currentUser,
-          response.data.domainName,
-        );
-        await router.replace(redirectUrl);
+        await redirectToDashboard(response.data);
       } else {
         router.back();
       }
