@@ -22,6 +22,7 @@ import reducer, {
 } from './createClinicWrapperSlice';
 
 export default function CreateClinicWrapper({
+  newAccount,
   token,
   redirect,
   countries,
@@ -43,11 +44,6 @@ export default function CreateClinicWrapper({
     }
   };
 
-  const redirectToDashboard = async (clinic) => {
-    const clinicUrl = getClinicUrl(clinic, token);
-    await router.replace(clinicUrl);
-  };
-
   const handleCreateClinic = async (clinicData) => {
     dispatch(setIsLoading(true));
     try {
@@ -55,14 +51,12 @@ export default function CreateClinicWrapper({
       delete requestBody.logoFile;
       const response = await createNewClinic(clinicData, clinicData.logoFile);
       dispatch(setCurrentClinic(response.data));
-      if (shouldLogin) {
+      if (newAccount) {
         const redirectUrl = getRedirectUrlForUser(
           currentUser,
           response.data.domainName,
         );
         await router.replace(redirectUrl);
-      } else if (redirect) {
-        await redirectToDashboard(response.data);
       } else {
         router.back();
       }

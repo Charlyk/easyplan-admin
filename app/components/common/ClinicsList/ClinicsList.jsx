@@ -32,7 +32,7 @@ export default function ClinicsList({ user, authToken, isMobile }) {
       }
       handleClinicSelected(user.clinics[0]);
     } else if (user?.clinics.length === 0) {
-      router.replace('/create-clinic');
+      router.replace('/create-clinic?fresh=1');
     }
   }, [user]);
 
