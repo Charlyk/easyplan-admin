@@ -31,6 +31,7 @@ import {
 } from 'redux/selectors/scheduleSelector';
 import { updateFilterData } from 'redux/slices/calendarData';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import CalendarNoDataView from '../../common/CalendarNoDataView';
 import DoctorsCalendarDay from '../DoctorsCalendarDay';
 import PatientsFilter from '../PatientsFilter';
 import styles from './DoctorCalendar.module.scss';
@@ -239,6 +240,7 @@ const DoctorCalendar = ({ viewMode, date }) => {
             columns={mappedWeek}
             schedules={filteredSchedules}
             viewDate={viewDate}
+            noDataView={<CalendarNoDataView />}
             animatedStatuses={['OnSite']}
             onScheduleSelected={handleScheduleSelected}
             onHeaderItemClick={handleDateClick}
