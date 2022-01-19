@@ -765,6 +765,7 @@ export default {
     clinic_settings: 'Clinic settings',
     show_doctor_on_confirmation:
       'Show doctor name on appointment confirmation page',
+    no_categories_message: 'There are no categories yet :(',
   },
   ro: {
     analytics: 'Analitică',
@@ -1541,6 +1542,7 @@ export default {
     clinic_settings: 'Setările clincii',
     show_doctor_on_confirmation:
       'Afișea numele doctorului pe pagina de confirmare a programării',
+    no_categories_message: 'Încă nu sunt categorii create :(',
   },
   ru: {
     analytics: 'Analytics',
@@ -2306,5 +2308,6 @@ export default {
     clinic_settings: 'Clinic settings',
     show_doctor_on_confirmation:
       'Show doctor name on appointment confirmation page',
+    no_categories_message: 'There are no categories yet :(',
   },
 };
