@@ -126,6 +126,7 @@ const AddAppointmentModal = ({
   // map cabinets for autocomplete fields
   const cabinets = useMemo(() => {
     if (doctor == null || doctor.cabinets?.length === 0) {
+      localDispatch(setSelectedCabinetInDoctorMode(null));
       return [];
     } else {
       return orderBy(
@@ -138,9 +139,7 @@ const AddAppointmentModal = ({
 
   // check if there are any cabinets
   const shouldSelectCabinet =
-    selectedCabinet == null &&
-    schedule?.cabinet == null &&
-    doctor?.cabinets?.length > 0;
+    selectedCabinet == null && schedule?.cabinet == null && cabinets.length > 0;
 
   // check if data is fetching
   const isLoading = isFetchingHours || isCreatingSchedule;
@@ -395,6 +394,13 @@ const AddAppointmentModal = ({
   };
 
   const isFormValid = () => {
+    console.log(
+      isDoctorValid,
+      isServiceValid,
+      startTime?.length > 0,
+      endTime?.length > 0,
+      !shouldSelectCabinet || cabinet != null,
+    );
     return (
       isDoctorValid &&
       isServiceValid &&
@@ -437,6 +443,7 @@ const AddAppointmentModal = ({
         status: appointmentStatus,
         scheduleId: scheduleId,
       };
+      console.log(requestBody);
 
       await postSchedule(requestBody);
       onClose();
