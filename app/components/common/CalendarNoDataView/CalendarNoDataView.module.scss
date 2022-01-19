@@ -1,0 +1,21 @@
+.calendarNoDataView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 350px;
+
+  .dayOffLabel {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    text-align: center !important;
+    color: #34354c !important;
+  }
+
+  .addAppointmentBtn {
+    color: #3a83dc;
+    margin-top: 20px;
+  }
+}
