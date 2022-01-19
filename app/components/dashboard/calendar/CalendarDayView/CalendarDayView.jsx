@@ -9,8 +9,10 @@ import orderBy from 'lodash/orderBy';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import CalendarNoDataView from 'app/components/common/CalendarNoDataView';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import isOutOfBounds from 'app/utils/isOutOfBounds';
@@ -19,6 +21,7 @@ import { fetchSchedulesHours } from 'middleware/api/schedules';
 import {
   calendarDoctorsSelector,
   clinicCabinetsSelector,
+  isManagerSelector,
   userCalendarOrderSelector,
 } from 'redux/selectors/appDataSelector';
 import {
@@ -43,8 +46,10 @@ const CalendarDayView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
+  const isManager = useSelector(isManagerSelector);
   const updateSchedule = useSelector(updateScheduleSelector);
   const schedules = useSelector(filteredSchedulesSelector);
   const hours = useSelector(dayHoursSelector);
@@ -147,6 +152,10 @@ const CalendarDayView = ({
     const doctor = doctors.find((item) => item.id === doctorId);
     const cabinet = cabinets.find((item) => item.id === cabinetId);
     onCreateSchedule(doctor, startHour, endHour, selectedDate, null, cabinet);
+  };
+
+  const handleOpenClinicSettings = async () => {
+    await router.push({ pathname: '/settings', search: 'menu=workingHours' });
   };
 
   /**
@@ -307,6 +316,12 @@ const CalendarDayView = ({
         dayHours={hours}
         columns={mappedColumns}
         schedules={schedules}
+        noDataView={
+          <CalendarNoDataView
+            showButton={isManager}
+            onSetupHours={handleOpenClinicSettings}
+          />
+        }
         showHourIndicator={showHourIndicator}
         animatedStatuses={['WaitingForPatient']}
         onAddSchedule={handleAddSchedule}

@@ -776,6 +776,8 @@ export default {
     moizvonki_username_help: 'Email address used to login to Moizvonki.ru',
     disconnect: 'Disconnect',
     edit_connection: 'Edit connection',
+    clinic_has_no_working_hours: '{1} is a day off.',
+    edit_working_hours: 'Edit working hours',
   },
   ro: {
     analytics: 'Analitică',
@@ -1564,6 +1566,8 @@ export default {
       'Adresa de email folosită la logarea în Moizvonki.ru',
     disconnect: 'Deconectează',
     edit_connection: 'Editează conexiunea',
+    clinic_has_no_working_hours: 'Clinica are zi liberă pentru {1}.',
+    edit_working_hours: 'Editează programul de lucru',
   },
   ru: {
     analytics: 'Analytics',
@@ -2340,5 +2344,7 @@ export default {
     moizvonki_username_help: 'Email address used to login to Moizvonki.ru',
     disconnect: 'Disconnect',
     edit_connection: 'Edit connection',
+    clinic_has_no_working_hours: '{1} is a day off.',
+    edit_working_hours: 'Edit working hours',
   },
 };
