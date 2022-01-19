@@ -765,6 +765,8 @@ export default {
     clinic_settings: 'Clinic settings',
     show_doctor_on_confirmation:
       'Show doctor name on appointment confirmation page',
+    clinic_has_no_working_hours: '{1} is a day off.',
+    edit_working_hours: 'Edit working hours',
   },
   ro: {
     analytics: 'Analitică',
@@ -1541,6 +1543,8 @@ export default {
     clinic_settings: 'Setările clincii',
     show_doctor_on_confirmation:
       'Afișea numele doctorului pe pagina de confirmare a programării',
+    clinic_has_no_working_hours: 'Clinica are zi liberă pentru {1}.',
+    edit_working_hours: 'Editează programul de lucru',
   },
   ru: {
     analytics: 'Analytics',
@@ -2306,5 +2310,7 @@ export default {
     clinic_settings: 'Clinic settings',
     show_doctor_on_confirmation:
       'Show doctor name on appointment confirmation page',
+    clinic_has_no_working_hours: '{1} is a day off.',
+    edit_working_hours: 'Edit working hours',
   },
 };
