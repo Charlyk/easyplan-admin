@@ -17,6 +17,7 @@ const EasyCalendar = ({
   showHourIndicator,
   animatedStatuses,
   hideCreateIndicator,
+  noDataView,
   onAddSchedule,
   onScheduleSelected,
   onHeaderItemClick,
@@ -33,6 +34,9 @@ const EasyCalendar = ({
         onMoveRight={onMoveColumnRight}
       />
       <div className={styles.calendarContainer}>
+        {dayHours.length === 0 && (
+          <div className={styles.noDataContainer}>{noDataView}</div>
+        )}
         <HourIndicator
           disabled={
             !hourIndicator || dayHours.length === 0 || !showHourIndicator
@@ -119,6 +123,7 @@ EasyCalendar.propTypes = {
       'Rescheduled',
     ]),
   ),
+  noDataView: PropTypes.element,
   onAddSchedule: PropTypes.func,
   onScheduleSelected: PropTypes.func,
   onHeaderItemClick: PropTypes.func,
