@@ -31,7 +31,7 @@ export default function CreateClinicWrapper({
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
   const handleGoBack = async () => {
-    if (redirect) {
+    if (newAccount) {
       await router.replace('/login');
     } else {
       router.back();
