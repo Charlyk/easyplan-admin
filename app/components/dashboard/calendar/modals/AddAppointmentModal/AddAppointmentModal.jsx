@@ -394,13 +394,6 @@ const AddAppointmentModal = ({
   };
 
   const isFormValid = () => {
-    console.log(
-      isDoctorValid,
-      isServiceValid,
-      startTime?.length > 0,
-      endTime?.length > 0,
-      !shouldSelectCabinet || cabinet != null,
-    );
     return (
       isDoctorValid &&
       isServiceValid &&
@@ -443,7 +436,6 @@ const AddAppointmentModal = ({
         status: appointmentStatus,
         scheduleId: scheduleId,
       };
-      console.log(requestBody);
 
       await postSchedule(requestBody);
       onClose();
