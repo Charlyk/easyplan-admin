@@ -3,16 +3,13 @@ import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import getClinicUrl from 'app/utils/getClinicUrl';
-import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import { textForKey } from 'app/utils/localization';
 import { isDev } from 'eas.config';
 import { createNewClinic } from 'middleware/api/clinic';
-import { currentUserSelector } from 'redux/selectors/appDataSelector';
 import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import CreateClinicForm from '../CreateClinicForm';
 import styles from './CreateClinic.module.scss';
@@ -22,16 +19,14 @@ import reducer, {
 } from './createClinicWrapperSlice';
 
 export default function CreateClinicWrapper({
+  newAccount,
   token,
-  redirect,
   countries,
-  shouldLogin,
   isMobile,
 }) {
   const toast = useContext(NotificationsContext);
   const router = useRouter();
   const isOnPhone = useIsMobileDevice();
-  const currentUser = useSelector(currentUserSelector);
   const isMobileDevice = isMobile || isOnPhone;
   const [{ isLoading }, dispatch] = useReducer(reducer, initialState);
 
@@ -55,13 +50,7 @@ export default function CreateClinicWrapper({
       delete requestBody.logoFile;
       const response = await createNewClinic(clinicData, clinicData.logoFile);
       dispatch(setCurrentClinic(response.data));
-      if (shouldLogin) {
-        const redirectUrl = getRedirectUrlForUser(
-          currentUser,
-          response.data.domainName,
-        );
-        await router.replace(redirectUrl);
-      } else if (redirect) {
+      if (newAccount) {
         await redirectToDashboard(response.data);
       } else {
         router.back();
@@ -100,7 +89,7 @@ export default function CreateClinicWrapper({
         <CreateClinicForm
           isMobile={isMobileDevice}
           countries={countries}
-          redirect={redirect}
+          redirect={newAccount}
           onSubmit={handleCreateClinic}
           onGoBack={handleGoBack}
           isLoading={isLoading}
