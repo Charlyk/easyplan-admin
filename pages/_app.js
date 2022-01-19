@@ -220,6 +220,7 @@ const EasyApp = ({ Component, pageProps }) => {
   };
 
   const handleUserLogout = async () => {
+    dispatch(triggerUserLogOut(false));
     await signOut();
     router.replace(appBaseUrl).then(() => {
       dispatch(triggerUserLogOut(false));
