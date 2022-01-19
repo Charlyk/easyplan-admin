@@ -10,14 +10,13 @@ import { fetchAllCountries } from 'middleware/api/countries';
 import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
 
-const CreateClinic = ({ token, redirect, countries, login, isMobile }) => {
+const CreateClinic = ({ token, countries, isMobile, newAccount }) => {
   return (
     <CreateClinicWrapper
+      newAccount={newAccount}
       isMobile={isMobile}
-      redirect={redirect}
       token={token}
       countries={countries}
-      shouldLogin={login}
     />
   );
 };
@@ -47,13 +46,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
         store.dispatch(setCookies(cookies));
         const { data: countries } = await fetchAllCountries(req.headers);
-        const { redirect, login } = query;
+        const { fresh } = query;
         return {
           props: {
             isMobile,
             token: authToken,
-            redirect: redirect === '1',
-            shouldLogin: login === '1',
+            newAccount: fresh === '1',
             countries,
           },
         };
