@@ -1,7 +1,7 @@
 import React from 'react';
+import { Typography } from '@material-ui/core';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
 import { textForKey } from 'app/utils/localization';
 import styles from './PatientNote.module.scss';
 
