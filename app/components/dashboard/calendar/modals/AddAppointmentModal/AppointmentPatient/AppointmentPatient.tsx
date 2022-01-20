@@ -91,7 +91,6 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
   };
 
   const handlePatientSourceChange = (event) => {
-    console.log(event.target.value);
     setPatientData({
       ...patientData,
       source: event.target.value,
