@@ -88,6 +88,7 @@ export interface AppDataState {
   isUpdatingProfile: boolean;
   isUpdatingClinic: boolean;
   isAppInitialized?: boolean;
+  isEmailChanged: boolean;
 }
 
 export interface CabinetsDataState {
