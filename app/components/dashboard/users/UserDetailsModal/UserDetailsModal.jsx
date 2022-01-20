@@ -81,6 +81,10 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
     localDispatch(setUserData({ ...userData, ...newData }));
   };
 
+  // console.log('*****************************************');
+  // console.log(userData);
+  // console.log('*****************************************');
+
   const saveUser = async () => {
     const newServices = userData.services.map((item) => {
       if (item.price != null || item.percentage != null) return item;
@@ -97,6 +101,9 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
       services: newServices,
       braces: newBraces,
     };
+
+    console.log('*****************************************');
+    console.log(requestBody);
 
     if (user != null) {
       await updateUser(requestBody);

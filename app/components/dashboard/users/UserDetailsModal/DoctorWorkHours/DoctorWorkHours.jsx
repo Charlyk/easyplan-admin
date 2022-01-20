@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import WorkDay from 'app/components/common/WorkDay';
 import styles from './DoctorWorkHours.module.scss';
 
-const DoctorWorkHours = (props) => {
-  const { data, onChange } = props;
-
+const DoctorWorkHours = ({ data, onChange }) => {
   const handleDayChange = (day, startHour, endHour, isSelected) => {
     const newDays = data.workdays.map((item) => {
       if (item.day !== day.day) return item;
+
       return {
         ...item,
         startHour,
         endHour,
+        isDayOff: !isSelected || startHour == null || endHour == null,
         selected: isSelected,
       };
     });
