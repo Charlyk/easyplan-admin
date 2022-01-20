@@ -53,12 +53,12 @@ const fetchIncomeStats = (req) => {
 
 export default authorized(async (req, res) => {
   const scheduleStats = await handler(fetchScheduleStats, req, res);
-  if (scheduleStats == null) {
+  if (!scheduleStats) {
     res.json(emptyResponse);
     return;
   }
   const financeStats = await handler(fetchIncomeStats, req, res);
-  if (financeStats == null) {
+  if (!financeStats) {
     res.json(emptyResponse);
     return;
   }

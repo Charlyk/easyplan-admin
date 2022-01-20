@@ -49,11 +49,11 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const categories = await handler(fetchCategories, req, res);
-      if (categories == null) {
+      if (!categories) {
         return;
       }
       const services = await handler(fetchServices, req, res);
-      if (services == null) {
+      if (!services) {
         return;
       }
       res.json({ categories, services });
@@ -61,7 +61,7 @@ export default authorized(async (req, res) => {
     }
     case 'POST': {
       const response = await handler(createService, req, res);
-      if (response == null) {
+      if (!response) {
         return;
       }
       res.json(response);

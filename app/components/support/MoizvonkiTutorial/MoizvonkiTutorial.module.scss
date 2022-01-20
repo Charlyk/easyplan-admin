@@ -1,0 +1,51 @@
+.moizvonkiTutorial {
+  flex: 1;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+
+  .title {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+  }
+
+  .updatedAt {
+    font-family: Inter, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    color: #6F7787 !important;
+  }
+
+  .dataContainer {
+    flex: 1;
+    margin-top: 20px;
+    font-size: 16px;
+
+    a {
+      text-transform: none;
+      text-decoration: none;
+      font-size: inherit;
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal;
+      color: #3a83dc;
+    }
+
+    img {
+      width: 70% !important;
+      height: auto !important;
+      object-fit: contain;
+    }
+
+    .dataLabel {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      color: #34354c;
+      margin-bottom: 10px;
+    }
+  }
+}

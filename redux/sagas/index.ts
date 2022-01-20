@@ -29,6 +29,9 @@ import {
   markNotificationAsReadWatcher,
   clinicSettingsWatcher,
   updateConfirmationDoctorWatcher,
+  moizvonkiConnectionWatcher,
+  updateMoizvonkiConnectionWatcher,
+  disconnectMoizvonkiWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -62,5 +65,8 @@ export default function* rootSaga() {
     markNotificationAsReadWatcher(),
     clinicSettingsWatcher(),
     updateConfirmationDoctorWatcher(),
+    moizvonkiConnectionWatcher(),
+    updateMoizvonkiConnectionWatcher(),
+    disconnectMoizvonkiWatcher(),
   ]);
 }
