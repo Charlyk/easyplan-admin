@@ -81,10 +81,6 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
     localDispatch(setUserData({ ...userData, ...newData }));
   };
 
-  // console.log('*****************************************');
-  // console.log(userData);
-  // console.log('*****************************************');
-
   const saveUser = async () => {
     const newServices = userData.services.map((item) => {
       if (item.price != null || item.percentage != null) return item;
@@ -96,14 +92,19 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
       return { ...item, price: 0 };
     });
 
+    const newWorkDays = userData.workdays.map((day) => ({
+      ...day,
+      startHour:
+        day.startHour === 'none' || day.isDayOff ? null : day.startHour,
+      endHour: day.endHour === 'none' || day.isDayOff ? null : day.endHour,
+    }));
+
     const requestBody = {
       ...userData,
+      workdays: newWorkDays,
       services: newServices,
       braces: newBraces,
     };
-
-    console.log('*****************************************');
-    console.log(requestBody);
 
     if (user != null) {
       await updateUser(requestBody);
