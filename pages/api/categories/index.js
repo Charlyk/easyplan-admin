@@ -29,7 +29,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'POST': {
       const response = await handler(createCategory, req, res);
-      if (response == null) {
+      if (!response) {
         return;
       }
       res.json(response);
