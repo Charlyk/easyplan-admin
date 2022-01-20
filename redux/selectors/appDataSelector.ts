@@ -160,3 +160,8 @@ export const isUpdatingProfileSelector = createSelector(
   appDataSelector,
   (data) => data.isUpdatingProfile,
 );
+
+export const isEmailChangedSelector = createSelector(
+  appDataSelector,
+  (data) => data.isEmailChanged,
+);
