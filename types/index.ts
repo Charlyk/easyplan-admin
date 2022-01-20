@@ -32,3 +32,4 @@ export * from './patientVisit.types';
 export * from './patientPurchase.types';
 export * from './globalNotification.type';
 export * from './clinicSettings.types';
+export * from './moizvonkiConnection.types';

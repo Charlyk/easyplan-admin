@@ -1,0 +1,25 @@
+.apiDetailsModal {
+  .data {
+    padding: 16px;
+
+    .field {
+      margin-bottom: 5px;
+    }
+
+    .howToBtn {
+      width: 100%;
+      margin-top: 10px;
+      text-align: center;
+
+      a {
+        color: #3a83dc;
+        text-transform: none;
+        text-decoration: none;
+        font-family: Inter, sans-serif !important;
+        font-style: normal !important;
+        font-size: .8rem !important;
+        font-weight: normal !important;
+      }
+    }
+  }
+}
