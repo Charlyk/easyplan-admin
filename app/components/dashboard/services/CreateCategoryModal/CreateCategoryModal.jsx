@@ -51,8 +51,11 @@ const CreateCategoryModal = (props) => {
   };
 
   const createNewCategory = async () => {
+    if (categoryName.trim().length === 0) {
+      return;
+    }
     try {
-      const response = await requestCreateCategory(categoryName);
+      const response = await requestCreateCategory(categoryName.trim());
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {
@@ -91,7 +94,7 @@ const CreateCategoryModal = (props) => {
       onPrimaryClick={handleCategorySave}
       isPositiveLoading={isLoading}
       destroyBtnText={destroyBtnText}
-      isPositiveDisabled={isLoading}
+      isPositiveDisabled={isLoading || categoryName.trim().length === 0}
       onDestroyClick={category === null ? null : handleOnDelete}
     >
       <form style={{ padding: '16px' }} onSubmit={handleCategorySave}>

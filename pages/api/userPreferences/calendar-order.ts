@@ -31,7 +31,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
       const response = await handler(changeDoctorCalendarOrder, req, res);
-      if (response !== null) {
+      if (response) {
         res.json(response);
       }
       break;

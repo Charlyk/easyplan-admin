@@ -33,7 +33,7 @@ export default authorized(async (req, res) => {
     case 'PUT': {
       const response: typeof toggleDoctorCreateShcedulesPermission =
         await handler(toggleDoctorCreateShcedulesPermission, req, res);
-      if (response !== null) {
+      if (response) {
         res.json(response);
       }
       break;

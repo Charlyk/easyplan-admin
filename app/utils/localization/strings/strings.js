@@ -767,6 +767,7 @@ export default {
       'Show doctor name on appointment confirmation page',
     clinic_has_no_working_hours: '{1} is a day off.',
     edit_working_hours: 'Edit working hours',
+    no_categories_message: 'There are no categories yet :(',
   },
   ro: {
     analytics: 'Analitică',
@@ -1545,6 +1546,7 @@ export default {
       'Afișea numele doctorului pe pagina de confirmare a programării',
     clinic_has_no_working_hours: 'Clinica are zi liberă pentru {1}.',
     edit_working_hours: 'Editează programul de lucru',
+    no_categories_message: 'Încă nu sunt categorii create :(',
   },
   ru: {
     analytics: 'Analytics',
@@ -2312,5 +2314,6 @@ export default {
       'Show doctor name on appointment confirmation page',
     clinic_has_no_working_hours: '{1} is a day off.',
     edit_working_hours: 'Edit working hours',
+    no_categories_message: 'There are no categories yet :(',
   },
 };
