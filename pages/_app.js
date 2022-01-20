@@ -178,6 +178,7 @@ const EasyApp = ({ Component, pageProps }) => {
       path.includes('confirmation') ||
       path.includes('reset-password') ||
       path.includes('create-clinic') ||
+      path.includes('how-to') ||
       isChecking
     ) {
       // no need to check auth status on integrations page
