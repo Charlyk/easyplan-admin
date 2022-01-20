@@ -45,11 +45,13 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchPatientOrthodonticPlan, req, res);
+      if (!data) return;
       res.json(data);
       break;
     }
     case 'POST': {
       const data = await handler(updateOrthodonticPlan, req, res);
+      if (!data) return;
       res.json(data);
       break;
     }

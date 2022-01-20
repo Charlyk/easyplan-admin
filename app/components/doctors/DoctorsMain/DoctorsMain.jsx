@@ -94,7 +94,7 @@ const DoctorsMain = ({ children, pageTitle }) => {
   };
 
   const handleCreateClinic = async () => {
-    await router.push('/create-clinic?redirect=0');
+    await router.push('/create-clinic?fresh=0');
   };
 
   const handleStartLogout = () => {

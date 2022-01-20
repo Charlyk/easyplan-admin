@@ -45,7 +45,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'PUT': {
       const response = await handler(updateCategory, req, res);
-      if (response == null) {
+      if (!response) {
         return;
       }
       res.json(response);
@@ -53,7 +53,7 @@ export default authorized(async (req, res) => {
     }
     case 'DELETE': {
       const response = await handler(deleteCategory, req, res);
-      if (response === null) return;
+      if (!response) return;
       res.json(response);
       break;
     }

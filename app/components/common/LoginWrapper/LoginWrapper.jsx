@@ -154,7 +154,7 @@ export default function LoginWrapper({
   const handleLoginActionReceived = async (action) => {
     switch (action) {
       case 'CreateClinic':
-        await router.push('/create-clinic?redirect=1');
+        await router.push('/create-clinic?fresh=1');
         break;
       case 'SelectClinic':
         await router.replace('/clinics');
