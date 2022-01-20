@@ -12,6 +12,7 @@ import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import paths from 'app/utils/paths';
 import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
+import { appBaseUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setPatientNoteModal,
@@ -19,6 +20,7 @@ import {
   setPaymentModal,
 } from 'redux/actions/actions';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
+import initialState from 'redux/initialState';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -40,6 +42,7 @@ import {
   patientDetailsSelector,
   phoneCallRecordSelector,
 } from 'redux/selectors/rootSelector';
+import { setAppData } from 'redux/slices/appDataSlice';
 import {
   playPhoneCallRecord,
   setPatientDetails,
@@ -133,7 +136,9 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     }
     try {
       await signOut();
-      await router.replace(router.asPath);
+      router.replace(`${appBaseUrl}/login`).then(() => {
+        dispatch(setAppData(initialState.appData));
+      });
     } catch (error) {
       console.error(error);
     }
