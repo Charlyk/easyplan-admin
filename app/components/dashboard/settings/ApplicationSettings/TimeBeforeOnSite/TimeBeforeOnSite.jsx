@@ -5,8 +5,6 @@ import styles from './TimeBeforeOnSite.module.scss';
 
 const TimeBeforeOnSite = ({ value, onChange }) => {
   const handleFormChange = (newValue) => {
-    console.log(newValue);
-    console.log(typeof newValue);
     if (Number(newValue) > 120) {
       onChange?.(120);
     } else {
