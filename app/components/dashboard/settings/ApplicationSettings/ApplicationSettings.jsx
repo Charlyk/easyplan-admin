@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import ClinicsModal from 'app/components/common/modals/ClinicsModal';
@@ -23,7 +22,6 @@ import ClinicTags from './ClinicTags';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
 
 const ApplicationSettings = () => {
-  const router = useRouter();
   const clinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const toast = useContext(NotificationsContext);
@@ -52,7 +50,6 @@ const ApplicationSettings = () => {
         [HeaderKeys.clinicId]: clinic.id,
         [HeaderKeys.subdomain]: clinic.domainName,
       });
-      await router.replace(router.asPath);
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
       toast.error(error.message);
