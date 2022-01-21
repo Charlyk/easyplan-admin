@@ -5,6 +5,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { CalendarDataState } from 'redux/types';
 import { ScheduleItem, ScheduleDetails, Schedule } from 'types';
+import { FilterData } from '../types';
 
 const isScheduleInGroup = (group: ScheduleItem, schedule: Schedule) => {
   const scheduleDate = moment(schedule.startTime).format('YYYY-MM-DD');
@@ -199,6 +200,12 @@ const calendarData = createSlice({
     setViewMode(state, action: PayloadAction<'day' | 'week' | 'month'>) {
       state.viewMode = action.payload;
     },
+    updateFilterData(state, action: PayloadAction<FilterData>) {
+      return {
+        ...state,
+        filterData: { ...state.filterData, ...action.payload },
+      };
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -225,6 +232,7 @@ export const {
   setSchedulesData,
   setViewDate,
   setViewMode,
+  updateFilterData,
 } = calendarData.actions;
 
 export default calendarData.reducer;

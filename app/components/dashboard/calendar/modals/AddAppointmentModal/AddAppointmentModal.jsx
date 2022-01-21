@@ -28,6 +28,7 @@ import {
   getScheduleDetails,
   postSchedule,
 } from 'middleware/api/schedules';
+
 import {
   clinicCabinetsSelector,
   clinicServicesSelector,
@@ -77,6 +78,7 @@ const AddAppointmentModal = ({
   const activeServices = useSelector(clinicServicesSelector);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const clinicDoctors = useSelector(doctorsForScheduleSelector);
+
   const [
     {
       patient,
@@ -126,6 +128,7 @@ const AddAppointmentModal = ({
   // map cabinets for autocomplete fields
   const cabinets = useMemo(() => {
     if (doctor == null || doctor.cabinets?.length === 0) {
+      localDispatch(setSelectedCabinetInDoctorMode(null));
       return [];
     } else {
       return orderBy(
@@ -138,9 +141,7 @@ const AddAppointmentModal = ({
 
   // check if there are any cabinets
   const shouldSelectCabinet =
-    selectedCabinet == null &&
-    schedule?.cabinet == null &&
-    doctor?.cabinets?.length > 0;
+    selectedCabinet == null && schedule?.cabinet == null && cabinets.length > 0;
 
   // check if data is fetching
   const isLoading = isFetchingHours || isCreatingSchedule;
@@ -165,14 +166,14 @@ const AddAppointmentModal = ({
     }
 
     // filter services to show only provided by selected doctor service services
-    const services = doctor.services.filter((service) =>
+    const services = doctor?.services?.filter((service) =>
       activeServices.some(
         (activeService) => activeService.id === service.serviceId,
       ),
     );
 
     // map services for autocomplete field
-    const mappedServices = services.map((service) => ({
+    const mappedServices = services?.map((service) => ({
       ...service,
       label: service.name,
     }));

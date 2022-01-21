@@ -51,6 +51,7 @@ const initialState: ReduxState = {
     isUpdatingProfile: false,
     isUpdatingClinic: false,
     isAppInitialized: false,
+    isEmailChanged: false,
   },
   clinicData: {
     updateClinicData: false,
@@ -64,6 +65,11 @@ const initialState: ReduxState = {
     isFetchingDetails: false,
     viewDate: null,
     viewMode: 'day',
+    filterData: {
+      searchQuery: '',
+      serviceId: -1,
+      appointmentStatus: 'all',
+    },
   },
   appointmentModal: {
     open: false,
@@ -179,6 +185,10 @@ const initialState: ReduxState = {
   clinicSettings: {
     isFetching: false,
     settings: null,
+  },
+  moizvonkiConnection: {
+    isLoading: false,
+    connection: null,
   },
 };
 

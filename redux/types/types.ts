@@ -21,6 +21,7 @@ import {
   PatientVisit,
   AppNotification,
   ClinicSettings,
+  MoizvonkiConnection,
 } from 'types';
 
 export interface CalendarDataState {
@@ -33,6 +34,13 @@ export interface CalendarDataState {
   isFetchingDetails: boolean;
   viewDate: string | null;
   viewMode: 'day' | 'week' | 'month';
+  filterData: FilterData;
+}
+
+export interface FilterData {
+  searchQuery?: string;
+  serviceId?: number;
+  appointmentStatus?: string;
 }
 
 export interface CreateAppointmentModalState {
@@ -80,6 +88,7 @@ export interface AppDataState {
   isUpdatingProfile: boolean;
   isUpdatingClinic: boolean;
   isAppInitialized?: boolean;
+  isEmailChanged: boolean;
 }
 
 export interface CabinetsDataState {
@@ -194,6 +203,11 @@ export interface ClinicSettingsState {
   settings: ClinicSettings | null;
 }
 
+export interface MoizvonkiConnectionState {
+  isLoading: boolean;
+  connection?: MoizvonkiConnection | null;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -239,4 +253,5 @@ export interface ReduxState {
   changeLogModal: ChangeLogModalState;
   appNotification: AppNotificationState;
   clinicSettings: ClinicSettingsState;
+  moizvonkiConnection: MoizvonkiConnectionState;
 }

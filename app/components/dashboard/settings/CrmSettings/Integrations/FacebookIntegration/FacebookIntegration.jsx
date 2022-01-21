@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import IconFacebookSm from 'app/components/icons/iconFacebookSm';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
@@ -103,7 +104,10 @@ const FacebookIntegration = ({ currentClinic }) => {
         onSelect={handlePageSelected}
         onClose={handleClosePagesList}
       />
-      <Typography className={styles.rowTitle}>Facebook</Typography>
+      <div className={styles.rowContainer}>
+        <IconFacebookSm />
+        <Typography className={styles.rowTitle}>Facebook</Typography>
+      </div>
       <Box
         display='flex'
         alignItems='center'

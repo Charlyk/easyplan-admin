@@ -1,4 +1,5 @@
 import React from 'react';
+import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -24,9 +25,9 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
           <span className={styles.doctorTitle}>{textForKey('Doctor')}:</span>
           <span className={styles.doctorName}>{doctor.fullName}</span>
         </div>
-        <div className={styles.noteText}>
+        <Typography noWrap className={styles.noteText}>
           {visit.note.length === 0 ? textForKey('no_notes') : visit.note}
-        </div>
+        </Typography>
         <div className={styles.servicesContainer}>
           {visit?.planServices?.map((planService, index) => (
             <div
