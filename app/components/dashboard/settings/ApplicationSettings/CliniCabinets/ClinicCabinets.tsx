@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useState, useEffect, useRef } from 'react';
+import React, { KeyboardEvent, useState, useEffect, useRef, memo } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useDispatch } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
@@ -208,4 +208,4 @@ const ClinicCabinets: React.FC = () => {
   );
 };
 
-export default ClinicCabinets;
+export default memo(ClinicCabinets);
