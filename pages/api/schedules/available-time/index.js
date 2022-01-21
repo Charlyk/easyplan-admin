@@ -10,6 +10,7 @@ async function fetchAvailableTime(req) {
   const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
     req.headers.cookie,
   );
+
   const queryString = new URLSearchParams(req.query).toString();
   return axios.get(
     `${updatedServerUrl(req)}/schedules/available-time?${queryString}`,
