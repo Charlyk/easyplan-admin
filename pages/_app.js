@@ -73,6 +73,7 @@ const EasyApp = ({ Component, pageProps }) => {
   const appointmentModal = useSelector(appointmentModalSelector);
   const changeLogModal = useSelector(changeLogModalSelector);
   const [isChecking, setIsChecking] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
@@ -221,11 +222,12 @@ const EasyApp = ({ Component, pageProps }) => {
   };
 
   const handleUserLogout = async () => {
-    dispatch(triggerUserLogOut(false));
+    setIsLoading(true);
     await signOut();
     router.replace(`${appBaseUrl}/login`).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
+      setIsLoading(false);
     });
   };
 
@@ -266,6 +268,7 @@ const EasyApp = ({ Component, pageProps }) => {
                       message={textForKey('logout message')}
                       onConfirm={handleUserLogout}
                       onClose={handleCancelLogout}
+                      isLoading={isLoading}
                       show={logout}
                     />
                   )}
