@@ -42,7 +42,7 @@ export default function RegistrationWrapper({ isMobile }) {
       delete requestBody.avatarFile;
       const response = await registerUser(accountData, accountData.avatarFile);
       dispatch(setAuthenticationData(response.data));
-      await router.replace('/create-clinic?login=1');
+      await router.replace('/create-clinic?fresh=1');
     } catch (error) {
       if (error.response != null) {
         const { data } = error.response;

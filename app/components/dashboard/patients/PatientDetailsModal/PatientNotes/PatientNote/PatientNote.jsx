@@ -1,4 +1,5 @@
 import React from 'react';
+import { Typography } from '@material-ui/core';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { textForKey } from 'app/utils/localization';
@@ -11,7 +12,7 @@ const PatientNote = ({ note }) => {
         {moment(note.created).format('DD MMM YYYY HH:mm')}{' '}
         {textForKey('created by')} {note.createdBy}
       </div>
-      <div className={styles.noteText}>{note.noteText}</div>
+      <Typography className={styles.noteText}>{note.noteText}</Typography>
     </div>
   );
 };

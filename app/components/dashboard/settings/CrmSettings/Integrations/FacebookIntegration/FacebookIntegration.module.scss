@@ -6,11 +6,24 @@
   padding-bottom: 5px;
   border-bottom: #ededed 1px solid;
 
-  .rowTitle {
-    font-family: Inter, sans-serif !important;
-    font-style: normal !important;
-    font-size: .9rem !important;
-    font-weight: bold !important;
+  .rowContainer {
+    display: flex;
+    align-items: flex-end;
+
+    .rowTitle {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-size: .9rem !important;
+      font-weight: bold !important;
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .titleLabel {

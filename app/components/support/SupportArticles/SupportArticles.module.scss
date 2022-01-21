@@ -1,0 +1,63 @@
+.supportArticles {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+
+  .menuContainer {
+    width: 20rem;
+    height: 100%;
+    background-color: #F7F8F9;
+    border-right: #EAF0F4 1px solid;
+    padding: 16px;
+
+    .title {
+      font-family: Inter, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+    }
+
+    .menuList {
+      user-select: none;
+
+      .listItem {
+        padding: 0;
+        cursor: pointer;
+
+        .text {
+          a {
+            text-transform: none;
+            text-decoration: none;
+            font-size: 12px;
+            font-family: Inter, sans-serif !important;
+            font-style: normal !important;
+            font-weight: normal;
+            color: #34354c;
+          }
+        }
+
+        &.selected {
+          background-color: transparent;
+
+          .text {
+            a {
+              font-weight: bold;
+              color: #3a83dc;
+            }
+          }
+        }
+
+        &:hover {
+          .text {
+            a {
+              color: #3a83dc;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .children {
+    flex: 1;
+  }
+}

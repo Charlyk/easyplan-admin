@@ -75,7 +75,7 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const response = await handler(fetchServiceDetails, req, res);
-      if (response == null) {
+      if (!response) {
         return;
       }
       res.json(response);
@@ -83,7 +83,7 @@ export default authorized(async (req, res) => {
     }
     case 'POST': {
       const response = await handler(restoreService, req, res);
-      if (response == null) {
+      if (!response) {
         return;
       }
       res.json(response);
@@ -91,7 +91,7 @@ export default authorized(async (req, res) => {
     }
     case 'DELETE': {
       const response = await handler(deleteService, req, res);
-      if (response == null) {
+      if (!response) {
         return;
       }
       res.json(response);
@@ -99,7 +99,7 @@ export default authorized(async (req, res) => {
     }
     case 'PUT': {
       const response = await handler(editService, req, res);
-      if (response == null) {
+      if (!response) {
         return;
       }
       res.json(response);

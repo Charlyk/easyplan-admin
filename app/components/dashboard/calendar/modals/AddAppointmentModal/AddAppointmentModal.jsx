@@ -28,6 +28,7 @@ import {
   getScheduleDetails,
   postSchedule,
 } from 'middleware/api/schedules';
+
 import {
   clinicCabinetsSelector,
   clinicServicesSelector,
@@ -77,6 +78,7 @@ const AddAppointmentModal = ({
   const activeServices = useSelector(clinicServicesSelector);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const clinicDoctors = useSelector(doctorsForScheduleSelector);
+
   const [
     {
       patient,
@@ -164,14 +166,14 @@ const AddAppointmentModal = ({
     }
 
     // filter services to show only provided by selected doctor service services
-    const services = doctor.services.filter((service) =>
+    const services = doctor?.services?.filter((service) =>
       activeServices.some(
         (activeService) => activeService.id === service.serviceId,
       ),
     );
 
     // map services for autocomplete field
-    const mappedServices = services.map((service) => ({
+    const mappedServices = services?.map((service) => ({
       ...service,
       label: service.name,
     }));

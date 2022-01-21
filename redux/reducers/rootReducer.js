@@ -8,6 +8,7 @@ import patientVisits from 'app/components/dashboard/patients/PatientDetailsModal
 import patientPhoneCalls from 'app/components/dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
 import patientPurchases from 'app/components/dashboard/patients/PatientDetailsModal/PatientPurchasesList/PatientPurchasesList.reducer';
 import clinicSettings from 'app/components/dashboard/settings/ApplicationSettings/ClinicSettings/ClinicSettings.reducer';
+import moizvonkiConnection from 'app/components/dashboard/settings/CrmSettings/Integrations/MoizvonkiIntegration/MoizvonkiIntegration.reducer';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
@@ -75,6 +76,7 @@ const rootReducer = combineReducers({
   changeLogModal,
   appNotification,
   clinicSettings,
+  moizvonkiConnection,
 });
 
 export default rootReducer;

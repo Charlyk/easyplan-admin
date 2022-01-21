@@ -11,7 +11,6 @@ export function* handleFetchClinicSettings() {
   try {
     const response: SagaReturnType<typeof requestFetchClinicSettings> =
       yield call(requestFetchClinicSettings);
-    console.log(response.data);
     yield put(setClinicSettings(response.data));
   } catch (error) {
     yield put(setIsFetching(false));
