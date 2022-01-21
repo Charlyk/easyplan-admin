@@ -51,6 +51,7 @@ const initialState: ReduxState = {
     isUpdatingProfile: false,
     isUpdatingClinic: false,
     isAppInitialized: false,
+    isEmailChanged: false,
   },
   clinicData: {
     updateClinicData: false,
