@@ -8,7 +8,8 @@ import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
 import { textForKey } from 'app/utils/localization';
 import setCookies from 'app/utils/setCookies';
-import { getCurrentUser } from 'middleware/api/auth';
+import { getCurrentUser, signOut } from 'middleware/api/auth';
+import { appBaseUrl } from '../../eas.config';
 
 const Redirect = () => {
   const router = useRouter();
@@ -20,6 +21,11 @@ const Redirect = () => {
   const fetchUserData = async () => {
     try {
       const response = await getCurrentUser();
+      if (response.data.userClinic?.accessBlocked) {
+        await signOut();
+        await router.replace(`${appBaseUrl}/login`);
+        return;
+      }
       const [subdomain] = window.location.host.split('.');
       const redirectUrl = getRedirectUrlForUser(response.data, subdomain);
       if (redirectUrl == null || router.asPath === redirectUrl) {
@@ -27,7 +33,7 @@ const Redirect = () => {
       }
       await router.replace(redirectUrl);
     } catch (error) {
-      await router.replace('/login');
+      await router.replace(`${appBaseUrl}/login`);
     }
   };
 
