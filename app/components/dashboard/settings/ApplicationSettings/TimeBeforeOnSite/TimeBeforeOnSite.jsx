@@ -5,7 +5,11 @@ import styles from './TimeBeforeOnSite.module.scss';
 
 const TimeBeforeOnSite = ({ value, onChange }) => {
   const handleFormChange = (newValue) => {
-    onChange?.(newValue);
+    if (Number(newValue) > 120) {
+      onChange?.(120);
+    } else {
+      onChange?.(newValue);
+    }
   };
 
   return (
@@ -14,6 +18,7 @@ const TimeBeforeOnSite = ({ value, onChange }) => {
       containerClass={styles.timeBeforeOnSite}
       fieldLabel={textForKey('Animate appointments before')}
       value={value}
+      max={120}
       helperText={textForKey('appointment_animation_timer')}
       onChange={handleFormChange}
     />
