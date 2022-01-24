@@ -54,10 +54,11 @@ export async function requestResetUserPassword(body, headers = null) {
 
 /**
  * Sign out from current user account
+ * @param {boolean} redirect
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function signOut() {
-  return del('/api/auth/logout', null);
+export async function signOut(redirect = false) {
+  return del(`/api/auth/logout?redirect=${redirect ? '1' : '0'}`, null);
 }
 
 /**
