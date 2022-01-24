@@ -1573,9 +1573,9 @@ export default {
     clinic_has_no_working_hours: 'Clinica are zi liberă pentru {1}.',
     edit_working_hours: 'Editează programul de lucru',
     no_categories_message: 'Încă nu sunt categorii create :(',
-    delete_invitation: 'Ștergeți invitatia',
+    delete_invitation: 'Ștergeți invitația',
     delete_invitation_message:
-      'Sunteți sigur(ă) că doriți să ștergeți invitația ?',
+      'Sunteți sigur(ă) că doriți să ștergeți invitația?',
   },
   ru: {
     analytics: 'Analytics',
