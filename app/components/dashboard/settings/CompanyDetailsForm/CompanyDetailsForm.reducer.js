@@ -23,7 +23,7 @@ export const initialState = {
     workdays: [],
     currency: 'MDL',
     allCurrencies: [],
-    country: 'md',
+    country: 'mda',
     timeZone: moment.tz.guess(true),
     isValidPhoneNumber: true,
     isValidViberNumber: true,
