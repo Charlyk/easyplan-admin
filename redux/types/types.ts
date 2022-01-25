@@ -208,6 +208,13 @@ export interface MoizvonkiConnectionState {
   connection?: MoizvonkiConnection | null;
 }
 
+export interface CreateReminderModalState {
+  open: boolean;
+  isLoading: boolean;
+  deal: { id: number } | null;
+  searchType: 'Deal' | 'Schedule';
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -254,4 +261,5 @@ export interface ReduxState {
   appNotification: AppNotificationState;
   clinicSettings: ClinicSettingsState;
   moizvonkiConnection: MoizvonkiConnectionState;
+  createReminderModal: CreateReminderModalState;
 }

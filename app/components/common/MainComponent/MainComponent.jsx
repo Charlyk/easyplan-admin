@@ -27,6 +27,7 @@ import {
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
+import { createReminderModalSelector } from 'redux/selectors/CreateReminderModal.selector';
 import {
   newReminderSelector,
   updatedReminderSelector,
@@ -43,6 +44,7 @@ import {
   phoneCallRecordSelector,
 } from 'redux/selectors/rootSelector';
 import { setAppData } from 'redux/slices/appDataSlice';
+import { closeCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import {
   playPhoneCallRecord,
   setPatientDetails,
@@ -69,6 +71,7 @@ const ExchangeRatesModal = dynamic(() =>
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 const MainMenu = dynamic(() => import('./MainMenu'));
 const PageHeader = dynamic(() => import('./PageHeader'));
+const AddReminderModal = dynamic(() => import('../modals/AddReminderModal'));
 
 const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const toast = useContext(NotificationsContext);
@@ -85,6 +88,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const newReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
   const callToPlay = useSelector(phoneCallRecordSelector);
+  const reminderModal = useSelector(createReminderModalSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
   let childrenProps = children.props;
@@ -214,6 +218,10 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     );
   };
 
+  const handleCloseReminderModal = () => {
+    dispatch(closeCreateReminderModal());
+  };
+
   return (
     <div className={styles.mainPage} id='main-page'>
       <Head>
@@ -222,6 +230,12 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
       {currentUser != null && currentClinic != null && (
         <>
           <GlobalNotificationView />
+          {reminderModal.open && (
+            <AddReminderModal
+              {...reminderModal}
+              onClose={handleCloseReminderModal}
+            />
+          )}
           {patientNoteModal.open && (
             <AddNote
               {...patientNoteModal}

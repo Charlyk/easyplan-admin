@@ -39,6 +39,7 @@ import {
 } from 'redux/selectors/crmBoardSelector';
 import { updatedDealSelector } from 'redux/selectors/crmSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import DealsColumn from '../DealsColumn';
@@ -53,8 +54,6 @@ import reducer, {
   setUpdatedDeal,
   openDetailsModal,
   closeDealDetails,
-  openReminderModal,
-  closeReminderModal,
   setIsDeleting,
   setShowFilters,
   setQueryParams,
@@ -67,7 +66,6 @@ const ConfirmationModal = dynamic(() =>
 );
 const LinkPatientModal = dynamic(() => import('../LinkPatientModal'));
 const DealDetails = dynamic(() => import('../DealDetails'));
-const AddReminderModal = dynamic(() => import('../AddReminderModal'));
 const CrmFilters = dynamic(() => import('./CrmFilters'));
 
 const COOKIES_KEY = 'crm_filter';
@@ -90,7 +88,6 @@ const CrmMain = () => {
       deleteModal,
       updatedDeal,
       detailsModal,
-      reminderModal,
       showFilters,
       queryParams,
       showReminders,
@@ -158,11 +155,7 @@ const CrmMain = () => {
   };
 
   const handleOpenReminderModal = (deal) => {
-    localDispatch(openReminderModal(deal));
-  };
-
-  const handleCloseReminderModal = () => {
-    localDispatch(closeReminderModal());
+    dispatch(openCreateReminderModal({ deal, searchType: 'Deal' }));
   };
 
   const handleDeleteConfirmed = async () => {
@@ -280,11 +273,6 @@ const CrmMain = () => {
         deal={linkModal.deal}
         onClose={handleCloseLinkModal}
         onLinked={handlePatientLinked}
-      />
-      <AddReminderModal
-        {...reminderModal}
-        currentClinic={currentClinic}
-        onClose={handleCloseReminderModal}
       />
       <ConfirmationModal
         show={deleteModal.open}

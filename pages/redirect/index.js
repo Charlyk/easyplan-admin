@@ -8,8 +8,8 @@ import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
 import { textForKey } from 'app/utils/localization';
 import setCookies from 'app/utils/setCookies';
+import { appBaseUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
-import { appBaseUrl } from '../../eas.config';
 
 const Redirect = () => {
   const router = useRouter();

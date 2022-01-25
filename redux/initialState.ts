@@ -190,6 +190,12 @@ const initialState: ReduxState = {
     isLoading: false,
     connection: null,
   },
+  createReminderModal: {
+    open: false,
+    isLoading: false,
+    deal: null,
+    searchType: 'Deal',
+  },
 };
 
 export default initialState;
