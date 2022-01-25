@@ -257,6 +257,13 @@ const AddAppointmentModal = ({
     }
   }, [selectedStartTime, selectedEndTime]);
 
+  const isDoctorInCabinet = (doctor) => {
+    if (cabinet == null) {
+      return false;
+    }
+    return doctor.cabinets.some((item) => item.id === cabinet.id);
+  };
+
   const mappedTime = (timeList) => {
     return timeList.map((item) => ({
       id: item,
@@ -347,6 +354,9 @@ const AddAppointmentModal = ({
   };
 
   const handleDoctorChange = (event, selectedDoctor) => {
+    if (!isDoctorInCabinet(selectedDoctor)) {
+      localDispatch(setSelectedCabinetInDoctorMode(null));
+    }
     localDispatch(setDoctor(selectedDoctor));
   };
 
