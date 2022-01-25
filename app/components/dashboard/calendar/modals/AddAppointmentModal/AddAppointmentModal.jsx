@@ -21,7 +21,6 @@ import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField';
 import NotificationsContext from 'app/context/notificationsContext';
-import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import {
   getAvailableHours,
@@ -606,7 +605,7 @@ const AddAppointmentModal = ({
   );
 };
 
-export default React.memo(AddAppointmentModal, areComponentPropsEqual);
+export default AddAppointmentModal;
 
 AddAppointmentModal.propTypes = {
   open: PropTypes.bool,
