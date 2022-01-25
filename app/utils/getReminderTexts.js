@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 
+import getPatientName from './getPatientName';
 import { textForKey } from './localization';
 
 const getReminderTexts = (reminder) => {
@@ -9,6 +10,13 @@ const getReminderTexts = (reminder) => {
   const { assignee, createdBy } = reminder;
   const dueDate = moment(reminder.dueDate);
   const endDate = moment(reminder.endDate);
+  let contactName = '';
+  if (reminder.deal.patient != null) {
+    contactName = getPatientName(reminder.deal.patient);
+  } else {
+    contactName =
+      reminder.deal.contact.name || reminder.deal.contact.phoneNumber;
+  }
   const isExpired = dueDate.isBefore(moment(), 'minutes');
   const isToday = dueDate.isSame(moment(), 'date');
   const stringDate = dueDate.format('DD MMM YYYY');
@@ -30,6 +38,7 @@ const getReminderTexts = (reminder) => {
     stringTime,
     stringDate,
     createdByName,
+    contactName,
   };
 };
 
