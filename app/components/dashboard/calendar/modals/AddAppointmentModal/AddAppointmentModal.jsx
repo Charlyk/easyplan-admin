@@ -141,7 +141,7 @@ const AddAppointmentModal = ({
 
   // check if there are any cabinets
   const shouldSelectCabinet =
-    selectedCabinet == null && schedule?.cabinet == null && cabinets.length > 0;
+    cabinet == null && schedule?.cabinet == null && cabinets.length > 0;
 
   // check if data is fetching
   const isLoading = isFetchingHours || isCreatingSchedule;
@@ -219,6 +219,7 @@ const AddAppointmentModal = ({
   // set initial selected cabinet
   useEffect(() => {
     if (selectedCabinet != null && !isDoctorMode) {
+      console.log(selectedCabinet);
       localDispatch(setSelectedCabinet(selectedCabinet));
     }
   }, [selectedCabinet]);

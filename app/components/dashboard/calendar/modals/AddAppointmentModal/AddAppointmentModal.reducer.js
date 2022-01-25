@@ -245,6 +245,7 @@ const addAppointmentModalSlice = createSlice({
       state.availableEndTime = action.payload;
     },
     setSelectedCabinet(state, action) {
+      console.log('simple', action.payload);
       if (action.payload == null) {
         state.cabinet = null;
       } else {
@@ -257,6 +258,7 @@ const addAppointmentModalSlice = createSlice({
       state.isDoctorValid = action.payload != null;
     },
     setSelectedCabinetInDoctorMode(state, action) {
+      console.log('doctor', action.payload);
       if (action.payload == null) {
         state.cabinet = null;
       } else {
