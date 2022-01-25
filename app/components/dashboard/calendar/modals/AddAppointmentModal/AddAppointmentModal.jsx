@@ -28,6 +28,7 @@ import {
   getScheduleDetails,
   postSchedule,
 } from 'middleware/api/schedules';
+
 import {
   clinicCabinetsSelector,
   clinicServicesSelector,
@@ -77,6 +78,7 @@ const AddAppointmentModal = ({
   const activeServices = useSelector(clinicServicesSelector);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const clinicDoctors = useSelector(doctorsForScheduleSelector);
+
   const [
     {
       patient,
@@ -138,9 +140,7 @@ const AddAppointmentModal = ({
 
   // check if there are any cabinets
   const shouldSelectCabinet =
-    selectedCabinet == null &&
-    schedule?.cabinet == null &&
-    doctor?.cabinets?.length > 0;
+    cabinet == null && schedule?.cabinet == null && cabinets.length > 0;
 
   // check if data is fetching
   const isLoading = isFetchingHours || isCreatingSchedule;
