@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CreateReminderRequest } from '../../types/api';
-import { ReminderType } from '../../types/reminder.types';
+import { ReminderType } from 'types';
+import { CreateReminderRequest } from 'types/api';
 import initialState from '../initialState';
 
 type OpenAction = {

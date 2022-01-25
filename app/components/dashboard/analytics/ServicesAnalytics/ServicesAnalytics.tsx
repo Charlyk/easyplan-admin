@@ -22,9 +22,9 @@ import EASTextField from 'app/components/common/EASTextField';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import { ServicesStatisticResponse } from 'types';
-import { openCreateReminderModal } from '../../../../../redux/slices/CreateReminderModal.reducer';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
   initialState,
