@@ -35,6 +35,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import {
   crmDealsStatesSelector,
+  crmUserDealStatesSelector,
   remindersCountSelector,
 } from 'redux/selectors/crmBoardSelector';
 import { updatedDealSelector } from 'redux/selectors/crmSelector';
@@ -80,7 +81,7 @@ const CrmMain = () => {
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const activeRemindersCount = useSelector(remindersCountSelector);
-  const columns = useSelector(crmDealsStatesSelector);
+  const columns = useSelector(crmUserDealStatesSelector);
   const remoteDeal = useSelector(updatedDealSelector);
   const columnsContainerRef = useRef(null);
   const userClinic = useSelector(userClinicSelector);
@@ -98,15 +99,6 @@ const CrmMain = () => {
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
-
-  const filteredColumns = useMemo(() => {
-    const filterState = (queryParams.states ?? []).map((it) => it.id);
-    return columns.filter(
-      (item) =>
-        (filterState.length === 0 && item.visibleByDefault) ||
-        filterState.includes(item.id),
-    );
-  }, [columns, queryParams.states]);
 
   useEffect(() => {
     const queryParams = extractCookieByName(COOKIES_KEY);
@@ -130,7 +122,7 @@ const CrmMain = () => {
   }, [remoteDeal]);
 
   const updateColumns = () => {
-    dispatch(dispatchFetchDealStates());
+    dispatch(dispatchFetchDealStates(true));
   };
 
   const handleCloseLinkModal = () => {
@@ -369,7 +361,7 @@ const CrmMain = () => {
         </Zoom>
       </div>
       <div ref={columnsContainerRef} className={styles.columnsContainer}>
-        {filteredColumns.map((dealState, index) => (
+        {columns.map((dealState, index) => (
           <DealsColumn
             key={dealState.id}
             width={COLUMN_WIDTH}
@@ -391,7 +383,7 @@ const CrmMain = () => {
       </div>
 
       <HorizontalScrollHelper
-        columnsCount={filteredColumns.length}
+        columnsCount={columns.length}
         columnWidth={COLUMN_WIDTH}
         parentEl={columnsContainerRef.current}
         columnSpacing={8} // margin between columns

@@ -1,90 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
-import { textForKey } from 'app/utils/localization';
-import { DealShortcutType, ReminderType } from 'types';
+import { default as reduxState } from 'redux/initialState';
+import {
+  CrmFilterOption,
+  CrmFilterPatient,
+  CrmFilterShortcut,
+  CrmFilterType,
+} from 'types';
+import { SaveCrmFilterRequest } from 'types/api';
+import {
+  defaultRange,
+  reminderOptions,
+  Shortcuts,
+} from './CrmFilters.constants';
 
-export const Shortcuts = [
-  {
-    id: DealShortcutType.All,
-    type: 'default',
-    name: textForKey('crm_filter_all_deals'),
-  },
-  {
-    id: DealShortcutType.Opened,
-    type: 'default',
-    name: textForKey('crm_filter_opened_deals'),
-  },
-  {
-    id: DealShortcutType.Mine,
-    type: 'default',
-    name: textForKey('crm_filter_my_deals'),
-  },
-  {
-    id: DealShortcutType.Success,
-    type: 'default',
-    name: textForKey('crm_filter_closed_successfully'),
-  },
-  {
-    id: DealShortcutType.Closed,
-    type: 'default',
-    name: textForKey('crm_filter_not_realized'),
-  },
-  {
-    id: DealShortcutType.TodayTasks,
-    type: 'reminder',
-    name: textForKey('crm_filter_shortcuts_today_reminders'),
-  },
-  {
-    id: DealShortcutType.ExpiredTasks,
-    type: 'reminder',
-    name: textForKey('crm_filter_shortcuts_expired_tasks'),
-  },
-];
-
-export const reminderOptions = [
-  {
-    id: ReminderType.All,
-    name: textForKey('crm_filter_all_reminders'),
-  },
-  {
-    id: ReminderType.Today,
-    name: textForKey('crm_filter_today_reminders'),
-  },
-  {
-    id: ReminderType.Tomorrow,
-    name: textForKey('crm_filter_tomorrow_reminders'),
-  },
-  {
-    id: ReminderType.Week,
-    name: textForKey('crm_filter_current_week_reminders'),
-  },
-  {
-    id: ReminderType.NoTasks,
-    name: textForKey('crm_filter_without_tasks'),
-  },
-  {
-    id: ReminderType.Expired,
-    name: textForKey('crm_filter_expired_tasks'),
-  },
-];
-
-export const initialState = {
-  loading: { patients: false, filter: false },
-  patient: null,
-  selectedDoctors: [{ id: -1, name: textForKey('All doctors') }],
-  selectedServices: [{ id: -1, name: textForKey('All services') }],
-  selectedUsers: [{ id: -1, name: textForKey('All users') }],
-  selectedStates: [{ id: -1, name: textForKey('All states') }],
-  selectedDateRange: [],
-  selectedReminder: null,
-  selectedShortcut: Shortcuts[0],
-  showRangePicker: false,
-};
-
-export const defaultRange = [
-  moment().toDate(),
-  moment().add(10, 'days').toDate(),
-];
+export const initialState = reduxState.crmFilters;
 
 const crmFiltersSlice = createSlice({
   name: 'crmFilters',
@@ -93,44 +23,103 @@ const crmFiltersSlice = createSlice({
     dispatchFetchCrmFilter(state) {
       state.loading = { ...state.loading, filter: true };
     },
-    setPatient(state, action) {
+    dispatchUpdateCrmFilter(
+      state,
+      _action: PayloadAction<SaveCrmFilterRequest>,
+    ) {
+      state.loading = { ...state.loading, filter: true };
+    },
+    setCrmFilter(state, action: PayloadAction<CrmFilterType>) {
+      const filter = action.payload;
+      state.loading = { ...state.loading, filter: false };
+      state.selectedStates = filter.visibleStates.map((item) => ({
+        id: item.id,
+        name: item.name,
+      }));
+      state.selectedReminder = reminderOptions.find(
+        (option) => option.id === filter.reminderType,
+      );
+      state.selectedShortcut = Shortcuts.find(
+        (item) => item.id === filter.shortcut,
+      );
+      state.patient = filter.patient;
+      const startDate = filter.startDate
+        ? moment(filter.startDate).toDate()
+        : null;
+      const endDate = filter.endDate ? moment(filter.endDate).toDate() : null;
+      state.selectedDateRange =
+        startDate && endDate ? [startDate, endDate] : [];
+      state.selectedUsers =
+        filter.responsible.length > 0
+          ? filter.responsible.map((item) => ({
+              id: item.id,
+              name: `${item.firstName} ${item.lastName}`,
+            }))
+          : initialState.selectedUsers;
+      state.selectedDoctors =
+        filter.doctors.length > 0
+          ? filter.doctors.map((item) => ({
+              id: item.id,
+              name: `${item.firstName} ${item.lastName}`,
+            }))
+          : initialState.selectedDoctors;
+    },
+    setFilterLoading(state, action: PayloadAction<boolean>) {
+      state.loading = { ...state.loading, filter: action.payload };
+    },
+    setPatient(state, action: PayloadAction<CrmFilterPatient | null>) {
       state.patient = action.payload;
     },
-    setPatientsLoading(state, action) {
+    setPatientsLoading(state, action: PayloadAction<boolean>) {
       state.loading = { ...state.loading, patients: action.payload };
     },
-    setSelectedDoctors(state, action) {
-      state.selectedDoctors = action.payload;
+    setSelectedDoctors(state, action: PayloadAction<CrmFilterOption[] | null>) {
+      state.selectedDoctors = action.payload ?? [];
     },
-    setSelectedReminder(state, action) {
+    setSelectedReminder(state, action: PayloadAction<CrmFilterOption | null>) {
       state.selectedReminder = action.payload;
     },
-    setSelectedServices(state, action) {
-      state.selectedServices = action.payload;
+    setSelectedServices(
+      state,
+      action: PayloadAction<CrmFilterOption[] | null>,
+    ) {
+      state.selectedServices = action.payload ?? [];
     },
-    setSelectedUsers(state, action) {
-      state.selectedUsers = action.payload;
+    setSelectedUsers(state, action: PayloadAction<CrmFilterOption[] | null>) {
+      state.selectedUsers = action.payload ?? [];
     },
-    setDateRange(state, action) {
+    setDateRange(state, action: PayloadAction<[Date, Date] | []>) {
       state.selectedDateRange = action.payload;
     },
-    setShowRangePicker(state, action) {
+    setShowRangePicker(state, action: PayloadAction<boolean>) {
       state.showRangePicker = action.payload;
     },
-    setSelectedStates(state, action) {
-      state.selectedStates = action.payload;
+    setSelectedStates(state, action: PayloadAction<CrmFilterOption[] | null>) {
+      state.selectedStates = action.payload ?? [];
     },
-    setSelectedShortcut(state, action) {
+    setSelectedShortcut(
+      state,
+      action: PayloadAction<CrmFilterShortcut | null>,
+    ) {
       state.selectedShortcut = action.payload;
     },
-    resetState() {
-      return initialState;
+    resetState(state, action: PayloadAction<CrmFilterOption[]>) {
+      state.selectedStates = action.payload;
+      state.selectedDoctors = initialState.selectedDoctors;
+      state.selectedShortcut = initialState.selectedShortcut;
+      state.selectedUsers = initialState.selectedUsers;
+      state.selectedReminder = initialState.selectedReminder;
+      state.selectedDateRange = initialState.selectedDateRange;
+      state.selectedServices = initialState.selectedServices;
     },
   },
 });
 
 export const {
   dispatchFetchCrmFilter,
+  dispatchUpdateCrmFilter,
+  setCrmFilter,
+  setFilterLoading,
   setPatient,
   setPatientsLoading,
   setSelectedDoctors,

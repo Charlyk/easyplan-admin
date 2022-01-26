@@ -2,11 +2,12 @@ import { del, get, post, put } from './request';
 
 /**
  * Fetch all available deal states for a clinic
+ * @param {boolean} filter
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function fetchAllDealStates(headers = null) {
-  return get('/api/crm/deal-state', headers);
+export async function fetchAllDealStates(filter, headers = null) {
+  return get(`/api/crm/deal-state?filter=${filter ? 1 : 0}`, headers);
 }
 
 /**

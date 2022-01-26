@@ -9,8 +9,19 @@ export type CrmFilterType = {
   responsible: DealAssignee[];
   doctors: DealAssignee[];
   services: DealServiceView[];
-  reminderTypes: ReminderType[];
+  reminderType: ReminderType;
   shortcut: DealShortcutType;
+};
+
+export type CrmFilterOption = {
+  id: string | number;
+  name: string;
+};
+
+export type CrmFilterShortcut = {
+  id: DealShortcutType;
+  type: 'default' | 'reminder';
+  name: string;
 };
 
 export type CrmFilterPatient = {

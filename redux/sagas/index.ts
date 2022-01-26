@@ -32,6 +32,8 @@ import {
   moizvonkiConnectionWatcher,
   updateMoizvonkiConnectionWatcher,
   disconnectMoizvonkiWatcher,
+  fetchCrmFilterWatcher,
+  updateCrmFilterWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -68,5 +70,7 @@ export default function* rootSaga() {
     moizvonkiConnectionWatcher(),
     updateMoizvonkiConnectionWatcher(),
     disconnectMoizvonkiWatcher(),
+    fetchCrmFilterWatcher(),
+    updateCrmFilterWatcher(),
   ]);
 }

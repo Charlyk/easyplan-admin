@@ -8,7 +8,7 @@ const crmBoardSlice = createSlice({
   name: 'crmBoard',
   initialState: initialState.crmBoard,
   reducers: {
-    dispatchFetchDealStates(state) {
+    dispatchFetchDealStates(state, _action: PayloadAction<boolean>) {
       state.isFetchingStates = true;
     },
     dispatchFetchRemindersCount(state) {
@@ -20,6 +20,10 @@ const crmBoardSlice = createSlice({
     },
     setDealStates(state, action: PayloadAction<DealStateView[]>) {
       state.states = orderBy(action.payload, ['orderId'], ['asc']);
+      state.isFetchingStates = false;
+    },
+    setUserDealStates(state, action: PayloadAction<DealStateView[]>) {
+      state.userStates = action.payload;
       state.isFetchingStates = false;
     },
     setIsFetchingStates(state, action: PayloadAction<boolean>) {
@@ -41,6 +45,7 @@ const crmBoardSlice = createSlice({
 
 export const {
   setDealStates,
+  setUserDealStates,
   setIsFetchingStates,
   setRemindersCount,
   setIsFetchingRemindersCount,

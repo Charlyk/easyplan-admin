@@ -8,6 +8,11 @@ export const crmDealsStatesSelector = createSelector(
   (board) => board?.states ?? [],
 );
 
+export const crmUserDealStatesSelector = createSelector(
+  crmBoardSelector,
+  (board) => board.userStates ?? [],
+);
+
 export const remindersCountSelector = createSelector(
   crmBoardSelector,
   (board) => board?.remindersCount ?? 0,

@@ -13,7 +13,7 @@ import {
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
-import { setDealStates } from 'redux/slices/crmBoardSlice';
+import { setDealStates, setUserDealStates } from 'redux/slices/crmBoardSlice';
 import { wrapper } from 'store';
 
 const Crm = () => {
@@ -60,8 +60,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
           };
         }
 
-        const response = await fetchAllDealStates(req.headers);
-        store.dispatch(setDealStates(response.data));
+        const allStatesResponse = await fetchAllDealStates(false, req.headers);
+        const userStatesResponse = await fetchAllDealStates(true, req.headers);
+        store.dispatch(setDealStates(allStatesResponse.data));
+        store.dispatch(setUserDealStates(userStatesResponse.data));
 
         return {
           props: {},

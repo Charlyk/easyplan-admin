@@ -17,3 +17,4 @@ export * from './changeLog';
 export * from './appNotifications';
 export * from './clinicSettings';
 export * from './moizvonki';
+export * from './crmFilters';

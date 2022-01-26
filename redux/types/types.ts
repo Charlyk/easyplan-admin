@@ -22,6 +22,10 @@ import {
   AppNotification,
   ClinicSettings,
   MoizvonkiConnection,
+  CrmFilterOption,
+  DealShortcutType,
+  CrmFilterShortcut,
+  CrmFilterPatient,
 } from 'types';
 
 export interface CalendarDataState {
@@ -152,6 +156,7 @@ export interface ExchangeRatesState {
 
 export interface CrmBoardState {
   states: DealStateView[];
+  userStates: DealStateView[];
   remindersCount: number;
   isFetchingStates: boolean;
   isFetchingRemindersCount: boolean;
@@ -208,6 +213,19 @@ export interface MoizvonkiConnectionState {
   connection?: MoizvonkiConnection | null;
 }
 
+export interface CrmFiltersState {
+  loading: { patients: boolean; filter: boolean };
+  patient?: CrmFilterPatient | null;
+  selectedDoctors: CrmFilterOption[];
+  selectedServices: CrmFilterOption[];
+  selectedUsers: CrmFilterOption[];
+  selectedStates: CrmFilterOption[];
+  selectedDateRange: [Date, Date] | [];
+  selectedReminder?: CrmFilterOption | null;
+  selectedShortcut: CrmFilterShortcut;
+  showRangePicker: boolean;
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -254,4 +272,5 @@ export interface ReduxState {
   appNotification: AppNotificationState;
   clinicSettings: ClinicSettingsState;
   moizvonkiConnection: MoizvonkiConnectionState;
+  crmFilters: CrmFiltersState;
 }
