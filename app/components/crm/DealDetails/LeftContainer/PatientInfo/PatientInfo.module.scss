@@ -53,5 +53,19 @@
     font-weight: bold !important;
     font-size: 13px !important;
     color: #34354C !important;
+
+    a {
+      color: #3a83dc;
+    }
+  }
+
+  .clickableValue {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #3a83dc !important;
+
+    &:hover {
+      color: #5c93d6 !important;
+    }
   }
 }

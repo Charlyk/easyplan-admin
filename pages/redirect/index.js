@@ -11,7 +11,7 @@ import setCookies from 'app/utils/setCookies';
 import { appBaseUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
 
-const Redirect = () => {
+const Redirect = ({ clinicId }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -20,8 +20,12 @@ const Redirect = () => {
 
   const fetchUserData = async () => {
     try {
+      const id = parseInt(clinicId);
       const response = await getCurrentUser();
-      if (response.data.userClinic?.accessBlocked) {
+      const userClinic = response.data.clinics.find(
+        (item) => item.clinicId === id,
+      );
+      if (userClinic?.accessBlocked) {
         await signOut();
         await router.replace(`${appBaseUrl}/login`);
         return;
@@ -76,7 +80,7 @@ export const getServerSideProps = async ({ res, query }) => {
 
     // set cookies
     setCookies(res, token, clinicId);
-    return { props: {} };
+    return { props: { clinicId } };
   } catch (error) {
     return handleRequestError(error);
   }

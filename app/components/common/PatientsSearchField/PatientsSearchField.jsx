@@ -22,6 +22,7 @@ const PatientsSearchField = ({
   selectedPatient,
   fieldLabel,
   disabled,
+  canCreate = true,
   containerClass,
   onSelected,
   onCreatePatient,
@@ -92,7 +93,7 @@ const PatientsSearchField = ({
 
   return (
     <EASAutocomplete
-      canCreate
+      canCreate={canCreate}
       containerClass={containerClass}
       disabled={disabled}
       fieldLabel={fieldLabel}

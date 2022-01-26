@@ -21,7 +21,6 @@ import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField';
 import NotificationsContext from 'app/context/notificationsContext';
-import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import {
   getAvailableHours,
@@ -260,6 +259,13 @@ const AddAppointmentModal = ({
     }
   }, [selectedStartTime, selectedEndTime]);
 
+  const isDoctorInCabinet = (doctor) => {
+    if (cabinet == null) {
+      return false;
+    }
+    return doctor.cabinets.some((item) => item.id === cabinet.id);
+  };
+
   const mappedTime = (timeList) => {
     return timeList.map((item) => ({
       id: item,
@@ -350,6 +356,9 @@ const AddAppointmentModal = ({
   };
 
   const handleDoctorChange = (event, selectedDoctor) => {
+    if (!isDoctorInCabinet(selectedDoctor)) {
+      localDispatch(setSelectedCabinetInDoctorMode(null));
+    }
     localDispatch(setDoctor(selectedDoctor));
   };
 
@@ -608,7 +617,7 @@ const AddAppointmentModal = ({
   );
 };
 
-export default React.memo(AddAppointmentModal, areComponentPropsEqual);
+export default AddAppointmentModal;
 
 AddAppointmentModal.propTypes = {
   open: PropTypes.bool,
