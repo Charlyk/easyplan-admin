@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import ClinicsModal from 'app/components/common/modals/ClinicsModal';
 import IconSuccess from 'app/components/icons/iconSuccess';
@@ -15,6 +15,7 @@ import {
   authTokenSelector,
   currentClinicSelector,
 } from 'redux/selectors/appDataSelector';
+import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import styles from './ApplicationSettings.module.scss';
 import ClinicCabinets from './CliniCabinets';
 import ClinicSettings from './ClinicSettings';
@@ -22,6 +23,7 @@ import ClinicTags from './ClinicTags';
 import TimeBeforeOnSite from './TimeBeforeOnSite';
 
 const ApplicationSettings = () => {
+  const dispatch = useDispatch();
   const clinic = useSelector(currentClinicSelector);
   const authToken = useSelector(authTokenSelector);
   const toast = useContext(NotificationsContext);
@@ -45,11 +47,12 @@ const ApplicationSettings = () => {
         ...clinic,
         timeBeforeOnSite: parseInt(time),
       };
-      await updateClinic(requestBody, null, {
+      const response = await updateClinic(requestBody, null, {
         [HeaderKeys.authorization]: authToken,
         [HeaderKeys.clinicId]: clinic.id,
         [HeaderKeys.subdomain]: clinic.domainName,
       });
+      dispatch(setCurrentClinic(response.data));
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
       toast.error(error.message);

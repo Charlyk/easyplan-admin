@@ -39,7 +39,7 @@ const DealHistory = ({ deal, onPlayAudio }) => {
   );
 
   useEffect(() => {
-    if (updatedReminder == null || updatedReminder.deal.id !== deal.id) {
+    if (updatedReminder == null || updatedReminder.deal.id !== deal?.id) {
       return;
     }
 

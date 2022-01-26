@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import WorkDay from 'app/components/common/WorkDay';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
+import onRequestFailed from 'app/utils/onRequestFailed';
 import { updateClinic } from 'middleware/api/clinic';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import styles from './ClinicWorkingHours.module.scss';
 
 const ClinicWorkingHours = () => {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const clinic = useSelector(currentClinicSelector);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,11 +48,11 @@ const ClinicWorkingHours = () => {
     setIsLoading(true);
     try {
       const requestBody = { ...clinic, workdays };
-      await updateClinic(requestBody);
-      router.replace(router.asPath);
+      const response = await updateClinic(requestBody);
+      dispatch(setCurrentClinic(response.data));
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
-      toast.error(error.message);
+      onRequestFailed(error, toast);
     } finally {
       setIsLoading(false);
     }
