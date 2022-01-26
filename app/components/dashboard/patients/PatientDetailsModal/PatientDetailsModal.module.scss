@@ -12,6 +12,7 @@
     border-radius: 10px !important;
     overflow-x: auto;
     overflow-y: hidden;
+    z-index: 1400 !important;
     transform: translate(-50%, -50%);
 
     .dataContainer {
