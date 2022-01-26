@@ -224,7 +224,7 @@ const EasyApp = ({ Component, pageProps }) => {
   const handleUserLogout = async () => {
     setIsLoading(true);
     await signOut();
-    router.replace(appBaseUrl).then(() => {
+    router.replace(`${appBaseUrl}/login`).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
       setIsLoading(false);

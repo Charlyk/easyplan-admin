@@ -12,6 +12,7 @@ import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import paths from 'app/utils/paths';
 import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
+import { appBaseUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setPatientNoteModal,
@@ -19,12 +20,14 @@ import {
   setPaymentModal,
 } from 'redux/actions/actions';
 import { setIsExchangeRatesModalOpen } from 'redux/actions/exchangeRatesActions';
+import initialState from 'redux/initialState';
 import {
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { userClinicAccessChangeSelector } from 'redux/selectors/clinicDataSelector';
+import { createReminderModalSelector } from 'redux/selectors/CreateReminderModal.selector';
 import {
   newReminderSelector,
   updatedReminderSelector,
@@ -40,6 +43,8 @@ import {
   patientDetailsSelector,
   phoneCallRecordSelector,
 } from 'redux/selectors/rootSelector';
+import { setAppData } from 'redux/slices/appDataSlice';
+import { closeCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import {
   playPhoneCallRecord,
   setPatientDetails,
@@ -66,6 +71,7 @@ const ExchangeRatesModal = dynamic(() =>
 const CheckoutModal = dynamic(() => import('../modals/CheckoutModal'));
 const MainMenu = dynamic(() => import('./MainMenu'));
 const PageHeader = dynamic(() => import('./PageHeader'));
+const AddReminderModal = dynamic(() => import('../modals/AddReminderModal'));
 
 const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const toast = useContext(NotificationsContext);
@@ -82,6 +88,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   const newReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
   const callToPlay = useSelector(phoneCallRecordSelector);
+  const reminderModal = useSelector(createReminderModalSelector);
   const isExchangeRatesModalOpen = useSelector(isExchangeRateModalOpenSelector);
   const clinicAccessChange = useSelector(userClinicAccessChangeSelector);
   let childrenProps = children.props;
@@ -133,7 +140,9 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     }
     try {
       await signOut();
-      await router.replace(router.asPath);
+      router.replace(`${appBaseUrl}/login`).then(() => {
+        dispatch(setAppData(initialState.appData));
+      });
     } catch (error) {
       console.error(error);
     }
@@ -209,6 +218,10 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     );
   };
 
+  const handleCloseReminderModal = () => {
+    dispatch(closeCreateReminderModal());
+  };
+
   return (
     <div className={styles.mainPage} id='main-page'>
       <Head>
@@ -217,6 +230,12 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
       {currentUser != null && currentClinic != null && (
         <>
           <GlobalNotificationView />
+          {reminderModal.open && (
+            <AddReminderModal
+              {...reminderModal}
+              onClose={handleCloseReminderModal}
+            />
+          )}
           {patientNoteModal.open && (
             <AddNote
               {...patientNoteModal}

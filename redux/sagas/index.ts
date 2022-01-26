@@ -32,6 +32,7 @@ import {
   moizvonkiConnectionWatcher,
   updateMoizvonkiConnectionWatcher,
   disconnectMoizvonkiWatcher,
+  createNewReminderWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -68,5 +69,6 @@ export default function* rootSaga() {
     moizvonkiConnectionWatcher(),
     updateMoizvonkiConnectionWatcher(),
     disconnectMoizvonkiWatcher(),
+    createNewReminderWatcher(),
   ]);
 }

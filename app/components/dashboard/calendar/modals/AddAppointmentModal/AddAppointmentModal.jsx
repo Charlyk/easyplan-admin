@@ -21,7 +21,6 @@ import EasyDatePicker from 'app/components/common/EasyDatePicker';
 import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField';
 import NotificationsContext from 'app/context/notificationsContext';
-import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import {
   getAvailableHours,
@@ -141,7 +140,7 @@ const AddAppointmentModal = ({
 
   // check if there are any cabinets
   const shouldSelectCabinet =
-    selectedCabinet == null && schedule?.cabinet == null && cabinets.length > 0;
+    cabinet == null && schedule?.cabinet == null && cabinets.length > 0;
 
   // check if data is fetching
   const isLoading = isFetchingHours || isCreatingSchedule;
@@ -219,6 +218,7 @@ const AddAppointmentModal = ({
   // set initial selected cabinet
   useEffect(() => {
     if (selectedCabinet != null && !isDoctorMode) {
+      console.log(selectedCabinet);
       localDispatch(setSelectedCabinet(selectedCabinet));
     }
   }, [selectedCabinet]);
@@ -258,6 +258,13 @@ const AddAppointmentModal = ({
       localDispatch(setEndTime(selectedEndTime || ''));
     }
   }, [selectedStartTime, selectedEndTime]);
+
+  const isDoctorInCabinet = (doctor) => {
+    if (cabinet == null) {
+      return false;
+    }
+    return doctor.cabinets.some((item) => item.id === cabinet.id);
+  };
 
   const mappedTime = (timeList) => {
     return timeList.map((item) => ({
@@ -349,6 +356,9 @@ const AddAppointmentModal = ({
   };
 
   const handleDoctorChange = (event, selectedDoctor) => {
+    if (!isDoctorInCabinet(selectedDoctor)) {
+      localDispatch(setSelectedCabinetInDoctorMode(null));
+    }
     localDispatch(setDoctor(selectedDoctor));
   };
 
@@ -607,7 +617,7 @@ const AddAppointmentModal = ({
   );
 };
 
-export default React.memo(AddAppointmentModal, areComponentPropsEqual);
+export default AddAppointmentModal;
 
 AddAppointmentModal.propTypes = {
   open: PropTypes.bool,

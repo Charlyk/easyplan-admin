@@ -6,13 +6,17 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import IconLink from 'app/components/icons/iconLink';
 import getPatientName from 'app/utils/getPatientName';
 import { textForKey } from 'app/utils/localization';
+import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import styles from './PatientInfo.module.scss';
 
 const PatientInfo = ({ deal, onLink }) => {
+  const dispatch = useDispatch();
   const patientImage = useMemo(() => {
     return deal?.contact?.photoUrl ?? deal?.patient?.photo ?? '';
   }, [deal]);
@@ -42,6 +46,19 @@ const PatientInfo = ({ deal, onLink }) => {
     return patient.phoneWithCode;
   }, [deal]);
 
+  const handlePatientClick = () => {
+    if (deal.patient == null) {
+      return;
+    }
+    dispatch(
+      setPatientDetails({
+        show: true,
+        patientId: deal.patient.id,
+        canDelete: false,
+      }),
+    );
+  };
+
   return (
     <div className={styles.patientInfo}>
       {!patientImage && (
@@ -66,7 +83,12 @@ const PatientInfo = ({ deal, onLink }) => {
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography className={styles.rowValue}>
+                <Typography
+                  className={clsx(styles.rowValue, {
+                    [styles.clickableValue]: deal?.patient != null,
+                  })}
+                  onClick={handlePatientClick}
+                >
                   {patientName}
                 </Typography>
               </TableCell>
