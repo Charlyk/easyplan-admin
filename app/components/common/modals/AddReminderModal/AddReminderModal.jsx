@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import upperFirst from 'lodash/upperFirst';
 import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
@@ -8,8 +10,9 @@ import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
-import { requestCreateDealReminder } from 'middleware/api/crm';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { isCreatingNewReminderSelector } from 'redux/selectors/CreateReminderModal.selector';
+import { dispatchCreateNewReminder } from 'redux/slices/CreateReminderModal.reducer';
 import styles from './AddReminderModal.module.scss';
 import reducer, {
   initialState,
@@ -20,14 +23,16 @@ import reducer, {
   setNote,
   setEndTime,
   setDate,
-  setIsLoading,
   setPatient,
   resetState,
 } from './AddReminderModal.reducer';
 
-const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
+const AddReminderModal = ({ open, deal, searchType = 'Deal', onClose }) => {
+  const dispatch = useDispatch();
+  const currentClinic = useSelector(currentClinicSelector);
+  const isLoading = useSelector(isCreatingNewReminderSelector);
   const [
-    { startTime, endTime, date, user, type, note, patient, isLoading },
+    { startTime, endTime, date, user, type, note, patient },
     localDispatch,
   ] = useReducer(reducer, initialState);
   const stringDate = moment(date).format('YYYY-MM-DD');
@@ -103,23 +108,17 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
     if (!isFormValid) {
       return;
     }
-    try {
-      localDispatch(setIsLoading(true));
-      const requestBody = {
-        date: moment(date).format('YYYY-MM-DD'),
-        startTime,
-        endTime,
-        userId: user.id,
-        type: type.id,
-        comment: note,
-      };
-      await requestCreateDealReminder(deal.id, requestBody);
-      onClose?.();
-    } catch (error) {
-      onRequestError(error);
-    } finally {
-      localDispatch(setIsLoading(false));
-    }
+    const requestBody = {
+      date: moment(date).format('YYYY-MM-DD'),
+      startTime,
+      endTime,
+      userId: user.id,
+      type: type.id,
+      comment: note,
+      dealId: deal.id,
+      searchType,
+    };
+    dispatch(dispatchCreateNewReminder(requestBody));
   };
 
   return (
@@ -207,3 +206,11 @@ const AddReminderModal = ({ open, deal, currentClinic, onClose }) => {
 };
 
 export default AddReminderModal;
+
+AddReminderModal.propTypes = {
+  open: PropTypes.bool,
+  deal: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  searchType: PropTypes.oneOf(['Deal', 'Schedule']),
+};

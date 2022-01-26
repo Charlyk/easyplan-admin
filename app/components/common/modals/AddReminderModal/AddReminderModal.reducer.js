@@ -23,7 +23,6 @@ export const initialState = {
   user: null,
   type: reminderTypes[0],
   note: '',
-  isLoading: false,
 };
 
 const addReminderModalSlice = createSlice({
@@ -48,9 +47,6 @@ const addReminderModalSlice = createSlice({
     setNote(state, action) {
       state.note = action.payload;
     },
-    setIsLoading(state, action) {
-      state.isLoading = action.payload;
-    },
     setPatient(state, action) {
       state.patient = action.payload;
     },
@@ -68,7 +64,6 @@ export const {
   setStartTime,
   setDate,
   resetState,
-  setIsLoading,
   setPatient,
 } = addReminderModalSlice.actions;
 

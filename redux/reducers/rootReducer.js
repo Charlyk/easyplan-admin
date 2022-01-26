@@ -14,6 +14,7 @@ import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
 import appointmentModal from 'redux/slices/createAppointmentModalSlice';
+import createReminderModal from 'redux/slices/CreateReminderModal.reducer';
 import crmBoard from 'redux/slices/crmBoardSlice';
 import crm from 'redux/slices/crmSlice';
 import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
@@ -77,6 +78,7 @@ const rootReducer = combineReducers({
   appNotification,
   clinicSettings,
   moizvonkiConnection,
+  createReminderModal,
 });
 
 export default rootReducer;
