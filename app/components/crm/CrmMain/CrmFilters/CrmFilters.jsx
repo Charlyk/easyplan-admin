@@ -357,6 +357,7 @@ const CrmFilters = ({
                 />
 
                 <PatientsSearchField
+                  canCreate={false}
                   selectedPatient={patient}
                   containerClass={styles.simpleField}
                   fieldLabel={textForKey('Patient')}

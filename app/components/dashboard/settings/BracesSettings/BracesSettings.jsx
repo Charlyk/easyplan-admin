@@ -1,23 +1,24 @@
 import React, { useContext, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import isEqual from 'lodash/isEqual';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EASTextField from 'app/components/common/EASTextField';
 import LoadingButton from 'app/components/common/LoadingButton';
 import SwitchButton from 'app/components/common/SwitchButton';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
+import onRequestFailed from 'app/utils/onRequestFailed';
 import { updateClinicBraces } from 'middleware/api/clinic';
 import {
   clinicBracesSelector,
   clinicCurrencySelector,
 } from 'redux/selectors/appDataSelector';
+import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import styles from './BracesSettings.module.scss';
 
 const BracesSettings = () => {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const braces = useSelector(clinicBracesSelector);
   const currency = useSelector(clinicCurrencySelector);
@@ -64,11 +65,11 @@ const BracesSettings = () => {
   const handleSaveBracesSettings = async () => {
     setIsSaving(true);
     try {
-      await updateClinicBraces({ services: clinicBraces });
-      router.replace(router.asPath);
+      const response = await updateClinicBraces({ services: clinicBraces });
+      dispatch(setCurrentClinic(response.data));
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
-      toast.error(error.message);
+      onRequestFailed(error, toast);
     } finally {
       setIsSaving(false);
     }
