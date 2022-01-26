@@ -1,40 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
 import { textForKey } from 'app/utils/localization';
+import { DealShortcutType, ReminderType } from 'types';
 
 export const Shortcuts = [
   {
-    id: 0,
+    id: DealShortcutType.All,
     type: 'default',
     name: textForKey('crm_filter_all_deals'),
   },
   {
-    id: 1,
+    id: DealShortcutType.Opened,
     type: 'default',
     name: textForKey('crm_filter_opened_deals'),
   },
   {
-    id: 2,
+    id: DealShortcutType.Mine,
     type: 'default',
     name: textForKey('crm_filter_my_deals'),
   },
   {
-    id: 3,
+    id: DealShortcutType.Success,
     type: 'default',
     name: textForKey('crm_filter_closed_successfully'),
   },
   {
-    id: 4,
+    id: DealShortcutType.Closed,
     type: 'default',
     name: textForKey('crm_filter_not_realized'),
   },
   {
-    id: 5,
+    id: DealShortcutType.TodayTasks,
     type: 'reminder',
     name: textForKey('crm_filter_shortcuts_today_reminders'),
   },
   {
-    id: 6,
+    id: DealShortcutType.ExpiredTasks,
     type: 'reminder',
     name: textForKey('crm_filter_shortcuts_expired_tasks'),
   },
@@ -42,33 +43,33 @@ export const Shortcuts = [
 
 export const reminderOptions = [
   {
-    id: 0,
+    id: ReminderType.All,
     name: textForKey('crm_filter_all_reminders'),
   },
   {
-    id: 1,
+    id: ReminderType.Today,
     name: textForKey('crm_filter_today_reminders'),
   },
   {
-    id: 2,
+    id: ReminderType.Tomorrow,
     name: textForKey('crm_filter_tomorrow_reminders'),
   },
   {
-    id: 3,
+    id: ReminderType.Week,
     name: textForKey('crm_filter_current_week_reminders'),
   },
   {
-    id: 4,
+    id: ReminderType.NoTasks,
     name: textForKey('crm_filter_without_tasks'),
   },
   {
-    id: 5,
+    id: ReminderType.Expired,
     name: textForKey('crm_filter_expired_tasks'),
   },
 ];
 
 export const initialState = {
-  loading: { patients: false },
+  loading: { patients: false, filter: false },
   patient: null,
   selectedDoctors: [{ id: -1, name: textForKey('All doctors') }],
   selectedServices: [{ id: -1, name: textForKey('All services') }],
@@ -89,6 +90,9 @@ const crmFiltersSlice = createSlice({
   name: 'crmFilters',
   initialState,
   reducers: {
+    dispatchFetchCrmFilter(state) {
+      state.loading = { ...state.loading, filter: true };
+    },
     setPatient(state, action) {
       state.patient = action.payload;
     },
@@ -126,6 +130,7 @@ const crmFiltersSlice = createSlice({
 });
 
 export const {
+  dispatchFetchCrmFilter,
   setPatient,
   setPatientsLoading,
   setSelectedDoctors,
