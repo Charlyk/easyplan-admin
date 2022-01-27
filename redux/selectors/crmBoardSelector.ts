@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { DealStateView } from '../../types';
+import { DealStateView } from 'types';
 import { ReduxState } from '../types';
 
 export const crmBoardSelector = (state: ReduxState) => state.crmBoard;

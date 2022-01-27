@@ -91,9 +91,7 @@ const CrmFilters = ({ onSubmit, onClose }) => {
   }, []);
 
   const handlePatientChange = (selectedPatient) => {
-    dispatch(
-      setPatient({ ...selectedPatient, label: selectedPatient.fullName }),
-    );
+    dispatch(setPatient(selectedPatient));
   };
 
   const handleCloseFilters = () => {

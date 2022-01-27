@@ -68,7 +68,11 @@ const crmFiltersSlice = createSlice({
       state.loading = { ...state.loading, filter: action.payload };
     },
     setPatient(state, action: PayloadAction<CrmFilterPatient | null>) {
-      state.patient = action.payload;
+      if (action.payload != null) {
+        state.patient = { ...action.payload, label: action.payload.fullName };
+      } else {
+        state.patient = action.payload;
+      }
     },
     setPatientsLoading(state, action: PayloadAction<boolean>) {
       state.loading = { ...state.loading, patients: action.payload };
