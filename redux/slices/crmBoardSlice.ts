@@ -3,6 +3,7 @@ import orderBy from 'lodash/orderBy';
 import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { DealStateView, DealView, GroupedDeals } from 'types';
+import { UpdateDealStateRequest } from 'types/api';
 
 const crmBoardSlice = createSlice({
   name: 'crmBoard',
@@ -13,6 +14,12 @@ const crmBoardSlice = createSlice({
     },
     dispatchFetchRemindersCount(state) {
       state.isFetchingRemindersCount = true;
+    },
+    dispatchUpdateDealState(
+      state,
+      _action: PayloadAction<{ stateId: number; body: UpdateDealStateRequest }>,
+    ) {
+      state.isFetchingStates = true;
     },
     dispatchFetchGroupedDeals(
       state,
@@ -161,6 +168,22 @@ const crmBoardSlice = createSlice({
     setIsFetchingDeals(state, action: PayloadAction<boolean>) {
       state.isFetchingDeals = action.payload;
     },
+    updateDealState(state, action: PayloadAction<DealStateView[]>) {
+      state.deals = state.deals.map((group) => {
+        const dealState = action.payload.find(
+          (item) => item.id === group.state.id,
+        );
+        if (dealState == null) {
+          return group;
+        }
+
+        return {
+          ...group,
+          state: dealState,
+        };
+      });
+      state.isFetchingStates = false;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -174,6 +197,7 @@ const crmBoardSlice = createSlice({
 
 export const {
   dispatchFetchGroupedDeals,
+  dispatchUpdateDealState,
   setIsFetchingDeals,
   setGroupedDeals,
   setDealStates,
@@ -188,6 +212,7 @@ export const {
   deleteDeal,
   movedDeal,
   addGroupedDeals,
+  updateDealState,
 } = crmBoardSlice.actions;
 
 export default crmBoardSlice.reducer;

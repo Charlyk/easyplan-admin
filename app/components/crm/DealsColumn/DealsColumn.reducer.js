@@ -67,6 +67,8 @@ const dealsColumnSlice = createSlice({
       state.columnColor = action.payload.color;
       state.dealState = action.payload;
       state.page = 0;
+      state.isEditingName = false;
+      state.showColorPicker = false;
     },
     setColumnName(state, action) {
       state.columnName = action.payload.toUpperCase();

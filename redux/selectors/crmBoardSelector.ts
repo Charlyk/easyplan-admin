@@ -1,3 +1,4 @@
+import sortBy from 'lodash/sortBy';
 import { createSelector } from 'reselect';
 import { DealStateView } from 'types';
 import { ReduxState } from '../types';
@@ -19,9 +20,8 @@ export const remindersCountSelector = createSelector(
   (board) => board?.remindersCount ?? 0,
 );
 
-export const groupedDealsSelector = createSelector(
-  crmBoardSelector,
-  (board) => board?.deals ?? [],
+export const groupedDealsSelector = createSelector(crmBoardSelector, (board) =>
+  sortBy(board?.deals ?? [], (item) => item.state.orderId),
 );
 
 export const dealsForStateSelector = createSelector(

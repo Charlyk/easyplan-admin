@@ -15,7 +15,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useColor } from 'react-color-palette';
 import { useDrop } from 'react-dnd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ActionsSheet from 'app/components/common/ActionsSheet';
 import EASColorPicker from 'app/components/common/EASColorPicker';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -27,6 +27,7 @@ import {
   updateDealState,
 } from 'middleware/api/crm';
 import { dealsForStateSelector } from 'redux/selectors/crmBoardSelector';
+import { dispatchUpdateDealState } from '../../../../redux/slices/crmBoardSlice';
 import AddColumnModal from '../AddColumnModal';
 import { ItemTypes } from './constants';
 import DealItem from './DealItem';
@@ -58,6 +59,7 @@ const DealsColumn = ({
   onConfirmFirstContact,
   onDealClick,
 }) => {
+  const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
@@ -171,13 +173,12 @@ const DealsColumn = ({
   };
 
   const handleSaveColumnName = async () => {
-    try {
-      await updateDealState({ name: columnName }, dealState.id);
-    } catch (error) {
-      localDispatch(setColumnName(dealState.name));
-    } finally {
-      localDispatch(setIsEditingName(false));
-    }
+    dispatch(
+      dispatchUpdateDealState({
+        stateId: dealState.id,
+        body: { name: columnName },
+      }),
+    );
   };
 
   const handleEditColumn = () => {
@@ -193,14 +194,12 @@ const DealsColumn = ({
   };
 
   const handleSaveColor = async () => {
-    try {
-      await updateDealState({ color: color.hex }, dealState.id);
-      localDispatch(setColumnColor(color.hex));
-    } catch (error) {
-      localDispatch(setColumnColor(dealState.color));
-    } finally {
-      handleCloseColorPicker();
-    }
+    dispatch(
+      dispatchUpdateDealState({
+        stateId: dealState.id,
+        body: { color: color.hex },
+      }),
+    );
   };
 
   const handleDeleteColumn = async () => {

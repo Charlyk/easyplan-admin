@@ -218,7 +218,6 @@ const AddAppointmentModal = ({
   // set initial selected cabinet
   useEffect(() => {
     if (selectedCabinet != null && !isDoctorMode) {
-      console.log(selectedCabinet);
       localDispatch(setSelectedCabinet(selectedCabinet));
     }
   }, [selectedCabinet]);

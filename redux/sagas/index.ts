@@ -35,6 +35,7 @@ import {
   fetchCrmFilterWatcher,
   updateCrmFilterWatcher,
   fetchGroupedDealsWatcher,
+  updateDealStateWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -74,5 +75,6 @@ export default function* rootSaga() {
     fetchCrmFilterWatcher(),
     updateCrmFilterWatcher(),
     fetchGroupedDealsWatcher(),
+    updateDealStateWatcher(),
   ]);
 }

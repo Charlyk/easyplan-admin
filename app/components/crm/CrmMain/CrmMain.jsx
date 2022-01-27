@@ -20,7 +20,6 @@ import onRequestFailed from 'app/utils/onRequestFailed';
 import {
   requestChangeDealColumn,
   requestConfirmFirstContact,
-  updateDealState,
 } from 'middleware/api/crm';
 import {
   currentClinicSelector,
@@ -33,7 +32,10 @@ import {
   remindersCountSelector,
 } from 'redux/selectors/crmBoardSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
-import { dispatchFetchGroupedDeals } from 'redux/slices/crmBoardSlice';
+import {
+  dispatchFetchGroupedDeals,
+  dispatchUpdateDealState,
+} from 'redux/slices/crmBoardSlice';
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
@@ -166,12 +168,12 @@ const CrmMain = () => {
   };
 
   const handleColumnMoved = async (direction, state) => {
-    try {
-      await updateDealState({ moveDirection: upperFirst(direction) }, state.id);
-      await updateColumns();
-    } catch (error) {
-      toast.error(error.message);
-    }
+    dispatch(
+      dispatchUpdateDealState({
+        stateId: state.id,
+        body: { moveDirection: upperFirst(direction) },
+      }),
+    );
   };
 
   const handlePatientLinked = async (updatedDeal, confirmContact) => {

@@ -38,7 +38,6 @@ const crmFiltersSlice = createSlice({
       state.selectedShortcut = Shortcuts.find(
         (item) => item.id === filter.shortcut,
       );
-      console.log(filter.patient);
       state.patient =
         filter.patient != null
           ? { ...filter.patient, label: filter.patient.fullName }
