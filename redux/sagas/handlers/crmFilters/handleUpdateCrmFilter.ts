@@ -5,7 +5,7 @@ import {
   setFilterLoading,
   setCrmFilter,
 } from 'app/components/crm/CrmMain/CrmFilters/CrmFilters.reducer';
-import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
+import { dispatchFetchGroupedDeals } from 'redux/slices/crmBoardSlice';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
 import { SaveCrmFilterRequest } from 'types/api';
 import { requestUpdateCrmFilter } from '../../requests';
@@ -19,7 +19,7 @@ export function* handleUpdateCrmFilter(
       action.payload,
     );
     yield put(setCrmFilter(response.data));
-    yield put(dispatchFetchDealStates(true));
+    yield put(dispatchFetchGroupedDeals({ page: 0, itemsPerPage: 25 }));
   } catch (error) {
     yield put(setFilterLoading(false));
     if (error.response != null) {

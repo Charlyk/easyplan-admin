@@ -8,11 +8,7 @@ import {
   CrmFilterType,
 } from 'types';
 import { SaveCrmFilterRequest } from 'types/api';
-import {
-  defaultRange,
-  reminderOptions,
-  Shortcuts,
-} from './CrmFilters.constants';
+import { reminderOptions, Shortcuts } from './CrmFilters.constants';
 
 export const initialState = reduxState.crmFilters;
 
@@ -42,7 +38,11 @@ const crmFiltersSlice = createSlice({
       state.selectedShortcut = Shortcuts.find(
         (item) => item.id === filter.shortcut,
       );
-      state.patient = filter.patient;
+      console.log(filter.patient);
+      state.patient =
+        filter.patient != null
+          ? { ...filter.patient, label: filter.patient.fullName }
+          : null;
       const startDate = filter.startDate
         ? moment(filter.startDate).toDate()
         : null;
@@ -105,6 +105,7 @@ const crmFiltersSlice = createSlice({
     },
     resetState(state, action: PayloadAction<CrmFilterOption[]>) {
       state.selectedStates = action.payload;
+      state.patient = initialState.patient;
       state.selectedDoctors = initialState.selectedDoctors;
       state.selectedShortcut = initialState.selectedShortcut;
       state.selectedUsers = initialState.selectedUsers;
@@ -129,7 +130,6 @@ export const {
   setDateRange,
   setShowRangePicker,
   setSelectedStates,
-  setSelectedShortcut,
   resetState,
 } = crmFiltersSlice.actions;
 

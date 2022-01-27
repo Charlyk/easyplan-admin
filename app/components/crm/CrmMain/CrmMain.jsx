@@ -1,28 +1,22 @@
-import React, {
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-} from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Zoom from '@material-ui/core/Zoom';
 import IconFilter from '@material-ui/icons/FilterList';
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
+import sortBy from 'lodash/sortBy';
 import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import HorizontalScrollHelper from 'app/components/common/HorizontalScrollHelper';
+import InfiniteScrollDiv from 'app/components/common/InfiniteScrollDiv';
 import NotificationsContext from 'app/context/notificationsContext';
 import { Role } from 'app/utils/constants';
-import extractCookieByName from 'app/utils/extractCookieByName';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
-import setDocCookies from 'app/utils/setDocCookies';
+import onRequestFailed from 'app/utils/onRequestFailed';
 import {
   requestChangeDealColumn,
   requestConfirmFirstContact,
@@ -34,13 +28,12 @@ import {
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
 import {
-  crmDealsStatesSelector,
-  crmUserDealStatesSelector,
+  groupedDealsSelector,
+  isFetchingDealsSelector,
   remindersCountSelector,
 } from 'redux/selectors/crmBoardSelector';
-import { updatedDealSelector } from 'redux/selectors/crmSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
-import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
+import { dispatchFetchGroupedDeals } from 'redux/slices/crmBoardSlice';
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
@@ -58,8 +51,8 @@ import reducer, {
   closeReminderModal,
   setIsDeleting,
   setShowFilters,
-  setQueryParams,
   setShowReminders,
+  setCurrentPage,
   setShowPageConnectModal,
 } from './CrmMain.reducer';
 
@@ -71,8 +64,8 @@ const DealDetails = dynamic(() => import('../DealDetails'));
 const AddReminderModal = dynamic(() => import('../AddReminderModal'));
 const CrmFilters = dynamic(() => import('./CrmFilters'));
 
-const COOKIES_KEY = 'crm_filter';
 const COLUMN_WIDTH = 350;
+const itemsPerPage = 25;
 
 const CrmMain = () => {
   const router = useRouter();
@@ -81,48 +74,41 @@ const CrmMain = () => {
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const activeRemindersCount = useSelector(remindersCountSelector);
-  const columns = useSelector(crmUserDealStatesSelector);
-  const remoteDeal = useSelector(updatedDealSelector);
-  const columnsContainerRef = useRef(null);
+  const isFetchingDeals = useSelector(isFetchingDealsSelector);
+  const columns = useSelector(groupedDealsSelector);
   const userClinic = useSelector(userClinicSelector);
   const [
     {
       linkModal,
       deleteModal,
-      updatedDeal,
       detailsModal,
       reminderModal,
       showFilters,
       queryParams,
       showReminders,
+      currentPage,
       showPageConnectModal,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    const queryParams = extractCookieByName(COOKIES_KEY);
     const { roleInClinic } = userClinic;
     const showConnectModal =
       currentClinic.facebookPages.length === 0 &&
       (roleInClinic === Role.admin || roleInClinic === Role.manager);
     localDispatch(setShowPageConnectModal(showConnectModal));
-    if (!queryParams) {
-      return;
-    }
-    const params = JSON.parse(atob(queryParams));
-    localDispatch(setQueryParams(params));
   }, []);
 
   useEffect(() => {
-    if (remoteDeal == null) {
+    if (currentPage === 0) {
       return;
     }
-    localDispatch(setUpdatedDeal(remoteDeal));
-  }, [remoteDeal]);
+    dispatch(dispatchFetchGroupedDeals({ page: currentPage, itemsPerPage }));
+  }, [currentPage]);
 
   const updateColumns = () => {
-    dispatch(dispatchFetchDealStates(true));
+    localDispatch(setCurrentPage(0));
   };
 
   const handleCloseLinkModal = () => {
@@ -163,7 +149,9 @@ const CrmMain = () => {
       return;
     }
     try {
-      const column = columns.find((item) => item.type === 'ClosedNotRealized');
+      const column = columns
+        .map((item) => item.state)
+        .find((item) => item.type === 'ClosedNotRealized');
       if (column == null) {
         return;
       }
@@ -171,7 +159,7 @@ const CrmMain = () => {
       await requestChangeDealColumn(column.id, deal.id);
       handleCloseDeleteModal();
     } catch (error) {
-      onRequestError(error);
+      onRequestFailed(error, toast);
     } finally {
       localDispatch(setIsDeleting(false));
     }
@@ -236,25 +224,6 @@ const CrmMain = () => {
     dispatch(playPhoneCallRecord(call));
   };
 
-  const updateParams = (newParams) => {
-    const stringQuery = JSON.stringify(newParams);
-    const encoded = btoa(unescape(encodeURIComponent(stringQuery)));
-    setDocCookies(COOKIES_KEY, encoded);
-    localDispatch(setQueryParams(newParams));
-  };
-
-  const handleShortcutSelected = (shortcut) => {
-    updateParams({ ...queryParams, shortcut });
-  };
-
-  const handleFilterSubmit = (filterData) => {
-    updateParams(filterData);
-  };
-
-  const handleScrollUpdate = (scrollOffset) => {
-    columnsContainerRef.current.scrollLeft = scrollOffset;
-  };
-
   const handleCloseConnectSocial = () => {
     localDispatch(setShowPageConnectModal(false));
   };
@@ -264,8 +233,36 @@ const CrmMain = () => {
     await router.replace('/settings?menu=crmSettings');
   };
 
+  const handleScrolledToEnd = () => {
+    localDispatch(setCurrentPage(currentPage + 1));
+  };
+
+  const handleSubmitFilter = () => {
+    localDispatch(setCurrentPage(0));
+    handleCloseFilter();
+  };
+
+  const getMaxTotalItems = () => {
+    const sortedTotal = sortBy(columns.map((group) => group.deals.total));
+    return sortedTotal.reverse()[0];
+  };
+
+  const getMaxByLength = () => {
+    const sortedTotal = sortBy(columns.map((group) => group.deals.data.length));
+    return sortedTotal.reverse()[0];
+  };
+
   return (
-    <div className={styles.crmMain}>
+    <InfiniteScrollDiv
+      showScrollHelper
+      itemsCount={getMaxByLength()}
+      totalItems={getMaxTotalItems()}
+      isLoading={isFetchingDeals}
+      className={styles.crmMain}
+      columnWidth={COLUMN_WIDTH}
+      columnsCount={columns.length}
+      onScrollToEnd={handleScrolledToEnd}
+    >
       <LinkPatientModal
         open={linkModal.open}
         confirm={linkModal.confirmContact}
@@ -312,14 +309,7 @@ const CrmMain = () => {
         onPlayAudio={handlePlayAudio}
       />
       {showFilters && (
-        <CrmFilters
-          currentClinic={currentClinic}
-          dealsStates={columns}
-          selectedParams={queryParams}
-          onClose={handleCloseFilter}
-          onSubmit={handleFilterSubmit}
-          onShortcutSelected={handleShortcutSelected}
-        />
+        <CrmFilters onSubmit={handleSubmitFilter} onClose={handleCloseFilter} />
       )}
       <div className={styles.buttonsContainer}>
         <Zoom
@@ -360,17 +350,16 @@ const CrmMain = () => {
           </Tooltip>
         </Zoom>
       </div>
-      <div ref={columnsContainerRef} className={styles.columnsContainer}>
-        {columns.map((dealState, index) => (
+      <div className={styles.columnsContainer}>
+        {columns.map((column, index) => (
           <DealsColumn
-            key={dealState.id}
+            key={column.state.id}
             width={COLUMN_WIDTH}
             filterData={queryParams}
             isFirst={index === 0}
             isLast={index === columns.length - 1}
-            updatedDeal={updatedDeal}
             currentClinic={currentClinic}
-            dealState={dealState}
+            dealState={column.state}
             onAddSchedule={handleAddSchedule}
             onUpdate={updateColumns}
             onMove={handleColumnMoved}
@@ -381,19 +370,7 @@ const CrmMain = () => {
           />
         ))}
       </div>
-
-      <HorizontalScrollHelper
-        columnsCount={columns.length}
-        columnWidth={COLUMN_WIDTH}
-        parentEl={columnsContainerRef.current}
-        columnSpacing={8} // margin between columns
-        onScrollUpdate={handleScrollUpdate}
-        position={{
-          bottom: '1rem',
-          right: '5rem',
-        }}
-      />
-    </div>
+    </InfiniteScrollDiv>
   );
 };
 

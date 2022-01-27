@@ -148,7 +148,9 @@ const initialState: ReduxState = {
   crmBoard: {
     states: [],
     userStates: [],
+    deals: [],
     remindersCount: 0,
+    isFetchingDeals: false,
     isFetchingStates: false,
     isFetchingRemindersCount: false,
   },

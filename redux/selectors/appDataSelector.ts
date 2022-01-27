@@ -40,6 +40,14 @@ export const clinicDoctorsSelector = createSelector(
     ),
 );
 
+export const clinicManagementUsersSelector = createSelector(
+  currentClinicSelector,
+  (currentClinic) =>
+    (currentClinic?.users ?? []).filter(
+      (item) => item.roleInClinic !== Role.doctor,
+    ),
+);
+
 export const clinicCurrencySelector = createSelector(
   currentClinicSelector,
   (clinic) => clinic.currency,

@@ -29,6 +29,7 @@ export type CrmFilterPatient = {
   fullName: string;
   phoneNumber: string;
   countryCode: string;
+  label: string;
 };
 
 export enum ReminderType {

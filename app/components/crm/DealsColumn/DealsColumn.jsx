@@ -5,7 +5,6 @@ import React, {
   useReducer,
   useRef,
 } from 'react';
-import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
@@ -13,30 +12,21 @@ import Typography from '@material-ui/core/Typography';
 import DoneIcon from '@material-ui/icons/Done';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import clsx from 'clsx';
-import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import { useColor } from 'react-color-palette';
 import { useDrop } from 'react-dnd';
-import InfiniteScroll from 'react-infinite-scroller';
 import { useSelector } from 'react-redux';
 import ActionsSheet from 'app/components/common/ActionsSheet';
 import EASColorPicker from 'app/components/common/EASColorPicker';
 import NotificationsContext from 'app/context/notificationsContext';
-import usePrevious from 'app/hooks/usePrevious';
-import extractCookieByName from 'app/utils/extractCookieByName';
 import onRequestError from 'app/utils/onRequestError';
 import {
   createNewDealState,
   deleteDealState,
   requestChangeDealColumn,
-  requestFetchDeals,
   updateDealState,
 } from 'middleware/api/crm';
-import {
-  deletedDealSelector,
-  newDealSelector,
-  updatedDealSelector,
-} from 'redux/selectors/crmSelector';
+import { dealsForStateSelector } from 'redux/selectors/crmBoardSelector';
 import AddColumnModal from '../AddColumnModal';
 import { ItemTypes } from './constants';
 import DealItem from './DealItem';
@@ -51,23 +41,14 @@ import reducer, {
   setColumnData,
   setColumnColor,
   setShowCreateColumn,
-  setData,
-  setIsFetching,
-  setUpdatedDeal,
-  addNewDeal,
-  removeDeal,
   setPage,
 } from './DealsColumn.reducer';
-
-const COOKIES_KEY = 'crm_filter';
 
 const DealsColumn = ({
   dealState,
   width,
   isFirst,
   isLast,
-  updatedDeal,
-  filterData,
   currentClinic,
   onMove,
   onUpdate,
@@ -80,24 +61,18 @@ const DealsColumn = ({
   const toast = useContext(NotificationsContext);
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
-  const createdDeal = useSelector(newDealSelector);
-  const updatedDealData = useSelector(updatedDealSelector);
-  const deletedDeal = useSelector(deletedDealSelector);
   const [color, setColor] = useColor('hex', dealState.color);
-  const previousFilter = usePrevious(filterData);
+  const { total: totalElements, data: items } = useSelector((state) =>
+    dealsForStateSelector(state, dealState),
+  );
   const [
     {
-      isFetching,
       showActions,
       isEditingName,
       columnName,
       columnColor,
       showColorPicker,
       showCreateColumn,
-      totalElements,
-      items,
-      page,
-      itemsPerPage,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -133,27 +108,6 @@ const DealsColumn = ({
   );
 
   useEffect(() => {
-    if (isEqual(filterData, previousFilter)) {
-      return;
-    }
-    fetchDealsForState();
-  }, [filterData, previousFilter]);
-
-  useEffect(() => {
-    if (createdDeal == null || createdDeal.state.id !== dealState.id) {
-      return;
-    }
-    localDispatch(addNewDeal(createdDeal));
-  }, [createdDeal]);
-
-  useEffect(() => {
-    if (deletedDeal == null || deletedDeal.state.id !== dealState.id) {
-      return;
-    }
-    localDispatch(removeDeal(deletedDeal));
-  }, [deletedDeal]);
-
-  useEffect(() => {
     if (dealState == null) {
       return;
     }
@@ -162,34 +116,6 @@ const DealsColumn = ({
       localDispatch(setPage(0));
     };
   }, [dealState]);
-
-  useEffect(() => {
-    if (updatedDeal == null && updatedDealData == null) {
-      return;
-    }
-
-    localDispatch(setUpdatedDeal(updatedDeal ?? updatedDealData));
-  }, [updatedDeal, updatedDealData]);
-
-  const fetchDealsForState = async () => {
-    try {
-      if (isFetching) {
-        return;
-      }
-      localDispatch(setIsFetching(true));
-      const filterParams = extractCookieByName(COOKIES_KEY);
-      const response = await requestFetchDeals(
-        dealState.id,
-        page,
-        itemsPerPage,
-        filterParams,
-      );
-      localDispatch(setData(response.data));
-    } catch (error) {
-      onRequestError(error);
-      localDispatch(setIsFetching(false));
-    }
-  };
 
   const handleDealDrop = async (deal) => {
     try {
@@ -374,34 +300,20 @@ const DealsColumn = ({
         </div>
       </div>
       <div id='scrollableDiv' className={styles.dataContainer}>
-        <InfiniteScroll
-          initialLoad
-          pageStart={0}
-          useWindow={false}
-          style={{ width: '100%' }}
-          loadMore={fetchDealsForState}
-          hasMore={items.length < totalElements}
-          loader={
-            <div className={styles.progressWrapper}>
-              <CircularProgress className='circular-progress-bar' />
-            </div>
-          }
-        >
-          <div className={styles.itemsContainer} key='deal-items'>
-            {items.map((item) => (
-              <DealItem
-                key={item.id}
-                currentClinic={currentClinic}
-                onDealClick={onDealClick}
-                color={dealState.color}
-                dealItem={item}
-                onLinkPatient={onLinkPatient}
-                onDeleteDeal={onDeleteDeal}
-                onConfirmFirstContact={onConfirmFirstContact}
-              />
-            ))}
-          </div>
-        </InfiniteScroll>
+        <div className={styles.itemsContainer} key='deal-items'>
+          {items?.map((item) => (
+            <DealItem
+              key={item.id}
+              currentClinic={currentClinic}
+              onDealClick={onDealClick}
+              color={dealState.color}
+              dealItem={item}
+              onLinkPatient={onLinkPatient}
+              onDeleteDeal={onDeleteDeal}
+              onConfirmFirstContact={onConfirmFirstContact}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

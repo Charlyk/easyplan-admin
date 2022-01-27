@@ -6,14 +6,18 @@ import CrmMain from 'app/components/crm/CrmMain';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
-import { fetchAllDealStates } from 'middleware/api/crm';
+import { fetchAllDealStates, fetchGroupedDeals } from 'middleware/api/crm';
 import {
   authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
-import { setDealStates, setUserDealStates } from 'redux/slices/crmBoardSlice';
+import {
+  setDealStates,
+  setGroupedDeals,
+  setUserDealStates,
+} from 'redux/slices/crmBoardSlice';
 import { wrapper } from 'store';
 
 const Crm = () => {
@@ -61,9 +65,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
         }
 
         const allStatesResponse = await fetchAllDealStates(false, req.headers);
-        const userStatesResponse = await fetchAllDealStates(true, req.headers);
         store.dispatch(setDealStates(allStatesResponse.data));
-        store.dispatch(setUserDealStates(userStatesResponse.data));
+        const groupedDeals = await fetchGroupedDeals(0, 25, req.headers);
+        store.dispatch(setGroupedDeals(groupedDeals.data));
 
         return {
           props: {},

@@ -1,5 +1,5 @@
 .filterBackdrop {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -8,8 +8,8 @@
 
   .crmFilters {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 55%;
+    left: 55%;
     transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 10px !important;

@@ -23,9 +23,9 @@ import {
   ClinicSettings,
   MoizvonkiConnection,
   CrmFilterOption,
-  DealShortcutType,
   CrmFilterShortcut,
   CrmFilterPatient,
+  GroupedDeals,
 } from 'types';
 
 export interface CalendarDataState {
@@ -157,7 +157,9 @@ export interface ExchangeRatesState {
 export interface CrmBoardState {
   states: DealStateView[];
   userStates: DealStateView[];
+  deals: GroupedDeals[];
   remindersCount: number;
+  isFetchingDeals: boolean;
   isFetchingStates: boolean;
   isFetchingRemindersCount: boolean;
 }

@@ -13,8 +13,12 @@ import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import IconClose from 'app/components/icons/iconClose';
-import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
+import {
+  clinicDoctorsSelector,
+  clinicManagementUsersSelector,
+  clinicServicesSelector,
+} from 'redux/selectors/appDataSelector';
 import { crmDealsStatesSelector } from 'redux/selectors/crmBoardSelector';
 import { DealShortcutType } from 'types';
 import {
@@ -39,7 +43,7 @@ import {
 } from './CrmFilters.reducer';
 import { crmFiltersSelector } from './CrmFilters.selector';
 
-const CrmFilters = ({ currentClinic, onClose }) => {
+const CrmFilters = ({ onSubmit, onClose }) => {
   const dispatch = useDispatch();
   const {
     patient,
@@ -53,26 +57,24 @@ const CrmFilters = ({ currentClinic, onClose }) => {
     selectedShortcut,
   } = useSelector(crmFiltersSelector);
   const pickerRef = useRef(null);
-  const services = currentClinic.services;
+  const services = useSelector(clinicServicesSelector);
   const dealsStates = useSelector(crmDealsStatesSelector);
+  const clinicDoctors = useSelector(clinicDoctorsSelector);
+  const clinicUsers = useSelector(clinicManagementUsersSelector);
 
   const doctors = useMemo(() => {
-    return currentClinic.users
-      .filter((item) => item.roleInClinic === Role.doctor)
-      .map((item) => ({
-        ...item,
-        name: item.fullName,
-      }));
-  }, [currentClinic]);
+    return clinicDoctors.map((item) => ({
+      ...item,
+      name: item.fullName,
+    }));
+  }, [clinicDoctors]);
 
   const users = useMemo(() => {
-    return currentClinic.users
-      .filter((item) => item.roleInClinic !== Role.doctor)
-      .map((item) => ({
-        ...item,
-        name: item.fullName,
-      }));
-  }, [currentClinic]);
+    return clinicUsers.map((item) => ({
+      ...item,
+      name: item.fullName,
+    }));
+  }, [clinicUsers]);
 
   const dateRangeText = useMemo(() => {
     if (selectedDateRange.length === 0) {
@@ -89,7 +91,9 @@ const CrmFilters = ({ currentClinic, onClose }) => {
   }, []);
 
   const handlePatientChange = (selectedPatient) => {
-    dispatch(setPatient(selectedPatient));
+    dispatch(
+      setPatient({ ...selectedPatient, label: selectedPatient.fullName }),
+    );
   };
 
   const handleCloseFilters = () => {
@@ -121,7 +125,7 @@ const CrmFilters = ({ currentClinic, onClose }) => {
   const handleSubmitFilter = () => {
     const newFilter = getNewFilter();
     dispatch(dispatchUpdateCrmFilter(newFilter));
-    onClose?.();
+    onSubmit?.();
   };
 
   const handleDoctorChange = (event) => {

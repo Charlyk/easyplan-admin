@@ -259,3 +259,23 @@ export async function requestChangeDealClinic(
     branchId,
   });
 }
+
+/**
+ * Fetch all deals grouped by state
+ * @param {number} page
+ * @param {number} itemsPerPage
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<GroupedDeals[]>>}
+ */
+export async function fetchGroupedDeals(
+  page,
+  itemsPerPage = 25,
+  headers = null,
+) {
+  const params = {
+    page: `${page}`,
+    itemsPerPage: `${itemsPerPage}`,
+  };
+  const queryString = new URLSearchParams(params).toString();
+  return get(`/api/crm/deals/v2?${queryString}`, headers);
+}
