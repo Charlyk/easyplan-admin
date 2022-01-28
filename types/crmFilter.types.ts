@@ -10,7 +10,7 @@ export type CrmFilterType = {
   responsible: DealAssignee[];
   doctors: DealAssignee[];
   services: DealServiceView[];
-  reminderType: ReminderType;
+  reminderType: ReminderTypeEnum;
   shortcut: DealShortcutType;
   patientTags: PatientTag[];
   allTags: PatientTag[];
@@ -35,7 +35,7 @@ export type CrmFilterPatient = {
   label: string;
 };
 
-export enum ReminderType {
+export enum ReminderTypeEnum {
   All = 'All',
   Today = 'Today',
   Tomorrow = 'Tomorrow',

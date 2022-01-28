@@ -1,4 +1,4 @@
-import { DealShortcutType, ReminderType } from 'types';
+import { DealShortcutType, ReminderTypeEnum } from 'types';
 
 export interface SaveCrmFilterRequest {
   startDate?: string | null;
@@ -8,6 +8,6 @@ export interface SaveCrmFilterRequest {
   doctors: number[];
   responsible: number[];
   services: number[];
-  reminder: ReminderType[];
+  reminder: ReminderTypeEnum[];
   shortcut: DealShortcutType;
 }

@@ -5,7 +5,7 @@ import {
   CrmFilterShortcut,
   DealShortcutType,
   DealStateType,
-  ReminderType,
+  ReminderTypeEnum,
 } from 'types';
 
 export const defaultRange = [
@@ -53,27 +53,27 @@ export const Shortcuts: CrmFilterShortcut[] = [
 
 export const reminderOptions: CrmFilterOption[] = [
   {
-    id: ReminderType.All,
+    id: ReminderTypeEnum.All,
     name: textForKey('crm_filter_all_reminders'),
   },
   {
-    id: ReminderType.Today,
+    id: ReminderTypeEnum.Today,
     name: textForKey('crm_filter_today_reminders'),
   },
   {
-    id: ReminderType.Tomorrow,
+    id: ReminderTypeEnum.Tomorrow,
     name: textForKey('crm_filter_tomorrow_reminders'),
   },
   {
-    id: ReminderType.Week,
+    id: ReminderTypeEnum.Week,
     name: textForKey('crm_filter_current_week_reminders'),
   },
   {
-    id: ReminderType.NoTasks,
+    id: ReminderTypeEnum.NoTasks,
     name: textForKey('crm_filter_without_tasks'),
   },
   {
-    id: ReminderType.Expired,
+    id: ReminderTypeEnum.Expired,
     name: textForKey('crm_filter_expired_tasks'),
   },
 ];
