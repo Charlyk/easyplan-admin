@@ -76,7 +76,7 @@ export const WebRegex =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
 export const FacebookAppId =
-  environment === 'local' ? '2924106361197162' : '2924106361197162';
+  environment === 'local' ? '367664371555800' : '2924106361197162';
 
 export const YClientAPIUrl = 'https://api.yclients.com/api';
 
