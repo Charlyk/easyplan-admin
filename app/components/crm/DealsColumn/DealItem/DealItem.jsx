@@ -8,7 +8,6 @@ import styles from './DealItem.module.scss';
 
 const DealItem = ({
   dealItem,
-  color,
   currentClinic,
   onLinkPatient,
   onDeleteDeal,
