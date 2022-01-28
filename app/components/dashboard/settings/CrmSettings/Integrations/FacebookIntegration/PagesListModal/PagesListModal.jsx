@@ -48,7 +48,14 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
             }}
             onClick={() => handlePageSelected(page)}
           >
-            {page.name}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                className={styles.pagePicture}
+                src={page.picture.data.url}
+                alt={page.name}
+              />
+              {page.name}
+            </div>
             {isPageSelected(page) && <IconCheckMark fill='#00ac00' />}
           </MenuItem>
         ))}
@@ -70,6 +77,11 @@ PagesListModal.propTypes = {
       id: PropTypes.string,
       name: PropTypes.string,
       tasks: PropTypes.arrayOf(PropTypes.string),
+      picture: PropTypes.shape({
+        data: {
+          url: PropTypes.string,
+        },
+      }),
     }),
   ),
 };

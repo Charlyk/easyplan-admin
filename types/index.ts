@@ -34,3 +34,5 @@ export * from './globalNotification.type';
 export * from './clinicSettings.types';
 export * from './moizvonkiConnection.types';
 export * from './reminder.types';
+export * from './facebookAuthentication.types';
+export * from './facebookPage.types';

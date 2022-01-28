@@ -6,6 +6,12 @@
   padding-bottom: 5px;
   border-bottom: #ededed 1px solid;
 
+  :global(.positive-button) {
+    flex: unset;
+    height: 30px;
+    min-width: 140px !important;
+  }
+
   .rowContainer {
     display: flex;
     align-items: flex-end;

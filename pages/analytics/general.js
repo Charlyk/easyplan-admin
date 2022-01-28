@@ -10,11 +10,11 @@ import {
 } from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
+import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
 import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
 import { requestFetchSelectedCharts } from 'middleware/api/users';
 import {
-  authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
@@ -39,20 +39,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         store.dispatch(END);
         await store.sagaTask.toPromise();
 
-        // fetch page data
-        if (query.startDate == null) {
-          query.startDate = moment().startOf('week').format('YYYY-MM-DD');
-        }
-        if (query.endDate == null) {
-          query.endDate = moment().endOf('week').format('YYYY-MM-DD');
-        }
-
-        const appState = store.getState();
-        const authToken = authTokenSelector(appState);
-        const currentUser = currentUserSelector(appState);
-        const currentClinic = currentClinicSelector(appState);
+        const { auth_token: authToken } = parseCookies(req);
         const cookies = req?.headers?.cookie ?? '';
         store.dispatch(setCookies(cookies));
+
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
@@ -60,6 +50,33 @@ export const getServerSideProps = wrapper.getServerSideProps(
               permanent: true,
             },
           };
+        }
+
+        // fetch page data
+        const appState = store.getState();
+        const currentUser = currentUserSelector(appState);
+        const currentClinic = currentClinicSelector(appState);
+
+        const redirectTo = redirectToUrl(
+          currentUser,
+          currentClinic,
+          '/settings',
+        );
+        if (redirectTo != null) {
+          return {
+            redirect: {
+              destination: redirectTo,
+              permanent: true,
+            },
+          };
+        }
+
+        // fetch page data
+        if (query.startDate == null) {
+          query.startDate = moment().startOf('week').format('YYYY-MM-DD');
+        }
+        if (query.endDate == null) {
+          query.endDate = moment().endOf('week').format('YYYY-MM-DD');
         }
 
         const chartResponse = await requestFetchSelectedCharts(req.headers);
@@ -76,20 +93,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           req.headers,
         );
         store.dispatch(setAnalytics(analyticResponse.data));
-
-        const redirectTo = redirectToUrl(
-          currentUser,
-          currentClinic,
-          '/analytics/general',
-        );
-        if (redirectTo != null) {
-          return {
-            redirect: {
-              destination: redirectTo,
-              permanent: true,
-            },
-          };
-        }
 
         return {
           props: {
