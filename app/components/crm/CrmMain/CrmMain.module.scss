@@ -25,10 +25,10 @@
     position: fixed;
     bottom: 1rem;
     right: 1rem;
+    z-index: 1600;
 
     .remindersFab {
       background-color: #ffffff;
-      z-index: 9999;
 
       .activeIndicator {
         min-width: 1.3rem;
@@ -59,7 +59,6 @@
 
     .fab {
       background-color: #3A83DC;
-      z-index: 9999;
       margin-top: 14px;
 
       svg {
