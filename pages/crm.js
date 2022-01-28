@@ -13,11 +13,7 @@ import {
   currentUserSelector,
 } from 'redux/selectors/appDataSelector';
 import { setCookies } from 'redux/slices/appDataSlice';
-import {
-  setDealStates,
-  setGroupedDeals,
-  setUserDealStates,
-} from 'redux/slices/crmBoardSlice';
+import { setDealStates, setGroupedDeals } from 'redux/slices/crmBoardSlice';
 import { wrapper } from 'store';
 
 const Crm = () => {
