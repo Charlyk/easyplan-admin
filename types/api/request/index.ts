@@ -7,3 +7,4 @@ export * from './updateVisitRequest.types';
 export * from './connectMoizvonkiRequest.types';
 export * from './saveCrmFilterRequest.types';
 export * from './updateDealStateRequest.types';
+export * from './createReminderRequest.types';

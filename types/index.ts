@@ -34,3 +34,4 @@ export * from './globalNotification.type';
 export * from './clinicSettings.types';
 export * from './moizvonkiConnection.types';
 export * from './crmFilter.types';
+export * from './reminder.types';

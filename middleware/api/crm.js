@@ -129,18 +129,15 @@ export async function requestCreateDealNote(dealId, noteText, headers = null) {
  *   endTime: string,
  *   userId: number,
  *   type: string,
- *   comment?: string
+ *   dealId: number,
+ *   comment?: string,
+ *   searchType?: 'Deal' | 'Schedule',
  * }} reminder
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestCreateDealReminder(
-  dealId,
-  reminder,
-  headers = null,
-) {
-  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
-  return put(`/api/reminders?${queryString}`, headers, reminder);
+export async function requestCreateDealReminder(reminder, headers = null) {
+  return post('/api/reminders', headers, reminder);
 }
 
 /**

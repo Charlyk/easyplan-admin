@@ -212,6 +212,12 @@ const initialState: ReduxState = {
     allTags: [],
     selectedTags: [{ id: -1, name: textForKey('All tags') }],
   },
+  createReminderModal: {
+    open: false,
+    isLoading: false,
+    deal: null,
+    searchType: 'Deal',
+  },
 };
 
 export default initialState;

@@ -231,6 +231,13 @@ export interface CrmFiltersState {
   showRangePicker: boolean;
 }
 
+export interface CreateReminderModalState {
+  open: boolean;
+  isLoading: boolean;
+  deal: { id: number } | null;
+  searchType: 'Deal' | 'Schedule';
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -278,4 +285,5 @@ export interface ReduxState {
   clinicSettings: ClinicSettingsState;
   moizvonkiConnection: MoizvonkiConnectionState;
   crmFilters: CrmFiltersState;
+  createReminderModal: CreateReminderModalState;
 }
