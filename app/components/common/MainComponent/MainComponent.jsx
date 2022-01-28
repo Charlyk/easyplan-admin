@@ -11,7 +11,6 @@ import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import paths from 'app/utils/paths';
-import redirectIfOnGeneralHost from 'app/utils/redirectIfOnGeneralHost';
 import { appBaseUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
@@ -95,10 +94,6 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
   if (provideAppData) {
     childrenProps = { ...childrenProps, currentUser, currentClinic, authToken };
   }
-
-  useEffect(() => {
-    redirectIfOnGeneralHost(currentUser, router);
-  }, [currentUser, router]);
 
   useEffect(() => {
     if (newReminder == null || newReminder.assignee.id !== currentUser.id) {
