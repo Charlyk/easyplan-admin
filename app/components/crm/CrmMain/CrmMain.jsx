@@ -32,12 +32,11 @@ import {
   remindersCountSelector,
 } from 'redux/selectors/crmBoardSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
+import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import {
   dispatchFetchGroupedDeals,
   dispatchUpdateDealState,
 } from 'redux/slices/crmBoardSlice';
-import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
-import { dispatchFetchDealStates } from 'redux/slices/crmBoardSlice';
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
