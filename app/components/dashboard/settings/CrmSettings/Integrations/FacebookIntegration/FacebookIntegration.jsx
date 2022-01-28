@@ -8,14 +8,13 @@ import NotificationsContext from 'app/context/notificationsContext';
 import { FacebookAppId } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
-import { appBaseUrl } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
+import { environment } from 'eas.config';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
-const redirectUrl = `${appBaseUrl}/integrations/facebook`;
 const fbAuthUrl = 'https://www.facebook.com/v12.0/dialog/oauth';
 const facebookScopes =
   'public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement,instagram_basic,pages_manage_posts';
@@ -63,6 +62,10 @@ const FacebookIntegration = ({
   const authenticateFacebookCode = async () => {
     setIsLoading(true);
     try {
+      const baseUrl = window.location.hostname;
+      const protocol = window.location.protocol;
+      const port = environment === 'local' ? `:${window.location.port}` : '';
+      const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook`;
       const response = await generateFacebookAccessToken(
         facebookCode,
         facebookToken,
@@ -139,6 +142,10 @@ const FacebookIntegration = ({
   };
 
   const handleConnectClick = () => {
+    const baseUrl = window.location.hostname;
+    const protocol = window.location.protocol;
+    const port = environment === 'local' ? `:${window.location.port}` : '';
+    const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook`;
     router.push(
       `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}`,
     );
