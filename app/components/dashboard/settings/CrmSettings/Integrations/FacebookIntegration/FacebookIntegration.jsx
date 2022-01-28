@@ -8,13 +8,14 @@ import NotificationsContext from 'app/context/notificationsContext';
 import { FacebookAppId } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
+import { appBaseUrl } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
-const redirectUrl = 'http://localhost:3000/integrations/facebook';
+const redirectUrl = `${appBaseUrl}/integrations/facebook`;
 const fbAuthUrl = 'https://www.facebook.com/v12.0/dialog/oauth';
 const facebookScopes =
   'public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement,instagram_basic,pages_manage_posts';
