@@ -11,6 +11,7 @@ import onRequestFailed from 'app/utils/onRequestFailed';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
+import { environment } from 'eas.config';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
@@ -63,7 +64,8 @@ const FacebookIntegration = ({
     try {
       const baseUrl = window.location.hostname;
       const protocol = window.location.protocol;
-      const redirectUrl = `${protocol}://${baseUrl}/integrations/facebook`;
+      const port = environment === 'local' ? `:${window.location.port}` : '';
+      const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook`;
       const response = await generateFacebookAccessToken(
         facebookCode,
         facebookToken,
@@ -142,7 +144,8 @@ const FacebookIntegration = ({
   const handleConnectClick = () => {
     const baseUrl = window.location.hostname;
     const protocol = window.location.protocol;
-    const redirectUrl = `${protocol}://${baseUrl}/integrations/facebook`;
+    const port = environment === 'local' ? `:${window.location.port}` : '';
+    const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook`;
     router.push(
       `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}`,
     );
