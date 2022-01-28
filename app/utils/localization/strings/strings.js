@@ -782,6 +782,9 @@ export default {
     delete_invitation: 'Delete invitation',
     delete_invitation_message:
       'Are you sure you want to delete this invitation?',
+    all_tags: 'All tags',
+    patient_tags: 'Patient tags',
+    visible_states: 'Visible states',
   },
   ro: {
     analytics: 'Analitică',
@@ -1576,6 +1579,9 @@ export default {
     delete_invitation: 'Ștergeți invitația',
     delete_invitation_message:
       'Sunteți sigur(ă) că doriți să ștergeți invitația?',
+    all_tags: 'Toate',
+    patient_tags: 'Taguri',
+    visible_states: 'Statuturile vizibile',
   },
   ru: {
     analytics: 'Analytics',
@@ -2358,5 +2364,8 @@ export default {
     delete_invitation: 'Delete invitation',
     delete_invitation_message:
       'Sunteți sigur(ă) că doriți să ștergeți invitația ?',
+    all_tags: 'All tags',
+    patient_tags: 'Patient tags',
+    visible_states: 'Visible states',
   },
 };

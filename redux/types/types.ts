@@ -26,6 +26,7 @@ import {
   CrmFilterShortcut,
   CrmFilterPatient,
   GroupedDeals,
+  PatientTag,
 } from 'types';
 
 export interface CalendarDataState {
@@ -225,6 +226,8 @@ export interface CrmFiltersState {
   selectedDateRange: [Date, Date] | [];
   selectedReminder?: CrmFilterOption | null;
   selectedShortcut: CrmFilterShortcut;
+  selectedTags: CrmFilterOption[];
+  allTags: PatientTag[];
   showRangePicker: boolean;
 }
 

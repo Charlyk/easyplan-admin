@@ -209,6 +209,8 @@ const initialState: ReduxState = {
     selectedReminder: reminderOptions[0],
     selectedShortcut: Shortcuts[0],
     showRangePicker: false,
+    allTags: [],
+    selectedTags: [{ id: -1, name: textForKey('All tags') }],
   },
 };
 

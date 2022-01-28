@@ -1,4 +1,5 @@
 import { DealAssignee, DealServiceView, DealStateView } from './DealView.types';
+import { PatientTag } from './pubnubMessage.types';
 
 export type CrmFilterType = {
   id: number;
@@ -11,6 +12,8 @@ export type CrmFilterType = {
   services: DealServiceView[];
   reminderType: ReminderType;
   shortcut: DealShortcutType;
+  patientTags: PatientTag[];
+  allTags: PatientTag[];
 };
 
 export type CrmFilterOption = {

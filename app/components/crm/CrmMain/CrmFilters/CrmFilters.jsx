@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -40,13 +41,17 @@ import {
   resetState,
   dispatchFetchCrmFilter,
   dispatchUpdateCrmFilter,
+  setSelectedTags,
 } from './CrmFilters.reducer';
 import { crmFiltersSelector } from './CrmFilters.selector';
 
 const CrmFilters = ({ onSubmit, onClose }) => {
   const dispatch = useDispatch();
   const {
+    loading,
     patient,
+    allTags,
+    selectedTags,
     selectedDoctors,
     selectedReminder,
     selectedServices,
@@ -118,6 +123,9 @@ const CrmFilters = ({ onSubmit, onClose }) => {
       : selectedServices.map((service) => service.id),
     reminder: selectedReminder.id,
     shortcut: shortcut.id,
+    tags: selectedTags.some((item) => item.id === -1)
+      ? []
+      : selectedTags.map((tag) => tag.id),
   });
 
   const handleSubmitFilter = () => {
@@ -153,6 +161,19 @@ const CrmFilters = ({ onSubmit, onClose }) => {
       newValue.some((item) => item === state.id),
     );
     dispatch(setSelectedStates(newStates.filter((state) => state.id !== -1)));
+  };
+
+  const handleTagsChanged = (event) => {
+    const newValue = event.target.value;
+    const lastSelected = newValue[newValue.length - 1];
+    if (newValue.length === 0 || lastSelected === -1) {
+      dispatch(setSelectedTags(initialState.selectedTags));
+      return;
+    }
+    const newTags = allTags.filter((tag) =>
+      newValue.some((item) => item === tag.id),
+    );
+    dispatch(setSelectedTags(newTags.filter((state) => state.id !== -1)));
   };
 
   const handleServicesChange = (event) => {
@@ -235,129 +256,148 @@ const CrmFilters = ({ onSubmit, onClose }) => {
           </IconButton>
         </div>
         <div className={styles.container}>
-          <div className={styles.dataContainer}>
-            <div className={styles.shortcuts}>
-              {Shortcuts.map((item) => (
-                <Box
-                  key={item.id}
-                  className={clsx(styles.shortcut, {
-                    [styles.selected]: isShortcutSelected(item.id),
-                  })}
-                  onClick={() => handleShortcutSelected(item)}
-                >
-                  {item.type === 'reminder' ? (
-                    <div
-                      className={clsx(styles.reminderIndicator, {
-                        [styles.expired]:
-                          item.id === DealShortcutType.ExpiredTasks,
-                      })}
-                    />
-                  ) : null}
-                  <Typography className={styles.label}>{item.name}</Typography>
-                </Box>
-              ))}
-            </div>
-            <div className={styles.filters}>
-              <div className={styles.fieldsContainer}>
-                <EASTextField
-                  readOnly
-                  ref={pickerRef}
-                  value={dateRangeText}
-                  placeholder='01.01.2021 - 30.01.2021'
-                  fieldLabel={textForKey('Period')}
-                  containerClass={styles.simpleField}
-                  onClick={handleOpenRangePicker}
-                />
-
-                <PatientsSearchField
-                  canCreate={false}
-                  selectedPatient={patient}
-                  containerClass={styles.simpleField}
-                  fieldLabel={textForKey('Patient')}
-                  onSelected={handlePatientChange}
-                />
-
-                <EASSelect
-                  multiple
-                  updateText
-                  rootClass={styles.simpleField}
-                  label={textForKey('States')}
-                  labelId='doctors-select-label'
-                  options={dealsStates}
-                  value={selectedStates?.map((item) => item.id) || []}
-                  onChange={handleStatesChanged}
-                />
-
-                <EASSelect
-                  multiple
-                  rootClass={styles.simpleField}
-                  label={textForKey('Doctors')}
-                  labelId='doctors-select-label'
-                  options={doctors}
-                  defaultOption={{
-                    id: -1,
-                    name: textForKey('All doctors'),
-                  }}
-                  value={selectedDoctors?.map((item) => item.id) || []}
-                  onChange={handleDoctorChange}
-                />
-
-                <EASSelect
-                  multiple
-                  rootClass={styles.simpleField}
-                  label={textForKey('Responsible')}
-                  labelId='doctors-select-label'
-                  options={users}
-                  defaultOption={{
-                    id: -1,
-                    name: textForKey('All users'),
-                  }}
-                  value={selectedUsers?.map((item) => item.id) || []}
-                  onChange={handleUsersChange}
-                />
-
-                <EASSelect
-                  multiple
-                  rootClass={styles.simpleField}
-                  label={textForKey('Services')}
-                  labelId='doctors-select-label'
-                  options={services}
-                  defaultOption={{
-                    id: -1,
-                    name: textForKey('All services'),
-                  }}
-                  value={selectedServices?.map((item) => item.id) || []}
-                  onChange={handleServicesChange}
-                />
-
-                <EASSelect
-                  rootClass={styles.simpleField}
-                  label={textForKey('crm_reminders')}
-                  labelId='reminder-select-label'
-                  options={reminderOptions}
-                  value={selectedReminder?.id ?? 0}
-                  onChange={handleRemindersChange}
-                />
+          {!loading.filter && (
+            <div className={styles.dataContainer}>
+              <div className={styles.shortcuts}>
+                {Shortcuts.map((item) => (
+                  <Box
+                    key={item.id}
+                    className={clsx(styles.shortcut, {
+                      [styles.selected]: isShortcutSelected(item.id),
+                    })}
+                    onClick={() => handleShortcutSelected(item)}
+                  >
+                    {item.type === 'reminder' ? (
+                      <div
+                        className={clsx(styles.reminderIndicator, {
+                          [styles.expired]:
+                            item.id === DealShortcutType.ExpiredTasks,
+                        })}
+                      />
+                    ) : null}
+                    <Typography className={styles.label}>
+                      {item.name}
+                    </Typography>
+                  </Box>
+                ))}
               </div>
-              <div className={styles.footer}>
-                <Button onClick={handleCloseFilters}>
-                  {textForKey('Close')}
-                </Button>
-                <Button
-                  className={styles.resetBtn}
-                  onClick={handleResetFilters}
-                >
-                  {textForKey('Reset')}
-                </Button>
-                <Button
-                  className={styles.applyBtn}
-                  onClick={handleSubmitFilter}
-                >
-                  {textForKey('Apply')}
-                </Button>
+              <div className={styles.filters}>
+                <div className={styles.fieldsContainer}>
+                  <EASTextField
+                    readOnly
+                    ref={pickerRef}
+                    value={dateRangeText}
+                    placeholder='01.01.2021 - 30.01.2021'
+                    fieldLabel={textForKey('Period')}
+                    containerClass={styles.simpleField}
+                    onClick={handleOpenRangePicker}
+                  />
+
+                  <PatientsSearchField
+                    canCreate={false}
+                    selectedPatient={patient}
+                    containerClass={styles.simpleField}
+                    fieldLabel={textForKey('Patient')}
+                    onSelected={handlePatientChange}
+                  />
+
+                  <EASSelect
+                    multiple
+                    updateText
+                    rootClass={styles.simpleField}
+                    label={textForKey('patient_tags')}
+                    labelId='tags-select-label'
+                    options={allTags}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('all_tags'),
+                    }}
+                    value={selectedTags?.map((item) => item.id) || []}
+                    onChange={handleTagsChanged}
+                  />
+
+                  <EASSelect
+                    multiple
+                    updateText
+                    rootClass={styles.simpleField}
+                    label={textForKey('visible_states')}
+                    labelId='states-select-label'
+                    options={dealsStates}
+                    value={selectedStates?.map((item) => item.id) || []}
+                    onChange={handleStatesChanged}
+                  />
+
+                  <EASSelect
+                    multiple
+                    rootClass={styles.simpleField}
+                    label={textForKey('Doctors')}
+                    labelId='doctors-select-label'
+                    options={doctors}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('All doctors'),
+                    }}
+                    value={selectedDoctors?.map((item) => item.id) || []}
+                    onChange={handleDoctorChange}
+                  />
+
+                  <EASSelect
+                    multiple
+                    rootClass={styles.simpleField}
+                    label={textForKey('Responsible')}
+                    labelId='doctors-select-label'
+                    options={users}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('All users'),
+                    }}
+                    value={selectedUsers?.map((item) => item.id) || []}
+                    onChange={handleUsersChange}
+                  />
+
+                  <EASSelect
+                    multiple
+                    rootClass={styles.simpleField}
+                    label={textForKey('Services')}
+                    labelId='doctors-select-label'
+                    options={services}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('All services'),
+                    }}
+                    value={selectedServices?.map((item) => item.id) || []}
+                    onChange={handleServicesChange}
+                  />
+
+                  <EASSelect
+                    rootClass={styles.simpleField}
+                    label={textForKey('crm_reminders')}
+                    labelId='reminder-select-label'
+                    options={reminderOptions}
+                    value={selectedReminder?.id ?? 0}
+                    onChange={handleRemindersChange}
+                  />
+                </div>
+                <div className={styles.footer}>
+                  <Button onClick={handleCloseFilters}>
+                    {textForKey('Close')}
+                  </Button>
+                  <Button
+                    className={styles.resetBtn}
+                    onClick={handleResetFilters}
+                  >
+                    {textForKey('Reset')}
+                  </Button>
+                  <Button
+                    className={styles.applyBtn}
+                    onClick={handleSubmitFilter}
+                  >
+                    {textForKey('Apply')}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <EasyDateRangePicker
             open={showRangePicker}
@@ -369,6 +409,11 @@ const CrmFilters = ({ onSubmit, onClose }) => {
               endDate: selectedDateRange[1] ?? defaultRange[1],
             }}
           />
+          {loading.filter && (
+            <div className='progress-bar-wrapper'>
+              <CircularProgress className='circular-progress-bar' />
+            </div>
+          )}
         </div>
       </Paper>
     </Box>

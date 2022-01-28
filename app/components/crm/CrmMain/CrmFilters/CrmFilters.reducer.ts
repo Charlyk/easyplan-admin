@@ -28,6 +28,17 @@ const crmFiltersSlice = createSlice({
     setCrmFilter(state, action: PayloadAction<CrmFilterType>) {
       const filter = action.payload;
       state.loading = { ...state.loading, filter: false };
+      state.allTags = filter.allTags.map((tag) => ({
+        ...tag,
+        name: tag.title,
+      }));
+      state.selectedTags =
+        filter.patientTags.length > 0
+          ? filter.patientTags.map((tag) => ({
+              ...tag,
+              name: tag.title,
+            }))
+          : initialState.selectedTags;
       state.selectedStates = filter.visibleStates.map((item) => ({
         id: item.id,
         name: item.name,
@@ -100,6 +111,9 @@ const crmFiltersSlice = createSlice({
     setSelectedStates(state, action: PayloadAction<CrmFilterOption[] | null>) {
       state.selectedStates = action.payload ?? [];
     },
+    setSelectedTags(state, action: PayloadAction<CrmFilterOption[] | null>) {
+      state.selectedTags = action.payload ?? [];
+    },
     setSelectedShortcut(
       state,
       action: PayloadAction<CrmFilterShortcut | null>,
@@ -115,6 +129,7 @@ const crmFiltersSlice = createSlice({
       state.selectedReminder = initialState.selectedReminder;
       state.selectedDateRange = initialState.selectedDateRange;
       state.selectedServices = initialState.selectedServices;
+      state.selectedTags = initialState.selectedTags;
     },
   },
 });
@@ -133,6 +148,7 @@ export const {
   setDateRange,
   setShowRangePicker,
   setSelectedStates,
+  setSelectedTags,
   resetState,
 } = crmFiltersSlice.actions;
 
