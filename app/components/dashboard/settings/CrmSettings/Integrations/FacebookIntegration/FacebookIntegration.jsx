@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconFacebookSm from 'app/components/icons/iconMetaLogo';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -11,16 +12,14 @@ import { appBaseUrl, environment } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
-const FacebookIntegration = ({
-  currentClinic,
-  facebookToken,
-  facebookCode,
-}) => {
+const FacebookIntegration = ({ facebookToken, facebookCode }) => {
   const router = useRouter();
   const toast = useContext(NotificationsContext);
+  const currentClinic = useSelector(currentClinicSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [facebookPages, setFacebookPages] = useState(
     currentClinic.facebookPages,
@@ -61,7 +60,7 @@ const FacebookIntegration = ({
       const baseUrl = window.location.hostname;
       const protocol = window.location.protocol;
       const port = environment === 'local' ? `:${window.location.port}` : '';
-      const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook?connect=0`;
+      const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook?connect=0&subdomain=${currentClinic.domainName}`;
       const response = await generateFacebookAccessToken(
         facebookCode,
         facebookToken,
