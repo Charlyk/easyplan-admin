@@ -8,10 +8,10 @@ import NotificationsContext from 'app/context/notificationsContext';
 import { FacebookAppId } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
+import { environment } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
-import { environment } from 'eas.config';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
@@ -35,8 +35,8 @@ const FacebookIntegration = ({
     if (facebookPages == null || !Array.isArray(facebookPages)) {
       return textForKey('Connect facebook page for CRM');
     }
-    return textForKey('connected_facebook_page').replace(
-      '{1}',
+    return textForKey(
+      'connected_facebook_page',
       facebookPages.map((it) => it.name).join(', '),
     );
   }, [facebookPages]);
