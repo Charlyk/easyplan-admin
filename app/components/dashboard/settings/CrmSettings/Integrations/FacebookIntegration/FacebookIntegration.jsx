@@ -137,7 +137,9 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
   };
 
   const handleConnectClick = () => {
-    router.replace(`${appBaseUrl}/integrations/facebook?connect=1`);
+    router.replace(
+      `${appBaseUrl}/integrations/facebook?connect=1&subdomain=${currentClinic.domainName}`,
+    );
   };
 
   return (

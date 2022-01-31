@@ -31,7 +31,7 @@ const Facebook = ({
     if (connect !== '1') {
       return;
     }
-    const redirectUrl = `${appBaseUrl}/integrations/facebook?connect=0`;
+    const redirectUrl = `${appBaseUrl}/integrations/facebook?connect=0&subdomain=${subdomain}`;
     router.push(
       `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}`,
     );
