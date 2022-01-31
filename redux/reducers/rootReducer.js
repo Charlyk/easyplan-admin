@@ -2,6 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import appNotification from 'app/components/common/GlobalNotificationView/GlobalNotificationView.reducer';
 import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
 import changeLogModal from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
+import crmFilters from 'app/components/crm/CrmMain/CrmFilters/CrmFilters.reducer';
 import clinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import patientVisits from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes/AppointmentNotes.reducer';
@@ -78,6 +79,7 @@ const rootReducer = combineReducers({
   appNotification,
   clinicSettings,
   moizvonkiConnection,
+  crmFilters,
   createReminderModal,
 });
 

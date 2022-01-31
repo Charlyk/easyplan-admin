@@ -235,7 +235,7 @@ const PatientDetailsModal = ({
       disablePortal
       open={show}
       onClose={onClose}
-      style={{ zIndex: 1400 }}
+      style={{ zIndex: 1300 }}
       className={styles.patientDetailsModal}
     >
       <Paper className={styles.modalPaper}>

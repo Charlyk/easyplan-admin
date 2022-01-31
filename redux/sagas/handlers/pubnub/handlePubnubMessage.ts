@@ -29,8 +29,13 @@ import {
 } from 'redux/slices/calendarData';
 import { setUserClinicAccessChange } from 'redux/slices/clinicDataSlice';
 import {
+  deleteDeal,
+  movedDeal,
+  addNewDeal,
+  updateDeal,
+} from 'redux/slices/crmBoardSlice';
+import {
   setDeletedDeal,
-  setNewDeal,
   setNewReminder,
   setUpdatedDeal,
   setUpdatedReminder,
@@ -121,6 +126,9 @@ export function* handlePubnubMessage(event: PayloadAction<PubnubMessage>) {
       case MessageAction.UserCanCreateScheduleChanged:
         yield call(handleUserCanCreateScheduleChanged, payload);
         break;
+      case MessageAction.DealStateChanged:
+        yield call(handleDealStateChanged, payload);
+        break;
     }
   } catch (error) {
     console.error('error receiving message', error);
@@ -195,13 +203,14 @@ function* handleNewDealCreated(payload: DealView) {
   if (payload == null) {
     return;
   }
-  yield put(setNewDeal(payload));
+  yield put(addNewDeal(payload));
 }
 
 function* handleDealUpdated(payload: DealView) {
   if (payload == null) {
     return;
   }
+  yield put(updateDeal(payload));
   yield put(setUpdatedDeal(payload));
 }
 
@@ -209,7 +218,19 @@ function* handleDealDeleted(payload: DealView) {
   if (payload == null) {
     return;
   }
+  yield put(deleteDeal(payload));
   yield put(setDeletedDeal(payload));
+}
+
+function* handleDealStateChanged(payload: {
+  initial: DealView;
+  current: DealView;
+}) {
+  if (payload == null) {
+    return;
+  }
+  yield put(movedDeal(payload));
+  yield put(setUpdatedDeal(payload.current));
 }
 
 function* handleReminderCreated(payload: any) {

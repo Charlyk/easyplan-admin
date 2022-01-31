@@ -12,6 +12,7 @@ export const initialState = {
   activeRemindersCount: 0,
   queryParams: {},
   callToPlay: null,
+  currentPage: 0,
   showPageConnectModal: false,
 };
 
@@ -82,11 +83,13 @@ const crmMainSlice = createSlice({
     setShowPageConnectModal(state, action) {
       state.showPageConnectModal = action.payload;
     },
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
+    },
   },
 });
 
 export const {
-  setColumns,
   openDeleteModal,
   closeDeleteModal,
   openLinkModal,
@@ -101,8 +104,8 @@ export const {
   setQueryParams,
   setShowReminders,
   setActiveRemindersCount,
-  setCallToPlay,
   setShowPageConnectModal,
+  setCurrentPage,
 } = crmMainSlice.actions;
 
 export default crmMainSlice.reducer;

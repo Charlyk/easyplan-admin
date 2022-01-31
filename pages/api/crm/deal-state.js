@@ -10,7 +10,8 @@ async function fetchDealStates(req) {
   const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
     req.headers.cookie,
   );
-  return axios.get(`${updatedServerUrl(req)}/crm/deal-state`, {
+  const queryString = new URLSearchParams(req.query).toString();
+  return axios.get(`${updatedServerUrl()}/crm/deal-state?${queryString}`, {
     headers: {
       [HeaderKeys.authorization]: authToken,
       [HeaderKeys.clinicId]: clinicId,

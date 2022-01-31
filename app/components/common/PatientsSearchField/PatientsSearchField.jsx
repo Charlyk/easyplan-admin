@@ -1,22 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
+import getPatientName from 'app/utils/getPatientName';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { getPatients } from 'middleware/api/patients';
 import EASAutocomplete from '../EASAutocomplete';
-
-const getPatientLabel = (patient) => {
-  if (patient.firstName && patient.lastName) {
-    return `${patient.lastName} ${patient.firstName}`;
-  } else if (patient.firstName) {
-    return patient.firstName;
-  } else if (patient.lastName) {
-    return patient.lastName;
-  } else {
-    return `+${patient.countryCode}${patient.phoneNumber}`;
-  }
-};
 
 const PatientsSearchField = ({
   selectedPatient,
@@ -47,7 +36,7 @@ const PatientsSearchField = ({
   }, [patients, selectedPatient]);
 
   const getLabelKey = useCallback((option) => {
-    return getPatientLabel(option);
+    return getPatientName(option);
   }, []);
 
   const handlePatientSearch = useCallback(
