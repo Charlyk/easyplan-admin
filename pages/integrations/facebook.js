@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FacebookAppId } from 'app/utils/constants';
-import { environment } from 'eas.config';
+import { appBaseUrl, environment } from 'eas.config';
 
 const fbAuthUrl = 'https://www.facebook.com/v12.0/dialog/oauth';
 const facebookScopes =
@@ -12,6 +12,7 @@ const Facebook = ({
   token,
   connect,
   subdomain,
+  state,
   error_message: errorMessage,
 }) => {
   const router = useRouter();
@@ -22,25 +23,29 @@ const Facebook = ({
       ? '.dev'
       : '.stage';
 
-  const clinicDomain =
-    environment === 'local'
-      ? 'http://localhost:3000'
-      : `https://${subdomain}${envPath}.easyplan.pro`;
-
   useEffect(() => {
     if (connect !== '1') {
       return;
     }
-    const baseUrl = window.location.hostname;
-    const protocol = window.location.protocol;
-    const port = environment === 'local' ? `:${window.location.port}` : '';
-    const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook?connect=0`;
+    const redirectUrl = `${appBaseUrl}/integrations/facebook`;
+    const state = { connect: '0', subdomain };
+    const stateString = btoa(JSON.stringify(state));
     router.push(
-      `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}`,
+      `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}&state=${stateString}`,
     );
-  }, [connect]);
+  }, [connect, subdomain]);
 
   useEffect(() => {
+    if (!state) {
+      return;
+    }
+
+    const decodedState = atob(state);
+    if (!decodedState) {
+      return;
+    }
+
+    const { connect, subdomain } = JSON.parse(decodedState);
     if (connect === '1') {
       return;
     }
@@ -56,8 +61,13 @@ const Facebook = ({
       }
     }
 
+    const clinicDomain =
+      environment === 'local'
+        ? 'http://localhost:3000'
+        : `https://${subdomain}${envPath}.easyplan.pro`;
+
     window.location.href = `${clinicDomain}/settings?${params}`;
-  }, [code, token, connect, clinicDomain]);
+  }, [code, token, state, subdomain]);
 
   return <div>{errorMessage ?? ''}</div>;
 };
