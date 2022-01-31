@@ -13,6 +13,7 @@ import styles from './EASSelect.module.scss';
 const EASSelect = ({
   updateText,
   selectClass,
+  helperText,
   rootClass,
   disabled,
   checkable,
@@ -108,6 +109,9 @@ const EASSelect = ({
         {renderMenuItem(defaultOption)}
         {options.map(renderMenuItem)}
       </Select>
+      {helperText && (
+        <Typography className={styles.helperText}>{helperText}</Typography>
+      )}
     </FormControl>
   );
 };

@@ -11,6 +11,7 @@ const PatientsSearchField = ({
   selectedPatient,
   fieldLabel,
   disabled,
+  helperText,
   canCreate = true,
   containerClass,
   onSelected,
@@ -90,6 +91,7 @@ const PatientsSearchField = ({
       onTextChange={handleSearchQueryChange}
       onChange={handlePatientChange}
       onCreateOption={onCreatePatient}
+      helperText={helperText}
       value={selectedPatient || ''}
       loading={isLoading}
       placeholder={textForKey('Enter patient name or phone')}
@@ -103,6 +105,7 @@ PatientsSearchField.propTypes = {
   selectedPatient: PropTypes.any,
   fieldLabel: PropTypes.string,
   disabled: PropTypes.bool,
+  helperText: PropTypes.string,
   containerClass: PropTypes.any,
   onSelected: PropTypes.func,
   onCreatePatient: PropTypes.func,

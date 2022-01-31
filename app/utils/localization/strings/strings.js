@@ -789,6 +789,7 @@ export default {
     delete_crm_column_message: 'Are you sure you want to delete this column?',
     crm_settings: 'CRM Settings',
     crm_columns: 'Columns',
+    fill_required_fields: 'Please fill all required fields.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1591,6 +1592,7 @@ export default {
       'Sunteți sigur(ă) că doriți să ștergeți această coloană?',
     crm_settings: 'Setări CRM',
     crm_columns: 'Coloane',
+    fill_required_fields: 'Completați toate câmpurile obligatorii.',
   },
   ru: {
     analytics: 'Analytics',
@@ -2380,5 +2382,6 @@ export default {
     delete_crm_column_message: 'Are you sure you want to delete this column?',
     crm_settings: 'CRM Settings',
     crm_columns: 'Columns',
+    fill_required_fields: 'Please fill all required fields.',
   },
 };
