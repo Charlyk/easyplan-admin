@@ -72,11 +72,8 @@ PagesListModal.propTypes = {
   onSelect: PropTypes.func,
   pages: PropTypes.arrayOf(
     PropTypes.shape({
-      access_token: PropTypes.string,
-      category: PropTypes.string,
       id: PropTypes.string,
       name: PropTypes.string,
-      tasks: PropTypes.arrayOf(PropTypes.string),
       picture: PropTypes.shape({
         data: {
           url: PropTypes.string,

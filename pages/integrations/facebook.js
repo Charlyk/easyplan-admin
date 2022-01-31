@@ -12,6 +12,7 @@ const Facebook = ({
   token,
   connect,
   subdomain,
+  state,
   error_message: errorMessage,
 }) => {
   const router = useRouter();
@@ -22,22 +23,29 @@ const Facebook = ({
       ? '.dev'
       : '.stage';
 
-  const clinicDomain =
-    environment === 'local'
-      ? 'http://localhost:3000'
-      : `https://${subdomain}${envPath}.easyplan.pro`;
-
   useEffect(() => {
     if (connect !== '1') {
       return;
     }
-    const redirectUrl = `${appBaseUrl}/integrations/facebook?connect=0&subdomain=${subdomain}`;
+    const redirectUrl = `${appBaseUrl}/integrations/facebook`;
+    const state = { connect: '0', subdomain };
+    const stateString = btoa(JSON.stringify(state));
     router.push(
-      `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}`,
+      `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}&state=${stateString}`,
     );
-  }, [connect]);
+  }, [connect, subdomain]);
 
   useEffect(() => {
+    if (!state) {
+      return;
+    }
+
+    const decodedState = atob(state);
+    if (!decodedState) {
+      return;
+    }
+
+    const { connect, subdomain } = JSON.parse(decodedState);
     if (connect === '1') {
       return;
     }
@@ -53,8 +61,13 @@ const Facebook = ({
       }
     }
 
+    const clinicDomain =
+      environment === 'local'
+        ? 'http://localhost:3000'
+        : `https://${subdomain}${envPath}.easyplan.pro`;
+
     window.location.href = `${clinicDomain}/settings?${params}`;
-  }, [code, token, connect, clinicDomain]);
+  }, [code, token, state, subdomain]);
 
   return <div>{errorMessage ?? ''}</div>;
 };

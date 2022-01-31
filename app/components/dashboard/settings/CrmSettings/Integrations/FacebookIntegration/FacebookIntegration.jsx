@@ -8,7 +8,7 @@ import IconFacebookSm from 'app/components/icons/iconMetaLogo';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
-import { appBaseUrl, environment } from 'eas.config';
+import { appBaseUrl } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
@@ -57,10 +57,7 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
   const authenticateFacebookCode = async () => {
     setIsLoading(true);
     try {
-      const baseUrl = window.location.hostname;
-      const protocol = window.location.protocol;
-      const port = environment === 'local' ? `:${window.location.port}` : '';
-      const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook?connect=0&subdomain=${currentClinic.domainName}`;
+      const redirectUrl = `${appBaseUrl}/integrations/facebook`;
       const response = await generateFacebookAccessToken(
         facebookCode,
         facebookToken,
@@ -136,8 +133,8 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
     }
   };
 
-  const handleConnectClick = () => {
-    router.replace(
+  const handleConnectClick = async () => {
+    await router.replace(
       `${appBaseUrl}/integrations/facebook?connect=1&subdomain=${currentClinic.domainName}`,
     );
   };
