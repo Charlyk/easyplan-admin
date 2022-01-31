@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FacebookAppId } from 'app/utils/constants';
-import { environment } from 'eas.config';
+import { appBaseUrl, environment } from 'eas.config';
 
 const fbAuthUrl = 'https://www.facebook.com/v12.0/dialog/oauth';
 const facebookScopes =
@@ -31,10 +31,7 @@ const Facebook = ({
     if (connect !== '1') {
       return;
     }
-    const baseUrl = window.location.hostname;
-    const protocol = window.location.protocol;
-    const port = environment === 'local' ? `:${window.location.port}` : '';
-    const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook?connect=0`;
+    const redirectUrl = `${appBaseUrl}/integrations/facebook?connect=0`;
     router.push(
       `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}`,
     );
