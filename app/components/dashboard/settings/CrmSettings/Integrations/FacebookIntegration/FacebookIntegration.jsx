@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import orderBy from 'lodash/orderBy';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
@@ -32,7 +33,9 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
     }
     return textForKey(
       'connected_facebook_page',
-      facebookPages.map((it) => it.name).join(', '),
+      orderBy(facebookPages, 'name')
+        .map((it) => it.name)
+        .join(', '),
     );
   }, [facebookPages]);
 

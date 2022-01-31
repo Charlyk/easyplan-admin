@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
 import EASModal from 'app/components/common/modals/EASModal';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
@@ -38,7 +39,7 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
       className={styles.pagesListModal}
     >
       <MenuList>
-        {pages.map((page) => (
+        {orderBy(pages, 'name').map((page) => (
           <MenuItem
             key={page.id}
             selected={isPageSelected(page)}
