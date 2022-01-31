@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-} from 'react';
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
@@ -18,16 +12,16 @@ import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionsSheet from 'app/components/common/ActionsSheet';
 import EASColorPicker from 'app/components/common/EASColorPicker';
-import NotificationsContext from 'app/context/notificationsContext';
+import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
+import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
-import {
-  createNewDealState,
-  deleteDealState,
-  requestChangeDealColumn,
-  updateDealState,
-} from 'middleware/api/crm';
+import { requestChangeDealColumn } from 'middleware/api/crm';
 import { dealsForStateSelector } from 'redux/selectors/crmBoardSelector';
-import { dispatchUpdateDealState } from '../../../../redux/slices/crmBoardSlice';
+import {
+  dispatchCreateDealState,
+  dispatchDeleteDealState,
+  dispatchUpdateDealState,
+} from 'redux/slices/crmBoardSlice';
 import AddColumnModal from '../AddColumnModal';
 import { ItemTypes } from './constants';
 import DealItem from './DealItem';
@@ -40,8 +34,8 @@ import reducer, {
   setColumnName,
   setShowColorPicker,
   setColumnData,
-  setColumnColor,
   setShowCreateColumn,
+  setShowDeleteColumn,
   setPage,
 } from './DealsColumn.reducer';
 
@@ -52,7 +46,6 @@ const DealsColumn = ({
   isLast,
   currentClinic,
   onMove,
-  onUpdate,
   onLinkPatient,
   onDeleteDeal,
   onAddSchedule,
@@ -60,7 +53,6 @@ const DealsColumn = ({
   onDealClick,
 }) => {
   const dispatch = useDispatch();
-  const toast = useContext(NotificationsContext);
   const actionsBtnRef = useRef(null);
   const colorPickerRef = useRef(null);
   const [color, setColor] = useColor('hex', dealState.color);
@@ -75,6 +67,7 @@ const DealsColumn = ({
       columnColor,
       showColorPicker,
       showCreateColumn,
+      showDeleteColumn,
     },
     localDispatch,
   ] = useReducer(reducer, initialState);
@@ -154,25 +147,21 @@ const DealsColumn = ({
     localDispatch(setColumnName(newName));
   };
 
-  const handleCreateColumn = async (columnName) => {
-    try {
-      const response = await createNewDealState({
+  const handleCreateColumn = (columnName) => {
+    dispatch(
+      dispatchCreateDealState({
         name: columnName,
         orderId: dealState.orderId + 1,
-      });
-      await onUpdate(response.data);
-    } catch (error) {
-      onRequestError(error);
-    } finally {
-      localDispatch(setShowCreateColumn(false));
-    }
+      }),
+    );
+    localDispatch(setShowCreateColumn(false));
   };
 
   const handleCloseCreateColumn = () => {
     localDispatch(setShowCreateColumn(false));
   };
 
-  const handleSaveColumnName = async () => {
+  const handleSaveColumnName = () => {
     dispatch(
       dispatchUpdateDealState({
         stateId: dealState.id,
@@ -193,7 +182,7 @@ const DealsColumn = ({
     localDispatch(setShowColorPicker(false));
   };
 
-  const handleSaveColor = async () => {
+  const handleSaveColor = () => {
     dispatch(
       dispatchUpdateDealState({
         stateId: dealState.id,
@@ -202,13 +191,16 @@ const DealsColumn = ({
     );
   };
 
-  const handleDeleteColumn = async () => {
-    try {
-      await deleteDealState(dealState.id);
-      await onUpdate();
-    } catch (error) {
-      toast.error(error.message);
-    }
+  const showConfirmDelete = () => {
+    localDispatch(setShowDeleteColumn(true));
+  };
+
+  const closeConfirmDelete = () => {
+    localDispatch(setShowDeleteColumn(false));
+  };
+
+  const handleDeleteColumn = () => {
+    dispatch(dispatchDeleteDealState(dealState.id));
   };
 
   const handleActionsSelected = (action) => {
@@ -229,7 +221,7 @@ const DealsColumn = ({
         localDispatch(setShowCreateColumn(true));
         break;
       case 'deleteColumn':
-        handleDeleteColumn();
+        showConfirmDelete();
         break;
     }
     handleCloseActions();
@@ -252,6 +244,13 @@ const DealsColumn = ({
         actions={filteredActions}
         onSelect={handleActionsSelected}
         onClose={handleCloseActions}
+      />
+      <ConfirmationModal
+        show={showDeleteColumn}
+        title={textForKey('delete_crm_column', dealState.name)}
+        message={textForKey('delete_crm_column_message')}
+        onClose={closeConfirmDelete}
+        onConfirm={handleDeleteColumn}
       />
       <EASColorPicker
         open={showColorPicker}

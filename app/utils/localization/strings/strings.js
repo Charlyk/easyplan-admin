@@ -785,6 +785,8 @@ export default {
     all_tags: 'All tags',
     patient_tags: 'Patient tags',
     visible_states: 'Visible states',
+    delete_crm_column: 'Delete {1}',
+    delete_crm_column_message: 'Are you sure you want to delete this column?',
   },
   ro: {
     analytics: 'Analitică',
@@ -1582,6 +1584,9 @@ export default {
     all_tags: 'Toate',
     patient_tags: 'Taguri',
     visible_states: 'Statuturile vizibile',
+    delete_crm_column: 'Ștergeți {1}',
+    delete_crm_column_message:
+      'Sunteți sigur(ă) că doriți să ștergeți această coloană?',
   },
   ru: {
     analytics: 'Analytics',
@@ -2367,5 +2372,7 @@ export default {
     all_tags: 'All tags',
     patient_tags: 'Patient tags',
     visible_states: 'Visible states',
+    delete_crm_column: 'Delete {1}',
+    delete_crm_column_message: 'Are you sure you want to delete this column?',
   },
 };

@@ -37,6 +37,8 @@ import {
   fetchGroupedDealsWatcher,
   updateDealStateWatcher,
   createNewReminderWatcher,
+  createDealStateWatcher,
+  deleteDealStateWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -78,5 +80,7 @@ export default function* rootSaga() {
     fetchGroupedDealsWatcher(),
     updateDealStateWatcher(),
     createNewReminderWatcher(),
+    createDealStateWatcher(),
+    deleteDealStateWatcher(),
   ]);
 }

@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
+import sortBy from 'lodash/sortBy';
 import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
 import { DealStateView, DealView, GroupedDeals } from 'types';
-import { UpdateDealStateRequest } from 'types/api';
+import {
+  CreateDealStateRequest,
+  UpdateDealStateRequest,
+  UpdateDealStateResponse,
+} from 'types/api';
 
 const crmBoardSlice = createSlice({
   name: 'crmBoard',
@@ -19,6 +24,15 @@ const crmBoardSlice = createSlice({
       state,
       _action: PayloadAction<{ stateId: number; body: UpdateDealStateRequest }>,
     ) {
+      state.isFetchingStates = true;
+    },
+    dispatchCreateDealState(
+      state,
+      _action: PayloadAction<CreateDealStateRequest>,
+    ) {
+      state.isFetchingStates = true;
+    },
+    dispatchDeleteDealState(state, _action: PayloadAction<number>) {
       state.isFetchingStates = true;
     },
     dispatchFetchGroupedDeals(
@@ -184,6 +198,38 @@ const crmBoardSlice = createSlice({
       });
       state.isFetchingStates = false;
     },
+    addDealState(state, action: PayloadAction<UpdateDealStateResponse>) {
+      const newDeals = state.deals.map((group) => {
+        const state = action.payload.all.find(
+          (item) => group.state.id === item.id,
+        );
+        if (state == null) {
+          return group;
+        }
+        return { ...group, state };
+      });
+      newDeals.push({
+        state: action.payload.updated,
+        deals: { total: 0, data: [] },
+      });
+      state.deals = sortBy(newDeals, (item) => item.state.orderId);
+      state.isFetchingStates = false;
+    },
+    removeDealState(state, action: PayloadAction<UpdateDealStateResponse>) {
+      state.deals = state.deals.filter(
+        (item) => item.state.id !== action.payload.updated.id,
+      );
+      state.deals = state.deals.map((group) => {
+        const state = action.payload.all.find(
+          (item) => group.state.id === item.id,
+        );
+        if (state == null) {
+          return group;
+        }
+        return { ...group, state };
+      });
+      state.isFetchingStates = false;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -198,6 +244,8 @@ const crmBoardSlice = createSlice({
 export const {
   dispatchFetchGroupedDeals,
   dispatchUpdateDealState,
+  dispatchCreateDealState,
+  dispatchDeleteDealState,
   setIsFetchingDeals,
   setGroupedDeals,
   setDealStates,
@@ -213,6 +261,8 @@ export const {
   movedDeal,
   addGroupedDeals,
   updateDealState,
+  addDealState,
+  removeDealState,
 } = crmBoardSlice.actions;
 
 export default crmBoardSlice.reducer;
