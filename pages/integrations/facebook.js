@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { FacebookAppId } from '../../app/utils/constants';
-import { environment } from '../../eas.config';
+import { FacebookAppId } from 'app/utils/constants';
+import { environment } from 'eas.config';
 
 const fbAuthUrl = 'https://www.facebook.com/v12.0/dialog/oauth';
 const facebookScopes =
@@ -21,6 +21,7 @@ const Facebook = ({
       : environment === 'testing'
       ? '.dev'
       : '.stage';
+
   const clinicDomain =
     environment === 'local'
       ? 'http://localhost:3000'
@@ -43,16 +44,20 @@ const Facebook = ({
     if (connect === '1') {
       return;
     }
-    if (!code && !token) {
-      router.replace('/');
-      return;
+
+    let params = 'menu=crmSettings';
+    if (code || token) {
+      if (code && token) {
+        params = `menu=crmSettings&code=${code}&token=${token}`;
+      } else if (code) {
+        params = `menu=crmSettings&code=${code}`;
+      } else if (token) {
+        params = `menu=crmSettings&token=${token}`;
+      }
     }
 
-    router.replace({
-      pathname: '/settings',
-      search: `menu=crmSettings&code=${code}&token=${token}`,
-    });
-  }, [code, token, connect]);
+    window.location.href = `${clinicDomain}/settings?${params}`;
+  }, [code, token, connect, clinicDomain]);
 
   return <div>{errorMessage ?? ''}</div>;
 };
