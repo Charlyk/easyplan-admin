@@ -2,6 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
 import {
   dispatchDeleteDealState,
+  dispatchFetchDealStates,
   removeDealState,
   setIsFetchingStates,
 } from 'redux/slices/crmBoardSlice';
@@ -15,6 +16,7 @@ export function* handleDeleteDealState(action: PayloadAction<number>) {
       action.payload,
     );
     yield put(removeDealState(response.data));
+    yield put(dispatchFetchDealStates(false));
   } catch (error) {
     yield put(setIsFetchingStates(false));
     if (error.response != null) {

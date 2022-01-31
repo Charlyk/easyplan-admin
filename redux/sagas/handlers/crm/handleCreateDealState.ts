@@ -3,6 +3,7 @@ import { call, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
 import {
   addDealState,
   dispatchCreateDealState,
+  dispatchFetchDealStates,
   setIsFetchingStates,
 } from 'redux/slices/crmBoardSlice';
 import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
@@ -18,6 +19,7 @@ export function* handleCreateDealState(
       action.payload,
     );
     yield put(addDealState(response.data));
+    yield put(dispatchFetchDealStates(false));
   } catch (error) {
     yield put(setIsFetchingStates(false));
     if (error.response != null) {
