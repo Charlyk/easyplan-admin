@@ -41,7 +41,7 @@ const CrmSettings = ({ facebookToken, facebookCode }) => {
             />
             <Tab
               value='1'
-              label={textForKey('Columns')}
+              label={textForKey('crm_columns')}
               classes={{ root: styles.tabItem }}
             />
           </TabList>

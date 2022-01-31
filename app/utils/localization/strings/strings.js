@@ -782,6 +782,8 @@ export default {
     delete_invitation: 'Delete invitation',
     delete_invitation_message:
       'Are you sure you want to delete this invitation?',
+    crm_settings: 'CRM Settings',
+    crm_columns: 'Columns',
   },
   ro: {
     analytics: 'Analitică',
@@ -1576,6 +1578,8 @@ export default {
     delete_invitation: 'Ștergeți invitația',
     delete_invitation_message:
       'Sunteți sigur(ă) că doriți să ștergeți invitația?',
+    crm_settings: 'Setări CRM',
+    crm_columns: 'Coloane',
   },
   ru: {
     analytics: 'Analytics',
@@ -2358,5 +2362,7 @@ export default {
     delete_invitation: 'Delete invitation',
     delete_invitation_message:
       'Sunteți sigur(ă) că doriți să ștergeți invitația ?',
+    crm_settings: 'CRM Settings',
+    crm_columns: 'Columns',
   },
 };
