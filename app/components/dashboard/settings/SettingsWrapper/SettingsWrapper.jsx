@@ -23,7 +23,12 @@ const SettingsForm = {
   crmSettings: 'crmSettings',
 };
 
-const SettingsWrapper = ({ countries, selectedMenu }) => {
+const SettingsWrapper = ({
+  countries,
+  selectedMenu,
+  facebookToken,
+  facebookCode,
+}) => {
   const selectedClinic = useSelector(userClinicSelector);
   const [currentForm, setCurrentForm] = useState(
     [Role.admin, Role.manager].includes(selectedClinic?.roleInClinic)
@@ -58,7 +63,12 @@ const SettingsWrapper = ({ countries, selectedMenu }) => {
         {currentForm === SettingsForm.securitySettings && <SecuritySettings />}
         {currentForm === SettingsForm.appSettings && <ApplicationSettings />}
         {currentForm === SettingsForm.bracesSettings && <BracesSettings />}
-        {currentForm === SettingsForm.crmSettings && <CrmSettings />}
+        {currentForm === SettingsForm.crmSettings && (
+          <CrmSettings
+            facebookCode={facebookCode}
+            facebookToken={facebookToken}
+          />
+        )}
       </div>
     </div>
   );

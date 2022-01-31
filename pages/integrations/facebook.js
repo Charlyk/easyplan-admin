@@ -1,34 +1,26 @@
-import React, { useCallback } from 'react';
-import FacebookLogin from 'react-facebook-login';
-import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import { FacebookAppId } from 'app/utils/constants';
-import { textForKey } from 'app/utils/localization';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-const Facebook = ({ redirect }) => {
-  const handleFacebookResponse = useCallback((response) => {
-    parent.postMessage(response, redirect);
-  }, []);
+const Facebook = ({ code, token, error_message: errorMessage }) => {
+  const router = useRouter();
 
-  return (
-    <div style={{ width: 'fit-content', height: '30px' }}>
-      <FacebookLogin
-        autoLoad={false}
-        appId={FacebookAppId}
-        fields='name,email,picture,accounts'
-        scope='public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement'
-        size='small'
-        textButton={textForKey('Connect Facebook')}
-        callback={handleFacebookResponse}
-      />
-    </div>
-  );
+  useEffect(() => {
+    if (!code && !token) {
+      router.replace('/');
+      return;
+    }
+
+    router.replace({
+      pathname: '/settings',
+      search: `menu=crmSettings&code=${code}&token=${token}`,
+    });
+  }, [code, token]);
+
+  return <div>{errorMessage ?? ''}</div>;
 };
 
 export const getServerSideProps = ({ query }) => {
-  const { redirect } = query;
-  return {
-    props: { redirect },
-  };
+  return { props: { ...query } };
 };
 
-export default React.memo(Facebook, areComponentPropsEqual);
+export default Facebook;

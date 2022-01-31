@@ -35,3 +35,5 @@ export * from './clinicSettings.types';
 export * from './moizvonkiConnection.types';
 export * from './crmFilter.types';
 export * from './reminder.types';
+export * from './facebookAuthentication.types';
+export * from './facebookPage.types';

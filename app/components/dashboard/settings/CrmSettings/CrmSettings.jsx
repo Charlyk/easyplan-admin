@@ -14,7 +14,7 @@ import CrmColumns from './CrmColumns';
 import styles from './CrmSettings.module.scss';
 import Integrations from './Integrations';
 
-const CrmSettings = () => {
+const CrmSettings = ({ facebookToken, facebookCode }) => {
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const [currentTab, setCurrentTab] = useState('0');
@@ -47,7 +47,11 @@ const CrmSettings = () => {
           </TabList>
         </Box>
         <TabPanel value='0' style={{ padding: 0, width: '100%' }}>
-          <Integrations currentClinic={currentClinic} />
+          <Integrations
+            currentClinic={currentClinic}
+            facebookCode={facebookCode}
+            facebookToken={facebookToken}
+          />
         </TabPanel>
         <TabPanel value='1' style={{ padding: 0, width: '100%' }}>
           <CrmColumns currentUser={currentUser} currentClinic={currentClinic} />
