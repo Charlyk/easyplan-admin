@@ -3,21 +3,17 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
 import LoadingButton from 'app/components/common/LoadingButton';
-import IconFacebookSm from 'app/components/icons/iconFacebookSm';
+import IconFacebookSm from 'app/components/icons/iconMetaLogo';
 import NotificationsContext from 'app/context/notificationsContext';
-import { FacebookAppId } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import onRequestFailed from 'app/utils/onRequestFailed';
+import { appBaseUrl, environment } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
-import { environment } from 'eas.config';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
-const fbAuthUrl = 'https://www.facebook.com/v12.0/dialog/oauth';
-const facebookScopes =
-  'public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement,instagram_basic,pages_manage_posts';
 const FacebookIntegration = ({
   currentClinic,
   facebookToken,
@@ -35,8 +31,8 @@ const FacebookIntegration = ({
     if (facebookPages == null || !Array.isArray(facebookPages)) {
       return textForKey('Connect facebook page for CRM');
     }
-    return textForKey('connected_facebook_page').replace(
-      '{1}',
+    return textForKey(
+      'connected_facebook_page',
       facebookPages.map((it) => it.name).join(', '),
     );
   }, [facebookPages]);
@@ -65,7 +61,7 @@ const FacebookIntegration = ({
       const baseUrl = window.location.hostname;
       const protocol = window.location.protocol;
       const port = environment === 'local' ? `:${window.location.port}` : '';
-      const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook`;
+      const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook?connect=0`;
       const response = await generateFacebookAccessToken(
         facebookCode,
         facebookToken,
@@ -142,13 +138,7 @@ const FacebookIntegration = ({
   };
 
   const handleConnectClick = () => {
-    const baseUrl = window.location.hostname;
-    const protocol = window.location.protocol;
-    const port = environment === 'local' ? `:${window.location.port}` : '';
-    const redirectUrl = `${protocol}//${baseUrl}${port}/integrations/facebook`;
-    router.push(
-      `${fbAuthUrl}?client_id=${FacebookAppId}&redirect_uri=${redirectUrl}&scope=${facebookScopes}`,
-    );
+    router.replace(`${appBaseUrl}/integrations/facebook?connect=1`);
   };
 
   return (
@@ -162,7 +152,7 @@ const FacebookIntegration = ({
         <Box>
           <div className={styles.rowContainer}>
             <IconFacebookSm />
-            <Typography className={styles.rowTitle}>Facebook</Typography>
+            <Typography className={styles.rowTitle}>Meta (Facebook)</Typography>
           </div>
           <Box display='flex' flexDirection='column'>
             <Typography className={styles.titleLabel}>{title}</Typography>
