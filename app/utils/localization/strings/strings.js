@@ -782,6 +782,14 @@ export default {
     delete_invitation: 'Delete invitation',
     delete_invitation_message:
       'Are you sure you want to delete this invitation?',
+    all_tags: 'All tags',
+    patient_tags: 'Patient tags',
+    visible_states: 'Visible states',
+    delete_crm_column: 'Delete {1}',
+    delete_crm_column_message: 'Are you sure you want to delete this column?',
+    crm_settings: 'CRM Settings',
+    crm_columns: 'Columns',
+    fill_required_fields: 'Please fill all required fields.',
   },
   ro: {
     analytics: 'Analitică',
@@ -1576,6 +1584,15 @@ export default {
     delete_invitation: 'Ștergeți invitația',
     delete_invitation_message:
       'Sunteți sigur(ă) că doriți să ștergeți invitația?',
+    all_tags: 'Toate',
+    patient_tags: 'Taguri',
+    visible_states: 'Statuturile vizibile',
+    delete_crm_column: 'Ștergeți {1}',
+    delete_crm_column_message:
+      'Sunteți sigur(ă) că doriți să ștergeți această coloană?',
+    crm_settings: 'Setări CRM',
+    crm_columns: 'Coloane',
+    fill_required_fields: 'Completați toate câmpurile obligatorii.',
   },
   ru: {
     analytics: 'Analytics',
@@ -2358,5 +2375,13 @@ export default {
     delete_invitation: 'Delete invitation',
     delete_invitation_message:
       'Sunteți sigur(ă) că doriți să ștergeți invitația ?',
+    all_tags: 'All tags',
+    patient_tags: 'Patient tags',
+    visible_states: 'Visible states',
+    delete_crm_column: 'Delete {1}',
+    delete_crm_column_message: 'Are you sure you want to delete this column?',
+    crm_settings: 'CRM Settings',
+    crm_columns: 'Columns',
+    fill_required_fields: 'Please fill all required fields.',
   },
 };

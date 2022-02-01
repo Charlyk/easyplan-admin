@@ -1,5 +1,13 @@
 import { PatientTag, ScheduleStatus } from 'types';
 
+export type GroupedDeals = {
+  state: DealStateView;
+  deals: {
+    total: number;
+    data: DealView[];
+  };
+};
+
 export interface DealView {
   id: number;
   source: DealSource;

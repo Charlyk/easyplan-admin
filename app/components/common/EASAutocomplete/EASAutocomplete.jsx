@@ -80,6 +80,11 @@ const EASAutocomplete = ({
         onChange={handleTextChange}
         helperText={helperText}
         error={error}
+        FormHelperTextProps={{
+          classes: {
+            root: styles.helperText,
+          },
+        }}
         InputProps={{
           ...params.InputProps,
           classes: {

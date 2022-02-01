@@ -48,6 +48,7 @@ export const initialState = {
   isEditingName: false,
   showColorPicker: false,
   showCreateColumn: false,
+  showDeleteColumn: false,
   columnName: '',
   columnColor: '',
   totalElements: 0,
@@ -67,6 +68,8 @@ const dealsColumnSlice = createSlice({
       state.columnColor = action.payload.color;
       state.dealState = action.payload;
       state.page = 0;
+      state.isEditingName = false;
+      state.showColorPicker = false;
     },
     setColumnName(state, action) {
       state.columnName = action.payload.toUpperCase();
@@ -180,6 +183,9 @@ const dealsColumnSlice = createSlice({
     setItemsPerPage(state, action) {
       state.itemsPerPage = action.payload;
     },
+    setShowDeleteColumn(state, action) {
+      state.showDeleteColumn = action.payload;
+    },
   },
 });
 
@@ -188,13 +194,11 @@ export const {
   setIsEditingName,
   setColumnName,
   setShowColorPicker,
-  setColumnColor,
   setColumnData,
   setShowCreateColumn,
   setData,
   setIsFetching,
-  setUpdatedDeal,
-  addNewDeal,
+  setShowDeleteColumn,
   removeDeal,
   setPage,
 } = dealsColumnSlice.actions;

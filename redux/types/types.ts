@@ -22,6 +22,11 @@ import {
   AppNotification,
   ClinicSettings,
   MoizvonkiConnection,
+  CrmFilterOption,
+  CrmFilterShortcut,
+  CrmFilterPatient,
+  GroupedDeals,
+  PatientTag,
 } from 'types';
 
 export interface CalendarDataState {
@@ -152,7 +157,10 @@ export interface ExchangeRatesState {
 
 export interface CrmBoardState {
   states: DealStateView[];
+  userStates: DealStateView[];
+  deals: GroupedDeals[];
   remindersCount: number;
+  isFetchingDeals: boolean;
   isFetchingStates: boolean;
   isFetchingRemindersCount: boolean;
 }
@@ -208,6 +216,21 @@ export interface MoizvonkiConnectionState {
   connection?: MoizvonkiConnection | null;
 }
 
+export interface CrmFiltersState {
+  loading: { patients: boolean; filter: boolean };
+  patient?: CrmFilterPatient | null;
+  selectedDoctors: CrmFilterOption[];
+  selectedServices: CrmFilterOption[];
+  selectedUsers: CrmFilterOption[];
+  selectedStates: CrmFilterOption[];
+  selectedDateRange: [Date, Date] | [];
+  selectedReminder?: CrmFilterOption | null;
+  selectedShortcut: CrmFilterShortcut;
+  selectedTags: CrmFilterOption[];
+  allTags: PatientTag[];
+  showRangePicker: boolean;
+}
+
 export interface CreateReminderModalState {
   open: boolean;
   isLoading: boolean;
@@ -261,5 +284,6 @@ export interface ReduxState {
   appNotification: AppNotificationState;
   clinicSettings: ClinicSettingsState;
   moizvonkiConnection: MoizvonkiConnectionState;
+  crmFilters: CrmFiltersState;
   createReminderModal: CreateReminderModalState;
 }

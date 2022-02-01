@@ -32,7 +32,13 @@ import {
   moizvonkiConnectionWatcher,
   updateMoizvonkiConnectionWatcher,
   disconnectMoizvonkiWatcher,
+  fetchCrmFilterWatcher,
+  updateCrmFilterWatcher,
+  fetchGroupedDealsWatcher,
+  updateDealStateWatcher,
   createNewReminderWatcher,
+  createDealStateWatcher,
+  deleteDealStateWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -69,6 +75,12 @@ export default function* rootSaga() {
     moizvonkiConnectionWatcher(),
     updateMoizvonkiConnectionWatcher(),
     disconnectMoizvonkiWatcher(),
+    fetchCrmFilterWatcher(),
+    updateCrmFilterWatcher(),
+    fetchGroupedDealsWatcher(),
+    updateDealStateWatcher(),
     createNewReminderWatcher(),
+    createDealStateWatcher(),
+    deleteDealStateWatcher(),
   ]);
 }

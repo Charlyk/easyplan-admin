@@ -218,7 +218,6 @@ const AddAppointmentModal = ({
   // set initial selected cabinet
   useEffect(() => {
     if (selectedCabinet != null && !isDoctorMode) {
-      console.log(selectedCabinet);
       localDispatch(setSelectedCabinet(selectedCabinet));
     }
   }, [selectedCabinet]);
@@ -504,6 +503,7 @@ const AddAppointmentModal = ({
       className={styles['add-appointment-root']}
       paperClass={styles.modalPaper}
       title={modalTitle}
+      note={textForKey('fill_required_fields')}
       onBackdropClick={() => null}
       isPositiveDisabled={!isFormValid() || isLoading}
       onPrimaryClick={handleCreateSchedule}
@@ -513,7 +513,7 @@ const AddAppointmentModal = ({
         <Box display='flex' flexDirection='column' padding='16px'>
           <PatientsSearchField
             onCreatePatient={handleOpenCreateModal}
-            fieldLabel={textForKey('Patient')}
+            fieldLabel={`${textForKey('Patient')} (${textForKey('required')})`}
             selectedPatient={patient}
             onSelected={handleExistentPatientChange}
           />
@@ -524,7 +524,7 @@ const AddAppointmentModal = ({
               containerClass={styles.simpleField}
               options={doctors}
               value={doctor}
-              fieldLabel={textForKey('Doctor')}
+              fieldLabel={`${textForKey('Doctor')} (${textForKey('required')})`}
               placeholder={textForKey('Enter doctor name or phone')}
               onChange={handleDoctorChange}
             />
@@ -536,7 +536,9 @@ const AddAppointmentModal = ({
               containerClass={styles.simpleField}
               options={cabinets}
               value={cabinet}
-              fieldLabel={textForKey('add_appointment_cabinet')}
+              fieldLabel={`${textForKey(
+                'add_appointment_cabinet',
+              )} (${textForKey('required')})`}
               placeholder={textForKey('type_to_search')}
               onChange={handleCabinetChange}
             />
@@ -548,7 +550,7 @@ const AddAppointmentModal = ({
             containerClass={styles.simpleField}
             options={mappedServices}
             value={service}
-            fieldLabel={textForKey('Service')}
+            fieldLabel={`${textForKey('Service')} (${textForKey('required')})`}
             placeholder={textForKey('Enter service name')}
             onChange={handleServiceChange}
           />
@@ -557,7 +559,7 @@ const AddAppointmentModal = ({
             readOnly
             ref={datePickerAnchor}
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Date')}
+            fieldLabel={`${textForKey('Date')} (${textForKey('required')})`}
             value={moment(appointmentDate).format('DD MMMM YYYY')}
             onPointerUp={handleDateFieldClick}
           />
@@ -567,7 +569,7 @@ const AddAppointmentModal = ({
               disabled={availableStartTime.length === 0}
               rootClass={styles.timeSelect}
               value={startTime || ''}
-              label={textForKey('Start time')}
+              label={`${textForKey('Start time')} (${textForKey('required')})`}
               labelId='start-time-select'
               options={mappedTime(availableStartTime)}
               onChange={handleStartHourChange}
@@ -576,7 +578,7 @@ const AddAppointmentModal = ({
               disabled={availableEndTime.length === 0}
               rootClass={styles.timeSelect}
               value={endTime || ''}
-              label={textForKey('End time')}
+              label={`${textForKey('End time')} (${textForKey('required')})`}
               labelId='start-time-select'
               options={mappedTime(availableEndTime)}
               onChange={handleEndHourChange}
