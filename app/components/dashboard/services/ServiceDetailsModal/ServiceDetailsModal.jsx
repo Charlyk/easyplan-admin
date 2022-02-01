@@ -8,6 +8,7 @@ import IconClose from 'app/components/icons/iconClose';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
+import onRequestFailed from 'app/utils/onRequestFailed';
 import { createService, updateService } from 'middleware/api/services';
 import {
   activeClinicDoctorsSelector,
@@ -121,6 +122,7 @@ const ServiceDetailsModal = () => {
       });
     }
     dispatch(fetchServicesList());
+    toast.success(textForKey('Saved successfully'));
     handleCloseModal();
   };
 
@@ -128,7 +130,7 @@ const ServiceDetailsModal = () => {
     try {
       await createService(serviceInfo);
     } catch (error) {
-      toast.error(error.message);
+      onRequestFailed(error, toast);
     }
   };
 
@@ -136,7 +138,7 @@ const ServiceDetailsModal = () => {
     try {
       await updateService(service.id, serviceInfo);
     } catch (error) {
-      toast.error(error.message);
+      onRequestFailed(error, toast);
     }
   };
 
