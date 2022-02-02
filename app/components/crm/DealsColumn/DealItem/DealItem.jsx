@@ -8,7 +8,6 @@ import styles from './DealItem.module.scss';
 
 const DealItem = ({
   dealItem,
-  color,
   currentClinic,
   onLinkPatient,
   onDeleteDeal,
@@ -30,10 +29,6 @@ const DealItem = ({
 
   return (
     <div ref={drag} key={dealItem.id} className={styles.dealItem}>
-      <div
-        className={styles.backgroundHolder}
-        style={{ backgroundColor: isUnsorted ? 'white' : `${color}33` }}
-      />
       {dealItem.state.type === 'Unsorted' ? (
         <UnsortedDealItem
           deal={dealItem}

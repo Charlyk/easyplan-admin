@@ -2,11 +2,12 @@ import { del, get, post, put } from './request';
 
 /**
  * Fetch all available deal states for a clinic
+ * @param {boolean} filter
  * @param {Object|null} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function fetchAllDealStates(headers = null) {
-  return get('/api/crm/deal-state', headers);
+export async function fetchAllDealStates(filter, headers = null) {
+  return get(`/api/crm/deal-state?filter=${filter ? 1 : 0}`, headers);
 }
 
 /**
@@ -128,18 +129,15 @@ export async function requestCreateDealNote(dealId, noteText, headers = null) {
  *   endTime: string,
  *   userId: number,
  *   type: string,
- *   comment?: string
+ *   dealId: number,
+ *   comment?: string,
+ *   searchType?: 'Deal' | 'Schedule',
  * }} reminder
  * @param {*} headers
  * @return {Promise<AxiosResponse<*>>}
  */
-export async function requestCreateDealReminder(
-  dealId,
-  reminder,
-  headers = null,
-) {
-  const queryString = new URLSearchParams({ dealId: `${dealId}` }).toString();
-  return put(`/api/reminders?${queryString}`, headers, reminder);
+export async function requestCreateDealReminder(reminder, headers = null) {
+  return post('/api/reminders', headers, reminder);
 }
 
 /**
@@ -257,4 +255,24 @@ export async function requestChangeDealClinic(
   return put(`/api/crm/${dealId}/change-branch?branchId=${branchId}`, headers, {
     branchId,
   });
+}
+
+/**
+ * Fetch all deals grouped by state
+ * @param {number} page
+ * @param {number} itemsPerPage
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<GroupedDeals[]>>}
+ */
+export async function fetchGroupedDeals(
+  page,
+  itemsPerPage = 25,
+  headers = null,
+) {
+  const params = {
+    page: `${page}`,
+    itemsPerPage: `${itemsPerPage}`,
+  };
+  const queryString = new URLSearchParams(params).toString();
+  return get(`/api/crm/deals/v2?${queryString}`, headers);
 }

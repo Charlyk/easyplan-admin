@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
 import EASModal from 'app/components/common/modals/EASModal';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
@@ -38,7 +39,7 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
       className={styles.pagesListModal}
     >
       <MenuList>
-        {pages.map((page) => (
+        {orderBy(pages, 'name').map((page) => (
           <MenuItem
             key={page.id}
             selected={isPageSelected(page)}
@@ -48,7 +49,14 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
             }}
             onClick={() => handlePageSelected(page)}
           >
-            {page.name}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                className={styles.pagePicture}
+                src={page.picture.data.url}
+                alt={page.name}
+              />
+              {page.name}
+            </div>
             {isPageSelected(page) && <IconCheckMark fill='#00ac00' />}
           </MenuItem>
         ))}
@@ -65,11 +73,13 @@ PagesListModal.propTypes = {
   onSelect: PropTypes.func,
   pages: PropTypes.arrayOf(
     PropTypes.shape({
-      access_token: PropTypes.string,
-      category: PropTypes.string,
       id: PropTypes.string,
       name: PropTypes.string,
-      tasks: PropTypes.arrayOf(PropTypes.string),
+      picture: PropTypes.shape({
+        data: {
+          url: PropTypes.string,
+        },
+      }),
     }),
   ),
 };

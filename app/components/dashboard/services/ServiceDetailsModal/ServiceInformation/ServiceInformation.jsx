@@ -53,6 +53,18 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
   const [showPicker, setShowPicker] = useState(false);
   const [color, setColor] = useColor('hex', '#3A83DC');
   const [service, setService] = useState(data);
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    let debounceTimer;
+    setIsTyping(true);
+
+    debounceTimer = setTimeout(() => {
+      setIsTyping(false);
+    }, 700);
+
+    return () => clearInterval(debounceTimer);
+  }, [service.duration]);
 
   useEffect(() => {
     if (data?.color == null) {
@@ -156,12 +168,20 @@ const ServiceInformation = ({ isExpanded, showStep, data, onChange }) => {
             min='15'
             max='360'
             inputClass='test-input-class'
-            error={service.duration > 360}
+            error={
+              (!isTyping && service.duration > 360) ||
+              (!isTyping && service.duration < 15)
+            }
             value={service.duration}
             helperText={
               service.duration < 15 ? `${textForKey('value_more_then')} 15` : ''
             }
             onChange={(value) => {
+              if (isTyping) {
+                handleFormChange('duration', value);
+                return;
+              }
+
               if (value < 15 && value > 10) {
                 handleFormChange('duration', 15);
               } else if (value > 360) {

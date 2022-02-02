@@ -41,6 +41,7 @@ const BottomSheetDialog = ({
       className={styles.dialogRoot}
       open={open}
       onClose={handleClose}
+      style={{ zIndex: 1299 }}
       TransitionComponent={Transition}
     >
       <AppBar className={styles.appBar}>

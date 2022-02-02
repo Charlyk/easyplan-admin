@@ -83,7 +83,7 @@ const UnsortedDealItem = ({
     return deal.source === 'PhoneCall'
       ? deal?.contact?.name.startsWith('+')
         ? deal?.contact?.name
-        : `+${deal?.contact?.name}`
+        : `${deal?.contact?.name}`
       : deal?.contact?.name;
   }, [deal]);
 

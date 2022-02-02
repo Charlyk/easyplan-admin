@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -13,11 +13,11 @@ import EASTextField from 'app/components/common/EASTextField';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Statuses } from 'app/utils/constants';
 import { getAppLanguage, textForKey } from 'app/utils/localization';
+
 import {
   clinicServicesSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
-import { currentUserSelector } from 'redux/selectors/appDataSelector';
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import styles from './PatientsFilter.module.scss';
 
@@ -32,10 +32,8 @@ const PatientsFilter = ({
   onViewModeChange,
 }) => {
   const services = useSelector(clinicServicesSelector);
-  const currentUser = useSelector(currentUserSelector);
   const userClinic = useSelector(userClinicSelector);
   const dispatch = useDispatch();
-
   const sortedServices = useMemo(() => {
     return sortBy(services, (item) => item.name.toLowerCase());
   }, [services]);
@@ -45,10 +43,15 @@ const PatientsFilter = ({
       openAppointmentModal({
         open: true,
         isDoctorMode: true,
-        doctor: currentUser,
+        doctor: { ...userClinic, id: userClinic.userId },
       }),
     );
   };
+
+  useEffect(() => {
+    if (userClinic.canCreateSchedules) return;
+    dispatch(openAppointmentModal({ open: false }));
+  }, [userClinic.canCreateSchedules]);
 
   return (
     <div className={styles.patientsFilter}>
@@ -88,7 +91,7 @@ const PatientsFilter = ({
 
       <EASTextField
         type='text'
-        value={filterData?.patientName || ''}
+        value={filterData?.searchQuery || ''}
         containerClass={styles.simpleField}
         fieldLabel={textForKey('Patient')}
         onChange={onNameChange}

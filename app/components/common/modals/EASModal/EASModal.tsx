@@ -26,6 +26,7 @@ interface Props {
   paperClass?: string;
   children?: any;
   isPositiveDisabled?: any;
+  isDestroyDisabled?: boolean | null;
   note?: boolean | string;
   onClose: () => void;
   onDestroyClick?: () => void;
@@ -44,6 +45,7 @@ const EASModal: React.FC<Props> = ({
   hidePositiveBtn,
   isPositiveLoading,
   isPositiveDisabled,
+  isDestroyDisabled = null,
   bodyStyle,
   note,
   children,
@@ -137,7 +139,11 @@ const EASModal: React.FC<Props> = ({
           {!isPositiveLoading && showDestroyBtn && (
             <Button
               onClick={handleDestroyClick}
-              disabled={isPositiveDisabled}
+              disabled={
+                isDestroyDisabled == null
+                  ? isPositiveDisabled
+                  : isDestroyDisabled
+              }
               variant='text'
               classes={{
                 root: styles.destroyButton,

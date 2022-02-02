@@ -1,14 +1,19 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import CalendarNoDataView from 'app/components/common/CalendarNoDataView';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getCurrentWeek from 'app/utils/getCurrentWeek';
-import { calendarDoctorsSelector } from 'redux/selectors/appDataSelector';
+import {
+  calendarDoctorsSelector,
+  isManagerSelector,
+} from 'redux/selectors/appDataSelector';
 import {
   dayHoursSelector,
-  schedulesSelector,
+  filteredSchedulesSelector,
 } from 'redux/selectors/scheduleSelector';
 import styles from './CalendarWeekView.module.scss';
 
@@ -24,7 +29,9 @@ const CalendarWeekView = ({
   onScheduleSelect,
   onCreateSchedule,
 }) => {
-  const schedules = useSelector(schedulesSelector);
+  const router = useRouter();
+  const isManager = useSelector(isManagerSelector);
+  const schedules = useSelector(filteredSchedulesSelector);
   const hours = useSelector(dayHoursSelector);
   const doctors = useSelector(calendarDoctorsSelector);
   const week = getCurrentWeek(viewDate);
@@ -38,6 +45,10 @@ const CalendarWeekView = ({
     const dayDate = moment(selectedDate).toDate();
     const doctor = doctors.find((item) => item.id === doctorId);
     onCreateSchedule(doctor, startHour, endHour, dayDate);
+  };
+
+  const handleOpenClinicSettings = async () => {
+    await router.push({ pathname: '/settings', search: 'menu=workingHours' });
   };
 
   const handleScheduleClick = (schedule) => {
@@ -65,6 +76,12 @@ const CalendarWeekView = ({
         dayHours={hours}
         schedules={schedules}
         columns={mappedWeek}
+        noDataView={
+          <CalendarNoDataView
+            showButton={isManager}
+            onSetupHours={handleOpenClinicSettings}
+          />
+        }
         showHourIndicator={showHourIndicator}
         animatedStatuses={['WaitingForPatient']}
         onScheduleSelected={handleScheduleClick}

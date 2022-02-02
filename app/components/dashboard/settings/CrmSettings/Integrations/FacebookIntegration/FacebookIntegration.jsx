@@ -1,28 +1,41 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+import orderBy from 'lodash/orderBy';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import LoadingButton from 'app/components/common/LoadingButton';
+import IconFacebookSm from 'app/components/icons/iconMetaLogo';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
+import onRequestFailed from 'app/utils/onRequestFailed';
+import { appBaseUrl } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
+import { generateFacebookAccessToken } from 'middleware/api/facebook';
 import { saveFacebookToken } from 'middleware/api/users';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
-const FacebookIntegration = ({ currentClinic }) => {
+const FacebookIntegration = ({ facebookToken, facebookCode }) => {
+  const router = useRouter();
   const toast = useContext(NotificationsContext);
+  const currentClinic = useSelector(currentClinicSelector);
+  const [isLoading, setIsLoading] = useState(false);
   const [facebookPages, setFacebookPages] = useState(
     currentClinic.facebookPages,
   );
   const [pagesModal, setPagesModal] = useState({ open: false, pages: [] });
-  const frameRef = useRef(null);
 
   const title = useMemo(() => {
     if (facebookPages == null || !Array.isArray(facebookPages)) {
       return textForKey('Connect facebook page for CRM');
     }
-    return textForKey('connected_facebook_page').replace(
-      '{1}',
-      facebookPages.map((it) => it.name).join(', '),
+    return textForKey(
+      'connected_facebook_page',
+      orderBy(facebookPages, 'name')
+        .map((it) => it.name)
+        .join(', '),
     );
   }, [facebookPages]);
 
@@ -34,8 +47,33 @@ const FacebookIntegration = ({ currentClinic }) => {
   }, []);
 
   useEffect(() => {
+    if (!facebookCode && !facebookToken) {
+      return;
+    }
+    authenticateFacebookCode();
+  }, [facebookCode, facebookToken]);
+
+  useEffect(() => {
     setFacebookPages(currentClinic.facebookPages);
   }, [currentClinic]);
+
+  const authenticateFacebookCode = async () => {
+    setIsLoading(true);
+    try {
+      const redirectUrl = `${appBaseUrl}/integrations/facebook`;
+      const response = await generateFacebookAccessToken(
+        facebookCode,
+        facebookToken,
+        redirectUrl,
+      );
+      const pages = response.data.pages;
+      handleShowPagesList(pages);
+    } catch (error) {
+      onRequestFailed(error, toast);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleFrameMessage = async (event) => {
     if (event.data.source != null) {
@@ -50,6 +88,7 @@ const FacebookIntegration = ({ currentClinic }) => {
 
   const handleClosePagesList = () => {
     setPagesModal({ open: false, pages: [] });
+    router.replace('/settings?menu=crmSettings');
   };
 
   const handlePageSelected = async (pages) => {
@@ -62,6 +101,7 @@ const FacebookIntegration = ({ currentClinic }) => {
       }));
       await saveClinicFacebookPage(requestBody);
       setFacebookPages(pages);
+      router.replace('/settings?menu=crmSettings');
     } catch (error) {
       toast.error(error.message);
     }
@@ -96,6 +136,12 @@ const FacebookIntegration = ({ currentClinic }) => {
     }
   };
 
+  const handleConnectClick = async () => {
+    await router.replace(
+      `${appBaseUrl}/integrations/facebook?connect=1&subdomain=${currentClinic.domainName}`,
+    );
+  };
+
   return (
     <div className={styles.facebookIntegration}>
       <PagesListModal
@@ -103,24 +149,23 @@ const FacebookIntegration = ({ currentClinic }) => {
         onSelect={handlePageSelected}
         onClose={handleClosePagesList}
       />
-      <Typography className={styles.rowTitle}>Facebook</Typography>
-      <Box
-        display='flex'
-        alignItems='center'
-        justifyContent='space-between'
-        width='100%'
-      >
-        <Box display='flex' flexDirection='column'>
-          <Typography className={styles.titleLabel}>{title}</Typography>
+      <Box display='flex' alignItems='center' justifyContent='space-between'>
+        <Box>
+          <div className={styles.rowContainer}>
+            <IconFacebookSm />
+            <Typography className={styles.rowTitle}>Meta (Facebook)</Typography>
+          </div>
+          <Box display='flex' flexDirection='column'>
+            <Typography className={styles.titleLabel}>{title}</Typography>
+          </Box>
         </Box>
-        <iframe
-          title='Facebook Integration'
-          ref={frameRef}
-          id='facebookLogin'
-          frameBorder='0'
-          className={styles.connectContainer}
-          src={`https://app.easyplan.pro/integrations/facebook?redirect=${window.location.href}`}
-        />
+        <LoadingButton
+          isLoading={isLoading}
+          className='positive-button'
+          onClick={handleConnectClick}
+        >
+          {textForKey('Connect')}
+        </LoadingButton>
       </Box>
     </div>
   );

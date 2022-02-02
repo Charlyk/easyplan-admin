@@ -12,15 +12,19 @@ import { textForKey } from 'app/utils/localization';
 import {
   currentUserSelector,
   isUpdatingProfileSelector,
+  isEmailChangedSelector,
 } from 'redux/selectors/appDataSelector';
-import { updateUserProfile } from 'redux/slices/appDataSlice';
+import {
+  updateUserProfile,
+  updateIsEmailChanged,
+} from 'redux/slices/appDataSlice';
 import styles from './AccountSettings.module.scss';
 
 const AccountSettings = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
   const isLoading = useSelector(isUpdatingProfileSelector);
-  const [isEmailChanged, setIsEmailChanged] = useState(false);
+  const isEmailChanged = useSelector(isEmailChangedSelector);
   const [data, setData] = useState({
     avatarUrl: currentUser?.avatar,
     avatarFile: null,
@@ -42,7 +46,7 @@ const AccountSettings = () => {
     if (!isChanged) {
       setData({ ...data, oldPassword: null });
     }
-    setIsEmailChanged(isChanged);
+    dispatch(updateIsEmailChanged(isChanged));
   }, [data.email]);
 
   const handleLogoChange = (file) => {

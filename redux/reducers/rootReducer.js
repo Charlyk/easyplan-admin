@@ -2,17 +2,20 @@ import { combineReducers } from '@reduxjs/toolkit';
 import appNotification from 'app/components/common/GlobalNotificationView/GlobalNotificationView.reducer';
 import exchangeRates from 'app/components/common/MainComponent/ExchageRates/ExchangeRates.slice';
 import changeLogModal from 'app/components/common/modals/ChangeLogsModal/ChangeLogModal.reducer';
+import crmFilters from 'app/components/crm/CrmMain/CrmFilters/CrmFilters.reducer';
 import clinicAnalytics from 'app/components/dashboard/analytics/ClinicAnalytics/ClinicAnalytics.reducer';
 import invoicesButton from 'app/components/dashboard/InvoicesButton/InvoicesButton.slice';
 import patientVisits from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes/AppointmentNotes.reducer';
 import patientPhoneCalls from 'app/components/dashboard/patients/PatientDetailsModal/PatientPhoneRecords/PatientPhoneRecords.reducer';
 import patientPurchases from 'app/components/dashboard/patients/PatientDetailsModal/PatientPurchasesList/PatientPurchasesList.reducer';
 import clinicSettings from 'app/components/dashboard/settings/ApplicationSettings/ClinicSettings/ClinicSettings.reducer';
+import moizvonkiConnection from 'app/components/dashboard/settings/CrmSettings/Integrations/MoizvonkiIntegration/MoizvonkiIntegration.reducer';
 import appData from 'redux/slices/appDataSlice';
 import cabinetsData from 'redux/slices/cabinetsData';
 import calendarData from 'redux/slices/calendarData';
 import clinicData from 'redux/slices/clinicDataSlice';
 import appointmentModal from 'redux/slices/createAppointmentModalSlice';
+import createReminderModal from 'redux/slices/CreateReminderModal.reducer';
 import crmBoard from 'redux/slices/crmBoardSlice';
 import crm from 'redux/slices/crmSlice';
 import doctorScheduleDetails from 'redux/slices/doctorScheduleDetailsSlice';
@@ -75,6 +78,9 @@ const rootReducer = combineReducers({
   changeLogModal,
   appNotification,
   clinicSettings,
+  moizvonkiConnection,
+  crmFilters,
+  createReminderModal,
 });
 
 export default rootReducer;

@@ -73,6 +73,7 @@ const EasyApp = ({ Component, pageProps }) => {
   const appointmentModal = useSelector(appointmentModalSelector);
   const changeLogModal = useSelector(changeLogModalSelector);
   const [isChecking, setIsChecking] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
@@ -178,6 +179,7 @@ const EasyApp = ({ Component, pageProps }) => {
       path.includes('confirmation') ||
       path.includes('reset-password') ||
       path.includes('create-clinic') ||
+      path.includes('how-to') ||
       isChecking
     ) {
       // no need to check auth status on integrations page
@@ -220,10 +222,12 @@ const EasyApp = ({ Component, pageProps }) => {
   };
 
   const handleUserLogout = async () => {
+    setIsLoading(true);
     await signOut();
-    router.replace(appBaseUrl).then(() => {
+    router.replace(`${appBaseUrl}/login`).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
+      setIsLoading(false);
     });
   };
 
@@ -264,6 +268,7 @@ const EasyApp = ({ Component, pageProps }) => {
                       message={textForKey('logout message')}
                       onConfirm={handleUserLogout}
                       onClose={handleCancelLogout}
+                      isLoading={isLoading}
                       show={logout}
                     />
                   )}

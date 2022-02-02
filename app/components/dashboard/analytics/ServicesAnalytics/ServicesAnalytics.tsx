@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import { Tooltip } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,6 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
 import isEqual from 'lodash/isEqual';
 import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
@@ -19,8 +22,9 @@ import EASTextField from 'app/components/common/EASTextField';
 import { Role, ScheduleStatuses } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
-import { ServicesStatisticResponse, ScheduleStatus } from 'types';
+import { ServicesStatisticResponse } from 'types';
 import styles from './ServicesAnalytics.module.scss';
 import reducer, {
   initialState,
@@ -245,6 +249,12 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
     );
   };
 
+  const handleCreateReminder = (statisticItem) => {
+    dispatch(
+      openCreateReminderModal({ deal: statisticItem, searchType: 'Schedule' }),
+    );
+  };
+
   return (
     <div className={styles['statistics-services']}>
       <StatisticFilter onUpdate={handleFilterSubmit} isLoading={isLoading}>
@@ -322,7 +332,8 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
                   <TableCell>{textForKey('Service')}</TableCell>
                   <TableCell>{textForKey('Patient')}</TableCell>
                   <TableCell>{textForKey('Phone number')}</TableCell>
-                  <TableCell>{textForKey('Status')}</TableCell>
+                  <TableCell align='right'>{textForKey('Status')}</TableCell>
+                  <TableCell align='right'>{textForKey('Actions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -349,7 +360,7 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
                         {item.patientPhoneNumber}
                       </a>
                     </TableCell>
-                    <TableCell>
+                    <TableCell align='right'>
                       <span
                         className={styles['status-label']}
                         style={{
@@ -359,6 +370,20 @@ const ServicesAnalytics: React.FC<ServicesAnalyticsProps> = ({
                       >
                         {titleForStatus(item.status)}
                       </span>
+                    </TableCell>
+                    <TableCell size='small' align='right'>
+                      <Tooltip
+                        title={textForKey('crm_add_reminder')}
+                        placement='left'
+                      >
+                        <IconButton
+                          disableRipple
+                          className={styles.reminderBtn}
+                          onClick={() => handleCreateReminder(item)}
+                        >
+                          <IconReminders />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
