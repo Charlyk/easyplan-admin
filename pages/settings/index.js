@@ -41,7 +41,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         store.dispatch(setCookies(cookies));
 
         if (!authToken || !authToken.match(JwtRegex)) {
-          console.log('redirecting 1', authToken);
           return {
             redirect: {
               destination: '/login',
@@ -60,7 +59,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
           '/settings',
         );
         if (redirectTo != null) {
-          console.log('redirecting 2');
           return {
             redirect: {
               destination: redirectTo,

@@ -63,7 +63,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const allStatesResponse = await fetchAllDealStates(false, req.headers);
         store.dispatch(setDealStates(allStatesResponse.data));
         const groupedDeals = await fetchGroupedDeals(0, 25, req.headers);
-        console.log(groupedDeals.data);
         store.dispatch(setGroupedDeals(groupedDeals.data));
 
         return {

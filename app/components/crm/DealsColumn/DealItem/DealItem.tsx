@@ -23,7 +23,6 @@ const DealItem: React.FC<DealItemProps> = ({
   onConfirmFirstContact,
   onDealClick,
 }) => {
-  const currentClinic = useSelector(currentClinicSelector);
   const isUnsorted = dealItem.stateType === DealStateType.Unsorted;
   const [{ isDragging: _isDragging }, drag] = useDrag(() => ({
     type: isUnsorted
@@ -42,7 +41,6 @@ const DealItem: React.FC<DealItemProps> = ({
       {dealItem.stateType === DealStateType.Unsorted ? (
         <UnsortedDealItem
           deal={dealItem}
-          currentClinic={currentClinic}
           onDealClick={onDealClick}
           onLinkPatient={onLinkPatient}
           onDeleteDeal={onDeleteDeal}

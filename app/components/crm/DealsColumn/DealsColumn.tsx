@@ -22,6 +22,7 @@ import {
   dispatchUpdateDealState,
 } from 'redux/slices/crmBoardSlice';
 import { CrmDealListItemType, DealStateType, DealStateView } from 'types';
+import { ColumnMoveDirection } from 'types/api';
 import AddColumnModal from '../AddColumnModal';
 import { ItemTypes } from './constants';
 import DealItem from './DealItem';
@@ -44,7 +45,7 @@ interface DealsColumnProps {
   width?: number;
   isFirst?: boolean;
   isLast?: boolean;
-  onMove?: (direction: 'Left' | 'Right', state: DealStateView) => void;
+  onMove?: (direction: ColumnMoveDirection, state: DealStateView) => void;
   onLinkPatient?: (deal: CrmDealListItemType) => void;
   onDeleteDeal?: (deal: CrmDealListItemType) => void;
   onConfirmFirstContact?: (deal: CrmDealListItemType) => void;
@@ -225,10 +226,10 @@ const DealsColumn: React.FC<DealsColumnProps> = ({
         localDispatch(setIsEditingName(true));
         break;
       case 'moveToRight':
-        onMove?.('Right', dealState);
+        onMove?.(ColumnMoveDirection.Right, dealState);
         break;
       case 'moveToLeft':
-        onMove?.('Left', dealState);
+        onMove?.(ColumnMoveDirection.Left, dealState);
         break;
       case 'changeColor':
         localDispatch(setShowColorPicker(true));

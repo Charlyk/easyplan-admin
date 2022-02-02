@@ -6,7 +6,6 @@ import Zoom from '@material-ui/core/Zoom';
 import IconFilter from '@material-ui/icons/FilterList';
 import IconReminders from '@material-ui/icons/NotificationsActiveOutlined';
 import sortBy from 'lodash/sortBy';
-import upperFirst from 'lodash/upperFirst';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -23,7 +22,6 @@ import {
 } from 'middleware/api/crm';
 import {
   currentClinicSelector,
-  currentUserSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
 import {
@@ -40,6 +38,7 @@ import {
 } from 'redux/slices/crmBoardSlice';
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
 import { CrmDealListItemType, DealStateView, DealView } from 'types';
+import { ColumnMoveDirection } from '../../../../types/api';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';
@@ -73,7 +72,6 @@ const CrmMain = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
-  const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
   const activeRemindersCount = useSelector(remindersCountSelector);
   const isFetchingDeals = useSelector(isFetchingDealsSelector);
@@ -159,13 +157,13 @@ const CrmMain = () => {
   };
 
   const handleColumnMoved = async (
-    direction: 'Left' | 'Right',
+    direction: ColumnMoveDirection,
     state: DealStateView,
   ) => {
     dispatch(
       dispatchUpdateDealState({
         stateId: state.id,
-        body: { moveDirection: upperFirst(direction) },
+        body: { moveDirection: direction },
       }),
     );
   };
