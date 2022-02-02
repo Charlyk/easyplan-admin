@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
-import { useSelector } from 'react-redux';
-import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import { CrmDealListItemType, DealStateType } from 'types';
 import { ItemTypes } from '../constants';
 import SortedDealItem from '../SortedDealItem';
