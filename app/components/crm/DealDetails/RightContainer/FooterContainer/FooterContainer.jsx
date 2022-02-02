@@ -5,15 +5,18 @@ import TabContext from '@material-ui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { requestCreateDealNote } from 'middleware/api/crm';
 import { requestSendSms } from 'middleware/api/patients';
+import { dealDetailsSelector } from 'redux/selectors/crmBoardSelector';
 import AddNoteForm from './AddNoteForm';
 import AddSmsForm from './AddSmsForm/AddSmsForm';
 import styles from './FooterContainer.module.scss';
 
-const FooterContainer = ({ deal, onAddReminder }) => {
+const FooterContainer = ({ onAddReminder }) => {
+  const { deal } = useSelector(dealDetailsSelector);
   const [currentTab, setCurrentTab] = useState('0');
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [isAddingSms, setIsAddingSms] = useState(false);

@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import DoneIcon from '@material-ui/icons/Done';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import { useColor } from 'react-color-palette';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,29 +21,42 @@ import {
   dispatchDeleteDealState,
   dispatchUpdateDealState,
 } from 'redux/slices/crmBoardSlice';
+import { CrmDealListItemType, DealStateType, DealStateView } from 'types';
 import AddColumnModal from '../AddColumnModal';
 import { ItemTypes } from './constants';
 import DealItem from './DealItem';
 import styles from './DealsColumn.module.scss';
 import reducer, {
-  sheetActions,
   initialState,
-  setShowActions,
-  setIsEditingName,
-  setColumnName,
-  setShowColorPicker,
   setColumnData,
+  setColumnName,
+  setIsEditingName,
+  setPage,
+  setShowActions,
+  setShowColorPicker,
   setShowCreateColumn,
   setShowDeleteColumn,
-  setPage,
+  sheetActions,
 } from './DealsColumn.reducer';
 
-const DealsColumn = ({
+interface DealsColumnProps {
+  dealState: DealStateView;
+  width?: number;
+  isFirst?: boolean;
+  isLast?: boolean;
+  onMove?: (direction: 'Left' | 'Right', state: DealStateView) => void;
+  onLinkPatient?: (deal: CrmDealListItemType) => void;
+  onDeleteDeal?: (deal: CrmDealListItemType) => void;
+  onConfirmFirstContact?: (deal: CrmDealListItemType) => void;
+  onDealClick?: (deal: CrmDealListItemType) => void;
+  onAddSchedule?: (deal: CrmDealListItemType) => void;
+}
+
+const DealsColumn: React.FC<DealsColumnProps> = ({
   dealState,
   width,
   isFirst,
   isLast,
-  currentClinic,
   onMove,
   onLinkPatient,
   onDeleteDeal,
@@ -57,8 +69,11 @@ const DealsColumn = ({
   const colorPickerRef = useRef(null);
   const [color, setColor] = useColor('hex', dealState.color);
   const { total: totalElements, data: items } = useSelector((state) =>
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     dealsForStateSelector(state, dealState),
   );
+
   const [
     {
       showActions,
@@ -85,16 +100,16 @@ const DealsColumn = ({
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept:
-        dealState.type === 'Unsorted' ||
-        dealState.type === 'Rescheduled' ||
-        dealState.type === 'Completed'
+        dealState.type === DealStateType.Unsorted ||
+        dealState.type === DealStateType.Rescheduled ||
+        dealState.type === DealStateType.Completed
           ? ItemTypes.NONE
-          : dealState.type === 'Custom'
+          : dealState.type === DealStateType.Custom
           ? [ItemTypes.ALL, ItemTypes.SCHEDULED, ItemTypes.UNSCHEDULED]
-          : dealState.type === 'FirstContact'
+          : dealState.type === DealStateType.FirstContact
           ? [ItemTypes.UNSCHEDULED, ItemTypes.ALL]
           : [ItemTypes.SCHEDULED, ItemTypes.UNSCHEDULED],
-      drop: (item) => handleDealDrop(item),
+      drop: (item) => handleDealDrop(item as CrmDealListItemType),
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
       }),
@@ -112,26 +127,27 @@ const DealsColumn = ({
     };
   }, [dealState]);
 
-  const handleDealDrop = async (deal) => {
+  const handleDealDrop = async (deal: CrmDealListItemType) => {
     try {
       if (
-        deal.state.id === dealState.id ||
+        deal.stateId === dealState.id ||
         (dealState.type !== 'Custom' &&
-          dealState.orderId < deal.state.orderId) ||
-        (deal.state.type === 'Completed' && dealState.type === 'Failed')
+          dealState.orderId < deal.stateOrderId) ||
+        (deal.stateType === DealStateType.Completed &&
+          dealState.type === DealStateType.Failed)
       ) {
         // no need to change deal state
         return;
       }
-      if (deal.patient == null) {
-        onLinkPatient?.();
+      if (deal.patientId == null) {
+        onLinkPatient?.(deal);
         return;
       }
       if (
         (dealState.type === 'Scheduled' ||
           dealState.type === 'Completed' ||
           dealState.type === 'Failed') &&
-        deal.schedule == null
+        deal.scheduleId == null
       ) {
         onAddSchedule?.(deal);
         return;
@@ -209,10 +225,10 @@ const DealsColumn = ({
         localDispatch(setIsEditingName(true));
         break;
       case 'moveToRight':
-        onMove?.('right', dealState);
+        onMove?.('Right', dealState);
         break;
       case 'moveToLeft':
-        onMove?.('left', dealState);
+        onMove?.('Left', dealState);
         break;
       case 'changeColor':
         localDispatch(setShowColorPicker(true));
@@ -302,9 +318,7 @@ const DealsColumn = ({
           {items?.map((item) => (
             <DealItem
               key={item.id}
-              currentClinic={currentClinic}
               onDealClick={onDealClick}
-              color={dealState.color}
               dealItem={item}
               onLinkPatient={onLinkPatient}
               onDeleteDeal={onDeleteDeal}
@@ -318,30 +332,3 @@ const DealsColumn = ({
 };
 
 export default DealsColumn;
-
-DealsColumn.propTypes = {
-  isFirst: PropTypes.bool,
-  isLast: PropTypes.bool,
-  width: PropTypes.number,
-  currentClinic: PropTypes.any,
-  dealState: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    color: PropTypes.string,
-    orderId: PropTypes.number,
-    deleteable: PropTypes.bool,
-    type: PropTypes.string,
-  }),
-  updatedDeal: PropTypes.any,
-  onMove: PropTypes.func,
-  onUpdate: PropTypes.func,
-  onAddSchedule: PropTypes.func,
-  onLinkPatient: PropTypes.func,
-  onDeleteDeal: PropTypes.func,
-  onConfirmFirstContact: PropTypes.func,
-  onDealClick: PropTypes.func,
-};
-
-DealsColumn.defaultProps = {
-  width: 350,
-};

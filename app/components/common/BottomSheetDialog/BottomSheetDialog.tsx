@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, SlideProps } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -9,15 +9,27 @@ import Slide from '@material-ui/core/Slide';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import PropTypes from 'prop-types';
 import { textForKey } from 'app/utils/localization';
 import styles from './BottomSheetDialog.module.scss';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = React.forwardRef<unknown, SlideProps>(function Transition(
+  props,
+  ref,
+) {
   return <Slide direction='up' ref={ref} {...props} />;
 });
 
-const BottomSheetDialog = ({
+interface BottomSheetDialogProps {
+  open: boolean;
+  title?: string;
+  canSave?: boolean;
+  saveText?: string;
+  isLoading?: boolean;
+  onClose?: () => void;
+  onSave?: () => void;
+}
+
+const BottomSheetDialog: React.FC<BottomSheetDialogProps> = ({
   open,
   title,
   children,
@@ -81,17 +93,3 @@ const BottomSheetDialog = ({
 };
 
 export default BottomSheetDialog;
-
-BottomSheetDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  canSave: PropTypes.bool,
-  isLoading: PropTypes.bool,
-  title: PropTypes.string,
-  children: PropTypes.any,
-  onClose: PropTypes.func,
-};
-
-BottomSheetDialog.defaultProps = {
-  isLoading: false,
-  canSave: true,
-};

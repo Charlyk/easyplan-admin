@@ -3,7 +3,12 @@ import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
 import { HYDRATE } from 'next-redux-wrapper';
 import initialState from 'redux/initialState';
-import { DealStateView, DealView, GroupedDeals } from 'types';
+import {
+  CrmDealDetailsType,
+  CrmDealListItemType,
+  DealStateView,
+  GroupedDeals,
+} from 'types';
 import {
   CreateDealStateRequest,
   UpdateDealStateRequest,
@@ -41,6 +46,9 @@ const crmBoardSlice = createSlice({
     ) {
       state.isFetchingDeals = true;
     },
+    dispatchFetchDealDetails(state, _action: PayloadAction<number>) {
+      state.isFetchingDetails = true;
+    },
     setRemindersCount(state, action: PayloadAction<number>) {
       state.remindersCount = action.payload;
       state.isFetchingRemindersCount = false;
@@ -72,12 +80,12 @@ const crmBoardSlice = createSlice({
       state.states = orderBy(action.payload, ['orderId'], ['asc']);
       state.isFetchingStates = false;
     },
-    updateDeal(state, action: PayloadAction<DealView>) {
+    updateDeal(state, action: PayloadAction<CrmDealListItemType>) {
       state.deals = state.deals.map((group) => {
         const hasDeal = group.deals.data.some(
           (deal) => deal.id === action.payload.id,
         );
-        if (group.state.id !== action.payload.state.id || !hasDeal) {
+        if (group.state.id !== action.payload.stateId || !hasDeal) {
           return group;
         }
         const deals = group.deals.data.map((deal) => {
@@ -98,12 +106,12 @@ const crmBoardSlice = createSlice({
         };
       });
     },
-    addNewDeal(state, action: PayloadAction<DealView>) {
+    addNewDeal(state, action: PayloadAction<CrmDealListItemType>) {
       state.deals = state.deals.map((group) => {
         const hasDeal = group.deals.data.some(
           (deal) => deal.id === action.payload.id,
         );
-        if (group.state.id !== action.payload.state.id || hasDeal) {
+        if (group.state.id !== action.payload.stateId || hasDeal) {
           return group;
         }
         return {
@@ -116,12 +124,12 @@ const crmBoardSlice = createSlice({
         };
       });
     },
-    deleteDeal(state, action: PayloadAction<DealView>) {
+    deleteDeal(state, action: PayloadAction<CrmDealListItemType>) {
       state.deals = state.deals.map((group) => {
         const hasDeal = group.deals.data.some(
           (deal) => deal.id === action.payload.id,
         );
-        if (group.state.id !== action.payload.state.id || hasDeal) {
+        if (group.state.id !== action.payload.stateId || hasDeal) {
           return group;
         }
         return {
@@ -138,17 +146,20 @@ const crmBoardSlice = createSlice({
     },
     movedDeal(
       state,
-      action: PayloadAction<{ initial: DealView; current: DealView }>,
+      action: PayloadAction<{
+        initial: CrmDealListItemType;
+        current: CrmDealListItemType;
+      }>,
     ) {
       const { initial, current } = action.payload;
       state.deals = state.deals.map((group) => {
         if (
-          group.state.id !== initial.state.id &&
-          group.state.id !== current.state.id
+          group.state.id !== initial.stateId &&
+          group.state.id !== current.stateId
         ) {
           return group;
         }
-        if (group.state.id === initial.state.id) {
+        if (group.state.id === initial.stateId) {
           return {
             ...group,
             deals: {
@@ -157,7 +168,7 @@ const crmBoardSlice = createSlice({
               total: group.deals.total - 1,
             },
           };
-        } else if (group.state.id === current.state.id) {
+        } else if (group.state.id === current.stateId) {
           return {
             ...group,
             deals: {
@@ -230,6 +241,13 @@ const crmBoardSlice = createSlice({
       });
       state.isFetchingStates = false;
     },
+    setDealDetails(state, action: PayloadAction<CrmDealDetailsType | null>) {
+      state.dealDetails = action.payload;
+      state.isFetchingDetails = false;
+    },
+    setIsFetchingDetails(state, action: PayloadAction<boolean>) {
+      state.isFetchingDetails = action.payload;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -246,6 +264,7 @@ export const {
   dispatchUpdateDealState,
   dispatchCreateDealState,
   dispatchDeleteDealState,
+  dispatchFetchDealDetails,
   setIsFetchingDeals,
   setGroupedDeals,
   setDealStates,
@@ -262,6 +281,8 @@ export const {
   addGroupedDeals,
   updateDealState,
   addDealState,
+  setDealDetails,
+  setIsFetchingDetails,
   removeDealState,
 } = crmBoardSlice.actions;
 

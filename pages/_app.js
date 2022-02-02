@@ -58,7 +58,7 @@ const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
 );
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../app/components/common/modals/ConfirmationModal'),
 );
 
 const ChangeLogModal = dynamic(() =>

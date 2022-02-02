@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent';
-import CrmMain from 'app/components/crm/CrmMain';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
@@ -15,6 +14,7 @@ import {
 import { setCookies } from 'redux/slices/appDataSlice';
 import { setDealStates, setGroupedDeals } from 'redux/slices/crmBoardSlice';
 import { wrapper } from 'store';
+import CrmMain from '../app/components/crm/CrmMain';
 
 const Crm = () => {
   return (
@@ -63,6 +63,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const allStatesResponse = await fetchAllDealStates(false, req.headers);
         store.dispatch(setDealStates(allStatesResponse.data));
         const groupedDeals = await fetchGroupedDeals(0, 25, req.headers);
+        console.log(groupedDeals.data);
         store.dispatch(setGroupedDeals(groupedDeals.data));
 
         return {

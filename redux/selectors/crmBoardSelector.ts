@@ -1,6 +1,6 @@
 import sortBy from 'lodash/sortBy';
 import { createSelector } from 'reselect';
-import { DealStateView } from 'types';
+import { CrmDealListItemType, DealStateView, GroupedDeals } from 'types';
 import { ReduxState } from '../types';
 
 export const crmBoardSelector = (state: ReduxState) => state.crmBoard;
@@ -27,9 +27,24 @@ export const groupedDealsSelector = createSelector(crmBoardSelector, (board) =>
 export const dealsForStateSelector = createSelector(
   groupedDealsSelector,
   (state, dealState: DealStateView) => dealState,
-  (groups, dealState) => {
-    return groups.find((group) => group.state.id === dealState.id)?.deals ?? [];
+  (groups, dealState): { total: number; data: CrmDealListItemType[] } => {
+    return (
+      groups.find((group) => group.state.id === dealState.id)?.deals ?? {
+        total: 0,
+        data: [],
+      }
+    );
   },
+);
+
+export const dealDetailsSelector = createSelector(
+  crmBoardSelector,
+  (board) => board.dealDetails,
+);
+
+export const isFetchingDetailsSelector = createSelector(
+  crmBoardSelector,
+  (board) => board.isFetchingDetails,
 );
 
 export const isFetchingDealsSelector = createSelector(

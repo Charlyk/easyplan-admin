@@ -15,6 +15,7 @@ import {
   currentUserSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
+import { dealDetailsSelector } from 'redux/selectors/crmBoardSelector';
 import { scheduleDetailsSelector } from 'redux/selectors/doctorScheduleDetailsSelector';
 import { calendarScheduleDetailsSelector } from 'redux/selectors/scheduleSelector';
 import {
@@ -33,6 +34,7 @@ import {
   movedDeal,
   addNewDeal,
   updateDeal,
+  dispatchFetchDealDetails,
 } from 'redux/slices/crmBoardSlice';
 import {
   setDeletedDeal,
@@ -47,10 +49,11 @@ import {
 } from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import {
-  DealView,
+  CrmDealListItemType,
   MessageAction,
   PatientDebt,
   PubnubMessage,
+  ReminderType,
   Schedule,
   ShortInvoice,
 } from 'types';
@@ -199,22 +202,26 @@ function handleUpdateMessageStatus(payload: any) {
   console.warn('handleUpdateMessageStatus', 'Not handled', payload);
 }
 
-function* handleNewDealCreated(payload: DealView) {
+function* handleNewDealCreated(payload: CrmDealListItemType) {
   if (payload == null) {
     return;
   }
   yield put(addNewDeal(payload));
 }
 
-function* handleDealUpdated(payload: DealView) {
+function* handleDealUpdated(payload: CrmDealListItemType) {
   if (payload == null) {
     return;
   }
+  const dealDetails = yield select(dealDetailsSelector);
+  if (dealDetails?.deal.id === payload.id) {
+    yield put(dispatchFetchDealDetails(payload.id));
+  }
   yield put(updateDeal(payload));
-  yield put(setUpdatedDeal(payload));
+  // yield put(setUpdatedDeal(payload));
 }
 
-function* handleDealDeleted(payload: DealView) {
+function* handleDealDeleted(payload: CrmDealListItemType) {
   if (payload == null) {
     return;
   }
@@ -223,8 +230,8 @@ function* handleDealDeleted(payload: DealView) {
 }
 
 function* handleDealStateChanged(payload: {
-  initial: DealView;
-  current: DealView;
+  initial: CrmDealListItemType;
+  current: CrmDealListItemType;
 }) {
   if (payload == null) {
     return;
@@ -233,14 +240,14 @@ function* handleDealStateChanged(payload: {
   yield put(setUpdatedDeal(payload.current));
 }
 
-function* handleReminderCreated(payload: any) {
+function* handleReminderCreated(payload: ReminderType) {
   if (payload == null) {
     return;
   }
   yield put(setNewReminder(payload));
 }
 
-function* handleReminderUpdated(payload: any) {
+function* handleReminderUpdated(payload: ReminderType) {
   if (payload == null) {
     return;
   }

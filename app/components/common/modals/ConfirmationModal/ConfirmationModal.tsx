@@ -1,12 +1,22 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
 import { textForKey } from 'app/utils/localization';
 import EASModal from '../EASModal';
 import styles from './ConfirmationModal.module.scss';
 
-const ConfirmationModal = ({
+interface ConfirmationModalProps {
+  show: boolean;
+  title?: string;
+  message?: string;
+  isLoading?: boolean;
+  primaryBtnText?: string;
+  onConfirm?: () => void;
+  onClose?: () => void;
+  secondaryBtnText?: string;
+}
+
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   show,
   title,
   message,
@@ -39,16 +49,3 @@ const ConfirmationModal = ({
 };
 
 export default ConfirmationModal;
-
-ConfirmationModal.propTypes = {
-  show: PropTypes.bool,
-  title: PropTypes.string,
-  message: PropTypes.string,
-  isLoading: PropTypes.bool,
-  onConfirm: PropTypes.func,
-  onClose: PropTypes.func,
-};
-
-ConfirmationModal.defaultProps = {
-  secondaryBtnText: textForKey('cancel_schedule'),
-};

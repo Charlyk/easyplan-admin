@@ -1,22 +1,22 @@
 import React, { useMemo, useRef, useState } from 'react';
 import Box from '@material-ui/core/Box';
-import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import IconPhone from '@material-ui/icons/PhoneCallback';
 import moment from 'moment-timezone';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import ActionsSheet from 'app/components/common/ActionsSheet';
 import ClinicsModal from 'app/components/common/modals/ClinicsModal';
 import IconAvatar from 'app/components/icons/iconAvatar';
 import IconFacebookSm from 'app/components/icons/iconFacebookSm';
 import IconLink from 'app/components/icons/iconLink';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
-import getPatientName from 'app/utils/getPatientName';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { requestChangeDealClinic } from 'middleware/api/crm';
+import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { CrmDealListItemType } from 'types';
 import styles from './UnsortedDealItem.module.scss';
 
 const actions = [
@@ -46,18 +46,25 @@ const actions = [
   },
 ];
 
-const UnsortedDealItem = ({
+interface UnsortedDealItemProps {
+  deal: CrmDealListItemType;
+  onLinkPatient?: (deal: CrmDealListItemType) => void;
+  onDeleteDeal?: (deal: CrmDealListItemType) => void;
+  onConfirmFirstContact?: (deal: CrmDealListItemType) => void;
+  onDealClick?: (deal: CrmDealListItemType) => void;
+}
+
+const UnsortedDealItem: React.FC<UnsortedDealItemProps> = ({
   deal,
-  currentClinic,
   onLinkPatient,
   onDeleteDeal,
   onConfirmFirstContact,
   onDealClick,
 }) => {
+  const currentClinic = useSelector(currentClinicSelector);
   const moreBtnRef = useRef(null);
   const [showActions, setShowActions] = useState(false);
   const [clinicsModal, setClinicsModal] = useState(false);
-  const hasTags = deal.patient?.tags?.length > 0;
 
   const sourceIcon = useMemo(() => {
     switch (deal.source) {
@@ -68,28 +75,20 @@ const UnsortedDealItem = ({
     }
   }, [deal]);
 
-  const personName = useMemo(() => {
-    if (deal?.patient == null) {
-      return deal?.contact?.name || '-';
-    }
-    const { patient } = deal;
-    return getPatientName(patient);
-  }, [deal]);
-
   const contactName = useMemo(() => {
-    if (deal == null || deal?.contact == null) {
+    if (deal == null || deal?.contactName == null) {
       return '-';
     }
     return deal.source === 'PhoneCall'
-      ? deal?.contact?.name.startsWith('+')
-        ? deal?.contact?.name
-        : `${deal?.contact?.name}`
-      : deal?.contact?.name;
+      ? deal?.contactName.startsWith('+')
+        ? deal?.contactName
+        : `${deal?.contactName}`
+      : deal?.contactName;
   }, [deal]);
 
   const filteredActions = useMemo(() => {
     return actions.filter((action) => {
-      return deal?.patient == null || action.key !== 'linkPatient';
+      return deal?.patientId == null || action.key !== 'linkPatient';
     });
   }, [deal]);
 
@@ -169,8 +168,8 @@ const UnsortedDealItem = ({
         onClose={handleCloseActions}
       />
       <div className={styles.avatarContainer}>
-        {deal.contact?.photoUrl ? (
-          <img src={deal.contact.photoUrl} alt={deal.contact.name} />
+        {deal.contactPhoto ? (
+          <img src={deal.contactPhoto} alt={deal.contactName} />
         ) : (
           <IconAvatar />
         )}
@@ -183,9 +182,9 @@ const UnsortedDealItem = ({
         </Typography>
         <Typography className={styles.contactName}>
           {contactName}{' '}
-          {deal?.patient != null && (
+          {deal?.patientId != null && (
             <>
-              <IconLink fill='#3A83DC' /> {personName}
+              <IconLink fill='#3A83DC' /> {deal.patientName}
             </>
           )}
         </Typography>
@@ -196,27 +195,10 @@ const UnsortedDealItem = ({
             </Typography>
           </div>
         )}
-        {hasTags && (
-          <div className={styles.tagsContainer}>
-            {deal.patient.tags.map((tag) => (
-              <Chip
-                size='small'
-                variant='outlined'
-                label={tag.title}
-                key={tag.id}
-                classes={{
-                  root: styles.tagItem,
-                  label: styles.label,
-                  outlined: styles.outlined,
-                }}
-              />
-            ))}
-          </div>
-        )}
       </div>
       <div className={styles.actionsContainer}>
         <Typography className={styles.dateLabel}>
-          {moment(deal.lastUpdated).format('DD MMM YYYY HH:mm')}
+          {moment(deal.updated).format('DD MMM YYYY HH:mm')}
         </Typography>
         <IconButton
           ref={moreBtnRef}
@@ -231,73 +213,3 @@ const UnsortedDealItem = ({
 };
 
 export default React.memo(UnsortedDealItem, areComponentPropsEqual);
-
-UnsortedDealItem.propTypes = {
-  currentClinic: PropTypes.any,
-  deal: PropTypes.shape({
-    id: PropTypes.number,
-    created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    lastUpdated: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    messageSnippet: PropTypes.string,
-    source: PropTypes.string,
-    sourceDescription: PropTypes.string,
-    contact: PropTypes.shape({
-      id: PropTypes.number,
-      email: PropTypes.string,
-      name: PropTypes.string,
-      phoneNumber: PropTypes.string,
-      photoUrl: PropTypes.string,
-    }),
-    patient: PropTypes.shape({
-      id: PropTypes.number,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      phoneWithCode: PropTypes.string,
-      tags: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number,
-          title: PropTypes.string,
-        }),
-      ),
-    }),
-    state: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      color: PropTypes.string,
-      orderId: PropTypes.number,
-      deleteable: PropTypes.bool,
-      type: PropTypes.string,
-    }),
-    assignedTo: PropTypes.shape({
-      id: PropTypes.number,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-    }),
-    service: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      price: PropTypes.number,
-      currency: PropTypes.string,
-    }),
-    schedule: PropTypes.shape({
-      id: PropTypes.number,
-      created: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      dateAndTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      canceledReason: PropTypes.string,
-      doctor: PropTypes.shape({
-        id: PropTypes.number,
-        firstName: PropTypes.string,
-        lastName: PropTypes.string,
-      }),
-    }),
-    movedToClinic: PropTypes.shape({
-      id: PropTypes.number,
-      clinicName: PropTypes.string,
-    }),
-  }),
-  onLinkPatient: PropTypes.func,
-  onDeleteDeal: PropTypes.func,
-  onConfirmFirstContact: PropTypes.func,
-  onDealClick: PropTypes.func,
-};

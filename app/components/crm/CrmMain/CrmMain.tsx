@@ -34,10 +34,12 @@ import {
 import { openAppointmentModal } from 'redux/slices/createAppointmentModalSlice';
 import { openCreateReminderModal } from 'redux/slices/CreateReminderModal.reducer';
 import {
+  dispatchFetchDealDetails,
   dispatchFetchGroupedDeals,
   dispatchUpdateDealState,
 } from 'redux/slices/crmBoardSlice';
 import { playPhoneCallRecord } from 'redux/slices/mainReduxSlice';
+import { CrmDealListItemType, DealStateView, DealView } from 'types';
 import DealsColumn from '../DealsColumn';
 import RemindersModal from '../RemindersModal';
 import styles from './CrmMain.module.scss';
@@ -57,8 +59,8 @@ import reducer, {
   setShowPageConnectModal,
 } from './CrmMain.reducer';
 
-const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+const ConfirmationModal = dynamic(
+  () => import('app/components/common/modals/ConfirmationModal'),
 );
 const LinkPatientModal = dynamic(() => import('../LinkPatientModal'));
 const DealDetails = dynamic(() => import('../DealDetails'));
@@ -83,7 +85,6 @@ const CrmMain = () => {
       deleteModal,
       detailsModal,
       showFilters,
-      queryParams,
       showReminders,
       currentPage,
       showPageConnectModal,
@@ -106,10 +107,6 @@ const CrmMain = () => {
     dispatch(dispatchFetchGroupedDeals({ page: currentPage, itemsPerPage }));
   }, [currentPage]);
 
-  const updateColumns = () => {
-    localDispatch(setCurrentPage(0));
-  };
-
   const handleCloseLinkModal = () => {
     localDispatch(closeLinkModal());
   };
@@ -118,7 +115,7 @@ const CrmMain = () => {
     localDispatch(openLinkModal({ deal, confirm }));
   };
 
-  const handleDeleteDeal = (deal) => {
+  const handleDeleteDeal = (deal: CrmDealListItemType) => {
     localDispatch(openDeleteModal(deal));
   };
 
@@ -126,7 +123,8 @@ const CrmMain = () => {
     localDispatch(closeDeleteModal());
   };
 
-  const handleDealClick = (deal) => {
+  const handleDealClick = (deal: CrmDealListItemType) => {
+    dispatch(dispatchFetchDealDetails(deal.id));
     localDispatch(openDetailsModal(deal));
   };
 
@@ -134,7 +132,7 @@ const CrmMain = () => {
     localDispatch(closeDealDetails());
   };
 
-  const handleOpenReminderModal = (deal) => {
+  const handleOpenReminderModal = (deal: DealView) => {
     dispatch(openCreateReminderModal({ deal, searchType: 'Deal' }));
   };
 
@@ -160,7 +158,10 @@ const CrmMain = () => {
     }
   };
 
-  const handleColumnMoved = async (direction, state) => {
+  const handleColumnMoved = async (
+    direction: 'Left' | 'Right',
+    state: DealStateView,
+  ) => {
     dispatch(
       dispatchUpdateDealState({
         stateId: state.id,
@@ -289,9 +290,7 @@ const CrmMain = () => {
       <DealDetails
         open={detailsModal.open}
         deal={detailsModal.deal}
-        currentUser={currentUser}
-        currentClinic={currentClinic}
-        states={columns}
+        states={columns.map((item) => item.state)}
         onLink={handleLinkPatient}
         onClose={handleCloseDetails}
         onAddSchedule={handleAddSchedule}
@@ -345,13 +344,10 @@ const CrmMain = () => {
           <DealsColumn
             key={column.state.id}
             width={COLUMN_WIDTH}
-            filterData={queryParams}
             isFirst={index === 0}
             isLast={index === columns.length - 1}
-            currentClinic={currentClinic}
             dealState={column.state}
             onAddSchedule={handleAddSchedule}
-            onUpdate={updateColumns}
             onMove={handleColumnMoved}
             onDealClick={handleDealClick}
             onLinkPatient={handleLinkPatient}

@@ -11,10 +11,11 @@ import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import IconClose from 'app/components/icons/iconClose';
 import extractCookieByName from 'app/utils/extractCookieByName';
 import { textForKey } from 'app/utils/localization';
+import onRequestError from 'app/utils/onRequestError';
 import setDocCookies from 'app/utils/setDocCookies';
 import { requestFetchUserReminders } from 'middleware/api/crm';
 import { updatedReminderSelector } from 'redux/selectors/crmSelector';
-import onRequestError from 'app/utils/onRequestError';
+import { DealView } from 'types';
 import HeaderItem from './HeaderItem';
 import ReminderItem from './ReminderItem';
 import styles from './RemindersModal.module.scss';
@@ -33,7 +34,13 @@ const defaultRange = {
   endDate: moment().add(7, 'days').toDate(),
 };
 
-const RemindersModal = ({ open, onClose }) => {
+interface RemindersModalProps {
+  open: boolean;
+  onClose: () => void;
+  onAddReminder?: (deal: DealView) => void;
+}
+
+const RemindersModal: React.FC<RemindersModalProps> = ({ open, onClose }) => {
   const pickerRef = useRef(null);
   const remoteReminder = useSelector(updatedReminderSelector);
   const [{ filters, reminders, showDateRange }, localDispatch] = useReducer(

@@ -39,6 +39,7 @@ import {
   createNewReminderWatcher,
   createDealStateWatcher,
   deleteDealStateWatcher,
+  dealDetailsWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -82,5 +83,6 @@ export default function* rootSaga() {
     createNewReminderWatcher(),
     createDealStateWatcher(),
     deleteDealStateWatcher(),
+    dealDetailsWatcher(),
   ]);
 }

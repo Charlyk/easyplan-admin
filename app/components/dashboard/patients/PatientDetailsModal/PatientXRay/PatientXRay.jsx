@@ -20,7 +20,7 @@ import styles from './PatientXRay.module.scss';
 import XRayPhase from './XRayPhase';
 
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../../common/modals/ConfirmationModal'),
 );
 
 const ExpandedPhase = {

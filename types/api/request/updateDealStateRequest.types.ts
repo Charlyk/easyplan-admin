@@ -1,5 +1,5 @@
 export interface UpdateDealStateRequest {
   name?: string | null;
-  moveDirection?: 'Left' | 'Right' | null;
+  moveDirection?: string | null;
   color?: string | null;
 }

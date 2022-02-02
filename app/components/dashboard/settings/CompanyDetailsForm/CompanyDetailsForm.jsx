@@ -41,7 +41,7 @@ import reducer, {
 } from './CompanyDetailsForm.reducer';
 
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../common/modals/ConfirmationModal'),
 );
 
 const CompanyDetailsForm = ({ countries }) => {

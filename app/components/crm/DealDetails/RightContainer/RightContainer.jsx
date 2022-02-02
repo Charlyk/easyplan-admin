@@ -15,9 +15,8 @@ const RightContainer = ({
   return (
     <div className={styles.rightContainer}>
       <div className={styles.center}>
-        <DealHistory deal={deal} onPlayAudio={onPlayAudio} />
+        <DealHistory onPlayAudio={onPlayAudio} />
         <FooterContainer
-          deal={deal}
           currentClinic={currentClinic}
           onAddReminder={onAddReminder}
         />
