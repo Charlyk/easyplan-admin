@@ -33,11 +33,11 @@
   padding-left: 0.3rem;
   background-color: #f3f3f3;
   border-radius: 3px;
-  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.05);
   transition: all 0.3s;
 
   &.pauseStyles {
-    background-color: hsl(0, 0%, 92%) !important;
+    background-color: #FDC534 !important;
     left: 0 !important;
     z-index: 0;
     width: 100% !important;
@@ -85,7 +85,7 @@
         font-size: 12px;
 
         &.pause {
-          color: #000;
+          color: #fff;
           width: 100%;
           text-align: center;
         }
@@ -180,11 +180,11 @@
 
         .commentLabel {
           margin-top: 1rem;
-          color: #000;
+          color: #fff;
           font-family: Inter, sans-serif;
           font-style: normal;
           font-weight: normal;
-          font-size: 12px;
+          font-size: 16px;
           width: 100%;
           text-align: center;
         }
@@ -192,11 +192,11 @@
         .pauseLabel {
           width: 100%;
           text-align: center;
-          color: #000;
+          color: #fff;
           font-family: Inter, sans-serif;
           font-style: normal;
-          font-weight: normal;
-          font-size: 15px;
+          font-weight: bold;
+          font-size: 18px;
         }
       }
     }
