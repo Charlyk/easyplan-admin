@@ -5,10 +5,10 @@ import TabContext from '@material-ui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 import PropTypes from 'prop-types';
-import EASModal from 'app/components/common/modals/EASModal';
 import { textForKey } from 'app/utils/localization';
-import { requestLinkPatient } from 'middleware/api/crm';
 import onRequestError from 'app/utils/onRequestError';
+import { requestLinkPatient } from 'middleware/api/crm';
+import EASModal from '../../common/modals/EASModal';
 import ExistentPatientForm from './ExistentPatientForm';
 import styles from './LinkPatientModal.module.scss';
 import reducer, {

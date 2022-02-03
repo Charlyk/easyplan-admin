@@ -1,25 +1,32 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import orderBy from 'lodash/orderBy';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadingButton from 'app/components/common/LoadingButton';
 import IconFacebookSm from 'app/components/icons/iconMetaLogo';
-import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
-import onRequestFailed from 'app/utils/onRequestFailed';
 import { appBaseUrl } from 'eas.config';
 import { saveClinicFacebookPage } from 'middleware/api/clinic';
 import { generateFacebookAccessToken } from 'middleware/api/facebook';
-import { saveFacebookToken } from 'middleware/api/users';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
+import { showErrorNotification } from 'redux/slices/globalNotificationsSlice';
+import { FacebookPageType } from 'types';
 import styles from './FacebookIntegration.module.scss';
 import PagesListModal from './PagesListModal';
 
-const FacebookIntegration = ({ facebookToken, facebookCode }) => {
+interface FacebookIntegrationProps {
+  facebookToken?: string | null;
+  facebookCode?: string | null;
+}
+
+const FacebookIntegration: React.FC<FacebookIntegrationProps> = ({
+  facebookToken,
+  facebookCode,
+}) => {
   const router = useRouter();
-  const toast = useContext(NotificationsContext);
+  const dispatch = useDispatch();
   const currentClinic = useSelector(currentClinicSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [facebookPages, setFacebookPages] = useState(
@@ -38,13 +45,6 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
         .join(', '),
     );
   }, [facebookPages]);
-
-  useEffect(() => {
-    window.addEventListener('message', handleFrameMessage);
-    return () => {
-      window.removeEventListener('message', handleFrameMessage);
-    };
-  }, []);
 
   useEffect(() => {
     if (!facebookCode && !facebookToken) {
@@ -69,20 +69,14 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
       const pages = response.data.pages;
       handleShowPagesList(pages);
     } catch (error) {
-      onRequestFailed(error, toast);
+      dispatch(showErrorNotification(error.message));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleFrameMessage = async (event) => {
-    if (event.data.source != null) {
-      return;
-    }
-    await handleFacebookResponse(event.data);
-  };
-
-  const handleShowPagesList = (pages) => {
+  const handleShowPagesList = (pages: FacebookPageType[]) => {
+    console.log(pages);
     setPagesModal({ open: true, pages });
   };
 
@@ -91,49 +85,22 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
     router.replace('/settings?menu=crmSettings');
   };
 
-  const handlePageSelected = async (pages) => {
+  const handlePageSelected = async (pages: FacebookPageType[]) => {
     try {
       const requestBody = pages.map((page) => ({
         accessToken: page.access_token,
         category: page.category,
         name: page.name,
         pageId: page.id,
+        instagramAccountId: page.connected_instagram_account?.id ?? null,
       }));
       await saveClinicFacebookPage(requestBody);
       setFacebookPages(pages);
       router.replace('/settings?menu=crmSettings');
     } catch (error) {
-      toast.error(error.message);
+      dispatch(showErrorNotification(error.message));
     }
     handleClosePagesList();
-  };
-
-  /**
-   * Handle facebook response
-   * @param {{ accessToken?: string, userID?: string, status?: string, accounts?: { data: Array<*> } }} response
-   * @return {Promise<void>}
-   */
-  const handleFacebookResponse = async (response) => {
-    if (!response.accessToken) {
-      return;
-    }
-    try {
-      await saveFacebookToken(response.accessToken);
-      if (response.accounts == null || response.accounts.data.length === 0) {
-        toast.warn(
-          textForKey('No authorized Facebook pages, please try again.'),
-        );
-      } else {
-        const pages = response.accounts.data;
-        if (pages.length > 1) {
-          handleShowPagesList(pages);
-        } else {
-          await handlePageSelected(pages);
-        }
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
   };
 
   const handleConnectClick = async () => {
@@ -153,7 +120,9 @@ const FacebookIntegration = ({ facebookToken, facebookCode }) => {
         <Box>
           <div className={styles.rowContainer}>
             <IconFacebookSm />
-            <Typography className={styles.rowTitle}>Meta (Facebook)</Typography>
+            <Typography className={styles.rowTitle}>
+              Meta (Facebook, Instagram, Whatsapp)
+            </Typography>
           </div>
           <Box display='flex' flexDirection='column'>
             <Typography className={styles.titleLabel}>{title}</Typography>

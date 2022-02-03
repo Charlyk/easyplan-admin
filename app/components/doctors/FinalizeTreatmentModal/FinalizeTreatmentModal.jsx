@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
-import EASModal from 'app/components/common/modals/EASModal';
 import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
 import NotificationsContext from 'app/context/notificationsContext';
@@ -19,6 +18,7 @@ import {
   clinicCurrencySelector,
   clinicExchangeRatesSelector,
 } from 'redux/selectors/appDataSelector';
+import EASModal from '../../common/modals/EASModal';
 import styles from './FinalizeTreatmentModal.module.scss';
 
 const FinalizeTreatmentModal = ({ open, services, onClose, onSave }) => {

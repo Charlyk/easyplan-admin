@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
-import EASModal from 'app/components/common/modals/EASModal';
 import { textForKey } from 'app/utils/localization';
+import EASModal from '../../common/modals/EASModal';
 import styles from './AddColumnModal.module.scss';
 
 const AddColumnModal = ({ open, onClose, onSave }) => {

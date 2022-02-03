@@ -2,14 +2,28 @@ import React, { useCallback, useState } from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import orderBy from 'lodash/orderBy';
-import PropTypes from 'prop-types';
+import Image from 'next/image';
 import EASModal from 'app/components/common/modals/EASModal';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
 import { textForKey } from 'app/utils/localization';
+import instagramLogo from 'public/instagram.png';
+import { FacebookPageType } from 'types';
 import styles from './PagesListModal.module.scss';
 
-const PagesListModal = ({ open, pages, onClose, onSelect }) => {
-  const [selectedPages, setSelectedPages] = useState([]);
+interface PageListModalProps {
+  open: boolean;
+  pages: FacebookPageType[];
+  onClose?: () => void;
+  onSelect?: (pages: FacebookPageType[]) => void;
+}
+
+const PagesListModal: React.FC<PageListModalProps> = ({
+  open,
+  pages,
+  onClose,
+  onSelect,
+}) => {
+  const [selectedPages, setSelectedPages] = useState<FacebookPageType[]>([]);
 
   const isPageSelected = useCallback(
     (page) => {
@@ -41,6 +55,7 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
       <MenuList>
         {orderBy(pages, 'name').map((page) => (
           <MenuItem
+            disableRipple
             key={page.id}
             selected={isPageSelected(page)}
             classes={{
@@ -49,13 +64,26 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
             }}
             onClick={() => handlePageSelected(page)}
           >
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img
-                className={styles.pagePicture}
-                src={page.picture.data.url}
-                alt={page.name}
-              />
-              {page.name}
+            <div className={styles.itemRoot}>
+              <div className={styles.pageContainer}>
+                <img
+                  className={styles.pagePicture}
+                  src={page.picture.data.url}
+                  alt={page.name}
+                />
+                {page.name}
+              </div>
+              {page.connected_instagram_account != null && (
+                <div className={styles.instagramContainer}>
+                  <Image
+                    className={styles.logo}
+                    src={instagramLogo}
+                    width={20}
+                    height={20}
+                  />
+                  @{page.connected_instagram_account.username}
+                </div>
+              )}
             </div>
             {isPageSelected(page) && <IconCheckMark fill='#00ac00' />}
           </MenuItem>
@@ -66,20 +94,3 @@ const PagesListModal = ({ open, pages, onClose, onSelect }) => {
 };
 
 export default PagesListModal;
-
-PagesListModal.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func,
-  onSelect: PropTypes.func,
-  pages: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      picture: PropTypes.shape({
-        data: {
-          url: PropTypes.string,
-        },
-      }),
-    }),
-  ),
-};

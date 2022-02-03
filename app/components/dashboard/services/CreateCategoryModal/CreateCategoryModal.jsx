@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import EASTextField from 'app/components/common/EASTextField';
-import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import {
   requestCreateCategory,
   requestEditCategory,
 } from 'middleware/api/categories';
+import EASModal from '../../../common/modals/EASModal';
 import styles from './CreateCategoryModal.module.scss';
 
 const CreateCategoryModal = (props) => {
