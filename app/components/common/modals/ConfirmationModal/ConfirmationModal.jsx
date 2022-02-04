@@ -21,7 +21,7 @@ const ConfirmationModal = ({
       open={show}
       title={title}
       onClose={onClose}
-      onPrimaryClick={onConfirm}
+      onPrimaryClick={isLoading ? () => null : onConfirm}
       onBackdropClick={onClose}
       onSecondaryClick={onClose}
       hidePositiveBtn={onConfirm == null}
