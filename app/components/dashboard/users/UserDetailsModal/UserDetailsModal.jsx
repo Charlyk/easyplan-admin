@@ -99,6 +99,8 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
       endHour: day.endHour === 'none' || day.isDayOff ? null : day.endHour,
     }));
 
+    console.log(newWorkDays);
+
     const requestBody = {
       ...userData,
       workdays: newWorkDays,
