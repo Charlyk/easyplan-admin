@@ -93,6 +93,14 @@
             font-weight: normal;
             font-size: 12px;
             color: #34354C;
+
+            .reminderBtn {
+              padding: 0;
+
+              svg {
+                fill: #3a83dc;
+              }
+            }
           }
         }
 

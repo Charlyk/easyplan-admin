@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
@@ -15,6 +14,7 @@ import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import { textForKey } from 'app/utils/localization';
 import { appBaseUrl, environment, isDev } from 'eas.config';
 import { loginUser, resetUserPassword, signOut } from 'middleware/api/auth';
+import ConfirmationModal from '../modals/ConfirmationModal';
 import styles from './LoginWrapper.module.scss';
 import reducer, {
   initialState,
@@ -154,7 +154,7 @@ export default function LoginWrapper({
   const handleLoginActionReceived = async (action) => {
     switch (action) {
       case 'CreateClinic':
-        await router.push('/create-clinic?redirect=1');
+        await router.push('/create-clinic?fresh=1');
         break;
       case 'SelectClinic':
         await router.replace('/clinics');

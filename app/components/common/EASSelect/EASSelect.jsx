@@ -13,6 +13,7 @@ import styles from './EASSelect.module.scss';
 const EASSelect = ({
   updateText,
   selectClass,
+  helperText,
   rootClass,
   disabled,
   checkable,
@@ -108,6 +109,9 @@ const EASSelect = ({
         {renderMenuItem(defaultOption)}
         {options.map(renderMenuItem)}
       </Select>
+      {helperText && (
+        <Typography className={styles.helperText}>{helperText}</Typography>
+      )}
     </FormControl>
   );
 };
@@ -118,6 +122,7 @@ EASSelect.propTypes = {
   disabled: PropTypes.bool,
   variant: PropTypes.oneOf(['outlined', 'text']),
   label: PropTypes.string,
+  helperText: PropTypes.string,
   rootClass: PropTypes.any,
   checkable: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -141,6 +146,7 @@ EASSelect.defaultProps = {
   disabled: false,
   variant: 'outlined',
   label: '',
+  helperText: null,
   rootClass: null,
   checkable: false,
   multiple: false,

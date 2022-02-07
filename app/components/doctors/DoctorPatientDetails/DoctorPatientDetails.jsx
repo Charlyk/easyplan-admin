@@ -212,11 +212,14 @@ const DoctorPatientDetails = () => {
   };
 
   const handlePrintTreatmentPlan = () => {
+    const lowercasedGuideName =
+      guideName.charAt(0).toUpperCase() + guideName.slice(1).toLowerCase();
+
     const planUrl = getTreatmentPlanURL(
       currentClinic,
       authToken,
       patient.id,
-      guideName,
+      lowercasedGuideName,
     );
     window.open(planUrl, '_blank');
   };

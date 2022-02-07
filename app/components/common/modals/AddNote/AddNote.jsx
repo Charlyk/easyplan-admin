@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import EASTextarea from 'app/components/common/EASTextarea';
-import EASModal from 'app/components/common/modals/EASModal';
 import { dispatchUpdateVisit } from 'app/components/dashboard/patients/PatientDetailsModal/AppointmentNotes/AppointmentNotes.reducer';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { createPatientNote } from 'middleware/api/patients';
 import { updateNotes } from 'redux/slices/mainReduxSlice';
+import EASModal from '../EASModal';
 import styles from './AddNote.module.scss';
 
 const AddNote = ({ open, patientId, visit, mode, scheduleId, onClose }) => {

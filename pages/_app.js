@@ -58,7 +58,7 @@ const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
 );
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../app/components/common/modals/ConfirmationModal'),
 );
 
 const ChangeLogModal = dynamic(() =>
@@ -179,6 +179,7 @@ const EasyApp = ({ Component, pageProps }) => {
       path.includes('confirmation') ||
       path.includes('reset-password') ||
       path.includes('create-clinic') ||
+      path.includes('how-to') ||
       isChecking
     ) {
       // no need to check auth status on integrations page
@@ -223,7 +224,7 @@ const EasyApp = ({ Component, pageProps }) => {
   const handleUserLogout = async () => {
     setIsLoading(true);
     await signOut();
-    router.replace(appBaseUrl).then(() => {
+    router.replace(`${appBaseUrl}/login`).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
       setIsLoading(false);

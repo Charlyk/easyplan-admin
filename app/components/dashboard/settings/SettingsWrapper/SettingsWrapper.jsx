@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useSelector } from 'react-redux';
 import { Role } from 'app/utils/constants';
-import {
-  currentClinicSelector,
-  currentUserSelector,
-  userClinicSelector,
-} from 'redux/selectors/appDataSelector';
+import { userClinicSelector } from 'redux/selectors/appDataSelector';
 import styles from './SettingsWrapper.module.scss';
 const AccountSettings = dynamic(() => import('../AccountSettings'));
 const ApplicationSettings = dynamic(() => import('../ApplicationSettings'));
@@ -27,9 +23,12 @@ const SettingsForm = {
   crmSettings: 'crmSettings',
 };
 
-const SettingsWrapper = ({ countries, selectedMenu }) => {
-  const currentUser = useSelector(currentUserSelector);
-  const currentClinic = useSelector(currentClinicSelector);
+const SettingsWrapper = ({
+  countries,
+  selectedMenu,
+  facebookToken,
+  facebookCode,
+}) => {
   const selectedClinic = useSelector(userClinicSelector);
   const [currentForm, setCurrentForm] = useState(
     [Role.admin, Role.manager].includes(selectedClinic?.roleInClinic)
@@ -64,7 +63,12 @@ const SettingsWrapper = ({ countries, selectedMenu }) => {
         {currentForm === SettingsForm.securitySettings && <SecuritySettings />}
         {currentForm === SettingsForm.appSettings && <ApplicationSettings />}
         {currentForm === SettingsForm.bracesSettings && <BracesSettings />}
-        {currentForm === SettingsForm.crmSettings && <CrmSettings />}
+        {currentForm === SettingsForm.crmSettings && (
+          <CrmSettings
+            facebookCode={facebookCode}
+            facebookToken={facebookToken}
+          />
+        )}
       </div>
     </div>
   );

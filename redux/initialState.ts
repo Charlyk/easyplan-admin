@@ -1,4 +1,9 @@
 import moment from 'moment-timezone';
+import {
+  reminderOptions,
+  Shortcuts,
+} from 'app/components/crm/CrmMain/CrmFilters/CrmFilters.constants';
+import { textForKey } from 'app/utils/localization';
 import { ReduxState } from 'redux/types';
 
 const defaultRange: [string, string] = [
@@ -51,6 +56,7 @@ const initialState: ReduxState = {
     isUpdatingProfile: false,
     isUpdatingClinic: false,
     isAppInitialized: false,
+    isEmailChanged: false,
   },
   clinicData: {
     updateClinicData: false,
@@ -141,7 +147,12 @@ const initialState: ReduxState = {
   },
   crmBoard: {
     states: [],
+    userStates: [],
+    deals: [],
+    dealDetails: null,
     remindersCount: 0,
+    isFetchingDetails: false,
+    isFetchingDeals: false,
     isFetchingStates: false,
     isFetchingRemindersCount: false,
   },
@@ -184,6 +195,30 @@ const initialState: ReduxState = {
   clinicSettings: {
     isFetching: false,
     settings: null,
+  },
+  moizvonkiConnection: {
+    isLoading: false,
+    connection: null,
+  },
+  crmFilters: {
+    loading: { patients: false, filter: false },
+    patient: null,
+    selectedDoctors: [{ id: -1, name: textForKey('All doctors') }],
+    selectedServices: [{ id: -1, name: textForKey('All services') }],
+    selectedUsers: [{ id: -1, name: textForKey('All users') }],
+    selectedStates: [{ id: -1, name: textForKey('All states') }],
+    selectedDateRange: [],
+    selectedReminder: reminderOptions[0],
+    selectedShortcut: Shortcuts[0],
+    showRangePicker: false,
+    allTags: [],
+    selectedTags: [{ id: -1, name: textForKey('All tags') }],
+  },
+  createReminderModal: {
+    open: false,
+    isLoading: false,
+    deal: null,
+    searchType: 'Deal',
   },
 };
 

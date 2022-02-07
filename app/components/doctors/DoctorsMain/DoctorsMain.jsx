@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import GlobalNotificationView from 'app/components/common/GlobalNotificationView';
 import PageHeader from 'app/components/common/MainComponent/PageHeader/PageHeader';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
 import { textForKey } from 'app/utils/localization';
@@ -15,6 +16,7 @@ import {
   setPatientNoteModal,
   setPatientXRayModal,
 } from 'redux/actions/actions';
+import initialState from 'redux/initialState';
 import {
   currentClinicSelector,
   currentUserSelector,
@@ -24,8 +26,8 @@ import {
   patientNoteModalSelector,
   patientXRayModalSelector,
 } from 'redux/selectors/modalsSelector';
+import { setAppData } from 'redux/slices/appDataSlice';
 import { triggerUserLogOut } from 'redux/slices/mainReduxSlice';
-import GlobalNotificationView from '../../common/GlobalNotificationView';
 import styles from './DoctorsMain.module.scss';
 
 const AddXRay = dynamic(() =>
@@ -72,7 +74,9 @@ const DoctorsMain = ({ children, pageTitle }) => {
     }
     try {
       await signOut();
-      await router.replace(router.asPath);
+      router.replace(`${appBaseUrl}/login`).then(() => {
+        dispatch(setAppData(initialState.appData));
+      });
     } catch (error) {
       console.error(error);
     }
@@ -94,7 +98,7 @@ const DoctorsMain = ({ children, pageTitle }) => {
   };
 
   const handleCreateClinic = async () => {
-    await router.push('/create-clinic?redirect=0');
+    await router.push('/create-clinic?fresh=0');
   };
 
   const handleStartLogout = () => {

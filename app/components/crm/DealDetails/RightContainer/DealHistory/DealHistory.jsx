@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer, useRef } from 'react';
-import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import first from 'lodash/first';
@@ -9,18 +8,12 @@ import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
-import { requestFetchDealDetails } from 'middleware/api/crm';
-import {
-  updatedDealSelector,
-  updatedReminderSelector,
-} from 'redux/selectors/crmSelector';
+import { dealDetailsSelector } from 'redux/selectors/crmBoardSelector';
 import styles from './DealHistory.module.scss';
 import reducer, {
   initialState,
   ItemType,
   setHistory,
-  setIsFetching,
 } from './DealHistory.reducer';
 import LogItem from './LogItem';
 import MessageItem from './MessageItem';
@@ -29,59 +22,25 @@ import PhoneCallItem from './PhoneCallItem';
 import ReminderItem from './ReminderItem';
 import SMSMessageItem from './SMSMessageItem';
 
-const DealHistory = ({ deal, onPlayAudio }) => {
+const DealHistory = ({ onPlayAudio }) => {
   const containerRef = useRef(null);
-  const updatedDeal = useSelector(updatedDealSelector);
-  const updatedReminder = useSelector(updatedReminderSelector);
-  const [{ items, isFetching }, localDispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const details = useSelector(dealDetailsSelector);
+  const [{ items }, localDispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (updatedReminder == null || updatedReminder.deal.id !== deal.id) {
+    if (details == null) {
       return;
     }
-
-    fetchDealDetails();
-  }, [updatedReminder, deal]);
-
-  useEffect(() => {
-    if (deal == null || updatedDeal?.id !== deal?.id) {
-      return;
-    }
-    fetchDealDetails();
-  }, [updatedDeal, deal]);
-
-  useEffect(() => {
-    if (deal == null) {
-      return;
-    }
-    fetchDealDetails();
-  }, [deal]);
-
-  const fetchDealDetails = async () => {
-    try {
-      localDispatch(setIsFetching(true));
-      const response = await requestFetchDealDetails(deal.id);
-      localDispatch(setHistory(response.data));
-    } catch (error) {
-      onRequestError(error);
-    } finally {
-      localDispatch(setIsFetching(false));
-      if (containerRef.current != null) {
-        containerRef.current.scrollTop = containerRef.current.scrollHeight;
-      }
-    }
-  };
+    localDispatch(setHistory(details));
+  }, [details]);
 
   const renderItem = (historyItem, index, items) => {
-    if (deal == null) {
+    if (details == null) {
       return null;
     }
     switch (historyItem.itemType) {
       case ItemType.message: {
-        const { contact } = deal;
+        const { contact } = details.deal;
         const messages = items.filter(
           (item) => item.itemType === ItemType.message,
         );
@@ -112,7 +71,7 @@ const DealHistory = ({ deal, onPlayAudio }) => {
             isLastMessage={isLastMessage}
             isFirstMessage={isFirstOfType}
             message={historyItem}
-            contact={deal.contact}
+            contact={details.deal.contact}
             messageType={messageType}
           />
         );
@@ -157,11 +116,6 @@ const DealHistory = ({ deal, onPlayAudio }) => {
 
   return (
     <div ref={containerRef} className={styles.dealHistory}>
-      {isFetching && (
-        <div className='progress-bar-wrapper'>
-          <CircularProgress className='circular-progress-bar' />
-        </div>
-      )}
       <Box padding={1}>
         {Object.keys(items)
           .sort()

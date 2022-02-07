@@ -54,7 +54,7 @@ import reducer, {
 } from './servicesContainerSlice';
 
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../common/modals/ConfirmationModal'),
 );
 const CSVImportModal = dynamic(() =>
   import('app/components/common/CSVImportModal'),
@@ -349,7 +349,7 @@ const ServicesContainer = () => {
             <CircularProgress classes={{ root: 'circular-progress-bar' }} />
           </div>
         )}
-        {!isLoading && filteredServices.length === 0 && (
+        {categories.length > 0 && !isLoading && filteredServices.length === 0 && (
           <div className={styles['services-root__no-data-wrapper']}>
             <Typography classes={{ root: styles['no-data-label'] }}>
               {textForKey('no_services_message')}
@@ -360,6 +360,22 @@ const ServicesContainer = () => {
                 onClick={handleAddOrEditService}
               >
                 {textForKey('Add service')}
+                <IconPlus fill='#3A83DC' />
+              </span>
+            </Typography>
+          </div>
+        )}
+        {categories.length === 0 && !isLoading && (
+          <div className={styles['services-root__no-data-wrapper']}>
+            <Typography classes={{ root: styles['no-data-label'] }}>
+              {textForKey('no_categories_message')}
+              <span
+                role='button'
+                tabIndex={0}
+                className={styles['add-btn']}
+                onClick={handleCreateCategory}
+              >
+                {textForKey('Add category')}
                 <IconPlus fill='#3A83DC' />
               </span>
             </Typography>

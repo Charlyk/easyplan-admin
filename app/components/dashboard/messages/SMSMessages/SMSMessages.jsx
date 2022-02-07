@@ -21,7 +21,7 @@ import { initialState, actions, reducer } from './SMSMessages.reducer';
 import SMSMessagesHeader from './SMSMessagesHeader';
 
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../common/modals/ConfirmationModal'),
 );
 const CreateMessageDialog = dynamic(() => import('../CreateMessageDialog'));
 

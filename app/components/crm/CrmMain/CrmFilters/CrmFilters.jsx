@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useReducer, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { CircularProgress } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,19 +8,28 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDateRangePicker from 'app/components/common/EasyDateRangePicker';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import IconClose from 'app/components/icons/iconClose';
-import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import styles from './CrmFilters.module.scss';
-import reducer, {
+import {
+  clinicDoctorsSelector,
+  clinicManagementUsersSelector,
+  clinicServicesSelector,
+} from 'redux/selectors/appDataSelector';
+import { crmDealsStatesSelector } from 'redux/selectors/crmBoardSelector';
+import { DealShortcutType } from 'types';
+import {
   defaultRange,
   reminderOptions,
-  initialState,
   Shortcuts,
+} from './CrmFilters.constants';
+import styles from './CrmFilters.module.scss';
+import {
+  initialState,
   setPatient,
   setSelectedDoctors,
   setSelectedReminder,
@@ -28,61 +38,49 @@ import reducer, {
   setDateRange,
   setShowRangePicker,
   setSelectedStates,
-  setSelectedShortcut,
   resetState,
+  dispatchFetchCrmFilter,
+  dispatchUpdateCrmFilter,
+  setSelectedTags,
 } from './CrmFilters.reducer';
+import { crmFiltersSelector } from './CrmFilters.selector';
 
-const CrmFilters = ({
-  selectedParams,
-  currentClinic,
-  dealsStates,
-  onClose,
-  onShortcutSelected,
-  onSubmit,
-}) => {
-  const [
-    {
-      patient,
-      selectedDoctors,
-      selectedReminder,
-      selectedServices,
-      selectedUsers,
-      selectedDateRange,
-      showRangePicker,
-      selectedStates,
-      selectedShortcut,
-    },
-    localDispatch,
-  ] = useReducer(reducer, initialState);
-
+const CrmFilters = ({ onSubmit, onClose }) => {
+  const dispatch = useDispatch();
   const {
-    patient: initialPatient,
-    doctors: initialDoctors,
-    reminder: initialReminder,
-    shortcut: initialShortcut,
-    services: initialServices,
-    users: initialUsers,
-    dateRange: initialDateRange,
-    states: initialStates,
-  } = selectedParams;
+    loading,
+    patient,
+    allTags,
+    selectedTags,
+    selectedDoctors,
+    selectedReminder,
+    selectedServices,
+    selectedUsers,
+    selectedDateRange,
+    showRangePicker,
+    selectedStates,
+    selectedShortcut,
+  } = useSelector(crmFiltersSelector);
   const pickerRef = useRef(null);
-  const services = currentClinic.services;
+  const services = useSelector(clinicServicesSelector);
+  const dealsStates = useSelector(crmDealsStatesSelector);
+  const clinicDoctors = useSelector(clinicDoctorsSelector);
+  const clinicUsers = useSelector(clinicManagementUsersSelector);
+
   const doctors = useMemo(() => {
-    return currentClinic.users
-      .filter((item) => item.roleInClinic === Role.doctor)
-      .map((item) => ({
-        ...item,
-        name: item.fullName,
-      }));
-  }, [currentClinic]);
+    return clinicDoctors.map((item) => ({
+      ...item,
+      name: item.fullName,
+    }));
+  }, [clinicDoctors]);
+
   const users = useMemo(() => {
-    return currentClinic.users
-      .filter((item) => item.roleInClinic !== Role.doctor)
-      .map((item) => ({
-        ...item,
-        name: item.fullName,
-      }));
-  }, [currentClinic]);
+    return clinicUsers.map((item) => ({
+      ...item,
+      name: item.fullName,
+    }));
+  }, [clinicUsers]);
+
   const dateRangeText = useMemo(() => {
     if (selectedDateRange.length === 0) {
       return '';
@@ -94,63 +92,11 @@ const CrmFilters = ({
   }, [selectedDateRange]);
 
   useEffect(() => {
-    setupDealStates();
-  }, [initialStates, dealsStates]);
-
-  useEffect(() => {
-    localDispatch(setPatient(initialPatient));
-  }, [initialPatient]);
-
-  useEffect(() => {
-    localDispatch(
-      setSelectedDoctors(initialDoctors ?? initialState.selectedDoctors),
-    );
-  }, [initialDoctors]);
-
-  useEffect(() => {
-    localDispatch(
-      setSelectedReminder(initialReminder ?? initialState.selectedReminder),
-    );
-  }, [initialReminder]);
-
-  useEffect(() => {
-    localDispatch(
-      setSelectedServices(initialServices ?? initialState.selectedServices),
-    );
-  }, [initialServices]);
-
-  useEffect(() => {
-    localDispatch(setSelectedUsers(initialUsers ?? initialState.selectedUsers));
-  }, [initialUsers]);
-
-  useEffect(() => {
-    localDispatch(
-      setSelectedShortcut(initialShortcut ?? initialState.selectedShortcut),
-    );
-  }, [initialShortcut]);
-
-  useEffect(() => {
-    if (initialDateRange == null) {
-      return;
-    }
-    const [start, end] = initialDateRange;
-    const startDate = moment(start).toDate();
-    const endDate = moment(end).toDate();
-    localDispatch(setDateRange([startDate, endDate]));
-  }, [initialDateRange]);
-
-  const setupDealStates = () => {
-    if (initialStates == null || initialStates.length === 0) {
-      localDispatch(
-        setSelectedStates(dealsStates.filter((item) => item.visibleByDefault)),
-      );
-    } else {
-      localDispatch(setSelectedStates(initialStates));
-    }
-  };
+    dispatch(dispatchFetchCrmFilter());
+  }, []);
 
   const handlePatientChange = (selectedPatient) => {
-    localDispatch(setPatient(selectedPatient));
+    dispatch(setPatient(selectedPatient));
   };
 
   const handleCloseFilters = () => {
@@ -158,68 +104,47 @@ const CrmFilters = ({
   };
 
   const handleResetFilters = () => {
-    localDispatch(resetState());
-    setupDealStates();
-    // setTimeout(() => {
-    //   handleSubmitFilter();
-    // }, 300);
+    dispatch(resetState(dealsStates));
   };
 
+  const getNewFilter = (shortcut = selectedShortcut) => ({
+    startDate: selectedDateRange.length === 2 ? selectedDateRange[0] : null,
+    endDate: selectedDateRange.length === 2 ? selectedDateRange[1] : null,
+    patientId: patient ? patient.id : null,
+    states: selectedStates.map((state) => state.id),
+    doctors: selectedDoctors.some((item) => item.id === -1)
+      ? []
+      : selectedDoctors.map((doctor) => doctor.id),
+    responsible: selectedUsers.some((item) => item.id === -1)
+      ? []
+      : selectedUsers.map((user) => user.id),
+    services: selectedServices.some((item) => item.id === -1)
+      ? []
+      : selectedServices.map((service) => service.id),
+    reminder: selectedReminder.id,
+    shortcut: shortcut.id,
+    tags: selectedTags.some((item) => item.id === -1)
+      ? []
+      : selectedTags.map((tag) => tag.id),
+  });
+
   const handleSubmitFilter = () => {
-    const newFilter = {
-      patient: patient
-        ? {
-            id: patient.id,
-            name: patient.name,
-            label: patient.label,
-          }
-        : null,
-      doctors: selectedDoctors.some((item) => item.id === -1)
-        ? null
-        : selectedDoctors.map((doctor) => ({
-            id: doctor.id,
-            name: doctor.name,
-          })),
-      users: selectedUsers.some((item) => item.id === -1)
-        ? null
-        : selectedUsers.map((user) => ({ id: user.id, name: user.name })),
-      services: selectedServices.some((item) => item.id === -1)
-        ? null
-        : selectedServices.map((service) => ({
-            id: service.id,
-            name: service.name,
-          })),
-      reminder: selectedReminder,
-      dateRange: selectedDateRange.length === 0 ? null : selectedDateRange,
-      states: selectedStates.map((state) => ({
-        id: state.id,
-        name: state.name,
-      })),
-      shortcut: selectedShortcut,
-    };
-    if (newFilter.patient == null) delete newFilter.patient;
-    if (newFilter.doctors == null) delete newFilter.doctors;
-    if (newFilter.users == null) delete newFilter.users;
-    if (newFilter.services == null) delete newFilter.services;
-    if (newFilter.reminder == null) delete newFilter.reminder;
-    if (newFilter.dateRange == null) delete newFilter.dateRange;
-    if (newFilter.shortcut == null || newFilter.shortcut.id === 0)
-      delete newFilter.shortcut;
-    onSubmit?.(newFilter);
-    handleCloseFilters();
+    const newFilter = getNewFilter();
+    dispatch(dispatchUpdateCrmFilter(newFilter));
+    onSubmit?.();
   };
 
   const handleDoctorChange = (event) => {
     const newValue = event.target.value;
     const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
-      localDispatch(setSelectedDoctors(initialState.selectedDoctors));
+      dispatch(setSelectedDoctors(initialState.selectedDoctors));
       return;
     }
     const newDoctors = doctors.filter((doctor) =>
       newValue.some((item) => item === doctor.id),
     );
-    localDispatch(
+    dispatch(
       setSelectedDoctors(newDoctors.filter((doctor) => doctor.id !== -1)),
     );
   };
@@ -227,7 +152,7 @@ const CrmFilters = ({
   const handleStatesChanged = (event) => {
     const newValue = event.target.value;
     if (newValue.length === 0) {
-      localDispatch(
+      dispatch(
         setSelectedStates(dealsStates.filter((item) => item.visibleByDefault)),
       );
       return;
@@ -235,73 +160,81 @@ const CrmFilters = ({
     const newStates = dealsStates.filter((state) =>
       newValue.some((item) => item === state.id),
     );
-    localDispatch(
-      setSelectedStates(newStates.filter((state) => state.id !== -1)),
+    dispatch(setSelectedStates(newStates.filter((state) => state.id !== -1)));
+  };
+
+  const handleTagsChanged = (event) => {
+    const newValue = event.target.value;
+    const lastSelected = newValue[newValue.length - 1];
+    if (newValue.length === 0 || lastSelected === -1) {
+      dispatch(setSelectedTags(initialState.selectedTags));
+      return;
+    }
+    const newTags = allTags.filter((tag) =>
+      newValue.some((item) => item === tag.id),
     );
+    dispatch(setSelectedTags(newTags.filter((state) => state.id !== -1)));
   };
 
   const handleServicesChange = (event) => {
     const newValue = event.target.value;
     const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
-      localDispatch(setSelectedServices(initialState.selectedServices));
+      dispatch(setSelectedServices(initialState.selectedServices));
       return;
     }
     const newServices = services.filter((service) =>
       newValue.some((item) => item === service.id),
     );
-    localDispatch(
+    dispatch(
       setSelectedServices(newServices.filter((service) => service.id !== -1)),
     );
   };
 
   const handleCloseRangePicker = (event) => {
     event?.stopPropagation();
-    localDispatch(setShowRangePicker(false));
+    dispatch(setShowRangePicker(false));
   };
 
   const handleOpenRangePicker = (event) => {
     event?.stopPropagation();
-    localDispatch(setShowRangePicker(true));
+    dispatch(setShowRangePicker(true));
   };
 
   const handleDateChange = (data) => {
     const { startDate, endDate } = data.range1;
-    localDispatch(setDateRange([startDate, endDate]));
+    dispatch(setDateRange([startDate, endDate]));
   };
 
   const handleRemindersChange = (event) => {
     const newValue = event.target.value;
     if (newValue === 0) {
-      localDispatch(setSelectedReminder(null));
+      dispatch(setSelectedReminder(null));
       return;
     }
     const newReminder = reminderOptions.find(
       (reminder) => newValue === reminder.id,
     );
-    localDispatch(setSelectedReminder(newReminder));
+    dispatch(setSelectedReminder(newReminder));
   };
 
   const handleUsersChange = (event) => {
     const newValue = event.target.value;
     const lastSelected = newValue[newValue.length - 1];
     if (newValue.length === 0 || lastSelected === -1) {
-      localDispatch(setSelectedUsers(initialState.selectedUsers));
+      dispatch(setSelectedUsers(initialState.selectedUsers));
       return;
     }
     const newUsers = users.filter((user) =>
       newValue.some((item) => item === user.id),
     );
-    localDispatch(setSelectedUsers(newUsers.filter((user) => user.id !== -1)));
+    dispatch(setSelectedUsers(newUsers.filter((user) => user.id !== -1)));
   };
 
   const handleShortcutSelected = (shortcut) => {
-    if (shortcut.id === 0) {
-      onShortcutSelected?.(null);
-    } else {
-      onShortcutSelected?.({ id: shortcut.id, name: shortcut.name });
-    }
-    handleCloseFilters();
+    const newFilter = getNewFilter(shortcut);
+    dispatch(dispatchUpdateCrmFilter(newFilter));
+    onClose?.();
   };
 
   const isShortcutSelected = (shortcut) => {
@@ -323,127 +256,148 @@ const CrmFilters = ({
           </IconButton>
         </div>
         <div className={styles.container}>
-          <div className={styles.dataContainer}>
-            <div className={styles.shortcuts}>
-              {Shortcuts.map((item) => (
-                <Box
-                  key={item.id}
-                  className={clsx(styles.shortcut, {
-                    [styles.selected]: isShortcutSelected(item.id),
-                  })}
-                  onClick={() => handleShortcutSelected(item)}
-                >
-                  {item.type === 'reminder' ? (
-                    <div
-                      className={clsx(styles.reminderIndicator, {
-                        [styles.expired]: item.id === 6,
-                      })}
-                    />
-                  ) : null}
-                  <Typography className={styles.label}>{item.name}</Typography>
-                </Box>
-              ))}
-            </div>
-            <div className={styles.filters}>
-              <div className={styles.fieldsContainer}>
-                <EASTextField
-                  readOnly
-                  ref={pickerRef}
-                  value={dateRangeText}
-                  placeholder='01.01.2021 - 30.01.2021'
-                  fieldLabel={textForKey('Period')}
-                  containerClass={styles.simpleField}
-                  onClick={handleOpenRangePicker}
-                />
-
-                <PatientsSearchField
-                  selectedPatient={patient}
-                  containerClass={styles.simpleField}
-                  fieldLabel={textForKey('Patient')}
-                  onSelected={handlePatientChange}
-                />
-
-                <EASSelect
-                  multiple
-                  updateText
-                  rootClass={styles.simpleField}
-                  label={textForKey('States')}
-                  labelId='doctors-select-label'
-                  options={dealsStates}
-                  value={selectedStates?.map((item) => item.id) || []}
-                  onChange={handleStatesChanged}
-                />
-
-                <EASSelect
-                  multiple
-                  rootClass={styles.simpleField}
-                  label={textForKey('Doctors')}
-                  labelId='doctors-select-label'
-                  options={doctors}
-                  defaultOption={{
-                    id: -1,
-                    name: textForKey('All doctors'),
-                  }}
-                  value={selectedDoctors?.map((item) => item.id) || []}
-                  onChange={handleDoctorChange}
-                />
-
-                <EASSelect
-                  multiple
-                  rootClass={styles.simpleField}
-                  label={textForKey('Responsible')}
-                  labelId='doctors-select-label'
-                  options={users}
-                  defaultOption={{
-                    id: -1,
-                    name: textForKey('All users'),
-                  }}
-                  value={selectedUsers?.map((item) => item.id) || []}
-                  onChange={handleUsersChange}
-                />
-
-                <EASSelect
-                  multiple
-                  rootClass={styles.simpleField}
-                  label={textForKey('Services')}
-                  labelId='doctors-select-label'
-                  options={services}
-                  defaultOption={{
-                    id: -1,
-                    name: textForKey('All services'),
-                  }}
-                  value={selectedServices?.map((item) => item.id) || []}
-                  onChange={handleServicesChange}
-                />
-
-                <EASSelect
-                  rootClass={styles.simpleField}
-                  label={textForKey('crm_reminders')}
-                  labelId='reminder-select-label'
-                  options={reminderOptions}
-                  value={selectedReminder?.id ?? 0}
-                  onChange={handleRemindersChange}
-                />
+          {!loading.filter && (
+            <div className={styles.dataContainer}>
+              <div className={styles.shortcuts}>
+                {Shortcuts.map((item) => (
+                  <Box
+                    key={item.id}
+                    className={clsx(styles.shortcut, {
+                      [styles.selected]: isShortcutSelected(item.id),
+                    })}
+                    onClick={() => handleShortcutSelected(item)}
+                  >
+                    {item.type === 'reminder' ? (
+                      <div
+                        className={clsx(styles.reminderIndicator, {
+                          [styles.expired]:
+                            item.id === DealShortcutType.ExpiredTasks,
+                        })}
+                      />
+                    ) : null}
+                    <Typography className={styles.label}>
+                      {item.name}
+                    </Typography>
+                  </Box>
+                ))}
               </div>
-              <div className={styles.footer}>
-                <Button onClick={handleCloseFilters}>
-                  {textForKey('Close')}
-                </Button>
-                <Button
-                  className={styles.resetBtn}
-                  onClick={handleResetFilters}
-                >
-                  {textForKey('Reset')}
-                </Button>
-                <Button
-                  className={styles.applyBtn}
-                  onClick={handleSubmitFilter}
-                >
-                  {textForKey('Apply')}
-                </Button>
+              <div className={styles.filters}>
+                <div className={styles.fieldsContainer}>
+                  <EASTextField
+                    readOnly
+                    ref={pickerRef}
+                    value={dateRangeText}
+                    placeholder='01.01.2021 - 30.01.2021'
+                    fieldLabel={textForKey('Period')}
+                    containerClass={styles.simpleField}
+                    onClick={handleOpenRangePicker}
+                  />
+
+                  <PatientsSearchField
+                    canCreate={false}
+                    selectedPatient={patient}
+                    containerClass={styles.simpleField}
+                    fieldLabel={textForKey('Patient')}
+                    onSelected={handlePatientChange}
+                  />
+
+                  <EASSelect
+                    multiple
+                    updateText
+                    rootClass={styles.simpleField}
+                    label={textForKey('patient_tags')}
+                    labelId='tags-select-label'
+                    options={allTags}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('all_tags'),
+                    }}
+                    value={selectedTags?.map((item) => item.id) || []}
+                    onChange={handleTagsChanged}
+                  />
+
+                  <EASSelect
+                    multiple
+                    updateText
+                    rootClass={styles.simpleField}
+                    label={textForKey('visible_states')}
+                    labelId='states-select-label'
+                    options={dealsStates}
+                    value={selectedStates?.map((item) => item.id) || []}
+                    onChange={handleStatesChanged}
+                  />
+
+                  <EASSelect
+                    multiple
+                    rootClass={styles.simpleField}
+                    label={textForKey('Doctors')}
+                    labelId='doctors-select-label'
+                    options={doctors}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('All doctors'),
+                    }}
+                    value={selectedDoctors?.map((item) => item.id) || []}
+                    onChange={handleDoctorChange}
+                  />
+
+                  <EASSelect
+                    multiple
+                    rootClass={styles.simpleField}
+                    label={textForKey('Responsible')}
+                    labelId='doctors-select-label'
+                    options={users}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('All users'),
+                    }}
+                    value={selectedUsers?.map((item) => item.id) || []}
+                    onChange={handleUsersChange}
+                  />
+
+                  <EASSelect
+                    multiple
+                    rootClass={styles.simpleField}
+                    label={textForKey('Services')}
+                    labelId='doctors-select-label'
+                    options={services}
+                    defaultOption={{
+                      id: -1,
+                      name: textForKey('All services'),
+                    }}
+                    value={selectedServices?.map((item) => item.id) || []}
+                    onChange={handleServicesChange}
+                  />
+
+                  <EASSelect
+                    rootClass={styles.simpleField}
+                    label={textForKey('crm_reminders')}
+                    labelId='reminder-select-label'
+                    options={reminderOptions}
+                    value={selectedReminder?.id ?? 0}
+                    onChange={handleRemindersChange}
+                  />
+                </div>
+                <div className={styles.footer}>
+                  <Button onClick={handleCloseFilters}>
+                    {textForKey('Close')}
+                  </Button>
+                  <Button
+                    className={styles.resetBtn}
+                    onClick={handleResetFilters}
+                  >
+                    {textForKey('Reset')}
+                  </Button>
+                  <Button
+                    className={styles.applyBtn}
+                    onClick={handleSubmitFilter}
+                  >
+                    {textForKey('Apply')}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <EasyDateRangePicker
             open={showRangePicker}
@@ -455,6 +409,11 @@ const CrmFilters = ({
               endDate: selectedDateRange[1] ?? defaultRange[1],
             }}
           />
+          {loading.filter && (
+            <div className='progress-bar-wrapper'>
+              <CircularProgress className='circular-progress-bar' />
+            </div>
+          )}
         </div>
       </Paper>
     </Box>

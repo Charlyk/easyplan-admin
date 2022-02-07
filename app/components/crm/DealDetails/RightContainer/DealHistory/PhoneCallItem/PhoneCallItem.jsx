@@ -35,9 +35,11 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
     if (call == null) {
       return '-';
     }
-    return textForKey('call_direction_with_time')
-      .replace('{1}', textForKey(`call_${call.direction}`))
-      .replace('{2}', formatSeconds(call.duration));
+    return textForKey(
+      'call_direction_with_time',
+      textForKey(`call_${call.direction}`),
+      formatSeconds(call.duration),
+    );
   }, [call]);
 
   const callIcon = useMemo(() => {
@@ -60,11 +62,15 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
       return;
     }
     const recordUrl = getCallRecordUrl(call);
-    const result = await fetch(recordUrl, { method: 'HEAD' });
-    if (result.ok) {
+    try {
+      const result = await fetch(recordUrl, { method: 'HEAD' });
+      if (result.ok) {
+        window.open(recordUrl, '_blank');
+      } else if (recordUrl.endsWith('.wav')) {
+        window.open(recordUrl.replace('.wav', '.ogg'), '_blank');
+      }
+    } catch (error) {
       window.open(recordUrl, '_blank');
-    } else if (recordUrl.endsWith('.wav')) {
-      window.open(recordUrl.replace('.wav', '.ogg'), '_blank');
     }
   };
 
@@ -81,7 +87,11 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
             {directionAndTime}
           </Typography>
           <Button
-            disabled={call?.fileUrl == null || call.status !== 'Answered'}
+            disabled={
+              call?.fileUrl == null ||
+              call.status !== 'Answered' ||
+              call.duration === 0
+            }
             variant='outlined'
             onClick={handlePlayAudio}
             classes={{
@@ -94,7 +104,11 @@ const PhoneCallItem = ({ call, onPlayAudio }) => {
             {textForKey('call_listen')}
           </Button>
           <Button
-            disabled={call?.fileUrl == null || call.status !== 'Answered'}
+            disabled={
+              call?.fileUrl == null ||
+              call.status !== 'Answered' ||
+              call.duration === 0
+            }
             variant='text'
             onClick={handleDownloadRecord}
             classes={{

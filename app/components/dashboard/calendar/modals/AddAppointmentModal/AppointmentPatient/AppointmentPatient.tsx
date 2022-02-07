@@ -152,7 +152,7 @@ const AppointmentPatient: React.FC<AppointmentPatientProps> = ({
             label={textForKey('patient_source')}
             labelId='patient-source-select'
             options={PatientSources}
-            value={'Unknown'}
+            value={patientData.source}
             rootClass={styles.simpleField}
             onChange={handlePatientSourceChange}
           />

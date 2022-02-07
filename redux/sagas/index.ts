@@ -29,6 +29,17 @@ import {
   markNotificationAsReadWatcher,
   clinicSettingsWatcher,
   updateConfirmationDoctorWatcher,
+  moizvonkiConnectionWatcher,
+  updateMoizvonkiConnectionWatcher,
+  disconnectMoizvonkiWatcher,
+  fetchCrmFilterWatcher,
+  updateCrmFilterWatcher,
+  fetchGroupedDealsWatcher,
+  updateDealStateWatcher,
+  createNewReminderWatcher,
+  createDealStateWatcher,
+  deleteDealStateWatcher,
+  dealDetailsWatcher,
 } from './handlers';
 
 export default function* rootSaga() {
@@ -62,5 +73,16 @@ export default function* rootSaga() {
     markNotificationAsReadWatcher(),
     clinicSettingsWatcher(),
     updateConfirmationDoctorWatcher(),
+    moizvonkiConnectionWatcher(),
+    updateMoizvonkiConnectionWatcher(),
+    disconnectMoizvonkiWatcher(),
+    fetchCrmFilterWatcher(),
+    updateCrmFilterWatcher(),
+    fetchGroupedDealsWatcher(),
+    updateDealStateWatcher(),
+    createNewReminderWatcher(),
+    createDealStateWatcher(),
+    deleteDealStateWatcher(),
+    dealDetailsWatcher(),
   ]);
 }

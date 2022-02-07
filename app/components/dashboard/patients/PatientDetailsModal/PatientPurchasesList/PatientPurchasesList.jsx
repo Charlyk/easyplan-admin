@@ -14,7 +14,6 @@ import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import ConfirmationModal from 'app/components/common/modals/ConfirmationModal';
 import IconPrint from 'app/components/icons/iconPrint';
 import IconRefresh from 'app/components/icons/iconRefresh';
 import IconTrash from 'app/components/icons/iconTrash';
@@ -26,6 +25,7 @@ import {
   isManagerSelector,
 } from 'redux/selectors/appDataSelector';
 import { updateInvoiceSelector } from 'redux/selectors/invoicesSelector';
+import ConfirmationModal from '../../../../common/modals/ConfirmationModal';
 import styles from './PatientPurchasesList.module.scss';
 import {
   dispatchFetchPatientPurchases,

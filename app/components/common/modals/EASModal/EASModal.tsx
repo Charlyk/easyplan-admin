@@ -14,7 +14,7 @@ import styles from './EASModal.module.scss';
 interface Props {
   open: boolean;
   title: string;
-  size: 'small' | 'medium' | 'large' | 'unset';
+  size?: 'small' | 'medium' | 'large' | 'unset';
   destroyBtnText?: string;
   primaryBtnText?: string;
   secondaryBtnText?: string;
@@ -26,6 +26,7 @@ interface Props {
   paperClass?: string;
   children?: any;
   isPositiveDisabled?: any;
+  isDestroyDisabled?: boolean | null;
   note?: boolean | string;
   onClose: () => void;
   onDestroyClick?: () => void;
@@ -37,13 +38,14 @@ interface Props {
 const EASModal: React.FC<Props> = ({
   open,
   title,
-  size,
+  size = 'small',
   destroyBtnText = textForKey('Delete'),
   primaryBtnText = textForKey('Save'),
   secondaryBtnText = textForKey('Close'),
   hidePositiveBtn,
   isPositiveLoading,
   isPositiveDisabled,
+  isDestroyDisabled = null,
   bodyStyle,
   note,
   children,
@@ -137,7 +139,11 @@ const EASModal: React.FC<Props> = ({
           {!isPositiveLoading && showDestroyBtn && (
             <Button
               onClick={handleDestroyClick}
-              disabled={isPositiveDisabled}
+              disabled={
+                isDestroyDisabled == null
+                  ? isPositiveDisabled
+                  : isDestroyDisabled
+              }
               variant='text'
               classes={{
                 root: styles.destroyButton,

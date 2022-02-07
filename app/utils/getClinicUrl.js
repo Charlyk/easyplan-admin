@@ -8,7 +8,7 @@ const getClinicUrl = (clinic, authToken) => {
   const [_, domain, location, location2] = host.split('.');
   const queryString = new URLSearchParams({
     token: authToken,
-    clinicId: clinic.clinicId,
+    clinicId: clinic.clinicId ?? clinic.id,
   });
   const clinicDomain = clinic.clinicDomain ?? clinic.domainName;
   switch (environment) {

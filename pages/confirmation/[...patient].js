@@ -14,7 +14,6 @@ import { useRouter } from 'next/router';
 import EASImage from 'app/components/common/EASImage';
 import EASTextarea from 'app/components/common/EASTextarea';
 import LoadingButton from 'app/components/common/LoadingButton';
-import EASModal from 'app/components/common/modals/EASModal';
 import AppLogoBlue from 'app/components/icons/appLogoBlue';
 import NotificationsContext from 'app/context/notificationsContext';
 import styles from 'app/styles/ScheduleConfirmation.module.scss';
@@ -29,6 +28,7 @@ import {
   fetchScheduleConfirmationInfo,
   requestConfirmSchedule,
 } from 'middleware/api/schedules';
+import EASModal from '../../app/components/common/modals/EASModal';
 
 const Confirmation = ({ schedule, scheduleId, patientId }) => {
   const router = useRouter();

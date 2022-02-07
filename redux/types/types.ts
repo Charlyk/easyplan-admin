@@ -21,6 +21,14 @@ import {
   PatientVisit,
   AppNotification,
   ClinicSettings,
+  MoizvonkiConnection,
+  CrmFilterOption,
+  CrmFilterShortcut,
+  CrmFilterPatient,
+  GroupedDeals,
+  PatientTag,
+  DealDetailsView,
+  CrmDealDetailsType,
 } from 'types';
 
 export interface CalendarDataState {
@@ -87,6 +95,7 @@ export interface AppDataState {
   isUpdatingProfile: boolean;
   isUpdatingClinic: boolean;
   isAppInitialized?: boolean;
+  isEmailChanged: boolean;
 }
 
 export interface CabinetsDataState {
@@ -150,7 +159,12 @@ export interface ExchangeRatesState {
 
 export interface CrmBoardState {
   states: DealStateView[];
+  userStates: DealStateView[];
+  deals: GroupedDeals[];
+  dealDetails?: CrmDealDetailsType | null;
   remindersCount: number;
+  isFetchingDeals: boolean;
+  isFetchingDetails: boolean;
   isFetchingStates: boolean;
   isFetchingRemindersCount: boolean;
 }
@@ -201,6 +215,33 @@ export interface ClinicSettingsState {
   settings: ClinicSettings | null;
 }
 
+export interface MoizvonkiConnectionState {
+  isLoading: boolean;
+  connection?: MoizvonkiConnection | null;
+}
+
+export interface CrmFiltersState {
+  loading: { patients: boolean; filter: boolean };
+  patient?: CrmFilterPatient | null;
+  selectedDoctors: CrmFilterOption[];
+  selectedServices: CrmFilterOption[];
+  selectedUsers: CrmFilterOption[];
+  selectedStates: CrmFilterOption[];
+  selectedDateRange: [Date, Date] | [];
+  selectedReminder?: CrmFilterOption | null;
+  selectedShortcut: CrmFilterShortcut;
+  selectedTags: CrmFilterOption[];
+  allTags: PatientTag[];
+  showRangePicker: boolean;
+}
+
+export interface CreateReminderModalState {
+  open: boolean;
+  isLoading: boolean;
+  deal: { id: number } | null;
+  searchType: 'Deal' | 'Schedule';
+}
+
 export interface ReduxState {
   updateCategories: boolean;
   updateServices: boolean;
@@ -246,4 +287,7 @@ export interface ReduxState {
   changeLogModal: ChangeLogModalState;
   appNotification: AppNotificationState;
   clinicSettings: ClinicSettingsState;
+  moizvonkiConnection: MoizvonkiConnectionState;
+  crmFilters: CrmFiltersState;
+  createReminderModal: CreateReminderModalState;
 }

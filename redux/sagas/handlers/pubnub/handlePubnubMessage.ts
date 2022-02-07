@@ -15,6 +15,7 @@ import {
   currentUserSelector,
   userClinicSelector,
 } from 'redux/selectors/appDataSelector';
+import { dealDetailsSelector } from 'redux/selectors/crmBoardSelector';
 import { scheduleDetailsSelector } from 'redux/selectors/doctorScheduleDetailsSelector';
 import { calendarScheduleDetailsSelector } from 'redux/selectors/scheduleSelector';
 import {
@@ -29,8 +30,14 @@ import {
 } from 'redux/slices/calendarData';
 import { setUserClinicAccessChange } from 'redux/slices/clinicDataSlice';
 import {
+  deleteDeal,
+  movedDeal,
+  addNewDeal,
+  updateDeal,
+  dispatchFetchDealDetails,
+} from 'redux/slices/crmBoardSlice';
+import {
   setDeletedDeal,
-  setNewDeal,
   setNewReminder,
   setUpdatedDeal,
   setUpdatedReminder,
@@ -42,10 +49,11 @@ import {
 } from 'redux/slices/mainReduxSlice';
 import { handleRemoteMessageReceived } from 'redux/slices/pubnubMessagesSlice';
 import {
-  DealView,
+  CrmDealListItemType,
   MessageAction,
   PatientDebt,
   PubnubMessage,
+  ReminderType,
   Schedule,
   ShortInvoice,
 } from 'types';
@@ -121,6 +129,9 @@ export function* handlePubnubMessage(event: PayloadAction<PubnubMessage>) {
       case MessageAction.UserCanCreateScheduleChanged:
         yield call(handleUserCanCreateScheduleChanged, payload);
         break;
+      case MessageAction.DealStateChanged:
+        yield call(handleDealStateChanged, payload);
+        break;
     }
   } catch (error) {
     console.error('error receiving message', error);
@@ -191,35 +202,52 @@ function handleUpdateMessageStatus(payload: any) {
   console.warn('handleUpdateMessageStatus', 'Not handled', payload);
 }
 
-function* handleNewDealCreated(payload: DealView) {
+function* handleNewDealCreated(payload: CrmDealListItemType) {
   if (payload == null) {
     return;
   }
-  yield put(setNewDeal(payload));
+  yield put(addNewDeal(payload));
 }
 
-function* handleDealUpdated(payload: DealView) {
+function* handleDealUpdated(payload: CrmDealListItemType) {
   if (payload == null) {
     return;
   }
-  yield put(setUpdatedDeal(payload));
+  const dealDetails = yield select(dealDetailsSelector);
+  if (dealDetails?.deal.id === payload.id) {
+    yield put(dispatchFetchDealDetails(payload.id));
+  }
+  yield put(updateDeal(payload));
+  // yield put(setUpdatedDeal(payload));
 }
 
-function* handleDealDeleted(payload: DealView) {
+function* handleDealDeleted(payload: CrmDealListItemType) {
   if (payload == null) {
     return;
   }
+  yield put(deleteDeal(payload));
   yield put(setDeletedDeal(payload));
 }
 
-function* handleReminderCreated(payload: any) {
+function* handleDealStateChanged(payload: {
+  initial: CrmDealListItemType;
+  current: CrmDealListItemType;
+}) {
+  if (payload == null) {
+    return;
+  }
+  yield put(movedDeal(payload));
+  yield put(setUpdatedDeal(payload.current));
+}
+
+function* handleReminderCreated(payload: ReminderType) {
   if (payload == null) {
     return;
   }
   yield put(setNewReminder(payload));
 }
 
-function* handleReminderUpdated(payload: any) {
+function* handleReminderUpdated(payload: ReminderType) {
   if (payload == null) {
     return;
   }

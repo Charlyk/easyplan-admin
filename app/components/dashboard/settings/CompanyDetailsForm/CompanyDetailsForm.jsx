@@ -16,7 +16,7 @@ import NotificationsContext from 'app/context/notificationsContext';
 import { EmailRegex, HeaderKeys } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
-import onRequestError from 'app/utils/onRequestError';
+import onRequestFailed from 'app/utils/onRequestFailed';
 import {
   clinicTimeZones,
   deleteClinic,
@@ -41,7 +41,7 @@ import reducer, {
 } from './CompanyDetailsForm.reducer';
 
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../common/modals/ConfirmationModal'),
 );
 
 const CompanyDetailsForm = ({ countries }) => {
@@ -101,7 +101,7 @@ const CompanyDetailsForm = ({ countries }) => {
       const response = await clinicTimeZones();
       localDispatch(setTimeZones(response.data));
     } catch (error) {
-      onRequestError(error);
+      onRequestFailed(error, toast);
       localDispatch(setIsSaving(false));
     }
   };
@@ -179,7 +179,7 @@ const CompanyDetailsForm = ({ countries }) => {
       await deleteClinic();
       localDispatch(openDeleteRequestSent());
     } catch (error) {
-      onRequestError(error);
+      onRequestFailed(error, toast);
     } finally {
       localDispatch(setIsDeleting(false));
     }
@@ -237,7 +237,7 @@ const CompanyDetailsForm = ({ countries }) => {
       dispatch(setCurrentClinic(response.data));
       toast.success(textForKey('Saved successfully'));
     } catch (error) {
-      onRequestError(error);
+      onRequestFailed(error, toast);
     } finally {
       localDispatch(setIsSaving(false));
     }

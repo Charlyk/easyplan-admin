@@ -18,16 +18,15 @@ import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
-import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField';
 import NotificationsContext from 'app/context/notificationsContext';
-import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
 import {
   getAvailableHours,
   getScheduleDetails,
   postSchedule,
 } from 'middleware/api/schedules';
+
 import {
   clinicCabinetsSelector,
   clinicServicesSelector,
@@ -35,6 +34,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { updateAppointmentsList } from 'redux/slices/mainReduxSlice';
 import { ScheduleStatus } from 'types';
+import EASModal from '../../../../common/modals/EASModal';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
@@ -77,6 +77,7 @@ const AddAppointmentModal = ({
   const activeServices = useSelector(clinicServicesSelector);
   const clinicCabinets = useSelector(clinicCabinetsSelector);
   const clinicDoctors = useSelector(doctorsForScheduleSelector);
+
   const [
     {
       patient,
@@ -126,6 +127,7 @@ const AddAppointmentModal = ({
   // map cabinets for autocomplete fields
   const cabinets = useMemo(() => {
     if (doctor == null || doctor.cabinets?.length === 0) {
+      localDispatch(setSelectedCabinetInDoctorMode(null));
       return [];
     } else {
       return orderBy(
@@ -138,9 +140,7 @@ const AddAppointmentModal = ({
 
   // check if there are any cabinets
   const shouldSelectCabinet =
-    selectedCabinet == null &&
-    schedule?.cabinet == null &&
-    doctor?.cabinets?.length > 0;
+    cabinet == null && schedule?.cabinet == null && cabinets.length > 0;
 
   // check if data is fetching
   const isLoading = isFetchingHours || isCreatingSchedule;
@@ -165,14 +165,14 @@ const AddAppointmentModal = ({
     }
 
     // filter services to show only provided by selected doctor service services
-    const services = doctor.services.filter((service) =>
+    const services = doctor?.services?.filter((service) =>
       activeServices.some(
         (activeService) => activeService.id === service.serviceId,
       ),
     );
 
     // map services for autocomplete field
-    const mappedServices = services.map((service) => ({
+    const mappedServices = services?.map((service) => ({
       ...service,
       label: service.name,
     }));
@@ -257,6 +257,13 @@ const AddAppointmentModal = ({
       localDispatch(setEndTime(selectedEndTime || ''));
     }
   }, [selectedStartTime, selectedEndTime]);
+
+  const isDoctorInCabinet = (doctor) => {
+    if (cabinet == null) {
+      return false;
+    }
+    return doctor.cabinets.some((item) => item.id === cabinet.id);
+  };
 
   const mappedTime = (timeList) => {
     return timeList.map((item) => ({
@@ -348,6 +355,9 @@ const AddAppointmentModal = ({
   };
 
   const handleDoctorChange = (event, selectedDoctor) => {
+    if (!isDoctorInCabinet(selectedDoctor)) {
+      localDispatch(setSelectedCabinetInDoctorMode(null));
+    }
     localDispatch(setDoctor(selectedDoctor));
   };
 
@@ -493,6 +503,7 @@ const AddAppointmentModal = ({
       className={styles['add-appointment-root']}
       paperClass={styles.modalPaper}
       title={modalTitle}
+      note={textForKey('fill_required_fields')}
       onBackdropClick={() => null}
       isPositiveDisabled={!isFormValid() || isLoading}
       onPrimaryClick={handleCreateSchedule}
@@ -502,7 +513,7 @@ const AddAppointmentModal = ({
         <Box display='flex' flexDirection='column' padding='16px'>
           <PatientsSearchField
             onCreatePatient={handleOpenCreateModal}
-            fieldLabel={textForKey('Patient')}
+            fieldLabel={`${textForKey('Patient')} (${textForKey('required')})`}
             selectedPatient={patient}
             onSelected={handleExistentPatientChange}
           />
@@ -513,7 +524,7 @@ const AddAppointmentModal = ({
               containerClass={styles.simpleField}
               options={doctors}
               value={doctor}
-              fieldLabel={textForKey('Doctor')}
+              fieldLabel={`${textForKey('Doctor')} (${textForKey('required')})`}
               placeholder={textForKey('Enter doctor name or phone')}
               onChange={handleDoctorChange}
             />
@@ -525,7 +536,9 @@ const AddAppointmentModal = ({
               containerClass={styles.simpleField}
               options={cabinets}
               value={cabinet}
-              fieldLabel={textForKey('add_appointment_cabinet')}
+              fieldLabel={`${textForKey(
+                'add_appointment_cabinet',
+              )} (${textForKey('required')})`}
               placeholder={textForKey('type_to_search')}
               onChange={handleCabinetChange}
             />
@@ -537,7 +550,7 @@ const AddAppointmentModal = ({
             containerClass={styles.simpleField}
             options={mappedServices}
             value={service}
-            fieldLabel={textForKey('Service')}
+            fieldLabel={`${textForKey('Service')} (${textForKey('required')})`}
             placeholder={textForKey('Enter service name')}
             onChange={handleServiceChange}
           />
@@ -546,7 +559,7 @@ const AddAppointmentModal = ({
             readOnly
             ref={datePickerAnchor}
             containerClass={styles.simpleField}
-            fieldLabel={textForKey('Date')}
+            fieldLabel={`${textForKey('Date')} (${textForKey('required')})`}
             value={moment(appointmentDate).format('DD MMMM YYYY')}
             onPointerUp={handleDateFieldClick}
           />
@@ -556,7 +569,7 @@ const AddAppointmentModal = ({
               disabled={availableStartTime.length === 0}
               rootClass={styles.timeSelect}
               value={startTime || ''}
-              label={textForKey('Start time')}
+              label={`${textForKey('Start time')} (${textForKey('required')})`}
               labelId='start-time-select'
               options={mappedTime(availableStartTime)}
               onChange={handleStartHourChange}
@@ -565,7 +578,7 @@ const AddAppointmentModal = ({
               disabled={availableEndTime.length === 0}
               rootClass={styles.timeSelect}
               value={endTime || ''}
-              label={textForKey('End time')}
+              label={`${textForKey('End time')} (${textForKey('required')})`}
               labelId='start-time-select'
               options={mappedTime(availableEndTime)}
               onChange={handleEndHourChange}
@@ -606,7 +619,7 @@ const AddAppointmentModal = ({
   );
 };
 
-export default React.memo(AddAppointmentModal, areComponentPropsEqual);
+export default AddAppointmentModal;
 
 AddAppointmentModal.propTypes = {
   open: PropTypes.bool,

@@ -92,8 +92,16 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
       return { ...item, price: 0 };
     });
 
+    const newWorkDays = userData.workdays.map((day) => ({
+      ...day,
+      startHour:
+        day.startHour === 'none' || day.isDayOff ? null : day.startHour,
+      endHour: day.endHour === 'none' || day.isDayOff ? null : day.endHour,
+    }));
+
     const requestBody = {
       ...userData,
+      workdays: newWorkDays,
       services: newServices,
       braces: newBraces,
     };

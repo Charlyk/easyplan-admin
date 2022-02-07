@@ -2,6 +2,9 @@ import moment from 'moment-timezone';
 import { PatientCallRecord } from 'types';
 
 const getCallRecordUrl = (record: PatientCallRecord) => {
+  if (record.fileUrl.startsWith('http')) {
+    return record.fileUrl;
+  }
   const recordDate = moment(record.created);
   const year = recordDate.format('YYYY');
   const month = recordDate.format('MM');

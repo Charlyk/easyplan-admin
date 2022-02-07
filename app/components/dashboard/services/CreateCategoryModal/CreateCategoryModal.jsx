@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import EASTextField from 'app/components/common/EASTextField';
-import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import {
   requestCreateCategory,
   requestEditCategory,
 } from 'middleware/api/categories';
+import EASModal from '../../../common/modals/EASModal';
 import styles from './CreateCategoryModal.module.scss';
 
 const CreateCategoryModal = (props) => {
@@ -51,8 +51,11 @@ const CreateCategoryModal = (props) => {
   };
 
   const createNewCategory = async () => {
+    if (categoryName.trim().length === 0) {
+      return;
+    }
     try {
-      const response = await requestCreateCategory(categoryName);
+      const response = await requestCreateCategory(categoryName.trim());
       setCategoryName('');
       onSaved(response.data);
     } catch (error) {
@@ -91,7 +94,7 @@ const CreateCategoryModal = (props) => {
       onPrimaryClick={handleCategorySave}
       isPositiveLoading={isLoading}
       destroyBtnText={destroyBtnText}
-      isPositiveDisabled={isLoading}
+      isPositiveDisabled={isLoading || categoryName.trim().length === 0}
       onDestroyClick={category === null ? null : handleOnDelete}
     >
       <form style={{ padding: '16px' }} onSubmit={handleCategorySave}>

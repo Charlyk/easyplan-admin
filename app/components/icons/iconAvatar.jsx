@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function IconAvatar({ onClick }) {
+function IconAvatar({ onClick = null }) {
   return (
     <svg
       width='64'
@@ -8,7 +9,7 @@ function IconAvatar({ onClick }) {
       viewBox='0 0 64 64'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
-      onPointerUp={onClick}
+      onClick={onClick}
     >
       <path
         fillRule='evenodd'
@@ -37,3 +38,11 @@ function IconAvatar({ onClick }) {
 }
 
 export default React.memo(IconAvatar);
+
+IconAvatar.propTypes = {
+  onClick: PropTypes.func,
+};
+
+IconAvatar.defaultProps = {
+  onClick: () => null,
+};

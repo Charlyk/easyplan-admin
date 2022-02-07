@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
 import EASTextarea from 'app/components/common/EASTextarea';
-import EASModal from 'app/components/common/modals/EASModal';
 import { getAppLanguage, textForKey } from 'app/utils/localization';
+import EASModal from '../../../../common/modals/EASModal';
 import styles from './CreateHolidayModal.module.scss';
 
 const initialRange = {

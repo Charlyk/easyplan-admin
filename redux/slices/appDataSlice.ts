@@ -82,6 +82,9 @@ const appDataSlice = createSlice({
     updateUserProfile(state, _action: PayloadAction<UpdateProfileRequest>) {
       state.isUpdatingProfile = true;
     },
+    updateIsEmailChanged(state, action: PayloadAction<boolean>) {
+      state.isEmailChanged = action.payload;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -107,6 +110,7 @@ export const {
   dispatchFetchAppData,
   setCurrentEntities,
   dispatchChangeDoctorCalendarOrder,
+  updateIsEmailChanged,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;

@@ -55,7 +55,7 @@ const SettingsMenu = ({ onSelect, currentOption, selectedClinic }) => {
           )}
         >
           <span className={styles['item-title']}>
-            {textForKey('CRM Settings')}
+            {textForKey('crm_settings')}
           </span>
           <div className={styles['next-arrow']}>
             {isSelected('crmSettings') && <IconNext />}

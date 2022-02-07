@@ -1,9 +1,47 @@
 .pagesListModal {
   .menuItem {
     justify-content: space-between;
+    display: flex;
+    align-items: center;
+
+    .itemRoot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .pagePicture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
   }
 
   .selected {
     background-color: transparent !important;
+  }
+
+  .pageContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  .instagramContainer {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+
+    svg {
+      fill: #3a83dc;
+      margin-right: 10px;
+    }
+
+    span {
+      margin-right: 5px !important;
+      width: 20px !important;
+      height: 20px !important;
+    }
   }
 }

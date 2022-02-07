@@ -9,9 +9,11 @@
   position: relative;
   cursor: pointer;
   background-color: white;
+  overflow: hidden;
 
   .backgroundHolder {
     position: absolute;
+    border-radius: 4px;
     top: 0;
     right: 0;
     bottom: 0;

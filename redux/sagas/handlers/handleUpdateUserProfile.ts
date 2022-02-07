@@ -4,6 +4,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { textForKey } from 'app/utils/localization';
 import {
   updateUserProfile,
+  updateIsEmailChanged,
   setCurrentUser,
   setAuthToken,
   setIsUpdatingProfile,
@@ -24,6 +25,7 @@ export function* handleUpdateUserProfile(
     yield put(setCurrentUser(data.user));
     yield put(setAuthToken(data.token));
     yield put(showSuccessNotification(textForKey('Saved successfully')));
+    yield put(updateIsEmailChanged(false));
   } catch (error) {
     if (error.response != null) {
       const data = error.response?.data;

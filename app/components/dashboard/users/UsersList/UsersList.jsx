@@ -48,7 +48,7 @@ const UserItem = dynamic(() => import('../UserItem'));
 const UsersHeader = dynamic(() => import('../UserHeader'));
 const UserDetailsModal = dynamic(() => import('../UserDetailsModal'));
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../common/modals/ConfirmationModal'),
 );
 const InviteUserModal = dynamic(() =>
   import('app/components/common/modals/InviteUserModal'),
@@ -331,8 +331,8 @@ const UsersList = () => {
       <ConfirmationModal
         show={Boolean(invitationToDelete)}
         onClose={closeDeleteInvitationDialog}
-        title={textForKey('Delete invitation')}
-        message={textForKey('Are you sure you want to delete this invitation?')}
+        title={textForKey('delete_invitation')}
+        message={textForKey('delete_invitation_message')}
         onConfirm={handleDeleteInvitationConfirm}
         isLoading={isDeleting}
       />

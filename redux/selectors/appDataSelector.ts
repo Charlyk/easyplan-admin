@@ -27,6 +27,11 @@ export const clinicCabinetsSelector = createSelector(
   (currentClinic) => currentClinic?.cabinets ?? [],
 );
 
+export const clinicFacebookPagesSelector = createSelector(
+  currentClinicSelector,
+  (currentClinic) => currentClinic.facebookPages ?? [],
+);
+
 export const hasCabinetsSelector = createSelector(
   currentClinicSelector,
   (currentClinic) => currentClinic?.cabinets?.length > 0,
@@ -37,6 +42,14 @@ export const clinicDoctorsSelector = createSelector(
   (currentClinic) =>
     (currentClinic?.users ?? []).filter(
       (user) => user.roleInClinic === Role.doctor,
+    ),
+);
+
+export const clinicManagementUsersSelector = createSelector(
+  currentClinicSelector,
+  (currentClinic) =>
+    (currentClinic?.users ?? []).filter(
+      (item) => item.roleInClinic !== Role.doctor,
     ),
 );
 
@@ -159,4 +172,9 @@ export const clinicExchangeRatesSelector = createSelector(
 export const isUpdatingProfileSelector = createSelector(
   appDataSelector,
   (data) => data.isUpdatingProfile,
+);
+
+export const isEmailChangedSelector = createSelector(
+  appDataSelector,
+  (data) => data.isEmailChanged,
 );

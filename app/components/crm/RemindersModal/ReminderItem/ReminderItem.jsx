@@ -2,19 +2,24 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import ReminderIcon from '@material-ui/icons/AccessTime';
 import clsx from 'clsx';
+import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import EASTextarea from 'app/components/common/EASTextarea';
 import LoadingButton from 'app/components/common/LoadingButton';
 import getReminderTexts from 'app/utils/getReminderTexts';
 import { textForKey } from 'app/utils/localization';
-import { requestCompleteReminder } from 'middleware/api/crm';
 import onRequestError from 'app/utils/onRequestError';
+import { requestCompleteReminder } from 'middleware/api/crm';
+import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import styles from './ReminderItem.module.scss';
 
 const ReminderItem = ({ reminder }) => {
+  const dispatch = useDispatch();
   const [resultComment, setResultComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { isToday, timeText, assigneeName } = getReminderTexts(reminder);
+  const { isToday, timeText, assigneeName, createdByName, contactName } =
+    getReminderTexts(reminder);
 
   const handleCompleteReminder = async () => {
     if (isLoading || resultComment.trim().length === 0) {
@@ -28,6 +33,17 @@ const ReminderItem = ({ reminder }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePatientClick = (event) => {
+    event.preventDefault();
+    dispatch(
+      setPatientDetails({
+        show: true,
+        patientId: reminder.deal.patient.id,
+        canDelete: false,
+      }),
+    );
   };
 
   return (
@@ -44,6 +60,12 @@ const ReminderItem = ({ reminder }) => {
           {timeText}
         </Typography>
         <Typography className={styles.detailsRow}>
+          {upperFirst(textForKey('created by'))}:
+          <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
+            {createdByName}
+          </span>
+        </Typography>
+        <Typography className={styles.detailsRow}>
           {textForKey('crm_reminder_for')}:
           <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
             {assigneeName}
@@ -57,6 +79,18 @@ const ReminderItem = ({ reminder }) => {
           >
             {textForKey(`crm_reminder_type_${reminder.type}`)}
             {reminder.comment ? ` - ${reminder.comment}` : ''}
+          </span>
+        </Typography>
+        <Typography className={styles.detailsRow}>
+          {textForKey('patient')}:
+          <span style={{ fontWeight: 'bold', marginLeft: 5 }}>
+            {reminder.deal.patient ? (
+              <a href='#' onClick={handlePatientClick}>
+                {contactName}
+              </a>
+            ) : (
+              contactName
+            )}
           </span>
         </Typography>
         {reminder.resultComment ? (
@@ -115,5 +149,19 @@ ReminderItem.propTypes = {
     id: PropTypes.number,
     lastUpdated: PropTypes.string,
     type: PropTypes.string,
+    deal: PropTypes.shape({
+      id: PropTypes.number,
+      patient: PropTypes.shape({
+        id: PropTypes.number,
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+        phoneWithCode: PropTypes.string,
+      }),
+      contact: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        phoneNumber: PropTypes.string,
+      }),
+    }),
   }),
 };

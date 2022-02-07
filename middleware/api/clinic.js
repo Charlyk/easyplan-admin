@@ -129,6 +129,7 @@ export async function requestUpdateExchangeRates(requestBody, headers = null) {
  *   category?: string,
  *   name: string,
  *   pageId: string,
+ *   instagramAccountId?: string | null
  * }>} pageData
  * @param headers
  * @return {Promise<AxiosResponse<*>>}

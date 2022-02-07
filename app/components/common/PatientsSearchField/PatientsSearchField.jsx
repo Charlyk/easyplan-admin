@@ -1,27 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
+import getPatientName from 'app/utils/getPatientName';
 import { textForKey } from 'app/utils/localization';
 import onRequestError from 'app/utils/onRequestError';
 import { getPatients } from 'middleware/api/patients';
 import EASAutocomplete from '../EASAutocomplete';
 
-const getPatientLabel = (patient) => {
-  if (patient.firstName && patient.lastName) {
-    return `${patient.lastName} ${patient.firstName}`;
-  } else if (patient.firstName) {
-    return patient.firstName;
-  } else if (patient.lastName) {
-    return patient.lastName;
-  } else {
-    return `+${patient.countryCode}${patient.phoneNumber}`;
-  }
-};
-
 const PatientsSearchField = ({
   selectedPatient,
   fieldLabel,
   disabled,
+  helperText,
+  canCreate = true,
   containerClass,
   onSelected,
   onCreatePatient,
@@ -46,7 +37,7 @@ const PatientsSearchField = ({
   }, [patients, selectedPatient]);
 
   const getLabelKey = useCallback((option) => {
-    return getPatientLabel(option);
+    return getPatientName(option);
   }, []);
 
   const handlePatientSearch = useCallback(
@@ -92,7 +83,7 @@ const PatientsSearchField = ({
 
   return (
     <EASAutocomplete
-      canCreate
+      canCreate={canCreate}
       containerClass={containerClass}
       disabled={disabled}
       fieldLabel={fieldLabel}
@@ -100,6 +91,7 @@ const PatientsSearchField = ({
       onTextChange={handleSearchQueryChange}
       onChange={handlePatientChange}
       onCreateOption={onCreatePatient}
+      helperText={helperText}
       value={selectedPatient || ''}
       loading={isLoading}
       placeholder={textForKey('Enter patient name or phone')}
@@ -113,6 +105,7 @@ PatientsSearchField.propTypes = {
   selectedPatient: PropTypes.any,
   fieldLabel: PropTypes.string,
   disabled: PropTypes.bool,
+  helperText: PropTypes.string,
   containerClass: PropTypes.any,
   onSelected: PropTypes.func,
   onCreatePatient: PropTypes.func,
