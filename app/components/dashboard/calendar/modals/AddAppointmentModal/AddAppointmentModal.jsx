@@ -502,6 +502,7 @@ const AddAppointmentModal = ({
       open={open}
       className={styles['add-appointment-root']}
       paperClass={styles.modalPaper}
+      size='medium'
       title={modalTitle}
       note={textForKey('fill_required_fields')}
       onBackdropClick={() => null}
