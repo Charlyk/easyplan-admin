@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 import MainComponent from 'app/components/common/MainComponent';
+import CrmMain from 'app/components/crm/CrmMain';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import { fetchAllDealStates, fetchGroupedDeals } from 'middleware/api/crm';
 import {
   authTokenSelector,
@@ -14,7 +16,6 @@ import {
 import { setCookies } from 'redux/slices/appDataSlice';
 import { setDealStates, setGroupedDeals } from 'redux/slices/crmBoardSlice';
 import { wrapper } from 'store';
-import CrmMain from '../app/components/crm/CrmMain';
 
 const Crm = () => {
   return (
@@ -44,7 +45,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
+              destination: loginUrl,
               permanent: true,
             },
           };
@@ -54,7 +55,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (redirectTo != null) {
           return {
             redirect: {
-              destination: '/login',
+              destination: loginUrl,
               permanent: true,
             },
           };

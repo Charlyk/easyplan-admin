@@ -8,7 +8,7 @@ import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
 import { textForKey } from 'app/utils/localization';
 import setCookies from 'app/utils/setCookies';
-import { appBaseUrl } from 'eas.config';
+import { loginUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
 
 const Redirect = ({ clinicId }) => {
@@ -27,7 +27,7 @@ const Redirect = ({ clinicId }) => {
       );
       if (userClinic?.accessBlocked) {
         await signOut();
-        await router.replace(`${appBaseUrl}/login`);
+        await router.replace(loginUrl);
         return;
       }
       const [subdomain] = window.location.host.split('.');
@@ -37,7 +37,7 @@ const Redirect = ({ clinicId }) => {
       }
       await router.replace(redirectUrl);
     } catch (error) {
-      await router.replace(`${appBaseUrl}/login`);
+      await router.replace(loginUrl);
     }
   };
 
@@ -72,7 +72,7 @@ export const getServerSideProps = async ({ res, query }) => {
     if (!token.match(JwtRegex) || !clinicId) {
       return {
         redirect: {
-          destination: '/login',
+          destination: loginUrl,
           permanent: true,
         },
       };

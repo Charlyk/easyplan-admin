@@ -1,3 +1,4 @@
+import { loginUrl } from 'eas.config';
 import { Role } from './constants';
 
 export default function redirectToUrl(user, clinic, path) {
@@ -6,7 +7,7 @@ export default function redirectToUrl(user, clinic, path) {
   );
 
   if (selectedClinic == null || selectedClinic.accessBlocked) {
-    return '/login';
+    return loginUrl;
   }
 
   const role = selectedClinic.roleInClinic;
@@ -43,7 +44,7 @@ export default function redirectToUrl(user, clinic, path) {
       break;
     default:
       shouldRedirect = true;
-      if (shouldRedirect) redirectPath = '/login';
+      if (shouldRedirect) redirectPath = loginUrl;
       break;
   }
   return shouldRedirect ? redirectPath : null;

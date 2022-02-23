@@ -7,6 +7,7 @@ import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import { fetchAllCountries } from 'middleware/api/countries';
 import {
   currentClinicSelector,
@@ -43,7 +44,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
+              destination: loginUrl,
               permanent: true,
             },
           };

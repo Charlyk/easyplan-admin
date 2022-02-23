@@ -6,6 +6,7 @@ import UsersList from 'app/components/dashboard/users/UsersList';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import { getUsers } from 'middleware/api/users';
 import {
   authTokenSelector,
@@ -45,7 +46,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
+              destination: loginUrl,
               permanent: true,
             },
           };

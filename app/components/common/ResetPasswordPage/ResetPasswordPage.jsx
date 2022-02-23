@@ -5,7 +5,7 @@ import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { PasswordRegex } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
-import { isDev } from 'eas.config';
+import { isDev, loginUrl } from 'eas.config';
 import { requestResetUserPassword } from 'middleware/api/auth';
 import EASImage from '../EASImage';
 import EASTextField from '../EASTextField';
@@ -42,7 +42,7 @@ const ResetPasswordPage = ({ token }) => {
         resetToken: token,
       });
       toast.success(textForKey('Saved successfully'));
-      window.location = '/login';
+      window.location = loginUrl;
     } catch (error) {
       toast.error(error.response.data.message);
       setState({ ...state, errorMessage: error.message, isLoading: false });

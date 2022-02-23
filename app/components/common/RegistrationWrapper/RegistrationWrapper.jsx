@@ -9,7 +9,7 @@ import AppLogoWhite from 'app/components/icons/AppLogoWhite';
 import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { textForKey } from 'app/utils/localization';
-import { isDev } from 'eas.config';
+import { isDev, loginUrl } from 'eas.config';
 import { registerUser } from 'middleware/api/auth';
 import { setAuthenticationData } from 'redux/slices/appDataSlice';
 import styles from './RegistrationWrapper.module.scss';
@@ -32,7 +32,7 @@ export default function RegistrationWrapper({ isMobile }) {
   );
 
   const handleOpenLogin = () => {
-    router.push('/login');
+    router.push(loginUrl);
   };
 
   const handleCreateAccount = async (accountData) => {

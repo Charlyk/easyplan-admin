@@ -15,6 +15,7 @@ import {
 import { setCookies } from 'redux/slices/appDataSlice';
 import { setScheduleDetailsData } from 'redux/slices/doctorScheduleDetailsSlice';
 import { wrapper } from 'store';
+import { loginUrl } from '../../../eas.config';
 
 const DoctorScheduleDetails = () => {
   return (
@@ -44,7 +45,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
+              destination: loginUrl,
               permanent: true,
             },
           };

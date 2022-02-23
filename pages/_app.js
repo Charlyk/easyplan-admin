@@ -26,7 +26,7 @@ import { UnauthorizedPaths } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
-import { appBaseUrl, isDev, pubNubEnv } from 'eas.config';
+import { isDev, loginUrl, pubNubEnv } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
 import { pubnubClient } from 'pubnubUtils';
@@ -224,7 +224,7 @@ const EasyApp = ({ Component, pageProps }) => {
   const handleUserLogout = async () => {
     setIsLoading(true);
     await signOut();
-    router.replace(`${appBaseUrl}/login`).then(() => {
+    router.replace(loginUrl).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
       setIsLoading(false);

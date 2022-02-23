@@ -1,8 +1,9 @@
+import { loginUrl } from 'eas.config';
 import { Role } from './constants';
 
 const getRedirectUrlForUser = (user, subdomain) => {
   if (user == null) {
-    return '/login';
+    return loginUrl;
   }
   const { clinics } = user;
   const userClinic = clinics.find(
@@ -19,13 +20,13 @@ const getRedirectUrlForUser = (user, subdomain) => {
         case Role.doctor:
           return '/doctor';
         default:
-          return '/login';
+          return loginUrl;
       }
     } catch (error) {
-      return '/login';
+      return loginUrl;
     }
   } else {
-    return '/login';
+    return loginUrl;
   }
 };
 

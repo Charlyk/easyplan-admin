@@ -8,7 +8,7 @@ import NotificationsContext from 'app/context/notificationsContext';
 import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import getClinicUrl from 'app/utils/getClinicUrl';
 import { textForKey } from 'app/utils/localization';
-import { isDev } from 'eas.config';
+import { isDev, loginUrl } from 'eas.config';
 import { createNewClinic } from 'middleware/api/clinic';
 import { setCurrentClinic } from 'redux/slices/appDataSlice';
 import CreateClinicForm from '../CreateClinicForm';
@@ -32,7 +32,7 @@ export default function CreateClinicWrapper({
 
   const handleGoBack = async () => {
     if (newAccount) {
-      await router.replace('/login');
+      await router.replace(loginUrl);
     } else {
       router.back();
     }
