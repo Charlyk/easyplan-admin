@@ -54,4 +54,4 @@ jobs:
 #        run: cp -a public/ ../deploy
 
       - name: Start application
-        run: PM2_HOME=/etc/pm2daemon pm2 reload easyplan
+        run: PM2_HOME=/etc/pm2daemon pm2 reload authentication
