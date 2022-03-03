@@ -156,6 +156,7 @@ const ExchangeRatesModal = ({ open, currentClinic, currentUser, onClose }) => {
   return (
     <EASModal
       open={open}
+      size='large'
       onClose={onClose}
       className={styles.exchangeRatesRoot}
       paperClass={styles.modalPaper}

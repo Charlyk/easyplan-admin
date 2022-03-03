@@ -22,7 +22,6 @@ import NotificationsProvider from 'app/context/NotificationsProvider';
 import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
 import { checkIfHasUnreadUpdates } from 'app/utils/checkIfHasUnreadUpdates';
-import { UnauthorizedPaths } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
@@ -189,17 +188,11 @@ const EasyApp = ({ Component, pageProps }) => {
       setIsChecking(true);
       await requestCheckIsAuthenticated();
       setChatUserData();
-      if (router.asPath === '/login') {
-        await router.reload();
-      }
     } catch (error) {
       if (error.response != null) {
         const { status } = error.response;
         if (status === 401) {
-          if (UnauthorizedPaths.includes(router.asPath)) {
-            return;
-          }
-          await router.reload();
+          await handleUserLogout();
         }
       }
     } finally {

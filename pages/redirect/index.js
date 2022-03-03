@@ -8,7 +8,7 @@ import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
 import { textForKey } from 'app/utils/localization';
 import setCookies from 'app/utils/setCookies';
-import { loginUrl } from 'eas.config';
+import { environment, loginUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
 
 const Redirect = ({ clinicId }) => {
@@ -31,7 +31,10 @@ const Redirect = ({ clinicId }) => {
         return;
       }
       const [subdomain] = window.location.host.split('.');
-      const redirectUrl = getRedirectUrlForUser(response.data, subdomain);
+      const redirectUrl = getRedirectUrlForUser(
+        response.data,
+        environment === 'local' ? process.env.DEFAULT_CLINIC : subdomain,
+      );
       if (redirectUrl == null || router.asPath === redirectUrl) {
         return;
       }

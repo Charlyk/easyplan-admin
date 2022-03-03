@@ -17,6 +17,7 @@ export default function redirectToUrl(user, clinic, path) {
   switch (role) {
     case Role.reception:
       shouldRedirect =
+        path === '/' ||
         path.startsWith('/doctor') ||
         path.startsWith('/users') ||
         path.startsWith('/messages') ||
@@ -28,11 +29,12 @@ export default function redirectToUrl(user, clinic, path) {
       break;
     case Role.admin:
     case Role.manager:
-      shouldRedirect = path.startsWith('/doctor');
+      shouldRedirect = path === '/' || path.startsWith('/doctor');
       if (shouldRedirect) redirectPath = '/analytics/general';
       break;
     case Role.doctor:
       shouldRedirect =
+        path === '/' ||
         path.startsWith('/analytics') ||
         path.startsWith('/services') ||
         path.startsWith('/users') ||
@@ -44,7 +46,7 @@ export default function redirectToUrl(user, clinic, path) {
       break;
     default:
       shouldRedirect = true;
-      if (shouldRedirect) redirectPath = loginUrl;
+      redirectPath = loginUrl;
       break;
   }
   return shouldRedirect ? redirectPath : null;

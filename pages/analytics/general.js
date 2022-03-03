@@ -61,7 +61,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const redirectTo = redirectToUrl(
           currentUser,
           currentClinic,
-          '/settings',
+          '/analytics/general',
         );
         if (redirectTo != null) {
           return {
