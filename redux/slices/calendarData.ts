@@ -147,7 +147,7 @@ const calendarData = createSlice({
         const { schedules } = item;
 
         const updatedSchedules = schedules.map((schedule) => {
-          if (schedule.patient.id === updatedPatient.id) {
+          if (schedule?.patient?.id === updatedPatient?.id) {
             return { ...schedule, patient: { ...updatedPatient } };
           }
           return schedule;
