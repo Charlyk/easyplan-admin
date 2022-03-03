@@ -12,14 +12,14 @@ const SortedDealItem = ({ deal, onDealClick }) => {
 
   const personName = useMemo(() => {
     if (deal.patient == null) {
-      return deal.contact.name;
+      return deal.contact?.name;
     }
     const { patient } = deal;
     return getPatientName(patient);
   }, [deal]);
 
   const itemTitle = useMemo(() => {
-    switch (deal.state.type) {
+    switch (deal.state?.type) {
       case 'FirstContact':
         return deal.messageSnippet;
       case 'Failed':

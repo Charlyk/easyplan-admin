@@ -14,7 +14,7 @@ const DealItem = ({
   onConfirmFirstContact,
   onDealClick,
 }) => {
-  const isUnsorted = dealItem.state.type === 'Unsorted';
+  const isUnsorted = dealItem.state?.type === 'Unsorted';
   const [{ _ }, drag] = useDrag(() => ({
     type: isUnsorted
       ? ItemTypes.NONE
@@ -29,7 +29,7 @@ const DealItem = ({
 
   return (
     <div ref={drag} key={dealItem.id} className={styles.dealItem}>
-      {dealItem.state.type === 'Unsorted' ? (
+      {dealItem.state?.type === 'Unsorted' ? (
         <UnsortedDealItem
           deal={dealItem}
           currentClinic={currentClinic}
