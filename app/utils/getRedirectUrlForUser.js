@@ -1,4 +1,4 @@
-import { loginUrl } from 'eas.config';
+import { appBaseUrl, loginUrl } from 'eas.config';
 import { Role } from './constants';
 
 const getRedirectUrlForUser = (user, subdomain) => {
@@ -18,7 +18,7 @@ const getRedirectUrlForUser = (user, subdomain) => {
         case Role.manager:
           return '/analytics/general';
         case Role.doctor:
-          return '/doctor';
+          return `${appBaseUrl.replace('app.', `${subdomain}.`)}/doctor`;
         default:
           return loginUrl;
       }
