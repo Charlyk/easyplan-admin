@@ -40,7 +40,6 @@ const Redirect = ({ clinicId }) => {
       }
       await router.replace(redirectUrl);
     } catch (error) {
-      alert(error.message);
       await router.replace(loginUrl);
     }
   };
