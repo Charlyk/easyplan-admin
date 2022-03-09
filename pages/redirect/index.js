@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { JwtRegex } from 'app/utils/constants';
+import checkIsAuthTokenValid from 'app/utils/checkAuthToken';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
 import { textForKey } from 'app/utils/localization';
@@ -40,6 +40,7 @@ const Redirect = ({ clinicId }) => {
       }
       await router.replace(redirectUrl);
     } catch (error) {
+      alert(error.message);
       await router.replace(loginUrl);
     }
   };
@@ -68,15 +69,14 @@ export default connect((state) => state)(Redirect);
 export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
-    // try to check if clinic id is a number
-    parseInt(clinicId, 10);
 
     // check if token is valid
-    if (!token.match(JwtRegex) || !clinicId) {
+    const isAuthenticated = await checkIsAuthTokenValid(token, clinicId);
+    if (!isAuthenticated) {
       return {
         redirect: {
           destination: loginUrl,
-          permanent: true,
+          permanent: false,
         },
       };
     }
@@ -85,6 +85,7 @@ export const getServerSideProps = async ({ res, query }) => {
     setCookies(res, token, clinicId);
     return { props: { clinicId } };
   } catch (error) {
+    console.error('Redirect', error.message);
     return handleRequestError(error);
   }
 };

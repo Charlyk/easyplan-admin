@@ -6,7 +6,7 @@ const handleRequestError = (error) => {
     return {
       redirect: {
         destination: loginUrl,
-        permanent: true,
+        permanent: false,
       },
     };
   }

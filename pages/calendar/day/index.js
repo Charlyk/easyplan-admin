@@ -60,7 +60,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           redirect: {
             destination: loginUrl,
-            permanent: true,
+            permanent: false,
           },
         };
       }
@@ -74,7 +74,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           redirect: {
             destination: redirectTo,
-            permanent: true,
+            permanent: false,
           },
         };
       }

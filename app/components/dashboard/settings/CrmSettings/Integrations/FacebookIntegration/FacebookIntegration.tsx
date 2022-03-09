@@ -76,7 +76,6 @@ const FacebookIntegration: React.FC<FacebookIntegrationProps> = ({
   };
 
   const handleShowPagesList = (pages: FacebookPageType[]) => {
-    console.log(pages);
     setPagesModal({ open: true, pages });
   };
 

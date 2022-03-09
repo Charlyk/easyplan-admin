@@ -1,4 +1,4 @@
-import { appBaseUrl, loginUrl } from 'eas.config';
+import { appBaseUrl, environment, loginUrl } from 'eas.config';
 import { Role } from './constants';
 
 const getRedirectUrlForUser = (user, subdomain) => {
@@ -18,7 +18,11 @@ const getRedirectUrlForUser = (user, subdomain) => {
         case Role.manager:
           return '/analytics/general';
         case Role.doctor:
-          return `${appBaseUrl.replace('app.', `${subdomain}.`)}/doctor`;
+          if (environment === 'local') {
+            return 'http://localhost:3003/doctor';
+          } else {
+            return `${appBaseUrl.replace('app.', `${subdomain}.`)}/doctor`;
+          }
         default:
           return loginUrl;
       }

@@ -19,7 +19,6 @@ export function* handleFetchGroupedDeals(
         action.payload.page,
         action.payload.itemsPerPage,
       );
-    console.log(action.payload);
     if (action.payload.page > 0) {
       yield put(addGroupedDeals(response.data));
     } else {
