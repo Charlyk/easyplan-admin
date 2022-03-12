@@ -12,6 +12,8 @@ import {
   updateDoctorAppointmentsColor,
 } from 'middleware/api/userPreferences';
 import { UserClinic } from 'types';
+import hexToHSV from '../../../../../utils/hexToHSV';
+import hexToRGB from '../../../../../utils/hexToRGB';
 import EASColorPicker from '../../../../common/EASColorPicker';
 import styles from './DoctorScheduleCreation.module.scss';
 
@@ -28,7 +30,11 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     setStateUser(user);
     if (user?.appointmentsColor != null) {
-      setColor({ hex: user.appointmentsColor, rgb: null, hsv: null });
+      setColor({
+        hex: user.appointmentsColor,
+        rgb: hexToRGB(user.appointmentsColor),
+        hsv: hexToHSV(user.appointmentsColor),
+      });
     }
   }, [user]);
 
