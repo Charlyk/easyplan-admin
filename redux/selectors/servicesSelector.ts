@@ -28,6 +28,11 @@ export const serviceDetailsSelector = createSelector(
   (data) => data.details,
 );
 
+export const serviceDetailsIncludedSelector = createSelector(
+  serviceDetailsSelector,
+  (details) => details.includedServices ?? [],
+);
+
 export const isFetchingDetailsSelector = createSelector(
   servicesListSelector,
   (data) => data.isFetchingDetails,

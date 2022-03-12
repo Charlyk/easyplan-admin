@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
 import PropTypes from 'prop-types';
-import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import DoctorBracesSettings from '../DoctorBracesSettings';
@@ -114,7 +113,7 @@ const DoctorForm = ({
   );
 };
 
-export default React.memo(DoctorForm, areComponentPropsEqual);
+export default DoctorForm;
 
 DoctorForm.propTypes = {
   onChange: PropTypes.func,

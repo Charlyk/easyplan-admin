@@ -40,14 +40,10 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
   useEffect(() => {
     if (!show) {
       localDispatch(resetState());
-    }
-  }, [show]);
-
-  useEffect(() => {
-    if (user != null) {
+    } else if (user != null) {
       fetchUserDetails();
     }
-  }, [user]);
+  }, [show]);
 
   const fetchUserDetails = async () => {
     try {
@@ -250,7 +246,7 @@ const UserDetailsModal = ({ onClose, show, user, currentClinic }) => {
   );
 };
 
-export default React.memo(UserDetailsModal, areComponentPropsEqual);
+export default UserDetailsModal;
 
 UserDetailsModal.propTypes = {
   onClose: PropTypes.func.isRequired,

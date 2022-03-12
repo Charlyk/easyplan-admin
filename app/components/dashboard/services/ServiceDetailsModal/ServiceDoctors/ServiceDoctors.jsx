@@ -27,7 +27,7 @@ const ServiceDoctors = ({
       <div className={styles.header}>
         <div className={styles.title}>
           {showStep && (
-            <div className={styles.step}>{textForKey('Step 2.')}</div>
+            <div className={styles.step}>{textForKey('Step 3.')}</div>
           )}
           {textForKey('Doctors who provide this service')}
         </div>
