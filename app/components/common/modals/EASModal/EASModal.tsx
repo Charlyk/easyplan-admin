@@ -14,7 +14,7 @@ import styles from './EASModal.module.scss';
 interface Props {
   open: boolean;
   title: string;
-  size: 'small' | 'medium' | 'large' | 'unset';
+  size?: 'small' | 'medium' | 'large' | 'unset';
   destroyBtnText?: string;
   primaryBtnText?: string;
   secondaryBtnText?: string;
@@ -38,7 +38,7 @@ interface Props {
 const EASModal: React.FC<Props> = ({
   open,
   title,
-  size,
+  size = 'small',
   destroyBtnText = textForKey('Delete'),
   primaryBtnText = textForKey('Save'),
   secondaryBtnText = textForKey('Close'),

@@ -22,6 +22,7 @@ import {
   setViewMode,
 } from 'redux/slices/calendarData';
 import { wrapper } from 'store';
+import { loginUrl } from '../../eas.config';
 
 const Doctor = ({ schedules, date, viewMode }) => {
   return (
@@ -56,8 +57,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
-              permanent: true,
+              destination: loginUrl,
+              permanent: false,
             },
           };
         }
@@ -67,7 +68,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             redirect: {
               destination: redirectTo,
-              permanent: true,
+              permanent: false,
             },
           };
         }

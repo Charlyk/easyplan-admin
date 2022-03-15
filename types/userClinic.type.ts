@@ -7,8 +7,10 @@ export interface UserClinic {
   roleInClinic: UserRole;
   clinicLogo?: string | null;
   canRegisterPayments: boolean;
+  canManageOthersAppointments: boolean;
   canCreateSchedules: boolean;
   clinicDomain: string;
   accessBlocked: boolean;
   services: UserService;
+  appointmentsColor?: string | null;
 }

@@ -27,6 +27,8 @@ import {
   CrmFilterPatient,
   GroupedDeals,
   PatientTag,
+  DealDetailsView,
+  CrmDealDetailsType,
 } from 'types';
 
 export interface CalendarDataState {
@@ -159,8 +161,10 @@ export interface CrmBoardState {
   states: DealStateView[];
   userStates: DealStateView[];
   deals: GroupedDeals[];
+  dealDetails?: CrmDealDetailsType | null;
   remindersCount: number;
   isFetchingDeals: boolean;
+  isFetchingDetails: boolean;
   isFetchingStates: boolean;
   isFetchingRemindersCount: boolean;
 }

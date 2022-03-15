@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EASImage from 'app/components/common/EASImage';
-import EASModal from 'app/components/common/modals/EASModal';
+import EASModal from '../EASModal';
 import styles from './FullScreenImageModal.module.scss';
 
 const FullScreenImageModal = ({ open, imageUrl, onClose }) => {

@@ -3,12 +3,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { JwtRegex } from 'app/utils/constants';
+import checkIsAuthTokenValid from 'app/utils/checkAuthToken';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
 import { textForKey } from 'app/utils/localization';
 import setCookies from 'app/utils/setCookies';
-import { appBaseUrl } from 'eas.config';
+import { environment, loginUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
 
 const Redirect = ({ clinicId }) => {
@@ -27,17 +27,20 @@ const Redirect = ({ clinicId }) => {
       );
       if (userClinic?.accessBlocked) {
         await signOut();
-        await router.replace(`${appBaseUrl}/login`);
+        await router.replace(loginUrl);
         return;
       }
       const [subdomain] = window.location.host.split('.');
-      const redirectUrl = getRedirectUrlForUser(response.data, subdomain);
+      const redirectUrl = getRedirectUrlForUser(
+        response.data,
+        environment === 'local' ? process.env.DEFAULT_CLINIC : subdomain,
+      );
       if (redirectUrl == null || router.asPath === redirectUrl) {
         return;
       }
       await router.replace(redirectUrl);
     } catch (error) {
-      await router.replace(`${appBaseUrl}/login`);
+      await router.replace(loginUrl);
     }
   };
 
@@ -65,15 +68,14 @@ export default connect((state) => state)(Redirect);
 export const getServerSideProps = async ({ res, query }) => {
   try {
     const { token, clinicId } = query;
-    // try to check if clinic id is a number
-    parseInt(clinicId, 10);
 
     // check if token is valid
-    if (!token.match(JwtRegex) || !clinicId) {
+    const isAuthenticated = await checkIsAuthTokenValid(token, clinicId);
+    if (!isAuthenticated) {
       return {
         redirect: {
-          destination: '/login',
-          permanent: true,
+          destination: loginUrl,
+          permanent: false,
         },
       };
     }
@@ -82,6 +84,7 @@ export const getServerSideProps = async ({ res, query }) => {
     setCookies(res, token, clinicId);
     return { props: { clinicId } };
   } catch (error) {
+    console.error('Redirect', error.message);
     return handleRequestError(error);
   }
 };

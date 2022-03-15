@@ -37,3 +37,5 @@ export * from './crmFilter.types';
 export * from './reminder.types';
 export * from './facebookAuthentication.types';
 export * from './facebookPage.types';
+export * from './crmDealListItem.types';
+export * from './crmDealDetails.types';

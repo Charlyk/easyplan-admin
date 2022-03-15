@@ -13,6 +13,7 @@ import useIsMobileDevice from 'app/hooks/useIsMobileDevice';
 import { HeaderKeys, PasswordRegex, Role } from 'app/utils/constants';
 import isPhoneNumberValid from 'app/utils/isPhoneNumberValid';
 import { textForKey } from 'app/utils/localization';
+import { loginUrl } from 'eas.config';
 import { requestAcceptInvitation } from 'middleware/api/users';
 import { setAuthenticationData } from 'redux/slices/appDataSlice';
 import EASPhoneInput from '../EASPhoneInput';
@@ -108,11 +109,11 @@ const AcceptInvitation = ({ token, isNew, isMobile }) => {
           await router.replace('/analytics/general');
           break;
         default:
-          await router.replace('/login');
+          await router.replace(loginUrl);
           break;
       }
     } else {
-      await router.replace('/login');
+      await router.replace(loginUrl);
     }
   };
 

@@ -10,7 +10,7 @@ import GlobalNotificationView from 'app/components/common/GlobalNotificationView
 import PageHeader from 'app/components/common/MainComponent/PageHeader/PageHeader';
 import IconArrowDown from 'app/components/icons/iconArrowDown';
 import { textForKey } from 'app/utils/localization';
-import { appBaseUrl, isDev } from 'eas.config';
+import { appBaseUrl, isDev, loginUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setPatientNoteModal,
@@ -74,7 +74,7 @@ const DoctorsMain = ({ children, pageTitle }) => {
     }
     try {
       await signOut();
-      router.replace(`${appBaseUrl}/login`).then(() => {
+      router.replace(loginUrl).then(() => {
         dispatch(setAppData(initialState.appData));
       });
     } catch (error) {

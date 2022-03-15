@@ -1,10 +1,10 @@
-import { PatientTag, ScheduleStatus } from 'types';
+import { CrmDealListItemType, PatientTag, ScheduleStatus } from 'types';
 
 export type GroupedDeals = {
   state: DealStateView;
   deals: {
     total: number;
-    data: DealView[];
+    data: CrmDealListItemType[];
   };
 };
 

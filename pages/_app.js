@@ -22,11 +22,10 @@ import NotificationsProvider from 'app/context/NotificationsProvider';
 import useWindowFocused from 'app/hooks/useWindowFocused';
 import theme from 'app/styles/theme';
 import { checkIfHasUnreadUpdates } from 'app/utils/checkIfHasUnreadUpdates';
-import { UnauthorizedPaths } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import parseCookies from 'app/utils/parseCookies';
 import paths from 'app/utils/paths';
-import { appBaseUrl, isDev, pubNubEnv } from 'eas.config';
+import { isDev, loginUrl, pubNubEnv } from 'eas.config';
 import { requestCheckIsAuthenticated, signOut } from 'middleware/api/auth';
 import { fetchAppData } from 'middleware/api/initialization';
 import { pubnubClient } from 'pubnubUtils';
@@ -58,7 +57,7 @@ const FullScreenImageModal = dynamic(() =>
   import('app/components/common/modals/FullScreenImageModal'),
 );
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../app/components/common/modals/ConfirmationModal'),
 );
 
 const ChangeLogModal = dynamic(() =>
@@ -189,17 +188,11 @@ const EasyApp = ({ Component, pageProps }) => {
       setIsChecking(true);
       await requestCheckIsAuthenticated();
       setChatUserData();
-      if (router.asPath === '/login') {
-        await router.reload();
-      }
     } catch (error) {
       if (error.response != null) {
         const { status } = error.response;
         if (status === 401) {
-          if (UnauthorizedPaths.includes(router.asPath)) {
-            return;
-          }
-          await router.reload();
+          await handleUserLogout();
         }
       }
     } finally {
@@ -224,7 +217,7 @@ const EasyApp = ({ Component, pageProps }) => {
   const handleUserLogout = async () => {
     setIsLoading(true);
     await signOut();
-    router.replace(`${appBaseUrl}/login`).then(() => {
+    router.replace(loginUrl).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
       setIsLoading(false);

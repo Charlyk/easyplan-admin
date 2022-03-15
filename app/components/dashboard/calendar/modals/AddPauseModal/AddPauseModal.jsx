@@ -16,7 +16,6 @@ import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
-import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { textForKey } from 'app/utils/localization';
@@ -30,6 +29,7 @@ import {
   clinicCabinetsSelector,
 } from 'redux/selectors/appDataSelector';
 import { pauseSelector } from 'redux/selectors/scheduleSelector';
+import EASModal from '../../../../common/modals/EASModal';
 import styles from './AddPauseModal.module.scss';
 import reducer, {
   initialState,

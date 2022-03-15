@@ -13,10 +13,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import BottomSheetDialog from 'app/components/common/BottomSheetDialog';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
 import { createMessage, updateMessage } from 'middleware/api/messages';
+import BottomSheetDialog from '../../../common/BottomSheetDialog';
 import BirthdayMessageForm from './BirthdayMessageForm';
 import {
   availableLanguages,

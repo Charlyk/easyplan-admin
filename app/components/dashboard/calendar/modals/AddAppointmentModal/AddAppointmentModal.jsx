@@ -18,7 +18,6 @@ import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
 import EasyDatePicker from 'app/components/common/EasyDatePicker';
-import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField';
 import NotificationsContext from 'app/context/notificationsContext';
 import { textForKey } from 'app/utils/localization';
@@ -35,6 +34,7 @@ import {
 } from 'redux/selectors/appDataSelector';
 import { updateAppointmentsList } from 'redux/slices/mainReduxSlice';
 import { ScheduleStatus } from 'types';
+import EASModal from '../../../../common/modals/EASModal';
 import styles from './AddAppointment.module.scss';
 import reducer, {
   initialState,
@@ -502,6 +502,7 @@ const AddAppointmentModal = ({
       open={open}
       className={styles['add-appointment-root']}
       paperClass={styles.modalPaper}
+      size='medium'
       title={modalTitle}
       note={textForKey('fill_required_fields')}
       onBackdropClick={() => null}

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { ClinicUser, CurrentUser } from '../../types';
+import { CurrentUser } from '../../types';
 import { put } from './request';
 
 export async function requestAllowDoctorCreateSchedules(
@@ -13,12 +13,46 @@ export async function requestAllowDoctorCreateSchedules(
   return put(`/api/userPreferences/schedules/${userId}`, headers, body);
 }
 
+export async function requestAllowDoctorCreateOthersSchedules(
+  userId: number,
+  headers = null,
+) {
+  const body = {
+    canManageOthers: true,
+  };
+
+  return put(`/api/userPreferences/schedules/${userId}`, headers, body);
+}
+
 export async function requestForbidDoctorCreateSchedules(
   userId: number,
   headers = null,
 ) {
   const body = {
     canCreate: false,
+  };
+
+  return put(`/api/userPreferences/schedules/${userId}`, headers, body);
+}
+
+export async function requestForbidDoctorCreateOthersSchedules(
+  userId: number,
+  headers = null,
+) {
+  const body = {
+    canManageOthers: false,
+  };
+
+  return put(`/api/userPreferences/schedules/${userId}`, headers, body);
+}
+
+export async function updateDoctorAppointmentsColor(
+  userId: number,
+  color: string,
+  headers = null,
+) {
+  const body = {
+    appointmentsColor: color,
   };
 
   return put(`/api/userPreferences/schedules/${userId}`, headers, body);

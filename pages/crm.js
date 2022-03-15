@@ -6,6 +6,7 @@ import CrmMain from 'app/components/crm/CrmMain';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import { fetchAllDealStates, fetchGroupedDeals } from 'middleware/api/crm';
 import {
   authTokenSelector,
@@ -44,8 +45,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
-              permanent: true,
+              destination: loginUrl,
+              permanent: false,
             },
           };
         }
@@ -54,8 +55,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (redirectTo != null) {
           return {
             redirect: {
-              destination: '/login',
-              permanent: true,
+              destination: loginUrl,
+              permanent: false,
             },
           };
         }

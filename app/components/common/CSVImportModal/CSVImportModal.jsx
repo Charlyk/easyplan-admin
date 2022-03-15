@@ -180,6 +180,7 @@ const CSVImportModal = ({
     <EASModal
       open={open}
       onClose={onClose}
+      size='large'
       className={styles.importModal}
       paperClass={styles.modalPaper}
       onBackdropClick={() => null}

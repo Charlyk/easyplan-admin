@@ -7,6 +7,7 @@ import CalendarMonthView from 'app/components/dashboard/calendar/CalendarMonthVi
 import { JwtRegex, Role } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -50,8 +51,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
-              permanent: true,
+              destination: loginUrl,
+              permanent: false,
             },
           };
         }
@@ -65,7 +66,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           return {
             redirect: {
               destination: redirectTo,
-              permanent: true,
+              permanent: false,
             },
           };
         }

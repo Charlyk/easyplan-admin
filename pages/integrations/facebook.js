@@ -5,7 +5,7 @@ import { appBaseUrl, environment } from 'eas.config';
 
 const fbAuthUrl = 'https://www.facebook.com/v12.0/dialog/oauth';
 const facebookScopes =
-  'public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement,instagram_basic,pages_manage_posts';
+  'public_profile,pages_show_list,pages_messaging,pages_manage_metadata,pages_read_engagement,instagram_basic,instagram_manage_messages,instagram_manage_comments,pages_manage_posts,whatsapp_business_management';
 
 const Facebook = ({
   code,

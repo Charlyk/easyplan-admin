@@ -1,0 +1,115 @@
+.includedServices {
+  margin-top: 1rem;
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 0px -1px 90px -5px rgba(239, 242, 251, 0.8);
+  border-radius: 4px;
+  padding: 1rem;
+  user-select: none;
+
+  .header {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .step {
+      color: #7DD7C8 !important;
+      margin-right: .5rem;
+    }
+
+    .title, .step {
+      display: flex;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #34354C;
+    }
+
+    .button {
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+
+      svg {
+        fill: #3A83DC;
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1;
+    transition: height .2s ease-out, padding-top .2s ease-out;
+
+    .fieldContainer {
+      margin-top: 15px;
+    }
+
+    .servicesContainer {
+      width: 100%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      .row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+        justify-content: space-between;
+        border-bottom: #ededed 1px solid;
+
+        .title {
+          font-family: Inter, sans-serif;
+          font-style: normal;
+          font-weight: normal;
+          font-size: 0.9rem;
+          color: #34354C;
+        }
+
+        .button {
+          padding: 0;
+        }
+      }
+    }
+
+    .noData {
+      width: 100%;
+      height: 8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Inter, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 16px;
+      letter-spacing: 0.01em;
+      color: #A1A2C6;
+
+      a {
+        margin-left: .2rem;
+      }
+    }
+
+    &.expanded {
+      padding-top: 1rem;
+    }
+
+    &.collapsed {
+      padding-top: 0;
+      height: 0;
+    }
+  }
+}

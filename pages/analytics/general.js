@@ -12,6 +12,7 @@ import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import { requestFetchClinicAnalytics } from 'middleware/api/analytics';
 import { requestFetchSelectedCharts } from 'middleware/api/users';
 import {
@@ -46,8 +47,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         if (!authToken || !authToken.match(JwtRegex)) {
           return {
             redirect: {
-              destination: '/login',
-              permanent: true,
+              destination: loginUrl,
+              permanent: false,
             },
           };
         }
@@ -60,13 +61,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const redirectTo = redirectToUrl(
           currentUser,
           currentClinic,
-          '/settings',
+          '/analytics/general',
         );
         if (redirectTo != null) {
           return {
             redirect: {
               destination: redirectTo,
-              permanent: true,
+              permanent: false,
             },
           };
         }

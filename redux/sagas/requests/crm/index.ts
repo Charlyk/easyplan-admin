@@ -5,3 +5,4 @@ export * from './updateDealStateRequest';
 export * from './createReminderRequest';
 export * from './createDealStateRequest';
 export * from './deleteDealStateRequest';
+export * from './dealDetailsRequest';

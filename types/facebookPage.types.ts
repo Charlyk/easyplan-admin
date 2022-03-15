@@ -1,11 +1,17 @@
 export type FacebookPageType = {
   id: string;
-  accessToken: string;
+  access_token: string;
   category: string;
   name: string;
-  categoryList: FBCategoryType;
+  category_list: FBCategoryType;
   tasks: string[];
   picture: FBPictureType;
+  connected_instagram_account?: FBInstagramAccount | null;
+};
+
+export type FBInstagramAccount = {
+  id: string;
+  username: string;
 };
 
 export type FBCategoryType = {

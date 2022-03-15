@@ -20,7 +20,13 @@ export interface ClinicServiceCategory {
 
 export interface ClinicServiceDetails extends ClinicService {
   doctors: ServiceUser[];
+  includedServices: IncludedService[];
   created: string;
+}
+
+export interface IncludedService {
+  id: number;
+  name: string;
 }
 
 export interface ServiceUser {

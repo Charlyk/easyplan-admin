@@ -5,3 +5,4 @@ export * from './handleUpdateDealState';
 export * from './handleCreateNewReminder';
 export * from './handleCreateDealState';
 export * from './handleDeleteDealState';
+export * from './handleFetchDealDetails';

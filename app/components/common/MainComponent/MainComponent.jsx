@@ -11,7 +11,7 @@ import NotificationsContext from 'app/context/notificationsContext';
 import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import getCallRecordUrl from 'app/utils/getCallRecordUrl';
 import paths from 'app/utils/paths';
-import { appBaseUrl } from 'eas.config';
+import { loginUrl } from 'eas.config';
 import { signOut } from 'middleware/api/auth';
 import {
   setPatientNoteModal,
@@ -135,7 +135,7 @@ const MainComponent = ({ children, currentPath, provideAppData = true }) => {
     }
     try {
       await signOut();
-      router.replace(`${appBaseUrl}/login`).then(() => {
+      router.replace(loginUrl).then(() => {
         dispatch(setAppData(initialState.appData));
       });
     } catch (error) {

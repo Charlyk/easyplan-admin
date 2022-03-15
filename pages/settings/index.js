@@ -7,6 +7,7 @@ import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import parseCookies from 'app/utils/parseCookies';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import { fetchAllCountries } from 'middleware/api/countries';
 import {
   currentClinicSelector,
@@ -41,11 +42,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         store.dispatch(setCookies(cookies));
 
         if (!authToken || !authToken.match(JwtRegex)) {
-          console.log('redirecting 1', authToken);
           return {
             redirect: {
-              destination: '/login',
-              permanent: true,
+              destination: loginUrl,
+              permanent: false,
             },
           };
         }
@@ -60,11 +60,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
           '/settings',
         );
         if (redirectTo != null) {
-          console.log('redirecting 2');
           return {
             redirect: {
               destination: redirectTo,
-              permanent: true,
+              permanent: false,
             },
           };
         }

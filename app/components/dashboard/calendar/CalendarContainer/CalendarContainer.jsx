@@ -38,7 +38,7 @@ const CSVImportModal = dynamic(() =>
   import('app/components/common/CSVImportModal'),
 );
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../common/modals/ConfirmationModal'),
 );
 const CalendarDoctors = dynamic(() => import('../CalendarDoctors'));
 const AppointmentsCalendar = dynamic(() => import('../AppointmentsCalendar'));

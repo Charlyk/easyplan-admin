@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
 import EASTextarea from 'app/components/common/EASTextarea';
 import EASTextField from 'app/components/common/EASTextField';
-import EASModal from 'app/components/common/modals/EASModal';
 import PatientsSearchField from 'app/components/common/PatientsSearchField/PatientsSearchField';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { currentClinicSelector } from 'redux/selectors/appDataSelector';
 import { isCreatingNewReminderSelector } from 'redux/selectors/CreateReminderModal.selector';
 import { dispatchCreateNewReminder } from 'redux/slices/CreateReminderModal.reducer';
+import EASModal from '../EASModal';
 import styles from './AddReminderModal.module.scss';
 import reducer, {
   initialState,

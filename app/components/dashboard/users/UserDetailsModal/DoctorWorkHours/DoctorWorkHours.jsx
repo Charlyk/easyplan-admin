@@ -26,7 +26,8 @@ const DoctorWorkHours = ({ data, onChange }) => {
         ...item,
         startHour: day.startHour,
         endHour: day.endHour,
-        selected: true,
+        isDayOff: day.isDayOff,
+        selected: day.selected,
       };
     });
 

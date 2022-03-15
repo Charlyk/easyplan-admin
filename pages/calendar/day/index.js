@@ -7,6 +7,7 @@ import CalendarDayView from 'app/components/dashboard/calendar/CalendarDayView';
 import { JwtRegex } from 'app/utils/constants';
 import handleRequestError from 'app/utils/handleRequestError';
 import redirectToUrl from 'app/utils/redirectToUrl';
+import { loginUrl } from 'eas.config';
 import { fetchDaySchedules } from 'middleware/api/schedules';
 import {
   authTokenSelector,
@@ -58,8 +59,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       if (!authToken || !authToken.match(JwtRegex)) {
         return {
           redirect: {
-            destination: '/login',
-            permanent: true,
+            destination: loginUrl,
+            permanent: false,
           },
         };
       }
@@ -73,7 +74,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         return {
           redirect: {
             destination: redirectTo,
-            permanent: true,
+            permanent: false,
           },
         };
       }

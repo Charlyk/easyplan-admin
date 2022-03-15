@@ -25,6 +25,7 @@ import {
   closeDetailsModal,
 } from 'redux/slices/servicesListSlice';
 import { ClinicServiceType } from 'types';
+import IncludedServices from './IncludedServices';
 import styles from './ServiceDetailsModal.module.scss';
 
 const ServiceDoctors = dynamic(() => import('./ServiceDoctors'));
@@ -39,6 +40,7 @@ const getInitialService = (doctors, categoryId, currency) => {
     deleted: false,
     price: '',
     duration: '15',
+    includedServices: [],
     serviceType: ClinicServiceType.All,
     doctors: doctors.map((item) => ({
       id: item.id,
@@ -181,6 +183,13 @@ const ServiceDetailsModal = () => {
     setServiceDetails({ ...serviceDetails, ...newInfo });
   };
 
+  const handleIncludedServicesChange = (services) => {
+    setServiceDetails((state) => ({
+      ...state,
+      nestedServices: services.map((item) => item.id),
+    }));
+  };
+
   return (
     <LeftSideModal
       show={open}
@@ -208,7 +217,11 @@ const ServiceDetailsModal = () => {
                 onToggle={handleInfoToggle}
                 showStep={service == null}
               />
-
+              <IncludedServices
+                showStep={service == null}
+                initial={serviceInfo?.includedServices ?? []}
+                onChange={handleIncludedServicesChange}
+              />
               <ServiceDoctors
                 isExpanded
                 onDoctorChange={handleDoctorChange}

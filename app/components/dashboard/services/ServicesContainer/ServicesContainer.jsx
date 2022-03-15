@@ -54,7 +54,7 @@ import reducer, {
 } from './servicesContainerSlice';
 
 const ConfirmationModal = dynamic(() =>
-  import('app/components/common/modals/ConfirmationModal'),
+  import('../../../common/modals/ConfirmationModal'),
 );
 const CSVImportModal = dynamic(() =>
   import('app/components/common/CSVImportModal'),

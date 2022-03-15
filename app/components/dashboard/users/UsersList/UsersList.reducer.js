@@ -59,6 +59,7 @@ const usersListSlice = createSlice({
       state.invitationToDelete = action.payload;
     },
     setShowInviteModal(state, action) {
+      state.invitingExistentError = null;
       state.showInviteModal = action.payload;
     },
     setIsUserModalOpen(state, action) {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 import ResetPasswordPage from 'app/components/common/ResetPasswordPage';
 import { JwtRegex } from 'app/utils/constants';
+import { loginUrl } from 'eas.config';
 import { setCookies } from 'redux/slices/appDataSlice';
 import { wrapper } from 'store';
 
@@ -27,8 +28,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       if (!token?.match(JwtRegex)) {
         return {
           redirect: {
-            destination: '/login',
-            permanent: true,
+            destination: loginUrl,
+            permanent: false,
           },
         };
       }
