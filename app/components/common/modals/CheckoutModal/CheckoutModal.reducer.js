@@ -13,6 +13,15 @@ export const computeServicePrice = (services, exchangeRates) => {
       ...service,
       created: moment(service.created).toDate(),
       totalPrice: roundToTwo(servicePrice),
+      childServices: service.childServices.map((item) => {
+        const serviceExchange = exchangeRates.find(
+          (rate) => rate.currency === service.currency,
+        ) || { value: 1 };
+        return {
+          ...item,
+          totalPrice: item.amount * serviceExchange.value * item.count,
+        };
+      }),
     };
   });
 };
@@ -146,7 +155,12 @@ export const reducer = (state, action) => {
         exchangeRates,
       );
       const servicesPrice = parseFloat(
-        sumBy(updatedServices, (item) => item.totalPrice),
+        sumBy(
+          updatedServices,
+          (item) =>
+            item.totalPrice +
+            sumBy(item.childServices, (child) => child.totalPrice),
+        ),
       ).toFixed(2);
 
       const invoiceTotal = isDebt

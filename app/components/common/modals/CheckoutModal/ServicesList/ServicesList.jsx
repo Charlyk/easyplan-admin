@@ -86,15 +86,28 @@ const ServicesList = ({
         <Table classes={{ root: styles.servicesTable }}>
           <TableBody>
             {services.map((service, index) => (
-              <ServiceRow
-                currencies={currencies}
-                key={`${service.id}-${index}`}
-                canEdit={!isDebt}
-                service={service}
-                onChange={onServiceChanged}
-                canDelete={canAddService}
-                onDelete={onServiceDeleted}
-              />
+              <>
+                <ServiceRow
+                  currencies={currencies}
+                  key={`${service.id}-${index}`}
+                  canEdit={!isDebt}
+                  service={service}
+                  onChange={onServiceChanged}
+                  canDelete={canAddService}
+                  onDelete={onServiceDeleted}
+                />
+                {service.childServices.map((child) => (
+                  <ServiceRow
+                    currencies={currencies}
+                    key={`${child.id}-${index}`}
+                    canEdit={!isDebt}
+                    service={child}
+                    onChange={onServiceChanged}
+                    canDelete={canAddService}
+                    onDelete={onServiceDeleted}
+                  />
+                ))}
+              </>
             ))}
           </TableBody>
         </Table>
