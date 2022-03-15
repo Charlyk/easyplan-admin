@@ -9,10 +9,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import NumberFormat from 'react-number-format';
 import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconTrash from 'app/components/icons/iconTrash';
-import adjustValueToNumber from 'app/utils/adjustValueToNumber';
 import { textForKey } from 'app/utils/localization';
 import styles from './ServiceRow.module.scss';
 
@@ -34,8 +34,8 @@ const ServiceRow = ({
     onChange({ ...service, currency: newCurrency });
   };
 
-  const handlePriceChange = (event) => {
-    const newPrice = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
+  const handlePriceChange = ({ floatValue }) => {
+    const newPrice = floatValue;
     onChange({ ...service, amount: newPrice });
     setPrice(newPrice);
   };
@@ -112,17 +112,13 @@ const ServiceRow = ({
         align='right'
         classes={{ root: clsx(styles.cell, styles.price) }}
       >
-        <TextField
+        <NumberFormat
           disabled={!canEdit}
-          id='standard-number'
-          type='number'
-          value={String(price)}
-          onChange={handlePriceChange}
-          variant='outlined'
-          classes={{ root: styles['price-input'] }}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          maxLength={10}
+          placeholder='0'
+          className={styles['price-input']}
+          onValueChange={handlePriceChange}
+          value={price || ''}
         />
       </TableCell>
       <TableCell
