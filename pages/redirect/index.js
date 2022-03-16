@@ -71,7 +71,9 @@ export const getServerSideProps = async ({ res, query }) => {
     const { token, clinicId } = query;
 
     // check if token is valid
+    console.log(token, clinicId);
     const isAuthenticated = await checkIsAuthenticated(token, clinicId);
+    console.log('isAuthenticated', isAuthenticated);
     if (!isAuthenticated) {
       return {
         redirect: {
