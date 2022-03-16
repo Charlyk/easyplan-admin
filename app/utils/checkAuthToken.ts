@@ -18,6 +18,7 @@ const checkIsAuthTokenValid = async (
     await axios.get(url, { headers });
     return true;
   } catch (error) {
+    console.error(error);
     return false;
   }
 };

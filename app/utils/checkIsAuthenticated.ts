@@ -7,6 +7,7 @@ const checkIsAuthenticated = async (
 ): Promise<boolean> => {
   if (!authToken || !authToken.match(JwtRegex)) {
     // authentication token is not valid, redirect to login
+    console.log('Invalid', authToken);
     return false;
   }
 
