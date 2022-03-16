@@ -160,7 +160,12 @@ const Schedule = ({
           zIndex: getScheduleZIndex(),
           height: itemRect.height,
           backgroundColor: isPause ? '' : '#f3f3f3',
-          border: isHighlighted && !isPause ? '#3A83DC 1px solid' : 'none',
+          borderColor:
+            isHighlighted && !isPause
+              ? '#3A83DC'
+              : schedule.doctorColor
+              ? schedule.doctorColor
+              : 'transparent',
         }}
       >
         {!isPause && (
@@ -292,6 +297,7 @@ export default React.memo(Schedule, areComponentPropsEqual);
 Schedule.propTypes = {
   schedule: PropTypes.shape({
     id: PropTypes.number,
+    doctorColor: PropTypes.string,
     startTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     scheduleStatus: PropTypes.string,

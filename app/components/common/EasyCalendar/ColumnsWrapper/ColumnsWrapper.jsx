@@ -66,6 +66,7 @@ ColumnsWrapper.propTypes = {
         PropTypes.shape({
           id: PropTypes.number,
           comment: PropTypes.string,
+          doctorColor: PropTypes.string,
           doctorId: PropTypes.number,
           startTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
           endTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
