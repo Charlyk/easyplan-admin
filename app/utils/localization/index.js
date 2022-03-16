@@ -24,7 +24,7 @@ export function getAppLanguage() {
 /**
  * Get translated text by key
  * @param {string} key
- * @param {strings|numbers} params
+ * @param {any} params
  * @return string
  * @return {string}
  */

@@ -29,6 +29,7 @@ import {
   PatientTag,
   DealDetailsView,
   CrmDealDetailsType,
+  PaginatedResponse,
 } from 'types';
 
 export interface CalendarDataState {

@@ -12,7 +12,17 @@ export function* handleFetchPatientVisits(action: PayloadAction<number>) {
   try {
     const response: SagaReturnType<typeof requestFetchPatientVisits> =
       yield call(requestFetchPatientVisits, action.payload);
-    yield put(setPatientVisits(response.data));
+    yield put(
+      setPatientVisits(
+        response.data.map((item) => ({
+          ...item,
+          treatmentServices: item.treatmentServices.map((service) => ({
+            ...service,
+            teeth: service.teeth.map((item) => item.replace('_', '')),
+          })),
+        })),
+      ),
+    );
   } catch (error) {
     yield put(setIsFetching(false));
     if (error.response != null) {

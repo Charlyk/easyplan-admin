@@ -39,3 +39,5 @@ export * from './facebookAuthentication.types';
 export * from './facebookPage.types';
 export * from './crmDealListItem.types';
 export * from './crmDealDetails.types';
+export * from './treatmentPlan.types';
+export * from './paginatedResponse.types';
