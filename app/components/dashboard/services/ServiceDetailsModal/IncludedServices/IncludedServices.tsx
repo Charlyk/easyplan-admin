@@ -29,7 +29,7 @@ const IncludedServices: React.FC<IncludedServicesProps> = ({
 
   const mappedOptions = useMemo(() => {
     const mapped = allServices
-      .filter((item) => item.id !== service.id)
+      .filter((item) => item.id !== service?.id)
       .map((item) => ({
         ...item,
         name: getServiceName(item),

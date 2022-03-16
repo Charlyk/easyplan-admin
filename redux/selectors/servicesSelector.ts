@@ -30,7 +30,7 @@ export const serviceDetailsSelector = createSelector(
 
 export const serviceDetailsIncludedSelector = createSelector(
   serviceDetailsSelector,
-  (details) => details.includedServices ?? [],
+  (details) => details?.includedServices ?? [],
 );
 
 export const isFetchingDetailsSelector = createSelector(

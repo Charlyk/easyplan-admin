@@ -266,6 +266,16 @@ export async function updatePatientGeneralTreatmentPlan(
 }
 
 /**
+ * Fetch patient treatment plan from server
+ * @param {string|number} patientId
+ * @param {*} headers
+ * @return {Promise<AxiosResponse<TreatmentPlan>>}
+ */
+export async function fetchPatientTreatmentPlan(patientId, headers = null) {
+  return get(`/api/treatment-plans/${patientId}`, headers);
+}
+
+/**
  * Add an image to patient x-ray files
  * @param {number} patientId
  * @param {string} type

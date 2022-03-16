@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
 import initialState from 'redux/initialState';
-import { PatientVisit } from 'types';
+import { PaginatedResponse, PatientVisit } from 'types';
 import { UpdateVisitRequest } from 'types/api';
 
 const appointmentNotesSlice = createSlice({

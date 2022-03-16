@@ -45,7 +45,10 @@ export default authorized(async (req, res) => {
   switch (req.method) {
     case 'GET': {
       const data = await handler(fetchPatientOrthodonticPlan, req, res);
-      if (!data) return;
+      if (!data) {
+        res.json({ status: 'OK' });
+        return;
+      }
       res.json(data);
       break;
     }
@@ -56,7 +59,7 @@ export default authorized(async (req, res) => {
       break;
     }
     default:
-      res.setHeader('Allow', ['GET']);
+      res.setHeader('Allow', ['GET', 'POST']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }

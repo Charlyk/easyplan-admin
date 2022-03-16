@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import IconCheckMark from 'app/components/icons/iconCheckMark';
-import getServiceName from 'app/utils/getServiceName';
 import { textForKey } from 'app/utils/localization';
 import styles from './FinalServiceItem.module.scss';
 
@@ -22,21 +21,36 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
     return moment(service.created).format('DD.MM.YYYY HH:MM');
   }, [service]);
 
+  const serviceName = useMemo(() => {
+    let name = service.service.name;
+    if (service.teeth.length > 0) {
+      name = `${name} | Dinții - ${service.teeth.join(', ')}`;
+    }
+    if (service.bracesPlanType) {
+      name = `${name} | ${textForKey(service.bracesPlanType)}`;
+    }
+    return name;
+  }, [service]);
+
   return (
     <tr className={styles.finalServiceRoot}>
       <td>
         <div className={styles.serviceWrapper}>
           <Typography classes={{ root: styles.serviceName }}>
-            {getServiceName(service)}
+            {serviceName}
           </Typography>
           {service.completedBy && (
             <Typography classes={{ root: styles.completedByLabel }}>
-              {textForKey('completed by', service.completedBy, completedDate)}
+              {textForKey(
+                'completed by',
+                service.completedBy.fullName,
+                completedDate,
+              )}
             </Typography>
           )}
-          {!service.completed && service.addedByName && (
+          {!service.completed && service.addedBy && (
             <Typography classes={{ root: styles.completedByLabel }}>
-              {textForKey('added by', service.addedByName, addedDate)}
+              {textForKey('added by', service.addedBy.fullName, addedDate)}
             </Typography>
           )}
         </div>

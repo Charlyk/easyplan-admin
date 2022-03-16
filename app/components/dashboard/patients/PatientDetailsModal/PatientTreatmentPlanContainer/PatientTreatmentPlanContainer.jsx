@@ -8,6 +8,7 @@ import NotificationsContext from 'app/context/notificationsContext';
 import getTreatmentPlanURL from 'app/utils/getTreatmentPlanURL';
 import { textForKey } from 'app/utils/localization';
 import { fetchDoctorScheduleDetails } from 'middleware/api/schedules';
+import { fetchPatientTreatmentPlan } from '../../../../../../middleware/api/patients';
 import styles from './PatientTreatmentPlanContainer.module.scss';
 
 const PatientTreatmentPlanContainer = ({
@@ -31,11 +32,10 @@ const PatientTreatmentPlanContainer = ({
   const fetchScheduleData = async () => {
     setIsLoading(true);
     try {
-      const { data: initialSchedule } = await fetchDoctorScheduleDetails(
-        null,
+      const { data: treatmentPlan } = await fetchPatientTreatmentPlan(
         patientId,
       );
-      setScheduleData(initialSchedule);
+      setScheduleData(treatmentPlan);
     } catch (error) {
       toast.error(error.message);
     } finally {

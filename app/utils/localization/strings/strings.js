@@ -794,6 +794,9 @@ export default {
     crm_columns: 'Columns',
     fill_required_fields: 'Please fill all required fields.',
     'included services': 'Included Services',
+    surgery: 'Surgery',
+    treatment: 'Treatment',
+    prosthetics: 'Prosthetics',
   },
   ro: {
     analytics: 'Analitică',
@@ -1600,6 +1603,9 @@ export default {
     crm_columns: 'Coloane',
     fill_required_fields: 'Completați toate câmpurile obligatorii.',
     'included services': 'Servicii Incluse',
+    surgery: 'Intervenție chirurgicală',
+    treatment: 'Tratament',
+    prosthetics: 'Proteze',
   },
   ru: {
     analytics: 'Analytics',
@@ -2393,5 +2399,8 @@ export default {
     crm_columns: 'Columns',
     fill_required_fields: 'Please fill all required fields.',
     'included services': 'Included Services',
+    surgery: 'Surgery',
+    treatment: 'Treatment',
+    prosthetics: 'Prosthetics',
   },
 };

@@ -8,13 +8,38 @@ export const computeServicePrice = (services, exchangeRates) => {
     const serviceExchange = exchangeRates.find(
       (rate) => rate.currency === service.currency,
     ) || { value: 1 };
-    const servicePrice = service.amount * serviceExchange.value * service.count;
+    const teethCount = service.teeth?.length > 0 ? service.teeth?.length : 1;
+    const servicePrice =
+      serviceExchange.value * (service.amount * service.count * teethCount);
     return {
       ...service,
+      teeth: service.teeth?.map((item) => item.replace('_', '')),
       created: moment(service.created).toDate(),
       totalPrice: roundToTwo(servicePrice),
+      childServices: service.childServices.map((item) => {
+        const serviceExchange = exchangeRates.find(
+          (rate) => rate.currency === item.currency,
+        ) || { value: 1 };
+        return {
+          ...item,
+          totalPrice:
+            serviceExchange.value * (item.amount * item.count * teethCount),
+        };
+      }),
     };
   });
+};
+
+export const getServicesTotalPrice = (services, exchangeRates) => {
+  const updatedServices = computeServicePrice(services, exchangeRates);
+  return parseFloat(
+    sumBy(
+      updatedServices,
+      (item) =>
+        item.totalPrice +
+        sumBy(item.childServices, (child) => child.totalPrice),
+    ),
+  ).toFixed(2);
 };
 
 export const getDiscount = (total, discount) => {
@@ -117,7 +142,12 @@ export const reducer = (state, action) => {
       // compute services total price
       const updatedServices = computeServicePrice(services, exchangeRates);
       const servicesPrice = parseFloat(
-        sumBy(updatedServices, (item) => item.totalPrice),
+        sumBy(
+          updatedServices,
+          (item) =>
+            item.totalPrice +
+            sumBy(item.childServices, (child) => child.totalPrice),
+        ),
       ).toFixed(2);
       // compute new total amount
       const newTotalAmount = isDebt
@@ -146,7 +176,12 @@ export const reducer = (state, action) => {
         exchangeRates,
       );
       const servicesPrice = parseFloat(
-        sumBy(updatedServices, (item) => item.totalPrice),
+        sumBy(
+          updatedServices,
+          (item) =>
+            item.totalPrice +
+            sumBy(item.childServices, (child) => child.totalPrice),
+        ),
       ).toFixed(2);
 
       const invoiceTotal = isDebt

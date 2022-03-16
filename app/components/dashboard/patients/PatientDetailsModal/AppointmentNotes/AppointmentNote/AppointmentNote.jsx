@@ -4,7 +4,6 @@ import Box from '@material-ui/core/Box';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import IconEditService from 'app/components/icons/iconEditService';
-import getServiceName from 'app/utils/getServiceName';
 import { textForKey } from 'app/utils/localization';
 import styles from './AppointmentNote.module.scss';
 
@@ -12,7 +11,15 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
   const { doctor } = visit;
 
   const serviceName = (planService) => {
-    return getServiceName({ ...planService, name: planService.service.name });
+    let name = planService.name;
+    if (planService.teeth.length > 0) {
+      name = `${name} | ${planService.teeth.join(', ')}`;
+    }
+
+    if (planService.bracesPlanType) {
+      name = `${name} | ${textForKey(planService.bracesPlanType)}`;
+    }
+    return name;
   };
 
   return (
@@ -26,13 +33,14 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
           <span className={styles.doctorName}>{doctor.fullName}</span>
         </div>
         <Typography noWrap className={styles.noteText}>
-          {visit.note.length === 0 ? textForKey('no_notes') : visit.note}
+          {visit.note?.length === 0 ? textForKey('no_notes') : visit.note}
         </Typography>
         <div className={styles.servicesContainer}>
-          {visit?.planServices?.map((planService, index) => (
+          {visit?.treatmentServices?.map((planService, index) => (
             <div
               key={`${planService.id}-${index}`}
               className={styles.visitServiceItem}
+              style={{ borderColor: planService.color }}
             >
               {serviceName(planService)}
             </div>

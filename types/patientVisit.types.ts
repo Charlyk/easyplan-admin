@@ -3,7 +3,7 @@ export interface PatientVisit {
   created: string;
   note?: string | null;
   doctor: VisitDoctor;
-  planServices: VisitService[];
+  treatmentServices: VisitService[];
 }
 
 export interface VisitDoctor {
@@ -15,15 +15,8 @@ export interface VisitDoctor {
 
 export interface VisitService {
   id: number;
-  destination: string | null;
-  toothId: string | null;
-  service: VisitClinicService;
-}
-
-export interface VisitClinicService {
-  id: number;
-  color: string;
-  currency: string;
-  name: string;
-  price: number;
+  name: string | null;
+  color: string | null;
+  teeth: string[];
+  group: string | null;
 }

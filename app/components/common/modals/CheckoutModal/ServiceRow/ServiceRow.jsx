@@ -9,16 +9,17 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import NumberFormat from 'react-number-format';
 import IconMinus from 'app/components/icons/iconMinus';
 import IconPlus from 'app/components/icons/iconPlus';
 import IconTrash from 'app/components/icons/iconTrash';
-import adjustValueToNumber from 'app/utils/adjustValueToNumber';
 import { textForKey } from 'app/utils/localization';
 import styles from './ServiceRow.module.scss';
 
 const ServiceRow = ({
   service,
   currencies,
+  isChild,
   canEdit,
   canDelete,
   onChange,
@@ -31,17 +32,17 @@ const ServiceRow = ({
   const handleCurrencyChange = (event) => {
     const newCurrency = event.target.value;
     setCurrency(newCurrency);
-    onChange({ ...service, currency: newCurrency });
+    onChange({ ...service, currency: newCurrency, isChild });
   };
 
-  const handlePriceChange = (event) => {
-    const newPrice = adjustValueToNumber(event.target.value, Number.MAX_VALUE);
-    onChange({ ...service, amount: newPrice });
+  const handlePriceChange = ({ floatValue }) => {
+    const newPrice = floatValue;
+    onChange({ ...service, amount: newPrice, isChild });
     setPrice(newPrice);
   };
 
   const handleDeleteService = () => {
-    onDelete(service);
+    onDelete(service, isChild);
   };
 
   const handleServiceCountChange = (buttonId) => () => {
@@ -49,7 +50,7 @@ const ServiceRow = ({
       case 'plus': {
         const newCount = count + 1;
         setCount(newCount);
-        onChange({ ...service, count: newCount });
+        onChange({ ...service, count: newCount, isChild });
         break;
       }
       case 'minus': {
@@ -58,7 +59,7 @@ const ServiceRow = ({
           newCount = 1;
         }
         setCount(newCount);
-        onChange({ ...service, count: newCount });
+        onChange({ ...service, count: newCount, isChild });
         break;
       }
     }
@@ -66,18 +67,27 @@ const ServiceRow = ({
 
   const serviceTitle = () => {
     let name = service.name;
-    if (service.toothId != null) {
-      name = `${name} ${service.toothId}`;
+    const childIndicator = isChild ? '- ' : '';
+    const group = service.group ? ` | ${textForKey(service.group)}` : '';
+    if (service.teeth != null && service.teeth.length > 0) {
+      name = `${childIndicator}${name} | Dinții - ${service.teeth.join(', ')}`;
     }
     if (service.destination != null) {
-      name = `${name} (${textForKey(service.destination)})`;
+      name = `${childIndicator}${name} | ${textForKey(service.destination)}`;
     }
-    return name;
+    if (service.bracesPlanType != null) {
+      name = `${childIndicator}${name} | ${textForKey(service.bracesPlanType)}`;
+    }
+    return `${childIndicator}${name}${group}`;
   };
 
   return (
     <TableRow classes={{ root: styles.serviceRow }}>
-      <TableCell classes={{ root: clsx(styles.cell, styles.name) }}>
+      <TableCell
+        classes={{
+          root: clsx(styles.cell, styles.name, { [styles.nested]: isChild }),
+        }}
+      >
         <Tooltip title={serviceTitle()}>
           <Typography noWrap classes={{ root: styles['service-name'] }}>
             {serviceTitle()}
@@ -112,17 +122,13 @@ const ServiceRow = ({
         align='right'
         classes={{ root: clsx(styles.cell, styles.price) }}
       >
-        <TextField
+        <NumberFormat
           disabled={!canEdit}
-          id='standard-number'
-          type='number'
-          value={String(price)}
-          onChange={handlePriceChange}
-          variant='outlined'
-          classes={{ root: styles['price-input'] }}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          maxLength={10}
+          placeholder='0'
+          className={styles['price-input']}
+          onValueChange={handlePriceChange}
+          value={price || ''}
         />
       </TableCell>
       <TableCell
@@ -168,6 +174,7 @@ const ServiceRow = ({
 export default ServiceRow;
 
 ServiceRow.propTypes = {
+  isChild: PropTypes.bool,
   service: PropTypes.object,
   canEdit: PropTypes.bool,
   canDelete: PropTypes.bool,
