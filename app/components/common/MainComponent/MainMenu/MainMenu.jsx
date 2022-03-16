@@ -234,7 +234,7 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   const handleCompanySelected = async (company) => {
     const { clinicDomain } = company;
     const domain = getClinicUrl(clinicDomain);
-    const clinicUrl = `${domain}/redirect?token=${authToken}&clinicId=${company.id}`;
+    const clinicUrl = `${domain}/redirect?token=${authToken}&clinicId=${company.clinicId}`;
     // open clinic a new tab
     window.open(clinicUrl, '_blank');
     handleCompanyClose();
