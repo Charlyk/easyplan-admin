@@ -4,11 +4,11 @@ import { HeaderKeys } from './constants';
 
 const checkIsAuthTokenValid = async (
   authToken: string,
-  clinicId: string | null,
+  clinicId: string | null | undefined,
 ): Promise<boolean> => {
   try {
     const headers = {
-      [HeaderKeys.authorization]: authToken,
+      [HeaderKeys.authorization]: authToken ?? '',
     };
     if (clinicId) {
       headers[HeaderKeys.clinicId] = clinicId;

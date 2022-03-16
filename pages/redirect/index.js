@@ -3,13 +3,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
-import checkIsAuthTokenValid from 'app/utils/checkAuthToken';
 import getRedirectUrlForUser from 'app/utils/getRedirectUrlForUser';
 import handleRequestError from 'app/utils/handleRequestError';
 import { textForKey } from 'app/utils/localization';
 import setCookies from 'app/utils/setCookies';
 import { environment, loginUrl } from 'eas.config';
 import { getCurrentUser, signOut } from 'middleware/api/auth';
+import checkIsAuthenticated from '../../app/utils/checkIsAuthenticated';
 
 const Redirect = ({ clinicId }) => {
   const router = useRouter();
@@ -40,6 +40,7 @@ const Redirect = ({ clinicId }) => {
       }
       await router.replace(redirectUrl);
     } catch (error) {
+      console.error(error);
       await router.replace(loginUrl);
     }
   };
@@ -70,7 +71,7 @@ export const getServerSideProps = async ({ res, query }) => {
     const { token, clinicId } = query;
 
     // check if token is valid
-    const isAuthenticated = await checkIsAuthTokenValid(token, clinicId);
+    const isAuthenticated = await checkIsAuthenticated(token, clinicId);
     if (!isAuthenticated) {
       return {
         redirect: {
