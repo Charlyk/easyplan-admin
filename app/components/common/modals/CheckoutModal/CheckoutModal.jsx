@@ -21,7 +21,6 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
-import sumBy from 'lodash/sumBy';
 import uniq from 'lodash/uniq';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
@@ -39,10 +38,7 @@ import {
   fetchDetailsForInvoice,
   registerInvoicePayment,
 } from 'middleware/api/invoices';
-import {
-  savePatientGeneralTreatmentPlan,
-  searchPatients,
-} from 'middleware/api/patients';
+import { searchPatients } from 'middleware/api/patients';
 import {
   activeClinicDoctorsSelector,
   clinicExchangeRatesSelector,
@@ -54,7 +50,12 @@ import { updateInvoicesSelector } from 'redux/selectors/rootSelector';
 import { setPatientDetails } from 'redux/slices/mainReduxSlice';
 import TeethModal from '../TeethModal';
 import styles from './CheckoutModal.module.scss';
-import { actions, initialState, reducer } from './CheckoutModal.reducer';
+import {
+  actions,
+  getServicesTotalPrice,
+  initialState,
+  reducer,
+} from './CheckoutModal.reducer';
 import DetailsRow from './DetailsRow';
 import ServicesList from './ServicesList';
 
@@ -345,6 +346,7 @@ const CheckoutModal = ({
       amount: service.price,
       count: 1,
       totalPrice: service.price,
+      destination: service.destination,
       childServices: service.childServices.map((child) => ({
         ...child,
         amount: child.price,
@@ -376,27 +378,8 @@ const CheckoutModal = ({
     }
   };
 
-  const getPlanRequestBody = () => {
-    return {
-      patientId: invoiceDetails.patient.id,
-      scheduleId: schedule.id,
-      services: services.map((service) => ({
-        serviceId: service.id,
-        toothId: service.toothId ?? null,
-        destination: service.destination ?? null,
-        completed: true,
-        price: service.amount,
-        currency: service.currency,
-        count: service.count,
-        isBraces: service.serviceType == null,
-      })),
-    };
-  };
-
   const getRequestBody = () => {
-    const servicesPrice = parseFloat(
-      sumBy(services, (item) => item.totalPrice),
-    ).toFixed(2);
+    const servicesPrice = getServicesTotalPrice(services, exchangeRates);
     const requestBody = {
       paidAmount: payAmount,
       discount: discount,
@@ -408,6 +391,7 @@ const CheckoutModal = ({
         count: item.count,
         currency: item.currency,
         teeth: item.teeth ?? [],
+        bracesPlanType: item.destination,
         childServices: item.childServices.map((child) => ({
           id: child.id,
           price: child.amount,
@@ -420,6 +404,10 @@ const CheckoutModal = ({
     if (isNew) {
       requestBody.patientId = invoiceDetails.patient.id;
       requestBody.doctorId = invoiceDetails.doctor.id;
+    }
+
+    if (schedule != null) {
+      requestBody.scheduleId = schedule.id;
     }
 
     return requestBody;
@@ -444,12 +432,7 @@ const CheckoutModal = ({
     try {
       const requestBody = getRequestBody();
       localDispatch(actions.setIsLoading(true));
-      schedule != null
-        ? await savePatientGeneralTreatmentPlan({
-            ...getPlanRequestBody(),
-            paymentRequest: requestBody,
-          })
-        : isNew
+      isNew
         ? await createNewInvoice(requestBody)
         : await registerInvoicePayment(invoiceDetails.id, requestBody);
       if (openPatientDetailsOnClose) {

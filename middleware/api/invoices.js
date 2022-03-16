@@ -28,6 +28,7 @@ export async function fetchPendingInvoices(headers = null) {
  *     paidAmount: number,
  *     discount: number,
  *     totalAmount: string,
+ *     scheduleId: string?,
  *     services: [{
  *       id: number,
  *       serviceId: number,

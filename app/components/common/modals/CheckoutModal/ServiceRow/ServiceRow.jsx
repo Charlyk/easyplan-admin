@@ -73,7 +73,10 @@ const ServiceRow = ({
       name = `${childIndicator}${name} | Dinții - ${service.teeth.join(', ')}`;
     }
     if (service.destination != null) {
-      name = `${childIndicator}${name} (${textForKey(service.destination)})`;
+      name = `${childIndicator}${name} | ${textForKey(service.destination)}`;
+    }
+    if (service.bracesPlanType != null) {
+      name = `${childIndicator}${name} | ${textForKey(service.bracesPlanType)}`;
     }
     return `${childIndicator}${name}${group}`;
   };

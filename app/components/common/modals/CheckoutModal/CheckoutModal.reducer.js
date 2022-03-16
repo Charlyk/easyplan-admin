@@ -30,6 +30,18 @@ export const computeServicePrice = (services, exchangeRates) => {
   });
 };
 
+export const getServicesTotalPrice = (services, exchangeRates) => {
+  const updatedServices = computeServicePrice(services, exchangeRates);
+  return parseFloat(
+    sumBy(
+      updatedServices,
+      (item) =>
+        item.totalPrice +
+        sumBy(item.childServices, (child) => child.totalPrice),
+    ),
+  ).toFixed(2);
+};
+
 export const getDiscount = (total, discount) => {
   const discountAmount = total * (discount / 100);
   let discountedTotal = total - discountAmount;

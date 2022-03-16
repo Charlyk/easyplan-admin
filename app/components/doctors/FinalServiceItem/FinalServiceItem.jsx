@@ -26,6 +26,9 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
     if (service.teeth.length > 0) {
       name = `${name} | Dinții - ${service.teeth.join(', ')}`;
     }
+    if (service.bracesPlanType) {
+      name = `${name} | ${textForKey(service.bracesPlanType)}`;
+    }
     return name;
   }, [service]);
 

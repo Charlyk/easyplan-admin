@@ -35,7 +35,7 @@ const AppointmentNotes = ({ currentUser, patient, onEditNote }) => {
           return (
             <AppointmentNote
               canEdit={doctor.id === currentUser.id}
-              key={`${visit.scheduleId}-${doctor.id}-${visit.created}-${index}`}
+              key={`${doctor.id}-${visit.created}-${index}`}
               visit={visit}
               onEdit={onEditNote}
             />
