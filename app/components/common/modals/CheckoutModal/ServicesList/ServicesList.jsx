@@ -98,6 +98,7 @@ const ServicesList = ({
                 />
                 {service.childServices.map((child) => (
                   <ServiceRow
+                    isChild
                     currencies={currencies}
                     key={`${child.id}-${index}`}
                     canEdit={!isDebt}

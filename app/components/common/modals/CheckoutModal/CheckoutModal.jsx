@@ -260,7 +260,15 @@ const CheckoutModal = ({
 
   const handleServiceChanged = (newService) => {
     const newServices = services.map((service) => {
-      if (
+      if (newService.isChild) {
+        return {
+          ...service,
+          childServices: service.childServices.map((child) => {
+            if (child.id !== newService.id) return child;
+            return { ...child, ...newService };
+          }),
+        };
+      } else if (
         service.id !== newService.id ||
         service.toothId !== newService.toothId ||
         service.destination !== newService.destination
@@ -331,18 +339,23 @@ const CheckoutModal = ({
     );
   };
 
-  const handleServiceRemoved = (service) => {
-    const newServices = cloneDeep(services);
-    remove(
-      newServices,
-      (item) =>
-        item.serviceId === service.serviceId &&
-        item.toothId === service.toothId &&
-        item.destination === service.destination,
-    );
-    localDispatch(
-      actions.setServices({ services: newServices, exchangeRates }),
-    );
+  const handleServiceRemoved = (service, isChild) => {
+    if (isChild) {
+      const newServices = services.map((item) => ({
+        ...item,
+        childServices: item.childServices.filter(
+          (child) => child.id !== service.id,
+        ),
+      }));
+      localDispatch(
+        actions.setServices({ services: newServices, exchangeRates }),
+      );
+    } else {
+      const newServices = services.filter((item) => item.id !== service.id);
+      localDispatch(
+        actions.setServices({ services: newServices, exchangeRates }),
+      );
+    }
   };
 
   const getPlanRequestBody = () => {
@@ -373,12 +386,15 @@ const CheckoutModal = ({
       totalAmount: servicesPrice,
       services: services.map((item) => ({
         id: item.id,
-        serviceId: item.serviceId,
         price: item.amount,
         count: item.count,
         currency: item.currency,
-        toothId: item.toothId ?? null,
-        destination: item.destination ?? null,
+        childServices: item.childServices.map((child) => ({
+          id: child.id,
+          price: child.amount,
+          count: child.count,
+          currency: child.currency,
+        })),
       })),
     };
 

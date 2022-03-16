@@ -19,6 +19,7 @@ import styles from './ServiceRow.module.scss';
 const ServiceRow = ({
   service,
   currencies,
+  isChild,
   canEdit,
   canDelete,
   onChange,
@@ -31,17 +32,17 @@ const ServiceRow = ({
   const handleCurrencyChange = (event) => {
     const newCurrency = event.target.value;
     setCurrency(newCurrency);
-    onChange({ ...service, currency: newCurrency });
+    onChange({ ...service, currency: newCurrency, isChild });
   };
 
   const handlePriceChange = ({ floatValue }) => {
     const newPrice = floatValue;
-    onChange({ ...service, amount: newPrice });
+    onChange({ ...service, amount: newPrice, isChild });
     setPrice(newPrice);
   };
 
   const handleDeleteService = () => {
-    onDelete(service);
+    onDelete(service, isChild);
   };
 
   const handleServiceCountChange = (buttonId) => () => {
@@ -49,7 +50,7 @@ const ServiceRow = ({
       case 'plus': {
         const newCount = count + 1;
         setCount(newCount);
-        onChange({ ...service, count: newCount });
+        onChange({ ...service, count: newCount, isChild });
         break;
       }
       case 'minus': {
@@ -58,7 +59,7 @@ const ServiceRow = ({
           newCount = 1;
         }
         setCount(newCount);
-        onChange({ ...service, count: newCount });
+        onChange({ ...service, count: newCount, isChild });
         break;
       }
     }
@@ -66,18 +67,24 @@ const ServiceRow = ({
 
   const serviceTitle = () => {
     let name = service.name;
-    if (service.toothId != null) {
-      name = `${name} ${service.toothId}`;
+    const childIndicator = isChild ? '- ' : '';
+    const group = service.group ? ` | ${textForKey(service.group)}` : '';
+    if (service.teeth != null && service.teeth.length > 0) {
+      name = `${childIndicator}${name} | Dinții - ${service.teeth.join(', ')}`;
     }
     if (service.destination != null) {
-      name = `${name} (${textForKey(service.destination)})`;
+      name = `${childIndicator}${name} (${textForKey(service.destination)})`;
     }
-    return name;
+    return `${childIndicator}${name}${group}`;
   };
 
   return (
     <TableRow classes={{ root: styles.serviceRow }}>
-      <TableCell classes={{ root: clsx(styles.cell, styles.name) }}>
+      <TableCell
+        classes={{
+          root: clsx(styles.cell, styles.name, { [styles.nested]: isChild }),
+        }}
+      >
         <Tooltip title={serviceTitle()}>
           <Typography noWrap classes={{ root: styles['service-name'] }}>
             {serviceTitle()}
@@ -164,6 +171,7 @@ const ServiceRow = ({
 export default ServiceRow;
 
 ServiceRow.propTypes = {
+  isChild: PropTypes.bool,
   service: PropTypes.object,
   canEdit: PropTypes.bool,
   canDelete: PropTypes.bool,
