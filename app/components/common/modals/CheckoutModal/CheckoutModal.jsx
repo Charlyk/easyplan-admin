@@ -21,8 +21,8 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
-import remove from 'lodash/remove';
 import sumBy from 'lodash/sumBy';
+import uniq from 'lodash/uniq';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
@@ -287,29 +287,42 @@ const CheckoutModal = ({
   };
 
   const handleTeethSelected = (service, teeth) => {
-    const newServices = cloneDeep(services);
-    for (const tooth of teeth) {
-      const serviceClone = { ...service, toothId: tooth };
-      const serviceExists = newServices.some(
-        (item) =>
-          item.serviceId === serviceClone.id &&
-          item.toothId === serviceClone.toothId,
-      );
-      if (serviceExists) {
-        continue;
-      }
-      newServices.unshift({
-        ...serviceClone,
-        serviceId: serviceClone.id,
-        currency: clinicCurrency,
-        amount: serviceClone.price,
-        count: 1,
-        totalPrice: serviceClone.price,
+    const serviceExists = services.some((item) => item.id === service.id);
+    if (serviceExists) {
+      const newServices = services.map((item) => {
+        if (item.id !== service.id) {
+          return item;
+        }
+        return {
+          ...item,
+          teeth: uniq([...item.teeth, ...teeth]),
+        };
       });
+      localDispatch(
+        actions.setServices({ services: newServices, exchangeRates }),
+      );
+    } else {
+      const newServices = [
+        {
+          ...service,
+          teeth,
+          amount: service.price,
+          count: 1,
+          totalPrice: service.price,
+          childServices: service.childServices.map((child) => ({
+            ...child,
+            amount: child.price,
+            count: 1,
+            totalPrice: child.price,
+          })),
+        },
+        ...services,
+      ];
+
+      localDispatch(
+        actions.setServices({ services: newServices, exchangeRates }),
+      );
     }
-    localDispatch(
-      actions.setServices({ services: newServices, exchangeRates }),
-    );
   };
 
   const handleNewServiceSelected = (service) => {
@@ -329,10 +342,15 @@ const CheckoutModal = ({
     newServices.unshift({
       ...service,
       serviceId: service.id,
-      currency: clinicCurrency,
       amount: service.price,
       count: 1,
       totalPrice: service.price,
+      childServices: service.childServices.map((child) => ({
+        ...child,
+        amount: child.price,
+        count: 1,
+        totalPrice: child.price,
+      })),
     });
     localDispatch(
       actions.setServices({ services: newServices, exchangeRates }),
@@ -389,6 +407,7 @@ const CheckoutModal = ({
         price: item.amount,
         count: item.count,
         currency: item.currency,
+        teeth: item.teeth ?? [],
         childServices: item.childServices.map((child) => ({
           id: child.id,
           price: child.amount,

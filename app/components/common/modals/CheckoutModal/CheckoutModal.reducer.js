@@ -8,17 +8,17 @@ export const computeServicePrice = (services, exchangeRates) => {
     const serviceExchange = exchangeRates.find(
       (rate) => rate.currency === service.currency,
     ) || { value: 1 };
-    const teethCount = service.teeth.length > 0 ? service.teeth.length : 1;
+    const teethCount = service.teeth?.length > 0 ? service.teeth?.length : 1;
     const servicePrice =
       serviceExchange.value * (service.amount * service.count * teethCount);
     return {
       ...service,
-      teeth: service.teeth.map((item) => item.replace('_', '')),
+      teeth: service.teeth?.map((item) => item.replace('_', '')),
       created: moment(service.created).toDate(),
       totalPrice: roundToTwo(servicePrice),
       childServices: service.childServices.map((item) => {
         const serviceExchange = exchangeRates.find(
-          (rate) => rate.currency === service.currency,
+          (rate) => rate.currency === item.currency,
         ) || { value: 1 };
         return {
           ...item,
