@@ -75,6 +75,7 @@ EasyCalendar.propTypes = {
       schedules: PropTypes.arrayOf(
         PropTypes.shape({
           id: PropTypes.number,
+          doctorColor: PropTypes.string,
           comment: PropTypes.string,
           doctorId: PropTypes.number,
           startTime: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

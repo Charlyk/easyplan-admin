@@ -32,8 +32,10 @@ import { textForKey } from 'app/utils/localization';
 import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
-import { appBaseUrl, environment } from 'eas.config';
+import useRootDomain from 'app/utils/useRootDomain';
+import { environment } from 'eas.config';
 import {
+  authTokenSelector,
   currentClinicSelector,
   currentUserSelector,
   userClinicSelector,
@@ -158,10 +160,12 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   const selectedClinic = useSelector(userClinicSelector);
   const currentUser = useSelector(currentUserSelector);
   const currentClinic = useSelector(currentClinicSelector);
+  const authToken = useSelector(authTokenSelector);
   const canRegisterPayments = selectedClinic?.canRegisterPayments;
   const remoteReminder = useSelector(newReminderSelector);
   const updatedReminder = useSelector(updatedReminderSelector);
   const remindersCount = useSelector(remindersCountSelector);
+  const [_rootDomain, getClinicUrl] = useRootDomain();
   const [techSupportRef, setTechSupportRef] = useState(null);
   const [crmDashboardRef, setCrmDashboardRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
@@ -229,9 +233,10 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
 
   const handleCompanySelected = async (company) => {
     const { clinicDomain } = company;
-    const redirectUrl = appBaseUrl.replace('app', clinicDomain);
+    const domain = getClinicUrl(clinicDomain);
+    const clinicUrl = `${domain}/redirect?token=${authToken}&clinicId=${company.clinicId}`;
     // open clinic a new tab
-    window.open(redirectUrl, '_blank');
+    window.open(clinicUrl, '_blank');
     handleCompanyClose();
   };
 
