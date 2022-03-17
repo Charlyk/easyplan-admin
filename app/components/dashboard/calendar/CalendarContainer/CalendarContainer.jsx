@@ -72,12 +72,12 @@ const importFields = [
   {
     id: 'phoneNumber',
     name: textForKey('Patient phone'),
-    required: true,
+    required: false,
   },
   {
     id: 'countryCode',
     name: textForKey('Country code'),
-    required: true,
+    required: false,
   },
   {
     id: 'status',
