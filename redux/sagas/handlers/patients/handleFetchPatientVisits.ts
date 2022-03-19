@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import orderBy from 'lodash/orderBy';
 import { call, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
 import {
   dispatchFetchPatientVisits,
@@ -16,10 +17,14 @@ export function* handleFetchPatientVisits(action: PayloadAction<number>) {
       setPatientVisits(
         response.data.map((item) => ({
           ...item,
-          treatmentServices: item.treatmentServices.map((service) => ({
-            ...service,
-            teeth: service.teeth.map((item) => item.replace('_', '')),
-          })),
+          treatmentServices: orderBy(
+            item.treatmentServices.map((service) => ({
+              ...service,
+              tooth: service.tooth?.replace('_', ''),
+            })),
+            'created',
+            'desc',
+          ),
         })),
       ),
     );

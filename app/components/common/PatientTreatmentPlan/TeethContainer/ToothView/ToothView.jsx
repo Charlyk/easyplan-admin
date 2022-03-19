@@ -16,7 +16,7 @@ const ToothView = ({ icon, toothId, direction, services }) => {
   useEffect(() => {
     setToothServices(
       services
-        .filter((service) => service.teeth.includes(toothId))
+        .filter((service) => service.tooth === toothId)
         .map((item) => item.service),
     );
   }, [services]);

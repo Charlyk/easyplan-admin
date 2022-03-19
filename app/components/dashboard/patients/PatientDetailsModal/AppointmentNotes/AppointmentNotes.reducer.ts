@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import orderBy from 'lodash/orderBy';
 import initialState from 'redux/initialState';
-import { PaginatedResponse, PatientVisit } from 'types';
+import { PatientVisit } from 'types';
 import { UpdateVisitRequest } from 'types/api';
 
 const appointmentNotesSlice = createSlice({
@@ -13,6 +13,7 @@ const appointmentNotesSlice = createSlice({
     },
     dispatchFetchPatientVisits(state, _action: PayloadAction<number>) {
       state.isFetching = true;
+      state.visits = [];
     },
     setPatientVisits(state, action: PayloadAction<PatientVisit[]>) {
       state.visits = orderBy(action.payload, 'created', 'desc');

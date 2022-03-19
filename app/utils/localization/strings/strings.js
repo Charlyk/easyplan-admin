@@ -797,6 +797,7 @@ export default {
     surgery: 'Surgery',
     treatment: 'Treatment',
     prosthetics: 'Prosthetics',
+    tooth: 'Tooth {1}',
   },
   ro: {
     analytics: 'Analitică',
@@ -1606,6 +1607,7 @@ export default {
     surgery: 'Intervenție chirurgicală',
     treatment: 'Tratament',
     prosthetics: 'Proteze',
+    tooth: 'Dintele {1}',
   },
   ru: {
     analytics: 'Analytics',
@@ -2402,5 +2404,6 @@ export default {
     surgery: 'Surgery',
     treatment: 'Treatment',
     prosthetics: 'Prosthetics',
+    tooth: 'Зуб {1}',
   },
 };

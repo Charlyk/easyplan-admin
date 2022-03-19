@@ -23,8 +23,8 @@ const FinalServiceItem = ({ service, canRemove, onRemove }) => {
 
   const serviceName = useMemo(() => {
     let name = service.service.name;
-    if (service.teeth.length > 0) {
-      name = `${name} | Dinții - ${service.teeth.join(', ')}`;
+    if (service.tooth != null) {
+      name = `${name} | ${textForKey('tooth', service.tooth)}`;
     }
     if (service.bracesPlanType) {
       name = `${name} | ${textForKey(service.bracesPlanType)}`;

@@ -14,15 +14,15 @@ const treatmentPlanSlice = createSlice({
       const { services } = action.payload;
       const mapped = services.map((item) => ({
         ...item,
-        teeth: item.teeth.map((tooth) => tooth.replace('_', '')),
+        tooth: item.tooth?.replace('_', ''),
       }));
       const ordered = orderBy(
         mapped,
-        ['created', 'completed'],
-        ['desc', 'asc'],
+        ['completed', 'created'],
+        ['asc', 'desc'],
       );
       state.allServices = ordered;
-      state.toothServices = ordered.filter((item) => item.teeth.length > 0);
+      state.toothServices = ordered.filter((item) => item.tooth != null);
     },
   },
 });

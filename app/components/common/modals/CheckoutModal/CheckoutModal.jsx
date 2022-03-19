@@ -21,7 +21,6 @@ import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
-import uniq from 'lodash/uniq';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
@@ -288,42 +287,37 @@ const CheckoutModal = ({
   };
 
   const handleTeethSelected = (service, teeth) => {
-    const serviceExists = services.some((item) => item.id === service.id);
-    if (serviceExists) {
-      const newServices = services.map((item) => {
-        if (item.id !== service.id) {
-          return item;
-        }
-        return {
-          ...item,
-          teeth: uniq([...item.teeth, ...teeth]),
-        };
-      });
-      localDispatch(
-        actions.setServices({ services: newServices, exchangeRates }),
-      );
-    } else {
-      const newServices = [
-        {
-          ...service,
-          teeth,
-          amount: service.price,
-          count: 1,
-          totalPrice: service.price,
-          childServices: service.childServices.map((child) => ({
-            ...child,
-            amount: child.price,
-            count: 1,
-            totalPrice: child.price,
-          })),
-        },
-        ...services,
-      ];
+    const newServices = teeth
+      .map((tooth) => {
+        const serviceExists = services.some(
+          (item) => item.id === service.id && item.tooth === tooth,
+        );
 
-      localDispatch(
-        actions.setServices({ services: newServices, exchangeRates }),
-      );
-    }
+        if (!serviceExists) {
+          return {
+            ...service,
+            tooth,
+            amount: service.price,
+            count: 1,
+            totalPrice: service.price,
+            childServices: service.childServices.map((child) => ({
+              ...child,
+              amount: child.price,
+              count: 1,
+              totalPrice: child.price,
+            })),
+          };
+        }
+        return null;
+      })
+      .filter((item) => item != null);
+
+    localDispatch(
+      actions.setServices({
+        services: [...services, ...newServices],
+        exchangeRates,
+      }),
+    );
   };
 
   const handleNewServiceSelected = (service) => {
@@ -371,7 +365,12 @@ const CheckoutModal = ({
         actions.setServices({ services: newServices, exchangeRates }),
       );
     } else {
-      const newServices = services.filter((item) => item.id !== service.id);
+      const newServices = services.filter(
+        (item) =>
+          item.id !== service.id ||
+          item.tooth !== service.tooth ||
+          item.destination !== service.destination,
+      );
       localDispatch(
         actions.setServices({ services: newServices, exchangeRates }),
       );
@@ -390,7 +389,7 @@ const CheckoutModal = ({
         price: item.amount,
         count: item.count,
         currency: item.currency,
-        teeth: item.teeth ?? [],
+        tooth: item.tooth ?? null,
         bracesPlanType: item.destination,
         childServices: item.childServices.map((child) => ({
           id: child.id,

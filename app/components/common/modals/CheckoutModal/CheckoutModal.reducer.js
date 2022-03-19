@@ -13,7 +13,7 @@ export const computeServicePrice = (services, exchangeRates) => {
       serviceExchange.value * (service.amount * service.count * teethCount);
     return {
       ...service,
-      teeth: service.teeth?.map((item) => item.replace('_', '')),
+      tooth: service.tooth?.replace('_', ''),
       created: moment(service.created).toDate(),
       totalPrice: roundToTwo(servicePrice),
       childServices: service.childServices.map((item) => {
