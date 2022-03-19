@@ -17,6 +17,6 @@ export interface VisitService {
   id: number;
   name: string | null;
   color: string | null;
-  teeth: string[];
+  tooth: string;
   group: string | null;
 }

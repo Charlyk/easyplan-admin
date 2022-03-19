@@ -69,8 +69,8 @@ const ServiceRow = ({
     let name = service.name;
     const childIndicator = isChild ? '- ' : '';
     const group = service.group ? ` | ${textForKey(service.group)}` : '';
-    if (service.teeth != null && service.teeth.length > 0) {
-      name = `${childIndicator}${name} | Dinții - ${service.teeth.join(', ')}`;
+    if (service.tooth != null) {
+      name = `${childIndicator}${name} | ${textForKey('tooth', service.tooth)}`;
     }
     if (service.destination != null) {
       name = `${childIndicator}${name} | ${textForKey(service.destination)}`;

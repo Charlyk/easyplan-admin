@@ -12,8 +12,8 @@ const AppointmentNote = ({ visit, canEdit, onEdit }) => {
 
   const serviceName = (planService) => {
     let name = planService.name;
-    if (planService.teeth.length > 0) {
-      name = `${name} | ${planService.teeth.join(', ')}`;
+    if (planService.tooth != null) {
+      name = `${name} | ${textForKey('tooth', planService.tooth)}`;
     }
 
     if (planService.bracesPlanType) {
