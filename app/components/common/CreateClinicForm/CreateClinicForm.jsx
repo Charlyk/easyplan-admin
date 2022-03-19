@@ -145,7 +145,7 @@ const CreateClinicForm = ({
   const checkIsDomainAvailable = async () => {
     try {
       const { data } = await checkDomainAvailability(domainName);
-      localDispatch(setIsDomainAvailable(data.exists));
+      localDispatch(setIsDomainAvailable(!data.exists));
     } catch (error) {
       toast.error(error.message);
     }
