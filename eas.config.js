@@ -6,6 +6,8 @@ export const appBaseUrl = process.env.APP_URL;
 
 export const loginUrl = `${process.env.AUTH_APP_URL}/auth`;
 
+export const registerUrl = `${process.env.AUTH_APP_URL}/auth/register`;
+
 export const baseUrl = process.env.API_URL;
 
 export const baseApiUrl = `${baseUrl}/api`;
