@@ -270,7 +270,7 @@ const CheckoutModal = ({
         };
       } else if (
         service.id !== newService.id ||
-        service.toothId !== newService.toothId ||
+        service.tooth !== newService.tooth ||
         service.destination !== newService.destination
       ) {
         return service;
