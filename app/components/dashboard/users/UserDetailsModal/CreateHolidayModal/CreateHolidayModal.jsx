@@ -70,6 +70,7 @@ const CreateHolidayModal = ({ show, onClose, onCreate, holiday }) => {
       open={show}
       title={textForKey('Add holiday')}
       onPrimaryClick={handleSaveHoliday}
+      size='medium'
       onClose={handleCloseModal}
     >
       <div className={styles['holiday-modal__body']}>
