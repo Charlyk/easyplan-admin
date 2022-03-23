@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy';
 import { createSelector } from 'reselect';
 import { ReduxState } from '../types';
 
@@ -8,9 +9,8 @@ export const isFetchingServicesSelector = createSelector(
   (data) => data.isFetching,
 );
 
-export const servicesSelector = createSelector(
-  servicesListSelector,
-  (data) => data.services,
+export const servicesSelector = createSelector(servicesListSelector, (data) =>
+  orderBy(data.services, ['deleted', 'name'], ['asc', 'asc']),
 );
 
 export const categoriesSelector = createSelector(

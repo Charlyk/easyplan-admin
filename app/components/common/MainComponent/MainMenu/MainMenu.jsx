@@ -8,12 +8,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import AssessmentIcon from '@material-ui/icons/Assessment';
 import IconLiveHelp from '@material-ui/icons/LiveHelp';
 import IconMessages from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import ClinicSelector from 'app/components/common/ClinicSelector';
@@ -33,7 +31,6 @@ import notifications from 'app/utils/notifications/notifications';
 import updateNotificationState from 'app/utils/notifications/updateNotificationState';
 import wasNotificationShown from 'app/utils/notifications/wasNotificationShown';
 import useRootDomain from 'app/utils/useRootDomain';
-import { environment } from 'eas.config';
 import {
   authTokenSelector,
   currentClinicSelector,
@@ -98,15 +95,6 @@ const menuItems = [
     hasCounter: false,
   },
   {
-    id: 'crm',
-    type: 'link',
-    roles: ['ADMIN', 'MANAGER', 'RECEPTION'],
-    text: textForKey('CRM Board'),
-    icon: <AssessmentIcon />,
-    href: '/crm',
-    hasCounter: true,
-  },
-  {
     id: 'calendar',
     type: 'link',
     roles: [Role.admin, Role.manager, Role.reception],
@@ -154,7 +142,6 @@ const menuItems = [
 ];
 
 const MainMenu = ({ currentPath, onCreateClinic }) => {
-  const router = useRouter();
   const buttonRef = useRef(null);
   const dispatch = useDispatch();
   const selectedClinic = useSelector(userClinicSelector);
@@ -167,18 +154,11 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   const remindersCount = useSelector(remindersCountSelector);
   const [_rootDomain, getClinicUrl] = useRootDomain();
   const [techSupportRef, setTechSupportRef] = useState(null);
-  const [crmDashboardRef, setCrmDashboardRef] = useState(null);
   const [isClinicsOpen, setIsClinicsOpen] = useState(false);
   const [showTechSupportHelp, setShowTechSupportHelp] = useState(false);
-  const [showCrmHelp, setShowCrmHelp] = useState(false);
   const [isAnalyticsExpanded, setIsAnalyticsExpanded] = useState(
     currentPath.startsWith('/analytics'),
   );
-  const canShowCrm =
-    environment !== 'production' ||
-    currentClinic.id === 1772 ||
-    currentClinic.id === 46 ||
-    currentClinic.id === 289747;
 
   useEffect(() => {
     setIsAnalyticsExpanded(checkIsAnalyticsEnabled());
@@ -187,16 +167,6 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   useEffect(() => {
     setShowTechSupportHelp(!wasNotificationShown(notifications.techSupport.id));
   }, []);
-
-  useEffect(() => {
-    if (!canShowCrm) {
-      return;
-    }
-    setShowCrmHelp(
-      !wasNotificationShown(notifications.menuCRMImplementation.id) &&
-        !showTechSupportHelp,
-    );
-  }, [showTechSupportHelp, canShowCrm]);
 
   useEffect(() => {
     dispatch(dispatchFetchRemindersCount());
@@ -249,8 +219,6 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
     updateNotificationState(notification.id, true);
     if (notification.id === notifications.techSupport.id) {
       setShowTechSupportHelp(false);
-    } else if (notification.id === notifications.menuCRMImplementation.id) {
-      setShowCrmHelp(false);
     }
   };
 
@@ -261,11 +229,6 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
   const userClinic = currentUser.clinics.find(
     (item) => item.clinicId === currentClinic.id,
   );
-
-  const navigateIfNotAlreadyActive = (path) => {
-    if (currentPath === path) return;
-    router.push(path);
-  };
 
   return (
     <div className={styles.mainMenu}>
@@ -343,39 +306,6 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
               </React.Fragment>
             );
           } else if (item.type === 'link') {
-            if (item.id === 'crm') {
-              if (!canShowCrm) return null;
-              return (
-                <a key={item.id}>
-                  <ListItem
-                    ref={setCrmDashboardRef}
-                    classes={{
-                      root: styles.listItem,
-                      selected: styles.selected,
-                    }}
-                    selected={isActive(item.href)}
-                    onClick={() => navigateIfNotAlreadyActive(item.href)}
-                  >
-                    <ListItemIcon className={styles.itemIcon}>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      classes={{ primary: styles.itemText }}
-                      primary={
-                        <Typography className={styles.itemText}>
-                          {item.text}
-                          {item.hasCounter && getCounterValue(item) > 0 && (
-                            <span className={styles.counterLabel}>
-                              {getCounterValue(item)}
-                            </span>
-                          )}
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                </a>
-              );
-            }
             return (
               <Link passHref href={item.href} key={item.id}>
                 <ListItem
@@ -445,13 +375,6 @@ const MainMenu = ({ currentPath, onCreateClinic }) => {
         notification={notifications.techSupport}
         anchorEl={techSupportRef}
         open={showTechSupportHelp}
-      />
-      <EASHelpView
-        placement='right'
-        onClose={handleNotificationClose}
-        notification={notifications.menuCRMImplementation}
-        anchorEl={crmDashboardRef}
-        open={showCrmHelp}
       />
     </div>
   );
