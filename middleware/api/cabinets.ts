@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Cabinet, ClinicUser } from '../../types';
+import { Cabinet } from '../../types';
 import { del, get, put, post } from './request';
 
 export const getAllCabinetsInfo = async (headers = null) => {
