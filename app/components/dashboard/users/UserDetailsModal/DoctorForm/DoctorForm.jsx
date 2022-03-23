@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import sortBy from 'lodash/sortBy';
+import orderBy from 'lodash/orderBy';
 import PropTypes from 'prop-types';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
@@ -39,11 +39,11 @@ const DoctorForm = ({
     const activeServices = currentClinic.services.filter(
       (item) => !item.deleted,
     );
-    return sortBy(activeServices, (item) => item.name.toLowerCase());
+    return orderBy(activeServices, 'name', 'asc');
   }, [currentClinic]);
 
   const clinicBraces = useMemo(() => {
-    return currentClinic.braces;
+    return orderBy(currentClinic.braces, 'name', 'asc');
   }, []);
 
   return (

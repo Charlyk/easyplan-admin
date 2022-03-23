@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import clsx from 'clsx';
 import indexOf from 'lodash/indexOf';
+import orderBy from 'lodash/orderBy';
 import sortBy from 'lodash/sortBy';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -290,14 +291,15 @@ const ServicesContainer = () => {
     );
   };
 
-  const filteredServices = sortBy(
-    category.data != null && category.data.id !== 'all-services'
-      ? clinicServices.filter(
-          (item) => item?.category?.id === category?.data?.id,
-        )
-      : clinicServices,
-    (service) => service.name.toLowerCase(),
-  );
+  const filteredServices = useMemo(() => {
+    const services =
+      category.data != null && category.data.id !== 'all-services'
+        ? clinicServices.filter(
+            (item) => item?.category?.id === category?.data?.id,
+          )
+        : clinicServices;
+    return orderBy(services, ['deleted', 'name'], ['asc', 'asc']);
+  }, [category, clinicServices]);
 
   return (
     <div className={styles['services-root']}>
