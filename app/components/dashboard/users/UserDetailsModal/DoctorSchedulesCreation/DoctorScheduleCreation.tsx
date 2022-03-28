@@ -136,7 +136,7 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
               width: '18px',
               height: '18px',
               cursor: 'pointer',
-              borderRadius: '50%',
+              borderRadius: '4px',
               backgroundColor: color.hex,
             }}
           />
