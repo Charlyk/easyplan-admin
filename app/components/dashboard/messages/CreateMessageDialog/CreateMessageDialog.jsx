@@ -222,6 +222,7 @@ const CreateMessageDialog = ({
       open={open}
       isLoading={isLoading}
       title={title}
+      canSave={isFormValid}
       onSave={handleSubmit}
       onClose={onClose}
     >

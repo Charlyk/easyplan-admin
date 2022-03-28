@@ -77,11 +77,16 @@ const BottomSheetDialog: React.FC<BottomSheetDialogProps> = ({
           >
             {isLoading ? (
               <CircularProgress className={styles.progressBar} />
-            ) : canSave ? (
-              <Button color='inherit' onClick={handleSave}>
+            ) : (
+              <Button
+                color='inherit'
+                disabled={!canSave}
+                classes={{ disabled: styles.disabledBtn }}
+                onClick={handleSave}
+              >
                 {saveText || textForKey('Save')}
               </Button>
-            ) : null}
+            )}
           </Box>
         </Toolbar>
       </AppBar>
