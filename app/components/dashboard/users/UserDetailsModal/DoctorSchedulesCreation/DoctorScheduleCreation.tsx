@@ -136,13 +136,13 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
               width: '18px',
               height: '18px',
               cursor: 'pointer',
-              borderRadius: '50%',
+              borderRadius: '4px',
               backgroundColor: color.hex,
             }}
           />
         </Box>
         <Typography className={styles.switchStatus}>
-          {textForKey('can_manage_others_schedules')}
+          {textForKey('doctor_calendar_color')}
         </Typography>
       </div>
       {colorPickerPopper}

@@ -798,6 +798,7 @@ export default {
     treatment: 'Treatment',
     prosthetics: 'Prosthetics',
     tooth: 'Tooth {1}',
+    doctor_calendar_color: 'Doctor appointments color in calendar',
   },
   ro: {
     analytics: 'Analitică',
@@ -1608,6 +1609,7 @@ export default {
     treatment: 'Tratament',
     prosthetics: 'Proteze',
     tooth: 'Dintele {1}',
+    doctor_calendar_color: 'Culoarea programărilor in calendar',
   },
   ru: {
     analytics: 'Analytics',
@@ -2405,5 +2407,6 @@ export default {
     treatment: 'Treatment',
     prosthetics: 'Prosthetics',
     tooth: 'Зуб {1}',
+    doctor_calendar_color: 'Цвет записей в календаре',
   },
 };
