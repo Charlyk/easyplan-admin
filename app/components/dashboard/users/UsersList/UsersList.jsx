@@ -324,8 +324,6 @@ const UsersList = () => {
     }
   };
 
-  console.log(showInviteModal.email);
-
   return (
     <div className={styles.usersRoot}>
       {showInviteModal.open && (
