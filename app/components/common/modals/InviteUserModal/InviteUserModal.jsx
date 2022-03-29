@@ -24,13 +24,14 @@ const selectOptions = [
 
 const InviteUserModal = ({
   open,
+  email: propsEmail,
   type,
   error,
   isLoading,
   onClose,
   onInvite,
 }) => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(propsEmail ?? '');
   const [role, setRole] = useState(type || Role.reception);
   const isEmailValid = email.length === 0 || email.match(EmailRegex);
 
@@ -76,6 +77,7 @@ const InviteUserModal = ({
           helperText={isEmailValid ? null : textForKey('email_invalid_message')}
           containerClass={styles.input}
           fieldLabel={textForKey('Email')}
+          value={email}
           type='email'
           onChange={handleEmailChange}
         />
