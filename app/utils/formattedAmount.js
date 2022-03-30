@@ -8,7 +8,7 @@ const formattedAmount = (amount, currency) => {
   return Intl.NumberFormat('ro-RO', {
     style: 'currency',
     currency: currency || 'MDL',
-  }).format(amount);
+  }).format(amount ?? 0);
 };
 
 export default formattedAmount;
