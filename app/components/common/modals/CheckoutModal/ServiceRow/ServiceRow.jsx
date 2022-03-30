@@ -36,7 +36,7 @@ const ServiceRow = ({
   };
 
   const handlePriceChange = ({ floatValue }) => {
-    const newPrice = floatValue;
+    const newPrice = floatValue ?? 0;
     onChange({ ...service, amount: newPrice, isChild });
     setPrice(newPrice);
   };

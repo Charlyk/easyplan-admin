@@ -38,6 +38,22 @@ const usersListSlice = createSlice({
     setError(state, action: PayloadAction<string | null>) {
       state.error = action.payload;
     },
+    setNewInvitation(
+      state,
+      action: PayloadAction<{
+        email: string;
+        roleInClinic: string;
+        isRecentCreated: boolean;
+        id: string | number;
+      }>,
+    ) {
+      state.invitations.push(action.payload);
+    },
+    removeInvitation(state, action: PayloadAction<string | number>) {
+      state.invitations = state.invitations.filter(
+        (invitation) => invitation.id !== action.payload,
+      );
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -53,8 +69,10 @@ export const {
   setUsersData,
   setError,
   setInvitations,
+  removeInvitation,
   setUsers,
   fetchClinicUsers,
+  setNewInvitation,
 } = usersListSlice.actions;
 
 export default usersListSlice.reducer;
