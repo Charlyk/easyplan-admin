@@ -45,19 +45,34 @@ const AppointmentsCalendar = dynamic(() => import('../AppointmentsCalendar'));
 
 const importFields = [
   {
+    id: 'doctor',
+    name: textForKey('Doctor'),
+    required: true,
+  },
+  {
     id: 'date',
     name: textForKey('Date'),
-    required: true,
+    required: false,
   },
   {
     id: 'time',
     name: textForKey('Time'),
-    required: true,
+    required: false,
   },
   {
-    id: 'doctor',
-    name: textForKey('Doctor'),
-    required: true,
+    id: 'cabinet',
+    name: textForKey('cabinet'),
+    required: false,
+  },
+  {
+    id: 'startTime',
+    name: textForKey('import_start_date'),
+    required: false,
+  },
+  {
+    id: 'endTime',
+    name: textForKey('import_end_time'),
+    required: false,
   },
   {
     id: 'serviceName',
@@ -254,7 +269,8 @@ const CalendarContainer = ({ date, doctorId, viewMode, children }) => {
         fieldId: item.id,
         index: item.index,
       }));
-      await importSchedulesFromFile(file, mappedFields, 'MMM dd yyyy', {
+      //2018-03-27 07:00:00
+      await importSchedulesFromFile(file, mappedFields, 'yyyy-MM-dd HH:mm:ss', {
         [HeaderKeys.authorization]: authToken,
         [HeaderKeys.clinicId]: currentClinic.id,
         [HeaderKeys.subdomain]: currentClinic.domainName,
