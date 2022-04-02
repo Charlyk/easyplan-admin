@@ -289,10 +289,10 @@ export async function addPatientXRayImage(
   image,
   headers = null,
 ) {
-  const encodedImage = await imageToBase64(image);
-  return post(`/api/patients/${patientId}/x-ray`, headers, {
-    type,
-    image: encodedImage,
+  const formData = new FormData();
+  formData.append('image', image, image.name);
+  return axios.post(`${baseApiUrl}/patients/${patientId}/v2/x-ray`, formData, {
+    headers,
   });
 }
 

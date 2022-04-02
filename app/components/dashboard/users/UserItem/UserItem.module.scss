@@ -27,6 +27,8 @@
     border-color: #3A83DC;
   }
 
+
+
   .outlinedBtnGreen {
     border-color: #00E987;
   }
@@ -68,11 +70,27 @@
     }
   }
 
+  .cancelButton {
+    background-color: #3A83DC;
+    color: #fff;
+    padding: 0 15px;
+    font-size: 11px;
+    height: 35px;
+    margin-right: 5px;
+    text-transform: none !important;
+    min-width: 130px;
+
+    &:hover {
+      background-color: #3A83DC;
+    }
+  }
+
   .restoreBtn {
     font-size: 11px;
     height: 35px;
     margin-right: 5px;
     background-color: transparent;
+
 
     .buttonLabel {
       font-family: Inter, sans-serif;
