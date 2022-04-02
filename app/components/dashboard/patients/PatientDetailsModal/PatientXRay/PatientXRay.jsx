@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import sortBy from 'lodash/sortBy';
+import orderBy from 'lodash/orderBy';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Lightbox from 'react-awesome-lightbox';
@@ -17,17 +18,11 @@ import {
 } from 'middleware/api/patients';
 import { updateXRaySelector } from 'redux/selectors/rootSelector';
 import styles from './PatientXRay.module.scss';
-import XRayPhase from './XRayPhase';
+import XRayImage from './XRayImage';
 
 const ConfirmationModal = dynamic(() =>
   import('../../../../common/modals/ConfirmationModal'),
 );
-
-const ExpandedPhase = {
-  initial: 'Initial',
-  middle: 'Middle',
-  final: 'Final',
-};
 
 const PatientXRay = ({ patient, onAddXRay }) => {
   const toast = useContext(NotificationsContext);
@@ -37,32 +32,19 @@ const PatientXRay = ({ patient, onAddXRay }) => {
   const [deleteModal, setDeleteModal] = useState({ show: false, image: null });
   const [isFetching, setIsFetching] = useState(false);
   const [state, setState] = useState({
-    images: { initial: [], middle: [], final: [] },
+    images: [],
   });
 
   useEffect(() => {
     fetchImages();
   }, [patient, updateXRay]);
 
-  const getItemsOfType = (items, type) => {
-    return sortBy(
-      items?.filter((item) => item.imageType === type) || [],
-      (item) => item.created,
-    ).reverse();
-  };
-
   const fetchImages = async () => {
     setIsFetching(true);
     try {
       const response = await getPatientXRayImages(patient.id);
       const { data } = response;
-
-      const mappedImages = {
-        initial: getItemsOfType(data, ExpandedPhase.initial),
-        middle: getItemsOfType(data, ExpandedPhase.middle),
-        final: getItemsOfType(data, ExpandedPhase.final),
-      };
-      setState({ images: mappedImages });
+      setState({ images: orderBy(data, 'created', 'desc') });
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -130,34 +112,16 @@ const PatientXRay = ({ patient, onAddXRay }) => {
       </Typography>
       <div className={styles.imagesContainer}>
         {!isFetching && (
-          <XRayPhase
-            title={textForKey('Initial phase')}
-            isExpanded
-            images={state.images.initial}
-            phaseId={ExpandedPhase.initial}
-            onImageClick={handleImageClick}
-            onDeleteImage={handleDeleteXRayImage}
-          />
-        )}
-        {!isFetching && (
-          <XRayPhase
-            title={textForKey('Middle phase')}
-            isExpanded
-            images={state.images.middle}
-            phaseId={ExpandedPhase.middle}
-            onImageClick={handleImageClick}
-            onDeleteImage={handleDeleteXRayImage}
-          />
-        )}
-        {!isFetching && (
-          <XRayPhase
-            title={textForKey('Final phase')}
-            isExpanded
-            images={state.images.final}
-            phaseId={ExpandedPhase.final}
-            onImageClick={handleImageClick}
-            onDeleteImage={handleDeleteXRayImage}
-          />
+          <Grid container spacing={2}>
+            {state.images.map((image) => (
+              <XRayImage
+                key={image.id}
+                image={image}
+                onImageClick={handleImageClick}
+                onImageDelete={handleDeleteXRayImage}
+              />
+            ))}
+          </Grid>
         )}
         {isFetching && (
           <div className='progress-bar-wrapper'>

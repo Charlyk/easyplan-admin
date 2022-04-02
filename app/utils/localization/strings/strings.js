@@ -799,6 +799,8 @@ export default {
     prosthetics: 'Prosthetics',
     tooth: 'Tooth {1}',
     doctor_calendar_color: 'Doctor appointments color in calendar',
+    import_start_date: 'Start date',
+    import_end_time: 'End date',
   },
   ro: {
     analytics: 'Analitică',
@@ -1610,6 +1612,8 @@ export default {
     prosthetics: 'Proteze',
     tooth: 'Dintele {1}',
     doctor_calendar_color: 'Culoarea programărilor in calendar',
+    import_start_date: 'Timp început',
+    import_end_time: 'Timp sfârșit',
   },
   ru: {
     analytics: 'Analytics',
@@ -2408,5 +2412,7 @@ export default {
     prosthetics: 'Prosthetics',
     tooth: 'Зуб {1}',
     doctor_calendar_color: 'Цвет записей в календаре',
+    import_start_date: 'Start date',
+    import_end_time: 'End date',
   },
 };

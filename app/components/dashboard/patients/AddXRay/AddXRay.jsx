@@ -1,13 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EASSelect from 'app/components/common/EASSelect';
+import EASModal from 'app/components/common/modals/EASModal';
 import NotificationsContext from 'app/context/notificationsContext';
+import { HeaderKeys } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import { addPatientXRayImage } from 'middleware/api/patients';
+import {
+  authTokenSelector,
+  currentClinicSelector,
+} from 'redux/selectors/appDataSelector';
 import { updateXRay } from 'redux/slices/mainReduxSlice';
-import EASModal from '../../../common/modals/EASModal';
 import styles from './AddXRay.module.scss';
 
 const phases = [
@@ -28,6 +33,8 @@ const phases = [
 const AddXRay = ({ open, patientId, onClose }) => {
   const dispatch = useDispatch();
   const toast = useContext(NotificationsContext);
+  const authToken = useSelector(authTokenSelector);
+  const clinic = useSelector(currentClinicSelector);
   const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [phase, setPhase] = useState('Initial');
@@ -49,7 +56,12 @@ const AddXRay = ({ open, patientId, onClose }) => {
   const handleSaveImage = async () => {
     setIsLoading(true);
     try {
-      await addPatientXRayImage(patientId, phase, imageFile);
+      const headers = {
+        [HeaderKeys.authorization]: authToken,
+        [HeaderKeys.clinicId]: clinic.id,
+        [HeaderKeys.subdomain]: clinic.domainName,
+      };
+      await addPatientXRayImage(patientId, phase, imageFile, headers);
       dispatch(updateXRay());
       onClose();
     } catch (error) {
