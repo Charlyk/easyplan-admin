@@ -5,6 +5,11 @@ import {
   Analytics,
 } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
+import { useSelector } from 'react-redux';
+import {
+  currentClinicSelector,
+  currentUserSelector,
+} from 'redux/selectors/appDataSelector';
 import { AnalyticsEvent } from 'types';
 
 let firebaseAnalytics: Analytics;
@@ -25,6 +30,9 @@ type Event = {
 };
 
 const useAnalytics = () => {
+  const currentClinic = useSelector(currentClinicSelector);
+  const currentUser = useSelector(currentUserSelector);
+
   useEffect(() => {
     initFirebaseAnalytics();
   }, []);
@@ -43,9 +51,13 @@ const useAnalytics = () => {
       if (!firebaseAnalytics) {
         initFirebaseAnalytics();
       }
-      logAnalyticsEvent(firebaseAnalytics, event.event, event.payload);
+      logAnalyticsEvent(firebaseAnalytics, event.event, {
+        user: `${currentUser?.fullName} (${currentUser?.id})`,
+        clinic: `${currentClinic?.clinicName} (${currentClinic?.id})`,
+        payload: event.payload,
+      });
     },
-    [firebaseAnalytics],
+    [firebaseAnalytics, currentClinic, currentUser],
   );
 
   return [logEvent];
