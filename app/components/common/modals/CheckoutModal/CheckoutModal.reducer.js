@@ -32,7 +32,7 @@ export const computeServicePrice = (services, exchangeRates) => {
 
 export const getServicesTotalPrice = (services, exchangeRates) => {
   const updatedServices = computeServicePrice(services, exchangeRates);
-  return parseFloat(
+  const total = parseFloat(
     sumBy(
       updatedServices,
       (item) =>
@@ -40,6 +40,7 @@ export const getServicesTotalPrice = (services, exchangeRates) => {
         sumBy(item.childServices, (child) => child.totalPrice),
     ),
   ).toFixed(2);
+  return Number.isNaN(total) ? 0.0 : total;
 };
 
 export const getDiscount = (total, discount) => {
