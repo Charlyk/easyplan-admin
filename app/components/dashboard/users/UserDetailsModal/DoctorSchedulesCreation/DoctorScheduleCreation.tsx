@@ -107,8 +107,6 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
     />
   );
 
-  console.log(stateUser);
-
   return (
     <div>
       <div className={styles.wrapper}>

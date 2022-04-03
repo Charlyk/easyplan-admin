@@ -24,6 +24,7 @@ async function createNewInvoice(req) {
   const { clinic_id: clinicId, auth_token: authToken } = cookie.parse(
     req.headers.cookie,
   );
+
   return axios.post(`${updatedServerUrl(req)}/invoices`, req.body, {
     headers: {
       [HeaderKeys.authorization]: authToken,
