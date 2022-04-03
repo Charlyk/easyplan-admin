@@ -41,3 +41,4 @@ export * from './crmDealListItem.types';
 export * from './crmDealDetails.types';
 export * from './treatmentPlan.types';
 export * from './paginatedResponse.types';
+export * from './analyticsEvent.types';

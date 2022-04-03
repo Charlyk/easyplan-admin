@@ -48,6 +48,7 @@ import 'app/styles/base/base.scss';
 import 'react-h5-audio-player/src/styles.scss';
 import 'react-awesome-lightbox/build/style.css';
 import 'app/utils';
+import { useAnalytics } from '../app/utils/hooks';
 
 const AddAppointmentModal = dynamic(() =>
   import('app/components/dashboard/calendar/modals/AddAppointmentModal'),
@@ -76,10 +77,12 @@ const EasyApp = ({ Component, pageProps }) => {
   const isWindowFocused = useWindowFocused();
   const imageModal = useSelector(imageModalSelector);
   const logout = useSelector(logoutSelector);
+  const [logEvent] = useAnalytics();
   const currentPage = router.asPath;
 
   useEffect(() => {
     dispatch(setAppData(pageProps.appData));
+    logEvent({ event: 'view_page', payload: window.location.href });
   }, []);
 
   useEffect(() => {
@@ -217,6 +220,10 @@ const EasyApp = ({ Component, pageProps }) => {
   const handleUserLogout = async () => {
     setIsLoading(true);
     await signOut();
+    logEvent({
+      event: 'user_logout',
+      payload: { currentUser, currentClinic },
+    });
     router.replace(loginUrl).then(() => {
       dispatch(triggerUserLogOut(false));
       dispatch(setAppData(initialState.appData));
