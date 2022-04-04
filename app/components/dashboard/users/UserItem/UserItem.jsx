@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -26,6 +27,7 @@ import styles from './UserItem.module.scss';
 const UserItem = ({
   user,
   isInvitation,
+  isRecentCreated,
   isInviting,
   onDelete,
   onEdit,
@@ -34,7 +36,38 @@ const UserItem = ({
   onCashierChange,
   onCalendarChange,
   onAccessToggle,
+  onTimeoutExpired,
+  onInviteCanceled,
 }) => {
+  const intervalRef = useRef();
+  const [secondsLeft, setSecondsLeft] = useState(15);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+  useEffect(() => {
+    if (!isRecentCreated) return;
+    if (!intervalRef.current && secondsLeft > 1) {
+      setIsTimerRunning(true);
+      intervalRef.current = setInterval(() => {
+        setSecondsLeft((secondsLeft) => secondsLeft - 1);
+      }, 1000);
+    }
+  }, [secondsLeft]);
+
+  useEffect(() => {
+    if (!isRecentCreated) return;
+    if (secondsLeft === 0 && isTimerRunning) {
+      setIsTimerRunning(false);
+      clearInterval(intervalRef.current);
+      onTimeoutExpired(user.email, user.role);
+    }
+  }, [secondsLeft]);
+
+  const handleInviteCanceled = () => {
+    clearInterval(intervalRef.current);
+    setIsTimerRunning(false);
+    onInviteCanceled?.(user.email, user.role, user.id);
+  };
+
   const handleDeleteUser = (event) => {
     onDelete(event, user, isInvitation);
   };
@@ -138,7 +171,18 @@ const UserItem = ({
       </TableCell>
       <TableCell valign='middle' className={styles.tableCell}>
         <div className={styles.actionButtons}>
-          {(user.status === 'Pending' || isInvitation) && (
+          {isInvitation && isRecentCreated && isTimerRunning && (
+            <Button
+              onClick={handleInviteCanceled}
+              size='small'
+              classes={{
+                root: styles.cancelButton,
+              }}
+            >
+              {secondsLeft}s {textForKey('cancel_invitation')}
+            </Button>
+          )}
+          {(user.status === 'Pending' || isInvitation) && !isTimerRunning && (
             <LoadingButton
               isLoading={isInviting}
               className={styles.resendButton}

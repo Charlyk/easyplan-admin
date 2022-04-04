@@ -16,6 +16,7 @@ export const initialState = {
   showInviteModal: {
     open: false,
     type: Role.reception,
+    email: '',
   },
   isUserModalOpen: {
     open: false,

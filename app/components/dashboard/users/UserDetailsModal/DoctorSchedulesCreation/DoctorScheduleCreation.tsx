@@ -12,8 +12,8 @@ import {
   requestForbidDoctorCreateSchedules,
   updateDoctorAppointmentsColor,
 } from 'middleware/api/userPreferences';
+import { fetchClinicUsers } from 'redux/slices/usersListSlice';
 import { UserClinic } from 'types';
-import { fetchClinicUsers } from '../../../../../../redux/slices/usersListSlice';
 import hexToHSV from '../../../../../utils/hexToHSV';
 import hexToRGB from '../../../../../utils/hexToRGB';
 import EASColorPicker from '../../../../common/EASColorPicker';

@@ -17,18 +17,9 @@ const XRayImage = ({ image, onImageClick, onImageDelete }) => {
   };
 
   return (
-    <Grid
-      item
-      className={styles.xRayImageRoot}
-      xs={4}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '.2rem',
-      }}
-    >
+    <Grid item className={styles.xRayImageRoot} xs={3}>
       <div
-        style={{ outline: 'none', position: 'relative' }}
+        className={styles.imageWrapper}
         role='button'
         tabIndex={0}
         onPointerUp={handleImageClick}
