@@ -55,7 +55,7 @@ export const initialState = {
   isLoading: false,
   isFetching: false,
   isDebt: false,
-  payAmount: '0',
+  payAmount: 0,
   discount: '0',
   services: [],
   showConfirmationMenu: false,
