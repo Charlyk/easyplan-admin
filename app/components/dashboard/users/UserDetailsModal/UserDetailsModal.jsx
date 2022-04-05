@@ -9,7 +9,6 @@ import LoadingButton from 'app/components/common/LoadingButton';
 import IconClose from 'app/components/icons/iconClose';
 import IconSuccess from 'app/components/icons/iconSuccess';
 import NotificationsContext from 'app/context/notificationsContext';
-import areComponentPropsEqual from 'app/utils/areComponentPropsEqual';
 import { Role } from 'app/utils/constants';
 import { textForKey } from 'app/utils/localization';
 import {

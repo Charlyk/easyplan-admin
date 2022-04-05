@@ -363,13 +363,15 @@ const UsersList = () => {
         message={textForKey('invitation_sent_message')}
       />
 
-      <UserDetailsModal
-        currentClinic={currentClinic}
-        onClose={handleUserModalClose}
-        show={isUserModalOpen.open}
-        user={isUserModalOpen.user}
-        role={isUserModalOpen.type}
-      />
+      {isUserModalOpen.open && (
+        <UserDetailsModal
+          currentClinic={currentClinic}
+          onClose={handleUserModalClose}
+          show={isUserModalOpen.open}
+          user={isUserModalOpen.user}
+          role={isUserModalOpen.type}
+        />
+      )}
 
       <UsersHeader
         onFilterChange={handleFilterChange}

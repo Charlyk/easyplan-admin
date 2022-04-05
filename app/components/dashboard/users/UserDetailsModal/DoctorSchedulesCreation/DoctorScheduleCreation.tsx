@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { useColor } from 'react-color-palette';
+import { useDispatch } from 'react-redux';
 import SwitchButton from 'app/components/common/SwitchButton';
 import { textForKey } from 'app/utils/localization';
 import {
@@ -11,6 +12,7 @@ import {
   requestForbidDoctorCreateSchedules,
   updateDoctorAppointmentsColor,
 } from 'middleware/api/userPreferences';
+import { fetchClinicUsers } from 'redux/slices/usersListSlice';
 import { UserClinic } from 'types';
 import hexToHSV from '../../../../../utils/hexToHSV';
 import hexToRGB from '../../../../../utils/hexToRGB';
@@ -22,6 +24,7 @@ interface Props {
 }
 
 const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
+  const dispatch = useDispatch();
   const paletteRef = useRef(null);
   const [stateUser, setStateUser] = useState(user);
   const [showPicker, setShowPicker] = useState(false);
@@ -51,6 +54,7 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
       ...prevState,
       canCreateSchedules: response.data.canCreateSchedules,
     }));
+    dispatch(fetchClinicUsers());
   };
 
   const handleOthersSwitchChange = async () => {
@@ -66,6 +70,7 @@ const DoctorScheduleCreation: React.FC<Props> = ({ user }) => {
       ...prevState,
       canManageOthersAppointments: response.data.canManageOthersAppointments,
     }));
+    dispatch(fetchClinicUsers());
   };
 
   const handleShowPicker = (event) => {
