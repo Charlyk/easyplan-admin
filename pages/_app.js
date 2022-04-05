@@ -82,7 +82,7 @@ const EasyApp = ({ Component, pageProps }) => {
 
   useEffect(() => {
     dispatch(setAppData(pageProps.appData));
-    logEvent({ event: 'page_view', payload: window.location.href });
+    logEvent({ event: 'page_opened', payload: window.location.href });
   }, []);
 
   useEffect(() => {
